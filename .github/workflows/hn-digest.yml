@@ -5,7 +5,13 @@ name: hn digest
 
 on:
   schedule:
-    - cron: "0 1,6,11 * * *"
+    # asia/shanghai times (UTC+8) - adjusted for GitHub's ~2hr delays
+    # target 09:00 CST → trigger 07:00 CST (23:00 UTC prev day)
+    # target 14:00 CST → trigger 13:30 CST (05:30 UTC)
+    # target 19:00 CST → trigger 18:45 CST (10:45 UTC)
+    - cron: "0 23 * * *"
+    - cron: "30 5 * * *"
+    - cron: "45 10 * * *"
   workflow_dispatch:
     inputs:
       story_count:
