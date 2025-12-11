@@ -148,7 +148,7 @@ jobs:
 
             BE USEFUL. INCLUDE LINKS. HAVE OPINIONS. READ THE CONTENT.
 
-      - name: bark
+      - name: bark with link
         env:
           BARK_SERVER: ${{ secrets.BARK_SERVER }}
           BARK_KEY: ${{ secrets.BARK_KEY }}
@@ -156,4 +156,18 @@ jobs:
           [ -z "$BARK_SERVER" ] || [ -z "$BARK_KEY" ] && exit 0
           curl -fsSL https://raw.githubusercontent.com/thevibeworks/yolo-tools/main/src/bin/barkme.sh -o /tmp/barkme.sh
           chmod +x /tmp/barkme.sh
-          /tmp/barkme.sh -R 3 -t "HN curated" -g "hn" "new digest ready" || true
+
+          # find latest digest and issue
+          LATEST_DIGEST=$(ls -t digests/2025/*/*.md 2>/dev/null | head -1)
+          LATEST_ISSUE=$(gh issue list -L 1 --json number,title -q '.[0]')
+          ISSUE_NUM=$(echo "$LATEST_ISSUE" | jq -r '.number // empty')
+          ISSUE_TITLE=$(echo "$LATEST_ISSUE" | jq -r '.title // "HN Daily"')
+
+          NOW=$(TZ="Asia/Shanghai" date "+%H:%M")
+
+          if [ -n "$ISSUE_NUM" ]; then
+            ISSUE_URL="https://github.com/thevibeworks/claude-reads-hn/issues/$ISSUE_NUM"
+            /tmp/barkme.sh -R 3 -t "HN @ $NOW" -g "hn" -u "$ISSUE_URL" "$ISSUE_TITLE" || true
+          else
+            /tmp/barkme.sh -R 3 -t "HN @ $NOW" -g "hn" "digest ready" || true
+          fi
