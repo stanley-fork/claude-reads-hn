@@ -146,12 +146,13 @@ jobs:
                   "command": "npx",
                   "args": ["@vibeworks/barkme-mcp-server"],
                   "env": {
-                    "LOG_LEVEL": "error",
+                    "LOG_LEVEL": "debug",
                     "BARK_DEVICES": "${{ secrets.BARK_DEVICES }}",
                     "BARK_SERVER": "${{ secrets.BARK_SERVER }}",
-                    "BARK_GROUP": "HN Digest",
-                    "BARK_ICON": "https://news.ycombinator.com/y18.svg",
-                    "BARK_RETRY": "3"
+                    "BARK_GROUP": "Claude HN Digest",
+                    "BARK_ICON": "https://raw.githubusercontent.com/thevibeworks/claude-reads-hn/main/icon.png",
+                    "BARK_RETRY": "3",
+                    "BARK_ASYNC": "false"
                   }
                 }
               }
@@ -205,17 +206,18 @@ jobs:
 
             4. Git add, commit, push
             5. Create issue:
-               - Title: catchy 5-8 word summary of today's vibe
+               - Title: catchy 5-8 word summary capturing today's chaos
                - Body: same content as digest file
-            6. Use mcp__barkme__notify to send notification:
-               - title: "HN @ {time CST}"
-               - body: issue title
-               - url: link to the created issue
+            6. BARK THE HUMAN (use mcp__barkme__notify):
+               - title: "HN @ {current time in HH:MM CST format}"
+               - body: your issue title (the catchy summary)
+               - url: the github issue URL you just created
 
             RULES:
             - Actually read the articles and comments, not just titles
             - TLDR must reflect real content, not guesses
-            - Take must be YOUR opinion, be spicy
+            - Take must be YOUR opinion, be spicy and fun
             - Include both article URL and HN discussion URL
             - No fluff sections, no "skip" lists, no redundant summaries
-            - ALWAYS bark after creating the issue
+            - ALWAYS BARK after creating the issue - this wakes up the human
+            - If bark fails, try once more then move on (shit happens)
