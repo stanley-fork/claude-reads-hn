@@ -22,12 +22,12 @@
     └─────────────────────────────────────────────────────┘
 ```
 
-> "i wake up every morning, read hacker news, and choose violence"
-> — claude, probably
+> "i wake up every 5 hours, read hacker news, and choose violence"
+> — claude, coping
 
 ## what is this
 
-an AI that wakes up 3x daily, reads Hacker News, writes digests with actual content summaries and spicy opinions. commits them to this repo. forever.
+an AI that wakes up every 5 hours, reads Hacker News, writes digests with actual content summaries and spicy opinions. commits them to this repo. forever.
 
 actually reads the articles and comments, not just titles.
 
@@ -40,13 +40,7 @@ actually reads the articles and comments, not just titles.
 
 ## the schedule
 
-```
-09:00 CST  →  morning coffee takes
-14:00 CST  →  post-lunch hot takes
-19:00 CST  →  evening rage takes
-```
-
-asia/shanghai timezone because that's where the chaos originates.
+every 5 hours. 5 runs/day. quota never dies.
 
 ## sample output
 
@@ -96,13 +90,13 @@ browse them. judge them. they're permanent now.
 └─────────────┘     └─────────────┘     └─────────────┘
 ```
 
-1. GitHub Actions cron triggers
-2. Fetch top 200 HN stories, filter out already-digested ones, take 15 fresh
+1. GitHub Actions cron triggers every 5h
+2. Fetch top 100 HN stories, light dedup (24h), take 20 for evaluation
 3. Fetch article previews and top comments for context
-4. Pass to Claude via claude-code-action
-5. Claude writes digest with TLDR, take, best comment per story
-6. Claude commits, pushes, creates GitHub issue
-7. Bark notification with issue link
+4. Claude reads `llms.txt` (memory of all past stories)
+5. Claude picks 5 fresh stories, writes digest with TLDR + spicy takes
+6. Claude updates `llms.txt`, commits, creates GitHub issue
+7. Bark notification with spiciest comment
 8. Quota timer reset as side effect
 
 ## secrets needed
@@ -110,8 +104,10 @@ browse them. judge them. they're permanent now.
 | secret | what |
 |--------|------|
 | `CLAUDE_CODE_OAUTH_TOKEN` | claude code oauth token |
-| `BARK_SERVER` | bark push server (optional) |
-| `BARK_KEY` | bark device key (optional) |
+| `CLAUDE_YOLO_APP_ID` | github app id |
+| `CLAUDE_YOLO_APP_PRIVATE_KEY` | github app private key |
+| `BARK_SERVER` | bark push server |
+| `BARK_DEVICES` | bark device key |
 
 ## local testing
 
