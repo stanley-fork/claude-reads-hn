@@ -45,9 +45,11 @@ jobs:
           RECENT_IDS=""
           TODAY=$(date -u +%Y/%m/%d)
           YESTERDAY=$(date -u -d "yesterday" +%Y/%m/%d 2>/dev/null || date -u -v-1d +%Y/%m/%d)
-          for f in digests/$TODAY*.md digests/$YESTERDAY*.md 2>/dev/null; do
-            [ -f "$f" ] && RECENT_IDS="$RECENT_IDS $(grep -oE 'item\?id=[0-9]+' "$f" | cut -d= -f2)"
+          shopt -s nullglob
+          for f in digests/$TODAY*.md digests/$YESTERDAY*.md; do
+            RECENT_IDS="$RECENT_IDS $(grep -oE 'item\?id=[0-9]+' "$f" 2>/dev/null | cut -d= -f2)"
           done
+          shopt -u nullglob
           echo "recent (24h): $(echo $RECENT_IDS | wc -w) stories to skip"
 
           # fetch pool, light filter, give Claude more to work with
