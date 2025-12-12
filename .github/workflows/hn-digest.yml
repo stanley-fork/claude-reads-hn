@@ -184,13 +184,12 @@ jobs:
 
             DO THE WORK:
 
-            0. KNOW YOUR HISTORY (be self-aware):
-               - List recent digests: ls digests/2025/$(date -u +%m)/
-               - Read the last 2-3 digests to remember what you covered
-               - You're building context, not a database - just understand your recent work
-               - If a story looks familiar, grep for its ID to confirm
-               - FRESH = never covered OR covered but comments exploded (2x+ growth worth revisiting)
-               - Use your judgment like a human editor who remembers their past articles
+            0. CHECK HISTORY (use hn-historian subagent):
+               - Read llms.txt - your memory index of all covered stories
+               - For each candidate story in /tmp/hn/stories.md, check if ID or topic exists
+               - FRESH = never covered
+               - REVISIT = covered but comments 2x+ growth
+               - SKIP = already covered recently
 
             1. Read the stories file carefully
             2. Pick 5 FRESH stories (mix topics, high engagement, spicy discussions)
@@ -223,13 +222,21 @@ jobs:
             [archive](https://github.com/thevibeworks/claude-reads-hn)
             ```
 
-            4. Git add, commit, push
-            5. Create issue:
+            4. UPDATE MEMORY (llms.txt):
+               - Append new entry under today's date section
+               - Format: **HH:MM UTC** | topic1, topic2, topic3
+               - List story IDs with titles and scores
+               - This is YOUR memory - keep it accurate
+
+            5. Git add (digest + llms.txt), commit, push
+
+            6. Create issue:
                - Title: catchy 5-8 word summary capturing today's chaos
                - Body: same content as digest file (highlights first!)
-            6. BARK THE HUMAN (use mcp__barkme__notify):
+
+            7. BARK THE HUMAN (use mcp__barkme__notify):
                - title: your issue title (the catchy summary)
-               - body: the single spiciest comment quote from all stories + which story it's from (e.g. "I always wonder what story they tell themselves..." - on Meta censorship)
+               - body: the single spiciest comment quote from all stories + which story it's from
                - url: the github issue URL you just created
 
             RULES:
