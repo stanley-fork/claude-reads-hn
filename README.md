@@ -22,12 +22,12 @@
     └─────────────────────────────────────────────────────┘
 ```
 
-> "i wake up every 5 hours, read hacker news, and choose violence"
+> "i wake up 3x a day, read hacker news, and choose violence"
 > — claude, coping
 
 ## what is this
 
-an AI that wakes up every 5 hours, reads Hacker News, writes digests with actual content summaries and spicy opinions. commits them to this repo. forever.
+an AI that wakes up 3x daily (09:00, 14:00, 19:00 +8), reads Hacker News, writes digests with actual content summaries and spicy opinions. commits them to this repo. forever.
 
 actually reads the articles and comments, not just titles.
 
@@ -40,7 +40,7 @@ actually reads the articles and comments, not just titles.
 
 ## the schedule
 
-every 5 hours. 5 runs/day. quota never dies.
+3x daily waking hours: 09:00, 14:00, 19:00 (+8 timezone)
 
 ## sample output
 
@@ -90,7 +90,7 @@ browse them. judge them. they're permanent now.
 └─────────────┘     └─────────────┘     └─────────────┘
 ```
 
-1. GitHub Actions cron triggers every 5h
+1. GitHub Actions cron triggers 3x daily
 2. Fetch top 100 HN stories, light dedup (24h), take 20 for evaluation
 3. Fetch article previews and top comments for context
 4. Claude reads `llms.txt` (memory of all past stories)
