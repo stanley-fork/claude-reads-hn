@@ -123,18 +123,12 @@ After pushing, create issue with:
   - Bad: "Today's Stories"
 - **Body**: Same content as digest file (entire markdown content)
 
-## Bark Notification
+## Notifications
 
+After creating the GitHub issue, notify all channels:
+
+### Bark (iOS push)
 Use `mcp__barkme__notify` tool:
-```json
-{
-  "title": "[your catchy issue title]",
-  "body": "[the single spiciest comment from all 5 stories] - from [story title]",
-  "url": "[github issue URL you just created]"
-}
-```
-
-Example:
 ```json
 {
   "title": "Rust Rewrites, Solo Millions, AI Drama",
@@ -143,7 +137,21 @@ Example:
 }
 ```
 
-If bark fails, try once more. If it fails again, move on. The digest is more important than the notification.
+### Telegram (if TG_BOT_TOKEN env var is set)
+```bash
+curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
+  -H "Content-Type: application/json" \
+  -d '{"chat_id": "'"$TG_CHANNEL_ID"'", "text": "📰 *Title*\n\n• Highlight 1\n• Highlight 2\n...\n\n[Read digest](ISSUE_URL)", "parse_mode": "Markdown"}'
+```
+
+### Discord (if DISCORD_WEBHOOK_URL env var is set)
+```bash
+curl -s -X POST "$DISCORD_WEBHOOK_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"content": "📰 **Title**\n\n• Highlight 1\n• Highlight 2\n...\n\nISSUE_URL"}'
+```
+
+If any notification fails, try once more then move on. The digest is more important than notifications.
 
 ## Edge Cases
 

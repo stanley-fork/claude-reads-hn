@@ -92,12 +92,25 @@ That's it. Claude handles the rest.
 | `CLAUDE_CODE_OAUTH_TOKEN` | Claude Code OAuth token | Everything. Claude can't run. |
 | `CLAUDE_YOLO_APP_ID` | GitHub App ID | Can't commit or create issues. Run fails. |
 | `CLAUDE_YOLO_APP_PRIVATE_KEY` | GitHub App private key | Same as above. |
-| `BARK_SERVER` | Bark push notification server URL | You don't get notified. Digest still works. |
-| `BARK_DEVICES` | Bark device key(s) | Same. Notification fails silently. |
+| `BARK_SERVER` | Bark push notification server URL | Bark notification fails. Digest still works. |
+| `BARK_DEVICES` | Bark device key(s) | Same. |
+| `TG_BOT_TOKEN` | Telegram bot token (@BotFather) | TG notification fails. Optional. |
+| `TG_CHANNEL_ID` | Telegram channel/chat ID | Same. |
+| `DISCORD_WEBHOOK_URL` | Discord webhook URL | Discord notification fails. Optional. |
 
 Get the Claude token from: https://claude.com/settings/developer
 
 The GitHub App needs: `contents:write`, `issues:write` permissions.
+
+## Notification Channels
+
+Digests are published to multiple channels:
+- **GitHub Issues** - Always (required)
+- **Bark** - iOS push notifications
+- **Telegram** - Channel/group messages
+- **Discord** - Webhook messages
+
+Configure the secrets for the channels you want. Missing secrets = silent skip.
 
 ## File Structure
 
@@ -229,6 +242,27 @@ A: Because the quota timer is 5 hours and HN's front page doesn't change THAT fa
 
 **Q: Can I use this for other subreddits/forums?**
 A: Sure. Fork it. Change the fetch script. Point Claude at different sources. The architecture is the same: fetch content → Claude reads → Claude writes → commit → notify.
+
+## Infrastructure
+
+### GitHub Pages (Frontend)
+
+The site is served from this repo via GitHub Pages. Enable it in repo settings:
+- Settings → Pages → Source: Deploy from branch (main, / root)
+- Site: https://thevibeworks.github.io/claude-reads-hn
+
+### Cloudflare Worker (Reliable Cron)
+
+GitHub Actions cron is flaky. The CF Worker in `infra/cf-worker/` triggers workflows reliably:
+
+```bash
+cd infra/cf-worker
+npm install
+wrangler secret put GITHUB_TOKEN  # PAT with actions:write
+wrangler deploy
+```
+
+Crons: 01:00, 06:00, 11:00, 16:00 UTC (same as GitHub Actions schedule)
 
 ## Related Projects
 

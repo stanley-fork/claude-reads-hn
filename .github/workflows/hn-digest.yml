@@ -140,12 +140,15 @@ jobs:
         uses: thevibeworks/claude-code-action@main
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHANNEL_ID: ${{ secrets.TG_CHANNEL_ID }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ steps.app-token.outputs.token }}
           claude_args: |
             --model claude-opus-4-5-20251101
-            --allowedTools Bash(git:*),Bash(gh:*),Bash(date:*),Bash(mkdir:*),Read,Write,Edit,WebFetch,mcp__barkme__notify
+            --allowedTools Bash(git:*),Bash(gh:*),Bash(date:*),Bash(mkdir:*),Bash(curl:*),Read,Write,Edit,WebFetch,mcp__barkme__notify
             --mcp-config '{
               "mcpServers": {
                 "barkme": {
@@ -234,10 +237,22 @@ jobs:
                - Title: catchy 5-8 word summary capturing today's chaos
                - Body: same content as digest file (highlights first!)
 
-            7. BARK THE HUMAN (use mcp__barkme__notify):
-               - title: your issue title (the catchy summary)
-               - body: the single spiciest comment quote from all stories + which story it's from
-               - url: the github issue URL you just created
+            7. NOTIFY ALL CHANNELS:
+
+               a) BARK (use mcp__barkme__notify):
+                  - title: your issue title
+                  - body: spiciest comment quote + story name
+                  - url: github issue URL
+
+               b) TELEGRAM (if TG_BOT_TOKEN is set):
+                  curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
+                    -H "Content-Type: application/json" \
+                    -d '{"chat_id": "'"$TG_CHANNEL_ID"'", "text": "📰 *TITLE*\n\nHIGHLIGHTS\n\n[Read full digest](ISSUE_URL)", "parse_mode": "Markdown"}'
+
+               c) DISCORD (if DISCORD_WEBHOOK_URL is set):
+                  curl -s -X POST "$DISCORD_WEBHOOK_URL" \
+                    -H "Content-Type: application/json" \
+                    -d '{"content": "📰 **TITLE**\n\nHIGHLIGHTS\n\nISSUE_URL"}'
 
             RULES:
             - Actually read the articles and comments, not just titles
