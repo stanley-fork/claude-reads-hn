@@ -17,6 +17,11 @@ on:
         default: "20"
         type: string
 
+# prevent duplicate runs - if one is running, cancel the new one
+concurrency:
+  group: hn-digest
+  cancel-in-progress: false
+
 jobs:
   read:
     runs-on: ubuntu-latest
@@ -37,7 +42,20 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
 
+      - name: check if digest exists this hour
+        id: check-digest
+        run: |
+          HOUR_PREFIX=$(date -u +%Y/%m/%d-%H)
+          if ls digests/$HOUR_PREFIX*.md 2>/dev/null | head -1; then
+            echo "Digest already exists for this hour, skipping"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "No digest for this hour, proceeding"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: fetch hacker news with content
+        if: steps.check-digest.outputs.skip != 'true'
         run: |
           TARGET_COUNT="${{ inputs.story_count || '20' }}"
           echo "target: $TARGET_COUNT stories for Claude to evaluate"
@@ -132,11 +150,13 @@ jobs:
           wc -l /tmp/hn/stories.md
 
       - name: setup git
+        if: steps.check-digest.outputs.skip != 'true'
         run: |
           git config user.name "claude-yolo[bot]"
           git config user.email "claude-yolo[bot]@users.noreply.github.com"
 
       - name: let claude curate
+        if: steps.check-digest.outputs.skip != 'true'
         uses: thevibeworks/claude-code-action@main
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
