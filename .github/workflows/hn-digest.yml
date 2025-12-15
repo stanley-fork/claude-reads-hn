@@ -46,11 +46,12 @@ jobs:
         id: check-digest
         run: |
           HOUR_PREFIX=$(date -u +%Y/%m/%d-%H)
-          if ls digests/$HOUR_PREFIX*.md 2>/dev/null | head -1; then
-            echo "Digest already exists for this hour, skipping"
+          EXISTING=$(ls digests/$HOUR_PREFIX*.md 2>/dev/null || true)
+          if [ -n "$EXISTING" ]; then
+            echo "Digest already exists for this hour: $EXISTING"
             echo "skip=true" >> $GITHUB_OUTPUT
           else
-            echo "No digest for this hour, proceeding"
+            echo "No digest for hour $HOUR_PREFIX, proceeding"
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
