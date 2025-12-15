@@ -705,12 +705,14 @@
 
     // Language management
     let currentLang = localStorage.getItem('lang') || 'en';
+    let isLoadingFeed = false;
 
     function toggleLangMenu() {
       document.getElementById('langMenu').classList.toggle('show');
     }
 
     function setLang(lang) {
+      if (isLoadingFeed || lang === currentLang) return; // Prevent race condition
       currentLang = lang;
       localStorage.setItem('lang', lang);
       updateLangMenu(lang);
@@ -756,6 +758,7 @@
     let allStories = []; // for sidebar
 
     async function loadIndex() {
+      isLoadingFeed = true;
       try {
         const res = await fetch(`${REPO_RAW}/llms.txt?t=${Date.now()}`);
         const text = await res.text();
@@ -773,6 +776,8 @@
         await loadMore();
       } catch (e) {
         document.getElementById('feed').innerHTML = `<p class="loading">Error: ${e.message}</p>`;
+      } finally {
+        isLoadingFeed = false;
       }
     }
 
@@ -782,15 +787,21 @@
 
       for (const d of batch) {
         try {
+          let md = null;
           // Try localized path first, fall back to English
-          let path = d.path;
           if (currentLang !== 'en') {
             const i18nPath = d.path.replace('digests/', `digests/i18n/${currentLang}/`);
-            const testRes = await fetch(`${REPO_RAW}/${i18nPath}`, { method: 'HEAD' });
-            if (testRes.ok) path = i18nPath;
+            try {
+              const i18nRes = await fetch(`${REPO_RAW}/${i18nPath}`);
+              if (i18nRes.ok) md = await i18nRes.text();
+            } catch (e) { /* Fall through to English */ }
           }
-          const res = await fetch(`${REPO_RAW}/${path}`);
-          const md = await res.text();
+          // Fall back to English if i18n not available or failed
+          if (!md) {
+            const res = await fetch(`${REPO_RAW}/${d.path}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            md = await res.text();
+          }
           const { html, stories } = parseDigest(md, d.date);
           document.getElementById('feed').insertAdjacentHTML('beforeend', html);
           allStories.push(...stories);
@@ -1006,6 +1017,33 @@
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    // Sanitize HN comment HTML - allow safe tags only
+    function sanitizeHNComment(html) {
+      if (!html) return '';
+      // Create a temporary div to parse HTML
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+      // Remove all script tags and event handlers
+      temp.querySelectorAll('script, style, iframe, object, embed, form').forEach(el => el.remove());
+      // Remove dangerous attributes from all elements
+      temp.querySelectorAll('*').forEach(el => {
+        // Remove event handlers (onclick, onerror, etc.)
+        Array.from(el.attributes).forEach(attr => {
+          if (attr.name.startsWith('on') || attr.name === 'href' && attr.value.startsWith('javascript:')) {
+            el.removeAttribute(attr.name);
+          }
+        });
+        // Sanitize href to prevent javascript: URLs
+        if (el.hasAttribute('href')) {
+          const href = el.getAttribute('href');
+          if (href.toLowerCase().startsWith('javascript:') || href.toLowerCase().startsWith('data:')) {
+            el.setAttribute('href', '#');
+          }
+        }
+      });
+      return temp.innerHTML;
+    }
+
     // HN Discussion expansion - lazy load, no recursion
     const HN_API = 'https://hacker-news.firebaseio.com/v0';
     const commentCache = new Map();
@@ -1114,11 +1152,13 @@
     function renderSingleComment(c, depth) {
       const time = c.time ? timeAgo(c.time * 1000) : '';
       const d = Math.min(depth, 4);
+      // Sanitize HN comment HTML - allow safe tags, escape dangerous ones
+      const safeText = sanitizeHNComment(c.text || '');
       let html = `<div class="hn-comment depth-${d}">
         <div class="hn-comment-meta">
-          <a href="https://news.ycombinator.com/user?id=${c.by}" target="_blank">${c.by || 'anon'}</a> · ${time}
+          <a href="https://news.ycombinator.com/user?id=${escapeHtml(c.by || 'anon')}" target="_blank">${escapeHtml(c.by || 'anon')}</a> · ${time}
         </div>
-        <div class="hn-comment-text">${c.text || ''}</div>`;
+        <div class="hn-comment-text">${safeText}</div>`;
 
       if (c.kids && c.kids.length > 0) {
         html += `<button class="hn-load-more" data-ids='${JSON.stringify(c.kids)}' data-depth="${depth + 1}" onclick="loadReplies(this)">${c.kids.length} replies</button>`;
