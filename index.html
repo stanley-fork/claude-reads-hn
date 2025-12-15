@@ -450,41 +450,6 @@
       text-decoration: underline;
     }
 
-    /* Highlights - clickable tags */
-    .highlights {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .highlight {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: var(--bg-elevated);
-      padding: 0.5rem 0.85rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--fg);
-      border: 1px solid var(--border);
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .highlight:hover {
-      background: var(--accent);
-      color: var(--bg);
-      border-color: var(--accent);
-      text-decoration: none;
-      transform: translateY(-1px);
-    }
-    .highlight-num {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      opacity: 0.6;
-    }
-
     /* Loading */
     .loading {
       text-align: center;
@@ -670,10 +635,10 @@
 
     function updateSidebar() {
       const sidebar = document.getElementById('sidebar');
-      let html = '<div class="sidebar-section"><div class="sidebar-title">Stories</div>';
+      let html = '<div class="sidebar-section"><div class="sidebar-title">Highlights</div>';
       allStories.forEach((s, i) => {
-        const shortTitle = s.title.length > 35 ? s.title.slice(0, 35) + '...' : s.title;
-        html += `<a href="#${s.id}" class="sidebar-item" data-id="${s.id}"><span class="sidebar-num">${i + 1}</span>${escapeHtml(shortTitle)}</a>`;
+        const label = s.highlight || (s.title.length > 30 ? s.title.slice(0, 30) + '...' : s.title);
+        html += `<a href="#${s.id}" class="sidebar-item" data-id="${s.id}"><span class="sidebar-num">${i + 1}</span>${escapeHtml(label)}</a>`;
       });
       html += '</div>';
       sidebar.innerHTML = html;
@@ -803,18 +768,10 @@
           ${vibe ? `<div class="digest-vibe">${escapeHtml(vibe)}</div>` : ''}
         </header>`;
 
-      if (highlights.length > 0 && stories.length > 0) {
-        html += `<div class="highlights">`;
-        highlights.slice(0, 5).forEach((h, idx) => {
-          const story = stories[idx];
-          if (story) {
-            html += `<a href="#${story.id}" class="highlight"><span class="highlight-num">${idx + 1}</span>${escapeHtml(h)}</a>`;
-          } else {
-            html += `<span class="highlight">${escapeHtml(h)}</span>`;
-          }
-        });
-        html += `</div>`;
-      }
+      // Attach highlights to stories for sidebar
+      highlights.slice(0, 5).forEach((h, idx) => {
+        if (stories[idx]) stories[idx].highlight = h;
+      });
 
       for (const s of stories) {
         html += `<div class="story" id="${s.id}">
