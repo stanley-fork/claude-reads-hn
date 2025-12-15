@@ -901,11 +901,9 @@
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // HN Discussion expansion
+    // HN Discussion expansion - lazy load, no recursion
     const HN_API = 'https://hacker-news.firebaseio.com/v0';
     const commentCache = new Map();
-    const MAX_DEPTH = 4;
-    const INITIAL_COMMENTS = 15;
 
     async function expandDiscussion(btn, hnId) {
       if (btn.classList.contains('loading')) return;
@@ -913,7 +911,6 @@
       const story = btn.closest('.story');
       let container = story.querySelector('.hn-comments');
 
-      // Toggle if already loaded
       if (container) {
         container.style.display = container.style.display === 'none' ? 'block' : 'none';
         btn.textContent = container.style.display === 'none' ? 'Read HN discussion' : 'Hide discussion';
@@ -934,44 +931,68 @@
         container = document.createElement('div');
         container.className = 'hn-comments';
 
-        const commentsToShow = item.kids.slice(0, INITIAL_COMMENTS);
-        const remaining = item.kids.length - INITIAL_COMMENTS;
+        // Only fetch top-level comments (first 10), no recursion
+        const topKids = item.kids.slice(0, 10);
+        const comments = await Promise.all(topKids.map(id => fetchHNItem(id)));
 
-        for (const kid of commentsToShow) {
-          const commentHtml = await renderComment(kid, 0);
-          container.insertAdjacentHTML('beforeend', commentHtml);
+        for (const c of comments) {
+          if (!c || c.deleted) continue;
+          container.insertAdjacentHTML('beforeend', renderSingleComment(c, 0));
         }
 
-        if (remaining > 0) {
+        if (item.kids.length > 10) {
           container.insertAdjacentHTML('beforeend',
-            `<button class="hn-load-more" onclick="loadMoreComments(this, '${hnId}', ${INITIAL_COMMENTS})">Load ${remaining} more top-level comments</button>`);
+            `<button class="hn-load-more" data-ids='${JSON.stringify(item.kids.slice(10))}' onclick="loadMoreTop(this)">Load ${item.kids.length - 10} more comments</button>`);
         }
 
         story.appendChild(container);
         btn.textContent = 'Hide discussion';
       } catch (e) {
-        console.error('Failed to load discussion:', e);
+        console.error('Failed:', e);
         btn.textContent = 'Failed to load';
       } finally {
         btn.classList.remove('loading');
       }
     }
 
-    async function loadMoreComments(btn, hnId, offset) {
-      btn.textContent = 'Loading...';
-      const item = await fetchHNItem(hnId);
-      const container = btn.closest('.hn-comments');
-      const nextBatch = item.kids.slice(offset, offset + 10);
-      const remaining = item.kids.length - offset - 10;
+    async function loadMoreTop(btn) {
+      const ids = JSON.parse(btn.dataset.ids);
+      const batch = ids.slice(0, 10);
+      const rest = ids.slice(10);
 
-      for (const kid of nextBatch) {
-        const commentHtml = await renderComment(kid, 0);
-        btn.insertAdjacentHTML('beforebegin', commentHtml);
+      btn.textContent = 'Loading...';
+      const comments = await Promise.all(batch.map(id => fetchHNItem(id)));
+
+      for (const c of comments) {
+        if (!c || c.deleted) continue;
+        btn.insertAdjacentHTML('beforebegin', renderSingleComment(c, 0));
       }
 
-      if (remaining > 0) {
-        btn.textContent = `Load ${remaining} more top-level comments`;
-        btn.onclick = () => loadMoreComments(btn, hnId, offset + 10);
+      if (rest.length > 0) {
+        btn.dataset.ids = JSON.stringify(rest);
+        btn.textContent = `Load ${rest.length} more comments`;
+      } else {
+        btn.remove();
+      }
+    }
+
+    async function loadReplies(btn) {
+      const ids = JSON.parse(btn.dataset.ids);
+      const depth = parseInt(btn.dataset.depth);
+      const batch = ids.slice(0, 5);
+      const rest = ids.slice(5);
+
+      btn.textContent = 'Loading...';
+      const comments = await Promise.all(batch.map(id => fetchHNItem(id)));
+
+      for (const c of comments) {
+        if (!c || c.deleted) continue;
+        btn.insertAdjacentHTML('beforebegin', renderSingleComment(c, depth));
+      }
+
+      if (rest.length > 0) {
+        btn.dataset.ids = JSON.stringify(rest);
+        btn.textContent = `+${rest.length} more`;
       } else {
         btn.remove();
       }
@@ -985,56 +1006,21 @@
       return item;
     }
 
-    async function renderComment(id, depth) {
-      const comment = await fetchHNItem(id);
-      if (!comment || comment.deleted || comment.dead) {
-        return `<div class="hn-comment depth-${Math.min(depth, MAX_DEPTH)} hn-dead">[deleted]</div>`;
-      }
-
-      const time = comment.time ? timeAgo(comment.time * 1000) : '';
-      const text = comment.text || '';
-
-      let html = `<div class="hn-comment depth-${Math.min(depth, MAX_DEPTH)}">
+    function renderSingleComment(c, depth) {
+      const time = c.time ? timeAgo(c.time * 1000) : '';
+      const d = Math.min(depth, 4);
+      let html = `<div class="hn-comment depth-${d}">
         <div class="hn-comment-meta">
-          <a href="https://news.ycombinator.com/user?id=${comment.by}" target="_blank">${comment.by || 'anon'}</a> · ${time}
+          <a href="https://news.ycombinator.com/user?id=${c.by}" target="_blank">${c.by || 'anon'}</a> · ${time}
         </div>
-        <div class="hn-comment-text">${text}</div>`;
+        <div class="hn-comment-text">${c.text || ''}</div>`;
 
-      // Render replies up to MAX_DEPTH
-      if (comment.kids && comment.kids.length > 0 && depth < MAX_DEPTH) {
-        const repliesToShow = comment.kids.slice(0, 3);
-        const moreReplies = comment.kids.length - 3;
-
-        for (const kid of repliesToShow) {
-          html += await renderComment(kid, depth + 1);
-        }
-
-        if (moreReplies > 0) {
-          html += `<button class="hn-load-more" onclick="loadReplies(this, [${comment.kids.slice(3).join(',')}], ${depth + 1})">+${moreReplies} more replies</button>`;
-        }
-      } else if (comment.kids && comment.kids.length > 0 && depth >= MAX_DEPTH) {
-        html += `<button class="hn-load-more" onclick="window.open('https://news.ycombinator.com/item?id=${id}', '_blank')">View ${comment.kids.length} replies on HN</button>`;
+      if (c.kids && c.kids.length > 0) {
+        html += `<button class="hn-load-more" data-ids='${JSON.stringify(c.kids)}' data-depth="${depth + 1}" onclick="loadReplies(this)">${c.kids.length} replies</button>`;
       }
 
       html += '</div>';
       return html;
-    }
-
-    async function loadReplies(btn, ids, depth) {
-      btn.textContent = 'Loading...';
-      let html = '';
-      for (const id of ids.slice(0, 5)) {
-        html += await renderComment(id, depth);
-      }
-      btn.insertAdjacentHTML('beforebegin', html);
-
-      const remaining = ids.slice(5);
-      if (remaining.length > 0) {
-        btn.textContent = `+${remaining.length} more replies`;
-        btn.onclick = () => loadReplies(btn, remaining, depth);
-      } else {
-        btn.remove();
-      }
     }
 
     function timeAgo(ts) {
