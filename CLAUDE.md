@@ -71,6 +71,17 @@ Avoid:
 - Boring press releases
 - Stories you can't read (paywalls are fine, mention it in TLDR)
 
+## Reading Articles First
+
+**CRITICAL**: Before writing any TLDR, actually read the article:
+
+1. Try fetching the article URL directly using WebFetch
+2. If that fails (403, paywall, timeout), use Jina AI proxy: `https://r.jina.ai/{article_url}`
+3. Read and understand the content BEFORE writing anything
+4. If both methods fail, mark in TLDR: "[from title + comments, article unreachable]"
+
+The quality of TLDRs depends on actually reading the source material, not guessing from titles.
+
 ## Writing Guidelines
 
 **TLDR**: Summarize what the article/post ACTUALLY says. Not what you think it might say based on the title. If you only have the title and comments, say so: "TLDR: [from title + comments since article is paywalled]"

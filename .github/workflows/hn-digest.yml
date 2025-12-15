@@ -221,7 +221,16 @@ jobs:
 
             1. Read the stories file carefully
             2. Pick 5 FRESH stories (mix topics, high engagement, spicy discussions)
-            3. Write to digests/YYYY/MM/DD-HHMM.md with this EXACT format:
+
+            3. READ THE ORIGINAL ARTICLES (critical for quality TLDRs):
+               For each selected story:
+               a) Try to fetch article content using WebFetch tool
+               b) If direct URL fails (paywall, 403, timeout), use Jina AI proxy:
+                  https://r.jina.ai/{article_url}
+               c) Read and understand the actual content before writing TLDR
+               d) If both fail, note in TLDR: "[from title + comments, article unreachable]"
+
+            4. Write to digests/YYYY/MM/DD-HHMM.md with this EXACT format:
 
             ```
             # HN Digest YYYY-MM-DD HH:MM UTC
@@ -254,15 +263,15 @@ jobs:
             [archive](https://github.com/thevibeworks/claude-reads-hn)
             ```
 
-            4. UPDATE MEMORY: run ./llms-gen.py (regenerates llms.txt from all digests)
+            5. UPDATE MEMORY: run ./llms-gen.py (regenerates llms.txt from all digests)
 
-            5. Git add, commit, push
+            6. Git add, commit, push
 
-            6. Create issue:
+            7. Create issue:
                - Title: catchy 5-8 word summary capturing today's chaos
                - Body: same content as digest file (highlights first!)
 
-            7. NOTIFY ALL CHANNELS:
+            8. NOTIFY ALL CHANNELS:
 
                a) BARK (use mcp__barkme__notify):
                   - title: your issue title
@@ -292,8 +301,8 @@ jobs:
                     }'
 
             RULES:
-            - Actually read the articles and comments, not just titles
-            - TLDR must reflect real content, not guesses
+            - READ THE DAMN ARTICLE first via WebFetch or Jina proxy (https://r.jina.ai/{url})
+            - TLDR must reflect ACTUAL content you read, not guesses from title
             - Take must be YOUR opinion, be spicy and fun
             - Include both article URL and HN discussion URL
             - Comments: pick 2-3 contrasting/opposing views to create discourse resonance. Single comment can't capture the full picture. Make it feel like a group chat with different perspectives.
