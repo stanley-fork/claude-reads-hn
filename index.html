@@ -430,6 +430,87 @@
       margin-top: 0.5rem;
     }
 
+    /* Expand discussion */
+    .expand-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--fg-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .expand-btn:hover {
+      border-color: var(--accent);
+      color: var(--fg);
+    }
+    .expand-btn.loading {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .hn-comments {
+      margin-top: 1rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+    .hn-comment {
+      margin-bottom: 0.75rem;
+      padding-left: 0.75rem;
+      border-left: 2px solid var(--border);
+    }
+    .hn-comment.depth-0 { border-left-color: var(--accent); }
+    .hn-comment.depth-1 { margin-left: 1rem; border-left-color: var(--fg-dim); }
+    .hn-comment.depth-2 { margin-left: 2rem; border-left-color: var(--fg-dim); opacity: 0.9; }
+    .hn-comment.depth-3 { margin-left: 3rem; border-left-color: var(--fg-dim); opacity: 0.8; }
+    .hn-comment.depth-4 { margin-left: 4rem; border-left-color: var(--fg-dim); opacity: 0.7; }
+    .hn-comment-meta {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--fg-dim);
+      margin-bottom: 0.3rem;
+    }
+    .hn-comment-meta a { color: var(--fg-dim); }
+    .hn-comment-meta a:hover { color: var(--accent); }
+    .hn-comment-text {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--fg-muted);
+    }
+    .hn-comment-text a { color: var(--link); }
+    .hn-comment-text code {
+      background: var(--bg-elevated);
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 0.8em;
+    }
+    .hn-comment-text pre {
+      background: var(--bg-elevated);
+      padding: 0.75rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 0.5rem 0;
+    }
+    .hn-comment-text p { margin: 0.4rem 0; }
+    .hn-load-more {
+      font-size: 0.7rem;
+      color: var(--fg-dim);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.3rem 0;
+      margin-left: 1rem;
+    }
+    .hn-load-more:hover { color: var(--accent); }
+    .hn-dead { opacity: 0.4; font-style: italic; }
+
     /* Tags */
     .story-tags {
       margin-top: 1rem;
@@ -796,6 +877,7 @@
             </div>
           </div>` : ''}
           ${s.tags.length > 0 ? `<div class="story-tags">${s.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join(' ')}</div>` : ''}
+          ${s.hnId ? `<button class="expand-btn" onclick="expandDiscussion(this, '${s.hnId}')">Read HN discussion</button>` : ''}
         </div>`;
       }
 
@@ -817,6 +899,150 @@
 
     function escapeHtml(str) {
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // HN Discussion expansion
+    const HN_API = 'https://hacker-news.firebaseio.com/v0';
+    const commentCache = new Map();
+    const MAX_DEPTH = 4;
+    const INITIAL_COMMENTS = 15;
+
+    async function expandDiscussion(btn, hnId) {
+      if (btn.classList.contains('loading')) return;
+
+      const story = btn.closest('.story');
+      let container = story.querySelector('.hn-comments');
+
+      // Toggle if already loaded
+      if (container) {
+        container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        btn.textContent = container.style.display === 'none' ? 'Read HN discussion' : 'Hide discussion';
+        return;
+      }
+
+      btn.classList.add('loading');
+      btn.textContent = 'Loading...';
+
+      try {
+        const item = await fetchHNItem(hnId);
+        if (!item || !item.kids || item.kids.length === 0) {
+          btn.textContent = 'No comments yet';
+          btn.disabled = true;
+          return;
+        }
+
+        container = document.createElement('div');
+        container.className = 'hn-comments';
+
+        const commentsToShow = item.kids.slice(0, INITIAL_COMMENTS);
+        const remaining = item.kids.length - INITIAL_COMMENTS;
+
+        for (const kid of commentsToShow) {
+          const commentHtml = await renderComment(kid, 0);
+          container.insertAdjacentHTML('beforeend', commentHtml);
+        }
+
+        if (remaining > 0) {
+          container.insertAdjacentHTML('beforeend',
+            `<button class="hn-load-more" onclick="loadMoreComments(this, '${hnId}', ${INITIAL_COMMENTS})">Load ${remaining} more top-level comments</button>`);
+        }
+
+        story.appendChild(container);
+        btn.textContent = 'Hide discussion';
+      } catch (e) {
+        console.error('Failed to load discussion:', e);
+        btn.textContent = 'Failed to load';
+      } finally {
+        btn.classList.remove('loading');
+      }
+    }
+
+    async function loadMoreComments(btn, hnId, offset) {
+      btn.textContent = 'Loading...';
+      const item = await fetchHNItem(hnId);
+      const container = btn.closest('.hn-comments');
+      const nextBatch = item.kids.slice(offset, offset + 10);
+      const remaining = item.kids.length - offset - 10;
+
+      for (const kid of nextBatch) {
+        const commentHtml = await renderComment(kid, 0);
+        btn.insertAdjacentHTML('beforebegin', commentHtml);
+      }
+
+      if (remaining > 0) {
+        btn.textContent = `Load ${remaining} more top-level comments`;
+        btn.onclick = () => loadMoreComments(btn, hnId, offset + 10);
+      } else {
+        btn.remove();
+      }
+    }
+
+    async function fetchHNItem(id) {
+      if (commentCache.has(id)) return commentCache.get(id);
+      const res = await fetch(`${HN_API}/item/${id}.json`);
+      const item = await res.json();
+      commentCache.set(id, item);
+      return item;
+    }
+
+    async function renderComment(id, depth) {
+      const comment = await fetchHNItem(id);
+      if (!comment || comment.deleted || comment.dead) {
+        return `<div class="hn-comment depth-${Math.min(depth, MAX_DEPTH)} hn-dead">[deleted]</div>`;
+      }
+
+      const time = comment.time ? timeAgo(comment.time * 1000) : '';
+      const text = comment.text || '';
+
+      let html = `<div class="hn-comment depth-${Math.min(depth, MAX_DEPTH)}">
+        <div class="hn-comment-meta">
+          <a href="https://news.ycombinator.com/user?id=${comment.by}" target="_blank">${comment.by || 'anon'}</a> · ${time}
+        </div>
+        <div class="hn-comment-text">${text}</div>`;
+
+      // Render replies up to MAX_DEPTH
+      if (comment.kids && comment.kids.length > 0 && depth < MAX_DEPTH) {
+        const repliesToShow = comment.kids.slice(0, 3);
+        const moreReplies = comment.kids.length - 3;
+
+        for (const kid of repliesToShow) {
+          html += await renderComment(kid, depth + 1);
+        }
+
+        if (moreReplies > 0) {
+          html += `<button class="hn-load-more" onclick="loadReplies(this, [${comment.kids.slice(3).join(',')}], ${depth + 1})">+${moreReplies} more replies</button>`;
+        }
+      } else if (comment.kids && comment.kids.length > 0 && depth >= MAX_DEPTH) {
+        html += `<button class="hn-load-more" onclick="window.open('https://news.ycombinator.com/item?id=${id}', '_blank')">View ${comment.kids.length} replies on HN</button>`;
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    async function loadReplies(btn, ids, depth) {
+      btn.textContent = 'Loading...';
+      let html = '';
+      for (const id of ids.slice(0, 5)) {
+        html += await renderComment(id, depth);
+      }
+      btn.insertAdjacentHTML('beforebegin', html);
+
+      const remaining = ids.slice(5);
+      if (remaining.length > 0) {
+        btn.textContent = `+${remaining.length} more replies`;
+        btn.onclick = () => loadReplies(btn, remaining, depth);
+      } else {
+        btn.remove();
+      }
+    }
+
+    function timeAgo(ts) {
+      const secs = Math.floor((Date.now() - ts) / 1000);
+      if (secs < 60) return 'just now';
+      if (secs < 3600) return Math.floor(secs / 60) + 'm ago';
+      if (secs < 86400) return Math.floor(secs / 3600) + 'h ago';
+      return Math.floor(secs / 86400) + 'd ago';
     }
 
     loadIndex();
