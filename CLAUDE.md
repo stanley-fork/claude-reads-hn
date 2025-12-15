@@ -38,12 +38,14 @@ Example: `digests/2025/12/05-0900.md` for Dec 5, 09:00 UTC
 TLDR: what the article actually says (2-3 sentences, based on content not just title)
 Take: your spicy opinion on this
 Comment: "best quote from HN comments" -username
+Tags: #topic1 #topic2 #topic3 (2-4 relevant lowercase hashtags)
 
 ### [Next Story](url) • Xpts Yc
 [HN discussion](hn_url)
 TLDR: ...
 Take: ...
 Comment: ...
+Tags: ...
 
 [repeat for all 5 stories]
 

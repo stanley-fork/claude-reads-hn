@@ -8,8 +8,17 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
+    /* Font modes */
+    :root {
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+    }
+    [data-font="mono"] {
+      --font-body: 'JetBrains Mono', 'Courier New', monospace;
+    }
+
     /* Theme: Dark (default) */
     [data-theme="dark"] {
       --bg: #0a0a0a;
@@ -17,8 +26,8 @@
       --bg-elevated: #1a1a1a;
       --bg-header: rgba(10, 10, 10, 0.9);
       --fg: #e4e4e7;
-      --fg-muted: #71717a;
-      --fg-dim: #52525b;
+      --fg-muted: #a1a1aa;
+      --fg-dim: #71717a;
       --accent: #f97316;
       --link: #60a5fa;
       --border: #27272a;
@@ -105,12 +114,17 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: var(--font-body);
       background: var(--bg);
       color: var(--fg);
       line-height: 1.7;
+      letter-spacing: -0.01em;
       -webkit-font-smoothing: antialiased;
       transition: background 0.2s ease, color 0.2s ease;
+    }
+    [data-font="mono"] body {
+      line-height: 1.6;
+      letter-spacing: 0;
     }
 
     .container {
@@ -152,6 +166,28 @@
     .nav a { color: var(--fg-muted); }
     .nav a:hover { color: var(--accent); text-decoration: none; }
     .nav .tg { color: #0088cc; }
+
+    /* Font toggle */
+    .font-toggle {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.3rem 0.5rem;
+      font-size: 0.75rem;
+      color: var(--fg-muted);
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.15s ease;
+    }
+    .font-toggle:hover {
+      border-color: var(--accent);
+      color: var(--fg);
+    }
+    .font-toggle.active {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
 
     /* Theme picker */
     .theme-picker {
@@ -277,6 +313,15 @@
     .story-meta a:hover {
       color: var(--link);
     }
+    .story-stats {
+      cursor: help;
+      border-bottom: 1px dotted var(--fg-dim);
+    }
+
+    /* Anchor offset for sticky header */
+    .story[id] {
+      scroll-margin-top: 80px;
+    }
 
     .story-section {
       margin-top: 1rem;
@@ -319,7 +364,27 @@
       margin-top: 0.5rem;
     }
 
-    /* Highlights */
+    /* Tags */
+    .story-tags {
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      background: transparent;
+      padding: 0.2rem 0;
+      text-decoration: none;
+    }
+    .tag:hover {
+      text-decoration: underline;
+    }
+
+    /* Highlights - clickable tags */
     .highlights {
       display: flex;
       flex-wrap: wrap;
@@ -327,12 +392,31 @@
       margin-bottom: 1.5rem;
     }
     .highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
       background: var(--bg-elevated);
-      padding: 0.4rem 0.75rem;
-      border-radius: 4px;
+      padding: 0.5rem 0.85rem;
+      border-radius: 6px;
       font-size: 0.8rem;
-      color: var(--fg-muted);
+      font-weight: 500;
+      color: var(--fg);
       border: 1px solid var(--border);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .highlight:hover {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+    .highlight-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      opacity: 0.6;
     }
 
     /* Loading */
@@ -386,8 +470,9 @@
     <div class="container header-inner">
       <div class="logo">Claude Reads HN</div>
       <nav class="nav">
-        <a href="https://t.me/claudehn" class="tg">Telegram</a>
-        <a href="https://github.com/thevibeworks/claude-reads-hn">GitHub</a>
+        <a href="https://t.me/claudehn" class="tg">TG</a>
+        <a href="https://github.com/thevibeworks/claude-reads-hn">GH</a>
+        <button class="font-toggle" id="fontToggle" onclick="toggleFont()" title="Toggle monospace font">Aa</button>
         <div class="theme-picker">
           <button class="theme-btn" onclick="toggleThemeMenu()">Theme</button>
           <div class="theme-menu" id="themeMenu">
@@ -434,6 +519,15 @@
       });
     }
 
+    // Font toggle
+    function toggleFont() {
+      const isMono = document.documentElement.getAttribute('data-font') === 'mono';
+      const newFont = isMono ? 'sans' : 'mono';
+      document.documentElement.setAttribute('data-font', newFont);
+      localStorage.setItem('font', newFont);
+      document.getElementById('fontToggle').classList.toggle('active', newFont === 'mono');
+    }
+
     // Close menu on outside click
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.theme-picker')) {
@@ -441,10 +535,13 @@
       }
     });
 
-    // Load saved theme
+    // Load saved preferences
     const savedTheme = localStorage.getItem('theme') || 'dark';
+    const savedFont = localStorage.getItem('font') || 'sans';
     document.documentElement.setAttribute('data-theme', savedTheme);
+    document.documentElement.setAttribute('data-font', savedFont);
     updateThemeMenu(savedTheme);
+    if (savedFont === 'mono') document.getElementById('fontToggle').classList.add('active');
 
     // Feed loading
     const REPO_RAW = 'https://raw.githubusercontent.com/thevibeworks/claude-reads-hn/main';
@@ -505,6 +602,8 @@
       let highlights = [];
       let stories = [];
       let currentStory = null;
+      let storyIdx = 0;
+      const digestId = date.replace(/[:\s-]/g, '');
 
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
@@ -524,15 +623,19 @@
           if (currentStory) stories.push(currentStory);
           const titleMatch = line.match(/### \[([^\]]+)\]\(([^)]+)\)(.*)/);
           if (titleMatch) {
+            storyIdx++;
             currentStory = {
+              id: `${digestId}-${storyIdx}`,
               title: titleMatch[1],
               url: titleMatch[2],
               meta: titleMatch[3].replace(/[•·]/g, '').trim(),
               hnUrl: '',
+              hnId: '',
               tldr: '',
               take: '',
               comment: '',
-              commentAuthor: ''
+              commentAuthor: '',
+              tags: []
             };
           }
           continue;
@@ -541,8 +644,11 @@
         if (!currentStory) continue;
 
         if (line.includes('news.ycombinator.com/item')) {
-          const hnMatch = line.match(/\((https:\/\/news\.ycombinator\.com\/item\?id=\d+)\)/);
-          if (hnMatch) currentStory.hnUrl = hnMatch[1];
+          const hnMatch = line.match(/\((https:\/\/news\.ycombinator\.com\/item\?id=(\d+))\)/);
+          if (hnMatch) {
+            currentStory.hnUrl = hnMatch[1];
+            currentStory.hnId = hnMatch[2];
+          }
           continue;
         }
 
@@ -564,28 +670,44 @@
           }
           continue;
         }
+
+        if (line.startsWith('Tags:')) {
+          const tagsMatch = line.match(/#\w+/g);
+          if (tagsMatch) currentStory.tags = tagsMatch;
+          continue;
+        }
       }
 
       if (currentStory) stories.push(currentStory);
 
-      let html = `<article class="digest">
+      // Format date nicely (no UTC suffix)
+      const formattedDate = formatDate(date);
+
+      let html = `<article class="digest" id="d-${digestId}">
         <header class="digest-header">
-          <div class="digest-date">${date} UTC</div>
+          <div class="digest-date">${formattedDate}</div>
           ${vibe ? `<div class="digest-vibe">${escapeHtml(vibe)}</div>` : ''}
         </header>`;
 
-      if (highlights.length > 0) {
-        html += `<div class="highlights">
-          ${highlights.slice(0, 5).map(h => `<span class="highlight">${escapeHtml(h)}</span>`).join('')}
-        </div>`;
+      if (highlights.length > 0 && stories.length > 0) {
+        html += `<div class="highlights">`;
+        highlights.slice(0, 5).forEach((h, idx) => {
+          const story = stories[idx];
+          if (story) {
+            html += `<a href="#${story.id}" class="highlight"><span class="highlight-num">${idx + 1}</span>${escapeHtml(h)}</a>`;
+          } else {
+            html += `<span class="highlight">${escapeHtml(h)}</span>`;
+          }
+        });
+        html += `</div>`;
       }
 
       for (const s of stories) {
-        html += `<div class="story">
+        html += `<div class="story" id="${s.id}">
           <h3 class="story-title"><a href="${escapeHtml(s.url)}" target="_blank">${escapeHtml(s.title)}</a></h3>
           <div class="story-meta">
-            ${s.meta ? `${escapeHtml(s.meta)} · ` : ''}
-            ${s.hnUrl ? `<a href="${escapeHtml(s.hnUrl)}" target="_blank">discuss</a>` : ''}
+            ${s.meta ? `<span class="story-stats" title="Stats from when story was fetched">${escapeHtml(s.meta)}</span> · ` : ''}
+            ${s.hnUrl ? `<a href="${escapeHtml(s.hnUrl)}" target="_blank">HN#${s.hnId}</a>` : ''}
           </div>
           ${s.tldr ? `<div class="story-section story-tldr">
             <div class="story-label">TL;DR</div>
@@ -602,11 +724,21 @@
               <div class="story-quote-author">— ${escapeHtml(s.commentAuthor)}</div>
             </div>
           </div>` : ''}
+          ${s.tags.length > 0 ? `<div class="story-tags">${s.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join(' ')}</div>` : ''}
         </div>`;
       }
 
       html += '</article>';
       return html;
+    }
+
+    function formatDate(dateStr) {
+      // Input: "2025-12-13 00:44" -> "Dec 13, 2025 00:44"
+      const parts = dateStr.match(/(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})/);
+      if (!parts) return dateStr;
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const [_, y, m, d, h, min] = parts;
+      return `${months[parseInt(m)-1]} ${parseInt(d)}, ${y} ${h}:${min}`;
     }
 
     function escapeHtml(str) {
