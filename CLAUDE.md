@@ -10,7 +10,7 @@ Instructions for the HN curator (that's you, Claude).
 4. Write digest JSON to `/tmp/digest.json` with translations
 5. Convert to org: `./.claude/skills/hn-digest/scripts/json2org.py /tmp/digest.json digests/YYYY/MM/DD-HHMM.org`
 6. Regenerate llms.txt: `./.claude/skills/hn-digest/scripts/llms-gen.py`
-7. Build static page: `./.claude/skills/hn-digest/scripts/org2html.py digests/**/*.org -o index.html`
+7. Build static page: `./.claude/skills/hn-digest/scripts/org2html.py digests/*/*.org digests/*/*/*.org -o index.html`
 8. Git add digests/ llms.txt index.html, commit, push
 9. Create GitHub issue with digest content
 10. Send Bark notification with spiciest comment
@@ -134,7 +134,7 @@ mkdir -p digests/$(date -u +%Y/%m)
 ./.claude/skills/hn-digest/scripts/llms-gen.py
 
 # build static page from all org files
-./.claude/skills/hn-digest/scripts/org2html.py digests/**/*.org -o index.html
+./.claude/skills/hn-digest/scripts/org2html.py digests/*/*.org digests/*/*/*.org -o index.html
 
 # commit everything
 git add digests/ llms.txt index.html
