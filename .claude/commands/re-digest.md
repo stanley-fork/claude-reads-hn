@@ -1,6 +1,6 @@
 # Re-Digest Command
 
-Reprocess existing digests: update format, generate translations, add historical stories.
+Reprocess existing digests: update format, verify structure.
 
 ## Usage
 
@@ -22,11 +22,7 @@ claude /re-digest digests/2025/12/*.md
    - `Tags:` with 2-4 lowercase English hashtags
    - All URLs preserved unchanged
 
-2. **Translate**: Spawn translator agents for all languages
-   - Languages: zh, ja, ko, es, de
-   - Output: `digests/i18n/{lang}/YYYY/MM/DD-HHMM.md`
-
-3. **Regenerate Index**: Run `./llms-gen.py`
+2. **Regenerate Index**: Run `./llms-gen.py`
 
 ## Execution Steps
 
@@ -45,18 +41,9 @@ Given file(s) as $ARGS:
       - Tags: #lowercase #hashtags
    c. Write corrected version back
 
-3. Spawn translator agents (parallel):
-   claude --agent translator "Translate $FILE to zh" --run-in-background
-   claude --agent translator "Translate $FILE to ja" --run-in-background
-   claude --agent translator "Translate $FILE to ko" --run-in-background
-   claude --agent translator "Translate $FILE to es" --run-in-background
-   claude --agent translator "Translate $FILE to de" --run-in-background
+3. Run ./llms-gen.py
 
-4. Wait for all translators to complete
-
-5. Run ./llms-gen.py
-
-6. Git commit with message: "re-digest: update format + translations for {files}"
+4. Git commit with message: "re-digest: format update for {files}"
 ```
 
 ## Adding Historical Stories
@@ -73,6 +60,4 @@ Historical digests follow same format, just different source data.
 ## Notes
 
 - Does NOT re-fetch articles (preserves existing TLDRs and Takes)
-- Translations overwrite existing i18n files
 - Run during low-usage hours for batch operations
-- Use `--model haiku` for format checks, `--model sonnet` for translations
