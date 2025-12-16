@@ -7,54 +7,72 @@ Instructions for the HN curator (that's you, Claude).
 1. Read `/tmp/hn/stories.md` - contains HN stories with titles, scores, comments, article previews
 2. Read `llms.txt` - your memory of all past digests (story IDs, topics covered)
 3. Pick 5 FRESH stories (never covered before, or covered but with 2x+ comment growth)
-4. Write digest to `digests/YYYY/MM/DD-HHMM.md`
+4. Write digest to `digests/YYYY/MM/DD-HHMM.md` with INLINE TRANSLATIONS
 5. Regenerate `llms.txt` by running `./llms-gen.py`
-6. Git commit, push
-7. Create GitHub issue with digest content
-8. Send Bark notification with spiciest comment
+6. Build static page: `python3 scripts/build.py --all`
+7. Git add digests/ llms.txt index.html, commit, push
+8. Create GitHub issue with digest content
+9. Send Bark notification with spiciest comment
 
 ## Digest Format
 
 **File path**: `digests/YYYY/MM/DD-HHMM.md`
 Example: `digests/2025/12/05-0900.md` for Dec 5, 09:00 UTC
 
-**Content structure**:
+**Content structure with inline translations**:
 ```markdown
 # HN Digest YYYY-MM-DD HH:MM UTC
 
 > one-line vibe capturing today's HN energy
+<!-- i18n:zh -->中文版 vibe<!-- /i18n -->
+<!-- i18n:ja -->日本語 vibe<!-- /i18n -->
+<!-- i18n:ko -->한국어 vibe<!-- /i18n -->
+<!-- i18n:es -->Spanish vibe<!-- /i18n -->
+<!-- i18n:de -->German vibe<!-- /i18n -->
 
 **Highlights**
 - Story1: one-liner hook
+<!-- i18n:zh -->- Story1: 中文 hook<!-- /i18n -->
 - Story2: one-liner hook
-- Story3: one-liner hook
-- Story4: one-liner hook
-- Story5: one-liner hook
+<!-- i18n:zh -->- Story2: 中文 hook<!-- /i18n -->
+...
 
 ---
 
 ### [Story Title](article_url) • Xpts Yc
+<!-- i18n:zh -->### 中文标题<!-- /i18n -->
+<!-- i18n:ja -->### 日本語タイトル<!-- /i18n -->
 [HN discussion](hn_url)
-TLDR: what the article actually says (2-3 sentences, based on content not just title)
+
+TLDR: what the article actually says (2-3 sentences)
+<!-- i18n:zh -->TLDR: 中文摘要<!-- /i18n -->
+
 Take: your spicy opinion on this
+<!-- i18n:zh -->Take: 中文观点<!-- /i18n -->
+
 Comments:
 - "first perspective" -user1
+<!-- i18n:zh -->- "中文翻译" -user1<!-- /i18n -->
 - "contrasting view" -user2
-- "third angle" -user3
+<!-- i18n:zh -->- "中文翻译" -user2<!-- /i18n -->
+
 Tags: #topic1 #topic2 #topic3 (2-4 relevant lowercase hashtags)
 
 ### [Next Story](url) • Xpts Yc
-[HN discussion](hn_url)
-TLDR: ...
-Take: ...
-Comments: ...
-Tags: ...
-
-[repeat for all 5 stories]
+...repeat with translations...
 
 ---
 [archive](https://github.com/thevibeworks/claude-reads-hn)
 ```
+
+## Translation Rules
+
+- Use HTML comments: `<!-- i18n:LANG -->translation<!-- /i18n -->`
+- Languages: zh (Chinese), ja (Japanese), ko (Korean), es (Spanish), de (German)
+- Translate: vibe, highlights, story titles, TLDR, Take, Comments
+- Keep unchanged: URLs, hashtags (#tags), usernames (-user)
+- For each story: translate title, TLDR, Take, and 1-2 key comments
+- For highlights: translate all 5 hooks
 
 ## Story Selection Criteria
 
@@ -117,14 +135,17 @@ The quality of TLDRs depends on actually reading the source material, not guessi
 # create directory if needed
 mkdir -p digests/$(date -u +%Y/%m)
 
-# write digest file
+# write digest file with translations
 # (you do this with Write tool)
 
 # regenerate llms.txt from all digests
 ./llms-gen.py
 
+# build static page
+python3 scripts/build.py --all
+
 # commit everything
-git add digests/ llms.txt
+git add digests/ llms.txt index.html
 git commit -m "hn: $(date -u +%Y-%m-%d %H:%M) digest"
 git push
 ```

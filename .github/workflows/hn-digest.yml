@@ -230,48 +230,76 @@ jobs:
                c) Read and understand the actual content before writing TLDR
                d) If both fail, note in TLDR: "[from title + comments, article unreachable]"
 
-            4. Write to digests/YYYY/MM/DD-HHMM.md with this EXACT format:
+            4. Write to digests/YYYY/MM/DD-HHMM.md with INLINE TRANSLATIONS:
 
             ```
             # HN Digest YYYY-MM-DD HH:MM UTC
 
             > one-line vibe of today's HN
+            <!-- i18n:zh -->中文版 vibe<!-- /i18n -->
+            <!-- i18n:ja -->日本語 vibe<!-- /i18n -->
+            <!-- i18n:ko -->한국어 vibe<!-- /i18n -->
+            <!-- i18n:es -->Spanish vibe<!-- /i18n -->
+            <!-- i18n:de -->German vibe<!-- /i18n -->
 
             **Highlights**
             - Story1: one-liner hook
+            <!-- i18n:zh -->- Story1: 中文 hook<!-- /i18n -->
             - Story2: one-liner hook
-            - Story3: one-liner hook
-            - Story4: one-liner hook
-            - Story5: one-liner hook
+            <!-- i18n:zh -->- Story2: 中文 hook<!-- /i18n -->
+            ...
 
             ---
 
             ### [Story Title](article_url) • Xpts Yc
+            <!-- i18n:zh -->### 中文标题<!-- /i18n -->
+            <!-- i18n:ja -->### 日本語タイトル<!-- /i18n -->
+            <!-- i18n:ko -->### 한국어 제목<!-- /i18n -->
+            <!-- i18n:es -->### Título en español<!-- /i18n -->
+            <!-- i18n:de -->### Deutscher Titel<!-- /i18n -->
             [HN discussion](hn_url)
+
             TLDR: what the article actually says (2-3 sentences)
+            <!-- i18n:zh -->TLDR: 中文摘要<!-- /i18n -->
+            <!-- i18n:ja -->TLDR: 日本語要約<!-- /i18n -->
+
             Take: your spicy opinion
+            <!-- i18n:zh -->Take: 中文观点<!-- /i18n -->
+
             Comments:
             - "first perspective quote" -user1
-            - "contrasting/opposing view" -user2
-            - "third angle or synthesis" -user3
+            <!-- i18n:zh -->- "中文翻译" -user1<!-- /i18n -->
+            - "second quote" -user2
+            <!-- i18n:zh -->- "中文翻译" -user2<!-- /i18n -->
+
             Tags: #rust #opensource #startup (2-4 relevant topic tags)
 
             ### [Next Story](url) • Xpts Yc
-            ...repeat for all 5...
+            ...repeat for all 5 with translations...
 
             ---
             [archive](https://github.com/thevibeworks/claude-reads-hn)
             ```
 
+            TRANSLATION RULES:
+            - Use HTML comments: <!-- i18n:LANG -->translation<!-- /i18n -->
+            - Languages: zh (Chinese), ja (Japanese), ko (Korean), es (Spanish), de (German)
+            - Translate: vibe, highlights, titles, TLDR, Take, Comments
+            - Keep: URLs, hashtags, usernames unchanged
+            - For each story: translate title, TLDR, Take, and 1-2 key comments
+            - For highlights: translate all 5 hooks
+
             5. UPDATE MEMORY: run ./llms-gen.py (regenerates llms.txt from all digests)
 
-            6. Git add, commit, push
+            6. BUILD STATIC PAGE: run python3 scripts/build.py --all
 
-            7. Create issue:
+            7. Git add digests/ llms.txt index.html, commit, push
+
+            8. Create issue:
                - Title: catchy 5-8 word summary capturing today's chaos
                - Body: same content as digest file (highlights first!)
 
-            8. NOTIFY ALL CHANNELS:
+            9. NOTIFY ALL CHANNELS:
 
                a) BARK (use mcp__barkme__notify):
                   - title: your issue title
