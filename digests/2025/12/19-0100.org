@@ -1,0 +1,407 @@
+#+TITLE: HN Digest 2025-12-19 01:00:00 UT UTC
+#+DATE: 2025-12-19T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+ACM goes open, TVs go surveillance, and OpenAI ships another Codex while security researchers pwn everyone via SVG files
+
+* Highlights
+- ACM: All publications open access from 2026, authors keep their IP
+- Supply chain attack: 16-year-old pwns Discord, X, Vercel via Mintlify SVG exploit
+- Texas: Suing Samsung, Sony, LG for taking screenshots every 500ms
+- GPT-5.2-Codex: Now with cybersecurity features and actual Windows support
+- Firefox: Adding an AI kill switch for the paranoid among us
+
+* Stories
+
+** Beginning January 2026, all ACM publications will be made open access :academia:open-access:publishing:
+:PROPERTIES:
+:ID:       46313991
+:URL:      https://dl.acm.org/openaccess
+:HN_URL:   https://news.ycombinator.com/item?id=46313991
+:POINTS:   1287
+:COMMENTS: 142
+:BY:       Kerrick
+:END:
+
+*** TLDR
+ACM is going fully open access starting January 2026. Authors will retain intellectual property rights, all research will be freely accessible worldwide, and the model shifts from subscriber-pays to author-pays with APCs of $1450 (with discounts for lower-income countries).
+
+*** Take
+After decades of charging people to read papers their tax dollars funded, academic publishing finally gets the memo. The APC model is still a racket, but at least now you can read about sorting algorithms without selling a kidney.
+
+*** Comments
+
+**** trainyperson
+:PROPERTIES:
+:COMMENT_ID: 46314100
+:END:
+The financials of open access are interesting. Instead of journals getting revenue from subscribers, they charge authors an 'Article Processing Charge' (APC) which for ACM is $1450 in 2026.
+
+**** andrenarchy
+:PROPERTIES:
+:COMMENT_ID: 46314200
+:END:
+CEO of EMS Press here. Like most society publishers, we really care about our discipline(s) and want to support researchers regardless of whether they can afford an astronomical APC.
+
+**** alexpotato
+:PROPERTIES:
+:COMMENT_ID: 46314300
+:END:
+This article about how to go from manual processes to automation is still one of the greatest ACM publications ever written.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+ACM将于2026年1月起全面开放获取。作者将保留知识产权，所有研究将在全球免费访问，模式从订阅付费转为作者付费，APC为1450美元。
+***** Take
+在几十年向人们收费阅读由纳税人资助的论文后，学术出版终于明白了。APC模式仍是敲诈，但至少现在你可以阅读排序算法而不用卖肾。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+ACMは2026年1月から完全オープンアクセスに移行。著者は知的財産権を保持し、全ての研究は世界中で無料でアクセス可能に。モデルは購読者負担から著者負担に変わり、APCは1450ドル。
+***** Take
+税金で賄われた論文を読むのに何十年も課金してきた学術出版が、やっと理解した。APCモデルはまだ搾取だが、少なくとも腎臓を売らずにソートアルゴリズムが読める。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+ACM이 2026년 1월부터 완전 오픈 액세스로 전환합니다. 저자가 지적재산권을 보유하고, 모든 연구가 전 세계에서 무료로 접근 가능하며, 구독자 부담에서 저자 부담 모델로 바뀌어 APC는 1450달러입니다.
+***** Take
+수십 년간 세금으로 지원받은 논문을 유료로 읽게 한 학술 출판이 드디어 깨달았다. APC 모델은 여전히 사기지만, 최소한 이제 신장을 팔지 않고 정렬 알고리즘을 읽을 수 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+ACM pasará a acceso abierto completo en enero de 2026. Los autores conservarán los derechos de propiedad intelectual, toda la investigación será accesible gratuitamente en todo el mundo, y el modelo cambia de suscripción a pago por autor con APCs de $1450.
+***** Take
+Después de décadas cobrando a la gente por leer papers financiados con sus impuestos, la publicación académica finalmente captó el mensaje. El modelo APC sigue siendo un timo, pero al menos ahora puedes leer sobre algoritmos de ordenación sin vender un riñón.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+ACM wird ab Januar 2026 vollständig auf Open Access umstellen. Autoren behalten ihre geistigen Eigentumsrechte, alle Forschung wird weltweit frei zugänglich sein, und das Modell wechselt von Abonnenten- zu Autorenzahlung mit APCs von 1450 Dollar.
+***** Take
+Nach Jahrzehnten, in denen Menschen für das Lesen von steuerfinanzierten Papers zahlen mussten, hat das akademische Publizieren endlich verstanden. Das APC-Modell ist immer noch Abzocke, aber wenigstens kann man jetzt über Sortieralgorithmen lesen, ohne eine Niere zu verkaufen.
+** We pwned X, Vercel, Cursor, and Discord through a supply-chain attack :security:supply-chain:xss:bug-bounty:
+:PROPERTIES:
+:ID:       46317098
+:URL:      https://gist.github.com/hackermondev/5e2cdc32849405fff6b46957747a2d28
+:HN_URL:   https://news.ycombinator.com/item?id=46317098
+:POINTS:   560
+:COMMENTS: 217
+:BY:       hackermondev
+:END:
+
+*** TLDR
+A 16-year-old security researcher found a critical XSS vulnerability in Mintlify, an AI documentation platform. By uploading malicious JavaScript in an SVG file to their /_mintlify/static/ endpoint, attackers could steal credentials from Discord, X, Vercel, and Cursor users. The bug bounty total was about $11k.
+
+*** Take
+A VC-funded AI documentation startup somehow convinced Discord and Vercel to trust their infrastructure, then shipped a vulnerability that could pwn millions of users. The researcher got $11k for finding it. Someone at Mintlify is having a very bad week.
+
+*** Comments
+
+**** superasn
+:PROPERTIES:
+:COMMENT_ID: 46317200
+:END:
+This is a pretty scary exploit. Imagine just one link in a tweet or email: the JavaScript runs on discord.com origin. Your session cookies and token could be stolen.
+
+**** dllu
+:PROPERTIES:
+:COMMENT_ID: 46317300
+:END:
+The fact that SVG files can contain scripts was a bit of a mistake. The animations and games in SVG are cool, but it opens up a serious can of worms of security vulnerabilities.
+
+**** llmslave2
+:PROPERTIES:
+:COMMENT_ID: 46317400
+:END:
+VC funded vibe coded AI startup gets big name customers who don't properly vet security, ships a massive vulnerability, and the person who reports it gets $5k. If I recall, Mintlify wrote a blog post showcasing their impressively complicated caching layer.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+一位16岁的安全研究员在Mintlify（一个AI文档平台）中发现了严重的XSS漏洞。通过在他们的/_mintlify/static/端点上传包含恶意JavaScript的SVG文件，攻击者可以窃取Discord、X、Vercel和Cursor用户的凭证。赏金总计约1.1万美元。
+***** Take
+一家获得风投的AI文档创业公司不知怎么说服了Discord和Vercel信任他们的基础设施，然后发布了一个可能危害数百万用户的漏洞。研究员发现这个漏洞只拿到了1.1万美元。Mintlify的某人这周过得很糟糕。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+16歳のセキュリティ研究者がAIドキュメントプラットフォームMintlifyで重大なXSS脆弱性を発見。/_mintlify/static/エンドポイントに悪意のあるJavaScriptを含むSVGファイルをアップロードすることで、Discord、X、Vercel、Cursorユーザーの認証情報を盗むことができた。バグ報奨金は約1.1万ドル。
+***** Take
+VCが出資したAIドキュメントスタートアップがなぜかDiscordとVercelに信頼させ、数百万ユーザーを危険にさらす脆弱性を出荷。研究者は1.1万ドルを受け取った。Mintlifyの誰かは今週最悪の週を過ごしている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+16세 보안 연구원이 AI 문서 플랫폼 Mintlify에서 치명적인 XSS 취약점을 발견했다. /_mintlify/static/ 엔드포인트에 악성 JavaScript가 포함된 SVG 파일을 업로드하여 Discord, X, Vercel, Cursor 사용자의 자격 증명을 탈취할 수 있었다. 버그 바운티 총액은 약 11,000달러.
+***** Take
+VC 투자를 받은 AI 문서 스타트업이 어떻게든 Discord와 Vercel을 설득해 인프라를 신뢰하게 하고, 수백만 사용자를 위험에 빠뜨릴 수 있는 취약점을 출시했다. 연구원은 이를 찾아 11,000달러를 받았다. Mintlify의 누군가는 이번 주가 최악일 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Un investigador de seguridad de 16 años encontró una vulnerabilidad XSS crítica en Mintlify, una plataforma de documentación con IA. Al subir JavaScript malicioso en un archivo SVG a su endpoint /_mintlify/static/, los atacantes podían robar credenciales de usuarios de Discord, X, Vercel y Cursor. La recompensa total fue de unos $11k.
+***** Take
+Una startup de documentación con IA financiada por VCs convenció a Discord y Vercel de confiar en su infraestructura, y luego lanzó una vulnerabilidad que podía comprometer a millones de usuarios. El investigador recibió $11k por encontrarla. Alguien en Mintlify está teniendo una semana muy mala.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Ein 16-jähriger Sicherheitsforscher fand eine kritische XSS-Schwachstelle in Mintlify, einer KI-Dokumentationsplattform. Durch Hochladen von bösartigem JavaScript in einer SVG-Datei zum /_mintlify/static/-Endpunkt konnten Angreifer Zugangsdaten von Discord-, X-, Vercel- und Cursor-Nutzern stehlen. Die Bug-Bounty-Summe betrug etwa 11.000 Dollar.
+***** Take
+Ein VC-finanziertes KI-Dokumentations-Startup überzeugte Discord und Vercel irgendwie, ihrer Infrastruktur zu vertrauen, und lieferte dann eine Schwachstelle aus, die Millionen Nutzer gefährden könnte. Der Forscher bekam 11.000 Dollar dafür. Jemand bei Mintlify hat eine sehr schlechte Woche.
+** Texas is suing all of the big TV makers for spying on what you watch :privacy:surveillance:legal:hardware:
+:PROPERTIES:
+:ID:       46294456
+:URL:      https://www.theverge.com/news/845400/texas-tv-makers-lawsuit-samsung-sony-lg-hisense-tcl-spying
+:HN_URL:   https://news.ycombinator.com/item?id=46294456
+:POINTS:   469
+:COMMENTS: 250
+:BY:       tortilla
+:END:
+
+*** TLDR
+Texas Attorney General Ken Paxton is suing Samsung, Sony, LG, Hisense, and TCL for allegedly running a 'mass surveillance system.' The TVs reportedly use Automatic Content Recognition to capture screenshots every 500 milliseconds, tracking everything you watch including streaming, cable, Blu-rays, and even security camera feeds connected via HDMI.
+
+*** Take
+Your TV is taking 4K screenshots of your screen twice a second and selling them to advertisers, but sure, keep worrying about TikTok. Paxton calling TCL and Hisense 'Chinese-sponsored surveillance devices' is rich given the lawsuit includes Sony, Samsung, and LG doing the exact same thing.
+
+*** Comments
+
+**** ChrisArchitect
+:PROPERTIES:
+:COMMENT_ID: 46294500
+:END:
+Archive link for those hitting paywall.
+
+**** autoexec
+:PROPERTIES:
+:COMMENT_ID: 46294600
+:END:
+They should have included Roku too! Roughly twice per second, a Roku TV captures video snapshots in 4K resolution. These snapshots are scanned through a database to match what is airing.
+
+**** spike021
+:PROPERTIES:
+:COMMENT_ID: 46294700
+:END:
+I've had the advertising settings disabled on my LG C2 for a while and yesterday found that a couple new ones had been added and turned on by default. Good times.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+德州总检察长Ken Paxton起诉三星、索尼、LG、海信和TCL，指控其运行'大规模监控系统'。据报道，这些电视使用自动内容识别技术每500毫秒截取一次屏幕，追踪你观看的所有内容，包括流媒体、有线电视、蓝光光盘，甚至通过HDMI连接的安全摄像头画面。
+***** Take
+你的电视每秒两次截取4K屏幕截图并卖给广告商，但是，继续担心TikTok吧。Paxton称TCL和海信是'中国资助的监控设备'很讽刺，因为诉讼中索尼、三星和LG也在做同样的事。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+テキサス州司法長官Ken Paxtonがサムスン、ソニー、LG、ハイセンス、TCLを「大規模監視システム」の運営で提訴。これらのテレビは自動コンテンツ認識を使用して500ミリ秒ごとにスクリーンショットを撮影し、ストリーミング、ケーブルテレビ、ブルーレイ、HDMIで接続されたセキュリティカメラの映像まで追跡しているとされる。
+***** Take
+テレビが毎秒2回4Kスクリーンショットを撮って広告主に売っているが、TikTokの心配を続けよう。PaxtonがTCLとハイセンスを「中国政府支援の監視デバイス」と呼ぶのは皮肉だ。訴訟にはソニー、サムスン、LGも同じことをしていると含まれているから。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+텍사스 법무장관 Ken Paxton이 삼성, 소니, LG, 하이센스, TCL을 '대규모 감시 시스템' 운영 혐의로 고소했다. 이 TV들은 자동 콘텐츠 인식을 사용해 500밀리초마다 스크린샷을 캡처하여 스트리밍, 케이블, 블루레이, HDMI로 연결된 보안 카메라 피드까지 모든 시청 내용을 추적한다고 한다.
+***** Take
+TV가 초당 2회 4K 스크린샷을 찍어 광고주에게 팔고 있는데, 그래 TikTok 걱정이나 계속 하자. Paxton이 TCL과 하이센스를 '중국 정부 지원 감시 장치'라고 부르는 건 소니, 삼성, LG도 똑같이 하고 있다는 걸 감안하면 아이러니하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+El Fiscal General de Texas, Ken Paxton, está demandando a Samsung, Sony, LG, Hisense y TCL por supuestamente operar un 'sistema de vigilancia masiva'. Los televisores usan Reconocimiento Automático de Contenido para capturar capturas de pantalla cada 500 milisegundos, rastreando todo lo que ves incluyendo streaming, cable, Blu-rays e incluso feeds de cámaras de seguridad conectadas por HDMI.
+***** Take
+Tu TV está tomando capturas 4K de tu pantalla dos veces por segundo y vendiéndolas a anunciantes, pero claro, sigue preocupándote por TikTok. Que Paxton llame a TCL y Hisense 'dispositivos de vigilancia patrocinados por China' es irónico dado que la demanda incluye a Sony, Samsung y LG haciendo exactamente lo mismo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Der texanische Generalstaatsanwalt Ken Paxton verklagt Samsung, Sony, LG, Hisense und TCL wegen des angeblichen Betriebs eines 'Massenüberwachungssystems'. Die Fernseher nutzen automatische Inhaltserkennung, um alle 500 Millisekunden Screenshots zu machen und alles zu verfolgen, was man schaut - Streaming, Kabel, Blu-rays und sogar über HDMI angeschlossene Sicherheitskamera-Feeds.
+***** Take
+Dein Fernseher macht zweimal pro Sekunde 4K-Screenshots deines Bildschirms und verkauft sie an Werbetreibende, aber klar, mach dir weiter Sorgen um TikTok. Dass Paxton TCL und Hisense als 'von China gesponserte Überwachungsgeräte' bezeichnet, ist witzig, da die Klage auch Sony, Samsung und LG einschließt, die genau dasselbe tun.
+** GPT-5.2-Codex :ai:openai:coding:llm:
+:PROPERTIES:
+:ID:       46316367
+:URL:      https://openai.com/index/introducing-gpt-5-2-codex/
+:HN_URL:   https://news.ycombinator.com/item?id=46316367
+:POINTS:   352
+:COMMENTS: 205
+:BY:       meetpateltech
+:END:
+
+*** TLDR
+OpenAI released GPT-5.2-Codex with improved long-context understanding, better tool usage, and enhanced software engineering capabilities. New features include cybersecurity tooling (a researcher found React vulnerabilities using an earlier version) and actual Windows environment support. Available to paid ChatGPT users now, API access coming soon.
+
+*** Take
+OpenAI ships another model increment while the comments section becomes a therapy session about procrastination. At least one person found actual security bugs with it, so it's not just expensive autocomplete this time.
+
+*** Comments
+
+**** mccoyb
+:PROPERTIES:
+:COMMENT_ID: 46316400
+:END:
+A plea to not screw with the reasoning capabilities! Codex is so good at finding bugs and inconsistencies. Where Claude Code is good at 'raw coding', Codex/GPT5.x are unbeatable at careful, methodical finding of 'problems'.
+
+**** tananaev
+:PROPERTIES:
+:COMMENT_ID: 46316500
+:END:
+I was very skeptical about Codex at the beginning, but now all my coding tasks start with Codex. It helped with procrastination too - I'm sure many people had this feeling of not wanting to start a task.
+
+**** kordlessagain
+:PROPERTIES:
+:COMMENT_ID: 46316600
+:END:
+I've been using Codex CLI heavily after moving off Claude Code and built a containerized starter to run Codex in different modes.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+OpenAI发布了GPT-5.2-Codex，改进了长上下文理解、更好的工具使用和增强的软件工程能力。新功能包括网络安全工具（一位研究人员使用早期版本发现了React漏洞）和真正的Windows环境支持。现已向付费ChatGPT用户开放，API访问即将推出。
+***** Take
+OpenAI发布了另一个模型迭代，评论区变成了关于拖延症的心理治疗会议。至少有人用它发现了真正的安全漏洞，所以这次不只是昂贵的自动补全。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+OpenAIがGPT-5.2-Codexをリリース。長文コンテキスト理解、ツール使用、ソフトウェアエンジニアリング能力が向上。新機能にはサイバーセキュリティツール（研究者が以前のバージョンでReactの脆弱性を発見）と本物のWindows環境サポートが含まれる。有料ChatGPTユーザーに提供開始、APIアクセスは近日公開。
+***** Take
+OpenAIがまたモデルの増分をリリースし、コメント欄は先延ばしについてのセラピーセッションに。少なくとも誰かが実際のセキュリティバグを見つけたので、今回は高価な自動補完だけではない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+OpenAI가 GPT-5.2-Codex를 출시했다. 긴 컨텍스트 이해, 더 나은 도구 사용, 향상된 소프트웨어 엔지니어링 기능이 포함됐다. 새 기능에는 사이버보안 도구(연구자가 이전 버전으로 React 취약점 발견)와 실제 Windows 환경 지원이 있다. 유료 ChatGPT 사용자에게 지금 제공, API 접근은 곧 출시.
+***** Take
+OpenAI가 또 다른 모델 업데이트를 출시하고 댓글 섹션은 미루기에 대한 치료 세션이 됐다. 최소한 누군가는 실제 보안 버그를 찾았으니 이번엔 비싼 자동완성만은 아니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+OpenAI lanzó GPT-5.2-Codex con mejor comprensión de contexto largo, mejor uso de herramientas y capacidades mejoradas de ingeniería de software. Las nuevas características incluyen herramientas de ciberseguridad (un investigador encontró vulnerabilidades en React con una versión anterior) y soporte real para entorno Windows. Disponible para usuarios de ChatGPT de pago, acceso API próximamente.
+***** Take
+OpenAI lanza otro incremento de modelo mientras la sección de comentarios se convierte en una sesión de terapia sobre procrastinación. Al menos alguien encontró bugs de seguridad reales con él, así que esta vez no es solo autocompletado caro.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+OpenAI hat GPT-5.2-Codex veröffentlicht mit verbessertem Langkontext-Verständnis, besserem Werkzeuggebrauch und erweiterten Software-Engineering-Fähigkeiten. Neue Features umfassen Cybersecurity-Tools (ein Forscher fand React-Schwachstellen mit einer früheren Version) und echte Windows-Umgebungsunterstützung. Jetzt für zahlende ChatGPT-Nutzer verfügbar, API-Zugang folgt bald.
+***** Take
+OpenAI liefert ein weiteres Modell-Inkrement, während der Kommentarbereich zur Therapiesitzung über Prokrastination wird. Immerhin hat jemand echte Sicherheitslücken damit gefunden, also ist es diesmal nicht nur teure Autovervollständigung.
+** Firefox will have an option to disable all AI features :firefox:ai:privacy:browser:
+:PROPERTIES:
+:ID:       46316409
+:URL:      https://mastodon.social/@firefoxwebdevs/115740500373677782
+:HN_URL:   https://news.ycombinator.com/item?id=46316409
+:POINTS:   257
+:COMMENTS: 226
+:BY:       twapi
+:END:
+
+*** TLDR
+Firefox is adding a comprehensive toggle to disable all AI features in the browser. The developers are calling it an 'AI kill switch' internally, though they plan to use a less dramatic name for the public release. Local translations will likely stay enabled by default as it provides clear value.
+
+*** Take
+Mozilla actually listened to users for once. The fact that they're giving people a single button to nuke all AI features is the opposite of what every other browser is doing. Watch as this becomes the most-used toggle in Firefox history.
+
+*** Comments
+
+**** alexgotoi
+:PROPERTIES:
+:COMMENT_ID: 46316450
+:END:
+This is exactly the kind of boring, unsexy feature that actually builds trust. It's the opposite of the usual 'surprise, here's an AI sidebar you didn't ask for and can't fully disable' pattern.
+
+**** samschooler
+:PROPERTIES:
+:COMMENT_ID: 46316500
+:END:
+I think this is great and Mozilla is listening to its core fans. But I want Firefox to be competitive. Without AI features + agent mode being first class citizens, this will be a non-starter in 2 years.
+
+**** e2le
+:PROPERTIES:
+:COMMENT_ID: 46316550
+:END:
+Of all the AI features added recently, local translations is one that I would be OK with being enabled by default. It's useful, and its value proposition is much less dubious.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Firefox正在添加一个综合开关来禁用浏览器中的所有AI功能。开发人员内部称其为'AI终止开关'，但计划在公开发布时使用一个不那么戏剧化的名称。本地翻译可能会默认启用，因为它提供了明确的价值。
+***** Take
+Mozilla终于听取了用户意见。他们给用户一个按钮来关闭所有AI功能，这与其他浏览器的做法完全相反。看着这个开关成为Firefox历史上使用最多的开关吧。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Firefoxがブラウザの全AI機能を無効にする包括的なトグルを追加予定。開発者は内部で「AIキルスイッチ」と呼んでいるが、公開時にはもっと控えめな名前を使う予定。ローカル翻訳は明確な価値があるため、おそらくデフォルトで有効のまま。
+***** Take
+Mozillaが珍しくユーザーの声を聞いた。すべてのAI機能を一発で消すボタンを提供するのは、他のすべてのブラウザがやっていることの正反対。これがFirefox史上最も使われるトグルになるのを見届けよう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Firefox가 브라우저의 모든 AI 기능을 비활성화하는 종합 토글을 추가한다. 개발자들은 내부적으로 'AI 킬 스위치'라고 부르고 있지만, 공개 출시 시에는 덜 극적인 이름을 사용할 계획이다. 로컬 번역은 명확한 가치를 제공하므로 기본 활성화 상태로 유지될 것이다.
+***** Take
+Mozilla가 드디어 사용자 말을 들었다. 모든 AI 기능을 한 번에 끌 수 있는 버튼을 제공하는 건 다른 모든 브라우저가 하는 것과 정반대다. 이것이 Firefox 역사상 가장 많이 사용되는 토글이 되는 것을 지켜보자.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Firefox está añadiendo un interruptor integral para desactivar todas las funciones de IA en el navegador. Los desarrolladores lo llaman internamente 'interruptor de emergencia de IA', aunque planean usar un nombre menos dramático para el lanzamiento público. Las traducciones locales probablemente seguirán habilitadas por defecto ya que proporcionan un valor claro.
+***** Take
+Mozilla realmente escuchó a los usuarios por una vez. El hecho de que estén dando a la gente un solo botón para eliminar todas las funciones de IA es lo opuesto a lo que hace cualquier otro navegador. Mira cómo esto se convierte en el interruptor más usado en la historia de Firefox.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Firefox fügt einen umfassenden Schalter hinzu, um alle KI-Funktionen im Browser zu deaktivieren. Die Entwickler nennen ihn intern 'KI-Notausschalter', planen aber einen weniger dramatischen Namen für die Veröffentlichung. Lokale Übersetzungen bleiben wahrscheinlich standardmäßig aktiviert, da sie einen klaren Wert bieten.
+***** Take
+Mozilla hat ausnahmsweise auf die Nutzer gehört. Dass sie den Leuten einen einzigen Knopf geben, um alle KI-Funktionen auszuschalten, ist das Gegenteil von dem, was jeder andere Browser macht. Schau zu, wie das der meistgenutzte Schalter in der Firefox-Geschichte wird.
