@@ -1,0 +1,377 @@
+#+TITLE: HN Digest 2025-12-20 01:00:00 UT UTC
+#+DATE: 2025-12-20T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+MinIO exodus, AI acquihires, and TP-Link cameras that phone home to anyone who asks nicely
+
+* Highlights
+- Garage: The S3 store you can run on a potato, post-MinIO rage
+- Graphite joins Cursor, proving acquihires aren't dead
+- TP-Link cameras: hardcoded keys, buffer overflows, and 25K exposed on the internet
+- CSS Grid Lanes: Safari solving masonry before Chrome could file a spec
+- Believe the Checkbook: Anthropic bought Bun's humans, not its code
+
+* Stories
+
+** Garage – An S3 object store so reliable you can run it outside datacenters :infrastructure:s3:self-hosting:rust:opensource:
+:PROPERTIES:
+:ID:       46326984
+:URL:      https://garagehq.deuxfleurs.fr/
+:HN_URL:   https://news.ycombinator.com/item?id=46326984
+:POINTS:   440
+:COMMENTS: 90
+:BY:       ibobev
+:END:
+
+*** TLDR
+Garage is a lightweight, open-source S3-compatible object store designed to run on sketchy hardware across unreliable networks. Single binary, 1GB RAM requirement, replicates data across 3 zones. Built by Europeans on EU research grants, it's what you grab when MinIO's licensing gives you heartburn.
+
+*** Take
+The MinIO debacle created a market opportunity and Garage is capitalizing. It won't win benchmarks against MinIO, but for self-hosters who value 'it just works on my Raspberry Pi cluster' over raw throughput, this is catnip.
+
+*** Comments
+
+**** adamcharnock
+:PROPERTIES:
+:COMMENT_ID: 46327001
+:END:
+We found Garage easier to deploy than MinIO but it caps around 5 gigabits vs MinIO's 20-25 gigabits on a 25g NIC.
+
+**** SomaticPirate
+:PROPERTIES:
+:COMMENT_ID: 46327045
+:END:
+Seeing a ton of adoption after the MinIO debacle. RustFS also looks interesting but had to exclude it for non-technical reasons.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Garage是一个轻量级开源S3兼容对象存储，设计用于在不可靠网络上运行于普通硬件。单一二进制文件，只需1GB内存，跨3个区域复制数据。当MinIO的许可证让你头疼时，这就是你的选择。
+***** Take
+MinIO事件创造了市场机会，Garage正在抓住它。性能测试赢不了MinIO，但对于看重'在我的树莓派集群上能用'的自托管者来说，这简直太香了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Garageは軽量でオープンソースのS3互換オブジェクトストア。不安定なネットワーク上の普通のハードウェアで動くように設計。シングルバイナリ、1GB RAMで動作、3ゾーンにデータ複製。MinIOのライセンスに悩まされたらこれ。
+***** Take
+MinIO問題が市場機会を作り、Garageはそれを掴んでいる。ベンチマークでは勝てないが、「ラズパイクラスタで動く」を重視するセルフホスターにはたまらない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Garage는 경량 오픈소스 S3 호환 오브젝트 스토어. 불안정한 네트워크의 일반 하드웨어에서 실행 가능. 단일 바이너리, 1GB RAM, 3개 존에 데이터 복제. MinIO 라이선스가 골치 아플 때 쓰는 것.
+***** Take
+MinIO 사태가 시장 기회를 만들었고 Garage가 잡고 있다. 벤치마크에선 못 이기지만 '라즈베리파이 클러스터에서 그냥 돌아가는' 것을 중시하는 셀프호스터에겐 꿀이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Garage es un almacén de objetos S3 ligero y de código abierto, diseñado para hardware modesto en redes poco confiables. Un solo binario, 1GB de RAM, replica datos en 3 zonas. Es lo que usas cuando la licencia de MinIO te da dolor de cabeza.
+***** Take
+El fiasco de MinIO creó una oportunidad de mercado y Garage la está aprovechando. No ganará benchmarks, pero para los que valoran 'funciona en mi cluster de Raspberry Pi', esto es oro.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Garage ist ein leichtgewichtiger Open-Source S3-kompatibler Objektspeicher für unzuverlässige Netzwerke und einfache Hardware. Ein Binary, 1GB RAM, repliziert Daten über 3 Zonen. Wenn MinIOs Lizenz Kopfschmerzen macht, nimm das hier.
+***** Take
+Das MinIO-Debakel hat einen Markt geschaffen und Garage nutzt ihn. Es gewinnt keine Benchmarks gegen MinIO, aber für Self-Hoster, die 'läuft auf meinem Raspberry Pi Cluster' schätzen, ist es perfekt.
+** Graphite is joining Cursor :acquisition:devtools:ai:startup:
+:PROPERTIES:
+:ID:       46327206
+:URL:      https://cursor.com/blog/graphite
+:HN_URL:   https://news.ycombinator.com/item?id=46327206
+:POINTS:   166
+:COMMENTS: 191
+:BY:       fosterfriends
+:END:
+
+*** TLDR
+Cursor acquired Graphite, a code review platform used by hundreds of thousands of engineers. Graphite will 'continue to operate independently' (classic acquihire speak). The stated goal: blur the line between writing code and reviewing it. No financial terms disclosed.
+
+*** Take
+If AI agents can write all the code, why buy a code review company? Either Cursor knows something we don't about the limits of AI-generated code, or they really just wanted the team. The 191 comments suggest HN has opinions.
+
+*** Comments
+
+**** bangaladore
+:PROPERTIES:
+:COMMENT_ID: 46327250
+:END:
+Cursor had first mover advantage but as a huge IDE fan, I prefer Codex CLI. The VSCode fork thing means I'll never switch.
+
+**** gravypod
+:PROPERTIES:
+:COMMENT_ID: 46327312
+:END:
+If AI companies had 100x dev output, why acquire anyone? Just show screenshots to your agent. Is it market share?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Cursor收购了Graphite，一个被数十万工程师使用的代码审查平台。Graphite将'继续独立运营'（经典收购话术）。目标：模糊写代码和审代码的界限。财务条款未披露。
+***** Take
+如果AI能写所有代码，为什么要买代码审查公司？要么Cursor知道一些我们不知道的AI生成代码的局限性，要么他们真的只是想要团队。191条评论说明HN有话要说。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Cursorが数十万のエンジニアが使うコードレビュープラットフォームGraphiteを買収。Graphiteは「独立して運営を続ける」（典型的な買収トーク）。目標：コードを書くこととレビューすることの境界を曖昧に。財務条件は非公開。
+***** Take
+AIエージェントが全てのコードを書けるなら、なぜコードレビュー会社を買う？CursorはAI生成コードの限界について何か知っているか、本当にチームが欲しかっただけ。191コメントはHNが意見を持っている証拠。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Cursor가 수십만 엔지니어가 사용하는 코드 리뷰 플랫폼 Graphite를 인수. Graphite는 '독립적으로 운영을 계속할 것'(전형적인 인수합병 화법). 목표: 코드 작성과 리뷰의 경계를 흐리게. 재무 조건 비공개.
+***** Take
+AI 에이전트가 모든 코드를 쓸 수 있다면 왜 코드 리뷰 회사를 사? Cursor가 AI 생성 코드의 한계에 대해 뭔가 아는 게 있거나, 팀을 원했거나. 191개 댓글은 HN이 할 말이 많다는 증거.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Cursor adquirió Graphite, una plataforma de code review usada por cientos de miles de ingenieros. Graphite 'continuará operando independientemente' (discurso típico de adquisición). El objetivo: difuminar la línea entre escribir y revisar código. Sin términos financieros.
+***** Take
+Si los agentes de IA pueden escribir todo el código, ¿por qué comprar una empresa de code review? O Cursor sabe algo sobre los límites del código generado por IA, o solo querían al equipo. Los 191 comentarios sugieren que HN tiene opiniones.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Cursor kaufte Graphite, eine Code-Review-Plattform mit Hunderttausenden von Nutzern. Graphite wird 'unabhängig weiterarbeiten' (klassisches Acquihire-Sprech). Ziel: Die Grenze zwischen Code schreiben und reviewen verwischen. Keine finanziellen Details.
+***** Take
+Wenn KI-Agenten allen Code schreiben können, warum eine Code-Review-Firma kaufen? Entweder weiß Cursor etwas über die Grenzen von KI-generiertem Code, oder sie wollten wirklich nur das Team. Die 191 Kommentare zeigen, dass HN Meinungen hat.
+** TP-Link Tapo C200: Hardcoded Keys, Buffer Overflows and Privacy :security:iot:ai:reverse-engineering:privacy:
+:PROPERTIES:
+:ID:       46329038
+:URL:      https://www.evilsocket.net/2025/12/18/TP-Link-Tapo-C200-Hardcoded-Keys-Buffer-Overflows-and-Privacy-in-the-Era-of-AI-Assisted-Reverse-Engineering/
+:HN_URL:   https://news.ycombinator.com/item?id=46329038
+:POINTS:   210
+:COMMENTS: 61
+:BY:       sibellavia
+:END:
+
+*** TLDR
+Security researcher used AI-assisted reverse engineering (Ghidra + Claude) to find multiple pre-auth vulns in TP-Link's Tapo C200 camera: SOAP XML parser overflow, HTTPS integer overflow, WiFi hijacking, and network scanning. About 25,000 of these cameras are directly exposed on the internet.
+
+*** Take
+Your $30 security camera has hardcoded keys and can be hijacked to spy on your WiFi neighbors. The fact that the researcher found all this in one sitting with Claude helping decompile binaries is either terrifying or amazing, depending on which side of the vulnerability you're on.
+
+*** Comments
+
+**** rao-v
+:PROPERTIES:
+:COMMENT_ID: 46329100
+:END:
+I'm frustrated with articles that conflate genuine failures with problems even FAANGs struggle with. Attacking a best practice as a cheap gotcha isn't fair.
+
+**** JaggedJax
+:PROPERTIES:
+:COMMENT_ID: 46329150
+:END:
+Probably fair to assume most of their other camera models have similar issues. They pump out models with similar firmware.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+安全研究员使用AI辅助逆向工程（Ghidra + Claude）在TP-Link Tapo C200摄像头中发现多个未授权漏洞：SOAP XML解析器溢出、HTTPS整数溢出、WiFi劫持和网络扫描。约25000台这样的摄像头直接暴露在互联网上。
+***** Take
+你那30美元的安全摄像头有硬编码密钥，可以被劫持来监视你邻居的WiFi。研究员用Claude帮助反编译在一次会话中就发现了这些，这要么令人恐惧要么令人惊叹，取决于你站在漏洞的哪一边。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+セキュリティ研究者がAI支援リバースエンジニアリング（Ghidra + Claude）でTP-Link Tapo C200カメラに複数の認証前脆弱性を発見：SOAP XMLパーサーオーバーフロー、HTTPSの整数オーバーフロー、WiFiハイジャック、ネットワークスキャン。約25000台がインターネットに直接露出。
+***** Take
+30ドルのセキュリティカメラにハードコードされた鍵があり、隣人のWiFiをスパイするために乗っ取れる。研究者がClaudeの助けで一度のセッションでこれを見つけたのは、脆弱性のどちら側にいるかで恐ろしくも驚くべきことでもある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+보안 연구원이 AI 보조 리버스 엔지니어링(Ghidra + Claude)으로 TP-Link Tapo C200 카메라에서 여러 사전 인증 취약점 발견: SOAP XML 파서 오버플로우, HTTPS 정수 오버플로우, WiFi 하이재킹, 네트워크 스캐닝. 약 25,000대가 인터넷에 직접 노출.
+***** Take
+30달러짜리 보안 카메라에 하드코딩된 키가 있고 이웃의 WiFi를 염탐하도록 하이재킹될 수 있다. 연구원이 Claude의 도움으로 한 세션에서 이걸 다 찾았다는 건 취약점의 어느 쪽에 있느냐에 따라 무섭거나 놀랍다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Un investigador de seguridad usó ingeniería inversa asistida por IA (Ghidra + Claude) para encontrar múltiples vulns pre-auth en la cámara TP-Link Tapo C200: overflow del parser XML SOAP, overflow de enteros HTTPS, secuestro WiFi y escaneo de redes. Unas 25,000 cámaras están expuestas directamente en internet.
+***** Take
+Tu cámara de seguridad de $30 tiene claves hardcodeadas y puede ser secuestrada para espiar el WiFi de tus vecinos. El hecho de que el investigador encontró todo esto en una sesión con Claude es aterrador o increíble, dependiendo de qué lado de la vulnerabilidad estés.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Sicherheitsforscher nutzte KI-unterstütztes Reverse Engineering (Ghidra + Claude) um mehrere Pre-Auth-Schwachstellen in TP-Links Tapo C200 Kamera zu finden: SOAP XML Parser Overflow, HTTPS Integer Overflow, WiFi-Hijacking und Netzwerk-Scanning. Etwa 25.000 dieser Kameras sind direkt im Internet erreichbar.
+***** Take
+Deine 30-Dollar-Sicherheitskamera hat hardcodierte Schlüssel und kann gekapert werden, um das WiFi deiner Nachbarn auszuspionieren. Dass der Forscher das alles in einer Sitzung mit Claudes Hilfe fand, ist entweder erschreckend oder erstaunlich, je nachdem auf welcher Seite der Schwachstelle du stehst.
+** CSS Grid Lanes :css:webdev:safari:webkit:frontend:
+:PROPERTIES:
+:ID:       46331586
+:URL:      https://webkit.org/blog/17660/introducing-css-grid-lanes/
+:HN_URL:   https://news.ycombinator.com/item?id=46331586
+:POINTS:   202
+:COMMENTS: 62
+:BY:       frizlab
+:END:
+
+*** TLDR
+WebKit introduces CSS Grid Lanes, a native solution for masonry layouts. Uses 'display: grid-lanes' with automatic item placement to minimize vertical gaps. Zero media queries needed. Available now in Safari Technology Preview 234, pending standardization.
+
+*** Take
+Safari shipped masonry before Chrome could finish arguing about whether it should be part of Grid or its own thing. The irony of Safari being the CSS innovator while Chrome plays catch-up is not lost on anyone who remembers 2010.
+
+*** Comments
+
+**** culi
+:PROPERTIES:
+:COMMENT_ID: 46331600
+:END:
+Props to the Safari team. They surprised us all when they shot to the top of interop-2025.
+
+**** jonah
+:PROPERTIES:
+:COMMENT_ID: 46331650
+:END:
+I just used Masonry for a project. It works but it's hacky with absolute positioning and recalculating on resize. Looking forward to a native option.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+WebKit推出CSS Grid Lanes，瀑布流布局的原生解决方案。使用'display: grid-lanes'自动放置项目以最小化垂直间隙。不需要媒体查询。现已在Safari Technology Preview 234中可用，等待标准化。
+***** Take
+Safari在Chrome还在争论瀑布流该是Grid的一部分还是独立特性时就已发布了。Safari成为CSS创新者而Chrome在追赶，这讽刺感让所有记得2010年的人都会心一笑。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+WebKitがCSS Grid Lanesを発表。マスタリーレイアウトのネイティブソリューション。'display: grid-lanes'で自動配置し垂直ギャップを最小化。メディアクエリ不要。Safari Technology Preview 234で利用可能、標準化待ち。
+***** Take
+SafariはChromeがGridの一部かどうか議論している間にマスタリーを出荷した。Safariが CSS イノベーターでChromeが追いかける側という皮肉は2010年を覚えている人には響く。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+WebKit이 CSS Grid Lanes 출시. 매이슨리 레이아웃의 네이티브 솔루션. 'display: grid-lanes'로 자동 배치하여 수직 간격 최소화. 미디어 쿼리 불필요. Safari Technology Preview 234에서 사용 가능, 표준화 대기 중.
+***** Take
+Safari가 Chrome이 Grid의 일부인지 별개인지 논쟁하는 동안 매이슨리를 출시했다. Safari가 CSS 혁신자이고 Chrome이 따라잡는 아이러니는 2010년을 기억하는 사람에게 와닿는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+WebKit presenta CSS Grid Lanes, solución nativa para layouts masonry. Usa 'display: grid-lanes' con posicionamiento automático para minimizar espacios verticales. Sin media queries. Disponible en Safari Technology Preview 234, pendiente de estandarización.
+***** Take
+Safari lanzó masonry antes de que Chrome terminara de discutir si debería ser parte de Grid o algo propio. La ironía de Safari siendo el innovador CSS mientras Chrome se pone al día no se le escapa a nadie que recuerde 2010.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+WebKit präsentiert CSS Grid Lanes, eine native Lösung für Masonry-Layouts. Verwendet 'display: grid-lanes' mit automatischer Platzierung zur Minimierung vertikaler Lücken. Keine Media Queries nötig. Verfügbar in Safari Technology Preview 234, Standardisierung ausstehend.
+***** Take
+Safari hat Masonry geliefert, bevor Chrome fertig diskutiert hatte, ob es Teil von Grid sein sollte oder eigenständig. Die Ironie, dass Safari der CSS-Innovator ist während Chrome aufholt, entgeht niemandem, der sich an 2010 erinnert.
+** Believe the Checkbook :ai:careers:startup:acquisition:
+:PROPERTIES:
+:ID:       46327133
+:URL:      https://robertgreiner.com/believe-the-checkbook/
+:HN_URL:   https://news.ycombinator.com/item?id=46327133
+:POINTS:   114
+:COMMENTS: 48
+:BY:       rg81
+:END:
+
+*** TLDR
+Despite AI companies claiming engineers are obsolete, their acquisitions tell a different story. Case in point: Anthropic paid millions for the Bun team when they could have forked the open-source code for free. The thesis: 'The bottleneck isn't code production, it is judgment.'
+
+*** Take
+When Anthropic's own AI agent is Bun's most prolific contributor but they still write checks for humans, maybe the 'AI replaces devs' narrative has some holes. Watch what they buy, not what they tweet.
+
+*** Comments
+
+**** RandallBrown
+:PROPERTIES:
+:COMMENT_ID: 46327200
+:END:
+It always surprises me that this isn't obvious to everyone. If AI wrote 100% of my code, I wouldn't get more done because writing code is usually the easy part.
+
+**** neilv
+:PROPERTIES:
+:COMMENT_ID: 46327250
+:END:
+Clever pitch. Don't alienate people who've hitched their wagons to AI, but push valuing highly-skilled ICs as a solution.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+尽管AI公司声称工程师已过时，他们的收购却讲述了不同的故事。例证：Anthropic花了数百万买下Bun团队，而他们本可以免费fork开源代码。论点：'瓶颈不是代码生产，而是判断力。'
+***** Take
+当Anthropic自己的AI代理是Bun最多产的贡献者，但他们仍然为人类开支票时，也许'AI取代开发者'的叙事有些漏洞。看他们买什么，不是看他们发什么推。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+AI企業はエンジニアが時代遅れと主張するが、買収は違う話をしている。例：Anthropicはオープンソースコードを無料でフォークできたのに、Bunチームに数百万ドル支払った。テーゼ：「ボトルネックはコード生産ではなく判断力だ。」
+***** Take
+AnthropicのAIエージェントがBunの最も多作な貢献者なのに人間に小切手を切るなら、「AIが開発者を置き換える」物語には穴があるかも。ツイートではなく何を買うかを見よ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+AI 회사들이 엔지니어가 쓸모없다고 주장하지만 인수는 다른 이야기를 한다. 사례: Anthropic이 오픈소스 코드를 무료로 포크할 수 있었는데도 Bun 팀에 수백만 달러를 지불. 테제: '병목은 코드 생산이 아니라 판단력이다.'
+***** Take
+Anthropic의 AI 에이전트가 Bun의 가장 다작 기여자인데도 인간에게 수표를 쓴다면, 'AI가 개발자를 대체한다' 서사에 구멍이 있을지도. 트윗이 아니라 뭘 사는지 봐라.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+A pesar de que las empresas de IA afirman que los ingenieros son obsoletos, sus adquisiciones cuentan otra historia. Caso: Anthropic pagó millones por el equipo de Bun cuando podían haber forkeado el código open-source gratis. La tesis: 'El cuello de botella no es la producción de código, es el juicio.'
+***** Take
+Cuando el agente de IA de Anthropic es el contribuidor más prolífico de Bun pero aún escriben cheques para humanos, quizás la narrativa de 'IA reemplaza devs' tiene agujeros. Mira lo que compran, no lo que tuitean.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Obwohl KI-Firmen behaupten, Ingenieure seien obsolet, erzählen ihre Akquisitionen eine andere Geschichte. Beispiel: Anthropic zahlte Millionen für das Bun-Team, obwohl sie den Open-Source-Code kostenlos forken konnten. These: 'Der Engpass ist nicht Code-Produktion, sondern Urteilsvermögen.'
+***** Take
+Wenn Anthropics KI-Agent der produktivste Bun-Contributor ist, sie aber trotzdem Schecks für Menschen schreiben, hat die 'KI ersetzt Devs'-Story vielleicht Löcher. Schau was sie kaufen, nicht was sie tweeten.
