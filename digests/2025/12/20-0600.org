@@ -1,0 +1,407 @@
+#+TITLE: HN Digest 2025-12-20 06:00:00 UT UTC
+#+DATE: 2025-12-20T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Safari reinvents CSS layouts, IoT cameras remain a dumpster fire, and Cursor keeps eating the dev tool ecosystem
+
+* Highlights
+- CSS Grid Lanes: Safari gives us masonry without the JavaScript hangover
+- Garage: S3 storage that runs on your grandma's Raspberry Pi cluster
+- Graphite + Cursor: Code review meets AI editor in tech's latest Voltron moment
+- TP-Link cameras: Hardcoded keys, buffer overflows, and 25k devices exposed
+- 8-bit Bolero: One man, nine homemade instruments, six months of obsession
+
+* Stories
+
+** CSS Grid Lanes :css:webdev:safari:layout:
+:PROPERTIES:
+:ID:       46331586
+:URL:      https://webkit.org/blog/17660/introducing-css-grid-lanes/
+:HN_URL:   https://news.ycombinator.com/item?id=46331586
+:POINTS:   409
+:COMMENTS: 116
+:BY:       frizlab
+:END:
+
+*** TLDR
+Safari introduces CSS Grid Lanes, a new layout method using 'display: grid-lanes' that enables masonry-style layouts natively in CSS. It automatically places items in optimal positions across columns or rows, supports varying sizes, and works without JavaScript. Available now in Safari Technology Preview 234.
+
+*** Take
+WebKit casually drops the masonry layout we've been hacking together with JavaScript for a decade. Meanwhile Chrome is still busy adding flags for experimental features nobody asked for.
+
+*** Comments
+
+**** culi
+:PROPERTIES:
+:COMMENT_ID: 46331600
+:END:
+Props to the Safari team. They surprised us all when they suddenly shot to the top of interop-2025.
+
+**** wackget
+:PROPERTIES:
+:COMMENT_ID: 46331650
+:END:
+I wish they'd release CSS Gap Decorations. I'm tired of having to use stupid hacks to get nice-looking borders between flex/grid items.
+
+**** GaryBluto
+:PROPERTIES:
+:COMMENT_ID: 46331700
+:END:
+To quote the wise Karl Pilkington: 'Do we need 'em?' HTML has become more and more bloated. How many methods do we need to do something that was possible back in the 90s?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Safari推出CSS Grid Lanes，使用'display: grid-lanes'实现原生CSS瀑布流布局。自动将元素放置在最佳位置，支持不同尺寸，无需JavaScript。现已在Safari Technology Preview 234中可用。
+***** Take
+WebKit轻描淡写地推出了我们用JavaScript折腾了十年的瀑布流布局。与此同时Chrome还在忙着给没人要的实验性功能加开关。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Safariが'display: grid-lanes'を使った新しいレイアウト方法CSS Grid Lanesを導入。マサンリースタイルのレイアウトをCSSでネイティブに実現。アイテムを自動的に最適な位置に配置し、JavaScriptなしで動作。Safari Technology Preview 234で利用可能。
+***** Take
+WebKitが10年間JavaScriptでハックしてきたマサンリーレイアウトをさらっと実装。一方Chromeは誰も求めていない実験的機能のフラグ追加に忙しい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Safari가 'display: grid-lanes'를 사용하는 새로운 레이아웃 방식 CSS Grid Lanes를 도입. 메이슨리 스타일 레이아웃을 CSS로 네이티브하게 구현. 아이템을 자동으로 최적의 위치에 배치하고, JavaScript 없이 작동. Safari Technology Preview 234에서 사용 가능.
+***** Take
+WebKit이 10년간 JavaScript로 조립해온 메이슨리 레이아웃을 슬쩍 내놓았다. 한편 Chrome은 아무도 원하지 않는 실험적 기능 플래그 추가에 바쁘다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Safari introduce CSS Grid Lanes, un nuevo metodo de layout usando 'display: grid-lanes' que permite layouts estilo masonry nativamente en CSS. Coloca automaticamente los elementos en posiciones optimas, soporta tamanos variables y funciona sin JavaScript. Disponible en Safari Technology Preview 234.
+***** Take
+WebKit lanza casualmente el layout masonry que hemos estado hackeando con JavaScript durante una decada. Mientras tanto Chrome sigue ocupado agregando flags para funciones experimentales que nadie pidio.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Safari fuhrt CSS Grid Lanes ein, eine neue Layout-Methode mit 'display: grid-lanes', die Masonry-Layouts nativ in CSS ermoglicht. Elemente werden automatisch optimal platziert, verschiedene Grossen werden unterstutzt, und es funktioniert ohne JavaScript. Verfugbar in Safari Technology Preview 234.
+***** Take
+WebKit bringt beilaufig das Masonry-Layout, das wir seit einem Jahrzehnt mit JavaScript zusammengehackt haben. Wahrend Chrome immer noch damit beschaftigt ist, Flags fur experimentelle Features hinzuzufugen, die niemand wollte.
+** Garage - An S3 object store so reliable you can run it outside datacenters :storage:s3:selfhosted:distributed:opensource:
+:PROPERTIES:
+:ID:       46326984
+:URL:      https://garagehq.deuxfleurs.fr/
+:HN_URL:   https://news.ycombinator.com/item?id=46326984
+:POINTS:   519
+:COMMENTS: 108
+:BY:       ibobev
+:END:
+
+*** TLDR
+Garage is an open-source, lightweight S3-compatible object store designed for distributed deployments on minimal hardware. Single binary, no dependencies, replicates across 3 zones, runs on 1GB RAM on x86/ARM. Built for resilience over raw speed, inspired by Amazon's Dynamo paper and CRDTs.
+
+*** Take
+Finally, enterprise-grade object storage for people who think 'the cloud' is just someone else's Raspberry Pi. Which, in this case, it literally can be.
+
+*** Comments
+
+**** adamcharnock
+:PROPERTIES:
+:COMMENT_ID: 46327100
+:END:
+We've done extensive testing and found Garage is easier to deploy than MinIO, but not as performant at high speeds. We could push about 5 gigabits but couldn't reach the 20-25 gigabits that MinIO could handle.
+
+**** fabian2k
+:PROPERTIES:
+:COMMENT_ID: 46327150
+:END:
+Looks interesting for local development. But some stuff in the production guide would scare me: 'For metadata storage, Garage does not do checksumming and integrity verification on its own.'
+
+**** tenacious_tuna
+:PROPERTIES:
+:COMMENT_ID: 46327200
+:END:
+Anyone know if it's possible to bandwidth-limit the sync operations? I'd love to set up garage instances across my families' houses as distributed backup, but I don't want to hose their down/uplink during awake hours.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Garage是一个开源轻量级S3兼容对象存储，专为最小硬件上的分布式部署设计。单一二进制文件，无依赖，跨3个区域复制，在x86/ARM上只需1GB内存。注重可靠性而非原始速度，灵感来自亚马逊的Dynamo论文和CRDT。
+***** Take
+终于有了企业级对象存储，适合那些认为'云'只是别人的树莓派的人。在这种情况下，确实可以是。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Garageは最小限のハードウェアでの分散デプロイ向けに設計された、オープンソースの軽量S3互換オブジェクトストア。単一バイナリ、依存関係なし、3ゾーン間でレプリケーション、x86/ARMで1GB RAMで動作。速度より信頼性を重視、AmazonのDynamo論文とCRDTにインスパイア。
+***** Take
+ついにエンタープライズグレードのオブジェクトストレージが、「クラウドは他人のRaspberry Piに過ぎない」と考える人々のために登場。この場合、文字通りそうなれる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Garage는 최소 하드웨어에서의 분산 배포를 위해 설계된 오픈소스 경량 S3 호환 객체 저장소. 단일 바이너리, 종속성 없음, 3개 존에 걸쳐 복제, x86/ARM에서 1GB RAM으로 실행. 속도보다 안정성 중시, Amazon의 Dynamo 논문과 CRDT에서 영감.
+***** Take
+드디어 '클라우드'가 그냥 다른 사람의 라즈베리 파이라고 생각하는 사람들을 위한 엔터프라이즈급 객체 스토리지. 이 경우, 말 그대로 그럴 수 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Garage es un almacen de objetos compatible con S3, de codigo abierto y ligero, disenado para despliegues distribuidos en hardware minimo. Un solo binario, sin dependencias, replica en 3 zonas, corre con 1GB RAM en x86/ARM. Prioriza la resiliencia sobre la velocidad, inspirado en el paper Dynamo de Amazon y CRDTs.
+***** Take
+Finalmente, almacenamiento de objetos de nivel empresarial para quienes piensan que 'la nube' es solo la Raspberry Pi de alguien mas. Lo cual, en este caso, literalmente puede ser.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Garage ist ein quelloffener, leichtgewichtiger S3-kompatibler Objektspeicher fur verteilte Deployments auf minimaler Hardware. Einzelne Binary, keine Abhangigkeiten, repliziert uber 3 Zonen, lauft mit 1GB RAM auf x86/ARM. Auf Belastbarkeit statt Geschwindigkeit ausgelegt, inspiriert von Amazons Dynamo-Paper und CRDTs.
+***** Take
+Endlich Enterprise-Grade Objektspeicher fur Leute, die denken 'die Cloud' ist nur jemand anderes' Raspberry Pi. Was in diesem Fall buchstablich stimmen kann.
+** Graphite is joining Cursor :acquisitions:devtools:ai:codereview:startup:
+:PROPERTIES:
+:ID:       46327206
+:URL:      https://cursor.com/blog/graphite
+:HN_URL:   https://news.ycombinator.com/item?id=46327206
+:POINTS:   204
+:COMMENTS: 219
+:BY:       fosterfriends
+:END:
+
+*** TLDR
+Cursor is acquiring Graphite, a code review platform used by hundreds of thousands of engineers. Graphite will continue operating independently with the same team. The plan is to explore tighter integrations between local dev and PRs, smarter code review that learns from both systems, and other 'radical ideas.'
+
+*** Take
+If AI companies have 100x dev output, why acquire anyone? Unless the real product is the network effects you absorbed along the way. The comments are absolutely roasting this logic.
+
+*** Comments
+
+**** bangaladore
+:PROPERTIES:
+:COMMENT_ID: 46327300
+:END:
+Cursor had first mover advantage but I can't help but think they have no realistic path forward. As someone who loves IDEs, I vastly prefer Codex CLI over having AI built into my IDE. The fact it's a fork of VSCode will make me never use it.
+
+**** fosterfriends
+:PROPERTIES:
+:COMMENT_ID: 46327350
+:END:
+Hi all! Graphite cofounder Greg here. I work on Graphite for two reasons: 1) I love working with kind, smart, intense teammates. 2) I want to build bleeding-edge dev tools that move the whole industry forward.
+
+**** gravypod
+:PROPERTIES:
+:COMMENT_ID: 46327400
+:END:
+If these AI companies had 100x dev output, why would you acquire a company? Why not just show screenshots to your agent and get it to implement everything?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Cursor收购了Graphite，一个被数十万工程师使用的代码审查平台。Graphite将继续独立运营，团队不变。计划探索本地开发与PR之间更紧密的集成、能从两个系统学习的更智能的代码审查，以及其他'激进的想法'。
+***** Take
+如果AI公司有100倍的开发产出，为什么还要收购任何人？除非真正的产品是你一路吸收的网络效应。评论区正在疯狂吐槽这个逻辑。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Cursorが数十万人のエンジニアに使われているコードレビュープラットフォームGraphiteを買収。Graphiteは同じチームで独立して運営を継続。ローカル開発とPR間のより緊密な統合、両システムから学ぶよりスマートなコードレビュー、その他の「急進的なアイデア」を探求する予定。
+***** Take
+AI企業に100倍の開発アウトプットがあるなら、なぜ誰かを買収する？本当の製品は途中で吸収したネットワーク効果でない限り。コメント欄でこのロジックが炎上中。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Cursor가 수십만 엔지니어가 사용하는 코드 리뷰 플랫폼 Graphite를 인수. Graphite는 같은 팀으로 독립적으로 계속 운영될 예정. 로컬 개발과 PR 간의 더 긴밀한 통합, 두 시스템에서 학습하는 더 스마트한 코드 리뷰, 기타 '급진적인 아이디어'를 탐색할 계획.
+***** Take
+AI 회사들이 100배의 개발 산출물을 가지고 있다면, 왜 누군가를 인수하나? 진짜 제품이 그 과정에서 흡수한 네트워크 효과가 아니라면. 댓글에서 이 논리를 신나게 까고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Cursor esta adquiriendo Graphite, una plataforma de revision de codigo usada por cientos de miles de ingenieros. Graphite continuara operando independientemente con el mismo equipo. El plan es explorar integraciones mas estrechas entre desarrollo local y PRs, revision de codigo mas inteligente que aprende de ambos sistemas, y otras 'ideas radicales.'
+***** Take
+Si las companias de IA tienen 100x de productividad, por que adquirir a alguien? A menos que el verdadero producto sean los efectos de red que absorbiste en el camino. Los comentarios estan destrozando esta logica.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Cursor ubernimmt Graphite, eine Code-Review-Plattform, die von Hunderttausenden von Entwicklern genutzt wird. Graphite wird unabhangig mit dem gleichen Team weiterarbeiten. Der Plan ist, engere Integrationen zwischen lokaler Entwicklung und PRs, intelligenteres Code-Review, das von beiden Systemen lernt, und andere 'radikale Ideen' zu erforschen.
+***** Take
+Wenn KI-Unternehmen 100-fachen Dev-Output haben, warum dann jemanden kaufen? Es sei denn, das wahre Produkt sind die Netzwerkeffekte, die man unterwegs aufgesogen hat. Die Kommentare zerlegen diese Logik gerade.
+** TP-Link Tapo C200: Hardcoded Keys, Buffer Overflows and Privacy :security:iot:vulnerability:privacy:hardware:
+:PROPERTIES:
+:ID:       46329038
+:URL:      https://www.evilsocket.net/2025/12/18/TP-Link-Tapo-C200-Hardcoded-Keys-Buffer-Overflows-and-Privacy-in-the-Era-of-AI-Assisted-Reverse-Engineering/
+:HN_URL:   https://news.ycombinator.com/item?id=46329038
+:POINTS:   250
+:COMMENTS: 68
+:BY:       sibellavia
+:END:
+
+*** TLDR
+Security researcher used AI-assisted reverse engineering to find 4 critical vulnerabilities in TP-Link Tapo C200 cameras: ONVIF XML parser overflow, HTTPS integer overflow, unauthenticated WiFi hijacking, and network enumeration. Also found hardcoded SSL keys shared across devices. About 25,000 cameras are directly exposed to the internet.
+
+*** Take
+The IoT security bar is so low it's a tripping hazard. Hardcoded keys in 2025? That's not a bug, that's a lifestyle choice.
+
+*** Comments
+
+**** rao-v
+:PROPERTIES:
+:COMMENT_ID: 46329100
+:END:
+I'm a little frustrated with articles like this that scattershot their critique by conflating genuine failures with problems that even FAANGs struggle with. I don't love it when an article attacks a best practice as a cheap gotcha.
+
+**** JaggedJax
+:PROPERTIES:
+:COMMENT_ID: 46329150
+:END:
+It's probably fair to assume that most of their other camera models are affected by the same or similar issues. It looks like they pump out quite a few models that I imagine have similar firmware.
+
+**** magmostafa
+:PROPERTIES:
+:COMMENT_ID: 46329200
+:END:
+This is exactly why network segmentation is critical for IoT devices. I always recommend putting all smart cameras and IoT devices on a separate VLAN with no direct internet access.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+安全研究人员使用AI辅助逆向工程在TP-Link Tapo C200摄像头中发现4个关键漏洞：ONVIF XML解析器溢出、HTTPS整数溢出、未认证WiFi劫持和网络枚举。还发现了跨设备共享的硬编码SSL密钥。约25,000台摄像头直接暴露在互联网上。
+***** Take
+物联网安全门槛低到成了绊脚石。2025年还在用硬编码密钥？这不是bug，这是一种生活方式选择。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+セキュリティ研究者がAI支援のリバースエンジニアリングでTP-Link Tapo C200カメラに4つの重大な脆弱性を発見：ONVIF XMLパーサーオーバーフロー、HTTPS整数オーバーフロー、未認証WiFiハイジャック、ネットワーク列挙。デバイス間で共有されたハードコードSSL鍵も発見。約25,000台のカメラがインターネットに直接露出。
+***** Take
+IoTセキュリティの基準は低すぎて躓く危険がある。2025年にハードコードされた鍵？これはバグではなく、ライフスタイルの選択だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+보안 연구원이 AI 지원 리버스 엔지니어링으로 TP-Link Tapo C200 카메라에서 4가지 치명적 취약점 발견: ONVIF XML 파서 오버플로우, HTTPS 정수 오버플로우, 미인증 WiFi 하이재킹, 네트워크 열거. 기기 간 공유되는 하드코딩된 SSL 키도 발견. 약 25,000대의 카메라가 인터넷에 직접 노출됨.
+***** Take
+IoT 보안 기준이 너무 낮아서 걸려 넘어질 위험이 있다. 2025년에 하드코딩된 키? 이건 버그가 아니라 라이프스타일 선택이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Un investigador de seguridad uso ingenieria inversa asistida por IA para encontrar 4 vulnerabilidades criticas en camaras TP-Link Tapo C200: desbordamiento del parser ONVIF XML, desbordamiento de enteros HTTPS, secuestro WiFi sin autenticacion y enumeracion de red. Tambien encontro claves SSL hardcodeadas compartidas entre dispositivos. Unas 25,000 camaras estan directamente expuestas a internet.
+***** Take
+El nivel de seguridad IoT es tan bajo que es un peligro de tropiezo. Claves hardcodeadas en 2025? Eso no es un bug, es una eleccion de estilo de vida.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Sicherheitsforscher nutzte KI-gestutztes Reverse Engineering, um 4 kritische Schwachstellen in TP-Link Tapo C200 Kameras zu finden: ONVIF XML Parser Overflow, HTTPS Integer Overflow, unauthentifiziertes WiFi-Hijacking und Netzwerk-Enumeration. Auch hardcodierte SSL-Schlussel gefunden, die zwischen Geraten geteilt werden. Etwa 25.000 Kameras sind direkt dem Internet ausgesetzt.
+***** Take
+Die IoT-Sicherheitslatte liegt so niedrig, dass man daruber stolpert. Hardcodierte Schlussel im Jahr 2025? Das ist kein Bug, das ist eine Lifestyle-Entscheidung.
+** 8-bit Bolero :music:retrocomputing:art:chiptune:hardware:
+:PROPERTIES:
+:ID:       46324702
+:URL:      https://linusakesson.net/music/bolero/index.php
+:HN_URL:   https://news.ycombinator.com/item?id=46324702
+:POINTS:   205
+:COMMENTS: 36
+:BY:       Aissen
+:END:
+
+*** TLDR
+Linus Akesson recreated Ravel's Bolero using 9 homemade 8-bit instruments including the Qweremin, Paulimba, and a C64 accordion called 'The Commodordion'. The project took 6 months, involved 52 mixer channels, and 9+ hours of footage. Audio and video were recorded simultaneously for most sections.
+
+*** Take
+This is the kind of project that makes you feel bad about everything you've ever accomplished. One man turned vintage computers into an orchestra, and I can barely get my bluetooth speaker to pair correctly.
+
+*** Comments
+
+**** timfsu
+:PROPERTIES:
+:COMMENT_ID: 46324800
+:END:
+Possibly best thing ever on Hacker News. There is something quite appealing about the simplicity of Bolero.
+
+**** thomassmith65
+:PROPERTIES:
+:COMMENT_ID: 46324850
+:END:
+According to a possibly apocryphal story from the premiere performance, a woman was heard shouting that Ravel was mad. When told about this, Ravel is said to have remarked that she had understood the piece.
+
+**** fodmap
+:PROPERTIES:
+:COMMENT_ID: 46324900
+:END:
+That Commodore C64 accordion made me laugh. Ah it's called The Commodordion.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Linus Akesson使用9种自制8位乐器重新创作了拉威尔的《波莱罗》，包括Qweremin、Paulimba和一架叫'Commodordion'的C64手风琴。项目耗时6个月，涉及52个混音通道和9小时以上的镜头。大部分片段的音视频是同时录制的。
+***** Take
+这种项目让你对自己完成的一切都感到惭愧。一个人把老式电脑变成了管弦乐队，而我连蓝牙音箱都配对不好。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Linus AkessonがQweremin、Paulimba、'Commodordion'と呼ばれるC64アコーディオンを含む9つの自作8ビット楽器でラヴェルのボレロを再現。プロジェクトは6ヶ月かかり、52のミキサーチャンネルと9時間以上の映像を使用。ほとんどのセクションで音声と映像を同時録音。
+***** Take
+こういうプロジェクトを見ると、自分が達成したすべてのことがみすぼらしく感じる。一人でビンテージコンピュータをオーケストラに変えた人がいるのに、私はBluetoothスピーカーのペアリングすらまともにできない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Linus Akesson이 Qweremin, Paulimba, 'Commodordion'이라 불리는 C64 아코디언을 포함한 9개의 자작 8비트 악기로 라벨의 볼레로를 재현. 프로젝트는 6개월이 걸렸고, 52개의 믹서 채널과 9시간 이상의 영상이 사용됨. 대부분의 섹션에서 오디오와 비디오를 동시 녹음.
+***** Take
+이런 프로젝트를 보면 내가 이룬 모든 것이 초라해 보인다. 한 사람이 빈티지 컴퓨터를 오케스트라로 바꿨는데, 나는 블루투스 스피커 페어링도 제대로 못한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Linus Akesson recreo el Bolero de Ravel usando 9 instrumentos de 8 bits hechos a mano, incluyendo el Qweremin, Paulimba y un acordeon C64 llamado 'The Commodordion'. El proyecto tomo 6 meses, involucro 52 canales de mezcla y mas de 9 horas de grabacion. El audio y video se grabaron simultaneamente para la mayoria de las secciones.
+***** Take
+Este es el tipo de proyecto que te hace sentir mal por todo lo que has logrado. Un hombre convirtio computadoras antiguas en una orquesta, y yo apenas puedo hacer que mi altavoz bluetooth se empareje correctamente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Linus Akesson hat Ravels Bolero mit 9 selbstgebauten 8-Bit-Instrumenten nachgestellt, darunter das Qweremin, die Paulimba und ein C64-Akkordeon namens 'The Commodordion'. Das Projekt dauerte 6 Monate, umfasste 52 Mischpultkanale und uber 9 Stunden Filmmaterial. Audio und Video wurden fur die meisten Abschnitte gleichzeitig aufgenommen.
+***** Take
+Das ist die Art von Projekt, die einen schlecht fuhlen lasst uber alles, was man je erreicht hat. Ein Mann verwandelte Vintage-Computer in ein Orchester, und ich schaffe es kaum, meinen Bluetooth-Lautsprecher richtig zu koppeln.
