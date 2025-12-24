@@ -1,0 +1,407 @@
+#+TITLE: HN Digest 2025-12-24 01:00:00 UT UTC
+#+DATE: 2025-12-24T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Steam Deck scheduler runs Meta's servers, Fabrice Bellard strikes again, and your TV is watching you watch TV
+
+* Highlights
+- Meta adopts Steam Deck's game scheduler for datacenter workloads
+- MicroQuickJS: JavaScript in 10KB RAM, Bellard does it again
+- X-ray exposes millions of badly redacted PDFs
+- H.264 streaming replaced with JPEG screenshots (it worked)
+- Texas age verification law blocked as unconstitutional
+
+* Stories
+
+** Meta is using the Linux scheduler designed for Valve's Steam Deck on its servers :linux:infrastructure:gaming:meta:valve:
+:PROPERTIES:
+:ID:       46366998
+:URL:      https://www.phoronix.com/news/Meta-SCX-LAVD-Steam-Deck-Server
+:HN_URL:   https://news.ycombinator.com/item?id=46366998
+:POINTS:   533
+:COMMENTS: 283
+:BY:       yellow_lead
+:END:
+
+*** TLDR
+Meta discovered that SCX-LAVD, a scheduler originally built by Igalia for Valve's Steam Deck gaming handheld, works surprisingly well as a general-purpose scheduler across their diverse server fleet. They presented findings showing it handles load balancing well across different CPU clusters and adapts to varying hardware configurations.
+
+*** Take
+A scheduler tuned for smooth frame pacing on a handheld gaming device somehow became Meta's default for massive datacenters. Valve is accidentally becoming a Linux infrastructure company while trying to sell video games.
+
+*** Comments
+
+**** Fiveplus
+:PROPERTIES:
+:COMMENT_ID: 46367100
+:END:
+Valve is practically singlehandedly dragging the Linux ecosystem forward in areas that nobody else wanted to touch.
+
+**** mikkupikku
+:PROPERTIES:
+:COMMENT_ID: 46367200
+:END:
+It seems like every time I read about this kind of stuff, it's being done by contractors. Do they pretty much stick to Steam/game development and contract out most of this?
+
+**** redleader55
+:PROPERTIES:
+:COMMENT_ID: 46367300
+:END:
+Worth mentioning that sched_ext was developed at Meta. The schedulers are developed by several companies who collaborate.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Meta发现由Igalia为Valve Steam Deck开发的SCX-LAVD调度器在他们多样化的服务器集群上表现出色。该调度器能很好地处理不同CPU集群间的负载均衡,并适应各种硬件配置。
+***** Take
+一个为掌机游戏流畅度调优的调度器,居然成了Meta数据中心的默认选择。Valve在卖游戏的同时,不小心变成了Linux基础设施公司。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+MetaはIgaliaがValve Steam Deck向けに開発したSCX-LAVDスケジューラが、多様なサーバー群で驚くほどうまく機能することを発見。異なるCPUクラスター間の負荷分散に優れ、様々なハードウェア構成に適応する。
+***** Take
+携帯ゲーム機のフレームレート安定化用スケジューラが、Metaの巨大データセンターのデフォルトになった。Valveはゲームを売りながら、うっかりLinuxインフラ企業になりつつある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Meta는 Igalia가 Valve Steam Deck을 위해 개발한 SCX-LAVD 스케줄러가 다양한 서버 환경에서 놀라울 정도로 잘 작동한다는 것을 발견했다. 다양한 CPU 클러스터 간 로드 밸런싱이 우수하고 여러 하드웨어 구성에 적응한다.
+***** Take
+휴대용 게임기의 프레임 안정화용 스케줄러가 Meta 데이터센터의 기본값이 되었다. Valve는 게임을 팔면서 우연히 Linux 인프라 회사가 되어가고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Meta descubrió que SCX-LAVD, un scheduler desarrollado por Igalia para Steam Deck de Valve, funciona sorprendentemente bien en su diversa flota de servidores. Maneja bien el balanceo de carga entre clusters de CPU y se adapta a diferentes configuraciones de hardware.
+***** Take
+Un scheduler optimizado para fluidez de frames en una consola portátil se convirtió en el predeterminado de Meta para centros de datos masivos. Valve se está convirtiendo accidentalmente en una empresa de infraestructura Linux mientras intenta vender videojuegos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Meta entdeckte, dass SCX-LAVD, ein von Igalia für Valves Steam Deck entwickelter Scheduler, überraschend gut auf ihrer vielfältigen Server-Flotte funktioniert. Er bewältigt Lastverteilung zwischen CPU-Clustern gut und passt sich verschiedenen Hardware-Konfigurationen an.
+***** Take
+Ein Scheduler für flüssige Frameraten auf einem Handheld-Gaming-Gerät wurde Metas Standard für massive Rechenzentren. Valve wird versehentlich zu einem Linux-Infrastrukturunternehmen, während sie Videospiele verkaufen wollen.
+** Fabrice Bellard Releases MicroQuickJS :javascript:embedded:opensource:programming:
+:PROPERTIES:
+:ID:       46367224
+:URL:      https://github.com/bellard/mquickjs/blob/main/README.md
+:HN_URL:   https://news.ycombinator.com/item?id=46367224
+:POINTS:   748
+:COMMENTS: 291
+:BY:       Aissen
+:END:
+
+*** TLDR
+Fabrice Bellard released MicroQuickJS, a stripped-down JavaScript engine that runs with just 10KB of RAM and 100KB of ROM. It uses a tracing garbage collector, restricts JS to strict mode only, removes array holes and limits eval/regex features. Designed for embedded systems and microcontrollers where every byte counts.
+
+*** Take
+While the rest of us argue about whether React needs 500KB of dependencies, Bellard casually ships an entire JavaScript runtime in the space of a favicon. The man treats impossible engineering challenges like sudoku puzzles.
+
+*** Comments
+
+**** antirez
+:PROPERTIES:
+:COMMENT_ID: 46367300
+:END:
+If this had been available in 2010, Redis scripting would have been JavaScript and not Lua. Lua was chosen based on implementation requirements, not language ones.
+
+**** pizlonator
+:PROPERTIES:
+:COMMENT_ID: 46367400
+:END:
+This engine restricts JS in all of the ways I wished I could restrict the language back when I was working on JSC.
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 46367500
+:END:
+If anyone wants to try out MicroQuickJS in a browser here's a simple playground interface for executing a WebAssembly compiled version of it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Fabrice Bellard发布了MicroQuickJS,一个精简版JavaScript引擎,仅需10KB RAM和100KB ROM即可运行。使用追踪式垃圾回收器,仅支持严格模式JS,移除了数组空洞并限制eval/正则功能。专为嵌入式系统和微控制器设计。
+***** Take
+当我们还在争论React是否需要500KB依赖时,Bellard随手用一个favicon的大小发布了完整的JavaScript运行时。这人把不可能的工程挑战当数独来玩。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Fabrice Bellardが、わずか10KB RAMと100KB ROMで動作する軽量JavaScriptエンジンMicroQuickJSをリリース。トレーシングGCを使用し、strictモードのみに制限、配列の穴を削除しeval/正規表現機能を制限。組み込みシステムとマイコン向け設計。
+***** Take
+我々がReactに500KBの依存関係が必要かどうか議論している間に、Bellardはファビコンサイズで完全なJavaScriptランタイムを出荷した。この人は不可能なエンジニアリング課題を数独のように扱う。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Fabrice Bellard가 10KB RAM과 100KB ROM만으로 실행되는 경량 JavaScript 엔진 MicroQuickJS를 출시했다. 트레이싱 GC를 사용하고, strict 모드만 지원하며, 배열 hole을 제거하고 eval/정규식 기능을 제한했다. 임베디드 시스템과 마이크로컨트롤러용으로 설계되었다.
+***** Take
+우리가 React에 500KB 의존성이 필요한지 논쟁하는 동안, Bellard는 파비콘 크기로 완전한 JavaScript 런타임을 출시했다. 이 사람은 불가능한 엔지니어링 과제를 스도쿠처럼 다룬다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Fabrice Bellard lanzó MicroQuickJS, un motor JavaScript reducido que funciona con solo 10KB de RAM y 100KB de ROM. Usa un recolector de basura de rastreo, restringe JS solo a modo estricto, elimina huecos de arrays y limita funciones eval/regex. Diseñado para sistemas embebidos y microcontroladores.
+***** Take
+Mientras el resto discutimos si React necesita 500KB de dependencias, Bellard tranquilamente entrega un runtime JavaScript completo en el espacio de un favicon. El hombre trata los desafíos de ingeniería imposibles como puzzles de sudoku.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Fabrice Bellard veröffentlichte MicroQuickJS, eine abgespeckte JavaScript-Engine, die mit nur 10KB RAM und 100KB ROM läuft. Sie verwendet einen Tracing-Garbage-Collector, beschränkt JS auf Strict-Mode, entfernt Array-Löcher und limitiert eval/regex-Funktionen. Entwickelt für eingebettete Systeme und Mikrocontroller.
+***** Take
+Während wir uns streiten, ob React 500KB Abhängigkeiten braucht, liefert Bellard beiläufig eine komplette JavaScript-Runtime im Platz eines Favicons. Der Mann behandelt unmögliche Engineering-Herausforderungen wie Sudoku-Rätsel.
+** X-ray: a Python library for finding bad redactions in PDF documents :security:python:legal:opensource:
+:PROPERTIES:
+:ID:       46369923
+:URL:      https://github.com/freelawproject/x-ray
+:HN_URL:   https://news.ycombinator.com/item?id=46369923
+:POINTS:   143
+:COMMENTS: 39
+:BY:       rendx
+:END:
+
+*** TLDR
+Free Law Project built x-ray to scan PDFs for 'bad redactions' where people draw black rectangles over text but the underlying text remains selectable. They used it to analyze millions of court documents in CourtListener via S3 batch jobs and found widespread improper redaction practices.
+
+*** Take
+Turns out drawing a black rectangle over sensitive text is not the same as actually removing it. Shocking revelation that has apparently escaped millions of lawyers and government officials for decades.
+
+*** Comments
+
+**** mlissner
+:PROPERTIES:
+:COMMENT_ID: 46370000
+:END:
+We do so many huge, complex, multiyear projects at Free Law Project, but this is the most viral any of our work has ever gone!
+
+**** jmward01
+:PROPERTIES:
+:COMMENT_ID: 46370100
+:END:
+Font kerning is likely a major leak for redaction. Even with randomness, words around blacked out areas have exact positioning that constrains what text could fit.
+
+**** embedding-shape
+:PROPERTIES:
+:COMMENT_ID: 46370200
+:END:
+Some PDFs have a /Prev pointer, meaning the previous revision is available inside the PDF itself. The difference might be minor but could be more.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Free Law Project开发了x-ray来扫描PDF中的'不良遮盖',即人们在文字上画黑色矩形但底层文字仍可选择的情况。他们通过S3批处理作业分析了CourtListener中数百万法庭文件,发现不当遮盖做法非常普遍。
+***** Take
+原来在敏感文字上画黑色矩形和真正删除它不是一回事。这个惊人的发现显然让数百万律师和政府官员困惑了几十年。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Free Law Projectは、テキスト上に黒い四角を描いても下のテキストが選択可能なままの「不適切な墨消し」を検出するx-rayを開発。S3バッチジョブでCourtListenerの数百万件の裁判文書を分析し、不適切な墨消しが広く行われていることを発見した。
+***** Take
+機密テキストに黒い四角を描くことと実際に削除することは同じではないことが判明。この驚くべき発見は、数十年にわたって数百万人の弁護士や政府関係者を逃れてきたようだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Free Law Project는 텍스트 위에 검은 사각형을 그렸지만 밑의 텍스트가 여전히 선택 가능한 '잘못된 마스킹'을 탐지하는 x-ray를 개발했다. S3 배치 작업을 통해 CourtListener의 수백만 법원 문서를 분석하고 부적절한 마스킹 관행이 광범위하다는 것을 발견했다.
+***** Take
+민감한 텍스트 위에 검은 사각형을 그리는 것이 실제로 삭제하는 것과 같지 않다는 것이 밝혀졌다. 수십 년간 수백만 변호사와 공무원들을 피해간 놀라운 발견이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Free Law Project creó x-ray para escanear PDFs en busca de 'redacciones defectuosas' donde la gente dibuja rectángulos negros sobre texto pero el texto subyacente sigue siendo seleccionable. Analizaron millones de documentos judiciales en CourtListener mediante trabajos batch de S3 y encontraron prácticas de redacción impropia generalizadas.
+***** Take
+Resulta que dibujar un rectángulo negro sobre texto sensible no es lo mismo que eliminarlo. Revelación impactante que aparentemente ha eludido a millones de abogados y funcionarios durante décadas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Free Law Project entwickelte x-ray, um PDFs nach 'schlechten Schwärzungen' zu durchsuchen, bei denen schwarze Rechtecke über Text gezeichnet werden, aber der darunterliegende Text weiterhin auswählbar bleibt. Sie analysierten Millionen von Gerichtsdokumenten in CourtListener via S3-Batch-Jobs und fanden weit verbreitete unsachgemäße Schwärzungspraktiken.
+***** Take
+Es stellt sich heraus, dass ein schwarzes Rechteck über sensiblen Text zu zeichnen nicht dasselbe ist wie ihn tatsächlich zu entfernen. Schockierende Erkenntnis, die offenbar Millionen von Anwälten und Regierungsbeamten jahrzehntelang entgangen ist.
+** We replaced H.264 streaming with JPEG screenshots (and it worked better) :streaming:webdev:networking:engineering:
+:PROPERTIES:
+:ID:       46367475
+:URL:      https://blog.helix.ml/p/we-mass-deployed-15-year-old-screen
+:HN_URL:   https://news.ycombinator.com/item?id=46367475
+:POINTS:   310
+:COMMENTS: 195
+:BY:       quesobob
+:END:
+
+*** TLDR
+Helix built a complex H.264 WebSocket video streaming pipeline that broke constantly on enterprise networks. They replaced it with simple HTTP polling for JPEG screenshots (100-150KB each). When network is bad, you just get fewer screenshots instead of a broken stream. The system falls back to video when RTT is under 150ms.
+
+*** Take
+Sometimes the best engineering is knowing when to stop engineering. They built a sophisticated video codec pipeline, enterprise networks laughed at it, and the solution was technology from 1992.
+
+*** Comments
+
+**** mikepavone
+:PROPERTIES:
+:COMMENT_ID: 46367600
+:END:
+This would make sense if they were using UDP, but they are using TCP. What presumably happened is the way they implemented their JPEG screenshots has different buffering behavior.
+
+**** qbow883
+:PROPERTIES:
+:COMMENT_ID: 46367700
+:END:
+10Mbps should be way more than enough for a mostly static image with some scrolling text. This is very likely caused by bad encoder settings.
+
+**** adamjs
+:PROPERTIES:
+:COMMENT_ID: 46367800
+:END:
+They might want to check out what VNC has been doing since 1998 - break the framebuffer up into tiles, perform a diff, composite client-side.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Helix构建了一个复杂的H.264 WebSocket视频流管道,但在企业网络上经常崩溃。他们用简单的HTTP轮询JPEG截图(每张100-150KB)替换了它。网络差时只是获得更少的截图,而不是中断的流。当RTT低于150ms时系统回退到视频。
+***** Take
+有时最好的工程就是知道什么时候停止工程。他们构建了复杂的视频编解码器管道,企业网络嘲笑它,解决方案却是1992年的技术。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Helixは複雑なH.264 WebSocketビデオストリーミングパイプラインを構築したが、企業ネットワークで常に壊れた。シンプルなHTTPポーリングでJPEGスクリーンショット(各100-150KB)に置き換えた。ネットワークが悪いときは壊れたストリームではなくスクリーンショットが少なくなるだけ。RTTが150ms以下のときはビデオにフォールバック。
+***** Take
+最高のエンジニアリングは、エンジニアリングをやめるタイミングを知ることだ。彼らは洗練されたビデオコーデックパイプラインを構築し、企業ネットワークに笑われ、解決策は1992年の技術だった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Helix는 복잡한 H.264 WebSocket 비디오 스트리밍 파이프라인을 구축했지만 기업 네트워크에서 계속 고장났다. 간단한 HTTP 폴링 JPEG 스크린샷(각 100-150KB)으로 대체했다. 네트워크가 나쁘면 끊긴 스트림 대신 스크린샷이 적게 온다. RTT가 150ms 미만이면 비디오로 폴백한다.
+***** Take
+때로는 최고의 엔지니어링은 언제 엔지니어링을 멈춰야 하는지 아는 것이다. 그들은 정교한 비디오 코덱 파이프라인을 만들었고, 기업 네트워크는 비웃었고, 해결책은 1992년 기술이었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Helix construyó una compleja tubería de streaming de video H.264 WebSocket que se rompía constantemente en redes empresariales. La reemplazaron con simple polling HTTP para capturas JPEG (100-150KB cada una). Cuando la red es mala, simplemente recibes menos capturas en lugar de un stream roto. El sistema vuelve a video cuando el RTT está bajo 150ms.
+***** Take
+A veces la mejor ingeniería es saber cuándo dejar de ingenierar. Construyeron una sofisticada tubería de códec de video, las redes empresariales se rieron de ella, y la solución fue tecnología de 1992.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Helix baute eine komplexe H.264-WebSocket-Video-Streaming-Pipeline, die in Unternehmensnetzwerken ständig ausfiel. Sie ersetzten sie durch einfaches HTTP-Polling für JPEG-Screenshots (je 100-150KB). Bei schlechtem Netzwerk bekommt man einfach weniger Screenshots statt eines kaputten Streams. Das System fällt auf Video zurück, wenn RTT unter 150ms liegt.
+***** Take
+Manchmal ist die beste Ingenieurskunst zu wissen, wann man aufhören sollte zu engineeren. Sie bauten eine ausgeklügelte Video-Codec-Pipeline, Unternehmensnetzwerke lachten darüber, und die Lösung war Technologie von 1992.
+** Texas app store age verification law blocked by federal judge :legal:privacy:apple:regulation:
+:PROPERTIES:
+:ID:       46370012
+:URL:      https://www.macrumors.com/2025/12/23/texas-app-store-law-blocked/
+:HN_URL:   https://news.ycombinator.com/item?id=46370012
+:POINTS:   99
+:COMMENTS: 68
+:BY:       danso
+:END:
+
+*** TLDR
+Federal Judge Robert Pitman blocked Texas SB2420, which would have required app stores to verify user age and force minors into Family Sharing groups. The judge compared it to requiring bookstores to ID every customer at the door, ruling it likely violates the First Amendment.
+
+*** Take
+Texas tried to make downloading a weather app require more ID verification than buying a gun. The judge politely explained how the First Amendment works.
+
+*** Comments
+
+**** WarOnPrivacy
+:PROPERTIES:
+:COMMENT_ID: 46370100
+:END:
+The Act is akin to a law that would require every bookstore to verify the age of every customer at the door and, for minors, require parental consent before they could enter.
+
+**** GeekyBear
+:PROPERTIES:
+:COMMENT_ID: 46370200
+:END:
+Avoiding the collection of user data in the first place (if it's possible) is exactly the correct approach to user privacy.
+
+**** ls612
+:PROPERTIES:
+:COMMENT_ID: 46370300
+:END:
+The only reason the earlier age verification laws were upheld were because they narrowly targeted porn. This is an entirely unsurprising outcome.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+联邦法官Robert Pitman叫停了德州SB2420法案,该法案要求应用商店验证用户年龄并强制未成年人加入家庭共享组。法官将其比作要求书店在门口验证每位顾客的身份,裁定其可能违反第一修正案。
+***** Take
+德州试图让下载天气应用比买枪需要更多的身份验证。法官礼貌地解释了第一修正案是如何运作的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Robert Pitman連邦判事がテキサス州SB2420を差し止めた。同法はアプリストアにユーザーの年齢確認を義務付け、未成年者をファミリー共有グループに強制加入させるものだった。判事は書店が入口で全顧客の年齢確認を求めるのと同等と比較し、修正第1条違反の可能性が高いと判断。
+***** Take
+テキサス州は天気アプリのダウンロードに銃の購入より多くの身分証明を求めようとした。判事は丁寧に修正第1条の仕組みを説明した。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Robert Pitman 연방 판사가 앱스토어에 사용자 나이 확인을 요구하고 미성년자를 가족 공유 그룹에 강제 가입시키는 텍사스 SB2420을 차단했다. 판사는 이를 서점이 모든 고객의 신원을 문 앞에서 확인하도록 요구하는 것에 비유하며 수정헌법 제1조 위반 가능성이 높다고 판결했다.
+***** Take
+텍사스는 날씨 앱 다운로드에 총 구매보다 더 많은 신원 확인을 요구하려 했다. 판사가 정중하게 수정헌법 제1조가 어떻게 작동하는지 설명했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+El juez federal Robert Pitman bloqueó la SB2420 de Texas, que habría requerido que las tiendas de aplicaciones verificaran la edad del usuario y forzaran a los menores a unirse a grupos de Compartir en Familia. El juez lo comparó con exigir que las librerías pidieran identificación a cada cliente en la puerta, dictaminando que probablemente viola la Primera Enmienda.
+***** Take
+Texas intentó hacer que descargar una app del clima requiriera más verificación de identidad que comprar un arma. El juez explicó cortésmente cómo funciona la Primera Enmienda.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Bundesrichter Robert Pitman blockierte Texas SB2420, das App Stores verpflichtet hätte, das Alter der Nutzer zu überprüfen und Minderjährige in Familienfreigabe-Gruppen zu zwingen. Der Richter verglich es mit der Anforderung, dass Buchhandlungen jeden Kunden an der Tür ausweisen müssten, und entschied, dass es wahrscheinlich gegen den Ersten Verfassungszusatz verstößt.
+***** Take
+Texas versuchte, das Herunterladen einer Wetter-App mit mehr Identitätsprüfung zu versehen als einen Waffenkauf. Der Richter erklärte höflich, wie der Erste Verfassungszusatz funktioniert.
