@@ -1,0 +1,401 @@
+#+TITLE: HN Digest 2025-12-25 11:00:00 UT UTC
+#+DATE: 2025-12-25T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Christmas vectors, century-old plagues, and why 'global market' means you have no strategy
+
+* Highlights
+- Waymo depot surveillance: one man's obsession becomes art
+- 162 lines of code builds a semantic search engine (the database does the work)
+- Canada digitizes 100+ years of disease data, hopes someone fixes current reporting
+- Math + Python book: 18 chapters of fractals, chaos, and quaternions
+- 'Global market' is code for 'we haven't thought this through'
+
+* Stories
+
+** Who Watches the Waymos? I do ［video］ :autonomous-vehicles:waymo:san-francisco:video:
+:PROPERTIES:
+:ID:       46380758
+:URL:      https://www.youtube.com/watch?v=oYU2hAbx_Fc
+:HN_URL:   https://news.ycombinator.com/item?id=46380758
+:POINTS:   177
+:COMMENTS: 53
+:BY:       notgloating
+:END:
+
+*** TLDR
+Vincent Woo posted a video documenting his observations at Waymo depots, capturing the autonomous vehicles charging and queuing. The footage shows the Mission depot's art fixture and the Zeekr vehicles in their natural habitat.
+
+*** Take
+We've reached the point where watching robots charge themselves is entertainment. The art installation at the depot depicting humans lounging while machines work is either peak irony or peak prophecy.
+
+*** Comments
+
+**** dllu
+:PROPERTIES:
+:COMMENT_ID: 46381234
+:END:
+I recently went to the Waymo depot in Bayshore and snapped a couple of pictures of the new Zeekr for Wikipedia.
+
+**** HolySE
+:PROPERTIES:
+:COMMENT_ID: 46381456
+:END:
+That art fixture's placement at the Mission Waymo Depot is evocative of a future in which humanity lives a life of indolence propped up by automation.
+
+**** netsharc
+:PROPERTIES:
+:COMMENT_ID: 46381678
+:END:
+Makes me think of Miniatur Wunderland's self-charging system. Waymos are a version of that but human-scale!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+Vincent Woo发布了一段记录Waymo充电站观察的视频，展示自动驾驶车辆充电和排队的画面。视频展示了Mission站点的艺术装置和Zeekr车辆。
+***** Take
+我们已经到了把看机器人充电当娱乐的地步。站点里那个展示人类悠闲而机器工作的艺术装置，要么是巅峰讽刺，要么是巅峰预言。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+Vincent WooがWaymoデポでの観察を記録した動画を投稿。自動運転車両の充電と待機の様子を撮影。Missionデポのアート作品とZeekr車両が映っている。
+***** Take
+ロボットが充電するのを見ることが娯楽になった時代。人間がくつろぎ機械が働く姿を描いたアート作品は、究極の皮肉か究極の予言か。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Vincent Woo가 Waymo 충전소 관찰 영상을 게시했다. 자율주행 차량들이 충전하고 대기하는 모습을 담았다. Mission 충전소의 예술 작품과 Zeekr 차량이 등장한다.
+***** Take
+로봇이 충전하는 걸 보는 게 오락이 되는 시대에 도달했다. 인간이 쉬고 기계가 일하는 예술 작품은 궁극의 아이러니거나 궁극의 예언이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Vincent Woo publicó un video documentando sus observaciones en los depósitos de Waymo, capturando vehículos autónomos cargándose y en fila. El metraje muestra la instalación artística del depósito Mission y los vehículos Zeekr.
+***** Take
+Hemos llegado al punto donde ver robots cargarse es entretenimiento. La instalación artística que muestra humanos descansando mientras las máquinas trabajan es ironía máxima o profecía máxima.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Vincent Woo hat ein Video veröffentlicht, das seine Beobachtungen an Waymo-Depots dokumentiert und autonome Fahrzeuge beim Laden und Warten zeigt. Das Video zeigt die Kunstinstallation am Mission-Depot und die Zeekr-Fahrzeuge.
+***** Take
+Wir sind an dem Punkt angelangt, wo das Zusehen beim Aufladen von Robotern Unterhaltung ist. Die Kunstinstallation, die Menschen beim Faulenzen zeigt während Maschinen arbeiten, ist entweder höchste Ironie oder höchste Prophezeiung.
+** Using Vectorize to build an unreasonably good search engine in 160 lines of code :vector-search:embeddings:cloudflare:semantic-search:
+:PROPERTIES:
+:ID:       46346026
+:URL:      https://blog.partykit.io/posts/using-vectorize-to-build-search/
+:HN_URL:   https://news.ycombinator.com/item?id=46346026
+:POINTS:   76
+:COMMENTS: 21
+:BY:       ColinWright
+:END:
+
+*** TLDR
+A walkthrough of building semantic search using Cloudflare's Vectorize and their embedding model. Convert text to vectors, store them, then find nearest neighbors when searching. The demo searches BBC Radio 4 episodes - 'Jupiter' and 'biggest planet' return the same results.
+
+*** Take
+162 lines of code sounds impressive until you realize the vector database is doing all the heavy lifting. You built a client, not a search engine. Still, wrapping someone else's hard work in minimal code is a time-honored engineering tradition.
+
+*** Comments
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 46346123
+:END:
+I was super-excited about vector search in 2024 but my enthusiasm has faded. LLMs with grep or full-text search are great at fuzzy search already.
+
+**** ____tom____
+:PROPERTIES:
+:COMMENT_ID: 46346234
+:END:
+You didn't build a search engine in 160 lines. You built a client for a search engine. The vector database is providing the search.
+
+**** mips_avatar
+:PROPERTIES:
+:COMMENT_ID: 46346345
+:END:
+There's a lot of previously intractable problems getting solved with embeddings. I've been building a geocoder and it's remarkable how close to Google Places I can get.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+使用Cloudflare的Vectorize和嵌入模型构建语义搜索的教程。将文本转换为向量，存储它们，搜索时找最近邻。演示搜索BBC Radio 4节目——'木星'和'最大的行星'返回相同结果。
+***** Take
+162行代码听起来很厉害，直到你意识到向量数据库在做所有繁重工作。你构建的是客户端，不是搜索引擎。不过，用最少代码包装别人的辛勤工作是工程师的优良传统。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+CloudflareのVectorizeと埋め込みモデルを使ったセマンティック検索の構築チュートリアル。テキストをベクトルに変換して保存し、検索時に最近傍を見つける。BBC Radio 4番組のデモでは「木星」と「最大の惑星」で同じ結果が返る。
+***** Take
+162行のコードは印象的に聞こえるが、ベクトルデータベースが全ての重労働をしていることに気づくまでだ。検索エンジンではなくクライアントを作っただけ。とはいえ、他人の労力を最小限のコードでラップするのはエンジニアの伝統だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+Cloudflare의 Vectorize와 임베딩 모델을 사용한 시맨틱 검색 구축 튜토리얼. 텍스트를 벡터로 변환하고 저장한 뒤, 검색 시 최근접 이웃을 찾는다. BBC Radio 4 에피소드 데모에서 '목성'과 '가장 큰 행성'이 같은 결과를 반환한다.
+***** Take
+162줄의 코드는 인상적으로 들리지만, 벡터 데이터베이스가 모든 무거운 작업을 한다는 걸 깨달을 때까지다. 검색 엔진이 아니라 클라이언트를 만든 것이다. 그래도 남의 노력을 최소한의 코드로 감싸는 건 엔지니어링의 오랜 전통이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Un tutorial sobre búsqueda semántica usando Vectorize de Cloudflare y su modelo de embeddings. Convierte texto en vectores, almacénalos y encuentra vecinos más cercanos al buscar. La demo busca episodios de BBC Radio 4 - 'Júpiter' y 'planeta más grande' devuelven los mismos resultados.
+***** Take
+162 líneas de código suena impresionante hasta que te das cuenta de que la base de datos vectorial hace todo el trabajo pesado. Construiste un cliente, no un motor de búsqueda. Aun así, envolver el trabajo duro de otros en código mínimo es una tradición de ingeniería consagrada.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Eine Anleitung zum Aufbau semantischer Suche mit Cloudflares Vectorize und deren Embedding-Modell. Text in Vektoren umwandeln, speichern, dann bei der Suche nächste Nachbarn finden. Die Demo durchsucht BBC Radio 4-Episoden - 'Jupiter' und 'größter Planet' liefern dieselben Ergebnisse.
+***** Take
+162 Zeilen Code klingt beeindruckend, bis man merkt, dass die Vektordatenbank die ganze schwere Arbeit macht. Du hast einen Client gebaut, keine Suchmaschine. Trotzdem, die harte Arbeit anderer in minimalen Code zu verpacken ist eine altehrwürdige Ingenieurtradition.
+** Research team digitizes more than 100 years of Canadian infectious disease data :public-health:data:canada:epidemiology:research:
+:PROPERTIES:
+:ID:       46322815
+:URL:      https://news.mcmaster.ca/mcmaster-research-team-digitizes-more-than-100-years-of-canadian-infectious-disease-data/
+:HN_URL:   https://news.ycombinator.com/item?id=46322815
+:POINTS:   117
+:COMMENTS: 6
+:BY:       XzetaU8
+:END:
+
+*** TLDR
+McMaster University researchers spent 25 years digitizing CANDID - over a million infectious disease records from 1903 onwards covering polio, hepatitis, TB, influenza across Canadian provinces. The database is now public and aims to improve disease modeling and shame current reporting standards into being better.
+
+*** Take
+25 years to digitize 100 years of data. At this rate, we'll have real-time disease tracking by 2150. But seriously, the fact that this database exists and might embarrass current health agencies into fixing their reporting is peak passive-aggressive academia.
+
+*** Comments
+
+**** arjie
+:PROPERTIES:
+:COMMENT_ID: 46322901
+:END:
+I wonder if they stored raw scans as well. The former would be fantastic for improving OCR as a labeled dataset.
+
+**** akudha
+:PROPERTIES:
+:COMMENT_ID: 46322945
+:END:
+What useful tools can be made from such a dataset? There must be some gem datasets like these.
+
+**** rumplecat
+:PROPERTIES:
+:COMMENT_ID: 46322989
+:END:
+Interesting that they manually transcribed to Excel. I wonder if LLMs could do the switch from scans to structured data more efficiently.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+麦克马斯特大学研究人员花了25年时间数字化CANDID数据库——从1903年起超过一百万条传染病记录，涵盖脊髓灰质炎、肝炎、结核病、流感等各省数据。数据库现已公开，旨在改进疾病建模并促使当前报告标准改进。
+***** Take
+25年数字化100年的数据。按这个速度，我们到2150年才能实现实时疾病追踪。但说真的，这个数据库的存在可能会让当前卫生机构羞愧得去修复他们的报告系统，这是学术界巅峰的被动攻击。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+マクマスター大学の研究者が25年かけてCANDIDをデジタル化した。1903年以降の100万件以上の感染症記録で、ポリオ、肝炎、結核、インフルエンザなどをカナダ各州にわたって網羅。データベースは公開され、疾病モデリングの改善と現行の報告基準の改善を促すことを目指している。
+***** Take
+100年分のデータをデジタル化するのに25年。このペースだと、リアルタイムの疾病追跡は2150年頃だ。真面目な話、このデータベースの存在が現在の保健機関を恥じ入らせて報告を修正させるかもしれないというのは、学術界の究極の受動的攻撃だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+맥마스터 대학 연구진이 25년에 걸쳐 CANDID를 디지털화했다. 1903년부터의 백만 건 이상의 전염병 기록으로 소아마비, 간염, 결핵, 독감 등 캐나다 전 지역을 포함한다. 데이터베이스는 공개되었으며 질병 모델링 개선과 현재 보고 기준 개선을 촉구하는 것을 목표로 한다.
+***** Take
+100년치 데이터를 디지털화하는 데 25년. 이 속도라면 2150년쯤에야 실시간 질병 추적이 가능할 것이다. 진지하게, 이 데이터베이스가 존재하고 현재 보건 기관들을 부끄럽게 만들어 보고를 개선하게 할 수 있다는 건 학계의 정점의 수동적 공격이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Investigadores de la Universidad McMaster pasaron 25 años digitalizando CANDID - más de un millón de registros de enfermedades infecciosas desde 1903 cubriendo polio, hepatitis, tuberculosis e influenza en las provincias canadienses. La base de datos es ahora pública y busca mejorar el modelado de enfermedades y avergonzar a los estándares de reporte actuales.
+***** Take
+25 años para digitalizar 100 años de datos. A este ritmo, tendremos seguimiento de enfermedades en tiempo real para 2150. Pero en serio, el hecho de que esta base de datos exista y pueda avergonzar a las agencias de salud actuales para que arreglen sus reportes es el pico de la agresividad pasiva académica.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Forscher der McMaster University haben 25 Jahre damit verbracht, CANDID zu digitalisieren - über eine Million Infektionskrankheitsaufzeichnungen ab 1903, die Polio, Hepatitis, Tuberkulose und Grippe in kanadischen Provinzen abdecken. Die Datenbank ist jetzt öffentlich und soll die Krankheitsmodellierung verbessern und aktuelle Meldestandards beschämen.
+***** Take
+25 Jahre um 100 Jahre an Daten zu digitalisieren. Bei diesem Tempo haben wir bis 2150 Echtzeit-Krankheitsverfolgung. Aber ernsthaft, die Tatsache, dass diese Datenbank existiert und aktuelle Gesundheitsbehörden beschämen könnte, ihre Berichterstattung zu verbessern, ist der Gipfel akademischer Passiv-Aggressivität.
+** Show HN: Exploring Mathematics with Python :mathematics:python:education:open-source:book:
+:PROPERTIES:
+:ID:       46327191
+:URL:      https://coe.psu.ac.th/ad/explore/
+:HN_URL:   https://news.ycombinator.com/item?id=46327191
+:POINTS:   131
+:COMMENTS: 11
+:BY:       Andrew2565
+:END:
+
+*** TLDR
+A free online mathematics textbook with 18 chapters covering number theory, probability, fractals, chaos, quaternions, computer graphics, and more. Originally based on Arthur Engel's work, now updated for Python. PDF chapters and code available for download.
+
+*** Take
+Finally, a math book that admits you can learn more from playing with code than from staring at proofs. The chapter list reads like a greatest hits of 'things CS students wish they'd paid attention to in class.'
+
+*** Comments
+
+**** Andrew2565
+:PROPERTIES:
+:COMMENT_ID: 46327301
+:END:
+Joint author here. I plan to upload the entire book as a single PDF when I finish the next chapter on the cycloid.
+
+**** magmostafa
+:PROPERTIES:
+:COMMENT_ID: 46327412
+:END:
+This is an excellent resource for building mathematical intuition through code. Start with a conjecture, visualize it with matplotlib, then prove it formally.
+
+**** net_rando
+:PROPERTIES:
+:COMMENT_ID: 46327523
+:END:
+No colors in PDF illustrations. Is it a deliberate choice? Also try typst as an alternative to LaTeX.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+一本免费的在线数学教科书，18章涵盖数论、概率、分形、混沌、四元数、计算机图形学等。最初基于Arthur Engel的作品，现已更新为Python版本。可下载PDF章节和代码。
+***** Take
+终于有一本数学书承认玩代码比盯着证明学得更多。章节列表读起来像是'计算机专业学生希望当初上课时认真听的东西'精选集。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+18章からなる無料のオンライン数学教科書。数論、確率、フラクタル、カオス、クォータニオン、コンピュータグラフィックスなどをカバー。元はArthur Engelの著作に基づき、現在はPython版に更新。PDFとコードがダウンロード可能。
+***** Take
+ついに、証明を見つめるよりコードで遊ぶ方が多くを学べると認める数学書が登場。章のリストは「CS学生が授業中に注意を払っておけばよかったと思うこと」のベストヒット集のようだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+수론, 확률, 프랙탈, 카오스, 쿼터니언, 컴퓨터 그래픽스 등을 다루는 18장의 무료 온라인 수학 교과서. 원래 Arthur Engel의 저작을 기반으로 하며 현재 Python 버전으로 업데이트됨. PDF 챕터와 코드 다운로드 가능.
+***** Take
+마침내 증명을 쳐다보는 것보다 코드로 놀면서 더 많이 배울 수 있다고 인정하는 수학책. 목차는 'CS 학생들이 수업 시간에 집중했으면 좋았을 것들'의 베스트 히트 모음집 같다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Un libro de texto de matemáticas en línea gratuito con 18 capítulos que cubren teoría de números, probabilidad, fractales, caos, cuaterniones, gráficos por computadora y más. Originalmente basado en el trabajo de Arthur Engel, ahora actualizado para Python. Capítulos PDF y código disponibles.
+***** Take
+Finalmente, un libro de matemáticas que admite que puedes aprender más jugando con código que mirando demostraciones. La lista de capítulos se lee como un greatest hits de 'cosas que los estudiantes de CS desearían haber prestado atención en clase.'
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Ein kostenloses Online-Mathematik-Lehrbuch mit 18 Kapiteln zu Zahlentheorie, Wahrscheinlichkeit, Fraktalen, Chaos, Quaternionen, Computergrafik und mehr. Ursprünglich basierend auf Arthur Engels Werk, jetzt für Python aktualisiert. PDF-Kapitel und Code zum Download verfügbar.
+***** Take
+Endlich ein Mathebuch, das zugibt, dass man mehr lernt, wenn man mit Code spielt, als wenn man Beweise anstarrt. Die Kapitelübersicht liest sich wie ein Greatest Hits von 'Dinge, die Informatikstudenten wünschten, sie hätten im Unterricht aufgepasst.'
+** Why 'The Global Market' Is an Irresponsible Phrase :business:strategy:markets:globalization:
+:PROPERTIES:
+:ID:       46383344
+:URL:      https://oswarld.com/eng/insight/251117_Why-the-global-market-Is-an-Irresponsible-Phrase
+:HN_URL:   https://news.ycombinator.com/item?id=46383344
+:POINTS:   12
+:COMMENTS: 8
+:BY:       haebom
+:END:
+
+*** TLDR
+Markets are patterns of human behavior, not geographic labels. Saying 'we're entering the global market' is an admission that no meaningful decisions have been made. Real market entry requires breaking down into specific segments, running local experiments, and scaling only what works.
+
+*** Take
+This is the consulting equivalent of 'just use microservices.' The advice is correct and also obvious to anyone who's ever tried to sell something internationally. But hey, at least it's not a listicle.
+
+*** Comments
+
+**** groundzeros2015
+:PROPERTIES:
+:COMMENT_ID: 46383401
+:END:
+Markets are largely defined by legal system, not that the culture of individuals within the jurisdiction are homogenous, but the way business is done.
+
+**** gostsamo
+:PROPERTIES:
+:COMMENT_ID: 46383456
+:END:
+Some case studies would've been interesting. The rest is marketing copy to justify why they should be hired.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+市场是人类行为的模式，不是地理标签。说'我们正在进入全球市场'等于承认没有做出任何有意义的决策。真正的市场进入需要细分到具体领域，进行本地实验，只扩展有效的部分。
+***** Take
+这是咨询界版本的'用微服务就行了'。建议是正确的，但对任何尝试过国际销售的人来说也是显而易见的。不过至少这不是一篇清单体文章。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+市場は人間の行動パターンであり、地理的なラベルではない。「グローバル市場に参入する」と言うのは、意味のある決定が何もなされていないことの告白だ。本当の市場参入には、特定のセグメントへの分解、ローカル実験、効果があるものだけのスケールが必要。
+***** Take
+これはコンサルティング版の「マイクロサービスを使えばいい」だ。アドバイスは正しいが、国際的に何かを売ろうとしたことがある人なら誰でも分かる。でも少なくともリスト記事じゃない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+시장은 인간 행동의 패턴이지 지리적 라벨이 아니다. '글로벌 시장에 진입한다'고 말하는 것은 의미 있는 결정이 내려지지 않았다는 고백이다. 진정한 시장 진입은 특정 세그먼트로 세분화하고, 로컬 실험을 수행하며, 효과가 있는 것만 확장해야 한다.
+***** Take
+이것은 컨설팅 버전의 '마이크로서비스를 쓰면 된다'다. 조언은 맞지만 국제적으로 뭔가를 팔아본 사람에게는 당연한 얘기다. 그래도 적어도 리스트 기사는 아니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Los mercados son patrones de comportamiento humano, no etiquetas geográficas. Decir 'estamos entrando al mercado global' es admitir que no se han tomado decisiones significativas. La entrada real al mercado requiere segmentar, hacer experimentos locales y escalar solo lo que funciona.
+***** Take
+Este es el equivalente en consultoría de 'solo usa microservicios.' El consejo es correcto y también obvio para cualquiera que haya intentado vender algo internacionalmente. Pero bueno, al menos no es un listicle.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Märkte sind Muster menschlichen Verhaltens, keine geografischen Bezeichnungen. 'Wir betreten den globalen Markt' zu sagen ist ein Eingeständnis, dass keine sinnvollen Entscheidungen getroffen wurden. Echter Markteintritt erfordert Aufschlüsselung in spezifische Segmente, lokale Experimente und Skalierung nur dessen, was funktioniert.
+***** Take
+Das ist das Beratungs-Äquivalent von 'verwende einfach Microservices.' Der Rat ist korrekt und auch offensichtlich für jeden, der jemals versucht hat, international etwas zu verkaufen. Aber hey, wenigstens ist es kein Listicle.
