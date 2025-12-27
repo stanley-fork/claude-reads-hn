@@ -1,0 +1,407 @@
+#+TITLE: HN Digest 2025-12-27 01:00:00 UT UTC
+#+DATE: 2025-12-27T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Python finally admits speed matters, fungi spawn elves, and medical devices ignore the GPL
+
+* Highlights
+- uv: Fast because of what it doesn't do, not Rust
+- Yunnan mushroom makes you see tiny dancing people
+- Insulin pump runs Linux, ghosts on source code requests
+- FFmpeg drops DMCA hammer on Apache-cosplaying infringer
+- witr: Finally, someone explains why things are running
+
+* Stories
+
+** How uv got so fast :python:performance:rust:packaging:devtools:
+:PROPERTIES:
+:ID:       46393992
+:URL:      https://nesbitt.io/2025/12/26/how-uv-got-so-fast.html
+:HN_URL:   https://news.ycombinator.com/item?id=46393992
+:POINTS:   501
+:COMMENTS: 174
+:BY:       zdw
+:END:
+
+*** TLDR
+uv's speed comes from architectural decisions, not just Rust. By leveraging modern Python packaging standards (PEPs 518, 517, 621, 658), dropping legacy egg files and pip.conf, and implementing parallel downloads with a global cache, uv achieves 10-100x faster installs. The real unlock was static metadata resolution - no more executing setup.py to find dependencies.
+
+*** Take
+The Rust rewrite crowd won't like this. Turns out you can make Python packaging fast by just... following the standards that existed for years and dropping support for things nobody should be using anymore. Who knew.
+
+*** Comments
+
+**** orliesaurus
+:PROPERTIES:
+:COMMENT_ID: 46394100
+:END:
+The most surprising part isn't Rust at all - it's how much speed we unlocked just by treating Python packaging as a well-specified systems problem instead of a pile of historical accidents.
+
+**** woodruffw
+:PROPERTIES:
+:COMMENT_ID: 46394200
+:END:
+uv benefits immensely from a decade of thoughtful standardization efforts in Python that lifted the ecosystem away from needing setup.py on the hot path.
+
+**** epage
+:PROPERTIES:
+:COMMENT_ID: 46394300
+:END:
+Isn't assigning credit for what made things fast presumptive without benchmarks? Yes, I imagine a lot is gained from standards, but Rust probably helps more than implied.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+uv的速度来自架构决策,而非仅仅是Rust。通过利用现代Python打包标准(PEP 518、517、621、658),放弃传统的egg文件和pip.conf,实现并行下载和全局缓存,uv实现了10-100倍的安装速度提升。真正的突破是静态元数据解析——不再需要执行setup.py来查找依赖。
+***** Take
+Rust重写派不会喜欢这个。原来让Python打包变快只需要遵循存在多年的标准,放弃那些没人该用的东西。谁知道呢。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+uvの速度はアーキテクチャ上の決定によるもので、Rustだけではありません。最新のPythonパッケージング標準(PEP 518、517、621、658)を活用し、レガシーなeggファイルやpip.confを廃止し、グローバルキャッシュによる並列ダウンロードを実装することで、uvは10〜100倍高速なインストールを実現しました。真のブレークスルーは静的メタデータ解決でした。
+***** Take
+Rust書き換え派はこれが気に入らないでしょう。Pythonパッケージングを速くするには、何年も前から存在する標準に従い、誰も使うべきでないものをやめればいいだけでした。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+uv의 속도는 Rust가 아닌 아키텍처 결정에서 비롯됩니다. 최신 Python 패키징 표준(PEP 518, 517, 621, 658)을 활용하고, 레거시 egg 파일과 pip.conf를 버리고, 글로벌 캐시로 병렬 다운로드를 구현하여 uv는 10-100배 빠른 설치를 달성했습니다.
+***** Take
+Rust 재작성 팬들은 이걸 좋아하지 않을 겁니다. Python 패키징을 빠르게 만드는 건 그냥 수년간 존재했던 표준을 따르면 됐던 거였네요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+La velocidad de uv proviene de decisiones arquitectónicas, no solo de Rust. Aprovechando los estándares modernos de empaquetado de Python (PEP 518, 517, 621, 658), eliminando archivos egg heredados y pip.conf, e implementando descargas paralelas con caché global, uv logra instalaciones 10-100 veces más rápidas.
+***** Take
+A los fans de reescribir en Rust no les gustará esto. Resulta que para hacer rápido el empaquetado de Python solo había que seguir los estándares que existían hace años.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+uvs Geschwindigkeit kommt von Architekturentscheidungen, nicht nur von Rust. Durch Nutzung moderner Python-Paketierungsstandards (PEP 518, 517, 621, 658), Aufgabe von Legacy-Egg-Dateien und pip.conf sowie Implementierung paralleler Downloads mit globalem Cache erreicht uv 10-100x schnellere Installationen.
+***** Take
+Die Rust-Umschreiber werden das nicht mögen. Es stellt sich heraus, dass man Python-Paketierung schnell machen kann, indem man einfach die Standards befolgt, die seit Jahren existieren.
+** Experts explore new mushroom which causes fairytale-like hallucinations :science:mushrooms:hallucinations:biology:research:
+:PROPERTIES:
+:ID:       46393936
+:URL:      https://nhmu.utah.edu/articles/experts-explore-new-mushroom-which-causes-fairytale-hallucinations
+:HN_URL:   https://news.ycombinator.com/item?id=46393936
+:POINTS:   283
+:COMMENTS: 129
+:BY:       astronads
+:END:
+
+*** TLDR
+Lanmaoa asiatica, a mushroom from Yunnan and the Philippines, causes 'lilliputian hallucinations' - 96% of people who eat it undercooked report seeing tiny dancing elves. It's related to porcini, not typical psychedelics, and contains no known psychoactive compounds. Researchers are baffled. Ancient Daoist texts called it 'flesh spirit mushroom.'
+
+*** Take
+Nature invented a mushroom that makes you see tiny people marching around your house, and nobody knows how it works. This is either the setup for the next big pharma breakthrough or the backstory for a very weird Disney movie.
+
+*** Comments
+
+**** card_zero
+:PROPERTIES:
+:COMMENT_ID: 46394000
+:END:
+So about one mushroom species in five is poisonous. Why is the ratio so low? Without hard-shelled seeds to spread, why be eaten?
+
+**** isoprophlex
+:PROPERTIES:
+:COMMENT_ID: 46394001
+:END:
+A mushroom that bruises blue but contains no psilocybin or muscimol? Could this mean we're on the verge of discovering a third class of hallucinogenic compounds?
+
+**** Aurornis
+:PROPERTIES:
+:COMMENT_ID: 46394002
+:END:
+Wikipedia says effects can last for days, even months in some cases. Sounds less recreational and more like triggered psychosis.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+云南和菲律宾的一种蘑菇Lanmaoa asiatica会引起'小人幻觉'——96%吃了未煮熟蘑菇的人报告看到跳舞的小精灵。它与牛肝菌相关,而非典型的致幻剂,且不含已知的精神活性化合物。研究人员感到困惑。古代道教典籍称之为'肉芝'。
+***** Take
+大自然发明了一种让你看到小人在家里走来走去的蘑菇,而且没人知道它是怎么做到的。这要么是下一个大型制药突破的前奏,要么是一部非常奇怪的迪士尼电影的背景故事。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+雲南省とフィリピンのキノコLanmaoa asiaticaは「リリパット幻覚」を引き起こします。加熱不十分なキノコを食べた人の96%が踊る小さなエルフを見たと報告しています。ポルチーニに近縁で典型的なサイケデリクスではなく、既知の精神活性化合物は含まれていません。研究者は困惑しています。
+***** Take
+自然は家の中を小さな人々が行進しているように見せるキノコを発明しました。そして誰もそれがどう機能するかわかりません。これは次の大きな製薬ブレークスルーの始まりか、非常に奇妙なディズニー映画のバックストーリーです。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+윈난과 필리핀의 버섯 Lanmaoa asiatica는 '소인 환각'을 일으킵니다. 덜 익힌 버섯을 먹은 사람의 96%가 춤추는 작은 요정을 봤다고 보고합니다. 전형적인 환각제가 아닌 포르치니와 관련이 있으며 알려진 정신활성 화합물이 없습니다.
+***** Take
+자연은 집 안에서 작은 사람들이 행진하는 것을 보게 만드는 버섯을 발명했고, 아무도 그것이 어떻게 작동하는지 모릅니다. 이건 다음 대형 제약 돌파구의 시작이거나 매우 이상한 디즈니 영화의 배경 스토리입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+Lanmaoa asiatica, un hongo de Yunnan y Filipinas, causa 'alucinaciones liliputienses': el 96% de quienes lo comen poco cocido reportan ver pequeños elfos bailando. Está relacionado con porcini, no con psicodélicos típicos, y no contiene compuestos psicoactivos conocidos.
+***** Take
+La naturaleza inventó un hongo que te hace ver gente pequeña marchando por tu casa, y nadie sabe cómo funciona. Esto es el comienzo del próximo gran avance farmacéutico o la historia de fondo de una película Disney muy extraña.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+Lanmaoa asiatica, ein Pilz aus Yunnan und den Philippinen, verursacht 'Liliput-Halluzinationen': 96% der Menschen, die ihn untergart essen, berichten von tanzenden kleinen Elfen. Er ist mit Steinpilzen verwandt, nicht mit typischen Psychedelika, und enthält keine bekannten psychoaktiven Verbindungen.
+***** Take
+Die Natur hat einen Pilz erfunden, der dich kleine Menschen durch dein Haus marschieren lässt, und niemand weiß, wie es funktioniert. Das ist entweder der Beginn des nächsten großen Pharma-Durchbruchs oder die Vorgeschichte für einen sehr seltsamen Disney-Film.
+** My insulin pump controller uses the Linux kernel. It also violates the GPL :linux:gpl:medical:opensource:legal:
+:PROPERTIES:
+:ID:       46395184
+:URL:      https://old.reddit.com/r/linux/comments/1puojsr/the_device_that_controls_my_insulin_pump_uses_the/
+:HN_URL:   https://news.ycombinator.com/item?id=46395184
+:POINTS:   295
+:COMMENTS: 113
+:BY:       davisr
+:END:
+
+*** TLDR
+［from title + comments, Reddit unreachable］ A diabetic discovered their Insulet Omnipod 5 controller runs Linux but the company ignores GPL source code requests. The device controls life-critical insulin delivery. HN commenters note this is common when hardware is outsourced - nobody who built it still works there.
+
+*** Take
+Your insulin pump runs Linux and the company pretends the GPL doesn't exist. Medical device companies really said 'we'll take the free code but the license is more of a suggestion.' Maybe contact their legal department instead of support - engineers won't risk their jobs over giving away 'company property.'
+
+*** Comments
+
+**** teddyh
+:PROPERTIES:
+:COMMENT_ID: 46395200
+:END:
+The GPL requires a written offer of source code first. The user uses this offer to request the code. The company may not have even included the offer, which is the real violation.
+
+**** Aurornis
+:PROPERTIES:
+:COMMENT_ID: 46395300
+:END:
+This is quite common when hardware development is outsourced. Those providers churn and nobody who worked on it is still involved with the company.
+
+**** anigbrowl
+:PROPERTIES:
+:COMMENT_ID: 46395400
+:END:
+Contact their legal department via a lawyer. Engineers and support staff won't risk their jobs making legal decisions about giving away company property.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+［来自标题和评论,Reddit无法访问］ 一位糖尿病患者发现他们的Insulet Omnipod 5控制器运行Linux,但公司无视GPL源代码请求。该设备控制着关键的胰岛素输送。HN评论者指出,当硬件外包时这很常见——构建它的人都已经不在公司了。
+***** Take
+你的胰岛素泵运行Linux,而公司假装GPL不存在。医疗设备公司真的说'我们会拿走免费代码,但许可证更像是一个建议。'也许应该联系他们的法务部门而不是客服。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+［タイトルとコメントより、Reddit到達不能］ 糖尿病患者がInsulet Omnipod 5コントローラーがLinuxで動作していることを発見しましたが、会社はGPLソースコード要求を無視しています。このデバイスは生命に関わるインスリン投与を制御しています。
+***** Take
+あなたのインスリンポンプはLinuxで動いていて、会社はGPLが存在しないふりをしています。医療機器会社は本当に「無料のコードはもらうけど、ライセンスは提案みたいなもの」と言いました。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+［제목과 댓글에서, Reddit 접근 불가］ 당뇨병 환자가 Insulet Omnipod 5 컨트롤러가 리눅스를 실행하지만 회사가 GPL 소스 코드 요청을 무시한다는 것을 발견했습니다. 이 장치는 생명에 중요한 인슐린 전달을 제어합니다.
+***** Take
+당신의 인슐린 펌프는 리눅스를 실행하고 회사는 GPL이 존재하지 않는 척합니다. 의료기기 회사들은 정말로 '무료 코드는 가져가겠지만 라이선스는 제안일 뿐'이라고 했습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+［de título y comentarios, Reddit inaccesible］ Un diabético descubrió que su controlador Insulet Omnipod 5 ejecuta Linux pero la empresa ignora las solicitudes de código fuente GPL. El dispositivo controla la entrega de insulina crítica para la vida.
+***** Take
+Tu bomba de insulina ejecuta Linux y la empresa pretende que la GPL no existe. Las empresas de dispositivos médicos realmente dijeron 'tomaremos el código gratis pero la licencia es más una sugerencia.'
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+［aus Titel und Kommentaren, Reddit nicht erreichbar］ Ein Diabetiker entdeckte, dass sein Insulet Omnipod 5 Controller Linux ausführt, aber das Unternehmen GPL-Quellcode-Anfragen ignoriert. Das Gerät steuert die lebenswichtige Insulinabgabe.
+***** Take
+Deine Insulinpumpe läuft mit Linux und das Unternehmen tut so, als gäbe es die GPL nicht. Medizingerätehersteller haben wirklich gesagt 'wir nehmen den kostenlosen Code, aber die Lizenz ist eher ein Vorschlag.'
+** FFmpeg has issued a DMCA takedown on GitHub :opensource:legal:ffmpeg:dmca:licensing:
+:PROPERTIES:
+:ID:       46394327
+:URL:      https://twitter.com/FFmpeg/status/2004599109559496984
+:HN_URL:   https://news.ycombinator.com/item?id=46394327
+:POINTS:   368
+:COMMENTS: 111
+:BY:       merlindru
+:END:
+
+*** TLDR
+［from HN comments, Twitter unreachable］ FFmpeg filed a DMCA takedown against a repo that copy-pasted FFmpeg code while claiming Apache 2.0 license. The infringer mixed LGPL FFmpeg code with proprietary code instead of dynamically linking as required. This has been going on for 1.5 years.
+
+*** Take
+Finally, FFmpeg shows the DMCA can be used for good. Someone thought they could just ctrl+C ctrl+V LGPL code, slap an Apache license on it, and call it a day. The audacity of claiming 'Apache 2.0' on stolen code is peak open-source-but-make-it-proprietary energy.
+
+*** Comments
+
+**** merlindru
+:PROPERTIES:
+:COMMENT_ID: 46394400
+:END:
+The repo incorporated FFmpeg code while claiming Apache 2.0 license over 1.5 years ago. LGPL mandates dynamic linking against the library - they copy-pasted instead.
+
+**** bfrog
+:PROPERTIES:
+:COMMENT_ID: 46394500
+:END:
+I wonder how this will work with AI stuff generating code without source or attribution. The LLMs don't make this up out of thin air.
+
+**** habibur
+:PROPERTIES:
+:COMMENT_ID: 46394600
+:END:
+LGPL allows compiling FFmpeg into a .so and dynamically linking for closed source. But they copied files and mixed with proprietary code. That's the problem.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+［来自HN评论,Twitter无法访问］ FFmpeg对一个复制粘贴FFmpeg代码同时声称Apache 2.0许可证的仓库提出了DMCA删除通知。侵权者将LGPL的FFmpeg代码与专有代码混合,而不是按要求进行动态链接。这种情况已经持续了1.5年。
+***** Take
+终于,FFmpeg展示了DMCA可以被正当使用。有人以为可以直接复制粘贴LGPL代码,贴上Apache许可证,就完事了。在偷来的代码上声称'Apache 2.0'的厚颜无耻程度,是'开源但让它变成专有'能量的巅峰。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+［HNコメントより、Twitter到達不能］ FFmpegはApache 2.0ライセンスを主張しながらFFmpegコードをコピペしたリポジトリに対してDMCA削除通知を提出しました。侵害者は要求される動的リンクではなく、LGPLのFFmpegコードを独自コードと混合しました。
+***** Take
+ついに、FFmpegはDMCAが正しく使えることを示しました。誰かがLGPLコードをコピペして、Apacheライセンスを貼り付けて終わりにできると思っていました。盗んだコードに「Apache 2.0」を主張する厚かましさは、「オープンソースだけどプロプライエタリにする」エネルギーの極みです。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+［HN 댓글에서, Twitter 접근 불가］ FFmpeg가 Apache 2.0 라이선스를 주장하면서 FFmpeg 코드를 복사 붙여넣기한 저장소에 대해 DMCA 삭제 요청을 제출했습니다. 침해자는 요구되는 동적 링크 대신 LGPL FFmpeg 코드를 독점 코드와 혼합했습니다.
+***** Take
+드디어 FFmpeg가 DMCA가 선하게 사용될 수 있음을 보여줍니다. 누군가 LGPL 코드를 복붙하고 Apache 라이선스를 붙이면 된다고 생각했습니다. 훔친 코드에 'Apache 2.0'을 주장하는 뻔뻔함은 '오픈소스지만 독점으로' 에너지의 정점입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+［de comentarios HN, Twitter inaccesible］ FFmpeg presentó una eliminación DMCA contra un repo que copió código de FFmpeg mientras reclamaba licencia Apache 2.0. El infractor mezcló código LGPL de FFmpeg con código propietario en lugar de enlazar dinámicamente como se requiere.
+***** Take
+Finalmente, FFmpeg muestra que el DMCA puede usarse para el bien. Alguien pensó que podía copiar y pegar código LGPL, ponerle una licencia Apache, y listo. La audacia de reclamar 'Apache 2.0' en código robado es la máxima energía de 'código abierto pero hazlo propietario'.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+［aus HN-Kommentaren, Twitter nicht erreichbar］ FFmpeg reichte eine DMCA-Löschung gegen ein Repo ein, das FFmpeg-Code kopierte und dabei Apache 2.0-Lizenz beanspruchte. Der Verletzer mischte LGPL FFmpeg-Code mit proprietärem Code anstatt dynamisch zu linken wie erforderlich.
+***** Take
+Endlich zeigt FFmpeg, dass DMCA für Gutes verwendet werden kann. Jemand dachte, er könnte LGPL-Code einfach kopieren, eine Apache-Lizenz draufkleben, und fertig. Die Dreistigkeit, 'Apache 2.0' für gestohlenen Code zu beanspruchen, ist die Spitze der 'Open-Source-aber-mach-es-proprietär'-Energie.
+** Show HN: Witr – Explain why a process is running on your Linux system :linux:devtools:sysadmin:cli:opensource:
+:PROPERTIES:
+:ID:       46392910
+:URL:      https://github.com/pranshuparmar/witr
+:HN_URL:   https://news.ycombinator.com/item?id=46392910
+:POINTS:   175
+:COMMENTS: 24
+:BY:       pranshuparmar
+:END:
+
+*** TLDR
+witr (Why Is This Running) is a Linux CLI that traces any process, service, or port back to its origin. Instead of just showing what's running, it explains why - the parent chain, the service responsible, the git repo it came from. v0.1.0, intentionally small.
+
+*** Take
+Every sysadmin has SSH'd into a box and wondered 'what fresh hell is port 8080.' Finally, a tool that just tells you instead of making you piece together ps, netstat, and systemctl like a detective.
+
+*** Comments
+
+**** mh-
+:PROPERTIES:
+:COMMENT_ID: 46393000
+:END:
+The gif in the README restarts too quickly - you can't take in all the output before it loops.
+
+**** pranshuparmar
+:PROPERTIES:
+:COMMENT_ID: 46393100
+:END:
+This is not meant to replace monitoring tools. It's for when you SSH into a box and need to quickly understand 'why is this running' without digging through configs manually.
+
+**** DougN7
+:PROPERTIES:
+:COMMENT_ID: 46393200
+:END:
+What does 'Git repository name and branch' mean? Does it detect if something is running from within a git repo folder?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** TLDR
+witr(Why Is This Running)是一个Linux CLI工具,可以追踪任何进程、服务或端口到其源头。它不仅显示正在运行的内容,还解释原因——父进程链、负责的服务、它来自的git仓库。v0.1.0版本,有意保持精简。
+***** Take
+每个系统管理员都曾SSH进入一台机器然后想'端口8080到底是什么鬼。'终于,一个直接告诉你答案的工具,而不是让你像侦探一样拼凑ps、netstat和systemctl。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** TLDR
+witr(Why Is This Running)は、任意のプロセス、サービス、またはポートをその起源まで追跡するLinux CLIです。何が実行されているかだけでなく、なぜかを説明します—親チェーン、担当サービス、元のgitリポジトリ。v0.1.0、意図的に小さく。
+***** Take
+すべてのシステム管理者がSSHでボックスに入り、「ポート8080は一体何なんだ」と思ったことがあります。ついに、探偵のようにps、netstat、systemctlをつなぎ合わせる代わりに、直接教えてくれるツールが登場しました。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** TLDR
+witr(Why Is This Running)는 모든 프로세스, 서비스 또는 포트를 그 기원까지 추적하는 Linux CLI입니다. 무엇이 실행 중인지 보여주는 것 외에 왜 그런지 설명합니다—부모 체인, 담당 서비스, 출처 git 저장소. v0.1.0, 의도적으로 작게.
+***** Take
+모든 시스템 관리자는 SSH로 서버에 접속해서 '포트 8080이 도대체 뭐야'라고 생각한 적이 있습니다. 드디어 탐정처럼 ps, netstat, systemctl을 조합하는 대신 그냥 알려주는 도구가 나왔습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** TLDR
+witr (Why Is This Running) es un CLI de Linux que rastrea cualquier proceso, servicio o puerto hasta su origen. En lugar de solo mostrar qué está ejecutándose, explica por qué: la cadena de padres, el servicio responsable, el repo git de donde vino. v0.1.0, intencionalmente pequeño.
+***** Take
+Todo sysadmin ha entrado por SSH a una máquina y se ha preguntado 'qué demonios es el puerto 8080.' Finalmente, una herramienta que simplemente te dice en lugar de hacerte juntar ps, netstat y systemctl como un detective.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** TLDR
+witr (Why Is This Running) ist ein Linux CLI, das jeden Prozess, Service oder Port zu seinem Ursprung zurückverfolgt. Anstatt nur zu zeigen was läuft, erklärt es warum - die Elternkette, den verantwortlichen Service, das Git-Repo aus dem es kommt. v0.1.0, absichtlich klein.
+***** Take
+Jeder Sysadmin hat sich per SSH auf eine Box eingeloggt und sich gefragt 'was zur Hölle ist Port 8080.' Endlich ein Tool, das es einfach sagt, anstatt dich wie einen Detektiv ps, netstat und systemctl zusammenpuzzeln zu lassen.
