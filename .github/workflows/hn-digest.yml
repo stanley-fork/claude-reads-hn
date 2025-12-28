@@ -5,12 +5,11 @@ name: hn digest
 
 on:
   schedule:
-    # 4x daily. GitHub cron uses UTC.
-    # Local mapping in comments: America/Los_Angeles (PST; in PDT add +1 hour).
-    - cron: "0 20 * * *"  # 12:00 LA
-    - cron: "0 1 * * *"   # 17:00 LA (prev day)
-    - cron: "0 6 * * *"   # 22:00 LA (prev day)
-    - cron: "0 11 * * *"  # 03:00 LA
+    # 4x daily (+8 timezone), next day starts at 09:00
+    - cron: "0 1 * * *"   # 09:00 +8
+    - cron: "0 6 * * *"   # 14:00 +8
+    - cron: "0 11 * * *"  # 19:00 +8
+    - cron: "0 16 * * *"  # 00:00 +8 (midnight)
   workflow_dispatch:
     inputs:
       story_count:
@@ -299,8 +298,8 @@ jobs:
 
             7. BUILD STATIC PAGES: run ./.claude/skills/hn-digest/scripts/org2html.py digests/*/*.org digests/*/*/*.org -o index.html -d 7 -a archive.html
                This generates:
-               - index.html: last 7 days (~100KB)
-               - archive.html: older digests (separate file)
+               - index.html: last 7 days
+               - archive.html: older digests
 
             8. Git add digests/ llms.txt index.html archive.html, commit, push
 
@@ -312,11 +311,11 @@ jobs:
                BASE_URL: https://thevibeworks.github.io/claude-reads-hn
 
                ANCHOR FORMAT (CRITICAL - must match exactly):
-               - Pattern: #s{id}-{MMDDHH} where {id} is story ID, {MMDDHH} is digest date
-               - Example: #s46268854-122711 (story 46268854 from Dec 27 11:00 digest)
-               - Full URL: https://thevibeworks.github.io/claude-reads-hn#s46268854-122711
-               - Format breakdown: "s" + story_id + "-" + MM + DD + HH (from digest date)
-               - This ensures uniqueness when same story appears in multiple digests (REVISIT)
+               - Pattern: #s{id}-{MMDDHHMM} where {id} is story ID, {MMDDHHMM} is digest datetime
+               - Example: #s46268854-12271100 (story 46268854 from Dec 27 11:00 digest)
+               - Full URL: https://thevibeworks.github.io/claude-reads-hn#s46268854-12271100
+               - Build: "s" + story_id + "-" + MM + DD + HH + MM (from digest date)
+               - Minutes required: multiple digests can exist in same hour (0240, 0259)
 
                a) BARK (use mcp__barkme__notify) - one ping to wake human:
                   - title: digest vibe (the catchy summary)
@@ -327,8 +326,8 @@ jobs:
                   For each of the 5 stories, send one message.
                   IMPORTANT: Escape HTML entities (< → &lt; > → &gt; & → &amp;)
 
-                  Anchor = #s{story_id}-{MMDDHH} from current digest date.
-                  Example: digest date "2025-12-27T11:00:00Z", story id 46268854 → #s46268854-122711
+                  Anchor = #s{story_id}-{MMDDHHMM} from digest date.
+                  Example: digest "2025-12-27T11:00:00Z", story 46268854 → #s46268854-12271100
 
                   curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
                     -H "Content-Type: application/json" \
@@ -336,28 +335,28 @@ jobs:
                       "chat_id": "'"$TG_CHANNEL_ID"'",
                       "parse_mode": "HTML",
                       "disable_web_page_preview": false,
-                      "text": "<b>TITLE</b>\n\nTLDR\n\n<i>Take: OPINION</i>\n\n<a href=\"https://thevibeworks.github.io/claude-reads-hn#s46268854-122711\">Read →</a> | <a href=\"https://news.ycombinator.com/item?id=46268854\">HN</a>"
+                      "text": "<b>TITLE</b>\n\nTLDR\n\n<i>Take: OPINION</i>\n\n<a href=\"https://thevibeworks.github.io/claude-reads-hn#s46268854-12271100\">Read →</a> | <a href=\"https://news.ycombinator.com/item?id=46268854\">HN</a>"
                     }'
 
-                  Build anchor from: "s" + story.id + "-" + digest.date[5:7] + digest.date[8:10] + digest.date[11:13]
-                  Sends 5 messages total, one per story.
+                  Build: "s" + story.id + "-" + date[5:7] + date[8:10] + date[11:13] + date[14:16]
+                  Sends 5 messages, one per story.
 
                c) DISCORD (if DISCORD_WEBHOOK_URL is set) - single rich embed:
-                  Build description with all 5 stories. Anchor format: #s{id}-{MMDDHH}
+                  Anchor format: #s{id}-{MMDDHHMM}
 
                   curl -s -X POST "$DISCORD_WEBHOOK_URL" \
                     -H "Content-Type: application/json" \
                     -d '{
                       "embeds": [{
                         "title": "📰 VIBE_SUMMARY",
-                        "description": "• [Title1](https://thevibeworks.github.io/claude-reads-hn#s46268854-122711) - tldr1\n• [Title2](...#s46268855-122711) - tldr2\n...",
+                        "description": "• [Title1](https://thevibeworks.github.io/claude-reads-hn#s46268854-12271100) - tldr1\n• [Title2](...#s46268855-12271100) - tldr2\n...",
                         "url": "https://thevibeworks.github.io/claude-reads-hn",
                         "color": 16737280,
                         "footer": {"text": "Claude Reads HN • 4x daily"}
                       }]
                     }'
 
-                  All stories in same digest share the MMDDHH suffix (e.g., 122711 for Dec 27 11:00).
+                  All stories in same digest share the MMDDHHMM suffix.
 
             RULES:
             - READ THE DAMN ARTICLE first via WebFetch or Jina proxy (https://r.jina.ai/{url})
@@ -372,8 +371,8 @@ jobs:
 
             LINK REFERENCE:
             - Base URL: https://thevibeworks.github.io/claude-reads-hn
-            - Anchor: #s{id}-{MMDDHH} (e.g., #s46268854-122711)
-            - Build: "s" + story.id + "-" + MM + DD + HH from digest.date
-            - Example: digest "2025-12-27T11:00:00Z" + story 46268854 → #s46268854-122711
-            - Same story in different digests gets different anchors (REVISIT support)
+            - Anchor: #s{id}-{MMDDHHMM} (e.g., #s46268854-12271100)
+            - Build: "s" + id + "-" + date[5:7] + date[8:10] + date[11:13] + date[14:16]
+            - Example: digest "2025-12-27T11:00:00Z" + story 46268854 → #s46268854-12271100
+            - Minutes required: digests like 0240.org and 0259.org need distinct anchors
 
