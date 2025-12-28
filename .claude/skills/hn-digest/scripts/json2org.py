@@ -14,7 +14,7 @@ examples:
 
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -82,7 +82,7 @@ def i18n_to_org(lang: str, data: dict, level: int = 4) -> str:
     if data.get("comments"):
         parts.append(f"""
 {sub_stars} Comments""")
-        for idx, comment in enumerate(data["comments"]):
+        for comment in data["comments"]:
             parts.append(f"""
 - {escape_org(comment)}""")
 
@@ -156,7 +156,7 @@ def story_to_org(story: dict, level: int = 2) -> str:
 
 def digest_to_org(digest: dict) -> str:
     """Convert full digest JSON to org format."""
-    date = digest.get("date", datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"))
+    date = digest.get("date", datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
 
     if "T" in date:
         date_display = date.replace("T", " ").replace("Z", " UTC")[:22] + " UTC"
