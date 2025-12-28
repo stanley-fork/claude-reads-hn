@@ -29,8 +29,10 @@ class Comment:
 
 @dataclass
 class I18nContent:
+    title: str = ""
     tldr: str = ""
     take: str = ""
+    comments: list = field(default_factory=list)
 
 
 @dataclass
@@ -222,13 +224,26 @@ def parse_org(content: str) -> Digest:
 
         elif level == 5 and current_i18n_lang and current_story:
             subsection = heading.lower()
-            content, i = collect_content(lines, i + 1, 5)
             i18n_data = current_story.i18n.get(current_i18n_lang, I18nContent())
 
-            if subsection == "tldr":
-                i18n_data.tldr = content
-            elif subsection == "take":
-                i18n_data.take = content
+            if subsection == "comments":
+                # Parse list items as translated comments
+                i += 1
+                while i < len(lines):
+                    line = lines[i].strip()
+                    if line.startswith("*") or (line.startswith(":") and "PROPERTIES" in line):
+                        break
+                    if line.startswith("- "):
+                        i18n_data.comments.append(line[2:])
+                    i += 1
+            else:
+                content, i = collect_content(lines, i + 1, 5)
+                if subsection == "title":
+                    i18n_data.title = content
+                elif subsection == "tldr":
+                    i18n_data.tldr = content
+                elif subsection == "take":
+                    i18n_data.take = content
 
             current_story.i18n[current_i18n_lang] = i18n_data
             continue
@@ -262,8 +277,12 @@ def digest_to_dict(digest: Digest) -> dict:
             "take": story.take,
             "tags": story.tags,
             "comments": [{"by": c.by, "text": c.text, "id": c.id} for c in story.comments],
-            "i18n": {lang: {"tldr": data.tldr, "take": data.take}
-                     for lang, data in story.i18n.items()}
+            "i18n": {lang: {
+                         "title": data.title,
+                         "tldr": data.tldr,
+                         "take": data.take,
+                         "comments": data.comments
+                     } for lang, data in story.i18n.items()}
         }
         if story.by:
             s["by"] = story.by
