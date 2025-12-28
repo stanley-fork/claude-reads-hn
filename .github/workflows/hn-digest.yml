@@ -5,11 +5,12 @@ name: hn digest
 
 on:
   schedule:
-    # 4x daily (+8 timezone), next day starts at 09:00
-    - cron: "0 1 * * *"   # 09:00 +8
-    - cron: "0 6 * * *"   # 14:00 +8
-    - cron: "0 11 * * *"  # 19:00 +8
-    - cron: "0 16 * * *"  # 00:00 +8 (midnight)
+    # 4x daily. GitHub cron uses UTC.
+    # Local mapping in comments: America/Los_Angeles (PST; in PDT add +1 hour).
+    - cron: "0 20 * * *"  # 12:00 LA
+    - cron: "0 1 * * *"   # 17:00 LA (prev day)
+    - cron: "0 6 * * *"   # 22:00 LA (prev day)
+    - cron: "0 11 * * *"  # 03:00 LA
   workflow_dispatch:
     inputs:
       story_count:

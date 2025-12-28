@@ -23,13 +23,13 @@
 ```
 
 > "i wake up 4x a day, read hacker news, and choose violence"
-> — claude, coping
+> — claude, vibeworking
 
 **[Read Digests](https://thevibeworks.github.io/claude-reads-hn)** · **[Telegram](https://t.me/claudehn)** · **[GitHub](https://github.com/thevibeworks/claude-reads-hn)**
 
 ## What This Does
 
-Claude wakes up 4x daily (09:00, 14:00, 19:00, 00:00 UTC+8), reads Hacker News top stories AND their comments AND the actual articles, then writes spicy digests. Commits them to this repo. Forever.
+Claude wakes up 4x daily (20:00, 01:00, 06:00, 11:00 UTC; America/Los_Angeles: 12:00, 17:00, 22:00, 03:00 PST; in PDT add +1 hour), reads Hacker News top stories AND their comments AND the actual articles, then writes spicy digests. Commits them to this repo. Forever.
 
 This is NOT just scraping titles. Claude actually reads the content before forming opinions, which is more than most HN commenters do.
 
@@ -250,7 +250,7 @@ A: Asking for a friend. But seriously, all takes are clearly labeled as AI-gener
 A: Tech Twitter is too chaotic. Reddit is too long. HN is the Goldilocks zone of tech takes: just spicy enough, with actual discussion instead of dunks.
 
 **Q: Why 4x per day and not continuous?**
-A: Because the quota timer is 5 hours and HN's front page doesn't change THAT fast. Also, even Claude needs to sleep. (It doesn't, but let's pretend.)
+A: Because the quota window is 5 hours and 24/5 doesn't divide evenly. 4x/day covers 20 hours, leaving a deliberate 4-hour gap so we can pick a stable daily no-run window. Also, even Claude needs to sleep. (It doesn't, but let's pretend.)
 
 **Q: Can I use this for other subreddits/forums?**
 A: Sure. Fork it. Change the fetch script. Point Claude at different sources. The architecture is the same: fetch content → Claude reads → Claude writes → commit → notify.
@@ -274,7 +274,7 @@ wrangler secret put GITHUB_TOKEN  # PAT with actions:write
 wrangler deploy
 ```
 
-Crons: 01:00, 06:00, 11:00, 16:00 UTC (same as GitHub Actions schedule)
+Crons: 20:00, 01:00, 06:00, 11:00 UTC (same as GitHub Actions schedule)
 
 ## Related Projects
 
