@@ -3,17 +3,19 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-# Version: 0.4.0
+# Version: 0.5.0
 """
-Render org-mode HN digests to HTML thread page.
+Render org-mode HN digests to HTML.
 
 examples:
-  %(prog)s digests/*.org -o index.html
-  %(prog)s digests/2025/12/15-1100.org  # stdout
+  %(prog)s digests/*.org -o index.html                    # all digests
+  %(prog)s digests/*.org -o index.html -d 7               # last 7 days in index
+  %(prog)s digests/*.org -o index.html -d 7 -a archive.html  # split output
 """
 
 import argparse
 import sys
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from html import escape
 from string import Template
@@ -160,43 +162,32 @@ def generate_sidebar(digests: list) -> str:
     return "\n".join(lines)
 
 
-def render_page(digests: list, recent_days: int = 7) -> str:
-    """Render full HTML page from list of digests with pagination."""
-    from datetime import datetime, timedelta
-
+def render_page(digests: list, archive_link: str = None) -> str:
+    """Render HTML page from list of digests."""
     template = load_template()
+    content = "\n".join(digest_to_html(d) for d in digests)
 
-    # Split into recent and archive
-    cutoff = (datetime.utcnow() - timedelta(days=recent_days)).strftime("%Y-%m-%d")
-    recent = [d for d in digests if d.get("date", "")[:10] >= cutoff]
-    archive = [d for d in digests if d.get("date", "")[:10] < cutoff]
-
-    # Render recent content
-    content = "\n".join(digest_to_html(d) for d in recent)
-
-    # Render archive as hidden
-    if archive:
-        archive_content = "\n".join(digest_to_html(d) for d in archive)
+    # Add archive link if provided
+    if archive_link:
         content += f'''
-    <div id="archive" class="archive hidden">
-      {archive_content}
-    </div>
-    <button id="load-more" class="load-more" onclick="loadMore()">
-      Load {len(archive)} more digests →
-    </button>'''
+    <a href="{archive_link}" class="archive-link">
+      View older digests →
+    </a>'''
 
-    sidebar = generate_sidebar(recent)  # Only recent in sidebar initially
+    sidebar = generate_sidebar(digests)
     return template.substitute(content=content, sidebar=sidebar)
 
 
 def main():
     parser = argparse.ArgumentParser(description="Render org digests to HTML")
     parser.add_argument("files", nargs="+", help="Org files to render")
-    parser.add_argument("-o", "--output", help="Output HTML file")
-    parser.add_argument("-d", "--days", type=int, default=7,
-                        help="Days to show initially (default: 7)")
+    parser.add_argument("-o", "--output", help="Output HTML file (index)")
+    parser.add_argument("-d", "--days", type=int, default=0,
+                        help="Days to include in index (0 = all)")
+    parser.add_argument("-a", "--archive", help="Archive output file (older digests)")
     args = parser.parse_args()
 
+    # Parse all digests
     digests = []
     for f in args.files:
         path = Path(f)
@@ -211,13 +202,33 @@ def main():
 
     digests.sort(key=lambda d: d.get("date", ""), reverse=True)
 
-    html = render_page(digests, recent_days=args.days)
+    if args.days > 0 and args.archive:
+        # Split mode: recent in index, older in archive
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=args.days)).strftime("%Y-%m-%d")
+        recent = [d for d in digests if d.get("date", "")[:10] >= cutoff]
+        archive = [d for d in digests if d.get("date", "")[:10] < cutoff]
 
-    if args.output:
-        Path(args.output).write_text(html)
-        print(f"Wrote {args.output}", file=sys.stderr)
+        # Generate index with link to archive
+        archive_name = Path(args.archive).name
+        index_html = render_page(recent, archive_link=archive_name)
+
+        # Generate archive (no link back, or link to index)
+        archive_html = render_page(archive, archive_link="index.html")
+
+        if args.output:
+            Path(args.output).write_text(index_html)
+            print(f"Wrote {args.output} ({len(recent)} digests)", file=sys.stderr)
+
+        Path(args.archive).write_text(archive_html)
+        print(f"Wrote {args.archive} ({len(archive)} digests)", file=sys.stderr)
     else:
-        print(html)
+        # Single file mode
+        html = render_page(digests)
+        if args.output:
+            Path(args.output).write_text(html)
+            print(f"Wrote {args.output} ({len(digests)} digests)", file=sys.stderr)
+        else:
+            print(html)
 
 
 if __name__ == "__main__":
