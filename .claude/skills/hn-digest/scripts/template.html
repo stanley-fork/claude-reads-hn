@@ -220,7 +220,7 @@
     }
     .back-to-top.visible { opacity: 1; }
     .back-to-top:hover { background: var(--accent); color: white; }
-    .load-more {
+    .archive-link {
       display: block;
       width: 100%;
       padding: 1rem;
@@ -230,15 +230,15 @@
       color: var(--fg-muted);
       font-family: inherit;
       font-size: 0.9rem;
-      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
       border-radius: 6px;
       transition: border-color 0.2s, color 0.2s;
     }
-    .load-more:hover {
+    .archive-link:hover {
       border-color: var(--accent);
       color: var(--accent);
     }
-    .archive { margin-top: 2rem; }
     @media (max-width: 800px) {
       .sidebar { display: none; }
       .main { padding: 1rem; }
@@ -357,27 +357,6 @@ $content
 
     window.addEventListener('scroll', updateActiveLink, { passive: true });
     updateActiveLink();
-    function loadMore() {
-      const archive = document.getElementById('archive');
-      const btn = document.getElementById('load-more');
-      if (archive) {
-        archive.classList.remove('hidden');
-        // Add archive stories to sidebar
-        const sidebar = document.querySelector('.sidebar');
-        if (sidebar) {
-          archive.querySelectorAll('.story').forEach(story => {
-            const id = story.id;
-            const title = story.querySelector('.story-title a')?.textContent?.slice(0, 40) || '';
-            const link = document.createElement('a');
-            link.href = '#' + id;
-            link.textContent = title + (title.length >= 40 ? '...' : '');
-            sidebar.appendChild(link);
-          });
-        }
-      }
-      if (btn) btn.remove();
-    }
-
     (function init() {
       const savedTheme = safeStorage('hn-theme');
       if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
