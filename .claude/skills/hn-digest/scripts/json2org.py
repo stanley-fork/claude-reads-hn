@@ -64,6 +64,11 @@ def i18n_to_org(lang: str, data: dict, level: int = 4) -> str:
 :LANG: {lang}
 :END:"""]
 
+    if data.get("title"):
+        parts.append(f"""
+{sub_stars} Title
+{escape_org(data['title'])}""")
+
     if data.get("tldr"):
         parts.append(f"""
 {sub_stars} TLDR
@@ -73,6 +78,13 @@ def i18n_to_org(lang: str, data: dict, level: int = 4) -> str:
         parts.append(f"""
 {sub_stars} Take
 {escape_org(data['take'])}""")
+
+    if data.get("comments"):
+        parts.append(f"""
+{sub_stars} Comments""")
+        for idx, comment in enumerate(data["comments"]):
+            parts.append(f"""
+- {escape_org(comment)}""")
 
     return "".join(parts)
 
