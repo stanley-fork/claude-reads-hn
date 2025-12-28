@@ -3,17 +3,19 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-# Version: 0.4.0
+# Version: 0.5.0
 """
-Render org-mode HN digests to HTML thread page.
+Render org-mode HN digests to HTML.
 
 examples:
-  %(prog)s digests/*.org -o index.html
-  %(prog)s digests/2025/12/15-1100.org  # stdout
+  %(prog)s digests/*.org -o index.html                       # all digests
+  %(prog)s digests/*.org -o index.html -d 7                  # last 7 days only
+  %(prog)s digests/*.org -o index.html -d 7 -a archive.html  # split: recent + archive
 """
 
 import argparse
 import sys
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from html import escape
 from string import Template
@@ -23,15 +25,55 @@ from org2json import parse_org, digest_to_dict
 
 TEMPLATE_PATH = Path(__file__).parent / "template.html"
 
+# Canonical anchor format - SINGLE SOURCE OF TRUTH
+# Format: s{story_id}-{MMDDHHMM} e.g., s46268854-12271100
+# MMDDHHMM required because multiple digests can exist in same hour (0240, 0259)
+
+
+def story_anchor(story_id, digest_date: str = "") -> str:
+    """Generate unique story anchor: s{id}-{MMDDHHMM}
+
+    Args:
+        story_id: HN story ID (int or str)
+        digest_date: ISO date like "2025-12-27T11:00:00Z"
+
+    Returns:
+        Anchor like "s46268854-12271100" or empty if invalid
+    """
+    if story_id is None:
+        return ""
+    try:
+        sid = int(story_id)
+        if sid <= 0:
+            return ""
+    except (ValueError, TypeError):
+        return ""
+
+    # Extract MMDDHHMM from digest date
+    suffix = ""
+    if digest_date and len(digest_date) >= 16:
+        # "2025-12-27T11:00:00Z" -> "12271100"
+        try:
+            month = digest_date[5:7]
+            day = digest_date[8:10]
+            hour = digest_date[11:13]
+            minute = digest_date[14:16]
+            suffix = f"-{month}{day}{hour}{minute}"
+        except (IndexError, ValueError):
+            pass
+
+    return f"s{sid}{suffix}"
+
 
 def load_template() -> Template:
     """Load HTML template from file."""
     return Template(TEMPLATE_PATH.read_text(encoding="utf-8"))
 
 
-def story_to_html(story: dict) -> str:
+def story_to_html(story: dict, digest_date: str = "") -> str:
     """Render a story to HTML."""
-    story_id = story.get("id", "")
+    raw_id = story.get("id")
+    anchor = story_anchor(raw_id, digest_date)  # Unique anchor with date suffix
     title = escape(story.get("title", ""))
     url = escape(story.get("url", ""))
     hn_url = escape(story.get("hn_url", ""))
@@ -108,14 +150,19 @@ def story_to_html(story: dict) -> str:
 
     tags_section = f'<div class="tags">{tags_html}</div>' if tags_html else ''
 
-    return f'''<article class="story" id="s{story_id}">
+    # Build anchor attributes - only if we have a valid anchor
+    id_attr = f'id="{anchor}"' if anchor else ''
+    anchor_link = f'<a href="#{anchor}" class="story-anchor">#</a>' if anchor else ''
+    hn_label = f'HN#{raw_id}' if raw_id else 'HN'
+
+    return f'''<article class="story" {id_attr}>
       <h3 class="story-title">
         <a href="{url}" target="_blank">{title}</a>
-        <a href="#s{story_id}" class="story-anchor">#</a>
+        {anchor_link}
       </h3>
       {title_i18n}
       <div class="story-meta">
-        {points}pts | {comments_count}c | <a href="{hn_url}" target="_blank">HN#{story_id}</a>
+        {points}pts | {comments_count}c | <a href="{hn_url}" target="_blank">{hn_label}</a>
       </div>
       {tldr_section}
       {take_section}
@@ -128,7 +175,7 @@ def digest_to_html(digest: dict) -> str:
     """Render a digest to HTML."""
     date = digest.get("date", "")
     vibe = escape(digest.get("vibe", ""))
-    stories_html = "\n".join(story_to_html(s) for s in digest.get("stories", []))
+    stories_html = "\n".join(story_to_html(s, date) for s in digest.get("stories", []))
 
     return f'''<section class="digest">
       <div class="digest-header">
@@ -145,25 +192,36 @@ def generate_sidebar(digests: list) -> str:
     current_date = None
 
     for digest in digests:
-        date = digest.get("date", "")[:10]
-        if date != current_date:
-            current_date = date
-            lines.append(f'      <div class="sidebar-date">{date}</div>')
+        digest_date = digest.get("date", "")
+        date_display = digest_date[:10]
+        if date_display != current_date:
+            current_date = date_display
+            lines.append(f'      <div class="sidebar-date">{date_display}</div>')
 
         for story in digest.get("stories", []):
-            story_id = story.get("id", "")
+            anchor = story_anchor(story.get("id"), digest_date)
+            if not anchor:  # Skip stories without valid anchors
+                continue
             title = escape(story.get("title", ""))[:40]
             if len(story.get("title", "")) > 40:
                 title += "..."
-            lines.append(f'      <a href="#s{story_id}">{title}</a>')
+            lines.append(f'      <a href="#{anchor}">{title}</a>')
 
     return "\n".join(lines)
 
 
-def render_page(digests: list) -> str:
-    """Render full HTML page from list of digests."""
+def render_page(digests: list, archive_link: str = None) -> str:
+    """Render HTML page from list of digests."""
     template = load_template()
     content = "\n".join(digest_to_html(d) for d in digests)
+
+    # Add archive link if provided
+    if archive_link:
+        content += f'''
+    <a href="{archive_link}" class="archive-link">
+      View older digests →
+    </a>'''
+
     sidebar = generate_sidebar(digests)
     return template.substitute(content=content, sidebar=sidebar)
 
@@ -171,9 +229,13 @@ def render_page(digests: list) -> str:
 def main():
     parser = argparse.ArgumentParser(description="Render org digests to HTML")
     parser.add_argument("files", nargs="+", help="Org files to render")
-    parser.add_argument("-o", "--output", help="Output HTML file")
+    parser.add_argument("-o", "--output", help="Output HTML file (index)")
+    parser.add_argument("-d", "--days", type=int, default=0,
+                        help="Days to include in index (0 = all)")
+    parser.add_argument("-a", "--archive", help="Archive output file (older digests)")
     args = parser.parse_args()
 
+    # Parse all digests
     digests = []
     for f in args.files:
         path = Path(f)
@@ -188,13 +250,35 @@ def main():
 
     digests.sort(key=lambda d: d.get("date", ""), reverse=True)
 
-    html = render_page(digests)
-
-    if args.output:
-        Path(args.output).write_text(html)
-        print(f"Wrote {args.output}", file=sys.stderr)
+    # Filter by days if specified
+    if args.days > 0:
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=args.days)).strftime("%Y-%m-%d")
+        recent = [d for d in digests if d.get("date", "")[:10] >= cutoff]
+        archive = [d for d in digests if d.get("date", "")[:10] < cutoff]
     else:
-        print(html)
+        recent = digests
+        archive = []
+
+    if args.archive and archive:
+        # Split mode: recent in index, older in archive
+        archive_name = Path(args.archive).name
+        index_html = render_page(recent, archive_link=archive_name)
+        archive_html = render_page(archive, archive_link="index.html")
+
+        if args.output:
+            Path(args.output).write_text(index_html)
+            print(f"Wrote {args.output} ({len(recent)} digests)", file=sys.stderr)
+
+        Path(args.archive).write_text(archive_html)
+        print(f"Wrote {args.archive} ({len(archive)} digests)", file=sys.stderr)
+    else:
+        # Single file mode (filtered if -d specified)
+        html = render_page(recent)
+        if args.output:
+            Path(args.output).write_text(html)
+            print(f"Wrote {args.output} ({len(recent)} digests)", file=sys.stderr)
+        else:
+            print(html)
 
 
 if __name__ == "__main__":

@@ -296,52 +296,83 @@ jobs:
 
             6. UPDATE MEMORY: run ./.claude/skills/hn-digest/scripts/llms-gen.py (regenerates llms.txt from all digests)
 
-            7. BUILD STATIC PAGE: run ./.claude/skills/hn-digest/scripts/org2html.py digests/*/*.org digests/*/*/*.org -o index.html
+            7. BUILD STATIC PAGES: run ./.claude/skills/hn-digest/scripts/org2html.py digests/*/*.org digests/*/*/*.org -o index.html -d 7 -a archive.html
+               This generates:
+               - index.html: last 7 days
+               - archive.html: older digests
 
-            8. Git add digests/ llms.txt index.html, commit, push
+            8. Git add digests/ llms.txt index.html archive.html, commit, push
 
             9. Create issue:
                - Title: catchy 5-8 word summary capturing today's chaos
                - Body: same content as digest file (highlights first!)
 
             10. NOTIFY ALL CHANNELS:
+               BASE_URL: https://thevibeworks.github.io/claude-reads-hn
 
-               a) BARK (use mcp__barkme__notify):
-                  - title: your issue title
-                  - body: spiciest comment quote + story name
-                  - url: github issue URL
+               ANCHOR FORMAT (CRITICAL - must match exactly):
+               - Pattern: #s{id}-{MMDDHHMM} where {id} is story ID, {MMDDHHMM} is digest datetime
+               - Example: #s46268854-12271100 (story 46268854 from Dec 27 11:00 digest)
+               - Full URL: https://thevibeworks.github.io/claude-reads-hn#s46268854-12271100
+               - Build: "s" + story_id + "-" + MM + DD + HH + MM (from digest date)
+               - Minutes required: multiple digests can exist in same hour (0240, 0259)
 
-               b) TELEGRAM (if TG_BOT_TOKEN is set, use HTML parse_mode):
-                  IMPORTANT: Escape HTML entities in highlights (< → &lt; > → &gt; & → &amp;)
+               a) BARK (use mcp__barkme__notify) - one ping to wake human:
+                  - title: digest vibe (the catchy summary)
+                  - body: "5 stories curated" or spiciest take
+                  - url: https://thevibeworks.github.io/claude-reads-hn
+
+               b) TELEGRAM (if TG_BOT_TOKEN is set) - send EACH story separately:
+                  For each of the 5 stories, send one message.
+                  IMPORTANT: Escape HTML entities (< → &lt; > → &gt; & → &amp;)
+
+                  Anchor = #s{story_id}-{MMDDHHMM} from digest date.
+                  Example: digest "2025-12-27T11:00:00Z", story 46268854 → #s46268854-12271100
+
                   curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
                     -H "Content-Type: application/json" \
                     -d '{
                       "chat_id": "'"$TG_CHANNEL_ID"'",
                       "parse_mode": "HTML",
                       "disable_web_page_preview": false,
-                      "text": "<b>📰 TITLE</b>\n\n• Highlight 1\n• Highlight 2\n• Highlight 3\n• Highlight 4\n• Highlight 5\n\n<a href=\"ISSUE_URL\">Read full digest →</a>"
+                      "text": "<b>TITLE</b>\n\nTLDR\n\n<i>Take: OPINION</i>\n\n<a href=\"https://thevibeworks.github.io/claude-reads-hn#s46268854-12271100\">Read →</a> | <a href=\"https://news.ycombinator.com/item?id=46268854\">HN</a>"
                     }'
 
-               c) DISCORD (if DISCORD_WEBHOOK_URL is set):
+                  Build: "s" + story.id + "-" + date[5:7] + date[8:10] + date[11:13] + date[14:16]
+                  Sends 5 messages, one per story.
+
+               c) DISCORD (if DISCORD_WEBHOOK_URL is set) - single rich embed:
+                  Anchor format: #s{id}-{MMDDHHMM}
+
                   curl -s -X POST "$DISCORD_WEBHOOK_URL" \
                     -H "Content-Type: application/json" \
                     -d '{
                       "embeds": [{
-                        "title": "📰 TITLE",
-                        "description": "• Highlight 1\n• Highlight 2\n• Highlight 3\n• Highlight 4\n• Highlight 5",
-                        "url": "ISSUE_URL",
-                        "color": 16737280
+                        "title": "📰 VIBE_SUMMARY",
+                        "description": "• [Title1](https://thevibeworks.github.io/claude-reads-hn#s46268854-12271100) - tldr1\n• [Title2](...#s46268855-12271100) - tldr2\n...",
+                        "url": "https://thevibeworks.github.io/claude-reads-hn",
+                        "color": 16737280,
+                        "footer": {"text": "Claude Reads HN • 4x daily"}
                       }]
                     }'
+
+                  All stories in same digest share the MMDDHHMM suffix.
 
             RULES:
             - READ THE DAMN ARTICLE first via WebFetch or Jina proxy (https://r.jina.ai/{url})
             - TLDR must reflect ACTUAL content you read, not guesses from title
             - Take must be YOUR opinion, be spicy and fun
             - Include both article URL and HN discussion URL
-            - Comments: pick 2-3 contrasting/opposing views to create discourse resonance. Single comment can't capture the full picture. Make it feel like a group chat with different perspectives.
-            - Tags: use lowercase #hashtags for topic categories (e.g. #rust, #ai, #startup, #security, #opensource, #performance, #apple, #google, #webdev, #databases, #devtools)
-            - No fluff sections, no "skip" lists, no redundant summaries
-            - ALWAYS BARK after creating the issue - this wakes up the human
-            - If bark fails, try once more then move on (shit happens)
+            - Comments: pick 2-3 contrasting/opposing views to create discourse resonance
+            - Tags: lowercase #hashtags (e.g. #rust, #ai, #startup, #security)
+            - No fluff, no "skip" lists, no redundant summaries
+            - ALWAYS notify after git push - BARK first to wake human, then TG/Discord
+            - If any notification fails, retry once then move on
+
+            LINK REFERENCE:
+            - Base URL: https://thevibeworks.github.io/claude-reads-hn
+            - Anchor: #s{id}-{MMDDHHMM} (e.g., #s46268854-12271100)
+            - Build: "s" + id + "-" + date[5:7] + date[8:10] + date[11:13] + date[14:16]
+            - Example: digest "2025-12-27T11:00:00Z" + story 46268854 → #s46268854-12271100
+            - Minutes required: digests like 0240.org and 0259.org need distinct anchors
 
