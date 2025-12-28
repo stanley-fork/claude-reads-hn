@@ -309,7 +309,12 @@ jobs:
 
             10. NOTIFY ALL CHANNELS:
                BASE_URL: https://thevibeworks.github.io/claude-reads-hn
-               ANCHOR_FORMAT: #s{story_id} (e.g., #s46268854)
+
+               ANCHOR FORMAT (CRITICAL - must match exactly):
+               - Pattern: #s{id} where {id} is the numeric HN story ID
+               - Example: #s46268854 (for story with "id": 46268854)
+               - Full URL: https://thevibeworks.github.io/claude-reads-hn#s46268854
+               - NO spaces, NO dashes, NO "story-" prefix, just "s" + digits
 
                a) BARK (use mcp__barkme__notify) - one ping to wake human:
                   - title: digest vibe (the catchy summary)
@@ -317,8 +322,10 @@ jobs:
                   - url: https://thevibeworks.github.io/claude-reads-hn
 
                b) TELEGRAM (if TG_BOT_TOKEN is set) - send EACH story separately:
-                  For each of the 5 stories, send one message:
+                  For each of the 5 stories, send one message.
                   IMPORTANT: Escape HTML entities (< → &lt; > → &gt; & → &amp;)
+
+                  For a story with id=46268854, the anchor is #s46268854:
 
                   curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
                     -H "Content-Type: application/json" \
@@ -326,26 +333,27 @@ jobs:
                       "chat_id": "'"$TG_CHANNEL_ID"'",
                       "parse_mode": "HTML",
                       "disable_web_page_preview": false,
-                      "text": "<b>STORY_TITLE</b>\n\nTLDR_TEXT\n\n<i>Take: TAKE_TEXT</i>\n\n<a href=\"https://thevibeworks.github.io/claude-reads-hn#sSTORY_ID\">Read more →</a> | <a href=\"HN_URL\">HN</a>"
+                      "text": "<b>TITLE</b>\n\nTLDR\n\n<i>Take: OPINION</i>\n\n<a href=\"https://thevibeworks.github.io/claude-reads-hn#s46268854\">Read →</a> | <a href=\"https://news.ycombinator.com/item?id=46268854\">HN</a>"
                     }'
 
-                  This sends 5 messages total, one per story, each with direct anchor link.
+                  Replace 46268854 with each story's actual numeric ID. Sends 5 messages total.
 
                c) DISCORD (if DISCORD_WEBHOOK_URL is set) - single rich embed:
-                  Build description with all 5 stories, each on its own line with anchor:
-                  "• [Title1](BASE_URL#s{id1}) - tldr1\n• [Title2](BASE_URL#s{id2}) - tldr2\n..."
+                  Build description with all 5 stories. Use anchor format: #s{numeric_id}
 
                   curl -s -X POST "$DISCORD_WEBHOOK_URL" \
                     -H "Content-Type: application/json" \
                     -d '{
                       "embeds": [{
-                        "title": "📰 DIGEST_VIBE",
-                        "description": "• [Story1](https://thevibeworks.github.io/claude-reads-hn#s{id}) - tldr\n• [Story2](...) - tldr\n...",
+                        "title": "📰 VIBE_SUMMARY",
+                        "description": "• [Title1](https://thevibeworks.github.io/claude-reads-hn#s46268854) - tldr1\n• [Title2](...#s46268855) - tldr2\n...",
                         "url": "https://thevibeworks.github.io/claude-reads-hn",
                         "color": 16737280,
                         "footer": {"text": "Claude Reads HN • 4x daily"}
                       }]
                     }'
+
+                  Replace 46268854, 46268855 etc with actual story IDs from the digest.
 
             RULES:
             - READ THE DAMN ARTICLE first via WebFetch or Jina proxy (https://r.jina.ai/{url})
@@ -359,7 +367,8 @@ jobs:
             - If any notification fails, retry once then move on
 
             LINK REFERENCE:
-            - Static site: https://thevibeworks.github.io/claude-reads-hn
-            - Story anchor: #s{story_id} (e.g., https://...reads-hn#s46268854)
-            - Use anchors in TG messages so readers jump directly to story
+            - Base URL: https://thevibeworks.github.io/claude-reads-hn
+            - Anchor: #s{id} (e.g., #s46268854) - MUST be "s" + numeric ID, nothing else
+            - Full link: BASE_URL + "#s" + story.id (e.g., ...reads-hn#s46268854)
+            - Use these anchors in TG/Discord so readers jump directly to story
 
