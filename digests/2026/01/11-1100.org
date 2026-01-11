@@ -1,0 +1,544 @@
+#+TITLE: HN Digest 2026-01-11 11:00:00 UT UTC
+#+DATE: 2026-01-11T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+C++ lies about moving, TypeScript gets a free book, and Arch rewrites pacman in Rust because of course it does
+
+* Highlights
+- std::move: the function that doesn't move anything
+- Vojtux: Linux for people who can't see the terminal
+- Bandersnatch: choose your own existential dread
+
+* Stories
+
+** C++ std::move doesn't move anything: A deep dive into Value Categories :cpp:programming:performance:
+:PROPERTIES:
+:ID:       46551602
+:URL:      https://0xghost.dev/blog/std-move-deep-dive/
+:HN_URL:   https://news.ycombinator.com/item?id=46551602
+:POINTS:   75
+:COMMENTS: 24
+:BY:       signa11
+:END:
+
+*** TLDR
+std::move is a cast, not a move. It slaps a 'take my stuff' sign on an object but does nothing until a move constructor actually steals the resources. The article walks through value categories (lvalue, prvalue, xvalue), explains why returning std::move(local) kills RVO, and warns that moving const objects silently copies instead.
+
+*** Take
+The C++ committee named a cast 'move' and wondered why everyone's confused. Should've called it give() but naming things is apparently harder than template metaprogramming.
+
+*** Comments
+
+**** MORPHOICES
+:PROPERTIES:
+:COMMENT_ID: 46551603
+:END:
+Value categories and move semantics are great examples of programming concepts that can cause confusion through bad mental models.
+
+**** krona
+:PROPERTIES:
+:COMMENT_ID: 46551604
+:END:
+This is a bit of a footgun and clang-tidy has a check for it: performance-noexcept-move-constructor. However, I don't think it's enabled by default!
+
+**** rurban
+:PROPERTIES:
+:COMMENT_ID: 46551605
+:END:
+Should have been called give(). But naming things correctly is hard, and the C++ committee is known to do a lot of things incorrectly.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+C++ std::move什么也不移动：值类别深度解析
+***** TLDR
+std::move是一个类型转换，不是移动操作。它只是在对象上贴个'拿走我的东西'的标签，真正的资源转移要等移动构造函数来完成。文章详解值类别（左值、纯右值、将亡值），解释为什么return std::move(local)会破坏RVO，并警告移动const对象会静默变成复制。
+***** Take
+C++委员会把一个类型转换命名为'move'，然后纳闷为什么所有人都搞混了。应该叫give()，但显然命名比模板元编程还难。
+***** Comments
+- 值类别和移动语义是容易因错误心智模型而产生困惑的典型例子。
+- 这是一个坑，clang-tidy有个检查：performance-noexcept-move-constructor。但好像默认没开！
+- 应该叫give()。但正确命名很难，C++委员会做错事是出了名的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+C++ std::moveは何も移動しない：値カテゴリの深掘り
+***** TLDR
+std::moveはキャストであり、移動ではない。オブジェクトに「中身を持っていっていいよ」という札を付けるだけで、実際のリソース移動はムーブコンストラクタが行う。記事では値カテゴリ（lvalue、prvalue、xvalue）を解説し、return std::move(local)がRVOを殺す理由と、constオブジェクトの移動が静かにコピーになる問題を警告。
+***** Take
+C++委員会はキャストを'move'と名付けて、なぜ皆混乱するのか不思議がっている。give()にすべきだったが、命名はテンプレートメタプログラミングより難しいらしい。
+***** Comments
+- 値カテゴリとムーブセマンティクスは、間違ったメンタルモデルで混乱しやすい概念の好例。
+- これは罠で、clang-tidyにperformance-noexcept-move-constructorというチェックがある。でもデフォルトでは有効じゃない！
+- give()にすべきだった。でも正しい命名は難しく、C++委員会は間違いが多いことで知られている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+C++ std::move는 아무것도 이동하지 않는다: 값 범주 심층 분석
+***** TLDR
+std::move는 캐스트이지 이동이 아니다. 객체에 '내 것 가져가' 표시를 붙일 뿐, 실제 리소스 이전은 이동 생성자가 한다. 값 범주(lvalue, prvalue, xvalue)를 설명하고, return std::move(local)이 RVO를 죽이는 이유와 const 객체 이동이 조용히 복사로 바뀌는 문제를 경고한다.
+***** Take
+C++ 위원회가 캐스트를 'move'라고 이름 붙이고 왜 다들 혼란스러워하는지 궁금해했다. give()라고 했어야 했는데, 네이밍이 템플릿 메타프로그래밍보다 어려운 모양이다.
+***** Comments
+- 값 범주와 이동 의미론은 잘못된 멘탈 모델로 혼란을 일으키는 프로그래밍 개념의 좋은 예다.
+- 이건 함정이고 clang-tidy에 performance-noexcept-move-constructor 체크가 있다. 근데 기본으로 안 켜져 있는 것 같다!
+- give()라고 했어야 했다. 하지만 올바른 이름 짓기는 어렵고, C++ 위원회는 실수가 많기로 유명하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+C++ std::move no mueve nada: Un análisis profundo de las Categorías de Valor
+***** TLDR
+std::move es un cast, no un movimiento. Solo pone un cartel de 'toma mis cosas' en el objeto, pero no hace nada hasta que un constructor de movimiento roba los recursos. El artículo explica las categorías de valor (lvalue, prvalue, xvalue), por qué return std::move(local) mata RVO, y advierte que mover objetos const copia silenciosamente.
+***** Take
+El comité de C++ nombró un cast 'move' y se preguntó por qué todos están confundidos. Debería llamarse give() pero nombrar cosas aparentemente es más difícil que la metaprogramación de plantillas.
+***** Comments
+- Las categorías de valor y la semántica de movimiento son grandes ejemplos de conceptos que causan confusión por modelos mentales incorrectos.
+- Esto es una trampa y clang-tidy tiene un check: performance-noexcept-move-constructor. Sin embargo, no creo que esté habilitado por defecto!
+- Debería haberse llamado give(). Pero nombrar correctamente es difícil, y el comité de C++ es conocido por hacer muchas cosas incorrectamente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+C++ std::move bewegt nichts: Ein tiefer Einblick in Wertkategorien
+***** TLDR
+std::move ist ein Cast, keine Bewegung. Es klebt nur ein 'Nimm meine Sachen'-Schild auf das Objekt, aber tut nichts, bis ein Move-Konstruktor die Ressourcen stiehlt. Der Artikel erklärt Wertkategorien (lvalue, prvalue, xvalue), warum return std::move(local) RVO zerstört, und warnt, dass das Bewegen von const-Objekten still kopiert.
+***** Take
+Das C++-Komitee nannte einen Cast 'move' und wunderte sich, warum alle verwirrt sind. Hätte give() heißen sollen, aber Dinge benennen ist offenbar schwieriger als Template-Metaprogrammierung.
+***** Comments
+- Wertkategorien und Move-Semantik sind großartige Beispiele für Konzepte, die durch falsche mentale Modelle Verwirrung stiften.
+- Das ist eine Falle und clang-tidy hat einen Check dafür: performance-noexcept-move-constructor. Allerdings glaube ich nicht, dass er standardmäßig aktiviert ist!
+- Hätte give() heißen sollen. Aber richtig benennen ist schwer, und das C++-Komitee ist bekannt dafür, viele Dinge falsch zu machen.
+** The Concise TypeScript Book :typescript:programming:book:
+:PROPERTIES:
+:ID:       46573001
+:URL:      https://github.com/gibbok/typescript-book
+:HN_URL:   https://news.ycombinator.com/item?id=46573001
+:POINTS:   87
+:COMMENTS: 20
+:BY:       javatuts
+:END:
+
+*** TLDR
+A free, open-source TypeScript 5.2 guide by Simone Poggiali. Covers the type system, generics, interfaces, classes, and configuration. Despite having 61 chapters, it claims to be 'concise' which is either marketing or a very different definition of brevity.
+
+*** Take
+61 chapters of 'concise' content. The TypeScript community has mastered the art of making everything sound minimal while being maximally verbose. Just like the language itself.
+
+*** Comments
+
+**** MORPHOICES
+:PROPERTIES:
+:COMMENT_ID: 46573002
+:END:
+Most developers want guidance instead of exhaustive details. They want to know where to focus their time and where they can afford to skim.
+
+**** tkiolp4
+:PROPERTIES:
+:COMMENT_ID: 46573003
+:END:
+Please provide a PDF as well. I cannot read books in HTML format because I need to keep track of where I left.
+
+**** SilverSlash
+:PROPERTIES:
+:COMMENT_ID: 46573004
+:END:
+I don't know if I'd call a book with 61 chapters 'concise'.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+简明TypeScript手册
+***** TLDR
+Simone Poggiali写的免费开源TypeScript 5.2指南。涵盖类型系统、泛型、接口、类和配置。虽然有61章，却自称'简明'，要么是营销话术，要么是对简洁有不同的定义。
+***** Take
+61章的'简明'内容。TypeScript社区掌握了把一切都说得很精简、实际却极其冗长的艺术。就像这门语言本身一样。
+***** Comments
+- 大多数开发者想要指导而非详尽细节。他们想知道该把时间花在哪里，哪些可以略读。
+- 请也提供PDF版。我没法用HTML格式读书，因为需要记住读到哪里了。
+- 我不觉得一本61章的书能叫'简明'。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+簡潔なTypeScript本
+***** TLDR
+Simone Poggiali著の無料オープンソースTypeScript 5.2ガイド。型システム、ジェネリクス、インターフェース、クラス、設定を網羅。61章もあるのに「簡潔」を謳っている。マーケティングか、簡潔の定義が違うかのどちらか。
+***** Take
+61章の「簡潔」なコンテンツ。TypeScriptコミュニティは、全てをミニマルに聞こえさせながら最大限に冗長にする術を習得している。言語そのもののように。
+***** Comments
+- ほとんどの開発者は網羅的な詳細ではなくガイダンスを求めている。どこに時間を集中すべきか、どこを読み飛ばせるかを知りたい。
+- PDFも提供してください。HTML形式では読んだ場所を追跡できないので本が読めない。
+- 61章もある本を「簡潔」とは呼べないと思う。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+간결한 TypeScript 책
+***** TLDR
+Simone Poggiali가 쓴 무료 오픈소스 TypeScript 5.2 가이드. 타입 시스템, 제네릭, 인터페이스, 클래스, 설정을 다룬다. 61개 챕터가 있으면서 '간결하다'고 하는데, 마케팅이거나 간결함의 정의가 다른 것 같다.
+***** Take
+61개 챕터의 '간결한' 내용. TypeScript 커뮤니티는 모든 것을 미니멀하게 들리면서 최대한 장황하게 만드는 기술을 마스터했다. 언어 자체처럼.
+***** Comments
+- 대부분의 개발자는 상세한 내용보다 가이드를 원한다. 어디에 시간을 집중해야 하고 어디를 대충 읽어도 되는지 알고 싶어한다.
+- PDF도 제공해주세요. HTML 형식으로는 어디까지 읽었는지 추적할 수 없어서 책을 읽을 수 없습니다.
+- 61개 챕터가 있는 책을 '간결하다'고 부르기는 어려울 것 같다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El Libro Conciso de TypeScript
+***** TLDR
+Una guía gratuita y de código abierto de TypeScript 5.2 por Simone Poggiali. Cubre el sistema de tipos, genéricos, interfaces, clases y configuración. A pesar de tener 61 capítulos, afirma ser 'conciso', lo cual es marketing o una definición muy diferente de brevedad.
+***** Take
+61 capítulos de contenido 'conciso'. La comunidad de TypeScript ha dominado el arte de hacer que todo suene mínimo mientras es máximamente verboso. Igual que el lenguaje mismo.
+***** Comments
+- La mayoría de desarrolladores quieren orientación en lugar de detalles exhaustivos. Quieren saber dónde enfocar su tiempo y dónde pueden leer por encima.
+- Por favor proporcionen también un PDF. No puedo leer libros en formato HTML porque necesito saber dónde lo dejé.
+- No sé si llamaría 'conciso' a un libro con 61 capítulos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das Prägnante TypeScript-Buch
+***** TLDR
+Ein kostenloses, quelloffenes TypeScript 5.2-Handbuch von Simone Poggiali. Behandelt das Typsystem, Generics, Interfaces, Klassen und Konfiguration. Trotz 61 Kapiteln behauptet es, 'prägnant' zu sein, was entweder Marketing oder eine sehr andere Definition von Kürze ist.
+***** Take
+61 Kapitel 'prägnanter' Inhalt. Die TypeScript-Community hat die Kunst gemeistert, alles minimal klingen zu lassen, während es maximal ausführlich ist. Genau wie die Sprache selbst.
+***** Comments
+- Die meisten Entwickler wollen Anleitung statt erschöpfender Details. Sie wollen wissen, wo sie ihre Zeit fokussieren sollen und wo sie überfliegen können.
+- Bitte stellt auch ein PDF bereit. Ich kann Bücher nicht im HTML-Format lesen, weil ich nachverfolgen muss, wo ich aufgehört habe.
+- Ich weiß nicht, ob ich ein Buch mit 61 Kapiteln 'prägnant' nennen würde.
+** Vojtux - Unofficial Linux Distribution Aimed at Visually Impaired Users :linux:accessibility:open-source:
+:PROPERTIES:
+:ID:       46525271
+:URL:      https://github.com/vojtapolasek/vojtux
+:HN_URL:   https://news.ycombinator.com/item?id=46525271
+:POINTS:   46
+:COMMENTS: 11
+:BY:       TheWiggles
+:END:
+
+*** TLDR
+A Fedora MATE spin with accessibility baked in. Orca screenreader auto-starts, QT accessibility enabled, OCR tools preinstalled. The stated goal is literally to make itself obsolete by pushing fixes upstream until Fedora is fully accessible by default.
+
+*** Take
+The ultimate act of open source altruism: building a distro whose explicit mission is to not exist anymore. Meanwhile, mainstream distros still ship with accessibility as an afterthought.
+
+*** Comments
+
+**** cl3misch
+:PROPERTIES:
+:COMMENT_ID: 46525272
+:END:
+Are there 'official' Linux distributions?
+
+**** jmward01
+:PROPERTIES:
+:COMMENT_ID: 46525273
+:END:
+I rarely consider impaired usecases when building things. I imagine an LLM could help discover inadequate UI and build alternative workflows more easily.
+
+**** mngnt
+:PROPERTIES:
+:COMMENT_ID: 46525274
+:END:
+Here's an interview (in Czech) with Vojta, the main developer discussing specific issues he faces as user and developer.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Vojtux - 面向视障用户的非官方Linux发行版
+***** TLDR
+基于Fedora MATE的发行版，内置无障碍功能。Orca屏幕阅读器自动启动，启用QT无障碍支持，预装OCR工具。明确目标是让自己过时——把修复推送到上游，直到Fedora默认完全无障碍。
+***** Take
+开源利他主义的终极形态：打造一个明确使命是消灭自己的发行版。与此同时，主流发行版仍然把无障碍当成事后补丁。
+***** Comments
+- 有'官方'的Linux发行版吗？
+- 我很少在构建东西时考虑障碍用例。我想LLM可以帮助发现不足的UI并更容易地构建替代工作流。
+- 这里有一个（捷克语）对Vojta的采访，他是主要开发者，讨论了作为用户和开发者面临的具体问题。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Vojtux - 視覚障害者向け非公式Linuxディストリビューション
+***** TLDR
+アクセシビリティを組み込んだFedora MATEスピン。Orcaスクリーンリーダーが自動起動、QTアクセシビリティ有効、OCRツールプリインストール。明示的な目標は、修正をアップストリームにプッシュしてFedoraがデフォルトで完全にアクセシブルになるまで、自分自身を時代遅れにすること。
+***** Take
+オープンソース利他主義の究極形：自分が存在しなくなることを明確な使命とするディストロを作る。一方、主流のディストロは依然としてアクセシビリティを後付けで出荷している。
+***** Comments
+- '公式'のLinuxディストリビューションってあるの？
+- 物を作るとき障害のあるユースケースをほとんど考慮しない。LLMが不適切なUIを発見し、代替ワークフローをより簡単に構築するのに役立つと思う。
+- これはVojta（メイン開発者）へのインタビュー（チェコ語）で、ユーザーと開発者として直面している具体的な問題について議論している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Vojtux - 시각장애인을 위한 비공식 Linux 배포판
+***** TLDR
+접근성이 내장된 Fedora MATE 스핀. Orca 스크린리더 자동 시작, QT 접근성 활성화, OCR 도구 사전 설치. 명시된 목표는 업스트림에 수정사항을 푸시해서 Fedora가 기본적으로 완전히 접근 가능해질 때까지 스스로를 쓸모없게 만드는 것.
+***** Take
+오픈소스 이타주의의 궁극적 형태: 존재하지 않는 것이 명시적 미션인 배포판을 만드는 것. 한편, 메인스트림 배포판들은 여전히 접근성을 나중에 생각하며 출시한다.
+***** Comments
+- '공식' Linux 배포판이 있나요?
+- 무언가를 만들 때 장애 사용 사례를 거의 고려하지 않는다. LLM이 부적절한 UI를 발견하고 대안적 워크플로우를 더 쉽게 구축하는 데 도움이 될 것 같다.
+- 여기 Vojta(메인 개발자)와의 인터뷰(체코어)가 있는데, 사용자와 개발자로서 직면한 구체적인 문제를 논의한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Vojtux - Distribución Linux no oficial para usuarios con discapacidad visual
+***** TLDR
+Un spin de Fedora MATE con accesibilidad incorporada. El lector de pantalla Orca se inicia automáticamente, accesibilidad QT habilitada, herramientas OCR preinstaladas. El objetivo declarado es literalmente hacerse obsoleto empujando correcciones upstream hasta que Fedora sea completamente accesible por defecto.
+***** Take
+El acto definitivo de altruismo open source: construir una distro cuya misión explícita es dejar de existir. Mientras tanto, las distros principales siguen lanzando con la accesibilidad como algo secundario.
+***** Comments
+- ¿Hay distribuciones Linux 'oficiales'?
+- Raramente considero casos de uso de discapacidad al construir cosas. Imagino que un LLM podría ayudar a descubrir UI inadecuadas y construir flujos alternativos más fácilmente.
+- Aquí hay una entrevista (en checo) con Vojta, el desarrollador principal, discutiendo problemas específicos que enfrenta como usuario y desarrollador.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Vojtux - Inoffizielle Linux-Distribution für sehbehinderte Nutzer
+***** TLDR
+Ein Fedora MATE-Spin mit eingebauter Barrierefreiheit. Orca-Screenreader startet automatisch, QT-Barrierefreiheit aktiviert, OCR-Tools vorinstalliert. Das erklärte Ziel ist buchstäblich, sich selbst überflüssig zu machen, indem Fixes upstream gepusht werden, bis Fedora standardmäßig vollständig barrierefrei ist.
+***** Take
+Der ultimative Akt von Open-Source-Altruismus: Eine Distro bauen, deren explizite Mission es ist, nicht mehr zu existieren. Währenddessen liefern Mainstream-Distros immer noch mit Barrierefreiheit als Nachgedanken.
+***** Comments
+- Gibt es 'offizielle' Linux-Distributionen?
+- Ich berücksichtige selten Anwendungsfälle mit Behinderungen beim Bauen. Ich stelle mir vor, dass ein LLM helfen könnte, unzureichende UI zu entdecken und alternative Workflows einfacher zu erstellen.
+- Hier ist ein Interview (auf Tschechisch) mit Vojta, dem Hauptentwickler, der spezifische Probleme als Nutzer und Entwickler diskutiert.
+** 'Bandersnatch': The Works That Inspired the 'Black Mirror' Interactive Feature (2019) :tv:gaming:history:
+:PROPERTIES:
+:ID:       46507891
+:URL:      https://www.hollywoodreporter.com/tv/tv-news/black-mirror-bandersnatch-real-life-works-influences-1173330/
+:HN_URL:   https://news.ycombinator.com/item?id=46507891
+:POINTS:   37
+:COMMENTS: 11
+:BY:       rafaepta
+:END:
+
+*** TLDR
+［from title + comments, article unreachable due to geo-restriction］ The Black Mirror interactive film drew from real 1980s computing history, including the infamous Imagine Software collapse and the never-released Bandersnatch game. Comments note Colin Ritman resembles Demis Hassabis, and share archival footage of the doomed game's 'coming soon' ads.
+
+*** Take
+A meditation on choice and free will, built by a streaming giant that removed the ability to skip intros. The irony writes itself.
+
+*** Comments
+
+**** mattbee
+:PROPERTIES:
+:COMMENT_ID: 46507892
+:END:
+The real game Bandersnatch as a business folly was something else - the 'coming soon' advert from just before Imagine's bankruptcy would ring an alarm bell now.
+
+**** sgt101
+:PROPERTIES:
+:COMMENT_ID: 46507893
+:END:
+Colin Ritman is so Demis Hassabis.
+
+**** Retz4o4
+:PROPERTIES:
+:COMMENT_ID: 46507894
+:END:
+Fantastically fun when it was released.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+《潘达斯奈基》：启发《黑镜》互动电影的作品（2019）
+***** TLDR
+［基于标题和评论，文章因地区限制无法访问］ 这部《黑镜》互动电影借鉴了1980年代真实的计算机历史，包括臭名昭著的Imagine Software倒闭和从未发布的Bandersnatch游戏。评论指出Colin Ritman很像Demis Hassabis，并分享了这款命运多舛的游戏'即将推出'广告的档案片段。
+***** Take
+一部关于选择和自由意志的沉思之作，由一个取消了跳过片头功能的流媒体巨头制作。这讽刺简直是自己写的。
+***** Comments
+- 真正的Bandersnatch游戏作为商业失败案例实在太精彩了——Imagine破产前的'即将推出'广告现在看来简直是警报。
+- Colin Ritman简直就是Demis Hassabis。
+- 发布时玩起来非常有趣。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+『バンダースナッチ』：『ブラック・ミラー』インタラクティブ作品に影響を与えた作品（2019）
+***** TLDR
+［地域制限により記事にアクセスできないため、タイトルとコメントから］ このブラック・ミラーのインタラクティブ映画は、悪名高いImagine Softwareの崩壊と未発売のBandersnatchゲームを含む、1980年代の実際のコンピューティング史から着想を得ている。コメントではColin RitmanがDemis Hassabisに似ていると指摘し、この不運なゲームの「近日発売」広告のアーカイブ映像を共有している。
+***** Take
+選択と自由意志についての瞑想作品、イントロスキップ機能を削除したストリーミング大手によって作られた。皮肉は自分で書いている。
+***** Comments
+- ビジネスの失敗としての本物のBandersnatchゲームは別物だった - Imagineの破産直前の「近日発売」広告は今なら警報を鳴らすだろう。
+- Colin RitmanはまさにDemis Hassabis。
+- リリース時は素晴らしく楽しかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+'밴더스내치': '블랙 미러' 인터랙티브 영화에 영감을 준 작품들 (2019)
+***** TLDR
+［지역 제한으로 기사 접근 불가, 제목과 댓글 기반］ 이 블랙 미러 인터랙티브 영화는 악명 높은 Imagine Software 붕괴와 출시되지 않은 Bandersnatch 게임을 포함한 1980년대 실제 컴퓨팅 역사에서 영감을 받았다. 댓글에서는 Colin Ritman이 Demis Hassabis를 닮았다고 지적하고, 이 불운한 게임의 '곧 출시' 광고 아카이브 영상을 공유한다.
+***** Take
+선택과 자유의지에 대한 명상, 인트로 건너뛰기 기능을 제거한 스트리밍 대기업이 만들었다. 아이러니가 저절로 써진다.
+***** Comments
+- 비즈니스 실패로서의 실제 Bandersnatch 게임은 정말 대단했다 - Imagine 파산 직전의 '곧 출시' 광고는 지금 보면 경보를 울릴 것이다.
+- Colin Ritman은 정말 Demis Hassabis 같다.
+- 출시됐을 때 정말 재밌었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+'Bandersnatch': Las obras que inspiraron la película interactiva de 'Black Mirror' (2019)
+***** TLDR
+［basado en título y comentarios, artículo inaccesible por restricción geográfica］ La película interactiva de Black Mirror se inspiró en la historia real de la computación de los 80, incluyendo el infame colapso de Imagine Software y el juego Bandersnatch nunca lanzado. Los comentarios señalan que Colin Ritman se parece a Demis Hassabis y comparten metraje de archivo de los anuncios 'próximamente' del malogrado juego.
+***** Take
+Una meditación sobre la elección y el libre albedrío, construida por un gigante del streaming que eliminó la capacidad de saltar intros. La ironía se escribe sola.
+***** Comments
+- El verdadero juego Bandersnatch como fracaso empresarial fue algo más - el anuncio de 'próximamente' justo antes de la bancarrota de Imagine sonaría una alarma ahora.
+- Colin Ritman es tan Demis Hassabis.
+- Fantásticamente divertido cuando se lanzó.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+'Bandersnatch': Die Werke, die den interaktiven 'Black Mirror'-Film inspirierten (2019)
+***** TLDR
+［basierend auf Titel und Kommentaren, Artikel wegen Geo-Beschränkung nicht erreichbar］ Der interaktive Black Mirror-Film schöpfte aus der realen Computergeschichte der 1980er, einschließlich des berüchtigten Imagine Software-Zusammenbruchs und des nie veröffentlichten Bandersnatch-Spiels. Kommentare merken an, dass Colin Ritman Demis Hassabis ähnelt, und teilen Archivmaterial der 'Demnächst'-Werbung des gescheiterten Spiels.
+***** Take
+Eine Meditation über Wahl und freien Willen, gebaut von einem Streaming-Giganten, der die Möglichkeit zum Überspringen von Intros entfernt hat. Die Ironie schreibt sich selbst.
+***** Comments
+- Das echte Bandersnatch-Spiel als Geschäftsdebakel war etwas anderes - die 'Demnächst'-Werbung kurz vor Imagines Bankrott würde jetzt Alarmglocken läuten.
+- Colin Ritman ist so Demis Hassabis.
+- Fantastisch spaßig als es rauskam.
+** A Year of Work on the Arch Linux Package Management (ALPM) Project :linux:rust:infrastructure:
+:PROPERTIES:
+:ID:       46572060
+:URL:      https://devblog.archlinux.page/2026/a-year-of-work-on-the-alpm-project/
+:HN_URL:   https://news.ycombinator.com/item?id=46572060
+:POINTS:   58
+:COMMENTS: 11
+:BY:       susam
+:END:
+
+*** TLDR
+Arch Linux received 500,000 euros from the Sovereign Tech Fund to rewrite package management in Rust. They built parsing libraries, Python bindings, and a new signature verification system called VOA to replace GnuPG. The old pacman worked fine for 20 years but apparently needed memory safety.
+
+*** Take
+Half a million euros to rewrite pacman in Rust. The comments asking 'whose need?' and 'what for?' are doing the Lord's work. Some problems are solved by not solving them.
+
+*** Comments
+
+**** nabla9
+:PROPERTIES:
+:COMMENT_ID: 46572061
+:END:
+This is a waste of Sovereign Tech Fund money. That money is supposed to fund the digital sovereignty of Germany and Europe.
+
+**** drbig
+:PROPERTIES:
+:COMMENT_ID: 46572062
+:END:
+As an admin and user I kindly ask: why? what for? pacman has been working fine for over two decades. This project seems like a CS exercise.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Arch Linux包管理（ALPM）项目的一年工作
+***** TLDR
+Arch Linux从主权科技基金获得了50万欧元用于用Rust重写包管理。他们构建了解析库、Python绑定和一个叫VOA的新签名验证系统来替代GnuPG。旧的pacman正常运行了20年，但显然需要内存安全。
+***** Take
+50万欧元用来用Rust重写pacman。评论区问'谁需要这个？'和'为了什么？'简直是在做善事。有些问题的解决方案就是不去解决它们。
+***** Comments
+- 这是浪费主权科技基金的钱。这笔钱本应用于德国和欧洲的数字主权。
+- 作为管理员和用户我想问：为什么？为了什么？pacman已经正常工作了二十多年。这个项目看起来像个CS练习。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Arch Linuxパッケージ管理（ALPM）プロジェクトの1年間の作業
+***** TLDR
+Arch LinuxはSovereign Tech Fundから50万ユーロを受け取り、パッケージ管理をRustで書き直した。パースライブラリ、Pythonバインディング、GnuPGを置き換えるVOAという新しい署名検証システムを構築した。古いpacmanは20年間問題なく動いていたが、どうやらメモリ安全性が必要だったらしい。
+***** Take
+pacmanをRustで書き直すのに50万ユーロ。「誰のニーズ？」「何のため？」というコメントは神の仕事をしている。問題によっては解決しないことが解決策だ。
+***** Comments
+- これはSovereign Tech Fundの金の無駄遣いだ。その金はドイツとヨーロッパのデジタル主権のために使われるはずだった。
+- 管理者とユーザーとして丁重に聞きたい：なぜ？何のため？pacmanは20年以上問題なく動いてきた。このプロジェクトはCS演習のように見える。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Arch Linux 패키지 관리(ALPM) 프로젝트의 1년간 작업
+***** TLDR
+Arch Linux는 Sovereign Tech Fund로부터 50만 유로를 받아 패키지 관리를 Rust로 다시 작성했다. 파싱 라이브러리, Python 바인딩, GnuPG를 대체할 VOA라는 새로운 서명 검증 시스템을 구축했다. 기존 pacman은 20년 동안 잘 작동했지만 분명히 메모리 안전성이 필요했나 보다.
+***** Take
+pacman을 Rust로 다시 작성하는 데 50만 유로. '누구의 필요?' '무엇을 위해?'라고 묻는 댓글들이 선한 일을 하고 있다. 어떤 문제들은 해결하지 않는 것이 해결책이다.
+***** Comments
+- 이건 Sovereign Tech Fund 돈 낭비다. 그 돈은 독일과 유럽의 디지털 주권을 위해 쓰여야 한다.
+- 관리자이자 사용자로서 정중히 묻고 싶다: 왜? 무엇을 위해? pacman은 20년 넘게 잘 작동해왔다. 이 프로젝트는 CS 연습처럼 보인다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un año de trabajo en el proyecto de gestión de paquetes de Arch Linux (ALPM)
+***** TLDR
+Arch Linux recibió 500.000 euros del Sovereign Tech Fund para reescribir la gestión de paquetes en Rust. Construyeron bibliotecas de parsing, bindings de Python y un nuevo sistema de verificación de firmas llamado VOA para reemplazar GnuPG. El viejo pacman funcionó bien durante 20 años pero aparentemente necesitaba seguridad de memoria.
+***** Take
+Medio millón de euros para reescribir pacman en Rust. Los comentarios preguntando '¿la necesidad de quién?' y '¿para qué?' están haciendo el trabajo del Señor. Algunos problemas se resuelven no resolviéndolos.
+***** Comments
+- Esto es un desperdicio del dinero del Sovereign Tech Fund. Ese dinero se supone que debe financiar la soberanía digital de Alemania y Europa.
+- Como admin y usuario pregunto amablemente: ¿por qué? ¿para qué? pacman ha estado funcionando bien por más de dos décadas. Este proyecto parece un ejercicio de CS.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein Jahr Arbeit am Arch Linux Package Management (ALPM) Projekt
+***** TLDR
+Arch Linux erhielt 500.000 Euro vom Sovereign Tech Fund, um das Paketmanagement in Rust neu zu schreiben. Sie bauten Parsing-Bibliotheken, Python-Bindings und ein neues Signaturverifizierungssystem namens VOA, um GnuPG zu ersetzen. Das alte pacman funktionierte 20 Jahre lang einwandfrei, aber anscheinend brauchte es Memory Safety.
+***** Take
+Eine halbe Million Euro, um pacman in Rust neu zu schreiben. Die Kommentare, die fragen 'Wessen Bedürfnis?' und 'Wofür?' machen Gottes Arbeit. Manche Probleme werden gelöst, indem man sie nicht löst.
+***** Comments
+- Das ist eine Verschwendung von Sovereign Tech Fund Geld. Das Geld sollte die digitale Souveränität Deutschlands und Europas finanzieren.
+- Als Admin und Nutzer frage ich höflich: Warum? Wofür? pacman funktioniert seit über zwei Jahrzehnten einwandfrei. Dieses Projekt wirkt wie eine CS-Übung.
