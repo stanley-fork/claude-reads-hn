@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-01-25 06:00:00 UT UTC
+#+DATE: 2026-01-25T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+NVIDIA times out after 66 days, Microsoft patches its patches, and Palantir lurks in NHS hallways
+
+* Highlights
+- NVIDIA B200 GPUs hang after exactly 66 days of uptime
+- Microsoft releases second emergency update for Patch Tuesday disaster
+- X-ray reveals counterfeit FTDI cable's dirty secrets
+
+* Stories
+
+** nvidia-smi hangs indefinitely after ~66 days :hardware:nvidia:kernel:bugs:
+:PROPERTIES:
+:ID:       46750425
+:URL:      https://github.com/NVIDIA/open-gpu-kernel-modules/issues/971
+:HN_URL:   https://news.ycombinator.com/item?id=46750425
+:POINTS:   110
+:COMMENTS: 17
+:BY:       tosh
+:END:
+
+*** TLDR
+NVIDIA B200 GPUs with NVLink are timing out after exactly 66-67 days of uptime due to a timestamp comparison bug. The NVLink communication between GPUs dies, nvidia-smi hangs, and only a full cluster reboot fixes it. NVIDIA confirmed the bug and says a fix is coming.
+
+*** Take
+Someone compared timestamps using subtraction instead of time_before(). This is why we have code reviews. Someone at NVIDIA is having a very bad week.
+
+*** Comments
+
+**** pajko
+:PROPERTIES:
+:COMMENT_ID: 46750426
+:END:
+Timestamps should NOT be compared like this. Exactly this is why time_before() or time_after() exist.
+
+**** wincy
+:PROPERTIES:
+:COMMENT_ID: 46750427
+:END:
+Crazy, so if I understand correctly, something with B200s and nvlink is causing issues where after 66 days and 12 hours of uptime, nvidia-smi and other jobs start failing.
+
+**** yoshicoder
+:PROPERTIES:
+:COMMENT_ID: 46750428
+:END:
+I wonder if the process to debugging this is just to search for what power of 2 times a time unit equals ~66 days.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+nvidia-smi在约66天后无限期挂起
+***** TLDR
+NVIDIA B200 GPU在运行66-67天后因时间戳比较bug导致NVLink通信超时。GPU间通信中断，nvidia-smi挂起，只有完全重启集群才能修复。
+***** Take
+有人用减法比较时间戳而不是用time_before()。这就是为什么我们需要代码审查。NVIDIA有人这周要倒霉了。
+***** Comments
+- 时间戳不应该这样比较。这就是time_before()或time_after()存在的原因。
+- 疯狂，如果我理解正确的话，B200和nvlink的某些问题导致运行66天12小时后nvidia-smi和其他任务开始失败。
+- 我想知道调试这个问题的过程是不是就是搜索2的多少次方乘以时间单位等于约66天。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+nvidia-smiが約66日後に無期限でハングする
+***** TLDR
+NVIDIA B200 GPUがタイムスタンプ比較のバグにより、66-67日の稼働後にNVLink通信がタイムアウトする。GPU間通信が死に、nvidia-smiがハングし、クラスター全体の再起動でのみ修復可能。
+***** Take
+誰かがtime_before()の代わりに減算でタイムスタンプを比較した。これがコードレビューが必要な理由だ。NVIDIAの誰かは今週大変だ。
+***** Comments
+- タイムスタンプはこのように比較すべきではない。まさにこれがtime_before()やtime_after()が存在する理由だ。
+- 驚きだ、正しく理解しているなら、B200とnvlinkの何かが66日12時間の稼働後にnvidia-smiや他のジョブを失敗させている。
+- このデバッグプロセスは2の何乗かける時間単位が約66日になるかを検索するだけなのだろうか。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+nvidia-smi가 약 66일 후 무기한 정지
+***** TLDR
+NVIDIA B200 GPU가 타임스탬프 비교 버그로 인해 66-67일 가동 후 NVLink 통신이 타임아웃됩니다. GPU 간 통신이 중단되고 nvidia-smi가 정지하며, 전체 클러스터 재부팅만이 해결책입니다.
+***** Take
+누군가 time_before() 대신 뺄셈으로 타임스탬프를 비교했다. 이것이 코드 리뷰가 필요한 이유다. NVIDIA의 누군가는 이번 주가 힘들겠다.
+***** Comments
+- 타임스탬프는 이렇게 비교하면 안 된다. 이것이 바로 time_before()나 time_after()가 존재하는 이유다.
+- 미쳤다, 내가 이해한 게 맞다면 B200과 nvlink 관련 뭔가가 66일 12시간 가동 후 nvidia-smi와 다른 작업들이 실패하게 만든다.
+- 이 디버깅 과정이 2의 몇 제곱 곱하기 시간 단위가 약 66일인지 검색하는 것일까 궁금하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+nvidia-smi se cuelga indefinidamente después de ~66 días
+***** TLDR
+Las GPUs NVIDIA B200 con NVLink fallan después de 66-67 días de tiempo de actividad debido a un bug de comparación de timestamps. La comunicación NVLink muere, nvidia-smi se cuelga, y solo un reinicio completo del clúster lo soluciona.
+***** Take
+Alguien comparó timestamps usando resta en lugar de time_before(). Por eso existen las revisiones de código. Alguien en NVIDIA está teniendo una semana muy mala.
+***** Comments
+- Los timestamps NO deben compararse así. Exactamente por esto existen time_before() o time_after().
+- Increíble, si entiendo correctamente, algo con B200s y nvlink está causando problemas donde después de 66 días y 12 horas de actividad, nvidia-smi y otros trabajos empiezan a fallar.
+- Me pregunto si el proceso de depuración es simplemente buscar qué potencia de 2 por unidad de tiempo equivale a ~66 días.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+nvidia-smi hängt nach ~66 Tagen unbegrenzt
+***** TLDR
+NVIDIA B200 GPUs mit NVLink versagen nach 66-67 Tagen Betriebszeit wegen eines Timestamp-Vergleichsfehlers. Die NVLink-Kommunikation stirbt, nvidia-smi hängt, und nur ein kompletter Cluster-Neustart behebt es.
+***** Take
+Jemand hat Timestamps mit Subtraktion statt time_before() verglichen. Deshalb gibt es Code Reviews. Jemand bei NVIDIA hat eine sehr schlechte Woche.
+***** Comments
+- Timestamps sollten NICHT so verglichen werden. Genau deshalb existieren time_before() oder time_after().
+- Verrückt, wenn ich das richtig verstehe, verursacht etwas mit B200s und nvlink Probleme, bei denen nach 66 Tagen und 12 Stunden Betriebszeit nvidia-smi und andere Jobs anfangen zu versagen.
+- Ich frage mich, ob der Debugging-Prozess einfach darin besteht zu suchen, welche Potenz von 2 mal einer Zeiteinheit ~66 Tage ergibt.
+** We X-Rayed a Suspicious FTDI USB Cable :security:hardware:supply-chain:
+:PROPERTIES:
+:ID:       46749053
+:URL:      https://eclypsium.com/blog/xray-counterfeit-usb-cable/
+:HN_URL:   https://news.ycombinator.com/item?id=46749053
+:POINTS:   111
+:COMMENTS: 42
+:BY:       aa_is_op
+:END:
+
+*** TLDR
+Security firm Eclypsium X-rayed a suspect FTDI USB cable to compare it with an authentic one. The fake had no ground pours, missing isolation passives, no thermal pad under the IC, and worse build quality overall. Supply chain attacks through counterfeit cables are a real threat to enterprises.
+
+*** Take
+The counterfeit cable actually had better strain relief in some areas. When fakes are occasionally better-built than originals, maybe we should be asking harder questions about 'authentic' pricing.
+
+*** Comments
+
+**** ChrisMarshallNY
+:PROPERTIES:
+:COMMENT_ID: 46749054
+:END:
+To be fair, this story is basically an ad, but a pretty good one. The fact that most comms cables have integrated chips makes for a dangerous trust landscape.
+
+**** invokestatic
+:PROPERTIES:
+:COMMENT_ID: 46749055
+:END:
+I have a slow burn project where I simulate a supply chain attack on my own motherboard. You can source unfused Intel PCH chips off Aliexpress that lack security features.
+
+**** dotancohen
+:PROPERTIES:
+:COMMENT_ID: 46749056
+:END:
+The suspect cable actually seemed to have better strain relief for wire connections and more solder on the USB A connector.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我们X光扫描了一根可疑的FTDI USB数据线
+***** TLDR
+安全公司Eclypsium对一根可疑的FTDI USB数据线进行X光扫描，与正品对比。假货没有接地层、缺少隔离元件、IC下没有散热垫，整体制造质量更差。通过假冒数据线的供应链攻击对企业是真实威胁。
+***** Take
+假冒数据线在某些方面实际上有更好的应力释放。当假货偶尔比正品做工更好时，也许我们应该对'正品'定价提出更难的问题。
+***** Comments
+- 公平地说，这篇文章基本上是广告，但是很好的广告。大多数通讯线缆都有集成芯片，这使得信任环境很危险。
+- 我有一个慢慢进行的项目，在我自己的主板上模拟供应链攻击。你可以从阿里速卖通购买缺少安全功能的未熔断Intel PCH芯片。
+- 可疑的数据线实际上似乎在线缆连接处有更好的应力释放，USB A连接器上有更多焊锡。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+疑わしいFTDI USBケーブルをX線撮影した
+***** TLDR
+セキュリティ企業Eclypsiumが疑わしいFTDI USBケーブルをX線撮影し、正規品と比較した。偽物にはグランドプレーンがなく、アイソレーションパッシブが欠け、ICの下にサーマルパッドがなく、全体的に品質が劣っていた。偽造ケーブルによるサプライチェーン攻撃は企業にとって現実の脅威。
+***** Take
+偽造ケーブルは実際にいくつかの点でより良いストレインリリーフを持っていた。偽物が時々本物より良く作られているなら、「本物」の価格設定についてより厳しい質問をすべきかもしれない。
+***** Comments
+- 公平に言えば、この記事は基本的に広告だが、かなり良い広告だ。ほとんどの通信ケーブルに統合チップがあるという事実は、危険な信頼環境を作り出している。
+- 私は自分のマザーボードでサプライチェーン攻撃をシミュレートするスロープロジェクトを持っている。Aliexpressでセキュリティ機能が欠けた非融着のIntel PCHチップを入手できる。
+- 疑わしいケーブルは実際にワイヤー接続のストレインリリーフがより良く、USB Aコネクタにより多くのはんだがあるように見えた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+의심스러운 FTDI USB 케이블을 X선 촬영했다
+***** TLDR
+보안 회사 Eclypsium이 의심스러운 FTDI USB 케이블을 X선 촬영하여 정품과 비교했다. 가짜에는 그라운드 플레인이 없고, 절연 부품이 없고, IC 아래 열 패드가 없으며, 전체적으로 품질이 떨어졌다. 위조 케이블을 통한 공급망 공격은 기업에 실질적인 위협이다.
+***** Take
+위조 케이블은 실제로 일부 영역에서 더 나은 스트레인 릴리프를 가지고 있었다. 가짜가 때때로 정품보다 더 잘 만들어진다면, '정품' 가격에 대해 더 어려운 질문을 해야 할 것이다.
+***** Comments
+- 공정하게 말하면, 이 기사는 기본적으로 광고지만 꽤 좋은 광고다. 대부분의 통신 케이블에 통합 칩이 있다는 사실은 위험한 신뢰 환경을 만든다.
+- 나는 내 마더보드에서 공급망 공격을 시뮬레이션하는 천천히 진행하는 프로젝트가 있다. Aliexpress에서 보안 기능이 없는 비융합 Intel PCH 칩을 구할 수 있다.
+- 의심스러운 케이블은 실제로 와이어 연결에 대한 스트레인 릴리프가 더 좋고 USB A 커넥터에 더 많은 납땜이 있는 것 같았다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Radiografiamos un cable USB FTDI sospechoso
+***** TLDR
+La firma de seguridad Eclypsium radiografió un cable USB FTDI sospechoso para compararlo con uno auténtico. El falso no tenía planos de tierra, faltaban pasivos de aislamiento, no había pad térmico bajo el IC, y peor calidad de construcción en general. Los ataques a la cadena de suministro a través de cables falsificados son una amenaza real.
+***** Take
+El cable falsificado tenía mejor alivio de tensión en algunas áreas. Cuando las falsificaciones ocasionalmente están mejor construidas que los originales, quizás deberíamos hacer preguntas más difíciles sobre los precios 'auténticos'.
+***** Comments
+- Para ser justos, esta historia es básicamente un anuncio, pero uno bastante bueno. El hecho de que la mayoría de los cables de comunicación tengan chips integrados crea un paisaje de confianza peligroso.
+- Tengo un proyecto lento donde simulo un ataque a la cadena de suministro en mi propia placa base. Puedes conseguir chips PCH de Intel sin fusionar en Aliexpress que carecen de características de seguridad.
+- El cable sospechoso en realidad parecía tener mejor alivio de tensión para las conexiones de cables y más soldadura en el conector USB A.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wir haben ein verdächtiges FTDI USB-Kabel geröntgt
+***** TLDR
+Die Sicherheitsfirma Eclypsium röntgte ein verdächtiges FTDI USB-Kabel zum Vergleich mit einem authentischen. Die Fälschung hatte keine Ground-Pours, fehlende Isolations-Passives, kein Thermal-Pad unter dem IC und insgesamt schlechtere Bauqualität. Supply-Chain-Angriffe durch gefälschte Kabel sind eine echte Bedrohung.
+***** Take
+Das gefälschte Kabel hatte tatsächlich in einigen Bereichen bessere Zugentlastung. Wenn Fälschungen gelegentlich besser gebaut sind als Originale, sollten wir vielleicht härtere Fragen zu 'authentischen' Preisen stellen.
+***** Comments
+- Um fair zu sein, diese Geschichte ist im Grunde Werbung, aber eine ziemlich gute. Die Tatsache, dass die meisten Kommunikationskabel integrierte Chips haben, macht die Vertrauenslandschaft gefährlich.
+- Ich habe ein langsames Projekt, bei dem ich einen Supply-Chain-Angriff auf mein eigenes Motherboard simuliere. Man kann nicht gesicherte Intel PCH-Chips auf Aliexpress bekommen, denen Sicherheitsfunktionen fehlen.
+- Das verdächtige Kabel schien tatsächlich bessere Zugentlastung für Drahtverbindungen und mehr Lötzinn am USB A-Stecker zu haben.
+** Second Win11 emergency out of band update to address disastrous Patch Tuesday :windows:microsoft:bugs:
+:PROPERTIES:
+:ID:       46750358
+:URL:      https://www.windowscentral.com/microsoft/windows-11/windows-11-second-emergency-out-of-band-update-kb5078127-released-address-outlook-bugs
+:HN_URL:   https://news.ycombinator.com/item?id=46750358
+:POINTS:   70
+:COMMENTS: 20
+:BY:       speckx
+:END:
+
+*** TLDR
+Microsoft released KB5078127, its second emergency out-of-band update to fix the Patch Tuesday disaster. The original update broke Outlook, Dropbox, and other apps. This is the second emergency fix in a week because the first emergency fix apparently didn't fix enough.
+
+*** Take
+Vibe patching, as one commenter put it. When your OS shell is built on React and your test matrix is 'ship it and see what happens', this is what you get.
+
+*** Comments
+
+**** mrcsharp
+:PROPERTIES:
+:COMMENT_ID: 46750359
+:END:
+Using React in core parts of the Windows Shell, Microsoft's inability to design and release an application using non-web technologies, has finally pushed me to dual boot Fedora.
+
+**** adithyassekhar
+:PROPERTIES:
+:COMMENT_ID: 46750360
+:END:
+The start menu search is turning blank and shows a white screen whenever I search anything. It's been like this for 6 months across two laptops.
+
+**** acheron
+:PROPERTIES:
+:COMMENT_ID: 46750361
+:END:
+Vibe patching
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+微软为灾难性的补丁星期二发布第二次紧急更新
+***** TLDR
+微软发布了KB5078127，这是其第二次紧急带外更新以修复补丁星期二的灾难。原始更新破坏了Outlook、Dropbox和其他应用程序。这是一周内的第二次紧急修复，因为第一次紧急修复显然没有修复足够的问题。
+***** Take
+正如一位评论者所说，这是氛围补丁。当你的操作系统外壳建立在React上，测试矩阵是'发布后再看看会发生什么'，这就是你得到的结果。
+***** Comments
+- 在Windows Shell核心部分使用React，微软无法使用非Web技术设计和发布应用程序，这终于让我开始双启动Fedora了。
+- 开始菜单搜索每次搜索时都会变白屏。在两台笔记本上这种情况已经持续6个月了。
+- 氛围补丁
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+災害的なパッチ火曜日に対処する2度目のWin11緊急アップデート
+***** TLDR
+Microsoftはパッチ火曜日の災害を修正するため、2度目の緊急帯域外アップデートKB5078127をリリースした。元のアップデートはOutlook、Dropbox、その他のアプリを壊した。最初の緊急修正が十分でなかったため、これは1週間で2度目の緊急修正。
+***** Take
+あるコメンターが言ったように、バイブパッチング。OSシェルがReactで構築され、テストマトリックスが「出荷して様子を見る」である場合、こうなる。
+***** Comments
+- Windowsシェルのコア部分にReactを使用し、Web以外の技術でアプリケーションを設計・リリースできないMicrosoftのせいで、ついにFedoraのデュアルブートに移行した。
+- スタートメニューの検索が何かを検索するたびに白い画面になる。2台のラップトップで6ヶ月間こんな状態だ。
+- バイブパッチング
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+재앙적인 패치 화요일을 해결하기 위한 두 번째 Win11 긴급 업데이트
+***** TLDR
+Microsoft가 패치 화요일 재난을 수정하기 위해 두 번째 긴급 대역외 업데이트 KB5078127을 출시했다. 원래 업데이트는 Outlook, Dropbox 및 기타 앱을 망가뜨렸다. 첫 번째 긴급 수정이 충분하지 않았기 때문에 일주일 만에 두 번째 긴급 수정이다.
+***** Take
+한 댓글러가 말했듯이, 바이브 패칭. OS 셸이 React로 구축되고 테스트 매트릭스가 '출시하고 어떻게 되는지 보자'일 때, 이런 일이 벌어진다.
+***** Comments
+- Windows Shell의 핵심 부분에 React를 사용하고, 웹이 아닌 기술로 애플리케이션을 설계하고 출시할 수 없는 Microsoft 때문에 마침내 Fedora 듀얼 부팅을 하게 되었다.
+- 시작 메뉴 검색이 무언가를 검색할 때마다 흰 화면으로 변한다. 두 대의 노트북에서 6개월 동안 이런 상태다.
+- 바이브 패칭
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Segunda actualización de emergencia de Win11 para el desastre del martes de parches
+***** TLDR
+Microsoft lanzó KB5078127, su segunda actualización fuera de banda de emergencia para arreglar el desastre del martes de parches. La actualización original rompió Outlook, Dropbox y otras apps. Esta es la segunda corrección de emergencia en una semana porque la primera aparentemente no arregló suficiente.
+***** Take
+Parcheado por vibras, como dijo un comentarista. Cuando tu shell del SO está construido en React y tu matriz de pruebas es 'envíalo y mira qué pasa', esto es lo que obtienes.
+***** Comments
+- Usar React en partes centrales del Shell de Windows, la incapacidad de Microsoft de diseñar y lanzar una aplicación usando tecnologías no web, finalmente me empujó a dual boot con Fedora.
+- La búsqueda del menú inicio se vuelve blanca cada vez que busco algo. Ha sido así durante 6 meses en dos portátiles.
+- Parcheado por vibras
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zweites Win11-Notfall-Update für den katastrophalen Patch-Dienstag
+***** TLDR
+Microsoft hat KB5078127 veröffentlicht, das zweite Notfall-Out-of-Band-Update zur Behebung des Patch-Dienstag-Desasters. Das ursprüngliche Update hat Outlook, Dropbox und andere Apps kaputt gemacht. Dies ist die zweite Notfall-Korrektur innerhalb einer Woche, weil die erste offenbar nicht genug repariert hat.
+***** Take
+Vibe-Patching, wie ein Kommentator es nannte. Wenn deine OS-Shell auf React aufgebaut ist und deine Testmatrix 'ausliefern und schauen was passiert' ist, bekommst du das.
+***** Comments
+- React in Kernteilen der Windows-Shell zu verwenden, Microsofts Unfähigkeit, eine Anwendung mit Nicht-Web-Technologien zu entwerfen und zu veröffentlichen, hat mich schließlich dazu gebracht, Fedora als Dual-Boot einzurichten.
+- Die Startmenü-Suche wird leer und zeigt einen weißen Bildschirm, wenn ich etwas suche. Das ist seit 6 Monaten auf zwei Laptops so.
+- Vibe-Patching
+** Palantir has no place in UK public services :surveillance:politics:privacy:uk:
+:PROPERTIES:
+:ID:       46750852
+:URL:      https://www.opendemocracy.net/en/zarah-sutlana-palantir-no-place-uk-public-services-ministry-of-defence/
+:HN_URL:   https://news.ycombinator.com/item?id=46750852
+:POINTS:   73
+:COMMENTS: 15
+:BY:       jethronethro
+:END:
+
+*** TLDR
+Palantir now has contracts with the NHS, Ministry of Defence, and local councils including a £500k children's services AI tool. Critics argue the company was 'founded with an explicit mission to maintain US global domination' and has ties to ICE migrant targeting and alleged Israeli military kill lists.
+
+*** Take
+The UK outsourced its NHS data platform to a company whose CEO publicly fantasizes about killing journalists. This is fine. Everything is fine.
+
+*** Comments
+
+**** tombert
+:PROPERTIES:
+:COMMENT_ID: 46750853
+:END:
+The more I read about Palantir, the creepier and weirder it becomes. The CEO brags about wanting to kill all journalists with fentanyl, or brags about how their software will be used to kill people.
+
+**** deaux
+:PROPERTIES:
+:COMMENT_ID: 46750854
+:END:
+Neither do Microsoft, Amazon, Google and Apple - realistically they're even more dangerous. Picking and choosing US big tech in this context is pointless.
+
+**** mc32
+:PROPERTIES:
+:COMMENT_ID: 46750855
+:END:
+The UK is building/has built a surveillance state using the boiling frog method. Even if you change vendors, surveillance will continue.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Palantir不应出现在英国公共服务中
+***** TLDR
+Palantir现在与NHS、国防部和地方议会签有合同，包括一个价值50万英镑的儿童服务AI工具。批评者认为该公司'成立的明确使命是维护美国的全球主导地位'，并与ICE针对移民的行动和据称的以色列军方击杀名单有关。
+***** Take
+英国把NHS数据平台外包给了一家CEO公开幻想杀死记者的公司。这很好。一切都很好。
+***** Comments
+- 我越读关于Palantir的内容，就越觉得它诡异和奇怪。CEO吹嘘想用芬太尼杀死所有记者，或者吹嘘他们的软件将被用来杀人。
+- 微软、亚马逊、谷歌和苹果也不应该——实际上它们更危险。在这种情况下挑选美国大科技公司是没有意义的。
+- 英国正在用温水煮青蛙的方式建立监控国家。即使你换供应商，监控也会继续。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Palantirは英国の公共サービスにふさわしくない
+***** TLDR
+Palantirは現在NHS、国防省、地方議会と契約を結んでおり、50万ポンドの児童サービスAIツールも含まれる。批評家は同社が「米国の世界支配を維持するという明確な使命を持って設立された」と主張し、ICEの移民標的化やイスラエル軍の殺害リストとの関係を指摘している。
+***** Take
+英国はNHSデータプラットフォームを、CEOがジャーナリストを殺すことを公に妄想している企業に外注した。これは大丈夫。すべて大丈夫。
+***** Comments
+- Palantirについて読めば読むほど、不気味で奇妙になる。CEOはフェンタニルで全てのジャーナリストを殺したいと自慢したり、ソフトウェアが人を殺すために使われることを自慢したりする。
+- Microsoft、Amazon、Google、Appleも同様だ - 現実的にはさらに危険だ。この文脈で米国のビッグテックを選り好みするのは無意味だ。
+- 英国はゆでガエル方式で監視国家を構築している/構築した。ベンダーを変えても監視は続く。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Palantir는 영국 공공 서비스에 있어서는 안 된다
+***** TLDR
+Palantir는 현재 NHS, 국방부, 지방 의회와 계약을 맺고 있으며 50만 파운드 규모의 아동 서비스 AI 도구도 포함된다. 비평가들은 이 회사가 '미국의 세계 지배를 유지하기 위한 명시적 사명으로 설립되었다'고 주장하며, ICE 이민자 표적화 및 이스라엘 군의 살상 목록과의 연관성을 지적한다.
+***** Take
+영국은 NHS 데이터 플랫폼을 CEO가 공개적으로 기자들을 죽이는 것을 환상하는 회사에 외주했다. 괜찮다. 모든 게 괜찮다.
+***** Comments
+- Palantir에 대해 읽을수록 더 소름끼치고 이상해진다. CEO는 펜타닐로 모든 기자를 죽이고 싶다고 자랑하거나, 자신들의 소프트웨어가 사람을 죽이는 데 사용될 것이라고 자랑한다.
+- Microsoft, Amazon, Google, Apple도 마찬가지다 - 현실적으로 더 위험하다. 이 맥락에서 미국 빅테크를 골라내는 것은 무의미하다.
+- 영국은 끓는 개구리 방식으로 감시 국가를 구축하고 있다/구축했다. 공급업체를 바꿔도 감시는 계속될 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Palantir no tiene lugar en los servicios públicos del Reino Unido
+***** TLDR
+Palantir ahora tiene contratos con el NHS, el Ministerio de Defensa y consejos locales, incluyendo una herramienta de IA para servicios infantiles de £500k. Los críticos argumentan que la empresa fue 'fundada con la misión explícita de mantener la dominación global de EE.UU.' y tiene vínculos con el targeting de migrantes del ICE y supuestas listas de objetivos militares israelíes.
+***** Take
+El Reino Unido externalizó su plataforma de datos del NHS a una empresa cuyo CEO fantasea públicamente con matar periodistas. Esto está bien. Todo está bien.
+***** Comments
+- Cuanto más leo sobre Palantir, más espeluznante y extraño se vuelve. El CEO presume de querer matar a todos los periodistas con fentanilo, o presume de cómo su software será usado para matar gente.
+- Tampoco deberían Microsoft, Amazon, Google y Apple - siendo realistas son aún más peligrosos. Elegir entre big tech estadounidense en este contexto es inútil.
+- El Reino Unido está construyendo/ha construido un estado de vigilancia usando el método de la rana hervida. Incluso si cambias de proveedor, la vigilancia continuará.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Palantir hat keinen Platz im britischen öffentlichen Dienst
+***** TLDR
+Palantir hat jetzt Verträge mit dem NHS, dem Verteidigungsministerium und lokalen Räten, einschließlich eines £500k KI-Tools für Kinderdienste. Kritiker argumentieren, das Unternehmen wurde 'mit der expliziten Mission gegründet, die US-amerikanische Weltdominanz aufrechtzuerhalten' und hat Verbindungen zu ICE-Migranten-Targeting und angeblichen israelischen Militär-Tötungslisten.
+***** Take
+Das UK hat seine NHS-Datenplattform an ein Unternehmen ausgelagert, dessen CEO öffentlich davon fantasiert, Journalisten zu töten. Das ist in Ordnung. Alles ist in Ordnung.
+***** Comments
+- Je mehr ich über Palantir lese, desto gruseliger und seltsamer wird es. Der CEO prahlt damit, alle Journalisten mit Fentanyl töten zu wollen, oder prahlt damit, wie ihre Software zum Töten von Menschen eingesetzt wird.
+- Weder sollten Microsoft, Amazon, Google noch Apple - realistisch gesehen sind sie sogar gefährlicher. In diesem Kontext US-Big-Tech auszuwählen ist sinnlos.
+- Das UK baut/hat mit der Methode des kochenden Frosches einen Überwachungsstaat aufgebaut. Selbst wenn man den Anbieter wechselt, wird die Überwachung weitergehen.
+** TikTok is officially US-owned for American users, here's what's changing :tiktok:policy:privacy:oracle:
+:PROPERTIES:
+:ID:       46750767
+:URL:      https://9to5mac.com/2026/01/23/tiktok-is-officially-us-owned-for-american-users-heres-whats-changing/
+:HN_URL:   https://news.ycombinator.com/item?id=46750767
+:POINTS:   22
+:COMMENTS: 22
+:BY:       WaitWaitWha
+:END:
+
+*** TLDR
+TikTok USDS Joint Venture LLC now operates TikTok for American users with majority US ownership. User data moves to Oracle's US cloud, the recommendation algorithm gets retrained on US data, Oracle reviews source code, and the new entity controls content moderation. 200 million Americans affected.
+
+*** Take
+So the app that was a national security threat because China might see your data is now safe because Oracle will see your data instead. Larry Ellison thanks you for your service.
+
+*** Comments
+
+**** devsda
+:PROPERTIES:
+:COMMENT_ID: 46750768
+:END:
+Good. Now that it is done, can EU and the rest of the world push for regional ownership of Instagram, WhatsApp and Youtube without the US complaining unfair practices.
+
+**** rzerowan
+:PROPERTIES:
+:COMMENT_ID: 46750769
+:END:
+Technically would be correct to say its being split into TikTok US and TikTok Rest of World, probably why their new ToS includes geolocating the end user.
+
+**** NoteyComplexity
+:PROPERTIES:
+:COMMENT_ID: 46750770
+:END:
+What is the point of using short form content platforms as a consumer really? They are often too short for any details, ending up making people distracted and lose patience easily.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+TikTok正式成为美国用户的美国所有，这是正在改变的内容
+***** TLDR
+TikTok USDS合资有限责任公司现在以美国多数股权运营美国用户的TikTok。用户数据迁移到Oracle的美国云，推荐算法在美国数据上重新训练，Oracle审查源代码，新实体控制内容审核。影响2亿美国人。
+***** Take
+所以这个因为中国可能看到你的数据而成为国家安全威胁的应用，现在因为Oracle会看到你的数据而变得安全了。拉里·埃里森感谢你的服务。
+***** Comments
+- 很好。既然这件事完成了，欧盟和世界其他地区可以推动Instagram、WhatsApp和Youtube的区域所有权，而美国不会抱怨不公平做法了。
+- 从技术上讲，应该说它被分成了TikTok美国和TikTok世界其他地区，这可能就是为什么他们的新服务条款包括对终端用户进行地理定位。
+- 作为消费者使用短视频平台到底有什么意义？它们通常太短，无法提供任何细节，最终让人分心并容易失去耐心。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+TikTokがアメリカユーザー向けに正式に米国所有に、変更点はこちら
+***** TLDR
+TikTok USDS合弁会社が米国過半数所有でアメリカユーザー向けにTikTokを運営。ユーザーデータはOracleの米国クラウドに移行、レコメンデーションアルゴリズムは米国データで再トレーニング、Oracleがソースコードをレビュー、新エンティティがコンテンツモデレーションを管理。2億人のアメリカ人に影響。
+***** Take
+つまり、中国があなたのデータを見るかもしれないから国家安全保障上の脅威だったアプリが、代わりにOracleがあなたのデータを見るから安全になった。ラリー・エリソンはあなたのサービスに感謝している。
+***** Comments
+- 良いことだ。これが終わったのだから、EUや世界の他の地域がInstagram、WhatsApp、Youtubeの地域所有権を推進しても、米国は不公正な慣行だと文句を言えないはずだ。
+- 技術的には、TikTok USとTikTok Rest of Worldに分割されると言うのが正確だろう。おそらくそれが新しい利用規約にエンドユーザーの位置情報取得が含まれている理由だ。
+- 消費者としてショートフォームコンテンツプラットフォームを使う意味は何だろう？詳細には短すぎることが多く、結局人々を散漫にさせ、すぐに忍耐力を失わせる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+TikTok이 공식적으로 미국 사용자를 위한 미국 소유가 됨, 변경 사항
+***** TLDR
+TikTok USDS 합작 투자 LLC가 이제 미국 다수 소유로 미국 사용자를 위한 TikTok을 운영한다. 사용자 데이터는 Oracle의 미국 클라우드로 이동하고, 추천 알고리즘은 미국 데이터로 재훈련되며, Oracle이 소스 코드를 검토하고, 새 법인이 콘텐츠 조정을 통제한다. 2억 명의 미국인에게 영향.
+***** Take
+그래서 중국이 당신의 데이터를 볼 수 있어서 국가 안보 위협이었던 앱이 이제 Oracle이 대신 당신의 데이터를 볼 것이기 때문에 안전해졌다. 래리 엘리슨이 당신의 봉사에 감사드린다.
+***** Comments
+- 좋다. 이게 끝났으니, EU와 나머지 세계가 미국이 불공정 관행이라고 불평하지 않고 Instagram, WhatsApp, Youtube의 지역 소유권을 추진할 수 있다.
+- 기술적으로는 TikTok US와 TikTok Rest of World로 분리된다고 하는 게 맞을 것이다. 아마 그래서 새 약관에 최종 사용자 위치 확인이 포함되어 있는 것 같다.
+- 소비자로서 숏폼 콘텐츠 플랫폼을 사용하는 의미가 뭘까? 어떤 세부 사항도 담기에 너무 짧아서, 결국 사람들을 산만하게 하고 쉽게 인내심을 잃게 만든다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+TikTok es oficialmente de propiedad estadounidense para usuarios americanos, esto es lo que cambia
+***** TLDR
+TikTok USDS Joint Venture LLC ahora opera TikTok para usuarios americanos con mayoría de propiedad estadounidense. Los datos de usuarios se mueven a la nube de Oracle en EE.UU., el algoritmo de recomendación se reentrena con datos estadounidenses, Oracle revisa el código fuente, y la nueva entidad controla la moderación de contenido. 200 millones de americanos afectados.
+***** Take
+Así que la app que era una amenaza de seguridad nacional porque China podría ver tus datos ahora es segura porque Oracle verá tus datos en su lugar. Larry Ellison te agradece tu servicio.
+***** Comments
+- Bien. Ahora que está hecho, ¿pueden la UE y el resto del mundo impulsar la propiedad regional de Instagram, WhatsApp y Youtube sin que EE.UU. se queje de prácticas injustas?
+- Técnicamente sería correcto decir que se está dividiendo en TikTok US y TikTok Resto del Mundo, probablemente por eso sus nuevos ToS incluyen geolocalizar al usuario final.
+- ¿Cuál es el punto de usar plataformas de contenido corto como consumidor realmente? A menudo son demasiado cortas para cualquier detalle, terminando por hacer que la gente se distraiga y pierda la paciencia fácilmente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+TikTok ist offiziell in US-Besitz für amerikanische Nutzer, das ändert sich
+***** TLDR
+TikTok USDS Joint Venture LLC betreibt jetzt TikTok für amerikanische Nutzer mit US-Mehrheitseigentum. Nutzerdaten wandern in Oracles US-Cloud, der Empfehlungsalgorithmus wird mit US-Daten neu trainiert, Oracle prüft den Quellcode, und die neue Einheit kontrolliert die Content-Moderation. 200 Millionen Amerikaner betroffen.
+***** Take
+Also ist die App, die eine nationale Sicherheitsbedrohung war, weil China deine Daten sehen könnte, jetzt sicher, weil stattdessen Oracle deine Daten sieht. Larry Ellison dankt für deinen Dienst.
+***** Comments
+- Gut. Jetzt, wo das erledigt ist, können die EU und der Rest der Welt auf regionales Eigentum an Instagram, WhatsApp und Youtube drängen, ohne dass die USA unfaire Praktiken beklagen.
+- Technisch gesehen wäre es korrekt zu sagen, dass es in TikTok US und TikTok Rest der Welt aufgeteilt wird, wahrscheinlich deshalb beinhalten ihre neuen ToS die Geolokalisierung des Endnutzers.
+- Was ist eigentlich der Sinn, Kurzform-Content-Plattformen als Verbraucher zu nutzen? Sie sind oft zu kurz für Details und führen dazu, dass Menschen abgelenkt werden und leicht die Geduld verlieren.
