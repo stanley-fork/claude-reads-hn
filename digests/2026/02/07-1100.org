@@ -1,0 +1,533 @@
+#+TITLE: HN Digest 2026-02-07 11:00:00 UT UTC
+#+DATE: 2026-02-07T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Hexagons beat geometry, Wolfram invents a word, and someone asks you to solve integrals at gunpoint
+
+* Highlights
+- H3: hexagons make geo joins 400x faster
+- Comma prefix: the namespace trick you didn't know you needed
+- Ruliology: Wolfram's latest attempt to sound important
+
+* Stories
+
+** How we made geo joins 400x faster with H3 indexes :geospatial:databases:performance:
+:PROPERTIES:
+:ID:       46898473
+:URL:      https://floedb.ai/blog/how-we-made-geo-joins-400-faster-with-h3-indexes
+:HN_URL:   https://news.ycombinator.com/item?id=46898473
+:POINTS:   112
+:COMMENTS: 28
+:BY:       matheusalmeida
+:END:
+
+*** TLDR
+FloeDB replaced expensive ST_Intersects geometry comparisons with H3 hexagonal cell IDs. Convert shapes to cell sets, do fast integer joins, then filter with the original predicate. Query time dropped from 459 seconds to 1.17 seconds.
+
+*** Take
+Turning geometry into integers and pretending the hard problem doesn't exist is exactly the kind of pragmatic laziness that actually ships products.
+
+*** Comments
+
+**** cullenking
+:PROPERTIES:
+:COMMENT_ID: 46898501
+:END:
+We do something similar for some limited geospatial search using elastic search. We make a set of h3 indexes for each of the hundreds of millions of gps recordings on our service.
+
+**** jandrewrogers
+:PROPERTIES:
+:COMMENT_ID: 46898612
+:END:
+There is a lot of literature on join operations using discrete global grid systems (DGGS). H3 is a widely used DGGS optimized for visualization. If joins are a critical performance-sensitive operation, the most important property of a DGGS is congruency.
+
+**** dgsan
+:PROPERTIES:
+:COMMENT_ID: 46898700
+:END:
+I don't like what scrolling this site does to my browser history.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我们如何通过H3索引让地理连接快了400倍
+***** TLDR
+FloeDB用H3六边形单元格ID替换了昂贵的ST_Intersects几何比较。将形状转换为单元格集，进行快速整数连接，然后用原始谓词过滤。查询时间从459秒降到1.17秒。
+***** Take
+把几何变成整数然后假装难题不存在，这正是那种能实际交付产品的务实懒惰。
+***** Comments
+- 我们在Elasticsearch做类似的地理搜索。我们为服务中数亿条GPS记录建立了H3索引集。
+- 关于使用离散全球网格系统(DGGS)的连接操作有很多文献。H3是一种广泛使用的DGGS，针对可视化进行了优化。
+- 我不喜欢滚动这个网站对我浏览器历史的影响。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+H3インデックスでジオ結合を400倍高速化した方法
+***** TLDR
+FloeDBは高価なST_Intersectsジオメトリ比較をH3六角形セルIDに置き換えた。形状をセル集合に変換し、高速な整数結合を行い、元の述語でフィルタリング。クエリ時間が459秒から1.17秒に短縮。
+***** Take
+ジオメトリを整数に変換して難しい問題は存在しないふりをする。実際に製品を出荷する実用的な怠惰そのもの。
+***** Comments
+- Elasticsearchで同様の地理空間検索を行っている。数億のGPS記録にH3インデックスのセットを作成している。
+- 離散グローバルグリッドシステム(DGGS)を使用した結合操作に関する文献は多い。H3は可視化に最適化された広く使われているDGGS。
+- このサイトをスクロールするとブラウザ履歴がおかしくなるのが嫌。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+H3 인덱스로 지리 조인을 400배 빠르게 만든 방법
+***** TLDR
+FloeDB는 비싼 ST_Intersects 기하학 비교를 H3 육각형 셀 ID로 대체했다. 도형을 셀 집합으로 변환하고 빠른 정수 조인을 수행한 뒤 원래 술어로 필터링. 쿼리 시간이 459초에서 1.17초로 단축.
+***** Take
+기하학을 정수로 바꾸고 어려운 문제는 없는 척하는 것. 실제로 제품을 출시하는 실용적인 게으름의 정수.
+***** Comments
+- Elasticsearch에서 비슷한 지리공간 검색을 한다. 수억 개의 GPS 기록에 H3 인덱스 세트를 만든다.
+- 이산 글로벌 그리드 시스템(DGGS)을 사용한 조인 연산에 관한 문헌이 많다. H3는 시각화에 최적화된 널리 사용되는 DGGS다.
+- 이 사이트 스크롤이 브라우저 기록에 하는 짓이 마음에 안 든다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo hicimos los geo joins 400 veces más rápidos con índices H3
+***** TLDR
+FloeDB reemplazó las costosas comparaciones de geometría ST_Intersects con IDs de celdas hexagonales H3. Convierte formas a conjuntos de celdas, hace joins rápidos de enteros, luego filtra con el predicado original. El tiempo de consulta bajó de 459 segundos a 1.17 segundos.
+***** Take
+Convertir geometría en enteros y pretender que el problema difícil no existe es exactamente el tipo de pereza pragmática que realmente entrega productos.
+***** Comments
+- Hacemos algo similar para búsqueda geoespacial limitada usando Elasticsearch. Creamos un conjunto de índices H3 para cada uno de los cientos de millones de registros GPS.
+- Hay mucha literatura sobre operaciones de join usando sistemas de cuadrícula global discreta (DGGS). H3 es un DGGS ampliamente usado optimizado para visualización.
+- No me gusta lo que el scroll de este sitio le hace a mi historial del navegador.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie wir Geo-Joins mit H3-Indizes 400-mal schneller machten
+***** TLDR
+FloeDB ersetzte teure ST_Intersects-Geometrievergleiche durch H3-Hexagonzellen-IDs. Formen in Zellmengen umwandeln, schnelle Integer-Joins durchführen, dann mit dem ursprünglichen Prädikat filtern. Die Abfragezeit sank von 459 Sekunden auf 1,17 Sekunden.
+***** Take
+Geometrie in Integer umwandeln und so tun, als gäbe es das schwierige Problem nicht, ist genau die Art pragmatischer Faulheit, die tatsächlich Produkte liefert.
+***** Comments
+- Wir machen etwas Ähnliches für begrenzte Geodatensuche mit Elasticsearch. Wir erstellen einen Satz von H3-Indizes für jede der Hunderte Millionen GPS-Aufzeichnungen.
+- Es gibt viel Literatur über Join-Operationen mit diskreten globalen Gittersystemen (DGGS). H3 ist ein weit verbreitetes DGGS, das für Visualisierung optimiert ist.
+- Ich mag nicht, was das Scrollen dieser Seite mit meinem Browserverlauf macht.
+** Dark Alley Mathematics :math:probability:geometry:
+:PROPERTIES:
+:ID:       46857453
+:URL:      https://blog.szczepan.org/blog/three-points/
+:HN_URL:   https://news.ycombinator.com/item?id=46857453
+:POINTS:   85
+:COMMENTS: 21
+:BY:       quibono
+:END:
+
+*** TLDR
+A whimsical narrative about solving a probability problem at gunpoint: what's the chance that three random points inside a unit circle form a circumcircle that stays entirely within the circle? The answer is 2/5, derived through a painful six-dimensional integral in polar coordinates.
+
+*** Take
+Finally, a math problem presentation that accurately reflects the emotional experience of being asked to solve integrals on a deadline.
+
+*** Comments
+
+**** dooglius
+:PROPERTIES:
+:COMMENT_ID: 46857500
+:END:
+EDIT: ok this was nagging at me for a while as something being off, I think this is actually wrong (in some way that must cancel out to accidentally get the right answer).
+
+**** fosco
+:PROPERTIES:
+:COMMENT_ID: 46857600
+:END:
+The intro strongly reminded me of existentialcomics.com/comic/604. Really enjoyed this keep writing!
+
+**** layman51
+:PROPERTIES:
+:COMMENT_ID: 46857700
+:END:
+When I first read the title, I thought it was gonna be about a book similar to one I heard about called 'Street Fighting Mathematics' and it would be about like heuristics, estimation, etc.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+暗巷数学
+***** TLDR
+一个在枪口下解决概率问题的奇异故事：单位圆内三个随机点形成的外接圆完全在圆内的概率是多少？答案是2/5，通过痛苦的极坐标六维积分推导得出。
+***** Take
+终于有一道数学题的呈现方式准确反映了在截止日期前被要求解积分的情感体验。
+***** Comments
+- 编辑：这个问题一直困扰我，我觉得这实际上是错的（以某种方式相互抵消而意外得到正确答案）。
+- 开头让我强烈想起了existentialcomics.com/comic/604。非常喜欢，继续写！
+- 我第一次看到标题时，以为是关于一本类似《街头格斗数学》的书，讲的是启发式方法、估算等。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+暗い路地の数学
+***** TLDR
+銃を突きつけられて確率問題を解く奇抜な物語：単位円内の3つのランダムな点が形成する外接円が完全に円内に収まる確率は？答えは2/5、極座標での苦痛な6次元積分で導出。
+***** Take
+ついに、締め切りに追われて積分を解けと言われる感情的体験を正確に反映した数学問題のプレゼンテーション。
+***** Comments
+- 編集：これずっと気になってたんだけど、これ実際間違ってると思う（何らかの形で相殺して偶然正解になってる）。
+- イントロがexistentialcomics.com/comic/604を強く思い出させた。すごく楽しめた、書き続けて！
+- タイトルを最初に見たとき、『ストリートファイティング数学』みたいな本の話で、ヒューリスティックスや見積もりについてかと思った。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+어두운 골목 수학
+***** TLDR
+총을 겨눈 채 확률 문제를 푸는 기발한 이야기: 단위원 안의 세 무작위 점이 만드는 외접원이 완전히 원 안에 있을 확률은? 답은 2/5, 극좌표에서 고통스러운 6차원 적분으로 유도.
+***** Take
+드디어 마감에 쫓기며 적분을 풀라는 감정적 경험을 정확히 반영한 수학 문제 발표.
+***** Comments
+- 편집: 이거 계속 뭔가 이상하다고 생각했는데, 실제로 틀린 것 같다(어떤 식으로든 상쇄되어 우연히 정답이 나온 듯).
+- 도입부가 existentialcomics.com/comic/604를 강하게 떠올리게 했다. 정말 재밌었어, 계속 써!
+- 제목을 처음 봤을 때 '스트리트 파이팅 수학' 같은 책에 대한 얘기인 줄 알았다. 휴리스틱, 추정 같은 것들.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Matemáticas de callejón oscuro
+***** TLDR
+Una narrativa caprichosa sobre resolver un problema de probabilidad a punta de pistola: ¿cuál es la probabilidad de que tres puntos aleatorios dentro de un círculo unitario formen un circuncírculo que permanezca enteramente dentro del círculo? La respuesta es 2/5, derivada a través de una dolorosa integral de seis dimensiones en coordenadas polares.
+***** Take
+Por fin, una presentación de problema matemático que refleja con precisión la experiencia emocional de que te pidan resolver integrales con fecha límite.
+***** Comments
+- EDITAR: esto me estuvo molestando un rato como algo que está mal, creo que en realidad está equivocado (de alguna manera que debe cancelarse para obtener accidentalmente la respuesta correcta).
+- La introducción me recordó mucho a existentialcomics.com/comic/604. ¡Disfruté mucho esto, sigue escribiendo!
+- Cuando leí el título por primera vez, pensé que iba a ser sobre un libro similar a uno llamado 'Street Fighting Mathematics' sobre heurísticas, estimación, etc.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Dunkle-Gasse-Mathematik
+***** TLDR
+Eine skurrile Geschichte über das Lösen eines Wahrscheinlichkeitsproblems unter vorgehaltener Waffe: Wie hoch ist die Chance, dass drei zufällige Punkte in einem Einheitskreis einen Umkreis bilden, der vollständig im Kreis bleibt? Die Antwort ist 2/5, hergeleitet durch ein schmerzhaftes sechsdimensionales Integral in Polarkoordinaten.
+***** Take
+Endlich eine Präsentation eines Matheproblems, die die emotionale Erfahrung genau widerspiegelt, unter Zeitdruck Integrale lösen zu müssen.
+***** Comments
+- EDIT: Das hat mich eine Weile genervt als etwas Falsches, ich glaube das ist tatsächlich falsch (auf eine Weise, die sich ausgleichen muss, um zufällig die richtige Antwort zu bekommen).
+- Das Intro erinnerte mich stark an existentialcomics.com/comic/604. Hat mir sehr gefallen, schreib weiter!
+- Als ich den Titel zum ersten Mal las, dachte ich, es geht um ein Buch ähnlich wie 'Street Fighting Mathematics' über Heuristiken, Schätzungen usw.
+** Start all of your commands with a comma :unix:shell:productivity:
+:PROPERTIES:
+:ID:       46890814
+:URL:      https://rhodesmill.org/brandon/2009/commands-with-comma/
+:HN_URL:   https://news.ycombinator.com/item?id=46890814
+:POINTS:   42
+:COMMENTS: 5
+:BY:       theblazehen
+:END:
+
+*** TLDR
+Prefix your custom shell scripts with a comma to prevent naming collisions with system commands. Typing comma-tab shows all your personal commands instantly. Simple, elegant, and somehow nobody thought of this before 2009.
+
+*** Take
+The best Unix tricks are the ones that make you feel stupid for not figuring them out yourself. This is one of those.
+
+*** Comments
+
+**** falloutx
+:PROPERTIES:
+:COMMENT_ID: 46890850
+:END:
+Finally a post that is relevant to what I have been looking for quite some time. Also, kudos to keeping it so concise and to the point, thats some prime writing.
+
+**** sevg
+:PROPERTIES:
+:COMMENT_ID: 46890900
+:END:
+This is one of those ideas that is so simple and elegant that it makes you think 'why did I never think of doing this?!' Neat trick!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用逗号开头你所有的命令
+***** TLDR
+给你的自定义shell脚本加逗号前缀可以防止与系统命令冲突。输入逗号加tab可以立即显示所有个人命令。简单、优雅，而且不知为何2009年之前没人想到。
+***** Take
+最好的Unix技巧是那些让你觉得自己愚蠢到没有自己想出来的。这就是其中之一。
+***** Comments
+- 终于有一篇文章与我一直在寻找的东西相关。另外，赞一下如此简洁明了，这是顶级写作。
+- 这是那种简单优雅到让你想'我怎么从来没想过这样做？！'的点子。巧妙的技巧！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+すべてのコマンドをカンマで始める
+***** TLDR
+カスタムシェルスクリプトにカンマをプレフィックスとして付けると、システムコマンドとの名前衝突を防げる。カンマ+タブで個人コマンドが一覧表示。シンプルでエレガント、なぜか2009年まで誰も思いつかなかった。
+***** Take
+最高のUnixトリックは、自分で思いつかなかったことを馬鹿みたいに感じさせるもの。これはそのひとつ。
+***** Comments
+- やっとずっと探していたものに関連する投稿が見つかった。簡潔で要点を押さえた素晴らしい文章だ。
+- これはあまりにもシンプルでエレガントで『なぜ自分でこれを思いつかなかったのか？！』と思わせるアイデアの一つ。素敵なトリック！
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+모든 명령어를 쉼표로 시작하세요
+***** TLDR
+커스텀 셸 스크립트에 쉼표 접두사를 붙이면 시스템 명령어와의 이름 충돌을 방지할 수 있다. 쉼표+탭으로 모든 개인 명령어를 즉시 표시. 단순하고 우아한데 왜 2009년 전에는 아무도 생각하지 못했을까.
+***** Take
+최고의 유닉스 트릭은 스스로 생각해내지 못한 것에 바보같이 느끼게 만드는 것들이다. 이것이 그중 하나.
+***** Comments
+- 드디어 오랫동안 찾던 것과 관련된 포스트다. 또한 간결하고 요점만 짚어서 훌륭한 글이다.
+- 이건 너무 단순하고 우아해서 '왜 나는 이걸 생각하지 못했을까?!'라고 생각하게 만드는 아이디어 중 하나다. 멋진 트릭!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Empieza todos tus comandos con una coma
+***** TLDR
+Prefijar tus scripts de shell personalizados con una coma previene colisiones de nombres con comandos del sistema. Escribir coma-tab muestra todos tus comandos personales instantáneamente. Simple, elegante, y de alguna manera nadie pensó en esto antes de 2009.
+***** Take
+Los mejores trucos de Unix son los que te hacen sentir estúpido por no haberlos descubierto tú mismo. Este es uno de esos.
+***** Comments
+- Por fin un post relevante a lo que he estado buscando durante bastante tiempo. También, felicitaciones por mantenerlo tan conciso y al punto, esa es escritura de primera.
+- Esta es una de esas ideas tan simples y elegantes que te hacen pensar '¿por qué nunca pensé en hacer esto?' ¡Buen truco!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Beginne alle deine Befehle mit einem Komma
+***** TLDR
+Füge deinen benutzerdefinierten Shell-Skripten ein Komma als Präfix hinzu, um Namenskollisionen mit Systembefehlen zu vermeiden. Komma-Tab zeigt sofort alle persönlichen Befehle. Einfach, elegant, und irgendwie hat vor 2009 niemand daran gedacht.
+***** Take
+Die besten Unix-Tricks sind die, bei denen man sich dumm fühlt, weil man nicht selbst darauf gekommen ist. Das ist einer davon.
+***** Comments
+- Endlich ein Post, der relevant ist für das, wonach ich schon eine Weile gesucht habe. Außerdem Kudos dafür, so prägnant und auf den Punkt zu sein, das ist erstklassiges Schreiben.
+- Das ist eine dieser Ideen, die so einfach und elegant sind, dass man denkt 'warum bin ich nie darauf gekommen?!' Netter Trick!
+** What Is Ruliology? :wolfram:computation:science:
+:PROPERTIES:
+:ID:       46867361
+:URL:      https://writings.stephenwolfram.com/2026/01/what-is-ruliology/
+:HN_URL:   https://news.ycombinator.com/item?id=46867361
+:POINTS:   35
+:COMMENTS: 29
+:BY:       helloplanets
+:END:
+
+*** TLDR
+Wolfram defines Ruliology as 'the pure basic science of what simple rules do' - exploring the computational universe of possible programs to understand how complexity emerges. It's cellular automata research rebranded with a name that sounds like it was generated by a markov chain.
+
+*** Take
+When you invent a field and name it after yourself, at least have the decency to make it sound like a real science. 'Ruliology' sounds like a rejected Scientology branch.
+
+*** Comments
+
+**** meindnoch
+:PROPERTIES:
+:COMMENT_ID: 46867400
+:END:
+Wolfram's eulogy will be titled: 'A life wasted on cellular automata'
+
+**** PaulRobinson
+:PROPERTIES:
+:COMMENT_ID: 46867450
+:END:
+I actually think this is just computer science. Why? Because the first 'computer scientist' - Alan Turing - was interested in this exact same set of ideas.
+
+**** happa
+:PROPERTIES:
+:COMMENT_ID: 46867500
+:END:
+It's starting to sound an awful lot like a Ruligion.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+什么是规则学？
+***** TLDR
+Wolfram将规则学定义为'研究简单规则做什么的纯粹基础科学'——探索可能程序的计算宇宙以理解复杂性如何产生。这是细胞自动机研究的品牌重塑，名字听起来像马尔可夫链生成的。
+***** Take
+当你发明一个领域并以自己命名时，至少让它听起来像一门真正的科学。'规则学'听起来像被科学教拒绝的分支。
+***** Comments
+- Wolfram的讣告标题将是：'浪费在细胞自动机上的一生'
+- 我实际上认为这就是计算机科学。为什么？因为第一位'计算机科学家'——艾伦·图灵——对同样的思想感兴趣。
+- 这开始听起来非常像一个规则宗教。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ルーリオロジーとは何か？
+***** TLDR
+Wolframはルーリオロジーを『単純なルールが何をするかの純粋な基礎科学』と定義——可能なプログラムの計算宇宙を探索して複雑性がどのように生じるかを理解する。セルオートマトン研究のブランド変更で、名前はマルコフ連鎖で生成されたように聞こえる。
+***** Take
+自分の名前を冠した分野を発明するなら、せめて本物の科学らしく聞こえるようにしてほしい。『ルーリオロジー』はサイエントロジーのボツ分派みたい。
+***** Comments
+- Wolframの追悼文のタイトルは：『セルオートマトンに費やされた人生』になるだろう
+- これは実際にはコンピュータサイエンスだと思う。なぜ？最初の『コンピュータサイエンティスト』アラン・チューリングはまさにこの同じアイデアに興味を持っていたから。
+- これはますますルーリジョン（宗教）のように聞こえてきた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+규칙학이란 무엇인가?
+***** TLDR
+Wolfram은 규칙학을 '단순한 규칙이 무엇을 하는지에 대한 순수 기초 과학'으로 정의한다 - 복잡성이 어떻게 나타나는지 이해하기 위해 가능한 프로그램의 계산 우주를 탐구. 마르코프 체인이 생성한 것 같은 이름으로 리브랜딩된 셀룰러 오토마타 연구.
+***** Take
+자신의 이름을 딴 분야를 발명할 때는 최소한 진짜 과학처럼 들리게 해라. '규칙학'은 거부당한 사이언톨로지 분파처럼 들린다.
+***** Comments
+- Wolfram의 추도사 제목은: '셀룰러 오토마타에 낭비된 인생'이 될 것이다
+- 나는 이것이 그냥 컴퓨터 과학이라고 생각한다. 왜? 최초의 '컴퓨터 과학자' 앨런 튜링이 정확히 같은 아이디어에 관심이 있었기 때문.
+- 이건 점점 규칙종교처럼 들린다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Qué es la Ruliología?
+***** TLDR
+Wolfram define la Ruliología como 'la ciencia básica pura de lo que hacen las reglas simples' - explorando el universo computacional de programas posibles para entender cómo emerge la complejidad. Es investigación de autómatas celulares renombrada con un nombre que suena como si fuera generado por una cadena de Markov.
+***** Take
+Cuando inventas un campo y lo nombras con tu propio nombre, al menos ten la decencia de que suene como una ciencia real. 'Ruliología' suena como una rama rechazada de la Cienciología.
+***** Comments
+- El elogio fúnebre de Wolfram se titulará: 'Una vida desperdiciada en autómatas celulares'
+- En realidad creo que esto es solo ciencia de la computación. ¿Por qué? Porque el primer 'científico de la computación' - Alan Turing - estaba interesado en exactamente el mismo conjunto de ideas.
+- Esto está empezando a sonar mucho como una Ruligión.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Was ist Ruliologie?
+***** TLDR
+Wolfram definiert Ruliologie als 'die reine Grundlagenwissenschaft davon, was einfache Regeln tun' - die Erforschung des Rechenuniversums möglicher Programme, um zu verstehen, wie Komplexität entsteht. Es ist Zellularautomatenforschung, umbenannt mit einem Namen, der klingt, als wäre er von einer Markov-Kette generiert.
+***** Take
+Wenn du ein Feld erfindest und es nach dir selbst benennst, hab wenigstens den Anstand, es wie eine echte Wissenschaft klingen zu lassen. 'Ruliologie' klingt wie ein abgelehnter Scientology-Zweig.
+***** Comments
+- Wolframs Nachruf wird heißen: 'Ein Leben, verschwendet an zellulären Automaten'
+- Ich denke tatsächlich, das ist einfach Informatik. Warum? Weil der erste 'Informatiker' - Alan Turing - an genau denselben Ideen interessiert war.
+- Das fängt an, sehr nach einer Ruligion zu klingen.
+** PC Floppy Copy Protection: Vault Prolok :retro:drm:history:
+:PROPERTIES:
+:ID:       46854386
+:URL:      https://martypc.blogspot.com/2024/09/pc-floppy-copy-protection-vault-prolok.html
+:HN_URL:   https://news.ycombinator.com/item?id=46854386
+:POINTS:   57
+:COMMENTS: 3
+:BY:       kmm
+:END:
+
+*** TLDR
+Vault Corporation's 1983 Prolok copy protection used intentional physical damage ('fingerprints') on floppy disks that couldn't be replicated by copiers. The company's reputation imploded when they announced Prolok Plus would format hard drives or plant viruses if it detected piracy.
+
+*** Take
+DRM companies threatening to brick your hardware in 1983. Some things never change, they just get more sophisticated malware.
+
+*** Comments
+
+**** chihuahua
+:PROPERTIES:
+:COMMENT_ID: 46854400
+:END:
+The scheme to damage hardware or data when Prolok Plus thinks someone's using a pirated copy seems ludicrous. Who wants to deal with the liability when this goes wrong due to a bug or unexpected circumstances?
+
+**** asdefghyk
+:PROPERTIES:
+:COMMENT_ID: 46854450
+:END:
+For a old geek like me, its a good interesting read.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+PC软盘复制保护：Vault Prolok
+***** TLDR
+Vault公司1983年的Prolok复制保护使用软盘上无法被复制器复制的故意物理损坏（'指纹'）。当他们宣布Prolok Plus会在检测到盗版时格式化硬盘或植入病毒时，公司声誉崩溃了。
+***** Take
+1983年DRM公司威胁要让你的硬件变砖。有些事情永远不变，只是恶意软件变得更复杂了。
+***** Comments
+- 当Prolok Plus认为有人在使用盗版时损坏硬件或数据的计划看起来太荒谬了。当因为bug或意外情况出问题时，谁想承担责任？
+- 对于像我这样的老极客来说，这是一篇很好的有趣阅读。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+PCフロッピーコピー保護：Vault Prolok
+***** TLDR
+Vault Corporationの1983年のProlokコピー保護は、コピー機では複製できないフロッピーディスクへの意図的な物理的損傷（「指紋」）を使用。Prolok Plusが海賊版を検出するとハードドライブをフォーマットするかウイルスを仕込むと発表して会社の評判は崩壊。
+***** Take
+1983年にDRM企業がハードウェアを文鎮化すると脅迫。変わらないものもある、マルウェアが洗練されただけ。
+***** Comments
+- Prolok Plusが海賊版使用と判断した時にハードウェアやデータを損傷させるスキームはばかげている。バグや予期せぬ状況で問題が起きた時の責任は誰が取るのか？
+- 私のような古いギークには良い面白い読み物だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+PC 플로피 복사 방지: Vault Prolok
+***** TLDR
+Vault Corporation의 1983년 Prolok 복사 방지는 복사기로 복제할 수 없는 플로피 디스크의 의도적인 물리적 손상('지문')을 사용했다. Prolok Plus가 불법 복제를 감지하면 하드 드라이브를 포맷하거나 바이러스를 심는다고 발표하면서 회사 평판이 무너졌다.
+***** Take
+1983년 DRM 회사가 하드웨어를 벽돌로 만들겠다고 협박. 어떤 것은 변하지 않는다, 그냥 악성코드가 더 정교해질 뿐.
+***** Comments
+- Prolok Plus가 불법 복제 사용이라고 판단할 때 하드웨어나 데이터를 손상시키는 계획은 터무니없어 보인다. 버그나 예상치 못한 상황으로 문제가 생기면 누가 책임지려고?
+- 나 같은 늙은 긱에게는 좋고 재미있는 읽을거리다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Protección de copia de disquetes PC: Vault Prolok
+***** TLDR
+La protección de copia Prolok de Vault Corporation de 1983 usaba daño físico intencional ('huellas dactilares') en disquetes que no podían ser replicados por copiadoras. La reputación de la empresa se desplomó cuando anunciaron que Prolok Plus formatearía discos duros o plantaría virus si detectaba piratería.
+***** Take
+Empresas de DRM amenazando con inutilizar tu hardware en 1983. Algunas cosas nunca cambian, solo se vuelven malware más sofisticado.
+***** Comments
+- El plan de dañar hardware o datos cuando Prolok Plus cree que alguien está usando una copia pirata parece ridículo. ¿Quién quiere lidiar con la responsabilidad cuando esto sale mal por un bug o circunstancias inesperadas?
+- Para un viejo geek como yo, es una lectura interesante.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+PC-Disketten-Kopierschutz: Vault Prolok
+***** TLDR
+Vault Corporations Prolok-Kopierschutz von 1983 verwendete absichtliche physische Beschädigung ('Fingerabdrücke') auf Disketten, die von Kopierern nicht repliziert werden konnten. Der Ruf des Unternehmens brach zusammen, als sie ankündigten, dass Prolok Plus Festplatten formatieren oder Viren einpflanzen würde, wenn es Piraterie erkennt.
+***** Take
+DRM-Unternehmen drohten 1983, deine Hardware zu zerstören. Manche Dinge ändern sich nie, sie werden nur zu ausgefeilterem Malware.
+***** Comments
+- Das Schema, Hardware oder Daten zu beschädigen, wenn Prolok Plus denkt, dass jemand eine Raubkopie benutzt, scheint lächerlich. Wer will sich mit der Haftung auseinandersetzen, wenn das wegen eines Bugs oder unerwarteter Umstände schiefgeht?
+- Für einen alten Geek wie mich ist es eine gute interessante Lektüre.
