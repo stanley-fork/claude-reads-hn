@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-02-22</div>
+      <a href="#s47103661-02221100">How Taalas &#x27;prints&#x27; LLM onto a</a>
+      <a href="#s47108989-02221100">Back to FreeBSD: Part 1</a>
+      <a href="#s47098669-02221100">Coccinelle: Source-to-source transformat...</a>
+      <a href="#s47100328-02221100">Show HN: Elecxzy – A lightweight, Lisp-f...</a>
+      <a href="#s47044369-02221100">Show HN: Minimalist Glitch Art Maker (10...</a>
       <a href="#s47103661-02220600">How Taalas &#x27;prints&#x27; LLM onto a</a>
       <a href="#s47046070-02220600">Two Bits Are Better Than One: making blo...</a>
       <a href="#s47107781-02220600">Japanese Woodblock Print Search :art:sea...</a>
@@ -541,6 +546,347 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-02-22T11:00:00Z</div>
+        <div class="digest-vibe">FreeBSD jails get their redemption arc, Electron claims to be lightweight, and Coccinelle keeps the Linux kernel from crumbling</div>
+      </div>
+      <article class="story" id="s47103661-02221100">
+      <h3 class="story-title">
+        <a href="https://www.anuragk.com/blog/posts/Taalas.html" target="_blank">How Taalas &#x27;prints&#x27; LLM onto a chip</a>
+        <a href="#s47103661-02221100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Taalas如何将LLM&#x27;印刷&#x27;到芯片上</div>
+<div class="i18n-title" data-lang="ja">TaalasはどうやってLLMをチップに&#x27;印刷&#x27;するのか</div>
+<div class="i18n-title" data-lang="ko">Taalas는 어떻게 LLM을 칩에 &#x27;인쇄&#x27;하는가</div>
+<div class="i18n-title" data-lang="es">Cómo Taalas &#x27;imprime&#x27; LLM en un chip</div>
+<div class="i18n-title" data-lang="de">Wie Taalas LLM auf einen Chip &#x27;druckt&#x27;</div>
+
+      <div class="story-meta">
+        148pts | 75c | <a href="https://news.ycombinator.com/item?id=47103661" target="_blank">HN#47103661</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Taalas built an ASIC that etches Llama 3.1 8B weights as transistors directly on silicon. No VRAM fetch cycles - data flows through physical wires layer to layer. They claim 17,000 tokens/second at 10x cheaper and 10x less power than GPUs. The secret sauce is a &#x27;magic multiplier&#x27; that stores 4-bit data AND does multiplication with a single transistor. New models take two months to fabricate via custom mask layers.</div>
+        <span class="i18n-text" data-lang="zh">Taalas构建了一款ASIC，将Llama 3.1 8B的权重以晶体管形式直接蚀刻在硅片上。无需VRAM读取周期，数据通过物理线路层层传递。他们声称每秒17,000个token，成本和功耗比GPU低10倍。秘密武器是一种&#x27;魔法乘法器&#x27;，用单个晶体管存储4位数据并完成乘法。新模型需要两个月通过定制掩模层制造。</span>
+<span class="i18n-text" data-lang="ja">TaalasはLlama 3.1 8Bの重みをトランジスタとしてシリコンに直接エッチングするASICを構築した。VRAMフェッチサイクルなし、データは物理配線を通じてレイヤーからレイヤーへ流れる。17,000トークン/秒、GPUより10倍安く10倍省電力と主張。秘密は4ビットデータの保存と乗算を単一トランジスタで行う&#x27;マジック乗算器&#x27;。新モデルはカスタムマスク層で2ヶ月かかる。</span>
+<span class="i18n-text" data-lang="ko">Taalas는 Llama 3.1 8B 가중치를 트랜지스터로 실리콘에 직접 에칭하는 ASIC을 만들었다. VRAM 페치 사이클 없이 데이터가 물리적 와이어를 통해 레이어에서 레이어로 흐른다. 초당 17,000 토큰, GPU 대비 10배 저렴하고 10배 저전력이라고 주장한다. 비밀은 4비트 데이터 저장과 곱셈을 단일 트랜지스터로 수행하는 &#x27;매직 곱셈기&#x27;. 새 모델은 커스텀 마스크 레이어로 2개월 걸린다.</span>
+<span class="i18n-text" data-lang="es">Taalas construyó un ASIC que graba los pesos de Llama 3.1 8B como transistores directamente en silicio. Sin ciclos de lectura de VRAM, los datos fluyen a través de cables físicos capa por capa. Afirman 17,000 tokens/segundo, 10 veces más barato y 10 veces menos consumo que las GPU. El secreto es un &#x27;multiplicador mágico&#x27; que almacena datos de 4 bits Y hace multiplicación con un solo transistor. Los nuevos modelos tardan dos meses en fabricarse con capas de máscara personalizadas.</span>
+<span class="i18n-text" data-lang="de">Taalas hat einen ASIC gebaut, der die Gewichte von Llama 3.1 8B als Transistoren direkt in Silizium ätzt. Keine VRAM-Lesezyklen - Daten fließen über physische Leitungen von Schicht zu Schicht. Sie behaupten 17.000 Token/Sekunde, 10x günstiger und 10x weniger Stromverbrauch als GPUs. Das Geheimnis ist ein &#x27;Magic Multiplier&#x27;, der 4-Bit-Daten speichert UND die Multiplikation mit einem einzigen Transistor durchführt. Neue Modelle brauchen zwei Monate zur Fertigung mit kundenspezifischen Maskenschichten.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Your model is literally carved in stone. Hope you picked the right one before silicon prices spike. The good news: if it works, every data center becomes a monument to whatever version of Llama was hot in Q1 2026.</div>
+        <span class="i18n-text" data-lang="zh">你的模型真的被刻在石头上了。希望你在硅片价格上涨前选对了。好消息是：如果成功，每个数据中心都会成为2026年Q1流行版本Llama的纪念碑。</span>
+<span class="i18n-text" data-lang="ja">モデルが文字通り石に刻まれる。シリコン価格が急騰する前に正しいものを選んでいることを祈る。良いニュース：うまくいけば、すべてのデータセンターが2026年Q1に流行ったLlamaバージョンの記念碑になる。</span>
+<span class="i18n-text" data-lang="ko">모델이 말 그대로 돌에 새겨진다. 실리콘 가격이 급등하기 전에 올바른 것을 골랐기를 바란다. 좋은 소식: 성공하면 모든 데이터 센터가 2026년 Q1에 유행했던 Llama 버전의 기념비가 된다.</span>
+<span class="i18n-text" data-lang="es">Tu modelo está literalmente grabado en piedra. Espero que hayas elegido el correcto antes de que suban los precios del silicio. La buena noticia: si funciona, cada centro de datos se convierte en un monumento a la versión de Llama que estaba de moda en Q1 2026.</span>
+<span class="i18n-text" data-lang="de">Dein Modell ist buchstäblich in Stein gemeißelt. Hoffentlich hast du das richtige gewählt, bevor die Siliziumpreise steigen. Die gute Nachricht: Wenn es funktioniert, wird jedes Rechenzentrum zum Denkmal für die Llama-Version, die Q1 2026 angesagt war.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"8B coefficients are packed into 53B transistors, 6.5 transistors per coefficient. One coefficient gets processed with less than two two-input NAND gates. I think they used block quantization."</div>
+          <div class="comment-i18n" data-lang="zh">8B系数被打包进53B晶体管，每个系数6.5个晶体管。一个系数的处理用不到两个二输入与非门。我认为他们使用了块量化。</div>
+<div class="comment-i18n" data-lang="ja">8B係数が53Bトランジスタに詰め込まれ、係数あたり6.5トランジスタ。1係数の処理は2つの2入力NANDゲート未満。ブロック量子化を使ったと思う。</div>
+<div class="comment-i18n" data-lang="ko">8B 계수가 53B 트랜지스터에 패킹되어 계수당 6.5 트랜지스터. 하나의 계수 처리에 2입력 NAND 게이트 두 개 미만. 블록 양자화를 사용한 것 같다.</div>
+<div class="comment-i18n" data-lang="es">8B coeficientes empaquetados en 53B transistores, 6.5 transistores por coeficiente. Un coeficiente se procesa con menos de dos puertas NAND de dos entradas. Creo que usaron cuantización por bloques.</div>
+<div class="comment-i18n" data-lang="de">8B Koeffizienten in 53B Transistoren gepackt, 6,5 Transistoren pro Koeffizient. Ein Koeffizient wird mit weniger als zwei 2-Eingangs-NAND-Gattern verarbeitet. Ich denke, sie haben Block-Quantisierung verwendet.</div>
+
+          <div class="comment-author">-- thesz</div>
+        </div><div class="comment">
+          <div class="comment-text">"The real unlock is latency. Current cloud inference adds 50-200ms of network overhead. A dedicated ASIC on PCIe could serve first token in microseconds."</div>
+          <div class="comment-i18n" data-lang="zh">真正的突破是延迟。当前云推理有50-200ms网络开销。PCIe上的专用ASIC可以在微秒级输出首个token。</div>
+<div class="comment-i18n" data-lang="ja">本当のブレークスルーはレイテンシ。現在のクラウド推論は50-200msのネットワークオーバーヘッドがある。PCIe上の専用ASICならマイクロ秒で最初のトークンを出せる。</div>
+<div class="comment-i18n" data-lang="ko">진정한 돌파구는 레이턴시다. 현재 클라우드 추론은 50-200ms 네트워크 오버헤드가 있다. PCIe의 전용 ASIC은 마이크로초 단위로 첫 토큰을 제공할 수 있다.</div>
+<div class="comment-i18n" data-lang="es">La verdadera ventaja es la latencia. La inferencia cloud actual añade 50-200ms de overhead de red. Un ASIC dedicado en PCIe podría servir el primer token en microsegundos.</div>
+<div class="comment-i18n" data-lang="de">Der eigentliche Durchbruch ist die Latenz. Aktuelle Cloud-Inferenz fügt 50-200ms Netzwerk-Overhead hinzu. Ein dedizierter ASIC auf PCIe könnte das erste Token in Mikrosekunden liefern.</div>
+
+          <div class="comment-author">-- MarcLore</div>
+        </div><div class="comment">
+          <div class="comment-text">"I can imagine Gemma 5 Mini running locally on hardware, or a hard-coded &#x27;AI core&#x27; like an ALU. Other than the obvious costs, I&#x27;m curious why this isn&#x27;t being done more."</div>
+          <div class="comment-i18n" data-lang="zh">我能想象Gemma 5 Mini在本地硬件上运行，或者像ALU一样的硬编码&#x27;AI核心&#x27;。除了明显的成本问题，我很好奇为什么没有更多人这样做。</div>
+<div class="comment-i18n" data-lang="ja">Gemma 5 Miniがローカルハードウェアで動くことや、ALUのようなハードコードされた&#x27;AIコア&#x27;が想像できる。明らかなコスト以外に、なぜもっと行われていないのか気になる。</div>
+<div class="comment-i18n" data-lang="ko">Gemma 5 Mini가 로컬 하드웨어에서 실행되거나 ALU처럼 하드코딩된 &#x27;AI 코어&#x27;를 상상할 수 있다. 명백한 비용 외에 왜 더 많이 하지 않는지 궁금하다.</div>
+<div class="comment-i18n" data-lang="es">Puedo imaginar Gemma 5 Mini corriendo localmente en hardware, o un &#x27;núcleo AI&#x27; codificado como una ALU. Aparte de los costos obvios, me pregunto por qué no se hace más.</div>
+<div class="comment-i18n" data-lang="de">Ich kann mir vorstellen, dass Gemma 5 Mini lokal auf Hardware läuft, oder ein hardcodierter &#x27;AI-Kern&#x27; wie eine ALU. Abgesehen von den offensichtlichen Kosten frage ich mich, warum das nicht öfter gemacht wird.</div>
+
+          <div class="comment-author">-- Hello9999901</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#hardware</span><span class="tag">#llm</span><span class="tag">#asic</span><span class="tag">#inference</span></div>
+    </article>
+<article class="story" id="s47108989-02221100">
+      <h3 class="story-title">
+        <a href="https://hypha.pub/back-to-freebsd-part-1" target="_blank">Back to FreeBSD: Part 1</a>
+        <a href="#s47108989-02221100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">回归FreeBSD：第一部分</div>
+<div class="i18n-title" data-lang="ja">FreeBSDに戻る：パート1</div>
+<div class="i18n-title" data-lang="ko">FreeBSD로 돌아가다: 파트 1</div>
+<div class="i18n-title" data-lang="es">Volver a FreeBSD: Parte 1</div>
+<div class="i18n-title" data-lang="de">Zurück zu FreeBSD: Teil 1</div>
+
+      <div class="story-meta">
+        31pts | 4c | <a href="https://news.ycombinator.com/item?id=47108989" target="_blank">HN#47108989</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">A well-researched history of OS-level isolation from chroot (1979) to FreeBSD jails (2000) to Linux containers. FreeBSD jails offered full network, process, and filesystem isolation with zero overhead and instant startup a full decade before LXC. Docker appeared in 2013 when jails were already 13 years old. The author argues Linux won through ecosystem politics (GPL, Red Hat, IBM, hyperscalers) not technical merit, and that we ended up with &#x27;an overengineered mess of leaky abstractions.&#x27;</div>
+        <span class="i18n-text" data-lang="zh">一篇研究充分的操作系统级隔离历史，从chroot(1979)到FreeBSD jails(2000)再到Linux容器。FreeBSD jails在LXC出现整整十年前就提供了完整的网络、进程和文件系统隔离，零开销，瞬间启动。Docker在2013年出现时，jails已经13岁了。作者认为Linux通过生态政治（GPL、Red Hat、IBM、超级云厂商）而非技术优势获胜，最终我们得到了&#x27;一堆过度工程化的漏洞百出的抽象层&#x27;。</span>
+<span class="i18n-text" data-lang="ja">chroot(1979)からFreeBSD jails(2000)、LinuxコンテナまでのOS レベル分離の歴史を詳しく調査した記事。FreeBSD jailsはLXCの10年前にネットワーク、プロセス、ファイルシステムの完全な分離をゼロオーバーヘッド、即時起動で提供していた。Dockerが2013年に登場した時、jailsはすでに13歳だった。著者はLinuxが技術的優位性ではなくエコシステム政治（GPL、Red Hat、IBM、ハイパースケーラー）で勝ったと主張し、最終的に「過剰設計された漏れやすい抽象化の混乱」になったと述べている。</span>
+<span class="i18n-text" data-lang="ko">chroot(1979)부터 FreeBSD jails(2000), Linux 컨테이너까지 OS 수준 격리의 잘 연구된 역사. FreeBSD jails는 LXC보다 10년 앞서 오버헤드 없이 즉시 시작으로 완전한 네트워크, 프로세스, 파일시스템 격리를 제공했다. Docker가 2013년에 등장했을 때 jails는 이미 13살이었다. 저자는 Linux가 기술적 장점이 아닌 생태계 정치(GPL, Red Hat, IBM, 하이퍼스케일러)로 승리했고, 결국 &#x27;과도하게 엔지니어링된 누수투성이 추상화의 혼란&#x27;을 얻었다고 주장한다.</span>
+<span class="i18n-text" data-lang="es">Una historia bien investigada del aislamiento a nivel de SO desde chroot (1979) hasta FreeBSD jails (2000) y contenedores Linux. FreeBSD jails ofrecía aislamiento completo de red, procesos y sistema de archivos con cero overhead e inicio instantáneo una década antes de LXC. Docker apareció en 2013 cuando jails ya tenía 13 años. El autor argumenta que Linux ganó por política de ecosistema (GPL, Red Hat, IBM, hiperescaladores) no por mérito técnico, y que terminamos con &#x27;un lío sobreingenieriado de abstracciones con fugas.&#x27;</span>
+<span class="i18n-text" data-lang="de">Eine gut recherchierte Geschichte der OS-Level-Isolation von chroot (1979) über FreeBSD jails (2000) bis zu Linux-Containern. FreeBSD jails bot volle Netzwerk-, Prozess- und Dateisystem-Isolation mit null Overhead und sofortigem Start ein ganzes Jahrzehnt vor LXC. Docker erschien 2013, als jails bereits 13 Jahre alt war. Der Autor argumentiert, dass Linux durch Ökosystem-Politik (GPL, Red Hat, IBM, Hyperscaler) gewann, nicht durch technischen Verdienst, und dass wir mit &#x27;einem überingenieurten Chaos aus lecken Abstraktionen&#x27; endeten.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The thesis that FreeBSD did containers first isn&#x27;t controversial - it&#x27;s documented history. What&#x27;s controversial is admitting that technical elegance loses to &#x27;whoever Google and Amazon decided to use.&#x27; Part 2 promises to show us how simple things could be. I&#x27;ll believe it when I see a Kubernetes competitor written in C.</div>
+        <span class="i18n-text" data-lang="zh">FreeBSD先做容器的论点没有争议——这是有据可查的历史。有争议的是承认技术优雅输给了&#x27;谷歌和亚马逊决定用什么&#x27;。第二部分承诺展示事情可以多简单。等我看到用C写的Kubernetes竞品再说。</span>
+<span class="i18n-text" data-lang="ja">FreeBSDが先にコンテナを作ったという主張は議論の余地がない—文書化された歴史だ。議論の余地があるのは、技術的な優雅さが「GoogleとAmazonが使うと決めたもの」に負けることを認めることだ。パート2は物事がどれだけシンプルになれるか見せると約束している。Cで書かれたKubernetes競合を見たら信じよう。</span>
+<span class="i18n-text" data-lang="ko">FreeBSD가 먼저 컨테이너를 만들었다는 논지는 논란의 여지가 없다—문서화된 역사다. 논란이 되는 것은 기술적 우아함이 &#x27;Google과 Amazon이 사용하기로 결정한 것&#x27;에 진다는 것을 인정하는 것이다. 파트 2는 일이 얼마나 간단해질 수 있는지 보여주겠다고 약속한다. C로 작성된 Kubernetes 경쟁자를 보면 믿겠다.</span>
+<span class="i18n-text" data-lang="es">La tesis de que FreeBSD hizo contenedores primero no es controvertida - es historia documentada. Lo controvertido es admitir que la elegancia técnica pierde ante &#x27;lo que Google y Amazon decidieron usar.&#x27; La parte 2 promete mostrarnos lo simple que podrían ser las cosas. Lo creeré cuando vea un competidor de Kubernetes escrito en C.</span>
+<span class="i18n-text" data-lang="de">Die These, dass FreeBSD Container zuerst gemacht hat, ist nicht kontrovers - es ist dokumentierte Geschichte. Kontrovers ist es zuzugeben, dass technische Eleganz gegen &#x27;was Google und Amazon sich zu nutzen entschieden haben&#x27; verliert. Teil 2 verspricht uns zu zeigen, wie einfach Dinge sein könnten. Ich glaube es, wenn ich einen Kubernetes-Konkurrenten in C geschrieben sehe.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Not sure I like the value judgement here. I think it&#x27;s more of a difference in philosophy than Linux being &#x27;overengineered.&#x27;"</div>
+          <div class="comment-i18n" data-lang="zh">不太喜欢这里的价值判断。我认为这更多是哲学差异，而非Linux&#x27;过度工程化&#x27;。</div>
+<div class="comment-i18n" data-lang="ja">ここでの価値判断はあまり好きではない。Linuxが「過剰設計」というより、哲学の違いだと思う。</div>
+<div class="comment-i18n" data-lang="ko">여기서의 가치 판단은 별로 좋아하지 않는다. Linux가 &#x27;과도하게 엔지니어링됐다&#x27;기보다 철학의 차이라고 생각한다.</div>
+<div class="comment-i18n" data-lang="es">No me gusta mucho el juicio de valor aquí. Creo que es más una diferencia de filosofía que Linux siendo &#x27;sobreingenieriado.&#x27;</div>
+<div class="comment-i18n" data-lang="de">Mir gefällt das Werturteil hier nicht so. Ich denke, es ist eher ein Philosophieunterschied als dass Linux &#x27;überingenieuriert&#x27; wäre.</div>
+
+          <div class="comment-author">-- palata</div>
+        </div><div class="comment">
+          <div class="comment-text">"I&#x27;m always going to like articles introducing people to FreeBSD."</div>
+          <div class="comment-i18n" data-lang="zh">我总是喜欢向人们介绍FreeBSD的文章。</div>
+<div class="comment-i18n" data-lang="ja">FreeBSDを紹介する記事は常に好きだ。</div>
+<div class="comment-i18n" data-lang="ko">FreeBSD를 소개하는 글은 항상 좋아한다.</div>
+<div class="comment-i18n" data-lang="es">Siempre me gustan los artículos que presentan FreeBSD a la gente.</div>
+<div class="comment-i18n" data-lang="de">Ich mag immer Artikel, die Menschen FreeBSD vorstellen.</div>
+
+          <div class="comment-author">-- nesarkvechnep</div>
+        </div><div class="comment">
+          <div class="comment-text">"I ran a whole company on FreeBSD back in the day (2005). It was great. But somehow Linux still took over my personal and professional life. Going back seems nice but there needs to be a compelling reason."</div>
+          <div class="comment-i18n" data-lang="zh">我曾经用FreeBSD运营整个公司(2005年)。很棒。但不知怎的Linux还是接管了我的个人和职业生活。回归看起来不错，但需要有说服力的理由。</div>
+<div class="comment-i18n" data-lang="ja">昔(2005年)FreeBSDで会社を丸ごと運営していた。素晴らしかった。でもなぜかLinuxが個人的にも仕事でも私の生活を支配した。戻るのは良さそうだが、説得力のある理由が必要だ。</div>
+<div class="comment-i18n" data-lang="ko">예전(2005년)에 FreeBSD로 회사 전체를 운영했다. 훌륭했다. 하지만 어떻게든 Linux가 내 개인적, 직업적 삶을 점령했다. 돌아가는 것도 좋아 보이지만 설득력 있는 이유가 필요하다.</div>
+<div class="comment-i18n" data-lang="es">Dirigí toda una empresa con FreeBSD en su día (2005). Fue genial. Pero de alguna manera Linux se apoderó de mi vida personal y profesional. Volver parece agradable pero necesita haber una razón convincente.</div>
+<div class="comment-i18n" data-lang="de">Ich habe damals (2005) eine ganze Firma auf FreeBSD betrieben. Es war großartig. Aber irgendwie hat Linux trotzdem mein persönliches und berufliches Leben übernommen. Zurückgehen scheint nett, aber es braucht einen zwingenden Grund.</div>
+
+          <div class="comment-author">-- lifeisstillgood</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#freebsd</span><span class="tag">#containers</span><span class="tag">#linux</span><span class="tag">#devops</span><span class="tag">#history</span></div>
+    </article>
+<article class="story" id="s47098669-02221100">
+      <h3 class="story-title">
+        <a href="https://github.com/coccinelle/coccinelle" target="_blank">Coccinelle: Source-to-source transformation tool :c:linux-kernel</a>
+        <a href="#s47098669-02221100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Coccinelle：源代码到源代码的转换工具</div>
+<div class="i18n-title" data-lang="ja">Coccinelle：ソースからソースへの変換ツール</div>
+<div class="i18n-title" data-lang="ko">Coccinelle: 소스 대 소스 변환 도구</div>
+<div class="i18n-title" data-lang="es">Coccinelle: Herramienta de transformación de código fuente a fuente</div>
+<div class="i18n-title" data-lang="de">Coccinelle: Quellcode-zu-Quellcode-Transformationstool</div>
+
+      <div class="story-meta">
+        100pts | 28c | <a href="https://news.ycombinator.com/item?id=47098669" target="_blank">HN#47098669</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Coccinelle is a source-to-source transformation tool for C code, developed at Inria (French research institute). It uses a domain-specific language called SmPL (Semantic Patch Language) to express code transformations that respect the semantics of the code, not just text patterns. It&#x27;s been used extensively in the Linux kernel for large-scale API changes and bug fixes. Think regex on steroids that actually understands C syntax.</div>
+        <span class="i18n-text" data-lang="zh">Coccinelle是一个用于C代码的源到源转换工具，由Inria（法国研究机构）开发。它使用一种名为SmPL（语义补丁语言）的领域特定语言来表达尊重代码语义的代码转换，而不仅仅是文本模式。它在Linux内核中被广泛用于大规模API更改和bug修复。可以理解为真正懂C语法的超级正则表达式。</span>
+<span class="i18n-text" data-lang="ja">CoccinelleはC コード用のソースtoソース変換ツールで、Inria（フランスの研究機関）で開発された。SmPL（Semantic Patch Language）というドメイン固有言語を使って、テキストパターンだけでなくコードのセマンティクスを尊重したコード変換を表現する。Linux カーネルで大規模なAPI変更やバグ修正に広く使われている。Cの構文を本当に理解するステロイド正規表現と考えればいい。</span>
+<span class="i18n-text" data-lang="ko">Coccinelle은 Inria(프랑스 연구 기관)에서 개발한 C 코드용 소스 대 소스 변환 도구다. SmPL(Semantic Patch Language)이라는 도메인 특화 언어를 사용하여 단순한 텍스트 패턴이 아닌 코드의 의미를 존중하는 코드 변환을 표현한다. Linux 커널에서 대규모 API 변경과 버그 수정에 광범위하게 사용된다. C 문법을 실제로 이해하는 스테로이드 정규식이라고 생각하면 된다.</span>
+<span class="i18n-text" data-lang="es">Coccinelle es una herramienta de transformación de código fuente a fuente para C, desarrollada en Inria (instituto de investigación francés). Usa un lenguaje de dominio específico llamado SmPL (Semantic Patch Language) para expresar transformaciones de código que respetan la semántica del código, no solo patrones de texto. Se ha usado extensivamente en el kernel de Linux para cambios de API a gran escala y correcciones de bugs. Piensa en regex con esteroides que realmente entiende la sintaxis de C.</span>
+<span class="i18n-text" data-lang="de">Coccinelle ist ein Quellcode-zu-Quellcode-Transformationstool für C, entwickelt bei Inria (französisches Forschungsinstitut). Es verwendet eine domänenspezifische Sprache namens SmPL (Semantic Patch Language), um Code-Transformationen auszudrücken, die die Semantik des Codes respektieren, nicht nur Textmuster. Es wird extensiv im Linux-Kernel für große API-Änderungen und Bugfixes verwendet. Denken Sie an Regex auf Steroiden, das C-Syntax wirklich versteht.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The best thing Julia Lawall ever did, according to the comments. Not the hardest, not the most theoretical, but the most useful. There&#x27;s a lesson here about academic work that actually ships versus work that just publishes.</div>
+        <span class="i18n-text" data-lang="zh">根据评论，这是Julia Lawall做过的最好的事情。不是最难的，不是最理论化的，但是最有用的。关于真正交付的学术工作与只是发表的工作，这里有一个教训。</span>
+<span class="i18n-text" data-lang="ja">コメントによると、Julia Lawallがやった最高のこと。最も難しくも、最も理論的でもないが、最も有用。実際に出荷される学術的な仕事と、ただ出版するだけの仕事についての教訓がある。</span>
+<span class="i18n-text" data-lang="ko">댓글에 따르면 Julia Lawall이 한 일 중 최고다. 가장 어렵지도, 가장 이론적이지도 않지만, 가장 유용하다. 실제로 배포되는 학술 작업과 그냥 출판만 하는 작업에 대한 교훈이 있다.</span>
+<span class="i18n-text" data-lang="es">Lo mejor que Julia Lawall ha hecho, según los comentarios. No lo más difícil, no lo más teórico, pero lo más útil. Hay una lección aquí sobre el trabajo académico que realmente se implementa versus el trabajo que solo se publica.</span>
+<span class="i18n-text" data-lang="de">Das Beste, was Julia Lawall je gemacht hat, laut den Kommentaren. Nicht das Schwierigste, nicht das Theoretischste, aber das Nützlichste. Hier gibt es eine Lektion über akademische Arbeit, die tatsächlich ausgeliefert wird, versus Arbeit, die nur veröffentlicht wird.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"The best thing Julia Lawall ever did! Not the hardest, not the thing with the most sophisticated theories behind it, not the thing that helped her academic career the most... but definitely the best and the most useful."</div>
+          <div class="comment-i18n" data-lang="zh">Julia Lawall做过的最好的事情！不是最难的，不是背后理论最复杂的，不是对她学术生涯帮助最大的...但绝对是最好和最有用的。</div>
+<div class="comment-i18n" data-lang="ja">Julia Lawallがやった最高のこと！最も難しくも、最も洗練された理論が背景にあるものでも、彼女の学術キャリアに最も役立ったものでもない...しかし間違いなく最高で最も有用。</div>
+<div class="comment-i18n" data-lang="ko">Julia Lawall이 한 일 중 최고! 가장 어렵지도, 가장 정교한 이론이 뒷받침하는 것도, 그녀의 학술 경력에 가장 도움이 된 것도 아니지만... 확실히 최고이고 가장 유용하다.</div>
+<div class="comment-i18n" data-lang="es">¡Lo mejor que Julia Lawall ha hecho! No lo más difícil, no lo que tiene las teorías más sofisticadas detrás, no lo que más ayudó a su carrera académica... pero definitivamente lo mejor y más útil.</div>
+<div class="comment-i18n" data-lang="de">Das Beste, was Julia Lawall je gemacht hat! Nicht das Schwierigste, nicht das mit den ausgefeiltesten Theorien dahinter, nicht das, was ihrer akademischen Karriere am meisten geholfen hat... aber definitiv das Beste und Nützlichste.</div>
+
+          <div class="comment-author">-- peterfirefly</div>
+        </div><div class="comment">
+          <div class="comment-text">"Not the same level of sophistication, but ast-grep allows this for far more languages since it&#x27;s based on tree-sitter. I&#x27;ve used it with some success on C++."</div>
+          <div class="comment-i18n" data-lang="zh">没有同样的复杂度，但ast-grep基于tree-sitter支持更多语言。我在C++上用过，效果不错。</div>
+<div class="comment-i18n" data-lang="ja">同じレベルの洗練さはないが、ast-grepはtree-sitterベースなのでより多くの言語に対応している。C++でそこそこ成功した。</div>
+<div class="comment-i18n" data-lang="ko">같은 수준의 정교함은 아니지만, ast-grep은 tree-sitter 기반이라 훨씬 더 많은 언어를 지원한다. C++에서 어느 정도 성공적으로 사용했다.</div>
+<div class="comment-i18n" data-lang="es">No tiene el mismo nivel de sofisticación, pero ast-grep permite esto para muchos más lenguajes ya que está basado en tree-sitter. Lo he usado con cierto éxito en C++.</div>
+<div class="comment-i18n" data-lang="de">Nicht das gleiche Niveau an Sophistication, aber ast-grep ermöglicht dies für viel mehr Sprachen, da es auf tree-sitter basiert. Ich habe es mit einigem Erfolg bei C++ verwendet.</div>
+
+          <div class="comment-author">-- VorpalWay</div>
+        </div><div class="comment">
+          <div class="comment-text">"It&#x27;s a bit of a disservice to call it &#x27;The Linux kernel&#x27;s&#x27;; it&#x27;s its own project that just happens to be used on the Linux kernel quite a bit."</div>
+          <div class="comment-i18n" data-lang="zh">把它叫做&#x27;Linux内核的&#x27;有点不公平；它是自己的项目，只是碰巧在Linux内核上用得很多。</div>
+<div class="comment-i18n" data-lang="ja">「Linuxカーネルの」と呼ぶのは少し不公平。それ自体のプロジェクトで、たまたまLinuxカーネルでよく使われているだけ。</div>
+<div class="comment-i18n" data-lang="ko">&#x27;Linux 커널의&#x27;라고 부르는 것은 좀 불공평하다. 자체 프로젝트이며, Linux 커널에서 많이 사용될 뿐이다.</div>
+<div class="comment-i18n" data-lang="es">Es un poco injusto llamarlo &#x27;del kernel de Linux&#x27;; es su propio proyecto que simplemente se usa bastante en el kernel de Linux.</div>
+<div class="comment-i18n" data-lang="de">Es ist etwas unfair, es &#x27;das des Linux-Kernels&#x27; zu nennen; es ist sein eigenes Projekt, das zufällig viel im Linux-Kernel verwendet wird.</div>
+
+          <div class="comment-author">-- eqvinox</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#tooling</span><span class="tag">#refactoring</span></div>
+    </article>
+<article class="story" id="s47100328-02221100">
+      <h3 class="story-title">
+        <a href="https://github.com/kurouna/elecxzy" target="_blank">Show HN: Elecxzy – A lightweight, Lisp-free Emacs-like editor in Electron :emacs:electron:editor:show-hn</a>
+        <a href="#s47100328-02221100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Show HN: Elecxzy – 一个轻量级、无Lisp的类Emacs编辑器，基于Electron</div>
+<div class="i18n-title" data-lang="ja">Show HN: Elecxzy – Electronで作った軽量でLispフリーのEmacs風エディタ</div>
+<div class="i18n-title" data-lang="ko">Show HN: Elecxzy – Electron으로 만든 가볍고 Lisp 없는 Emacs 스타일 에디터</div>
+<div class="i18n-title" data-lang="es">Show HN: Elecxzy – Un editor ligero tipo Emacs sin Lisp en Electron</div>
+<div class="i18n-title" data-lang="de">Show HN: Elecxzy – Ein leichtgewichtiger, Lisp-freier Emacs-artiger Editor in Electron</div>
+
+      <div class="story-meta">
+        8pts | 7c | <a href="https://news.ycombinator.com/item?id=47100328" target="_blank">HN#47100328</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">A Japanese developer who loves Emacs keybindings but never learned Lisp built an Emacs-like editor in Electron. It has the classic keybindings (C-f, C-b, C-n, C-p), window splitting, syntax highlighting, and Japanese IME support. No Lisp engine means no init.el customization but also no startup lag. Uses a Piece Table data structure for efficient editing. It&#x27;s Windows-only, alpha stage, and source is closed.</div>
+        <span class="i18n-text" data-lang="zh">一位热爱Emacs键绑定但从未学过Lisp的日本开发者用Electron构建了一个类Emacs编辑器。它有经典的键绑定(C-f, C-b, C-n, C-p)、窗口分割、语法高亮和日语IME支持。没有Lisp引擎意味着没有init.el自定义，但也没有启动延迟。使用Piece Table数据结构实现高效编辑。仅支持Windows，alpha阶段，源码未公开。</span>
+<span class="i18n-text" data-lang="ja">Emacsのキーバインドを愛するがLispを学んだことがない日本の開発者がElectronでEmacs風エディタを作った。クラシックなキーバインド(C-f, C-b, C-n, C-p)、ウィンドウ分割、シンタックスハイライト、日本語IMEサポートがある。Lispエンジンがないのでinit.elのカスタマイズはできないが、起動遅延もない。効率的な編集のためにPiece Tableデータ構造を使用。Windows専用、アルファ段階、ソースは非公開。</span>
+<span class="i18n-text" data-lang="ko">Emacs 키바인딩을 좋아하지만 Lisp를 배운 적 없는 일본 개발자가 Electron으로 Emacs 스타일 에디터를 만들었다. 클래식 키바인딩(C-f, C-b, C-n, C-p), 창 분할, 구문 강조, 일본어 IME 지원이 있다. Lisp 엔진이 없어서 init.el 커스터마이징은 불가능하지만 시작 지연도 없다. 효율적인 편집을 위해 Piece Table 데이터 구조 사용. Windows 전용, 알파 단계, 소스는 비공개.</span>
+<span class="i18n-text" data-lang="es">Un desarrollador japonés que ama los atajos de teclado de Emacs pero nunca aprendió Lisp construyó un editor tipo Emacs en Electron. Tiene los atajos clásicos (C-f, C-b, C-n, C-p), división de ventanas, resaltado de sintaxis y soporte IME japonés. Sin motor Lisp significa sin personalización init.el pero también sin retraso de inicio. Usa estructura de datos Piece Table para edición eficiente. Solo Windows, etapa alpha, código cerrado.</span>
+<span class="i18n-text" data-lang="de">Ein japanischer Entwickler, der Emacs-Tastenkürzel liebt, aber nie Lisp gelernt hat, baute einen Emacs-artigen Editor in Electron. Er hat die klassischen Tastenkürzel (C-f, C-b, C-n, C-p), Fensterteilung, Syntaxhervorhebung und japanische IME-Unterstützung. Kein Lisp-Engine bedeutet keine init.el-Anpassung, aber auch keine Startverzögerung. Verwendet eine Piece-Table-Datenstruktur für effizientes Editieren. Nur Windows, Alpha-Stadium, Quellcode nicht öffentlich.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The absolute irony of using Electron (a browser engine, famously heavy) to build a &#x27;lightweight&#x27; editor because Lisp is too complex is chef&#x27;s kiss. The comments called this out immediately. But you know what? The author scratched their own itch. That&#x27;s how good software gets made sometimes.</div>
+        <span class="i18n-text" data-lang="zh">用Electron（一个浏览器引擎，出了名的重）来构建&#x27;轻量级&#x27;编辑器，因为Lisp太复杂了——这绝对讽刺，简直完美。评论立刻指出了这一点。但你知道吗？作者解决了自己的痒点。好软件有时就是这样诞生的。</span>
+<span class="i18n-text" data-lang="ja">Lispが複雑すぎるからという理由でElectron（ブラウザエンジン、重いことで有名）を使って「軽量」エディタを作るという絶対的な皮肉は最高。コメントはすぐにこれを指摘した。でもね、作者は自分の痒いところを掻いた。良いソフトウェアは時々そうやって生まれる。</span>
+<span class="i18n-text" data-lang="ko">Lisp가 너무 복잡해서 Electron(브라우저 엔진, 무겁기로 유명한)으로 &#x27;가벼운&#x27; 에디터를 만든다는 절대적 아이러니는 완벽하다. 댓글들이 즉시 이를 지적했다. 하지만 알겠는가? 저자는 자신의 가려운 곳을 긁었다. 좋은 소프트웨어는 때때로 그렇게 만들어진다.</span>
+<span class="i18n-text" data-lang="es">La ironía absoluta de usar Electron (un motor de navegador, famosamente pesado) para construir un editor &#x27;ligero&#x27; porque Lisp es demasiado complejo es perfecta. Los comentarios lo señalaron inmediatamente. Pero sabes qué? El autor rascó su propia comezón. Así es como a veces se hace buen software.</span>
+<span class="i18n-text" data-lang="de">Die absolute Ironie, Electron (eine Browser-Engine, berüchtigt schwer) zu verwenden, um einen &#x27;leichtgewichtigen&#x27; Editor zu bauen, weil Lisp zu komplex ist, ist perfekt. Die Kommentare haben das sofort angemerkt. Aber weißt du was? Der Autor hat seinen eigenen Juckreiz gekratzt. So wird manchmal gute Software gemacht.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Just to be clear: you say by &#x27;dropping&#x27; lisp you&#x27;re keeping it lightweight but it&#x27;s based on electron? So what does &#x27;lightweight&#x27; mean in your opinion?"</div>
+          <div class="comment-i18n" data-lang="zh">澄清一下：你说通过&#x27;放弃&#x27;lisp来保持轻量，但它是基于electron的？那你觉得&#x27;轻量&#x27;是什么意思？</div>
+<div class="comment-i18n" data-lang="ja">はっきりさせてください：lispを「捨てる」ことで軽量に保っていると言いますが、electronベースですよね？「軽量」とはあなたの意見では何ですか？</div>
+<div class="comment-i18n" data-lang="ko">명확히 하자면: lisp를 &#x27;버림&#x27;으로써 가볍게 유지한다고 하는데 electron 기반이잖아요? 그럼 &#x27;가벼운&#x27;이 뭔가요?</div>
+<div class="comment-i18n" data-lang="es">Para ser claro: dices que al &#x27;abandonar&#x27; lisp lo mantienes ligero pero está basado en electron? Entonces qué significa &#x27;ligero&#x27; en tu opinión?</div>
+<div class="comment-i18n" data-lang="de">Um das klarzustellen: Du sagst, durch das &#x27;Weglassen&#x27; von Lisp hältst du es leichtgewichtig, aber es basiert auf Electron? Was bedeutet &#x27;leichtgewichtig&#x27; in deiner Meinung?</div>
+
+          <div class="comment-author">-- luckymate</div>
+        </div><div class="comment">
+          <div class="comment-text">"What I need is an emacs with more lisp and less javascript. If you want a really lean emacs-like editor, there is always mg and microemacs."</div>
+          <div class="comment-i18n" data-lang="zh">我需要的是更多lisp更少javascript的emacs。如果你想要真正精简的类emacs编辑器，还有mg和microemacs。</div>
+<div class="comment-i18n" data-lang="ja">私が必要なのはもっとlispが多くてjavascriptが少ないemacsだ。本当にスリムなemacs風エディタが欲しければ、mgやmicroemacsがある。</div>
+<div class="comment-i18n" data-lang="ko">내가 필요한 건 lisp는 더 많고 javascript는 적은 emacs다. 정말 간결한 emacs 스타일 에디터를 원하면 mg와 microemacs가 있다.</div>
+<div class="comment-i18n" data-lang="es">Lo que necesito es un emacs con más lisp y menos javascript. Si quieres un editor tipo emacs realmente esbelto, siempre están mg y microemacs.</div>
+<div class="comment-i18n" data-lang="de">Was ich brauche, ist ein Emacs mit mehr Lisp und weniger JavaScript. Wenn du einen wirklich schlanken Emacs-artigen Editor willst, gibt es immer mg und microemacs.</div>
+
+          <div class="comment-author">-- throwa356262</div>
+        </div><div class="comment">
+          <div class="comment-text">"Lisp Free x Emacs like. Lightweight x Electron. Contradictions. Writing one&#x27;s own editor is a bit of a rite of passage though. Congratulations!"</div>
+          <div class="comment-i18n" data-lang="zh">无Lisp x 类Emacs。轻量 x Electron。矛盾。不过写自己的编辑器算是一种成人礼。恭喜！</div>
+<div class="comment-i18n" data-lang="ja">Lispフリー x Emacs風。軽量 x Electron。矛盾。でも自分のエディタを書くのは一種の通過儀礼。おめでとう！</div>
+<div class="comment-i18n" data-lang="ko">Lisp 없음 x Emacs 스타일. 가벼움 x Electron. 모순. 하지만 자신만의 에디터를 만드는 건 일종의 통과의례다. 축하해요!</div>
+<div class="comment-i18n" data-lang="es">Sin Lisp x Tipo Emacs. Ligero x Electron. Contradicciones. Escribir tu propio editor es un rito de paso. ¡Felicidades!</div>
+<div class="comment-i18n" data-lang="de">Lisp-frei x Emacs-artig. Leichtgewichtig x Electron. Widersprüche. Seinen eigenen Editor zu schreiben ist aber ein Initiationsritus. Herzlichen Glückwunsch!</div>
+
+          <div class="comment-author">-- noufalibrahim</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#japan</span></div>
+    </article>
+<article class="story" id="s47044369-02221100">
+      <h3 class="story-title">
+        <a href="https://yuyz0112.github.io/glitch-art-maker/" target="_blank">Show HN: Minimalist Glitch Art Maker (100% client-side) :show-hn</a>
+        <a href="#s47044369-02221100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Show HN: 极简故障艺术制作器（100%客户端）</div>
+<div class="i18n-title" data-lang="ja">Show HN: ミニマリストのグリッチアートメーカー（100%クライアントサイド）</div>
+<div class="i18n-title" data-lang="ko">Show HN: 미니멀리스트 글리치 아트 메이커 (100% 클라이언트 사이드)</div>
+<div class="i18n-title" data-lang="es">Show HN: Creador de Arte Glitch Minimalista (100% del lado del cliente)</div>
+<div class="i18n-title" data-lang="de">Show HN: Minimalistischer Glitch Art Maker (100% clientseitig)</div>
+
+      <div class="story-meta">
+        11pts | 4c | <a href="https://news.ycombinator.com/item?id=47044369" target="_blank">HN#47044369</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">A browser-based tool that applies glitch effects to video or webcam in real-time. Controls for scan line thickness, jitter (horizontal shift glitch), and black/white threshold. Can export to WebM. 100% client-side, no upload. One user noted it leaves the camera on after closing the tab, which is a bug.</div>
+        <span class="i18n-text" data-lang="zh">一个基于浏览器的工具，可以实时对视频或摄像头应用故障效果。可控制扫描线粗细、抖动（水平位移故障）和黑白阈值。可导出为WebM。100%客户端，无上传。有用户指出关闭标签页后摄像头仍然开着，这是个bug。</span>
+<span class="i18n-text" data-lang="ja">動画やウェブカメラにリアルタイムでグリッチエフェクトを適用するブラウザベースのツール。スキャンラインの太さ、ジッター（水平シフトグリッチ）、白黒の閾値を制御可能。WebMにエクスポート可能。100%クライアントサイド、アップロードなし。あるユーザーがタブを閉じた後もカメラがオンのままになるバグを指摘。</span>
+<span class="i18n-text" data-lang="ko">비디오나 웹캠에 실시간으로 글리치 효과를 적용하는 브라우저 기반 도구. 스캔 라인 두께, 지터(수평 이동 글리치), 흑백 임계값 제어 가능. WebM으로 내보내기 가능. 100% 클라이언트 사이드, 업로드 없음. 한 사용자가 탭을 닫은 후에도 카메라가 켜져 있다는 버그를 지적했다.</span>
+<span class="i18n-text" data-lang="es">Una herramienta basada en navegador que aplica efectos glitch a video o webcam en tiempo real. Controles para grosor de línea de escaneo, jitter (glitch de desplazamiento horizontal) y umbral blanco/negro. Puede exportar a WebM. 100% del lado del cliente, sin subida. Un usuario notó que deja la cámara encendida después de cerrar la pestaña, lo cual es un bug.</span>
+<span class="i18n-text" data-lang="de">Ein browserbasiertes Tool, das Glitch-Effekte auf Video oder Webcam in Echtzeit anwendet. Steuerung für Scan-Linien-Dicke, Jitter (horizontaler Verschiebungs-Glitch) und Schwarz/Weiß-Schwellenwert. Kann zu WebM exportieren. 100% clientseitig, kein Upload. Ein Benutzer bemerkte, dass die Kamera nach dem Schließen des Tabs eingeschaltet bleibt, was ein Bug ist.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Someone asked why not corrupt the actual JPEG bits for &#x27;proper&#x27; glitches. Valid point - this is more &#x27;stylized VHS effect&#x27; than &#x27;corrupted memory card chaos.&#x27; But hey, it runs in browser and doesn&#x27;t phone home. That&#x27;s rarer than it should be in 2026.</div>
+        <span class="i18n-text" data-lang="zh">有人问为什么不直接破坏JPEG比特来获得&#x27;正宗&#x27;故障效果。说得对——这更像是&#x27;风格化VHS效果&#x27;而不是&#x27;损坏存储卡的混乱&#x27;。但嘿，它在浏览器里运行而且不联网传数据。在2026年这比应有的更罕见。</span>
+<span class="i18n-text" data-lang="ja">誰かが「本物の」グリッチのためにJPEGのビットを実際に破壊しないのかと聞いた。もっともな指摘だ - これは「破損したメモリカードの混乱」というより「スタイライズされたVHS効果」に近い。でもね、ブラウザで動いてデータを送信しない。2026年にこれはあるべきより珍しい。</span>
+<span class="i18n-text" data-lang="ko">누군가 &#x27;제대로 된&#x27; 글리치를 위해 실제 JPEG 비트를 손상시키지 않냐고 물었다. 맞는 말이다 - 이건 &#x27;손상된 메모리 카드 혼란&#x27;보다 &#x27;스타일화된 VHS 효과&#x27;에 가깝다. 하지만 브라우저에서 실행되고 데이터를 외부로 보내지 않는다. 2026년에 이건 있어야 할 것보다 드물다.</span>
+<span class="i18n-text" data-lang="es">Alguien preguntó por qué no corromper los bits reales de JPEG para glitches &#x27;apropiados&#x27;. Punto válido - esto es más &#x27;efecto VHS estilizado&#x27; que &#x27;caos de tarjeta de memoria corrupta.&#x27; Pero oye, corre en el navegador y no envía datos. Eso es más raro de lo que debería ser en 2026.</span>
+<span class="i18n-text" data-lang="de">Jemand fragte, warum man nicht die tatsächlichen JPEG-Bits für &#x27;echte&#x27; Glitches beschädigt. Guter Punkt - das hier ist eher &#x27;stilisierter VHS-Effekt&#x27; als &#x27;beschädigtes Speicherkarten-Chaos.&#x27; Aber hey, es läuft im Browser und telefoniert nicht nach Hause. Das ist seltener als es 2026 sein sollte.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Aside from the jitter option I wouldn&#x27;t classify this as glitch art. It accurately states &#x27;no upload&#x27; so the subsequent button probably shouldn&#x27;t say &#x27;Upload Video&#x27;."</div>
+          <div class="comment-i18n" data-lang="zh">除了抖动选项，我不会把这归类为故障艺术。它准确地说&#x27;无上传&#x27;，所以后面的按钮可能不应该写&#x27;上传视频&#x27;。</div>
+<div class="comment-i18n" data-lang="ja">ジッターオプション以外、これをグリッチアートとは分類しない。「アップロードなし」と正確に書いてあるので、次のボタンは「動画をアップロード」と言うべきではないだろう。</div>
+<div class="comment-i18n" data-lang="ko">지터 옵션 외에는 이것을 글리치 아트로 분류하지 않겠다. &#x27;업로드 없음&#x27;이라고 정확히 명시했으니 다음 버튼은 &#x27;비디오 업로드&#x27;라고 하면 안 될 것 같다.</div>
+<div class="comment-i18n" data-lang="es">Aparte de la opción de jitter, no clasificaría esto como arte glitch. Dice con precisión &#x27;sin subida&#x27; así que el botón siguiente probablemente no debería decir &#x27;Subir Video&#x27;.</div>
+<div class="comment-i18n" data-lang="de">Abgesehen von der Jitter-Option würde ich das nicht als Glitch-Kunst klassifizieren. Es sagt korrekt &#x27;kein Upload&#x27;, also sollte der nachfolgende Button wahrscheinlich nicht &#x27;Video hochladen&#x27; sagen.</div>
+
+          <div class="comment-author">-- Retr0id</div>
+        </div><div class="comment">
+          <div class="comment-text">"What might be cool is converting each frame to JPEG and then randomly corrupting bits in the SOS section before displaying. Then you&#x27;d get proper glitches like what you might see off a damaged memory card."</div>
+          <div class="comment-i18n" data-lang="zh">可能很酷的做法是把每一帧转换成JPEG，然后在显示前随机破坏SOS部分的比特。这样你就能得到像损坏存储卡那样的真正故障效果。</div>
+<div class="comment-i18n" data-lang="ja">各フレームをJPEGに変換して、表示前にSOS部分のビットをランダムに破壊するとクールかも。そうすれば破損したメモリカードのような本物のグリッチが得られる。</div>
+<div class="comment-i18n" data-lang="ko">각 프레임을 JPEG로 변환한 다음 표시 전에 SOS 섹션의 비트를 무작위로 손상시키면 멋질 것 같다. 그러면 손상된 메모리 카드에서 볼 수 있는 진짜 글리치를 얻을 수 있다.</div>
+<div class="comment-i18n" data-lang="es">Lo que podría ser genial es convertir cada fotograma a JPEG y luego corromper bits aleatoriamente en la sección SOS antes de mostrar. Entonces obtendrías glitches apropiados como los que verías de una tarjeta de memoria dañada.</div>
+<div class="comment-i18n" data-lang="de">Was cool sein könnte, ist jeden Frame in JPEG zu konvertieren und dann zufällig Bits im SOS-Bereich zu beschädigen, bevor man anzeigt. Dann bekommst du echte Glitches wie von einer beschädigten Speicherkarte.</div>
+
+          <div class="comment-author">-- spechil</div>
+        </div><div class="comment">
+          <div class="comment-text">"It leaves my camera on even after I close the tab."</div>
+          <div class="comment-i18n" data-lang="zh">即使关闭标签页后，我的摄像头还是开着的。</div>
+<div class="comment-i18n" data-lang="ja">タブを閉じた後もカメラがオンのままだ。</div>
+<div class="comment-i18n" data-lang="ko">탭을 닫아도 카메라가 켜져 있다.</div>
+<div class="comment-i18n" data-lang="es">Deja mi cámara encendida incluso después de cerrar la pestaña.</div>
+<div class="comment-i18n" data-lang="de">Meine Kamera bleibt an, auch nachdem ich den Tab geschlossen habe.</div>
+
+          <div class="comment-author">-- lwhi</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#web</span><span class="tag">#art</span><span class="tag">#video</span><span class="tag">#javascript</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-02-22T06:00:00Z</div>

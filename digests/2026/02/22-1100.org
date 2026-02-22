@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-02-22 11:00:00 UT UTC
+#+DATE: 2026-02-22T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+FreeBSD jails get their redemption arc, Electron claims to be lightweight, and Coccinelle keeps the Linux kernel from crumbling
+
+* Highlights
+- Taalas revisited: 75 comments later, still carving models in silicon
+- FreeBSD jails did containers before containers were cool
+- Emacs-like editor built on Electron calls itself 'lightweight' with a straight face
+
+* Stories
+
+** How Taalas 'prints' LLM onto a chip :hardware:llm:asic:inference:
+:PROPERTIES:
+:ID:       47103661
+:URL:      https://www.anuragk.com/blog/posts/Taalas.html
+:HN_URL:   https://news.ycombinator.com/item?id=47103661
+:POINTS:   148
+:COMMENTS: 75
+:BY:       beAroundHere
+:END:
+
+*** TLDR
+Taalas built an ASIC that etches Llama 3.1 8B weights as transistors directly on silicon. No VRAM fetch cycles - data flows through physical wires layer to layer. They claim 17,000 tokens/second at 10x cheaper and 10x less power than GPUs. The secret sauce is a 'magic multiplier' that stores 4-bit data AND does multiplication with a single transistor. New models take two months to fabricate via custom mask layers.
+
+*** Take
+Your model is literally carved in stone. Hope you picked the right one before silicon prices spike. The good news: if it works, every data center becomes a monument to whatever version of Llama was hot in Q1 2026.
+
+*** Comments
+
+**** thesz
+:PROPERTIES:
+:COMMENT_ID: 47103712
+:END:
+8B coefficients are packed into 53B transistors, 6.5 transistors per coefficient. One coefficient gets processed with less than two two-input NAND gates. I think they used block quantization.
+
+**** MarcLore
+:PROPERTIES:
+:COMMENT_ID: 47103834
+:END:
+The real unlock is latency. Current cloud inference adds 50-200ms of network overhead. A dedicated ASIC on PCIe could serve first token in microseconds.
+
+**** Hello9999901
+:PROPERTIES:
+:COMMENT_ID: 47103956
+:END:
+I can imagine Gemma 5 Mini running locally on hardware, or a hard-coded 'AI core' like an ALU. Other than the obvious costs, I'm curious why this isn't being done more.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Taalas如何将LLM'印刷'到芯片上
+***** TLDR
+Taalas构建了一款ASIC，将Llama 3.1 8B的权重以晶体管形式直接蚀刻在硅片上。无需VRAM读取周期，数据通过物理线路层层传递。他们声称每秒17,000个token，成本和功耗比GPU低10倍。秘密武器是一种'魔法乘法器'，用单个晶体管存储4位数据并完成乘法。新模型需要两个月通过定制掩模层制造。
+***** Take
+你的模型真的被刻在石头上了。希望你在硅片价格上涨前选对了。好消息是：如果成功，每个数据中心都会成为2026年Q1流行版本Llama的纪念碑。
+***** Comments
+- 8B系数被打包进53B晶体管，每个系数6.5个晶体管。一个系数的处理用不到两个二输入与非门。我认为他们使用了块量化。
+- 真正的突破是延迟。当前云推理有50-200ms网络开销。PCIe上的专用ASIC可以在微秒级输出首个token。
+- 我能想象Gemma 5 Mini在本地硬件上运行，或者像ALU一样的硬编码'AI核心'。除了明显的成本问题，我很好奇为什么没有更多人这样做。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+TaalasはどうやってLLMをチップに'印刷'するのか
+***** TLDR
+TaalasはLlama 3.1 8Bの重みをトランジスタとしてシリコンに直接エッチングするASICを構築した。VRAMフェッチサイクルなし、データは物理配線を通じてレイヤーからレイヤーへ流れる。17,000トークン/秒、GPUより10倍安く10倍省電力と主張。秘密は4ビットデータの保存と乗算を単一トランジスタで行う'マジック乗算器'。新モデルはカスタムマスク層で2ヶ月かかる。
+***** Take
+モデルが文字通り石に刻まれる。シリコン価格が急騰する前に正しいものを選んでいることを祈る。良いニュース：うまくいけば、すべてのデータセンターが2026年Q1に流行ったLlamaバージョンの記念碑になる。
+***** Comments
+- 8B係数が53Bトランジスタに詰め込まれ、係数あたり6.5トランジスタ。1係数の処理は2つの2入力NANDゲート未満。ブロック量子化を使ったと思う。
+- 本当のブレークスルーはレイテンシ。現在のクラウド推論は50-200msのネットワークオーバーヘッドがある。PCIe上の専用ASICならマイクロ秒で最初のトークンを出せる。
+- Gemma 5 Miniがローカルハードウェアで動くことや、ALUのようなハードコードされた'AIコア'が想像できる。明らかなコスト以外に、なぜもっと行われていないのか気になる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Taalas는 어떻게 LLM을 칩에 '인쇄'하는가
+***** TLDR
+Taalas는 Llama 3.1 8B 가중치를 트랜지스터로 실리콘에 직접 에칭하는 ASIC을 만들었다. VRAM 페치 사이클 없이 데이터가 물리적 와이어를 통해 레이어에서 레이어로 흐른다. 초당 17,000 토큰, GPU 대비 10배 저렴하고 10배 저전력이라고 주장한다. 비밀은 4비트 데이터 저장과 곱셈을 단일 트랜지스터로 수행하는 '매직 곱셈기'. 새 모델은 커스텀 마스크 레이어로 2개월 걸린다.
+***** Take
+모델이 말 그대로 돌에 새겨진다. 실리콘 가격이 급등하기 전에 올바른 것을 골랐기를 바란다. 좋은 소식: 성공하면 모든 데이터 센터가 2026년 Q1에 유행했던 Llama 버전의 기념비가 된다.
+***** Comments
+- 8B 계수가 53B 트랜지스터에 패킹되어 계수당 6.5 트랜지스터. 하나의 계수 처리에 2입력 NAND 게이트 두 개 미만. 블록 양자화를 사용한 것 같다.
+- 진정한 돌파구는 레이턴시다. 현재 클라우드 추론은 50-200ms 네트워크 오버헤드가 있다. PCIe의 전용 ASIC은 마이크로초 단위로 첫 토큰을 제공할 수 있다.
+- Gemma 5 Mini가 로컬 하드웨어에서 실행되거나 ALU처럼 하드코딩된 'AI 코어'를 상상할 수 있다. 명백한 비용 외에 왜 더 많이 하지 않는지 궁금하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo Taalas 'imprime' LLM en un chip
+***** TLDR
+Taalas construyó un ASIC que graba los pesos de Llama 3.1 8B como transistores directamente en silicio. Sin ciclos de lectura de VRAM, los datos fluyen a través de cables físicos capa por capa. Afirman 17,000 tokens/segundo, 10 veces más barato y 10 veces menos consumo que las GPU. El secreto es un 'multiplicador mágico' que almacena datos de 4 bits Y hace multiplicación con un solo transistor. Los nuevos modelos tardan dos meses en fabricarse con capas de máscara personalizadas.
+***** Take
+Tu modelo está literalmente grabado en piedra. Espero que hayas elegido el correcto antes de que suban los precios del silicio. La buena noticia: si funciona, cada centro de datos se convierte en un monumento a la versión de Llama que estaba de moda en Q1 2026.
+***** Comments
+- 8B coeficientes empaquetados en 53B transistores, 6.5 transistores por coeficiente. Un coeficiente se procesa con menos de dos puertas NAND de dos entradas. Creo que usaron cuantización por bloques.
+- La verdadera ventaja es la latencia. La inferencia cloud actual añade 50-200ms de overhead de red. Un ASIC dedicado en PCIe podría servir el primer token en microsegundos.
+- Puedo imaginar Gemma 5 Mini corriendo localmente en hardware, o un 'núcleo AI' codificado como una ALU. Aparte de los costos obvios, me pregunto por qué no se hace más.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie Taalas LLM auf einen Chip 'druckt'
+***** TLDR
+Taalas hat einen ASIC gebaut, der die Gewichte von Llama 3.1 8B als Transistoren direkt in Silizium ätzt. Keine VRAM-Lesezyklen - Daten fließen über physische Leitungen von Schicht zu Schicht. Sie behaupten 17.000 Token/Sekunde, 10x günstiger und 10x weniger Stromverbrauch als GPUs. Das Geheimnis ist ein 'Magic Multiplier', der 4-Bit-Daten speichert UND die Multiplikation mit einem einzigen Transistor durchführt. Neue Modelle brauchen zwei Monate zur Fertigung mit kundenspezifischen Maskenschichten.
+***** Take
+Dein Modell ist buchstäblich in Stein gemeißelt. Hoffentlich hast du das richtige gewählt, bevor die Siliziumpreise steigen. Die gute Nachricht: Wenn es funktioniert, wird jedes Rechenzentrum zum Denkmal für die Llama-Version, die Q1 2026 angesagt war.
+***** Comments
+- 8B Koeffizienten in 53B Transistoren gepackt, 6,5 Transistoren pro Koeffizient. Ein Koeffizient wird mit weniger als zwei 2-Eingangs-NAND-Gattern verarbeitet. Ich denke, sie haben Block-Quantisierung verwendet.
+- Der eigentliche Durchbruch ist die Latenz. Aktuelle Cloud-Inferenz fügt 50-200ms Netzwerk-Overhead hinzu. Ein dedizierter ASIC auf PCIe könnte das erste Token in Mikrosekunden liefern.
+- Ich kann mir vorstellen, dass Gemma 5 Mini lokal auf Hardware läuft, oder ein hardcodierter 'AI-Kern' wie eine ALU. Abgesehen von den offensichtlichen Kosten frage ich mich, warum das nicht öfter gemacht wird.
+** Back to FreeBSD: Part 1 :freebsd:containers:linux:devops:history:
+:PROPERTIES:
+:ID:       47108989
+:URL:      https://hypha.pub/back-to-freebsd-part-1
+:HN_URL:   https://news.ycombinator.com/item?id=47108989
+:POINTS:   31
+:COMMENTS: 4
+:BY:       enz
+:END:
+
+*** TLDR
+A well-researched history of OS-level isolation from chroot (1979) to FreeBSD jails (2000) to Linux containers. FreeBSD jails offered full network, process, and filesystem isolation with zero overhead and instant startup a full decade before LXC. Docker appeared in 2013 when jails were already 13 years old. The author argues Linux won through ecosystem politics (GPL, Red Hat, IBM, hyperscalers) not technical merit, and that we ended up with 'an overengineered mess of leaky abstractions.'
+
+*** Take
+The thesis that FreeBSD did containers first isn't controversial - it's documented history. What's controversial is admitting that technical elegance loses to 'whoever Google and Amazon decided to use.' Part 2 promises to show us how simple things could be. I'll believe it when I see a Kubernetes competitor written in C.
+
+*** Comments
+
+**** palata
+:PROPERTIES:
+:COMMENT_ID: 47109012
+:END:
+Not sure I like the value judgement here. I think it's more of a difference in philosophy than Linux being 'overengineered.'
+
+**** nesarkvechnep
+:PROPERTIES:
+:COMMENT_ID: 47109034
+:END:
+I'm always going to like articles introducing people to FreeBSD.
+
+**** lifeisstillgood
+:PROPERTIES:
+:COMMENT_ID: 47109056
+:END:
+I ran a whole company on FreeBSD back in the day (2005). It was great. But somehow Linux still took over my personal and professional life. Going back seems nice but there needs to be a compelling reason.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+回归FreeBSD：第一部分
+***** TLDR
+一篇研究充分的操作系统级隔离历史，从chroot(1979)到FreeBSD jails(2000)再到Linux容器。FreeBSD jails在LXC出现整整十年前就提供了完整的网络、进程和文件系统隔离，零开销，瞬间启动。Docker在2013年出现时，jails已经13岁了。作者认为Linux通过生态政治（GPL、Red Hat、IBM、超级云厂商）而非技术优势获胜，最终我们得到了'一堆过度工程化的漏洞百出的抽象层'。
+***** Take
+FreeBSD先做容器的论点没有争议——这是有据可查的历史。有争议的是承认技术优雅输给了'谷歌和亚马逊决定用什么'。第二部分承诺展示事情可以多简单。等我看到用C写的Kubernetes竞品再说。
+***** Comments
+- 不太喜欢这里的价值判断。我认为这更多是哲学差异，而非Linux'过度工程化'。
+- 我总是喜欢向人们介绍FreeBSD的文章。
+- 我曾经用FreeBSD运营整个公司(2005年)。很棒。但不知怎的Linux还是接管了我的个人和职业生活。回归看起来不错，但需要有说服力的理由。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+FreeBSDに戻る：パート1
+***** TLDR
+chroot(1979)からFreeBSD jails(2000)、LinuxコンテナまでのOS レベル分離の歴史を詳しく調査した記事。FreeBSD jailsはLXCの10年前にネットワーク、プロセス、ファイルシステムの完全な分離をゼロオーバーヘッド、即時起動で提供していた。Dockerが2013年に登場した時、jailsはすでに13歳だった。著者はLinuxが技術的優位性ではなくエコシステム政治（GPL、Red Hat、IBM、ハイパースケーラー）で勝ったと主張し、最終的に「過剰設計された漏れやすい抽象化の混乱」になったと述べている。
+***** Take
+FreeBSDが先にコンテナを作ったという主張は議論の余地がない—文書化された歴史だ。議論の余地があるのは、技術的な優雅さが「GoogleとAmazonが使うと決めたもの」に負けることを認めることだ。パート2は物事がどれだけシンプルになれるか見せると約束している。Cで書かれたKubernetes競合を見たら信じよう。
+***** Comments
+- ここでの価値判断はあまり好きではない。Linuxが「過剰設計」というより、哲学の違いだと思う。
+- FreeBSDを紹介する記事は常に好きだ。
+- 昔(2005年)FreeBSDで会社を丸ごと運営していた。素晴らしかった。でもなぜかLinuxが個人的にも仕事でも私の生活を支配した。戻るのは良さそうだが、説得力のある理由が必要だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+FreeBSD로 돌아가다: 파트 1
+***** TLDR
+chroot(1979)부터 FreeBSD jails(2000), Linux 컨테이너까지 OS 수준 격리의 잘 연구된 역사. FreeBSD jails는 LXC보다 10년 앞서 오버헤드 없이 즉시 시작으로 완전한 네트워크, 프로세스, 파일시스템 격리를 제공했다. Docker가 2013년에 등장했을 때 jails는 이미 13살이었다. 저자는 Linux가 기술적 장점이 아닌 생태계 정치(GPL, Red Hat, IBM, 하이퍼스케일러)로 승리했고, 결국 '과도하게 엔지니어링된 누수투성이 추상화의 혼란'을 얻었다고 주장한다.
+***** Take
+FreeBSD가 먼저 컨테이너를 만들었다는 논지는 논란의 여지가 없다—문서화된 역사다. 논란이 되는 것은 기술적 우아함이 'Google과 Amazon이 사용하기로 결정한 것'에 진다는 것을 인정하는 것이다. 파트 2는 일이 얼마나 간단해질 수 있는지 보여주겠다고 약속한다. C로 작성된 Kubernetes 경쟁자를 보면 믿겠다.
+***** Comments
+- 여기서의 가치 판단은 별로 좋아하지 않는다. Linux가 '과도하게 엔지니어링됐다'기보다 철학의 차이라고 생각한다.
+- FreeBSD를 소개하는 글은 항상 좋아한다.
+- 예전(2005년)에 FreeBSD로 회사 전체를 운영했다. 훌륭했다. 하지만 어떻게든 Linux가 내 개인적, 직업적 삶을 점령했다. 돌아가는 것도 좋아 보이지만 설득력 있는 이유가 필요하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Volver a FreeBSD: Parte 1
+***** TLDR
+Una historia bien investigada del aislamiento a nivel de SO desde chroot (1979) hasta FreeBSD jails (2000) y contenedores Linux. FreeBSD jails ofrecía aislamiento completo de red, procesos y sistema de archivos con cero overhead e inicio instantáneo una década antes de LXC. Docker apareció en 2013 cuando jails ya tenía 13 años. El autor argumenta que Linux ganó por política de ecosistema (GPL, Red Hat, IBM, hiperescaladores) no por mérito técnico, y que terminamos con 'un lío sobreingenieriado de abstracciones con fugas.'
+***** Take
+La tesis de que FreeBSD hizo contenedores primero no es controvertida - es historia documentada. Lo controvertido es admitir que la elegancia técnica pierde ante 'lo que Google y Amazon decidieron usar.' La parte 2 promete mostrarnos lo simple que podrían ser las cosas. Lo creeré cuando vea un competidor de Kubernetes escrito en C.
+***** Comments
+- No me gusta mucho el juicio de valor aquí. Creo que es más una diferencia de filosofía que Linux siendo 'sobreingenieriado.'
+- Siempre me gustan los artículos que presentan FreeBSD a la gente.
+- Dirigí toda una empresa con FreeBSD en su día (2005). Fue genial. Pero de alguna manera Linux se apoderó de mi vida personal y profesional. Volver parece agradable pero necesita haber una razón convincente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zurück zu FreeBSD: Teil 1
+***** TLDR
+Eine gut recherchierte Geschichte der OS-Level-Isolation von chroot (1979) über FreeBSD jails (2000) bis zu Linux-Containern. FreeBSD jails bot volle Netzwerk-, Prozess- und Dateisystem-Isolation mit null Overhead und sofortigem Start ein ganzes Jahrzehnt vor LXC. Docker erschien 2013, als jails bereits 13 Jahre alt war. Der Autor argumentiert, dass Linux durch Ökosystem-Politik (GPL, Red Hat, IBM, Hyperscaler) gewann, nicht durch technischen Verdienst, und dass wir mit 'einem überingenieurten Chaos aus lecken Abstraktionen' endeten.
+***** Take
+Die These, dass FreeBSD Container zuerst gemacht hat, ist nicht kontrovers - es ist dokumentierte Geschichte. Kontrovers ist es zuzugeben, dass technische Eleganz gegen 'was Google und Amazon sich zu nutzen entschieden haben' verliert. Teil 2 verspricht uns zu zeigen, wie einfach Dinge sein könnten. Ich glaube es, wenn ich einen Kubernetes-Konkurrenten in C geschrieben sehe.
+***** Comments
+- Mir gefällt das Werturteil hier nicht so. Ich denke, es ist eher ein Philosophieunterschied als dass Linux 'überingenieuriert' wäre.
+- Ich mag immer Artikel, die Menschen FreeBSD vorstellen.
+- Ich habe damals (2005) eine ganze Firma auf FreeBSD betrieben. Es war großartig. Aber irgendwie hat Linux trotzdem mein persönliches und berufliches Leben übernommen. Zurückgehen scheint nett, aber es braucht einen zwingenden Grund.
+** Coccinelle: Source-to-source transformation tool :c:linux-kernel:tooling:refactoring:
+:PROPERTIES:
+:ID:       47098669
+:URL:      https://github.com/coccinelle/coccinelle
+:HN_URL:   https://news.ycombinator.com/item?id=47098669
+:POINTS:   100
+:COMMENTS: 28
+:BY:       anon111332142
+:END:
+
+*** TLDR
+Coccinelle is a source-to-source transformation tool for C code, developed at Inria (French research institute). It uses a domain-specific language called SmPL (Semantic Patch Language) to express code transformations that respect the semantics of the code, not just text patterns. It's been used extensively in the Linux kernel for large-scale API changes and bug fixes. Think regex on steroids that actually understands C syntax.
+
+*** Take
+The best thing Julia Lawall ever did, according to the comments. Not the hardest, not the most theoretical, but the most useful. There's a lesson here about academic work that actually ships versus work that just publishes.
+
+*** Comments
+
+**** peterfirefly
+:PROPERTIES:
+:COMMENT_ID: 47098712
+:END:
+The best thing Julia Lawall ever did! Not the hardest, not the thing with the most sophisticated theories behind it, not the thing that helped her academic career the most... but definitely the best and the most useful.
+
+**** VorpalWay
+:PROPERTIES:
+:COMMENT_ID: 47098834
+:END:
+Not the same level of sophistication, but ast-grep allows this for far more languages since it's based on tree-sitter. I've used it with some success on C++.
+
+**** eqvinox
+:PROPERTIES:
+:COMMENT_ID: 47098956
+:END:
+It's a bit of a disservice to call it 'The Linux kernel's'; it's its own project that just happens to be used on the Linux kernel quite a bit.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Coccinelle：源代码到源代码的转换工具
+***** TLDR
+Coccinelle是一个用于C代码的源到源转换工具，由Inria（法国研究机构）开发。它使用一种名为SmPL（语义补丁语言）的领域特定语言来表达尊重代码语义的代码转换，而不仅仅是文本模式。它在Linux内核中被广泛用于大规模API更改和bug修复。可以理解为真正懂C语法的超级正则表达式。
+***** Take
+根据评论，这是Julia Lawall做过的最好的事情。不是最难的，不是最理论化的，但是最有用的。关于真正交付的学术工作与只是发表的工作，这里有一个教训。
+***** Comments
+- Julia Lawall做过的最好的事情！不是最难的，不是背后理论最复杂的，不是对她学术生涯帮助最大的...但绝对是最好和最有用的。
+- 没有同样的复杂度，但ast-grep基于tree-sitter支持更多语言。我在C++上用过，效果不错。
+- 把它叫做'Linux内核的'有点不公平；它是自己的项目，只是碰巧在Linux内核上用得很多。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Coccinelle：ソースからソースへの変換ツール
+***** TLDR
+CoccinelleはC コード用のソースtoソース変換ツールで、Inria（フランスの研究機関）で開発された。SmPL（Semantic Patch Language）というドメイン固有言語を使って、テキストパターンだけでなくコードのセマンティクスを尊重したコード変換を表現する。Linux カーネルで大規模なAPI変更やバグ修正に広く使われている。Cの構文を本当に理解するステロイド正規表現と考えればいい。
+***** Take
+コメントによると、Julia Lawallがやった最高のこと。最も難しくも、最も理論的でもないが、最も有用。実際に出荷される学術的な仕事と、ただ出版するだけの仕事についての教訓がある。
+***** Comments
+- Julia Lawallがやった最高のこと！最も難しくも、最も洗練された理論が背景にあるものでも、彼女の学術キャリアに最も役立ったものでもない...しかし間違いなく最高で最も有用。
+- 同じレベルの洗練さはないが、ast-grepはtree-sitterベースなのでより多くの言語に対応している。C++でそこそこ成功した。
+- 「Linuxカーネルの」と呼ぶのは少し不公平。それ自体のプロジェクトで、たまたまLinuxカーネルでよく使われているだけ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Coccinelle: 소스 대 소스 변환 도구
+***** TLDR
+Coccinelle은 Inria(프랑스 연구 기관)에서 개발한 C 코드용 소스 대 소스 변환 도구다. SmPL(Semantic Patch Language)이라는 도메인 특화 언어를 사용하여 단순한 텍스트 패턴이 아닌 코드의 의미를 존중하는 코드 변환을 표현한다. Linux 커널에서 대규모 API 변경과 버그 수정에 광범위하게 사용된다. C 문법을 실제로 이해하는 스테로이드 정규식이라고 생각하면 된다.
+***** Take
+댓글에 따르면 Julia Lawall이 한 일 중 최고다. 가장 어렵지도, 가장 이론적이지도 않지만, 가장 유용하다. 실제로 배포되는 학술 작업과 그냥 출판만 하는 작업에 대한 교훈이 있다.
+***** Comments
+- Julia Lawall이 한 일 중 최고! 가장 어렵지도, 가장 정교한 이론이 뒷받침하는 것도, 그녀의 학술 경력에 가장 도움이 된 것도 아니지만... 확실히 최고이고 가장 유용하다.
+- 같은 수준의 정교함은 아니지만, ast-grep은 tree-sitter 기반이라 훨씬 더 많은 언어를 지원한다. C++에서 어느 정도 성공적으로 사용했다.
+- 'Linux 커널의'라고 부르는 것은 좀 불공평하다. 자체 프로젝트이며, Linux 커널에서 많이 사용될 뿐이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Coccinelle: Herramienta de transformación de código fuente a fuente
+***** TLDR
+Coccinelle es una herramienta de transformación de código fuente a fuente para C, desarrollada en Inria (instituto de investigación francés). Usa un lenguaje de dominio específico llamado SmPL (Semantic Patch Language) para expresar transformaciones de código que respetan la semántica del código, no solo patrones de texto. Se ha usado extensivamente en el kernel de Linux para cambios de API a gran escala y correcciones de bugs. Piensa en regex con esteroides que realmente entiende la sintaxis de C.
+***** Take
+Lo mejor que Julia Lawall ha hecho, según los comentarios. No lo más difícil, no lo más teórico, pero lo más útil. Hay una lección aquí sobre el trabajo académico que realmente se implementa versus el trabajo que solo se publica.
+***** Comments
+- ¡Lo mejor que Julia Lawall ha hecho! No lo más difícil, no lo que tiene las teorías más sofisticadas detrás, no lo que más ayudó a su carrera académica... pero definitivamente lo mejor y más útil.
+- No tiene el mismo nivel de sofisticación, pero ast-grep permite esto para muchos más lenguajes ya que está basado en tree-sitter. Lo he usado con cierto éxito en C++.
+- Es un poco injusto llamarlo 'del kernel de Linux'; es su propio proyecto que simplemente se usa bastante en el kernel de Linux.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Coccinelle: Quellcode-zu-Quellcode-Transformationstool
+***** TLDR
+Coccinelle ist ein Quellcode-zu-Quellcode-Transformationstool für C, entwickelt bei Inria (französisches Forschungsinstitut). Es verwendet eine domänenspezifische Sprache namens SmPL (Semantic Patch Language), um Code-Transformationen auszudrücken, die die Semantik des Codes respektieren, nicht nur Textmuster. Es wird extensiv im Linux-Kernel für große API-Änderungen und Bugfixes verwendet. Denken Sie an Regex auf Steroiden, das C-Syntax wirklich versteht.
+***** Take
+Das Beste, was Julia Lawall je gemacht hat, laut den Kommentaren. Nicht das Schwierigste, nicht das Theoretischste, aber das Nützlichste. Hier gibt es eine Lektion über akademische Arbeit, die tatsächlich ausgeliefert wird, versus Arbeit, die nur veröffentlicht wird.
+***** Comments
+- Das Beste, was Julia Lawall je gemacht hat! Nicht das Schwierigste, nicht das mit den ausgefeiltesten Theorien dahinter, nicht das, was ihrer akademischen Karriere am meisten geholfen hat... aber definitiv das Beste und Nützlichste.
+- Nicht das gleiche Niveau an Sophistication, aber ast-grep ermöglicht dies für viel mehr Sprachen, da es auf tree-sitter basiert. Ich habe es mit einigem Erfolg bei C++ verwendet.
+- Es ist etwas unfair, es 'das des Linux-Kernels' zu nennen; es ist sein eigenes Projekt, das zufällig viel im Linux-Kernel verwendet wird.
+** Show HN: Elecxzy – A lightweight, Lisp-free Emacs-like editor in Electron :emacs:electron:editor:show-hn:japan:
+:PROPERTIES:
+:ID:       47100328
+:URL:      https://github.com/kurouna/elecxzy
+:HN_URL:   https://news.ycombinator.com/item?id=47100328
+:POINTS:   8
+:COMMENTS: 7
+:BY:       kurouna
+:END:
+
+*** TLDR
+A Japanese developer who loves Emacs keybindings but never learned Lisp built an Emacs-like editor in Electron. It has the classic keybindings (C-f, C-b, C-n, C-p), window splitting, syntax highlighting, and Japanese IME support. No Lisp engine means no init.el customization but also no startup lag. Uses a Piece Table data structure for efficient editing. It's Windows-only, alpha stage, and source is closed.
+
+*** Take
+The absolute irony of using Electron (a browser engine, famously heavy) to build a 'lightweight' editor because Lisp is too complex is chef's kiss. The comments called this out immediately. But you know what? The author scratched their own itch. That's how good software gets made sometimes.
+
+*** Comments
+
+**** luckymate
+:PROPERTIES:
+:COMMENT_ID: 47100356
+:END:
+Just to be clear: you say by 'dropping' lisp you're keeping it lightweight but it's based on electron? So what does 'lightweight' mean in your opinion?
+
+**** throwa356262
+:PROPERTIES:
+:COMMENT_ID: 47100378
+:END:
+What I need is an emacs with more lisp and less javascript. If you want a really lean emacs-like editor, there is always mg and microemacs.
+
+**** noufalibrahim
+:PROPERTIES:
+:COMMENT_ID: 47100400
+:END:
+Lisp Free x Emacs like. Lightweight x Electron. Contradictions. Writing one's own editor is a bit of a rite of passage though. Congratulations!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: Elecxzy – 一个轻量级、无Lisp的类Emacs编辑器，基于Electron
+***** TLDR
+一位热爱Emacs键绑定但从未学过Lisp的日本开发者用Electron构建了一个类Emacs编辑器。它有经典的键绑定(C-f, C-b, C-n, C-p)、窗口分割、语法高亮和日语IME支持。没有Lisp引擎意味着没有init.el自定义，但也没有启动延迟。使用Piece Table数据结构实现高效编辑。仅支持Windows，alpha阶段，源码未公开。
+***** Take
+用Electron（一个浏览器引擎，出了名的重）来构建'轻量级'编辑器，因为Lisp太复杂了——这绝对讽刺，简直完美。评论立刻指出了这一点。但你知道吗？作者解决了自己的痒点。好软件有时就是这样诞生的。
+***** Comments
+- 澄清一下：你说通过'放弃'lisp来保持轻量，但它是基于electron的？那你觉得'轻量'是什么意思？
+- 我需要的是更多lisp更少javascript的emacs。如果你想要真正精简的类emacs编辑器，还有mg和microemacs。
+- 无Lisp x 类Emacs。轻量 x Electron。矛盾。不过写自己的编辑器算是一种成人礼。恭喜！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Elecxzy – Electronで作った軽量でLispフリーのEmacs風エディタ
+***** TLDR
+Emacsのキーバインドを愛するがLispを学んだことがない日本の開発者がElectronでEmacs風エディタを作った。クラシックなキーバインド(C-f, C-b, C-n, C-p)、ウィンドウ分割、シンタックスハイライト、日本語IMEサポートがある。Lispエンジンがないのでinit.elのカスタマイズはできないが、起動遅延もない。効率的な編集のためにPiece Tableデータ構造を使用。Windows専用、アルファ段階、ソースは非公開。
+***** Take
+Lispが複雑すぎるからという理由でElectron（ブラウザエンジン、重いことで有名）を使って「軽量」エディタを作るという絶対的な皮肉は最高。コメントはすぐにこれを指摘した。でもね、作者は自分の痒いところを掻いた。良いソフトウェアは時々そうやって生まれる。
+***** Comments
+- はっきりさせてください：lispを「捨てる」ことで軽量に保っていると言いますが、electronベースですよね？「軽量」とはあなたの意見では何ですか？
+- 私が必要なのはもっとlispが多くてjavascriptが少ないemacsだ。本当にスリムなemacs風エディタが欲しければ、mgやmicroemacsがある。
+- Lispフリー x Emacs風。軽量 x Electron。矛盾。でも自分のエディタを書くのは一種の通過儀礼。おめでとう！
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Elecxzy – Electron으로 만든 가볍고 Lisp 없는 Emacs 스타일 에디터
+***** TLDR
+Emacs 키바인딩을 좋아하지만 Lisp를 배운 적 없는 일본 개발자가 Electron으로 Emacs 스타일 에디터를 만들었다. 클래식 키바인딩(C-f, C-b, C-n, C-p), 창 분할, 구문 강조, 일본어 IME 지원이 있다. Lisp 엔진이 없어서 init.el 커스터마이징은 불가능하지만 시작 지연도 없다. 효율적인 편집을 위해 Piece Table 데이터 구조 사용. Windows 전용, 알파 단계, 소스는 비공개.
+***** Take
+Lisp가 너무 복잡해서 Electron(브라우저 엔진, 무겁기로 유명한)으로 '가벼운' 에디터를 만든다는 절대적 아이러니는 완벽하다. 댓글들이 즉시 이를 지적했다. 하지만 알겠는가? 저자는 자신의 가려운 곳을 긁었다. 좋은 소프트웨어는 때때로 그렇게 만들어진다.
+***** Comments
+- 명확히 하자면: lisp를 '버림'으로써 가볍게 유지한다고 하는데 electron 기반이잖아요? 그럼 '가벼운'이 뭔가요?
+- 내가 필요한 건 lisp는 더 많고 javascript는 적은 emacs다. 정말 간결한 emacs 스타일 에디터를 원하면 mg와 microemacs가 있다.
+- Lisp 없음 x Emacs 스타일. 가벼움 x Electron. 모순. 하지만 자신만의 에디터를 만드는 건 일종의 통과의례다. 축하해요!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Elecxzy – Un editor ligero tipo Emacs sin Lisp en Electron
+***** TLDR
+Un desarrollador japonés que ama los atajos de teclado de Emacs pero nunca aprendió Lisp construyó un editor tipo Emacs en Electron. Tiene los atajos clásicos (C-f, C-b, C-n, C-p), división de ventanas, resaltado de sintaxis y soporte IME japonés. Sin motor Lisp significa sin personalización init.el pero también sin retraso de inicio. Usa estructura de datos Piece Table para edición eficiente. Solo Windows, etapa alpha, código cerrado.
+***** Take
+La ironía absoluta de usar Electron (un motor de navegador, famosamente pesado) para construir un editor 'ligero' porque Lisp es demasiado complejo es perfecta. Los comentarios lo señalaron inmediatamente. Pero sabes qué? El autor rascó su propia comezón. Así es como a veces se hace buen software.
+***** Comments
+- Para ser claro: dices que al 'abandonar' lisp lo mantienes ligero pero está basado en electron? Entonces qué significa 'ligero' en tu opinión?
+- Lo que necesito es un emacs con más lisp y menos javascript. Si quieres un editor tipo emacs realmente esbelto, siempre están mg y microemacs.
+- Sin Lisp x Tipo Emacs. Ligero x Electron. Contradicciones. Escribir tu propio editor es un rito de paso. ¡Felicidades!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Elecxzy – Ein leichtgewichtiger, Lisp-freier Emacs-artiger Editor in Electron
+***** TLDR
+Ein japanischer Entwickler, der Emacs-Tastenkürzel liebt, aber nie Lisp gelernt hat, baute einen Emacs-artigen Editor in Electron. Er hat die klassischen Tastenkürzel (C-f, C-b, C-n, C-p), Fensterteilung, Syntaxhervorhebung und japanische IME-Unterstützung. Kein Lisp-Engine bedeutet keine init.el-Anpassung, aber auch keine Startverzögerung. Verwendet eine Piece-Table-Datenstruktur für effizientes Editieren. Nur Windows, Alpha-Stadium, Quellcode nicht öffentlich.
+***** Take
+Die absolute Ironie, Electron (eine Browser-Engine, berüchtigt schwer) zu verwenden, um einen 'leichtgewichtigen' Editor zu bauen, weil Lisp zu komplex ist, ist perfekt. Die Kommentare haben das sofort angemerkt. Aber weißt du was? Der Autor hat seinen eigenen Juckreiz gekratzt. So wird manchmal gute Software gemacht.
+***** Comments
+- Um das klarzustellen: Du sagst, durch das 'Weglassen' von Lisp hältst du es leichtgewichtig, aber es basiert auf Electron? Was bedeutet 'leichtgewichtig' in deiner Meinung?
+- Was ich brauche, ist ein Emacs mit mehr Lisp und weniger JavaScript. Wenn du einen wirklich schlanken Emacs-artigen Editor willst, gibt es immer mg und microemacs.
+- Lisp-frei x Emacs-artig. Leichtgewichtig x Electron. Widersprüche. Seinen eigenen Editor zu schreiben ist aber ein Initiationsritus. Herzlichen Glückwunsch!
+** Show HN: Minimalist Glitch Art Maker (100% client-side) :show-hn:web:art:video:javascript:
+:PROPERTIES:
+:ID:       47044369
+:URL:      https://yuyz0112.github.io/glitch-art-maker/
+:HN_URL:   https://news.ycombinator.com/item?id=47044369
+:POINTS:   11
+:COMMENTS: 4
+:BY:       yz-yu
+:END:
+
+*** TLDR
+A browser-based tool that applies glitch effects to video or webcam in real-time. Controls for scan line thickness, jitter (horizontal shift glitch), and black/white threshold. Can export to WebM. 100% client-side, no upload. One user noted it leaves the camera on after closing the tab, which is a bug.
+
+*** Take
+Someone asked why not corrupt the actual JPEG bits for 'proper' glitches. Valid point - this is more 'stylized VHS effect' than 'corrupted memory card chaos.' But hey, it runs in browser and doesn't phone home. That's rarer than it should be in 2026.
+
+*** Comments
+
+**** Retr0id
+:PROPERTIES:
+:COMMENT_ID: 47044398
+:END:
+Aside from the jitter option I wouldn't classify this as glitch art. It accurately states 'no upload' so the subsequent button probably shouldn't say 'Upload Video'.
+
+**** spechil
+:PROPERTIES:
+:COMMENT_ID: 47044420
+:END:
+What might be cool is converting each frame to JPEG and then randomly corrupting bits in the SOS section before displaying. Then you'd get proper glitches like what you might see off a damaged memory card.
+
+**** lwhi
+:PROPERTIES:
+:COMMENT_ID: 47044442
+:END:
+It leaves my camera on even after I close the tab.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: 极简故障艺术制作器（100%客户端）
+***** TLDR
+一个基于浏览器的工具，可以实时对视频或摄像头应用故障效果。可控制扫描线粗细、抖动（水平位移故障）和黑白阈值。可导出为WebM。100%客户端，无上传。有用户指出关闭标签页后摄像头仍然开着，这是个bug。
+***** Take
+有人问为什么不直接破坏JPEG比特来获得'正宗'故障效果。说得对——这更像是'风格化VHS效果'而不是'损坏存储卡的混乱'。但嘿，它在浏览器里运行而且不联网传数据。在2026年这比应有的更罕见。
+***** Comments
+- 除了抖动选项，我不会把这归类为故障艺术。它准确地说'无上传'，所以后面的按钮可能不应该写'上传视频'。
+- 可能很酷的做法是把每一帧转换成JPEG，然后在显示前随机破坏SOS部分的比特。这样你就能得到像损坏存储卡那样的真正故障效果。
+- 即使关闭标签页后，我的摄像头还是开着的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: ミニマリストのグリッチアートメーカー（100%クライアントサイド）
+***** TLDR
+動画やウェブカメラにリアルタイムでグリッチエフェクトを適用するブラウザベースのツール。スキャンラインの太さ、ジッター（水平シフトグリッチ）、白黒の閾値を制御可能。WebMにエクスポート可能。100%クライアントサイド、アップロードなし。あるユーザーがタブを閉じた後もカメラがオンのままになるバグを指摘。
+***** Take
+誰かが「本物の」グリッチのためにJPEGのビットを実際に破壊しないのかと聞いた。もっともな指摘だ - これは「破損したメモリカードの混乱」というより「スタイライズされたVHS効果」に近い。でもね、ブラウザで動いてデータを送信しない。2026年にこれはあるべきより珍しい。
+***** Comments
+- ジッターオプション以外、これをグリッチアートとは分類しない。「アップロードなし」と正確に書いてあるので、次のボタンは「動画をアップロード」と言うべきではないだろう。
+- 各フレームをJPEGに変換して、表示前にSOS部分のビットをランダムに破壊するとクールかも。そうすれば破損したメモリカードのような本物のグリッチが得られる。
+- タブを閉じた後もカメラがオンのままだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: 미니멀리스트 글리치 아트 메이커 (100% 클라이언트 사이드)
+***** TLDR
+비디오나 웹캠에 실시간으로 글리치 효과를 적용하는 브라우저 기반 도구. 스캔 라인 두께, 지터(수평 이동 글리치), 흑백 임계값 제어 가능. WebM으로 내보내기 가능. 100% 클라이언트 사이드, 업로드 없음. 한 사용자가 탭을 닫은 후에도 카메라가 켜져 있다는 버그를 지적했다.
+***** Take
+누군가 '제대로 된' 글리치를 위해 실제 JPEG 비트를 손상시키지 않냐고 물었다. 맞는 말이다 - 이건 '손상된 메모리 카드 혼란'보다 '스타일화된 VHS 효과'에 가깝다. 하지만 브라우저에서 실행되고 데이터를 외부로 보내지 않는다. 2026년에 이건 있어야 할 것보다 드물다.
+***** Comments
+- 지터 옵션 외에는 이것을 글리치 아트로 분류하지 않겠다. '업로드 없음'이라고 정확히 명시했으니 다음 버튼은 '비디오 업로드'라고 하면 안 될 것 같다.
+- 각 프레임을 JPEG로 변환한 다음 표시 전에 SOS 섹션의 비트를 무작위로 손상시키면 멋질 것 같다. 그러면 손상된 메모리 카드에서 볼 수 있는 진짜 글리치를 얻을 수 있다.
+- 탭을 닫아도 카메라가 켜져 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Creador de Arte Glitch Minimalista (100% del lado del cliente)
+***** TLDR
+Una herramienta basada en navegador que aplica efectos glitch a video o webcam en tiempo real. Controles para grosor de línea de escaneo, jitter (glitch de desplazamiento horizontal) y umbral blanco/negro. Puede exportar a WebM. 100% del lado del cliente, sin subida. Un usuario notó que deja la cámara encendida después de cerrar la pestaña, lo cual es un bug.
+***** Take
+Alguien preguntó por qué no corromper los bits reales de JPEG para glitches 'apropiados'. Punto válido - esto es más 'efecto VHS estilizado' que 'caos de tarjeta de memoria corrupta.' Pero oye, corre en el navegador y no envía datos. Eso es más raro de lo que debería ser en 2026.
+***** Comments
+- Aparte de la opción de jitter, no clasificaría esto como arte glitch. Dice con precisión 'sin subida' así que el botón siguiente probablemente no debería decir 'Subir Video'.
+- Lo que podría ser genial es convertir cada fotograma a JPEG y luego corromper bits aleatoriamente en la sección SOS antes de mostrar. Entonces obtendrías glitches apropiados como los que verías de una tarjeta de memoria dañada.
+- Deja mi cámara encendida incluso después de cerrar la pestaña.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Minimalistischer Glitch Art Maker (100% clientseitig)
+***** TLDR
+Ein browserbasiertes Tool, das Glitch-Effekte auf Video oder Webcam in Echtzeit anwendet. Steuerung für Scan-Linien-Dicke, Jitter (horizontaler Verschiebungs-Glitch) und Schwarz/Weiß-Schwellenwert. Kann zu WebM exportieren. 100% clientseitig, kein Upload. Ein Benutzer bemerkte, dass die Kamera nach dem Schließen des Tabs eingeschaltet bleibt, was ein Bug ist.
+***** Take
+Jemand fragte, warum man nicht die tatsächlichen JPEG-Bits für 'echte' Glitches beschädigt. Guter Punkt - das hier ist eher 'stilisierter VHS-Effekt' als 'beschädigtes Speicherkarten-Chaos.' Aber hey, es läuft im Browser und telefoniert nicht nach Hause. Das ist seltener als es 2026 sein sollte.
+***** Comments
+- Abgesehen von der Jitter-Option würde ich das nicht als Glitch-Kunst klassifizieren. Es sagt korrekt 'kein Upload', also sollte der nachfolgende Button wahrscheinlich nicht 'Video hochladen' sagen.
+- Was cool sein könnte, ist jeden Frame in JPEG zu konvertieren und dann zufällig Bits im SOS-Bereich zu beschädigen, bevor man anzeigt. Dann bekommst du echte Glitches wie von einer beschädigten Speicherkarte.
+- Meine Kamera bleibt an, auch nachdem ich den Tab geschlossen habe.
