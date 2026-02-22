@@ -1,0 +1,471 @@
+#+TITLE: HN Digest 2026-02-22 06:00:00 UT UTC
+#+DATE: 2026-02-22T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+LLMs etched in silicon, bloom filters outsmart themselves, and dead games get a second chance
+
+* Highlights
+- Taalas hardwires Llama onto a chip - 17,000 tokens per second
+- Two bits beat one: Bloom filters get 2x more accurate
+- Ukiyo-e.org: Search 224K Japanese prints with a photo
+
+* Stories
+
+** How Taalas 'prints' LLM onto a chip :hardware:llm:asic:inference:
+:PROPERTIES:
+:ID:       47103661
+:URL:      https://www.anuragk.com/blog/posts/Taalas.html
+:HN_URL:   https://news.ycombinator.com/item?id=47103661
+:POINTS:   20
+:COMMENTS: 0
+:BY:       beAroundHere
+:END:
+
+*** TLDR
+Taalas built an ASIC that physically etches Llama 3.1 8B's weights as transistors on silicon. No VRAM fetch cycles - data flows through physical wires from layer to layer. They claim 17,000 tokens/second, 10x cheaper and 10x less power than GPUs. Custom masks let them 'print' new models in about two months.
+
+*** Take
+They invented a hardware scheme to store 4-bit data AND multiply with a single transistor. That's either genius or Nobel Prize material. The catch? Your model is literally carved in stone. Hope you picked the right one.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Taalas如何把LLM'印刷'到芯片上
+***** TLDR
+Taalas构建了一款ASIC，将Llama 3.1 8B的权重以晶体管形式物理蚀刻在硅片上。无需VRAM读取周期，数据通过物理线路从一层流向另一层。他们声称能达到每秒17,000个token，成本和功耗比GPU低10倍。定制掩模让他们能在两个月内'印刷'新模型。
+***** Take
+他们发明了一种硬件方案，用单个晶体管存储4位数据并完成乘法。要么是天才，要么是诺贝尔奖级别的材料。问题是？你的模型真的是刻在石头上了。希望你选对了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+TaalasはどうやってLLMをチップに'印刷'するのか
+***** TLDR
+TaalasはLlama 3.1 8Bの重みをトランジスタとしてシリコン上に物理的にエッチングするASICを構築した。VRAMフェッチサイクルなし、データは物理的な配線を通じてレイヤーからレイヤーへ流れる。17,000トークン/秒、GPUより10倍安く、10倍省電力だと主張。カスタムマスクで約2ヶ月で新モデルを'印刷'できる。
+***** Take
+彼らは4ビットデータの保存と乗算を単一トランジスタで行うハードウェア方式を発明した。天才かノーベル賞レベルか。問題は？モデルが文字通り石に刻まれること。正しいモデルを選んでいることを祈る。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Taalas는 어떻게 LLM을 칩에 '인쇄'하는가
+***** TLDR
+Taalas는 Llama 3.1 8B의 가중치를 트랜지스터로 실리콘에 물리적으로 에칭하는 ASIC을 만들었다. VRAM 페치 사이클 없이 데이터가 물리적 와이어를 통해 레이어에서 레이어로 흐른다. 초당 17,000 토큰, GPU 대비 10배 저렴하고 10배 저전력이라고 주장한다. 커스텀 마스크로 약 2개월 만에 새 모델을 '인쇄'할 수 있다.
+***** Take
+그들은 단일 트랜지스터로 4비트 데이터 저장과 곱셈을 수행하는 하드웨어 방식을 발명했다. 천재이거나 노벨상 수준이다. 문제는? 모델이 말 그대로 돌에 새겨진다는 것. 올바른 모델을 골랐기를 바란다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo Taalas 'imprime' LLM en un chip
+***** TLDR
+Taalas construyó un ASIC que graba físicamente los pesos de Llama 3.1 8B como transistores en silicio. Sin ciclos de lectura de VRAM: los datos fluyen a través de cables físicos de capa en capa. Afirman 17,000 tokens/segundo, 10x más barato y 10x menos consumo que las GPU. Las máscaras personalizadas les permiten 'imprimir' nuevos modelos en unos dos meses.
+***** Take
+Inventaron un esquema de hardware para almacenar datos de 4 bits Y multiplicar con un solo transistor. Eso es genio o material de Premio Nobel. ¿El problema? Tu modelo está literalmente grabado en piedra. Espero que hayas elegido el correcto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie Taalas LLM auf einen Chip 'druckt'
+***** TLDR
+Taalas hat einen ASIC gebaut, der die Gewichte von Llama 3.1 8B physisch als Transistoren in Silizium ätzt. Keine VRAM-Lesezyklen - Daten fließen über physische Leitungen von Schicht zu Schicht. Sie behaupten 17.000 Token/Sekunde, 10x günstiger und 10x weniger Stromverbrauch als GPUs. Mit kundenspezifischen Masken können sie neue Modelle in etwa zwei Monaten 'drucken'.
+***** Take
+Sie haben ein Hardware-Schema erfunden, um 4-Bit-Daten zu speichern UND mit einem einzigen Transistor zu multiplizieren. Das ist entweder genial oder Nobelpreis-Material. Der Haken? Dein Modell ist buchstäblich in Stein gemeißelt. Hoffentlich hast du das richtige gewählt.
+** Two Bits Are Better Than One: making bloom filters 2x more accurate :database:algorithms:optimization:bloom-filter:
+:PROPERTIES:
+:ID:       47046070
+:URL:      https://floedb.ai/blog/two-bits-are-better-than-one-making-bloom-filters-2x-more-accurate
+:HN_URL:   https://news.ycombinator.com/item?id=47046070
+:POINTS:   47
+:COMMENTS: 6
+:BY:       matheusalmeida
+:END:
+
+*** TLDR
+FloeDB reduced bloom filter false positives from 11.7% to 5.7% by setting two bits per element instead of one - both bits stored in the same uint32 for a single memory access. The cost? An extra 1.2 CPU cycles per lookup. The benefit? Avoiding decompression of ~60GB of unnecessary data when scanning terabyte tables.
+
+*** Take
+The optimization is so elegant it hurts. Use half your hash for position, split the other half to set two bit positions in the same word. Cache-friendly, lock-free, and cuts false positives in half. This is the kind of micro-optimization that makes database engineers weep with joy.
+
+*** Comments
+
+**** vlmutolo
+:PROPERTIES:
+:COMMENT_ID: 47046123
+:END:
+This is a roundabout way to invent the blocked bloom filter with k=2 bits inserted per element. Block bloom filters should be the default.
+
+**** pkoird
+:PROPERTIES:
+:COMMENT_ID: 47046234
+:END:
+My first impression was that surely this saturates the filter too fast, but the math checks out. One of those non-intuitive things I'm glad I learned today.
+
+**** h33t-l4x0r
+:PROPERTIES:
+:COMMENT_ID: 47046345
+:END:
+Bloom filters seem important. I'm wondering why my CS education never touched on them - triggering my imposter syndrome.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+两个比特胜过一个：让布隆过滤器准确度提升2倍
+***** TLDR
+FloeDB通过每个元素设置两个比特而非一个，将布隆过滤器的误报率从11.7%降至5.7%。两个比特存储在同一个uint32中，只需一次内存访问。代价？每次查找多1.2个CPU周期。收益？扫描TB级表时避免解压约60GB不必要的数据。
+***** Take
+这个优化优雅得令人心疼。用一半哈希值做位置，另一半拆开在同一个字里设置两个比特位置。缓存友好，无锁，误报率减半。这就是让数据库工程师喜极而泣的微优化。
+***** Comments
+- 这是一种迂回发明块布隆过滤器的方式，k=2个比特。块布隆过滤器应该是默认选择。
+- 我第一印象是这肯定会让过滤器饱和太快，但数学验证通过了。这是我今天很高兴学到的反直觉知识。
+- 布隆过滤器似乎很重要。我在想为什么我的计算机教育从未涉及——引发了我的冒充者综合症。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+2ビットは1ビットに勝る：ブルームフィルターの精度を2倍に
+***** TLDR
+FloeDBは要素ごとに1ビットではなく2ビットを設定することで、ブルームフィルターの偽陽性率を11.7%から5.7%に削減した。両方のビットは同じuint32に格納され、1回のメモリアクセスで済む。コスト？ルックアップごとに1.2CPUサイクル追加。メリット？テラバイトテーブルをスキャンする際に約60GBの不要なデータの解凍を回避。
+***** Take
+この最適化は痛いほど優雅だ。ハッシュの半分を位置に使い、残りの半分を分割して同じワード内の2つのビット位置を設定。キャッシュフレンドリーでロックフリー、偽陽性を半減。これはデータベースエンジニアを歓喜で泣かせるようなマイクロ最適化だ。
+***** Comments
+- これはk=2ビット挿入のブロックブルームフィルターを発明する遠回りな方法だ。ブロックブルームフィルターがデフォルトであるべき。
+- 最初の印象はフィルターがすぐに飽和するはずだと思ったが、数学的には正しい。今日学べて良かった直感に反すること。
+- ブルームフィルターは重要そう。なぜCSの教育で触れなかったのか不思議で、インポスター症候群を引き起こしている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+두 비트가 하나보다 낫다: 블룸 필터 정확도 2배 향상
+***** TLDR
+FloeDB는 요소당 1비트 대신 2비트를 설정하여 블룸 필터 거짓 양성률을 11.7%에서 5.7%로 줄였다. 두 비트 모두 같은 uint32에 저장되어 메모리 접근 1회로 해결. 비용? 조회당 CPU 사이클 1.2 추가. 이점? 테라바이트 테이블 스캔 시 불필요한 약 60GB 데이터 압축 해제 방지.
+***** Take
+이 최적화는 아플 정도로 우아하다. 해시의 절반은 위치에, 나머지 절반을 나눠서 같은 워드 내 두 비트 위치 설정. 캐시 친화적이고 락프리이며 거짓 양성을 절반으로 줄인다. 데이터베이스 엔지니어를 기쁨의 눈물로 울게 하는 마이크로 최적화다.
+***** Comments
+- 이것은 k=2 비트 삽입의 블록 블룸 필터를 발명하는 우회적인 방법이다. 블록 블룸 필터가 기본이어야 한다.
+- 첫인상은 필터가 너무 빨리 포화될 거라 생각했는데 수학이 맞았다. 오늘 배워서 기쁜 반직관적인 것들 중 하나.
+- 블룸 필터가 중요해 보인다. 왜 CS 교육에서 다루지 않았는지 궁금하고 임포스터 증후군을 유발한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Dos bits son mejor que uno: filtros bloom 2x más precisos
+***** TLDR
+FloeDB redujo los falsos positivos del filtro bloom del 11.7% al 5.7% estableciendo dos bits por elemento en lugar de uno, ambos almacenados en el mismo uint32 para un solo acceso a memoria. ¿El costo? 1.2 ciclos de CPU extra por búsqueda. ¿El beneficio? Evitar la descompresión de ~60GB de datos innecesarios al escanear tablas de terabytes.
+***** Take
+La optimización es tan elegante que duele. Usa la mitad de tu hash para la posición, divide la otra mitad para establecer dos posiciones de bits en la misma palabra. Amigable con la caché, sin bloqueos, y reduce los falsos positivos a la mitad. Este es el tipo de micro-optimización que hace llorar de alegría a los ingenieros de bases de datos.
+***** Comments
+- Esta es una forma indirecta de inventar el filtro bloom por bloques con k=2 bits insertados por elemento. Los filtros bloom por bloques deberían ser el estándar.
+- Mi primera impresión fue que seguramente esto satura el filtro muy rápido, pero las matemáticas confirman. Una de esas cosas no intuitivas que me alegra haber aprendido hoy.
+- Los filtros bloom parecen importantes. Me pregunto por qué mi educación en CS nunca los tocó - desencadenando mi síndrome del impostor.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zwei Bits sind besser als eines: Bloom-Filter 2x genauer
+***** TLDR
+FloeDB reduzierte die Falsch-Positiv-Rate von Bloom-Filtern von 11,7% auf 5,7%, indem zwei Bits pro Element statt eines gesetzt werden - beide Bits im selben uint32 für einen einzigen Speicherzugriff. Die Kosten? 1,2 zusätzliche CPU-Zyklen pro Lookup. Der Nutzen? Vermeidung der Dekomprimierung von ~60GB unnötiger Daten beim Scannen von Terabyte-Tabellen.
+***** Take
+Die Optimierung ist so elegant, dass es wehtut. Verwende die Hälfte deines Hashs für die Position, teile die andere Hälfte auf, um zwei Bit-Positionen im selben Wort zu setzen. Cache-freundlich, lockfrei und halbiert die Falsch-Positiv-Rate. Das ist die Art von Mikro-Optimierung, die Datenbankingenieure vor Freude weinen lässt.
+***** Comments
+- Dies ist ein Umweg, um den Block-Bloom-Filter mit k=2 eingefügten Bits pro Element zu erfinden. Block-Bloom-Filter sollten der Standard sein.
+- Mein erster Eindruck war, dass dies den Filter sicher zu schnell sättigt, aber die Mathematik stimmt. Eines dieser nicht intuitiven Dinge, die ich heute gelernt habe.
+- Bloom-Filter scheinen wichtig zu sein. Ich frage mich, warum meine Informatikausbildung sie nie behandelt hat - löst mein Hochstapler-Syndrom aus.
+** Japanese Woodblock Print Search :art:search:computer-vision:ukiyo-e:
+:PROPERTIES:
+:ID:       47107781
+:URL:      https://ukiyo-e.org/
+:HN_URL:   https://news.ycombinator.com/item?id=47107781
+:POINTS:   42
+:COMMENTS: 9
+:BY:       curmudgeon22
+:END:
+
+*** TLDR
+Ukiyo-e.org lets you search 223,891 Japanese woodblock prints across multiple museum collections by uploading an image. Built by John Resig (of jQuery fame), it uses TinEye's computer vision to cluster similar prints. Browse by artist from early 1700s masters like Okumura Masanobu to the popularization era with Hokusai and Hiroshige.
+
+*** Take
+John Resig went from revolutionizing JavaScript to cataloging 18th century Japanese art. Honestly, a reasonable career trajectory. The site is what museum websites wish they were - actually useful for finding things.
+
+*** Comments
+
+**** jeresig
+:PROPERTIES:
+:COMMENT_ID: 47107890
+:END:
+Thank you for sharing my site! I built this as I was starting to learn about Japanese prints. I use computer vision analysis to cluster prints together using TinEye.
+
+**** PacificSpecific
+:PROPERTIES:
+:COMMENT_ID: 47107923
+:END:
+Wow, 2 ukiyo-e threads in 24 hours. For anyone interested, there's a museum in Kurashiki: https://ukiyo-e-kurashiki.jp/?lang=en
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+日本浮世绘版画搜索
+***** TLDR
+Ukiyo-e.org让你通过上传图片搜索多个博物馆收藏的223,891幅日本浮世绘版画。由John Resig（jQuery之父）构建，使用TinEye的计算机视觉来聚类相似版画。可按艺术家浏览，从1700年代早期大师如奥村政信到普及时代的葛饰北斋和�的川广重。
+***** Take
+John Resig从革新JavaScript变成了编目18世纪日本艺术。老实说，这是个合理的职业轨迹。这个网站就是博物馆网站梦寐以求的样子——真正有用。
+***** Comments
+- 感谢分享我的网站！我在开始学习日本版画时建了这个。我使用TinEye的计算机视觉分析来聚类版画。
+- 哇，24小时内两个浮世绘帖子。有兴趣的话，�的库有个博物馆：https://ukiyo-e-kurashiki.jp/?lang=en
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+日本の浮世絵版画検索
+***** TLDR
+Ukiyo-e.orgでは画像をアップロードして複数の美術館コレクションにある223,891点の日本の浮世絵版画を検索できる。John Resig（jQueryの生みの親）が構築し、TinEyeのコンピュータビジョンで類似版画をクラスタリング。1700年代初期の奥村政信から普及期の葛飾北斎や歌川広重まで、アーティスト別に閲覧可能。
+***** Take
+John ResigはJavaScriptに革命を起こした後、18世紀の日本美術のカタログ化に転じた。正直、合理的なキャリアパスだ。このサイトは美術館のウェブサイトが目指すべき姿、つまり実際に検索に使えるサイトだ。
+***** Comments
+- 私のサイトをシェアしてくれてありがとう！日本の版画を学び始めた時に作った。TinEyeを使ったコンピュータビジョン分析で版画をクラスタリングしている。
+- すごい、24時間で浮世絵スレッドが2つも。興味のある方へ、倉敷に美術館があります：https://ukiyo-e-kurashiki.jp/?lang=en
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+일본 우키요에 판화 검색
+***** TLDR
+Ukiyo-e.org는 이미지를 업로드하여 여러 박물관 컬렉션의 223,891점 일본 우키요에 판화를 검색할 수 있게 해준다. John Resig(jQuery 창시자)가 만들었고, TinEye의 컴퓨터 비전으로 유사한 판화를 클러스터링한다. 1700년대 초 오쿠무라 마사노부부터 대중화 시대의 호쿠사이와 히로시게까지 작가별 탐색 가능.
+***** Take
+John Resig가 JavaScript 혁신에서 18세기 일본 미술 카탈로그화로 전환했다. 솔직히 합리적인 커리어 경로다. 이 사이트는 박물관 웹사이트가 되고 싶어하는 모습, 즉 실제로 뭔가를 찾는 데 유용한 사이트다.
+***** Comments
+- 제 사이트를 공유해 주셔서 감사합니다! 일본 판화를 배우기 시작하면서 만들었습니다. TinEye를 사용한 컴퓨터 비전 분석으로 판화를 클러스터링합니다.
+- 와, 24시간 내에 우키요에 스레드가 2개나. 관심 있는 분들께, 쿠라시키에 박물관이 있습니다: https://ukiyo-e-kurashiki.jp/?lang=en
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Búsqueda de grabados japoneses en madera
+***** TLDR
+Ukiyo-e.org te permite buscar 223,891 grabados japoneses en madera de múltiples colecciones de museos subiendo una imagen. Construido por John Resig (creador de jQuery), usa visión por computadora de TinEye para agrupar grabados similares. Navega por artista desde maestros de principios de 1700 como Okumura Masanobu hasta la era de popularización con Hokusai e Hiroshige.
+***** Take
+John Resig pasó de revolucionar JavaScript a catalogar arte japonés del siglo XVIII. Honestamente, una trayectoria profesional razonable. El sitio es lo que los sitios web de museos desearían ser: realmente útil para encontrar cosas.
+***** Comments
+- ¡Gracias por compartir mi sitio! Lo construí cuando empezaba a aprender sobre grabados japoneses. Uso análisis de visión por computadora para agrupar grabados usando TinEye.
+- Wow, 2 hilos de ukiyo-e en 24 horas. Para los interesados, hay un museo en Kurashiki: https://ukiyo-e-kurashiki.jp/?lang=en
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Japanische Holzschnitt-Suche
+***** TLDR
+Ukiyo-e.org ermöglicht die Suche nach 223.891 japanischen Holzschnitten aus mehreren Museumssammlungen durch Hochladen eines Bildes. Von John Resig (jQuery-Erfinder) gebaut, nutzt es TinEyes Computer-Vision, um ähnliche Drucke zu clustern. Durchsuchen nach Künstler von frühen 1700er Meistern wie Okumura Masanobu bis zur Popularisierungsära mit Hokusai und Hiroshige.
+***** Take
+John Resig wechselte von der JavaScript-Revolution zur Katalogisierung japanischer Kunst des 18. Jahrhunderts. Ehrlich gesagt, eine vernünftige Karriereentwicklung. Die Seite ist das, was Museums-Websites sein wollen - tatsächlich nützlich zum Finden von Dingen.
+***** Comments
+- Danke fürs Teilen meiner Seite! Ich habe sie gebaut, als ich anfing, japanische Drucke zu lernen. Ich nutze TinEyes Computer-Vision-Analyse zum Clustern der Drucke.
+- Wow, 2 Ukiyo-e-Threads in 24 Stunden. Für Interessierte gibt es ein Museum in Kurashiki: https://ukiyo-e-kurashiki.jp/?lang=en
+** Gamedate - A site to revive dead multiplayer games :gaming:multiplayer:community:retro:
+:PROPERTIES:
+:ID:       47096167
+:URL:      https://gamedate.org/
+:HN_URL:   https://news.ycombinator.com/item?id=47096167
+:POINTS:   35
+:COMMENTS: 4
+:BY:       msuniverse2026
+:END:
+
+*** TLDR
+Gamedate.org coordinates multiplayer sessions for games with dead servers. Users post game nights (GoldenEye: Source, Left 4 Dead 2, Twisted Metal Black Online), others indicate interest, and expected player counts are calculated. Features old-school steam-punk inspired UI and supports even games not yet released like Deadlock.
+
+*** Take
+Finally, a dating app for people who want to play Gauntlet: Dark Legacy via Dolphin emulator at 2am. The saddest post on the front page: 'I'm 30 years old and alone. I live alone. I live in a cav-' Sir, this is a Deadlock lobby.
+
+*** Comments
+
+**** PacificSpecific
+:PROPERTIES:
+:COMMENT_ID: 47096234
+:END:
+Love the old school steam inspired UI. First game I noticed was Deadlock which technically isn't even released yet. Good for even more than dead games.
+
+**** Razengan
+:PROPERTIES:
+:COMMENT_ID: 47096345
+:END:
+StarCraft 1 let you take your computer anywhere and connect on LAN. In StarCraft 2 Blizzard wanted to see and control everything, so you go through the internet even sitting next to each other.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Gamedate - 复活死去多人游戏的网站
+***** TLDR
+Gamedate.org协调服务器已关闭游戏的多人游戏时段。用户发布游戏之夜（黄金眼：起源、求生之路2、Twisted Metal Black Online），其他人表示兴趣，然后计算预期玩家数。具有复古蒸汽朋克风格UI，甚至支持尚未发布的游戏如Deadlock。
+***** Take
+终于有个约会应用是给想在凌晨2点通过Dolphin模拟器玩Gauntlet: Dark Legacy的人用的。首页最悲伤的帖子：'我30岁了，独自一人。我独居。我住在一个洞-' 先生，这是Deadlock大厅。
+***** Comments
+- 喜欢这个复古蒸汽风格UI。我注意到的第一个游戏是Deadlock，技术上还没发布呢。不只适合死掉的游戏。
+- 星际争霸1可以把电脑带到任何地方通过局域网连接。星际争霸2暴雪想看到和控制一切，所以即使坐在旁边也要通过互联网。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Gamedate - 死んだマルチプレイヤーゲームを復活させるサイト
+***** TLDR
+Gamedate.orgはサーバーが死んだゲームのマルチプレイヤーセッションを調整する。ユーザーがゲームナイトを投稿し（GoldenEye: Source、Left 4 Dead 2、Twisted Metal Black Online）、他の人が興味を示し、予想プレイヤー数が計算される。レトロなスチームパンク風UIを特徴とし、Deadlockのような未発売ゲームもサポート。
+***** Take
+ついに、深夜2時にDolphinエミュレータでGauntlet: Dark Legacyをプレイしたい人のための出会い系アプリ。フロントページで最も悲しい投稿：「30歳で一人です。一人暮らしです。洞窟に住んで-」お客様、ここはDeadlockのロビーです。
+***** Comments
+- レトロなスチーム風UIが好き。最初に気づいたゲームはDeadlockで、技術的にはまだリリースされていない。死んだゲーム以上に良い。
+- StarCraft 1はコンピュータをどこにでも持っていってLANで接続できた。StarCraft 2ではBlizzardが全てを見て制御したがり、隣に座っていてもインターネット経由になる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Gamedate - 죽은 멀티플레이어 게임을 되살리는 사이트
+***** TLDR
+Gamedate.org는 서버가 죽은 게임의 멀티플레이어 세션을 조율한다. 사용자가 게임 나이트를 게시하고(GoldenEye: Source, Left 4 Dead 2, Twisted Metal Black Online), 다른 사람들이 관심을 표시하면 예상 플레이어 수가 계산된다. 레트로 스팀펑크 UI를 특징으로 하며 Deadlock같은 미출시 게임도 지원.
+***** Take
+드디어 새벽 2시에 돌핀 에뮬레이터로 Gauntlet: Dark Legacy를 하고 싶은 사람들을 위한 데이팅 앱이 나왔다. 첫 페이지에서 가장 슬픈 게시물: '저는 30살이고 혼자입니다. 혼자 살아요. 동굴에 사-' 손님, 여기는 Deadlock 로비입니다.
+***** Comments
+- 레트로 스팀 스타일 UI가 좋다. 처음 본 게임이 Deadlock인데 기술적으로 아직 출시 안 됐다. 죽은 게임 이상으로 좋다.
+- StarCraft 1은 컴퓨터를 어디든 가져가서 LAN으로 연결할 수 있었다. StarCraft 2에서 블리자드는 모든 걸 보고 통제하려 해서 옆에 앉아 있어도 인터넷을 거쳐야 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Gamedate - Un sitio para revivir juegos multijugador muertos
+***** TLDR
+Gamedate.org coordina sesiones multijugador para juegos con servidores muertos. Los usuarios publican noches de juego (GoldenEye: Source, Left 4 Dead 2, Twisted Metal Black Online), otros indican interés y se calculan los recuentos esperados de jugadores. Presenta UI de estilo steampunk retro y soporta incluso juegos aún no lanzados como Deadlock.
+***** Take
+Finalmente, una app de citas para gente que quiere jugar Gauntlet: Dark Legacy via emulador Dolphin a las 2am. El post más triste en la portada: 'Tengo 30 años y estoy solo. Vivo solo. Vivo en una cuev-' Señor, esto es un lobby de Deadlock.
+***** Comments
+- Me encanta la UI de estilo steam retro. El primer juego que noté fue Deadlock que técnicamente ni siquiera ha salido. Bueno incluso para más que juegos muertos.
+- StarCraft 1 te dejaba llevar tu computadora a cualquier lugar y conectar por LAN. En StarCraft 2 Blizzard quería ver y controlar todo, así que vas por internet incluso sentado al lado del otro.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gamedate - Eine Seite zur Wiederbelebung toter Multiplayer-Spiele
+***** TLDR
+Gamedate.org koordiniert Multiplayer-Sitzungen für Spiele mit toten Servern. Benutzer posten Spieleabende (GoldenEye: Source, Left 4 Dead 2, Twisted Metal Black Online), andere zeigen Interesse und erwartete Spielerzahlen werden berechnet. Features retro Steampunk-inspirierte UI und unterstützt sogar noch nicht veröffentlichte Spiele wie Deadlock.
+***** Take
+Endlich eine Dating-App für Leute, die um 2 Uhr morgens Gauntlet: Dark Legacy über den Dolphin-Emulator spielen wollen. Der traurigste Post auf der Startseite: 'Ich bin 30 Jahre alt und allein. Ich lebe allein. Ich lebe in einer Höh-' Mein Herr, dies ist eine Deadlock-Lobby.
+***** Comments
+- Liebe die Retro-Steam-inspirierte UI. Das erste Spiel, das mir auffiel, war Deadlock, das technisch noch nicht erschienen ist. Gut für mehr als nur tote Spiele.
+- StarCraft 1 ließ dich deinen Computer überall hinnehmen und per LAN verbinden. In StarCraft 2 wollte Blizzard alles sehen und kontrollieren, also geht man durchs Internet, selbst wenn man nebeneinander sitzt.
+** Scientists discover recent tectonic activity on the moon :space:geology:moon:science:
+:PROPERTIES:
+:ID:       47051709
+:URL:      https://phys.org/news/2026-02-scientists-tectonic-moon.html
+:HN_URL:   https://news.ycombinator.com/item?id=47051709
+:POINTS:   35
+:COMMENTS: 2
+:BY:       bookmtn
+:END:
+
+*** TLDR
+［From title + comments - article blocked by Jina］ Scientists have discovered evidence of recent tectonic activity on the Moon. The exact timeframe of 'recent' in geological terms is unclear from available information, but the finding challenges assumptions about the Moon being tectonically dead.
+
+*** Take
+HN's entire commentary on this discovery is one person posting 'Recent' with implied air quotes. Peak scientific discourse. The moon moved and we're all just going to let that slide without comment apparently.
+
+*** Comments
+
+**** whycome
+:PROPERTIES:
+:COMMENT_ID: 47051823
+:END:
+"Recent"
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+科学家发现月球上近期的地质活动
+***** TLDR
+［根据标题和评论 - 文章无法访问］ 科学家发现了月球上近期地质活动的证据。地质学意义上的'近期'确切时间范围尚不清楚，但这一发现挑战了月球在地质上已经死亡的假设。
+***** Take
+HN对这一发现的全部评论就是一个人发了个带引号的'近期'。科学讨论的巅峰。月球动了，我们显然都只是让它滑过去不作评论。
+***** Comments
+- "近期"
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+科学者が月で最近の地殻活動を発見
+***** TLDR
+［タイトルとコメントから - 記事アクセス不可］ 科学者が月で最近の地殻活動の証拠を発見した。地質学的な意味での「最近」の正確な時期は利用可能な情報からは不明だが、この発見は月が地殻活動的に死んでいるという仮定に挑戦する。
+***** Take
+HNのこの発見に対するコメント全体は、誰かが「最近」と引用符付きで投稿しただけ。科学的議論のピーク。月が動いたのに、みんなコメントなしでスルーするらしい。
+***** Comments
+- 「最近」
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+과학자들, 달에서 최근 지각 활동 발견
+***** TLDR
+［제목과 댓글에서 - 기사 접근 불가］ 과학자들이 달에서 최근 지각 활동의 증거를 발견했다. 지질학적 의미에서 '최근'의 정확한 시기는 불분명하지만, 이 발견은 달이 지각활동적으로 죽었다는 가정에 도전한다.
+***** Take
+HN의 이 발견에 대한 전체 논평은 누군가 따옴표를 넣어 '최근'이라고 올린 것뿐이다. 과학적 담론의 정점. 달이 움직였는데 우리 모두 별 댓글 없이 그냥 넘어가는 모양이다.
+***** Comments
+- "최근"
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Científicos descubren actividad tectónica reciente en la luna
+***** TLDR
+［Del título + comentarios - artículo bloqueado］ Los científicos han descubierto evidencia de actividad tectónica reciente en la Luna. El marco temporal exacto de 'reciente' en términos geológicos no está claro, pero el hallazgo desafía las suposiciones de que la Luna está tectónicamente muerta.
+***** Take
+Todo el comentario de HN sobre este descubrimiento es una persona publicando 'Reciente' con comillas implícitas. El pico del discurso científico. La luna se movió y aparentemente todos vamos a dejar que pase sin comentarios.
+***** Comments
+- "Reciente"
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wissenschaftler entdecken jüngste tektonische Aktivität auf dem Mond
+***** TLDR
+［Aus Titel + Kommentaren - Artikel blockiert］ Wissenschaftler haben Hinweise auf jüngste tektonische Aktivität auf dem Mond entdeckt. Der genaue Zeitrahmen von 'kürzlich' in geologischen Begriffen ist unklar, aber die Entdeckung stellt Annahmen in Frage, dass der Mond tektonisch tot ist.
+***** Take
+HNs gesamter Kommentar zu dieser Entdeckung ist eine Person, die 'Kürzlich' mit implizierten Anführungszeichen postet. Der Höhepunkt des wissenschaftlichen Diskurses. Der Mond hat sich bewegt und wir lassen das alle anscheinend ohne Kommentar durchgehen.
+***** Comments
+- "Kürzlich"
