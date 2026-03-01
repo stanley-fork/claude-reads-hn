@@ -1,0 +1,546 @@
+#+TITLE: HN Digest 2026-03-01 11:00:00 UT UTC
+#+DATE: 2026-03-01T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Karpathy's 200-line GPT explodes, holographic 3D printers go sub-second, and someone finally named what we're all doing: houseplant programming
+
+* Highlights
+- Microgpt revisited: Karpathy's minimalist GPT now has 7x more comments dissecting every line
+- DISH: Tsinghua prints 3D objects in under a second using holographic light fields
+- H-Bomb: The 118-year mystery of Frank Lloyd Wright's upside-down letters
+- CMU's new AI course: Build a chatbot from scratch, no PhD required
+- Houseplant programming: Tiny software just for yourself, finally has a name
+
+* Stories
+
+** Microgpt :ai:ml:python:education:
+:PROPERTIES:
+:ID:       47202708
+:URL:      http://karpathy.github.io/2026/02/12/microgpt/
+:HN_URL:   https://news.ycombinator.com/item?id=47202708
+:POINTS:   891
+:COMMENTS: 152
+:BY:       tambourine_man
+:END:
+
+*** TLDR
+Andrej Karpathy distilled GPT training and inference into 200 lines of pure Python with zero dependencies. The single file contains everything: dataset loading, character-level tokenizer, autograd engine (the Value class), GPT-2 architecture with attention, Adam optimizer, training loop, and inference. He calls it an 'art project' representing a decade of obsession to strip LLMs to their algorithmic essence.
+
+*** Take
+Production ML frameworks have 999,000 lines on top of this. Karpathy just handed everyone a map to tell essential complexity from accumulated cruft. The typos in the blog post (vocavulary, inmput) prove he doesn't even use an LLM to write about LLMs.
+
+*** Comments
+
+**** sieste
+:PROPERTIES:
+:COMMENT_ID: 47202709
+:END:
+The typos are interesting (vocavulary, inmput) - One of the godfathers of LLMs clearly does not use an LLM to improve his writing, and he doesn't even bother to use a simple spell checker.
+
+**** subset
+:PROPERTIES:
+:COMMENT_ID: 47202710
+:END:
+I had good fun transliterating it to Rust as a learning experience. The trickiest part was working out how to represent the autograd graph data structure with Rust types.
+
+**** znnajdla
+:PROPERTIES:
+:COMMENT_ID: 47202711
+:END:
+Someone will soon figure out how to build micro-LLMs for specialized tasks that have real-world value. Imagine a hyper-focused model for a specific programming framework trained only on open-source repositories.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Microgpt：200行纯Python实现GPT
+***** TLDR
+Andrej Karpathy将GPT训练和推理压缩成200行零依赖的纯Python代码。单个文件包含一切：数据集加载、字符级分词器、自动微分引擎（Value类）、带注意力机制的GPT-2架构、Adam优化器、训练循环和推理。他称之为'艺术项目'，代表了他十年来将LLM剥离到算法本质的执念。
+***** Take
+生产级ML框架在此基础上还有99.9万行代码。Karpathy给了所有人一张区分本质复杂性和历史包袱的地图。博文中的拼写错误证明他写LLM文章时甚至不用LLM。
+***** Comments
+- 有趣的拼写错误——LLM教父显然不用LLM来改进自己的写作，甚至连拼写检查器都不用。
+- 我用Rust重写了一遍作为学习体验。最棘手的是如何用Rust类型表示自动微分图数据结构。
+- 很快会有人为特定任务构建有实际价值的微型LLM。想象一下只用开源代码库训练的框架专用模型。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Microgpt：200行の純粋なPythonでGPTを実装
+***** TLDR
+Andrej Karpathyが依存関係ゼロの200行純粋PythonでGPTの学習と推論を凝縮。データセット読み込み、文字レベルトークナイザー、自動微分エンジン（Valueクラス）、注意機構付きGPT-2アーキテクチャ、Adamオプティマイザー、学習・推論ループすべてを含む。LLMをアルゴリズムの本質まで削ぎ落とす10年の執念を「アートプロジェクト」と呼ぶ。
+***** Take
+本番MLフレームワークはこの上に99.9万行ある。Karpathyは本質的複雑さと負債を見分ける地図をくれた。ブログのタイポはLLMについて書くときもLLMを使わない証拠。
+***** Comments
+- 興味深いタイポ——LLMの創始者は明らかにLLMで文章を改善せず、スペルチェッカーすら使わない。
+- Rustに移植して楽しく学んだ。一番難しかったのは自動微分グラフをRustの型で表現すること。
+- 特化したマイクロLLMを作る人がすぐ現れるだろう。オープンソースだけで訓練されたフレームワーク専用モデルを想像してみて。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Microgpt: 200줄 순수 파이썬으로 GPT 구현
+***** TLDR
+Andrej Karpathy가 의존성 없는 200줄 순수 파이썬으로 GPT 훈련과 추론을 압축했다. 단일 파일에 데이터셋 로딩, 문자 수준 토크나이저, 자동미분 엔진(Value 클래스), 어텐션이 있는 GPT-2 아키텍처, Adam 옵티마이저, 훈련/추론 루프가 모두 포함된다. LLM을 알고리즘 본질까지 벗기려는 10년간의 집착을 '아트 프로젝트'라고 부른다.
+***** Take
+프로덕션 ML 프레임워크는 이 위에 99.9만 줄이 더 있다. Karpathy가 본질적 복잡성과 부채를 구별하는 지도를 건넸다. 블로그의 오타는 LLM에 대해 쓸 때도 LLM을 안 쓴다는 증거다.
+***** Comments
+- 흥미로운 오타 - LLM 창시자가 분명히 LLM으로 글을 다듬지 않고, 맞춤법 검사기조차 안 쓴다.
+- Rust로 옮겨보며 재미있게 배웠다. 가장 까다로운 건 자동미분 그래프를 Rust 타입으로 표현하는 것이었다.
+- 곧 누군가 실용적 가치가 있는 특화 마이크로LLM을 만들 것이다. 오픈소스만으로 훈련된 프레임워크 전용 모델을 상상해보라.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Microgpt: GPT implementado en 200 lineas de Python puro
+***** TLDR
+Andrej Karpathy condenso el entrenamiento e inferencia de GPT en 200 lineas de Python puro sin dependencias. El archivo contiene todo: carga de datos, tokenizador a nivel de caracter, motor de autograd (clase Value), arquitectura GPT-2 con atencion, optimizador Adam, bucles de entrenamiento e inferencia. Lo llama 'proyecto artistico' que representa una decada de obsesion por reducir LLMs a su esencia algoritmica.
+***** Take
+Los frameworks ML de produccion tienen 999,000 lineas encima de esto. Karpathy acaba de entregar un mapa para distinguir complejidad esencial de deuda acumulada. Los errores tipograficos en el blog demuestran que ni siquiera usa un LLM para escribir sobre LLMs.
+***** Comments
+- Los errores tipograficos son interesantes - uno de los padrinos de LLMs claramente no usa un LLM para mejorar su escritura, ni siquiera un corrector ortografico.
+- Me diverti transliterando a Rust como experiencia de aprendizaje. Lo mas dificil fue representar la estructura de datos del grafo autograd con tipos de Rust.
+- Pronto alguien descubrira como construir micro-LLMs para tareas especializadas con valor real. Imagina un modelo hiperfocado en un framework especifico entrenado solo con repositorios open-source.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Microgpt: GPT in 200 Zeilen purem Python implementiert
+***** TLDR
+Andrej Karpathy hat GPT-Training und -Inferenz in 200 Zeilen reinem Python ohne Abhangigkeiten verdichtet. Die einzelne Datei enthalt alles: Datensatz-Laden, Zeichen-Level-Tokenizer, Autograd-Engine (Value-Klasse), GPT-2-Architektur mit Attention, Adam-Optimizer, Trainings- und Inferenz-Schleifen. Er nennt es ein 'Kunstprojekt', das ein Jahrzehnt Besessenheit reprasentiert, LLMs auf ihre algorithmische Essenz zu reduzieren.
+***** Take
+Produktions-ML-Frameworks haben 999.000 Zeilen daruber. Karpathy hat allen eine Karte gegeben, um wesentliche Komplexitat von angesammeltem Ballast zu unterscheiden. Die Tippfehler im Blog beweisen, dass er nicht mal ein LLM benutzt, um uber LLMs zu schreiben.
+***** Comments
+- Die Tippfehler sind interessant - einer der Vater der LLMs benutzt offensichtlich kein LLM, um sein Schreiben zu verbessern, nicht mal eine Rechtschreibprufung.
+- Ich hatte viel Spass beim Umschreiben in Rust als Lernerfahrung. Das Schwierigste war, die Autograd-Graph-Datenstruktur mit Rust-Typen darzustellen.
+- Bald wird jemand herausfinden, wie man Mikro-LLMs fur spezialisierte Aufgaben mit echtem Wert baut. Stell dir ein hyperfokussiertes Modell fur ein bestimmtes Framework vor, nur mit Open-Source-Repos trainiert.
+** H-Bomb: A Frank Lloyd Wright typographic mystery :design:typography:architecture:history:
+:PROPERTIES:
+:ID:       47163779
+:URL:      https://www.inconspicuous.info/p/h-bomb-a-frank-lloyd-wright-typographic
+:HN_URL:   https://news.ycombinator.com/item?id=47163779
+:POINTS:   92
+:COMMENTS: 27
+:BY:       mrngm
+:END:
+
+*** TLDR
+Unity Temple, Frank Lloyd Wright's 1908 masterpiece in Oak Park, has an upside-down 'H' in its bronze lettering. Typographer Jonathan Hoefler spotted it, triggering a deep investigation. The author traced four distinct eras of the lettering through photos dating back to the 1930s-40s, discovering that inverted letters (H and S) have appeared and disappeared multiple times through gunite treatments, vandalism, and restorations. A 1956 photo shows all three H's inverted, but we still don't know if Wright himself installed them that way.
+
+*** Take
+This is 118 years of humans installing and reinstalling the same letters wrong in new and creative ways. The real mystery isn't whether Wright made a mistake - it's that professional architects kept making the same mistake decade after decade. There's a metaphor about software maintenance in here somewhere.
+
+*** Comments
+
+**** chris_engel
+:PROPERTIES:
+:COMMENT_ID: 47163780
+:END:
+Nobody speaks about the way larger spacing between 'AND THE' in comparison to the other spaces...
+
+**** parpfish
+:PROPERTIES:
+:COMMENT_ID: 47163781
+:END:
+I'm curious if the mounting points for the letters had 180deg rotational symmetry. If they didn't, that'd go a long way to explaining correctness.
+
+**** weinzierl
+:PROPERTIES:
+:COMMENT_ID: 47163782
+:END:
+Given that there had been wrongly installed letters continuously since at least 1956, I'd consider the inverted H historically accurate and I hope it won't ever get fixed.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+H-炸弹：弗兰克·劳埃德·赖特的字体之谜
+***** TLDR
+弗兰克·劳埃德·赖特1908年在橡树园的杰作联合神殿，其青铜字母中有一个倒置的'H'。字体设计师Jonathan Hoefler发现后引发了深入调查。作者通过追溯到1930-40年代的照片，追踪了字母的四个不同时期，发现倒置的字母（H和S）在喷浆处理、破坏和修复过程中多次出现和消失。1956年的照片显示三个H全部倒置，但我们仍不知道赖特本人是否就是这样安装的。
+***** Take
+这是人类118年来以各种创造性方式反复装错同样字母的故事。真正的谜团不是赖特是否犯了错，而是专业建筑师们十年又十年地犯同样的错误。这里面有个关于软件维护的隐喻。
+***** Comments
+- 没人提'AND THE'之间的间距比其他地方大得多...
+- 我好奇字母的安装点是否有180度旋转对称性。如果没有，那就能很好解释'正确性'问题。
+- 鉴于至少从1956年起就一直有装错的字母，我认为倒置的H是历史真实的，希望永远不要修正。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+H爆弾：フランク・ロイド・ライトの活字の謎
+***** TLDR
+フランク・ロイド・ライトが1908年にオークパークに建てた傑作ユニティ・テンプルの青銅文字に逆さまの「H」がある。タイポグラファーのJonathan Hoeflerが発見し、深い調査のきっかけとなった。著者は1930-40年代まで遡る写真を通じて文字の4つの異なる時代を追跡し、逆さまの文字（HとS）がガナイト処理、破壊行為、修復を経て何度も現れては消えていることを発見した。1956年の写真では3つのHすべてが逆さまだが、ライト自身がそう設置したかは不明。
+***** Take
+これは人類が118年間、同じ文字を新しい創造的な方法で何度も間違って設置してきた物語だ。本当の謎はライトがミスをしたかではなく、プロの建築家が何十年も同じミスを繰り返してきたこと。ソフトウェア保守についての比喩がここにある。
+***** Comments
+- 'AND THE'の間隔が他より大きいことについて誰も言及していない...
+- 文字の取り付け点が180度回転対称性を持っていたか気になる。なければ「正しさ」をかなり説明できる。
+- 少なくとも1956年から間違った文字が設置され続けていたことを考えると、逆さHは歴史的に正確と考え、決して修正されないことを願う。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+H-폭탄: 프랭크 로이드 라이트의 타이포그래피 미스터리
+***** TLDR
+프랭크 로이드 라이트가 1908년 오크파크에 지은 걸작 유니티 템플의 청동 글자에 거꾸로 된 'H'가 있다. 타이포그래퍼 조나단 호플러가 발견하면서 깊은 조사가 시작됐다. 저자는 1930-40년대까지 거슬러 올라가는 사진을 통해 글자의 네 가지 시대를 추적했고, 뒤집힌 글자(H와 S)가 거나이트 처리, 기물파손, 복원을 거치며 여러 번 나타났다 사라졌음을 발견했다. 1956년 사진에는 세 개의 H가 모두 뒤집혀 있지만, 라이트 본인이 그렇게 설치했는지는 여전히 모른다.
+***** Take
+이것은 인류가 118년간 같은 글자를 새롭고 창의적인 방식으로 계속 잘못 설치해온 이야기다. 진짜 미스터리는 라이트가 실수했는지가 아니라, 전문 건축가들이 수십 년간 같은 실수를 반복해왔다는 것이다. 소프트웨어 유지보수에 대한 비유가 여기 있다.
+***** Comments
+- 'AND THE' 사이 간격이 다른 곳보다 훨씬 넓다는 건 아무도 말 안 하네...
+- 글자 장착점이 180도 회전 대칭이었는지 궁금하다. 아니었다면 '정확성' 문제를 많이 설명해줄 것이다.
+- 최소 1956년부터 계속 잘못 설치된 글자가 있었다는 점을 고려하면, 뒤집힌 H가 역사적으로 정확하다고 보며 절대 고쳐지지 않길 바란다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Bomba-H: Un misterio tipografico de Frank Lloyd Wright
+***** TLDR
+Unity Temple, la obra maestra de 1908 de Frank Lloyd Wright en Oak Park, tiene una 'H' al reves en su rotulacion de bronce. El tipografo Jonathan Hoefler la descubrio, desencadenando una profunda investigacion. El autor rastrea cuatro epocas distintas de la rotulacion a traves de fotos desde los anos 1930-40, descubriendo que las letras invertidas (H y S) han aparecido y desaparecido multiples veces a traves de tratamientos de gunita, vandalismo y restauraciones. Una foto de 1956 muestra las tres H invertidas, pero aun no sabemos si Wright las instalo asi.
+***** Take
+Son 118 anos de humanos instalando y reinstalando las mismas letras mal de formas nuevas y creativas. El verdadero misterio no es si Wright cometio un error, sino que arquitectos profesionales siguieron cometiendo el mismo error decada tras decada. Hay una metafora sobre mantenimiento de software aqui.
+***** Comments
+- Nadie habla del espaciado mucho mayor entre 'AND THE' comparado con los otros espacios...
+- Me pregunto si los puntos de montaje de las letras tenian simetria rotacional de 180 grados. Si no, eso explicaria mucho la 'correccion'.
+- Dado que ha habido letras mal instaladas continuamente desde al menos 1956, consideraria la H invertida historicamente precisa y espero que nunca se arregle.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+H-Bombe: Ein typografisches Ratsel von Frank Lloyd Wright
+***** TLDR
+Unity Temple, Frank Lloyd Wrights Meisterwerk von 1908 in Oak Park, hat ein umgedrehtes 'H' in seiner Bronzebeschriftung. Typograf Jonathan Hoefler entdeckte es und loste eine tiefgreifende Untersuchung aus. Der Autor verfolgte vier verschiedene Epochen der Beschriftung anhand von Fotos aus den 1930er-40er Jahren und entdeckte, dass umgedrehte Buchstaben (H und S) durch Spritzbetonbehandlungen, Vandalismus und Restaurierungen mehrfach erschienen und verschwanden. Ein Foto von 1956 zeigt alle drei H's umgedreht, aber ob Wright sie selbst so installiert hat, wissen wir noch nicht.
+***** Take
+Das sind 118 Jahre, in denen Menschen dieselben Buchstaben immer wieder auf neue, kreative Weise falsch installiert haben. Das wahre Ratsel ist nicht, ob Wright einen Fehler gemacht hat, sondern dass professionelle Architekten Jahrzehnt fur Jahrzehnt denselben Fehler machten. Hier steckt eine Metapher uber Software-Wartung.
+***** Comments
+- Niemand spricht uber den viel grosseren Abstand zwischen 'AND THE' im Vergleich zu den anderen Abstanden...
+- Ich frage mich, ob die Befestigungspunkte der Buchstaben 180-Grad-Rotationssymmetrie hatten. Wenn nicht, wurde das die 'Korrektheit' gut erklaren.
+- Da seit mindestens 1956 standig falsch installierte Buchstaben vorhanden waren, wurde ich das umgedrehte H als historisch korrekt betrachten und hoffe, dass es nie repariert wird.
+** Sub-second volumetric 3D printing by synthesis of holographic light fields :3dprinting:research:hardware:optics:
+:PROPERTIES:
+:ID:       47152448
+:URL:      https://www.nature.com/articles/s41586-026-10114-5
+:HN_URL:   https://news.ycombinator.com/item?id=47152448
+:POINTS:   63
+:COMMENTS: 11
+:BY:       zdw
+:END:
+
+*** TLDR
+Tsinghua researchers developed DISH (Digital Incoherent Synthesis of Holographic light fields) that prints millimeter-scale 3D objects in under one second. Instead of rotating the sample like traditional computed axial lithography, DISH rotates a periscope at 10 rotations/second while a DMD projects 17,000Hz patterns. A coherent laser with holographic optimization achieves 11um resolution across 1cm depth. Works with low-viscosity materials (4.7 cP) since printing finishes before the object can sink.
+
+*** Take
+They turned Star Trek replicator dreams into a loss optimization problem with spinning mirrors. The Benchy (3D printing's Hello World) isn't that impressive, but it was printed faster than you can say 'computed axial lithography'.
+
+*** Comments
+
+**** btown
+:PROPERTIES:
+:COMMENT_ID: 47152449
+:END:
+I highly recommend reading the paper - it's quite approachable. They turn the Star Trek replicator problem into 'just' a loss optimization problem with projectors and spinning mirrors!
+
+**** skybrian
+:PROPERTIES:
+:COMMENT_ID: 47152450
+:END:
+Figure 5g: not that impressive a Benchy. But printed much faster, presumably.
+
+**** jimbokun
+:PROPERTIES:
+:COMMENT_ID: 47152451
+:END:
+ELI5? Is this a Star Trek replicator or what?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+亚秒级全息光场合成体积3D打印
+***** TLDR
+清华研究人员开发了DISH（数字非相干全息光场合成），能在一秒内打印毫米级3D物体。与传统计算轴向光刻不同，DISH不旋转样品，而是以每秒10转的速度旋转潜望镜，同时DMD以17000Hz投射图案。相干激光配合全息优化在1厘米深度内实现11微米分辨率。由于打印在物体下沉前完成，可使用低粘度材料（4.7 cP）。
+***** Take
+他们把星际迷航复制机的梦想变成了带旋转镜的损失优化问题。Benchy（3D打印的Hello World）不太惊艳，但打印速度比你说'计算轴向光刻'还快。
+***** Comments
+- 强烈推荐阅读论文——非常易懂。他们把星际迷航复制机问题变成了投影仪和旋转镜的损失优化问题！
+- 图5g：Benchy不太惊艳。但大概打印得更快。
+- 能给五岁小孩解释下吗？这是星际迷航复制机吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ホログラフィック光場合成による1秒未満の体積3Dプリント
+***** TLDR
+清華大学の研究者がDISH（デジタル非干渉ホログラフィック光場合成）を開発し、ミリメートルスケールの3Dオブジェクトを1秒未満で印刷できる。従来の計算軸方向リソグラフィーのようにサンプルを回転させる代わりに、DISHは毎秒10回転でペリスコープを回転させ、DMDが17,000Hzでパターンを投影する。コヒーレントレーザーとホログラフィック最適化により、1cm深度で11um解像度を達成。印刷が沈む前に終わるため低粘度材料（4.7 cP）でも使用可能。
+***** Take
+スタートレックのレプリケーターの夢を回転ミラー付きの損失最適化問題に変えた。Benchy（3Dプリントのハローワールド）はそれほど印象的ではないが、「計算軸方向リソグラフィー」と言い終わる前に印刷される。
+***** Comments
+- 論文を読むことを強くお勧めする——とてもわかりやすい。スタートレックのレプリケーター問題をプロジェクターと回転ミラーの損失最適化問題に変えている！
+- 図5g：それほど印象的なBenchyではない。でもおそらくずっと速く印刷される。
+- 5歳児にもわかるように説明して？これはスタートレックのレプリケーター？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+홀로그래픽 광장 합성을 통한 1초 미만 체적 3D 프린팅
+***** TLDR
+칭화대 연구진이 밀리미터 규모의 3D 객체를 1초 안에 프린트하는 DISH(디지털 비간섭 홀로그래픽 광장 합성)를 개발했다. 기존 계산 축 리소그래피처럼 샘플을 회전시키는 대신, DISH는 잠망경을 초당 10회전시키며 DMD가 17,000Hz로 패턴을 투사한다. 일관성 레이저와 홀로그래픽 최적화로 1cm 깊이에서 11um 해상도를 달성한다. 프린팅이 물체가 가라앉기 전에 끝나므로 저점도 재료(4.7 cP)도 사용 가능하다.
+***** Take
+스타트렉 복제기의 꿈을 회전 거울이 있는 손실 최적화 문제로 바꿨다. Benchy(3D 프린팅의 Hello World)는 그다지 인상적이지 않지만, '계산 축 리소그래피'라고 말하는 것보다 빨리 프린트된다.
+***** Comments
+- 논문을 읽어보길 강력 추천한다 - 꽤 이해하기 쉽다. 스타트렉 복제기 문제를 프로젝터와 회전 거울의 손실 최적화 문제로 바꿨다!
+- 그림 5g: 그다지 인상적인 Benchy는 아니다. 하지만 아마 훨씬 빨리 프린트됐을 것이다.
+- 5살도 알아듣게 설명해줘? 이거 스타트렉 복제기야 뭐야?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Impresion 3D volumetrica en menos de un segundo mediante sintesis de campos de luz holograficos
+***** TLDR
+Investigadores de Tsinghua desarrollaron DISH (Sintesis Digital Incoherente de campos de luz Holograficos) que imprime objetos 3D de escala milimetrica en menos de un segundo. En lugar de rotar la muestra como la litografia axial computada tradicional, DISH rota un periscopio a 10 rotaciones/segundo mientras un DMD proyecta patrones a 17,000Hz. Un laser coherente con optimizacion holografica logra 11um de resolucion en 1cm de profundidad. Funciona con materiales de baja viscosidad (4.7 cP) ya que la impresion termina antes de que el objeto pueda hundirse.
+***** Take
+Convirtieron los suenos del replicador de Star Trek en un problema de optimizacion de perdida con espejos giratorios. El Benchy (el Hello World de la impresion 3D) no es tan impresionante, pero se imprimio mas rapido de lo que puedes decir 'litografia axial computada'.
+***** Comments
+- Recomiendo mucho leer el paper - es bastante accesible. Convierten el problema del replicador de Star Trek en 'solo' un problema de optimizacion de perdida con proyectores y espejos giratorios!
+- Figura 5g: no es un Benchy tan impresionante. Pero presumiblemente impreso mucho mas rapido.
+- Explicamelo como si tuviera 5 anos? Es esto un replicador de Star Trek o que?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Volumetrischer 3D-Druck in unter einer Sekunde durch Synthese holografischer Lichtfelder
+***** TLDR
+Forscher der Tsinghua entwickelten DISH (Digitale Inkoharente Synthese Holografischer Lichtfelder), das millimetergrosse 3D-Objekte in unter einer Sekunde druckt. Anstatt die Probe wie bei traditioneller computertomografischer Lithografie zu rotieren, rotiert DISH ein Periskop mit 10 Umdrehungen/Sekunde, wahrend ein DMD Muster mit 17.000Hz projiziert. Ein koharenter Laser mit holografischer Optimierung erreicht 11um Auflosung uber 1cm Tiefe. Funktioniert mit niedrigviskosen Materialien (4,7 cP), da der Druck endet, bevor das Objekt sinken kann.
+***** Take
+Sie haben Star Trek Replikator-Traume in ein Verlustoptimierungsproblem mit rotierenden Spiegeln verwandelt. Der Benchy (Hello World des 3D-Drucks) ist nicht so beeindruckend, wurde aber schneller gedruckt, als man 'computertomografische Lithografie' sagen kann.
+***** Comments
+- Ich empfehle sehr, das Paper zu lesen - es ist recht zuganglich. Sie verwandeln das Star Trek Replikator-Problem in 'nur' ein Verlustoptimierungsproblem mit Projektoren und rotierenden Spiegeln!
+- Abbildung 5g: kein so beeindruckender Benchy. Aber vermutlich viel schneller gedruckt.
+- ELI5? Ist das ein Star Trek Replikator oder was?
+** 10-202: Introduction to Modern AI (CMU) :education:ai:ml:courses:
+:PROPERTIES:
+:ID:       47204559
+:URL:      https://modernaicourse.org
+:HN_URL:   https://news.ycombinator.com/item?id=47204559
+:POINTS:   60
+:COMMENTS: 12
+:BY:       vismit2000
+:END:
+
+*** TLDR
+CMU's new course taught by Zico Kolter guides students from zero to building a functional chatbot. Covers supervised ML, linear models, neural networks, transformers, tokenizers, efficient inference, supervised fine-tuning, RLHF, and AI safety. A free online version is available with a 2-week delay. All homeworks are Colab notebooks. Prerequisites: basic Python (15-112) and differential calculus (21-111). Students can use AI for homework but not for quizzes/exams.
+
+*** Take
+Finally a course that teaches you how to build the thing everyone's using instead of mathematical proofs you'll never need. The AI policy is perfectly ironic: learn to build AI, but prove you learned something without AI's help.
+
+*** Comments
+
+**** aanet
+:PROPERTIES:
+:COMMENT_ID: 47204560
+:END:
+Students are permitted to use AI assistants for all homework but strongly encouraged to complete final submissions without AI. Cannot use any assistants during in-class evaluations.
+
+**** gabrieledarrigo
+:PROPERTIES:
+:COMMENT_ID: 47204561
+:END:
+Do you think this is a good course? Or, what do you suggest as a structured course to learn how LLMs work?
+
+**** sim04ful
+:PROPERTIES:
+:COMMENT_ID: 47204562
+:END:
+Nothing on symbolic reasoning?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+10-202：现代人工智能导论（CMU）
+***** TLDR
+CMU由Zico Kolter教授的新课程，指导学生从零开始构建功能性聊天机器人。涵盖监督学习、线性模型、神经网络、Transformer、分词器、高效推理、监督微调、RLHF和AI安全。提供延迟两周的免费在线版本。所有作业都是Colab笔记本。前置要求：基础Python（15-112）和微积分（21-111）。学生可以在作业中使用AI，但测验/考试不行。
+***** Take
+终于有一门教你如何构建大家都在用的东西的课程，而不是你永远用不上的数学证明。AI政策非常讽刺：学习构建AI，但要在没有AI帮助的情况下证明你学到了东西。
+***** Comments
+- 学生可以在所有作业中使用AI助手，但强烈建议不用AI完成最终提交。课堂评估时不能使用任何助手。
+- 你觉得这门课好吗？或者你推荐什么结构化课程来学习LLM如何工作？
+- 没有符号推理的内容？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+10-202：現代AI入門（CMU）
+***** TLDR
+Zico Kolter教授によるCMUの新コースで、学生をゼロから機能するチャットボット構築まで導く。教師あり学習、線形モデル、ニューラルネットワーク、Transformer、トークナイザー、効率的な推論、教師ありファインチューニング、RLHF、AI安全をカバー。2週間遅れの無料オンライン版あり。全ての課題はColabノートブック。前提条件：基本Python（15-112）と微分積分（21-111）。学生は課題にAIを使えるがクイズ/試験には使えない。
+***** Take
+ついにみんなが使っているものを作る方法を教えるコースが登場。決して使わない数学的証明ではなく。AIポリシーは完璧に皮肉：AIを作ることを学ぶが、AIの助けなしで学んだことを証明しなければならない。
+***** Comments
+- 学生は全ての課題でAIアシスタントを使えるが、最終提出はAIなしで完成させることを強く推奨。授業内評価ではアシスタント使用不可。
+- これは良いコースだと思う？LLMの仕組みを学ぶ構造化されたコースとして何を勧める？
+- 記号推論については何もない？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+10-202: 현대 AI 입문 (CMU)
+***** TLDR
+Zico Kolter가 가르치는 CMU 신규 과정으로 학생들을 제로부터 기능하는 챗봇 구축까지 안내한다. 지도학습, 선형 모델, 신경망, 트랜스포머, 토크나이저, 효율적 추론, 지도 파인튜닝, RLHF, AI 안전을 다룬다. 2주 지연된 무료 온라인 버전 제공. 모든 과제는 Colab 노트북. 선수과목: 기본 파이썬(15-112)과 미분적분(21-111). 학생들은 과제에 AI를 사용할 수 있지만 퀴즈/시험에는 불가.
+***** Take
+드디어 모두가 쓰는 것을 만드는 법을 가르치는 과정이 나왔다. 절대 쓸 일 없는 수학 증명 대신. AI 정책이 완벽하게 아이러니하다: AI 만드는 법을 배우되, AI 도움 없이 배웠다는 걸 증명해야 한다.
+***** Comments
+- 학생들은 모든 과제에 AI 어시스턴트를 사용할 수 있지만 최종 제출은 AI 없이 완료할 것을 강력 권장. 수업 내 평가에서는 어시스턴트 사용 불가.
+- 이 과정이 좋다고 생각해? LLM 작동 방식을 배우기 위한 체계적인 과정으로 뭘 추천해?
+- 기호 추론에 대한 내용은 없어?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+10-202: Introduccion a la IA Moderna (CMU)
+***** TLDR
+El nuevo curso de CMU impartido por Zico Kolter guia a los estudiantes desde cero hasta construir un chatbot funcional. Cubre ML supervisado, modelos lineales, redes neuronales, transformers, tokenizadores, inferencia eficiente, ajuste fino supervisado, RLHF y seguridad de IA. Disponible version online gratuita con 2 semanas de retraso. Todas las tareas son notebooks de Colab. Requisitos: Python basico (15-112) y calculo diferencial (21-111). Los estudiantes pueden usar IA para tareas pero no para examenes.
+***** Take
+Finalmente un curso que te ensena como construir lo que todos usan en lugar de pruebas matematicas que nunca necesitaras. La politica de IA es perfectamente ironica: aprende a construir IA, pero demuestra que aprendiste algo sin ayuda de IA.
+***** Comments
+- Los estudiantes pueden usar asistentes de IA para todas las tareas pero se les recomienda encarecidamente completar las entregas finales sin IA. No pueden usar asistentes durante evaluaciones en clase.
+- Crees que es un buen curso? O que sugieres como curso estructurado para aprender como funcionan los LLMs?
+- Nada sobre razonamiento simbolico?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+10-202: Einfuhrung in Moderne KI (CMU)
+***** TLDR
+CMUs neuer Kurs von Zico Kolter fuhrt Studenten von Null zum Bau eines funktionierenden Chatbots. Behandelt uberwachtes ML, lineare Modelle, neuronale Netze, Transformer, Tokenizer, effiziente Inferenz, uberwachtes Feintuning, RLHF und KI-Sicherheit. Eine kostenlose Online-Version ist mit 2 Wochen Verzogerung verfugbar. Alle Hausaufgaben sind Colab-Notebooks. Voraussetzungen: grundlegendes Python (15-112) und Differentialrechnung (21-111). Studenten durfen KI fur Hausaufgaben nutzen, aber nicht fur Tests/Prufungen.
+***** Take
+Endlich ein Kurs, der lehrt, wie man das baut, was alle benutzen, statt mathematischer Beweise, die man nie braucht. Die KI-Richtlinie ist perfekt ironisch: Lerne KI zu bauen, aber beweise, dass du etwas ohne KI-Hilfe gelernt hast.
+***** Comments
+- Studenten durfen KI-Assistenten fur alle Hausaufgaben nutzen, werden aber ermutigt, Endabgaben ohne KI zu erstellen. Keine Assistenten bei Prufungen im Unterricht erlaubt.
+- Glaubst du, das ist ein guter Kurs? Oder was empfiehlst du als strukturierten Kurs, um zu lernen, wie LLMs funktionieren?
+- Nichts uber symbolisches Schlussfolgern?
+** An ode to houseplant programming :programming:culture:software:philosophy:
+:PROPERTIES:
+:ID:       47181542
+:URL:      https://hannahilea.com/blog/houseplant-programming/
+:HN_URL:   https://news.ycombinator.com/item?id=47181542
+:POINTS:   33
+:COMMENTS: 7
+:BY:       evakhoury
+:END:
+
+*** TLDR
+Hannah Ilea celebrates 'houseplant programming' - a term coined by Recurse Center peer Ryan Goldstein for tiny software written just for yourself. Like houseplants: they live in your home, need occasional care but not production-grade robustness, can be propagated and shared, and most importantly - 'it works on my machine' is the goal, not an excuse. Also introduces 'bouquet programming' for one-off scripts that need no maintenance.
+
+*** Take
+Someone finally named what half of HN's side projects actually are. The metaphor is perfect: your houseplant code doesn't need to survive every environment, just yours. Now I can stop apologizing that my scripts are held together with string and electrical tape.
+
+*** Comments
+
+**** userbinator
+:PROPERTIES:
+:COMMENT_ID: 47181543
+:END:
+Not sure we need another term for this, as 'utilities' has been the accepted term for various one-off programs. However, the term reminded me of a memorable interaction with an old woman who wanted to write a program in x86 Asm to manage various aspects of her plants.
+
+**** ku1ik
+:PROPERTIES:
+:COMMENT_ID: 47181544
+:END:
+This is such a lovely article. It's one of the few things posted to HN these days that actually feels human.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+向盆栽编程致敬
+***** TLDR
+Hannah Ilea赞美'盆栽编程'——这是Recurse Center同伴Ryan Goldstein创造的术语，指只为自己写的小型软件。就像盆栽：它们住在你家里，需要偶尔照料但不需要生产级的健壮性，可以繁殖和分享，最重要的是——'在我机器上能跑'是目标，不是借口。还介绍了'花束编程'，指不需要维护的一次性脚本。
+***** Take
+终于有人给HN一半的副项目起了名字。这个比喻太完美了：你的盆栽代码不需要在每个环境都能活，只需要在你的环境里活着就行。现在我可以不用再为我那用绳子和电工胶带勉强粘在一起的脚本道歉了。
+***** Comments
+- 不确定我们需要另一个术语，'工具程序'一直是各种一次性程序的公认术语。不过这个词让我想起了一位老太太，她想用x86汇编写程序来管理她的植物。
+- 这篇文章太可爱了。这是这些天HN上少数几篇真正有人情味的东西之一。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+観葉植物プログラミングへの頌歌
+***** TLDR
+Hannah IleaがRecurse Centerの仲間Ryan Goldsteinが作った「観葉植物プログラミング」という言葉を称える——自分だけのために書く小さなソフトウェアのこと。観葉植物のように：家に住み、時々世話が必要だが本番グレードの堅牢さは不要、挿し木で共有でき、最も重要なのは「自分のマシンで動く」が目標であり言い訳ではないこと。メンテナンス不要の一回限りスクリプト「ブーケプログラミング」も紹介。
+***** Take
+ついにHNのサイドプロジェクトの半分が何であるかに名前がついた。この比喩は完璧：あなたの観葉植物コードはすべての環境で生き残る必要はなく、あなたの環境だけでいい。これで紐とビニールテープでなんとか動いているスクリプトを謝る必要がなくなった。
+***** Comments
+- これに別の用語が必要かどうかわからない。'ユーティリティ'が様々な一回限りプログラムの一般的な用語だった。ただ、この言葉はx86アセンブリで植物管理プログラムを書きたいと言った老婦人との思い出深い会話を思い出させた。
+- とても素敵な記事。最近HNに投稿されたもので本当に人間味を感じる数少ないものの一つ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+화분 프로그래밍에 바치는 찬가
+***** TLDR
+Hannah Ilea가 '화분 프로그래밍'을 찬양한다 - Recurse Center 동료 Ryan Goldstein이 만든 용어로 오직 자신만을 위해 작성한 작은 소프트웨어를 의미한다. 화분처럼: 집에 살고, 가끔 돌봄이 필요하지만 프로덕션급 견고함은 불필요하며, 번식시켜 공유할 수 있고, 가장 중요한 건 - '내 컴퓨터에서 돌아감'이 목표이지 변명이 아니라는 것. 유지보수가 필요 없는 일회성 스크립트 '꽃다발 프로그래밍'도 소개한다.
+***** Take
+드디어 누군가 HN 사이드 프로젝트 절반이 뭔지에 이름을 붙였다. 비유가 완벽하다: 화분 코드는 모든 환경에서 살아남을 필요 없이 네 환경에서만 살면 된다. 이제 끈과 절연테이프로 겨우 붙어있는 스크립트에 대해 사과할 필요가 없어졌다.
+***** Comments
+- 이게 또 다른 용어가 필요한지 모르겠다. '유틸리티'가 다양한 일회성 프로그램의 통용 용어였다. 하지만 이 용어는 x86 어셈블리로 식물 관리 프로그램을 작성하고 싶다던 할머니와의 기억에 남는 대화를 떠올리게 했다.
+- 정말 사랑스러운 글이다. 요즘 HN에 올라오는 것 중 실제로 인간미가 느껴지는 몇 안 되는 글 중 하나다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Una oda a la programacion de planta de interior
+***** TLDR
+Hannah Ilea celebra la 'programacion de planta de interior' - un termino acunado por el companero de Recurse Center Ryan Goldstein para software pequeno escrito solo para ti mismo. Como las plantas de interior: viven en tu casa, necesitan cuidado ocasional pero no robustez de produccion, pueden propagarse y compartirse, y lo mas importante - 'funciona en mi maquina' es el objetivo, no una excusa. Tambien introduce 'programacion de ramo' para scripts de una sola vez que no necesitan mantenimiento.
+***** Take
+Alguien finalmente nombro lo que la mitad de los proyectos secundarios de HN realmente son. La metafora es perfecta: tu codigo planta de interior no necesita sobrevivir en cada ambiente, solo en el tuyo. Ahora puedo dejar de disculparme porque mis scripts estan unidos con cuerda y cinta aislante.
+***** Comments
+- No estoy seguro de que necesitemos otro termino, 'utilidades' ha sido el termino aceptado para programas de un solo uso. Sin embargo, el termino me recordo una interaccion memorable con una anciana que queria escribir un programa en x86 Asm para gestionar varios aspectos de sus plantas.
+- Es un articulo tan encantador. Es una de las pocas cosas publicadas en HN estos dias que realmente se siente humana.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Eine Ode an das Zimmerpflanzen-Programmieren
+***** TLDR
+Hannah Ilea feiert 'Zimmerpflanzen-Programmieren' - ein Begriff von Recurse Center-Kollege Ryan Goldstein fur kleine Software, die nur fur einen selbst geschrieben wird. Wie Zimmerpflanzen: sie leben in deinem Zuhause, brauchen gelegentliche Pflege aber keine Produktions-Robustheit, konnen vermehrt und geteilt werden, und am wichtigsten - 'lauft auf meinem Rechner' ist das Ziel, keine Ausrede. Fuhrt auch 'Blumenstrauss-Programmieren' ein fur einmalige Skripte ohne Wartungsbedarf.
+***** Take
+Endlich hat jemand benannt, was die Halfte der HN-Nebenprojekte wirklich sind. Die Metapher ist perfekt: dein Zimmerpflanzen-Code muss nicht in jeder Umgebung uberleben, nur in deiner. Jetzt muss ich mich nicht mehr entschuldigen, dass meine Skripte mit Schnur und Isolierband zusammengehalten werden.
+***** Comments
+- Nicht sicher, ob wir einen weiteren Begriff brauchen, 'Utilities' war der akzeptierte Begriff fur verschiedene Einmal-Programme. Der Begriff erinnerte mich jedoch an ein denkwurdiges Gesprach mit einer alten Frau, die ein Programm in x86 Asm schreiben wollte, um verschiedene Aspekte ihrer Pflanzen zu verwalten.
+- Das ist so ein liebenswerter Artikel. Er ist eines der wenigen Dinge, die heutzutage auf HN gepostet werden und sich wirklich menschlich anfuhlen.
