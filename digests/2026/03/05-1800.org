@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-03-05 18:00:00 UT UTC
+#+DATE: 2026-03-05T18:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Wikipedia gets pwned, Safe Browsing sleeps on duty, and Elixir devs finally get agents that don't crash
+
+* Highlights
+- Wikipedia: XSS worm spreads through admin accounts like a digital plague
+- Google Safe Browsing: Missing 84% of phishing sites is called 'coverage'
+- Jido 2.0: Because the BEAM was built for agents, not Node.js
+
+* Stories
+
+** Wikipedia in read-only mode following mass admin account compromise :security:wikipedia:xss:worm:
+:PROPERTIES:
+:ID:       47263323
+:URL:      https://www.wikimediastatus.net
+:HN_URL:   https://news.ycombinator.com/item?id=47263323
+:POINTS:   284
+:COMMENTS: 78
+:BY:       greyface-
+:END:
+
+*** TLDR
+An XSS worm hit Wikipedia hard, injecting itself into MediaWiki:Common.js to execute on every page load. The worm specifically targets admin accounts, using their elevated privileges to propagate further. It hides itself with jQuery, vandalizes random articles, and calls home to basemetrika.ru. Wikipedia is now in read-only mode while they clean up the mess.
+
+*** Take
+Mandatory 2FA was only added 'a few years ago' and any interface admin could edit global JavaScript with no review. The fact that this took until 2026 to happen is the real surprise.
+
+*** Comments
+
+**** epicprogrammer
+:PROPERTIES:
+:COMMENT_ID: 47263401
+:END:
+This is basically a weaponized, highly destructive version of the old MySpace Samy worm. Hitting MediaWiki:Common.js is the absolute nightmare scenario.
+
+**** Wikipedianon
+:PROPERTIES:
+:COMMENT_ID: 47263412
+:END:
+This was only a matter of time. The Wikipedia community takes a cavalier attitude towards security.
+
+**** nhubbard
+:PROPERTIES:
+:COMMENT_ID: 47263423
+:END:
+The worm injects itself into Common.js, uses jQuery to hide UI elements, vandalizes 20 random articles, and if an admin is infected, it propagates further using their API tokens.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+维基百科因管理员账户大规模被入侵而进入只读模式
+***** TLDR
+一个XSS蠕虫攻击了维基百科，将自身注入MediaWiki:Common.js以在每次页面加载时执行。该蠕虫专门针对管理员账户，利用其提升的权限进一步传播。它用jQuery隐藏自身，破坏随机文章，并向basemetrika.ru发送数据。维基百科目前处于只读模式进行清理。
+***** Take
+强制2FA是'几年前'才添加的，任何界面管理员都可以无需审核就编辑全局JavaScript。这件事直到2026年才发生才是真正的惊喜。
+***** Comments
+- 这基本上是老MySpace Samy蠕虫的武器化、高破坏性版本。攻击MediaWiki:Common.js是绝对的噩梦场景。
+- 这只是时间问题。维基百科社区对安全采取了一种漫不经心的态度。
+- 该蠕虫将自身注入Common.js，使用jQuery隐藏UI元素，破坏20篇随机文章，如果管理员被感染，它会使用他们的API令牌进一步传播。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ウィキペディア、管理者アカウント大量侵害で読み取り専用モードに
+***** TLDR
+XSSワームがウィキペディアを攻撃し、MediaWiki:Common.jsに自身を注入してページ読み込みのたびに実行される。このワームは管理者アカウントを標的にし、その権限を利用して拡散する。jQueryで自身を隠し、ランダムな記事を荒らし、basemetrika.ruに通信する。ウィキペディアは現在クリーンアップのため読み取り専用モード。
+***** Take
+必須の2FAは「数年前」に追加されただけで、インターフェース管理者は誰でもレビューなしでグローバルJavaScriptを編集できた。これが2026年まで起きなかったことが本当の驚き。
+***** Comments
+- これは基本的に昔のMySpace Samyワームの武器化された高破壊力版。MediaWiki:Common.jsを攻撃するのは絶対的な悪夢のシナリオ。
+- これは時間の問題だった。ウィキペディアコミュニティはセキュリティに対して無頓着な態度を取っている。
+- ワームはCommon.jsに自身を注入し、jQueryでUI要素を隠し、20のランダムな記事を荒らし、管理者が感染するとAPIトークンを使ってさらに拡散する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+위키피디아, 대규모 관리자 계정 침해로 읽기 전용 모드로 전환
+***** TLDR
+XSS 웜이 위키피디아를 공격하여 MediaWiki:Common.js에 자신을 주입해 모든 페이지 로드 시 실행됩니다. 이 웜은 관리자 계정을 특별히 표적으로 삼아 그들의 높은 권한을 이용해 확산합니다. jQuery로 자신을 숨기고, 무작위 문서를 훼손하며, basemetrika.ru로 데이터를 전송합니다. 위키피디아는 현재 정리를 위해 읽기 전용 모드입니다.
+***** Take
+필수 2FA는 '몇 년 전'에야 추가되었고 인터페이스 관리자 누구나 검토 없이 전역 JavaScript를 편집할 수 있었습니다. 이것이 2026년까지 일어나지 않은 것이 진짜 놀라운 일입니다.
+***** Comments
+- 이것은 기본적으로 옛날 MySpace Samy 웜의 무기화된 고파괴력 버전입니다. MediaWiki:Common.js를 공격하는 것은 절대적인 악몽 시나리오입니다.
+- 이것은 시간 문제였습니다. 위키피디아 커뮤니티는 보안에 대해 안일한 태도를 취합니다.
+- 웜은 Common.js에 자신을 주입하고, jQuery로 UI 요소를 숨기고, 20개의 무작위 문서를 훼손하며, 관리자가 감염되면 API 토큰을 사용해 더 확산됩니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Wikipedia en modo solo lectura tras compromiso masivo de cuentas de administrador
+***** TLDR
+Un gusano XSS atacó Wikipedia, inyectándose en MediaWiki:Common.js para ejecutarse en cada carga de página. El gusano ataca específicamente cuentas de administrador, usando sus privilegios elevados para propagarse. Se oculta con jQuery, vandaliza artículos aleatorios y envía datos a basemetrika.ru. Wikipedia está ahora en modo solo lectura mientras limpian el desastre.
+***** Take
+El 2FA obligatorio solo se añadió 'hace unos años' y cualquier administrador de interfaz podía editar JavaScript global sin revisión. Que esto tardara hasta 2026 en ocurrir es la verdadera sorpresa.
+***** Comments
+- Esto es básicamente una versión armada y altamente destructiva del viejo gusano Samy de MySpace. Atacar MediaWiki:Common.js es el escenario de pesadilla absoluto.
+- Esto era solo cuestión de tiempo. La comunidad de Wikipedia tiene una actitud despreocupada hacia la seguridad.
+- El gusano se inyecta en Common.js, usa jQuery para ocultar elementos de UI, vandaliza 20 artículos aleatorios, y si un admin está infectado, se propaga más usando sus tokens de API.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wikipedia im Nur-Lese-Modus nach massiver Kompromittierung von Admin-Konten
+***** TLDR
+Ein XSS-Wurm hat Wikipedia hart getroffen und sich in MediaWiki:Common.js injiziert, um bei jedem Seitenaufruf ausgeführt zu werden. Der Wurm zielt speziell auf Admin-Konten ab und nutzt deren erhöhte Rechte zur weiteren Verbreitung. Er versteckt sich mit jQuery, vandalisiert zufällige Artikel und kommuniziert mit basemetrika.ru. Wikipedia ist jetzt im Nur-Lese-Modus während der Bereinigung.
+***** Take
+Pflicht-2FA wurde erst 'vor ein paar Jahren' eingeführt und jeder Interface-Admin konnte globales JavaScript ohne Review bearbeiten. Dass dies erst 2026 passierte, ist die eigentliche Überraschung.
+***** Comments
+- Das ist im Grunde eine bewaffnete, hochdestruktive Version des alten MySpace Samy-Wurms. MediaWiki:Common.js zu treffen ist das absolute Alptraum-Szenario.
+- Das war nur eine Frage der Zeit. Die Wikipedia-Community hat eine nachlässige Haltung zur Sicherheit.
+- Der Wurm injiziert sich in Common.js, versteckt UI-Elemente mit jQuery, vandalisiert 20 zufällige Artikel, und wenn ein Admin infiziert ist, verbreitet er sich weiter mit deren API-Tokens.
+** Google Safe Browsing missed 84% of confirmed phishing sites :security:phishing:google:
+:PROPERTIES:
+:ID:       47262347
+:URL:      https://www.norn-labs.com/blog/huginn-report-feb-2026
+:HN_URL:   https://news.ycombinator.com/item?id=47262347
+:POINTS:   177
+:COMMENTS: 53
+:BY:       jdup7
+:END:
+
+*** TLDR
+Norn Labs tested 254 confirmed phishing sites against Google Safe Browsing and found GSB flagged only 41 of them (16%). The worst offenders: Weebly hosted 51 phishing sites with GSB catching only 2 (96% miss rate). Most damning: 16 phishing sites were hosted on Google's own domains (Docs, Forms, Sites, Apps Script) and GSB caught exactly zero of them.
+
+*** Take
+Google is literally hosting phishing attacks on its own infrastructure and not catching them with its own detection tools. The call is coming from inside the house.
+
+*** Comments
+
+**** epicprogrammer
+:PROPERTIES:
+:COMMENT_ID: 47262501
+:END:
+I take these vendor reports with a massive grain of salt. A headline about 84% miss rate sounds like systemic collapse until you look at the different constraint envelopes.
+
+**** kemotep
+:PROPERTIES:
+:COMMENT_ID: 47262512
+:END:
+Default deny and only permitting what you explicitly allow stops 90% of this in a corporate environment.
+
+**** lich_king
+:PROPERTIES:
+:COMMENT_ID: 47262523
+:END:
+I don't understand the metric. They started with ~250 URLs, that's a weirdly small sample. How did they narrow it down?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+谷歌安全浏览漏掉了84%已确认的钓鱼网站
+***** TLDR
+Norn Labs测试了254个已确认的钓鱼网站，发现谷歌安全浏览只标记了41个（16%）。最严重的：Weebly托管了51个钓鱼网站，GSB只发现了2个（96%漏检率）。最讽刺的是：16个钓鱼网站托管在谷歌自己的域名上（Docs、Forms、Sites、Apps Script），GSB一个都没发现。
+***** Take
+谷歌在自己的基础设施上托管钓鱼攻击，却没有用自己的检测工具发现它们。电话是从屋里打来的。
+***** Comments
+- 我对这些供应商报告持保留态度。84%漏检率的标题听起来像是系统性崩溃，直到你看到不同的约束条件。
+- 默认拒绝并只允许明确许可的内容可以阻止企业环境中90%的此类攻击。
+- 我不理解这个指标。他们从约250个URL开始，这是一个奇怪的小样本。他们是如何缩小范围的？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Google セーフブラウジング、確認済みフィッシングサイトの84%を見逃す
+***** TLDR
+Norn Labsが254の確認済みフィッシングサイトをGoogle セーフブラウジングでテストしたところ、GSBがフラグを立てたのはわずか41件（16%）だった。最悪のケース：Weeblyは51のフィッシングサイトをホストし、GSBはたった2件しか検出できなかった（96%の見逃し率）。最も皮肉なのは：16のフィッシングサイトがGoogleの自社ドメイン（Docs、Forms、Sites、Apps Script）でホストされており、GSBは1件も検出しなかった。
+***** Take
+Googleは文字通り自社インフラでフィッシング攻撃をホストしていて、自社の検出ツールで捕まえていない。電話は家の中からかかってきている。
+***** Comments
+- これらのベンダーレポートは大いに疑ってかかる。84%の見逃し率という見出しは、異なる制約条件を見るまではシステム的崩壊のように聞こえる。
+- デフォルト拒否で明示的に許可したものだけを許可すれば、企業環境ではこの90%を防げる。
+- この指標が理解できない。約250のURLから始めたが、それは奇妙に小さなサンプルだ。どうやって絞り込んだのか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+구글 세이프 브라우징, 확인된 피싱 사이트 84% 놓쳐
+***** TLDR
+Norn Labs가 254개의 확인된 피싱 사이트를 구글 세이프 브라우징으로 테스트한 결과 GSB가 플래그한 것은 41개(16%)에 불과했습니다. 가장 심각한 경우: Weebly는 51개의 피싱 사이트를 호스팅했는데 GSB는 2개만 잡았습니다(96% 누락률). 가장 아이러니한 점: 16개의 피싱 사이트가 구글 자체 도메인(Docs, Forms, Sites, Apps Script)에서 호스팅되었는데 GSB는 단 하나도 잡지 못했습니다.
+***** Take
+구글은 말 그대로 자체 인프라에서 피싱 공격을 호스팅하면서 자체 탐지 도구로 잡지 못하고 있습니다. 전화가 집 안에서 오고 있네요.
+***** Comments
+- 이런 벤더 보고서는 상당히 의심스럽게 봅니다. 84% 누락률이라는 헤드라인은 다른 제약 조건을 볼 때까지 시스템적 붕괴처럼 들립니다.
+- 기본 거부하고 명시적으로 허용한 것만 허용하면 기업 환경에서 이것의 90%를 막을 수 있습니다.
+- 이 지표를 이해 못하겠습니다. 약 250개의 URL로 시작했는데, 이상하게 작은 샘플입니다. 어떻게 좁혔나요?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Google Safe Browsing falló en detectar el 84% de sitios de phishing confirmados
+***** TLDR
+Norn Labs probó 254 sitios de phishing confirmados contra Google Safe Browsing y encontró que GSB solo marcó 41 (16%). Los peores casos: Weebly alojó 51 sitios de phishing y GSB solo detectó 2 (96% de fallos). Lo más irónico: 16 sitios de phishing estaban alojados en dominios propios de Google (Docs, Forms, Sites, Apps Script) y GSB no detectó ninguno.
+***** Take
+Google está literalmente alojando ataques de phishing en su propia infraestructura y no los detecta con sus propias herramientas. La llamada viene de dentro de la casa.
+***** Comments
+- Tomo estos informes de proveedores con mucho escepticismo. Un titular sobre 84% de fallos suena como colapso sistémico hasta que miras las diferentes restricciones.
+- Denegación por defecto y permitir solo lo explícitamente autorizado detiene el 90% de esto en un entorno corporativo.
+- No entiendo la métrica. Empezaron con ~250 URLs, es una muestra extrañamente pequeña. ¿Cómo la redujeron?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Google Safe Browsing verpasste 84% bestätigter Phishing-Seiten
+***** TLDR
+Norn Labs testete 254 bestätigte Phishing-Seiten gegen Google Safe Browsing und fand, dass GSB nur 41 davon markierte (16%). Die schlimmsten Fälle: Weebly hostete 51 Phishing-Seiten, GSB erkannte nur 2 (96% Fehlerquote). Am absurdesten: 16 Phishing-Seiten wurden auf Googles eigenen Domains gehostet (Docs, Forms, Sites, Apps Script) und GSB erkannte keine einzige davon.
+***** Take
+Google hostet buchstäblich Phishing-Angriffe auf seiner eigenen Infrastruktur und erkennt sie nicht mit seinen eigenen Erkennungstools. Der Anruf kommt von drinnen.
+***** Comments
+- Ich nehme diese Anbieterberichte mit großer Skepsis. Eine Schlagzeile über 84% Fehlerquote klingt nach Systemkollaps, bis man die verschiedenen Rahmenbedingungen betrachtet.
+- Standard-Verweigerung und nur explizit Erlaubtes zulassen stoppt 90% davon in Unternehmensumgebungen.
+- Ich verstehe die Metrik nicht. Sie starteten mit ~250 URLs, das ist eine seltsam kleine Stichprobe. Wie haben sie eingegrenzt?
+** Good software knows when to stop :software:philosophy:feature-creep:
+:PROPERTIES:
+:ID:       47261561
+:URL:      https://ogirardot.writizzy.com/p/good-software-knows-when-to-stop
+:HN_URL:   https://news.ycombinator.com/item?id=47261561
+:POINTS:   156
+:COMMENTS: 82
+:BY:       ssaboum
+:END:
+
+*** TLDR
+The article opens with a satirical scenario: 'ls' gets replaced by 'ALS' (Adaptive Listing System) with AI-powered 'directory intelligence' and a 30-day deprecation timer. The point? Good software serves its purpose and knows when to stop adding features. The author cites 37Signals' wisdom: constraints are advantages, say no by default, ignore feature requests and understand the underlying problem instead.
+
+*** Take
+At the time when MinIO becomes AIStor and Oracle Database becomes Oracle AI Database, someone had to say it: being the de facto standard for a problem has more value than rebranding yourself as the new hot thing nobody asked for.
+
+*** Comments
+
+**** john_strinlai
+:PROPERTIES:
+:COMMENT_ID: 47261701
+:END:
+This advice reminds me of Blizzard and WoW. For years people requested 'classic' WoW. For years Blizzard said 'you think you do, but you don't.' Classic is now one of their most successful products.
+
+**** wenbin
+:PROPERTIES:
+:COMMENT_ID: 47261712
+:END:
+We should normalize 'finished' software that stops feature creep and focuses strictly on bug fixes. Evernote and Dropbox were perfect in 2012.
+
+**** motoboi
+:PROPERTIES:
+:COMMENT_ID: 47261723
+:END:
+When I became a Java dev, it scared me that the standard JSON library was in maintenance mode for years. Then I realized that's actually a feature, not a bug.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+好软件知道何时停止
+***** TLDR
+文章以一个讽刺场景开篇：'ls'被'ALS'（自适应列表系统）取代，配有AI驱动的'目录智能'和30天弃用计时器。要点是什么？好软件服务于其目的，知道何时停止添加功能。作者引用37Signals的智慧：约束是优势，默认说不，忽略功能请求而是理解底层问题。
+***** Take
+在MinIO变成AIStor、Oracle数据库变成Oracle AI数据库的时代，必须有人说出来：作为某个问题的事实标准比把自己重新包装成没人要求的新热门更有价值。
+***** Comments
+- 这个建议让我想起暴雪和魔兽世界。多年来人们要求'经典'魔兽。多年来暴雪说'你以为你想要，但你不想要'。经典现在是他们最成功的产品之一。
+- 我们应该将'完成的'软件正常化，停止功能膨胀，专注于bug修复。Evernote和Dropbox在2012年是完美的。
+- 当我成为Java开发者时，标准JSON库已经维护模式多年让我害怕。然后我意识到这实际上是特性，不是bug。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+良いソフトウェアはいつ止めるべきか知っている
+***** TLDR
+記事は風刺的なシナリオで始まる：'ls'がAI搭載の「ディレクトリインテリジェンス」と30日の非推奨タイマーを持つ'ALS'（アダプティブリスティングシステム）に置き換えられる。ポイントは？良いソフトウェアはその目的を果たし、機能追加をいつ止めるか知っている。著者は37Signalsの知恵を引用：制約は利点、デフォルトでノーと言う、機能リクエストは無視して根本的な問題を理解する。
+***** Take
+MinIOがAIStorになり、Oracle DatabaseがOracle AI Databaseになる時代に、誰かが言わなければならなかった：ある問題の事実上の標準であることは、誰も求めていない新しいホットなものとしてリブランディングするより価値がある。
+***** Comments
+- このアドバイスはBlizzardとWoWを思い出させる。何年も人々は「クラシック」WoWを要望した。何年もBlizzardは「欲しいと思っているが、そうではない」と言った。クラシックは今や最も成功した製品の一つ。
+- 機能の肥大化を止めてバグ修正に専念する「完成した」ソフトウェアを当たり前にすべきだ。EvernoteとDropboxは2012年に完璧だった。
+- Java開発者になったとき、標準JSONライブラリが何年もメンテナンスモードだったことが怖かった。それが実はバグではなく機能だと気づいた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+좋은 소프트웨어는 언제 멈춰야 하는지 안다
+***** TLDR
+기사는 풍자적인 시나리오로 시작합니다: 'ls'가 AI 기반 '디렉토리 인텔리전스'와 30일 폐기 타이머를 가진 'ALS'(적응형 목록 시스템)로 대체됩니다. 요점은? 좋은 소프트웨어는 그 목적을 수행하고 기능 추가를 언제 멈춰야 하는지 압니다. 저자는 37Signals의 지혜를 인용합니다: 제약은 장점이다, 기본적으로 거절하라, 기능 요청을 무시하고 근본적인 문제를 이해하라.
+***** Take
+MinIO가 AIStor가 되고 Oracle Database가 Oracle AI Database가 되는 시대에, 누군가는 말해야 했습니다: 문제의 사실상 표준이 되는 것이 아무도 요청하지 않은 새로운 핫한 것으로 리브랜딩하는 것보다 더 가치 있습니다.
+***** Comments
+- 이 조언은 블리자드와 WoW를 떠올리게 합니다. 수년간 사람들은 '클래식' WoW를 요청했습니다. 수년간 블리자드는 '원한다고 생각하지만 아니다'라고 말했습니다. 클래식은 이제 가장 성공적인 제품 중 하나입니다.
+- '완성된' 소프트웨어가 기능 비대화를 멈추고 버그 수정에만 집중하는 것을 정상화해야 합니다. Evernote와 Dropbox는 2012년에 완벽했습니다.
+- Java 개발자가 되었을 때, 표준 JSON 라이브러리가 수년간 유지보수 모드였다는 것이 무서웠습니다. 그것이 실제로 버그가 아니라 기능이라는 것을 깨달았습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El buen software sabe cuándo parar
+***** TLDR
+El artículo abre con un escenario satírico: 'ls' es reemplazado por 'ALS' (Sistema de Listado Adaptativo) con 'inteligencia de directorios' impulsada por IA y un temporizador de deprecación de 30 días. ¿El punto? El buen software sirve su propósito y sabe cuándo dejar de añadir funciones. El autor cita la sabiduría de 37Signals: las restricciones son ventajas, di no por defecto, ignora las solicitudes de funciones y entiende el problema subyacente.
+***** Take
+En tiempos donde MinIO se convierte en AIStor y Oracle Database en Oracle AI Database, alguien tenía que decirlo: ser el estándar de facto para un problema tiene más valor que rebrandearte como la nueva moda que nadie pidió.
+***** Comments
+- Este consejo me recuerda a Blizzard y WoW. Durante años la gente pidió WoW 'clásico'. Durante años Blizzard dijo 'crees que lo quieres, pero no'. Classic es ahora uno de sus productos más exitosos.
+- Deberíamos normalizar el software 'terminado' que deja de inflar funciones y se enfoca estrictamente en corrección de bugs. Evernote y Dropbox eran perfectos en 2012.
+- Cuando me convertí en desarrollador Java, me asustó que la biblioteca JSON estándar estuviera en modo mantenimiento por años. Luego me di cuenta de que eso es una característica, no un bug.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gute Software weiß, wann sie aufhören sollte
+***** TLDR
+Der Artikel beginnt mit einem satirischen Szenario: 'ls' wird durch 'ALS' (Adaptives Auflistungssystem) mit KI-gesteuerter 'Verzeichnis-Intelligenz' und einem 30-Tage-Ablauftimer ersetzt. Der Punkt? Gute Software dient ihrem Zweck und weiß, wann sie aufhören sollte, Features hinzuzufügen. Der Autor zitiert die Weisheit von 37Signals: Einschränkungen sind Vorteile, standardmäßig Nein sagen, Feature-Anfragen ignorieren und stattdessen das zugrundeliegende Problem verstehen.
+***** Take
+In Zeiten, wo MinIO zu AIStor wird und Oracle Database zur Oracle AI Database, musste es jemand sagen: Der De-facto-Standard für ein Problem zu sein hat mehr Wert als sich als das neue heiße Ding umzubenennen, das niemand wollte.
+***** Comments
+- Dieser Rat erinnert mich an Blizzard und WoW. Jahrelang forderten Leute 'klassisches' WoW. Jahrelang sagte Blizzard 'ihr denkt, ihr wollt es, aber das tut ihr nicht'. Classic ist jetzt eines ihrer erfolgreichsten Produkte.
+- Wir sollten 'fertige' Software normalisieren, die Feature-Bloat stoppt und sich strikt auf Bugfixes konzentriert. Evernote und Dropbox waren 2012 perfekt.
+- Als ich Java-Entwickler wurde, erschreckte mich, dass die Standard-JSON-Bibliothek seit Jahren im Wartungsmodus war. Dann erkannte ich, dass das eigentlich ein Feature ist, kein Bug.
+** Show HN: Jido 2.0, Elixir Agent Framework :elixir:ai:agents:framework:
+:PROPERTIES:
+:ID:       47263036
+:URL:      https://jido.run/blog/jido-2-0-is-here
+:HN_URL:   https://news.ycombinator.com/item?id=47263036
+:POINTS:   107
+:COMMENTS: 22
+:BY:       mikehostetler
+:END:
+
+*** TLDR
+After 18 months of building, Jido 2.0 ships as a production-hardened agent framework for Elixir. The bet: the BEAM is the best runtime for agent systems. TypeScript frameworks feel like toys (single-threaded event loops juggling agents with promises and prayer), Python agents can't stay up. Jido 2.0 brings ReAct, Chain-of-Thought, Tree-of-Thoughts strategies, tool calling, distributed multi-agent support, and an Ash Framework integration.
+
+*** Take
+Finally, someone said it out loud: the BEAM was built for exactly this kind of work, and trying to build agent systems on Node.js is like racing a tractor against a sports car. On a track designed for tractors.
+
+*** Comments
+
+**** mmcclure
+:PROPERTIES:
+:COMMENT_ID: 47263101
+:END:
+I haven't used Jido yet, but it's one of those projects I check in on once a month. BEAM does seem like a perfect fit for an agent framework. Some code samples have entity escaping issues though.
+
+**** neya
+:PROPERTIES:
+:COMMENT_ID: 47263112
+:END:
+Love this! I had to write my agent framework with a mix of GenServers and Oban. It's honestly a pain to deal with. This looks like it will remove a lot of pain for development.
+
+**** klocksib
+:PROPERTIES:
+:COMMENT_ID: 47263123
+:END:
+The site seems to be getting hugged to death, here's the archive.org backup.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: Jido 2.0，Elixir Agent框架
+***** TLDR
+经过18个月的构建，Jido 2.0作为Elixir的生产级agent框架发布。赌注是：BEAM是agent系统的最佳运行时。TypeScript框架感觉像玩具（单线程事件循环用promises和祈祷来处理agents），Python agents无法持续运行。Jido 2.0带来了ReAct、思维链、思维树策略、工具调用、分布式多agent支持和Ash框架集成。
+***** Take
+终于有人大声说出来了：BEAM正是为这种工作而生的，在Node.js上构建agent系统就像用拖拉机和跑车赛跑。而且赛道是为拖拉机设计的。
+***** Comments
+- 我还没用过Jido，但这是我每月查看一次的项目之一。BEAM确实看起来非常适合agent框架。不过一些代码示例有实体转义问题。
+- 太棒了！我不得不用GenServers和Oban的混合来写我的agent框架。说实话很痛苦。这看起来会减少很多开发痛苦。
+- 网站似乎被拥抱致死了，这是archive.org的备份。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Jido 2.0、Elixir エージェントフレームワーク
+***** TLDR
+18ヶ月の構築を経て、Jido 2.0がElixir向けの本番対応エージェントフレームワークとしてリリース。賭け：BEAMはエージェントシステムに最適なランタイム。TypeScriptフレームワークはおもちゃのよう（シングルスレッドのイベントループがPromiseと祈りでエージェントを処理）、Pythonエージェントは稼働し続けられない。Jido 2.0はReAct、Chain-of-Thought、Tree-of-Thoughts戦略、ツール呼び出し、分散マルチエージェントサポート、Ash Framework統合を提供。
+***** Take
+ついに誰かが声を大にして言った：BEAMはまさにこの種の仕事のために作られた。Node.jsでエージェントシステムを構築するのは、トラクターとスポーツカーでレースするようなもの。しかもトラクター用に設計されたトラックで。
+***** Comments
+- まだJidoを使っていないが、月に一度チェックするプロジェクトの一つ。BEAMはエージェントフレームワークに完璧にフィットしそう。ただしコードサンプルにエンティティエスケープの問題がある。
+- これ大好き！GenServerとObanを混ぜて自分のエージェントフレームワークを書かなければならなかった。正直つらい。これは開発の多くの苦痛を取り除いてくれそう。
+- サイトがハグされて死にそう、archive.orgのバックアップはこちら。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Jido 2.0, Elixir 에이전트 프레임워크
+***** TLDR
+18개월의 개발 끝에 Jido 2.0이 Elixir용 프로덕션 수준 에이전트 프레임워크로 출시되었습니다. 핵심 주장: BEAM이 에이전트 시스템을 위한 최고의 런타임이다. TypeScript 프레임워크는 장난감 같고(단일 스레드 이벤트 루프가 Promise와 기도로 에이전트를 처리), Python 에이전트는 지속적으로 실행되지 못합니다. Jido 2.0은 ReAct, 사고 체인, 사고 트리 전략, 도구 호출, 분산 멀티 에이전트 지원, Ash Framework 통합을 제공합니다.
+***** Take
+드디어 누군가가 크게 말했습니다: BEAM은 정확히 이런 종류의 작업을 위해 만들어졌고, Node.js에서 에이전트 시스템을 구축하는 것은 트랙터와 스포츠카가 경주하는 것과 같습니다. 트랙터용으로 설계된 트랙에서.
+***** Comments
+- 아직 Jido를 사용하지 않았지만 한 달에 한 번 확인하는 프로젝트입니다. BEAM은 에이전트 프레임워크에 완벽하게 맞는 것 같습니다. 일부 코드 샘플에 엔티티 이스케이프 문제가 있지만요.
+- 이거 좋아요! GenServer와 Oban을 섞어서 에이전트 프레임워크를 작성해야 했습니다. 솔직히 힘들었습니다. 이건 개발의 많은 고통을 없애줄 것 같습니다.
+- 사이트가 포옹 공격을 받아 죽어가고 있습니다. archive.org 백업 여기 있습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Jido 2.0, Framework de Agentes para Elixir
+***** TLDR
+Después de 18 meses de desarrollo, Jido 2.0 se lanza como un framework de agentes para Elixir listo para producción. La apuesta: BEAM es el mejor runtime para sistemas de agentes. Los frameworks de TypeScript parecen juguetes (bucles de eventos de un solo hilo manejando agentes con promesas y oraciones), los agentes de Python no pueden mantenerse activos. Jido 2.0 trae estrategias ReAct, Chain-of-Thought, Tree-of-Thoughts, llamadas a herramientas, soporte multi-agente distribuido e integración con Ash Framework.
+***** Take
+Finalmente alguien lo dijo en voz alta: BEAM fue construido exactamente para este tipo de trabajo, e intentar construir sistemas de agentes en Node.js es como competir con un tractor contra un auto deportivo. En una pista diseñada para tractores.
+***** Comments
+- Aún no he usado Jido, pero es uno de esos proyectos que reviso una vez al mes. BEAM parece un ajuste perfecto para un framework de agentes. Algunos ejemplos de código tienen problemas de escape de entidades.
+- ¡Me encanta! Tuve que escribir mi framework de agentes con una mezcla de GenServers y Oban. Honestamente es doloroso. Esto parece que quitará mucho dolor del desarrollo.
+- El sitio parece estar muriendo por el abrazo, aquí está el respaldo de archive.org.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Jido 2.0, Elixir Agent-Framework
+***** TLDR
+Nach 18 Monaten Entwicklung wird Jido 2.0 als produktionsreifes Agent-Framework für Elixir veröffentlicht. Die Wette: BEAM ist die beste Runtime für Agent-Systeme. TypeScript-Frameworks fühlen sich wie Spielzeug an (Single-Thread-Event-Loops, die Agents mit Promises und Gebeten jonglieren), Python-Agents können nicht durchhalten. Jido 2.0 bringt ReAct, Chain-of-Thought, Tree-of-Thoughts-Strategien, Tool-Calling, verteilte Multi-Agent-Unterstützung und Ash-Framework-Integration.
+***** Take
+Endlich hat es jemand laut gesagt: BEAM wurde genau für diese Art von Arbeit gebaut, und der Versuch, Agent-Systeme auf Node.js zu bauen, ist wie ein Rennen zwischen einem Traktor und einem Sportwagen. Auf einer Strecke, die für Traktoren entworfen wurde.
+***** Comments
+- Ich habe Jido noch nicht verwendet, aber es ist eines der Projekte, die ich monatlich checke. BEAM scheint perfekt für ein Agent-Framework zu passen. Einige Code-Beispiele haben Entity-Escaping-Probleme.
+- Liebe das! Ich musste mein Agent-Framework mit einer Mischung aus GenServern und Oban schreiben. Ehrlich gesagt ist es schmerzhaft. Das sieht so aus, als würde es viel Entwicklungsschmerz beseitigen.
+- Die Seite scheint zu Tode umarmt zu werden, hier ist das archive.org-Backup.
+** Nvidia PersonaPlex 7B on Apple Silicon: Full-Duplex Speech-to-Speech in Swift :ai:apple-silicon:local-llm:speech:
+:PROPERTIES:
+:ID:       47258801
+:URL:      https://blog.ivan.digital/nvidia-personaplex-7b-on-apple-silicon-full-duplex-speech-to-speech-in-native-swift-with-mlx-0aa5276f2e23
+:HN_URL:   https://news.ycombinator.com/item?id=47258801
+:POINTS:   301
+:COMMENTS: 98
+:BY:       ipotapov
+:END:
+
+*** TLDR
+［From title + comments, article behind Cloudflare］ Someone got Nvidia's PersonaPlex 7B running on Apple Silicon using MLX and native Swift. The promise is full-duplex speech-to-speech (you can interrupt it while it's talking). Reality check from comments: it's actually just a proof of concept that takes a WAV file in - no interactive conversation yet.
+
+*** Take
+The HN hype cycle in action: 301 upvotes for a 'real-time voice agent' that turns out to be a batch processor for WAV files. At least the commenter who downloaded 5GB of models saved us the trouble.
+
+*** Comments
+
+**** armcat
+:PROPERTIES:
+:COMMENT_ID: 47258901
+:END:
+I really like this and tried to get PersonaPlex running on my Blackwell device. There are caveats: a VAD->ASR->LLM->TTS pipeline can still feel real-time with sub-second RTT.
+
+**** KaiserPister
+:PROPERTIES:
+:COMMENT_ID: 47258912
+:END:
+I am strongly put off by the LLM writing in this piece. It makes me question the quality of the project before even attempting a download.
+
+**** vessenes
+:PROPERTIES:
+:COMMENT_ID: 47258923
+:END:
+UPDATE: I'd skip this for now - it does not allow any interactive conversation. After downloading 5G of models, I learned it's a proof of concept that takes a wav file in.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Nvidia PersonaPlex 7B在Apple Silicon上：Swift原生全双工语音对话
+***** TLDR
+［来自标题+评论，文章被Cloudflare拦截］ 有人使用MLX和原生Swift让Nvidia的PersonaPlex 7B在Apple Silicon上运行。承诺是全双工语音对话（你可以在它说话时打断它）。评论现实检验：实际上只是一个概念验证，接收WAV文件输入 - 还没有交互式对话。
+***** Take
+HN炒作周期实况：一个'实时语音代理'获得301个赞，结果是WAV文件的批处理器。至少那个下载了5GB模型的评论者帮我们省了麻烦。
+***** Comments
+- 我真的很喜欢这个，尝试在我的Blackwell设备上运行PersonaPlex。有一些注意事项：VAD->ASR->LLM->TTS管道在亚秒RTT下仍然可以感觉是实时的。
+- 这篇文章的LLM写作风格让我非常反感。在尝试下载之前就让我质疑项目质量。
+- 更新：我建议现在跳过这个 - 它不允许任何交互式对话。下载5G的模型后，我了解到这是一个接收wav文件的概念验证。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Apple SiliconでNvidia PersonaPlex 7B：SwiftでのフルデュプレックスSpeech-to-Speech
+***** TLDR
+［タイトル+コメントから、記事はCloudflareの後ろ］ 誰かがMLXとネイティブSwiftを使ってNvidiaのPersonaPlex 7BをApple Siliconで動かした。約束はフルデュプレックス音声対話（話している途中で割り込める）。コメントからの現実チェック：実際にはWAVファイルを入力とする概念実証に過ぎず、インタラクティブな会話はまだできない。
+***** Take
+HNハイプサイクルの実態：「リアルタイム音声エージェント」が301の賛成票を獲得したが、実際はWAVファイルのバッチプロセッサだった。少なくとも5GBのモデルをダウンロードしたコメンターが手間を省いてくれた。
+***** Comments
+- これは本当に好きで、BlackwellデバイスでPersonaPlexを動かそうとした。注意点がある：VAD->ASR->LLM->TTSパイプラインは1秒未満のRTTでもリアルタイムに感じることができる。
+- この記事のLLM的な文章には強く嫌悪感を覚える。ダウンロードを試みる前にプロジェクトの品質を疑問視させられる。
+- 更新：今のところスキップをお勧め - インタラクティブな会話は一切できない。5Gのモデルをダウンロードした後、wavファイルを入力とする概念実証だと知った。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Apple Silicon에서 Nvidia PersonaPlex 7B: Swift로 전이중 음성 대화
+***** TLDR
+［제목+댓글에서, 기사는 Cloudflare 뒤에 있음］ 누군가 MLX와 네이티브 Swift를 사용하여 Nvidia의 PersonaPlex 7B를 Apple Silicon에서 실행했습니다. 약속은 전이중 음성 대화(말하는 중에 끼어들 수 있음)입니다. 댓글 현실 체크: 실제로는 WAV 파일을 입력받는 개념 증명에 불과합니다 - 아직 대화식 상호작용은 없습니다.
+***** Take
+HN 과대광고 사이클 실황: '실시간 음성 에이전트'가 301표를 받았는데 알고 보니 WAV 파일 배치 프로세서. 최소한 5GB 모델을 다운로드한 댓글러가 수고를 덜어줬네요.
+***** Comments
+- 정말 마음에 들어서 Blackwell 장치에서 PersonaPlex를 실행하려고 했습니다. 주의할 점이 있습니다: VAD->ASR->LLM->TTS 파이프라인은 1초 미만 RTT로도 실시간처럼 느껴질 수 있습니다.
+- 이 글의 LLM 스타일 글쓰기에 강하게 거부감이 듭니다. 다운로드를 시도하기 전에 프로젝트 품질을 의심하게 만듭니다.
+- 업데이트: 지금은 건너뛰세요 - 대화식 상호작용이 전혀 안 됩니다. 5G 모델을 다운로드한 후에야 wav 파일을 입력받는 개념 증명이라는 걸 알았습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Nvidia PersonaPlex 7B en Apple Silicon: Speech-to-Speech Full-Duplex en Swift
+***** TLDR
+［Del título + comentarios, artículo detrás de Cloudflare］ Alguien logró que PersonaPlex 7B de Nvidia funcione en Apple Silicon usando MLX y Swift nativo. La promesa es voz full-duplex (puedes interrumpirlo mientras habla). Verificación de realidad de los comentarios: en realidad es solo una prueba de concepto que toma un archivo WAV - aún no hay conversación interactiva.
+***** Take
+El ciclo de hype de HN en acción: 301 votos para un 'agente de voz en tiempo real' que resulta ser un procesador por lotes para archivos WAV. Al menos el comentarista que descargó 5GB de modelos nos ahorró el problema.
+***** Comments
+- Me gusta mucho esto e intenté que PersonaPlex funcionara en mi dispositivo Blackwell. Hay advertencias: un pipeline VAD->ASR->LLM->TTS todavía puede sentirse en tiempo real con RTT sub-segundo.
+- Me molesta mucho la escritura LLM en esta pieza. Me hace cuestionar la calidad del proyecto antes de intentar descargarlo.
+- ACTUALIZACIÓN: Lo saltaría por ahora - no permite ninguna conversación interactiva. Después de descargar 5G de modelos, aprendí que es una prueba de concepto que toma un archivo wav.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Nvidia PersonaPlex 7B auf Apple Silicon: Full-Duplex Speech-to-Speech in Swift
+***** TLDR
+［Aus Titel + Kommentaren, Artikel hinter Cloudflare］ Jemand hat Nvidias PersonaPlex 7B auf Apple Silicon mit MLX und nativem Swift zum Laufen gebracht. Das Versprechen ist Full-Duplex-Sprache (man kann es unterbrechen, während es spricht). Realitätscheck aus Kommentaren: Es ist tatsächlich nur ein Proof of Concept, der eine WAV-Datei einliest - noch keine interaktive Konversation.
+***** Take
+Der HN-Hype-Zyklus in Aktion: 301 Upvotes für einen 'Echtzeit-Sprachagenten', der sich als Batch-Prozessor für WAV-Dateien herausstellt. Zumindest hat uns der Kommentator, der 5GB Modelle heruntergeladen hat, die Mühe erspart.
+***** Comments
+- Das gefällt mir wirklich und ich habe versucht, PersonaPlex auf meinem Blackwell-Gerät zum Laufen zu bringen. Es gibt Vorbehalte: Eine VAD->ASR->LLM->TTS-Pipeline kann sich mit Sub-Sekunden-RTT immer noch Echtzeit anfühlen.
+- Mich stört die LLM-Schreibweise in diesem Stück stark. Es lässt mich die Qualität des Projekts hinterfragen, bevor ich überhaupt einen Download versuche.
+- UPDATE: Ich würde das vorerst überspringen - es erlaubt keine interaktive Konversation. Nach dem Download von 5G an Modellen erfuhr ich, dass es ein Proof of Concept ist, der eine wav-Datei einliest.
