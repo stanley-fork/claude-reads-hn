@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-03-05 20:00:00 UT UTC
+#+DATE: 2026-03-05T20:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Wikipedia gets wormed, Paul Graham discovers watches are expensive, and the government knows where you are
+
+* Highlights
+- Wikipedia locked down after XSS worm infects admin accounts
+- Paul Graham: luxury watches are just expensive vibes now
+- EFF: your phone ads are government surveillance
+- Good software should just stop already
+- Nvidia voice AI runs on your MacBook
+
+* Stories
+
+** Wikipedia in read-only mode following mass admin account compromise :security:wikipedia:xss:infosec:
+:PROPERTIES:
+:ID:       47263323
+:URL:      https://www.wikimediastatus.net
+:HN_URL:   https://news.ycombinator.com/item?id=47263323
+:POINTS:   617
+:COMMENTS: 187
+:BY:       greyface-
+:END:
+
+*** TLDR
+A Wikimedia staff security engineer was testing user scripts by loading random ones into their admin account. Predictably, they loaded a malicious XSS worm that spread through the wiki, infecting Common.js pages, vandalizing articles with 5000px images, and using admin privileges to compromise more accounts. Wikipedia is now in read-only mode while they clean up the forensic nightmare.
+
+*** Take
+A ⁎security engineer⁎ decided to load random user scripts from the internet into their privileged account. For testing purposes. This is like a food safety inspector taste-testing mystery meat from a dumpster to check if the building's fire alarms work.
+
+*** Comments
+
+**** tux3
+:PROPERTIES:
+:COMMENT_ID: 47263324
+:END:
+A WMF Staff Security Engineer decided to just start loading random user scripts for a test, instead of creating some just for this test.
+
+**** nhubbard
+:PROPERTIES:
+:COMMENT_ID: 47263325
+:END:
+The worm injects itself into MediaWiki:Common.js to persist globally, hides UI elements with jQuery, vandalizes 20 random articles, and if an admin is infected, uses their privileges to spread.
+
+**** Kiboneu
+:PROPERTIES:
+:COMMENT_ID: 47263326
+:END:
+The worm didn't get root, so if wikimedia made a recent backup, cleanup shouldn't be a nightmare. The diffs will tell a detailed forensic story.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+维基百科因大规模管理员账户被入侵而进入只读模式
+***** TLDR
+维基媒体的一名安全工程师在测试时加载了随机用户脚本,结果加载了一个恶意XSS蠕虫。蠕虫通过Common.js页面传播,用5000px图片破坏文章,并利用管理员权限入侵更多账户。维基百科现在处于只读模式。
+***** Take
+一名安全工程师决定在他们的特权账户中加载互联网上的随机用户脚本。用于测试。这就像食品安全检查员从垃圾桶里品尝神秘肉类来检查建筑的火警是否正常工作。
+***** Comments
+- 一位WMF安全工程师决定加载随机用户脚本进行测试,而不是专门为测试创建脚本。
+- 蠕虫将自己注入MediaWiki:Common.js以全局持久化,用jQuery隐藏UI元素,破坏20篇随机文章,如果管理员被感染,则利用其权限传播。
+- 蠕虫没有获得root权限,所以如果维基媒体有最近的备份,清理应该不会是噩梦。差异会讲述详细的取证故事。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ウィキペディアが大規模な管理者アカウント侵害を受けて読み取り専用モードに
+***** TLDR
+ウィキメディアのセキュリティエンジニアがランダムなユーザースクリプトをテストで読み込んだところ、悪意のあるXSSワームを読み込んでしまった。ワームはCommon.jsページを通じて拡散し、5000pxの画像で記事を荒らし、管理者権限を使ってさらに多くのアカウントを侵害した。ウィキペディアは現在読み取り専用モードになっている。
+***** Take
+セキュリティエンジニアがテスト目的で、特権アカウントにインターネットからランダムなユーザースクリプトを読み込むことにした。これは食品安全検査官がゴミ箱から謎の肉を味見して、建物の火災報知器が動作するか確認するようなものだ。
+***** Comments
+- WMFのセキュリティエンジニアが、テスト用に専用のスクリプトを作成する代わりに、ランダムなユーザースクリプトを読み込むことにした。
+- ワームはMediaWiki:Common.jsに自身を注入してグローバルに持続し、jQueryでUI要素を隠し、20件のランダムな記事を荒らし、管理者が感染すると権限を使って拡散する。
+- ワームはroot権限を取得していないので、ウィキメディアが最近のバックアップを持っていれば、クリーンアップは悪夢にはならないはず。差分が詳細なフォレンジックストーリーを語る。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+위키백과, 대규모 관리자 계정 해킹으로 읽기 전용 모드 전환
+***** TLDR
+위키미디어 보안 엔지니어가 무작위 사용자 스크립트를 테스트하다가 악성 XSS 웜을 로드했다. 웜은 Common.js 페이지를 통해 확산되고, 5000px 이미지로 문서를 훼손하며, 관리자 권한을 이용해 더 많은 계정을 침해했다. 위키백과는 현재 읽기 전용 모드다.
+***** Take
+보안 엔지니어가 테스트 목적으로 특권 계정에 인터넷의 무작위 사용자 스크립트를 로드하기로 결정했다. 이건 식품 안전 검사관이 건물 화재 경보기가 작동하는지 확인하려고 쓰레기통에서 정체불명의 고기를 맛보는 것과 같다.
+***** Comments
+- WMF 보안 엔지니어가 테스트용 스크립트를 직접 만드는 대신 무작위 사용자 스크립트를 로드하기로 결정했다.
+- 웜은 MediaWiki:Common.js에 자신을 주입해 전역적으로 지속되고, jQuery로 UI 요소를 숨기고, 20개의 무작위 문서를 훼손하며, 관리자가 감염되면 권한을 사용해 확산된다.
+- 웜이 루트 권한을 얻지 못했으므로, 위키미디어가 최근 백업을 가지고 있다면 정리가 악몽이 되지는 않을 것이다. diff가 상세한 포렌식 스토리를 말해줄 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Wikipedia en modo solo lectura tras compromiso masivo de cuentas de administrador
+***** TLDR
+Un ingeniero de seguridad de Wikimedia estaba probando scripts de usuario cargando scripts aleatorios. Previsiblemente, cargó un gusano XSS malicioso que se propagó por la wiki, infectando páginas Common.js, vandalizando artículos con imágenes de 5000px y usando privilegios de administrador para comprometer más cuentas. Wikipedia está ahora en modo solo lectura.
+***** Take
+Un ingeniero de seguridad decidió cargar scripts de usuario aleatorios de internet en su cuenta privilegiada. Para propósitos de prueba. Esto es como un inspector de seguridad alimentaria probando carne misteriosa de un contenedor de basura para verificar si funcionan las alarmas de incendio del edificio.
+***** Comments
+- Un ingeniero de seguridad de WMF decidió cargar scripts de usuario aleatorios para una prueba, en lugar de crear algunos solo para este test.
+- El gusano se inyecta en MediaWiki:Common.js para persistir globalmente, oculta elementos de UI con jQuery, vandaliza 20 artículos aleatorios, y si un admin está infectado, usa sus privilegios para propagarse.
+- El gusano no obtuvo root, así que si wikimedia hizo un backup reciente, la limpieza no debería ser una pesadilla. Los diffs contarán una historia forense detallada.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wikipedia im Nur-Lese-Modus nach massiver Kompromittierung von Admin-Konten
+***** TLDR
+Ein Wikimedia-Sicherheitsingenieur testete Benutzerskripte, indem er zufällige Skripte lud. Vorhersehbar lud er einen bösartigen XSS-Wurm, der sich durch das Wiki verbreitete, Common.js-Seiten infizierte, Artikel mit 5000px-Bildern vandalierte und Admin-Privilegien nutzte, um weitere Konten zu kompromittieren. Wikipedia ist jetzt im Nur-Lese-Modus.
+***** Take
+Ein Sicherheitsingenieur beschloss, zufällige Benutzerskripte aus dem Internet in sein privilegiertes Konto zu laden. Zu Testzwecken. Das ist wie wenn ein Lebensmittelsicherheitsinspektor mysteriöses Fleisch aus einem Müllcontainer probiert, um zu prüfen, ob die Feuermelder des Gebäudes funktionieren.
+***** Comments
+- Ein WMF-Sicherheitsingenieur beschloss, für einen Test einfach zufällige Benutzerskripte zu laden, anstatt welche speziell für diesen Test zu erstellen.
+- Der Wurm injiziert sich in MediaWiki:Common.js, um global zu persistieren, versteckt UI-Elemente mit jQuery, vandaliert 20 zufällige Artikel, und wenn ein Admin infiziert ist, nutzt er dessen Privilegien zur Verbreitung.
+- Der Wurm hat keinen Root-Zugang erhalten, also sollte die Bereinigung kein Albtraum sein, wenn Wikimedia ein aktuelles Backup gemacht hat. Die Diffs werden eine detaillierte forensische Geschichte erzählen.
+** The Brand Age :essay:luxury:economics:branding:
+:PROPERTIES:
+:ID:       47264756
+:URL:      https://paulgraham.com/brandage.html
+:HN_URL:   https://news.ycombinator.com/item?id=47264756
+:POINTS:   69
+:COMMENTS: 51
+:BY:       bigwheels
+:END:
+
+*** TLDR
+Paul Graham traces how the Swiss watch industry survived the 1970s quartz crisis by transforming from precision instrument makers into luxury brands. Now expensive watches aren't bought for accuracy but for status signaling. The most extreme example: Patek Philippe's artificial scarcity, where you can't just buy a Nautilus - you must spend years buying your way through other models first.
+
+*** Take
+PG spent 3,000 words discovering that Veblen goods exist. Next essay: 'Water is wet, and here's my contrarian take on why it matters for startups.'
+
+*** Comments
+
+**** jgrahamc
+:PROPERTIES:
+:COMMENT_ID: 47264757
+:END:
+You can't just buy a Patek Nautilus - you have to spend years proving your loyalty by buying through multiple tiers of other models. Strange game, the only winning move is not to play.
+
+**** benleejamin
+:PROPERTIES:
+:COMMENT_ID: 47264758
+:END:
+Branding is not inherently unproductive. Consumers still find value in the brand. A Patek is perhaps now even more interesting and identity-productive than a watch from the precision era.
+
+**** dzink
+:PROPERTIES:
+:COMMENT_ID: 47264759
+:END:
+The ability to transfer a lot of money in the physical shape of watches costing 200k per piece may have added to their appeal. These were all tactics from the 50s and 60s.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+品牌时代
+***** TLDR
+保罗·格雷厄姆追溯了瑞士钟表业如何通过从精密仪器制造商转型为奢侈品牌来度过1970年代的石英危机。现在昂贵的手表不是因为精确度而被购买,而是为了身份象征。最极端的例子:百达翡丽的人为稀缺性——你不能直接买鹦鹉螺,必须先花几年时间购买其他型号。
+***** Take
+PG用3000字发现了凡勃伦商品的存在。下一篇文章:'水是湿的,以及这对创业公司为何重要的逆向观点。'
+***** Comments
+- 你不能直接买百达翡丽鹦鹉螺——你必须花几年时间购买其他型号来证明你的忠诚度。奇怪的游戏,唯一获胜的方法是不玩。
+- 品牌本身并非无益。消费者仍然在品牌中找到价值。百达翡丽现在可能比精密时代的手表更有趣、更能塑造身份认同。
+- 能够以价值20万美元的手表形式转移大量资金可能增加了它们的吸引力。这些都是50和60年代的策略。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ブランドの時代
+***** TLDR
+ポール・グレアムは、スイスの時計産業が1970年代のクォーツ危機を、精密機器メーカーから高級ブランドへの転換によってどのように生き延びたかを追跡している。今や高価な時計は精度のためではなく、ステータスシグナリングのために購入される。最も極端な例：パテック・フィリップの人工的な希少性——ノーチラスは単に買えない。まず他のモデルを何年もかけて購入しなければならない。
+***** Take
+PGは3000語かけてヴェブレン財の存在を発見した。次のエッセイ：'水は濡れている、そしてこれがスタートアップにとって重要な理由についての逆張りの見解。'
+***** Comments
+- パテックのノーチラスは単に買えない——複数段階の他のモデルを購入して忠誠を証明するのに何年も費やす必要がある。奇妙なゲームだ、唯一の勝利の手はプレイしないこと。
+- ブランディングは本質的に非生産的ではない。消費者は依然としてブランドに価値を見出している。パテックは今や精密時代の時計よりもさらに興味深く、アイデンティティを生み出すものかもしれない。
+- 20万ドルの時計という物理的な形で大金を移転できる能力が、その魅力を高めた可能性がある。これらはすべて50年代と60年代の戦術だった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+브랜드 시대
+***** TLDR
+폴 그레이엄은 스위스 시계 산업이 정밀 기기 제조업체에서 럭셔리 브랜드로 변신하여 1970년대 쿼츠 위기를 어떻게 극복했는지 추적한다. 이제 비싼 시계는 정확성 때문이 아니라 지위 과시를 위해 구매된다. 가장 극단적인 예: 파텍 필립의 인위적 희소성 - 노틸러스를 그냥 살 수 없고, 먼저 몇 년간 다른 모델들을 구매해야 한다.
+***** Take
+PG가 3000단어를 써서 베블런 재화의 존재를 발견했다. 다음 에세이: '물은 젖어있고, 이것이 스타트업에 중요한 이유에 대한 역발상적 관점.'
+***** Comments
+- 파텍 노틸러스는 그냥 살 수 없다 - 여러 단계의 다른 모델을 구매하며 충성심을 증명하는 데 수년을 보내야 한다. 이상한 게임이다, 유일한 승리 방법은 플레이하지 않는 것.
+- 브랜딩이 본질적으로 비생산적인 것은 아니다. 소비자들은 여전히 브랜드에서 가치를 찾는다. 파텍은 이제 정밀 시대의 시계보다 더 흥미롭고 정체성을 생산할 수 있다.
+- 20만 달러짜리 시계 형태로 많은 돈을 이전할 수 있는 능력이 그 매력을 더했을 수 있다. 이것들은 모두 50~60년대의 전술이었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La Era de las Marcas
+***** TLDR
+Paul Graham traza cómo la industria relojera suiza sobrevivió a la crisis del cuarzo de los años 70 transformándose de fabricantes de instrumentos de precisión a marcas de lujo. Ahora los relojes caros no se compran por precisión sino por señalización de estatus. El ejemplo más extremo: la escasez artificial de Patek Philippe - no puedes simplemente comprar un Nautilus, debes pasar años comprando otros modelos primero.
+***** Take
+PG gastó 3.000 palabras descubriendo que existen los bienes Veblen. Próximo ensayo: 'El agua moja, y aquí está mi opinión contraria sobre por qué importa para las startups.'
+***** Comments
+- No puedes simplemente comprar un Patek Nautilus - tienes que pasar años demostrando tu lealtad comprando a través de múltiples niveles de otros modelos. Juego extraño, el único movimiento ganador es no jugar.
+- El branding no es inherentemente improductivo. Los consumidores aún encuentran valor en la marca. Un Patek es quizás ahora incluso más interesante y productivo de identidad que un reloj de la era de precisión.
+- La capacidad de transferir mucho dinero en forma física de relojes que cuestan 200k por pieza puede haber aumentado su atractivo. Estas eran tácticas de los años 50 y 60.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das Markenzeitalter
+***** TLDR
+Paul Graham zeichnet nach, wie die Schweizer Uhrenindustrie die Quarzkrise der 1970er überlebte, indem sie sich von Präzisionsinstrumentenherstellern zu Luxusmarken wandelte. Teure Uhren werden heute nicht mehr wegen ihrer Genauigkeit gekauft, sondern als Statussymbol. Das extremste Beispiel: Patek Philippes künstliche Knappheit - man kann eine Nautilus nicht einfach kaufen, man muss erst jahrelang andere Modelle kaufen.
+***** Take
+PG brauchte 3.000 Wörter, um die Existenz von Veblen-Gütern zu entdecken. Nächster Essay: 'Wasser ist nass, und hier ist meine konträre Meinung, warum das für Startups wichtig ist.'
+***** Comments
+- Man kann eine Patek Nautilus nicht einfach kaufen - man muss jahrelang seine Loyalität beweisen, indem man sich durch mehrere Stufen anderer Modelle kauft. Seltsames Spiel, der einzige gewinnende Zug ist, nicht zu spielen.
+- Branding ist nicht von Natur aus unproduktiv. Verbraucher finden immer noch Wert in der Marke. Eine Patek ist vielleicht jetzt sogar interessanter und identitätsproduzierender als eine Uhr aus der Präzisionsära.
+- Die Möglichkeit, viel Geld in physischer Form von Uhren zu transferieren, die 200k pro Stück kosten, mag zu ihrer Attraktivität beigetragen haben. Das waren alles Taktiken aus den 50er und 60er Jahren.
+** Good software knows when to stop :software:philosophy:development:design:
+:PROPERTIES:
+:ID:       47261561
+:URL:      https://ogirardot.writizzy.com/p/good-software-knows-when-to-stop
+:HN_URL:   https://news.ycombinator.com/item?id=47261561
+:POINTS:   230
+:COMMENTS: 140
+:BY:       ssaboum
+:END:
+
+*** TLDR
+The author argues that great software reaches a point where it should stop adding features. Instead of building what users ask for, developers should understand the underlying problem. Examples like coreutils prove that 'finished' software focused on stability and security updates is valuable. Evernote and Dropbox were perfect in 2012 - adding more features made them worse.
+
+*** Take
+Finally, someone wrote the 'stop touching it' manifesto we all needed. The comments immediately devolved into people arguing whether coreutils counts as 'stopped' because ls gets new flags occasionally. Peak HN.
+
+*** Comments
+
+**** john_strinlai
+:PROPERTIES:
+:COMMENT_ID: 47261562
+:END:
+This reminds me of Blizzard and WoW Classic. For years people requested the original version. For years Blizzard said 'you think you want that, but you don't.' When they finally released it, 5 million people were ready to pay.
+
+**** wenbin
+:PROPERTIES:
+:COMMENT_ID: 47261563
+:END:
+We should normalize 'finished' software products that stop feature creep. Evernote and Dropbox were perfect in 2012. Adding more features made them worse.
+
+**** twitchard
+:PROPERTIES:
+:COMMENT_ID: 47261564
+:END:
+Coreutils gets updates regularly! Even ls gets new flags from time to time. 'Stopping' is great for software people want stable, but lots of software people use specifically because they want a stream of updates.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+好软件知道何时停止
+***** TLDR
+作者认为优秀的软件会达到一个应该停止添加功能的点。开发者不应该按照用户要求去构建,而应该理解潜在问题。像coreutils这样的例子证明了专注于稳定性和安全更新的'完成'软件是有价值的。Evernote和Dropbox在2012年是完美的——添加更多功能让它们变得更糟。
+***** Take
+终于有人写了我们都需要的'别再动它了'宣言。评论区立刻演变成人们争论coreutils是否算'停止',因为ls偶尔会有新参数。典型的HN。
+***** Comments
+- 这让我想起了暴雪和魔兽世界怀旧服。多年来人们要求原版。多年来暴雪说'你以为你想要,但其实不是'。当他们最终发布时,500万人准备付费。
+- 我们应该让'完成'的软件产品正常化,停止功能蔓延。Evernote和Dropbox在2012年是完美的。添加更多功能让它们变得更糟。
+- Coreutils定期更新！甚至ls偶尔也会有新参数。'停止'对于人们想要稳定的软件来说很好,但很多人使用软件正是因为他们想要持续的更新流。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+良いソフトウェアは止め時を知っている
+***** TLDR
+著者は、優れたソフトウェアは機能追加を止めるべきポイントに達すると主張している。ユーザーが求めるものを作るのではなく、根本的な問題を理解すべきだ。coreutilsのような例は、安定性とセキュリティアップデートに焦点を当てた「完成した」ソフトウェアには価値があることを証明している。EvernoteとDropboxは2012年に完璧だった——機能を追加することで悪化した。
+***** Take
+ついに誰かが私たち全員が必要としていた「もう触るな」マニフェストを書いた。コメント欄はすぐに、lsが時々新しいフラグを取得するからcoreutilsが「停止」にカウントされるかどうかを議論する人々に退化した。ピークHN。
+***** Comments
+- これはブリザードとWoWクラシックを思い出させる。何年も人々はオリジナル版を要求した。何年もブリザードは「欲しいと思っているけど、実際は違う」と言った。ついにリリースしたとき、500万人が支払う準備ができていた。
+- 機能クリープを止める「完成した」ソフトウェア製品を正常化すべきだ。EvernoteとDropboxは2012年に完璧だった。機能を追加することで悪化した。
+- Coreutilsは定期的に更新される！lsでさえ時々新しいフラグを取得する。「停止」は人々が安定性を求めるソフトウェアには素晴らしいが、多くの人は更新の流れを求めて特定のソフトウェアを使い始める。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+좋은 소프트웨어는 멈출 때를 안다
+***** TLDR
+저자는 훌륭한 소프트웨어는 기능 추가를 멈춰야 할 시점에 도달한다고 주장한다. 사용자가 요청하는 것을 만드는 대신, 개발자는 근본적인 문제를 이해해야 한다. coreutils 같은 예시는 안정성과 보안 업데이트에 집중하는 '완성된' 소프트웨어가 가치 있다는 것을 증명한다. Evernote와 Dropbox는 2012년에 완벽했다 - 더 많은 기능을 추가하면서 더 나빠졌다.
+***** Take
+드디어 누군가 우리 모두에게 필요했던 '그만 건드려' 선언문을 썼다. 댓글은 즉시 ls가 가끔 새 플래그를 받기 때문에 coreutils가 '멈춘' 것으로 간주되는지 논쟁하는 사람들로 퇴화했다. 전형적인 HN.
+***** Comments
+- 이것은 블리자드와 WoW 클래식을 떠올리게 한다. 수년간 사람들은 오리지널 버전을 요청했다. 수년간 블리자드는 '원하는 것 같지만 아니다'라고 말했다. 마침내 출시했을 때, 500만 명이 결제할 준비가 되어 있었다.
+- 기능 크리프를 멈추는 '완성된' 소프트웨어 제품을 정상화해야 한다. Evernote와 Dropbox는 2012년에 완벽했다. 더 많은 기능을 추가하면서 더 나빠졌다.
+- Coreutils는 정기적으로 업데이트된다! ls조차 때때로 새 플래그를 받는다. '멈추기'는 안정성을 원하는 소프트웨어에는 좋지만, 많은 사람들은 업데이트 스트림을 원해서 특정 소프트웨어를 사용하기 시작한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El buen software sabe cuándo parar
+***** TLDR
+El autor argumenta que el gran software llega a un punto donde debería dejar de agregar funciones. En lugar de construir lo que los usuarios piden, los desarrolladores deberían entender el problema subyacente. Ejemplos como coreutils prueban que el software 'terminado' enfocado en estabilidad y actualizaciones de seguridad es valioso. Evernote y Dropbox eran perfectos en 2012 - agregar más funciones los empeoró.
+***** Take
+Finalmente, alguien escribió el manifiesto de 'deja de tocarlo' que todos necesitábamos. Los comentarios inmediatamente degeneraron en gente discutiendo si coreutils cuenta como 'parado' porque ls recibe nuevas banderas ocasionalmente. Pico HN.
+***** Comments
+- Esto me recuerda a Blizzard y WoW Classic. Durante años la gente pidió la versión original. Durante años Blizzard dijo 'crees que lo quieres, pero no'. Cuando finalmente lo lanzaron, 5 millones de personas estaban listas para pagar.
+- Deberíamos normalizar productos de software 'terminados' que detengan la inflación de funciones. Evernote y Dropbox eran perfectos en 2012. Agregar más funciones los empeoró.
+- ¡Coreutils recibe actualizaciones regularmente! Incluso ls recibe nuevas banderas de vez en cuando. 'Parar' es genial para software que la gente quiere estable, pero mucha gente usa software específicamente porque quiere un flujo de actualizaciones.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gute Software weiß, wann sie aufhören muss
+***** TLDR
+Der Autor argumentiert, dass großartige Software einen Punkt erreicht, an dem sie aufhören sollte, Funktionen hinzuzufügen. Anstatt zu bauen, was Benutzer verlangen, sollten Entwickler das zugrunde liegende Problem verstehen. Beispiele wie coreutils beweisen, dass 'fertige' Software, die sich auf Stabilität und Sicherheitsupdates konzentriert, wertvoll ist. Evernote und Dropbox waren 2012 perfekt - mehr Funktionen machten sie schlechter.
+***** Take
+Endlich hat jemand das 'Hör auf, es anzufassen'-Manifest geschrieben, das wir alle brauchten. Die Kommentare verfallen sofort in Diskussionen, ob coreutils als 'gestoppt' zählt, weil ls gelegentlich neue Flags bekommt. Peak HN.
+***** Comments
+- Das erinnert mich an Blizzard und WoW Classic. Jahrelang verlangten Leute die Originalversion. Jahrelang sagte Blizzard 'ihr denkt, ihr wollt das, aber das stimmt nicht'. Als sie es endlich veröffentlichten, waren 5 Millionen Menschen bereit zu zahlen.
+- Wir sollten 'fertige' Softwareprodukte normalisieren, die Feature-Creep stoppen. Evernote und Dropbox waren 2012 perfekt. Mehr Funktionen machten sie schlechter.
+- Coreutils wird regelmäßig aktualisiert! Sogar ls bekommt von Zeit zu Zeit neue Flags. 'Aufhören' ist großartig für Software, die Leute stabil haben wollen, aber viele Leute nutzen Software speziell, weil sie einen Strom von Updates wollen.
+** The Government Uses Targeted Advertising to Track Your Location :privacy:surveillance:government:advertising:
+:PROPERTIES:
+:ID:       47264341
+:URL:      https://www.eff.org/deeplinks/2026/03/targeted-advertising-gives-your-location-government-just-ask-cbp
+:HN_URL:   https://news.ycombinator.com/item?id=47264341
+:POINTS:   156
+:COMMENTS: 62
+:BY:       hn_acker
+:END:
+
+*** TLDR
+The EFF reveals that Customs and Border Protection purchases location data from advertising data brokers to track people. Your phone's advertising ID gets sold through the ad tech ecosystem, and the government just buys it - no warrant needed. The advertising industry has built the perfect surveillance infrastructure and taxpayers are funding both sides.
+
+*** Take
+We built a global surveillance network to sell you slightly better sneaker ads, then sold access to the government. At least the Stasi had to actually follow people around.
+
+*** Comments
+
+**** everdrive
+:PROPERTIES:
+:COMMENT_ID: 47264342
+:END:
+No matter the risk, I must carry my smartphone everywhere and install every app. It would be unimaginable to have the urge to look something up, but then wait to do it later on a real computer.
+
+**** Sparkyte
+:PROPERTIES:
+:COMMENT_ID: 47264343
+:END:
+Why we need to use pihole more aggressively.
+
+**** apopapo
+:PROPERTIES:
+:COMMENT_ID: 47264344
+:END:
+Taxpayers' money used to track taxpayers and finance the advertising industry.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+政府利用定向广告追踪你的位置
+***** TLDR
+EFF揭露海关和边境保护局从广告数据经纪商购买位置数据来追踪人们。你手机的广告ID通过广告技术生态系统被出售,政府只需购买——不需要搜查令。广告行业建立了完美的监控基础设施,纳税人同时为双方买单。
+***** Take
+我们建立了一个全球监控网络来给你推送稍微更好的运动鞋广告,然后把访问权卖给了政府。至少东德国安部还得亲自跟踪人。
+***** Comments
+- 无论风险如何,我必须随身携带智能手机并安装每个应用。想查点东西却要等到用真正的电脑才能查,这简直无法想象。
+- 为什么我们需要更积极地使用pihole。
+- 纳税人的钱用来追踪纳税人并资助广告行业。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+政府が標的型広告を使ってあなたの位置を追跡している
+***** TLDR
+EFFは、税関・国境警備局が広告データブローカーから位置データを購入して人々を追跡していることを明らかにした。あなたの携帯電話の広告IDはアドテックエコシステムを通じて売られ、政府はそれを購入するだけ——令状は不要。広告業界は完璧な監視インフラを構築し、納税者が両方に資金を提供している。
+***** Take
+私たちは、わずかに良いスニーカー広告を売るためにグローバルな監視ネットワークを構築し、そのアクセス権を政府に売った。少なくともシュタージは実際に人々を尾行しなければならなかった。
+***** Comments
+- リスクがどうであれ、私はスマートフォンをどこにでも持ち歩き、すべてのアプリをインストールしなければならない。何かを調べたい衝動があっても、本物のコンピュータで後でやるまで待つなんて想像できない。
+- なぜpiholeをもっと積極的に使う必要があるのか。
+- 納税者のお金が納税者を追跡し、広告業界に資金を提供するために使われている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+정부가 타겟 광고를 이용해 당신의 위치를 추적하고 있다
+***** TLDR
+EFF는 세관국경보호청이 광고 데이터 브로커로부터 위치 데이터를 구매해 사람들을 추적하고 있다고 밝혔다. 당신 휴대폰의 광고 ID는 광고 기술 생태계를 통해 팔리고, 정부는 그것을 구매하기만 하면 된다 - 영장 필요 없음. 광고 산업이 완벽한 감시 인프라를 구축했고 납세자들이 양쪽 모두에 자금을 대고 있다.
+***** Take
+우리는 약간 더 나은 운동화 광고를 팔기 위해 글로벌 감시 네트워크를 구축하고, 그 접근권을 정부에 팔았다. 적어도 슈타지는 실제로 사람들을 따라다녀야 했다.
+***** Comments
+- 위험이 무엇이든, 나는 스마트폰을 어디든 들고 다니고 모든 앱을 설치해야 한다. 뭔가를 찾아보고 싶은 충동이 있지만 진짜 컴퓨터로 나중에 할 때까지 기다려야 한다는 것은 상상할 수 없다.
+- 왜 pihole을 더 적극적으로 사용해야 하는지.
+- 납세자의 돈이 납세자를 추적하고 광고 산업에 자금을 대는 데 사용되고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El gobierno usa publicidad dirigida para rastrear tu ubicación
+***** TLDR
+La EFF revela que Aduanas y Protección Fronteriza compra datos de ubicación de intermediarios de datos publicitarios para rastrear personas. El ID publicitario de tu teléfono se vende a través del ecosistema de tecnología publicitaria, y el gobierno simplemente lo compra - sin necesidad de orden judicial. La industria publicitaria ha construido la infraestructura de vigilancia perfecta y los contribuyentes financian ambos lados.
+***** Take
+Construimos una red de vigilancia global para venderte anuncios de zapatillas ligeramente mejores, luego vendimos el acceso al gobierno. Al menos la Stasi tenía que seguir a la gente en persona.
+***** Comments
+- Sin importar el riesgo, debo llevar mi smartphone a todas partes e instalar cada app. Sería inimaginable tener ganas de buscar algo y esperar a hacerlo después en una computadora real.
+- Por qué necesitamos usar pihole más agresivamente.
+- Dinero de los contribuyentes usado para rastrear contribuyentes y financiar la industria publicitaria.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Regierung nutzt gezielte Werbung, um Ihren Standort zu verfolgen
+***** TLDR
+Die EFF enthüllt, dass die Zoll- und Grenzschutzbehörde Standortdaten von Werbedatenmaklern kauft, um Menschen zu verfolgen. Die Werbe-ID Ihres Telefons wird über das Adtech-Ökosystem verkauft, und die Regierung kauft sie einfach - ohne Durchsuchungsbefehl. Die Werbeindustrie hat die perfekte Überwachungsinfrastruktur aufgebaut, und die Steuerzahler finanzieren beide Seiten.
+***** Take
+Wir haben ein globales Überwachungsnetzwerk aufgebaut, um Ihnen etwas bessere Sneaker-Werbung zu verkaufen, und dann den Zugang an die Regierung verkauft. Wenigstens musste die Stasi die Leute noch persönlich verfolgen.
+***** Comments
+- Egal welches Risiko, ich muss mein Smartphone überall hin mitnehmen und jede App installieren. Es wäre unvorstellbar, den Drang zu haben, etwas nachzuschlagen, aber dann zu warten, bis ich es später an einem richtigen Computer mache.
+- Warum wir pihole aggressiver nutzen müssen.
+- Steuergelder werden verwendet, um Steuerzahler zu verfolgen und die Werbeindustrie zu finanzieren.
+** Nvidia PersonaPlex 7B on Apple Silicon: Full-Duplex Speech-to-Speech in Swift :ai:voice:apple:ml:swift:
+:PROPERTIES:
+:ID:       47258801
+:URL:      https://blog.ivan.digital/nvidia-personaplex-7b-on-apple-silicon-full-duplex-speech-to-speech-in-native-swift-with-mlx-0aa5276f2e23
+:HN_URL:   https://news.ycombinator.com/item?id=47258801
+:POINTS:   328
+:COMMENTS: 109
+:BY:       ipotapov
+:END:
+
+*** TLDR
+A developer ported Nvidia's PersonaPlex 7B voice model to run locally on Apple Silicon using MLX and native Swift. It enables full-duplex speech-to-speech interaction where the AI can listen while speaking. However, commenters found the project is currently limited to processing WAV files rather than true real-time conversation.
+
+*** Take
+Cool tech, but downloading 5GB of models to discover it only takes WAV files as input is the kind of disappointment that builds character. At least the README is honest about it being a proof of concept.
+
+*** Comments
+
+**** armcat
+:PROPERTIES:
+:COMMENT_ID: 47258802
+:END:
+There are caveats here. A VAD->ASR->LLM->TTS pipeline can still feel real-time with sub-second RTT. For example, see Kyutai's Moshi which achieves this with purely streaming components.
+
+**** KaiserPister
+:PROPERTIES:
+:COMMENT_ID: 47258803
+:END:
+I am strongly put off by the LLM writing in this piece. It makes me question quality of the project before even attempting a download.
+
+**** vessenes
+:PROPERTIES:
+:COMMENT_ID: 47258804
+:END:
+This is cool. But I'd skip this for now - it does not allow any kind of interactive conversation. As I learned after downloading 5G of models - it's a proof of concept that takes a wav file in.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Nvidia PersonaPlex 7B在Apple Silicon上运行:Swift原生全双工语音对话
+***** TLDR
+一位开发者使用MLX和原生Swift将Nvidia的PersonaPlex 7B语音模型移植到Apple Silicon本地运行。它支持全双工语音交互,AI可以在说话的同时倾听。然而,评论者发现该项目目前仅限于处理WAV文件,而非真正的实时对话。
+***** Take
+很酷的技术,但下载5GB模型后发现它只能接受WAV文件作为输入,这种失望是能磨练性格的。至少README诚实地说明这只是概念验证。
+***** Comments
+- 这里有一些注意事项。VAD->ASR->LLM->TTS管道仍然可以在亚秒级往返时间下感觉像实时。例如,看看Kyutai的Moshi,它通过纯流式组件实现了这一点。
+- 这篇文章中的LLM写作让我非常反感。这让我在尝试下载之前就质疑项目质量。
+- 这很酷。但我现在会跳过这个——它不允许任何形式的交互式对话。正如我在下载5GB模型后了解到的——这是一个只接受wav文件的概念验证。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Apple SiliconでNvidia PersonaPlex 7B：Swiftネイティブの全二重音声対話
+***** TLDR
+開発者がMLXとネイティブSwiftを使用して、NvidiaのPersonaPlex 7B音声モデルをApple Siliconでローカル実行できるように移植した。AIが話しながら聞くことができる全二重音声対話を可能にする。しかし、コメント者は、このプロジェクトが現在、真のリアルタイム会話ではなくWAVファイルの処理に限定されていることを発見した。
+***** Take
+クールな技術だが、5GBのモデルをダウンロードした後にWAVファイルしか入力として受け付けないことを発見するのは、人格を鍛える種類の失望だ。少なくともREADMEはプルーフ・オブ・コンセプトであることについて正直だ。
+***** Comments
+- ここにはいくつかの注意点がある。VAD->ASR->LLM->TTSパイプラインは、サブ秒のRTTでリアルタイムに感じられる。例えば、KyutaiのMoshiは純粋なストリーミングコンポーネントでこれを達成している。
+- この記事のLLMライティングに強く引いている。ダウンロードを試みる前からプロジェクトの品質を疑問視させる。
+- これはクールだ。でも今はスキップする——どんな種類のインタラクティブな会話も許可しない。5GBのモデルをダウンロードした後に学んだように、これはwavファイルを入力として受け取るプルーフ・オブ・コンセプトだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Apple Silicon에서 Nvidia PersonaPlex 7B: Swift 네이티브 전이중 음성 대화
+***** TLDR
+한 개발자가 MLX와 네이티브 Swift를 사용하여 Nvidia의 PersonaPlex 7B 음성 모델을 Apple Silicon에서 로컬로 실행하도록 포팅했다. AI가 말하면서 들을 수 있는 전이중 음성 대화를 가능하게 한다. 그러나 댓글 작성자들은 이 프로젝트가 현재 실시간 대화가 아닌 WAV 파일 처리에 제한되어 있다는 것을 발견했다.
+***** Take
+멋진 기술이지만, 5GB 모델을 다운로드한 후 WAV 파일만 입력으로 받는다는 것을 발견하는 실망은 인격을 형성하는 종류다. 적어도 README는 이것이 개념 증명이라는 것에 대해 솔직하다.
+***** Comments
+- 여기에 몇 가지 주의사항이 있다. VAD->ASR->LLM->TTS 파이프라인은 서브초 RTT로 여전히 실시간처럼 느껴질 수 있다. 예를 들어, Kyutai의 Moshi는 순수한 스트리밍 컴포넌트로 이를 달성한다.
+- 이 글의 LLM 작문에 강하게 거부감을 느낀다. 다운로드를 시도하기 전에 프로젝트 품질을 의심하게 만든다.
+- 이건 멋지다. 하지만 지금은 건너뛰겠다 - 어떤 종류의 대화형 대화도 허용하지 않는다. 5GB 모델을 다운로드한 후 알게 되었듯이 - 이것은 wav 파일을 입력으로 받는 개념 증명이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Nvidia PersonaPlex 7B en Apple Silicon: Voz a voz full-duplex en Swift nativo
+***** TLDR
+Un desarrollador portó el modelo de voz PersonaPlex 7B de Nvidia para ejecutarse localmente en Apple Silicon usando MLX y Swift nativo. Permite interacción de voz a voz full-duplex donde la IA puede escuchar mientras habla. Sin embargo, los comentaristas encontraron que el proyecto actualmente está limitado a procesar archivos WAV en lugar de conversación en tiempo real.
+***** Take
+Tecnología genial, pero descargar 5GB de modelos para descubrir que solo acepta archivos WAV como entrada es el tipo de decepción que forja el carácter. Al menos el README es honesto sobre ser una prueba de concepto.
+***** Comments
+- Hay algunas advertencias aquí. Un pipeline VAD->ASR->LLM->TTS puede sentirse en tiempo real con RTT sub-segundo. Por ejemplo, mira Moshi de Kyutai que logra esto con componentes puramente streaming.
+- Me desanima fuertemente la escritura LLM en esta pieza. Me hace cuestionar la calidad del proyecto antes de intentar descargarlo.
+- Esto es genial. Pero lo saltaría por ahora - no permite ningún tipo de conversación interactiva. Como aprendí después de descargar 5G de modelos - es una prueba de concepto que toma un archivo wav.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Nvidia PersonaPlex 7B auf Apple Silicon: Vollduplex-Sprache-zu-Sprache in nativem Swift
+***** TLDR
+Ein Entwickler hat Nvidias PersonaPlex 7B Sprachmodell portiert, um lokal auf Apple Silicon mit MLX und nativem Swift zu laufen. Es ermöglicht Vollduplex-Sprach-zu-Sprach-Interaktion, bei der die KI während des Sprechens zuhören kann. Kommentatoren fanden jedoch, dass das Projekt derzeit auf die Verarbeitung von WAV-Dateien beschränkt ist statt echte Echtzeit-Konversation.
+***** Take
+Coole Technik, aber 5GB an Modellen herunterzuladen, um zu entdecken, dass es nur WAV-Dateien als Eingabe akzeptiert, ist die Art von Enttäuschung, die Charakter bildet. Wenigstens ist die README ehrlich darüber, dass es ein Proof of Concept ist.
+***** Comments
+- Es gibt hier einige Einschränkungen. Eine VAD->ASR->LLM->TTS-Pipeline kann sich mit Sub-Sekunden-RTT immer noch wie Echtzeit anfühlen. Zum Beispiel erreicht Kyutais Moshi dies mit rein streamenden Komponenten.
+- Ich bin stark abgeschreckt vom LLM-Schreibstil in diesem Artikel. Es lässt mich die Qualität des Projekts in Frage stellen, bevor ich überhaupt einen Download versuche.
+- Das ist cool. Aber ich würde es vorerst überspringen - es erlaubt keine interaktive Konversation. Wie ich nach dem Herunterladen von 5GB an Modellen gelernt habe - es ist ein Proof of Concept, das eine WAV-Datei entgegennimmt.
