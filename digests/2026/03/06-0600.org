@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-03-06 06:00:00 UT UTC
+#+DATE: 2026-03-06T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Structs get humbled, Linux goes kernel-deep, and citrus reveals its messy family tree
+
+* Highlights
+- Feldera: 700-column SQL tables break Rust structs in embarrassing ways
+- Linux hotplug: mixing endianness within packets is diabolical
+- Citrus genealogy: your lime is a secret lemon-citron hybrid
+
+* Stories
+
+** Nobody ever got fired for using a struct :rust:performance:databases:sql:
+:PROPERTIES:
+:ID:       47225655
+:URL:      https://www.feldera.com/blog/nobody-ever-got-fired-for-using-a-struct
+:HN_URL:   https://news.ycombinator.com/item?id=47225655
+:POINTS:   73
+:COMMENTS: 47
+:BY:       gz09
+:END:
+
+*** TLDR
+Feldera's SQL-to-Rust compiler hit a wall when a customer table had 700+ nullable columns. The generated Rust struct had 700 Option<T> fields, and Rust's derive macros for Eq, Ord, Hash turned polynomial. They fixed it by switching from Rust structs to a columnar representation that stores each field in its own vector - same data, wildly different performance.
+
+*** Take
+Everyone says 'choose the right data structure' until they generate 700 Option fields from SQL and watch Rust spend more time comparing nulls than doing actual work.
+
+*** Comments
+
+**** amluto
+:PROPERTIES:
+:COMMENT_ID: 47226001
+:END:
+One should essentially never use reflection-based serialization for anything at scale. The actual data format should be designed, not derived from language structures.
+
+**** duc_minh
+:PROPERTIES:
+:COMMENT_ID: 47226002
+:END:
+This is Rob Pike's Rule 5: If you've chosen the right data structures, the algorithms will almost always be self-evident.
+
+**** SoftTalker
+:PROPERTIES:
+:COMMENT_ID: 47226003
+:END:
+That 700-column database table was a waving red flag. I have never worked with a table that had even 100 columns.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+没人会因为用了struct而被开除
+***** TLDR
+Feldera的SQL转Rust编译器遇到一个有700多个可空列的客户表时卡住了。生成的Rust结构体有700个Option<T>字段，Rust的Eq、Ord、Hash派生宏变成了多项式复杂度。他们通过从Rust结构体切换到列式存储来解决，每个字段存储在自己的向量中。
+***** Take
+大家都说'选对数据结构'，直到他们从SQL生成700个Option字段，看着Rust花更多时间比较null而不是干正事。
+***** Comments
+- 大规模使用反射序列化是不可取的。数据格式应该设计，而不是从语言结构派生。
+- 这就是Rob Pike的第5条规则：选对数据结构，算法自然就明了。
+- 那个700列的数据库表就是危险信号。我从没见过超过100列的表。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+structを使ったからといってクビになった人はいない
+***** TLDR
+FelderaのSQL-Rustコンパイラが700以上のnullable列を持つテーブルで行き詰まった。生成されたRust構造体は700のOption<T>フィールドを持ち、Eq、Ord、Hashの導出マクロが多項式時間になった。列指向表現に切り替えて解決した。
+***** Take
+「正しいデータ構造を選べ」と皆言うが、SQLから700のOptionフィールドを生成して、Rustがnull比較に時間を費やすのを見るまでの話だ。
+***** Comments
+- 大規模システムでリフレクションベースのシリアライズは使うべきではない。
+- これはRob Pikeの第5法則だ：正しいデータ構造を選べばアルゴリズムは自明になる。
+- あの700列のテーブルは危険信号だった。100列のテーブルすら見たことがない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+struct를 썼다고 해고된 사람은 없다
+***** TLDR
+Feldera의 SQL-Rust 컴파일러가 700개 이상의 nullable 컬럼을 가진 테이블에서 막혔다. 생성된 Rust 구조체는 700개의 Option<T> 필드를 가졌고, Eq, Ord, Hash 매크로가 다항식 시간이 됐다. 컬럼 기반 표현으로 전환해 해결했다.
+***** Take
+다들 '올바른 데이터 구조를 선택하라'고 하지만, SQL에서 700개의 Option 필드를 생성하고 Rust가 null 비교에 시간을 쏟는 걸 보기 전까지의 이야기다.
+***** Comments
+- 대규모 시스템에서 리플렉션 기반 직렬화는 절대 쓰면 안 된다.
+- 이것이 Rob Pike의 5번 규칙이다: 올바른 데이터 구조를 선택하면 알고리즘은 자명해진다.
+- 그 700컬럼 테이블은 위험 신호였다. 100컬럼 테이블도 본 적 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+A nadie lo despidieron por usar un struct
+***** TLDR
+El compilador SQL-Rust de Feldera se atascó con una tabla de 700+ columnas nullable. El struct generado tenía 700 campos Option<T>, y los macros derive de Eq, Ord, Hash se volvieron polinomiales. Lo solucionaron cambiando a representación columnar.
+***** Take
+Todos dicen 'elige la estructura de datos correcta' hasta que generan 700 campos Option desde SQL y ven a Rust pasar más tiempo comparando nulls que trabajando.
+***** Comments
+- Nunca usar serialización basada en reflexión a escala. El formato debe diseñarse, no derivarse.
+- Esta es la Regla 5 de Rob Pike: si eliges las estructuras correctas, los algoritmos serán evidentes.
+- Esa tabla de 700 columnas era una señal de alarma. Nunca trabajé con tablas de 100 columnas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Niemand wurde je gefeuert, weil er ein Struct benutzt hat
+***** TLDR
+Felderas SQL-zu-Rust-Compiler stieß bei einer Tabelle mit 700+ nullable Spalten an seine Grenzen. Das generierte Rust-Struct hatte 700 Option<T>-Felder, und die Derive-Makros für Eq, Ord, Hash wurden polynomial. Sie lösten es durch Umstellung auf spaltenorientierte Darstellung.
+***** Take
+Alle sagen 'wähle die richtige Datenstruktur', bis sie 700 Option-Felder aus SQL generieren und zusehen, wie Rust mehr Zeit mit Null-Vergleichen verbringt als mit echter Arbeit.
+***** Comments
+- Reflexionsbasierte Serialisierung sollte nie im großen Maßstab verwendet werden.
+- Das ist Rob Pikes Regel 5: Bei richtigen Datenstrukturen sind Algorithmen selbstverständlich.
+- Diese 700-Spalten-Tabelle war ein Warnsignal. Ich habe nie mit 100 Spalten gearbeitet.
+** Hardware hotplug events on Linux, the gory details :linux:kernel:usb:hardware:
+:PROPERTIES:
+:ID:       47215602
+:URL:      https://arcanenibble.github.io/hardware-hotplug-events-on-linux-the-gory-details.html
+:HN_URL:   https://news.ycombinator.com/item?id=47215602
+:POINTS:   130
+:COMMENTS: 10
+:BY:       todsacerdoti
+:END:
+
+*** TLDR
+A deep dive into how Linux handles hardware hotplug: two backends (netlink and udev), mixed endianness within packets (diabolical!), and the archaeology of why USB devices sometimes work on coldplug but not hotplug. The author traces through libusb's hotplug code to show the messy reality.
+
+*** Take
+The fact that Linux mixes endianness within a single hotplug packet tells you everything you need to know about how kernel interfaces evolve: somebody needed it to work, so they made it work, and now we're all stuck with it.
+
+*** Comments
+
+**** philips
+:PROPERTIES:
+:COMMENT_ID: 47215701
+:END:
+My DDR pad works on coldplug but not hotplug. The firmware isn't ready to be polled for USB descriptors right when plugged in, so you need a udev hack to suspend and reconnect it.
+
+**** deathanatos
+:PROPERTIES:
+:COMMENT_ID: 47215702
+:END:
+Mixing endianness within a packet is diabolical. Also, 'netink' would have been a much cooler word than 'blog'.
+
+**** robinsonb5
+:PROPERTIES:
+:COMMENT_ID: 47215703
+:END:
+The old XKCD about life satisfaction being proportional to time since last opening xorg.conf could equally apply to udev.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Linux硬件热插拔事件的血腥细节
+***** TLDR
+深入探讨Linux如何处理硬件热插拔：两个后端（netlink和udev），数据包内混合字节序（太邪恶了！），以及USB设备为什么有时冷插拔能用但热插拔不行的考古学。
+***** Take
+Linux在单个热插拔数据包中混合字节序，这告诉你内核接口是如何演变的：有人需要它工作，就让它工作了，现在我们都得忍着。
+***** Comments
+- 我的DDR垫冷插拔能用但热插拔不行。固件插入时还没准备好响应USB描述符查询，需要用udev技巧让它重连。
+- 在数据包内混合字节序太邪恶了。另外'netink'比'blog'酷多了。
+- 那个关于生活满意度与上次打开xorg.conf时间成正比的XKCD漫画同样适用于udev。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Linuxのハードウェアホットプラグイベントの詳細
+***** TLDR
+Linuxがハードウェアホットプラグをどう処理するか深掘り：2つのバックエンド（netlinkとudev）、パケット内でのエンディアン混在（悪魔的！）、USBデバイスがコールドプラグで動くのにホットプラグで動かない理由の考古学。
+***** Take
+Linuxが単一のホットプラグパケット内でエンディアンを混在させているのは、カーネルインターフェースがどう進化するかを物語っている：誰かが動くようにしたから、今みんなそれに付き合わされている。
+***** Comments
+- DDRパッドがコールドプラグでは動くがホットプラグでは動かない。ファームウェアが接続直後にUSBディスクリプタ応答の準備ができていないので、udevハックで再接続が必要。
+- パケット内でエンディアンを混在させるのは悪魔的だ。
+- xorg.confを開いてからの時間と人生満足度が比例するというXKCDはudevにも当てはまる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Linux 하드웨어 핫플러그 이벤트의 상세한 내막
+***** TLDR
+Linux가 하드웨어 핫플러그를 어떻게 처리하는지 심층 분석: 두 가지 백엔드(netlink와 udev), 패킷 내 엔디안 혼합(악마적!), USB 장치가 콜드플러그에서는 작동하고 핫플러그에서는 안 되는 이유의 고고학.
+***** Take
+Linux가 단일 핫플러그 패킷 내에서 엔디안을 혼합하는 것은 커널 인터페이스가 어떻게 진화하는지 보여준다: 누군가 작동하게 만들었고, 이제 우리 모두 그걸 감수해야 한다.
+***** Comments
+- 내 DDR 패드가 콜드플러그에서는 되는데 핫플러그에서는 안 된다. 펌웨어가 연결 직후 USB 디스크립터 응답 준비가 안 돼서 udev 핵으로 재연결해야 한다.
+- 패킷 내에서 엔디안을 섞는 건 악마적이다.
+- xorg.conf를 연 이후 시간과 인생 만족도가 비례한다는 XKCD는 udev에도 적용된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Eventos de hotplug de hardware en Linux, los detalles sangrientos
+***** TLDR
+Inmersión profunda en cómo Linux maneja el hotplug: dos backends (netlink y udev), endianness mezclado dentro de paquetes (¡diabólico!), y la arqueología de por qué dispositivos USB funcionan en coldplug pero no en hotplug.
+***** Take
+El hecho de que Linux mezcle endianness dentro de un paquete de hotplug te dice todo sobre cómo evolucionan las interfaces del kernel: alguien lo necesitaba funcionando, así que lo hizo funcionar, y ahora todos estamos atrapados con eso.
+***** Comments
+- Mi pad DDR funciona en coldplug pero no en hotplug. El firmware no está listo para responder descriptores USB al conectar, necesitas un hack de udev.
+- Mezclar endianness dentro de un paquete es diabólico.
+- El XKCD sobre satisfacción vital proporcional al tiempo desde abrir xorg.conf aplica igual a udev.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Hardware-Hotplug-Events unter Linux, die blutigen Details
+***** TLDR
+Ein tiefer Einblick in Linux' Hotplug-Handling: zwei Backends (netlink und udev), gemischte Byte-Reihenfolge innerhalb von Paketen (teuflisch!), und die Archäologie warum USB-Geräte manchmal bei Coldplug funktionieren aber nicht bei Hotplug.
+***** Take
+Dass Linux die Byte-Reihenfolge innerhalb eines Hotplug-Pakets mischt, sagt alles über die Evolution von Kernel-Interfaces: Jemand brauchte es funktionierend, also wurde es funktionierend gemacht, und jetzt sitzen wir alle damit fest.
+***** Comments
+- Mein DDR-Pad funktioniert bei Coldplug aber nicht bei Hotplug. Die Firmware ist nicht bereit für USB-Deskriptor-Abfragen beim Einstecken, man braucht einen udev-Hack.
+- Endianness innerhalb eines Pakets zu mischen ist teuflisch.
+- Der alte XKCD über Lebenszufriedenheit proportional zur Zeit seit dem letzten Öffnen von xorg.conf gilt auch für udev.
+** A ternary plot of citrus genealogy :dataviz:science:biology:interactive:
+:PROPERTIES:
+:ID:       47238272
+:URL:      https://www.jlauf.com/writing/citrus/
+:HN_URL:   https://news.ycombinator.com/item?id=47238272
+:POINTS:   113
+:COMMENTS: 20
+:BY:       jlauf
+:END:
+
+*** TLDR
+An interactive ternary plot visualizing how all citrus fruits descend from just three ancestors: citron, mandarin, and pomelo. Persian limes are actually key lime x lemon hybrids. The author built an interactive visualization showing the complex hybridization history of citrus.
+
+*** Take
+Your grocery store citrus aisle is basically a family reunion for three ancient fruits that really got around. Turns out a lime is not just a lime - it's a lemon's cousin twice removed through a citron.
+
+*** Comments
+
+**** CamelCaseCondo
+:PROPERTIES:
+:COMMENT_ID: 47238301
+:END:
+Clementine seeds have polyembryonism: multiple seedlings from one seed. One is a clone of the mother plant, the rest are from pollination.
+
+**** lameda
+:PROPERTIES:
+:COMMENT_ID: 47238302
+:END:
+This reminds me of John McPhee's 'Oranges' which covers the mess of citrus genealogy wonderfully.
+
+**** jihadjihad
+:PROPERTIES:
+:COMMENT_ID: 47238303
+:END:
+A Persian lime is a cross between a Key lime and a lemon? I never would have guessed that.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+柑橘家谱的三元图
+***** TLDR
+一个交互式三元图，展示所有柑橘类水果如何源自三个祖先：香橼、橘子和柚子。波斯青柠实际上是墨西哥青柠和柠檬的杂交。作者构建了一个展示柑橘复杂杂交历史的交互式可视化。
+***** Take
+你超市的柑橘货架基本上是三种古老水果的家庭聚会，它们的关系很混乱。原来青柠不只是青柠——它是柠檬通过香橼的远房表亲。
+***** Comments
+- 克莱门氏小柑橘种子有多胚现象：一颗种子长出多株苗。一株是母本的克隆，其余是授粉产物。
+- 这让我想起John McPhee的《橙子》，精彩地讲述了柑橘家谱的混乱。
+- 波斯青柠是墨西哥青柠和柠檬的杂交？我从没猜到。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+柑橘類の系図の三角グラフ
+***** TLDR
+すべての柑橘類がシトロン、マンダリン、ブンタンという3つの祖先から派生していることを視覚化したインタラクティブな三角グラフ。ペルシャライムは実はキーライムとレモンの交配種。
+***** Take
+スーパーの柑橘売り場は基本的に3つの古代フルーツの家族の集まりだ。ライムは単なるライムではない——シトロンを介したレモンの遠い親戚だ。
+***** Comments
+- クレメンタインの種子は多胚性がある：1つの種子から複数の苗が出る。1つは母木のクローンで、残りは受粉の結果。
+- これはJohn McPheeの『Oranges』を思い出させる。柑橘類の系図の混乱を素晴らしく描いている。
+- ペルシャライムがキーライムとレモンの交配？想像もしなかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+감귤류 계보의 삼원 그래프
+***** TLDR
+모든 감귤류가 유자, 귤, 자몽 세 조상에서 파생됐음을 시각화한 인터랙티브 삼원 그래프. 페르시아 라임은 실제로 키 라임과 레몬의 교배종이다.
+***** Take
+마트 감귤 코너는 기본적으로 매우 복잡한 관계를 가진 세 고대 과일의 가족 모임이다. 라임은 그냥 라임이 아니라 유자를 통한 레몬의 먼 친척이다.
+***** Comments
+- 클레멘타인 씨앗은 다배 현상이 있다: 한 씨앗에서 여러 묘목이 나온다. 하나는 어미 식물의 클론이고 나머지는 수분 결과다.
+- 이것은 John McPhee의 'Oranges'를 떠올리게 한다. 감귤류 계보의 혼란을 훌륭하게 다룬다.
+- 페르시아 라임이 키 라임과 레몬의 교배라고? 상상도 못 했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un gráfico ternario de la genealogía de los cítricos
+***** TLDR
+Un gráfico ternario interactivo que visualiza cómo todos los cítricos descienden de solo tres ancestros: cidra, mandarina y pomelo. Las limas persas son en realidad híbridos de lima key y limón.
+***** Take
+El pasillo de cítricos del supermercado es básicamente una reunión familiar de tres frutas antiguas con relaciones muy complicadas. Resulta que una lima no es solo una lima - es prima segunda del limón a través de la cidra.
+***** Comments
+- Las semillas de clementina tienen poliembrionía: múltiples plántulas de una semilla. Una es clon de la planta madre, el resto son de polinización.
+- Esto me recuerda a 'Oranges' de John McPhee que cubre maravillosamente el lío genealógico de los cítricos.
+- ¿Una lima persa es cruce de lima key y limón? Nunca lo hubiera adivinado.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein ternäres Diagramm der Zitrus-Genealogie
+***** TLDR
+Ein interaktives ternäres Diagramm, das zeigt, wie alle Zitrusfrüchte von nur drei Vorfahren abstammen: Zitronatzitrone, Mandarine und Pampelmuse. Persische Limetten sind eigentlich Kreuzungen aus Key-Limette und Zitrone.
+***** Take
+Der Zitrus-Gang im Supermarkt ist im Grunde ein Familientreffen von drei alten Früchten mit sehr komplizierten Beziehungen. Eine Limette ist nicht nur eine Limette - sie ist der Cousin zweiten Grades der Zitrone über die Zitronatzitrone.
+***** Comments
+- Clementinen-Samen haben Polyembryonie: mehrere Sämlinge aus einem Samen. Einer ist ein Klon der Mutterpflanze, der Rest stammt aus Bestäubung.
+- Das erinnert mich an John McPhees 'Oranges', das das Chaos der Zitrus-Genealogie wunderbar behandelt.
+- Eine persische Limette ist eine Kreuzung aus Key-Limette und Zitrone? Das hätte ich nie gedacht.
+** System76 on Age Verification Laws :privacy:policy:linux:security:
+:PROPERTIES:
+:ID:       47270784
+:URL:      https://blog.system76.com/post/system76-on-age-verification/
+:HN_URL:   https://news.ycombinator.com/item?id=47270784
+:POINTS:   60
+:COMMENTS: 19
+:BY:       LorenDB
+:END:
+
+*** TLDR
+System76 publishes their stance on proliferating age verification laws affecting OS distributors. California and Colorado laws require 'major OS providers' to implement age attestation, and System76 fears these requirements will eventually apply to Linux distributions too.
+
+*** Take
+Nothing says 'protecting children' like requiring every OS to implement ID verification so the government knows exactly who's behind every keyboard. System76 is right to be concerned - these laws are written by people who think 'the Linux' is a type of penguin.
+
+*** Comments
+
+**** Tyrubias
+:PROPERTIES:
+:COMMENT_ID: 47270801
+:END:
+Glad System76 made a statement, though the addendum feels like their legal team made them add it. The California law was agreed with major OS providers.
+
+**** al_borland
+:PROPERTIES:
+:COMMENT_ID: 47270802
+:END:
+Throwing kids into the deep end at 16 or 18 is too late. Kids sheltered too long go wild in college. A lot of them failed out.
+
+**** hellojesus
+:PROPERTIES:
+:COMMENT_ID: 47270803
+:END:
+Are these laws not 1A violations due to code being speech and the gov not being allowed to compel speech?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+System76关于年龄验证法的声明
+***** TLDR
+System76发布了对影响操作系统发行商的年龄验证法案的立场。加州和科罗拉多州法律要求'主要操作系统提供商'实施年龄证明，System76担心这些要求最终会适用于Linux发行版。
+***** Take
+'保护儿童'就是要求每个操作系统实施身份验证，这样政府就能知道每个键盘后面是谁。System76的担忧是对的——这些法律是由认为'Linux'是一种企鹅的人写的。
+***** Comments
+- 很高兴System76发表声明，虽然附录感觉是法务团队让他们加的。加州法律是与主要操作系统提供商协商的。
+- 16或18岁才把孩子扔进深水区太晚了。保护过度的孩子上大学后会疯狂。很多人退学了。
+- 这些法律不是违反第一修正案吗？代码就是言论，政府不能强迫言论。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+年齢確認法に関するSystem76の声明
+***** TLDR
+System76がOS配布者に影響する年齢確認法についての立場を公表。カリフォルニア州とコロラド州の法律は「主要OSプロバイダー」に年齢証明の実装を求めており、System76はこれらの要件がいずれLinuxディストリビューションにも適用されることを懸念。
+***** Take
+「子供を守る」とは、すべてのOSにID認証を義務付けて、政府がすべてのキーボードの後ろに誰がいるか正確に把握することらしい。System76の懸念は正しい——これらの法律は「Linux」がペンギンの一種だと思っている人たちが書いた。
+***** Comments
+- System76が声明を出したのは良いが、補足は法務チームに追加させられた感じがする。カリフォルニア法は主要OSプロバイダーと合意された。
+- 16歳や18歳で深いところに放り込むのは遅すぎる。過保護だった子は大学で暴走する。多くが退学した。
+- これらの法律はコードが言論であり政府が言論を強制できないので第1修正条項違反ではないか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+연령 인증 법안에 대한 System76의 입장
+***** TLDR
+System76이 OS 배포자에게 영향을 미치는 연령 인증 법안에 대한 입장을 발표했다. 캘리포니아와 콜로라도 법은 '주요 OS 제공자'에게 연령 증명 구현을 요구하며, System76은 이 요구사항이 결국 Linux 배포판에도 적용될 것을 우려한다.
+***** Take
+'아동 보호'란 모든 OS에 신원 확인을 의무화해서 정부가 모든 키보드 뒤에 누가 있는지 정확히 아는 것을 말하는 것 같다. System76의 우려는 정당하다 - 이 법들은 'Linux'가 펭귄 종류라고 생각하는 사람들이 썼다.
+***** Comments
+- System76이 성명을 낸 건 좋지만 부록은 법무팀이 추가하게 한 느낌이다. 캘리포니아 법은 주요 OS 제공자와 합의됐다.
+- 16세나 18세에 깊은 곳에 던지는 건 너무 늦다. 과보호받은 아이들은 대학에서 폭주한다. 많은 애들이 퇴학했다.
+- 코드가 언론이고 정부가 언론을 강제할 수 없으니 이 법들은 수정헌법 1조 위반 아닌가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+System76 sobre las leyes de verificación de edad
+***** TLDR
+System76 publica su postura sobre las leyes de verificación de edad que afectan a distribuidores de SO. Las leyes de California y Colorado requieren que los 'principales proveedores de SO' implementen atestación de edad, y System76 teme que estos requisitos eventualmente apliquen a distribuciones Linux.
+***** Take
+Nada dice 'proteger niños' como requerir que cada SO implemente verificación de ID para que el gobierno sepa exactamente quién está detrás de cada teclado. System76 tiene razón en preocuparse - estas leyes las escriben personas que piensan que 'el Linux' es un tipo de pingüino.
+***** Comments
+- Me alegra que System76 se pronunciara, aunque el addendum parece que lo añadió su equipo legal. La ley de California se acordó con los principales proveedores de SO.
+- Lanzar a los niños a lo profundo a los 16 o 18 es muy tarde. Los niños sobreprotegidos se descontrolan en la universidad. Muchos abandonaron.
+- ¿Estas leyes no violan la 1A dado que el código es discurso y el gobierno no puede obligar el discurso?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+System76 zu Altersverifikationsgesetzen
+***** TLDR
+System76 veröffentlicht ihre Position zu den sich ausbreitenden Altersverifikationsgesetzen, die OS-Distributoren betreffen. Gesetze in Kalifornien und Colorado verlangen von 'großen OS-Anbietern' die Implementierung von Altersnachweis, und System76 befürchtet, dass diese Anforderungen irgendwann auch für Linux-Distributionen gelten werden.
+***** Take
+Nichts sagt 'Kinder schützen' wie die Pflicht für jedes OS, ID-Verifikation zu implementieren, damit die Regierung genau weiß, wer hinter jeder Tastatur sitzt. System76 hat Recht, besorgt zu sein - diese Gesetze werden von Leuten geschrieben, die denken 'das Linux' sei eine Pinguinart.
+***** Comments
+- Gut, dass System76 Stellung bezogen hat, obwohl der Nachtrag nach Rechtsabteilung klingt. Das Kalifornien-Gesetz wurde mit großen OS-Anbietern vereinbart.
+- Kinder mit 16 oder 18 ins kalte Wasser zu werfen ist zu spät. Überbehütete Kinder drehen in der Uni durch. Viele sind durchgefallen.
+- Sind diese Gesetze nicht 1A-Verstöße, da Code Rede ist und die Regierung Rede nicht erzwingen darf?
+** Stop Using Grey Text :design:accessibility:css:ux:
+:PROPERTIES:
+:ID:       47268574
+:URL:      https://catskull.net/stop-using-grey-text.html
+:HN_URL:   https://news.ycombinator.com/item?id=47268574
+:POINTS:   59
+:COMMENTS: 36
+:BY:       catskull
+:END:
+
+*** TLDR
+An argument against low-contrast grey text for readability and accessibility. The author advocates for sufficient contrast while acknowledging that their own site uses carefully chosen grey text - the point being 'use contrast wisely' not 'never use grey'.
+
+*** Take
+Author tells you to stop using grey text while using grey text. The real message is 'use contrast properly' but that title wouldn't get clicks. At least they're self-aware about it.
+
+*** Comments
+
+**** tejohnso
+:PROPERTIES:
+:COMMENT_ID: 47268601
+:END:
+Isn't most of the text on that page grey? The message is 'don't use grey unless you know what you're doing, like I do'.
+
+**** akrakesh
+:PROPERTIES:
+:COMMENT_ID: 47268602
+:END:
+The article could have been more useful if its point was just 'use sufficient contrast'. It's overly prescriptive and feels like trying too hard to be sensational.
+
+**** ccleve
+:PROPERTIES:
+:COMMENT_ID: 47268603
+:END:
+For an opposing view: ianstormtaylor.com/design-tip-never-use-black
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+别再用灰色文字了
+***** TLDR
+反对使用低对比度灰色文字的可读性和无障碍性论点。作者主张使用足够的对比度，同时承认自己的网站使用了精心选择的灰色文字——重点是'明智使用对比度'而不是'永远不要用灰色'。
+***** Take
+作者叫你别用灰色文字，自己却在用灰色文字。真正的信息是'正确使用对比度'，但那个标题不会有点击量。至少他们有自知之明。
+***** Comments
+- 那个页面上大部分文字不都是灰色的吗？信息是'除非你像我一样懂行，否则别用灰色'。
+- 如果文章的观点只是'使用足够的对比度'会更有用。过度说教，感觉在刻意制造话题。
+- 相反观点：ianstormtaylor.com/design-tip-never-use-black
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+グレーテキストを使うのをやめよう
+***** TLDR
+可読性とアクセシビリティのために低コントラストのグレーテキストに反対する議論。著者は十分なコントラストを主張しつつ、自サイトでは慎重に選んだグレーテキストを使っていることを認めている——ポイントは「グレーを使うな」ではなく「コントラストを賢く使え」。
+***** Take
+著者はグレーテキストを使うなと言いながらグレーテキストを使っている。本当のメッセージは「コントラストを適切に使え」だが、そのタイトルではクリックされない。少なくとも自覚はある。
+***** Comments
+- そのページのほとんどのテキストはグレーでは？メッセージは「私のように分かっている人以外はグレーを使うな」だ。
+- 記事のポイントが「十分なコントラストを使え」だけならもっと有用だっただろう。過度に処方的で、センセーショナルになろうとしすぎている。
+- 反対意見として：ianstormtaylor.com/design-tip-never-use-black
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+회색 텍스트 사용을 멈춰라
+***** TLDR
+가독성과 접근성을 위해 저대비 회색 텍스트에 반대하는 주장. 저자는 충분한 대비를 주장하면서도 자신의 사이트가 신중하게 선택한 회색 텍스트를 사용함을 인정한다 - 요점은 '회색을 쓰지 마라'가 아니라 '대비를 현명하게 사용하라'이다.
+***** Take
+저자는 회색 텍스트를 쓰지 말라고 하면서 회색 텍스트를 쓴다. 진짜 메시지는 '대비를 제대로 써라'지만 그 제목은 클릭을 못 받는다. 적어도 자각은 있다.
+***** Comments
+- 그 페이지 텍스트 대부분이 회색 아닌가? 메시지는 '나처럼 뭘 하는지 아는 게 아니면 회색 쓰지 마라'다.
+- 기사 요점이 '충분한 대비를 사용하라'였으면 더 유용했을 것이다. 과도하게 처방적이고 선정적이려고 애쓰는 느낌이다.
+- 반대 의견: ianstormtaylor.com/design-tip-never-use-black
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Deja de usar texto gris
+***** TLDR
+Un argumento contra el texto gris de bajo contraste por legibilidad y accesibilidad. El autor aboga por contraste suficiente mientras reconoce que su propio sitio usa texto gris cuidadosamente elegido - el punto es 'usa el contraste sabiamente' no 'nunca uses gris'.
+***** Take
+El autor te dice que dejes de usar texto gris mientras usa texto gris. El mensaje real es 'usa el contraste correctamente' pero ese título no conseguiría clics. Al menos son conscientes de ello.
+***** Comments
+- ¿No es gris la mayoría del texto en esa página? El mensaje es 'no uses gris a menos que sepas lo que haces, como yo'.
+- El artículo habría sido más útil si su punto fuera solo 'usa suficiente contraste'. Es demasiado prescriptivo y parece intentar ser sensacionalista.
+- Para una opinión contraria: ianstormtaylor.com/design-tip-never-use-black
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Hör auf, grauen Text zu verwenden
+***** TLDR
+Ein Argument gegen kontrastarmen grauen Text für Lesbarkeit und Barrierefreiheit. Der Autor plädiert für ausreichenden Kontrast, während er zugibt, dass seine eigene Seite sorgfältig gewählten grauen Text verwendet - der Punkt ist 'Kontrast klug einsetzen' nicht 'niemals Grau verwenden'.
+***** Take
+Der Autor sagt dir, du sollst keinen grauen Text verwenden, während er grauen Text verwendet. Die echte Botschaft ist 'Kontrast richtig einsetzen', aber der Titel würde keine Klicks bringen. Wenigstens sind sie sich dessen bewusst.
+***** Comments
+- Ist nicht der meiste Text auf der Seite grau? Die Botschaft ist 'benutze kein Grau, außer du weißt was du tust, wie ich'.
+- Der Artikel wäre nützlicher gewesen, wenn der Punkt nur 'genug Kontrast verwenden' gewesen wäre. Zu vorschreibend und versucht zu sensationell zu sein.
+- Für eine Gegenansicht: ianstormtaylor.com/design-tip-never-use-black
