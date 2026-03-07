@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-03-07 16:00:00 UT UTC
+#+DATE: 2026-03-07T16:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+AST editors go modal, LLMs go plausible, and the economy goes sideways
+
+* Highlights
+- Ki Editor: Vim muscle memory meets tree-sitter consciousness
+- LLMs: Still writing code that compiles but shouldn't ship
+- AMD's 1GHz flex turns 26, and we're still not at 30GHz
+- QGIS 4.0: The free GIS that ate ArcGIS's lunch
+- US sheds 92K jobs, HN debates whether it's weather or worse
+
+* Stories
+
+** Ki Editor – an editor that operates on the AST :editor:ast:rust:dev-tools:
+:PROPERTIES:
+:ID:       47286311
+:URL:      https://ki-editor.org/
+:HN_URL:   https://news.ycombinator.com/item?id=47286311
+:POINTS:   213
+:COMMENTS: 59
+:BY:       ravenical
+:END:
+
+*** TLDR
+Ki Editor is a multi-cursor modal editor that operates directly on syntax trees instead of raw text. It introduces 'Selection Modes' that standardize movements across words, lines, and syntax nodes, letting you manipulate code structures with Kakoune-style selection-first editing.
+
+*** Take
+Another editor promising to revolutionize how we think about code. The syntax-aware selection is genuinely useful, but let's be real: most of us will try it for a week then crawl back to VS Code with our tails between our legs.
+
+*** Comments
+
+**** scriptsmith
+:PROPERTIES:
+:COMMENT_ID: 47286500
+:END:
+The 'First-class syntactic selection' reminds me of my most used shortcuts in Jetbrains IDEs: Expand/Shrink Selection. It really changed my perspective on interacting with the 'text' of a file.
+
+**** sigbottle
+:PROPERTIES:
+:COMMENT_ID: 47286501
+:END:
+I feel so illiterate when it comes to AST editing sometimes. I understand what an AST is from a computer science perspective, but I've never worked on a huge software refactor that required direct AST textobject editing.
+
+**** messh
+:PROPERTIES:
+:COMMENT_ID: 47286502
+:END:
+I don't like the positional keybindings. There is no real difference from regular keybindings configured with profiles for Qwerty, Dvorak, etc.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Ki Editor – 基于AST操作的编辑器
+***** TLDR
+Ki Editor是一个多光标模态编辑器，直接操作语法树而非原始文本。它引入了'选择模式'，统一了跨单词、行和语法节点的移动方式，让你用Kakoune风格的选择优先编辑来操作代码结构。
+***** Take
+又一个承诺要革新我们代码思维方式的编辑器。语法感知选择确实有用，但说实话：大多数人会试用一周然后夹着尾巴爬回VS Code。
+***** Comments
+- '一流的语法选择'让我想起JetBrains IDE中最常用的快捷键：扩展/收缩选择。它真的改变了我与文件'文本'交互的视角。
+- 说到AST编辑我总觉得自己很无知。从计算机科学角度我理解什么是AST，但从没做过需要直接AST文本对象编辑的大型重构。
+- 我不喜欢位置键绑定。和为Qwerty、Dvorak等配置的常规键绑定没什么区别。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Ki Editor – ASTで操作するエディタ
+***** TLDR
+Ki Editorは生テキストではなく構文木を直接操作するマルチカーソルモーダルエディタ。単語、行、構文ノード間の移動を標準化する「選択モード」を導入し、Kakoune式の選択優先編集でコード構造を操作できる。
+***** Take
+コードの考え方を革命するという約束をするまた別のエディタ。構文認識選択は本当に便利だが、正直なところ：ほとんどの人は1週間試してからVS Codeに戻る。
+***** Comments
+- 「一流の構文選択」はJetBrains IDEで最もよく使うショートカット、選択の拡大/縮小を思い出させる。ファイルの「テキスト」との対話の視点が変わった。
+- AST編集に関しては自分が無知に感じる。CSの観点からASTは理解しているが、直接AST編集が必要な大規模リファクタリングの経験がない。
+- 位置キーバインディングは好きじゃない。Qwerty、Dvorakなどのプロファイル設定と変わらない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Ki Editor – AST로 작동하는 에디터
+***** TLDR
+Ki Editor는 원시 텍스트 대신 구문 트리를 직접 조작하는 멀티커서 모달 에디터다. 단어, 줄, 구문 노드 간 이동을 표준화하는 '선택 모드'를 도입해 Kakoune 스타일의 선택 우선 편집으로 코드 구조를 조작할 수 있다.
+***** Take
+코드 사고방식을 혁신하겠다는 또 다른 에디터. 구문 인식 선택은 정말 유용하지만, 솔직히 대부분은 일주일 써보고 VS Code로 돌아갈 거다.
+***** Comments
+- '일급 구문 선택'은 JetBrains IDE에서 가장 많이 쓰는 단축키인 선택 확장/축소가 생각난다. 파일 '텍스트'와 상호작용하는 관점이 바뀌었다.
+- AST 편집에 관해서는 무식하게 느껴질 때가 있다. CS 관점에서 AST가 뭔지는 알지만 직접 AST 편집이 필요한 대규모 리팩토링 경험이 없다.
+- 위치 키바인딩은 마음에 안 든다. Qwerty, Dvorak 등 프로필 설정과 다를 게 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ki Editor – un editor que opera en el AST
+***** TLDR
+Ki Editor es un editor modal multicursor que opera directamente en árboles de sintaxis en lugar de texto crudo. Introduce 'Modos de Selección' que estandarizan movimientos entre palabras, líneas y nodos de sintaxis, permitiendo manipular estructuras de código con edición de selección primero estilo Kakoune.
+***** Take
+Otro editor prometiendo revolucionar cómo pensamos sobre el código. La selección consciente de sintaxis es genuinamente útil, pero seamos realistas: la mayoría lo probará una semana y volverá arrastrándose a VS Code.
+***** Comments
+- La 'selección sintáctica de primera clase' me recuerda a mis atajos más usados en JetBrains: Expandir/Contraer Selección. Cambió mi perspectiva sobre interactuar con el 'texto' de un archivo.
+- Me siento tan analfabeto cuando se trata de edición AST. Entiendo qué es un AST desde la perspectiva de CS, pero nunca trabajé en un refactor que requiriera edición directa de textobjects AST.
+- No me gustan los keybindings posicionales. No hay diferencia real con keybindings regulares configurados para Qwerty, Dvorak, etc.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ki Editor – ein Editor, der auf dem AST operiert
+***** TLDR
+Ki Editor ist ein Multi-Cursor-Modal-Editor, der direkt auf Syntaxbäumen statt auf Rohtext arbeitet. Er führt 'Auswahlmodi' ein, die Bewegungen über Wörter, Zeilen und Syntaxknoten standardisieren und ermöglichen, Codestrukturen mit Kakoune-artigem Selection-First-Editing zu manipulieren.
+***** Take
+Noch ein Editor, der verspricht zu revolutionieren, wie wir über Code denken. Die syntaxbewusste Auswahl ist wirklich nützlich, aber seien wir ehrlich: Die meisten werden es eine Woche testen und dann zu VS Code zurückkriechen.
+***** Comments
+- Die 'erstklassige syntaktische Auswahl' erinnert mich an meine meistgenutzten Shortcuts in JetBrains: Auswahl erweitern/verkleinern. Es hat meine Perspektive auf die Interaktion mit dem 'Text' einer Datei verändert.
+- Ich fühle mich so unwissend bei AST-Bearbeitung. Ich verstehe, was ein AST aus CS-Perspektive ist, aber ich habe nie an einem Refactoring gearbeitet, das direkte AST-Textobject-Bearbeitung erforderte.
+- Ich mag die positionellen Keybindings nicht. Es gibt keinen echten Unterschied zu regulären Keybindings mit Profilen für Qwerty, Dvorak usw.
+** LLM Doesn't Write Correct Code. It Writes Plausible Code :ai:llm:programming:hot-take:
+:PROPERTIES:
+:ID:       47288046
+:URL:      https://twitter.com/KatanaLarp/status/2029928471632224486
+:HN_URL:   https://news.ycombinator.com/item?id=47288046
+:POINTS:   48
+:COMMENTS: 39
+:BY:       pretext
+:END:
+
+*** TLDR
+A viral thread arguing that LLMs don't write correct code, they write statistically plausible code. The output looks right, compiles, and might even pass basic tests, but often contains subtle bugs or suboptimal patterns because the model optimizes for 'looks like code humans wrote' not 'actually works correctly.'
+
+*** Take
+This is the 'water is wet' observation of 2026. LLMs write code that looks like Stack Overflow answers because they trained on Stack Overflow answers. Shocking revelation: probability-based text generators optimize for probability.
+
+*** Comments
+
+**** treetalker
+:PROPERTIES:
+:COMMENT_ID: 47288100
+:END:
+This is my experience with how LLMs 'draft' legal arguments: at first glance, it's plausible — but may be, and often is, invalid, unsound, and/or ill-advised. Many judges lack the time to dig into the arguments and cited authorities.
+
+**** andai
+:PROPERTIES:
+:COMMENT_ID: 47288101
+:END:
+It writes statistically represented code, which is why everything defaults to enterprisey, OOP, 'I installed 10 trendy dependencies' type code.
+
+**** seanmcdirmid
+:PROPERTIES:
+:COMMENT_ID: 47288102
+:END:
+Ok, I'll bite: how is that different from humans?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+LLM不写正确的代码，它写看起来合理的代码
+***** TLDR
+一个病毒式传播的讨论认为LLM不写正确的代码，而是写统计上合理的代码。输出看起来对，能编译，甚至可能通过基本测试，但往往包含微妙的bug或次优模式，因为模型优化的是'看起来像人写的代码'而不是'真正正确工作'。
+***** Take
+这是2026年'水是湿的'级别的观察。LLM写的代码看起来像Stack Overflow答案，因为它们是用Stack Overflow答案训练的。惊人发现：基于概率的文本生成器优化的是概率。
+***** Comments
+- 这是我对LLM'起草'法律论点的体验：乍一看很合理，但可能是无效的、不合理的和/或不明智的。很多法官没时间深入研究论点和引用的权威。
+- 它写的是统计上代表性的代码，所以一切都默认是企业风、面向对象、'我装了10个流行依赖'类型的代码。
+- 好吧，我接招：这和人类有什么不同？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+LLMは正しいコードを書かない。もっともらしいコードを書く
+***** TLDR
+LLMは正しいコードではなく統計的にもっともらしいコードを書くという議論がバイラルに。出力は正しく見え、コンパイルでき、基本テストも通るかもしれないが、モデルが「人間が書いたように見える」を最適化し「実際に正しく動作する」ではないため、微妙なバグや最適でないパターンを含むことが多い。
+***** Take
+これは2026年の「水は濡れている」観察だ。LLMがStack Overflowの回答のようなコードを書くのはStack Overflowの回答で訓練されたから。衝撃の発見：確率ベースのテキスト生成器は確率を最適化する。
+***** Comments
+- これはLLMが法的議論を「起草」する私の経験と同じ：一見もっともらしいが、無効、不合理、不適切なことが多い。多くの裁判官は議論や引用を掘り下げる時間がない。
+- 統計的に代表されるコードを書く、だからすべてが大企業風、OOP、「10個のトレンディな依存関係をインストール」タイプのコードになる。
+- じゃあ聞くが：人間とどう違うの？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+LLM은 올바른 코드를 쓰지 않는다. 그럴듯한 코드를 쓴다
+***** TLDR
+LLM이 올바른 코드가 아닌 통계적으로 그럴듯한 코드를 쓴다는 바이럴 스레드. 출력은 맞아 보이고 컴파일되며 기본 테스트도 통과할 수 있지만, 모델이 '사람이 쓴 것처럼 보이는' 것을 최적화하지 '실제로 올바르게 작동'을 최적화하지 않기 때문에 미묘한 버그나 차선의 패턴을 포함하는 경우가 많다.
+***** Take
+이건 2026년의 '물은 젖어있다' 관찰이다. LLM이 Stack Overflow 답변처럼 코드를 쓰는 건 Stack Overflow 답변으로 훈련됐기 때문이다. 충격적 발견: 확률 기반 텍스트 생성기는 확률을 최적화한다.
+***** Comments
+- 이건 LLM이 법적 논증을 '초안' 작성할 때의 내 경험과 같다: 언뜻 보면 그럴듯하지만 무효하고 불합리하며 부적절한 경우가 많다. 많은 판사들이 논증과 인용을 파고들 시간이 없다.
+- 통계적으로 대표되는 코드를 쓴다, 그래서 모든 게 기업풍, OOP, '트렌디한 의존성 10개 설치' 타입 코드가 기본이다.
+- 좋아, 받아들이지: 인간이랑 뭐가 다른데?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+LLM no escribe código correcto. Escribe código plausible
+***** TLDR
+Un hilo viral argumentando que los LLMs no escriben código correcto, escriben código estadísticamente plausible. La salida se ve bien, compila y puede pasar tests básicos, pero a menudo contiene bugs sutiles o patrones subóptimos porque el modelo optimiza para 'parece código que humanos escribieron' no 'realmente funciona correctamente.'
+***** Take
+Esta es la observación 'el agua moja' de 2026. Los LLMs escriben código que parece respuestas de Stack Overflow porque entrenaron con respuestas de Stack Overflow. Revelación impactante: generadores de texto basados en probabilidad optimizan para probabilidad.
+***** Comments
+- Esta es mi experiencia con cómo los LLMs 'redactan' argumentos legales: a primera vista es plausible, pero puede ser inválido, poco sólido y/o desaconsejado. Muchos jueces no tienen tiempo para profundizar en los argumentos.
+- Escribe código estadísticamente representado, por eso todo es empresarial, OOP, tipo 'instalé 10 dependencias de moda'.
+- Ok, muerdo: ¿cómo es eso diferente de los humanos?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+LLM schreibt keinen korrekten Code. Es schreibt plausiblen Code
+***** TLDR
+Ein viraler Thread argumentiert, dass LLMs keinen korrekten Code schreiben, sondern statistisch plausiblen. Die Ausgabe sieht richtig aus, kompiliert und besteht vielleicht sogar Tests, enthält aber oft subtile Bugs oder suboptimale Muster, weil das Modell für 'sieht aus wie Code den Menschen geschrieben haben' optimiert, nicht für 'funktioniert tatsächlich korrekt.'
+***** Take
+Das ist die 'Wasser ist nass'-Beobachtung von 2026. LLMs schreiben Code der wie Stack Overflow Antworten aussieht, weil sie mit Stack Overflow Antworten trainiert wurden. Schockierende Erkenntnis: Wahrscheinlichkeitsbasierte Textgeneratoren optimieren für Wahrscheinlichkeit.
+***** Comments
+- Das ist meine Erfahrung damit, wie LLMs juristische Argumente 'entwerfen': auf den ersten Blick plausibel, aber oft ungültig, nicht stichhaltig und/oder unklug. Viele Richter haben keine Zeit, die Argumente zu prüfen.
+- Es schreibt statistisch repräsentierten Code, deshalb ist alles Enterprise-mäßig, OOP, 'Ich habe 10 trendige Dependencies installiert' Code.
+- Ok, ich beiße: Wie ist das anders als bei Menschen?
+** PC processors entered the Gigahertz era today in the year 2000 with AMD's Athlon :hardware:cpu:history:amd:
+:PROPERTIES:
+:ID:       47287792
+:URL:      https://www.tomshardware.com/pc-components/cpus/pc-processors-entered-the-gigahertz-era-today-in-the-year-2000-with-amds-athlon-amd-hit-marketing-gold-with-its-1-ghz-athlon-beat-intel-by-a-nose
+:HN_URL:   https://news.ycombinator.com/item?id=47287792
+:POINTS:   56
+:COMMENTS: 29
+:BY:       LorenDB
+:END:
+
+*** TLDR
+26 years ago today, AMD hit marketing gold by being the first to break the 1GHz barrier with its Athlon processor, beating Intel by mere days. The chip sold for $990 in tray quantity. Clock speeds increased 30x in the decade from 1990-2000, but we never hit the 30GHz mark that extrapolation would have predicted by 2010.
+
+*** Take
+Remember when CPU progress meant 'my number is bigger than yours'? The Megahertz Wars were simpler times, when marketing departments could just slap a bigger number on the box and call it innovation. Now we're arguing about core counts and thermal throttling like adults.
+
+*** Comments
+
+**** xnx
+:PROPERTIES:
+:COMMENT_ID: 47287800
+:END:
+The Megahertz Wars were an exciting time. Going from 75 MHz to 200 MHz meant that everything ran 2x as fast. Nothing since has packed nearly the impact with the exception of going from spinning disks to SSDs.
+
+**** hedora
+:PROPERTIES:
+:COMMENT_ID: 47287801
+:END:
+The Athlon XP was the bigger milestone, as I remember it. You could get an entire GHz+ Athlon XP machine for much less than half the $990 tray price from the article.
+
+**** Sharlin
+:PROPERTIES:
+:COMMENT_ID: 47287802
+:END:
+The i486DX 33MHz was introduced in May 1990. A 30x increase in clock speeds over ten years. In 2010 we clearly did not have 30GHz processors – by then, the era of exponentially rising clock speeds was decidedly over.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+2000年的今天，PC处理器随着AMD的Athlon进入GHz时代
+***** TLDR
+26年前的今天，AMD凭借其Athlon处理器首次突破1GHz大关，仅比英特尔领先几天，成为营销金矿。该芯片批量价990美元。1990-2000年间时钟速度增长了30倍，但我们从未达到按外推法2010年应有的30GHz。
+***** Take
+还记得CPU进步意味着'我的数字比你大'的时候吗？兆赫兹大战是更简单的时代，营销部门只要在盒子上贴个更大的数字就叫创新。现在我们像成年人一样争论核心数和温度降频。
+***** Comments
+- 兆赫兹大战是令人兴奋的时代。从75MHz到200MHz意味着一切运行速度快2倍。除了从机械硬盘到SSD，没有什么能带来如此大的影响。
+- 据我记忆，Athlon XP是更大的里程碑。你可以用不到文章中990美元批量价的一半买到整台GHz+ Athlon XP机器。
+- i486DX 33MHz于1990年5月推出。十年间时钟速度增长30倍。2010年我们显然没有30GHz处理器——那时指数级增长时钟速度的时代已经结束。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+2000年の今日、AMDのAthlonでPCプロセッサはギガヘルツ時代に突入
+***** TLDR
+26年前の今日、AMDはAthlonプロセッサで1GHzの壁を最初に破り、Intelをわずか数日差で抑えてマーケティングの金鉱を掘り当てた。チップはトレイ価格990ドルで販売。1990-2000年でクロック速度は30倍に増加したが、外挿すれば2010年に予測された30GHzには決して達しなかった。
+***** Take
+CPUの進歩が「俺の数字の方が大きい」を意味していた頃を覚えてる？メガヘルツ戦争はシンプルな時代で、マーケティング部門は箱に大きな数字を貼ってイノベーションと呼べた。今は大人のようにコア数とサーマルスロットリングを議論している。
+***** Comments
+- メガヘルツ戦争はエキサイティングな時代だった。75MHzから200MHzになると全てが2倍速く動いた。HDD→SSDを除いて、これほどのインパクトは他にない。
+- 私の記憶ではAthlon XPの方が大きなマイルストーンだった。記事の990ドルトレイ価格の半分以下で完全なGHz+ Athlon XPマシンが買えた。
+- i486DX 33MHzは1990年5月に発表。10年で30倍のクロック速度増加。2010年には明らかに30GHzプロセッサはなかった——その頃には指数関数的なクロック上昇時代は終わっていた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+2000년 오늘, AMD Athlon으로 PC 프로세서가 기가헤르츠 시대에 진입
+***** TLDR
+26년 전 오늘, AMD는 Athlon 프로세서로 1GHz 장벽을 최초로 돌파해 인텔을 불과 며칠 차이로 제치고 마케팅 대박을 쳤다. 칩은 트레이 가격 990달러에 판매됐다. 1990-2000년 클럭 속도는 30배 증가했지만, 외삽법대로라면 2010년 30GHz여야 할 것을 결코 달성하지 못했다.
+***** Take
+CPU 발전이 '내 숫자가 네 것보다 크다'를 의미하던 때를 기억하는가? 메가헤르츠 전쟁은 단순한 시대였고, 마케팅 부서는 그냥 더 큰 숫자를 박스에 붙이고 혁신이라 부를 수 있었다. 이제 우리는 어른처럼 코어 수와 발열 쓰로틀링을 논쟁한다.
+***** Comments
+- 메가헤르츠 전쟁은 흥미진진한 시대였다. 75MHz에서 200MHz로 가면 모든 게 2배 빨라졌다. HDD에서 SSD로의 전환을 제외하면 이만큼 임팩트 있는 건 없었다.
+- 내 기억에 Athlon XP가 더 큰 이정표였다. 기사의 990달러 트레이 가격 절반도 안 되는 돈으로 완전한 GHz+ Athlon XP 머신을 살 수 있었다.
+- i486DX 33MHz는 1990년 5월 출시됐다. 10년간 클럭 속도 30배 증가. 2010년에 분명 30GHz 프로세서는 없었다 - 그때쯤이면 지수적 클럭 상승 시대는 끝났다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los procesadores de PC entraron en la era Gigahertz hoy en 2000 con el Athlon de AMD
+***** TLDR
+Hace 26 años hoy, AMD dio en el oro del marketing siendo el primero en romper la barrera de 1GHz con su procesador Athlon, venciendo a Intel por días. El chip se vendía a $990 en cantidad. Las velocidades de reloj aumentaron 30x en la década de 1990-2000, pero nunca alcanzamos los 30GHz que la extrapolación habría predicho para 2010.
+***** Take
+¿Recuerdas cuando el progreso de CPU significaba 'mi número es más grande que el tuyo'? Las Guerras del Megahercio eran tiempos más simples, cuando marketing podía poner un número más grande en la caja y llamarlo innovación. Ahora discutimos sobre núcleos y throttling térmico como adultos.
+***** Comments
+- Las Guerras del Megahercio fueron tiempos emocionantes. Pasar de 75 MHz a 200 MHz significaba que todo corría 2x más rápido. Nada desde entonces ha tenido tanto impacto excepto pasar de discos mecánicos a SSDs.
+- El Athlon XP fue el hito mayor, según recuerdo. Podías conseguir una máquina Athlon XP completa de GHz+ por menos de la mitad del precio de $990 del artículo.
+- El i486DX 33MHz se introdujo en mayo 1990. Un aumento de 30x en velocidades de reloj en diez años. En 2010 claramente no teníamos procesadores de 30GHz - para entonces la era de velocidades exponenciales había terminado.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+PC-Prozessoren traten heute im Jahr 2000 mit AMDs Athlon in die Gigahertz-Ära ein
+***** TLDR
+Vor 26 Jahren heute traf AMD mit seinem Athlon-Prozessor Marketing-Gold, indem es als erstes die 1GHz-Barriere durchbrach und Intel um Tage schlug. Der Chip wurde für $990 im Tray verkauft. Taktgeschwindigkeiten stiegen von 1990-2000 um das 30-fache, aber wir erreichten nie die 30GHz, die eine Extrapolation für 2010 vorhergesagt hätte.
+***** Take
+Erinnert ihr euch als CPU-Fortschritt 'meine Zahl ist größer als deine' bedeutete? Die Megahertz-Kriege waren einfachere Zeiten, als Marketing einfach eine größere Zahl auf die Box kleben und es Innovation nennen konnte. Jetzt diskutieren wir über Kernzahlen und Thermal Throttling wie Erwachsene.
+***** Comments
+- Die Megahertz-Kriege waren eine aufregende Zeit. Von 75 MHz auf 200 MHz zu gehen bedeutete, dass alles 2x schneller lief. Nichts seitdem hatte so viel Impact außer dem Wechsel von HDDs zu SSDs.
+- Der Athlon XP war der größere Meilenstein, wie ich mich erinnere. Man konnte eine komplette GHz+ Athlon XP-Maschine für weit unter der Hälfte des $990-Tray-Preises bekommen.
+- Der i486DX 33MHz wurde im Mai 1990 eingeführt. Eine 30-fache Steigerung der Taktgeschwindigkeit über zehn Jahre. 2010 hatten wir eindeutig keine 30GHz-Prozessoren – da war die Ära exponentiell steigender Taktgeschwindigkeiten vorbei.
+** QGIS 4.0 :gis:opensource:software:mapping:
+:PROPERTIES:
+:ID:       47285846
+:URL:      https://changelog.qgis.org/en/version/4.0/
+:HN_URL:   https://news.ycombinator.com/item?id=47285846
+:POINTS:   143
+:COMMENTS: 33
+:BY:       jonbaer
+:END:
+
+*** TLDR
+QGIS 4.0 drops with a major version bump, bringing API changes, new features, and continued improvements to the open-source GIS platform that has become a serious alternative to expensive proprietary options. The release continues QGIS's decade-long journey from 'cheap open-source contender' to 'primary tool' for many GIS professionals.
+
+*** Take
+The most beloved free software that nobody outside GIS circles has heard of. QGIS has been quietly eating ArcGIS's lunch while the rest of us argue about text editors. If you work with geographic data and aren't using this, you're paying thousands for vibes.
+
+*** Comments
+
+**** ogig
+:PROPERTIES:
+:COMMENT_ID: 47285900
+:END:
+QGIS has been a key piece of my career for the past 10 years. This year I'm launching a SaaS where QGIS is the most fundamental piece. I'm only hoping everything goes right so I can contribute back to this project what it deserves.
+
+**** apexalpha
+:PROPERTIES:
+:COMMENT_ID: 47285901
+:END:
+I recently joined a grid management company and we use an ancient piece of German software called Lovion. Crazy to see this free software that essentially runs circles around the software we pay heavily for.
+
+**** thetoon
+:PROPERTIES:
+:COMMENT_ID: 47285902
+:END:
+I remember 10 to 20 years ago when GIS was still a huge part of my job. QGIS then went from being the 'cheap opensource contender' to being my main tool... How much better it was than the previous ones.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+QGIS 4.0
+***** TLDR
+QGIS 4.0发布了重大版本更新，带来API变更、新功能，并持续改进这个已成为昂贵专有软件严肃替代品的开源GIS平台。此版本延续了QGIS从'廉价开源竞争者'到许多GIS专业人士'主要工具'的十年征程。
+***** Take
+GIS圈外无人知晓的最受喜爱的免费软件。QGIS一直在悄悄蚕食ArcGIS的市场，而我们其他人还在争论文本编辑器。如果你处理地理数据却不用这个，那你是在为情怀花几千块。
+***** Comments
+- QGIS是我过去10年职业生涯的关键部分。今年我要推出一个以QGIS为核心的SaaS。我只希望一切顺利，这样我可以回馈这个项目应得的。
+- 我最近加入了一家电网管理公司，我们用的是一个叫Lovion的古老德国软件。看到这个免费软件基本上完胜我们重金购买的软件，真是疯狂。
+- 我记得10到20年前GIS还是我工作的重要部分。QGIS从'廉价开源竞争者'变成了我的主要工具...比以前的好太多了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+QGIS 4.0
+***** TLDR
+QGIS 4.0がメジャーバージョンアップでリリース、API変更、新機能、そして高価なプロプライエタリ製品の本格的な代替となったオープンソースGISプラットフォームの継続的改善をもたらす。このリリースは「安いオープンソースの挑戦者」から多くのGIS専門家の「メインツール」への10年の旅を続ける。
+***** Take
+GIS界隈以外では誰も聞いたことがない最も愛されるフリーソフト。QGISは静かにArcGISの昼飯を奪い続け、残りの我々はテキストエディタで議論している。地理データを扱っていてこれを使っていないなら、雰囲気に何千ドルも払っている。
+***** Comments
+- QGISは過去10年間の私のキャリアの重要な部分だった。今年QGISを最も基本的な部分とするSaaSを立ち上げる。すべてうまくいって、このプロジェクトに相応しい貢献ができることを願っている。
+- 最近グリッド管理会社に入社し、Lovionという古いドイツ製ソフトを使っている。高額で買ったソフトを周回遅れにするこの無料ソフトを見ると驚く。
+- 10〜20年前、GISがまだ仕事の大部分だった頃を覚えている。QGISは「安いオープンソースの挑戦者」から私のメインツールになった...以前のものよりどれだけ良かったか。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+QGIS 4.0
+***** TLDR
+QGIS 4.0이 메이저 버전 업데이트와 함께 출시되어 API 변경, 새로운 기능, 그리고 비싼 독점 소프트웨어의 진지한 대안이 된 오픈소스 GIS 플랫폼의 지속적인 개선을 가져온다. 이번 릴리스는 '저렴한 오픈소스 도전자'에서 많은 GIS 전문가의 '주요 도구'로의 10년 여정을 이어간다.
+***** Take
+GIS 업계 밖에서는 아무도 들어본 적 없는 가장 사랑받는 무료 소프트웨어. QGIS는 조용히 ArcGIS의 밥그릇을 뺏고 있는데 나머지 우리는 텍스트 에디터 가지고 싸우고 있다. 지리 데이터 작업하면서 이거 안 쓰면 분위기에 수천 달러 쓰는 거다.
+***** Comments
+- QGIS는 지난 10년간 내 커리어의 핵심이었다. 올해 QGIS가 가장 기본적인 부분인 SaaS를 런칭한다. 모든 게 잘 돼서 이 프로젝트에 마땅히 기여할 수 있기를 바란다.
+- 최근 전력망 관리 회사에 입사했는데 Lovion이라는 고대 독일 소프트웨어를 쓴다. 우리가 비싸게 산 소프트웨어를 압도하는 이 무료 소프트웨어를 보니 미쳤다.
+- 10~20년 전 GIS가 내 업무의 큰 부분이던 때가 기억난다. QGIS는 '저렴한 오픈소스 도전자'에서 내 주요 도구가 됐다... 이전 것들보다 얼마나 나았는지.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+QGIS 4.0
+***** TLDR
+QGIS 4.0 llega con un salto de versión mayor, trayendo cambios de API, nuevas funciones y mejoras continuas a la plataforma GIS de código abierto que se ha convertido en una alternativa seria a opciones propietarias caras. El lanzamiento continúa el viaje de una década de QGIS de 'contendiente open-source barato' a 'herramienta principal' para muchos profesionales GIS.
+***** Take
+El software libre más querido del que nadie fuera de círculos GIS ha oído hablar. QGIS ha estado comiendo el almuerzo de ArcGIS silenciosamente mientras el resto de nosotros discutimos sobre editores de texto. Si trabajas con datos geográficos y no usas esto, estás pagando miles por vibras.
+***** Comments
+- QGIS ha sido pieza clave de mi carrera los últimos 10 años. Este año lanzo un SaaS donde QGIS es la pieza más fundamental. Solo espero que todo salga bien para poder contribuir lo que este proyecto merece.
+- Recientemente me uní a una empresa de gestión de redes y usamos un software alemán antiguo llamado Lovion. Loco ver este software gratis que básicamente supera al software por el que pagamos mucho.
+- Recuerdo hace 10-20 años cuando GIS era gran parte de mi trabajo. QGIS pasó de ser el 'contendiente opensource barato' a ser mi herramienta principal... Cuánto mejor era que los anteriores.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+QGIS 4.0
+***** TLDR
+QGIS 4.0 kommt mit einem großen Versionssprung, bringt API-Änderungen, neue Features und kontinuierliche Verbesserungen der Open-Source-GIS-Plattform, die zu einer ernsthaften Alternative zu teuren proprietären Optionen geworden ist. Das Release setzt QGIS' Jahrzehnt-lange Reise vom 'billigen Open-Source-Herausforderer' zum 'Hauptwerkzeug' vieler GIS-Profis fort.
+***** Take
+Die beliebteste freie Software, von der niemand außerhalb von GIS-Kreisen gehört hat. QGIS hat ArcGIS still das Mittagessen weggenommen, während wir anderen über Texteditoren streiten. Wenn du mit Geodaten arbeitest und das nicht nutzt, zahlst du Tausende für Vibes.
+***** Comments
+- QGIS war ein Schlüsselelement meiner Karriere in den letzten 10 Jahren. Dieses Jahr starte ich ein SaaS, wo QGIS das fundamentalste Stück ist. Ich hoffe nur, dass alles gut geht, damit ich diesem Projekt zurückgeben kann, was es verdient.
+- Ich bin kürzlich einer Netzbetreiberfirma beigetreten und wir nutzen eine uralte deutsche Software namens Lovion. Verrückt, diese kostenlose Software zu sehen, die die Software, für die wir viel zahlen, in den Schatten stellt.
+- Ich erinnere mich vor 10-20 Jahren, als GIS noch ein großer Teil meiner Arbeit war. QGIS ging vom 'billigen Opensource-Herausforderer' zu meinem Hauptwerkzeug... Wie viel besser es war als die vorherigen.
+** US economy sheds 92,000 jobs in February in sharp slide :economy:jobs:usa:employment:
+:PROPERTIES:
+:ID:       47286933
+:URL:      https://www.ft.com/content/6542bd0c-59ca-493b-ab5d-2d69e4e00cae
+:HN_URL:   https://news.ycombinator.com/item?id=47286933
+:POINTS:   169
+:COMMENTS: 49
+:BY:       doener
+:END:
+
+*** TLDR
+The US economy lost 92,000 jobs in February 2026, marking a sharp slide. Two factors contributed: a Kaiser Permanente healthcare strike sidelined 28,000 workers (strike ended Feb 23), and severe winter storms closed businesses, affecting survey accuracy. The labor force participation rate also ticked down.
+
+*** Take
+HN economists emerge to explain why this bad number is actually fine (weather! strikes!) or why this fine number is actually catastrophic (participation rate! doomscroll!). The real story is everyone arguing in the comments about statistics methodology.
+
+*** Comments
+
+**** IgorPartola
+:PROPERTIES:
+:COMMENT_ID: 47287000
+:END:
+Two factors affected this report: 1. Kaiser Permanente healthcare strike sidelined 28,000 workers. The strike ended on February 23rd. 2. Severe weather resulting in two major snow storms meant lots of businesses were simply closed for a few days.
+
+**** rayiner
+:PROPERTIES:
+:COMMENT_ID: 47287001
+:END:
+The ungameable statistic is the native born labor force participation rate, which also ticked down. Unfortunately, that figure never recovered from the pandemic. It also never recovered from a major drop after the 2008 recession.
+
+**** WalterGR
+:PROPERTIES:
+:COMMENT_ID: 47287002
+:END:
+This same story was posted yesterday with 524 points and 733 comments.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+美国经济2月份大幅下滑，失去9.2万个工作岗位
+***** TLDR
+2026年2月美国经济失去9.2万个工作岗位，标志着急剧下滑。两个因素起了作用：凯撒医疗罢工导致2.8万工人离岗（罢工于2月23日结束），以及严重的冬季风暴导致企业关闭，影响了调查准确性。劳动参与率也有所下降。
+***** Take
+HN经济学家纷纷出来解释为什么这个坏数字其实没问题（天气！罢工！）或者为什么这个还行的数字其实是灾难（参与率！末日滚动！）。真正的故事是评论区里大家在争论统计方法论。
+***** Comments
+- 两个因素影响了这份报告：1. 凯撒医疗罢工导致2.8万工人离岗。罢工于2月23日结束。2. 两场大雪暴导致很多企业关门数天。
+- 无法操纵的统计数据是本土出生劳动参与率，也下降了。不幸的是，这个数字从未从疫情中恢复。它也从未从2008年衰退后的大幅下降中恢复。
+- 这同一个新闻昨天发过了，有524分和733条评论。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+米経済、2月に9.2万人の雇用を削減し急落
+***** TLDR
+2026年2月、米経済は9.2万人の雇用を失い、急激な下落を記録。2つの要因が寄与：カイザー・パーマネンテの医療ストライキで2.8万人が離職（ストライキは2月23日終了）、大雪により企業が数日間閉鎖し調査精度に影響。労働参加率も低下。
+***** Take
+HNエコノミストがこの悪い数字が実は大丈夫な理由（天気！スト！）か、この大丈夫な数字が実は破滅的な理由（参加率！ドゥームスクロール！）を説明しに現れる。本当のストーリーはコメント欄で統計手法について議論している全員。
+***** Comments
+- 2つの要因がこの報告に影響：1. カイザー・パーマネンテのストライキで2.8万人が離職。ストは2月23日に終了。2. 2つの大雪暴で多くの企業が数日間閉鎖。
+- 操作不能な統計は本土生まれの労働参加率で、これも低下した。残念ながら、この数字はパンデミックから回復していない。2008年不況後の大幅下落からも回復していない。
+- 同じ記事が昨日投稿され、524ポイントと733コメントだった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+미국 경제 2월 급락으로 9.2만 일자리 감소
+***** TLDR
+2026년 2월 미국 경제는 9.2만 개의 일자리를 잃으며 급격한 하락을 기록했다. 두 가지 요인이 기여했다: 카이저 퍼머넌트 의료 파업으로 2.8만 명이 이탈(파업은 2월 23일 종료), 대규모 겨울 폭풍으로 기업들이 며칠간 문을 닫아 조사 정확도에 영향. 노동 참여율도 하락했다.
+***** Take
+HN 이코노미스트들이 이 나쁜 숫자가 사실 괜찮은 이유(날씨! 파업!)나 이 괜찮은 숫자가 사실 재앙인 이유(참여율! 둠스크롤!)를 설명하러 나온다. 진짜 이야기는 댓글에서 통계 방법론에 대해 논쟁하는 모든 사람들이다.
+***** Comments
+- 두 가지 요인이 이 보고서에 영향을 줬다: 1. 카이저 퍼머넌트 파업으로 2.8만 명 이탈. 파업은 2월 23일 종료. 2. 두 차례 대규모 눈폭풍으로 많은 기업이 며칠간 문을 닫았다.
+- 조작 불가능한 통계는 본토 태생 노동 참여율인데, 이것도 하락했다. 안타깝게도 이 수치는 팬데믹에서 회복되지 않았다. 2008년 불황 이후 급락에서도 회복되지 않았다.
+- 같은 기사가 어제 올라왔는데 524점과 733개 댓글이었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La economía de EE.UU. pierde 92.000 empleos en febrero en fuerte caída
+***** TLDR
+La economía estadounidense perdió 92.000 empleos en febrero de 2026, marcando una fuerte caída. Dos factores contribuyeron: una huelga de Kaiser Permanente dejó fuera a 28.000 trabajadores (la huelga terminó el 23 de febrero), y severas tormentas invernales cerraron negocios, afectando la precisión de las encuestas. La tasa de participación laboral también bajó.
+***** Take
+Los economistas de HN emergen para explicar por qué este número malo en realidad está bien (¡clima! ¡huelgas!) o por qué este número aceptable en realidad es catastrófico (¡participación! ¡doomscroll!). La historia real es todos discutiendo en los comentarios sobre metodología estadística.
+***** Comments
+- Dos factores afectaron este informe: 1. La huelga de Kaiser Permanente dejó fuera a 28.000 trabajadores. La huelga terminó el 23 de febrero. 2. El clima severo con dos grandes tormentas de nieve significó que muchos negocios cerraron varios días.
+- La estadística no manipulable es la tasa de participación laboral de nacidos nativos, que también bajó. Desafortunadamente, esa cifra nunca se recuperó de la pandemia. Tampoco se recuperó de una caída importante después de la recesión de 2008.
+- Esta misma noticia se publicó ayer con 524 puntos y 733 comentarios.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+US-Wirtschaft verliert im Februar 92.000 Jobs in starkem Rückgang
+***** TLDR
+Die US-Wirtschaft verlor im Februar 2026 92.000 Jobs, was einen scharfen Rückgang markiert. Zwei Faktoren trugen bei: Ein Streik bei Kaiser Permanente legte 28.000 Arbeiter lahm (Streik endete am 23. Februar), und schwere Winterstürme schlossen Geschäfte, was die Umfragegenauigkeit beeinträchtigte. Die Erwerbsbeteiligungsquote sank ebenfalls.
+***** Take
+HN-Ökonomen tauchen auf, um zu erklären, warum diese schlechte Zahl eigentlich okay ist (Wetter! Streiks!) oder warum diese okay Zahl eigentlich katastrophal ist (Partizipationsrate! Doomscroll!). Die echte Story ist, dass alle in den Kommentaren über Statistikmethodik streiten.
+***** Comments
+- Zwei Faktoren beeinflussten diesen Bericht: 1. Der Kaiser Permanente Streik legte 28.000 Arbeiter lahm. Der Streik endete am 23. Februar. 2. Schweres Wetter mit zwei großen Schneestürmen bedeutete, dass viele Geschäfte tagelang geschlossen waren.
+- Die nicht manipulierbare Statistik ist die Erwerbsbeteiligung der im Inland Geborenen, die auch sank. Leider erholte sich diese Zahl nie von der Pandemie. Sie erholte sich auch nie vom starken Rückgang nach der Rezession 2008.
+- Dieselbe Geschichte wurde gestern mit 524 Punkten und 733 Kommentaren gepostet.
