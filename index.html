@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-03-11</div>
+      <a href="#s47330836-03110600">Zig – Type Resolution Redesign and Langu...</a>
+      <a href="#s47331034-03110600">Writing my own text editor, and daily-dr...</a>
+      <a href="#s47293337-03110600">Roblox is minting teen millionaires</a>
+      <a href="#s47318830-03110600">EQT eyes potential $6B sale of Linux pio...</a>
+      <a href="#s47327473-03110600">Mesh over Bluetooth LE, TCP, or Reticulu...</a>
       <a href="#s47329605-03110400">U+237C ⍼ Is Azimuth</a>
       <a href="#s47329608-03110400">Universal vaccine against respiratory in...</a>
       <a href="#s47326101-03110400">Launch HN: RunAnywhere (YC W26) – Faster...</a>
@@ -506,6 +511,302 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-03-11T06:00:00Z</div>
+        <div class="digest-vibe">Zig gets lazier, SUSE gets sold, and a programmer writes their own editor because all 15 existing ones were somehow inadequate</div>
+      </div>
+      <article class="story" id="s47330836-03110600">
+      <h3 class="story-title">
+        <a href="https://ziglang.org/devlog/2026/#2026-03-10" target="_blank">Zig – Type Resolution Redesign and Language Changes :zig:compilers:programming-languages:</a>
+        <a href="#s47330836-03110600" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Zig - 类型解析重新设计和语言变更</div>
+<div class="i18n-title" data-lang="ja">Zig - 型解決の再設計と言語変更</div>
+<div class="i18n-title" data-lang="ko">Zig - 타입 해석 재설계 및 언어 변경</div>
+<div class="i18n-title" data-lang="es">Zig - Rediseño de resolución de tipos y cambios en el lenguaje</div>
+<div class="i18n-title" data-lang="de">Zig - Neugestaltung der Typauflösung und Sprachänderungen</div>
+
+      <div class="story-meta">
+        112pts | 32c | <a href="https://news.ycombinator.com/item?id=47330836" target="_blank">HN#47330836</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Matthew Lugg merged a 30,000-line PR that overhauls Zig&#x27;s type resolution. The compiler is now lazier about analyzing struct fields (so @compileError in unused fields won&#x27;t explode), dependency loop errors are actually helpful now with detailed traces, and incremental compilation got a major speedup by eliminating over-analysis.</div>
+        <span class="i18n-text" data-lang="zh">Matthew Lugg合并了一个30,000行的PR,彻底改造了Zig的类型解析。编译器现在对分析结构体字段更加惰性(未使用字段中的@compileError不会爆炸),依赖循环错误现在提供详细追踪信息,增量编译通过消除过度分析获得了重大加速。</span>
+<span class="i18n-text" data-lang="ja">Matthew Luggが30,000行のPRをマージし、Zigの型解決を全面的に見直した。コンパイラは構造体フィールドの解析について遅延評価するようになり(未使用フィールドの@compileErrorが爆発しない)、依存ループエラーが詳細なトレース付きで実用的になり、過剰解析の排除によりインクリメンタルコンパイルが大幅に高速化された。</span>
+<span class="i18n-text" data-lang="ko">Matthew Lugg가 30,000줄의 PR을 머지하여 Zig의 타입 해석을 전면 개편했다. 컴파일러가 구조체 필드 분석에 더 게을러져서(사용하지 않는 필드의 @compileError가 폭발하지 않음), 의존성 루프 오류가 상세한 추적과 함께 실용적이 되었고, 과잉 분석 제거로 증분 컴파일이 크게 빨라졌다.</span>
+<span class="i18n-text" data-lang="es">Matthew Lugg fusionó un PR de 30,000 líneas que reforma la resolución de tipos de Zig. El compilador ahora es más perezoso al analizar campos de estructuras (los @compileError en campos no usados no explotarán), los errores de bucles de dependencia ahora son útiles con trazas detalladas, y la compilación incremental mejoró significativamente al eliminar el análisis excesivo.</span>
+<span class="i18n-text" data-lang="de">Matthew Lugg hat einen 30.000-Zeilen-PR gemerged, der Zigs Typauflösung überarbeitet. Der Compiler ist jetzt fauler bei der Analyse von Struct-Feldern (@compileError in ungenutzten Feldern explodiert nicht mehr), Abhängigkeitsschleifenfehler sind jetzt mit detaillierten Traces hilfreich, und inkrementelle Kompilierung wurde durch Eliminierung von Überanalyse deutlich beschleunigt.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Finally, a dependency loop error message that doesn&#x27;t require a PhD in compiler theory to understand. The laziness improvements mean Zig won&#x27;t judge you for that cursed struct you&#x27;re only using as a namespace.</div>
+        <span class="i18n-text" data-lang="zh">终于,一个不需要编译器理论博士学位就能理解的依赖循环错误信息。惰性改进意味着Zig不会因为你只是把某个结构体当命名空间用而对你指指点点。</span>
+<span class="i18n-text" data-lang="ja">ついに、コンパイラ理論の博士号がなくても理解できる依存ループエラーメッセージが登場。遅延改善により、名前空間としてしか使っていないあの呪われた構造体をZigが批判しなくなった。</span>
+<span class="i18n-text" data-lang="ko">드디어 컴파일러 이론 박사 학위 없이도 이해할 수 있는 의존성 루프 오류 메시지가 나왔다. 지연 개선 덕분에 네임스페이스로만 쓰는 저주받은 구조체 때문에 Zig가 잔소리하지 않게 되었다.</span>
+<span class="i18n-text" data-lang="es">Por fin, un mensaje de error de bucle de dependencia que no requiere un doctorado en teoría de compiladores para entender. Las mejoras de pereza significan que Zig no te juzgará por esa estructura maldita que solo usas como namespace.</span>
+<span class="i18n-text" data-lang="de">Endlich eine Abhängigkeitsschleifenfehlermeldung, die keinen Doktortitel in Compilertheorie erfordert. Die Faulheitsverbesserungen bedeuten, dass Zig dich nicht mehr für diese verfluchte Struktur verurteilt, die du nur als Namespace verwendest.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I would really like to hear from people using Zig in production where software stability is important. How&#x27;s your experience with the constantly changing language?"</div>
+          <div class="comment-i18n" data-lang="zh">我真的很想听听在生产环境中使用Zig的人的经验,特别是在软件稳定性很重要的地方。不断变化的语言体验如何?</div>
+<div class="comment-i18n" data-lang="ja">本番環境でZigを使っている人の話を聞きたい。ソフトウェアの安定性が重要な場面で、常に変化する言語をどう扱っているのか？</div>
+<div class="comment-i18n" data-lang="ko">프로덕션에서 Zig를 사용하는 분들의 경험이 궁금합니다. 소프트웨어 안정성이 중요한 곳에서 계속 변하는 언어를 어떻게 다루고 계신가요?</div>
+<div class="comment-i18n" data-lang="es">Me gustaría escuchar a personas que usan Zig en producción donde la estabilidad del software es importante. ¿Cómo es su experiencia con el lenguaje en constante cambio?</div>
+<div class="comment-i18n" data-lang="de">Ich würde gerne von Leuten hören, die Zig in der Produktion verwenden, wo Softwarestabilität wichtig ist. Wie sind eure Erfahrungen mit der sich ständig ändernden Sprache?</div>
+
+          <div class="comment-author">-- h4ch1</div>
+        </div><div class="comment">
+          <div class="comment-text">"A 30,000 line PR for a language compiler is a feat to be proud of. But a change of this magnitude is a serious bit of development and gave me pause."</div>
+          <div class="comment-i18n" data-lang="zh">为语言编译器提交一个30,000行的PR是值得骄傲的成就。但这种规模的变更是一项严肃的开发工作,让我有些担忧。</div>
+<div class="comment-i18n" data-lang="ja">言語コンパイラに30,000行のPRは誇るべき偉業だ。しかしこの規模の変更は深刻な開発作業であり、少し躊躇する。</div>
+<div class="comment-i18n" data-lang="ko">언어 컴파일러에 30,000줄 PR은 자랑스러운 업적이다. 하지만 이 규모의 변경은 심각한 개발 작업이라 좀 주저하게 된다.</div>
+<div class="comment-i18n" data-lang="es">Un PR de 30,000 líneas para un compilador de lenguaje es un logro para estar orgulloso. Pero un cambio de esta magnitud es un desarrollo serio que me hizo pausar.</div>
+<div class="comment-i18n" data-lang="de">Ein 30.000-Zeilen-PR für einen Sprachcompiler ist eine Leistung, auf die man stolz sein kann. Aber eine Änderung dieser Größenordnung ist eine ernste Entwicklungsarbeit, die mich innehalten ließ.</div>
+
+          <div class="comment-author">-- throwaway17_17</div>
+        </div>
+      </div>
+      
+    </article>
+<article class="story" id="s47331034-03110600">
+      <h3 class="story-title">
+        <a href="https://blog.jsbarretto.com/post/text-editor" target="_blank">Writing my own text editor, and daily-driving it</a>
+        <a href="#s47331034-03110600" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">编写自己的文本编辑器并日常使用</div>
+<div class="i18n-title" data-lang="ja">自分のテキストエディタを書いて日常的に使う</div>
+<div class="i18n-title" data-lang="ko">나만의 텍스트 에디터를 만들어 일상적으로 사용하기</div>
+<div class="i18n-title" data-lang="es">Escribiendo mi propio editor de texto y usándolo a diario</div>
+<div class="i18n-title" data-lang="de">Meinen eigenen Texteditor schreiben und täglich nutzen</div>
+
+      <div class="story-meta">
+        56pts | 10c | <a href="https://news.ycombinator.com/item?id=47331034" target="_blank">HN#47331034</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">After trying 15 different editors including Helix, VS Code, Vim, and Emacs, the author spent 2 years building their own TUI text editor in Rust. Key features: custom regex engine with context-sensitive highlighting, double-buffered terminal rendering for SSH efficiency, file browser that actually works, and an integrated terminal emulator using alacritty_terminal.</div>
+        <span class="i18n-text" data-lang="zh">在尝试了15种不同的编辑器(包括Helix、VS Code、Vim和Emacs)之后,作者花了2年时间用Rust构建自己的TUI文本编辑器。主要特性:具有上下文敏感高亮的自定义正则引擎、双缓冲终端渲染提高SSH效率、真正好用的文件浏览器,以及使用alacritty_terminal的集成终端模拟器。</span>
+<span class="i18n-text" data-lang="ja">Helix、VS Code、Vim、Emacsを含む15種類のエディタを試した後、著者は2年かけてRustでTUIテキストエディタを構築した。主な機能：コンテキスト依存ハイライト付きカスタム正規表現エンジン、SSH効率のためのダブルバッファリング端末レンダリング、実際に機能するファイルブラウザ、alacritty_terminalを使った統合端末エミュレータ。</span>
+<span class="i18n-text" data-lang="ko">Helix, VS Code, Vim, Emacs를 포함한 15개의 에디터를 사용해본 후, 저자는 2년에 걸쳐 Rust로 TUI 텍스트 에디터를 만들었다. 주요 기능: 컨텍스트 인식 하이라이팅이 있는 커스텀 정규식 엔진, SSH 효율성을 위한 더블 버퍼 터미널 렌더링, 실제로 작동하는 파일 브라우저, alacritty_terminal을 사용한 통합 터미널 에뮬레이터.</span>
+<span class="i18n-text" data-lang="es">Después de probar 15 editores diferentes incluyendo Helix, VS Code, Vim y Emacs, el autor pasó 2 años construyendo su propio editor de texto TUI en Rust. Características principales: motor regex personalizado con resaltado sensible al contexto, renderizado de terminal con doble búfer para eficiencia SSH, explorador de archivos que realmente funciona, y emulador de terminal integrado usando alacritty_terminal.</span>
+<span class="i18n-text" data-lang="de">Nach dem Ausprobieren von 15 verschiedenen Editoren einschließlich Helix, VS Code, Vim und Emacs verbrachte der Autor 2 Jahre damit, seinen eigenen TUI-Texteditor in Rust zu bauen. Hauptfunktionen: benutzerdefinierte Regex-Engine mit kontextsensitiver Hervorhebung, doppelt gepuffertes Terminal-Rendering für SSH-Effizienz, Dateibrowser der tatsächlich funktioniert, und integrierter Terminal-Emulator mit alacritty_terminal.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The &#x27;I tried every editor and they all lack fingerspitzengefühl&#x27; to &#x27;I wrote 10k lines of Rust&#x27; pipeline is real. Though I respect anyone who implements their own regex engine because they found the standard one insufficiently painful.</div>
+        <span class="i18n-text" data-lang="zh">&#x27;我试了所有编辑器但都缺少那种感觉&#x27;到&#x27;我写了10000行Rust代码&#x27;的流水线是真实存在的。不过我尊重任何因为觉得标准正则引擎不够痛苦而自己实现一个的人。</span>
+<span class="i18n-text" data-lang="ja">「すべてのエディタを試したけどどれもfingerspitzengefühlがない」から「Rustで1万行書いた」へのパイプラインは実在する。標準の正規表現エンジンが十分に苦痛でないからと自作する人は尊敬に値する。</span>
+<span class="i18n-text" data-lang="ko">&#x27;모든 에디터를 써봤지만 다 fingerspitzengefühl이 없다&#x27;에서 &#x27;Rust로 1만줄 썼다&#x27;로 가는 파이프라인은 실재한다. 표준 정규식 엔진이 충분히 고통스럽지 않아서 직접 구현하는 사람은 존경한다.</span>
+<span class="i18n-text" data-lang="es">El pipeline de &#x27;probé todos los editores y a todos les falta fingerspitzengefühl&#x27; a &#x27;escribí 10k líneas de Rust&#x27; es real. Aunque respeto a cualquiera que implemente su propio motor regex porque el estándar no era suficientemente doloroso.</span>
+<span class="i18n-text" data-lang="de">Die Pipeline von &#x27;Ich habe jeden Editor probiert und allen fehlt das Fingerspitzengefühl&#x27; zu &#x27;Ich habe 10k Zeilen Rust geschrieben&#x27; ist real. Obwohl ich jeden respektiere, der seine eigene Regex-Engine implementiert, weil die Standard-Engine nicht schmerzhaft genug war.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I love this! The line &#x27;resist the urge to push the difficult bits off to a box of statistics&#x27; particularly resonated with me!"</div>
+          <div class="comment-i18n" data-lang="zh">我喜欢这个!&#x27;抵制把困难部分推给统计黑箱的冲动&#x27;这句话特别引起我的共鸣!</div>
+<div class="comment-i18n" data-lang="ja">これ大好き！「難しい部分を統計のブラックボックスに押し付ける衝動に抵抗しろ」という一節が特に響いた！</div>
+<div class="comment-i18n" data-lang="ko">이거 정말 좋다! &#x27;어려운 부분을 통계 블랙박스로 밀어내려는 충동을 참아라&#x27;라는 문장이 특히 공감됐다!</div>
+<div class="comment-i18n" data-lang="es">¡Me encanta esto! ¡La línea &#x27;resiste el impulso de empujar las partes difíciles a una caja de estadísticas&#x27; resonó particularmente conmigo!</div>
+<div class="comment-i18n" data-lang="de">Ich liebe das! Die Zeile &#x27;widerstehe dem Drang, die schwierigen Teile in eine Statistik-Box zu schieben&#x27; hat besonders bei mir angesprochen!</div>
+
+          <div class="comment-author">-- bananaboy</div>
+        </div><div class="comment">
+          <div class="comment-text">"This feels like two steps up from a highly customized vim config. But I want one step up. I want to be able to piece together an editor from modular task specific executables."</div>
+          <div class="comment-i18n" data-lang="zh">这感觉比高度定制的vim配置高两个层次。但我想要一个层次。我想能够从模块化的特定任务可执行文件中组装一个编辑器。</div>
+<div class="comment-i18n" data-lang="ja">これは高度にカスタマイズされたvim設定から2段階上の感じがする。でも1段階上が欲しい。モジュラーなタスク固有の実行ファイルからエディタを組み立てたい。</div>
+<div class="comment-i18n" data-lang="ko">이건 고도로 커스터마이즈된 vim 설정보다 두 단계 위 같은 느낌이다. 하지만 한 단계 위를 원한다. 모듈식 작업별 실행 파일로 에디터를 조립하고 싶다.</div>
+<div class="comment-i18n" data-lang="es">Esto se siente como dos pasos arriba de una configuración de vim altamente personalizada. Pero quiero un paso arriba. Quiero poder armar un editor a partir de ejecutables modulares específicos para tareas.</div>
+<div class="comment-i18n" data-lang="de">Das fühlt sich wie zwei Stufen über einer stark angepassten Vim-Konfiguration an. Aber ich will eine Stufe höher. Ich möchte einen Editor aus modularen aufgabenspezifischen Executables zusammensetzen können.</div>
+
+          <div class="comment-author">-- willrshansen</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#editors</span><span class="tag">#rust</span><span class="tag">#programming</span></div>
+    </article>
+<article class="story" id="s47293337-03110600">
+      <h3 class="story-title">
+        <a href="https://www.bloomberg.com/news/articles/2026-03-06/roblox-s-teen-millionaires-are-disrupting-the-gaming-industry" target="_blank">Roblox is minting teen millionaires</a>
+        <a href="#s47293337-03110600" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Roblox正在造就青少年百万富翁</div>
+<div class="i18n-title" data-lang="ja">Robloxが10代の億万長者を生み出している</div>
+<div class="i18n-title" data-lang="ko">Roblox가 10대 백만장자를 만들어내고 있다</div>
+<div class="i18n-title" data-lang="es">Roblox está creando adolescentes millonarios</div>
+<div class="i18n-title" data-lang="de">Roblox macht Teenager zu Millionären</div>
+
+      <div class="story-meta">
+        100pts | 98c | <a href="https://news.ycombinator.com/item?id=47293337" target="_blank">HN#47293337</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">［From title + HN comments, article paywalled］ Roblox has created teen millionaires through its game development platform. Half of all American children under 16 play monthly. The largest single Roblox game (a Minecraft clone) gets more concurrent players than all Minecraft servers combined.</div>
+        <span class="i18n-text" data-lang="zh">［根据标题和HN评论,原文有付费墙］ Roblox通过其游戏开发平台创造了青少年百万富翁。16岁以下的美国儿童中有一半每月都在玩。最大的单个Roblox游戏(一个Minecraft克隆)的同时在线玩家比所有Minecraft服务器加起来还多。</span>
+<span class="i18n-text" data-lang="ja">［タイトルとHNコメントより、記事は有料］ Robloxはゲーム開発プラットフォームを通じて10代の億万長者を生み出している。16歳未満のアメリカの子供の半数が毎月プレイ。最大のRobloxゲーム（Minecraftクローン）は全Minecraftサーバーの合計より多くの同時接続プレイヤーを持つ。</span>
+<span class="i18n-text" data-lang="ko">［제목과 HN 댓글 기준, 원문은 유료］ Roblox는 게임 개발 플랫폼을 통해 10대 백만장자를 만들어냈다. 16세 미만 미국 어린이의 절반이 매월 플레이한다. 가장 큰 단일 Roblox 게임(마인크래프트 클론)은 모든 마인크래프트 서버를 합친 것보다 더 많은 동시 접속 플레이어를 보유하고 있다.</span>
+<span class="i18n-text" data-lang="es">［Del título y comentarios de HN, artículo con muro de pago］ Roblox ha creado adolescentes millonarios a través de su plataforma de desarrollo de juegos. La mitad de todos los niños estadounidenses menores de 16 años juegan mensualmente. El juego individual más grande de Roblox (un clon de Minecraft) tiene más jugadores concurrentes que todos los servidores de Minecraft combinados.</span>
+<span class="i18n-text" data-lang="de">［Aus Titel und HN-Kommentaren, Artikel hinter Paywall］ Roblox hat über seine Spieleentwicklungsplattform Teenager-Millionäre geschaffen. Die Hälfte aller amerikanischen Kinder unter 16 spielt monatlich. Das größte einzelne Roblox-Spiel (ein Minecraft-Klon) hat mehr gleichzeitige Spieler als alle Minecraft-Server zusammen.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Roblox figured out how to turn child labor into a Silicon Valley success story. Pay creators 25 cents on the dollar, let teens build the entire platform, then write puff pieces about the handful who struck gold while ignoring the thousands making pennies.</div>
+        <span class="i18n-text" data-lang="zh">Roblox想出了如何把童工变成硅谷成功故事。给创作者支付25%的分成,让青少年建设整个平台,然后写软文宣传少数淘到金的人,同时忽视成千上万只赚到几分钱的人。</span>
+<span class="i18n-text" data-lang="ja">Robloxは児童労働をシリコンバレーのサクセスストーリーに変える方法を見つけた。クリエイターに25セントで1ドル分払い、ティーンにプラットフォーム全体を構築させ、金を掘り当てた一握りの人についてのヨイショ記事を書きながら、ペニーしか稼げない何千人もを無視する。</span>
+<span class="i18n-text" data-lang="ko">Roblox는 아동 노동을 실리콘밸리 성공 스토리로 바꾸는 방법을 알아냈다. 크리에이터에게 25센트/달러를 지불하고, 10대들이 전체 플랫폼을 구축하게 한 다음, 금을 캔 소수에 대한 홍보 기사를 쓰면서 푼돈을 버는 수천 명은 무시한다.</span>
+<span class="i18n-text" data-lang="es">Roblox descubrió cómo convertir el trabajo infantil en una historia de éxito de Silicon Valley. Paga a los creadores 25 centavos por dólar, deja que los adolescentes construyan toda la plataforma, luego escribe artículos promocionales sobre los pocos que encontraron oro mientras ignora a los miles que ganan centavos.</span>
+<span class="i18n-text" data-lang="de">Roblox hat herausgefunden, wie man Kinderarbeit in eine Silicon-Valley-Erfolgsgeschichte verwandelt. Zahle Kreativen 25 Cent pro Dollar, lass Teenager die gesamte Plattform aufbauen, dann schreibe Lobeshymnen über die Handvoll, die Gold gefunden haben, während du die Tausenden ignorierst, die Pfennige verdienen.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Roblox turns a blind eye to child exploitation (whether being creeped on by adults, or being exploited by teens/adults to make games) and makes a fortune out of it. If it weren&#x27;t online, it&#x27;d be illegal and people would be in jail."</div>
+          <div class="comment-i18n" data-lang="zh">Roblox对儿童剥削视而不见(无论是被成年人骚扰,还是被青少年/成年人利用来制作游戏)并从中赚取巨额利润。如果不是在线上,这将是违法的,会有人坐牢。</div>
+<div class="comment-i18n" data-lang="ja">Robloxは児童搾取を見て見ぬふりをしている（大人に付きまとわれるか、ゲーム制作のために10代/大人に搾取されるかにかかわらず）そして大金を稼いでいる。もしオンラインでなければ、違法で人々は投獄されているだろう。</div>
+<div class="comment-i18n" data-lang="ko">Roblox는 아동 착취를 눈감아준다(성인에게 스토킹당하든, 게임 제작을 위해 10대/성인에게 착취당하든) 그리고 그것으로 큰돈을 번다. 온라인이 아니었다면 불법이고 사람들이 감옥에 갔을 것이다.</div>
+<div class="comment-i18n" data-lang="es">Roblox hace la vista gorda ante la explotación infantil (ya sea ser acosado por adultos o ser explotado por adolescentes/adultos para hacer juegos) y hace fortuna con ello. Si no fuera en línea, sería ilegal y la gente estaría en la cárcel.</div>
+<div class="comment-i18n" data-lang="de">Roblox drückt bei der Ausbeutung von Kindern beide Augen zu (ob sie von Erwachsenen belästigt werden oder von Teenagern/Erwachsenen zur Spieleentwicklung ausgebeutet werden) und macht ein Vermögen damit. Wenn es nicht online wäre, wäre es illegal und Leute würden im Gefängnis sitzen.</div>
+
+          <div class="comment-author">-- amiga386</div>
+        </div><div class="comment">
+          <div class="comment-text">"There is one Roblox game that looks and plays like Minecraft and copied one single game mode from Hypixel. It gets more concurrent players than all Minecraft servers combined."</div>
+          <div class="comment-i18n" data-lang="zh">有一款Roblox游戏看起来和玩起来都像Minecraft,复制了Hypixel的一个游戏模式。它的同时在线玩家比所有Minecraft服务器加起来还多。</div>
+<div class="comment-i18n" data-lang="ja">MinecraftのようなRobloxゲームがあり、Hypixelの1つのゲームモードをコピーしている。全Minecraftサーバーの合計より多くの同時接続プレイヤーがいる。</div>
+<div class="comment-i18n" data-lang="ko">마인크래프트처럼 보이고 플레이되는 Roblox 게임이 있는데 Hypixel의 게임 모드 하나를 복사했다. 모든 마인크래프트 서버를 합친 것보다 동시 접속자가 더 많다.</div>
+<div class="comment-i18n" data-lang="es">Hay un juego de Roblox que se ve y juega como Minecraft y copió un solo modo de juego de Hypixel. Tiene más jugadores concurrentes que todos los servidores de Minecraft combinados.</div>
+<div class="comment-i18n" data-lang="de">Es gibt ein Roblox-Spiel, das wie Minecraft aussieht und sich spielt und einen einzelnen Spielmodus von Hypixel kopiert hat. Es hat mehr gleichzeitige Spieler als alle Minecraft-Server zusammen.</div>
+
+          <div class="comment-author">-- 2001zhaozhao</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#gaming</span><span class="tag">#roblox</span><span class="tag">#economics</span></div>
+    </article>
+<article class="story" id="s47318830-03110600">
+      <h3 class="story-title">
+        <a href="https://www.reuters.com/business/eqt-eyes-potential-6-billion-sale-linux-pioneer-suse-sources-say-2026-03-09" target="_blank">EQT eyes potential $6B sale of Linux pioneer SUSE, sources say :linux:enterprise:private-equity:</a>
+        <a href="#s47318830-03110600" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">消息人士称EQT考虑以60亿美元出售Linux先驱SUSE</div>
+<div class="i18n-title" data-lang="ja">EQTがLinuxの先駆者SUSEを60億ドルで売却検討、関係者</div>
+<div class="i18n-title" data-lang="ko">EQT, Linux 선구자 SUSE 60억 달러 매각 검토 중, 소식통</div>
+<div class="i18n-title" data-lang="es">EQT contempla posible venta de $6B del pionero de Linux SUSE, según fuentes</div>
+<div class="i18n-title" data-lang="de">EQT erwägt möglichen $6B-Verkauf des Linux-Pioniers SUSE, sagen Quellen</div>
+
+      <div class="story-meta">
+        37pts | 10c | <a href="https://news.ycombinator.com/item?id=47318830" target="_blank">HN#47318830</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">［From title + HN comments, article blocked］ Private equity firm EQT is considering selling SUSE for around $6 billion. SUSE reportedly does $800M revenue per year in &#x27;enterprise Linux&#x27; which apparently means good tech support and long-term stability guarantees.</div>
+        <span class="i18n-text" data-lang="zh">［根据标题和HN评论,原文被屏蔽］ 私募股权公司EQT正在考虑以约60亿美元出售SUSE。据报道SUSE每年在&#x27;企业级Linux&#x27;方面创造8亿美元收入,这显然意味着良好的技术支持和长期稳定性保证。</span>
+<span class="i18n-text" data-lang="ja">［タイトルとHNコメントより、記事はブロック］ プライベートエクイティ企業EQTがSUSEを約60億ドルで売却することを検討中。SUSEは「エンタープライズLinux」で年間8億ドルの収益を上げているとされ、これは良いテクニカルサポートと長期安定性保証を意味するようだ。</span>
+<span class="i18n-text" data-lang="ko">［제목과 HN 댓글 기준, 원문 차단됨］ 사모펀드 EQT가 SUSE를 약 60억 달러에 매각하는 것을 검토 중이다. SUSE는 &#x27;엔터프라이즈 Linux&#x27;로 연간 8억 달러의 매출을 올리는 것으로 알려졌는데, 이는 좋은 기술 지원과 장기 안정성 보장을 의미하는 것 같다.</span>
+<span class="i18n-text" data-lang="es">［Del título y comentarios de HN, artículo bloqueado］ La firma de capital privado EQT está considerando vender SUSE por alrededor de $6 mil millones. Según informes, SUSE genera $800M de ingresos anuales en &#x27;Linux empresarial&#x27;, lo que aparentemente significa buen soporte técnico y garantías de estabilidad a largo plazo.</span>
+<span class="i18n-text" data-lang="de">［Aus Titel und HN-Kommentaren, Artikel blockiert］ Die Private-Equity-Firma EQT erwägt den Verkauf von SUSE für etwa 6 Milliarden Dollar. SUSE erzielt Berichten zufolge 800 Millionen Dollar Jahresumsatz mit &#x27;Enterprise Linux&#x27;, was offenbar guten technischen Support und langfristige Stabilitätsgarantien bedeutet.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">SUSE: getting passed between private equity firms like a hot potato that somehow keeps appreciating in value. The real question is whether the next buyer will finally figure out what &#x27;enterprise Linux&#x27; actually means before flipping it again.</div>
+        <span class="i18n-text" data-lang="zh">SUSE:在私募股权公司之间被传来传去,像一个不断升值的烫手山芋。真正的问题是下一个买家是否会在再次转手之前搞清楚&#x27;企业级Linux&#x27;到底是什么意思。</span>
+<span class="i18n-text" data-lang="ja">SUSE：なぜか値上がりし続けるホットポテトのようにプライベートエクイティ企業間で回されている。本当の問題は、次の買い手が再び転売する前に「エンタープライズLinux」が実際に何を意味するか理解するかどうかだ。</span>
+<span class="i18n-text" data-lang="ko">SUSE: 어떻게든 계속 가치가 오르는 뜨거운 감자처럼 사모펀드 사이에서 돌고 도는 중. 진짜 질문은 다음 인수자가 다시 팔기 전에 &#x27;엔터프라이즈 Linux&#x27;가 실제로 무엇을 의미하는지 알아낼 것인가다.</span>
+<span class="i18n-text" data-lang="es">SUSE: pasando entre firmas de capital privado como una papa caliente que de alguna manera sigue apreciándose en valor. La verdadera pregunta es si el próximo comprador finalmente descubrirá qué significa realmente &#x27;Linux empresarial&#x27; antes de venderlo de nuevo.</span>
+<span class="i18n-text" data-lang="de">SUSE: wird zwischen Private-Equity-Firmen herumgereicht wie eine heiße Kartoffel, die irgendwie immer weiter an Wert gewinnt. Die eigentliche Frage ist, ob der nächste Käufer endlich herausfindet, was &#x27;Enterprise Linux&#x27; eigentlich bedeutet, bevor er es wieder weiterverkauft.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"This whole thing of private equity + companies getting massively inflated - only ends one way. There is something deeply wrong with the whole model."</div>
+          <div class="comment-i18n" data-lang="zh">私募股权加公司被大幅炒高的整个模式只会有一个结局。整个模式都有很大的问题。</div>
+<div class="comment-i18n" data-lang="ja">プライベートエクイティと企業が大幅に膨らむこの全体の仕組みは、一つの結末しかない。モデル全体に何か根本的な問題がある。</div>
+<div class="comment-i18n" data-lang="ko">사모펀드와 회사 가치가 대폭 부풀려지는 이 전체 상황은 한 가지 결말밖에 없다. 전체 모델에 근본적으로 뭔가 잘못되었다.</div>
+<div class="comment-i18n" data-lang="es">Todo esto del capital privado + empresas que se inflan masivamente solo termina de una manera. Hay algo profundamente mal con todo el modelo.</div>
+<div class="comment-i18n" data-lang="de">Diese ganze Sache mit Private Equity und massiv aufgeblähten Unternehmen endet nur auf eine Art. Mit dem ganzen Modell stimmt grundlegend etwas nicht.</div>
+
+          <div class="comment-author">-- stuaxo</div>
+        </div><div class="comment">
+          <div class="comment-text">"What does &#x27;enterprise Linux&#x27; actually mean? Not asking snarkily; I&#x27;m curious what the main differences are between this and other Linux distros. Is it mostly about getting good tech support?"</div>
+          <div class="comment-i18n" data-lang="zh">&#x27;企业级Linux&#x27;到底是什么意思?我不是在讽刺;我很好奇这和其他Linux发行版的主要区别是什么。主要是关于获得好的技术支持吗?</div>
+<div class="comment-i18n" data-lang="ja">「エンタープライズLinux」とは実際何を意味するのか？皮肉で聞いているわけではない。他のLinuxディストロとの主な違いは何か興味がある。主に良いテクサポートを得ることについてか？</div>
+<div class="comment-i18n" data-lang="ko">&#x27;엔터프라이즈 Linux&#x27;가 실제로 무슨 뜻인가요? 비꼬는 게 아니라 다른 Linux 배포판과의 주요 차이점이 뭔지 궁금합니다. 주로 좋은 기술 지원을 받는 것에 관한 건가요?</div>
+<div class="comment-i18n" data-lang="es">¿Qué significa realmente &#x27;Linux empresarial&#x27;? No pregunto con sarcasmo; tengo curiosidad por saber cuáles son las principales diferencias entre esto y otras distros de Linux. ¿Se trata principalmente de obtener buen soporte técnico?</div>
+<div class="comment-i18n" data-lang="de">Was bedeutet &#x27;Enterprise Linux&#x27; eigentlich? Frage nicht sarkastisch; mich interessieren die Hauptunterschiede zu anderen Linux-Distros. Geht es hauptsächlich um guten technischen Support?</div>
+
+          <div class="comment-author">-- kdamica</div>
+        </div>
+      </div>
+      
+    </article>
+<article class="story" id="s47327473-03110600">
+      <h3 class="story-title">
+        <a href="https://github.com/torlando-tech/columba" target="_blank">Mesh over Bluetooth LE, TCP, or Reticulum :mesh-networking</a>
+        <a href="#s47327473-03110600" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">通过蓝牙LE、TCP或Reticulum进行网状通信</div>
+<div class="i18n-title" data-lang="ja">Bluetooth LE、TCP、またはReticulumを介したメッシュ通信</div>
+<div class="i18n-title" data-lang="ko">Bluetooth LE, TCP 또는 Reticulum을 통한 메시 통신</div>
+<div class="i18n-title" data-lang="es">Mesh sobre Bluetooth LE, TCP o Reticulum</div>
+<div class="i18n-title" data-lang="de">Mesh über Bluetooth LE, TCP oder Reticulum</div>
+
+      <div class="story-meta">
+        64pts | 7c | <a href="https://news.ycombinator.com/item?id=47327473" target="_blank">HN#47327473</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Columba is a native Android app for mesh messaging and voice calls over the Reticulum network. Works over Bluetooth LE, TCP, or LoRa via RNode. No internet, no cell towers, no central servers required. Material Design 3 UI, LXMF messaging, and LXST voice calls.</div>
+        <span class="i18n-text" data-lang="zh">Columba是一款原生Android应用,用于通过Reticulum网络进行网状消息和语音通话。支持蓝牙LE、TCP或通过RNode的LoRa。不需要互联网、手机信号塔或中央服务器。Material Design 3界面,LXMF消息传递和LXST语音通话。</span>
+<span class="i18n-text" data-lang="ja">ColumbaはReticulumネットワーク上でメッシュメッセージングと音声通話を行うネイティブAndroidアプリ。Bluetooth LE、TCP、またはRNode経由のLoRaで動作。インターネット、携帯基地局、中央サーバー不要。Material Design 3 UI、LXMFメッセージング、LXST音声通話対応。</span>
+<span class="i18n-text" data-lang="ko">Columba는 Reticulum 네트워크를 통한 메시 메시징과 음성 통화를 위한 네이티브 Android 앱이다. Bluetooth LE, TCP 또는 RNode를 통한 LoRa로 작동한다. 인터넷, 기지국, 중앙 서버가 필요 없다. Material Design 3 UI, LXMF 메시징, LXST 음성 통화 지원.</span>
+<span class="i18n-text" data-lang="es">Columba es una app nativa de Android para mensajería mesh y llamadas de voz sobre la red Reticulum. Funciona con Bluetooth LE, TCP o LoRa via RNode. Sin internet, sin torres celulares, sin servidores centrales. UI de Material Design 3, mensajería LXMF y llamadas de voz LXST.</span>
+<span class="i18n-text" data-lang="de">Columba ist eine native Android-App für Mesh-Messaging und Sprachanrufe über das Reticulum-Netzwerk. Funktioniert über Bluetooth LE, TCP oder LoRa via RNode. Kein Internet, keine Mobilfunkmasten, keine zentralen Server erforderlich. Material Design 3 UI, LXMF-Messaging und LXST-Sprachanrufe.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">For when you need to coordinate the resistance movement but also want good UX. The readme shows it&#x27;s literally being developed by Claude (Co-Authored-By tags everywhere), which is either very meta or slightly concerning.</div>
+        <span class="i18n-text" data-lang="zh">当你需要协调抵抗运动但又想要好的用户体验时。readme显示它实际上是由Claude开发的(到处都是Co-Authored-By标签),这要么非常meta,要么有点令人担忧。</span>
+<span class="i18n-text" data-lang="ja">レジスタンス運動を調整する必要があるけど良いUXも欲しい時のために。readmeを見るとClaudeが開発している（Co-Authored-Byタグがあちこちに）ことがわかり、これは非常にメタか、やや不安になる。</span>
+<span class="i18n-text" data-lang="ko">저항 운동을 조율해야 하지만 좋은 UX도 원할 때를 위해. readme를 보면 실제로 Claude가 개발하고 있다(Co-Authored-By 태그가 여기저기), 이건 매우 메타하거나 약간 걱정스럽다.</span>
+<span class="i18n-text" data-lang="es">Para cuando necesitas coordinar el movimiento de resistencia pero también quieres buena UX. El readme muestra que literalmente está siendo desarrollado por Claude (etiquetas Co-Authored-By por todas partes), lo cual es muy meta o ligeramente preocupante.</span>
+<span class="i18n-text" data-lang="de">Für wenn du die Widerstandsbewegung koordinieren musst, aber auch gute UX willst. Das Readme zeigt, dass es buchstäblich von Claude entwickelt wird (Co-Authored-By-Tags überall), was entweder sehr meta oder leicht besorgniserregend ist.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Great to see yet another project to provide &#x27;offline&#x27;-ish comms. LoRa is great, but the bandwidth is terrible, so you&#x27;d be limited to Twitter sized messages."</div>
+          <div class="comment-i18n" data-lang="zh">很高兴看到又一个提供&#x27;离线&#x27;通信的项目。LoRa很棒,但带宽很糟糕,所以你只能发送推特大小的消息。</div>
+<div class="comment-i18n" data-lang="ja">「オフライン」的な通信を提供する新しいプロジェクトが出てきて嬉しい。LoRaは素晴らしいが、帯域幅がひどいので、Twitterサイズのメッセージに限定される。</div>
+<div class="comment-i18n" data-lang="ko">&#x27;오프라인&#x27; 통신을 제공하는 또 다른 프로젝트가 나와서 반갑다. LoRa는 훌륭하지만 대역폭이 끔찍해서 트위터 크기의 메시지로 제한될 것이다.</div>
+<div class="comment-i18n" data-lang="es">Genial ver otro proyecto para proporcionar comunicaciones &#x27;offline&#x27;-ish. LoRa es genial, pero el ancho de banda es terrible, así que estarías limitado a mensajes del tamaño de Twitter.</div>
+<div class="comment-i18n" data-lang="de">Toll, wieder ein Projekt für &#x27;offline&#x27;-artige Kommunikation zu sehen. LoRa ist großartig, aber die Bandbreite ist schrecklich, also wärst du auf Twitter-große Nachrichten beschränkt.</div>
+
+          <div class="comment-author">-- xx__yy</div>
+        </div><div class="comment">
+          <div class="comment-text">"Has anyone used Reticulum and how does it compare to Meshtastic (or even Meshcore)?"</div>
+          <div class="comment-i18n" data-lang="zh">有人用过Reticulum吗?与Meshtastic(甚至Meshcore)相比如何?</div>
+<div class="comment-i18n" data-lang="ja">Reticulumを使ったことがある人はいますか？Meshtastic（またはMeshcore）と比べてどうですか？</div>
+<div class="comment-i18n" data-lang="ko">Reticulum을 사용해 본 사람 있나요? Meshtastic(또는 Meshcore)과 비교하면 어떤가요?</div>
+<div class="comment-i18n" data-lang="es">¿Alguien ha usado Reticulum y cómo se compara con Meshtastic (o incluso Meshcore)?</div>
+<div class="comment-i18n" data-lang="de">Hat jemand Reticulum benutzt und wie vergleicht es sich mit Meshtastic (oder sogar Meshcore)?</div>
+
+          <div class="comment-author">-- ews</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#android</span><span class="tag">#privacy</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-03-11T04:00:00Z</div>
