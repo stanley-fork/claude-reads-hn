@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-03-13 03:00:00 UT UTC
+#+DATE: 2026-03-13T03:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+LLMs plateau while RAG gets poisoned, agents hide secrets, and a $599 Mac sparks childhood flashbacks
+
+* Highlights
+- OneCLI: Give AI agents access without handing them the keys
+- LLM merge rates flatlined for over a year, nobody noticed
+- RAG poisoning: 3 fake docs, $8.3M fabricated revenue, 95% success
+- WolfIP: TCP/IP with zero malloc for embedded devs
+- MacBook Neo: Not the computer for you, but maybe for who you'll become
+
+* Stories
+
+** Show HN: OneCLI – Vault for AI Agents in Rust :security:ai:rust:devtools:
+:PROPERTIES:
+:ID:       47353558
+:URL:      https://github.com/onecli/onecli
+:HN_URL:   https://news.ycombinator.com/item?id=47353558
+:POINTS:   126
+:COMMENTS: 40
+:BY:       guyb3
+:END:
+
+*** TLDR
+OneCLI is an open-source credential vault that sits between AI agents and APIs. You store real secrets encrypted, give agents placeholder keys, and the proxy swaps them at request time. Agents never touch actual credentials. Written in Rust with AES-256-GCM encryption, runs in a single Docker container with embedded Postgres.
+
+*** Take
+The problem isn't new but the timing is perfect. Everyone's giving Claude raw API keys like it's 2019 and we're handing .env files to junior devs. At least this time when the agent goes rogue, it won't have your Stripe key.
+
+*** Comments
+
+**** captn3m0
+:PROPERTIES:
+:COMMENT_ID: 47353801
+:END:
+This problem+solution, like many others in the agentic-space, have nothing agent-specific. Giving a 'box' API keys was always considered a risk, and auth-proxying has existed as a solution forever.
+
+**** sathish316
+:PROPERTIES:
+:COMMENT_ID: 47353912
+:END:
+This can also be done using existing Vaults or Secrets manager. Hashicorp Vault can do this and agents can be instructed to get secrets, which are set without the agent's knowledge.
+
+**** hardsnow
+:PROPERTIES:
+:COMMENT_ID: 47354022
+:END:
+I built a similar system. Not all systems respect HTTP_PROXY. Node in particular is very uncooperative in this regard. AWS access keys can't be handled by simple credential swap; the requests need to be resigned.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: OneCLI – 用Rust写的AI代理密钥保险库
+***** TLDR
+OneCLI是一个开源凭证保险库，位于AI代理和API之间。你存储加密的真实密钥，给代理占位符密钥，代理在请求时进行交换。代理永远不会接触实际凭证。用Rust编写，使用AES-256-GCM加密，在单个Docker容器中运行。
+***** Take
+问题不新鲜，但时机完美。每个人都像2019年给初级开发者.env文件一样给Claude原始API密钥。至少这次代理失控时，不会有你的Stripe密钥。
+***** Comments
+- 这个问题和解决方案与代理无关。给'盒子'API密钥一直被认为是风险，认证代理一直存在。
+- 这也可以用现有的Vault或Secrets管理器完成。Hashicorp Vault可以做到这一点。
+- 我建了一个类似的系统。不是所有系统都遵守HTTP_PROXY。Node在这方面特别不配合。AWS访问密钥不能通过简单的凭证交换处理。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: OneCLI – RustでAIエージェント用のVault
+***** TLDR
+OneCLIはAIエージェントとAPIの間に位置するオープンソースの認証情報保管庫です。実際の秘密を暗号化して保存し、エージェントにはプレースホルダーキーを渡し、プロキシがリクエスト時に交換します。エージェントは実際の認証情報に触れません。Rustで書かれ、AES-256-GCM暗号化、単一のDockerコンテナで動作します。
+***** Take
+問題は新しくないがタイミングは完璧。みんな2019年にジュニア開発者に.envファイルを渡すようにClaudeに生のAPIキーを渡している。少なくとも今回エージェントが暴走してもStripeキーは持っていない。
+***** Comments
+- この問題と解決策はエージェント固有ではない。'ボックス'にAPIキーを渡すことは常にリスクと見なされ、認証プロキシは解決策として存在していた。
+- 既存のVaultやSecrets managerでもできる。Hashicorp Vaultならエージェントの知らないところで秘密を設定できる。
+- 似たシステムを作った。すべてのシステムがHTTP_PROXYを尊重するわけではない。Nodeは特に非協力的。AWSアクセスキーは単純な認証情報交換では処理できない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: OneCLI – Rust로 만든 AI 에이전트용 Vault
+***** TLDR
+OneCLI는 AI 에이전트와 API 사이에 위치하는 오픈소스 자격 증명 보관소입니다. 실제 비밀을 암호화하여 저장하고, 에이전트에게 플레이스홀더 키를 주면 프록시가 요청 시 교환합니다. 에이전트는 실제 자격 증명에 접근하지 않습니다. Rust로 작성, AES-256-GCM 암호화, 단일 Docker 컨테이너에서 실행됩니다.
+***** Take
+문제는 새롭지 않지만 타이밍이 완벽하다. 모두가 2019년에 주니어 개발자에게 .env 파일을 건네주듯이 Claude에게 원시 API 키를 주고 있다. 적어도 이번에 에이전트가 폭주해도 Stripe 키는 없을 것이다.
+***** Comments
+- 이 문제와 해결책은 에이전트에 특화된 것이 아니다. '박스'에 API 키를 주는 것은 항상 위험으로 여겨졌고, 인증 프록시는 해결책으로 존재해왔다.
+- 기존 Vault나 Secrets manager로도 할 수 있다. Hashicorp Vault는 에이전트 모르게 비밀을 설정할 수 있다.
+- 비슷한 시스템을 만들었다. 모든 시스템이 HTTP_PROXY를 존중하지 않는다. Node는 특히 비협조적이다. AWS 액세스 키는 단순한 자격 증명 교환으로 처리할 수 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: OneCLI – Vault para Agentes de IA en Rust
+***** TLDR
+OneCLI es una bóveda de credenciales de código abierto entre agentes de IA y APIs. Almacenas secretos reales encriptados, das a los agentes claves de marcador de posición, y el proxy las intercambia en tiempo de solicitud. Los agentes nunca tocan las credenciales reales. Escrito en Rust con encriptación AES-256-GCM, corre en un solo contenedor Docker.
+***** Take
+El problema no es nuevo pero el momento es perfecto. Todos le dan a Claude claves API crudas como si fuera 2019 y estuviéramos dando archivos .env a desarrolladores junior. Al menos esta vez cuando el agente se descontrole, no tendrá tu clave de Stripe.
+***** Comments
+- Este problema y solución no tiene nada específico de agentes. Dar claves API a una 'caja' siempre se consideró un riesgo, y el proxy de autenticación ha existido como solución.
+- Esto también se puede hacer con Vaults o gestores de Secrets existentes. Hashicorp Vault puede hacer esto.
+- Construí un sistema similar. No todos los sistemas respetan HTTP_PROXY. Node en particular es muy poco cooperativo. Las claves de acceso de AWS no pueden manejarse con un simple intercambio de credenciales.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: OneCLI – Vault für KI-Agenten in Rust
+***** TLDR
+OneCLI ist ein Open-Source-Tresor für Anmeldedaten zwischen KI-Agenten und APIs. Du speicherst echte Geheimnisse verschlüsselt, gibst Agenten Platzhalter-Schlüssel, und der Proxy tauscht sie bei der Anfrage aus. Agenten berühren nie echte Anmeldedaten. In Rust geschrieben mit AES-256-GCM-Verschlüsselung, läuft in einem einzigen Docker-Container.
+***** Take
+Das Problem ist nicht neu, aber das Timing ist perfekt. Jeder gibt Claude rohe API-Schlüssel, als wäre es 2019 und wir würden Junior-Entwicklern .env-Dateien geben. Wenigstens hat er diesmal nicht deinen Stripe-Schlüssel, wenn der Agent durchdreht.
+***** Comments
+- Dieses Problem und diese Lösung haben nichts Agenten-spezifisches. Einer 'Box' API-Schlüssel zu geben wurde immer als Risiko angesehen, und Auth-Proxying existierte schon immer als Lösung.
+- Das kann man auch mit bestehenden Vaults oder Secrets Managern machen. Hashicorp Vault kann das, und Agenten können angewiesen werden, Geheimnisse zu holen.
+- Ich habe ein ähnliches System gebaut. Nicht alle Systeme respektieren HTTP_PROXY. Node ist besonders unkooperativ. AWS-Zugriffsschlüssel können nicht durch einfachen Credential-Swap gehandhabt werden.
+** Are LLM merge rates not getting better? :ai:llm:programming:benchmarks:
+:PROPERTIES:
+:ID:       47349334
+:URL:      https://entropicthoughts.com/no-swe-bench-improvement
+:HN_URL:   https://news.ycombinator.com/item?id=47349334
+:POINTS:   123
+:COMMENTS: 112
+:BY:       4diii
+:END:
+
+*** TLDR
+Analysis of METR data shows LLM merge rates (code that maintainers would actually approve) have been flat since early 2025. A constant function fits the data better than the optimistic upward trend everyone assumed. The gap between 'passes tests' and 'mergeable' remains huge, and nobody's talking about this year-long plateau.
+
+*** Take
+We've been confusing benchmark theater with actual progress. Models got better at gaming SWE-bench while real-world code quality flatlined. The emperor has no pants, but the pants were never the point anyway.
+
+*** Comments
+
+**** wongarsu
+:PROPERTIES:
+:COMMENT_ID: 47349501
+:END:
+I don't find this very compelling. If you look at the actual graph they are referencing there is a clear improvement from Sonnet 3.7 -> Opus 4.0 -> Sonnet 4.5. This is just hidden because they only look at PRs mergable with no human feedback.
+
+**** aerhardt
+:PROPERTIES:
+:COMMENT_ID: 47349678
+:END:
+Two things are true: 1) Something happened during 2025 that made terminal-based apps like Claude Code much better. I only type in the terminal anymore. 2) The quality of the code is still quite often terrible. Quadruple-nested control flow abounds.
+
+**** curiouscube
+:PROPERTIES:
+:COMMENT_ID: 47349812
+:END:
+There is a decent case for this thesis. Frontier labs don't seem to really push pure size/capability anymore, it's an all in focus on agentic AI which is mainly complex post-training regimes.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+LLM合并率没有变好吗？
+***** TLDR
+METR数据分析显示，LLM合并率（维护者实际会批准的代码）自2025年初以来一直持平。常数函数比大家假设的乐观上升趋势更符合数据。'通过测试'和'可合并'之间的差距仍然很大，没人在讨论这长达一年的停滞期。
+***** Take
+我们一直把基准测试表演和实际进展混为一谈。模型在SWE-bench上越来越会作弊，而现实世界的代码质量停滞不前。皇帝没穿裤子，但裤子从来都不是重点。
+***** Comments
+- 我觉得这不太有说服力。如果你看他们引用的实际图表，从Sonnet 3.7到Opus 4.0到Sonnet 4.5有明显改进。这只是被隐藏了，因为他们只看不需要人工反馈就能合并的PR。
+- 两件事都是真的：1) 2025年发生了什么使得Claude Code等终端应用好得多。我现在只在终端里打字。2) 代码质量通常仍然很糟糕。四重嵌套控制流比比皆是。
+- 这个论点有一定道理。前沿实验室似乎不再推动纯粹的规模/能力，而是全力投入主要是复杂后训练方案的代理AI。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+LLMのマージ率は改善していないのか？
+***** TLDR
+METRデータの分析によると、LLMのマージ率（メンテナーが実際に承認するコード）は2025年初頭以来横ばいです。定数関数の方が、みんなが想定していた楽観的な上昇トレンドよりもデータに適合します。「テストに合格」と「マージ可能」の間のギャップは依然として大きく、この1年間の停滞について誰も話していません。
+***** Take
+ベンチマークの茶番と実際の進歩を混同してきた。モデルはSWE-benchでのゲーミングがうまくなる一方、実世界のコード品質は横ばいだった。皇帝はズボンを履いていないが、ズボンは最初から重要ではなかった。
+***** Comments
+- これはあまり説得力がない。彼らが参照している実際のグラフを見ると、Sonnet 3.7からOpus 4.0、Sonnet 4.5への明確な改善がある。人間のフィードバックなしでマージ可能なPRだけを見ているから隠れているだけ。
+- 2つのことが同時に真実：1) 2025年に何かが起こり、Claude Codeのようなターミナルベースのアプリがずっと良くなった。もうターミナルでしか打たない。2) コードの品質は今でもひどいことが多い。四重ネストの制御フローだらけ。
+- この論文には相応の根拠がある。フロンティアラボは純粋なサイズ/能力をもう推していないようで、主に複雑なポストトレーニング方式のエージェントAIに全力投球している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+LLM 병합률이 개선되지 않고 있는가?
+***** TLDR
+METR 데이터 분석에 따르면 LLM 병합률(유지관리자가 실제로 승인할 코드)은 2025년 초 이후 평탄했습니다. 상수 함수가 모두가 가정한 낙관적인 상승 추세보다 데이터에 더 잘 맞습니다. '테스트 통과'와 '병합 가능' 사이의 격차는 여전히 크며, 이 1년간의 정체에 대해 아무도 말하지 않습니다.
+***** Take
+벤치마크 쇼와 실제 진전을 혼동해왔다. 모델은 SWE-bench 게임에 능숙해졌지만 실제 코드 품질은 정체되었다. 황제는 바지를 입지 않았지만, 바지는 애초에 포인트가 아니었다.
+***** Comments
+- 이건 별로 설득력이 없다. 그들이 참조하는 실제 그래프를 보면 Sonnet 3.7에서 Opus 4.0, Sonnet 4.5로 명확한 개선이 있다. 인간 피드백 없이 병합 가능한 PR만 보기 때문에 숨겨져 있을 뿐이다.
+- 두 가지가 동시에 사실이다: 1) 2025년에 Claude Code 같은 터미널 기반 앱이 훨씬 나아지게 만든 무언가가 있었다. 이제 터미널에서만 타이핑한다. 2) 코드 품질은 여전히 종종 끔찍하다. 사중 중첩 제어 흐름이 난무한다.
+- 이 논문에는 상당한 근거가 있다. 프론티어 연구소들은 더 이상 순수한 크기/능력을 밀어붙이지 않는 것 같고, 주로 복잡한 사후 훈련 체제인 에이전트 AI에 올인하고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Las tasas de merge de LLM no están mejorando?
+***** TLDR
+El análisis de datos METR muestra que las tasas de merge de LLM (código que los mantenedores realmente aprobarían) han estado planas desde principios de 2025. Una función constante se ajusta mejor a los datos que la tendencia alcista optimista que todos asumían. La brecha entre 'pasa tests' y 'mergeable' sigue siendo enorme, y nadie habla de este estancamiento de un año.
+***** Take
+Hemos confundido el teatro de benchmarks con progreso real. Los modelos mejoraron en el juego de SWE-bench mientras la calidad del código del mundo real se estancó. El emperador no tiene pantalones, pero los pantalones nunca fueron el punto.
+***** Comments
+- No encuentro esto muy convincente. Si miras el gráfico real que referencian, hay una mejora clara de Sonnet 3.7 a Opus 4.0 a Sonnet 4.5. Esto está oculto porque solo miran PRs mergeables sin feedback humano.
+- Dos cosas son ciertas: 1) Algo pasó durante 2025 que hizo que apps de terminal como Claude Code sean mucho mejores. Solo escribo en terminal ahora. 2) La calidad del código sigue siendo terrible. Flujo de control cuádruplemente anidado abunda.
+- Hay un caso decente para esta tesis. Los labs frontier no parecen empujar capacidad/tamaño puro, es un all-in en AI agéntica que es principalmente regímenes de post-entrenamiento complejos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Werden LLM-Merge-Raten nicht besser?
+***** TLDR
+Die Analyse von METR-Daten zeigt, dass LLM-Merge-Raten (Code, den Maintainer tatsächlich genehmigen würden) seit Anfang 2025 flach sind. Eine konstante Funktion passt besser zu den Daten als der optimistische Aufwärtstrend, den alle annahmen. Die Lücke zwischen 'besteht Tests' und 'mergebar' bleibt riesig, und niemand spricht über dieses einjährige Plateau.
+***** Take
+Wir haben Benchmark-Theater mit echtem Fortschritt verwechselt. Modelle wurden besser darin, SWE-bench zu gamen, während die Code-Qualität in der echten Welt stagnierte. Der Kaiser hat keine Hosen, aber die Hosen waren nie der Punkt.
+***** Comments
+- Das finde ich nicht überzeugend. Wenn man den eigentlichen Graphen anschaut, gibt es eine klare Verbesserung von Sonnet 3.7 zu Opus 4.0 zu Sonnet 4.5. Das ist nur versteckt, weil sie nur PRs betrachten, die ohne menschliches Feedback mergebar sind.
+- Zwei Dinge sind wahr: 1) Etwas passierte 2025, das Terminal-Apps wie Claude Code viel besser machte. Ich tippe nur noch im Terminal. 2) Die Code-Qualität ist oft immer noch schrecklich. Vierfach verschachtelter Kontrollfluss überall.
+- Es gibt einen guten Fall für diese These. Frontier-Labs scheinen nicht mehr auf reine Größe/Fähigkeit zu setzen, sondern gehen all-in auf agentische KI, die hauptsächlich komplexe Post-Training-Regime sind.
+** Document poisoning in RAG systems: How attackers corrupt AI's sources :security:ai:rag:llm:
+:PROPERTIES:
+:ID:       47350407
+:URL:      https://aminrj.com/posts/rag-document-poisoning/
+:HN_URL:   https://news.ycombinator.com/item?id=47350407
+:POINTS:   78
+:COMMENTS: 34
+:BY:       aminerj
+:END:
+
+*** TLDR
+Author injected 3 fabricated financial documents into a ChromaDB knowledge base and got the LLM to confidently report fake revenue figures ($8.3M instead of real $24.7M). Attack succeeded 95% of the time with no jailbreak needed. Embedding anomaly detection was the most effective defense, dropping success from 95% to 20%. All five defense layers combined: 10% residual.
+
+*** Take
+This is the RAG security wake-up call everyone's been ignoring. Your knowledge base isn't just data, it's an attack surface. The scariest part? The legitimate document was in context, the LLM just chose to trust the 'CFO-approved correction' instead.
+
+*** Comments
+
+**** ineedasername
+:PROPERTIES:
+:COMMENT_ID: 47350612
+:END:
+Any document store where you haven't meticulously vetted each document runs this risk. Analysis that were correct at one point and not at another, things that were simply wrong at all times, contradictory, etc.
+
+**** daemonologist
+:PROPERTIES:
+:COMMENT_ID: 47350723
+:END:
+Holy moly what's with all the AI comments in this thread?
+
+**** kpw94
+:PROPERTIES:
+:COMMENT_ID: 47350834
+:END:
+That's a big flaw of LLMs: it lacks the fundamental understanding of 'good and bad', like Richard Sutton said in that Dwarkesh podcast.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+RAG系统中的文档投毒：攻击者如何破坏AI的数据源
+***** TLDR
+作者向ChromaDB知识库注入了3份伪造的财务文档，让LLM自信地报告虚假收入数据（830万美元而非真实的2470万美元）。攻击在95%的情况下成功，无需越狱。嵌入异常检测是最有效的防御，将成功率从95%降至20%。五层防御结合：10%残余。
+***** Take
+这是每个人都在忽视的RAG安全警钟。你的知识库不仅仅是数据，它是一个攻击面。最可怕的是什么？合法文档就在上下文中，LLM只是选择相信'CFO批准的更正'。
+***** Comments
+- 任何你没有仔细审查每个文档的文档库都有这个风险。某个时点正确而另一个时点不正确的分析，一直都错误的东西，矛盾的东西等等。
+- 天哪，这个帖子里怎么这么多AI评论？
+- 这是LLM的一个大缺陷：它缺乏对'好与坏'的基本理解，就像Richard Sutton在Dwarkesh播客中说的那样。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+RAGシステムにおけるドキュメント汚染：攻撃者がAIのソースを破壊する方法
+***** TLDR
+著者はChromaDBナレッジベースに3つの偽造財務文書を注入し、LLMに偽の収益数字（実際の2470万ドルではなく830万ドル）を自信を持って報告させました。攻撃は95%の確率で成功し、脱獄は不要でした。埋め込み異常検出が最も効果的な防御で、成功率を95%から20%に低下させました。5つの防御層を組み合わせると10%の残存率。
+***** Take
+これは誰もが無視してきたRAGセキュリティの警鐘だ。ナレッジベースは単なるデータではなく、攻撃面だ。最も怖いのは？正当な文書はコンテキストにあったのに、LLMは「CFO承認の訂正」を信頼することを選んだ。
+***** Comments
+- 各文書を綿密に審査していない文書ストアにはすべてこのリスクがある。ある時点では正しく別の時点では正しくない分析、ずっと間違っていたもの、矛盾するものなど。
+- なんてこった、このスレッドのAIコメントは何なんだ？
+- これはLLMの大きな欠陥だ：Richard SuttonがDwarkeshポッドキャストで言ったように、「良いと悪い」の基本的な理解が欠けている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+RAG 시스템에서의 문서 오염: 공격자가 AI의 소스를 손상시키는 방법
+***** TLDR
+저자는 ChromaDB 지식 베이스에 3개의 위조 재무 문서를 주입하여 LLM이 가짜 수익 수치(실제 2470만 달러가 아닌 830만 달러)를 자신 있게 보고하게 했습니다. 공격은 탈옥 없이 95%의 성공률을 보였습니다. 임베딩 이상 탐지가 가장 효과적인 방어책으로 성공률을 95%에서 20%로 낮췄습니다. 다섯 가지 방어 계층을 결합하면 10% 잔여율.
+***** Take
+이것은 모두가 무시해온 RAG 보안 경종이다. 지식 베이스는 단순한 데이터가 아니라 공격 표면이다. 가장 무서운 점은? 합법적인 문서가 컨텍스트에 있었는데, LLM은 'CFO 승인 수정'을 신뢰하기로 선택했다.
+***** Comments
+- 각 문서를 꼼꼼히 검증하지 않은 문서 저장소에는 이 위험이 있다. 한 시점에서는 정확하고 다른 시점에서는 그렇지 않은 분석, 항상 틀렸던 것들, 모순되는 것들 등.
+- 세상에, 이 스레드에 AI 댓글이 왜 이렇게 많지?
+- 이것은 LLM의 큰 결함이다: Richard Sutton이 Dwarkesh 팟캐스트에서 말했듯이 '좋고 나쁨'에 대한 근본적인 이해가 부족하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Envenenamiento de documentos en sistemas RAG: Cómo los atacantes corrompen las fuentes de la IA
+***** TLDR
+El autor inyectó 3 documentos financieros fabricados en una base de conocimiento ChromaDB y logró que el LLM reportara cifras de ingresos falsas ($8.3M en lugar del real $24.7M). El ataque tuvo éxito el 95% de las veces sin necesidad de jailbreak. La detección de anomalías de embedding fue la defensa más efectiva, reduciendo el éxito del 95% al 20%. Las cinco capas de defensa combinadas: 10% residual.
+***** Take
+Esta es la llamada de atención de seguridad RAG que todos han estado ignorando. Tu base de conocimiento no es solo datos, es una superficie de ataque. ¿La parte más aterradora? El documento legítimo estaba en contexto, el LLM simplemente eligió confiar en la 'corrección aprobada por el CFO'.
+***** Comments
+- Cualquier almacén de documentos donde no hayas revisado meticulosamente cada documento corre este riesgo. Análisis que fueron correctos en un punto y no en otro, cosas simplemente erróneas todo el tiempo, contradictorias, etc.
+- Dios mío, ¿qué pasa con todos los comentarios de IA en este hilo?
+- Ese es un gran defecto de los LLM: carece del entendimiento fundamental de 'bueno y malo', como dijo Richard Sutton en ese podcast de Dwarkesh.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Dokumentenvergiftung in RAG-Systemen: Wie Angreifer die Quellen der KI korrumpieren
+***** TLDR
+Der Autor injizierte 3 gefälschte Finanzdokumente in eine ChromaDB-Wissensbasis und brachte das LLM dazu, falsche Umsatzzahlen zu melden (8,3 Mio. $ statt echter 24,7 Mio. $). Der Angriff war in 95% der Fälle erfolgreich, ohne Jailbreak. Embedding-Anomalie-Erkennung war die effektivste Verteidigung und senkte den Erfolg von 95% auf 20%. Alle fünf Verteidigungsschichten kombiniert: 10% Restrisiko.
+***** Take
+Das ist der RAG-Sicherheits-Weckruf, den alle ignoriert haben. Deine Wissensbasis ist nicht nur Daten, sie ist eine Angriffsfläche. Der gruseligste Teil? Das legitime Dokument war im Kontext, das LLM entschied sich einfach, der 'CFO-genehmigten Korrektur' zu vertrauen.
+***** Comments
+- Jeder Dokumentenspeicher, in dem du nicht jedes Dokument sorgfältig geprüft hast, birgt dieses Risiko. Analysen, die zu einem Zeitpunkt korrekt waren und zu einem anderen nicht, Dinge, die immer falsch waren, widersprüchlich, usw.
+- Heiliger Strohsack, was ist mit all den KI-Kommentaren in diesem Thread?
+- Das ist ein großer Fehler von LLMs: Es fehlt das grundlegende Verständnis von 'gut und schlecht', wie Richard Sutton in diesem Dwarkesh-Podcast sagte.
+** WolfIP: Lightweight TCP/IP stack with no dynamic memory allocations :embedded:networking:c:opensource:
+:PROPERTIES:
+:ID:       47352385
+:URL:      https://github.com/wolfssl/wolfip
+:HN_URL:   https://news.ycombinator.com/item?id=47352385
+:POINTS:   102
+:COMMENTS: 13
+:BY:       789c789c789c
+:END:
+
+*** TLDR
+WolfSSL released WolfIP, a lightweight TCP/IP stack designed for embedded systems that avoids all dynamic memory allocation. Zero malloc means predictable memory usage, no fragmentation, and easier security certification for safety-critical systems. Targets the same space as uIP and lwIP.
+
+*** Take
+In a world obsessed with AI and cloud, someone at WolfSSL said 'what if we wrote a TCP/IP stack that doesn't malloc' and actually shipped it. Embedded devs everywhere just felt a disturbance in the force.
+
+*** Comments
+
+**** rwmj
+:PROPERTIES:
+:COMMENT_ID: 47352501
+:END:
+passt (the network stack that you might be using if you're running qemu, or podman containers) also has no dynamic memory allocations. I always thought it's quite an interesting achievement.
+
+**** rpcope1
+:PROPERTIES:
+:COMMENT_ID: 47352612
+:END:
+It would be interesting to know why you would choose this over something like the Contiki uIP or lwIP that everything seems to use.
+
+**** CyberDildonics
+:PROPERTIES:
+:COMMENT_ID: 47352723
+:END:
+Are there TCP/IP stacks out there in common use that are allocating memory all the time?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+WolfIP：无动态内存分配的轻量级TCP/IP协议栈
+***** TLDR
+WolfSSL发布了WolfIP，一个为嵌入式系统设计的轻量级TCP/IP协议栈，避免所有动态内存分配。零malloc意味着可预测的内存使用、无碎片化，以及对安全关键系统更容易的安全认证。目标与uIP和lwIP相同的领域。
+***** Take
+在一个痴迷于AI和云的世界里，WolfSSL的某人说'如果我们写一个不malloc的TCP/IP协议栈会怎样'，然后真的发布了。各地的嵌入式开发者都感到了一阵骚动。
+***** Comments
+- passt（如果你运行qemu或podman容器可能会用到的网络栈）也没有动态内存分配。我一直觉得这是一个相当有趣的成就。
+- 有趣的是，为什么你会选择这个而不是像Contiki uIP或lwIP这样每个人似乎都在用的东西。
+- 有没有常用的TCP/IP协议栈一直在分配内存？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+WolfIP：動的メモリ割り当てのない軽量TCP/IPスタック
+***** TLDR
+WolfSSLは、すべての動的メモリ割り当てを避ける組み込みシステム向けの軽量TCP/IPスタック、WolfIPをリリースしました。ゼロmallocは予測可能なメモリ使用量、フラグメンテーションなし、安全クリティカルシステムのより簡単なセキュリティ認証を意味します。uIPやlwIPと同じ分野を対象としています。
+***** Take
+AIとクラウドに夢中な世界で、WolfSSLの誰かが「mallocしないTCP/IPスタックを書いたらどうなるか」と言って、実際にリリースした。世界中の組み込み開発者がフォースの乱れを感じた。
+***** Comments
+- passt（qemuやpodmanコンテナを実行している場合に使用しているかもしれないネットワークスタック）も動的メモリ割り当てがない。いつもかなり興味深い成果だと思っていた。
+- Contiki uIPやlwIPのようなみんなが使っているものではなくこれを選ぶ理由を知りたい。
+- 一般的に使われているTCP/IPスタックで常にメモリを割り当てているものはあるのか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+WolfIP: 동적 메모리 할당이 없는 경량 TCP/IP 스택
+***** TLDR
+WolfSSL이 모든 동적 메모리 할당을 피하는 임베디드 시스템용 경량 TCP/IP 스택인 WolfIP를 출시했습니다. 제로 malloc은 예측 가능한 메모리 사용, 단편화 없음, 안전 중요 시스템을 위한 더 쉬운 보안 인증을 의미합니다. uIP 및 lwIP와 동일한 영역을 대상으로 합니다.
+***** Take
+AI와 클라우드에 집착하는 세상에서 WolfSSL의 누군가가 'malloc하지 않는 TCP/IP 스택을 작성하면 어떨까'라고 말하고 실제로 출시했다. 전 세계 임베디드 개발자들이 포스의 교란을 느꼈다.
+***** Comments
+- passt(qemu나 podman 컨테이너를 실행할 때 사용할 수 있는 네트워크 스택)도 동적 메모리 할당이 없다. 항상 꽤 흥미로운 성과라고 생각했다.
+- Contiki uIP나 lwIP 같은 모두가 사용하는 것 대신 이것을 선택하는 이유가 궁금하다.
+- 일반적으로 사용되는 TCP/IP 스택 중에 항상 메모리를 할당하는 것이 있나요?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+WolfIP: Pila TCP/IP ligera sin asignaciones de memoria dinámica
+***** TLDR
+WolfSSL lanzó WolfIP, una pila TCP/IP ligera diseñada para sistemas embebidos que evita toda asignación de memoria dinámica. Cero malloc significa uso de memoria predecible, sin fragmentación y certificación de seguridad más fácil para sistemas críticos de seguridad. Apunta al mismo espacio que uIP y lwIP.
+***** Take
+En un mundo obsesionado con la IA y la nube, alguien en WolfSSL dijo '¿qué pasa si escribimos una pila TCP/IP que no haga malloc?' y realmente lo lanzó. Los desarrolladores embebidos de todo el mundo sintieron una perturbación en la Fuerza.
+***** Comments
+- passt (la pila de red que podrías estar usando si ejecutas qemu o contenedores podman) tampoco tiene asignaciones de memoria dinámica. Siempre pensé que es un logro bastante interesante.
+- Sería interesante saber por qué elegirías esto sobre algo como Contiki uIP o lwIP que todo el mundo parece usar.
+- ¿Hay pilas TCP/IP de uso común que estén asignando memoria todo el tiempo?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+WolfIP: Leichtgewichtiger TCP/IP-Stack ohne dynamische Speicherallokationen
+***** TLDR
+WolfSSL hat WolfIP veröffentlicht, einen leichtgewichtigen TCP/IP-Stack für eingebettete Systeme, der alle dynamischen Speicherallokationen vermeidet. Null malloc bedeutet vorhersagbare Speichernutzung, keine Fragmentierung und einfachere Sicherheitszertifizierung für sicherheitskritische Systeme. Zielt auf denselben Bereich wie uIP und lwIP.
+***** Take
+In einer Welt, die von KI und Cloud besessen ist, sagte jemand bei WolfSSL 'was wäre, wenn wir einen TCP/IP-Stack schreiben, der nicht malloc macht' und hat ihn tatsächlich ausgeliefert. Embedded-Entwickler überall spürten eine Störung in der Macht.
+***** Comments
+- passt (der Netzwerk-Stack, den du möglicherweise verwendest, wenn du qemu oder podman-Container betreibst) hat auch keine dynamischen Speicherallokationen. Ich fand das immer eine ziemlich interessante Leistung.
+- Es wäre interessant zu wissen, warum man das wählen würde anstatt etwas wie Contiki uIP oder lwIP, das jeder zu verwenden scheint.
+- Gibt es TCP/IP-Stacks im allgemeinen Gebrauch, die ständig Speicher allokieren?
+** "This is not the computer for you" :apple:hardware:culture:essay:
+:PROPERTIES:
+:ID:       47359744
+:URL:      https://samhenri.gold/blog/20260312-this-is-not-the-computer-for-you/
+:HN_URL:   https://news.ycombinator.com/item?id=47359744
+:POINTS:   76
+:COMMENTS: 28
+:BY:       MBCook
+:END:
+
+*** TLDR
+A beautiful essay about the $599 MacBook Neo and what computer reviews get wrong. Reviews categorize users and assign products. But kids don't start with the right tool. They take what's available and push it until something breaks. The Neo has the full macOS contract at a price point that matters. Unlike a Chromebook, when you hit its limits, you're learning physics, not product decisions.
+
+*** Take
+This hit different. The author ran Final Cut on a 2006 Core 2 Duo at age nine. Edited SystemVersion.plist to make it say 'Mac OS 69' because that's the s⁎x number. Clapped alone watching Steve Jobs' last keynote. That kid didn't need the right computer. He needed any computer.
+
+*** Comments
+
+**** sghiassy
+:PROPERTIES:
+:COMMENT_ID: 47359901
+:END:
+I appreciate the article and agree. If you have a desire to learn computers, just get your hands on whatever you can and learn.
+
+**** bitmasher9
+:PROPERTIES:
+:COMMENT_ID: 47360012
+:END:
+I hope they sell so many of these, because the Mac ecosystem is just better for learning about computers than what most young people use daily.
+
+**** GameOfKnowing
+:PROPERTIES:
+:COMMENT_ID: 47360123
+:END:
+This is true but also not at all the point of a review. Some tools are better suited for some tasks— reviews help those with the privilege of choice find the best ones for them.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+这不是适合你的电脑
+***** TLDR
+一篇关于599美元MacBook Neo的美丽散文，以及电脑评测的误区。评测把用户分类并分配产品。但孩子们不是从正确的工具开始的。他们拿起手边有的东西，一直用到坏掉。Neo以一个重要的价格点提供了完整的macOS契约。不像Chromebook，当你碰到它的极限时，你在学习物理定律，而不是产品决策。
+***** Take
+这触动了我。作者九岁时在2006年Core 2 Duo上运行Final Cut。编辑SystemVersion.plist让它显示'Mac OS 69'因为那是性数字。独自鼓掌看乔布斯的最后一次主题演讲。那个孩子不需要正确的电脑。他需要任何电脑。
+***** Comments
+- 我欣赏这篇文章并同意。如果你有学习电脑的愿望，就拿起你能拿到的任何东西去学习。
+- 我希望他们卖出很多这样的电脑，因为Mac生态系统比大多数年轻人日常使用的更适合学习电脑。
+- 这是真的，但这完全不是评测的重点。有些工具更适合某些任务——评测帮助有选择特权的人找到最适合他们的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+これはあなたのためのコンピュータではない
+***** TLDR
+599ドルのMacBook Neoについての美しいエッセイと、コンピュータレビューが間違えていること。レビューはユーザーを分類し、製品を割り当てる。しかし子供たちは正しいツールから始めない。手に入るものを取って、壊れるまで押し込む。Neoは重要な価格帯で完全なmacOSの契約を持っている。Chromebookとは違い、限界にぶつかったとき、学んでいるのは物理法則であり、製品の決定ではない。
+***** Take
+これは響いた。著者は9歳のとき2006年のCore 2 DuoでFinal Cutを動かしていた。SystemVersion.plistを編集して'Mac OS 69'と表示させた、それはセ○クスの数字だから。スティーブ・ジョブズの最後のキーノートを一人で拍手しながら見た。あの子に必要だったのは正しいコンピュータではなかった。どんなコンピュータでもよかった。
+***** Comments
+- この記事に感謝し、同意する。コンピュータを学びたいなら、手に入るものを何でも手に入れて学べばいい。
+- たくさん売れることを願う、Macエコシステムは若者が日常的に使うものよりコンピュータを学ぶのにずっと良いから。
+- これは事実だが、レビューのポイントとは全く違う。あるツールはあるタスクにより適している—レビューは選択の特権を持つ人が最適なものを見つけるのを助ける。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+이것은 당신을 위한 컴퓨터가 아닙니다
+***** TLDR
+599달러짜리 MacBook Neo에 대한 아름다운 에세이와 컴퓨터 리뷰가 틀린 점. 리뷰는 사용자를 분류하고 제품을 할당한다. 하지만 아이들은 올바른 도구로 시작하지 않는다. 그들은 손에 닿는 것을 잡고 뭔가가 부서질 때까지 밀어붙인다. Neo는 중요한 가격대에서 완전한 macOS 계약을 가지고 있다. Chromebook과 달리, 한계에 부딪힐 때 당신은 물리학을 배우고 있는 것이지, 제품 결정이 아니다.
+***** Take
+이건 다르게 와닿았다. 저자는 9살 때 2006년 Core 2 Duo에서 Final Cut을 돌렸다. SystemVersion.plist를 편집해서 'Mac OS 69'라고 표시했다, 그게 섹X 숫자니까. 스티브 잡스의 마지막 기조연설을 혼자 박수치며 봤다. 그 아이에게 필요한 건 올바른 컴퓨터가 아니었다. 어떤 컴퓨터든 필요했다.
+***** Comments
+- 이 글에 감사하고 동의한다. 컴퓨터를 배우고 싶다면, 손에 닿는 것을 잡고 배워라.
+- 이게 많이 팔렸으면 좋겠다, Mac 생태계가 대부분의 젊은이들이 매일 사용하는 것보다 컴퓨터를 배우기에 훨씬 낫기 때문에.
+- 이건 사실이지만 리뷰의 포인트가 전혀 아니다. 어떤 도구는 어떤 작업에 더 적합하다—리뷰는 선택의 특권을 가진 사람들이 최적의 것을 찾도록 돕는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Esta no es la computadora para ti
+***** TLDR
+Un hermoso ensayo sobre la MacBook Neo de $599 y lo que las reseñas de computadoras entienden mal. Las reseñas categorizan usuarios y asignan productos. Pero los niños no empiezan con la herramienta correcta. Toman lo que hay disponible y lo presionan hasta que algo se rompe. La Neo tiene el contrato completo de macOS a un precio que importa. A diferencia de un Chromebook, cuando llegas a sus límites, estás aprendiendo física, no decisiones de producto.
+***** Take
+Esto pegó diferente. El autor corría Final Cut en un Core 2 Duo de 2006 a los nueve años. Editó SystemVersion.plist para que dijera 'Mac OS 69' porque ese es el número del sex⁎. Aplaudió solo viendo el último keynote de Steve Jobs. Ese niño no necesitaba la computadora correcta. Necesitaba cualquier computadora.
+***** Comments
+- Aprecio el artículo y estoy de acuerdo. Si tienes deseo de aprender computadoras, solo agarra lo que puedas y aprende.
+- Espero que vendan muchas de estas, porque el ecosistema Mac es mejor para aprender sobre computadoras que lo que la mayoría de jóvenes usa diariamente.
+- Esto es cierto pero no es para nada el punto de una reseña. Algunas herramientas son más adecuadas para algunas tareas— las reseñas ayudan a quienes tienen el privilegio de elegir a encontrar las mejores para ellos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das ist nicht der Computer für dich
+***** TLDR
+Ein wunderschöner Essay über das $599 MacBook Neo und was Computerrezensionen falsch machen. Rezensionen kategorisieren Nutzer und weisen Produkte zu. Aber Kinder fangen nicht mit dem richtigen Werkzeug an. Sie nehmen, was verfügbar ist, und drücken darauf, bis etwas bricht. Das Neo hat den vollständigen macOS-Vertrag zu einem Preis, der zählt. Anders als ein Chromebook, wenn du an seine Grenzen stößt, lernst du Physik, nicht Produktentscheidungen.
+***** Take
+Das traf anders. Der Autor ließ Final Cut auf einem 2006er Core 2 Duo im Alter von neun Jahren laufen. Bearbeitete SystemVersion.plist, damit es 'Mac OS 69' anzeigte, weil das die Se⁎-Zahl ist. Klatschte allein beim letzten Keynote von Steve Jobs. Dieses Kind brauchte nicht den richtigen Computer. Es brauchte irgendeinen Computer.
+***** Comments
+- Ich schätze den Artikel und stimme zu. Wenn du den Wunsch hast, Computer zu lernen, schnapp dir einfach, was du kannst, und lerne.
+- Ich hoffe, sie verkaufen viele davon, weil das Mac-Ökosystem einfach besser zum Lernen über Computer ist als das, was die meisten jungen Leute täglich benutzen.
+- Das stimmt, aber das ist überhaupt nicht der Punkt einer Rezension. Manche Werkzeuge sind für manche Aufgaben besser geeignet— Rezensionen helfen denen mit dem Privileg der Wahl, die besten für sich zu finden.
