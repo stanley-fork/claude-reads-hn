@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-03-13 11:00:00 UT UTC
+#+DATE: 2026-03-13T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+AWS patches decade-old bucket squatting, Sweden gets hacked, and HN reminisces about modems
+
+* Highlights
+- Bucketsquatting: AWS finally kills the name-squatting loophole after 10 years
+- Sweden: CGI Sverige breach exposes e-government source code and PII
+- BBS Nostalgia: Software Creations photo triggers collective modem memories
+
+* Stories
+
+** Bucketsquatting is (finally) dead :aws:security:s3:cloud:
+:PROPERTIES:
+:ID:       47361913
+:URL:      https://onecloudplease.com/blog/bucketsquatting-is-finally-dead
+:HN_URL:   https://news.ycombinator.com/item?id=47361913
+:POINTS:   86
+:COMMENTS: 36
+:BY:       boyter
+:END:
+
+*** TLDR
+AWS has finally fixed bucketsquatting after a decade of Ian Mckay's advocacy. S3 bucket names are globally unique, so when deleted, attackers could register the same name and intercept traffic. AWS now recommends including account IDs in bucket names to prevent this. The fix changes naming conventions across the entire AWS ecosystem.
+
+*** Take
+It only took AWS 10 years to solve a problem that every sysadmin with a deleted bucket learned the hard way. Include your account ID in bucket names or enjoy your surprise data exfiltration.
+
+*** Comments
+
+**** josephg
+:PROPERTIES:
+:COMMENT_ID: 47362001
+:END:
+Package names, bucket names, github accounts should use Discord-style naming: @sometag-xxxx with a random 4-digit code. Democratizes the namespace since nobody can 'own' the prefix.
+
+**** vhab
+:PROPERTIES:
+:COMMENT_ID: 47362050
+:END:
+Author misunderstood Azure Storage. Account names are the equivalent of S3 bucket names and are still globally unique. This is still a concern there.
+
+**** iknownothow
+:PROPERTIES:
+:COMMENT_ID: 47362100
+:END:
+Excited for IaC tools like Terraform to incorporate this as default behavior. Currently they use predictable naming which is exactly what attackers exploit.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Bucketsquatting终于死了
+***** TLDR
+经过十年的倡导，AWS终于修复了bucketsquatting问题。S3存储桶名称全球唯一，删除后攻击者可以注册相同名称并拦截流量。AWS现在建议在存储桶名称中包含账户ID。
+***** Take
+AWS花了10年才解决这个问题，每个删过存储桶的运维早就学到教训了。把账户ID加到存储桶名里，否则就等着数据泄露吧。
+***** Comments
+- 包名、存储桶名、GitHub账号应该用Discord风格：@sometag-xxxx加随机4位数。没人能'拥有'前缀，命名空间更民主。
+- 作者误解了Azure存储。账户名相当于S3存储桶名，仍然是全局唯一的。这在那里仍然是个问题。
+- 期待Terraform等IaC工具将此作为默认行为。目前它们使用可预测的命名，正是攻击者利用的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Bucketsquattingがついに終わった
+***** TLDR
+Ian Mckayの10年の提唱の末、AWSがついにbucketsquattingを修正。S3バケット名はグローバルに一意なので、削除後に攻撃者が同名で登録してトラフィックを傍受できた。AWSは今後アカウントIDをバケット名に含めることを推奨。
+***** Take
+AWSが10年かけて解決した問題を、バケット削除経験者は皆痛感済み。アカウントIDを入れるか、データ漏洩をお楽しみください。
+***** Comments
+- パッケージ名、バケット名、GitHubアカウントはDiscord式に：@sometag-xxxxとランダム4桁コード。誰もプレフィックスを'所有'できず、名前空間が民主化される。
+- 著者はAzure Storageを誤解している。アカウント名はS3バケット名と同等で、依然としてグローバルに一意。これはまだ問題。
+- TerraformなどのIaCツールがこれをデフォルトにするのが楽しみ。現在は予測可能な命名で、攻撃者が狙い撃ちしている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Bucketsquatting이 드디어 끝났다
+***** TLDR
+Ian Mckay의 10년간의 노력 끝에 AWS가 드디어 bucketsquatting을 수정했다. S3 버킷 이름은 전역적으로 고유해서 삭제 후 공격자가 같은 이름을 등록해 트래픽을 가로챌 수 있었다. AWS는 이제 버킷 이름에 계정 ID를 포함할 것을 권장한다.
+***** Take
+AWS가 10년 걸려 해결한 문제를, 버킷 삭제 경험자들은 이미 다 알고 있었다. 계정 ID를 포함시키거나 데이터 유출을 즐기시길.
+***** Comments
+- 패키지명, 버킷명, GitHub 계정은 Discord 스타일로: @sometag-xxxx에 랜덤 4자리 코드. 아무도 접두사를 '소유'할 수 없어 네임스페이스가 민주화된다.
+- 저자가 Azure Storage를 오해했다. 계정 이름은 S3 버킷 이름과 동등하며 여전히 전역적으로 고유하다. 여전히 문제다.
+- Terraform 같은 IaC 도구가 이를 기본값으로 채택하길 기대한다. 현재는 예측 가능한 명명을 사용해 공격자가 악용한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Bucketsquatting por fin ha muerto
+***** TLDR
+AWS finalmente arregló bucketsquatting después de una década de promoción de Ian Mckay. Los nombres de buckets S3 son globalmente únicos, así que al eliminarse, los atacantes podían registrar el mismo nombre e interceptar tráfico. AWS ahora recomienda incluir IDs de cuenta en los nombres de buckets.
+***** Take
+AWS tardó 10 años en resolver un problema que todos los sysadmins con buckets eliminados aprendieron por las malas. Incluye tu ID de cuenta o disfruta de tu exfiltración de datos sorpresa.
+***** Comments
+- Los nombres de paquetes, buckets y cuentas de GitHub deberían usar el estilo Discord: @sometag-xxxx con un código aleatorio de 4 dígitos. Democratiza el espacio de nombres ya que nadie puede 'poseer' el prefijo.
+- El autor malinterpretó Azure Storage. Los nombres de cuenta son equivalentes a los nombres de bucket S3 y siguen siendo globalmente únicos. Esto sigue siendo un problema allí.
+- Emocionado por que herramientas IaC como Terraform incorporen esto como comportamiento predeterminado. Actualmente usan nomenclatura predecible que es exactamente lo que explotan los atacantes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Bucketsquatting ist endlich tot
+***** TLDR
+AWS hat Bucketsquatting nach einem Jahrzehnt der Fürsprache von Ian Mckay endlich behoben. S3-Bucket-Namen sind global eindeutig, sodass Angreifer nach dem Löschen denselben Namen registrieren und Traffic abfangen konnten. AWS empfiehlt jetzt, Account-IDs in Bucket-Namen aufzunehmen.
+***** Take
+AWS brauchte 10 Jahre, um ein Problem zu lösen, das jeder Sysadmin mit einem gelöschten Bucket auf die harte Tour gelernt hat. Account-ID in Bucket-Namen einbauen oder überraschende Datenexfiltration genießen.
+***** Comments
+- Paketnamen, Bucket-Namen, GitHub-Konten sollten Discord-Stil verwenden: @sometag-xxxx mit zufälligem 4-stelligem Code. Demokratisiert den Namensraum, da niemand das Präfix 'besitzen' kann.
+- Der Autor hat Azure Storage missverstanden. Kontonamen entsprechen S3-Bucket-Namen und sind immer noch global eindeutig. Das ist dort immer noch ein Problem.
+- Freue mich, wenn IaC-Tools wie Terraform dies als Standardverhalten übernehmen. Derzeit verwenden sie vorhersagbare Benennung, was Angreifer genau ausnutzen.
+** Source code of Swedish e-government services has been leaked :security:government:breach:sweden:
+:PROPERTIES:
+:ID:       47362350
+:URL:      https://darkwebinformer.com/full-source-code-of-swedens-e-government-platform-leaked-from-compromised-cgi-sverige-infrastructure/
+:HN_URL:   https://news.ycombinator.com/item?id=47362350
+:POINTS:   28
+:COMMENTS: 14
+:BY:       tavro
+:END:
+
+*** TLDR
+CGI Sverige, a major IT contractor for Swedish government services, was compromised. The full source code of Sweden's e-government platform was leaked, along with citizen PII databases and electronic signing documents being sold separately on the dark web.
+
+*** Take
+Nothing says 'we take security seriously' like outsourcing your entire government IT infrastructure to a contractor who then gets pwned. The source code leak is almost the least concerning part when PII databases are being auctioned off.
+
+*** Comments
+
+**** robertlagrant
+:PROPERTIES:
+:COMMENT_ID: 47362400
+:END:
+The source code is the least of it! Citizen PII databases and electronic signing documents were also collected but are being sold separately.
+
+**** noosphr
+:PROPERTIES:
+:COMMENT_ID: 47362450
+:END:
+I like paper documents for this very reason. It's very hard to steal everyone's documents when they weigh about the same as a train.
+
+**** teroshan
+:PROPERTIES:
+:COMMENT_ID: 47362500
+:END:
+Does anyone know if the source code for Swedish Armed Forces Team Test is in the leak? It was a fun collaborative flash-style game that got popular in my friend circle.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+瑞典电子政务服务源代码被泄露
+***** TLDR
+瑞典政府服务的主要IT承包商CGI Sverige遭到入侵。瑞典电子政务平台的完整源代码被泄露，公民个人身份信息数据库和电子签名文件正在暗网上单独出售。
+***** Take
+没有什么比把整个政府IT基础设施外包给一个被黑的承包商更能说明'我们重视安全'了。当PII数据库被拍卖时，源代码泄露几乎是最不值得担心的部分。
+***** Comments
+- 源代码只是冰山一角！公民PII数据库和电子签名文件也被收集，正在单独出售。
+- 这就是为什么我喜欢纸质文件。当文件重量和火车差不多时，很难偷走所有人的文件。
+- 有人知道泄露的内容里有没有瑞典武装部队Team Test的源代码吗？那是个在我朋友圈里很流行的协作flash游戏。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+スウェーデン電子政府サービスのソースコードが流出
+***** TLDR
+スウェーデン政府サービスの主要ITコントラクターCGI Sverigeが侵害された。スウェーデン電子政府プラットフォームの完全なソースコードが流出し、市民のPIIデータベースと電子署名文書がダークウェブで別売りされている。
+***** Take
+政府IT基盤全体を侵害されたコントラクターに外注することほど「セキュリティを重視しています」というメッセージはない。PIIデータベースがオークションされている時、ソースコード流出はほぼ最も心配のない部分。
+***** Comments
+- ソースコードなんて大したことない！市民PIIデータベースと電子署名文書も収集され、別売りされている。
+- こういう理由で紙の書類が好き。書類が電車と同じ重さなら、全員の書類を盗むのは非常に難しい。
+- 流出にスウェーデン軍のTeam Testのソースコードあるか知ってる人いる？友達の間で人気だった楽しい協力型flashゲームだった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+스웨덴 전자정부 서비스 소스코드 유출
+***** TLDR
+스웨덴 정부 서비스의 주요 IT 계약업체 CGI Sverige가 침해당했다. 스웨덴 전자정부 플랫폼의 전체 소스코드가 유출되었고, 시민 PII 데이터베이스와 전자서명 문서가 다크웹에서 별도 판매되고 있다.
+***** Take
+'보안을 중시합니다'를 보여주는 최고의 방법은 해킹당한 계약업체에 정부 IT 인프라 전체를 외주하는 것. PII 데이터베이스가 경매에 올라올 때 소스코드 유출은 거의 가장 덜 걱정되는 부분이다.
+***** Comments
+- 소스코드는 시작일 뿐! 시민 PII 데이터베이스와 전자서명 문서도 수집되어 별도 판매 중.
+- 이래서 종이 문서가 좋다. 문서 무게가 기차만큼 나가면 모든 사람의 문서를 훔치기 매우 어렵다.
+- 유출된 내용에 스웨덴 군대 Team Test 소스코드 있는지 아는 사람? 친구들 사이에서 인기 있던 재미있는 협동 플래시 게임이었는데.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El código fuente de los servicios de gobierno electrónico de Suecia ha sido filtrado
+***** TLDR
+CGI Sverige, un importante contratista de TI para servicios gubernamentales suecos, fue comprometido. El código fuente completo de la plataforma de gobierno electrónico de Suecia fue filtrado, junto con bases de datos de PII ciudadano y documentos de firma electrónica que se venden por separado en la dark web.
+***** Take
+Nada dice 'nos tomamos la seguridad en serio' como externalizar toda tu infraestructura de TI gubernamental a un contratista que luego es hackeado. La filtración del código fuente es casi la parte menos preocupante cuando las bases de datos de PII están siendo subastadas.
+***** Comments
+- ¡El código fuente es lo de menos! Las bases de datos de PII ciudadano y documentos de firma electrónica también fueron recolectados pero se venden por separado.
+- Me gustan los documentos de papel por esta misma razón. Es muy difícil robar los documentos de todos cuando pesan lo mismo que un tren.
+- ¿Alguien sabe si el código fuente de Swedish Armed Forces Team Test está en la filtración? Era un juego colaborativo estilo flash muy divertido que se hizo popular en mi círculo de amigos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Quellcode der schwedischen E-Government-Dienste wurde geleakt
+***** TLDR
+CGI Sverige, ein wichtiger IT-Auftragnehmer für schwedische Regierungsdienste, wurde kompromittiert. Der vollständige Quellcode der schwedischen E-Government-Plattform wurde geleakt, zusammen mit Bürger-PII-Datenbanken und elektronischen Signaturdokumenten, die separat im Darknet verkauft werden.
+***** Take
+Nichts sagt 'wir nehmen Sicherheit ernst' wie die gesamte Regierungs-IT-Infrastruktur an einen Auftragnehmer auszulagern, der dann gehackt wird. Das Quellcode-Leak ist fast der am wenigsten besorgniserregende Teil, wenn PII-Datenbanken versteigert werden.
+***** Comments
+- Der Quellcode ist das Geringste! Bürger-PII-Datenbanken und elektronische Signaturdokumente wurden ebenfalls gesammelt, werden aber separat verkauft.
+- Ich mag Papierdokumente genau aus diesem Grund. Es ist sehr schwer, alle Dokumente zu stehlen, wenn sie ungefähr so viel wiegen wie ein Zug.
+- Weiß jemand, ob der Quellcode für Swedish Armed Forces Team Test im Leak ist? Das war ein lustiges kollaboratives Flash-Spiel, das in meinem Freundeskreis beliebt war.
+** Executing programs inside transformers with exponentially faster inference :ai:transformers:research:computing:
+:PROPERTIES:
+:ID:       47348275
+:URL:      https://www.percepta.ai/blog/can-llms-be-computers
+:HN_URL:   https://news.ycombinator.com/item?id=47348275
+:POINTS:   121
+:COMMENTS: 26
+:BY:       u1hcw9nx
+:END:
+
+*** TLDR
+Researchers built a transformer that can execute programs directly instead of handing computation off to external tools. The model emits a program and then executes it internally, with attention that scales logarithmically with token count by only exploring the convex hull in 2D space. A clever trick for dynamic compute allocation inside the model itself.
+
+*** Take
+So we're teaching models to be their own calculators instead of using actual calculators. The 'can LLMs be computers' question is a bit like asking if your toaster can be a car. Sure, with enough engineering, but why?
+
+*** Comments
+
+**** bonoboTP
+:PROPERTIES:
+:COMMENT_ID: 47348300
+:END:
+This shows the downside of using AI to write up your project. I see the eloquent sentences but don't get the message. The model specifies computation then waits for external system - but this one executes it itself.
+
+**** rebolek
+:PROPERTIES:
+:COMMENT_ID: 47348350
+:END:
+The original title is 'Can LLMs be computers?' But the right question is, should they?
+
+**** btown
+:PROPERTIES:
+:COMMENT_ID: 47348400
+:END:
+This is way cooler than just computation. You can have your model switch dynamically to attention that scales with log of token count by only exploring the convex hull in 2D space.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+在transformer内部执行程序，推理速度指数级提升
+***** TLDR
+研究人员构建了一个可以直接执行程序的transformer，而不是将计算交给外部工具。模型发出程序然后在内部执行，注意力机制通过只探索二维空间的凸包来实现与token数量对数级缩放。一个在模型内部动态分配计算的巧妙技巧。
+***** Take
+我们在教模型当自己的计算器，而不是用真正的计算器。'LLM能成为计算机吗'这个问题有点像问你的烤面包机能不能变成汽车。当然可以，只要工程量够大，但为什么呢？
+***** Comments
+- 这展示了用AI写项目介绍的弊端。我看到了优美的句子但没懂信息。模型指定计算然后等待外部系统——但这个是自己执行。
+- 原标题是'LLM能成为计算机吗？'但正确的问题是，它们应该吗？
+- 这比单纯的计算酷多了。你可以让模型动态切换到与token数量对数级缩放的注意力，只需探索二维空间的凸包。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+transformer内部でプログラムを実行し、推論を指数関数的に高速化
+***** TLDR
+研究者たちが外部ツールに計算を渡す代わりに直接プログラムを実行できるtransformerを構築。モデルはプログラムを出力して内部で実行し、2D空間の凸包のみを探索することでトークン数の対数でスケールするアテンションを実現。モデル内部での動的計算割り当ての巧妙なトリック。
+***** Take
+本物の計算機を使う代わりに、モデルに自前の計算機になることを教えている。「LLMはコンピュータになれるか」という質問は、トースターが車になれるかと聞くようなもの。十分なエンジニアリングがあれば可能だが、なぜ？
+***** Comments
+- AIでプロジェクトを書き上げることの欠点が示されている。雄弁な文章は見えるがメッセージが伝わらない。モデルが計算を指定して外部システムを待つ——でもこれは自分で実行する。
+- 元のタイトルは「LLMはコンピュータになれるか？」だが、正しい質問は、なるべきか？
+- これは単なる計算よりずっとクール。トークン数の対数でスケールするアテンションに動的に切り替えられる、2D空間の凸包を探索するだけで。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+transformer 내부에서 프로그램 실행, 추론 속도 기하급수적 향상
+***** TLDR
+연구자들이 외부 도구에 계산을 넘기는 대신 직접 프로그램을 실행할 수 있는 transformer를 구축했다. 모델이 프로그램을 출력하고 내부에서 실행하며, 2D 공간의 볼록 껍질만 탐색하여 토큰 수의 로그에 비례하는 어텐션을 구현한다. 모델 내부에서 동적 계산 할당을 위한 영리한 트릭.
+***** Take
+실제 계산기를 쓰는 대신 모델에게 자체 계산기가 되도록 가르치고 있다. 'LLM이 컴퓨터가 될 수 있나'라는 질문은 토스터가 자동차가 될 수 있냐고 묻는 것과 비슷하다. 충분한 엔지니어링으로 가능하지만, 왜?
+***** Comments
+- AI로 프로젝트를 작성하는 것의 단점을 보여준다. 유려한 문장은 보이지만 메시지가 전달되지 않는다. 모델이 계산을 지정하고 외부 시스템을 기다린다 - 하지만 이건 자체 실행한다.
+- 원제는 'LLM이 컴퓨터가 될 수 있나?'지만 올바른 질문은, 되어야 하나?
+- 이건 단순한 계산보다 훨씬 쿨하다. 2D 공간의 볼록 껍질만 탐색해서 토큰 수 로그에 비례하는 어텐션으로 동적 전환 가능.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ejecutando programas dentro de transformers con inferencia exponencialmente más rápida
+***** TLDR
+Investigadores construyeron un transformer que puede ejecutar programas directamente en lugar de delegar cálculos a herramientas externas. El modelo emite un programa y luego lo ejecuta internamente, con atención que escala logarítmicamente con el conteo de tokens explorando solo el casco convexo en espacio 2D. Un truco ingenioso para asignación dinámica de cómputo dentro del modelo.
+***** Take
+Estamos enseñando a los modelos a ser sus propias calculadoras en lugar de usar calculadoras reales. La pregunta '¿pueden los LLM ser computadoras?' es como preguntar si tu tostadora puede ser un coche. Claro, con suficiente ingeniería, pero ¿por qué?
+***** Comments
+- Esto muestra la desventaja de usar IA para escribir tu proyecto. Veo oraciones elocuentes pero no capto el mensaje. El modelo especifica el cálculo y espera al sistema externo - pero este lo ejecuta él mismo.
+- El título original es '¿Pueden los LLM ser computadoras?' Pero la pregunta correcta es, ¿deberían serlo?
+- Esto es mucho más genial que solo cómputo. Puedes hacer que tu modelo cambie dinámicamente a atención que escala con el log del conteo de tokens explorando solo el casco convexo en 2D.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Programme in Transformern ausführen mit exponentiell schnellerer Inferenz
+***** TLDR
+Forscher bauten einen Transformer, der Programme direkt ausführen kann, anstatt Berechnungen an externe Tools zu übergeben. Das Modell gibt ein Programm aus und führt es dann intern aus, mit Attention, die logarithmisch mit der Token-Anzahl skaliert, indem nur die konvexe Hülle im 2D-Raum erkundet wird. Ein cleverer Trick für dynamische Rechenallokation innerhalb des Modells.
+***** Take
+Wir bringen Modellen bei, ihre eigenen Taschenrechner zu sein, anstatt echte Taschenrechner zu verwenden. Die Frage 'Können LLMs Computer sein?' ist wie zu fragen, ob dein Toaster ein Auto sein kann. Klar, mit genug Engineering, aber warum?
+***** Comments
+- Das zeigt die Nachteile der Verwendung von KI zum Schreiben deines Projekts. Ich sehe eloquente Sätze, aber verstehe die Botschaft nicht. Das Modell spezifiziert die Berechnung und wartet auf externes System - aber dieses führt es selbst aus.
+- Der Originaltitel ist 'Können LLMs Computer sein?' Aber die richtige Frage ist, sollten sie?
+- Das ist viel cooler als nur Berechnung. Du kannst dein Modell dynamisch zu Attention wechseln lassen, die mit dem Log der Token-Anzahl skaliert, indem nur die konvexe Hülle im 2D-Raum erkundet wird.
+** An old photo of a large BBS (2022) :history:bbs:nostalgia:retro:
+:PROPERTIES:
+:ID:       47356017
+:URL:      https://rachelbythebay.com/w/2022/01/26/swcbbs/
+:HN_URL:   https://news.ycombinator.com/item?id=47356017
+:POINTS:   194
+:COMMENTS: 134
+:BY:       xbryanx
+:END:
+
+*** TLDR
+A nostalgic look at Software Creations BBS, the bulletin board system that served as the distribution backbone for Apogee/3D Realms shareware games before the commercial internet. Photo shows racks of modems and phone lines that powered what was essentially the Steam of the early 90s.
+
+*** Take
+134 comments of boomers and elder millennials one-upping each other about their modem speeds and local BBSes. Peak nostalgia content. Someone is definitely running a BBS right now just to prove they still can.
+
+*** Comments
+
+**** SneakyMission
+:PROPERTIES:
+:COMMENT_ID: 47356100
+:END:
+Higher resolution photo available at web.archive.org/web/20230531042903im_/static...
+
+**** asdefghyk
+:PROPERTIES:
+:COMMENT_ID: 47356150
+:END:
+Scott Miller from Apogee/3D Realms posted about this: 'BBSs were the backbone of the online world before the Internet came along in 1995. Apogee teamed up with Dan Linton's Software Creations BBS.'
+
+**** gxd
+:PROPERTIES:
+:COMMENT_ID: 47356200
+:END:
+Nothing replaces the camaraderie of small local BBSs. The large ones resembled modern internet forums more. I featured BBSs in my sci-fi game because I miss them.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+一张大型BBS的老照片（2022年文章）
+***** TLDR
+怀旧回顾Software Creations BBS，这个公告板系统在商业互联网之前是Apogee/3D Realms共享软件游戏的分发骨干。照片展示了调制解调器和电话线机架，这基本上就是90年代初的Steam。
+***** Take
+134条评论里都是老一辈和千禧一代在比谁的调制解调器速度快、谁的本地BBS更厉害。怀旧内容巅峰。肯定有人现在就在运行BBS，就为了证明他们还能做到。
+***** Comments
+- 更高分辨率的照片可以在web.archive.org/web/20230531042903im_/static找到...
+- Apogee/3D Realms的Scott Miller发帖说：'在1995年互联网出现之前，BBS是网络世界的骨干。Apogee与Dan Linton的Software Creations BBS合作。'
+- 没有什么能取代小型本地BBS的友情。大型BBS更像现代互联网论坛。我在科幻游戏里加入了BBS元素，因为我想念它们。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+大規模BBSの古い写真（2022年記事）
+***** TLDR
+Software Creations BBSのノスタルジックな振り返り。商用インターネット以前、Apogee/3D Realmsシェアウェアゲームの配布バックボーンだった掲示板システム。写真は90年代初頭のSteamとも言えるモデムと電話回線のラックを映している。
+***** Take
+134件のコメントでブーマーと年長ミレニアル世代がモデム速度とローカルBBSを自慢し合っている。ノスタルジアコンテンツの頂点。誰かが今もBBSを運営しているはず、まだできることを証明するために。
+***** Comments
+- 高解像度写真がweb.archive.org/web/20230531042903im_/staticで利用可能...
+- Apogee/3D RealmsのScott Millerが投稿：「1995年にインターネットが来る前、BBSはオンライン世界のバックボーンだった。ApogeeはDan LintonのSoftware Creations BBSと提携した。」
+- 小さなローカルBBSの仲間意識に代わるものはない。大きなものは現代のネットフォーラムに似ていた。懐かしいからSFゲームにBBSを入れた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+대형 BBS의 오래된 사진 (2022년 글)
+***** TLDR
+Software Creations BBS를 추억하는 글. 상용 인터넷 이전에 Apogee/3D Realms 셰어웨어 게임의 배포 백본 역할을 했던 게시판 시스템. 사진은 90년대 초 Steam이라 할 수 있는 모뎀과 전화선 랙을 보여준다.
+***** Take
+134개의 댓글에서 부머와 밀레니얼 세대가 모뎀 속도와 로컬 BBS 자랑 대결을 벌이고 있다. 향수 콘텐츠의 정점. 누군가는 지금도 BBS를 운영하고 있을 거다, 아직 할 수 있다는 걸 증명하려고.
+***** Comments
+- 고해상도 사진은 web.archive.org/web/20230531042903im_/static에서 볼 수 있다...
+- Apogee/3D Realms의 Scott Miller가 올린 글: 'BBS는 1995년 인터넷이 오기 전 온라인 세계의 백본이었다. Apogee는 Dan Linton의 Software Creations BBS와 협력했다.'
+- 작은 로컬 BBS의 동료애를 대체할 수 있는 건 없다. 큰 BBS는 현대 인터넷 포럼과 더 비슷했다. 그리워서 내 SF 게임에 BBS를 넣었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Una foto antigua de un BBS grande (artículo de 2022)
+***** TLDR
+Una mirada nostálgica a Software Creations BBS, el sistema de tablón de anuncios que sirvió como columna vertebral de distribución para los juegos shareware de Apogee/3D Realms antes del internet comercial. La foto muestra racks de módems y líneas telefónicas que alimentaban lo que era esencialmente el Steam de principios de los 90.
+***** Take
+134 comentarios de boomers y millennials mayores compitiendo sobre sus velocidades de módem y BBSs locales. Contenido nostálgico puro. Alguien definitivamente está ejecutando un BBS ahora mismo solo para demostrar que todavía puede.
+***** Comments
+- Foto de mayor resolución disponible en web.archive.org/web/20230531042903im_/static...
+- Scott Miller de Apogee/3D Realms publicó sobre esto: 'Los BBS eran la columna vertebral del mundo online antes de que llegara Internet en 1995. Apogee se asoció con el BBS Software Creations de Dan Linton.'
+- Nada reemplaza la camaradería de los pequeños BBS locales. Los grandes se parecían más a los foros de internet modernos. Incluí BBS en mi juego de ciencia ficción porque los extraño.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein altes Foto eines großen BBS (2022 Artikel)
+***** TLDR
+Ein nostalgischer Blick auf Software Creations BBS, das Bulletin Board System, das als Vertriebsrückgrat für Apogee/3D Realms Shareware-Spiele vor dem kommerziellen Internet diente. Das Foto zeigt Racks von Modems und Telefonleitungen, die im Wesentlichen das Steam der frühen 90er Jahre antrieben.
+***** Take
+134 Kommentare von Boomern und älteren Millennials, die sich gegenseitig mit ihren Modemgeschwindigkeiten und lokalen BBSs übertrumpfen. Peak-Nostalgie-Content. Jemand betreibt definitiv gerade ein BBS, nur um zu beweisen, dass er es noch kann.
+***** Comments
+- Foto in höherer Auflösung verfügbar unter web.archive.org/web/20230531042903im_/static...
+- Scott Miller von Apogee/3D Realms postete darüber: 'BBSs waren das Rückgrat der Online-Welt, bevor das Internet 1995 kam. Apogee tat sich mit Dan Lintons Software Creations BBS zusammen.'
+- Nichts ersetzt die Kameradschaft der kleinen lokalen BBSs. Die großen ähnelten mehr den modernen Internet-Foren. Ich habe BBSs in mein Sci-Fi-Spiel eingebaut, weil ich sie vermisse.
+** Ceno, browse the web without internet access :censorship:p2p:privacy:browser:
+:PROPERTIES:
+:ID:       47361313
+:URL:      https://ceno.app/en/index.html
+:HN_URL:   https://news.ycombinator.com/item?id=47361313
+:POINTS:   26
+:COMMENTS: 6
+:BY:       mohsen1
+:END:
+
+*** TLDR
+Ceno is a browser for censored regions that uses BitTorrent-style peer-to-peer caching. In Public mode, it retrieves pages from other users' caches via the BitTorrent network. In Personal mode, it contacts 'Injectors' to fetch and deliver content. Designed for people behind restrictive firewalls.
+
+*** Take
+The 'browse without internet' headline is a bit misleading since you still need some network connectivity to reach peers. It's really 'browse without direct server access' which is quite different but still useful for the Great Firewall crowd.
+
+*** Comments
+
+**** keyle
+:PROPERTIES:
+:COMMENT_ID: 47361350
+:END:
+In Public mode, Ceno looks into BitTorrent network for recently shared pages. If not available, it contacts Injectors to request and deliver the site. Personal mode only contacts Injectors directly.
+
+**** voidUpdate
+:PROPERTIES:
+:COMMENT_ID: 47361400
+:END:
+Am I reading this right? You still need internet to retrieve pages from someone else. Not sure how this reduces data costs - same data going to your device, just from somewhere else.
+
+**** karel-3d
+:PROPERTIES:
+:COMMENT_ID: 47361450
+:END:
+How is Ceno making sure someone isn't poisoning the cache? How am I sure when reading from cache that it's really what the site served and not modified? Is it signed by the original SSL cert?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Ceno，无需互联网访问即可浏览网页
+***** TLDR
+Ceno是一款面向审查地区的浏览器，使用类似BitTorrent的点对点缓存。在公共模式下，它通过BitTorrent网络从其他用户的缓存中获取页面。在个人模式下，它联系'注入器'来获取和传送内容。专为防火墙后的用户设计。
+***** Take
+'无需互联网浏览'的标题有点误导，因为你仍需要网络连接来访问节点。实际上是'无需直接服务器访问浏览'，这很不一样，但对防火墙后的用户仍然有用。
+***** Comments
+- 在公共模式下，Ceno在BitTorrent网络中查找最近共享的页面。如果没有，它会联系注入器请求并传送网站。个人模式只直接联系注入器。
+- 我理解得对吗？你仍需要互联网才能从别人那里获取页面。不确定这如何减少数据成本——同样的数据进入你的设备，只是来源不同。
+- Ceno如何确保没人污染缓存？我怎么确定从缓存读取的内容确实是网站提供的而不是被修改过的？有原始SSL证书签名吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Ceno、インターネット接続なしでウェブを閲覧
+***** TLDR
+Cenoは検閲地域向けのブラウザで、BitTorrentスタイルのP2Pキャッシングを使用。パブリックモードではBitTorrentネットワーク経由で他のユーザーのキャッシュからページを取得。パーソナルモードでは「インジェクター」に連絡してコンテンツを取得・配信。制限的なファイアウォールの背後の人向け。
+***** Take
+「インターネットなしで閲覧」という見出しは少し誤解を招く、ピアに到達するにはネットワーク接続が必要だから。実際は「直接サーバーアクセスなしで閲覧」で、かなり違うがグレートファイアウォール組には有用。
+***** Comments
+- パブリックモードでは、CenoがBitTorrentネットワークで最近共有されたページを探す。なければインジェクターに連絡してサイトを要求・配信。パーソナルモードはインジェクターに直接連絡のみ。
+- 正しく読んでる？他の人からページを取得するにはまだインターネットが必要。これがどうデータコストを削減するのか不明——同じデータがデバイスに入る、ただ別の場所から。
+- Cenoはどうやってキャッシュ汚染を防いでる？キャッシュから読むとき、本当にサイトが提供したもので改ざんされてないとどう確認する？元のSSL証明書で署名されてる？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Ceno, 인터넷 없이 웹 브라우징
+***** TLDR
+Ceno는 검열 지역을 위한 브라우저로 BitTorrent 스타일의 P2P 캐싱을 사용한다. 공개 모드에서는 BitTorrent 네트워크를 통해 다른 사용자의 캐시에서 페이지를 가져온다. 개인 모드에서는 '인젝터'에 연락해 콘텐츠를 가져오고 전달한다. 제한적인 방화벽 뒤의 사람들을 위해 설계됨.
+***** Take
+'인터넷 없이 브라우징'이라는 제목은 약간 오해의 소지가 있다. 피어에 접근하려면 여전히 네트워크 연결이 필요하기 때문이다. 실제로는 '직접 서버 접근 없이 브라우징'으로 꽤 다르지만 만리방화벽 사용자에게는 여전히 유용하다.
+***** Comments
+- 공개 모드에서 Ceno는 BitTorrent 네트워크에서 최근 공유된 페이지를 찾는다. 없으면 인젝터에 연락해 사이트를 요청하고 전달한다. 개인 모드는 인젝터에만 직접 연락한다.
+- 제대로 읽은 건가? 다른 사람에게서 페이지를 가져오려면 여전히 인터넷이 필요하다. 이게 어떻게 데이터 비용을 줄이는지 모르겠다 - 같은 데이터가 기기로 들어오는데, 그냥 다른 곳에서 올 뿐.
+- Ceno는 어떻게 캐시 오염을 방지하나? 캐시에서 읽을 때 정말 사이트가 제공한 것이고 수정되지 않았다고 어떻게 확인하나? 원본 SSL 인증서로 서명되나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ceno, navega por la web sin acceso a internet
+***** TLDR
+Ceno es un navegador para regiones censuradas que usa caché peer-to-peer estilo BitTorrent. En modo Público, recupera páginas de las cachés de otros usuarios vía la red BitTorrent. En modo Personal, contacta 'Inyectores' para obtener y entregar contenido. Diseñado para personas detrás de firewalls restrictivos.
+***** Take
+El titular 'navegar sin internet' es algo engañoso ya que aún necesitas conectividad de red para alcanzar peers. Realmente es 'navegar sin acceso directo al servidor' lo cual es bastante diferente pero aún útil para la gente del Gran Firewall.
+***** Comments
+- En modo Público, Ceno busca en la red BitTorrent páginas compartidas recientemente. Si no está disponible, contacta Inyectores para solicitar y entregar el sitio. El modo Personal solo contacta Inyectores directamente.
+- ¿Estoy leyendo bien? Aún necesitas internet para recuperar páginas de alguien más. No estoy seguro de cómo esto reduce costos de datos - los mismos datos van a tu dispositivo, solo de otro lugar.
+- ¿Cómo se asegura Ceno de que alguien no esté envenenando la caché? ¿Cómo estoy seguro al leer de la caché de que es realmente lo que el sitio sirvió y no fue modificado? ¿Está firmado por el certificado SSL original?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ceno, im Web surfen ohne Internetzugang
+***** TLDR
+Ceno ist ein Browser für zensierte Regionen, der BitTorrent-ähnliches Peer-to-Peer-Caching verwendet. Im öffentlichen Modus ruft er Seiten aus den Caches anderer Nutzer über das BitTorrent-Netzwerk ab. Im persönlichen Modus kontaktiert er 'Injektoren', um Inhalte abzurufen und zu liefern. Konzipiert für Menschen hinter restriktiven Firewalls.
+***** Take
+Die Überschrift 'ohne Internet surfen' ist etwas irreführend, da man immer noch Netzwerkverbindung braucht, um Peers zu erreichen. Es ist wirklich 'ohne direkten Serverzugang surfen', was ziemlich anders ist, aber für die Great-Firewall-Crowd trotzdem nützlich.
+***** Comments
+- Im öffentlichen Modus sucht Ceno im BitTorrent-Netzwerk nach kürzlich geteilten Seiten. Falls nicht verfügbar, kontaktiert es Injektoren, um die Seite anzufordern und zu liefern. Persönlicher Modus kontaktiert nur direkt Injektoren.
+- Lese ich das richtig? Man braucht immer noch Internet, um Seiten von jemand anderem abzurufen. Nicht sicher, wie das Datenkosten reduziert - dieselben Daten gehen auf dein Gerät, nur von woanders.
+- Wie stellt Ceno sicher, dass niemand den Cache vergiftet? Wie bin ich sicher, dass beim Lesen aus dem Cache wirklich das steht, was die Seite geliefert hat, und es nicht modifiziert wurde? Ist es mit dem ursprünglichen SSL-Zertifikat signiert?
