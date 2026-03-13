@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-03-13 20:00:00 UT UTC
+#+DATE: 2026-03-13T20:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+NSA secrets, helium panic, Carmack defends AI training, and your laptop can finally run a 1B model
+
+* Highlights
+- CanIRun.ai: Browser tool tells you which local AI models your sad GPU can actually handle
+- Qatar helium shutdown: Chip fabs have two weeks before the noble gas runs out
+- Wyden Siren: Senator warns Section 702 interpretation will 'stun' Americans when declassified
+- Channel Surfer: YouTube but make it 1998 cable TV
+- Carmack vs OSS: AI training on open source is a gift, not theft
+
+* Stories
+
+** Can I run AI locally? :ai:local-llm:hardware:tools:
+:PROPERTIES:
+:ID:       47363754
+:URL:      https://www.canirun.ai/
+:HN_URL:   https://news.ycombinator.com/item?id=47363754
+:POINTS:   480
+:COMMENTS: 130
+:BY:       ricardbejarano
+:END:
+
+*** TLDR
+CanIRun.ai is a browser-based tool that detects your hardware via WebGPU and shows which AI models you can actually run locally. It ranks models from S-tier (TinyLlama at 1.1B) to F-tier (DeepSeek R1 at 671B) based on your RAM and GPU memory bandwidth. Spoiler: unless you have a server rack, most flagship models are too heavy.
+
+*** Take
+Finally, a website that tells you 'no' before you waste three hours downloading a 70B model that your MacBook Air will choke on. The brutal F-tier ratings for anything above 12B are doing God's work.
+
+*** Comments
+
+**** mark_l_watson
+:PROPERTIES:
+:COMMENT_ID: 47363801
+:END:
+I have spent a HUGE amount of time the last two years experimenting with local models. Small models like qwen3.5:9b can be fantastic for local tool use and information extraction.
+
+**** meatmanek
+:PROPERTIES:
+:COMMENT_ID: 47363855
+:END:
+This is estimating based on memory bandwidth/size of model, which is great for dense models, but MoE models like GPT-OSS-20b don't involve the entire model for every token.
+
+**** fraywing
+:PROPERTIES:
+:COMMENT_ID: 47363912
+:END:
+Still waiting for the 'Medusa' class AMD chips to build my own AI machine.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我能在本地运行AI吗?
+***** TLDR
+CanIRun.ai是一个基于浏览器的工具,通过WebGPU检测你的硬件,显示你实际能在本地运行哪些AI模型。它根据你的内存和GPU显存带宽,将模型从S级(TinyLlama 1.1B)到F级(DeepSeek R1 671B)进行排名。剧透:除非你有服务器机架,否则大多数旗舰模型都太重了。
+***** Take
+终于有个网站在你浪费三小时下载一个70B模型之前就告诉你'不行',你的MacBook Air会卡死的。对12B以上任何东西的残酷F级评分真是功德无量。
+***** Comments
+- 我花了大量时间实验本地模型。像qwen3.5:9b这样的小模型在本地工具使用和信息提取方面非常出色。
+- 这是基于内存带宽/模型大小的估算,对密集模型很准确,但MoE模型如GPT-OSS-20b并不是每个token都使用整个模型。
+- 还在等'美杜莎'级AMD芯片来组装我自己的AI机器。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ローカルでAIを動かせる?
+***** TLDR
+CanIRun.aiはWebGPUでハードウェアを検出し、実際にローカルで実行できるAIモデルを表示するブラウザベースのツール。RAMとGPUメモリ帯域幅に基づいて、モデルをSランク(TinyLlama 1.1B)からFランク(DeepSeek R1 671B)までランク付けする。ネタバレ:サーバーラックがない限り、ほとんどのフラッグシップモデルは重すぎる。
+***** Take
+ついに、MacBook Airが窒息する70Bモデルをダウンロードして3時間無駄にする前に「ダメ」と教えてくれるサイトが登場。12B以上のモデルへの残酷なFランク評価は神の仕事だ。
+***** Comments
+- ここ2年間、ローカルモデルの実験に膨大な時間を費やした。qwen3.5:9bのような小さなモデルは、ローカルツール使用や情報抽出に素晴らしい。
+- これはメモリ帯域幅/モデルサイズに基づく推定で、密なモデルには最適だが、GPT-OSS-20bのようなMoEモデルはすべてのトークンでモデル全体を使用しない。
+- まだ「メデューサ」クラスのAMDチップを待って、自分のAIマシンを組み立てたい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+로컬에서 AI를 실행할 수 있을까?
+***** TLDR
+CanIRun.ai는 WebGPU를 통해 하드웨어를 감지하고 실제로 로컬에서 실행 가능한 AI 모델을 보여주는 브라우저 기반 도구다. RAM과 GPU 메모리 대역폭을 기반으로 S등급(TinyLlama 1.1B)부터 F등급(DeepSeek R1 671B)까지 모델을 순위 매긴다. 스포일러: 서버 랙이 없으면 대부분의 플래그십 모델은 너무 무겁다.
+***** Take
+드디어 MacBook Air가 질식할 70B 모델을 다운로드하느라 3시간 낭비하기 전에 '안 돼'라고 말해주는 웹사이트가 나왔다. 12B 이상 모델에 대한 잔인한 F등급 평가는 신의 업적이다.
+***** Comments
+- 지난 2년간 로컬 모델 실험에 엄청난 시간을 보냈다. qwen3.5:9b 같은 작은 모델은 로컬 도구 사용과 정보 추출에 환상적이다.
+- 이것은 메모리 대역폭/모델 크기 기반 추정으로, 밀집 모델에는 좋지만 GPT-OSS-20b 같은 MoE 모델은 모든 토큰에 전체 모델을 사용하지 않는다.
+- 아직 '메두사' 클래스 AMD 칩을 기다리며 내 AI 머신을 만들려고 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Puedo ejecutar IA localmente?
+***** TLDR
+CanIRun.ai es una herramienta basada en navegador que detecta tu hardware via WebGPU y muestra qué modelos de IA puedes ejecutar localmente. Clasifica modelos desde nivel S (TinyLlama 1.1B) hasta nivel F (DeepSeek R1 671B) según tu RAM y ancho de banda de memoria GPU. Spoiler: a menos que tengas un rack de servidores, la mayoría de los modelos insignia son demasiado pesados.
+***** Take
+Por fin, un sitio web que te dice 'no' antes de que pierdas tres horas descargando un modelo de 70B con el que tu MacBook Air se ahogará. Las brutales calificaciones F para cualquier cosa por encima de 12B están haciendo el trabajo de Dios.
+***** Comments
+- He pasado una cantidad ENORME de tiempo los últimos dos años experimentando con modelos locales. Modelos pequeños como qwen3.5:9b pueden ser fantásticos para uso de herramientas locales y extracción de información.
+- Esto estima basándose en ancho de banda de memoria/tamaño del modelo, lo cual es genial para modelos densos, pero modelos MoE como GPT-OSS-20b no involucran todo el modelo para cada token.
+- Todavía esperando los chips AMD clase 'Medusa' para construir mi propia máquina de IA.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kann ich KI lokal ausführen?
+***** TLDR
+CanIRun.ai ist ein browserbasiertes Tool, das deine Hardware über WebGPU erkennt und zeigt, welche KI-Modelle du tatsächlich lokal ausführen kannst. Es ordnet Modelle von S-Tier (TinyLlama bei 1.1B) bis F-Tier (DeepSeek R1 bei 671B) basierend auf deinem RAM und GPU-Speicherbandbreite ein. Spoiler: Ohne Server-Rack sind die meisten Flaggschiff-Modelle zu schwer.
+***** Take
+Endlich eine Website, die dir 'nein' sagt, bevor du drei Stunden damit verschwendest, ein 70B-Modell herunterzuladen, an dem dein MacBook Air ersticken wird. Die brutalen F-Tier-Bewertungen für alles über 12B leisten Gottes Arbeit.
+***** Comments
+- Ich habe in den letzten zwei Jahren RIESIGE Mengen an Zeit damit verbracht, mit lokalen Modellen zu experimentieren. Kleine Modelle wie qwen3.5:9b können fantastisch für lokale Tool-Nutzung und Informationsextraktion sein.
+- Dies schätzt basierend auf Speicherbandbreite/Modellgröße, was für dichte Modelle großartig ist, aber MoE-Modelle wie GPT-OSS-20b verwenden nicht das gesamte Modell für jeden Token.
+- Warte immer noch auf die 'Medusa'-Klasse AMD-Chips, um meine eigene KI-Maschine zu bauen.
+** Qatar helium shutdown puts chip supply chain on a two-week clock :hardware:supply-chain:semiconductors:crisis:
+:PROPERTIES:
+:ID:       47363584
+:URL:      https://www.tomshardware.com/tech-industry/qatar-helium-shutdown-puts-chip-supply-chain-on-a-two-week-clock
+:HN_URL:   https://news.ycombinator.com/item?id=47363584
+:POINTS:   189
+:COMMENTS: 167
+:BY:       johnbarron
+:END:
+
+*** TLDR
+［From title + comments, article unreachable due to Jina rate limit］ Qatar's helium production shutdown is threatening chip manufacturing with a two-week supply crunch. Helium is critical for semiconductor fab cooling and testing. Industry scrambling as this noble gas can't be easily substituted.
+
+*** Take
+Of all the supply chain nightmares to keep chip execs up at night, 'we're running out of party balloon gas' wasn't on anyone's 2026 bingo card. Maybe someone should have thought about recycling helium instead of just venting it into the atmosphere for decades.
+
+*** Comments
+
+**** randerson
+:PROPERTIES:
+:COMMENT_ID: 47363601
+:END:
+I've developed a new fear of my 2025 desktop PC being damaged by a power surge, because it would cost at least $2K more to replace than I paid for it, assuming I can even find parts now.
+
+**** abeppu
+:PROPERTIES:
+:COMMENT_ID: 47363655
+:END:
+I remember hearing that medical imaging got pretty good at building systems that recycle helium. Does chip manufacturing not do this or are the losses at their scale still large enough that you need substantial constant supply?
+
+**** CrzyLngPwd
+:PROPERTIES:
+:COMMENT_ID: 47363702
+:END:
+This is, according to Hegseth, just something they planned for, since they knew what was going to happen.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+卡塔尔氦气停产让芯片供应链面临两周倒计时
+***** TLDR
+［根据标题和评论,文章因Jina速率限制无法访问］ 卡塔尔氦气生产停工正威胁着芯片制造,供应紧张将持续两周。氦气对半导体晶圆厂的冷却和测试至关重要。这种惰性气体无法轻易替代,行业正在争分夺秒。
+***** Take
+在所有让芯片高管夜不能寐的供应链噩梦中,'派对气球气体用完了'没有出现在任何人的2026年预测单上。也许有人应该考虑回收氦气,而不是几十年来一直把它排放到大气中。
+***** Comments
+- 我对2025年的台式电脑被电涌损坏产生了新的恐惧,因为更换它的成本至少比我购买时多花2000美元,假设现在还能找到配件的话。
+- 我记得听说医学成像在建造回收氦气的系统方面做得很好。芯片制造不这样做吗?还是他们的规模下损失仍然大到需要大量持续供应?
+- 根据Hegseth的说法,这是他们计划好的事情,因为他们知道会发生什么。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+カタールのヘリウム供給停止、チップサプライチェーンに2週間のタイムリミット
+***** TLDR
+［タイトルとコメントより、Jinaレート制限のため記事にアクセス不可］ カタールのヘリウム生産停止が半導体製造を脅かし、2週間の供給逼迫が迫っている。ヘリウムは半導体ファブの冷却とテストに不可欠。この希ガスは簡単に代替できず、業界は対応に追われている。
+***** Take
+チップ幹部を眠れなくさせるすべてのサプライチェーンの悪夢の中で、『パーティー風船ガスがなくなる』は誰の2026年ビンゴカードにもなかった。何十年もヘリウムを大気中に放出する代わりに、リサイクルを考えるべきだったのでは。
+***** Comments
+- 2025年のデスクトップPCがサージで壊れることへの新しい恐怖が生まれた。今部品が見つかると仮定しても、購入時より少なくとも2000ドル高くなる。
+- 医療画像はヘリウムをリサイクルするシステムの構築がかなりうまくいっていると聞いた。チップ製造はこれをしないのか?それとも彼らの規模では損失がまだ大きく、相当量の継続的な供給が必要なのか?
+- Hegsethによると、これは彼らが計画していたことで、何が起こるか分かっていたからだそうだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+카타르 헬륨 공급 중단, 칩 공급망에 2주 타이머 시작
+***** TLDR
+［제목과 댓글 기반, Jina 속도 제한으로 기사 접근 불가］ 카타르의 헬륨 생산 중단이 2주간의 공급 위기로 칩 제조를 위협하고 있다. 헬륨은 반도체 팹 냉각 및 테스트에 필수적이다. 이 비활성 기체는 쉽게 대체할 수 없어 업계가 분주하다.
+***** Take
+칩 임원들을 밤잠 못 이루게 하는 모든 공급망 악몽 중에서 '파티 풍선 가스가 떨어졌다'는 누구의 2026년 빙고 카드에도 없었다. 수십 년간 헬륨을 대기 중에 방출하는 대신 재활용을 생각했어야 했는데.
+***** Comments
+- 2025년 데스크톱 PC가 전력 서지로 손상될까 봐 새로운 두려움이 생겼다. 지금 부품을 찾을 수 있다고 가정해도 구매 가격보다 최소 2천 달러는 더 들 것이다.
+- 의료 영상 분야가 헬륨 재활용 시스템 구축을 꽤 잘한다고 들었다. 칩 제조는 이걸 안 하나? 아니면 그 규모에서는 손실이 여전히 커서 상당한 지속적 공급이 필요한가?
+- Hegseth에 따르면 이건 그들이 계획한 것으로, 무슨 일이 일어날지 알고 있었다고 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cierre de helio en Qatar pone la cadena de suministro de chips en cuenta regresiva de dos semanas
+***** TLDR
+［Del título y comentarios, artículo inaccesible por límite de Jina］ El cierre de producción de helio de Qatar amenaza la fabricación de chips con una crisis de suministro de dos semanas. El helio es crítico para el enfriamiento y pruebas en fábricas de semiconductores. La industria se apresura ya que este gas noble no puede sustituirse fácilmente.
+***** Take
+De todas las pesadillas de cadena de suministro que mantienen despiertos a los ejecutivos de chips, 'nos quedamos sin gas de globos de fiesta' no estaba en la lista de predicciones de 2026 de nadie. Quizás alguien debería haber pensado en reciclar helio en lugar de ventilarlo a la atmósfera durante décadas.
+***** Comments
+- He desarrollado un nuevo miedo de que mi PC de escritorio 2025 se dañe por una sobretensión, porque costaría al menos $2K más reemplazarla de lo que pagué, asumiendo que pueda encontrar piezas ahora.
+- Recuerdo haber escuchado que las imágenes médicas se volvieron bastante buenas construyendo sistemas que reciclan helio. ¿La fabricación de chips no hace esto o las pérdidas a su escala siguen siendo lo suficientemente grandes como para necesitar un suministro constante sustancial?
+- Esto es, según Hegseth, algo que planificaron, ya que sabían lo que iba a pasar.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Katars Helium-Stopp setzt Chip-Lieferkette unter Zwei-Wochen-Druck
+***** TLDR
+［Aus Titel und Kommentaren, Artikel wegen Jina-Ratenlimit nicht erreichbar］ Katars Helium-Produktionsstopp bedroht die Chip-Herstellung mit einer zweiwöchigen Versorgungskrise. Helium ist kritisch für Kühlung und Tests in Halbleiter-Fabs. Die Branche kämpft, da dieses Edelgas nicht leicht ersetzt werden kann.
+***** Take
+Von allen Supply-Chain-Albträumen, die Chip-Manager nachts wachhalten, stand 'uns geht das Partyballon-Gas aus' auf niemandes 2026-Bingo-Karte. Vielleicht hätte jemand daran denken sollen, Helium zu recyceln, anstatt es jahrzehntelang in die Atmosphäre abzulassen.
+***** Comments
+- Ich habe eine neue Angst entwickelt, dass mein 2025-Desktop-PC durch einen Stromstoß beschädigt wird, weil es mindestens $2K mehr kosten würde, ihn zu ersetzen, als ich bezahlt habe, vorausgesetzt ich kann jetzt überhaupt Teile finden.
+- Ich erinnere mich, gehört zu haben, dass medizinische Bildgebung ziemlich gut darin wurde, Systeme zu bauen, die Helium recyceln. Macht die Chip-Herstellung das nicht, oder sind die Verluste in ihrem Maßstab immer noch groß genug, dass man eine erhebliche konstante Versorgung braucht?
+- Das ist laut Hegseth etwas, das sie geplant haben, da sie wussten, was passieren würde.
+** The Wyden Siren Goes Off Again: We'll Be 'Stunned' by NSA Under Section 702 :privacy:surveillance:nsa:politics:
+:PROPERTIES:
+:ID:       47366374
+:URL:      https://www.techdirt.com/2026/03/12/the-wyden-siren-goes-off-again-well-be-stunned-by-what-the-nsa-is-doing-under-section-702/
+:HN_URL:   https://news.ycombinator.com/item?id=47366374
+:POINTS:   211
+:COMMENTS: 72
+:BY:       cf100clunk
+:END:
+
+*** TLDR
+Senator Ron Wyden warned on the Senate floor that a classified interpretation of Section 702 surveillance law will 'stun' Americans when declassified. He's been asking multiple administrations to reveal this for years. The 'reforms' from last reauthorization placed surveillance approval under Dan Bongino (conspiracy theorist) then Andrew Bailey (election denier). The FBI refuses to even track sensitive searches in a spreadsheet. Congress is about to reauthorize this without knowing what the law actually means.
+
+*** Take
+Wyden's track record on these cryptic warnings is perfect: he warned about bulk metadata collection before Snowden, and he's doing it again. But sure, Congress will just rubber-stamp 702 renewal three days before the deadline while screaming 'national security' like they always do.
+
+*** Comments
+
+**** wing-_-nuts
+:PROPERTIES:
+:COMMENT_ID: 47366401
+:END:
+Everyone who's not terribly worried about privacy uses the line 'if you're not doing anything wrong, you have nothing to worry about', but my thinking is not 'do I trust the government' but 'do I trust all future forms of government who will have access to this data'.
+
+**** tehwebguy
+:PROPERTIES:
+:COMMENT_ID: 47366455
+:END:
+The interpretation of the law is classified? That's stupid and everyone who protected that classification is a traitor!
+
+**** blueone
+:PROPERTIES:
+:COMMENT_ID: 47366512
+:END:
+I've stayed private for most of my adult life. Network-wide DNS, VPNs, alternative personas online. Nonetheless, my personal data has been exposed numerous times.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+怀登警报再次响起:我们将对702条款下NSA的行为'震惊'
+***** TLDR
+参议员罗恩·怀登在参议院发言时警告,702条款监控法的一项机密解释一旦解密将'震惊'美国人。他多年来一直要求多届政府公开此事。上次重新授权的'改革'将监控审批权交给了丹·邦吉诺(阴谋论者),然后是安德鲁·贝利(选举否认者)。FBI甚至拒绝用电子表格追踪敏感搜索。国会即将在不知道法律实际含义的情况下重新授权。
+***** Take
+怀登在这些神秘警告上的记录是完美的:他在斯诺登之前就警告过批量元数据收集,现在又来了。但当然,国会会在截止日期前三天橡皮图章式地更新702,像往常一样尖叫'国家安全'。
+***** Comments
+- 所有不太担心隐私的人都说'如果你没做错事,就没什么可担心的',但我的想法不是'我信任政府吗',而是'我信任所有未来可能获得这些数据的政府形式吗'。
+- 法律的解释是机密的?这太愚蠢了,所有保护这个机密的人都是叛徒!
+- 我成年后大部分时间都保持隐私。全网DNS、VPN、在线替代身份。尽管如此,我的个人数据还是多次被泄露。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ワイデン・サイレン再び:702条下のNSAの行為に米国民は'驚愕'するだろう
+***** TLDR
+ロン・ワイデン上院議員が上院で、702条監視法の機密解釈が解除されれば米国民は'驚愕'すると警告した。彼は何年も複数の政権にこの公開を求めてきた。前回の再認可での'改革'は、監視承認をダン・ボンジーノ(陰謀論者)、次にアンドリュー・ベイリー(選挙否定論者)に委ねた。FBIは機密検索をスプレッドシートで追跡することすら拒否している。議会は法律が実際に何を意味するか知らないまま再認可しようとしている。
+***** Take
+ワイデンのこれらの謎めいた警告の実績は完璧だ:スノーデン以前にバルクメタデータ収集を警告し、また同じことをしている。しかし当然、議会はいつものように期限の3日前に'国家安全保障'と叫びながら702更新にゴム印を押すだろう。
+***** Comments
+- プライバシーをあまり心配しない人は皆『悪いことをしていなければ心配することはない』と言うが、私の考えは『政府を信頼するか』ではなく『このデータにアクセスできる将来のすべての形態の政府を信頼するか』だ。
+- 法律の解釈が機密?それは愚かで、その機密を守った者は皆反逆者だ!
+- 私は成人してからほとんどずっとプライベートを保ってきた。ネットワーク全体のDNS、VPN、オンラインでの代替ペルソナ。それでも個人データは何度も漏洩した。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+와이든 사이렌 재발동: 702조 하의 NSA 행위에 '충격' 받을 것
+***** TLDR
+론 와이든 상원의원이 702조 감시법의 기밀 해석이 해제되면 미국인들이 '충격'을 받을 것이라고 상원에서 경고했다. 그는 여러 행정부에 수년간 공개를 요청해왔다. 지난 재승인의 '개혁'은 감시 승인권을 댄 봉지노(음모론자), 그 다음 앤드류 베일리(선거 부정론자)에게 맡겼다. FBI는 민감한 검색을 스프레드시트로 추적하는 것조차 거부한다. 의회는 법이 실제로 무엇을 의미하는지 모른 채 재승인하려 한다.
+***** Take
+와이든의 이러한 암호 같은 경고 실적은 완벽하다: 스노든 이전에 대량 메타데이터 수집을 경고했고, 다시 하고 있다. 하지만 물론 의회는 항상 그랬듯이 마감 3일 전에 '국가안보'를 외치며 702 갱신에 도장을 찍을 것이다.
+***** Comments
+- 프라이버시를 크게 걱정하지 않는 사람들은 '잘못한 게 없으면 걱정할 게 없다'고 하지만, 내 생각은 '정부를 믿느냐'가 아니라 '이 데이터에 접근할 수 있는 모든 미래 형태의 정부를 믿느냐'다.
+- 법 해석이 기밀이라고? 멍청한 짓이고 그 기밀을 보호한 모든 사람은 반역자다!
+- 성인이 된 후 대부분 프라이버시를 유지해왔다. 네트워크 전체 DNS, VPN, 온라인 대체 페르소나. 그럼에도 내 개인 데이터는 여러 번 유출됐다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La Sirena de Wyden Suena de Nuevo: Nos 'Sorprenderá' lo que la NSA Hace Bajo la Sección 702
+***** TLDR
+El senador Ron Wyden advirtió en el Senado que una interpretación clasificada de la ley de vigilancia Sección 702 'sorprenderá' a los estadounidenses cuando se desclasifique. Ha pedido a múltiples administraciones que lo revelen durante años. Las 'reformas' de la última reautorización pusieron la aprobación de vigilancia bajo Dan Bongino (conspiracionista) y luego Andrew Bailey (negacionista electoral). El FBI se niega incluso a rastrear búsquedas sensibles en una hoja de cálculo. El Congreso está a punto de reautorizar sin saber qué significa realmente la ley.
+***** Take
+El historial de Wyden en estas advertencias crípticas es perfecto: advirtió sobre la recopilación masiva de metadatos antes de Snowden, y lo está haciendo de nuevo. Pero claro, el Congreso sellará la renovación del 702 tres días antes del plazo gritando 'seguridad nacional' como siempre.
+***** Comments
+- Todos los que no están muy preocupados por la privacidad usan la frase 'si no estás haciendo nada malo, no tienes nada de qué preocuparte', pero mi pensamiento no es '¿confío en el gobierno?' sino '¿confío en todas las formas futuras de gobierno que tendrán acceso a estos datos?'
+- ¿La interpretación de la ley está clasificada? ¡Eso es estúpido y todos los que protegieron esa clasificación son traidores!
+- He mantenido mi privacidad durante la mayor parte de mi vida adulta. DNS de red completa, VPNs, personas alternativas en línea. Sin embargo, mis datos personales han sido expuestos numerosas veces.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Wyden-Sirene geht wieder los: Wir werden über NSA unter Sektion 702 'schockiert' sein
+***** TLDR
+Senator Ron Wyden warnte im Senat, dass eine geheime Auslegung des Überwachungsgesetzes Sektion 702 die Amerikaner 'schockieren' wird, wenn sie freigegeben wird. Er hat mehrere Regierungen jahrelang um Offenlegung gebeten. Die 'Reformen' der letzten Neugenehmigung legten die Überwachungsgenehmigung in die Hände von Dan Bongino (Verschwörungstheoretiker) und dann Andrew Bailey (Wahlleugner). Das FBI weigert sich sogar, sensible Suchen in einer Tabelle zu verfolgen. Der Kongress ist dabei, dies neu zu genehmigen, ohne zu wissen, was das Gesetz tatsächlich bedeutet.
+***** Take
+Wydens Bilanz bei diesen kryptischen Warnungen ist perfekt: Er warnte vor Massenmetadatensammlung vor Snowden, und er tut es wieder. Aber sicher wird der Kongress die 702-Verlängerung drei Tage vor der Frist durchwinken und dabei 'nationale Sicherheit' schreien, wie immer.
+***** Comments
+- Alle, die sich nicht sehr um Privatsphäre sorgen, sagen 'wenn du nichts Falsches tust, hast du nichts zu befürchten', aber mein Gedanke ist nicht 'vertraue ich der Regierung', sondern 'vertraue ich allen zukünftigen Regierungsformen, die Zugang zu diesen Daten haben werden'.
+- Die Auslegung des Gesetzes ist geheim? Das ist dumm und jeder, der diese Geheimhaltung geschützt hat, ist ein Verräter!
+- Ich bin mein ganzes Erwachsenenleben privat geblieben. Netzwerkweites DNS, VPNs, alternative Online-Personas. Trotzdem wurden meine persönlichen Daten mehrfach exponiert.
+** Show HN: Channel Surfer - Watch YouTube like it's cable TV :youtube:show-hn:nostalgia:streaming:
+:PROPERTIES:
+:ID:       47336100
+:URL:      https://channelsurfer.tv
+:HN_URL:   https://news.ycombinator.com/item?id=47336100
+:POINTS:   197
+:COMMENTS: 90
+:BY:       kilroy123
+:END:
+
+*** TLDR
+Channel Surfer turns your YouTube subscriptions into a retro cable TV experience. Import your subscriptions via a browser bookmarklet (no sign-in required), and flip through channels like it's 1998. Built for people paralyzed by too many streaming options who just want someone else to decide what's on.
+
+*** Take
+We've come full circle: we escaped cable TV for infinite on-demand content, got decision fatigue, and now we're building tools to make YouTube feel like cable TV again. At least this one doesn't have Comcast's customer service.
+
+*** Comments
+
+**** spudlyo
+:PROPERTIES:
+:COMMENT_ID: 47336201
+:END:
+I'm right in the middle of trying to change how I watch YouTube. Despite my best efforts, I find myself getting sucked into shorts, so I'm starting to investigate if I can take advantage of YouTube RSS syndication.
+
+**** eegG0D
+:PROPERTIES:
+:COMMENT_ID: 47336255
+:END:
+This is such a clear example of 'Signal over Noise.' I've noticed a major market shift where people are becoming paralyzed by the 'firehose' of content. Information scarcity used to reward knowledge acquisition, but we now live in an era of information abundance.
+
+**** noah_buddy
+:PROPERTIES:
+:COMMENT_ID: 47336312
+:END:
+I love this concept. I was recently thinking about how I used to be able to skip from one channel to another when an ad break came on.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: Channel Surfer - 像看有线电视一样看YouTube
+***** TLDR
+Channel Surfer将你的YouTube订阅变成复古有线电视体验。通过浏览器书签工具导入订阅(无需登录),像1998年一样切换频道。专为被太多流媒体选项困扰、只想让别人决定播什么的人设计。
+***** Take
+我们绕了一圈:逃离有线电视去享受无限点播内容,得了选择困难症,现在又在开发工具让YouTube感觉像有线电视。至少这个没有Comcast的客户服务。
+***** Comments
+- 我正在尝试改变观看YouTube的方式。尽管我尽了最大努力,还是发现自己被短视频吸引,所以我开始研究能否利用YouTube RSS订阅。
+- 这是'信号优于噪音'的典型例子。我注意到一个重大市场转变,人们正被内容的'消防水管'淹没而不知所措。信息稀缺曾经奖励知识获取,但我们现在生活在信息过剩的时代。
+- 我喜欢这个概念。我最近在想以前广告时段来临时可以从一个频道跳到另一个。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Channel Surfer - YouTubeをケーブルTVのように見る
+***** TLDR
+Channel SurferはYouTubeの登録チャンネルをレトロなケーブルTV体験に変える。ブラウザのブックマークレット経由で登録をインポート(サインイン不要)、1998年のようにチャンネルを切り替える。ストリーミングオプションが多すぎて麻痺し、誰かに何を見るか決めてほしい人のために作られた。
+***** Take
+一周回った:無限のオンデマンドコンテンツを求めてケーブルTVから逃げ、選択疲れを起こし、今度はYouTubeをケーブルTVのように感じさせるツールを作っている。少なくともこれにはComcastのカスタマーサービスはない。
+***** Comments
+- YouTubeの見方を変えようとしている最中だ。最善を尽くしているにもかかわらず、ショート動画に吸い込まれてしまうので、YouTube RSSシンジケーションを活用できないか調べ始めている。
+- これは'ノイズより信号'の明確な例だ。コンテンツの'消火ホース'に人々が麻痺している大きな市場シフトに気づいた。情報不足は知識獲得を報いたが、今は情報過多の時代に生きている。
+- このコンセプトが好きだ。CMが入ったときに一つのチャンネルから別のチャンネルにスキップできたことを最近考えていた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Channel Surfer - 케이블 TV처럼 YouTube 보기
+***** TLDR
+Channel Surfer는 YouTube 구독을 레트로 케이블 TV 경험으로 바꿔준다. 브라우저 북마클릿으로 구독을 가져오고(로그인 불필요), 1998년처럼 채널을 돌려라. 너무 많은 스트리밍 옵션에 마비되어 누군가가 뭘 볼지 정해주길 원하는 사람들을 위해 만들어졌다.
+***** Take
+한 바퀴 돌아왔다: 무한 주문형 콘텐츠를 위해 케이블 TV를 떠났고, 결정 피로를 얻었고, 이제 YouTube를 케이블 TV처럼 느끼게 하는 도구를 만들고 있다. 적어도 이건 Comcast 고객 서비스는 없다.
+***** Comments
+- YouTube 시청 방식을 바꾸려는 중이다. 최선을 다했지만 쇼츠에 빠져들어서 YouTube RSS 신디케이션을 활용할 수 있는지 조사하기 시작했다.
+- 이것은 '노이즈보다 신호'의 명확한 예다. 콘텐츠의 '소방호스'에 사람들이 마비되는 주요 시장 변화를 알아챘다. 정보 부족은 지식 습득을 보상했지만, 우리는 이제 정보 과잉의 시대에 살고 있다.
+- 이 개념이 좋다. 광고 시간에 한 채널에서 다른 채널로 건너뛸 수 있었던 때를 최근 생각하고 있었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Channel Surfer - Mira YouTube como si fuera TV por cable
+***** TLDR
+Channel Surfer convierte tus suscripciones de YouTube en una experiencia retro de TV por cable. Importa tus suscripciones mediante un bookmarklet del navegador (sin inicio de sesión), y cambia de canal como en 1998. Hecho para personas paralizadas por demasiadas opciones de streaming que solo quieren que alguien más decida qué ver.
+***** Take
+Hemos dado la vuelta completa: escapamos de la TV por cable hacia contenido infinito bajo demanda, conseguimos fatiga de decisión, y ahora estamos construyendo herramientas para que YouTube se sienta como TV por cable otra vez. Al menos este no tiene el servicio al cliente de Comcast.
+***** Comments
+- Estoy en medio de intentar cambiar cómo veo YouTube. A pesar de mis mejores esfuerzos, me encuentro siendo absorbido por los shorts, así que estoy empezando a investigar si puedo aprovechar la sindicación RSS de YouTube.
+- Este es un ejemplo claro de 'Señal sobre Ruido'. He notado un cambio importante en el mercado donde las personas están paralizadas por la 'manguera de bomberos' de contenido. La escasez de información solía recompensar la adquisición de conocimiento, pero ahora vivimos en una era de abundancia de información.
+- Me encanta este concepto. Recientemente estaba pensando en cómo solía poder saltar de un canal a otro cuando llegaba la pausa publicitaria.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Channel Surfer - YouTube schauen wie Kabelfernsehen
+***** TLDR
+Channel Surfer verwandelt deine YouTube-Abos in ein Retro-Kabelfernsehen-Erlebnis. Importiere deine Abos über ein Browser-Bookmarklet (keine Anmeldung erforderlich) und zappe durch Kanäle wie 1998. Gemacht für Menschen, die von zu vielen Streaming-Optionen gelähmt sind und einfach wollen, dass jemand anderes entscheidet, was läuft.
+***** Take
+Wir sind einmal im Kreis gegangen: Wir flohen vom Kabelfernsehen zu unendlichem On-Demand-Content, bekamen Entscheidungsmüdigkeit, und jetzt bauen wir Tools, damit sich YouTube wieder wie Kabelfernsehen anfühlt. Zumindest hat dieses keinen Comcast-Kundenservice.
+***** Comments
+- Ich bin gerade dabei, zu ändern, wie ich YouTube schaue. Trotz meiner besten Bemühungen werde ich von Shorts aufgesogen, also beginne ich zu untersuchen, ob ich YouTube-RSS-Syndikation nutzen kann.
+- Dies ist ein klares Beispiel für 'Signal über Rauschen'. Ich habe einen großen Marktshift bemerkt, bei dem Menschen vom 'Feuerwehrschlauch' an Content gelähmt werden. Informationsknappheit belohnte früher Wissenserwerb, aber wir leben jetzt in einer Ära des Informationsüberflusses.
+- Ich liebe dieses Konzept. Ich habe kürzlich darüber nachgedacht, wie ich früher von einem Kanal zum anderen springen konnte, wenn eine Werbepause kam.
+** John Carmack about open source and anti-AI activists :open-source:ai:ethics:culture-war:
+:PROPERTIES:
+:ID:       47367463
+:URL:      https://twitter.com/id_aa_carmack/status/2032460578669691171
+:HN_URL:   https://news.ycombinator.com/item?id=47367463
+:POINTS:   96
+:COMMENTS: 136
+:BY:       tzury
+:END:
+
+*** TLDR
+John Carmack says he can't reconcile open source advocates opposing AI training on their code. His million+ lines of open source were 'a gift to the world' and AI training magnifies that gift. He argues the GPL was really about letting him release code, not about controlling downstream use. Some view open source as a tool for social change or career advancement, but those are 'downstream of the gift.'
+
+*** Take
+Carmack treating code like a donation box is fine when you're a millionaire legend who can afford the gift. The HN comments are full of maintainers pointing out that companies profiting billions from their unpaid labor might deserve a different analysis.
+
+*** Comments
+
+**** skrebbel
+:PROPERTIES:
+:COMMENT_ID: 47367501
+:END:
+Carmack doesn't really do OSS, he just does code dumps and tacks on a license. He's not been painstakingly and thanklessly maintaining some key Linux component for the last 20 years. It's an entirely different thing.
+
+**** arjie
+:PROPERTIES:
+:COMMENT_ID: 47367555
+:END:
+Has anyone else noticed a cultural shift around monetization of output? I think there wasn't as much back when I first started using open-source programs.
+
+**** OSaMaBiNLoGiN
+:PROPERTIES:
+:COMMENT_ID: 47367612
+:END:
+One of the more prominent issues folks take with mass training on OSS is that the companies doing it are now profiting while the original authors aren't.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+John Carmack谈开源和反AI活动人士
+***** TLDR
+John Carmack说他无法理解开源倡导者反对在其代码上训练AI。他的百万多行开源代码是'给世界的礼物',AI训练放大了这份礼物。他认为GPL实际上是为了让他发布代码,而不是控制下游使用。有些人把开源视为社会变革或职业发展的工具,但那些都是'礼物的衍生品'。
+***** Take
+Carmack把代码当捐款箱是因为他是个有钱的传奇人物,送得起这份礼物。HN评论区满是维护者指出,从他们无偿劳动中获利数十亿的公司可能需要不同的分析。
+***** Comments
+- Carmack并不真正做开源,他只是代码转储然后贴个许可证。他没有在过去20年里辛苦且无人感谢地维护某个关键的Linux组件。这完全是两码事。
+- 有没有人注意到围绕产出货币化的文化转变?我记得刚开始使用开源程序时没有这么多。
+- 人们对大规模训练开源软件的一个主要问题是,这样做的公司现在在盈利,而原作者却没有。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+John Carmack、オープンソースと反AIアクティビストについて語る
+***** TLDR
+John Carmackは、オープンソース支持者が自分のコードでのAIトレーニングに反対するのは理解できないと言う。彼の100万行以上のオープンソースコードは「世界への贈り物」であり、AIトレーニングはその贈り物を増幅する。GPLは本当は彼がコードをリリースするためのもので、下流の使用を制御するためではないと主張。オープンソースを社会変革やキャリアアップのツールと見る人もいるが、それらは「贈り物の派生物」だ。
+***** Take
+カーマックがコードを寄付箱のように扱えるのは、贈り物をする余裕のある億万長者の伝説だからだ。HNのコメントは、彼らの無給労働から数十億ドルを稼ぐ企業には別の分析が必要だと指摘するメンテナーで溢れている。
+***** Comments
+- カーマックは本当のOSSをしていない、コードダンプしてライセンスを貼り付けるだけ。過去20年間、重要なLinuxコンポーネントを苦労して感謝もされずにメンテナンスしてきたわけではない。全く別物だ。
+- アウトプットの収益化に関する文化的シフトに気づいた人はいる?オープンソースプログラムを使い始めた頃はそんなになかったと思う。
+- OSSでの大量トレーニングで人々が問題視する顕著な点の一つは、それを行う企業が利益を得ている一方で、元の作者はそうではないということだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+John Carmack, 오픈 소스와 반AI 활동가에 대해
+***** TLDR
+John Carmack은 오픈 소스 지지자들이 자신의 코드로 AI 훈련하는 것을 반대하는 것을 이해할 수 없다고 말했다. 그의 100만 줄 이상의 오픈 소스는 '세상에 대한 선물'이며 AI 훈련이 그 선물을 증폭시킨다. GPL은 실제로 코드를 릴리스하기 위한 것이었지 하류 사용을 통제하기 위한 것이 아니었다고 주장한다. 일부는 오픈 소스를 사회 변화나 경력 발전 도구로 보지만, 그것들은 '선물의 파생물'이다.
+***** Take
+Carmack이 코드를 기부함처럼 취급할 수 있는 건 선물을 줄 여유가 있는 백만장자 전설이기 때문이다. HN 댓글은 자신들의 무급 노동으로 수십억을 버는 회사들에게는 다른 분석이 필요하다고 지적하는 메인테이너들로 가득하다.
+***** Comments
+- Carmack은 실제로 OSS를 하지 않는다, 그냥 코드 덤프하고 라이선스를 붙인다. 지난 20년간 핵심 리눅스 컴포넌트를 고통스럽고 감사도 받지 못하며 유지보수한 적이 없다. 완전히 다른 것이다.
+- 누군가 산출물 수익화에 관한 문화적 변화를 눈치챘나? 내가 처음 오픈소스 프로그램을 쓰기 시작했을 때는 그렇게 많지 않았던 것 같다.
+- 사람들이 OSS 대량 훈련에서 문제 삼는 두드러진 점 중 하나는 그것을 하는 회사들이 이제 이익을 얻는 반면 원저자는 그렇지 않다는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+John Carmack sobre código abierto y activistas anti-IA
+***** TLDR
+John Carmack dice que no puede reconciliar que los defensores del código abierto se opongan al entrenamiento de IA en su código. Sus millones de líneas de código abierto fueron 'un regalo al mundo' y el entrenamiento de IA magnifica ese regalo. Argumenta que la GPL realmente se trataba de permitirle liberar código, no de controlar el uso posterior. Algunos ven el código abierto como una herramienta para el cambio social o el avance profesional, pero esos son 'derivados del regalo'.
+***** Take
+Carmack tratando el código como una caja de donaciones está bien cuando eres una leyenda millonaria que puede permitirse el regalo. Los comentarios de HN están llenos de mantenedores señalando que las empresas que ganan miles de millones de su trabajo no remunerado podrían merecer un análisis diferente.
+***** Comments
+- Carmack realmente no hace OSS, solo hace volcados de código y pone una licencia. No ha estado manteniendo dolorosamente y sin agradecimiento algún componente clave de Linux durante los últimos 20 años. Es algo completamente diferente.
+- ¿Alguien más ha notado un cambio cultural en torno a la monetización del output? Creo que no había tanto cuando empecé a usar programas de código abierto.
+- Uno de los problemas más prominentes que la gente tiene con el entrenamiento masivo en OSS es que las empresas que lo hacen ahora están ganando dinero mientras que los autores originales no.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+John Carmack über Open Source und Anti-KI-Aktivisten
+***** TLDR
+John Carmack sagt, er kann nicht verstehen, dass Open-Source-Befürworter KI-Training mit ihrem Code ablehnen. Seine über eine Million Zeilen Open-Source-Code waren 'ein Geschenk an die Welt' und KI-Training verstärkt dieses Geschenk. Er argumentiert, die GPL sei wirklich dazu da, ihm das Veröffentlichen von Code zu ermöglichen, nicht um die nachgelagerte Nutzung zu kontrollieren. Manche sehen Open Source als Werkzeug für sozialen Wandel oder Karrierefortschritt, aber das sind 'Ableitungen des Geschenks'.
+***** Take
+Carmack behandelt Code wie eine Spendenbox, was in Ordnung ist, wenn man eine Millionärslegende ist, die sich das Geschenk leisten kann. Die HN-Kommentare sind voll von Maintainern, die darauf hinweisen, dass Unternehmen, die Milliarden mit ihrer unbezahlten Arbeit verdienen, vielleicht eine andere Analyse verdienen.
+***** Comments
+- Carmack macht nicht wirklich OSS, er macht nur Code-Dumps und klebt eine Lizenz drauf. Er hat nicht die letzten 20 Jahre mühsam und undankbar irgendeine wichtige Linux-Komponente gewartet. Das ist etwas völlig anderes.
+- Hat sonst jemand einen kulturellen Wandel um die Monetarisierung von Output bemerkt? Ich denke, das war nicht so viel, als ich anfing, Open-Source-Programme zu nutzen.
+- Eines der prominenteren Probleme, die Leute mit Massentraining auf OSS haben, ist, dass die Unternehmen, die es tun, jetzt profitieren, während die ursprünglichen Autoren es nicht tun.
