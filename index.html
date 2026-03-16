@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-03-16</div>
+      <a href="#s47387047-03160724">Glassworm is back: A new wave of invisib...</a>
+      <a href="#s47388137-03160724">Separating the Wayland compositor and wi...</a>
+      <a href="#s47388141-03160724">What makes Intel Optane stand out (2023)</a>
+      <a href="#s47359712-03160724">Lies I was told about collaborative edit...</a>
+      <a href="#s47385011-03160724">SpiceCrypt: A Python library for decrypt...</a>
       <a href="#s47394264-03160601">Federal Right to Privacy Act – Draft leg...</a>
       <a href="#s47385576-03160601">The emergence of print-on-demand Amazon ...</a>
       <a href="#s47394022-03160601">How I write software with LLMs</a>
@@ -536,6 +541,347 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-03-16T07:24:00Z</div>
+        <div class="digest-vibe">Unicode ghosts haunt GitHub, Wayland finally separates, and Intel mourns the Optane that could have been</div>
+      </div>
+      <article class="story" id="s47387047-03160724">
+      <h3 class="story-title">
+        <a href="https://www.aikido.dev/blog/glassworm-returns-unicode-attack-github-npm-vscode" target="_blank">Glassworm is back: A new wave of invisible Unicode attacks hits repositories :security:supply-chain</a>
+        <a href="#s47387047-03160724" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Glassworm回来了：新一波隐形Unicode攻击袭击数百个代码仓库</div>
+<div class="i18n-title" data-lang="ja">Glasswormが帰ってきた：不可視Unicode攻撃の新たな波が数百のリポジトリを襲う</div>
+<div class="i18n-title" data-lang="ko">Glassworm 재등장: 보이지 않는 유니코드 공격의 새로운 물결이 수백 개의 저장소를 강타</div>
+<div class="i18n-title" data-lang="es">Glassworm regresa: Una nueva ola de ataques Unicode invisibles golpea cientos de repositorios</div>
+<div class="i18n-title" data-lang="de">Glassworm ist zurück: Eine neue Welle unsichtbarer Unicode-Angriffe trifft Hunderte von Repositories</div>
+
+      <div class="story-meta">
+        251pts | 155c | <a href="https://news.ycombinator.com/item?id=47387047" target="_blank">HN#47387047</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">The Glassworm threat actor is back with a mass campaign using invisible Unicode characters (PUA) to hide malicious payloads in GitHub repos, npm packages, and VS Code extensions. The attack encodes JavaScript payloads in zero-width characters that decode at runtime via eval(). 151+ repos compromised between March 3-9, including reworm (1,460 stars), Wasmer examples, and opencode-bench. AI-generated cover commits make the injections blend in perfectly.</div>
+        <span class="i18n-text" data-lang="zh">Glassworm威胁行为者利用隐形Unicode字符在GitHub仓库、npm包和VS Code扩展中隐藏恶意载荷。攻击在零宽字符中编码JavaScript载荷，运行时通过eval()解码。151+个仓库在3月3-9日被入侵，包括reworm、Wasmer示例和opencode-bench。AI生成的掩护提交使注入完美融入。</span>
+<span class="i18n-text" data-lang="ja">Glassworm脅威アクターがGitHubリポジトリ、npmパッケージ、VS Code拡張機能で不可視Unicode文字を使って悪意のあるペイロードを隠す大規模キャンペーンを展開。攻撃はゼロ幅文字にJavaScriptペイロードをエンコードし、実行時にeval()でデコード。3月3-9日に151以上のリポジトリが侵害され、reworm、Wasmerサンプル、opencode-benchが含まれる。AI生成のカバーコミットで注入が完璧に溶け込む。</span>
+<span class="i18n-text" data-lang="ko">Glassworm 위협 행위자가 GitHub 저장소, npm 패키지, VS Code 확장에서 보이지 않는 유니코드 문자를 사용해 악성 페이로드를 숨기는 대규모 캠페인을 진행 중. 공격은 제로 너비 문자에 JavaScript 페이로드를 인코딩하고 런타임에 eval()로 디코딩. 3월 3-9일 사이 151개 이상의 저장소가 침해됐으며 reworm, Wasmer 예제, opencode-bench가 포함됨. AI 생성 커버 커밋으로 주입이 완벽하게 위장됨.</span>
+<span class="i18n-text" data-lang="es">El actor de amenazas Glassworm regresa con una campaña masiva usando caracteres Unicode invisibles (PUA) para ocultar payloads maliciosos en repos de GitHub, paquetes npm y extensiones de VS Code. El ataque codifica payloads JavaScript en caracteres de ancho cero que se decodifican en tiempo de ejecución via eval(). Más de 151 repos comprometidos entre el 3-9 de marzo, incluyendo reworm, ejemplos de Wasmer y opencode-bench. Commits de cobertura generados por IA hacen que las inyecciones se mezclen perfectamente.</span>
+<span class="i18n-text" data-lang="de">Der Glassworm-Bedrohungsakteur ist zurück mit einer Massenkampagne, die unsichtbare Unicode-Zeichen (PUA) verwendet, um bösartige Payloads in GitHub-Repos, npm-Paketen und VS Code-Erweiterungen zu verstecken. Der Angriff kodiert JavaScript-Payloads in Zeichen mit Nullbreite, die zur Laufzeit über eval() dekodiert werden. 151+ Repos wurden zwischen dem 3.-9. März kompromittiert, darunter reworm, Wasmer-Beispiele und opencode-bench. KI-generierte Tarn-Commits lassen die Injektionen perfekt einblenden.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The real horror here isn&#x27;t the invisible characters - it&#x27;s that maintainers are merging code they clearly don&#x27;t understand. There&#x27;s a transforming function and an eval() call sitting there in plain sight. The &#x27;invisibility&#x27; is just window dressing for the actual problem: nobody reads their own PRs anymore.</div>
+        <span class="i18n-text" data-lang="zh">真正可怕的不是隐形字符——而是维护者在显然不理解代码的情况下合并它。变换函数和eval()调用就明摆在那里。&#x27;隐形&#x27;只是真正问题的幌子：没人再阅读自己的PR了。</span>
+<span class="i18n-text" data-lang="ja">本当に恐ろしいのは不可視文字ではない。メンテナーが明らかに理解していないコードをマージしていることだ。変換関数とeval()呼び出しがそこに見えているのに。「不可視性」は本当の問題の装飾に過ぎない：誰も自分のPRを読まなくなった。</span>
+<span class="i18n-text" data-lang="ko">진짜 무서운 건 보이지 않는 문자가 아니라 메인테이너들이 분명히 이해하지 못하는 코드를 머지하고 있다는 것이다. 변환 함수와 eval() 호출이 눈에 보이는데도. &#x27;보이지 않음&#x27;은 실제 문제의 장식일 뿐이다: 아무도 더 이상 자신의 PR을 읽지 않는다.</span>
+<span class="i18n-text" data-lang="es">El verdadero horror aquí no son los caracteres invisibles, es que los mantenedores están fusionando código que claramente no entienden. Hay una función de transformación y una llamada eval() ahí a plena vista. La &#x27;invisibilidad&#x27; es solo decoración del problema real: nadie lee sus propios PRs.</span>
+<span class="i18n-text" data-lang="de">Der wahre Horror hier sind nicht die unsichtbaren Zeichen - es ist, dass Maintainer Code mergen, den sie offensichtlich nicht verstehen. Da ist eine Transformationsfunktion und ein eval()-Aufruf gut sichtbar. Die &#x27;Unsichtbarkeit&#x27; ist nur Dekoration für das eigentliche Problem: Niemand liest mehr seine eigenen PRs.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"GitHub should provide Secret Scanning for zero-width characters used in non-standard linguistic ways. Third-party services help, but this should be repository-level."</div>
+          <div class="comment-i18n" data-lang="zh">GitHub应该为非标准语言用途的零宽字符提供秘密扫描。第三方服务有帮助，但这应该是仓库级别的功能。</div>
+<div class="comment-i18n" data-lang="ja">GitHubは非標準的な言語使用のゼロ幅文字に対するシークレットスキャンを提供すべきだ。サードパーティサービスは役立つが、これはリポジトリレベルであるべき。</div>
+<div class="comment-i18n" data-lang="ko">GitHub은 비표준 언어 용도의 제로 너비 문자에 대한 시크릿 스캐닝을 제공해야 한다. 서드파티 서비스가 도움이 되지만 이건 저장소 수준이어야 한다.</div>
+<div class="comment-i18n" data-lang="es">GitHub debería proporcionar escaneo de secretos para caracteres de ancho cero usados de manera no estándar lingüísticamente. Los servicios de terceros ayudan, pero esto debería ser a nivel de repositorio.</div>
+<div class="comment-i18n" data-lang="de">GitHub sollte Secret Scanning für Nullbreite-Zeichen bereitstellen, die nicht standardmäßig linguistisch verwendet werden. Drittanbieter-Dienste helfen, aber das sollte auf Repository-Ebene sein.</div>
+
+          <div class="comment-author">-- btown</div>
+        </div><div class="comment">
+          <div class="comment-text">"It baffles me that any maintainer would merge code like this without knowing what it does. The mere fact that someone would merge code without understanding says more about the terrible state of software."</div>
+          <div class="comment-i18n" data-lang="zh">任何维护者在不知道代码做什么的情况下就合并它，这令我难以置信。合并不理解的代码这个事实本身就说明了软件行业的糟糕状态。</div>
+<div class="comment-i18n" data-lang="ja">メンテナーがコードの動作を知らずにマージすることに私は驚愕している。理解せずにコードをマージするという事実自体が、ソフトウェアの悲惨な状態を物語っている。</div>
+<div class="comment-i18n" data-lang="ko">메인테이너가 코드가 무엇을 하는지 모르면서 머지한다는 것이 나를 당혹스럽게 한다. 이해하지 못하는 코드를 머지한다는 사실 자체가 소프트웨어의 끔찍한 상태를 말해준다.</div>
+<div class="comment-i18n" data-lang="es">Me desconcierta que cualquier mantenedor fusione código así sin saber qué hace. El mero hecho de que alguien fusione código sin entenderlo dice más sobre el terrible estado del software.</div>
+<div class="comment-i18n" data-lang="de">Es verblüfft mich, dass irgendein Maintainer solchen Code mergen würde, ohne zu wissen, was er tut. Die bloße Tatsache, dass jemand Code merged, ohne ihn zu verstehen, sagt mehr über den schrecklichen Zustand der Software.</div>
+
+          <div class="comment-author">-- ocornut</div>
+        </div><div class="comment">
+          <div class="comment-text">"I don&#x27;t understand how this is working. The malicious code says coauthored by dependabot and refers to a PR opened in 2020. Are commits being backdated?"</div>
+          <div class="comment-i18n" data-lang="zh">我不明白这是怎么运作的。恶意代码说是dependabot共同编写的，并引用了2020年开的PR。提交是被回溯的吗？</div>
+<div class="comment-i18n" data-lang="ja">これがどう動いているのか分からない。悪意のあるコードはdependabotの共同作成者と書かれ、2020年に開かれたPRを参照している。コミットは遡って作成されているのか？</div>
+<div class="comment-i18n" data-lang="ko">이게 어떻게 작동하는지 이해가 안 된다. 악성 코드는 dependabot이 공동 작성자라고 하고 2020년에 열린 PR을 참조한다. 커밋이 소급 작성된 건가?</div>
+<div class="comment-i18n" data-lang="es">No entiendo cómo funciona esto. El código malicioso dice coautoría de dependabot y se refiere a un PR abierto en 2020. ¿Se están retrodatando los commits?</div>
+<div class="comment-i18n" data-lang="de">Ich verstehe nicht, wie das funktioniert. Der bösartige Code sagt, er wurde von dependabot mitautoriert und bezieht sich auf einen 2020 geöffneten PR. Werden Commits rückdatiert?</div>
+
+          <div class="comment-author">-- nstart</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#unicode</span><span class="tag">#malware</span></div>
+    </article>
+<article class="story" id="s47388137-03160724">
+      <h3 class="story-title">
+        <a href="https://isaacfreund.com/blog/river-window-management/" target="_blank">Separating the Wayland compositor and window manager :wayland:linux:window-manager:open-source:</a>
+        <a href="#s47388137-03160724" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">分离Wayland合成器和窗口管理器</div>
+<div class="i18n-title" data-lang="ja">Waylandコンポジタとウィンドウマネージャの分離</div>
+<div class="i18n-title" data-lang="ko">Wayland 컴포지터와 윈도우 매니저 분리</div>
+<div class="i18n-title" data-lang="es">Separando el compositor Wayland y el gestor de ventanas</div>
+<div class="i18n-title" data-lang="de">Trennung des Wayland-Compositors und Window-Managers</div>
+
+      <div class="story-meta">
+        271pts | 129c | <a href="https://news.ycombinator.com/item?id=47388137" target="_blank">HN#47388137</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">River 0.4.0 introduces a stable protocol (river-window-management-v1) that separates the Wayland compositor from the window manager into distinct processes. The compositor handles rendering and input routing while window managers can be written in any language, even garbage-collected ones, without affecting compositor performance. This lowers the barrier to entry dramatically - a basic window manager is now a weekend project instead of months of work. Already 15 window managers exist for river.</div>
+        <span class="i18n-text" data-lang="zh">River 0.4.0引入了稳定协议(river-window-management-v1)，将Wayland合成器和窗口管理器分离成不同进程。合成器处理渲染和输入路由，窗口管理器可以用任何语言编写，包括垃圾回收语言，不影响合成器性能。这大大降低了入门门槛——一个基本窗口管理器现在是周末项目而不是几个月的工作。river已有15个窗口管理器。</span>
+<span class="i18n-text" data-lang="ja">River 0.4.0は安定プロトコル(river-window-management-v1)を導入し、Waylandコンポジタとウィンドウマネージャを別プロセスに分離。コンポジタはレンダリングと入力ルーティングを処理し、ウィンドウマネージャはガベージコレクション言語を含むあらゆる言語で書けて、コンポジタのパフォーマンスに影響しない。これにより参入障壁が大幅に下がり、基本的なウィンドウマネージャは数ヶ月の作業から週末プロジェクトになった。riverには既に15のウィンドウマネージャが存在。</span>
+<span class="i18n-text" data-lang="ko">River 0.4.0은 Wayland 컴포지터와 윈도우 매니저를 별도의 프로세스로 분리하는 안정적인 프로토콜(river-window-management-v1)을 도입했다. 컴포지터는 렌더링과 입력 라우팅을 처리하고, 윈도우 매니저는 가비지 컬렉션 언어를 포함한 모든 언어로 작성할 수 있으며 컴포지터 성능에 영향을 주지 않는다. 진입 장벽이 크게 낮아져서 기본 윈도우 매니저는 이제 몇 달이 아닌 주말 프로젝트가 되었다. river에는 이미 15개의 윈도우 매니저가 존재한다.</span>
+<span class="i18n-text" data-lang="es">River 0.4.0 introduce un protocolo estable (river-window-management-v1) que separa el compositor Wayland del gestor de ventanas en procesos distintos. El compositor maneja el renderizado y el enrutamiento de entrada mientras que los gestores de ventanas pueden escribirse en cualquier lenguaje, incluso con recolección de basura, sin afectar el rendimiento del compositor. Esto reduce drásticamente la barrera de entrada: un gestor de ventanas básico es ahora un proyecto de fin de semana en lugar de meses de trabajo. Ya existen 15 gestores de ventanas para river.</span>
+<span class="i18n-text" data-lang="de">River 0.4.0 führt ein stabiles Protokoll (river-window-management-v1) ein, das den Wayland-Compositor vom Window-Manager in getrennte Prozesse aufteilt. Der Compositor handhabt Rendering und Input-Routing, während Window-Manager in jeder Sprache geschrieben werden können, auch garbage-collected, ohne die Compositor-Performance zu beeinträchtigen. Dies senkt die Einstiegshürde dramatisch - ein einfacher Window-Manager ist jetzt ein Wochenendprojekt statt monatelanger Arbeit. Es existieren bereits 15 Window-Manager für river.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">It only took Wayland 15 years to solve what X11 did from day one. The monolithic &#x27;compositor plus window manager&#x27; design was never technically necessary - just the path of least resistance. Now that someone finally bothered to do it right, expect another decade before distros ship it by default.</div>
+        <span class="i18n-text" data-lang="zh">Wayland花了15年才解决X11从第一天就做到的事情。&#x27;合成器加窗口管理器&#x27;的单体设计从来不是技术必需——只是阻力最小的路径。现在终于有人做对了，预计再过十年发行版才会默认附带。</span>
+<span class="i18n-text" data-lang="ja">Waylandが X11が初日からやっていたことを解決するのに15年かかった。「コンポジタ＋ウィンドウマネージャ」のモノリシック設計は技術的に必要ではなかった。最小抵抗の道を選んだだけ。ようやく誰かが正しくやったので、ディストロがデフォルトで出荷するまでさらに10年かかると予想。</span>
+<span class="i18n-text" data-lang="ko">Wayland가 X11이 첫날부터 했던 것을 해결하는 데 15년이 걸렸다. &#x27;컴포지터 플러스 윈도우 매니저&#x27; 모놀리식 설계는 기술적으로 필요하지 않았다. 단지 저항이 가장 적은 경로였을 뿐. 이제 누군가가 마침내 제대로 했으니 배포판이 기본으로 탑재하기까지 또 10년이 걸릴 것으로 예상된다.</span>
+<span class="i18n-text" data-lang="es">Wayland tardó 15 años en resolver lo que X11 hizo desde el primer día. El diseño monolítico de &#x27;compositor más gestor de ventanas&#x27; nunca fue técnicamente necesario, solo el camino de menor resistencia. Ahora que alguien finalmente lo hizo bien, espera otra década antes de que las distros lo incluyan por defecto.</span>
+<span class="i18n-text" data-lang="de">Wayland hat 15 Jahre gebraucht, um das zu lösen, was X11 vom ersten Tag an tat. Das monolithische Design &#x27;Compositor plus Window-Manager&#x27; war nie technisch notwendig - nur der Weg des geringsten Widerstands. Jetzt, wo es endlich jemand richtig gemacht hat, erwarte noch ein Jahrzehnt, bis Distros es standardmäßig ausliefern.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"To me, this is the first time Wayland feels like it&#x27;s not a waste of time. The display server does not need to have the complexity of window managing on top of surface management."</div>
+          <div class="comment-i18n" data-lang="zh">对我来说，这是Wayland第一次感觉不是浪费时间。显示服务器不需要在表面管理之上增加窗口管理的复杂性。</div>
+<div class="comment-i18n" data-lang="ja">私にとって、これはWaylandが時間の無駄ではないと初めて感じた瞬間だ。ディスプレイサーバーはサーフェス管理の上にウィンドウ管理の複雑さを持つ必要がない。</div>
+<div class="comment-i18n" data-lang="ko">나에게 이것은 Wayland가 시간 낭비가 아니라고 처음 느낀 순간이다. 디스플레이 서버는 서피스 관리 위에 윈도우 관리의 복잡성을 가질 필요가 없다.</div>
+<div class="comment-i18n" data-lang="es">Para mí, esta es la primera vez que Wayland no parece una pérdida de tiempo. El servidor de display no necesita tener la complejidad de gestión de ventanas encima de la gestión de superficies.</div>
+<div class="comment-i18n" data-lang="de">Für mich ist das das erste Mal, dass sich Wayland nicht wie Zeitverschwendung anfühlt. Der Display-Server muss nicht die Komplexität des Window-Managings auf dem Surface-Management haben.</div>
+
+          <div class="comment-author">-- _flux</div>
+        </div><div class="comment">
+          <div class="comment-text">"I don&#x27;t get the frustration with wayland in the comments. This project shows that having a separate window manager was always possible. First we got wlroots as a library, now we got river as an even higher level abstraction."</div>
+          <div class="comment-i18n" data-lang="zh">我不理解评论里对wayland的挫败感。这个项目表明拥有独立窗口管理器一直是可能的。先有了wlroots作为库，现在有了river作为更高级的抽象。</div>
+<div class="comment-i18n" data-lang="ja">コメントでのwaylandへの不満が理解できない。このプロジェクトは独立したウィンドウマネージャが常に可能だったことを示している。まずwlrootsがライブラリとして出て、今riverがより高レベルの抽象として出た。</div>
+<div class="comment-i18n" data-lang="ko">댓글의 wayland에 대한 불만을 이해하지 못하겠다. 이 프로젝트는 별도의 윈도우 매니저가 항상 가능했음을 보여준다. 먼저 라이브러리로 wlroots가 나왔고, 이제 더 높은 수준의 추상화로 river가 나왔다.</div>
+<div class="comment-i18n" data-lang="es">No entiendo la frustración con wayland en los comentarios. Este proyecto muestra que tener un gestor de ventanas separado siempre fue posible. Primero tuvimos wlroots como biblioteca, ahora tenemos river como una abstracción de nivel aún más alto.</div>
+<div class="comment-i18n" data-lang="de">Ich verstehe die Frustration mit wayland in den Kommentaren nicht. Dieses Projekt zeigt, dass ein separater Window-Manager immer möglich war. Zuerst bekamen wir wlroots als Bibliothek, jetzt river als noch höhere Abstraktion.</div>
+
+          <div class="comment-author">-- ximm</div>
+        </div><div class="comment">
+          <div class="comment-text">"Well, it only took 15 years for someone to fix one of many Wayland design flaws. Now it will take another 15 years for window managers to mature to X11 levels."</div>
+          <div class="comment-i18n" data-lang="zh">好吧，有人花了15年才修复Wayland众多设计缺陷之一。现在还要再花15年窗口管理器才能成熟到X11的水平。</div>
+<div class="comment-i18n" data-lang="ja">まあ、誰かがWaylandの多くの設計上の欠陥の一つを修正するのに15年かかった。ウィンドウマネージャがX11レベルに成熟するのにさらに15年かかるだろう。</div>
+<div class="comment-i18n" data-lang="ko">글쎄, 누군가가 Wayland의 많은 설계 결함 중 하나를 고치는 데 15년이 걸렸다. 윈도우 매니저가 X11 수준으로 성숙하려면 또 15년이 걸릴 것이다.</div>
+<div class="comment-i18n" data-lang="es">Bueno, solo tomó 15 años para que alguien arreglara uno de los muchos defectos de diseño de Wayland. Ahora tomará otros 15 años para que los gestores de ventanas maduren al nivel de X11.</div>
+<div class="comment-i18n" data-lang="de">Nun, es hat nur 15 Jahre gedauert, bis jemand einen der vielen Wayland-Designfehler behoben hat. Jetzt wird es weitere 15 Jahre dauern, bis Window-Manager auf X11-Niveau ausgereift sind.</div>
+
+          <div class="comment-author">-- akagusu</div>
+        </div>
+      </div>
+      
+    </article>
+<article class="story" id="s47388141-03160724">
+      <h3 class="story-title">
+        <a href="https://blog.zuthof.nl/2023/06/02/what-makes-intel-optane-stand-out/" target="_blank">What makes Intel Optane stand out (2023)</a>
+        <a href="#s47388141-03160724" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">是什么让Intel Optane脱颖而出(2023)</div>
+<div class="i18n-title" data-lang="ja">Intel Optaneが際立つ理由(2023)</div>
+<div class="i18n-title" data-lang="ko">Intel Optane이 돋보이는 이유(2023)</div>
+<div class="i18n-title" data-lang="es">Lo que hace destacar a Intel Optane (2023)</div>
+<div class="i18n-title" data-lang="de">Was Intel Optane auszeichnet (2023)</div>
+
+      <div class="story-meta">
+        197pts | 141c | <a href="https://news.ycombinator.com/item?id=47388141" target="_blank">HN#47388141</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Intel Optane drives use 3D XPoint technology delivering 25 microsecond read latency (vs 90-110us for NAND SSDs), 100 DWPD endurance (vs 10 for best NAND), and consistent write performance without throttling. The P5800X achieves 1.5M IOPS per drive. Unlike NAND which must erase pages before writing, Optane is byte-addressable and can overwrite directly. Perfect for ZFS ZIL/SLOG, Ceph WAL, and high-write databases. Intel discontinued the technology in 2022 as part of IDM 2.0 strategy.</div>
+        <span class="i18n-text" data-lang="zh">Intel Optane驱动器使用3D XPoint技术，提供25微秒读取延迟(NAND SSD为90-110微秒)，100 DWPD耐久性(最佳NAND为10)，以及无节流的一致写入性能。P5800X每个驱动器实现150万IOPS。与NAND必须在写入前擦除页面不同，Optane是字节可寻址的，可以直接覆盖。非常适合ZFS ZIL/SLOG、Ceph WAL和高写入数据库。Intel在2022年作为IDM 2.0战略的一部分停止了该技术。</span>
+<span class="i18n-text" data-lang="ja">Intel Optaneドライブは3D XPoint技術を使用し、25マイクロ秒の読み取りレイテンシ(NAND SSDは90-110マイクロ秒)、100 DWPDの耐久性(最高のNANDは10)、スロットリングなしの一貫した書き込み性能を提供。P5800Xは1ドライブあたり150万IOPSを達成。書き込み前にページを消去する必要があるNANDとは異なり、Optaneはバイトアドレス可能で直接上書きできる。ZFS ZIL/SLOG、Ceph WAL、高書き込みデータベースに最適。Intelは2022年にIDM 2.0戦略の一環としてこの技術を廃止。</span>
+<span class="i18n-text" data-lang="ko">Intel Optane 드라이브는 3D XPoint 기술을 사용하여 25마이크로초 읽기 지연 시간(NAND SSD는 90-110마이크로초), 100 DWPD 내구성(최고 NAND는 10), 스로틀링 없는 일관된 쓰기 성능을 제공한다. P5800X는 드라이브당 150만 IOPS를 달성한다. 쓰기 전에 페이지를 지워야 하는 NAND와 달리 Optane은 바이트 주소 지정이 가능하고 직접 덮어쓸 수 있다. ZFS ZIL/SLOG, Ceph WAL, 고쓰기 데이터베이스에 완벽하다. Intel은 2022년 IDM 2.0 전략의 일환으로 이 기술을 중단했다.</span>
+<span class="i18n-text" data-lang="es">Los drives Intel Optane usan tecnología 3D XPoint entregando 25 microsegundos de latencia de lectura (vs 90-110us para SSDs NAND), 100 DWPD de durabilidad (vs 10 para el mejor NAND), y rendimiento de escritura consistente sin throttling. El P5800X logra 1.5M IOPS por drive. A diferencia de NAND que debe borrar páginas antes de escribir, Optane es direccionable por byte y puede sobrescribir directamente. Perfecto para ZFS ZIL/SLOG, Ceph WAL, y bases de datos de alta escritura. Intel descontinuó la tecnología en 2022 como parte de la estrategia IDM 2.0.</span>
+<span class="i18n-text" data-lang="de">Intel Optane-Laufwerke nutzen 3D-XPoint-Technologie mit 25 Mikrosekunden Lesezugriff (vs 90-110us für NAND-SSDs), 100 DWPD Haltbarkeit (vs 10 für bestes NAND) und konsistenter Schreibleistung ohne Drosselung. Der P5800X erreicht 1,5M IOPS pro Laufwerk. Anders als NAND, das Seiten vor dem Schreiben löschen muss, ist Optane byte-adressierbar und kann direkt überschreiben. Perfekt für ZFS ZIL/SLOG, Ceph WAL und schreibintensive Datenbanken. Intel stellte die Technologie 2022 als Teil der IDM-2.0-Strategie ein.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">A technology that was genuinely superior in every meaningful metric for storage-intensive workloads, killed because the market preferred cheaper over better. The 4x latency advantage and 10x endurance improvement weren&#x27;t enough to overcome &#x27;but NAND is cheaper per GB&#x27;. Future storage engineers will study Optane like we study Betamax.</div>
+        <span class="i18n-text" data-lang="zh">一项在存储密集型工作负载的每个有意义指标上都真正优越的技术，因为市场偏好便宜而非更好而被杀死。4倍延迟优势和10倍耐久性改进不足以克服&#x27;但NAND每GB更便宜&#x27;。未来的存储工程师会像我们研究Betamax一样研究Optane。</span>
+<span class="i18n-text" data-lang="ja">ストレージ集約型ワークロードのすべての意味ある指標で本当に優れていた技術が、市場がより良いものより安いものを好んだために殺された。4倍のレイテンシ優位性と10倍の耐久性向上は「でもNANDの方がGBあたり安い」を克服するには不十分だった。将来のストレージエンジニアは我々がBetamaxを研究するようにOptaneを研究するだろう。</span>
+<span class="i18n-text" data-lang="ko">스토리지 집약적 워크로드의 모든 의미 있는 지표에서 진정으로 우수했던 기술이 시장이 더 나은 것보다 더 싼 것을 선호했기 때문에 죽었다. 4배의 지연 시간 우위와 10배의 내구성 향상은 &#x27;NAND가 GB당 더 싸다&#x27;를 극복하기에 충분하지 않았다. 미래의 스토리지 엔지니어들은 우리가 베타맥스를 연구하듯이 Optane을 연구할 것이다.</span>
+<span class="i18n-text" data-lang="es">Una tecnología que era genuinamente superior en cada métrica significativa para cargas de trabajo intensivas en almacenamiento, muerta porque el mercado prefirió más barato sobre mejor. La ventaja de 4x en latencia y la mejora de 10x en durabilidad no fueron suficientes para superar &#x27;pero NAND es más barato por GB&#x27;. Los futuros ingenieros de almacenamiento estudiarán Optane como nosotros estudiamos Betamax.</span>
+<span class="i18n-text" data-lang="de">Eine Technologie, die in jeder bedeutsamen Metrik für speicherintensive Workloads wirklich überlegen war, getötet weil der Markt billiger gegenüber besser bevorzugte. Der 4-fache Latenzvorteil und die 10-fache Haltbarkeitsverbesserung reichten nicht aus, um &#x27;aber NAND ist billiger pro GB&#x27; zu überwinden. Zukünftige Storage-Ingenieure werden Optane studieren wie wir Betamax studieren.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"It stands out because it didn&#x27;t sell. Which is weird because there were some pretty big pros about using them. The latency for updating 1 byte was crazy good. Some databases or journals for ZFS really benefited from this."</div>
+          <div class="comment-i18n" data-lang="zh">它脱颖而出是因为它卖不出去。这很奇怪，因为使用它有一些很大的优点。更新1字节的延迟非常好。一些数据库或ZFS日志真的从中受益。</div>
+<div class="comment-i18n" data-lang="ja">売れなかったから目立つ。使用する大きなメリットがあったのに奇妙だ。1バイト更新のレイテンシは驚異的だった。一部のデータベースやZFSのジャーナルは本当にこれから恩恵を受けた。</div>
+<div class="comment-i18n" data-lang="ko">팔리지 않아서 눈에 띈다. 사용의 꽤 큰 장점이 있었는데 이상하다. 1바이트 업데이트 지연 시간이 엄청 좋았다. 일부 데이터베이스나 ZFS 저널은 정말 이것으로부터 혜택을 받았다.</div>
+<div class="comment-i18n" data-lang="es">Destaca porque no se vendió. Lo cual es raro porque había grandes ventajas en usarlos. La latencia para actualizar 1 byte era increíblemente buena. Algunas bases de datos o journals para ZFS realmente se beneficiaron de esto.</div>
+<div class="comment-i18n" data-lang="de">Es sticht hervor, weil es sich nicht verkaufte. Was seltsam ist, weil es einige große Vorteile gab. Die Latenz für die Aktualisierung von 1 Byte war wahnsinnig gut. Einige Datenbanken oder Journals für ZFS profitierten wirklich davon.</div>
+
+          <div class="comment-author">-- hbogert</div>
+        </div><div class="comment">
+          <div class="comment-text">"Is there any alternative today? I benched my brand new PCIe5 SSD today and while it does over 10GB/s sequential, for random small chunks it barely exceeds 70MB/s. Meanwhile Optane was 5 times faster."</div>
+          <div class="comment-i18n" data-lang="zh">今天有替代品吗？我今天测试了全新的PCIe5 SSD，顺序读写超过10GB/s，但随机小块几乎只有70MB/s。而Optane快了5倍。</div>
+<div class="comment-i18n" data-lang="ja">今日代替品はある？今日新品のPCIe5 SSDをベンチしたが、シーケンシャルは10GB/s以上出るが、ランダム小チャンクは70MB/sをかろうじて超える程度。一方Optaneは5倍速かった。</div>
+<div class="comment-i18n" data-lang="ko">오늘 대안이 있나? 오늘 새 PCIe5 SSD를 벤치마킹했는데 순차적으로는 10GB/s 이상이지만 랜덤 작은 청크는 70MB/s를 겨우 넘는다. 반면 Optane은 5배 빨랐다.</div>
+<div class="comment-i18n" data-lang="es">¿Hay alguna alternativa hoy? Probé mi SSD PCIe5 nuevo hoy y mientras hace más de 10GB/s secuencial, para chunks pequeños aleatorios apenas excede 70MB/s. Mientras tanto Optane era 5 veces más rápido.</div>
+<div class="comment-i18n" data-lang="de">Gibt es heute eine Alternative? Ich habe meine brandneue PCIe5-SSD heute getestet und während sie über 10GB/s sequentiell schafft, überschreitet sie bei zufälligen kleinen Chunks kaum 70MB/s. Optane war hingegen 5-mal schneller.</div>
+
+          <div class="comment-author">-- whatever1</div>
+        </div><div class="comment">
+          <div class="comment-text">"For a good technical explanation at the physical level of a memory cell, check pcper.com&#x27;s article on how 3D XPoint phase change memory works."</div>
+          <div class="comment-i18n" data-lang="zh">关于存储单元物理级别的技术解释，可以查看pcper.com关于3D XPoint相变存储器工作原理的文章。</div>
+<div class="comment-i18n" data-lang="ja">メモリセルの物理レベルでの技術的説明については、pcper.comの3D XPoint相変化メモリの仕組みに関する記事を参照。</div>
+<div class="comment-i18n" data-lang="ko">메모리 셀의 물리적 수준에 대한 좋은 기술적 설명은 pcper.com의 3D XPoint 상변화 메모리 작동 방식 기사를 참조.</div>
+<div class="comment-i18n" data-lang="es">Para una buena explicación técnica a nivel físico de una celda de memoria, consulta el artículo de pcper.com sobre cómo funciona la memoria de cambio de fase 3D XPoint.</div>
+<div class="comment-i18n" data-lang="de">Für eine gute technische Erklärung auf physischer Ebene einer Speicherzelle, siehe den pcper.com-Artikel darüber, wie 3D-XPoint-Phasenwechselspeicher funktioniert.</div>
+
+          <div class="comment-author">-- amelius</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#storage</span><span class="tag">#hardware</span><span class="tag">#intel</span><span class="tag">#performance</span></div>
+    </article>
+<article class="story" id="s47359712-03160724">
+      <h3 class="story-title">
+        <a href="https://www.moment.dev/blog/lies-i-was-told-pt-2" target="_blank">Lies I was told about collaborative editing, Part 2: Why we don&#x27;t use Yjs :crdt:collaborative-editing</a>
+        <a href="#s47359712-03160724" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">关于协同编辑的谎言，第二部分：为什么我们不使用Yjs</div>
+<div class="i18n-title" data-lang="ja">共同編集について聞かされた嘘、パート2：なぜ私たちはYjsを使わないのか</div>
+<div class="i18n-title" data-lang="ko">협업 편집에 대해 들은 거짓말, 2부: 왜 우리는 Yjs를 사용하지 않는가</div>
+<div class="i18n-title" data-lang="es">Mentiras que me contaron sobre la edición colaborativa, Parte 2: Por qué no usamos Yjs</div>
+<div class="i18n-title" data-lang="de">Lügen, die mir über kollaboratives Editieren erzählt wurden, Teil 2: Warum wir Yjs nicht verwenden</div>
+
+      <div class="story-meta">
+        43pts | 18c | <a href="https://news.ycombinator.com/item?id=47359712" target="_blank">HN#47359712</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Moment.dev explains why they abandoned Yjs, the most popular CRDT library, for collaborative editing. Key issues: Yjs completely destroys and recreates the entire ProseMirror document on every keystroke by design, breaking position mappings, decorations, plugins, and making 60fps impossible. The &#x27;simple&#x27; alternative using prosemirror-collab is 40 lines of code and provides the same offline/optimistic update capabilities without CRDT complexity. Unless you need truly masterless P2P editing, CRDTs are unnecessary overhead.</div>
+        <span class="i18n-text" data-lang="zh">Moment.dev解释了为什么他们放弃了最流行的CRDT库Yjs进行协同编辑。关键问题：Yjs在每次按键时都会完全销毁并重建整个ProseMirror文档，这是设计使然，破坏了位置映射、装饰、插件，使60fps变得不可能。使用prosemirror-collab的&#x27;简单&#x27;替代方案只需40行代码，提供相同的离线/乐观更新功能而没有CRDT的复杂性。除非你需要真正的无主P2P编辑，否则CRDT是不必要的开销。</span>
+<span class="i18n-text" data-lang="ja">Moment.devは最も人気のあるCRDTライブラリYjsを共同編集で放棄した理由を説明。主な問題：Yjsは設計上、キーストロークごとにProseMirrorドキュメント全体を完全に破棄して再作成し、位置マッピング、デコレーション、プラグインを壊し、60fpsを不可能にする。prosemirror-collabを使う「シンプル」な代替案は40行のコードで、CRDTの複雑さなしに同じオフライン/楽観的更新機能を提供。真にマスターレスなP2P編集が必要でない限り、CRDTは不要なオーバーヘッド。</span>
+<span class="i18n-text" data-lang="ko">Moment.dev는 가장 인기 있는 CRDT 라이브러리인 Yjs를 협업 편집에서 포기한 이유를 설명한다. 핵심 문제: Yjs는 설계상 모든 키스트로크마다 전체 ProseMirror 문서를 완전히 파괴하고 재생성하여 위치 매핑, 데코레이션, 플러그인을 깨뜨리고 60fps를 불가능하게 만든다. prosemirror-collab을 사용하는 &#x27;단순한&#x27; 대안은 40줄의 코드로 CRDT 복잡성 없이 동일한 오프라인/낙관적 업데이트 기능을 제공한다. 진정한 마스터리스 P2P 편집이 필요하지 않다면 CRDT는 불필요한 오버헤드다.</span>
+<span class="i18n-text" data-lang="es">Moment.dev explica por qué abandonaron Yjs, la biblioteca CRDT más popular, para edición colaborativa. Problemas clave: Yjs destruye y recrea completamente todo el documento ProseMirror en cada pulsación de tecla por diseño, rompiendo mapeos de posición, decoraciones, plugins, y haciendo imposible 60fps. La alternativa &#x27;simple&#x27; usando prosemirror-collab son 40 líneas de código y proporciona las mismas capacidades offline/actualización optimista sin la complejidad de CRDT. A menos que necesites edición P2P verdaderamente sin maestro, los CRDTs son sobrecarga innecesaria.</span>
+<span class="i18n-text" data-lang="de">Moment.dev erklärt, warum sie Yjs, die beliebteste CRDT-Bibliothek, für kollaboratives Editieren aufgegeben haben. Hauptprobleme: Yjs zerstört und erstellt designbedingt bei jedem Tastendruck das gesamte ProseMirror-Dokument neu, bricht Position-Mappings, Dekorationen, Plugins und macht 60fps unmöglich. Die &#x27;einfache&#x27; Alternative mit prosemirror-collab umfasst 40 Codezeilen und bietet dieselben Offline-/optimistischen Update-Funktionen ohne CRDT-Komplexität. Außer man braucht wirklich masterlose P2P-Bearbeitung, sind CRDTs unnötiger Overhead.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Everyone was so busy asking &#x27;can we use CRDTs&#x27; that nobody stopped to ask &#x27;should we&#x27;. Turns out the emperor has no clothes: you can get 99% of collaborative editing benefits with a boring centralized solution and 40 lines of code. The CRDT hype train derailed into a pit of tombstones and document recreation.</div>
+        <span class="i18n-text" data-lang="zh">每个人都忙于问&#x27;我们能用CRDT吗&#x27;，没人停下来问&#x27;我们应该用吗&#x27;。原来皇帝没穿衣服：你可以用无聊的集中式解决方案和40行代码获得99%的协同编辑好处。CRDT炒作列车脱轨进入了墓碑和文档重建的深坑。</span>
+<span class="i18n-text" data-lang="ja">誰もが「CRDTを使えるか」と忙しく聞いていて、「使うべきか」と立ち止まる人はいなかった。裸の王様だった：退屈な中央集権的ソリューションと40行のコードで共同編集の99%の利点を得られる。CRDTの誇大広告列車はトゥームストーンとドキュメント再作成の穴に脱線した。</span>
+<span class="i18n-text" data-lang="ko">모든 사람이 &#x27;CRDT를 사용할 수 있는가&#x27;라고 바쁘게 물었지 &#x27;사용해야 하는가&#x27;라고 멈춰 묻는 사람은 없었다. 황제가 벌거벗은 것으로 밝혀졌다: 지루한 중앙 집중식 솔루션과 40줄의 코드로 협업 편집 이점의 99%를 얻을 수 있다. CRDT 과대광고 열차는 툼스톤과 문서 재생성의 구덩이로 탈선했다.</span>
+<span class="i18n-text" data-lang="es">Todos estaban tan ocupados preguntando &#x27;podemos usar CRDTs&#x27; que nadie se detuvo a preguntar &#x27;deberíamos&#x27;. Resulta que el emperador está desnudo: puedes obtener el 99% de los beneficios de edición colaborativa con una solución centralizada aburrida y 40 líneas de código. El tren del hype de CRDT descarriló en un pozo de lápidas y recreación de documentos.</span>
+<span class="i18n-text" data-lang="de">Alle waren so damit beschäftigt zu fragen &#x27;können wir CRDTs nutzen&#x27;, dass niemand innehielt zu fragen &#x27;sollten wir&#x27;. Es stellt sich heraus, dass der Kaiser keine Kleider hat: Man kann 99% der Vorteile kollaborativen Editierens mit einer langweiligen zentralisierten Lösung und 40 Zeilen Code bekommen. Der CRDT-Hype-Zug entgleiste in eine Grube aus Tombstones und Dokumenten-Neuerschaffung.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I remember reading Part 1 back in the day, and this is also excellent. I&#x27;ve spent 3+ years fighting the same problems while building DocNode and DocSync, two libraries that synchronize documents while guaranteeing all clients apply operations in the same order."</div>
+          <div class="comment-i18n" data-lang="zh">我记得当时读过第一部分，这篇也很棒。我花了3年多时间与同样的问题作斗争，同时构建DocNode和DocSync，两个保证所有客户端以相同顺序应用操作的文档同步库。</div>
+<div class="comment-i18n" data-lang="ja">当時パート1を読んだのを覚えているが、これも素晴らしい。DocNodeとDocSync、すべてのクライアントが同じ順序で操作を適用することを保証する2つのライブラリを構築しながら、3年以上同じ問題と戦ってきた。</div>
+<div class="comment-i18n" data-lang="ko">당시 1부를 읽은 것을 기억하는데, 이것도 훌륭하다. 모든 클라이언트가 같은 순서로 작업을 적용하도록 보장하는 두 라이브러리인 DocNode와 DocSync를 구축하면서 3년 이상 같은 문제와 싸워왔다.</div>
+<div class="comment-i18n" data-lang="es">Recuerdo haber leído la Parte 1 en su momento, y esta también es excelente. He pasado más de 3 años luchando con los mismos problemas mientras construía DocNode y DocSync, dos bibliotecas que sincronizan documentos garantizando que todos los clientes apliquen operaciones en el mismo orden.</div>
+<div class="comment-i18n" data-lang="de">Ich erinnere mich, Teil 1 damals gelesen zu haben, und dieser ist auch ausgezeichnet. Ich habe über 3 Jahre damit verbracht, die gleichen Probleme zu bekämpfen, während ich DocNode und DocSync baute, zwei Bibliotheken, die Dokumente synchronisieren und garantieren, dass alle Clients Operationen in derselben Reihenfolge anwenden.</div>
+
+          <div class="comment-author">-- GermanJablo</div>
+        </div><div class="comment">
+          <div class="comment-text">"Just use OT like normal people, it&#x27;s been proven to work. No tombstones, no infinite storage requirements, fairly easy to debug. We regularly have 30+ people editing the same doc with negligible conflicts."</div>
+          <div class="comment-i18n" data-lang="zh">像正常人一样使用OT，它已被证明有效。没有墓碑，没有无限存储需求，相当容易调试。我们经常有30多人同时编辑同一文档，冲突可以忽略不计。</div>
+<div class="comment-i18n" data-lang="ja">普通の人のようにOTを使えばいい、それは機能することが証明されている。トゥームストーンなし、無限のストレージ要件なし、かなりデバッグしやすい。私たちは定期的に30人以上が同じドキュメントを編集しているが、競合は無視できる程度。</div>
+<div class="comment-i18n" data-lang="ko">평범한 사람들처럼 OT를 사용하라, 작동한다는 것이 증명되었다. 툼스톤 없음, 무한 스토리지 요구 사항 없음, 상당히 디버깅하기 쉽다. 우리는 정기적으로 30명 이상이 같은 문서를 편집하는데 충돌은 무시할 수 있다.</div>
+<div class="comment-i18n" data-lang="es">Solo usa OT como la gente normal, está probado que funciona. Sin lápidas, sin requisitos de almacenamiento infinito, bastante fácil de depurar. Regularmente tenemos más de 30 personas editando el mismo documento con conflictos insignificantes.</div>
+<div class="comment-i18n" data-lang="de">Benutze einfach OT wie normale Leute, es hat sich bewährt. Keine Tombstones, keine unendlichen Speicheranforderungen, ziemlich einfach zu debuggen. Wir haben regelmäßig 30+ Leute, die dasselbe Dokument bearbeiten, mit vernachlässigbaren Konflikten.</div>
+
+          <div class="comment-author">-- samlinnfer</div>
+        </div><div class="comment">
+          <div class="comment-text">"Moment appears to be producing &#x27;high-performance, collaborative, truly-offline-capable, fully-programmable document editor&#x27;. There seems to be a conflict of interest with describing Yjs&#x27;s performance."</div>
+          <div class="comment-i18n" data-lang="zh">Moment似乎在制作&#x27;高性能、协作、真正离线能力、完全可编程的文档编辑器&#x27;。在描述Yjs性能时似乎存在利益冲突。</div>
+<div class="comment-i18n" data-lang="ja">Momentは「高性能、協調的、真にオフライン対応、完全にプログラム可能なドキュメントエディタ」を作っているようだ。Yjsのパフォーマンスを説明する際に利益相反があるようだ。</div>
+<div class="comment-i18n" data-lang="ko">Moment는 &#x27;고성능, 협업, 진정한 오프라인 기능, 완전히 프로그래밍 가능한 문서 편집기&#x27;를 만들고 있는 것 같다. Yjs의 성능을 설명할 때 이해 충돌이 있는 것 같다.</div>
+<div class="comment-i18n" data-lang="es">Moment parece estar produciendo &#x27;editor de documentos de alto rendimiento, colaborativo, verdaderamente offline, completamente programable&#x27;. Parece haber un conflicto de interés al describir el rendimiento de Yjs.</div>
+<div class="comment-i18n" data-lang="de">Moment scheint einen &#x27;hochleistungsfähigen, kollaborativen, wirklich offline-fähigen, voll programmierbaren Dokumenteneditor&#x27; zu produzieren. Es scheint einen Interessenkonflikt bei der Beschreibung der Yjs-Performance zu geben.</div>
+
+          <div class="comment-author">-- kaiwenwang</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#yjs</span><span class="tag">#prosemirror</span></div>
+    </article>
+<article class="story" id="s47385011-03160724">
+      <h3 class="story-title">
+        <a href="https://github.com/jtsylve/spice-crypt" target="_blank">SpiceCrypt: A Python library for decrypting LTspice encrypted model files :reverse-engineering</a>
+        <a href="#s47385011-03160724" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">SpiceCrypt：用于解密LTspice加密模型文件的Python库</div>
+<div class="i18n-title" data-lang="ja">SpiceCrypt：LTspice暗号化モデルファイルを復号するPythonライブラリ</div>
+<div class="i18n-title" data-lang="ko">SpiceCrypt: LTspice 암호화 모델 파일 복호화를 위한 Python 라이브러리</div>
+<div class="i18n-title" data-lang="es">SpiceCrypt: Una librería Python para descifrar archivos de modelos encriptados de LTspice</div>
+<div class="i18n-title" data-lang="de">SpiceCrypt: Eine Python-Bibliothek zum Entschlüsseln verschlüsselter LTspice-Modelldateien</div>
+
+      <div class="story-meta">
+        29pts | 4c | <a href="https://news.ycombinator.com/item?id=47385011" target="_blank">HN#47385011</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">SpiceCrypt is a Python tool that decrypts LTspice&#x27;s &#x27;encrypted&#x27; component models. The encryption is actually just obfuscation: the file header contains two 32-bit keys used to derive a substitution table index and step value. The tool reveals that chip manufacturers&#x27; &#x27;protected&#x27; SPICE models are trivially reversible, which matters because these models contain proprietary component characteristics.</div>
+        <span class="i18n-text" data-lang="zh">SpiceCrypt是一个Python工具，用于解密LTspice的&#x27;加密&#x27;组件模型。所谓加密实际上只是混淆：文件头包含两个32位密钥，用于派生替换表索引和步长值。该工具揭示了芯片制造商的&#x27;受保护&#x27;SPICE模型是可以轻易逆向的，这很重要因为这些模型包含专有组件特性。</span>
+<span class="i18n-text" data-lang="ja">SpiceCryptはLTspiceの「暗号化」コンポーネントモデルを復号するPythonツール。暗号化は実際には難読化に過ぎない：ファイルヘッダーに2つの32ビットキーが含まれ、置換テーブルのインデックスとステップ値を導出する。このツールはチップメーカーの「保護された」SPICEモデルが簡単にリバースエンジニアリングできることを明らかにした。これらのモデルには独自のコンポーネント特性が含まれているため重要。</span>
+<span class="i18n-text" data-lang="ko">SpiceCrypt는 LTspice의 &#x27;암호화된&#x27; 컴포넌트 모델을 복호화하는 Python 도구다. 암호화는 실제로 난독화일 뿐이다: 파일 헤더에 두 개의 32비트 키가 있어 치환 테이블 인덱스와 스텝 값을 도출한다. 이 도구는 칩 제조사의 &#x27;보호된&#x27; SPICE 모델이 쉽게 역공학될 수 있음을 보여준다. 이러한 모델에는 독점적인 컴포넌트 특성이 포함되어 있어 중요하다.</span>
+<span class="i18n-text" data-lang="es">SpiceCrypt es una herramienta Python que descifra los modelos de componentes &#x27;encriptados&#x27; de LTspice. La encriptación es realmente solo ofuscación: el header del archivo contiene dos claves de 32 bits usadas para derivar un índice de tabla de sustitución y valor de paso. La herramienta revela que los modelos SPICE &#x27;protegidos&#x27; de los fabricantes de chips son trivialmente reversibles, lo cual importa porque estos modelos contienen características propietarias de componentes.</span>
+<span class="i18n-text" data-lang="de">SpiceCrypt ist ein Python-Tool, das LTspices &#x27;verschlüsselte&#x27; Komponentenmodelle entschlüsselt. Die Verschlüsselung ist eigentlich nur Obfuskation: Der Dateiheader enthält zwei 32-Bit-Schlüssel zur Ableitung eines Substitutionstabellenindex und Schrittwerts. Das Tool enthüllt, dass die &#x27;geschützten&#x27; SPICE-Modelle der Chiphersteller trivial umkehrbar sind, was wichtig ist, da diese Modelle proprietäre Komponenteneigenschaften enthalten.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Calling this &#x27;encryption&#x27; is generous. It&#x27;s a substitution cipher with the keys stored in the file header. The real story is that semiconductor companies have been shipping &#x27;protected&#x27; models that any motivated engineer could crack in an afternoon. Security theater at its finest.</div>
+        <span class="i18n-text" data-lang="zh">称这为&#x27;加密&#x27;是很慷慨的说法。这是一个替换密码，密钥存储在文件头中。真正的故事是半导体公司一直在发布&#x27;受保护&#x27;的模型，任何有动力的工程师都可以在一下午内破解。典型的安全表演。</span>
+<span class="i18n-text" data-lang="ja">これを「暗号化」と呼ぶのは寛大だ。ファイルヘッダーにキーが保存された置換暗号だ。本当の話は、半導体企業がやる気のあるエンジニアなら午後に解読できる「保護された」モデルを出荷してきたということ。最高のセキュリティ劇場。</span>
+<span class="i18n-text" data-lang="ko">이것을 &#x27;암호화&#x27;라고 부르는 것은 관대한 표현이다. 파일 헤더에 키가 저장된 치환 암호다. 진짜 이야기는 반도체 회사들이 의욕적인 엔지니어라면 오후에 깰 수 있는 &#x27;보호된&#x27; 모델을 출하해왔다는 것이다. 최고의 보안 극장.</span>
+<span class="i18n-text" data-lang="es">Llamar a esto &#x27;encriptación&#x27; es generoso. Es un cifrado de sustitución con las claves almacenadas en el header del archivo. La historia real es que las empresas de semiconductores han estado enviando modelos &#x27;protegidos&#x27; que cualquier ingeniero motivado podría crackear en una tarde. Teatro de seguridad en su máxima expresión.</span>
+<span class="i18n-text" data-lang="de">Dies &#x27;Verschlüsselung&#x27; zu nennen ist großzügig. Es ist eine Substitutionschiffre mit den Schlüsseln im Dateiheader gespeichert. Die wahre Geschichte ist, dass Halbleiterunternehmen &#x27;geschützte&#x27; Modelle ausgeliefert haben, die jeder motivierte Ingenieur an einem Nachmittag knacken könnte. Sicherheitstheater vom Feinsten.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Coming from a brief failed attempt of using ghidra to see if keys were part of binary, this is a welcome news. Next on wishlist is someone doing the same for encrypted FPGA Verilog blobs."</div>
+          <div class="comment-i18n" data-lang="zh">在使用ghidra短暂失败的尝试查看密钥是否是二进制文件的一部分后，这是个好消息。下一个愿望清单是有人对加密的FPGA Verilog blob做同样的事情。</div>
+<div class="comment-i18n" data-lang="ja">ghidraを使ってキーがバイナリの一部かどうか確認しようとした短い失敗の試みの後、これは歓迎すべきニュースだ。次のウィッシュリストは誰かが暗号化されたFPGA Verilog blobに対して同じことをすること。</div>
+<div class="comment-i18n" data-lang="ko">ghidra를 사용해 키가 바이너리의 일부인지 확인하려는 짧은 실패한 시도 후, 이것은 반가운 소식이다. 다음 위시리스트는 누군가가 암호화된 FPGA Verilog blob에 대해 같은 작업을 하는 것이다.</div>
+<div class="comment-i18n" data-lang="es">Viniendo de un breve intento fallido de usar ghidra para ver si las claves eran parte del binario, esta es una noticia bienvenida. Lo siguiente en la lista de deseos es que alguien haga lo mismo para los blobs Verilog de FPGA encriptados.</div>
+<div class="comment-i18n" data-lang="de">Nach einem kurzen gescheiterten Versuch mit ghidra zu sehen, ob Schlüssel Teil der Binärdatei waren, ist das eine willkommene Nachricht. Als Nächstes auf der Wunschliste steht, dass jemand dasselbe für verschlüsselte FPGA-Verilog-Blobs macht.</div>
+
+          <div class="comment-author">-- rshm</div>
+        </div><div class="comment">
+          <div class="comment-text">"The file header contains two 32-bit keys used to derive a substitution table index and step value for decryption. In other words, obfuscation."</div>
+          <div class="comment-i18n" data-lang="zh">文件头包含两个32位密钥，用于派生解密的替换表索引和步长值。换句话说，混淆。</div>
+<div class="comment-i18n" data-lang="ja">ファイルヘッダーには復号用の置換テーブルインデックスとステップ値を導出するために使用される2つの32ビットキーが含まれている。言い換えれば、難読化。</div>
+<div class="comment-i18n" data-lang="ko">파일 헤더에는 복호화를 위한 치환 테이블 인덱스와 스텝 값을 도출하는 데 사용되는 두 개의 32비트 키가 포함되어 있다. 다시 말해, 난독화.</div>
+<div class="comment-i18n" data-lang="es">El header del archivo contiene dos claves de 32 bits usadas para derivar un índice de tabla de sustitución y valor de paso para el descifrado. En otras palabras, ofuscación.</div>
+<div class="comment-i18n" data-lang="de">Der Dateiheader enthält zwei 32-Bit-Schlüssel, die zur Ableitung eines Substitutionstabellenindex und Schrittwerts für die Entschlüsselung verwendet werden. Mit anderen Worten, Obfuskation.</div>
+
+          <div class="comment-author">-- userbinator</div>
+        </div><div class="comment">
+          <div class="comment-text">"What is LTspice?"</div>
+          <div class="comment-i18n" data-lang="zh">什么是LTspice？</div>
+<div class="comment-i18n" data-lang="ja">LTspiceとは何？</div>
+<div class="comment-i18n" data-lang="ko">LTspice가 뭐야?</div>
+<div class="comment-i18n" data-lang="es">¿Qué es LTspice?</div>
+<div class="comment-i18n" data-lang="de">Was ist LTspice?</div>
+
+          <div class="comment-author">-- snthpy</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#electronics</span><span class="tag">#spice</span><span class="tag">#security</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-03-16T06:01:00Z</div>
