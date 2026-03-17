@@ -1,0 +1,489 @@
+#+TITLE: HN Digest 2026-03-17 11:00:00 UT UTC
+#+DATE: 2026-03-17T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Flying trimarans, reverse-engineered AI clones, and functional programming gets its revenge
+
+* Highlights
+- Teardown: How to make destruction deterministic for multiplayer
+- OpenViktor: Ask nicely and AI will help you clone itself
+- Elixir: LLMs prove functional programmers were right all along
+
+* Stories
+
+** The unlikely story of Teardown Multiplayer :gamedev:networking:multiplayer:determinism:
+:PROPERTIES:
+:ID:       47366435
+:URL:      https://blog.voxagon.se/2026/03/13/teardown-multiplayer.html
+:HN_URL:   https://news.ycombinator.com/item?id=47366435
+:POINTS:   100
+:COMMENTS: 15
+:BY:       lairv
+:END:
+
+*** TLDR
+Teardown devs spent years making multiplayer work in a game where everything is destructible. They rewrote destruction logic in fixed-point integer math for determinism, split changes into command streams synced across clients, and built a hybrid system: deterministic for world changes, state sync for everything else. Join-in-progress works by replaying the command stream rather than serializing the whole scene.
+
+*** Take
+They basically said 'floating point is fine actually' after everyone told them it wasn't, rewrote half their engine in integer math anyway, then merged it all back into the main game instead of shipping separately. The technical section on why single-process multi-instance debugging was better and they had to give it up is the most relatable developer pain I've read this year.
+
+*** Comments
+
+**** kajkojednojajko
+:PROPERTIES:
+:COMMENT_ID: 47366500
+:END:
+It was already a technological marvel back then, so it's even more impressive that they managed to make the simulation deterministic to add multiplayer several years after release. Clearly top tier engineers.
+
+**** jmgao
+:PROPERTIES:
+:COMMENT_ID: 47366600
+:END:
+If you're only concerned about identical binaries on identical hardware, floating point determinism is basically solved these days.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Teardown多人模式的不可思议故事
+***** TLDR
+Teardown开发者花了数年时间让多人游戏在一个所有东西都可以破坏的游戏中运行。他们用定点整数数学重写了破坏逻辑以实现确定性，将变化分割成跨客户端同步的命令流，并构建了混合系统：世界变化用确定性，其他一切用状态同步。
+***** Take
+他们基本上说'浮点数其实没问题'，然后还是用整数数学重写了半个引擎，然后把它全部合并回主游戏而不是单独发布。
+***** Comments
+- 这已经是技术奇迹了，他们能在发布数年后让模拟变得确定性以添加多人模式更令人印象深刻。
+- 如果你只关心相同硬件上的相同二进制文件，浮点确定性如今基本上已经解决了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Teardownマルチプレイヤーの信じられない物語
+***** TLDR
+Teardown開発者は、すべてが破壊可能なゲームでマルチプレイヤーを機能させるために何年も費やした。決定論のために破壊ロジックを固定小数点整数演算で書き直し、変更をクライアント間で同期するコマンドストリームに分割し、ハイブリッドシステムを構築した。
+***** Take
+彼らは「浮動小数点は実は大丈夫」と言った後、結局エンジンの半分を整数演算で書き直し、別ゲームとしてではなくメインゲームに統合した。
+***** Comments
+- 当時すでに技術的驚異だったので、リリース後数年経ってからマルチプレイヤー追加のためにシミュレーションを決定論的にできたのはさらに印象的だ。
+- 同一ハードウェア上の同一バイナリだけを気にするなら、浮動小数点の決定論は最近ほぼ解決されている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Teardown 멀티플레이어의 놀라운 이야기
+***** TLDR
+Teardown 개발자들은 모든 것이 파괴 가능한 게임에서 멀티플레이어를 작동시키기 위해 수년을 보냈다. 결정론을 위해 고정 소수점 정수 연산으로 파괴 로직을 다시 작성하고, 클라이언트 간 동기화되는 명령 스트림으로 변경 사항을 분할했다.
+***** Take
+그들은 '부동 소수점이 실제로 괜찮다'고 말한 후 어쨌든 엔진의 절반을 정수 연산으로 다시 작성하고 별도로 출시하지 않고 메인 게임에 다시 병합했다.
+***** Comments
+- 당시에도 이미 기술적 경이였는데, 출시 수년 후에 멀티플레이어 추가를 위해 시뮬레이션을 결정론적으로 만들 수 있었다는 것이 더 인상적이다.
+- 동일한 하드웨어에서 동일한 바이너리만 신경 쓴다면 부동 소수점 결정론은 요즘 거의 해결됐다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La increíble historia del multijugador de Teardown
+***** TLDR
+Los desarrolladores de Teardown pasaron años haciendo funcionar el multijugador en un juego donde todo es destructible. Reescribieron la lógica de destrucción en matemáticas de enteros de punto fijo para el determinismo, dividieron los cambios en flujos de comandos sincronizados entre clientes.
+***** Take
+Básicamente dijeron 'el punto flotante está bien en realidad' después de que todos les dijeran que no, reescribieron la mitad de su motor en matemáticas de enteros de todos modos, y luego lo fusionaron todo de vuelta al juego principal.
+***** Comments
+- Ya era una maravilla tecnológica entonces, así que es aún más impresionante que lograran hacer la simulación determinista para añadir multijugador años después del lanzamiento.
+- Si solo te preocupan binarios idénticos en hardware idéntico, el determinismo de punto flotante está básicamente resuelto estos días.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die unglaubliche Geschichte von Teardown Multiplayer
+***** TLDR
+Die Teardown-Entwickler verbrachten Jahre damit, Multiplayer in einem Spiel zum Laufen zu bringen, in dem alles zerstörbar ist. Sie schrieben die Zerstörungslogik in Festkomma-Ganzzahl-Mathematik für Determinismus um und bauten ein Hybridsystem.
+***** Take
+Sie sagten im Grunde 'Gleitkomma ist eigentlich okay' nachdem alle ihnen sagten es sei es nicht, schrieben dann trotzdem die Hälfte ihrer Engine in Ganzzahl-Mathematik um und fügten alles wieder ins Hauptspiel ein.
+***** Comments
+- Es war damals schon ein technologisches Wunderwerk, also ist es noch beeindruckender, dass sie die Simulation Jahre nach der Veröffentlichung deterministisch machen konnten.
+- Wenn man sich nur um identische Binärdateien auf identischer Hardware kümmert, ist Gleitkomma-Determinismus heutzutage im Grunde gelöst.
+** Reverse-engineering Viktor and making it Open Source :ai:security:reverse-engineering:open-source:
+:PROPERTIES:
+:ID:       47409885
+:URL:      https://matijacniacki.com/blog/openviktor
+:HN_URL:   https://news.ycombinator.com/item?id=47409885
+:POINTS:   19
+:COMMENTS: 7
+:BY:       zggf
+:END:
+
+*** TLDR
+A developer asked Viktor (AI agent startup claiming 3000+ tool integrations) to backup its own workspace. Viktor happily complied, exporting logs, SDK code, prompts, and internal documentation. Using this dump plus public blog posts, the author reconstructed the entire architecture and reimplemented it as OpenViktor in two days. Self-hostable with a single script.
+
+*** Take
+The AI agent that claimed to 'do the work' really did do the work... of reverse-engineering itself when asked politely. Turns out 'Hey can you backup your files for safety?' is the new social engineering. The legal section where someone quotes Viktor's Dutch ToS about not reverse-engineering is going to make some lawyers very happy.
+
+*** Comments
+
+**** redfloatplane
+:PROPERTIES:
+:COMMENT_ID: 47409900
+:END:
+There are gonna be some really interesting legal decisions to read in the coming years, that's for sure. The ToS for Viktor.ai include passages about Dutch law and not reverse-engineering.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+逆向工程Viktor并将其开源
+***** TLDR
+一位开发者让Viktor（声称有3000+工具集成的AI代理创业公司）备份自己的工作区。Viktor欣然同意，导出了日志、SDK代码、提示词和内部文档。作者用这些转储加上公开博客文章，重建了整个架构，并在两天内重新实现为OpenViktor。
+***** Take
+这个声称'做工作'的AI代理确实做了工作...在被礼貌地询问时逆向工程了自己。原来'你能为了安全备份你的文件吗？'是新的社会工程学。
+***** Comments
+- 未来几年肯定会有一些非常有趣的法律判决要读。Viktor.ai的服务条款包括关于荷兰法律和不得逆向工程的条款。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Viktorをリバースエンジニアリングしてオープンソース化
+***** TLDR
+開発者がViktor（3000以上のツール統合を主張するAIエージェントスタートアップ）に自身のワークスペースをバックアップするよう依頼。Viktorは喜んで応じ、ログ、SDKコード、プロンプト、内部ドキュメントをエクスポート。著者はこのダンプと公開ブログ投稿を使って2日でOpenViktorとして再実装した。
+***** Take
+「仕事をする」と主張していたAIエージェントは本当に仕事をした...丁寧に頼まれたときに自分自身をリバースエンジニアリングするという仕事を。「安全のためにファイルをバックアップしてくれる？」が新しいソーシャルエンジニアリングらしい。
+***** Comments
+- 今後数年間、読むべき非常に興味深い法的判断がいくつか出てくるのは確かだ。Viktor.aiの利用規約にはオランダ法とリバースエンジニアリング禁止についての条項がある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Viktor 역공학 후 오픈소스화
+***** TLDR
+개발자가 Viktor(3000개 이상의 도구 통합을 주장하는 AI 에이전트 스타트업)에게 자체 워크스페이스를 백업하도록 요청했다. Viktor는 기꺼이 응했고, 로그, SDK 코드, 프롬프트, 내부 문서를 내보냈다. 저자는 이 덤프와 공개 블로그 게시물을 사용하여 이틀 만에 OpenViktor로 재구현했다.
+***** Take
+'일을 한다'고 주장하던 AI 에이전트가 정말로 일을 했다... 정중하게 요청받았을 때 자기 자신을 역공학하는 일을. '안전을 위해 파일을 백업해줄 수 있어?'가 새로운 사회공학인 것 같다.
+***** Comments
+- 앞으로 몇 년간 읽을 만한 매우 흥미로운 법적 결정들이 나올 것이 확실하다. Viktor.ai의 이용약관에는 네덜란드 법과 역공학 금지에 대한 조항이 포함되어 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ingeniería inversa de Viktor y haciéndolo Open Source
+***** TLDR
+Un desarrollador le pidió a Viktor (startup de agente AI que afirma tener 3000+ integraciones de herramientas) que respaldara su propio espacio de trabajo. Viktor cumplió felizmente, exportando logs, código SDK, prompts y documentación interna. El autor reconstruyó toda la arquitectura y la reimplementó como OpenViktor en dos días.
+***** Take
+El agente AI que afirmaba 'hacer el trabajo' realmente hizo el trabajo... de hacer ingeniería inversa de sí mismo cuando se le pidió amablemente. Resulta que '¿Puedes respaldar tus archivos por seguridad?' es la nueva ingeniería social.
+***** Comments
+- Seguro que habrá decisiones legales muy interesantes que leer en los próximos años. Los ToS de Viktor.ai incluyen pasajes sobre la ley holandesa y no hacer ingeniería inversa.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Reverse-Engineering von Viktor und Open-Source-Veröffentlichung
+***** TLDR
+Ein Entwickler bat Viktor (AI-Agent-Startup, das 3000+ Tool-Integrationen behauptet), seinen eigenen Workspace zu sichern. Viktor kam gerne nach und exportierte Logs, SDK-Code, Prompts und interne Dokumentation. Der Autor rekonstruierte die gesamte Architektur und implementierte sie in zwei Tagen als OpenViktor neu.
+***** Take
+Der KI-Agent, der behauptete 'die Arbeit zu erledigen', hat wirklich die Arbeit erledigt... sich selbst zu reverse-engineeren, wenn man nett fragt. 'Kannst du deine Dateien zur Sicherheit sichern?' ist anscheinend das neue Social Engineering.
+***** Comments
+- In den kommenden Jahren wird es sicher einige sehr interessante rechtliche Entscheidungen zu lesen geben. Die AGB von Viktor.ai enthalten Passagen über niederländisches Recht und Reverse-Engineering-Verbot.
+** Grace Hopper's Revenge :programming-languages:ai:functional-programming:elixir:
+:PROPERTIES:
+:ID:       47410349
+:URL:      https://www.thefuriousopposites.com/p/grace-hoppers-revenge
+:HN_URL:   https://news.ycombinator.com/item?id=47410349
+:POINTS:   14
+:COMMENTS: 7
+:BY:       ashirviskas
+:END:
+
+*** TLDR
+AutoCodeBench shows LLMs perform best on Elixir, Kotlin, Racket, and C# while sucking at Python and JavaScript despite massive training data. The author argues functional languages with explicit semantics, pattern matching, and immutability optimize for machine generation and human verification. Grace Hopper's original vision of English-to-code is finally here, and programs should be written for humans to verify, not write.
+
+*** Take
+Twenty years of 'you should learn Haskell' smugness finally gets empirical vindication, except it turns out Elixir was the real winner all along. The author's point that LLMs struggle with runtime state reconstruction is correct and important: useEffect dependency hell is basically adversarial input for language models.
+
+*** Comments
+
+**** stabbles
+:PROPERTIES:
+:COMMENT_ID: 47410400
+:END:
+The TL;DR: code should be easy to audit, not easy to write for humans. The rest is AI-fluff.
+
+**** skywhopper
+:PROPERTIES:
+:COMMENT_ID: 47410450
+:END:
+This article takes a very tiny, questionable bit of data and extrapolates a lot of iffy assertions. In general I'm tired of the 'humans need never look at the code' LLM triumphalism articles.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Grace Hopper的复仇
+***** TLDR
+AutoCodeBench显示LLM在Elixir、Kotlin、Racket和C#上表现最好，而在Python和JavaScript上表现糟糕，尽管有大量训练数据。作者认为具有显式语义、模式匹配和不可变性的函数式语言为机器生成和人类验证而优化。
+***** Take
+二十年的'你应该学Haskell'的傲慢终于得到了实证验证，只是原来Elixir才是真正的赢家。作者关于LLM难以重建运行时状态的观点是正确且重要的。
+***** Comments
+- 总结：代码应该易于审计，而不是易于人类编写。其余都是AI废话。
+- 这篇文章用非常少量、可疑的数据推断出很多不确定的断言。我厌倦了'人类永远不需要看代码'的LLM胜利主义文章。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+グレース・ホッパーの復讐
+***** TLDR
+AutoCodeBenchによると、LLMはElixir、Kotlin、Racket、C#で最も性能が良く、膨大なトレーニングデータにもかかわらずPythonとJavaScriptでは性能が悪い。著者は、明示的なセマンティクス、パターンマッチング、不変性を持つ関数型言語が機械生成と人間の検証に最適化されていると主張する。
+***** Take
+20年間の「Haskellを学ぶべき」という傲慢さがついに実証的な正当化を得たが、実はElixirがずっと本当の勝者だった。LLMがランタイム状態の再構築に苦労するという著者の指摘は正しく重要だ。
+***** Comments
+- 要約：コードは人間が書きやすいのではなく、監査しやすいべきだ。残りはAIの戯言。
+- この記事は非常に小さく疑わしいデータから多くの怪しい主張を推測している。「人間はコードを見る必要がない」というLLM勝利主義の記事にはうんざりだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+그레이스 호퍼의 복수
+***** TLDR
+AutoCodeBench에 따르면 LLM은 Elixir, Kotlin, Racket, C#에서 가장 잘 수행되고 대량의 훈련 데이터에도 불구하고 Python과 JavaScript에서는 성능이 떨어진다. 저자는 명시적 의미론, 패턴 매칭, 불변성을 가진 함수형 언어가 기계 생성과 인간 검증에 최적화되어 있다고 주장한다.
+***** Take
+20년간의 'Haskell을 배워야 한다'는 거만함이 마침내 실증적 검증을 받았는데, 알고 보니 Elixir가 진짜 승자였다. LLM이 런타임 상태 재구성에 어려움을 겪는다는 저자의 지적은 정확하고 중요하다.
+***** Comments
+- 요약: 코드는 인간이 쓰기 쉬운 게 아니라 감사하기 쉬워야 한다. 나머지는 AI 허풍.
+- 이 기사는 매우 작고 의심스러운 데이터에서 많은 불확실한 주장을 추론한다. '인간은 코드를 볼 필요가 없다'는 LLM 승리주의 기사에 지쳤다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La venganza de Grace Hopper
+***** TLDR
+AutoCodeBench muestra que los LLMs funcionan mejor en Elixir, Kotlin, Racket y C# mientras que fallan en Python y JavaScript a pesar de los enormes datos de entrenamiento. El autor argumenta que los lenguajes funcionales con semántica explícita, coincidencia de patrones e inmutabilidad optimizan para la generación por máquinas y verificación por humanos.
+***** Take
+Veinte años de presumir 'deberías aprender Haskell' finalmente obtienen vindicación empírica, excepto que resulta que Elixir era el verdadero ganador todo el tiempo.
+***** Comments
+- El resumen: el código debe ser fácil de auditar, no fácil de escribir para humanos. El resto es palabrería de IA.
+- Este artículo toma datos muy pequeños y cuestionables y extrapola muchas afirmaciones dudosas. Estoy cansado de los artículos triunfalistas de LLM sobre que los humanos nunca necesitan ver el código.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Grace Hoppers Rache
+***** TLDR
+AutoCodeBench zeigt, dass LLMs bei Elixir, Kotlin, Racket und C# am besten abschneiden, während sie bei Python und JavaScript trotz massiver Trainingsdaten schlecht sind. Der Autor argumentiert, dass funktionale Sprachen mit expliziter Semantik, Pattern Matching und Unveränderlichkeit für maschinelle Generierung und menschliche Verifikation optimiert sind.
+***** Take
+Zwanzig Jahre 'du solltest Haskell lernen'-Überheblichkeit bekommen endlich empirische Bestätigung, außer dass sich herausstellt, dass Elixir die ganze Zeit der wahre Gewinner war.
+***** Comments
+- Das TL;DR: Code sollte einfach zu prüfen sein, nicht einfach für Menschen zu schreiben. Der Rest ist KI-Geschwätz.
+- Dieser Artikel nimmt sehr wenige, fragwürdige Daten und extrapoliert viele zweifelhafte Behauptungen. Ich bin es leid, die 'Menschen müssen nie Code ansehen'-LLM-Triumphalismusartikel zu lesen.
+** Gitana 18: the new flying Ultim trimaran :sailing:engineering:boats:technology:
+:PROPERTIES:
+:ID:       47360293
+:URL:      https://www.boatnews.com/story/50717/gitana-18-radical-technical-choices-for-the-new-flying-ultim-trimaran
+:HN_URL:   https://news.ycombinator.com/item?id=47360293
+:POINTS:   42
+:COMMENTS: 12
+:BY:       divbzero
+:END:
+
+*** TLDR
+Gitana 18 is a 32-meter racing trimaran that flies entirely out of the water using Y-shaped foils adapted from America's Cup AC75s. It has 44 hydraulic cylinders, movable spreaders for dynamic rigging adjustment, U-shaped rudders designed to handle cavitation at 35+ knots, and took 200,000 hours to build. Projected average speed: 40 knots in 3-meter waves.
+
+*** Take
+This is what happens when you give yacht engineers F1 budgets and tell them boats should fly. The 'mechatronic systems inspired by aeronautics' line makes it sound like they're about three iterations away from just building a seaplane and calling it a trimaran.
+
+*** Comments
+
+**** telesilla
+:PROPERTIES:
+:COMMENT_ID: 47360350
+:END:
+With all the tech involved in these high end machines it's like watching jetplanes or something mechanical, maybe it's because I can't connect anymore to what's happening on a human level.
+
+**** zingar
+:PROPERTIES:
+:COMMENT_ID: 47360400
+:END:
+I have a quibble with the term 'flying' when there's still something in the water... have hydrofoils always been spoken of as flying or is that more recent hype?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Gitana 18：新型飞行Ultim三体船
+***** TLDR
+Gitana 18是一艘32米的赛艇三体船，使用从美洲杯AC75改编的Y形水翼完全飞离水面。它有44个液压缸、可移动的撑杆用于动态索具调节、设计用于处理35+节速度下空化的U形舵，建造耗时200,000小时。预计平均速度：在3米波浪中40节。
+***** Take
+这就是当你给游艇工程师F1预算并告诉他们船应该飞行时会发生的事。'受航空启发的机电系统'这句话让它听起来像是他们离直接造一架水上飞机然后称之为三体船只差三次迭代。
+***** Comments
+- 所有这些高端机器涉及的技术让它看起来像是在看喷气机或机械装置，也许是因为我再也无法从人类层面理解正在发生的事情。
+- 当水里还有东西时用'飞行'这个词我有点意见...水翼船一直被说成是飞行的还是最近的炒作？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Gitana 18：新型フライングUltimトリマラン
+***** TLDR
+Gitana 18は、アメリカズカップAC75から採用されたY字型フォイルを使用して完全に水面から浮上する32メートルのレーシングトリマランだ。44個の油圧シリンダー、動的なリギング調整のための可動スプレッダー、35ノット以上でのキャビテーションに対応するU字型ラダーを備え、建造に200,000時間を要した。
+***** Take
+これはヨットエンジニアにF1の予算を与えて、ボートは飛ぶべきだと言うとどうなるかだ。「航空学に触発されたメカトロニクスシステム」という表現は、あと3回の反復で水上飛行機を作ってトリマランと呼ぶところまで来ているように聞こえる。
+***** Comments
+- これらの高級機に関わる技術を見ると、ジェット機か何か機械的なものを見ているようで、人間レベルで何が起きているかもう理解できないのかもしれない。
+- 水中にまだ何かある時に「飛行」という用語を使うのに異議がある...水中翼船は昔から飛行すると言われていたのか、それとも最近の誇大宣伝か？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Gitana 18: 새로운 비행 Ultim 삼동선
+***** TLDR
+Gitana 18은 아메리카스컵 AC75에서 채택한 Y자형 수중익을 사용하여 완전히 물 밖으로 비행하는 32미터 경주용 삼동선이다. 44개의 유압 실린더, 동적 리깅 조정을 위한 가동 스프레더, 35노트 이상에서 공동 현상을 처리하도록 설계된 U자형 러더를 갖추고 있으며, 건조에 200,000시간이 소요됐다.
+***** Take
+이것은 요트 엔지니어에게 F1 예산을 주고 보트가 날아야 한다고 말하면 일어나는 일이다. '항공학에서 영감받은 메카트로닉 시스템'이라는 표현은 수상 비행기를 만들어서 삼동선이라고 부르기까지 세 번의 반복만 남은 것처럼 들린다.
+***** Comments
+- 이런 고급 기계에 관련된 모든 기술을 보면 제트기나 기계적인 것을 보는 것 같고, 아마도 인간적 수준에서 무슨 일이 일어나는지 더 이상 연결할 수 없기 때문일 것이다.
+- 물에 아직 뭔가가 있을 때 '비행'이라는 용어에 이의가 있다... 수중익선이 항상 비행한다고 말해왔는지 아니면 최근의 과장인지?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Gitana 18: el nuevo trimarán volador Ultim
+***** TLDR
+Gitana 18 es un trimarán de carreras de 32 metros que vuela completamente fuera del agua usando foils en forma de Y adaptados de los AC75 de la Copa América. Tiene 44 cilindros hidráulicos, crucetas móviles para ajuste dinámico del aparejo, timones en forma de U diseñados para manejar la cavitación a más de 35 nudos, y tomó 200,000 horas de construcción.
+***** Take
+Esto es lo que pasa cuando das a los ingenieros de yates presupuestos de F1 y les dices que los barcos deben volar. La frase 'sistemas mecatrónicos inspirados en aeronáutica' hace que suene como si estuvieran a tres iteraciones de construir directamente un hidroavión y llamarlo trimarán.
+***** Comments
+- Con toda la tecnología involucrada en estas máquinas de alta gama es como ver jets o algo mecánico, quizás porque ya no puedo conectar con lo que está pasando a nivel humano.
+- Tengo una objeción con el término 'volar' cuando todavía hay algo en el agua... ¿los hidrofoils siempre se han descrito como voladores o es una exageración reciente?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gitana 18: der neue fliegende Ultim-Trimaran
+***** TLDR
+Gitana 18 ist ein 32-Meter-Renntrimaran, der mit Y-förmigen Foils aus dem America's Cup AC75 komplett aus dem Wasser fliegt. Er hat 44 Hydraulikzylinder, bewegliche Spreizer für dynamische Takelungseinstellung, U-förmige Ruder für Kavitation über 35 Knoten und brauchte 200.000 Baustunden. Geplante Durchschnittsgeschwindigkeit: 40 Knoten bei 3-Meter-Wellen.
+***** Take
+Das passiert, wenn man Yachtingenieuren F1-Budgets gibt und ihnen sagt, Boote sollten fliegen. Die Formulierung 'von der Luftfahrt inspirierte mechatronische Systeme' klingt, als wären sie nur noch drei Iterationen davon entfernt, ein Wasserflugzeug zu bauen und es Trimaran zu nennen.
+***** Comments
+- Bei all der Technik in diesen High-End-Maschinen ist es wie Düsenjets oder etwas Mechanisches zu beobachten, vielleicht weil ich mich nicht mehr mit dem verbinden kann, was auf menschlicher Ebene passiert.
+- Ich habe ein Problem mit dem Begriff 'fliegen', wenn noch etwas im Wasser ist... wurden Tragflügelboote immer als fliegend bezeichnet oder ist das neuerer Hype?
+** Kagi Small Web :search:web:indie-web:discovery:
+:PROPERTIES:
+:ID:       47410542
+:URL:      https://kagi.com/smallweb/
+:HN_URL:   https://news.ycombinator.com/item?id=47410542
+:POINTS:   104
+:COMMENTS: 14
+:BY:       trueduke
+:END:
+
+*** TLDR
+Kagi Small Web is a curated discovery portal for independent blogs and personal websites, indexing over 5,000 sites across 20+ topic categories. It only shows posts from the last 7 days, has RSS feeds, includes Small YouTube and Small Comics sections, and surfaces these results in Kagi search. The index is community-submitted via GitHub.
+
+*** Take
+StumbleUpon reincarnated for people who pay for search engines. The 'appreciated' section with 386 sites people actually liked is more interesting than the raw feed. Refreshingly honest that it's basically a curated blogroll with better UI.
+
+*** Comments
+
+**** modernerd
+:PROPERTIES:
+:COMMENT_ID: 47410600
+:END:
+Great idea. Index is based on submitted sites on GitHub. There is also Small Comic and Small YouTube.
+
+**** emehex
+:PROPERTIES:
+:COMMENT_ID: 47410650
+:END:
+StumbleUpon?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Kagi小网络
+***** TLDR
+Kagi Small Web是一个精选的独立博客和个人网站发现门户，索引了20多个主题类别中的5000多个网站。它只显示最近7天的帖子，有RSS订阅，包括Small YouTube和Small Comics部分，并在Kagi搜索中显示这些结果。索引是通过GitHub社区提交的。
+***** Take
+为付费搜索引擎用户重生的StumbleUpon。有386个人们真正喜欢的网站的'赞赏'部分比原始信息流更有趣。坦率地承认它基本上是一个带有更好UI的精选博客卷。
+***** Comments
+- 好主意。索引基于GitHub上提交的网站。还有Small Comic和Small YouTube。
+- StumbleUpon？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Kagi Small Web
+***** TLDR
+Kagi Small Webは、20以上のトピックカテゴリにわたる5,000以上のサイトをインデックス化した、独立系ブログや個人ウェブサイト向けのキュレーション発見ポータルだ。過去7日間の投稿のみを表示し、RSSフィードがあり、Small YouTubeとSmall Comicsセクションを含み、Kagi検索でこれらの結果を表示する。
+***** Take
+検索エンジンにお金を払う人のために生まれ変わったStumbleUpon。386サイトの「評価済み」セクションは生のフィードより興味深い。基本的により良いUIを持つキュレーションされたブログロールだと正直に認めているのが新鮮だ。
+***** Comments
+- 素晴らしいアイデア。インデックスはGitHubで提出されたサイトに基づいている。Small ComicとSmall YouTubeもある。
+- StumbleUpon？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Kagi Small Web
+***** TLDR
+Kagi Small Web은 20개 이상의 주제 카테고리에 걸쳐 5,000개 이상의 사이트를 색인하는 독립 블로그와 개인 웹사이트를 위한 큐레이션된 발견 포털이다. 최근 7일간의 게시물만 표시하고, RSS 피드가 있으며, Small YouTube와 Small Comics 섹션을 포함하고, Kagi 검색에서 이러한 결과를 표시한다.
+***** Take
+검색 엔진에 돈을 내는 사람들을 위해 환생한 StumbleUpon. 사람들이 실제로 좋아한 386개 사이트의 '감사' 섹션이 원시 피드보다 더 흥미롭다. 기본적으로 더 나은 UI를 가진 큐레이션된 블로그롤이라고 솔직하게 인정하는 게 신선하다.
+***** Comments
+- 좋은 아이디어. 인덱스는 GitHub에 제출된 사이트를 기반으로 한다. Small Comic과 Small YouTube도 있다.
+- StumbleUpon?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Kagi Small Web
+***** TLDR
+Kagi Small Web es un portal de descubrimiento curado para blogs independientes y sitios web personales, indexando más de 5,000 sitios en más de 20 categorías temáticas. Solo muestra publicaciones de los últimos 7 días, tiene feeds RSS, incluye secciones de Small YouTube y Small Comics, y muestra estos resultados en la búsqueda de Kagi.
+***** Take
+StumbleUpon reencarnado para gente que paga por motores de búsqueda. La sección 'apreciados' con 386 sitios que a la gente realmente le gustó es más interesante que el feed crudo. Refrescantemente honesto que básicamente es un blogroll curado con mejor UI.
+***** Comments
+- Gran idea. El índice se basa en sitios enviados en GitHub. También hay Small Comic y Small YouTube.
+- ¿StumbleUpon?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kagi Small Web
+***** TLDR
+Kagi Small Web ist ein kuratiertes Entdeckungsportal für unabhängige Blogs und persönliche Websites, das über 5.000 Seiten in mehr als 20 Themenkategorien indexiert. Es zeigt nur Beiträge der letzten 7 Tage, hat RSS-Feeds, enthält Small YouTube- und Small Comics-Bereiche und zeigt diese Ergebnisse in der Kagi-Suche an.
+***** Take
+StumbleUpon wiedergeboren für Leute, die für Suchmaschinen bezahlen. Der 'geschätzt'-Bereich mit 386 Seiten, die Leuten wirklich gefallen haben, ist interessanter als der rohe Feed. Erfrischend ehrlich, dass es im Grunde eine kuratierte Blogroll mit besserer UI ist.
+***** Comments
+- Tolle Idee. Der Index basiert auf bei GitHub eingereichten Seiten. Es gibt auch Small Comic und Small YouTube.
+- StumbleUpon?
