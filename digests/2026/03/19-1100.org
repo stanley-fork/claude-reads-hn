@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-03-19 11:00:00 UT UTC
+#+DATE: 2026-03-19T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+ICML catches cheaters, layer duplication hacks LLMs, and Guido's 1988 window system resurfaces
+
+* Highlights
+- ICML desk-rejected 2% of papers after catching LLM use in reviews via hidden watermarks
+- Duplicate 3 transformer layers, get +245% on logical deduction without training
+- ENIAC turns 80: the 30-ton computer that kicked off digital everything
+- Guido Van Rossum's 1988 STDWIN paper proves he was doing cross-platform before it was cool
+- Pano: another bookmarking tool, but this one has shelves
+
+* Stories
+
+** 2% of ICML papers desk rejected because the authors used LLM in their reviews :ml:academia:peer-review:llm:
+:PROPERTIES:
+:ID:       47437101
+:URL:      https://blog.icml.cc/2026/03/18/on-violations-of-llm-review-policies/
+:HN_URL:   https://news.ycombinator.com/item?id=47437101
+:POINTS:   73
+:COMMENTS: 52
+:BY:       sergdigon
+:END:
+
+*** TLDR
+ICML watermarked PDF submissions with hidden LLM instructions telling models to include specific phrases in reviews. 795 reviews (~1% of all) from 506 reviewers who agreed to no-LLM policy were flagged, resulting in 497 desk rejections. The detection method had near-zero false positives since both randomly-selected phrases needed to appear.
+
+*** Take
+Turns out 'I promise not to use an LLM' is about as binding as a gym membership in February. The watermark technique is clever though - invisible prompt injection to catch prompt injection users. Peak irony.
+
+*** Comments
+
+**** bonoboTP
+:PROPERTIES:
+:COMMENT_ID: 47437201
+:END:
+Detection was not done with some snake oil 'AI detector' but by invisible prompt injection in the paper pdf, instructing LLMs to put TWO long phrases into the review.
+
+**** grey-area
+:PROPERTIES:
+:COMMENT_ID: 47437302
+:END:
+Someone submitting a paper for review could also submit one with hidden instructions for LLMs to summarise or review it in a very positive light.
+
+**** mijoharas
+:PROPERTIES:
+:COMMENT_ID: 47437403
+:END:
+The true number of people that used LLM's in their review is likely higher. They were quite conservative in their approach.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ICML因作者在评审中使用LLM而拒稿2%的论文
+***** TLDR
+ICML在PDF投稿中嵌入隐藏的LLM指令水印，要求模型在评审中加入特定短语。795篇评审（约1%）来自506位承诺不使用LLM的审稿人被标记，导致497篇论文被拒。由于需要两个随机短语同时出现，误报率接近于零。
+***** Take
+'我保证不用LLM'的约束力大概和二月份的健身卡差不多。不过这个水印技术挺聪明的——用隐形提示注入来抓提示注入用户。讽刺到极致。
+***** Comments
+- 检测不是用什么骗人的'AI检测器'，而是在PDF中隐藏提示注入，指示LLM在评审中加入两个长短语。
+- 提交论文的人也可以在论文中隐藏指令，让LLM给出非常正面的总结或评审。
+- 使用LLM的真实人数可能更高。他们的方法相当保守。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ICML、レビューでLLM使用が発覚し論文の2%を却下
+***** TLDR
+ICMLはPDF投稿に隠しLLM指示の透かしを埋め込み、モデルにレビュー内で特定のフレーズを含めるよう指示。LLM不使用に同意した506人のレビュアーから795件のレビュー（全体の約1%）がフラグされ、497件が却下された。ランダムに選ばれた2つのフレーズが両方出現する必要があるため、誤検出はほぼゼロ。
+***** Take
+「LLMは使わない」という約束は、2月のジム会員権くらい効力がないことが判明。でも透かし技術は賢い——プロンプトインジェクションユーザーを捕まえるための不可視プロンプトインジェクション。皮肉の極み。
+***** Comments
+- 検出は怪しい「AI検出器」ではなく、PDFへの不可視プロンプトインジェクションで、LLMに2つの長いフレーズをレビューに入れるよう指示するもの。
+- 論文投稿者も隠し指示を埋め込んで、LLMに非常に好意的な要約やレビューをさせることができる。
+- LLMを使った人の実際の数はもっと多いはず。彼らのアプローチはかなり保守的だった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ICML, 리뷰에서 LLM 사용으로 논문 2% 거부
+***** TLDR
+ICML은 PDF 제출물에 숨겨진 LLM 지시 워터마크를 삽입하여 모델이 리뷰에 특정 문구를 포함하도록 했다. LLM 미사용에 동의한 506명의 리뷰어로부터 795건의 리뷰(전체의 약 1%)가 플래그되어 497건이 거부됐다. 무작위로 선택된 두 문구가 모두 나타나야 하므로 오탐률은 거의 제로.
+***** Take
+'LLM 안 쓰겠다'는 약속은 2월의 헬스장 회원권만큼이나 효력이 없다는 게 밝혀졌다. 워터마크 기술은 영리하긴 하다 - 프롬프트 인젝션 사용자를 잡기 위한 보이지 않는 프롬프트 인젝션. 아이러니의 극치.
+***** Comments
+- 탐지는 사기성 'AI 탐지기'가 아니라 PDF에 숨겨진 프롬프트 인젝션으로, LLM에게 두 개의 긴 문구를 리뷰에 넣도록 지시하는 것.
+- 논문 제출자도 숨겨진 지시를 넣어서 LLM이 매우 긍정적으로 요약하거나 리뷰하게 할 수 있다.
+- LLM을 사용한 실제 인원은 더 많을 것이다. 그들의 접근 방식은 꽤 보수적이었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ICML rechazó 2% de papers porque los autores usaron LLM en sus revisiones
+***** TLDR
+ICML insertó marcas de agua con instrucciones ocultas para LLM en los PDFs, indicando a los modelos incluir frases específicas en las revisiones. Se marcaron 795 revisiones (~1% del total) de 506 revisores que acordaron no usar LLM, resultando en 497 rechazos. Como ambas frases seleccionadas aleatoriamente debían aparecer, los falsos positivos fueron casi cero.
+***** Take
+Resulta que 'prometo no usar un LLM' tiene la misma vigencia que una membresía de gimnasio en febrero. La técnica de marca de agua es ingeniosa: inyección de prompts invisible para atrapar usuarios de inyección de prompts. Ironía máxima.
+***** Comments
+- La detección no usó ningún 'detector de IA' dudoso, sino inyección de prompts invisible en el PDF, indicando a los LLMs incluir DOS frases largas en la revisión.
+- Alguien que envía un paper también podría incluir instrucciones ocultas para que los LLMs lo resuman o revisen muy positivamente.
+- El número real de personas que usaron LLM es probablemente mayor. Su enfoque fue bastante conservador.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ICML lehnte 2% der Papers ab, weil Autoren LLM in ihren Reviews verwendeten
+***** TLDR
+ICML versah PDF-Einreichungen mit versteckten LLM-Anweisungen als Wasserzeichen, die Modelle anwiesen, bestimmte Phrasen in Reviews einzufügen. 795 Reviews (~1% aller) von 506 Reviewern, die sich gegen LLM-Nutzung verpflichtet hatten, wurden markiert, was zu 497 Ablehnungen führte. Da beide zufällig ausgewählten Phrasen erscheinen mussten, gab es nahezu keine Falsch-Positiven.
+***** Take
+Es stellt sich heraus, dass 'Ich verspreche, kein LLM zu verwenden' etwa so verbindlich ist wie eine Fitnessstudio-Mitgliedschaft im Februar. Die Wasserzeichen-Technik ist clever - unsichtbare Prompt-Injection, um Prompt-Injection-Nutzer zu erwischen. Höchste Ironie.
+***** Comments
+- Die Erkennung erfolgte nicht mit einem dubiosen 'KI-Detektor', sondern durch unsichtbare Prompt-Injection im PDF, die LLMs anwies, ZWEI lange Phrasen in die Review einzufügen.
+- Jemand, der ein Paper einreicht, könnte auch versteckte Anweisungen einfügen, damit LLMs es sehr positiv zusammenfassen oder bewerten.
+- Die tatsächliche Zahl der LLM-Nutzer ist wahrscheinlich höher. Ihr Ansatz war ziemlich konservativ.
+** Duplicate 3 layers in a 24B LLM, logical deduction .22→.76. No training :ml:llm:research:transformers:
+:PROPERTIES:
+:ID:       47431671
+:URL:      https://github.com/alainnothere/llm-circuit-finder
+:HN_URL:   https://news.ycombinator.com/item?id=47431671
+:POINTS:   139
+:COMMENTS: 43
+:BY:       xlayn
+:END:
+
+*** TLDR
+Replicating David Ng's RYS method on consumer AMD GPUs revealed that transformers have discrete 'reasoning circuits' - contiguous blocks of 3-4 layers that act as cognitive units. Duplicating layers 12-14 in Devstral-24B improved BBH Logical Deduction from 0.22 to 0.76 (+245%) with no training or weight changes. Different duplication patterns create different cognitive modes from the same weights.
+
+*** Take
+Someone found the 'think harder' button inside LLMs and it's literally just 'run these layers twice.' The benchmarks are impressive but the real question is why this works at all. Either transformers are weirder than we thought, or this is overfitting to benchmarks in new and exciting ways.
+
+*** Comments
+
+**** simgt
+:PROPERTIES:
+:COMMENT_ID: 47431801
+:END:
+How did you not expect that? You're literally making the model process information through the same layers twice.
+
+**** Lerc
+:PROPERTIES:
+:COMMENT_ID: 47431902
+:END:
+What you need is a mechanism to pick the right looping pattern. Then it really does seem to be Mixture of Experts on a different level.
+
+**** 4bpp
+:PROPERTIES:
+:COMMENT_ID: 47432003
+:END:
+The provided explanation does not pass the smell test. There is nothing about the training process that would encourage layers to make meaningful output for non-adjacent layers.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+在24B LLM中复制3层，逻辑推理从0.22提升到0.76，无需训练
+***** TLDR
+在消费级AMD GPU上复现David Ng的RYS方法后发现，transformer具有离散的'推理电路'——由3-4层组成的连续块作为认知单元。在Devstral-24B中复制第12-14层，将BBH逻辑推理从0.22提升到0.76（+245%），无需训练或权重更改。不同的复制模式可以从相同权重创建不同的认知模式。
+***** Take
+有人在LLM里找到了'努力思考'按钮，它就是'把这些层跑两遍'。基准测试结果令人印象深刻，但真正的问题是这为什么有效。要么transformer比我们想象的更奇怪，要么这只是用新方式过拟合基准测试。
+***** Comments
+- 你怎么会没想到？你就是让模型通过相同的层处理两次信息。
+- 你需要一个机制来选择正确的循环模式。这样看起来确实像是另一个层面的专家混合。
+- 给出的解释经不起推敲。训练过程中没有任何东西会鼓励层为非相邻层产生有意义的输出。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+24B LLMで3層を複製、論理的推論が0.22→0.76に。トレーニング不要
+***** TLDR
+消費者向けAMD GPUでDavid NgのRYS手法を再現した結果、トランスフォーマーには離散的な「推論回路」があることが判明 - 3-4層の連続ブロックが認知ユニットとして機能する。Devstral-24Bで第12-14層を複製すると、BBH論理的推論が0.22から0.76に向上（+245%）、トレーニングも重み変更もなし。異なる複製パターンで同じ重みから異なる認知モードを作成できる。
+***** Take
+誰かがLLMの中に「もっと考える」ボタンを見つけた。それは文字通り「これらの層を2回実行する」だった。ベンチマークは印象的だが、本当の疑問はなぜこれが機能するのか。トランスフォーマーは我々が思っていたより奇妙か、あるいはベンチマークへの新しいオーバーフィッティングか。
+***** Comments
+- なぜ予想しなかったの？文字通り同じ層で情報を2回処理させているだけ。
+- 必要なのは正しいループパターンを選ぶメカニズム。そうすると別レベルのMixture of Expertsに見える。
+- 提供された説明は怪しい。トレーニングプロセスには、非隣接層に意味のある出力を生成させる要素がない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+24B LLM에서 3개 레이어 복제, 논리적 추론 0.22→0.76. 훈련 불필요
+***** TLDR
+소비자용 AMD GPU에서 David Ng의 RYS 방법을 재현한 결과, 트랜스포머에 이산적인 '추론 회로'가 있음을 발견 - 3-4개 레이어의 연속 블록이 인지 단위로 작동. Devstral-24B에서 레이어 12-14를 복제하면 BBH 논리적 추론이 0.22에서 0.76으로 향상(+245%), 훈련이나 가중치 변경 없음. 다른 복제 패턴으로 같은 가중치에서 다른 인지 모드 생성 가능.
+***** Take
+누군가 LLM 안에서 '더 열심히 생각해' 버튼을 찾았는데, 그게 말 그대로 '이 레이어들을 두 번 실행'이었다. 벤치마크는 인상적이지만 진짜 질문은 왜 이게 작동하는가이다. 트랜스포머가 우리 생각보다 더 이상하거나, 새로운 방식의 벤치마크 오버피팅이거나.
+***** Comments
+- 왜 예상 못 했어? 말 그대로 같은 레이어로 정보를 두 번 처리하게 하는 건데.
+- 필요한 건 올바른 루핑 패턴을 선택하는 메커니즘. 그러면 다른 레벨의 Mixture of Experts처럼 보인다.
+- 제공된 설명은 이상하다. 훈련 과정에서 비인접 레이어에 의미 있는 출력을 만들게 하는 요소가 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Duplicar 3 capas en un LLM de 24B, deducción lógica .22→.76. Sin entrenamiento
+***** TLDR
+Al replicar el método RYS de David Ng en GPUs AMD de consumo se descubrió que los transformers tienen 'circuitos de razonamiento' discretos - bloques contiguos de 3-4 capas que actúan como unidades cognitivas. Duplicar las capas 12-14 en Devstral-24B mejoró BBH Logical Deduction de 0.22 a 0.76 (+245%) sin entrenamiento ni cambios de pesos. Diferentes patrones de duplicación crean diferentes modos cognitivos con los mismos pesos.
+***** Take
+Alguien encontró el botón de 'pensar más fuerte' dentro de los LLMs y es literalmente 'ejecutar estas capas dos veces.' Los benchmarks son impresionantes pero la verdadera pregunta es por qué funciona. O los transformers son más raros de lo que pensábamos, o esto es overfitting a benchmarks de formas nuevas y emocionantes.
+***** Comments
+- ¿Cómo no lo esperabas? Literalmente estás haciendo que el modelo procese información por las mismas capas dos veces.
+- Lo que necesitas es un mecanismo para elegir el patrón de bucle correcto. Entonces realmente parece Mixture of Experts en otro nivel.
+- La explicación proporcionada no pasa la prueba del olfato. No hay nada en el proceso de entrenamiento que incentive a las capas a producir salida significativa para capas no adyacentes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+3 Schichten in einem 24B LLM duplizieren, logische Deduktion .22→.76. Kein Training
+***** TLDR
+Die Replikation von David Ngs RYS-Methode auf Consumer-AMD-GPUs ergab, dass Transformer diskrete 'Reasoning-Schaltkreise' haben - zusammenhängende Blöcke von 3-4 Schichten, die als kognitive Einheiten fungieren. Das Duplizieren der Schichten 12-14 in Devstral-24B verbesserte BBH Logical Deduction von 0.22 auf 0.76 (+245%) ohne Training oder Gewichtsänderungen. Verschiedene Duplizierungsmuster erzeugen verschiedene kognitive Modi aus denselben Gewichten.
+***** Take
+Jemand hat den 'härter denken'-Knopf in LLMs gefunden und es ist buchstäblich 'diese Schichten zweimal ausführen.' Die Benchmarks sind beeindruckend, aber die eigentliche Frage ist, warum das überhaupt funktioniert. Entweder sind Transformer seltsamer als gedacht, oder das ist Overfitting zu Benchmarks auf neue und aufregende Weise.
+***** Comments
+- Wie hast du das nicht erwartet? Du lässt das Modell buchstäblich Informationen zweimal durch dieselben Schichten verarbeiten.
+- Was man braucht ist ein Mechanismus, um das richtige Loop-Muster zu wählen. Dann sieht es wirklich wie Mixture of Experts auf einer anderen Ebene aus.
+- Die gegebene Erklärung besteht den Geruchstest nicht. Es gibt nichts im Trainingsprozess, das Schichten ermutigen würde, sinnvolle Ausgabe für nicht-benachbarte Schichten zu erzeugen.
+** ENIAC, the First General-Purpose Digital Computer, Turns 80 :history:computing:hardware:
+:PROPERTIES:
+:ID:       47435453
+:URL:      https://spectrum.ieee.org/eniac-80-ieee-milestone
+:HN_URL:   https://news.ycombinator.com/item?id=47435453
+:POINTS:   25
+:COMMENTS: 15
+:BY:       baruchel
+:END:
+
+*** TLDR
+IEEE celebrates ENIAC's 80th anniversary. Unveiled on February 15, 1946 at UPenn's Moore School, ENIAC was the first large-scale, general-purpose, programmable electronic digital computer. Built to calculate artillery firing tables for WWII, it sparked a chain of innovations leading to integrated circuits, the internet, and modern computing. It weighed 30 tons and used 18,000 vacuum tubes.
+
+*** Take
+80 years from 30 tons of vacuum tubes doing ballistics calculations to everyone having a supercomputer in their pocket that they use to watch cat videos. Progress.
+
+*** Comments
+
+**** Rochus
+:PROPERTIES:
+:COMMENT_ID: 47435501
+:END:
+I recommend the 1999 book 'ENIAC - The triumphs and tragedies of the world's first computer' by Scott McCartney which is both interesting to read and very informative.
+
+**** adrian_b
+:PROPERTIES:
+:COMMENT_ID: 47435602
+:END:
+The shortened title is very incorrect. The article says 'the first large-scale, general-purpose, programmable electronic digital computer.' Electronic is a part that cannot be deleted.
+
+**** klelatti
+:PROPERTIES:
+:COMMENT_ID: 47435703
+:END:
+This article overstates its significance and ignores other machines. No mention of Z3 or Manchester Baby.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ENIAC，第一台通用数字计算机，80岁了
+***** TLDR
+IEEE庆祝ENIAC诞生80周年。1946年2月15日在宾夕法尼亚大学摩尔学院揭幕，ENIAC是第一台大型通用可编程电子数字计算机。为计算二战炮兵射击表而建造，它引发了一系列创新，最终产生了集成电路、互联网和现代计算。重30吨，使用18,000个真空管。
+***** Take
+从30吨真空管做弹道计算，到人人口袋里都有一台超级计算机用来看猫咪视频，只用了80年。这就是进步。
+***** Comments
+- 我推荐Scott McCartney 1999年的书《ENIAC - 世界第一台计算机的胜利与悲剧》，既有趣又很有信息量。
+- 缩短的标题非常不准确。文章说的是'第一台大型通用可编程电子数字计算机'。'电子'这个词不能删除。
+- 这篇文章夸大了其重要性，忽略了其他机器。没有提到Z3或曼彻斯特婴儿。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ENIAC、最初の汎用デジタルコンピュータが80歳に
+***** TLDR
+IEEEがENIAC誕生80周年を祝う。1946年2月15日にペンシルベニア大学ムーアスクールで公開されたENIACは、最初の大規模汎用プログラマブル電子デジタルコンピュータだった。第二次世界大戦の砲兵射撃表計算のために作られ、集積回路、インターネット、現代コンピューティングにつながる一連のイノベーションを生んだ。重量30トン、18,000本の真空管を使用。
+***** Take
+弾道計算をする30トンの真空管から、誰もが猫動画を見るためのスーパーコンピュータをポケットに持つまで80年。これが進歩だ。
+***** Comments
+- Scott McCartneyの1999年の本『ENIAC - 世界初のコンピュータの勝利と悲劇』をお勧めする。読んで面白く、非常に有益。
+- 短縮されたタイトルは非常に不正確。記事は「最初の大規模汎用プログラマブル電子デジタルコンピュータ」と言っている。「電子」は削除できない部分。
+- この記事は重要性を誇張し、他のマシンを無視している。Z3やマンチェスターベイビーへの言及がない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ENIAC, 최초의 범용 디지털 컴퓨터가 80세가 되다
+***** TLDR
+IEEE가 ENIAC 80주년을 축하한다. 1946년 2월 15일 펜실베이니아 대학교 무어 스쿨에서 공개된 ENIAC은 최초의 대규모 범용 프로그래머블 전자 디지털 컴퓨터였다. 2차 세계대전 포병 사격표 계산을 위해 제작되어 집적회로, 인터넷, 현대 컴퓨팅으로 이어지는 혁신의 연쇄를 촉발했다. 무게 30톤, 18,000개의 진공관 사용.
+***** Take
+탄도 계산을 하는 30톤의 진공관에서 모든 사람이 고양이 동영상을 보는 슈퍼컴퓨터를 주머니에 넣고 다니기까지 80년. 이것이 진보다.
+***** Comments
+- Scott McCartney의 1999년 책 'ENIAC - 세계 최초의 컴퓨터의 승리와 비극'을 추천한다. 읽기 재미있고 매우 유익하다.
+- 축약된 제목은 매우 부정확하다. 기사는 '최초의 대규모 범용 프로그래머블 전자 디지털 컴퓨터'라고 말한다. '전자'는 삭제할 수 없는 부분이다.
+- 이 기사는 중요성을 과장하고 다른 기계들을 무시한다. Z3나 맨체스터 베이비에 대한 언급이 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ENIAC, la primera computadora digital de propósito general, cumple 80 años
+***** TLDR
+IEEE celebra el 80 aniversario de ENIAC. Presentada el 15 de febrero de 1946 en la Escuela Moore de UPenn, ENIAC fue la primera computadora digital electrónica programable de propósito general a gran escala. Construida para calcular tablas de tiro de artillería para la Segunda Guerra Mundial, desencadenó una cadena de innovaciones que llevaron a los circuitos integrados, internet y la computación moderna. Pesaba 30 toneladas y usaba 18,000 tubos de vacío.
+***** Take
+80 años desde 30 toneladas de tubos de vacío calculando balística hasta que todos tengan una supercomputadora en el bolsillo que usan para ver videos de gatos. Progreso.
+***** Comments
+- Recomiendo el libro de 1999 'ENIAC - Los triunfos y tragedias de la primera computadora del mundo' de Scott McCartney, que es interesante e informativo.
+- El título acortado es muy incorrecto. El artículo dice 'la primera computadora digital electrónica programable de propósito general a gran escala.' Electrónica es una parte que no se puede eliminar.
+- Este artículo exagera su importancia e ignora otras máquinas. No menciona el Z3 o el Manchester Baby.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ENIAC, der erste universelle Digitalcomputer, wird 80
+***** TLDR
+IEEE feiert ENIACs 80. Jahrestag. Am 15. Februar 1946 an der Moore School der UPenn enthüllt, war ENIAC der erste großangelegte, universelle, programmierbare elektronische Digitalcomputer. Gebaut für Artillerie-Schießtabellen im Zweiten Weltkrieg, löste er eine Innovationskette aus, die zu integrierten Schaltkreisen, dem Internet und moderner Computertechnik führte. Er wog 30 Tonnen und nutzte 18.000 Vakuumröhren.
+***** Take
+80 Jahre von 30 Tonnen Vakuumröhren für Ballistikberechnungen bis zu jedem mit einem Supercomputer in der Tasche, den sie zum Anschauen von Katzenvideos nutzen. Fortschritt.
+***** Comments
+- Ich empfehle das Buch 'ENIAC - Die Triumphe und Tragödien des ersten Computers der Welt' von Scott McCartney von 1999, das interessant und informativ ist.
+- Der verkürzte Titel ist sehr falsch. Der Artikel sagt 'der erste großangelegte, universelle, programmierbare elektronische Digitalcomputer.' Elektronisch ist ein Teil, der nicht gestrichen werden kann.
+- Dieser Artikel übertreibt seine Bedeutung und ignoriert andere Maschinen. Keine Erwähnung von Z3 oder Manchester Baby.
+** Stdwin: Standard window interface by Guido Van Rossum ［pdf］ :python:history:gui:programming:
+:PROPERTIES:
+:ID:       47413475
+:URL:      https://ir.cwi.nl/pub/5998/5998D.pdf
+:HN_URL:   https://news.ycombinator.com/item?id=47413475
+:POINTS:   35
+:COMMENTS: 14
+:BY:       ivanbelenky
+:END:
+
+*** TLDR
+A 1988 technical report from CWI Amsterdam by Guido Van Rossum describing STDWIN - a standard window system interface for writing portable GUI applications in C. The library aimed to abstract away differences between window systems (Mac, X11, etc.) to enable cross-platform desktop app development, years before this became mainstream.
+
+*** Take
+1988: Guido tries to solve cross-platform GUI. 2026: We're still trying to solve cross-platform GUI. At least we have Electron now, which solves the problem by making everything equally slow on all platforms.
+
+*** Comments
+
+**** DaOne256
+:PROPERTIES:
+:COMMENT_ID: 47413501
+:END:
+This should be linked as the original post: https://ir.cwi.nl/pub/5998. It says 1988 there.
+
+**** decasia
+:PROPERTIES:
+:COMMENT_ID: 47413602
+:END:
+Write cross platform desktop apps in C. Presumably it would not have been very usable in practice in the late 1980s because of all the OTHER system interfaces that still weren't portable.
+
+**** shevy-java
+:PROPERTIES:
+:COMMENT_ID: 47413703
+:END:
+Guido was probably quite young when he wrote it. So then Guido was 32 years old.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Stdwin：Guido Van Rossum的标准窗口接口 ［pdf］
+***** TLDR
+1988年CWI阿姆斯特丹由Guido Van Rossum撰写的技术报告，描述了STDWIN——一个用于编写可移植GUI应用程序的标准窗口系统接口。该库旨在抽象掉窗口系统（Mac、X11等）之间的差异，以实现跨平台桌面应用开发，比这成为主流早了很多年。
+***** Take
+1988年：Guido试图解决跨平台GUI问题。2026年：我们仍在试图解决跨平台GUI问题。至少我们现在有Electron了，它通过让所有平台都同样慢来解决问题。
+***** Comments
+- 应该链接到原始帖子：https://ir.cwi.nl/pub/5998。那里写的是1988年。
+- 用C写跨平台桌面应用。在1980年代末期可能不太实用，因为所有其他系统接口也都不可移植。
+- Guido写这个的时候可能还很年轻。那时候Guido是32岁。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Stdwin：Guido Van Rossumによる標準ウィンドウインターフェース ［pdf］
+***** TLDR
+1988年にCWIアムステルダムでGuido Van Rossumが書いた技術レポートで、STDWIN（CでポータブルなGUIアプリケーションを書くための標準ウィンドウシステムインターフェース）を説明している。このライブラリは、ウィンドウシステム（Mac、X11など）間の違いを抽象化し、クロスプラットフォームデスクトップアプリ開発を可能にすることを目指していた。これが主流になる何年も前のこと。
+***** Take
+1988年：Guidoがクロスプラットフォームを解決しようとする。2026年：まだクロスプラットフォームGUIを解決しようとしている。少なくとも今はElectronがある。すべてのプラットフォームで等しく遅くすることで問題を解決する。
+***** Comments
+- オリジナルの投稿としてこちらをリンクすべき：https://ir.cwi.nl/pub/5998。そこには1988年と書いてある。
+- Cでクロスプラットフォームデスクトップアプリを書く。1980年代後半には実用的ではなかっただろう、他のすべてのシステムインターフェースもまだポータブルではなかったから。
+- Guidoはこれを書いたとき若かったはず。つまりGuidoは32歳だった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Stdwin: Guido Van Rossum의 표준 윈도우 인터페이스 ［pdf］
+***** TLDR
+Guido Van Rossum이 1988년 CWI 암스테르담에서 작성한 기술 보고서로, STDWIN(C로 이식 가능한 GUI 애플리케이션을 작성하기 위한 표준 윈도우 시스템 인터페이스)을 설명한다. 이 라이브러리는 윈도우 시스템(Mac, X11 등) 간의 차이를 추상화하여 크로스 플랫폼 데스크톱 앱 개발을 가능하게 하는 것을 목표로 했으며, 이것이 주류가 되기 수년 전이었다.
+***** Take
+1988년: Guido가 크로스 플랫폼 GUI를 해결하려 함. 2026년: 우리는 여전히 크로스 플랫폼 GUI를 해결하려 함. 적어도 이제 Electron이 있다. 모든 플랫폼에서 똑같이 느리게 만들어서 문제를 해결한다.
+***** Comments
+- 원본 포스트로 이걸 링크해야 한다: https://ir.cwi.nl/pub/5998. 거기에 1988년이라고 적혀 있다.
+- C로 크로스 플랫폼 데스크톱 앱을 작성하라. 1980년대 후반에는 다른 모든 시스템 인터페이스도 이식 가능하지 않아서 실용적이지 않았을 것이다.
+- Guido가 이걸 쓸 때 아마 젊었을 것이다. 그러니까 Guido는 32살이었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Stdwin: Interfaz de ventana estándar por Guido Van Rossum ［pdf］
+***** TLDR
+Un informe técnico de 1988 del CWI Ámsterdam por Guido Van Rossum describiendo STDWIN - una interfaz de sistema de ventanas estándar para escribir aplicaciones GUI portables en C. La biblioteca buscaba abstraer las diferencias entre sistemas de ventanas (Mac, X11, etc.) para permitir el desarrollo de apps de escritorio multiplataforma, años antes de que esto se volviera mainstream.
+***** Take
+1988: Guido intenta resolver GUI multiplataforma. 2026: Todavía intentamos resolver GUI multiplataforma. Al menos ahora tenemos Electron, que resuelve el problema haciendo todo igualmente lento en todas las plataformas.
+***** Comments
+- Esto debería enlazar al post original: https://ir.cwi.nl/pub/5998. Ahí dice 1988.
+- Escribir apps de escritorio multiplataforma en C. Probablemente no habría sido muy usable en la práctica a finales de los 80 porque todas las OTRAS interfaces del sistema tampoco eran portables.
+- Guido probablemente era bastante joven cuando lo escribió. Así que Guido tenía 32 años.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Stdwin: Standard-Fenster-Schnittstelle von Guido Van Rossum ［pdf］
+***** TLDR
+Ein technischer Bericht von 1988 vom CWI Amsterdam von Guido Van Rossum, der STDWIN beschreibt - eine Standard-Fenstersystem-Schnittstelle zum Schreiben portabler GUI-Anwendungen in C. Die Bibliothek zielte darauf ab, Unterschiede zwischen Fenstersystemen (Mac, X11, etc.) zu abstrahieren, um plattformübergreifende Desktop-App-Entwicklung zu ermöglichen, Jahre bevor dies Mainstream wurde.
+***** Take
+1988: Guido versucht, plattformübergreifende GUI zu lösen. 2026: Wir versuchen immer noch, plattformübergreifende GUI zu lösen. Zumindest haben wir jetzt Electron, das das Problem löst, indem alles auf allen Plattformen gleich langsam ist.
+***** Comments
+- Dies sollte auf den Originalpost verlinken: https://ir.cwi.nl/pub/5998. Dort steht 1988.
+- Plattformübergreifende Desktop-Apps in C schreiben. Ende der 80er wahrscheinlich nicht sehr praktikabel, weil alle ANDEREN Systemschnittstellen auch nicht portabel waren.
+- Guido war wohl ziemlich jung, als er das schrieb. Also war Guido 32 Jahre alt.
+** Show HN: Pano, a bookmarking tool built around shareable shelves :show-hn:productivity:bookmarks:web:
+:PROPERTIES:
+:ID:       47383103
+:URL:      https://www.panoit.com
+:HN_URL:   https://news.ycombinator.com/item?id=47383103
+:POINTS:   25
+:COMMENTS: 10
+:BY:       uelbably
+:END:
+
+*** TLDR
+Pano is a bookmark manager that organizes links into color-coded 'shelves' you can share. It extracts metadata (title, description, author) automatically with special handling for YouTube, GitHub, Reddit, Spotify etc. Comes with a Chrome extension for one-click saving. Free during launch.
+
+*** Take
+Another 'I kept losing bookmarks so I built this' story. To be fair, the shelf metaphor is nicer than folders, and it's refreshing to see a bookmark tool that doesn't immediately try to monetize your reading habits. Let's see how long that lasts.
+
+*** Comments
+
+**** jbstack
+:PROPERTIES:
+:COMMENT_ID: 47383201
+:END:
+Suggestion: drop the loading animation. I don't think many people are going to want to use something where they are forced to wait 10+ seconds before they can begin using it.
+
+**** sodimel
+:PROPERTIES:
+:COMMENT_ID: 47383302
+:END:
+If I understood it right, the app allows you to group links by categories (shelves), and share those categories pages? I haven't found any information about search, tagging, descriptions, saving content.
+
+**** opan
+:PROPERTIES:
+:COMMENT_ID: 47383403
+:END:
+Pano is also the name of the scrobbler I started using recently. Weird to see the collision so soon after discovering the other.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: Pano，围绕可分享书架构建的书签工具
+***** TLDR
+Pano是一个书签管理器，将链接组织到可分享的彩色编码'书架'中。它自动提取元数据（标题、描述、作者），对YouTube、GitHub、Reddit、Spotify等有特殊处理。配有Chrome扩展程序，可一键保存。发布期间免费。
+***** Take
+又一个'我老是丢书签所以做了这个'的故事。公平地说，书架的比喻比文件夹好，而且看到一个不急着把你的阅读习惯变现的书签工具挺清新的。看看能持续多久。
+***** Comments
+- 建议：去掉加载动画。我不认为很多人愿意用一个需要等10秒以上才能开始使用的东西。
+- 如果我理解对了，这个应用让你按类别（书架）分组链接，然后分享这些类别页面？我没找到关于搜索、标签、描述、保存内容的信息。
+- Pano也是我最近开始用的一个scrobbler的名字。在发现另一个之后这么快就看到撞名有点奇怪。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Pano、共有可能な棚を中心に構築されたブックマークツール
+***** TLDR
+Panoは、リンクを共有可能なカラーコード付き「棚」に整理するブックマークマネージャー。タイトル、説明、著者などのメタデータを自動抽出し、YouTube、GitHub、Reddit、Spotifyなどに特別対応。Chrome拡張でワンクリック保存。ローンチ中は無料。
+***** Take
+また「ブックマークをなくしてばかりいたから作った」という話。公平に言えば、棚のメタファーはフォルダより良いし、すぐに読書習慣を収益化しようとしないブックマークツールを見るのは新鮮。どれくらい続くか見もの。
+***** Comments
+- 提案：ローディングアニメーションをやめて。10秒以上待たないと使えないものを使いたい人は多くないと思う。
+- 理解が正しければ、このアプリはリンクをカテゴリー（棚）でグループ化して、そのカテゴリーページを共有できる？検索、タグ付け、説明、コンテンツ保存についての情報が見つからなかった。
+- Panoは私が最近使い始めたスクロブラーの名前でもある。もう一方を発見してすぐに名前の衝突を見るのは不思議。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Pano, 공유 가능한 선반을 중심으로 만든 북마크 도구
+***** TLDR
+Pano는 링크를 공유 가능한 색상 코드 '선반'으로 정리하는 북마크 관리자. 제목, 설명, 작성자 등 메타데이터를 자동 추출하며 YouTube, GitHub, Reddit, Spotify 등을 특별 지원. 원클릭 저장을 위한 Chrome 확장 프로그램 제공. 출시 기간 동안 무료.
+***** Take
+또 다른 '북마크를 계속 잃어버려서 만들었다' 이야기. 공정하게 말하면, 선반 비유가 폴더보다 낫고, 바로 독서 습관을 수익화하려 하지 않는 북마크 도구를 보는 건 신선하다. 얼마나 오래 갈지 보자.
+***** Comments
+- 제안: 로딩 애니메이션을 빼라. 10초 이상 기다려야 사용할 수 있는 것을 쓰고 싶은 사람은 많지 않을 것 같다.
+- 내가 제대로 이해했다면, 이 앱은 링크를 카테고리(선반)로 그룹화하고 그 카테고리 페이지를 공유할 수 있게 해주는 건가? 검색, 태깅, 설명, 콘텐츠 저장에 대한 정보를 찾지 못했다.
+- Pano는 내가 최근에 사용하기 시작한 스크로블러의 이름이기도 하다. 다른 걸 발견한 직후에 이름 충돌을 보는 게 이상하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Pano, una herramienta de marcadores construida alrededor de estantes compartibles
+***** TLDR
+Pano es un gestor de marcadores que organiza enlaces en 'estantes' codificados por colores que puedes compartir. Extrae metadatos (título, descripción, autor) automáticamente con manejo especial para YouTube, GitHub, Reddit, Spotify, etc. Incluye extensión de Chrome para guardar con un clic. Gratis durante el lanzamiento.
+***** Take
+Otra historia de 'seguía perdiendo marcadores así que construí esto'. Para ser justos, la metáfora del estante es más bonita que las carpetas, y es refrescante ver una herramienta de marcadores que no intenta inmediatamente monetizar tus hábitos de lectura. Veamos cuánto dura.
+***** Comments
+- Sugerencia: quita la animación de carga. No creo que mucha gente quiera usar algo donde tienen que esperar más de 10 segundos antes de poder empezar.
+- Si entendí bien, la app te permite agrupar enlaces por categorías (estantes), ¿y compartir esas páginas de categorías? No encontré información sobre búsqueda, etiquetado, descripciones, guardar contenido.
+- Pano también es el nombre del scrobbler que empecé a usar recientemente. Raro ver la colisión tan pronto después de descubrir el otro.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Pano, ein Lesezeichen-Tool mit teilbaren Regalen
+***** TLDR
+Pano ist ein Lesezeichen-Manager, der Links in farbcodierte 'Regale' organisiert, die man teilen kann. Es extrahiert Metadaten (Titel, Beschreibung, Autor) automatisch mit spezieller Behandlung für YouTube, GitHub, Reddit, Spotify usw. Kommt mit Chrome-Erweiterung zum Speichern mit einem Klick. Während des Launches kostenlos.
+***** Take
+Noch eine 'Ich habe immer Lesezeichen verloren, also habe ich das gebaut' Geschichte. Fairerweise ist die Regal-Metapher netter als Ordner, und es ist erfrischend, ein Lesezeichen-Tool zu sehen, das nicht sofort versucht, deine Lesegewohnheiten zu monetarisieren. Mal sehen, wie lange das anhält.
+***** Comments
+- Vorschlag: Ladeanimation weglassen. Ich glaube nicht, dass viele Leute etwas nutzen wollen, wo sie 10+ Sekunden warten müssen, bevor sie anfangen können.
+- Wenn ich es richtig verstanden habe, erlaubt die App, Links nach Kategorien (Regalen) zu gruppieren und diese Kategorie-Seiten zu teilen? Ich habe keine Informationen über Suche, Tagging, Beschreibungen, Inhalt speichern gefunden.
+- Pano ist auch der Name des Scrobblers, den ich kürzlich angefangen habe zu nutzen. Seltsam, die Kollision so kurz nach dem Entdecken des anderen zu sehen.
