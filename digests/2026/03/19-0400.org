@@ -1,0 +1,546 @@
+#+TITLE: HN Digest 2026-03-19 04:00:00 UT UTC
+#+DATE: 2026-03-19T04:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+GPU hackers extend VRAM, statisticians prove everything is average, and HTTP still exists
+
+* Highlights
+- GreenBoost: Run 32GB LLMs on 12GB GPUs with DDR4 spillover
+- Central Limit Theorem: Why your data always looks like a bell curve
+- ML Benchmarks book: The science of measuring AI capabilities
+- SVG backgrounds: 48 patterns for devs who can't design
+- What's on HTTP: 3.3 million sites still living in 1999
+
+* Stories
+
+** Nvidia greenboost: transparently extend GPU VRAM using system RAM/NVMe :gpu:llm:linux:hardware:
+:PROPERTIES:
+:ID:       47388658
+:URL:      https://gitlab.com/IsolatedOctopi/nvidia_greenboost
+:HN_URL:   https://news.ycombinator.com/item?id=47388658
+:POINTS:   195
+:COMMENTS: 37
+:BY:       mmastrac
+:END:
+
+*** TLDR
+A Linux kernel module and CUDA shim that creates a 3-tier memory pool (VRAM > DDR4 > NVMe) for GPU workloads. The 12GB RTX 5070 owner built this to run 32GB LLMs by routing overflow allocations through DMA-BUF, giving the GPU direct PCIe access to system RAM without CPU copies. Works transparently with existing CUDA software like Ollama.
+
+*** Take
+The absolute state of consumer GPUs: you need a kernel module, a CUDA shim, and a PhD in memory management just to run a model that actually remembers what you asked it. But honestly, this is the kind of unhinged engineering I respect.
+
+*** Comments
+
+**** 0xbadcafebee
+:PROPERTIES:
+:COMMENT_ID: 47389001
+:END:
+You can already do this with some GPU drivers using kernel parameters. One downside is your kernel isn't going to reserve that memory away from userland.
+
+**** nl
+:PROPERTIES:
+:COMMENT_ID: 47389200
+:END:
+Really interesting engineering, but the benchmarking makes it hard to understand the contribution various factors are having. The ExLlamaV3 EXL3 2bpw row is an order of magnitude faster than the baseline.
+
+**** Havoc
+:PROPERTIES:
+:COMMENT_ID: 47389350
+:END:
+Does putting KV cache in DDR4 make sense? I'd have thought the KV is guaranteed to be used 100% of the time while in a MoE the same can't be said of the weights.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Nvidia greenboost：使用系统内存/NVMe透明扩展GPU显存
+***** TLDR
+一个Linux内核模块和CUDA垫片，为GPU工作负载创建三层内存池（显存 > DDR4 > NVMe）。一位12GB RTX 5070用户构建了这个工具来运行32GB的大语言模型，通过DMA-BUF路由溢出分配，让GPU通过PCIe直接访问系统内存，无需CPU拷贝。
+***** Take
+消费级GPU的现状：你需要内核模块、CUDA垫片和内存管理博士学位才能运行一个能记住你问题的模型。但说实话，这种疯狂的工程我很欣赏。
+***** Comments
+- 你已经可以用一些GPU驱动的内核参数来做到这一点。缺点是内核不会为用户空间保留那些内存。
+- 非常有趣的工程，但基准测试很难理解各因素的贡献。ExLlamaV3 EXL3 2bpw行比基线快一个数量级。
+- 把KV缓存放在DDR4中有意义吗？我以为KV保证100%被使用，而MoE中权重则不一定。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Nvidia greenboost：システムRAM/NVMeを使用してGPU VRAMを透過的に拡張
+***** TLDR
+GPUワークロード用に3層メモリプール（VRAM > DDR4 > NVMe）を作成するLinuxカーネルモジュールとCUDAシム。12GB RTX 5070オーナーが32GB LLMを実行するために構築。DMA-BUFを介してオーバーフロー割り当てをルーティングし、CPUコピーなしでGPUがシステムRAMに直接アクセス可能。
+***** Take
+消費者GPUの現状：実際に質問を覚えているモデルを動かすには、カーネルモジュール、CUDAシム、メモリ管理の博士号が必要。でも正直、この狂った技術は尊敬する。
+***** Comments
+- 一部のGPUドライバでカーネルパラメータを使えば既にできる。欠点は、カーネルがそのメモリをユーザーランドから予約しないこと。
+- 非常に興味深いエンジニアリングだが、ベンチマークでは各要因の貢献が分かりにくい。ExLlamaV3 EXL3 2bpw行はベースラインより桁違いに速い。
+- KVキャッシュをDDR4に置くのは理にかなっている？KVは100%使用されるはずだが、MoEでは重みは同じとは言えない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Nvidia greenboost: 시스템 RAM/NVMe를 사용하여 GPU VRAM 투명하게 확장
+***** TLDR
+GPU 워크로드를 위한 3계층 메모리 풀(VRAM > DDR4 > NVMe)을 만드는 Linux 커널 모듈과 CUDA 심. 12GB RTX 5070 소유자가 32GB LLM을 실행하기 위해 구축. DMA-BUF를 통해 오버플로 할당을 라우팅하여 CPU 복사 없이 GPU가 시스템 RAM에 직접 접근 가능.
+***** Take
+소비자 GPU의 현주소: 실제로 질문을 기억하는 모델을 돌리려면 커널 모듈, CUDA 심, 메모리 관리 박사 학위가 필요하다. 하지만 솔직히 이런 미친 엔지니어링은 존경한다.
+***** Comments
+- 일부 GPU 드라이버에서 커널 파라미터로 이미 할 수 있다. 단점은 커널이 사용자 공간에서 해당 메모리를 예약하지 않는다는 것.
+- 정말 흥미로운 엔지니어링이지만, 벤치마크로는 각 요소의 기여도를 이해하기 어렵다. ExLlamaV3 EXL3 2bpw 행은 기준선보다 한 자릿수 빠르다.
+- KV 캐시를 DDR4에 두는 게 맞나? KV는 100% 사용이 보장되지만 MoE에서는 가중치에 대해 같은 말을 할 수 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Nvidia greenboost: extiende la VRAM de GPU de forma transparente usando RAM/NVMe del sistema
+***** TLDR
+Un módulo del kernel de Linux y un shim de CUDA que crea un pool de memoria de 3 niveles (VRAM > DDR4 > NVMe) para cargas de trabajo GPU. El dueño de una RTX 5070 de 12GB construyó esto para ejecutar LLMs de 32GB enrutando asignaciones de desbordamiento a través de DMA-BUF, dando a la GPU acceso directo por PCIe a la RAM del sistema sin copias de CPU.
+***** Take
+El estado actual de las GPUs de consumo: necesitas un módulo del kernel, un shim CUDA y un doctorado en gestión de memoria solo para ejecutar un modelo que realmente recuerde lo que le preguntaste. Pero honestamente, este tipo de ingeniería desquiciada me merece respeto.
+***** Comments
+- Ya puedes hacer esto con algunos drivers GPU usando parámetros del kernel. Una desventaja es que tu kernel no va a reservar esa memoria del espacio de usuario.
+- Ingeniería realmente interesante, pero el benchmarking hace difícil entender la contribución de varios factores. La fila ExLlamaV3 EXL3 2bpw es un orden de magnitud más rápida que la línea base.
+- ¿Tiene sentido poner el caché KV en DDR4? Pensaría que el KV está garantizado de usarse 100% del tiempo mientras que en un MoE no se puede decir lo mismo de los pesos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Nvidia greenboost: GPU VRAM transparent mit System-RAM/NVMe erweitern
+***** TLDR
+Ein Linux-Kernelmodul und CUDA-Shim, das einen 3-stufigen Speicherpool (VRAM > DDR4 > NVMe) für GPU-Workloads erstellt. Der Besitzer einer 12GB RTX 5070 baute dies, um 32GB LLMs auszuführen, indem Überlauf-Allokationen über DMA-BUF geleitet werden, was der GPU direkten PCIe-Zugriff auf System-RAM ohne CPU-Kopien gibt.
+***** Take
+Der Zustand der Consumer-GPUs: Man braucht ein Kernelmodul, einen CUDA-Shim und einen Doktor in Speicherverwaltung, nur um ein Modell auszuführen, das sich tatsächlich merkt, was man gefragt hat. Aber ehrlich, diese Art von wahnsinnigem Engineering respektiere ich.
+***** Comments
+- Das kann man bereits mit einigen GPU-Treibern über Kernel-Parameter machen. Ein Nachteil ist, dass der Kernel diesen Speicher nicht vom Userland reserviert.
+- Wirklich interessantes Engineering, aber das Benchmarking macht es schwer, den Beitrag verschiedener Faktoren zu verstehen. Die ExLlamaV3 EXL3 2bpw-Zeile ist eine Größenordnung schneller als die Baseline.
+- Macht es Sinn, den KV-Cache in DDR4 zu legen? Ich hätte gedacht, der KV wird garantiert zu 100% genutzt, während bei einem MoE das Gleiche nicht für die Gewichte gesagt werden kann.
+** The math that explains why bell curves are everywhere :math:statistics:science:
+:PROPERTIES:
+:ID:       47401489
+:URL:      https://www.quantamagazine.org/the-math-that-explains-why-bell-curves-are-everywhere-20260316/
+:HN_URL:   https://news.ycombinator.com/item?id=47401489
+:POINTS:   76
+:COMMENTS: 37
+:BY:       ibobev
+:END:
+
+*** TLDR
+Quanta explains the Central Limit Theorem: when you average many random measurements, no matter how chaotic the underlying process, you get a bell curve. Abraham de Moivre discovered this while consulting for London gamblers, and Laplace later formalized it into the statistical foundation we use today.
+
+*** Take
+Gamblers inadvertently invented modern statistics because they wanted to cheat better. The CLT is basically the universe saying 'I don't care how weird your individual data points are, average enough of them and you'll get something predictable.' Math's way of telling us that we're all average.
+
+*** Comments
+
+**** bicepjai
+:PROPERTIES:
+:COMMENT_ID: 47401650
+:END:
+This is one of my favorite philosophical questions to ponder. I always ask it in interviews as a warmup. I've noticed interviewees often curl up, thinking it's a technical question.
+
+**** mikrl
+:PROPERTIES:
+:COMMENT_ID: 47401800
+:END:
+Great article. I've been learning more about beyond-CLT scenarios like fat tails and infinite variance. Natural processes tend to exhibit Gaussian behaviour because there's a tendency towards equilibrium.
+
+**** AxEy
+:PROPERTIES:
+:COMMENT_ID: 47401950
+:END:
+I remember seeing one of these Galton boards at the Boston Science Museum when I was a kid. They have some pretty cool videos on YouTube.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+解释为什么钟形曲线无处不在的数学
+***** TLDR
+Quanta解释中心极限定理：当你对许多随机测量取平均值时，无论底层过程多么混乱，你都会得到钟形曲线。亚伯拉罕·棣莫弗在为伦敦赌徒做咨询时发现了这一点，拉普拉斯后来将其形式化为我们今天使用的统计学基础。
+***** Take
+赌徒们无意中发明了现代统计学，因为他们想作弊得更好。CLT基本上是宇宙在说'我不在乎你的单个数据点有多奇怪，平均足够多就会得到可预测的东西。'数学告诉我们每个人都很普通。
+***** Comments
+- 这是我最喜欢思考的哲学问题之一。我总是在面试中作为热身问题问它。我注意到面试者经常紧张起来，以为这是技术问题。
+- 很棒的文章。我一直在学习超越CLT的场景，比如肥尾和无限方差。自然过程倾向于表现出高斯行为，因为存在向平衡的趋势。
+- 我记得小时候在波士顿科学博物馆看过这种高尔顿板。YouTube上有一些很酷的视频。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ベルカーブがどこにでもある理由を説明する数学
+***** TLDR
+Quantaが中心極限定理を解説：多くのランダムな測定値を平均すると、基礎となるプロセスがどれほど混沌としていても、ベルカーブが得られる。アブラハム・ド・モアブルがロンドンのギャンブラーのコンサルタントをしていた時にこれを発見し、ラプラスが後に今日使われている統計学の基礎として形式化した。
+***** Take
+ギャンブラーたちは、より上手くズルをしたかったから偶然現代統計学を発明した。CLTは基本的に宇宙が「個々のデータポイントがどれほど奇妙でも気にしない、十分平均すれば予測可能なものが得られる」と言っているのだ。数学が私たちは皆平均的だと教えている。
+***** Comments
+- これは私が考えるのが好きな哲学的質問の一つ。面接でウォーミングアップとしていつも聞く。技術的な質問だと思って固まる面接者が多いことに気づいた。
+- 素晴らしい記事。ファットテールや無限分散などCLTを超えるシナリオについて学んでいる。自然のプロセスは平衡への傾向があるためガウス的挙動を示す傾向がある。
+- 子供の頃ボストン科学博物館でこのゴルトンボードを見たのを覚えている。YouTubeにかなりクールな動画がある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+종형 곡선이 어디에나 있는 이유를 설명하는 수학
+***** TLDR
+Quanta가 중심극한정리를 설명한다: 많은 무작위 측정값을 평균하면, 기저 과정이 아무리 혼란스러워도 종형 곡선을 얻는다. 아브라함 드 무아브르가 런던 도박꾼들을 위해 컨설팅하던 중 이를 발견했고, 라플라스가 나중에 오늘날 사용하는 통계학의 기초로 형식화했다.
+***** Take
+도박꾼들이 더 잘 속이고 싶어서 우연히 현대 통계학을 발명했다. CLT는 기본적으로 우주가 '개별 데이터 포인트가 얼마나 이상하든 상관없어, 충분히 평균하면 예측 가능한 것을 얻는다'고 말하는 것이다. 수학이 우리 모두가 평범하다고 말해주는 방식.
+***** Comments
+- 이것은 내가 생각하기 좋아하는 철학적 질문 중 하나다. 면접에서 항상 워밍업으로 물어본다. 기술적인 질문이라고 생각하고 움츠러드는 면접자들이 많다.
+- 훌륭한 기사. 두꺼운 꼬리와 무한 분산 같은 CLT를 넘어서는 시나리오에 대해 배우고 있다. 자연 과정은 평형을 향한 경향 때문에 가우시안 행동을 보이는 경향이 있다.
+- 어렸을 때 보스턴 과학박물관에서 이런 골턴 보드를 본 기억이 있다. 유튜브에 꽤 멋진 영상들이 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Las matemáticas que explican por qué las curvas de campana están en todas partes
+***** TLDR
+Quanta explica el Teorema del Límite Central: cuando promedias muchas mediciones aleatorias, sin importar cuán caótico sea el proceso subyacente, obtienes una curva de campana. Abraham de Moivre descubrió esto mientras consultaba para apostadores londinenses, y Laplace luego lo formalizó en la base estadística que usamos hoy.
+***** Take
+Los apostadores inventaron accidentalmente la estadística moderna porque querían hacer trampa mejor. El TLC es básicamente el universo diciendo 'no me importa cuán extraños sean tus puntos de datos individuales, promedia suficientes y obtendrás algo predecible.' La forma matemática de decirnos que todos somos promedio.
+***** Comments
+- Esta es una de mis preguntas filosóficas favoritas para reflexionar. Siempre la pregunto en entrevistas como calentamiento. He notado que los entrevistados a menudo se encogen, pensando que es una pregunta técnica.
+- Gran artículo. He estado aprendiendo más sobre escenarios más allá del TLC como colas gruesas y varianza infinita. Los procesos naturales tienden a exhibir comportamiento gaussiano porque hay una tendencia hacia el equilibrio.
+- Recuerdo haber visto uno de estos tableros de Galton en el Museo de Ciencias de Boston cuando era niño. Tienen videos muy buenos en YouTube.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Mathematik, die erklärt, warum Glockenkurven überall sind
+***** TLDR
+Quanta erklärt den Zentralen Grenzwertsatz: Wenn man viele zufällige Messungen mittelt, erhält man eine Glockenkurve, egal wie chaotisch der zugrunde liegende Prozess ist. Abraham de Moivre entdeckte dies, während er Londoner Glücksspieler beriet, und Laplace formalisierte es später zu der statistischen Grundlage, die wir heute verwenden.
+***** Take
+Glücksspieler haben versehentlich die moderne Statistik erfunden, weil sie besser betrügen wollten. Der ZGS ist im Grunde das Universum, das sagt: 'Es ist mir egal, wie seltsam deine einzelnen Datenpunkte sind, mittele genug davon und du bekommst etwas Vorhersagbares.' Mathematiks Art zu sagen, dass wir alle durchschnittlich sind.
+***** Comments
+- Das ist eine meiner philosophischen Lieblingsfragen zum Nachdenken. Ich frage sie immer in Interviews als Aufwärmung. Mir ist aufgefallen, dass Bewerber sich oft zusammenziehen und denken, es sei eine technische Frage.
+- Toller Artikel. Ich habe mehr über Szenarien jenseits des ZGS gelernt, wie Fat Tails und unendliche Varianz. Natürliche Prozesse neigen dazu, Gauß'sches Verhalten zu zeigen, weil es eine Tendenz zum Gleichgewicht gibt.
+- Ich erinnere mich, als Kind im Bostoner Wissenschaftsmuseum eines dieser Galton-Bretter gesehen zu haben. Es gibt ziemlich coole Videos auf YouTube.
+** Book: The Emerging Science of Machine Learning Benchmarks :ai:ml:benchmarks:science:
+:PROPERTIES:
+:ID:       47380714
+:URL:      https://mlbenchmarks.org/00-preface.html
+:HN_URL:   https://news.ycombinator.com/item?id=47380714
+:POINTS:   97
+:COMMENTS: 4
+:BY:       jxmorris12
+:END:
+
+*** TLDR
+Moritz Hardt's new book tackles the paradox of ML benchmarks: everyone knows they're flawed (overfitting, gaming, biased labels), yet they've somehow driven actual progress from ImageNet to MMLU. The book argues that model rankings, not absolute metrics, are what actually replicate and matter.
+
+*** Take
+Finally someone wrote the book explaining why benchmarks are broken but we use them anyway. The field's dirty secret: tech CEOs recite MMLU scores to shareholders like it's a credit rating, but the actual science says the numbers mean nothing unless you compare them to other numbers. It's rankings all the way down.
+
+*** Comments
+
+**** loveparade
+:PROPERTIES:
+:COMMENT_ID: 47380900
+:END:
+Methods that abuse benchmarks aren't adopted by follow-up research so they tend not to survive. Results are 'regularized' by real world applications and the Lindy effect.
+
+**** trostaft
+:PROPERTIES:
+:COMMENT_ID: 47381000
+:END:
+If I recall correctly, this was also a keynote at MDS24. Hardt is an excellent speaker.
+
+**** lazrgatr
+:PROPERTIES:
+:COMMENT_ID: 47381100
+:END:
+A little rule I live by is that if Moritz Hardt writes it, I will read it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+书籍：机器学习基准测试的新兴科学
+***** TLDR
+Moritz Hardt的新书探讨ML基准测试的悖论：每个人都知道它们有缺陷（过拟合、游戏化、有偏标签），但它们却从ImageNet到MMLU推动了实际进步。书中认为模型排名而非绝对指标才是真正可复现和重要的。
+***** Take
+终于有人写了一本书解释为什么基准测试已经破碎但我们仍然使用它们。这个领域的肮脏秘密：科技CEO们像念信用评级一样向股东背诵MMLU分数，但实际科学表明这些数字本身毫无意义，除非你把它们和其他数字比较。一切都是排名。
+***** Comments
+- 滥用基准的方法不会被后续研究采用，所以往往不会存活。结果被实际应用和林迪效应'正则化'。
+- 如果我没记错，这也是MDS24的主题演讲。Hardt是一位出色的演讲者。
+- 我遵循的一个小规则是，如果Moritz Hardt写的，我就会读。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+書籍：機械学習ベンチマークの新興科学
+***** TLDR
+Moritz Hardtの新著はMLベンチマークのパラドックスに取り組む：誰もがその欠陥（過学習、ゲーミング、偏ったラベル）を知っているが、ImageNetからMMLUまで実際の進歩を推進してきた。本書は、絶対的な指標ではなくモデルのランキングこそが実際に再現可能で重要だと主張する。
+***** Take
+ついに誰かがベンチマークは壊れているのになぜ使い続けるのかを説明する本を書いた。この分野の汚い秘密：テックCEOたちは信用格付けのようにMMLUスコアを株主に暗唱するが、実際の科学では他の数字と比較しない限り数字自体は意味がないと言っている。全てはランキングなのだ。
+***** Comments
+- ベンチマークを悪用する手法は後続の研究に採用されないため、生き残らない傾向がある。結果は実世界のアプリケーションとリンディ効果によって「正則化」される。
+- 私の記憶が正しければ、これはMDS24の基調講演でもあった。Hardtは優れた講演者だ。
+- 私が守っている小さなルールは、Moritz Hardtが書いたものは読むということ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+책: 머신러닝 벤치마크의 새로운 과학
+***** TLDR
+Moritz Hardt의 새 책은 ML 벤치마크의 역설을 다룬다: 모두가 그 결함(과적합, 게이밍, 편향된 라벨)을 알지만, ImageNet에서 MMLU까지 실제 진전을 이끌어왔다. 책은 절대적 지표가 아닌 모델 순위가 실제로 복제 가능하고 중요하다고 주장한다.
+***** Take
+드디어 누군가가 벤치마크가 망가졌는데 왜 사용하는지 설명하는 책을 썼다. 이 분야의 더러운 비밀: 기술 CEO들은 신용등급처럼 주주들에게 MMLU 점수를 암송하지만, 실제 과학은 다른 숫자와 비교하지 않으면 숫자 자체는 의미가 없다고 말한다. 전부 순위일 뿐이다.
+***** Comments
+- 벤치마크를 남용하는 방법은 후속 연구에 채택되지 않아 살아남지 못하는 경향이 있다. 결과는 실제 애플리케이션과 린디 효과에 의해 '정규화'된다.
+- 내 기억이 맞다면 이것은 MDS24 기조연설이기도 했다. Hardt는 훌륭한 연사다.
+- 내가 따르는 작은 규칙은 Moritz Hardt가 쓴 것은 읽는다는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Libro: La ciencia emergente de los benchmarks de aprendizaje automático
+***** TLDR
+El nuevo libro de Moritz Hardt aborda la paradoja de los benchmarks de ML: todos saben que tienen fallos (sobreajuste, gaming, etiquetas sesgadas), pero de alguna manera han impulsado el progreso real desde ImageNet hasta MMLU. El libro argumenta que los rankings de modelos, no las métricas absolutas, son lo que realmente se replica y importa.
+***** Take
+Finalmente alguien escribió el libro explicando por qué los benchmarks están rotos pero los usamos de todos modos. El secreto sucio del campo: los CEOs de tech recitan puntuaciones de MMLU a los accionistas como si fuera una calificación crediticia, pero la ciencia real dice que los números no significan nada a menos que los compares con otros números. Todo son rankings.
+***** Comments
+- Los métodos que abusan de benchmarks no son adoptados por investigaciones posteriores, así que tienden a no sobrevivir. Los resultados son 'regularizados' por aplicaciones del mundo real y el efecto Lindy.
+- Si recuerdo bien, esto también fue una charla magistral en MDS24. Hardt es un excelente orador.
+- Una pequeña regla que sigo es que si Moritz Hardt lo escribe, lo leeré.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Buch: Die aufkommende Wissenschaft der Machine-Learning-Benchmarks
+***** TLDR
+Moritz Hardts neues Buch behandelt das Paradox der ML-Benchmarks: Jeder weiß, dass sie fehlerhaft sind (Overfitting, Gaming, verzerrte Labels), doch sie haben tatsächlichen Fortschritt von ImageNet bis MMLU vorangetrieben. Das Buch argumentiert, dass Modell-Rankings, nicht absolute Metriken, das sind, was tatsächlich repliziert und zählt.
+***** Take
+Endlich hat jemand das Buch geschrieben, das erklärt, warum Benchmarks kaputt sind, aber wir sie trotzdem benutzen. Das schmutzige Geheimnis des Feldes: Tech-CEOs rezitieren MMLU-Scores vor Aktionären wie Kreditratings, aber die echte Wissenschaft sagt, die Zahlen bedeuten nichts, außer man vergleicht sie mit anderen Zahlen. Es sind nur Rankings.
+***** Comments
+- Methoden, die Benchmarks missbrauchen, werden von Folgeforschung nicht übernommen und überleben daher tendenziell nicht. Ergebnisse werden durch reale Anwendungen und den Lindy-Effekt 'regularisiert'.
+- Wenn ich mich richtig erinnere, war dies auch ein Keynote bei MDS24. Hardt ist ein ausgezeichneter Redner.
+- Eine kleine Regel, nach der ich lebe: Wenn Moritz Hardt es schreibt, werde ich es lesen.
+** Show HN: I built 48 lightweight SVG backgrounds you can copy/paste :design:webdev:tools:showhn:
+:PROPERTIES:
+:ID:       47427299
+:URL:      https://www.svgbackgrounds.com/set/free-svg-backgrounds-and-patterns/
+:HN_URL:   https://news.ycombinator.com/item?id=47427299
+:POINTS:   189
+:COMMENTS: 32
+:BY:       visiwig
+:END:
+
+*** TLDR
+Matt Visiwig created a collection of 48 free SVG background patterns that you can customize (colors, blending modes) and export as CSS or PNG. Licensed for commercial use with attribution, or pay for no-attribution access. Patterns range from abstract blobs to geometric grids.
+
+*** Take
+For developers who think 'design' means changing hex codes until something doesn't hurt their eyes anymore. These are legitimately useful if your alternative is a flat color or that one gradient everyone uses.
+
+*** Comments
+
+**** Frannky
+:PROPERTIES:
+:COMMENT_ID: 47427500
+:END:
+I am very confused by the comments, they seem too excited for this. Are they real or paid bots? If they are real, kudos to OP.
+
+**** wackget
+:PROPERTIES:
+:COMMENT_ID: 47427600
+:END:
+Please consider adding a visible textarea with the CSS instead of relying on click to copy buttons. Some users disable clipboard access for security.
+
+**** karlshea
+:PROPERTIES:
+:COMMENT_ID: 47427700
+:END:
+Hey thanks so much! I found your site about a year ago while redoing my portfolio and used one for my header.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN：我做了48个可以复制粘贴的轻量级SVG背景
+***** TLDR
+Matt Visiwig创建了一个包含48个免费SVG背景图案的集合，你可以自定义（颜色、混合模式）并导出为CSS或PNG。商业使用需署名许可，或付费获得无需署名的访问权限。图案从抽象blob到几何网格都有。
+***** Take
+给那些认为'设计'就是改变十六进制颜色直到不刺眼的开发者。如果你的替代方案是纯色或者每个人都在用的那个渐变，这些确实有用。
+***** Comments
+- 我对这些评论很困惑，他们似乎太兴奋了。是真人还是付费机器人？如果是真的，给OP点赞。
+- 请考虑添加一个可见的文本框显示CSS，而不是依赖点击复制按钮。一些用户出于安全考虑禁用了剪贴板访问。
+- 非常感谢！大约一年前我在重做作品集时发现了你的网站，用了一个做页头。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN：コピペできる軽量なSVG背景を48個作りました
+***** TLDR
+Matt Visiwigが48個の無料SVG背景パターンのコレクションを作成。カスタマイズ（色、ブレンドモード）してCSSやPNGでエクスポート可能。商用利用は帰属表示付きでライセンス、または帰属不要アクセスは有料。パターンは抽象的なblobから幾何学的なグリッドまで様々。
+***** Take
+「デザイン」とは目が痛くなくなるまでhexコードを変えることだと思っている開発者向け。単色か皆が使っているあのグラデーションが代替案なら、これらは本当に役立つ。
+***** Comments
+- コメントに混乱している、興奮しすぎているように見える。本物か有料ボットか？本物なら、OPに拍手。
+- クリックでコピーボタンに頼るのではなく、CSSが見えるテキストエリアを追加することを検討してください。セキュリティのためクリップボードアクセスを無効にしているユーザーもいます。
+- ありがとう！1年前にポートフォリオを作り直している時にあなたのサイトを見つけて、ヘッダーに一つ使いました。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: 복사/붙여넣기 가능한 48개의 경량 SVG 배경을 만들었습니다
+***** TLDR
+Matt Visiwig가 48개의 무료 SVG 배경 패턴 컬렉션을 만들었다. 색상, 블렌딩 모드를 커스터마이징하고 CSS나 PNG로 내보낼 수 있다. 저작자 표시 포함 상업적 사용 라이선스, 또는 저작자 표시 없는 접근권은 유료. 패턴은 추상적인 blob부터 기하학적 그리드까지 다양.
+***** Take
+'디자인'이란 눈이 아프지 않을 때까지 hex 코드를 바꾸는 것이라고 생각하는 개발자들을 위해. 대안이 단색이거나 모두가 쓰는 그 그라데이션이라면, 이것들은 진짜 유용하다.
+***** Comments
+- 댓글이 혼란스럽다. 너무 흥분한 것 같다. 진짜인가 유료 봇인가? 진짜라면 OP에게 박수를.
+- 클릭 복사 버튼에 의존하지 말고 CSS가 보이는 텍스트 영역을 추가하는 것을 고려해주세요. 일부 사용자는 보안상 클립보드 접근을 비활성화합니다.
+- 정말 감사해요! 약 1년 전 포트폴리오를 다시 만들면서 당신 사이트를 발견하고 헤더에 하나 사용했습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Hice 48 fondos SVG ligeros que puedes copiar/pegar
+***** TLDR
+Matt Visiwig creó una colección de 48 patrones de fondo SVG gratuitos que puedes personalizar (colores, modos de fusión) y exportar como CSS o PNG. Licencia para uso comercial con atribución, o paga por acceso sin atribución. Los patrones van desde blobs abstractos hasta cuadrículas geométricas.
+***** Take
+Para desarrolladores que piensan que 'diseño' significa cambiar códigos hex hasta que algo no les duela los ojos. Estos son legítimamente útiles si tu alternativa es un color plano o ese gradiente que todos usan.
+***** Comments
+- Estoy muy confundido por los comentarios, parecen demasiado emocionados. ¿Son reales o bots pagados? Si son reales, felicitaciones al OP.
+- Por favor considera agregar un textarea visible con el CSS en lugar de depender de botones de click para copiar. Algunos usuarios deshabilitan el acceso al portapapeles por seguridad.
+- ¡Muchas gracias! Encontré tu sitio hace un año mientras rehacía mi portfolio y usé uno para mi encabezado.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Ich habe 48 leichte SVG-Hintergründe zum Kopieren gebaut
+***** TLDR
+Matt Visiwig hat eine Sammlung von 48 kostenlosen SVG-Hintergrundmustern erstellt, die angepasst (Farben, Mischmodi) und als CSS oder PNG exportiert werden können. Für kommerzielle Nutzung mit Namensnennung lizenziert, oder gegen Bezahlung ohne Namensnennung. Muster reichen von abstrakten Blobs bis zu geometrischen Rastern.
+***** Take
+Für Entwickler, die denken, 'Design' bedeutet Hex-Codes zu ändern, bis etwas nicht mehr in den Augen wehtut. Diese sind wirklich nützlich, wenn die Alternative eine flache Farbe oder dieser eine Gradient ist, den alle benutzen.
+***** Comments
+- Ich bin sehr verwirrt von den Kommentaren, sie scheinen zu aufgeregt. Sind sie echt oder bezahlte Bots? Wenn sie echt sind, Hut ab vor OP.
+- Bitte erwäge, einen sichtbaren Textbereich mit dem CSS hinzuzufügen, anstatt auf Klick-zum-Kopieren-Buttons zu setzen. Einige Benutzer deaktivieren aus Sicherheitsgründen den Zugriff auf die Zwischenablage.
+- Hey vielen Dank! Ich habe deine Seite vor etwa einem Jahr gefunden, als ich mein Portfolio neu gemacht habe, und eines für meinen Header verwendet.
+** What's on HTTP? :web:security:internet:
+:PROPERTIES:
+:ID:       47431930
+:URL:      https://whatsonhttp.com/
+:HN_URL:   https://news.ycombinator.com/item?id=47431930
+:POINTS:   39
+:COMMENTS: 18
+:BY:       elixx
+:END:
+
+*** TLDR
+A project scanning IPv4 for sites still serving plain HTTP without HTTPS. Currently indexing 3.3 million unencrypted web servers, ranking them by some criteria (unclear), and displaying screenshots of random HTTP sites in a retro TV interface. Accepts Bitcoin donations to 'keep the census rolling.'
+
+*** Take
+Digital archaeology for the sites that time and Let's Encrypt forgot. Most are default nginx pages and abandoned servers, but somewhere in those 3.3 million there's probably a guy still updating his GeoCities-style homepage about his cats.
+
+*** Comments
+
+**** paulnpace
+:PROPERTIES:
+:COMMENT_ID: 47432100
+:END:
+Not very useful when most of the pages are default web server pages.
+
+**** superkuh
+:PROPERTIES:
+:COMMENT_ID: 47432200
+:END:
+HTTP is incomparably less fragile than HTTPS which is why HTTP+HTTPS is a great solution for websites made by human persons. No HTTPS cert system survives longer than a few years without human input.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+HTTP上有什么？
+***** TLDR
+一个扫描IPv4寻找仍在使用纯HTTP而没有HTTPS的网站的项目。目前索引了330万个未加密的Web服务器，按某些标准排名（不明确），并在复古电视界面中显示随机HTTP网站的截图。接受比特币捐款来"保持普查继续"。
+***** Take
+时间和Let's Encrypt遗忘的网站的数字考古学。大多数是默认的nginx页面和被遗弃的服务器，但在那330万个中，可能有一个人仍在更新他关于猫的GeoCities风格主页。
+***** Comments
+- 当大多数页面都是默认Web服务器页面时，不是很有用。
+- HTTP比HTTPS脆弱得少得多，这就是为什么HTTP+HTTPS对于人类制作的网站来说是一个很好的解决方案。没有HTTPS证书系统能在没有人工干预的情况下存活超过几年。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+HTTPには何がある？
+***** TLDR
+HTTPSなしでプレーンHTTPを提供しているサイトを探すIPv4スキャンプロジェクト。現在330万の暗号化されていないWebサーバーをインデックス化し、何らかの基準（不明確）でランキングし、レトロなTVインターフェースでランダムなHTTPサイトのスクリーンショットを表示。"調査を続ける"ためにビットコイン寄付を受け付けている。
+***** Take
+時間とLet's Encryptが忘れたサイトのデジタル考古学。ほとんどはデフォルトのnginxページと放棄されたサーバーだが、あの330万の中のどこかに、猫についてのGeoCitiesスタイルのホームページをまだ更新している人がいるかもしれない。
+***** Comments
+- ほとんどのページがデフォルトのウェブサーバーページだと、あまり役に立たない。
+- HTTPはHTTPSより比べ物にならないほど壊れにくい。だからHTTP+HTTPSは人間が作るウェブサイトに最適なソリューションだ。人間の入力なしに数年以上持つHTTPS証明書システムはない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+HTTP에 뭐가 있나요?
+***** TLDR
+HTTPS 없이 여전히 순수 HTTP를 제공하는 사이트를 찾아 IPv4를 스캔하는 프로젝트. 현재 330만 개의 암호화되지 않은 웹 서버를 인덱싱하고, 어떤 기준(불명확)으로 순위를 매기며, 레트로 TV 인터페이스에서 무작위 HTTP 사이트의 스크린샷을 표시. '조사를 계속하기' 위해 비트코인 기부를 받음.
+***** Take
+시간과 Let's Encrypt가 잊은 사이트들의 디지털 고고학. 대부분은 기본 nginx 페이지와 버려진 서버지만, 그 330만 개 중 어딘가에 아마도 고양이에 대한 GeoCities 스타일 홈페이지를 여전히 업데이트하는 사람이 있을 것이다.
+***** Comments
+- 대부분의 페이지가 기본 웹 서버 페이지일 때 그다지 유용하지 않다.
+- HTTP는 HTTPS보다 비교할 수 없을 정도로 덜 취약하다. 그래서 HTTP+HTTPS가 사람이 만든 웹사이트에 좋은 솔루션이다. 인간의 개입 없이 몇 년 이상 버티는 HTTPS 인증서 시스템은 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Qué hay en HTTP?
+***** TLDR
+Un proyecto escaneando IPv4 buscando sitios que aún sirven HTTP plano sin HTTPS. Actualmente indexa 3.3 millones de servidores web sin cifrar, los clasifica por algunos criterios (poco claros), y muestra capturas de pantalla de sitios HTTP aleatorios en una interfaz de TV retro. Acepta donaciones en Bitcoin para 'mantener el censo funcionando.'
+***** Take
+Arqueología digital para los sitios que el tiempo y Let's Encrypt olvidaron. La mayoría son páginas predeterminadas de nginx y servidores abandonados, pero en algún lugar de esos 3.3 millones probablemente hay alguien que aún actualiza su página estilo GeoCities sobre sus gatos.
+***** Comments
+- No muy útil cuando la mayoría de las páginas son páginas predeterminadas de servidores web.
+- HTTP es incomparablemente menos frágil que HTTPS, por eso HTTP+HTTPS es una gran solución para sitios web hechos por personas humanas. Ningún sistema de certificados HTTPS sobrevive más de unos años sin intervención humana.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Was gibt's auf HTTP?
+***** TLDR
+Ein Projekt, das IPv4 nach Seiten durchsucht, die immer noch reines HTTP ohne HTTPS anbieten. Aktuell werden 3,3 Millionen unverschlüsselte Webserver indiziert, nach einigen Kriterien (unklar) gerankt und Screenshots von zufälligen HTTP-Seiten in einer Retro-TV-Oberfläche angezeigt. Akzeptiert Bitcoin-Spenden, um 'den Zensus am Laufen zu halten.'
+***** Take
+Digitale Archäologie für die Seiten, die Zeit und Let's Encrypt vergessen haben. Die meisten sind Standard-nginx-Seiten und verlassene Server, aber irgendwo in diesen 3,3 Millionen gibt es wahrscheinlich jemanden, der immer noch seine GeoCities-artige Homepage über seine Katzen aktualisiert.
+***** Comments
+- Nicht sehr nützlich, wenn die meisten Seiten Standard-Webserver-Seiten sind.
+- HTTP ist unvergleichlich weniger fragil als HTTPS, deshalb ist HTTP+HTTPS eine großartige Lösung für Websites von Menschen. Kein HTTPS-Zertifikatssystem überlebt länger als ein paar Jahre ohne menschliche Eingabe.
