@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-03-20 06:00:00 UT UTC
+#+DATE: 2026-03-20T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Azure leaks invisible logins, twins prove wool beats Gore-Tex, and TI-83 Drugwars hits nostalgia
+
+* Highlights
+- Azure: Four sign-in log bypasses in three years, fixed after video proof
+- Turner twins: 1.8C is all modern gear buys you over 1924 wool
+- Drugwars TI-83: The gateway drug to programming
+
+* Stories
+
+** Full Disclosure: A Third (and Fourth) Azure Sign-In Log Bypass Found :security:azure:microsoft:authentication:
+:PROPERTIES:
+:ID:       47448994
+:URL:      https://trustedsec.com/blog/full-disclosure-a-third-and-fourth-azure-sign-in-log-bypass-found
+:HN_URL:   https://news.ycombinator.com/item?id=47448994
+:POINTS:   87
+:COMMENTS: 15
+:BY:       nyxgeek
+:END:
+
+*** TLDR
+Security researcher found two more ways to authenticate to Azure Entra ID without creating sign-in logs. GraphGoblin exploited an overflow by repeating 'openid' 10,000 times in the scope parameter. The fourth bypass? Just use a 50,000 character user-agent string. Both appear to be SQL column overflows causing the entire INSERT to fail. Microsoft took months to reproduce despite video evidence.
+
+*** Take
+Four invisible login bypasses in three years for Azure's most critical authentication logging. One was fixed before the researcher could even report it, but they still couldn't find the other one without a video walkthrough. At some point 'cloud security' starts to feel like an oxymoron.
+
+*** Comments
+
+**** kjellsbells
+:PROPERTIES:
+:COMMENT_ID: 47449001
+:END:
+Puts me in mind of this scathing report from CISA on how a state-sponsored group broke into Microsoft and then into the State Department. Reads like a heist movie.
+
+**** throwoutway
+:PROPERTIES:
+:COMMENT_ID: 47449002
+:END:
+Yesterday ProPublica and ArsTechnica published a takedown of Azure: 'Federal cyber experts called Microsoft's cloud a pile of shit, approved it anyway'
+
+**** epistasis
+:PROPERTIES:
+:COMMENT_ID: 47449003
+:END:
+There's a big tradeoff here though: IT admins really love buying Microsoft. And when the dog tries to complain about the dogfood, the dogfood purchaser tends to not understand very well.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+完整披露：发现第三个和第四个Azure登录日志绕过漏洞
+***** TLDR
+安全研究人员发现了两种新方法可以在不生成登录日志的情况下认证Azure Entra ID。GraphGoblin通过在scope参数中重复'openid'一万次来利用溢出漏洞。第四个绕过方法更简单：只需使用5万字符的user-agent字符串。两者都是SQL列溢出导致整个INSERT失败。
+***** Take
+三年四个隐形登录绕过漏洞。微软甚至需要视频演示才能复现。'云安全'这个词开始像个笑话了。
+***** Comments
+- 让我想起CISA关于国家级黑客入侵微软和国务院的报告，读起来像电影剧本。
+- 昨天ProPublica发文称联邦网络专家称Azure为'一堆屎'。
+- IT管理员就是喜欢买微软的东西，抱怨也没用。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+完全開示：3番目と4番目のAzureサインインログバイパスを発見
+***** TLDR
+セキュリティ研究者がAzure Entra IDにログなしで認証する2つの新しい方法を発見。GraphGoblinはscopeパラメータで'openid'を1万回繰り返してオーバーフローを悪用。4番目は5万文字のuser-agent文字列を使うだけ。どちらもSQLカラムオーバーフローでINSERT全体が失敗する問題。
+***** Take
+3年で4つの不可視ログインバイパス。ビデオ証拠がないと再現できないMicrosoft。「クラウドセキュリティ」は矛盾語のようだ。
+***** Comments
+- CISAの国家支援グループによるMicrosoft侵入報告を思い出す。映画のようだ。
+- 昨日ProPublicaが「連邦サイバー専門家はAzureを『クソの山』と呼んだ」と報道。
+- IT管理者はMicrosoftを買うのが大好き。犬がドッグフードに文句を言っても無駄。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+전체 공개: 세 번째와 네 번째 Azure 로그인 로그 우회 발견
+***** TLDR
+보안 연구원이 Azure Entra ID에 로그 없이 인증하는 두 가지 새로운 방법을 발견했습니다. GraphGoblin은 scope 매개변수에 'openid'를 만 번 반복하여 오버플로우를 악용합니다. 네 번째는 5만 자 user-agent 문자열만 사용하면 됩니다.
+***** Take
+3년 동안 보이지 않는 로그인 우회 4개. 비디오 증거 없이는 재현도 못하는 Microsoft. '클라우드 보안'이 모순어처럼 느껴진다.
+***** Comments
+- CISA의 국가 지원 그룹 Microsoft 침입 보고서가 생각난다. 영화 같다.
+- 어제 ProPublica가 '연방 사이버 전문가들이 Azure를 쓰레기 더미라고 불렀다'고 보도했다.
+- IT 관리자들은 Microsoft 구매를 좋아한다. 개가 사료에 불평해도 소용없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Divulgación completa: Se encontró un tercer y cuarto bypass de registro de inicio de sesión de Azure
+***** TLDR
+Un investigador de seguridad encontró dos nuevas formas de autenticarse en Azure Entra ID sin crear registros. GraphGoblin explotó un desbordamiento repitiendo 'openid' 10,000 veces. El cuarto bypass solo requiere una cadena user-agent de 50,000 caracteres.
+***** Take
+Cuatro bypasses de login invisibles en tres años. Microsoft necesitó un video para reproducirlo. 'Seguridad en la nube' empieza a sonar como un oxímoron.
+***** Comments
+- Me recuerda al informe de CISA sobre cómo un grupo patrocinado por el estado entró en Microsoft. Parece una película de atracos.
+- Ayer ProPublica publicó que expertos federales llamaron a Azure 'un montón de mierda'.
+- A los administradores de TI les encanta comprar Microsoft. Cuando el perro se queja de la comida, el comprador no entiende.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Vollständige Offenlegung: Ein dritter und vierter Azure-Anmeldelog-Bypass gefunden
+***** TLDR
+Sicherheitsforscher fand zwei neue Wege zur Azure Entra ID-Authentifizierung ohne Protokollierung. GraphGoblin nutzte einen Überlauf durch 10.000-fache Wiederholung von 'openid'. Der vierte Bypass: einfach einen 50.000 Zeichen langen User-Agent verwenden.
+***** Take
+Vier unsichtbare Login-Bypasses in drei Jahren. Microsoft brauchte ein Video zur Reproduktion. 'Cloud-Sicherheit' klingt langsam wie ein Oxymoron.
+***** Comments
+- Erinnert mich an den CISA-Bericht über den staatlich gesponsorten Einbruch bei Microsoft. Liest sich wie ein Heist-Film.
+- Gestern berichtete ProPublica, dass Bundesexperten Azure 'einen Haufen Scheiße' nannten.
+- IT-Admins kaufen gerne Microsoft. Wenn der Hund sich über das Futter beschwert, versteht der Käufer das nicht.
+** How the Turner twins are mythbusting modern technical apparel :outdoors:science:gear:research:
+:PROPERTIES:
+:ID:       47416972
+:URL:      https://www.carryology.com/insights/how-the-turner-twins-are-mythbusting-modern-gear/
+:HN_URL:   https://news.ycombinator.com/item?id=47416972
+:POINTS:   177
+:COMMENTS: 91
+:BY:       greedo
+:END:
+
+*** TLDR
+Genetically identical twins run extreme expeditions with one wearing modern Gore-Tex and down while the other wears 1924-era wool, silk, and gabardine replicas. Using ingestible temperature sensors and hacked baby thermometer patches, they found the modern twin was only 1.8C warmer on Everest summit night. That's one degree of efficiency per 50 years of textile innovation.
+
+*** Take
+Turns out a century of synthetic miracle fabrics bought us roughly the warmth of putting on a second pair of socks. The real innovation was making gear idiot-proof so we forgot how to actually layer. Mallory's six-layer silk-over-wool system worked because he knew what he was doing.
+
+*** Comments
+
+**** pinkmuffinere
+:PROPERTIES:
+:COMMENT_ID: 47417001
+:END:
+The human body self-regulates. A 1.8C difference conditioned on both surviving seems less impressive than it sounds.
+
+**** aidenn0
+:PROPERTIES:
+:COMMENT_ID: 47417002
+:END:
+So other than being easier to use, cheaper to buy, lighter, and warmer: modern apparel isn't any better than old apparel.
+
+**** jldugger
+:PROPERTIES:
+:COMMENT_ID: 47417003
+:END:
+Depending on where the baseline is, 1.8 degrees could be huge! But more importantly, the data shows modern gear buys you a safety margin if you stop moving.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+特纳双胞胎如何揭穿现代户外装备的神话
+***** TLDR
+基因相同的双胞胎进行极限探险，一人穿现代Gore-Tex和羽绒服，另一人穿1924年的羊毛、丝绸和华达呢复制品。使用可吞咽温度传感器，他们发现在珠峰登顶夜，现代装备只暖了1.8度。100年纺织创新，每50年只提升一度。
+***** Take
+一个世纪的合成纤维奇迹相当于多穿一双袜子。真正的创新是让装备变得傻瓜式，所以我们忘了怎么正确穿衣。
+***** Comments
+- 人体会自我调节。双方都存活的条件下，1.8度差异没那么惊人。
+- 除了更易用、更便宜、更轻、更暖之外，现代服装并没有更好。
+- 根据基准线，1.8度可能很重要！现代装备在静止时提供安全余量。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ターナー双子が現代テクニカルアパレルの神話を覆す方法
+***** TLDR
+遺伝的に同一の双子が、一人は現代のGore-Texとダウン、もう一人は1924年のウール、シルク、ギャバジンのレプリカを着て極限遠征を行った。摂取可能な温度センサーを使用した結果、エベレスト登頂の夜、現代装備の双子はわずか1.8度暖かいだけだった。
+***** Take
+1世紀の合成繊維の奇跡は、靴下をもう1足履くのと同じ程度だった。真のイノベーションは装備を馬鹿でも使えるようにしたことで、我々はレイヤリングの仕方を忘れた。
+***** Comments
+- 人体は自己調節する。両者が生存した条件下で1.8度の差はそれほど印象的ではない。
+- 使いやすく、安く、軽く、暖かい以外は現代の服は古いものと変わらない。
+- 基準線によっては1.8度は大きい！現代の装備は静止時に安全マージンを提供する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+터너 쌍둥이가 현대 기술 의류의 신화를 깨다
+***** TLDR
+유전적으로 동일한 쌍둥이가 한 명은 현대 Gore-Tex와 다운, 다른 한 명은 1924년 울, 실크, 개버딘 복제품을 입고 극한 탐험을 진행했습니다. 섭취 가능한 온도 센서를 사용한 결과, 에베레스트 정상 등반 밤에 현대 장비 쌍둥이가 겨우 1.8도 더 따뜻했습니다.
+***** Take
+한 세기의 합성 섬유 기적이 양말 한 켤레 더 신는 것과 같았다. 진짜 혁신은 장비를 바보도 쓸 수 있게 만든 것이고, 우리는 레이어링하는 법을 잊었다.
+***** Comments
+- 인체는 자가 조절한다. 둘 다 살아남은 조건에서 1.8도 차이는 그리 인상적이지 않다.
+- 사용하기 쉽고, 저렴하고, 가볍고, 따뜻한 것 외에는 현대 의류가 더 좋지 않다.
+- 기준선에 따라 1.8도는 클 수 있다! 현대 장비는 정지 시 안전 마진을 제공한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo los gemelos Turner desmienten los mitos de la ropa técnica moderna
+***** TLDR
+Gemelos genéticamente idénticos realizan expediciones extremas: uno con Gore-Tex moderno y plumón, otro con réplicas de lana, seda y gabardina de 1924. Usando sensores de temperatura ingeribles, encontraron que el gemelo moderno estaba solo 1.8°C más caliente en la noche de cumbre del Everest.
+***** Take
+Un siglo de fibras sintéticas milagrosas equivale a ponerse otro par de calcetines. La verdadera innovación fue hacer el equipo a prueba de tontos, así que olvidamos cómo vestir en capas.
+***** Comments
+- El cuerpo humano se autorregula. Una diferencia de 1.8°C con ambos sobreviviendo parece menos impresionante.
+- Aparte de ser más fácil de usar, más barato, más ligero y más cálido, la ropa moderna no es mejor.
+- Dependiendo de la línea base, 1.8 grados podría ser enorme. El equipo moderno da margen de seguridad si te detienes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie die Turner-Zwillinge moderne technische Bekleidung entlarven
+***** TLDR
+Genetisch identische Zwillinge führen Extremexpeditionen durch: einer in modernem Gore-Tex und Daunen, der andere in Repliken aus Wolle, Seide und Gabardine von 1924. Mit schluckbaren Temperatursensoren fanden sie heraus, dass der moderne Zwilling in der Gipfelnacht am Everest nur 1,8°C wärmer war.
+***** Take
+Ein Jahrhundert synthetischer Wunderfasern entspricht etwa einem zweiten Paar Socken. Die wahre Innovation war, Ausrüstung idiotensicher zu machen, sodass wir vergessen haben, wie man richtig schichtet.
+***** Comments
+- Der menschliche Körper reguliert sich selbst. Ein Unterschied von 1,8°C bei beidseitigem Überleben klingt weniger beeindruckend.
+- Abgesehen davon, dass sie einfacher zu benutzen, billiger, leichter und wärmer ist, ist moderne Kleidung nicht besser.
+- Je nach Ausgangspunkt könnten 1,8 Grad riesig sein! Moderne Ausrüstung bietet Sicherheitsmarge bei Stillstand.
+** Drugwars for the TI-82/83/83 Calculators (2011) :nostalgia:programming:calculator:games:
+:PROPERTIES:
+:ID:       47448566
+:URL:      https://gist.github.com/mattmanning/1002653/b7a1e88479a10eaae3bd5298b8b2c86e16fb4404
+:HN_URL:   https://news.ycombinator.com/item?id=47448566
+:POINTS:   102
+:COMMENTS: 43
+:BY:       robotnikman
+:END:
+
+*** TLDR
+A TI-BASIC implementation of the classic 'Drugwars' game for graphing calculators, originally created by John E. Dell for IBM. Buy low, sell high, pay off your debt to the loan shark, and watch out for the police. The full source code is 200 lines of nostalgic goto statements and single-letter variables.
+
+*** Take
+Before there was Leetcode, there was typing 200 lines of BASIC into your TI-83 during algebra class while pretending to calculate quadratic equations. The real lesson wasn't trigonometry. It was learning that A=1 means yes and B=2 means no, and that's perfectly good UX.
+
+*** Comments
+
+**** TimTheTinker
+:PROPERTIES:
+:COMMENT_ID: 47448601
+:END:
+TI-83 Basic was the first programming language I really felt like I had mastered. For a while in my first CS college class I was writing code in TI basic and translating it to C++.
+
+**** qaid
+:PROPERTIES:
+:COMMENT_ID: 47448602
+:END:
+I got my start reading the manual of my TI-83+. I spent most of 9th grade making a Street Fighter clone using graphing functions. Eventually I switched to coding with pencil and paper because the screen only shows 8 lines.
+
+**** jckahn
+:PROPERTIES:
+:COMMENT_ID: 47448603
+:END:
+This game is a really big deal for me! I was addicted to it in high school and it directly inspired my passion project, Farmhand.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+TI-82/83/83计算器上的Drugwars游戏 (2011)
+***** TLDR
+经典'Drugwars'游戏的TI-BASIC实现，适用于图形计算器。低买高卖，偿还高利贷债务，小心警察。完整源代码只有200行怀旧的goto语句和单字母变量。
+***** Take
+在Leetcode之前，我们在代数课上假装计算二次方程，实际上在TI-83里输入200行BASIC代码。真正的课程不是三角函数，而是学会A=1表示是，B=2表示否。
+***** Comments
+- TI-83 Basic是我真正掌握的第一门编程语言。大学第一节CS课我还在用TI basic写代码然后翻译成C++。
+- 我从TI-83+的说明书开始入门。九年级大部分时间都在用图形函数做街霸克隆。后来改用铅笔和纸编程，因为屏幕只能显示8行。
+- 这个游戏对我意义重大！高中时沉迷其中，直接启发了我的项目Farmhand。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+TI-82/83/83計算機用Drugwars (2011)
+***** TLDR
+グラフ電卓用の古典的な'Drugwars'ゲームのTI-BASIC実装。安く買って高く売り、借金を返済し、警察に注意。完全なソースコードは200行のgoto文と一文字変数の懐かしさ。
+***** Take
+Leetcodeの前は、代数の授業で二次方程式を計算するふりをしながらTI-83に200行のBASICを打ち込んでいた。本当の授業は三角関数ではなく、A=1がはい、B=2がいいえということを学ぶことだった。
+***** Comments
+- TI-83 Basicは本当にマスターしたと感じた最初のプログラミング言語だった。大学最初のCSの授業でもTI basicでコードを書いてC++に翻訳していた。
+- TI-83+のマニュアルを読んで始めた。9年生の大半をグラフ関数でストリートファイタークローンを作ることに費やした。
+- このゲームは私にとって本当に重要！高校で中毒になり、私のプロジェクトFarmhandに直接影響を与えた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+TI-82/83/83 계산기용 Drugwars (2011)
+***** TLDR
+그래프 계산기용 클래식 'Drugwars' 게임의 TI-BASIC 구현. 싸게 사서 비싸게 팔고, 사채업자에게 빚을 갚고, 경찰을 조심하세요. 전체 소스 코드는 200줄의 향수 어린 goto문과 단일 문자 변수입니다.
+***** Take
+Leetcode 이전에는 대수학 수업에서 이차 방정식을 계산하는 척하면서 TI-83에 200줄의 BASIC을 입력했다. 진짜 수업은 삼각함수가 아니라 A=1이 예이고 B=2가 아니오라는 것을 배우는 것이었다.
+***** Comments
+- TI-83 Basic은 내가 정말 마스터했다고 느낀 첫 프로그래밍 언어였다. 대학 첫 CS 수업에서도 TI basic으로 코드를 쓰고 C++로 번역했다.
+- TI-83+ 매뉴얼을 읽으며 시작했다. 9학년 대부분을 그래프 함수로 스트리트 파이터 클론을 만드는 데 보냈다.
+- 이 게임은 나에게 정말 큰 의미가 있다! 고등학교 때 중독되었고 내 프로젝트 Farmhand에 직접 영감을 주었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Drugwars para calculadoras TI-82/83/83 (2011)
+***** TLDR
+Una implementación en TI-BASIC del clásico juego 'Drugwars' para calculadoras gráficas. Compra barato, vende caro, paga tu deuda al prestamista y cuidado con la policía. El código fuente completo tiene 200 líneas de nostálgicos goto y variables de una letra.
+***** Take
+Antes de Leetcode, escribíamos 200 líneas de BASIC en la TI-83 durante la clase de álgebra fingiendo calcular ecuaciones cuadráticas. La verdadera lección no era trigonometría, sino que A=1 significa sí y B=2 significa no.
+***** Comments
+- TI-83 Basic fue el primer lenguaje que sentí que realmente dominaba. En mi primera clase de CS traducía código de TI basic a C++.
+- Empecé leyendo el manual de mi TI-83+. Pasé la mayor parte de 9º haciendo un clon de Street Fighter con funciones gráficas.
+- ¡Este juego es muy importante para mí! Era adicto en la secundaria e inspiró directamente mi proyecto Farmhand.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Drugwars für TI-82/83/83 Taschenrechner (2011)
+***** TLDR
+Eine TI-BASIC-Implementierung des klassischen 'Drugwars'-Spiels für Grafikrechner. Kaufe niedrig, verkaufe hoch, zahle deine Schulden beim Kredithai ab und pass auf die Polizei auf. Der vollständige Quellcode umfasst 200 Zeilen nostalgischer goto-Anweisungen und Einbuchstaben-Variablen.
+***** Take
+Vor Leetcode haben wir im Algebra-Unterricht 200 Zeilen BASIC in unsere TI-83 getippt und so getan, als würden wir quadratische Gleichungen berechnen. Die wahre Lektion war nicht Trigonometrie, sondern dass A=1 Ja und B=2 Nein bedeutet.
+***** Comments
+- TI-83 Basic war die erste Programmiersprache, die ich wirklich beherrschte. In meiner ersten Informatikvorlesung schrieb ich Code in TI basic und übersetzte ihn nach C++.
+- Ich habe mit dem Handbuch meiner TI-83+ angefangen. Die meiste Zeit der 9. Klasse verbrachte ich damit, einen Street Fighter-Klon mit Graphfunktionen zu machen.
+- Dieses Spiel bedeutet mir viel! Ich war in der Highschool süchtig danach und es inspirierte direkt mein Projekt Farmhand.
+** NanoGPT Slowrun: 10x Data Efficiency with Infinite Compute :ai:machine-learning:research:llm:
+:PROPERTIES:
+:ID:       47444072
+:URL:      https://qlabs.sh/10x
+:HN_URL:   https://news.ycombinator.com/item?id=47444072
+:POINTS:   122
+:COMMENTS: 25
+:BY:       sdpmas
+:END:
+
+*** TLDR
+Q Labs achieved 10x data efficiency by training an ensemble of 1.8B parameter models on just 100M tokens to match what normally requires 1B tokens. Key techniques: chain knowledge distillation (each model distills from its predecessor), aggressive regularization (16x normal weight decay), and looped transformers that re-run middle layers 4 times. Training past individual model optimum actually helps ensemble performance.
+
+*** Take
+Chinchilla says use 5M parameters for 100M tokens. These folks used 18B total params and called it 'Slowrun'. Sometimes the answer to 'we're running out of data' is just 'have you tried using 3600x more parameters and hoping the models disagree with each other productively?'
+
+*** Comments
+
+**** pastescreenshot
+:PROPERTIES:
+:COMMENT_ID: 47444101
+:END:
+The practical question is where the compute bill lands once you include both training and serving. Is the endgame 'serve the ensemble' or can the gain be compressed back into a single model?
+
+**** andai
+:PROPERTIES:
+:COMMENT_ID: 47444102
+:END:
+What's the human baseline? How many cats does a human need to see to learn what a cat is? Maybe not fair since my brain has been 'learning' for half a billion years before I was born.
+
+**** nsnzjznzbx
+:PROPERTIES:
+:COMMENT_ID: 47444103
+:END:
+We will get to the point where an LLM can train a better LLM in a loop, leave it and it can really learn. Like learn learn.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+NanoGPT Slowrun：无限算力下实现10倍数据效率
+***** TLDR
+Q Labs通过在1亿tokens上训练18亿参数模型集成，达到了10倍数据效率，匹配通常需要10亿tokens的效果。关键技术：链式知识蒸馏、16倍正常权重衰减的激进正则化、以及将中间层重复运行4次的循环transformer。
+***** Take
+Chinchilla说1亿tokens用500万参数。这些人用了180亿参数还叫它'Slowrun'。解决数据不足的方法是用3600倍参数然后期望模型们意见不一致？
+***** Comments
+- 实际问题是把训练和推理成本加起来怎么算。是要'部署整个集成'还是能把收益压缩回单个模型？
+- 人类基线是什么？人类需要看多少只猫才能学会什么是猫？虽然我的大脑在出生前已经'学习'了5亿年。
+- 我们会到达这样一个点：LLM可以循环训练更好的LLM。真正地学习。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+NanoGPT Slowrun：無限の計算で10倍のデータ効率
+***** TLDR
+Q Labsは18億パラメータのモデルアンサンブルを1億トークンのみで訓練し、通常10億トークンを必要とする性能を達成、10倍のデータ効率を実現。主要技術：チェーン知識蒸留、16倍の重み減衰による積極的な正則化、中間層を4回再実行するループトランスフォーマー。
+***** Take
+Chinchillaは1億トークンには500万パラメータを使えと言う。この人たちは180億パラメータを使って'Slowrun'と呼んだ。データ不足への答えが「3600倍のパラメータを使ってモデル同士が生産的に意見を違えることを期待する」だとは。
+***** Comments
+- 実用的な問題は、訓練と推論の両方を含めた計算コストがどこに着地するか。最終的に「アンサンブルをサーブする」のか、単一モデルに圧縮できるのか？
+- 人間のベースラインは？人間が猫とは何かを学ぶのに何匹の猫を見る必要がある？私の脳は生まれる前に5億年「学習」してきたから公平ではないかも。
+- LLMがループでより良いLLMを訓練できる段階に達するだろう。本当に学ぶように。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+NanoGPT Slowrun: 무한 컴퓨트로 10배 데이터 효율성
+***** TLDR
+Q Labs는 1억 토큰만으로 18억 파라미터 모델 앙상블을 훈련하여 일반적으로 10억 토큰이 필요한 성능을 달성, 10배 데이터 효율성을 실현했습니다. 핵심 기술: 체인 지식 증류, 16배 가중치 감쇠의 공격적 정규화, 중간 레이어를 4번 재실행하는 루프 트랜스포머.
+***** Take
+Chinchilla는 1억 토큰에 500만 파라미터를 사용하라고 했다. 이 사람들은 180억 파라미터를 사용하고 'Slowrun'이라고 불렀다. 데이터 부족에 대한 답이 '3600배 더 많은 파라미터를 사용하고 모델들이 생산적으로 의견이 다르길 바라는 것'이라니.
+***** Comments
+- 실질적인 질문은 훈련과 서빙을 모두 포함했을 때 컴퓨트 비용이 어디에 착지하느냐다. 최종 목표가 '앙상블을 서빙'하는 것인가, 단일 모델로 압축할 수 있는가?
+- 인간 베이스라인은? 인간이 고양이가 무엇인지 배우려면 몇 마리의 고양이를 봐야 하나? 내 뇌가 태어나기 전 5억 년 동안 '학습'해왔으니 공정하지 않을지도.
+- LLM이 루프에서 더 나은 LLM을 훈련할 수 있는 지점에 도달할 것이다. 진짜 학습하듯이.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+NanoGPT Slowrun: 10x eficiencia de datos con cómputo infinito
+***** TLDR
+Q Labs logró 10x eficiencia de datos entrenando un ensamble de modelos de 1.8B parámetros con solo 100M tokens para igualar lo que normalmente requiere 1B tokens. Técnicas clave: destilación de conocimiento en cadena, regularización agresiva (16x decay normal), y transformers en bucle que re-ejecutan capas intermedias 4 veces.
+***** Take
+Chinchilla dice usar 5M parámetros para 100M tokens. Estos tipos usaron 18B parámetros y lo llamaron 'Slowrun'. La respuesta a 'nos quedamos sin datos' es usar 3600x más parámetros y esperar que los modelos discrepen productivamente.
+***** Comments
+- La pregunta práctica es dónde queda la factura de cómputo incluyendo entrenamiento y servicio. ¿El objetivo es 'servir el ensamble' o se puede comprimir a un solo modelo?
+- ¿Cuál es la línea base humana? ¿Cuántos gatos necesita ver un humano para aprender qué es un gato? Mi cerebro ha estado 'aprendiendo' 500 millones de años antes de nacer.
+- Llegaremos al punto donde un LLM puede entrenar un mejor LLM en bucle. Realmente aprender.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+NanoGPT Slowrun: 10x Dateneffizienz mit unendlicher Rechenleistung
+***** TLDR
+Q Labs erreichte 10x Dateneffizienz durch Training eines Ensembles von 1,8B-Parameter-Modellen mit nur 100M Tokens, um zu erreichen, was normalerweise 1B Tokens erfordert. Schlüsseltechniken: Ketten-Wissensdestillation, aggressive Regularisierung (16x normaler Weight Decay) und geloopte Transformer, die mittlere Schichten 4-mal wiederholen.
+***** Take
+Chinchilla sagt, man solle 5M Parameter für 100M Tokens verwenden. Diese Leute verwendeten 18B Parameter und nannten es 'Slowrun'. Die Antwort auf 'uns gehen die Daten aus' ist 3600x mehr Parameter zu verwenden und zu hoffen, dass die Modelle produktiv uneins sind.
+***** Comments
+- Die praktische Frage ist, wo die Rechenkosten landen, wenn man Training und Serving einbezieht. Ist das Ziel 'das Ensemble bereitstellen' oder kann der Gewinn in ein einzelnes Modell komprimiert werden?
+- Was ist die menschliche Baseline? Wie viele Katzen muss ein Mensch sehen, um zu lernen, was eine Katze ist? Mein Gehirn hat vor meiner Geburt 500 Millionen Jahre 'gelernt'.
+- Wir werden den Punkt erreichen, an dem ein LLM ein besseres LLM in einer Schleife trainieren kann. Wirklich lernen.
+** Be intentional about how AI changes your codebase :programming:ai:code-quality:software-engineering:
+:PROPERTIES:
+:ID:       47446373
+:URL:      https://aicode.swerdlow.dev
+:HN_URL:   https://news.ycombinator.com/item?id=47446373
+:POINTS:   97
+:COMMENTS: 36
+:BY:       benswerd
+:END:
+
+*** TLDR
+A manifesto for AI-assisted coding that introduces 'semantic functions' (pure, minimal, unit-testable) vs 'pragmatic functions' (messy wrappers, integration-tested). Models should make wrong states impossible. Every optional field is a question the rest of the codebase has to answer. When a function morphs from semantic to pragmatic, downstream code starts doing things it didn't intend.
+
+*** Take
+The only thing that sloppifies a codebase faster than one coding agent is a swarm of them. This is basically 'Clean Code' but reframed for the AI apocalypse. The AI won't read your code comments, but it will absolutely add optional fields everywhere because that's easier than understanding your domain.
+
+*** Comments
+
+**** AgentOrange1234
+:PROPERTIES:
+:COMMENT_ID: 47446401
+:END:
+Every optional field is a question the rest of the codebase has to answer every time it touches that data. This is a beautiful articulation of a major pet peeve with coding tools.
+
+**** ChrisMarshallNY
+:PROPERTIES:
+:COMMENT_ID: 47446402
+:END:
+Because of how I use AI, I am constantly looking at the code. I usually leave it alone if I can, even if I don't really like it. Probably slower than using agents, but I test every step.
+
+**** earljwagner
+:PROPERTIES:
+:COMMENT_ID: 47446403
+:END:
+The concepts of Semantic Functions and Pragmatic Functions seem analogous to a Functional Core and Imperative Shell. The key insight is that complicated logic with large dependencies leads to slow test suites.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+对AI如何改变你的代码库要有意识
+***** TLDR
+AI辅助编码宣言，引入'语义函数'（纯粹、最小化、可单元测试）与'实用函数'（混乱的封装、集成测试）的概念。模型应该让错误状态变得不可能。每个可选字段都是代码库其他部分需要回答的问题。当函数从语义变成实用时，下游代码开始做非预期的事情。
+***** Take
+让代码库变糟的速度，一个编码代理比不上一群编码代理。这基本上是AI末日版的《整洁代码》。AI不会读你的代码注释，但它绝对会到处添加可选字段，因为这比理解你的领域更容易。
+***** Comments
+- 每个可选字段都是代码库每次接触数据时需要回答的问题。这完美地表达了使用编码工具时的一大痛点。
+- 因为我使用AI的方式，我一直在看代码。通常即使不喜欢也会保留它。比使用代理慢，但我测试每一步。
+- 语义函数和实用函数的概念类似于函数式核心和命令式外壳。关键洞察是复杂逻辑加大依赖会导致测试套件变慢。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AIがコードベースをどう変えるかについて意図的であれ
+***** TLDR
+AI支援コーディングのマニフェスト。「セマンティック関数」（純粋、最小限、ユニットテスト可能）vs「プラグマティック関数」（乱雑なラッパー、統合テスト）を導入。モデルは不正な状態を不可能にすべき。すべてのオプショナルフィールドはコードベースの他の部分が答えなければならない質問。
+***** Take
+コードベースを汚くする速度は、1つのコーディングエージェントより群れの方が速い。これは基本的にAI黙示録向けに再構成された『クリーンコード』だ。AIはコードコメントを読まないが、ドメインを理解するより簡単だからオプショナルフィールドをどこにでも追加する。
+***** Comments
+- すべてのオプショナルフィールドは、コードベースがそのデータに触れるたびに答えなければならない質問だ。これはコーディングツールに対する大きな不満を美しく表現している。
+- 私のAIの使い方では、常にコードを見ている。気に入らなくてもそのままにする。エージェントを使うより遅いが、毎ステップテストする。
+- セマンティック関数とプラグマティック関数の概念は、機能的コアと命令的シェルに類似している。重要な洞察は、大きな依存関係を持つ複雑なロジックは遅いテストスイートにつながるということ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AI가 코드베이스를 어떻게 바꾸는지에 대해 의도적이어야 한다
+***** TLDR
+AI 지원 코딩을 위한 선언문. '시맨틱 함수'(순수, 최소, 단위 테스트 가능) vs '프래그매틱 함수'(지저분한 래퍼, 통합 테스트)를 소개합니다. 모델은 잘못된 상태를 불가능하게 만들어야 합니다. 모든 선택적 필드는 코드베이스의 나머지가 답해야 하는 질문입니다.
+***** Take
+코드베이스를 엉망으로 만드는 속도는 한 코딩 에이전트보다 여러 에이전트가 더 빠르다. 이것은 기본적으로 AI 종말을 위해 재구성된 '클린 코드'다. AI는 코드 주석을 읽지 않지만, 도메인을 이해하는 것보다 쉬우니까 선택적 필드를 어디에나 추가할 것이다.
+***** Comments
+- 모든 선택적 필드는 코드베이스가 해당 데이터를 건드릴 때마다 답해야 하는 질문이다. 이것은 코딩 도구에 대한 큰 불만을 아름답게 표현한 것이다.
+- 내가 AI를 사용하는 방식 때문에 항상 코드를 보고 있다. 마음에 안 들어도 보통 그대로 둔다. 에이전트를 쓰는 것보다 느리지만 매 단계를 테스트한다.
+- 시맨틱 함수와 프래그매틱 함수 개념은 기능적 코어와 명령적 셸과 유사해 보인다. 핵심 통찰은 큰 의존성을 가진 복잡한 로직이 느린 테스트 스위트로 이어진다는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Sé intencional sobre cómo la IA cambia tu código
+***** TLDR
+Un manifiesto para codificación asistida por IA que introduce 'funciones semánticas' (puras, mínimas, testeables unitariamente) vs 'funciones pragmáticas' (wrappers desordenados, tests de integración). Los modelos deben hacer imposibles los estados incorrectos. Cada campo opcional es una pregunta que el resto del código debe responder.
+***** Take
+Lo único que ensucia un código más rápido que un agente de programación es un enjambre de ellos. Esto es básicamente 'Clean Code' reformulado para el apocalipsis de IA. La IA no leerá tus comentarios de código, pero añadirá campos opcionales en todas partes porque es más fácil que entender tu dominio.
+***** Comments
+- Cada campo opcional es una pregunta que el resto del código debe responder cada vez que toca esos datos. Esto articula bellamente una gran molestia con las herramientas de código.
+- Por cómo uso la IA, estoy constantemente mirando el código. Normalmente lo dejo aunque no me guste. Probablemente más lento que usar agentes, pero pruebo cada paso.
+- Los conceptos de Funciones Semánticas y Pragmáticas parecen análogos a un Núcleo Funcional y Shell Imperativo. La clave es que la lógica complicada con grandes dependencias lleva a suites de tests lentas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Sei bewusst darüber, wie KI deine Codebasis verändert
+***** TLDR
+Ein Manifest für KI-gestütztes Programmieren, das 'semantische Funktionen' (rein, minimal, unit-testbar) vs 'pragmatische Funktionen' (unordentliche Wrapper, Integrationstests) einführt. Modelle sollten falsche Zustände unmöglich machen. Jedes optionale Feld ist eine Frage, die der Rest der Codebasis beantworten muss.
+***** Take
+Das Einzige, was eine Codebasis schneller verschlechtert als ein Coding-Agent, ist ein Schwarm davon. Das ist im Grunde 'Clean Code', neu formuliert für die KI-Apokalypse. Die KI wird deine Code-Kommentare nicht lesen, aber sie wird überall optionale Felder hinzufügen, weil das einfacher ist als deine Domäne zu verstehen.
+***** Comments
+- Jedes optionale Feld ist eine Frage, die der Rest der Codebasis jedes Mal beantworten muss, wenn er diese Daten berührt. Das artikuliert wunderschön ein großes Ärgernis mit Coding-Tools.
+- Wegen meiner Art, KI zu nutzen, schaue ich ständig auf den Code. Normalerweise lasse ich ihn so, auch wenn er mir nicht gefällt. Wahrscheinlich langsamer als Agenten, aber ich teste jeden Schritt.
+- Die Konzepte von Semantischen und Pragmatischen Funktionen scheinen analog zu einem Funktionalen Kern und Imperativer Shell zu sein. Die Schlüsselerkenntnis ist, dass komplizierte Logik mit großen Abhängigkeiten zu langsamen Test-Suites führt.
