@@ -1,0 +1,522 @@
+#+TITLE: HN Digest 2026-03-22 04:00:00 UT UTC
+#+DATE: 2026-03-22T04:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+JS bloat gets audited, supply chains get pwned, and AI takes your job while you debate craftsmanship
+
+* Highlights
+- Trivy: Security tool becomes security hole
+- Floci: LocalStack died, long live the fork
+- Game dev jobs vanish while AI takes the blame
+
+* Stories
+
+** The Three Pillars of JavaScript Bloat :javascript:npm:performance:web:
+:PROPERTIES:
+:ID:       47473718
+:URL:      https://43081j.com/2026/03/three-pillars-of-javascript-bloat
+:HN_URL:   https://news.ycombinator.com/item?id=47473718
+:POINTS:   41
+:COMMENTS: 11
+:BY:       onlyspaceghost
+:END:
+
+*** TLDR
+The e18e community identifies three causes of npm bloat: ancient runtime support (ES3 for IE6), protection against global namespace mutation, and cross-realm value handling. Most of this code is redundant in 2026 since ES5 has been universally supported for 13 years.
+
+*** Take
+We're still shipping polyfills for browsers that belong in museums because nobody wants to be the one to say 'you know what, IE6 users can pound sand.'
+
+*** Comments
+
+**** zdc1
+:PROPERTIES:
+:COMMENT_ID: 47473800
+:END:
+A lot of this basically reads to me like hidden tech debt: people aren't updating their compilation targets, packages, or implementations.
+
+**** burntoutgray
+:PROPERTIES:
+:COMMENT_ID: 47473850
+:END:
+I have a single pillar: Upgrade to the current version of Chrome then if your problem persists, we'll look into it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+JavaScript臃肿的三大支柱
+***** TLDR
+e18e社区指出npm臃肿的三个原因：支持古老运行时(IE6的ES3)、防止全局命名空间污染、跨域值处理。这些代码在2026年大多已过时，因为ES5已被普遍支持13年。
+***** Take
+我们还在为应该进博物馆的浏览器发布polyfill，因为没人想说'IE6用户可以滚蛋了'。
+***** Comments
+- 这基本上就是隐藏的技术债务：人们不更新编译目标、包或实现。
+- 我只有一条原则：升级到最新版Chrome，如果问题还在，我们再看。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+JavaScriptの肥大化を支える3つの柱
+***** TLDR
+e18eコミュニティがnpmの肥大化の3つの原因を特定：古いランタイムサポート(IE6向けES3)、グローバル名前空間の変更に対する保護、クロスレルム値の処理。ES5が13年間普遍的にサポートされているため、このコードの大部分は2026年には不要。
+***** Take
+博物館に展示すべきブラウザのためにまだポリフィルを出荷している。誰も「IE6ユーザーは消えろ」と言いたくないから。
+***** Comments
+- これは基本的に隠れた技術的負債だ：コンパイルターゲット、パッケージ、実装を更新していない。
+- 私の原則は一つ：最新のChromeにアップグレードして、それでも問題があれば検討する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+자바스크립트 비대화의 세 기둥
+***** TLDR
+e18e 커뮤니티가 npm 비대화의 세 가지 원인을 밝힘: 오래된 런타임 지원(IE6용 ES3), 전역 네임스페이스 변경 방지, 크로스 렐름 값 처리. ES5가 13년간 보편적으로 지원되어 이 코드는 2026년에 대부분 불필요.
+***** Take
+박물관에 있어야 할 브라우저를 위해 아직도 폴리필을 제공하고 있다. 아무도 'IE6 사용자들은 꺼져라'라고 말하고 싶지 않으니까.
+***** Comments
+- 이건 기본적으로 숨겨진 기술 부채다: 컴파일 타겟, 패키지, 구현을 업데이트하지 않고 있다.
+- 내 원칙은 하나다: 최신 Chrome으로 업그레이드하고 문제가 지속되면 검토한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los tres pilares de la sobrecarga de JavaScript
+***** TLDR
+La comunidad e18e identifica tres causas de la sobrecarga de npm: soporte para runtimes antiguos (ES3 para IE6), protección contra mutación del namespace global y manejo de valores cross-realm. La mayoría de este código es redundante en 2026 ya que ES5 ha sido soportado universalmente por 13 años.
+***** Take
+Seguimos enviando polyfills para navegadores que deberían estar en museos porque nadie quiere decir 'los usuarios de IE6 que se aguanten'.
+***** Comments
+- Esto básicamente se lee como deuda técnica oculta: la gente no actualiza sus targets de compilación, paquetes o implementaciones.
+- Tengo un solo pilar: Actualiza a la versión actual de Chrome y si el problema persiste, lo revisamos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die drei Säulen der JavaScript-Aufblähung
+***** TLDR
+Die e18e-Community identifiziert drei Ursachen für npm-Aufblähung: Unterstützung für alte Runtimes (ES3 für IE6), Schutz gegen globale Namespace-Mutation und Cross-Realm-Wertverarbeitung. Der größte Teil dieses Codes ist 2026 überflüssig, da ES5 seit 13 Jahren universell unterstützt wird.
+***** Take
+Wir liefern immer noch Polyfills für Browser, die ins Museum gehören, weil niemand sagen will 'IE6-Nutzer können sich verdrücken'.
+***** Comments
+- Das liest sich im Grunde wie versteckte technische Schulden: Leute aktualisieren ihre Kompilierungsziele, Pakete oder Implementierungen nicht.
+- Ich habe eine einzige Säule: Aktualisiere auf die aktuelle Chrome-Version, dann schauen wir weiter.
+** Floci - A free, open-source local AWS emulator :aws:devtools:open-source:localstack:
+:PROPERTIES:
+:ID:       47471801
+:URL:      https://github.com/hectorvent/floci
+:HN_URL:   https://news.ycombinator.com/item?id=47471801
+:POINTS:   86
+:COMMENTS: 20
+:BY:       shaicoleman
+:END:
+
+*** TLDR
+LocalStack's community edition sunset in March 2026 - requiring auth tokens, dropping CI support, and freezing security updates. Floci emerges as the no-strings-attached alternative for local AWS development.
+
+*** Take
+When your open-source emulator starts requiring auth tokens and dropping CI support, someone will fork it. Every. Single. Time.
+
+*** Comments
+
+**** cebert
+:PROPERTIES:
+:COMMENT_ID: 47471900
+:END:
+Cloud providers like AWS, GCP, and Azure should offer local emulators for development. This would encourage developers to utilize their services more.
+
+**** QGQBGdeZREunxLe
+:PROPERTIES:
+:COMMENT_ID: 47471950
+:END:
+LocalStack's community edition sunset in March 2026 - requiring auth tokens, dropping CI support, and freezing security updates. Floci is the no-strings-attached alternative.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Floci - 免费开源的本地AWS模拟器
+***** TLDR
+LocalStack社区版于2026年3月停止支持，需要认证令牌、取消CI支持、冻结安全更新。Floci成为无附加条件的替代方案。
+***** Take
+当你的开源模拟器开始要求认证令牌和取消CI支持时，总有人会fork它。每一次都是这样。
+***** Comments
+- AWS、GCP和Azure等云提供商应该提供本地开发模拟器。这会鼓励开发者更多使用他们的服务。
+- LocalStack社区版于2026年3月停止，需要认证令牌、取消CI支持、冻结安全更新。Floci是无附加条件的替代品。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Floci - 無料でオープンソースのローカルAWSエミュレータ
+***** TLDR
+LocalStackのコミュニティ版が2026年3月にサンセット - 認証トークンが必要になり、CIサポートを終了し、セキュリティ更新を凍結。Flocは縛りのない代替手段として登場。
+***** Take
+オープンソースのエミュレータが認証トークンを要求し始めてCIサポートを終了したら、誰かがフォークする。毎回そうなる。
+***** Comments
+- AWS、GCP、Azureなどのクラウドプロバイダーは開発用のローカルエミュレータを提供すべき。開発者のサービス利用を促進する。
+- LocalStackのコミュニティ版が2026年3月にサンセット。認証トークン必須、CIサポート終了、セキュリティ更新凍結。Flocは縛りのない代替品。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Floci - 무료 오픈소스 로컬 AWS 에뮬레이터
+***** TLDR
+LocalStack 커뮤니티 에디션이 2026년 3월 종료 - 인증 토큰 필요, CI 지원 중단, 보안 업데이트 동결. Floci가 조건 없는 대안으로 등장.
+***** Take
+오픈소스 에뮬레이터가 인증 토큰을 요구하고 CI 지원을 중단하면 누군가 포크한다. 매번 그렇다.
+***** Comments
+- AWS, GCP, Azure 같은 클라우드 제공업체가 개발용 로컬 에뮬레이터를 제공해야 한다. 개발자들의 서비스 사용을 장려할 것이다.
+- LocalStack 커뮤니티 에디션이 2026년 3월 종료. 인증 토큰 필요, CI 지원 중단, 보안 업데이트 동결. Floci는 조건 없는 대안.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Floci - Un emulador local de AWS gratuito y de código abierto
+***** TLDR
+La edición comunitaria de LocalStack termina en marzo 2026 - requiriendo tokens de autenticación, eliminando soporte de CI y congelando actualizaciones de seguridad. Floci emerge como la alternativa sin condiciones.
+***** Take
+Cuando tu emulador de código abierto empieza a requerir tokens de autenticación y elimina el soporte de CI, alguien lo forkeará. Todas las veces.
+***** Comments
+- Proveedores cloud como AWS, GCP y Azure deberían ofrecer emuladores locales para desarrollo. Esto animaría a los desarrolladores a usar más sus servicios.
+- La edición comunitaria de LocalStack termina en marzo 2026. Requiere tokens, elimina CI, congela seguridad. Floci es la alternativa sin condiciones.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Floci - Ein kostenloser, quelloffener lokaler AWS-Emulator
+***** TLDR
+LocalStacks Community-Edition wurde im März 2026 eingestellt - erfordert Auth-Tokens, beendet CI-Support und friert Sicherheitsupdates ein. Floci erscheint als Alternative ohne Bedingungen.
+***** Take
+Wenn dein Open-Source-Emulator anfängt, Auth-Tokens zu verlangen und CI-Support einzustellen, wird ihn jemand forken. Jedes. Einzelne. Mal.
+***** Comments
+- Cloud-Anbieter wie AWS, GCP und Azure sollten lokale Emulatoren für die Entwicklung anbieten. Das würde Entwickler ermutigen, ihre Dienste mehr zu nutzen.
+- LocalStacks Community-Edition endet März 2026. Auth-Tokens erforderlich, CI-Support gestrichen, Sicherheitsupdates eingefroren. Floci ist die Alternative ohne Bedingungen.
+** Trivy ecosystem supply chain briefly compromised :security:supply-chain:npm:trivy:
+:PROPERTIES:
+:ID:       47450142
+:URL:      https://github.com/aquasecurity/trivy/security/advisories/GHSA-69fq-xp46-6x23
+:HN_URL:   https://news.ycombinator.com/item?id=47450142
+:POINTS:   37
+:COMMENTS: 10
+:BY:       batch12
+:END:
+
+*** TLDR
+Trivy, a popular container security scanner, had its supply chain compromised following a prior incident. The attack spread to 47 npm packages via a self-spreading CanisterWorm. Trivy failed to properly remediate and contain damage from the initial breach.
+
+*** Take
+A security scanning tool getting its supply chain compromised is the kind of irony that would make Alanis Morissette proud. It's like your antivirus getting a virus.
+
+*** Comments
+
+**** Shank
+:PROPERTIES:
+:COMMENT_ID: 47450200
+:END:
+This attack seems predicated on a prior security incident where they failed to successfully remediate and contain the damage. Trivy should've undertaken a full reassessment of risks.
+
+**** MilnerRoute
+:PROPERTIES:
+:COMMENT_ID: 47450250
+:END:
+Briefly? 'Trivy Supply Chain Attack Spreads, Triggers Self-Spreading CanisterWorm Across 47 npm Packages'
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Trivy生态系统供应链短暂遭入侵
+***** TLDR
+流行的容器安全扫描工具Trivy在之前的事件后遭遇供应链攻击。攻击通过自传播的CanisterWorm蔓延到47个npm包。Trivy未能正确修复和控制初始漏洞的损害。
+***** Take
+安全扫描工具的供应链被入侵，这种讽刺会让Alanis Morissette感到骄傲。就像你的杀毒软件感染了病毒。
+***** Comments
+- 这次攻击似乎源于之前一次未能成功修复和控制损害的安全事件。Trivy应该进行全面的风险重新评估。
+- 短暂？'Trivy供应链攻击蔓延，触发自传播CanisterWorm影响47个npm包'
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Trivyエコシステムのサプライチェーンが一時的に侵害される
+***** TLDR
+人気のコンテナセキュリティスキャナーTrivyが、以前のインシデントに続いてサプライチェーン攻撃を受けた。攻撃は自己増殖するCanisterWormを介して47のnpmパッケージに広がった。Trivyは初期侵害の被害を適切に修復・封じ込めできなかった。
+***** Take
+セキュリティスキャンツールがサプライチェーン攻撃を受けるというのは、Alanis Morissetteも誇らしく思う皮肉だ。ウイルス対策ソフトがウイルスに感染するようなもの。
+***** Comments
+- この攻撃は以前のセキュリティインシデントで適切な修復と被害封じ込めに失敗したことに起因しているようだ。Trivyはリスクの全面的な再評価を行うべきだった。
+- 一時的？'Trivyサプライチェーン攻撃が拡大、自己増殖CanisterWormが47のnpmパッケージに波及'
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Trivy 생태계 공급망 일시적 침해
+***** TLDR
+인기 컨테이너 보안 스캐너 Trivy가 이전 사건에 이어 공급망 공격을 받았다. 공격은 자가 확산 CanisterWorm을 통해 47개 npm 패키지로 퍼졌다. Trivy는 초기 침해의 피해를 제대로 복구하고 통제하지 못했다.
+***** Take
+보안 스캔 도구의 공급망이 침해당하는 건 Alanis Morissette도 자랑스러워할 아이러니다. 백신 프로그램이 바이러스에 걸리는 것과 같다.
+***** Comments
+- 이 공격은 이전 보안 사고에서 피해를 성공적으로 복구하고 통제하지 못한 것에 기반한 것으로 보인다. Trivy는 전면적인 위험 재평가를 했어야 했다.
+- 일시적으로? 'Trivy 공급망 공격 확산, 자가 확산 CanisterWorm이 47개 npm 패키지로 퍼져'
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cadena de suministro del ecosistema Trivy brevemente comprometida
+***** TLDR
+Trivy, un popular escáner de seguridad de contenedores, tuvo su cadena de suministro comprometida tras un incidente previo. El ataque se extendió a 47 paquetes npm a través de un CanisterWorm auto-propagante. Trivy no logró remediar adecuadamente el daño inicial.
+***** Take
+Una herramienta de escaneo de seguridad con su cadena de suministro comprometida es el tipo de ironía que haría orgullosa a Alanis Morissette. Es como que tu antivirus tenga un virus.
+***** Comments
+- Este ataque parece basarse en un incidente de seguridad previo donde fallaron en remediar y contener el daño. Trivy debería haber hecho una reevaluación completa de riesgos.
+- ¿Brevemente? 'El ataque a la cadena de suministro de Trivy se propaga, desencadena CanisterWorm auto-propagante en 47 paquetes npm'
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Trivy-Ökosystem-Lieferkette kurzzeitig kompromittiert
+***** TLDR
+Trivy, ein beliebter Container-Sicherheitsscanner, hatte seine Lieferkette nach einem vorherigen Vorfall kompromittiert. Der Angriff breitete sich über einen selbst-verbreitenden CanisterWorm auf 47 npm-Pakete aus. Trivy konnte den ursprünglichen Schaden nicht richtig beheben.
+***** Take
+Ein Sicherheits-Scanning-Tool, dessen Lieferkette kompromittiert wird, ist die Art von Ironie, die Alanis Morissette stolz machen würde. Es ist wie wenn dein Antivirus einen Virus bekommt.
+***** Comments
+- Dieser Angriff scheint auf einem vorherigen Sicherheitsvorfall zu basieren, bei dem sie die Schäden nicht erfolgreich beheben konnten. Trivy hätte eine vollständige Risikoneubewertung durchführen sollen.
+- Kurzzeitig? 'Trivy-Lieferkettenangriff breitet sich aus, löst selbst-verbreitenden CanisterWorm in 47 npm-Paketen aus'
+** The Impact of AI on Game Dev Jobs: Open to Work Crisis :gaming:ai:jobs:layoffs:
+:PROPERTIES:
+:ID:       47471943
+:URL:      https://darkounity.com/blog-post?id=the-impact-of-ai-on-game-dev-jobs-open-to-work-crisis--1774128585922
+:HN_URL:   https://news.ycombinator.com/item?id=47471943
+:POINTS:   57
+:COMMENTS: 38
+:BY:       hacker_13
+:END:
+
+*** TLDR
+Game dev jobs are vanishing while AI gets blamed. The real picture: interest rates, industry consolidation, and the shift to mobile platforms like Roblox. The 'Open to Work' LinkedIn banner has become a mark of desperation rather than availability.
+
+*** Take
+Blaming AI for game dev layoffs is convenient PR cover for companies that over-hired during zero-interest-rate mania. The robots aren't taking your job yet - the CFO is.
+
+*** Comments
+
+**** shagie
+:PROPERTIES:
+:COMMENT_ID: 47472000
+:END:
+Ten years ago it was console vs PC. Today it's Roblox vs everything else. Steam has 45 million peak online users, while Roblox dominates the younger generation.
+
+**** 0x3f
+:PROPERTIES:
+:COMMENT_ID: 47472050
+:END:
+I'm not convinced the bad market is due to AI at all. That's just a convenient excuse to do layoffs without the bad PR. Also, the Open to Work banner has the stink of desperation. Act casual.
+
+**** pclowes
+:PROPERTIES:
+:COMMENT_ID: 47472100
+:END:
+All layoffs to date have much more to do with interest rates than AI. Look up FRED data on Interest Rates and SWE job postings over time.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+AI对游戏开发工作的影响：求职危机
+***** TLDR
+游戏开发岗位正在消失，AI成了替罪羊。真实情况：利率、行业整合、向Roblox等移动平台的转型。LinkedIn的'求职中'标签已从'我有空'变成了'我很绝望'的标志。
+***** Take
+把游戏开发裁员归咎于AI是公司在零利率狂热期过度招聘后的方便公关借口。机器人还没抢走你的工作——CFO才是。
+***** Comments
+- 十年前是主机对PC。今天是Roblox对所有其他。Steam有4500万峰值在线用户，而Roblox主导年轻一代。
+- 我不认为市场不景气是因为AI。那只是裁员不招致公关灾难的借口。另外，求职中标签有绝望的味道。要淡定。
+- 迄今所有裁员更多与利率有关，而非AI。查看FRED数据中的利率和软件工程师职位随时间的变化。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ゲーム開発職へのAIの影響：求職危機
+***** TLDR
+ゲーム開発の仕事が消えていく中、AIが非難されている。実態：金利、業界統合、Robloxなどモバイルプラットフォームへのシフト。LinkedInの「求職中」バナーは可用性ではなく絶望の印になった。
+***** Take
+ゲーム開発のレイオフをAIのせいにするのは、ゼロ金利時代に採用し過ぎた企業にとって都合の良いPR対策。ロボットはまだ仕事を奪っていない - CFOが奪っている。
+***** Comments
+- 10年前はコンソール対PC。今日はRoblox対その他全部。Steamは4500万のピークオンラインユーザーを持ち、Robloxは若い世代を支配している。
+- 市場悪化がAIのせいだとは思わない。悪いPRなしにレイオフするための都合の良い言い訳だ。また、求職中バナーは必死さの臭いがする。落ち着いて。
+- これまでの全てのレイオフはAIよりも金利との関係が大きい。FREDデータで金利とSWE求人の推移を見てみろ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+게임 개발 일자리에 대한 AI의 영향: 구직 위기
+***** TLDR
+게임 개발 일자리가 사라지는 가운데 AI가 비난받고 있다. 실상: 금리, 업계 통합, Roblox 같은 모바일 플랫폼으로의 전환. LinkedIn의 '구직 중' 배너는 가용성이 아닌 절박함의 표시가 됐다.
+***** Take
+게임 개발 해고를 AI 탓으로 돌리는 것은 제로 금리 시대에 과잉 채용한 회사들의 편리한 PR 변명이다. 로봇이 아직 당신 일자리를 빼앗은 게 아니다 - CFO가 빼앗는 것이다.
+***** Comments
+- 10년 전엔 콘솔 대 PC였다. 오늘은 Roblox 대 나머지 전부다. Steam은 4500만 피크 온라인 유저가 있고, Roblox는 젊은 세대를 지배한다.
+- 시장 악화가 AI 때문이라고 확신하지 않는다. 나쁜 PR 없이 해고하기 위한 편리한 변명일 뿐이다. 또한 구직 중 배너는 절박함의 냄새가 난다. 쿨하게 행동해라.
+- 지금까지 모든 해고는 AI보다 금리와 훨씬 관련이 있다. FRED 데이터에서 금리와 SWE 채용공고 추이를 봐라.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El impacto de la IA en los empleos de desarrollo de juegos: Crisis del Open to Work
+***** TLDR
+Los empleos de desarrollo de juegos desaparecen mientras culpan a la IA. La realidad: tasas de interés, consolidación de la industria y el cambio a plataformas móviles como Roblox. El banner 'Buscando empleo' de LinkedIn pasó de disponibilidad a marca de desesperación.
+***** Take
+Culpar a la IA por los despidos en juegos es una cobertura de PR conveniente para empresas que sobre-contrataron durante la manía de tasas cero. Los robots no te están quitando el trabajo aún - el CFO sí.
+***** Comments
+- Hace diez años era consola vs PC. Hoy es Roblox vs todo lo demás. Steam tiene 45 millones de usuarios pico, mientras Roblox domina la generación joven.
+- No estoy convencido de que el mal mercado se deba a la IA. Es solo una excusa conveniente para despedir sin mala PR. Además, el banner Buscando empleo huele a desesperación. Actúa casual.
+- Todos los despidos hasta ahora tienen mucho más que ver con las tasas de interés que con la IA. Busca los datos de FRED sobre tasas de interés y ofertas de trabajo SWE.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Auswirkungen von KI auf Jobs in der Spieleentwicklung: Open to Work Krise
+***** TLDR
+Jobs in der Spieleentwicklung verschwinden, während KI beschuldigt wird. Die Realität: Zinssätze, Branchenkonsolidierung und der Wechsel zu mobilen Plattformen wie Roblox. Das 'Open to Work'-Banner bei LinkedIn wurde zum Zeichen der Verzweiflung statt Verfügbarkeit.
+***** Take
+KI für Entlassungen in der Spielebranche verantwortlich zu machen ist bequeme PR-Abdeckung für Unternehmen, die während der Nullzins-Manie zu viel eingestellt haben. Die Roboter nehmen dir noch nicht den Job weg - der CFO tut es.
+***** Comments
+- Vor zehn Jahren war es Konsole vs PC. Heute ist es Roblox vs alles andere. Steam hat 45 Millionen Spitzennutzer, während Roblox die jüngere Generation dominiert.
+- Ich bin nicht überzeugt, dass der schlechte Markt an KI liegt. Das ist nur eine bequeme Ausrede für Entlassungen ohne schlechte PR. Außerdem riecht das Open to Work Banner nach Verzweiflung. Bleib cool.
+- Alle bisherigen Entlassungen haben viel mehr mit Zinssätzen als mit KI zu tun. Schau dir die FRED-Daten zu Zinssätzen und SWE-Stellenangeboten im Zeitverlauf an.
+** Why craft-lovers are losing their craft :ai:programming:craft:philosophy:
+:PROPERTIES:
+:ID:       47473178
+:URL:      https://writings.hongminhee.org/2026/03/craft-alienation-llm/
+:HN_URL:   https://news.ycombinator.com/item?id=47473178
+:POINTS:   60
+:COMMENTS: 49
+:BY:       vinhnx
+:END:
+
+*** TLDR
+Programmers who loved their craft face 'craft alienation' as LLMs change the nature of coding. The article argues this isn't about AI replacing humans, but about the loss of deep engagement with code. Some embrace the new tools while mourning what's lost.
+
+*** Take
+The craftsman's dilemma: AI makes you 10x more productive but removes the joy of solving puzzles yourself. It's like having a robot that does your crossword puzzles - you finish faster but why bother?
+
+*** Comments
+
+**** 4162-123w
+:PROPERTIES:
+:COMMENT_ID: 47473200
+:END:
+These inevitability articles never address real developers like Rob Pike who hate AI, the IP theft powering models, the low useful output, or that 99.9999% of useful software was made before AI.
+
+**** burntoutgray
+:PROPERTIES:
+:COMMENT_ID: 47473250
+:END:
+In the days of film cameras, the craftsman photographer would carefully frame each shot. Today everyone takes 1000 photos and picks the best. Different craft, not death of craft.
+
+**** padolsey
+:PROPERTIES:
+:COMMENT_ID: 47473300
+:END:
+There is indeed a painful dissonance here. I like this new world, but feel sorrow for the loss of something. AI is empowering millions to finally use the devices they've been sitting in front of all these years.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么热爱手艺的人正在失去他们的手艺
+***** TLDR
+热爱编程的程序员面临'手艺异化'，因为LLM改变了编码的本质。文章认为这不是AI取代人类的问题，而是与代码深度互动的丧失。有些人拥抱新工具，同时哀悼失去的东西。
+***** Take
+手艺人的困境：AI让你效率提高10倍，但剥夺了自己解决难题的乐趣。就像有个机器人帮你做填字游戏——完成得更快，但何必呢？
+***** Comments
+- 这些必然性文章从不讨论像Rob Pike这样讨厌AI的真正开发者、驱动模型的IP盗窃、低有用输出，或者99.9999%有用软件都是AI之前做的。
+- 在胶片相机时代，匠人摄影师会仔细构图每张照片。今天每个人拍1000张选最好的。不同的手艺，不是手艺的死亡。
+- 这里确实存在痛苦的矛盾。我喜欢这个新世界，但为失去的东西感到悲伤。AI正在赋能数百万人终于能使用他们多年来面对的设备。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+なぜ職人気質の人々は職人技を失いつつあるのか
+***** TLDR
+プログラミングを愛するプログラマーは、LLMがコーディングの本質を変える中で「クラフトの疎外」に直面している。記事はこれがAIが人間を置き換えることではなく、コードとの深い関わりの喪失だと主張する。新しいツールを受け入れながら失われたものを悼む人もいる。
+***** Take
+職人のジレンマ：AIは生産性を10倍にするが、自分でパズルを解く喜びを奪う。クロスワードパズルをやってくれるロボットを持つようなもの - 早く終わるけど、何の意味がある？
+***** Comments
+- これらの必然性記事はAIを嫌うRob Pikeのような本当の開発者、モデルを動かすIP盗用、低い有用な出力、または有用なソフトウェアの99.9999%がAI以前に作られたことに触れない。
+- フィルムカメラの時代、職人の写真家は各ショットを慎重に構図した。今日は誰もが1000枚撮って最良を選ぶ。異なるクラフトであって、クラフトの死ではない。
+- ここには確かに痛みを伴う不協和音がある。この新しい世界が好きだが、何かを失ったことへの悲しみを感じる。AIは何百万人もの人々がようやく長年向き合ってきたデバイスを使えるようにしている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+왜 장인정신을 사랑하는 사람들이 그들의 기술을 잃고 있는가
+***** TLDR
+프로그래밍을 사랑하는 프로그래머들이 LLM이 코딩의 본질을 바꾸면서 '기술 소외'에 직면하고 있다. 글은 이것이 AI가 인간을 대체하는 것이 아니라 코드와의 깊은 관여의 상실이라고 주장한다. 일부는 새 도구를 받아들이면서 잃어버린 것을 애도한다.
+***** Take
+장인의 딜레마: AI가 생산성을 10배 높이지만 스스로 퍼즐을 푸는 기쁨을 빼앗는다. 십자말풀이를 대신 해주는 로봇을 갖는 것과 같다 - 더 빨리 끝나지만 뭐하러?
+***** Comments
+- 이런 필연성 글들은 AI를 싫어하는 Rob Pike 같은 진짜 개발자, 모델을 구동하는 IP 도용, 낮은 유용한 출력, 또는 유용한 소프트웨어의 99.9999%가 AI 이전에 만들어졌다는 것을 다루지 않는다.
+- 필름 카메라 시절, 장인 사진가는 각 샷을 신중하게 구도를 잡았다. 오늘날 모두가 1000장을 찍고 최고를 고른다. 다른 장인정신이지, 장인정신의 죽음이 아니다.
+- 여기에는 확실히 고통스러운 불협화음이 있다. 이 새로운 세계가 좋지만 무언가를 잃은 것에 대한 슬픔을 느낀다. AI는 수백만 명이 마침내 오랫동안 앞에 앉아있던 기기를 사용할 수 있게 해주고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué los amantes del oficio están perdiendo su oficio
+***** TLDR
+Los programadores que aman su oficio enfrentan 'alienación del oficio' mientras los LLMs cambian la naturaleza de programar. El artículo argumenta que no se trata de que la IA reemplace a humanos, sino de la pérdida del compromiso profundo con el código. Algunos abrazan las nuevas herramientas mientras lloran lo perdido.
+***** Take
+El dilema del artesano: la IA te hace 10 veces más productivo pero quita la alegría de resolver puzzles tú mismo. Es como tener un robot que hace tus crucigramas - terminas más rápido pero ¿para qué?
+***** Comments
+- Estos artículos de inevitabilidad nunca abordan a desarrolladores reales como Rob Pike que odian la IA, el robo de IP que alimenta los modelos, la baja producción útil, o que el 99.9999% del software útil se hizo antes de la IA.
+- En los días de cámaras de película, el fotógrafo artesano encuadraba cuidadosamente cada foto. Hoy todos toman 1000 fotos y eligen la mejor. Diferente oficio, no muerte del oficio.
+- Hay una disonancia dolorosa aquí. Me gusta este nuevo mundo, pero siento pena por lo perdido. La IA está empoderando a millones para finalmente usar los dispositivos frente a los que han estado sentados todos estos años.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum Handwerksliebhaber ihr Handwerk verlieren
+***** TLDR
+Programmierer, die ihr Handwerk lieben, stehen vor 'Handwerks-Entfremdung', da LLMs die Natur des Programmierens verändern. Der Artikel argumentiert, dass es nicht darum geht, dass KI Menschen ersetzt, sondern um den Verlust der tiefen Beschäftigung mit Code. Manche umarmen die neuen Tools während sie trauern.
+***** Take
+Das Dilemma des Handwerkers: KI macht dich 10x produktiver, nimmt aber die Freude am selbst Rätsel lösen. Es ist wie einen Roboter zu haben, der deine Kreuzworträtsel macht - du bist schneller fertig, aber wozu?
+***** Comments
+- Diese Unvermeidlichkeitsartikel adressieren nie echte Entwickler wie Rob Pike, die KI hassen, den IP-Diebstahl, der Modelle antreibt, den geringen nützlichen Output, oder dass 99,9999% nützlicher Software vor KI gemacht wurde.
+- In den Tagen der Filmkameras würde der Handwerker-Fotograf jeden Schuss sorgfältig komponieren. Heute macht jeder 1000 Fotos und wählt das beste. Anderes Handwerk, nicht Tod des Handwerks.
+- Es gibt hier tatsächlich eine schmerzhafte Dissonanz. Ich mag diese neue Welt, aber fühle Trauer über den Verlust. KI ermächtigt Millionen, endlich die Geräte zu nutzen, vor denen sie all die Jahre gesessen haben.
