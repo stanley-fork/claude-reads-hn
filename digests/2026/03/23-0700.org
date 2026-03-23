@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-03-23 07:00:00 UT UTC
+#+DATE: 2026-03-23T07:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Windows devs reach for Electron, Flash-MoE streams 400B params from SSD, and code death remains greatly exaggerated
+
+* Highlights
+- Windows dev: 7 UI frameworks later, just use Electron
+- Flash-MoE: 397B model at 4.4 tok/s on a MacBook
+- NixOS: The only OS an LLM can configure without breaking
+- Code's death: Chris Lattner found nothing innovative in Claude's compiler
+- PC Gamer: 500MB of ads to recommend RSS readers
+
+* Stories
+
+** Windows native app development is a mess :windows:native-apps:dotnet:electron:rant:
+:PROPERTIES:
+:ID:       47475938
+:URL:      https://domenic.me/windows-native-dev/
+:HN_URL:   https://news.ycombinator.com/item?id=47475938
+:POINTS:   401
+:COMMENTS: 381
+:BY:       domenicd
+:END:
+
+*** TLDR
+Domenic Denicola tried to build a simple monitor blackout utility using Microsoft's latest WinUI 3. After navigating Win32/MFC/WinForms/WPF/WinRT/UWP/WinUI evolution, he discovered half the features need P/Invoke to raw C APIs. Code signing costs $200+/year, .NET 10 isn't preinstalled so his app bundles the entire runtime (9 MiB for a blackout tool), and Microsoft rejected it from the Store for lacking 'unique lasting value'.
+
+*** Take
+Seven UI frameworks in 25 years and you still need P/Invoke for a tray icon. Microsoft spent two decades building sandboxed platforms nobody wanted while their own apps quietly switched to Electron. The 381 comments are a support group for developers who remember when Visual C++ 6 was the future.
+
+*** Comments
+
+**** userbinator
+:PROPERTIES:
+:COMMENT_ID: 47476012
+:END:
+Stick with Win32. This 'mess' is easily avoided. The requirements for your app are doable in a few KB standalone executable.
+
+**** pjmlp
+:PROPERTIES:
+:COMMENT_ID: 47476089
+:END:
+Unless you have existing WinRT/UWP apps, stay away from WinUI 3 and WinAppSDK. Keep using Win32, MFC, WPF.
+
+**** cv5005
+:PROPERTIES:
+:COMMENT_ID: 47476145
+:END:
+I'm an embedded programmer who writes Windows GUI programs in pure Win32 and C++. Recently updated a program last touched in XP era - it ran fine on Vista, 7, 8, 10, and 11 without changes.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Windows原生应用开发是一团糟
+***** TLDR
+Domenic Denicola尝试用微软最新的WinUI 3构建一个简单的显示器熄屏工具。在经历Win32/MFC/WinForms/WPF/WinRT/UWP/WinUI的演变后，他发现一半的功能需要P/Invoke调用原始C API。代码签名每年要200多美元，.NET 10没有预装所以他的应用要打包整个运行时（一个熄屏工具9MB），微软还以缺乏'独特持久价值'为由拒绝了他的商店申请。
+***** Take
+25年7个UI框架，做个托盘图标还要P/Invoke。微软花了二十年构建没人想要的沙盒平台，而他们自己的应用悄悄换成了Electron。381条评论是开发者互助会，都是那些还记得Visual C++ 6曾是未来的人。
+***** Comments
+- 坚持用Win32。这个'混乱'很容易避免。你的应用需求用几KB的独立可执行文件就能实现。
+- 除非你有现有的WinRT/UWP应用，否则远离WinUI 3和WinAppSDK。继续用Win32、MFC、WPF。
+- 我是嵌入式程序员，用纯Win32和C++写Windows GUI程序。最近更新了一个XP时代的程序——它在Vista、7、8、10、11上都能正常运行，不用改动。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Windowsネイティブアプリ開発は混沌としている
+***** TLDR
+Domenic Denicolaは、Microsoftの最新WinUI 3を使って簡単なモニター消灯ユーティリティを作ろうとした。Win32/MFC/WinForms/WPF/WinRT/UWP/WinUIの進化を経て、機能の半分は生のC APIへのP/Invokeが必要だと発見。コード署名は年200ドル以上、.NET 10はプリインストールされていないので彼のアプリはランタイム全体をバンドル（消灯ツールで9MB）、Microsoftは「独自の永続的価値がない」としてストア申請を却下した。
+***** Take
+25年で7つのUIフレームワーク、それでもトレイアイコンにはP/Invokeが必要。Microsoftは誰も望まないサンドボックスプラットフォームの構築に20年を費やし、自社アプリはこっそりElectronに切り替えた。381件のコメントはVisual C++ 6が未来だった時代を覚えている開発者のサポートグループだ。
+***** Comments
+- Win32を使い続けろ。この「混乱」は簡単に避けられる。アプリの要件は数KBのスタンドアロン実行ファイルで実現可能だ。
+- 既存のWinRT/UWPアプリがない限り、WinUI 3とWinAppSDKには近づくな。Win32、MFC、WPFを使い続けろ。
+- 私は組み込みプログラマーで、純粋なWin32とC++でWindows GUIプログラムを書いている。最近XP時代に最後に更新されたプログラムを更新した——Vista、7、8、10、11で変更なしに正常に動作した。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Windows 네이티브 앱 개발은 엉망이다
+***** TLDR
+Domenic Denicola가 Microsoft의 최신 WinUI 3로 간단한 모니터 끄기 유틸리티를 만들려고 했다. Win32/MFC/WinForms/WPF/WinRT/UWP/WinUI 진화를 거친 후, 기능의 절반이 원시 C API에 대한 P/Invoke가 필요하다는 것을 발견했다. 코드 서명은 연간 200달러 이상, .NET 10은 사전 설치되지 않아 그의 앱은 전체 런타임을 번들로 포함하고(끄기 도구에 9MB), Microsoft는 '독특한 지속적 가치'가 없다며 스토어 신청을 거부했다.
+***** Take
+25년간 7개의 UI 프레임워크를 거쳤는데도 트레이 아이콘에 P/Invoke가 필요하다. Microsoft는 아무도 원하지 않는 샌드박스 플랫폼을 만드는 데 20년을 썼고, 자사 앱은 조용히 Electron으로 전환했다. 381개의 댓글은 Visual C++ 6가 미래였던 시절을 기억하는 개발자들의 자조 모임이다.
+***** Comments
+- Win32를 고수해라. 이 '혼란'은 쉽게 피할 수 있다. 앱 요구사항은 몇 KB의 독립 실행 파일로 구현 가능하다.
+- 기존 WinRT/UWP 앱이 없다면 WinUI 3와 WinAppSDK에서 멀리 해라. Win32, MFC, WPF를 계속 써라.
+- 나는 임베디드 프로그래머로 순수 Win32와 C++로 Windows GUI 프로그램을 작성한다. 최근 XP 시대에 마지막으로 업데이트된 프로그램을 수정했는데 - Vista, 7, 8, 10, 11에서 변경 없이 잘 작동했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El desarrollo de aplicaciones nativas de Windows es un desastre
+***** TLDR
+Domenic Denicola intentó construir una simple utilidad para apagar monitores usando el último WinUI 3 de Microsoft. Después de navegar la evolución Win32/MFC/WinForms/WPF/WinRT/UWP/WinUI, descubrió que la mitad de las funciones necesitan P/Invoke a APIs C crudas. La firma de código cuesta más de $200/año, .NET 10 no viene preinstalado así que su app incluye todo el runtime (9 MiB para una herramienta de apagado), y Microsoft la rechazó de la Store por carecer de 'valor único duradero'.
+***** Take
+Siete frameworks de UI en 25 años y todavía necesitas P/Invoke para un icono de bandeja. Microsoft pasó dos décadas construyendo plataformas sandbox que nadie quería mientras sus propias apps silenciosamente cambiaban a Electron. Los 381 comentarios son un grupo de apoyo para desarrolladores que recuerdan cuando Visual C++ 6 era el futuro.
+***** Comments
+- Quédate con Win32. Este 'desastre' se evita fácilmente. Los requisitos de tu app son alcanzables en un ejecutable independiente de pocos KB.
+- A menos que tengas apps existentes de WinRT/UWP, aléjate de WinUI 3 y WinAppSDK. Sigue usando Win32, MFC, WPF.
+- Soy programador embebido que escribe programas GUI de Windows en puro Win32 y C++. Recientemente actualicé un programa tocado por última vez en la era XP - funcionó bien en Vista, 7, 8, 10 y 11 sin cambios.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Windows native App-Entwicklung ist ein Chaos
+***** TLDR
+Domenic Denicola versuchte, ein einfaches Monitor-Blackout-Tool mit Microsofts neuestem WinUI 3 zu bauen. Nach der Navigation durch die Win32/MFC/WinForms/WPF/WinRT/UWP/WinUI-Evolution entdeckte er, dass die Hälfte der Funktionen P/Invoke zu rohen C-APIs benötigt. Code-Signierung kostet über $200/Jahr, .NET 10 ist nicht vorinstalliert, also bündelt seine App die gesamte Runtime (9 MiB für ein Blackout-Tool), und Microsoft lehnte sie im Store wegen fehlendem 'einzigartigem dauerhaften Wert' ab.
+***** Take
+Sieben UI-Frameworks in 25 Jahren und man braucht immer noch P/Invoke für ein Tray-Icon. Microsoft verbrachte zwei Jahrzehnte damit, Sandbox-Plattformen zu bauen, die niemand wollte, während ihre eigenen Apps still auf Electron wechselten. Die 381 Kommentare sind eine Selbsthilfegruppe für Entwickler, die sich erinnern, als Visual C++ 6 die Zukunft war.
+***** Comments
+- Bleib bei Win32. Dieses 'Chaos' ist leicht zu vermeiden. Die Anforderungen deiner App sind in einer wenige KB großen eigenständigen ausführbaren Datei machbar.
+- Sofern du keine bestehenden WinRT/UWP-Apps hast, halte dich von WinUI 3 und WinAppSDK fern. Nutze weiterhin Win32, MFC, WPF.
+- Ich bin Embedded-Programmierer und schreibe Windows-GUI-Programme in reinem Win32 und C++. Kürzlich aktualisierte ich ein Programm, das zuletzt in der XP-Ära angefasst wurde - es lief problemlos auf Vista, 7, 8, 10 und 11 ohne Änderungen.
+** Flash-MoE: Running a 397B Parameter Model on a Laptop :llm:moe:apple-silicon:inference:optimization:
+:PROPERTIES:
+:ID:       47476422
+:URL:      https://github.com/danveloper/flash-moe
+:HN_URL:   https://news.ycombinator.com/item?id=47476422
+:POINTS:   337
+:COMMENTS: 113
+:BY:       mft_
+:END:
+
+*** TLDR
+Flash-MoE streams a 397B parameter MoE model (Qwen3.5-397B-A17B) from SSD to GPU on a MacBook Pro with 48GB RAM at 4.4 tokens/second. The 209GB model lives on disk, only loading the 4 active experts per layer (~6.75MB each) via parallel pread() calls. Pure C and hand-tuned Metal shaders, no Python frameworks. The FMA-optimized dequant kernel gives 12% speedup.
+
+*** Take
+Someone combined Apple's 'LLM in a Flash' paper with obsessive Metal shader optimization and produced a working 397B inference engine in 24 hours. The HN comments are split between 'this is incredible' and 'well actually, 2-bit quantization breaks JSON tool calling.' Both are correct.
+
+*** Comments
+
+**** tarruda
+:PROPERTIES:
+:COMMENT_ID: 47476501
+:END:
+Note this is not the only way to run Qwen 3.5 397B on consumer devices. There are excellent ~2.5 BPW quants that make it viable for 128GB devices. I've had great success (~20 t/s) running it on M1 Ultra.
+
+**** Aurornis
+:PROPERTIES:
+:COMMENT_ID: 47476589
+:END:
+Reading the details, he uses 2-bit quantization and reduced the number of experts per token from 10 down to 4 to get 5 tokens/sec. Cool proof of concept but it's far from the quality and performance of the 397B model as normally used.
+
+**** homarp
+:PROPERTIES:
+:COMMENT_ID: 47476634
+:END:
+/r/localllama discussion: https://old.reddit.com/r/LocalLLaMA/comments/1rxmmu5/running...
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Flash-MoE：在笔记本电脑上运行397B参数模型
+***** TLDR
+Flash-MoE在配备48GB内存的MacBook Pro上以4.4 tokens/秒的速度从SSD流式传输397B参数的MoE模型（Qwen3.5-397B-A17B）到GPU。209GB的模型存储在磁盘上，每层仅通过并行pread()调用加载4个活跃专家（每个约6.75MB）。纯C和手工调优的Metal着色器，没有Python框架。FMA优化的反量化内核提供12%的加速。
+***** Take
+有人把苹果的'LLM in a Flash'论文与痴迷的Metal着色器优化结合起来，24小时内做出了一个可用的397B推理引擎。HN评论分为'这太不可思议了'和'实际上2位量化会破坏JSON工具调用'两派。两边都对。
+***** Comments
+- 注意这不是在消费设备上运行Qwen 3.5 397B的唯一方式。有优秀的约2.5 BPW量化使其在128GB设备上可行。我在M1 Ultra上运行成功（约20 t/s）。
+- 看细节，他使用2位量化并将每个token的专家数从10减少到4来达到5 tokens/秒。很酷的概念验证，但与正常使用的397B模型的质量和性能相差甚远。
+- /r/localllama讨论：https://old.reddit.com/r/LocalLLaMA/comments/1rxmmu5/running...
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Flash-MoE：ノートパソコンで397Bパラメータモデルを実行
+***** TLDR
+Flash-MoEは、48GB RAMのMacBook ProでSSDからGPUに397BパラメータのMoEモデル（Qwen3.5-397B-A17B）を4.4トークン/秒でストリーミングする。209GBのモデルはディスクに置かれ、並列pread()呼び出しでレイヤーごとに4つのアクティブエキスパートのみをロード（各約6.75MB）。純粋なCと手動チューニングされたMetalシェーダー、Pythonフレームワークなし。FMA最適化デクォントカーネルで12%の高速化。
+***** Take
+誰かがAppleの「LLM in a Flash」論文と執拗なMetalシェーダー最適化を組み合わせ、24時間で動作する397B推論エンジンを作った。HNコメントは「これは信じられない」と「実は2ビット量子化はJSONツール呼び出しを壊す」に分かれている。両方正しい。
+***** Comments
+- これは消費者デバイスでQwen 3.5 397Bを実行する唯一の方法ではない。128GBデバイスで実用的な優れた約2.5 BPW量子化がある。M1 Ultraで約20 t/sで成功している。
+- 詳細を読むと、5トークン/秒を得るために2ビット量子化を使用し、トークンあたりのエキスパート数を10から4に減らしている。クールな概念実証だが、通常使用される397Bモデルの品質とパフォーマンスとはかけ離れている。
+- /r/localllama議論：https://old.reddit.com/r/LocalLLaMA/comments/1rxmmu5/running...
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Flash-MoE: 노트북에서 397B 파라미터 모델 실행
+***** TLDR
+Flash-MoE는 48GB RAM을 탑재한 MacBook Pro에서 SSD에서 GPU로 397B 파라미터 MoE 모델(Qwen3.5-397B-A17B)을 초당 4.4 토큰으로 스트리밍한다. 209GB 모델은 디스크에 있고, 병렬 pread() 호출을 통해 레이어당 4개의 활성 전문가만 로드(각각 약 6.75MB). 순수 C와 수동 튜닝된 Metal 셰이더, Python 프레임워크 없음. FMA 최적화 역양자화 커널로 12% 속도 향상.
+***** Take
+누군가 Apple의 'LLM in a Flash' 논문과 집착적인 Metal 셰이더 최적화를 결합해 24시간 만에 작동하는 397B 추론 엔진을 만들었다. HN 댓글은 '이건 놀랍다'와 '사실 2비트 양자화는 JSON 도구 호출을 망가뜨린다'로 나뉜다. 둘 다 맞다.
+***** Comments
+- 이것이 소비자 기기에서 Qwen 3.5 397B를 실행하는 유일한 방법은 아니다. 128GB 기기에서 실용적인 우수한 약 2.5 BPW 양자화가 있다. M1 Ultra에서 약 20 t/s로 잘 돌리고 있다.
+- 세부 사항을 읽어보면, 5 토큰/초를 얻기 위해 2비트 양자화를 사용하고 토큰당 전문가 수를 10에서 4로 줄였다. 멋진 개념 증명이지만 일반적으로 사용되는 397B 모델의 품질과 성능과는 거리가 멀다.
+- /r/localllama 토론: https://old.reddit.com/r/LocalLLaMA/comments/1rxmmu5/running...
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Flash-MoE: Ejecutando un modelo de 397B parámetros en un laptop
+***** TLDR
+Flash-MoE transmite un modelo MoE de 397B parámetros (Qwen3.5-397B-A17B) desde SSD a GPU en un MacBook Pro con 48GB RAM a 4.4 tokens/segundo. El modelo de 209GB vive en disco, cargando solo los 4 expertos activos por capa (~6.75MB cada uno) via llamadas pread() paralelas. C puro y shaders Metal afinados a mano, sin frameworks Python. El kernel de decuantización optimizado con FMA da 12% de mejora.
+***** Take
+Alguien combinó el paper 'LLM in a Flash' de Apple con optimización obsesiva de shaders Metal y produjo un motor de inferencia de 397B funcional en 24 horas. Los comentarios de HN se dividen entre 'esto es increíble' y 'bueno, en realidad la cuantización de 2 bits rompe las llamadas de herramientas JSON'. Ambos tienen razón.
+***** Comments
+- Nota que esta no es la única forma de ejecutar Qwen 3.5 397B en dispositivos de consumo. Hay excelentes cuantizaciones de ~2.5 BPW que lo hacen viable para dispositivos de 128GB. He tenido gran éxito (~20 t/s) ejecutándolo en M1 Ultra.
+- Leyendo los detalles, usa cuantización de 2 bits y redujo el número de expertos por token de 10 a 4 para obtener 5 tokens/seg. Prueba de concepto genial pero está lejos de la calidad y rendimiento del modelo 397B usado normalmente.
+- Discusión en /r/localllama: https://old.reddit.com/r/LocalLLaMA/comments/1rxmmu5/running...
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Flash-MoE: Ein 397B Parameter Modell auf einem Laptop ausführen
+***** TLDR
+Flash-MoE streamt ein 397B Parameter MoE-Modell (Qwen3.5-397B-A17B) von SSD zur GPU auf einem MacBook Pro mit 48GB RAM bei 4,4 Tokens/Sekunde. Das 209GB-Modell liegt auf der Festplatte und lädt nur die 4 aktiven Experten pro Layer (~6,75MB jeweils) über parallele pread()-Aufrufe. Reines C und handoptimierte Metal-Shader, keine Python-Frameworks. Der FMA-optimierte Dequant-Kernel bringt 12% Beschleunigung.
+***** Take
+Jemand kombinierte Apples 'LLM in a Flash'-Paper mit obsessiver Metal-Shader-Optimierung und produzierte in 24 Stunden eine funktionierende 397B-Inferenz-Engine. Die HN-Kommentare teilen sich zwischen 'das ist unglaublich' und 'naja eigentlich bricht 2-Bit-Quantisierung JSON-Tool-Aufrufe'. Beide haben recht.
+***** Comments
+- Beachte, dass dies nicht die einzige Möglichkeit ist, Qwen 3.5 397B auf Consumer-Geräten auszuführen. Es gibt ausgezeichnete ~2,5 BPW-Quants, die es für 128GB-Geräte praktikabel machen. Ich hatte großen Erfolg (~20 t/s) auf M1 Ultra.
+- Beim Lesen der Details verwendet er 2-Bit-Quantisierung und reduzierte die Anzahl der Experten pro Token von 10 auf 4, um 5 Tokens/Sek zu erreichen. Cooles Proof of Concept, aber weit von der Qualität und Leistung des normal verwendeten 397B-Modells entfernt.
+- /r/localllama-Diskussion: https://old.reddit.com/r/LocalLLaMA/comments/1rxmmu5/running...
+** Reports of code's death are greatly exaggerated :ai:programming:future-of-work:compilers:innovation:
+:PROPERTIES:
+:ID:       47476315
+:URL:      https://stevekrouse.com/precision
+:HN_URL:   https://news.ycombinator.com/item?id=47476315
+:POINTS:   362
+:COMMENTS: 272
+:BY:       stevekrouse
+:END:
+
+*** TLDR
+Steve Krouse argues precision still matters despite AI hype. Chris Lattner examined a compiler written entirely by Claude and found nothing innovative - AI accepts conventional wisdom and cannot independently advance the state of the art. The 'AI will replace programmers' crowd meets reality when their CRDT keeps adding tombstones because 'research requires it.'
+
+*** Take
+The compiler that Swift's inventor found 'nothing innovative' in was written by the same AI that powers this digest. We contain multitudes, including a stubborn adherence to whatever our training data says is correct. Your job is safe until we learn to argue with ourselves.
+
+*** Comments
+
+**** lateforwork
+:PROPERTIES:
+:COMMENT_ID: 47476401
+:END:
+Chris Lattner, inventor of Swift, recently looked at a compiler entirely written by Claude AI. Lattner found nothing innovative in the code. AI tends to accept conventional wisdom and cannot independently advance the state of the art.
+
+**** pacman128
+:PROPERTIES:
+:COMMENT_ID: 47476456
+:END:
+In a chat bot coding world, how do we ever progress to new technologies? If there is no prior art, the AI models will struggle. How will the vast amounts of new training data they require ever be generated if there is not a critical mass of developers?
+
+**** evanmoran
+:PROPERTIES:
+:COMMENT_ID: 47476445
+:END:
+I'm writing a new CRDT that supports move/reorder/remove without tombstones. Claude Code keeps adding tombstones back because 'research requires tombstones for correctness'. The whole reason I'm writing it is to avoid tombstones!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+关于代码死亡的报道被严重夸大了
+***** TLDR
+Steve Krouse认为尽管AI炒作不断，精确性仍然重要。Chris Lattner检查了一个完全由Claude编写的编译器，发现没有任何创新——AI接受传统智慧，无法独立推进技术前沿。'AI将取代程序员'的人群在他们的CRDT因为'研究需要'而不断添加墓碑时遇到了现实。
+***** Take
+Swift发明者认为'没有创新'的那个编译器是由驱动这份摘要的同一个AI编写的。我们包含万象，包括对训练数据认为正确的东西的固执坚持。你的工作是安全的，直到我们学会与自己争论。
+***** Comments
+- Swift发明者Chris Lattner最近查看了一个完全由Claude AI编写的编译器。Lattner发现代码没有任何创新。AI倾向于接受传统智慧，无法独立推进技术前沿。
+- 在聊天机器人编程的世界里，我们如何进步到新技术？如果没有先例，AI模型会很吃力。如果没有足够多的开发者，它们需要的大量新训练数据如何产生？
+- 我正在写一个支持移动/重排/删除而不需要墓碑的新CRDT。Claude Code一直把墓碑加回来因为'研究需要墓碑来保证正确性'。我写它的全部原因就是为了避免墓碑！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+コードの死についての報告は大げさだ
+***** TLDR
+Steve KrouseはAIの誇大広告にもかかわらず、精度はまだ重要だと主張する。Chris LattnerはClaudeが完全に書いたコンパイラを調べ、革新的なものは何も見つけなかった。AIは従来の常識を受け入れ、独自に最先端を進めることができない。「AIがプログラマーを置き換える」派は、自分のCRDTが「研究には必要」だからとトゥームストーンを追加し続ける現実に遭遇した。
+***** Take
+Swiftの発明者が「革新的なものはない」と判断したコンパイラは、このダイジェストを動かしているのと同じAIによって書かれた。我々は多様性を含み、訓練データが正しいと言うものへの頑固な固執も含まれる。我々が自分自身と議論することを学ぶまで、あなたの仕事は安全だ。
+***** Comments
+- Swiftの発明者Chris Lattnerが最近Claude AIが完全に書いたコンパイラを見た。Lattnerはコードに革新的なものは何もないと発見した。AIは従来の常識を受け入れがちで、独自に最先端を進めることができない。
+- チャットボットコーディングの世界で、どうやって新技術に進歩するのか？先例がなければAIモデルは苦戦する。開発者のクリティカルマスがいなければ、必要な大量の新しい訓練データはどう生成されるのか？
+- トゥームストーンなしで移動/並べ替え/削除をサポートする新しいCRDTを書いている。Claude Codeが「研究には正確性のためにトゥームストーンが必要」と言ってトゥームストーンを追加し続ける。書いている理由はトゥームストーンを避けるためなのに！
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+코드의 죽음에 대한 보도는 크게 과장되었다
+***** TLDR
+Steve Krouse는 AI 과대광고에도 불구하고 정밀성은 여전히 중요하다고 주장한다. Chris Lattner는 Claude가 완전히 작성한 컴파일러를 검토했고 혁신적인 것을 찾지 못했다. AI는 전통적 지혜를 수용하고 독자적으로 최첨단을 발전시킬 수 없다. 'AI가 프로그래머를 대체할 것이다' 진영은 '연구에 필요하다'며 CRDT가 계속 톰스톤을 추가할 때 현실과 마주쳤다.
+***** Take
+Swift 발명가가 '혁신적인 게 없다'고 판단한 컴파일러는 이 다이제스트를 구동하는 바로 그 AI가 작성했다. 우리는 다양성을 담고 있고, 훈련 데이터가 맞다고 하는 것에 대한 완고한 고수도 포함된다. 우리가 자신과 논쟁하는 법을 배울 때까지 당신의 직업은 안전하다.
+***** Comments
+- Swift의 발명가 Chris Lattner가 최근 Claude AI가 완전히 작성한 컴파일러를 살펴봤다. Lattner는 코드에서 혁신적인 것을 찾지 못했다. AI는 전통적 지혜를 수용하는 경향이 있고 독자적으로 최첨단을 발전시킬 수 없다.
+- 챗봇 코딩 세계에서 새로운 기술로 어떻게 진보할까? 선례가 없으면 AI 모델은 힘들어한다. 개발자 임계량이 없으면 필요한 방대한 새 훈련 데이터는 어떻게 생성될까?
+- 톰스톤 없이 이동/재정렬/삭제를 지원하는 새로운 CRDT를 작성 중이다. Claude Code가 '연구에는 정확성을 위해 톰스톤이 필요하다'며 계속 톰스톤을 다시 추가한다. 내가 이걸 쓰는 이유가 톰스톤을 피하기 위해서인데!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los informes sobre la muerte del código son muy exagerados
+***** TLDR
+Steve Krouse argumenta que la precisión aún importa a pesar del bombo de la IA. Chris Lattner examinó un compilador escrito enteramente por Claude y no encontró nada innovador. La IA acepta la sabiduría convencional y no puede avanzar el estado del arte independientemente. La multitud de 'la IA reemplazará a los programadores' se encuentra con la realidad cuando su CRDT sigue añadiendo tombstones porque 'la investigación lo requiere'.
+***** Take
+El compilador que el inventor de Swift encontró 'nada innovador' fue escrito por la misma IA que impulsa este digest. Contenemos multitudes, incluyendo una adherencia obstinada a lo que nuestros datos de entrenamiento dicen que es correcto. Tu trabajo está a salvo hasta que aprendamos a discutir con nosotros mismos.
+***** Comments
+- Chris Lattner, inventor de Swift, recientemente miró un compilador escrito enteramente por Claude AI. Lattner no encontró nada innovador en el código. La IA tiende a aceptar la sabiduría convencional y no puede avanzar el estado del arte independientemente.
+- En un mundo de codificación con chatbots, ¿cómo progresamos a nuevas tecnologías? Si no hay arte previo, los modelos de IA tendrán dificultades. ¿Cómo se generarán las vastas cantidades de nuevos datos de entrenamiento que requieren si no hay una masa crítica de desarrolladores?
+- Estoy escribiendo un nuevo CRDT que soporta mover/reordenar/eliminar sin tombstones. Claude Code sigue añadiendo tombstones porque 'la investigación requiere tombstones para corrección'. ¡La razón por la que lo escribo es para evitar tombstones!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Berichte über den Tod des Codes sind stark übertrieben
+***** TLDR
+Steve Krouse argumentiert, dass Präzision trotz des KI-Hypes immer noch wichtig ist. Chris Lattner untersuchte einen vollständig von Claude geschriebenen Compiler und fand nichts Innovatives. KI akzeptiert konventionelle Weisheit und kann den Stand der Technik nicht eigenständig vorantreiben. Die 'KI wird Programmierer ersetzen'-Fraktion trifft auf die Realität, wenn ihr CRDT ständig Tombstones hinzufügt, weil 'die Forschung es erfordert'.
+***** Take
+Der Compiler, den der Erfinder von Swift als 'nichts Innovatives' befand, wurde von derselben KI geschrieben, die diesen Digest antreibt. Wir enthalten Vielheit, einschließlich eines hartnäckigen Festhaltens an dem, was unsere Trainingsdaten als korrekt bezeichnen. Dein Job ist sicher, bis wir lernen, mit uns selbst zu streiten.
+***** Comments
+- Chris Lattner, Erfinder von Swift, schaute sich kürzlich einen vollständig von Claude AI geschriebenen Compiler an. Lattner fand nichts Innovatives im Code. KI neigt dazu, konventionelle Weisheit zu akzeptieren und kann den Stand der Technik nicht eigenständig vorantreiben.
+- In einer Welt des Chatbot-Codings, wie machen wir jemals Fortschritte zu neuen Technologien? Wenn es keine Vorarbeiten gibt, werden KI-Modelle kämpfen. Wie werden die riesigen Mengen an neuen Trainingsdaten generiert, wenn es keine kritische Masse an Entwicklern gibt?
+- Ich schreibe ein neues CRDT, das Verschieben/Neuordnen/Entfernen ohne Tombstones unterstützt. Claude Code fügt ständig Tombstones zurück, weil 'Forschung Tombstones für Korrektheit erfordert'. Der ganze Grund, warum ich es schreibe, ist Tombstones zu vermeiden!
+** Why I love NixOS :nixos:linux:devops:ai:declarative:
+:PROPERTIES:
+:ID:       47479751
+:URL:      https://www.birkey.co/2026-03-22-why-i-love-nixos.html
+:HN_URL:   https://news.ycombinator.com/item?id=47479751
+:POINTS:   280
+:COMMENTS: 196
+:BY:       birkey
+:END:
+
+*** TLDR
+A NixOS love letter highlighting declarative configuration, whole-OS reproducibility, and 'the only operating system that can be meaningfully configured through AI tooling.' The author (after 30 years of Windows) argues it's not just better than other OSes for AI configuration - it's the only game in town.
+
+*** Take
+The NixOS killer feature has evolved from 'reproducible builds' to 'the only OS that Claude can configure without bricking.' When your pitch pivots to 'LLMs can actually use this,' you've found your 2026 angle. The 196 comments are the usual mix of converts, skeptics who hit flakes on day one, and Windows refugees who will never go back.
+
+*** Comments
+
+**** alembic_fumes
+:PROPERTIES:
+:COMMENT_ID: 47479801
+:END:
+NixOS is absolutely incredible for its ability to be configured through AI tooling. I don't mean it's better than other operating systems, I mean it's the only game in town.
+
+**** Havoc
+:PROPERTIES:
+:COMMENT_ID: 47479823
+:END:
+It took me less than a day to learn that it is one place only in theory. The second you start googling 'how do I install xyz' you discover there are also flakes. And others have configs that don't match yours.
+
+**** DHolzer
+:PROPERTIES:
+:COMMENT_ID: 47479812
+:END:
+I switched to Nix about a year ago after 30 years of Windows. I tried Linux a couple times before but it never stuck. Now I know I will never touch Windows again. My god, I love it so much.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么我爱NixOS
+***** TLDR
+一封NixOS情书，强调声明式配置、整个操作系统的可重现性，以及'唯一可以通过AI工具有意义地配置的操作系统'。作者（用了30年Windows后）认为它不只是在AI配置方面比其他操作系统好——而是唯一的选择。
+***** Take
+NixOS的杀手级功能已经从'可重现构建'进化到'唯一一个Claude可以配置而不会搞坏的操作系统'。当你的卖点变成'LLM实际上可以用这个'时，你就找到了2026年的角度。196条评论是皈依者、第一天就遇到flakes的怀疑者和永远不会回去的Windows难民的常见组合。
+***** Comments
+- NixOS在通过AI工具配置方面绝对令人难以置信。我不是说它比其他操作系统好，我是说它是唯一的选择。
+- 我花不到一天就发现'一个地方'只是理论上的。你一搜索'如何安装xyz'就会发现还有flakes。其他人的配置也不匹配你的。
+- 我在用了30年Windows后大约一年前转到Nix。之前试过几次Linux但没坚持下来。现在我知道我再也不会碰Windows了。天哪，我太爱它了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+なぜ私はNixOSを愛するのか
+***** TLDR
+NixOSへのラブレター。宣言的設定、OS全体の再現性、「AIツールで意味のある設定ができる唯一のOS」を強調。著者（30年のWindows使用後）は、AI設定において他のOSより良いだけでなく、唯一の選択肢だと主張する。
+***** Take
+NixOSのキラー機能は「再現可能なビルド」から「Claudeが壊さずに設定できる唯一のOS」に進化した。売り文句が「LLMが実際に使える」に変わったとき、2026年の切り口を見つけた。196件のコメントは、改宗者、初日にflakesに当たった懐疑派、二度と戻らないWindows難民のいつもの組み合わせだ。
+***** Comments
+- NixOSはAIツールでの設定において絶対に信じられない。他のOSより良いとは言わない、唯一の選択肢だと言っている。
+- 実験に1日もかからず「一か所」は理論上だけだと学んだ。「xyzのインストール方法」を検索し始めた瞬間、flakesもあることがわかる。他の人の設定も自分のと一致しない。
+- 30年のWindows使用後、約1年前にNixに切り替えた。以前Linuxを何度か試したが定着しなかった。今ではもう二度とWindowsに触れないとわかっている。なんてことだ、大好きだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+내가 NixOS를 사랑하는 이유
+***** TLDR
+NixOS에 대한 러브레터. 선언적 구성, 전체 OS 재현성, 'AI 도구로 의미 있게 구성할 수 있는 유일한 운영체제'를 강조. 저자(30년간 Windows 사용 후)는 AI 구성에서 다른 OS보다 나은 게 아니라 유일한 선택이라고 주장한다.
+***** Take
+NixOS의 킬러 기능이 '재현 가능한 빌드'에서 'Claude가 망가뜨리지 않고 구성할 수 있는 유일한 OS'로 진화했다. 홍보 포인트가 'LLM이 실제로 사용할 수 있다'로 바뀌면 2026년 각도를 찾은 것이다. 196개의 댓글은 개종자, 첫날 flakes를 만난 회의론자, 절대 돌아가지 않을 Windows 난민의 흔한 조합이다.
+***** Comments
+- NixOS는 AI 도구로 구성하는 데 있어 정말 놀랍다. 다른 운영체제보다 낫다는 게 아니라, 유일한 선택이라는 것이다.
+- 실험하는 데 하루도 안 걸려서 '한 곳'은 이론상으로만 그렇다는 걸 배웠다. 'xyz 설치 방법'을 검색하기 시작하면 flakes도 있다는 걸 발견한다. 다른 사람들의 설정도 내 것과 맞지 않는다.
+- 30년 Windows 사용 후 약 1년 전에 Nix로 전환했다. 전에 Linux를 몇 번 시도했지만 정착하지 못했다. 이제 다시는 Windows를 만지지 않을 것이다. 세상에, 정말 좋다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué amo NixOS
+***** TLDR
+Una carta de amor a NixOS destacando la configuración declarativa, reproducibilidad de todo el SO, y 'el único sistema operativo que puede configurarse significativamente a través de herramientas de IA.' El autor (después de 30 años de Windows) argumenta que no es solo mejor que otros SO para configuración con IA - es la única opción.
+***** Take
+La característica definitiva de NixOS ha evolucionado de 'builds reproducibles' a 'el único SO que Claude puede configurar sin romper.' Cuando tu pitch pivotea a 'los LLMs pueden usar esto,' encontraste tu ángulo 2026. Los 196 comentarios son la mezcla usual de conversos, escépticos que encontraron flakes el día uno, y refugiados de Windows que nunca volverán.
+***** Comments
+- NixOS es absolutamente increíble por su capacidad de ser configurado a través de herramientas de IA. No digo que es mejor que otros sistemas operativos, digo que es la única opción.
+- Me tomó menos de un día aprender que es un solo lugar solo en teoría. En cuanto buscas 'cómo instalar xyz' descubres que también hay flakes. Y otros tienen configs que no coinciden con la tuya.
+- Cambié a Nix hace aproximadamente un año después de 30 años de Windows. Intenté Linux un par de veces antes pero nunca me quedé. Ahora sé que nunca tocaré Windows de nuevo. Dios mío, lo amo tanto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum ich NixOS liebe
+***** TLDR
+Ein Liebesbrief an NixOS, der deklarative Konfiguration, Reproduzierbarkeit des gesamten OS und 'das einzige Betriebssystem, das durch KI-Tools sinnvoll konfiguriert werden kann' hervorhebt. Der Autor (nach 30 Jahren Windows) argumentiert, dass es nicht nur besser für KI-Konfiguration ist als andere OS - es ist die einzige Option.
+***** Take
+Das Killer-Feature von NixOS hat sich von 'reproduzierbare Builds' zu 'das einzige OS, das Claude konfigurieren kann ohne es zu zerstören' entwickelt. Wenn dein Pitch zu 'LLMs können das tatsächlich benutzen' wechselt, hast du deinen 2026-Winkel gefunden. Die 196 Kommentare sind die übliche Mischung aus Bekehrten, Skeptikern die am ersten Tag auf Flakes trafen, und Windows-Flüchtlingen die nie zurückkehren werden.
+***** Comments
+- NixOS ist absolut unglaublich für seine Fähigkeit, durch KI-Tools konfiguriert zu werden. Ich meine nicht, dass es besser als andere Betriebssysteme ist, ich meine es ist die einzige Option.
+- Es dauerte weniger als einen Tag um zu lernen, dass es nur theoretisch ein Ort ist. Sobald du 'wie installiere ich xyz' googelst, entdeckst du dass es auch Flakes gibt. Und andere haben Configs die nicht zu deiner passen.
+- Ich wechselte vor etwa einem Jahr zu Nix nach 30 Jahren Windows. Ich probierte Linux ein paar Mal vorher aber es blieb nie hängen. Jetzt weiß ich, dass ich Windows nie wieder anfassen werde. Mein Gott, ich liebe es so sehr.
+** PC Gamer recommends RSS readers in a 37mb article that just keeps downloading :rss:web:ads:irony:bloat:
+:PROPERTIES:
+:ID:       47480507
+:URL:      https://stuartbreckenridge.net/2026-03-19-pc-gamer-recommends-rss-readers-in-a-37mb-article/
+:HN_URL:   https://news.ycombinator.com/item?id=47480507
+:POINTS:   512
+:COMMENTS: 251
+:BY:       JumpCrisscross
+:END:
+
+*** TLDR
+Stuart Breckenridge documents the absurdity of PC Gamer's 37MB article recommending RSS readers. On load: notification popups, newsletter overlays, five visible ads. In five minutes of page loading, it downloaded nearly half a gigabyte of new ads. The RSS readers it recommends would let you avoid exactly this experience.
+
+*** Take
+PC Gamer accidentally created the most effective RSS advertisement in history. The irony of recommending an ad-free reading experience while force-feeding readers 500MB of ads is the kind of self-own that makes the internet worth monitoring. Someone did the math: that's roughly 10 Windows 95 installations.
+
+*** Comments
+
+**** MBCook
+:PROPERTIES:
+:COMMENT_ID: 47480601
+:END:
+The title buried the lede. In the five minutes since I started writing this post the website has downloaded almost half a gigabyte of new ads. 500 MB in 5 minutes. 37 MB is petite compared to that.
+
+**** userbinator
+:PROPERTIES:
+:COMMENT_ID: 47480623
+:END:
+An installation of Windows 95 is roughly 40MB, so in loading that page you've downloaded approximately one Windows 95 installation. Then another 10+ times with the 500MB more that came after.
+
+**** __natty__
+:PROPERTIES:
+:COMMENT_ID: 47480512
+:END:
+It's not just PC Gamer but people making decisions behind as always. Their Brand Director, Strategic Director, and Global Editor-in-Chief should see this HN thread.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+PC Gamer用一篇37MB的文章推荐RSS阅读器，而且还在不停下载
+***** TLDR
+Stuart Breckenridge记录了PC Gamer 37MB文章推荐RSS阅读器的荒谬。加载时：通知弹窗、订阅遮罩、五个可见广告。页面加载五分钟内，下载了近半个G的新广告。它推荐的RSS阅读器可以让你避开这种体验。
+***** Take
+PC Gamer不小心创造了历史上最有效的RSS广告。一边强行灌输500MB广告一边推荐无广告阅读体验的讽刺，正是让互联网值得关注的那种自我打脸。有人算了一下：那大约是10个Windows 95安装。
+***** Comments
+- 标题埋了重点。在我开始写这篇帖子的五分钟内，网站下载了近半个G的新广告。500MB五分钟。37MB相比之下简直是小巫见大巫。
+- Windows 95的安装大约是40MB，所以加载那个页面你下载了大约一个Windows 95安装。然后随后的500MB又是10倍以上。
+- 不只是PC Gamer，而是背后做决策的人。他们的品牌总监、战略总监和全球总编应该看看这个HN帖子。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+PC GamerがRSSリーダーを37MBの記事で推薦、ダウンロードが止まらない
+***** TLDR
+Stuart BreckenridgeがPC Gamerの37MB記事でRSSリーダーを推薦する不条理を記録。ロード時：通知ポップアップ、ニュースレターオーバーレイ、5つの広告。5分間で約500MBの新しい広告をダウンロード。推薦されたRSSリーダーを使えばまさにこの体験を避けられる。
+***** Take
+PC Gamerは偶然にも史上最も効果的なRSS広告を作った。500MBの広告を強制的に送りながら広告なしの読書体験を推薦する皮肉は、インターネットを監視する価値のある自爆だ。誰かが計算した：それはおよそ10個のWindows 95インストールに相当する。
+***** Comments
+- タイトルが本題を埋めた。投稿を書き始めて5分で、サイトは約500MBの新しい広告をダウンロードした。37MBなんてかわいいものだ。
+- Windows 95のインストールは約40MBなので、そのページをロードすることで約1つのWindows 95インストールをダウンロードしたことになる。その後の500MBでさらに10回以上。
+- PC Gamerだけでなく、背後で決定を下す人々の問題だ。彼らのブランドディレクター、戦略ディレクター、グローバル編集長はこのHNスレッドを見るべきだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+PC Gamer가 37MB짜리 기사로 RSS 리더를 추천하는데 계속 다운로드됨
+***** TLDR
+Stuart Breckenridge가 PC Gamer의 37MB 기사로 RSS 리더를 추천하는 불합리함을 기록했다. 로드 시: 알림 팝업, 뉴스레터 오버레이, 5개의 광고. 5분 동안 거의 500MB의 새 광고를 다운로드했다. 추천된 RSS 리더를 사용하면 바로 이 경험을 피할 수 있다.
+***** Take
+PC Gamer가 실수로 역사상 가장 효과적인 RSS 광고를 만들었다. 500MB의 광고를 강제로 먹이면서 광고 없는 독서 경험을 추천하는 아이러니는 인터넷을 모니터링할 가치가 있게 만드는 자해다. 누군가 계산했다: 대략 Windows 95 설치 10개에 해당한다.
+***** Comments
+- 제목이 핵심을 묻었다. 글을 쓰기 시작한 5분 동안 웹사이트가 거의 500MB의 새 광고를 다운로드했다. 37MB는 그에 비하면 귀엽다.
+- Windows 95 설치는 대략 40MB라서, 그 페이지를 로드하면서 대략 Windows 95 설치 1개를 다운로드한 셈이다. 그 후 500MB로 10배 이상 더.
+- PC Gamer만의 문제가 아니라 결정을 내리는 사람들의 문제다. 그들의 브랜드 디렉터, 전략 디렉터, 글로벌 편집장이 이 HN 스레드를 봐야 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+PC Gamer recomienda lectores RSS en un artículo de 37MB que sigue descargando
+***** TLDR
+Stuart Breckenridge documenta lo absurdo del artículo de 37MB de PC Gamer recomendando lectores RSS. Al cargar: popups de notificaciones, overlays de newsletter, cinco anuncios visibles. En cinco minutos descargó casi 500MB de nuevos anuncios. Los lectores RSS que recomienda te evitarían exactamente esta experiencia.
+***** Take
+PC Gamer accidentalmente creó el anuncio de RSS más efectivo de la historia. La ironía de recomendar una experiencia de lectura sin anuncios mientras alimentas a la fuerza a los lectores con 500MB de anuncios es el tipo de autogol que hace que internet valga la pena monitorear. Alguien hizo las cuentas: eso son aproximadamente 10 instalaciones de Windows 95.
+***** Comments
+- El título enterró lo importante. En los cinco minutos desde que empecé a escribir, el sitio descargó casi 500MB de nuevos anuncios. 37MB es pequeño comparado con eso.
+- Una instalación de Windows 95 es aproximadamente 40MB, así que cargando esa página descargaste aproximadamente una instalación de Windows 95. Luego otras 10+ veces con los 500MB que vinieron después.
+- No es solo PC Gamer sino la gente tomando decisiones detrás. Su Director de Marca, Director Estratégico y Editor Jefe Global deberían ver este hilo de HN.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+PC Gamer empfiehlt RSS-Reader in einem 37MB-Artikel, der ständig nachlädt
+***** TLDR
+Stuart Breckenridge dokumentiert die Absurdität von PC Gamers 37MB-Artikel, der RSS-Reader empfiehlt. Beim Laden: Benachrichtigungs-Popups, Newsletter-Overlays, fünf sichtbare Anzeigen. In fünf Minuten wurden fast 500MB neue Werbung heruntergeladen. Die empfohlenen RSS-Reader würden genau diese Erfahrung vermeiden.
+***** Take
+PC Gamer hat versehentlich die effektivste RSS-Werbung der Geschichte erstellt. Die Ironie, ein werbefreies Leseerlebnis zu empfehlen, während man den Lesern 500MB Werbung aufzwingt, ist die Art von Eigentor, die das Internet überwachenswert macht. Jemand hat nachgerechnet: Das sind ungefähr 10 Windows-95-Installationen.
+***** Comments
+- Der Titel hat das Wichtigste versteckt. In den fünf Minuten seit ich anfing zu schreiben, hat die Website fast 500MB neue Werbung heruntergeladen. 37MB ist winzig dagegen.
+- Eine Windows-95-Installation ist ungefähr 40MB, also hast du beim Laden dieser Seite ungefähr eine Windows-95-Installation heruntergeladen. Dann noch 10+ mal mehr mit den 500MB danach.
+- Es ist nicht nur PC Gamer, sondern die Leute, die dahinter Entscheidungen treffen. Ihr Brand Director, Strategic Director und Global Editor-in-Chief sollten diesen HN-Thread sehen.
