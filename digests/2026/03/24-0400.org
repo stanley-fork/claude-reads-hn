@@ -1,0 +1,544 @@
+#+TITLE: HN Digest 2026-03-24 04:00:00 UT UTC
+#+DATE: 2026-03-24T04:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Supply chains snap, Rust gets existential, and we time-travel to Windows 3.1
+
+* Highlights
+- Trivy GitHub Actions compromised - 75 tags poisoned with infostealers
+- Resolv DeFi hack: $23M printed from thin air via one stolen key
+- Rust coherence rules are holding the ecosystem hostage
+
+* Stories
+
+** Trivy under attack again: Widespread GitHub Actions tag compromise secrets :security:supply-chain:github:cicd:
+:PROPERTIES:
+:ID:       47475888
+:URL:      https://socket.dev/blog/trivy-under-attack-again-github-actions-compromise
+:HN_URL:   https://news.ycombinator.com/item?id=47475888
+:POINTS:   168
+:COMMENTS: 61
+:BY:       jicea
+:END:
+
+*** TLDR
+Attackers force-pushed 75 of 76 version tags in Trivy's GitHub Action repo, injecting infostealers that dump runner process memory, harvest SSH keys, and exfiltrate cloud credentials. Over 10,000 workflows reference this action. The payload encrypts stolen data with AES-256-CBC and exfiltrates to attacker servers. GitHub's 'Immutable' release badge is meaningless since tags can still be force-pushed.
+
+*** Take
+Pin your actions to full commit SHAs or enjoy having your AWS credentials emailed to strangers. The fact that GitHub shows an 'Immutable' badge while letting you force-push tags is peak enterprise security theater.
+
+*** Comments
+
+**** tkzed49
+:PROPERTIES:
+:COMMENT_ID: 47476001
+:END:
+Why doesn't GitHub just enforce immutable versioning for actions? If you don't want immutable releases, you don't get to publish an Action.
+
+**** woodruffw
+:PROPERTIES:
+:COMMENT_ID: 47476234
+:END:
+This is a good wake-up call that many 'supply chain security' products are no more secure or responsibly engineered than the stacks they're intended to protect.
+
+**** deathanatos
+:PROPERTIES:
+:COMMENT_ID: 47476567
+:END:
+Trivy claims they rotated secrets but 'the process wasn't atomic' - does anyone know what exactly they're talking about here?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Trivy再次遭受攻击：GitHub Actions标签大规模被篡改泄露机密
+***** TLDR
+攻击者强制推送了Trivy GitHub Action仓库76个版本标签中的75个，注入了信息窃取程序，可转储运行器进程内存、获取SSH密钥并窃取云凭证。超过10,000个工作流引用此Action。载荷使用AES-256-CBC加密被盗数据并传输到攻击者服务器。GitHub的'不可变'发布徽章毫无意义，因为标签仍可被强制推送。
+***** Take
+把你的actions固定到完整的commit SHA，否则就等着你的AWS凭证被发送给陌生人吧。GitHub一边显示'不可变'徽章一边允许强制推送标签，这是典型的企业安全戏剧。
+***** Comments
+- 为什么GitHub不强制要求actions使用不可变版本？不想用不可变发布就别发布Action。
+- 这是个警钟，许多'供应链安全'产品并不比它们要保护的系统更安全或更负责任。
+- Trivy声称他们轮换了密钥但'过程不是原子性的'——有人知道他们到底在说什么吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Trivyが再び攻撃を受ける：GitHub Actionsタグの大規模な侵害でシークレットが流出
+***** TLDR
+攻撃者がTrivyのGitHub Actionリポジトリの76バージョンタグのうち75個を強制プッシュし、ランナープロセスメモリをダンプし、SSH鍵を収集し、クラウド認証情報を窃取するインフォスティーラーを注入。10,000以上のワークフローがこのアクションを参照。ペイロードは盗んだデータをAES-256-CBCで暗号化して攻撃者サーバーに送信。GitHubの「不変」リリースバッジは無意味で、タグは依然として強制プッシュ可能。
+***** Take
+アクションを完全なコミットSHAに固定しないと、AWS認証情報が見知らぬ人にメールされることになる。GitHubが「不変」バッジを表示しながらタグの強制プッシュを許可しているのは、典型的な企業セキュリティ劇場だ。
+***** Comments
+- なぜGitHubはアクションに不変バージョン管理を強制しないのか？不変リリースが嫌ならアクションを公開するな。
+- これは多くの「サプライチェーンセキュリティ」製品が保護対象のスタックと同程度にしか安全でないという警鐘だ。
+- Trivyはシークレットをローテーションしたが「プロセスはアトミックではなかった」と主張している - 誰かこれが何を意味するか知ってる？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Trivy 또다시 공격받다: GitHub Actions 태그 대규모 침해로 비밀 유출
+***** TLDR
+공격자가 Trivy GitHub Action 저장소의 76개 버전 태그 중 75개를 강제 푸시하여 러너 프로세스 메모리 덤프, SSH 키 수집, 클라우드 자격 증명 탈취를 수행하는 인포스틸러를 주입했다. 10,000개 이상의 워크플로우가 이 액션을 참조한다. 페이로드는 훔친 데이터를 AES-256-CBC로 암호화하여 공격자 서버로 전송한다. 태그를 강제 푸시할 수 있어서 GitHub의 '불변' 릴리스 배지는 의미가 없다.
+***** Take
+액션을 전체 커밋 SHA에 고정하지 않으면 AWS 자격 증명이 낯선 사람에게 이메일로 전송될 것이다. GitHub이 '불변' 배지를 표시하면서 태그 강제 푸시를 허용하는 것은 전형적인 기업 보안 쇼다.
+***** Comments
+- 왜 GitHub은 액션에 불변 버전 관리를 강제하지 않는가? 불변 릴리스를 원하지 않으면 액션을 게시하지 마라.
+- 이것은 많은 '공급망 보안' 제품이 보호하려는 스택보다 더 안전하거나 책임감 있게 설계되지 않았다는 경고다.
+- Trivy는 시크릿을 교체했지만 '프로세스가 원자적이지 않았다'고 주장한다 - 누가 이게 무슨 뜻인지 아는가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Trivy bajo ataque de nuevo: Compromiso masivo de tags de GitHub Actions filtra secretos
+***** TLDR
+Los atacantes forzaron el push de 75 de 76 tags de versión en el repo de GitHub Action de Trivy, inyectando infostealers que vuelcan la memoria del proceso runner, recolectan claves SSH y exfiltran credenciales de la nube. Más de 10,000 workflows referencian esta acción. El payload encripta los datos robados con AES-256-CBC y los exfiltra a servidores atacantes. La insignia 'Inmutable' de GitHub no sirve de nada ya que los tags aún pueden ser forzados.
+***** Take
+Fija tus actions a SHAs de commit completos o disfruta que tus credenciales de AWS sean enviadas por email a extraños. El hecho de que GitHub muestre una insignia 'Inmutable' mientras permite force-push de tags es el pico del teatro de seguridad empresarial.
+***** Comments
+- ¿Por qué GitHub no impone versionado inmutable para actions? Si no quieres releases inmutables, no publiques un Action.
+- Esta es una buena llamada de atención de que muchos productos de 'seguridad de cadena de suministro' no son más seguros que los stacks que pretenden proteger.
+- Trivy afirma que rotaron secretos pero 'el proceso no fue atómico' - ¿alguien sabe de qué están hablando exactamente?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Trivy erneut unter Angriff: Massive GitHub Actions Tag-Kompromittierung leakt Geheimnisse
+***** TLDR
+Angreifer haben 75 von 76 Versions-Tags im Trivy GitHub Action Repo force-gepusht und Infostealer injiziert, die Runner-Prozessspeicher dumpen, SSH-Schlüssel sammeln und Cloud-Credentials exfiltrieren. Über 10.000 Workflows referenzieren diese Action. Die Payload verschlüsselt gestohlene Daten mit AES-256-CBC und exfiltriert sie zu Angreifer-Servern. GitHubs 'Immutable' Release-Badge ist bedeutungslos, da Tags weiterhin force-gepusht werden können.
+***** Take
+Pinne deine Actions auf vollständige Commit-SHAs oder genieße es, dass deine AWS-Credentials an Fremde gemailt werden. Die Tatsache, dass GitHub ein 'Immutable' Badge anzeigt, während Tags force-gepusht werden können, ist der Gipfel des Enterprise-Sicherheitstheaters.
+***** Comments
+- Warum erzwingt GitHub nicht unveränderliches Versioning für Actions? Wenn du keine immutablen Releases willst, darfst du keine Action veröffentlichen.
+- Das ist ein guter Weckruf, dass viele 'Supply-Chain-Sicherheits'-Produkte nicht sicherer sind als die Stacks, die sie schützen sollen.
+- Trivy behauptet, sie haben Secrets rotiert, aber 'der Prozess war nicht atomar' - weiß jemand, was das genau bedeutet?
+** The Resolv hack: How one compromised key printed $23M :security:crypto:defi:hack:
+:PROPERTIES:
+:ID:       47495719
+:URL:      https://www.chainalysis.com/blog/lessons-from-the-resolv-hack/
+:HN_URL:   https://news.ycombinator.com/item?id=47495719
+:POINTS:   67
+:COMMENTS: 88
+:BY:       timbowhite
+:END:
+
+*** TLDR
+Attacker compromised Resolv's AWS KMS to get a signing key, then minted 80 million unbacked USR stablecoins from a ~$150K deposit. The smart contract only checked for valid signatures, not mint limits. Attacker converted to wstUSR, swapped for ETH, extracted $25M. USR price crashed 80%. The code worked as designed - the off-chain trust assumptions failed.
+
+*** Take
+18 audits and still got owned because nobody thought 'what if someone steals the mint key?' DeFi security is basically 'we checked the locks but left the keys under the doormat.'
+
+*** Comments
+
+**** primitivesuave
+:PROPERTIES:
+:COMMENT_ID: 47495801
+:END:
+The hacker first compromised Resolv Lab's AWS account, took a private key from KMS that was used to control minting, then managed to extract $25 million into ETH.
+
+**** Aurornis
+:PROPERTIES:
+:COMMENT_ID: 47495892
+:END:
+This started with a plain old hack that compromised their signing key. The hack was only possible with the stolen private key - whoever held the key was able to mint money unchecked.
+
+**** Panzer04
+:PROPERTIES:
+:COMMENT_ID: 47496012
+:END:
+Why does everything have to be written by an AI?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Resolv黑客事件：一个被盗密钥如何凭空印出2300万美元
+***** TLDR
+攻击者入侵Resolv的AWS KMS获取签名密钥，然后用约15万美元的存款铸造了8000万枚无抵押USR稳定币。智能合约只检查签名有效性，不检查铸币上限。攻击者转换为wstUSR，兑换成ETH，提取了2500万美元。USR价格暴跌80%。代码按设计运行——链下信任假设失败了。
+***** Take
+经过18次审计还是被黑了，因为没人想过'如果有人偷了铸币密钥怎么办？'DeFi安全基本上就是'我们检查了锁，但把钥匙放在门垫下面。'
+***** Comments
+- 黑客首先入侵了Resolv Lab的AWS账户，从KMS获取了用于控制铸币的私钥，然后成功将2500万美元提取为ETH。
+- 这始于一次普通的黑客攻击，攻击者窃取了他们的签名密钥。只有拥有被盗私钥才能进行此次黑客攻击——任何持有密钥的人都可以无限铸币。
+- 为什么所有东西都要用AI写？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Resolvハック：1つの漏洩した鍵が2300万ドルを印刷した方法
+***** TLDR
+攻撃者がResolvのAWS KMSを侵害して署名鍵を取得し、約15万ドルの預金から8000万の無担保USRステーブルコインを発行。スマートコントラクトは署名の有効性のみをチェックし、発行上限は確認しなかった。攻撃者はwstUSRに変換してETHに交換し、2500万ドルを引き出した。USR価格は80%暴落。コードは設計通りに動作した - オフチェーンの信頼前提が失敗した。
+***** Take
+18回の監査を受けてもやられた。「誰かが発行鍵を盗んだらどうする？」と誰も考えなかったから。DeFiセキュリティは基本的に「鍵をドアマットの下に置いたまま錠前だけチェックした」状態だ。
+***** Comments
+- ハッカーはまずResolv LabのAWSアカウントを侵害し、発行を制御するKMSから秘密鍵を取得、その後2500万ドルをETHに引き出すことに成功した。
+- これは署名鍵を侵害した普通のハッキングから始まった。盗まれた秘密鍵があって初めてハッキングが可能だった - 鍵を持っていれば誰でも無制限に発行できた。
+- なぜすべてがAIで書かれなければならないのか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Resolv 해킹: 하나의 유출된 키가 2300만 달러를 찍어낸 방법
+***** TLDR
+공격자가 Resolv의 AWS KMS를 침해하여 서명 키를 획득한 후 약 15만 달러의 예치금으로 8000만 개의 무담보 USR 스테이블코인을 발행했다. 스마트 컨트랙트는 서명 유효성만 확인하고 발행 한도는 확인하지 않았다. 공격자는 wstUSR로 변환하여 ETH로 교환하고 2500만 달러를 인출했다. USR 가격은 80% 폭락했다. 코드는 설계대로 작동했지만 오프체인 신뢰 가정이 실패했다.
+***** Take
+18번의 감사를 받고도 당했다. 아무도 '누군가 발행 키를 훔치면 어떻게 되지?'라고 생각하지 않았기 때문이다. DeFi 보안은 기본적으로 '자물쇠는 확인했지만 열쇠는 현관매트 아래 두었다'는 것이다.
+***** Comments
+- 해커는 먼저 Resolv Lab의 AWS 계정을 침해하고 발행을 제어하는 KMS에서 개인 키를 가져간 다음 2500만 달러를 ETH로 인출하는 데 성공했다.
+- 이것은 서명 키를 침해한 평범한 해킹으로 시작되었다. 도난당한 개인 키가 있어야만 해킹이 가능했다 - 키를 가진 사람은 누구나 무제한으로 발행할 수 있었다.
+- 왜 모든 게 AI로 작성되어야 하는 거지?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El hack de Resolv: Cómo una clave comprometida imprimió $23M
+***** TLDR
+El atacante comprometió el AWS KMS de Resolv para obtener una clave de firma, luego acuñó 80 millones de stablecoins USR sin respaldo desde un depósito de ~$150K. El smart contract solo verificaba firmas válidas, no límites de acuñación. El atacante convirtió a wstUSR, intercambió por ETH, extrajo $25M. El precio de USR cayó 80%. El código funcionó como fue diseñado - las suposiciones de confianza off-chain fallaron.
+***** Take
+18 auditorías y aun así los hackearon porque nadie pensó '¿y si alguien roba la clave de acuñación?' La seguridad DeFi es básicamente 'revisamos las cerraduras pero dejamos las llaves bajo el felpudo.'
+***** Comments
+- El hacker primero comprometió la cuenta AWS de Resolv Lab, tomó una clave privada del KMS que se usaba para controlar la acuñación, luego logró extraer $25 millones en ETH.
+- Esto comenzó con un hack común que comprometió su clave de firma. El hack solo fue posible con la clave privada robada - quien tuviera la clave podía acuñar dinero sin límite.
+- ¿Por qué todo tiene que estar escrito por una IA?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der Resolv-Hack: Wie ein kompromittierter Schlüssel $23M druckte
+***** TLDR
+Angreifer kompromittierten Resolvs AWS KMS für einen Signaturschlüssel, prägten dann 80 Millionen ungedeckte USR-Stablecoins aus einer ~$150K-Einzahlung. Der Smart Contract prüfte nur gültige Signaturen, keine Prägelimits. Angreifer konvertierte zu wstUSR, tauschte gegen ETH, extrahierte $25M. USR-Preis stürzte 80% ab. Der Code funktionierte wie designed - die Off-Chain-Vertrauensannahmen versagten.
+***** Take
+18 Audits und trotzdem gehackt, weil niemand dachte 'was wenn jemand den Mint-Key stiehlt?' DeFi-Sicherheit ist im Grunde 'wir haben die Schlösser geprüft aber die Schlüssel unter die Fußmatte gelegt.'
+***** Comments
+- Der Hacker kompromittierte zuerst Resolv Labs AWS-Konto, nahm einen privaten Schlüssel aus KMS, der zum Kontrollieren des Mintings verwendet wurde, und schaffte es dann, $25 Millionen in ETH zu extrahieren.
+- Das begann mit einem gewöhnlichen Hack, der ihren Signaturschlüssel kompromittierte. Der Hack war nur mit dem gestohlenen privaten Schlüssel möglich - wer den Schlüssel hatte, konnte unbegrenzt Geld prägen.
+- Warum muss alles von einer KI geschrieben werden?
+** An incoherent Rust :rust:programming-languages:type-system:
+:PROPERTIES:
+:ID:       47490648
+:URL:      https://www.boxyuwu.blog/posts/an-incoherent-rust/
+:HN_URL:   https://news.ycombinator.com/item?id=47490648
+:POINTS:   138
+:COMMENTS: 61
+:BY:       emschwartz
+:END:
+
+*** TLDR
+Rust's coherence rules (orphan rules) prevent you from implementing foreign traits for foreign types, creating artificial lock-in. If crate A defines a trait and crate B defines a type, crate C can't implement the trait for that type. This means foundational crates like serde become nearly impossible to replace because every ecosystem crate would need to add support for alternatives. The rules exist for soundness but strangle ecosystem evolution.
+
+*** Take
+Rust accidentally created a moat system where whoever gets their trait crate popular first wins forever. serde is the new jQuery - you'll be using it in 2045 because nobody can coordinate swapping it out.
+
+*** Comments
+
+**** kelnos
+:PROPERTIES:
+:COMMENT_ID: 47490801
+:END:
+This is one of the several things that make me very worried about Rust long-term. Reading some of the made-up syntax in the 'Removing Coherence' section makes my head hurt.
+
+**** smj-edison
+:PROPERTIES:
+:COMMENT_ID: 47490923
+:END:
+Encapsulation and composition are in strong tension, and this is one place where it boils over. In Rust you have private fields. In Zig all fields are public.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+不连贯的Rust
+***** TLDR
+Rust的一致性规则（孤儿规则）阻止你为外部类型实现外部trait，造成人为的锁定。如果crate A定义了trait，crate B定义了类型，crate C就无法为该类型实现该trait。这意味着像serde这样的基础crate几乎无法被替代，因为生态系统中的每个crate都需要为替代品添加支持。这些规则为了健全性而存在，但扼杀了生态系统的演进。
+***** Take
+Rust意外地创造了一个护城河系统，谁的trait crate先流行谁就永远赢。serde是新的jQuery——你在2045年还会用它，因为没人能协调替换它。
+***** Comments
+- 这是让我非常担忧Rust长期发展的几件事之一。阅读'移除一致性'部分中编造的语法让我头疼。
+- 封装和组合处于强烈的张力中，这是其爆发的地方之一。在Rust中你有私有字段。在Zig中所有字段都是公开的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+一貫性のないRust
+***** TLDR
+Rustのコヒーレンスルール（オーファンルール）は外部型に外部トレイトを実装することを妨げ、人為的なロックインを生み出している。クレートAがトレイトを定義し、クレートBが型を定義すると、クレートCはその型にそのトレイトを実装できない。これはserdeのような基盤クレートの置き換えがほぼ不可能になることを意味する。エコシステムのすべてのクレートが代替品のサポートを追加する必要があるからだ。ルールは健全性のために存在するが、エコシステムの進化を窒息させている。
+***** Take
+Rustは偶然にも堀システムを作ってしまった。トレイトクレートを最初に人気にした者が永遠に勝つ。serdeは新しいjQueryだ - 2045年になってもまだ使っているだろう。誰も交換を調整できないから。
+***** Comments
+- これはRustの長期的な将来について非常に心配になることの一つだ。「コヒーレンスの除去」セクションの作られた構文を読むと頭が痛くなる。
+- カプセル化とコンポジションは強い緊張関係にあり、ここでそれが噴出している。Rustではプライベートフィールドがある。Zigではすべてのフィールドがパブリックだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+일관성 없는 Rust
+***** TLDR
+Rust의 일관성 규칙(고아 규칙)은 외부 타입에 외부 트레이트를 구현하는 것을 방지하여 인위적인 종속성을 만든다. 크레이트 A가 트레이트를 정의하고 크레이트 B가 타입을 정의하면, 크레이트 C는 해당 타입에 해당 트레이트를 구현할 수 없다. 이는 serde와 같은 기반 크레이트를 대체하는 것이 거의 불가능하다는 것을 의미한다. 생태계의 모든 크레이트가 대안에 대한 지원을 추가해야 하기 때문이다. 규칙은 건전성을 위해 존재하지만 생태계 진화를 질식시킨다.
+***** Take
+Rust는 우연히 해자 시스템을 만들었다. 트레이트 크레이트를 먼저 인기 있게 만든 사람이 영원히 이긴다. serde는 새로운 jQuery다 - 2045년에도 여전히 사용하고 있을 것이다. 아무도 교체를 조율할 수 없기 때문에.
+***** Comments
+- 이것은 Rust의 장기적 미래에 대해 매우 걱정되게 만드는 여러 가지 중 하나다. '일관성 제거' 섹션의 만들어진 구문을 읽으면 머리가 아프다.
+- 캡슐화와 구성은 강한 긴장 관계에 있으며, 여기서 그것이 폭발한다. Rust에서는 비공개 필드가 있다. Zig에서는 모든 필드가 공개다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un Rust incoherente
+***** TLDR
+Las reglas de coherencia de Rust (reglas de huérfanos) te impiden implementar traits externos para tipos externos, creando lock-in artificial. Si el crate A define un trait y el crate B define un tipo, el crate C no puede implementar el trait para ese tipo. Esto significa que crates fundamentales como serde son casi imposibles de reemplazar porque cada crate del ecosistema necesitaría agregar soporte para alternativas. Las reglas existen por solidez pero estrangulan la evolución del ecosistema.
+***** Take
+Rust accidentalmente creó un sistema de fosos donde quien haga popular su trait crate primero gana para siempre. serde es el nuevo jQuery - lo seguirás usando en 2045 porque nadie puede coordinar su reemplazo.
+***** Comments
+- Esta es una de las varias cosas que me preocupan mucho sobre el futuro a largo plazo de Rust. Leer la sintaxis inventada en la sección 'Eliminando Coherencia' me hace doler la cabeza.
+- La encapsulación y la composición están en fuerte tensión, y este es uno de los lugares donde explota. En Rust tienes campos privados. En Zig todos los campos son públicos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein inkohärentes Rust
+***** TLDR
+Rusts Kohärenzregeln (Orphan Rules) verhindern, dass du fremde Traits für fremde Typen implementierst, was künstlichen Lock-in erzeugt. Wenn Crate A einen Trait definiert und Crate B einen Typ definiert, kann Crate C den Trait nicht für diesen Typ implementieren. Das bedeutet, dass fundamentale Crates wie serde fast unmöglich zu ersetzen sind, weil jedes Ökosystem-Crate Unterstützung für Alternativen hinzufügen müsste. Die Regeln existieren für Soundness, ersticken aber die Ökosystem-Evolution.
+***** Take
+Rust hat versehentlich ein Burggraben-System geschaffen, bei dem derjenige, der seinen Trait-Crate zuerst populär macht, für immer gewinnt. serde ist das neue jQuery - du wirst es 2045 noch benutzen, weil niemand den Austausch koordinieren kann.
+***** Comments
+- Das ist eines der Dinge, die mich langfristig sehr besorgt über Rust machen. Die erfundene Syntax im Abschnitt 'Kohärenz entfernen' zu lesen tut mir im Kopf weh.
+- Kapselung und Komposition stehen in starker Spannung, und hier kocht es über. In Rust hat man private Felder. In Zig sind alle Felder öffentlich.
+** Claude Code Cheat Sheet :developer-tools:ai:productivity:cli:
+:PROPERTIES:
+:ID:       47495527
+:URL:      https://cc.storyfox.cz
+:HN_URL:   https://news.ycombinator.com/item?id=47495527
+:POINTS:   201
+:COMMENTS: 70
+:BY:       phasE89
+:END:
+
+*** TLDR
+A comprehensive reference card for Claude Code v2.1.81 covering keyboard shortcuts (Ctrl+C cancel, Ctrl+L clear, Esc Esc undo), slash commands (/compact, /model, /vim, /plan), MCP server configuration, and recent features like --bare mode, /remote-control bridge, and effort frontmatter for skills. Includes coverage of session management, file memory, and the hooks system.
+
+*** Take
+Finally someone documented all the keyboard shortcuts I've been randomly discovering by accident. The /stickers command is either a joke or proof that Anthropic's marketing team has taken over the CLI.
+
+*** Comments
+
+**** levocardia
+:PROPERTIES:
+:COMMENT_ID: 47495601
+:END:
+It's missing the most important CLI flag! (--dangerously-skip-permissions)
+
+**** bingemaker
+:PROPERTIES:
+:COMMENT_ID: 47495678
+:END:
+Under 'MCP' section, 'Local' shouldn't be prepended with '~'. It should just be .claude.json (per project)
+
+**** plantain
+:PROPERTIES:
+:COMMENT_ID: 47495734
+:END:
+Shocking how far ahead Claude Code is from Codex on the CLI front.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Claude Code速查表
+***** TLDR
+Claude Code v2.1.81的全面参考卡，涵盖键盘快捷键（Ctrl+C取消，Ctrl+L清屏，Esc Esc撤销）、斜杠命令（/compact、/model、/vim、/plan）、MCP服务器配置，以及--bare模式、/remote-control桥接和skills的effort前置等最新功能。包括会话管理、文件记忆和hooks系统的内容。
+***** Take
+终于有人把我一直意外发现的所有键盘快捷键都记录下来了。/stickers命令要么是个笑话，要么是Anthropic市场团队接管CLI的证明。
+***** Comments
+- 缺少最重要的CLI标志！(--dangerously-skip-permissions)
+- 在'MCP'部分，'Local'不应该加'~'前缀。应该只是.claude.json（每个项目）
+- Claude Code在CLI方面远远领先Codex，令人震惊。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claude Codeチートシート
+***** TLDR
+Claude Code v2.1.81の包括的なリファレンスカード。キーボードショートカット（Ctrl+Cキャンセル、Ctrl+Lクリア、Esc Escアンドゥ）、スラッシュコマンド（/compact、/model、/vim、/plan）、MCPサーバー設定、--bareモード、/remote-controlブリッジ、スキル用のeffortフロントマターなどの最新機能を網羅。セッション管理、ファイルメモリ、フックシステムも含む。
+***** Take
+ついに誰かが私が偶然発見してきたキーボードショートカットを全部ドキュメント化してくれた。/stickersコマンドはジョークか、AnthropicのマーケティングチームがCLIを乗っ取った証拠だ。
+***** Comments
+- 最も重要なCLIフラグが抜けている！(--dangerously-skip-permissions)
+- 'MCP'セクションで'Local'に'~'を付けるべきではない。単に.claude.json（プロジェクトごと）とすべき
+- Claude CodeがCLI面でCodexをこれほど引き離しているのは衝撃的だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude Code 치트 시트
+***** TLDR
+Claude Code v2.1.81의 종합 참조 카드. 키보드 단축키(Ctrl+C 취소, Ctrl+L 지우기, Esc Esc 실행 취소), 슬래시 명령(/compact, /model, /vim, /plan), MCP 서버 구성, --bare 모드, /remote-control 브리지, 스킬용 effort 프론트매터 등 최신 기능을 다룬다. 세션 관리, 파일 메모리, 훅 시스템도 포함.
+***** Take
+드디어 누군가 내가 우연히 발견해온 모든 키보드 단축키를 문서화해줬다. /stickers 명령은 농담이거나 Anthropic 마케팅 팀이 CLI를 점령했다는 증거다.
+***** Comments
+- 가장 중요한 CLI 플래그가 빠졌다! (--dangerously-skip-permissions)
+- 'MCP' 섹션에서 'Local'에 '~'를 붙이면 안 된다. 그냥 .claude.json (프로젝트별)이어야 한다
+- Claude Code가 CLI 측면에서 Codex보다 이렇게 앞서 있다니 충격적이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Hoja de trucos de Claude Code
+***** TLDR
+Una tarjeta de referencia completa para Claude Code v2.1.81 que cubre atajos de teclado (Ctrl+C cancelar, Ctrl+L limpiar, Esc Esc deshacer), comandos slash (/compact, /model, /vim, /plan), configuración de servidor MCP, y funciones recientes como modo --bare, puente /remote-control, y frontmatter de effort para skills. Incluye cobertura de gestión de sesiones, memoria de archivos y sistema de hooks.
+***** Take
+Finalmente alguien documentó todos los atajos de teclado que he estado descubriendo por accidente. El comando /stickers es o una broma o prueba de que el equipo de marketing de Anthropic se ha apoderado del CLI.
+***** Comments
+- ¡Falta la bandera CLI más importante! (--dangerously-skip-permissions)
+- En la sección 'MCP', 'Local' no debería tener el prefijo '~'. Debería ser solo .claude.json (por proyecto)
+- Es impactante lo adelantado que está Claude Code respecto a Codex en el frente CLI.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Claude Code Spickzettel
+***** TLDR
+Eine umfassende Referenzkarte für Claude Code v2.1.81, die Tastaturkürzel (Ctrl+C abbrechen, Ctrl+L löschen, Esc Esc rückgängig), Slash-Befehle (/compact, /model, /vim, /plan), MCP-Serverkonfiguration und neue Funktionen wie --bare-Modus, /remote-control-Bridge und effort-Frontmatter für Skills abdeckt. Enthält Session-Management, Datei-Memory und das Hooks-System.
+***** Take
+Endlich hat jemand alle Tastaturkürzel dokumentiert, die ich zufällig entdeckt habe. Der /stickers-Befehl ist entweder ein Witz oder der Beweis, dass Anthropics Marketing-Team die CLI übernommen hat.
+***** Comments
+- Das wichtigste CLI-Flag fehlt! (--dangerously-skip-permissions)
+- Im 'MCP'-Abschnitt sollte 'Local' nicht mit '~' beginnen. Es sollte einfach .claude.json (pro Projekt) sein
+- Schockierend, wie weit Claude Code Codex an der CLI-Front voraus ist.
+** Windows 3.1 tiled background .bmp archive :retrocomputing:nostalgia:design:windows:
+:PROPERTIES:
+:ID:       47496221
+:URL:      https://github.com/andreasjansson/win-3.1-backgrounds
+:HN_URL:   https://news.ycombinator.com/item?id=47496221
+:POINTS:   187
+:COMMENTS: 52
+:BY:       justsomehnguy
+:END:
+
+*** TLDR
+A GitHub repository archiving Windows 3.1 era tiled .bmp backgrounds. The kind of patterns you'd see on your grandmother's 386 - geometric shapes, marble textures, and enough visual noise to give modern UI designers nightmares. Pure 1990s desktop nostalgia.
+
+*** Take
+Someone preserved digital archaeology that Microsoft would have happily let rot in a landfill. These patterns hit different when you remember they were designed for 640x480 monitors and 256 colors.
+
+*** Comments
+
+**** LetsGetTechnicl
+:PROPERTIES:
+:COMMENT_ID: 47496301
+:END:
+I unironically use the classic Packard Bell tile background on my computers because it reminds me of my grandmother's PC which is one of the first I ever used.
+
+**** thombles
+:PROPERTIES:
+:COMMENT_ID: 47496389
+:END:
+If you want your nostalgia in multimedia - https://canyonmid.com/
+
+**** BobMcBob
+:PROPERTIES:
+:COMMENT_ID: 47496456
+:END:
+Does anyone remember the artist or website that had cool textures and colorful tiled wallpaper for early Linux? I've been scratching my head for years.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Windows 3.1平铺背景.bmp档案库
+***** TLDR
+一个GitHub仓库，存档了Windows 3.1时代的平铺.bmp背景。那种你会在奶奶的386电脑上看到的图案——几何形状、大理石纹理，以及足以让现代UI设计师做噩梦的视觉噪音。纯粹的1990年代桌面怀旧。
+***** Take
+有人保存了微软本来会乐意让它在垃圾填埋场腐烂的数字考古文物。当你记起这些图案是为640x480显示器和256色设计的时候，感觉就不一样了。
+***** Comments
+- 我真的在我的电脑上使用经典的Packard Bell平铺背景，因为它让我想起我奶奶的电脑，那是我最早使用的电脑之一。
+- 如果你想要多媒体形式的怀旧 - https://canyonmid.com/
+- 有人记得早期Linux上有酷炫纹理和彩色平铺壁纸的艺术家或网站吗？我想了好几年了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Windows 3.1タイル背景.bmpアーカイブ
+***** TLDR
+Windows 3.1時代のタイル状.bmp背景をアーカイブしたGitHubリポジトリ。おばあちゃんの386で見たようなパターン - 幾何学模様、大理石テクスチャ、現代のUIデザイナーを悪夢に陥れるほどの視覚的ノイズ。純粋な1990年代のデスクトップノスタルジア。
+***** Take
+Microsoftが喜んで埋立地で腐らせたであろうデジタル考古学を誰かが保存した。640x480モニターと256色用に設計されたことを思い出すと、これらのパターンは違って見える。
+***** Comments
+- 私は皮肉なしに、クラシックなPackard Bellタイル背景をコンピュータで使っている。初めて使ったコンピュータの一つである祖母のPCを思い出すから。
+- マルチメディアでノスタルジアを味わいたいなら - https://canyonmid.com/
+- 初期Linuxでクールなテクスチャとカラフルなタイル壁紙を持っていたアーティストやウェブサイトを覚えている人いる？何年も頭を悩ませてる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Windows 3.1 타일 배경 .bmp 아카이브
+***** TLDR
+Windows 3.1 시대의 타일형 .bmp 배경을 보관한 GitHub 저장소. 할머니의 386 컴퓨터에서 봤을 법한 패턴들 - 기하학적 도형, 대리석 텍스처, 현대 UI 디자이너들에게 악몽을 선사할 만큼의 시각적 노이즈. 순수한 1990년대 데스크톱 향수.
+***** Take
+누군가 Microsoft가 기꺼이 쓰레기 매립지에서 썩게 놔뒀을 디지털 고고학을 보존했다. 이 패턴들이 640x480 모니터와 256색용으로 설계되었다는 걸 기억하면 다르게 느껴진다.
+***** Comments
+- 나는 정말로 클래식 Packard Bell 타일 배경을 내 컴퓨터에서 사용한다. 처음 사용했던 컴퓨터 중 하나인 할머니의 PC가 생각나기 때문이다.
+- 멀티미디어로 향수를 즐기고 싶다면 - https://canyonmid.com/
+- 초기 Linux용으로 멋진 텍스처와 컬러풀한 타일 배경화면을 가진 아티스트나 웹사이트 기억하는 사람 있나요? 몇 년째 머리를 긁적이고 있어요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Archivo de fondos .bmp en mosaico de Windows 3.1
+***** TLDR
+Un repositorio de GitHub que archiva fondos .bmp en mosaico de la era Windows 3.1. El tipo de patrones que verías en el 386 de tu abuela - formas geométricas, texturas de mármol, y suficiente ruido visual para dar pesadillas a los diseñadores de UI modernos. Pura nostalgia de escritorio de los 90.
+***** Take
+Alguien preservó arqueología digital que Microsoft hubiera dejado pudrirse felizmente en un vertedero. Estos patrones se sienten diferente cuando recuerdas que fueron diseñados para monitores 640x480 y 256 colores.
+***** Comments
+- Uso sin ironía el fondo de mosaico clásico de Packard Bell en mis computadoras porque me recuerda a la PC de mi abuela, una de las primeras que usé.
+- Si quieres tu nostalgia en multimedia - https://canyonmid.com/
+- ¿Alguien recuerda al artista o sitio web que tenía texturas geniales y fondos de mosaico coloridos para Linux temprano? Me he rascado la cabeza por años.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Windows 3.1 Kachelhintergrund .bmp-Archiv
+***** TLDR
+Ein GitHub-Repository, das gekachelte .bmp-Hintergründe aus der Windows 3.1-Ära archiviert. Die Art von Mustern, die man auf Omas 386 gesehen hätte - geometrische Formen, Marmortexturen und genug visuelles Rauschen, um modernen UI-Designern Albträume zu bescheren. Pure 1990er Desktop-Nostalgie.
+***** Take
+Jemand hat digitale Archäologie bewahrt, die Microsoft gerne auf einer Müllhalde hätte verrotten lassen. Diese Muster fühlen sich anders an, wenn man sich erinnert, dass sie für 640x480-Monitore und 256 Farben entworfen wurden.
+***** Comments
+- Ich benutze unironisch den klassischen Packard Bell Kachelhintergrund auf meinen Computern, weil er mich an den PC meiner Großmutter erinnert, einen der ersten, die ich je benutzt habe.
+- Wenn du deine Nostalgie in Multimedia willst - https://canyonmid.com/
+- Erinnert sich jemand an den Künstler oder die Website, die coole Texturen und bunte Kacheltapeten für frühes Linux hatte? Ich zermartere mir seit Jahren den Kopf.
