@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-03-24 01:00:00 UT UTC
+#+DATE: 2026-03-24T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+FCC bans Chinese routers, LocalStack goes dark, and regex has always been slow
+
+* Highlights
+- FCC adds foreign routers to national security ban list
+- LocalStack archives GitHub repo, requires login now
+- Regex matching is O(n²) and nobody cared until now
+- AI autoresearch: glorified hyperparameter tuning
+- Claude Code productivity tips: just spawn more agents
+
+* Stories
+
+** FCC Updates Covered List to Include Foreign-Made Consumer Routers :security:policy:hardware:fcc:
+:PROPERTIES:
+:ID:       47495344
+:URL:      https://www.fcc.gov/document/fcc-updates-covered-list-include-foreign-made-consumer-routers
+:HN_URL:   https://news.ycombinator.com/item?id=47495344
+:POINTS:   143
+:COMMENTS: 87
+:BY:       moonka
+:END:
+
+*** TLDR
+The FCC is adding foreign-made consumer routers to its 'Covered List' of equipment posing national security risks. Manufacturers can apply for 'Conditional Approval' from DoD or DHS to continue selling in the US. The move targets vulnerabilities exploited by state-sponsored cyber attackers.
+
+*** Take
+They're banning consumer TP-Links while enterprise Cisco gear manufactured in the same Chinese factories gets a free pass. Security theater with extra steps.
+
+*** Comments
+
+**** WarOnPrivacy
+:PROPERTIES:
+:COMMENT_ID: 47495500
+:END:
+The FCC maintains a list of equipment that pose an unacceptable risk to national security. Recently, malicious state and non-state cyber attackers have leveraged vulnerabilities in small and home office routers produced abroad.
+
+**** adrianmonk
+:PROPERTIES:
+:COMMENT_ID: 47495601
+:END:
+Foreign-made consumer routers are banned by default. But manufacturers can apply to get unbanned via 'Conditional Approval' from DoD or DHS.
+
+**** BOFH69420
+:PROPERTIES:
+:COMMENT_ID: 47495702
+:END:
+I would be more impressed if they banned enterprise routers manufactured in China. I continuously patch severe vulnerabilities in Cisco, Dell, HPE, Arista routers - all made in China, Taiwan, Hong Kong, Vietnam.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+FCC更新管制清单，纳入外国制造的消费级路由器
+***** TLDR
+FCC将外国制造的消费级路由器列入构成国家安全风险的'管制清单'。制造商可向国防部或国土安全部申请'有条件批准'继续在美销售。此举针对被国家级网络攻击者利用的漏洞。
+***** Take
+他们禁止消费级TP-Link，而在同一中国工厂生产的企业级思科设备却能通行无阻。披着安全外衣的形式主义。
+***** Comments
+- FCC维护一份对国家安全构成不可接受风险的设备清单。最近，恶意的国家和非国家网络攻击者利用了国外生产的小型和家用办公路由器的漏洞。
+- 外国制造的消费级路由器默认被禁止。但制造商可以通过国防部或国土安全部申请'有条件批准'解禁。
+- 如果他们禁止中国制造的企业级路由器，我会更佩服。我持续修补思科、戴尔、HPE、Arista路由器中的严重漏洞——全都产自中国、台湾、香港、越南。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+FCC、外国製コンシューマールーターを規制リストに追加
+***** TLDR
+FCCは外国製コンシューマールーターを国家安全保障リスクをもたらす「規制リスト」に追加。メーカーはDoDまたはDHSから「条件付き承認」を申請すれば米国での販売継続が可能。国家支援のサイバー攻撃者が悪用する脆弱性を標的としている。
+***** Take
+消費者向けTP-Linkは禁止するのに、同じ中国工場で作られたエンタープライズCisco機器は素通り。手の込んだセキュリティ劇場だ。
+***** Comments
+- FCCは国家安全保障に許容できないリスクをもたらす機器のリストを維持している。最近、悪意ある国家および非国家のサイバー攻撃者が、海外製の小規模・ホームオフィス向けルーターの脆弱性を悪用している。
+- 外国製コンシューマールーターはデフォルトで禁止される。ただしメーカーはDoDまたはDHSから「条件付き承認」を申請して解除できる。
+- 中国製のエンタープライズルーターを禁止してくれたらもっと感心するのに。Cisco、Dell、HPE、Aristaの深刻な脆弱性を常にパッチしている。全部中国、台湾、香港、ベトナム製だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+FCC, 외국산 소비자용 라우터를 규제 목록에 추가
+***** TLDR
+FCC가 외국산 소비자용 라우터를 국가 안보 위험을 초래하는 '규제 목록'에 추가했다. 제조업체는 국방부나 국토안보부에서 '조건부 승인'을 받으면 미국 내 판매를 계속할 수 있다. 이 조치는 국가 지원 사이버 공격자들이 악용하는 취약점을 겨냥한 것이다.
+***** Take
+소비자용 TP-Link는 금지하면서 같은 중국 공장에서 만든 기업용 Cisco 장비는 통과시킨다. 복잡한 보안 쇼에 불과하다.
+***** Comments
+- FCC는 국가 안보에 용납할 수 없는 위험을 초래하는 장비 목록을 유지한다. 최근 악의적인 국가 및 비국가 사이버 공격자들이 해외에서 생산된 소규모 및 홈오피스 라우터의 취약점을 이용해왔다.
+- 외국산 소비자용 라우터는 기본적으로 금지된다. 하지만 제조업체는 국방부나 국토안보부에서 '조건부 승인'을 신청하여 금지를 해제할 수 있다.
+- 중국에서 제조된 기업용 라우터를 금지한다면 더 인상적일 것이다. Cisco, Dell, HPE, Arista 라우터의 심각한 취약점을 지속적으로 패치하고 있다. 모두 중국, 대만, 홍콩, 베트남에서 만들어졌다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La FCC actualiza la lista de equipos prohibidos para incluir routers de consumo fabricados en el extranjero
+***** TLDR
+La FCC está añadiendo routers de consumo fabricados en el extranjero a su 'Lista de Equipos Cubiertos' que representan riesgos de seguridad nacional. Los fabricantes pueden solicitar 'Aprobación Condicional' del DoD o DHS para seguir vendiendo en EE.UU. La medida se dirige a vulnerabilidades explotadas por ciberatacantes patrocinados por estados.
+***** Take
+Prohíben los TP-Link de consumo mientras que los equipos empresariales Cisco fabricados en las mismas fábricas chinas pasan sin problema. Teatro de seguridad con pasos extra.
+***** Comments
+- La FCC mantiene una lista de equipos que representan un riesgo inaceptable para la seguridad nacional. Recientemente, ciberatacantes maliciosos patrocinados por estados y otros han aprovechado vulnerabilidades en routers de pequeñas oficinas y hogares producidos en el extranjero.
+- Los routers de consumo fabricados en el extranjero están prohibidos por defecto. Pero los fabricantes pueden solicitar ser desbloqueados mediante 'Aprobación Condicional' del DoD o DHS.
+- Estaría más impresionado si prohibieran los routers empresariales fabricados en China. Continuamente parcheo vulnerabilidades severas en routers Cisco, Dell, HPE, Arista, todos fabricados en China, Taiwán, Hong Kong, Vietnam.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+FCC aktualisiert Liste verbotener Geräte um ausländische Verbraucher-Router
+***** TLDR
+Die FCC fügt im Ausland hergestellte Verbraucher-Router zur 'Covered List' von Geräten hinzu, die nationale Sicherheitsrisiken darstellen. Hersteller können beim DoD oder DHS eine 'Bedingte Genehmigung' beantragen, um weiterhin in den USA zu verkaufen. Die Maßnahme zielt auf Schwachstellen ab, die von staatlich geförderten Cyber-Angreifern ausgenutzt werden.
+***** Take
+Verbraucher-TP-Links werden verboten, während Enterprise-Cisco-Geräte aus denselben chinesischen Fabriken durchgewunken werden. Sicherheitstheater mit Extraschritten.
+***** Comments
+- Die FCC führt eine Liste von Geräten, die ein inakzeptables Risiko für die nationale Sicherheit darstellen. Kürzlich haben böswillige staatliche und nichtstaatliche Cyber-Angreifer Schwachstellen in im Ausland produzierten Small-Office und Home-Office-Routern ausgenutzt.
+- Im Ausland hergestellte Verbraucher-Router sind standardmäßig verboten. Aber Hersteller können eine Entsperrung durch 'Bedingte Genehmigung' vom DoD oder DHS beantragen.
+- Ich wäre beeindruckter, wenn sie in China hergestellte Enterprise-Router verbieten würden. Ich patche ständig schwere Schwachstellen in Cisco-, Dell-, HPE-, Arista-Routern - alle in China, Taiwan, Hongkong, Vietnam hergestellt.
+** LocalStack Archived their GitHub repo and requires an account to run :opensource:aws:devtools:drama:
+:PROPERTIES:
+:ID:       47493657
+:URL:      https://github.com/localstack/localstack
+:HN_URL:   https://news.ycombinator.com/item?id=47493657
+:POINTS:   150
+:COMMENTS: 77
+:BY:       ecshafer
+:END:
+
+*** TLDR
+LocalStack, the popular AWS service emulator, has archived their GitHub repository and now requires a login to run. The company raised $10K via OpenCollective for open source development but has effectively closed the project.
+
+*** Take
+Another open source project that bootstrapped community goodwill into a VC-funded product before pulling the rug. At least MinIO waited a few years first.
+
+*** Comments
+
+**** tecleandor
+:PROPERTIES:
+:COMMENT_ID: 47493700
+:END:
+They still have their OpenCollective account linked, where they raised $10K and still have $5K balance. Have they been using a platform built for communities and open source to bootstrap their business?
+
+**** iaaan
+:PROPERTIES:
+:COMMENT_ID: 47493800
+:END:
+I evangelized localstack at my company, but as we integrated it deeper we ran into more unsupported things. Impossible to get attention from their support despite being paying customers.
+
+**** inglor
+:PROPERTIES:
+:COMMENT_ID: 47493900
+:END:
+First MinIO and then LocalStack. As an open source maintainer I find abandoning their community is bad faith. I get wanting to monetize but removing the free product entirely feels like betrayal.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+LocalStack归档了GitHub仓库，运行需要登录账户
+***** TLDR
+流行的AWS服务模拟器LocalStack已归档其GitHub仓库，现在运行需要登录。该公司通过OpenCollective为开源开发筹集了1万美元，但实际上已经关闭了该项目。
+***** Take
+又一个开源项目把社区好感度转化为VC资助的产品后抽身跑路。MinIO至少还等了几年。
+***** Comments
+- 他们仍然链接着OpenCollective账户，筹集了1万美元，余额还有5千美元。他们是在用一个为社区和开源构建的平台来启动商业项目吗？
+- 我在公司推广localstack，但随着集成加深，遇到越来越多不支持的功能。尽管是付费客户，也无法得到他们支持团队的关注。
+- 先是MinIO然后是LocalStack。作为开源维护者，我认为抛弃社区是不诚信的行为。我理解想要变现，但完全移除免费产品感觉像是背叛。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+LocalStackがGitHubリポジトリをアーカイブ、実行にアカウントが必要に
+***** TLDR
+人気のAWSサービスエミュレーター、LocalStackがGitHubリポジトリをアーカイブし、実行にはログインが必要になった。同社はOpenCollectiveでオープンソース開発のため1万ドルを調達したが、事実上プロジェクトを閉鎖した。
+***** Take
+コミュニティの好意をVC出資の製品に変えてから逃げ出した、また別のオープンソースプロジェクト。MinIOは少なくとも数年は待った。
+***** Comments
+- 彼らはまだOpenCollectiveアカウントをリンクしており、1万ドルを調達し、まだ5千ドルの残高がある。コミュニティとオープンソースのために構築されたプラットフォームをビジネスの足がかりに使っていたのか？
+- 私は会社でlocalstackを推進したが、深く統合するにつれてサポートされていない機能が増えてきた。有料顧客なのにサポートから注目を得ることは不可能だった。
+- まずMinIO、次にLocalStack。オープンソースメンテナーとして、コミュニティを見捨てることは不誠実だと思う。収益化したい気持ちは分かるが、無料製品を完全に削除するのは裏切りに感じる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+LocalStack이 GitHub 저장소를 아카이브하고 실행에 계정이 필요해짐
+***** TLDR
+인기 있는 AWS 서비스 에뮬레이터 LocalStack이 GitHub 저장소를 아카이브했으며 이제 실행하려면 로그인이 필요하다. 회사는 OpenCollective를 통해 오픈소스 개발을 위해 1만 달러를 모금했지만 사실상 프로젝트를 폐쇄했다.
+***** Take
+커뮤니티 호의를 VC 투자 제품으로 전환한 후 도망친 또 다른 오픈소스 프로젝트. MinIO는 적어도 몇 년은 기다렸다.
+***** Comments
+- 그들은 여전히 OpenCollective 계정을 연결해두고 있으며, 1만 달러를 모금하고 아직 5천 달러의 잔액이 있다. 커뮤니티와 오픈소스를 위해 만들어진 플랫폼을 사업 기반으로 사용한 것인가?
+- 나는 회사에서 localstack을 홍보했지만, 더 깊이 통합할수록 지원되지 않는 것들이 많아졌다. 유료 고객임에도 불구하고 지원팀의 관심을 받는 것이 불가능했다.
+- 먼저 MinIO 그리고 LocalStack. 오픈소스 메인테이너로서 커뮤니티를 버리는 것은 신의성실에 어긋난다고 생각한다. 수익화하고 싶은 마음은 이해하지만 무료 제품을 완전히 제거하는 것은 배신처럼 느껴진다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+LocalStack archiva su repositorio de GitHub y ahora requiere cuenta para ejecutarse
+***** TLDR
+LocalStack, el popular emulador de servicios AWS, ha archivado su repositorio de GitHub y ahora requiere inicio de sesión para ejecutarse. La empresa recaudó $10K a través de OpenCollective para desarrollo de código abierto pero efectivamente ha cerrado el proyecto.
+***** Take
+Otro proyecto de código abierto que convirtió la buena voluntad de la comunidad en un producto financiado por VC antes de desaparecer. Al menos MinIO esperó unos años primero.
+***** Comments
+- Todavía tienen vinculada su cuenta de OpenCollective, donde recaudaron $10K y aún tienen $5K de saldo. ¿Han estado usando una plataforma construida para comunidades y código abierto para impulsar su negocio?
+- Promocioné localstack en mi empresa, pero mientras más lo integrábamos, más cosas sin soporte encontrábamos. Imposible conseguir atención de su soporte a pesar de ser clientes de pago.
+- Primero MinIO y luego LocalStack. Como mantenedor de código abierto, creo que abandonar a su comunidad es de mala fe. Entiendo querer monetizar pero eliminar completamente el producto gratuito se siente como una traición.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+LocalStack archiviert GitHub-Repo und erfordert nun Account zum Ausführen
+***** TLDR
+LocalStack, der beliebte AWS-Service-Emulator, hat sein GitHub-Repository archiviert und erfordert nun eine Anmeldung zum Ausführen. Das Unternehmen sammelte $10K über OpenCollective für Open-Source-Entwicklung, hat das Projekt aber effektiv geschlossen.
+***** Take
+Noch ein Open-Source-Projekt, das Community-Goodwill in ein VC-finanziertes Produkt umgewandelt hat, bevor es den Stecker gezogen hat. MinIO hat wenigstens ein paar Jahre gewartet.
+***** Comments
+- Sie haben immer noch ihr OpenCollective-Konto verlinkt, wo sie $10K gesammelt haben und noch $5K Guthaben haben. Haben sie eine für Communities und Open Source gebaute Plattform genutzt, um ihr Geschäft aufzubauen?
+- Ich habe localstack in meiner Firma beworben, aber je tiefer wir es integrierten, desto mehr nicht unterstützte Dinge fanden wir. Unmöglich, trotz zahlender Kunden Aufmerksamkeit vom Support zu bekommen.
+- Erst MinIO und dann LocalStack. Als Open-Source-Maintainer finde ich, dass das Verlassen ihrer Community unredlich ist. Ich verstehe den Wunsch nach Monetarisierung, aber das komplette Entfernen des kostenlosen Produkts fühlt sich wie Verrat an.
+** Finding all regex matches has always been O(n²) :algorithms:regex:security:performance:
+:PROPERTIES:
+:ID:       47443903
+:URL:      https://iev.ee/blog/the-quadratic-problem-nobody-fixed/
+:HN_URL:   https://news.ycombinator.com/item?id=47443903
+:POINTS:   150
+:COMMENTS: 39
+:BY:       lalitmaganti
+:END:
+
+*** TLDR
+The standard algorithm for finding all regex matches in a string is fundamentally O(n²) due to how overlapping matches are handled. The author argues this has been known but largely ignored, and proposes 'hardened mode' should be the default like how Rust uses SipHash for hashmaps.
+
+*** Take
+We've been shipping ReDoS vulnerabilities by default for decades and calling it a feature. The real quadratic problem is how long it takes the industry to fix obvious footguns.
+
+*** Comments
+
+**** conartist6
+:PROPERTIES:
+:COMMENT_ID: 47444000
+:END:
+Have you seen implementations like @bablr/regex? It's an NFA system so not winning throughput awards, but it completely avoids the complexity blowup. Will run your heap out of memory on really big inputs though.
+
+**** 10000truths
+:PROPERTIES:
+:COMMENT_ID: 47444100
+:END:
+Restricting regex features to guarantee time complexity works, but requires sacrificing useful features like backtracking. In real-world deployment, the best solution is the same as running untrusted code - sandboxing.
+
+**** ummonk
+:PROPERTIES:
+:COMMENT_ID: 47444200
+:END:
+Hardened mode should be default, similar to how siphash is the default hashing function in Rust hash maps. Faster mode should be opt-in if you're confident the data is non-malicious.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+查找所有正则匹配一直都是O(n²)
+***** TLDR
+查找字符串中所有正则匹配的标准算法本质上是O(n²)，这是由于重叠匹配的处理方式。作者认为这一点早已为人所知但被广泛忽视，并建议'强化模式'应该成为默认设置，就像Rust对哈希表使用SipHash一样。
+***** Take
+我们几十年来一直默认发布ReDoS漏洞并称之为功能。真正的二次方问题是业界修复明显漏洞需要多长时间。
+***** Comments
+- 你见过@bablr/regex这样的实现吗？它是NFA系统，吞吐量上不会获奖，但完全避免了复杂度爆炸。不过在非常大的输入上会耗尽堆内存。
+- 限制正则特性以保证时间复杂度是可行的，但需要牺牲回溯等有用特性。在实际部署中，最好的解决方案与运行不受信任的代码相同——沙箱化。
+- 强化模式应该是默认的，类似于Rust哈希表默认使用siphash。如果你确信数据是非恶意的，更快的模式应该是可选的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+すべての正規表現マッチの検索は常にO(n²)だった
+***** TLDR
+文字列内のすべての正規表現マッチを見つける標準アルゴリズムは、重複マッチの処理方法により本質的にO(n²)である。著者は、これは知られていたが大部分で無視されてきたと主張し、Rustがハッシュマップにsiphashを使用するように、「強化モード」がデフォルトであるべきだと提案している。
+***** Take
+私たちは何十年もReDoS脆弱性をデフォルトで出荷し、それを機能と呼んできた。本当の二次問題は、業界が明白な欠陥を修正するのにかかる時間だ。
+***** Comments
+- @bablr/regexのような実装を見たことがありますか？NFAシステムなのでスループットで賞は取れませんが、複雑さの爆発を完全に回避します。ただし非常に大きな入力でヒープメモリを使い果たします。
+- 時間計算量を保証するために正規表現機能を制限することは機能しますが、バックトラッキングなどの有用な機能を犠牲にする必要があります。実世界のデプロイでは、最良の解決策は信頼できないコードを実行するのと同じです - サンドボックス化。
+- 強化モードはデフォルトであるべきです。Rustハッシュマップでsiphashがデフォルトのハッシュ関数であるのと同様に。データが悪意のないものと確信している場合は、より高速なモードをオプトインにすべきです。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+모든 정규식 매치 찾기는 항상 O(n²)였다
+***** TLDR
+문자열에서 모든 정규식 매치를 찾는 표준 알고리즘은 중복 매치 처리 방식 때문에 근본적으로 O(n²)이다. 저자는 이것이 알려져 있었지만 대체로 무시되어 왔다고 주장하며, Rust가 해시맵에 SipHash를 사용하는 것처럼 '강화 모드'가 기본값이어야 한다고 제안한다.
+***** Take
+우리는 수십 년 동안 ReDoS 취약점을 기본값으로 제공하면서 기능이라고 불러왔다. 진정한 이차 문제는 업계가 명백한 결함을 수정하는 데 걸리는 시간이다.
+***** Comments
+- @bablr/regex 같은 구현을 본 적 있나요? NFA 시스템이라 처리량에서 상을 받지는 못하지만, 복잡도 폭발을 완전히 피합니다. 다만 정말 큰 입력에서 힙 메모리가 부족해집니다.
+- 시간 복잡도를 보장하기 위해 정규식 기능을 제한하는 것은 작동하지만, 백트래킹 같은 유용한 기능을 희생해야 합니다. 실제 배포에서 최선의 해결책은 신뢰할 수 없는 코드를 실행하는 것과 같습니다 - 샌드박싱.
+- 강화 모드가 기본값이어야 합니다. Rust 해시맵에서 siphash가 기본 해시 함수인 것처럼요. 데이터가 악의적이지 않다고 확신한다면 더 빠른 모드를 선택하세요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Encontrar todas las coincidencias de regex siempre ha sido O(n²)
+***** TLDR
+El algoritmo estándar para encontrar todas las coincidencias de regex en una cadena es fundamentalmente O(n²) debido a cómo se manejan las coincidencias superpuestas. El autor argumenta que esto se conocía pero fue ignorado, y propone que el 'modo reforzado' debería ser el predeterminado como Rust usa SipHash para hashmaps.
+***** Take
+Hemos estado enviando vulnerabilidades ReDoS por defecto durante décadas y llamándolo característica. El verdadero problema cuadrático es cuánto tiempo le toma a la industria arreglar errores obvios.
+***** Comments
+- ¿Has visto implementaciones como @bablr/regex? Es un sistema NFA así que no ganará premios de rendimiento, pero evita completamente la explosión de complejidad. Aunque agotará tu memoria heap en entradas muy grandes.
+- Restringir características de regex para garantizar complejidad temporal funciona, pero requiere sacrificar características útiles como backtracking. En despliegue real, la mejor solución es la misma que para ejecutar código no confiable - sandboxing.
+- El modo reforzado debería ser predeterminado, similar a cómo siphash es la función hash predeterminada en los hash maps de Rust. El modo más rápido debería ser opt-in si estás seguro de que los datos no son maliciosos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Alle Regex-Matches zu finden war schon immer O(n²)
+***** TLDR
+Der Standardalgorithmus zum Finden aller Regex-Matches in einem String ist grundsätzlich O(n²) aufgrund der Behandlung überlappender Matches. Der Autor argumentiert, dass dies bekannt war, aber weitgehend ignoriert wurde, und schlägt vor, dass der 'gehärtete Modus' Standard sein sollte, wie Rust SipHash für Hashmaps verwendet.
+***** Take
+Wir haben jahrzehntelang standardmäßig ReDoS-Schwachstellen ausgeliefert und es Feature genannt. Das eigentliche quadratische Problem ist, wie lange die Branche braucht, um offensichtliche Fallstricke zu beheben.
+***** Comments
+- Hast du Implementierungen wie @bablr/regex gesehen? Es ist ein NFA-System, also gewinnt es keine Durchsatz-Awards, aber es vermeidet die Komplexitätsexplosion komplett. Läuft dir aber bei wirklich großen Eingaben den Heap voll.
+- Regex-Features einzuschränken um Zeitkomplexität zu garantieren funktioniert, erfordert aber das Opfern nützlicher Features wie Backtracking. Im realen Einsatz ist die beste Lösung dieselbe wie beim Ausführen von nicht vertrauenswürdigem Code - Sandboxing.
+- Der gehärtete Modus sollte Standard sein, ähnlich wie siphash die Standard-Hash-Funktion in Rust-Hash-Maps ist. Der schnellere Modus sollte Opt-in sein, wenn man sicher ist, dass die Daten nicht bösartig sind.
+** Autoresearch on an old research idea :ai:research:automation:ml:
+:PROPERTIES:
+:ID:       47493460
+:URL:      https://ykumar.me/blog/eclip-autoresearch/
+:HN_URL:   https://news.ycombinator.com/item?id=47493460
+:POINTS:   261
+:COMMENTS: 66
+:BY:       ykumards
+:END:
+
+*** TLDR
+The author fed an old research idea to an AI agent with the 'autoresearch' framework. The agent essentially acted as a hyperparameter optimization algorithm with basic reasoning, iteratively improving train.py, running training, running evals, and recording results while favoring simplicity.
+
+*** Take
+Turns out AI research agents are just grad students without the impostor syndrome: run experiment, check metric, repeat until advisor gets bored.
+
+*** Comments
+
+**** the_arun
+:PROPERTIES:
+:COMMENT_ID: 47493500
+:END:
+Try this if the main link is not responsive - https://archive.is/6xLiU
+
+**** datsci_est_2015
+:PROPERTIES:
+:COMMENT_ID: 47493600
+:END:
+I often use LLMs to explore prior art and find alternative ways of thinking about problems. 90% is useless or inapplicable due to technicalities, but the 10% has helped me learn great new things.
+
+**** carlsborg
+:PROPERTIES:
+:COMMENT_ID: 47493550
+:END:
+The agent acted like a hyperparameter optimization algorithm with basic reasoning. The crux is one file - program.md - a system prompt saying: do this in a loop: improve train.py, run training, run evals, record result. Favor simplicity.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用自动研究框架测试一个旧研究想法
+***** TLDR
+作者将一个旧的研究想法输入到使用'autoresearch'框架的AI代理中。该代理本质上像一个带有基本推理能力的超参数优化算法，迭代改进train.py，运行训练，运行评估，并记录结果，同时偏好简单性。
+***** Take
+原来AI研究代理就是没有冒充者综合症的研究生：运行实验，检查指标，重复直到导师厌倦。
+***** Comments
+- 如果主链接无响应可以试试这个 - https://archive.is/6xLiU
+- 我经常使用LLM来探索现有技术并找到思考问题的替代方式。90%是无用的或由于技术细节不适用，但那10%帮我学到了很多新东西。
+- 该代理像一个带有基本推理的超参数优化算法。核心是一个文件 - program.md - 一个系统提示说：循环执行：改进train.py，运行训练，运行评估，记录结果。偏好简单性。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+古い研究アイデアで自動研究を試す
+***** TLDR
+著者は古い研究アイデアを'autoresearch'フレームワークを使用したAIエージェントに入力した。エージェントは本質的に基本的な推論を持つハイパーパラメータ最適化アルゴリズムとして機能し、train.pyを反復的に改善し、トレーニングを実行し、評価を実行し、シンプルさを優先しながら結果を記録した。
+***** Take
+結局AIリサーチエージェントは詐欺師症候群のない大学院生だ：実験を実行し、指標を確認し、指導教官が飽きるまで繰り返す。
+***** Comments
+- メインリンクが反応しない場合はこちらを試してください - https://archive.is/6xLiU
+- 私はよくLLMを使って先行技術を探索し、問題について考える代替的な方法を見つけます。90%は役に立たないか技術的な理由で適用できませんが、10%は素晴らしい新しいことを学ぶのに役立ちました。
+- エージェントは基本的な推論を持つハイパーパラメータ最適化アルゴリズムのように機能した。核心は1つのファイル - program.md - 「ループでこれを行う：train.pyを改善し、トレーニングを実行し、評価を実行し、結果を記録する。シンプルさを優先」というシステムプロンプト。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+오래된 연구 아이디어로 자동 연구 테스트
+***** TLDR
+저자가 오래된 연구 아이디어를 'autoresearch' 프레임워크를 사용하는 AI 에이전트에 입력했다. 에이전트는 본질적으로 기본적인 추론이 포함된 하이퍼파라미터 최적화 알고리즘처럼 작동하며, train.py를 반복적으로 개선하고, 훈련을 실행하고, 평가를 실행하고, 단순성을 선호하면서 결과를 기록했다.
+***** Take
+알고 보니 AI 연구 에이전트는 가면 증후군이 없는 대학원생이었다: 실험 실행, 지표 확인, 지도교수가 지루해할 때까지 반복.
+***** Comments
+- 메인 링크가 응답하지 않으면 이것을 시도해 보세요 - https://archive.is/6xLiU
+- 저는 종종 LLM을 사용하여 선행 기술을 탐색하고 문제에 대해 생각하는 대안적인 방법을 찾습니다. 90%는 쓸모없거나 기술적인 이유로 적용할 수 없지만, 10%는 훌륭한 새로운 것을 배우는 데 도움이 되었습니다.
+- 에이전트는 기본적인 추론이 포함된 하이퍼파라미터 최적화 알고리즘처럼 작동했다. 핵심은 하나의 파일 - program.md - '이것을 루프에서 수행: train.py 개선, 훈련 실행, 평가 실행, 결과 기록. 단순성 선호'라는 시스템 프롬프트이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Autoinvestigación con una vieja idea de investigación
+***** TLDR
+El autor alimentó una vieja idea de investigación a un agente de IA con el framework 'autoresearch'. El agente esencialmente actuó como un algoritmo de optimización de hiperparámetros con razonamiento básico, mejorando iterativamente train.py, ejecutando entrenamiento, ejecutando evaluaciones y registrando resultados mientras favorecía la simplicidad.
+***** Take
+Resulta que los agentes de investigación de IA son solo estudiantes de posgrado sin síndrome del impostor: ejecutar experimento, verificar métrica, repetir hasta que el asesor se aburra.
+***** Comments
+- Prueba esto si el enlace principal no responde - https://archive.is/6xLiU
+- A menudo uso LLMs para explorar arte previo y encontrar formas alternativas de pensar sobre problemas. El 90% es inútil o inaplicable por tecnicismos, pero el 10% me ha ayudado a aprender cosas nuevas geniales.
+- El agente actuó como un algoritmo de optimización de hiperparámetros con razonamiento básico. El meollo es un archivo - program.md - un prompt del sistema que dice: haz esto en bucle: mejora train.py, ejecuta entrenamiento, ejecuta evaluaciones, registra resultado. Favorece la simplicidad.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Autoforschung mit einer alten Forschungsidee
+***** TLDR
+Der Autor fütterte eine alte Forschungsidee an einen KI-Agenten mit dem 'autoresearch'-Framework. Der Agent agierte im Wesentlichen wie ein Hyperparameter-Optimierungsalgorithmus mit grundlegendem Reasoning, verbesserte iterativ train.py, führte Training aus, führte Evaluierungen durch und zeichnete Ergebnisse auf, während er Einfachheit bevorzugte.
+***** Take
+Es stellt sich heraus, dass KI-Forschungsagenten nur Doktoranden ohne Impostor-Syndrom sind: Experiment durchführen, Metrik prüfen, wiederholen bis der Betreuer gelangweilt ist.
+***** Comments
+- Versuch das, wenn der Hauptlink nicht reagiert - https://archive.is/6xLiU
+- Ich nutze oft LLMs, um Stand der Technik zu erkunden und alternative Denkweisen über Probleme zu finden. 90% ist nutzlos oder wegen Technikdetails nicht anwendbar, aber die 10% haben mir geholfen, großartige neue Dinge zu lernen.
+- Der Agent agierte wie ein Hyperparameter-Optimierungsalgorithmus mit grundlegendem Reasoning. Der Kern ist eine Datei - program.md - ein System-Prompt der sagt: mach das in einer Schleife: verbessere train.py, führe Training aus, führe Evaluierungen durch, zeichne Ergebnis auf. Bevorzuge Einfachheit.
+** How I'm Productive with Claude Code :devtools:ai:productivity:claude:
+:PROPERTIES:
+:ID:       47494890
+:URL:      https://neilkakkar.com/productive-with-claude-code.html
+:HN_URL:   https://news.ycombinator.com/item?id=47494890
+:POINTS:   107
+:COMMENTS: 75
+:BY:       neilkakkar
+:END:
+
+*** TLDR
+The author shares their workflow for using Claude Code productively: spawning multiple agents via worktrees to parallelize work, treating throughput (more PRs) as a success metric, and using agents for context-switching across different streams of work.
+
+*** Take
+Lines of code per week, but make it 2026. More PRs doesn't mean better software, it means more code to debug when everything catches fire.
+
+*** Comments
+
+**** aguimaraes1986
+:PROPERTIES:
+:COMMENT_ID: 47495000
+:END:
+This is the 'lines of code per week' metric from the 90s, repackaged. 'I'm doing more PRs' is not evidence that AI is working, it's evidence that you are merging more. Whether that's good depends entirely on what you are merging.
+
+**** dakiol
+:PROPERTIES:
+:COMMENT_ID: 47495100
+:END:
+Honest question: if you're using multiple agents for big features spanning multiple files... wouldn't you review it? Like reading line by line what's going on and detecting if something is off?
+
+**** felipevb
+:PROPERTIES:
+:COMMENT_ID: 47495200
+:END:
+The worktree system removed the friction of context-switching. I'm so conflicted about this. On one hand I love the buzz of feeling so productive. On the other hand my brain gets so fried.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我如何高效使用Claude Code
+***** TLDR
+作者分享了高效使用Claude Code的工作流程：通过worktrees生成多个代理以并行化工作，将吞吐量（更多PR）作为成功指标，并使用代理在不同工作流之间切换上下文。
+***** Take
+每周代码行数，但这是2026版。更多PR不意味着更好的软件，它意味着当一切崩溃时有更多代码需要调试。
+***** Comments
+- 这是90年代'每周代码行数'指标的重新包装。'我做了更多PR'不是AI有效的证据，而是你合并更多的证据。这是否好完全取决于你合并的是什么。
+- 诚实的问题：如果你使用多个代理处理跨越多个文件的大型功能...你不会审查吗？比如逐行阅读发生了什么，检测是否有问题？
+- worktree系统消除了上下文切换的摩擦。我对此很矛盾。一方面我喜欢感觉如此高效的快感。另一方面我的大脑会很疲惫。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claude Codeで生産的に働く方法
+***** TLDR
+著者がClaude Codeを生産的に使用するワークフローを共有：worktreesを通じて複数のエージェントを生成して作業を並列化し、スループット（より多くのPR）を成功指標として扱い、異なる作業ストリーム間でコンテキストスイッチするためにエージェントを使用する。
+***** Take
+週あたりのコード行数、ただし2026年版。より多くのPRはより良いソフトウェアを意味しない、すべてが炎上したときにデバッグするコードが増えることを意味する。
+***** Comments
+- これは90年代の「週あたりのコード行数」指標を再パッケージしたものだ。「より多くのPRをしている」はAIが機能している証拠ではなく、より多くマージしている証拠だ。それが良いかどうかは完全に何をマージしているかによる。
+- 正直な質問：複数のファイルにまたがる大きな機能のために複数のエージェントを使用しているなら...レビューしないの？行ごとに何が起きているか読んで、何かおかしいか検出するように？
+- worktreeシステムはコンテキストスイッチの摩擦を取り除いた。これについてとても葛藤している。一方では生産的に感じるバズが好き。他方では脳がとても疲れる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude Code로 생산성 높이는 방법
+***** TLDR
+저자가 Claude Code를 생산적으로 사용하는 워크플로우를 공유한다: worktrees를 통해 여러 에이전트를 생성하여 작업을 병렬화하고, 처리량(더 많은 PR)을 성공 지표로 취급하며, 다른 작업 스트림 간의 컨텍스트 전환에 에이전트를 사용한다.
+***** Take
+주당 코드 라인 수, 2026년 버전. 더 많은 PR은 더 나은 소프트웨어를 의미하지 않는다, 모든 것이 불탈 때 디버깅할 코드가 더 많다는 것을 의미한다.
+***** Comments
+- 이것은 90년대의 '주당 코드 라인 수' 지표를 재포장한 것이다. '더 많은 PR을 하고 있다'는 AI가 작동한다는 증거가 아니라 더 많이 병합하고 있다는 증거다. 그것이 좋은지는 전적으로 무엇을 병합하는지에 달려 있다.
+- 솔직한 질문: 여러 파일에 걸친 큰 기능을 위해 여러 에이전트를 사용한다면... 리뷰하지 않나요? 무슨 일이 일어나고 있는지 한 줄씩 읽고 뭔가 이상한지 감지하는 것처럼?
+- worktree 시스템이 컨텍스트 전환의 마찰을 제거했다. 이것에 대해 매우 갈등한다. 한편으로는 생산적으로 느껴지는 buzz가 좋다. 다른 한편으로는 뇌가 너무 지친다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo soy productivo con Claude Code
+***** TLDR
+El autor comparte su flujo de trabajo para usar Claude Code productivamente: generar múltiples agentes a través de worktrees para paralelizar trabajo, tratar el rendimiento (más PRs) como métrica de éxito, y usar agentes para cambio de contexto entre diferentes flujos de trabajo.
+***** Take
+Líneas de código por semana, pero versión 2026. Más PRs no significa mejor software, significa más código para depurar cuando todo se incendia.
+***** Comments
+- Esta es la métrica de 'líneas de código por semana' de los 90s, reempaquetada. 'Estoy haciendo más PRs' no es evidencia de que la IA funciona, es evidencia de que estás fusionando más. Si eso es bueno depende enteramente de qué estás fusionando.
+- Pregunta honesta: si estás usando múltiples agentes para funciones grandes que abarcan múltiples archivos... ¿no lo revisarías? ¿Como leer línea por línea qué está pasando y detectar si algo está mal?
+- El sistema worktree eliminó la fricción del cambio de contexto. Estoy tan conflictuado sobre esto. Por un lado me encanta el zumbido de sentirme tan productivo. Por otro lado mi cerebro se fríe.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie ich mit Claude Code produktiv bin
+***** TLDR
+Der Autor teilt seinen Workflow für produktive Nutzung von Claude Code: Mehrere Agenten über Worktrees spawnen um Arbeit zu parallelisieren, Durchsatz (mehr PRs) als Erfolgsmetrik behandeln, und Agenten für Kontextwechsel zwischen verschiedenen Arbeitsströmen nutzen.
+***** Take
+Codezeilen pro Woche, aber 2026-Edition. Mehr PRs bedeutet nicht bessere Software, es bedeutet mehr Code zum Debuggen wenn alles in Flammen steht.
+***** Comments
+- Das ist die 'Codezeilen pro Woche'-Metrik aus den 90ern, neu verpackt. 'Ich mache mehr PRs' ist kein Beweis dass KI funktioniert, es ist Beweis dass du mehr mergst. Ob das gut ist hängt vollständig davon ab was du mergst.
+- Ehrliche Frage: wenn du mehrere Agenten für große Features über mehrere Dateien nutzt... würdest du es nicht reviewen? Wie Zeile für Zeile lesen was passiert und erkennen ob etwas nicht stimmt?
+- Das Worktree-System hat die Reibung beim Kontextwechsel entfernt. Ich bin so zwiespältig darüber. Einerseits liebe ich den Buzz mich so produktiv zu fühlen. Andererseits ist mein Gehirn total ausgebrannt.
