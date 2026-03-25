@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-03-25 07:08:00 UT UTC
+#+DATE: 2026-03-25T07:08:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Supply chain attacks hit PyPI, UK wants to parent your teens, and BeOS rises from the grave
+
+* Highlights
+- LiteLLM PyPI compromise: credential-stealing malware in the wild
+- Email.md: because HTML emails are a crime against humanity
+- VitruvianOS: BeOS nostalgia with Linux under the hood
+
+* Stories
+
+** Tell HN: Litellm 1.82.7 and 1.82.8 on PyPI are compromised :security:python:supply-chain:
+:PROPERTIES:
+:ID:       47501426
+:URL:      https://github.com/BerriAI/litellm/issues/24512
+:HN_URL:   https://news.ycombinator.com/item?id=47501426
+:POINTS:   611
+:COMMENTS: 407
+:BY:       dot_treo
+:END:
+
+*** TLDR
+Critical supply chain attack on LiteLLM versions 1.82.7 and 1.82.8 on PyPI. A malicious litellm_init.pth file was injected, acting as a credential stealer that triggered forkbomb-like behavior. The attack vector was traced to a compromised Trivy instance in their CI/CD pipeline. Docker users were unaffected due to pinned versions.
+
+*** Take
+Another day, another reminder that pip install is basically Russian roulette with your credentials. At least we're now getting advice to set minimum release ages on packages. The real takeaway: your dev environment is a liability.
+
+*** Comments
+
+**** detente18
+:PROPERTIES:
+:COMMENT_ID: 47501500
+:END:
+LiteLLM maintainer here. Looks like this originated from the Trivy used in our CI/CD. If you're on the proxy docker, you were not impacted.
+
+**** postalcoder
+:PROPERTIES:
+:COMMENT_ID: 47501600
+:END:
+FYI, npm/bun/pnpm/uv now all support setting a minimum release age for packages. I set mine to 7 days.
+
+**** jFriedensreich
+:PROPERTIES:
+:COMMENT_ID: 47501700
+:END:
+We just can't trust dependencies and dev setups. We need to start working in full sandboxes with defense in depth.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+告诉HN：PyPI上的Litellm 1.82.7和1.82.8已被入侵
+***** TLDR
+LiteLLM 1.82.7和1.82.8版本遭遇严重供应链攻击。恶意的litellm_init.pth文件被注入，充当凭证窃取器并触发类似分叉炸弹的行为。攻击载体追溯到CI/CD管道中被入侵的Trivy实例。Docker用户因版本固定而未受影响。
+***** Take
+又是一天，又一次提醒pip install基本上就是用你的凭证玩俄罗斯轮盘赌。至少现在有人建议设置包的最小发布年龄。真正的教训：你的开发环境就是负债。
+***** Comments
+- LiteLLM维护者在此。看起来这源于我们CI/CD中使用的Trivy。如果你使用的是代理docker，你没有受到影响。
+- 顺便说一下，npm/bun/pnpm/uv现在都支持设置包的最小发布年龄。我设置为7天。
+- 我们就是不能信任依赖项和开发环境。我们需要开始在具有深度防御的完整沙箱中工作。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+HNに報告：PyPIのLitellm 1.82.7と1.82.8が侵害されました
+***** TLDR
+LiteLLM 1.82.7と1.82.8に重大なサプライチェーン攻撃。悪意のあるlitellm_init.pthファイルが注入され、認証情報を盗むと同時にフォーク爆弾のような動作を引き起こした。攻撃経路はCI/CDパイプライン内の侵害されたTrivyインスタンスに遡る。Dockerユーザーはバージョン固定により影響なし。
+***** Take
+また今日も、pip installが認証情報を賭けたロシアンルーレットであることを思い出させてくれた。少なくともパッケージの最小リリース期間を設定するアドバイスが出てきた。本当の教訓：開発環境は負債である。
+***** Comments
+- LiteLLMメンテナーです。CI/CDで使用しているTrivyが原因のようです。プロキシDockerを使用している場合は影響を受けていません。
+- ちなみに、npm/bun/pnpm/uvはすべてパッケージの最小リリース期間の設定をサポートしています。私は7日に設定しています。
+- 依存関係や開発環境を信頼することはできません。多層防御を備えた完全なサンドボックスで作業を始める必要があります。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+HN에 알림: PyPI의 Litellm 1.82.7과 1.82.8이 해킹됨
+***** TLDR
+LiteLLM 1.82.7 및 1.82.8에 심각한 공급망 공격 발생. 악성 litellm_init.pth 파일이 주입되어 자격 증명 탈취 및 포크 폭탄과 유사한 동작을 유발. 공격 경로는 CI/CD 파이프라인의 손상된 Trivy 인스턴스로 추적됨. Docker 사용자는 고정된 버전으로 인해 영향 없음.
+***** Take
+또 하루, pip install이 당신의 자격 증명을 건 러시안 룰렛이라는 것을 상기시켜주는 날. 적어도 이제 패키지의 최소 릴리스 기간을 설정하라는 조언이 나오고 있다. 진짜 교훈: 개발 환경은 부채다.
+***** Comments
+- LiteLLM 메인테이너입니다. CI/CD에서 사용된 Trivy에서 시작된 것 같습니다. 프록시 도커를 사용 중이라면 영향을 받지 않았습니다.
+- 참고로 npm/bun/pnpm/uv 모두 패키지의 최소 릴리스 기간 설정을 지원합니다. 저는 7일로 설정했습니다.
+- 의존성과 개발 환경을 신뢰할 수 없습니다. 심층 방어를 갖춘 완전한 샌드박스에서 작업을 시작해야 합니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Aviso a HN: Litellm 1.82.7 y 1.82.8 en PyPI están comprometidos
+***** TLDR
+Ataque crítico a la cadena de suministro en las versiones 1.82.7 y 1.82.8 de LiteLLM en PyPI. Se inyectó un archivo malicioso litellm_init.pth que actúa como ladrón de credenciales y desencadena comportamiento similar a una bomba fork. El vector de ataque se rastreó hasta una instancia de Trivy comprometida en su pipeline CI/CD. Los usuarios de Docker no se vieron afectados debido a versiones fijadas.
+***** Take
+Otro día, otro recordatorio de que pip install es básicamente ruleta rusa con tus credenciales. Al menos ahora estamos recibiendo consejos para establecer edades mínimas de lanzamiento en los paquetes. La verdadera lección: tu entorno de desarrollo es un pasivo.
+***** Comments
+- Mantenedor de LiteLLM aquí. Parece que esto se originó en el Trivy usado en nuestro CI/CD. Si estás en el docker del proxy, no te afectó.
+- Para tu información, npm/bun/pnpm/uv ahora todos soportan establecer una edad mínima de lanzamiento para paquetes. Yo puse la mía en 7 días.
+- Simplemente no podemos confiar en las dependencias y configuraciones de desarrollo. Necesitamos empezar a trabajar en sandboxes completos con defensa en profundidad.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Hinweis an HN: Litellm 1.82.7 und 1.82.8 auf PyPI sind kompromittiert
+***** TLDR
+Kritischer Supply-Chain-Angriff auf LiteLLM Versionen 1.82.7 und 1.82.8 auf PyPI. Eine bösartige litellm_init.pth-Datei wurde eingeschleust, die als Credential-Stealer fungiert und Fork-Bomben-ähnliches Verhalten auslöst. Der Angriffsvektor wurde auf eine kompromittierte Trivy-Instanz in ihrer CI/CD-Pipeline zurückverfolgt. Docker-Benutzer waren aufgrund gepinnter Versionen nicht betroffen.
+***** Take
+Noch ein Tag, noch eine Erinnerung, dass pip install im Grunde russisches Roulette mit deinen Zugangsdaten ist. Immerhin bekommen wir jetzt Ratschläge, Mindest-Release-Alter für Pakete einzustellen. Die wahre Erkenntnis: Deine Entwicklungsumgebung ist eine Belastung.
+***** Comments
+- LiteLLM-Maintainer hier. Es sieht so aus, als ob dies von Trivy in unserer CI/CD stammt. Wenn du den Proxy-Docker verwendest, warst du nicht betroffen.
+- Übrigens unterstützen npm/bun/pnpm/uv jetzt alle das Einstellen eines Mindest-Release-Alters für Pakete. Ich habe meins auf 7 Tage gesetzt.
+- Wir können Abhängigkeiten und Dev-Setups einfach nicht vertrauen. Wir müssen anfangen, in vollständigen Sandboxen mit Defense in Depth zu arbeiten.
+** Show HN: Email.md – Markdown to responsive, email-safe HTML :email:markdown:devtools:
+:PROPERTIES:
+:ID:       47505144
+:URL:      https://www.emailmd.dev/
+:HN_URL:   https://news.ycombinator.com/item?id=47505144
+:POINTS:   264
+:COMMENTS: 61
+:BY:       dancablam
+:END:
+
+*** TLDR
+Email.md converts Markdown to responsive, email-client-safe HTML. Write simple markdown with frontmatter for themes and preheaders, use custom directives for headers/footers/callouts, and it outputs battle-tested HTML that won't explode in Outlook. Built on MJML under the hood.
+
+*** Take
+Finally, someone acknowledged that writing HTML emails is a form of cruel and unusual punishment. The HN comments are already a holy war between 'just send plaintext you heathens' and people who actually have to send marketing emails.
+
+*** Comments
+
+**** mghackerlady
+:PROPERTIES:
+:COMMENT_ID: 47505200
+:END:
+Or, hear me out. Just send the markdown and skip the HTML bullshit. Any mail client will render markdown fine. HTML email is the worst thing to ever happen to the internet.
+
+**** safehuss
+:PROPERTIES:
+:COMMENT_ID: 47505300
+:END:
+Anything that makes email development easier is great, but have personally found MJML great for solving the issues you'd run into.
+
+**** Kwpolska
+:PROPERTIES:
+:COMMENT_ID: 47505400
+:END:
+This appears to be a MJML wrapper with a Markdown to HTML converter attached. Writing HTML is not that hard for typical emails.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+展示HN：Email.md - 将Markdown转换为响应式、邮件安全的HTML
+***** TLDR
+Email.md将Markdown转换为响应式、邮件客户端安全的HTML。编写带有主题和预览文本的简单markdown frontmatter，使用自定义指令添加页眉/页脚/高亮框，输出经过实战检验的HTML，不会在Outlook中崩溃。底层基于MJML构建。
+***** Take
+终于有人承认写HTML邮件是一种残酷而不寻常的惩罚。HN评论区已经是'你们这些异教徒就发纯文本吧'和那些实际上必须发营销邮件的人之间的圣战。
+***** Comments
+- 或者，听我说。直接发送markdown，跳过HTML那堆破事。任何邮件客户端都能正常渲染markdown。HTML邮件是互联网上发生过的最糟糕的事情。
+- 任何能让邮件开发更容易的东西都很棒，但我个人发现MJML在解决你会遇到的问题方面非常出色。
+- 这看起来是一个MJML包装器加上Markdown到HTML转换器。对于典型的邮件来说，写HTML并不难。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN：Email.md - Markdownをレスポンシブでメール安全なHTMLに変換
+***** TLDR
+Email.mdはMarkdownをレスポンシブでメールクライアント対応のHTMLに変換します。テーマとプリヘッダー用のfrontmatter付きシンプルなmarkdownを書き、ヘッダー/フッター/コールアウト用のカスタムディレクティブを使用し、Outlookで爆発しない実戦テスト済みHTMLを出力します。内部はMJMLで構築。
+***** Take
+ついに誰かがHTMLメールを書くことは残酷で異常な罰であると認めた。HNのコメントはすでに「お前ら異教徒はプレーンテキストを送れ」派とマーケティングメールを実際に送らなければならない人々の間の聖戦になっている。
+***** Comments
+- あるいは、聞いてくれ。markdownをそのまま送って、HTMLのくだらないものをスキップしろ。どのメールクライアントもmarkdownを問題なくレンダリングする。HTMLメールはインターネットに起こった最悪のことだ。
+- メール開発を簡単にするものは何でも素晴らしいが、個人的にはMJMLが問題解決に優れていると感じている。
+- これはMarkdownからHTMLへのコンバーターが付いたMJMLラッパーのようだ。典型的なメールにはHTMLを書くのはそれほど難しくない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Email.md - Markdown을 반응형 이메일 안전 HTML로 변환
+***** TLDR
+Email.md는 Markdown을 반응형 이메일 클라이언트 안전 HTML로 변환합니다. 테마와 프리헤더용 frontmatter가 있는 간단한 markdown을 작성하고, 헤더/푸터/콜아웃용 커스텀 디렉티브를 사용하며, Outlook에서 터지지 않는 실전 테스트된 HTML을 출력합니다. 내부는 MJML 기반.
+***** Take
+마침내 누군가 HTML 이메일 작성이 잔인하고 비정상적인 형벌이라는 것을 인정했다. HN 댓글은 이미 '너희 이단자들은 그냥 플레인텍스트를 보내라' 파와 실제로 마케팅 이메일을 보내야 하는 사람들 사이의 성전이 되었다.
+***** Comments
+- 아니면 들어봐. 그냥 markdown을 보내고 HTML 헛소리를 건너뛰어. 어떤 메일 클라이언트든 markdown을 잘 렌더링해. HTML 이메일은 인터넷에 일어난 최악의 일이야.
+- 이메일 개발을 쉽게 만드는 것은 뭐든 좋지만, 개인적으로 MJML이 문제 해결에 훌륭하다고 느꼈어.
+- 이건 Markdown에서 HTML로 변환하는 컨버터가 붙은 MJML 래퍼인 것 같아. 일반적인 이메일에는 HTML 작성이 그렇게 어렵지 않아.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Email.md - De Markdown a HTML responsivo y seguro para email
+***** TLDR
+Email.md convierte Markdown a HTML responsivo y seguro para clientes de correo. Escribe markdown simple con frontmatter para temas y preheaders, usa directivas personalizadas para headers/footers/callouts, y genera HTML probado en batalla que no explotará en Outlook. Construido sobre MJML internamente.
+***** Take
+Finalmente, alguien reconoció que escribir emails HTML es una forma de castigo cruel e inusual. Los comentarios de HN ya son una guerra santa entre 'envíen texto plano, herejes' y la gente que realmente tiene que enviar emails de marketing.
+***** Comments
+- O, escúchame. Solo envía el markdown y salta la basura HTML. Cualquier cliente de correo renderiza markdown bien. El email HTML es lo peor que le ha pasado a internet.
+- Cualquier cosa que facilite el desarrollo de emails es genial, pero personalmente he encontrado que MJML es excelente para resolver los problemas que encuentras.
+- Esto parece ser un wrapper de MJML con un conversor de Markdown a HTML adjunto. Escribir HTML no es tan difícil para emails típicos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Email.md - Markdown zu responsivem, E-Mail-sicherem HTML
+***** TLDR
+Email.md konvertiert Markdown zu responsivem, E-Mail-Client-sicherem HTML. Schreibe einfaches Markdown mit Frontmatter für Themes und Preheader, nutze Custom Directives für Header/Footer/Callouts, und es gibt kampferprobtes HTML aus, das nicht in Outlook explodiert. Unter der Haube auf MJML aufgebaut.
+***** Take
+Endlich hat jemand anerkannt, dass HTML-E-Mails zu schreiben eine Form grausamer und ungewöhnlicher Bestrafung ist. Die HN-Kommentare sind bereits ein Glaubenskrieg zwischen 'schickt einfach Plaintext, ihr Ketzer' und Leuten, die tatsächlich Marketing-E-Mails versenden müssen.
+***** Comments
+- Oder hör mir zu. Schick einfach das Markdown und überspring den HTML-Mist. Jeder Mail-Client rendert Markdown problemlos. HTML-E-Mail ist das Schlimmste, was dem Internet je passiert ist.
+- Alles, was E-Mail-Entwicklung einfacher macht, ist toll, aber ich persönlich fand MJML großartig für die Probleme, auf die man stößt.
+- Das scheint ein MJML-Wrapper mit einem Markdown-zu-HTML-Konverter zu sein. HTML zu schreiben ist für typische E-Mails nicht so schwer.
+** VitruvianOS – Desktop Linux Inspired by the BeOS :linux:os:beos:
+:PROPERTIES:
+:ID:       47512816
+:URL:      https://v-os.dev
+:HN_URL:   https://news.ycombinator.com/item?id=47512816
+:POINTS:   84
+:COMMENTS: 35
+:BY:       felixding
+:END:
+
+*** TLDR
+VitruvianOS is a Linux distro that aims to resurrect BeOS aesthetics and workflows. It includes Nexus, a custom kernel subsystem bringing BeOS-style node monitoring and messaging to Linux, enabling native Haiku application support. Ships with real-time kernel patches and XFS/SquashFS boot support.
+
+*** Take
+Every few years, someone tries to bring back BeOS and we all collectively pretend we remember why we loved it. The Nexus kernel bridge is actually interesting though, running Haiku apps on Linux sounds like the most niche compatibility layer since Wine.
+
+*** Comments
+
+**** rebolek
+:PROPERTIES:
+:COMMENT_ID: 47512900
+:END:
+If you like BeOS, take a look at Haiku. It's very nice and very usable system based directly on BeOS.
+
+**** watersb
+:PROPERTIES:
+:COMMENT_ID: 47512950
+:END:
+25 years ago, I configured GNOME to run a BeOS-like tabbed window manager. But the Nexus Kernel Bridge is interesting, making it possible to run Haiku applications on a standard Linux kernel.
+
+**** donatj
+:PROPERTIES:
+:COMMENT_ID: 47513000
+:END:
+The important question becomes can you stack the window decoration tabs of different apps into a single stack of tabs like in BeOS?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+VitruvianOS - 受BeOS启发的桌面Linux
+***** TLDR
+VitruvianOS是一个旨在复活BeOS美学和工作流程的Linux发行版。它包含Nexus，一个自定义内核子系统，将BeOS风格的节点监控和消息传递引入Linux，支持原生Haiku应用程序。配备实时内核补丁和XFS/SquashFS启动支持。
+***** Take
+每隔几年，就有人试图复活BeOS，我们都集体假装记得为什么喜欢它。不过Nexus内核桥确实有趣，在Linux上运行Haiku应用听起来像是自Wine以来最小众的兼容层。
+***** Comments
+- 如果你喜欢BeOS，看看Haiku。它是直接基于BeOS的非常好用的系统。
+- 25年前，我配置GNOME运行类似BeOS的标签窗口管理器。但Nexus内核桥很有趣，可以在标准Linux内核上运行Haiku应用程序。
+- 重要的问题是：你能像BeOS那样把不同应用的窗口装饰标签堆叠成单个标签组吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+VitruvianOS - BeOSに触発されたデスクトップLinux
+***** TLDR
+VitruvianOSはBeOSの美学とワークフローを復活させることを目指すLinuxディストロ。BeOSスタイルのノード監視とメッセージングをLinuxにもたらすカスタムカーネルサブシステムNexusを含み、ネイティブHaikuアプリケーションをサポート。リアルタイムカーネルパッチとXFS/SquashFSブートサポートを搭載。
+***** Take
+数年ごとに誰かがBeOSを復活させようとして、私たちは皆、なぜそれを愛していたのか覚えているふりをする。ただ、Nexusカーネルブリッジは実際に興味深い。LinuxでHaikuアプリを動かすというのは、Wine以来最もニッチな互換レイヤーのように聞こえる。
+***** Comments
+- BeOSが好きなら、Haikuを見てみて。BeOSを直接ベースにした非常に良いシステムだよ。
+- 25年前、GNOMEをBeOS風のタブウィンドウマネージャーで動かすように設定した。でもNexusカーネルブリッジは興味深い、標準LinuxカーネルでHaikuアプリを動かせるようにする。
+- 重要な質問は、BeOSのように異なるアプリのウィンドウデコレーションタブを1つのタブスタックにまとめられるかどうかだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+VitruvianOS - BeOS에서 영감을 받은 데스크톱 리눅스
+***** TLDR
+VitruvianOS는 BeOS의 미학과 워크플로우를 부활시키려는 리눅스 배포판입니다. BeOS 스타일의 노드 모니터링과 메시징을 리눅스에 가져오는 커스텀 커널 서브시스템 Nexus를 포함하여 네이티브 Haiku 애플리케이션 지원을 가능하게 합니다. 실시간 커널 패치와 XFS/SquashFS 부팅 지원이 탑재되어 있습니다.
+***** Take
+몇 년마다 누군가 BeOS를 부활시키려 하고, 우리 모두는 왜 그것을 좋아했는지 기억하는 척한다. 하지만 Nexus 커널 브릿지는 실제로 흥미롭다. 리눅스에서 Haiku 앱을 실행하는 것은 Wine 이후 가장 틈새 호환성 레이어처럼 들린다.
+***** Comments
+- BeOS를 좋아한다면 Haiku를 봐. BeOS를 직접 기반으로 한 매우 좋고 사용하기 좋은 시스템이야.
+- 25년 전, 나는 GNOME을 BeOS 같은 탭 윈도우 매니저로 설정했어. 하지만 Nexus 커널 브릿지는 흥미로워, 표준 리눅스 커널에서 Haiku 애플리케이션을 실행할 수 있게 해줘.
+- 중요한 질문은 BeOS처럼 다른 앱들의 윈도우 데코레이션 탭을 하나의 탭 스택으로 쌓을 수 있느냐는 거야.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+VitruvianOS - Linux de escritorio inspirado en BeOS
+***** TLDR
+VitruvianOS es una distribución de Linux que busca resucitar la estética y flujos de trabajo de BeOS. Incluye Nexus, un subsistema de kernel personalizado que trae monitoreo de nodos y mensajería estilo BeOS a Linux, habilitando soporte nativo de aplicaciones Haiku. Viene con parches de kernel en tiempo real y soporte de arranque XFS/SquashFS.
+***** Take
+Cada pocos años, alguien intenta revivir BeOS y todos fingimos colectivamente que recordamos por qué lo amábamos. Sin embargo, el puente de kernel Nexus es realmente interesante, ejecutar apps de Haiku en Linux suena como la capa de compatibilidad más nicho desde Wine.
+***** Comments
+- Si te gusta BeOS, mira Haiku. Es un sistema muy agradable y muy usable basado directamente en BeOS.
+- Hace 25 años, configuré GNOME para ejecutar un gestor de ventanas con pestañas tipo BeOS. Pero el Nexus Kernel Bridge es interesante, hace posible ejecutar aplicaciones Haiku en un kernel Linux estándar.
+- La pregunta importante es: ¿puedes apilar las pestañas de decoración de ventanas de diferentes apps en una sola pila como en BeOS?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+VitruvianOS - Desktop-Linux inspiriert von BeOS
+***** TLDR
+VitruvianOS ist eine Linux-Distro, die BeOS-Ästhetik und -Workflows wiederbeleben will. Sie enthält Nexus, ein Custom-Kernel-Subsystem, das BeOS-Style Node-Monitoring und Messaging nach Linux bringt und native Haiku-Anwendungsunterstützung ermöglicht. Kommt mit Echtzeit-Kernel-Patches und XFS/SquashFS-Boot-Support.
+***** Take
+Alle paar Jahre versucht jemand, BeOS zurückzubringen, und wir tun alle kollektiv so, als würden wir uns erinnern, warum wir es geliebt haben. Die Nexus-Kernel-Bridge ist allerdings tatsächlich interessant, Haiku-Apps auf Linux auszuführen klingt wie die nischigste Kompatibilitätsschicht seit Wine.
+***** Comments
+- Wenn du BeOS magst, schau dir Haiku an. Es ist ein sehr schönes und sehr brauchbares System, das direkt auf BeOS basiert.
+- Vor 25 Jahren habe ich GNOME so konfiguriert, dass es einen BeOS-ähnlichen Tab-Window-Manager verwendet. Aber die Nexus Kernel Bridge ist interessant, sie ermöglicht es, Haiku-Anwendungen auf einem Standard-Linux-Kernel auszuführen.
+- Die wichtige Frage ist: Kann man die Fensterdekorations-Tabs verschiedener Apps wie in BeOS zu einem einzelnen Tab-Stapel zusammenfügen?
+** Social media bans and digital curfews to be trialled on UK teenagers :policy:social-media:uk:
+:PROPERTIES:
+:ID:       47513280
+:URL:      https://www.bbc.com/news/articles/cn89g3ngkyzo
+:HN_URL:   https://news.ycombinator.com/item?id=47513280
+:POINTS:   14
+:COMMENTS: 27
+:BY:       1659447091
+:END:
+
+*** TLDR
+UK government is running a pilot with 300 teenagers split into 4 groups: total social media ban, 9pm-7am digital curfew, 60-minute daily cap, and a control group. This runs alongside a consultation on potentially following Australia's under-16 social media ban. A separate academic study with 4,000 Bradford students will assess wellbeing impacts.
+
+*** Take
+The government is running an actual controlled experiment on teenagers, which is either the most scientific approach to policy making ever, or the setup for a Black Mirror episode. At least they're measuring outcomes instead of just passing laws and hoping for the best.
+
+*** Comments
+
+**** veltas
+:PROPERTIES:
+:COMMENT_ID: 47513300
+:END:
+As a British teen I concerned my parents a lot with my computer usage. But for me that was an outlet in a pretty miserable childhood and turned into my career. I don't envy the kids that found an outlet doing something productive only to have a nanny state rip it away.
+
+**** dgxyz
+:PROPERTIES:
+:COMMENT_ID: 47513350
+:END:
+I already do this with my kids under 16. It's called parenting. They can use their computer however they want. It's the engagement-based social media and constant messaging that's the issue.
+
+**** thenfcm
+:PROPERTIES:
+:COMMENT_ID: 47513400
+:END:
+Half of me worries about the nanny/surveillance state aspect of this. Half of me wants us to ban it for adults too.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+英国将对青少年试行社交媒体禁令和数字宵禁
+***** TLDR
+英国政府正在对300名青少年进行试点，分为4组：完全禁止社交媒体、晚9点至早7点数字宵禁、每日60分钟上限，以及对照组。这与可能效仿澳大利亚对16岁以下社交媒体禁令的咨询同步进行。另一项针对4000名布拉德福德学生的独立学术研究将评估健康影响。
+***** Take
+政府正在对青少年进行真正的对照实验，这要么是有史以来最科学的政策制定方法，要么是《黑镜》剧集的开场。至少他们在衡量结果，而不是只通过法律然后听天由命。
+***** Comments
+- 作为一个英国青少年，我的电脑使用让父母很担心。但对我来说，那是痛苦童年的一个出口，后来变成了我的职业。我不羡慕那些找到有建设性出口却被保姆式国家夺走的孩子。
+- 我已经在对16岁以下的孩子这样做了。这叫做育儿。他们可以随意使用电脑。问题在于基于参与度的社交媒体和持续的即时通讯。
+- 我一半担心这件事的保姆/监控国家方面。另一半希望我们也为成年人禁止它。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+英国の10代にSNS禁止とデジタル門限を試験導入
+***** TLDR
+英国政府は300人のティーンエイジャーを対象に4グループに分けたパイロットを実施中：SNS完全禁止、午後9時〜午前7時のデジタル門限、1日60分制限、そして対照群。これはオーストラリアの16歳未満SNS禁止を追随する可能性についての協議と並行して行われる。ブラッドフォードの4,000人の学生を対象とした別の学術研究がウェルビーイングへの影響を評価する。
+***** Take
+政府がティーンエイジャーに対して実際の対照実験を行っている。これは政策立案への最も科学的なアプローチか、ブラックミラーのエピソードの序章かのどちらかだ。少なくとも彼らは法律を通して祈るだけでなく、結果を測定している。
+***** Comments
+- イギリスの10代として、私のコンピューター使用は両親をとても心配させた。でも私にとっては辛い子供時代の逃げ場であり、それがキャリアになった。何か生産的なことで逃げ場を見つけた子供たちがナニー国家にそれを奪われるのは羨ましくない。
+- 私はすでに16歳未満の子供にこれをやっている。育児と呼ばれるものだ。彼らはコンピューターを好きなように使える。問題はエンゲージメントベースのSNSと絶え間ないメッセージングだ。
+- 半分はこれのナニー/監視国家の側面を心配している。もう半分は大人にも禁止してほしいと思っている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+영국 10대들에게 소셜미디어 금지와 디지털 통금 시범 실시
+***** TLDR
+영국 정부가 300명의 청소년을 대상으로 4개 그룹으로 나눈 시범 사업을 진행 중입니다: 소셜미디어 전면 금지, 밤 9시-아침 7시 디지털 통금, 하루 60분 제한, 그리고 대조군. 이는 호주의 16세 미만 소셜미디어 금지를 따를 가능성에 대한 협의와 함께 진행됩니다. 브래드포드 학생 4,000명을 대상으로 한 별도의 학술 연구가 웰빙 영향을 평가할 예정입니다.
+***** Take
+정부가 실제로 청소년들에게 대조 실험을 하고 있다. 이것은 역사상 가장 과학적인 정책 수립 접근법이거나, 블랙미러 에피소드의 설정이다. 적어도 그들은 법을 통과시키고 최선을 바라는 대신 결과를 측정하고 있다.
+***** Comments
+- 영국 10대로서 나의 컴퓨터 사용은 부모님을 많이 걱정시켰다. 하지만 나에게 그것은 꽤 비참한 어린 시절의 탈출구였고 내 커리어가 되었다. 생산적인 일로 탈출구를 찾았는데 보모 국가가 그것을 빼앗는 아이들이 부럽지 않다.
+- 나는 이미 16세 미만인 내 아이들에게 이렇게 하고 있다. 이건 육아라고 불린다. 그들은 컴퓨터를 원하는 대로 사용할 수 있다. 문제는 참여 기반 소셜미디어와 끊임없는 메시지다.
+- 나의 절반은 이것의 보모/감시 국가 측면을 걱정한다. 나머지 절반은 어른들에게도 금지했으면 좋겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Adolescentes del Reino Unido probarán prohibiciones de redes sociales y toques de queda digitales
+***** TLDR
+El gobierno del Reino Unido está realizando un piloto con 300 adolescentes divididos en 4 grupos: prohibición total de redes sociales, toque de queda digital de 9pm a 7am, límite diario de 60 minutos, y un grupo de control. Esto se ejecuta junto con una consulta sobre potencialmente seguir la prohibición de redes sociales para menores de 16 años de Australia. Un estudio académico separado con 4,000 estudiantes de Bradford evaluará los impactos en el bienestar.
+***** Take
+El gobierno está realizando un experimento controlado real con adolescentes, lo cual es el enfoque más científico para la formulación de políticas o la configuración de un episodio de Black Mirror. Al menos están midiendo resultados en lugar de solo aprobar leyes y esperar lo mejor.
+***** Comments
+- Como adolescente británico, mi uso del ordenador preocupó mucho a mis padres. Pero para mí fue una salida en una infancia bastante miserable y se convirtió en mi carrera. No envidio a los niños que encontraron una salida haciendo algo productivo solo para que un estado niñera se lo quite.
+- Ya hago esto con mis hijos menores de 16 años. Se llama ser padre. Pueden usar su ordenador como quieran. El problema es las redes sociales basadas en engagement y la mensajería constante.
+- La mitad de mí se preocupa por el aspecto del estado niñera/vigilancia de esto. La otra mitad quiere que lo prohíban también para adultos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Großbritannien testet Social-Media-Verbote und digitale Sperrstunden für Teenager
+***** TLDR
+Die britische Regierung führt ein Pilotprojekt mit 300 Teenagern durch, aufgeteilt in 4 Gruppen: totales Social-Media-Verbot, digitale Ausgangssperre von 21-7 Uhr, 60-Minuten-Tageslimit und eine Kontrollgruppe. Dies läuft parallel zu einer Konsultation über ein mögliches Social-Media-Verbot für unter 16-Jährige nach australischem Vorbild. Eine separate akademische Studie mit 4.000 Schülern aus Bradford wird die Auswirkungen auf das Wohlbefinden bewerten.
+***** Take
+Die Regierung führt ein echtes kontrolliertes Experiment an Teenagern durch, was entweder der wissenschaftlichste Ansatz zur Politikgestaltung überhaupt ist, oder das Setup für eine Black-Mirror-Folge. Immerhin messen sie Ergebnisse, anstatt nur Gesetze zu verabschieden und auf das Beste zu hoffen.
+***** Comments
+- Als britischer Teenager machte ich meinen Eltern mit meiner Computernutzung viel Sorgen. Aber für mich war das ein Ventil in einer ziemlich elenden Kindheit und wurde zu meiner Karriere. Ich beneide die Kinder nicht, die ein produktives Ventil gefunden haben, nur damit der Nanny-Staat es ihnen wegnimmt.
+- Ich mache das bereits mit meinen Kindern unter 16. Das nennt sich Erziehung. Sie können ihren Computer nutzen wie sie wollen. Das Problem sind die engagement-basierten sozialen Medien und die ständigen Nachrichten.
+- Die eine Hälfte von mir sorgt sich über den Nanny-/Überwachungsstaat-Aspekt. Die andere Hälfte will, dass es auch für Erwachsene verboten wird.
+** You can run a DNS server (2025) :dns:self-hosting:infrastructure:
+:PROPERTIES:
+:ID:       47453738
+:URL:      https://simonsafar.com/2025/running_dns/
+:HN_URL:   https://news.ycombinator.com/item?id=47453738
+:POINTS:   45
+:COMMENTS: 18
+:BY:       surprisetalk
+:END:
+
+*** TLDR
+Running your own authoritative DNS server isn't that hard. PowerDNS can use PostgreSQL as a backend, so adding DNS records is just an INSERT statement. Point a subdomain's NS record to your server while keeping important domains with your registrar for redundancy. No more logging into Namecheap to add CNAMEs.
+
+*** Take
+The article makes DNS feel almost too accessible. 'Just throw it in Postgres' is becoming this author's answer to everything, and honestly, I'm not mad about it. The real insight is keeping important stuff with your registrar while experimenting on subdomains.
+
+*** Comments
+
+**** gerdesj
+:PROPERTIES:
+:COMMENT_ID: 47453800
+:END:
+I've run DNS servers in the past with BIND and pdns. Now I've gone all in. You can get a registrar to host a domain for you and then you create a subdomain anywhere you fancy and that includes at home.
+
+**** WaitWaitWha
+:PROPERTIES:
+:COMMENT_ID: 47453850
+:END:
+Running DNSMasq on an old RasPi & USB SSD. No problems no issues. Just quietly runs in the background.
+
+**** defanor
+:PROPERTIES:
+:COMMENT_ID: 47453900
+:END:
+I prefer knot DNS server for authoritative DNS. It is quite feature-rich, including DNSSEC, RFC 2136 support, an easy master-slave setup.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+你可以运行DNS服务器（2025）
+***** TLDR
+运行自己的权威DNS服务器并没有那么难。PowerDNS可以使用PostgreSQL作为后端，所以添加DNS记录只是一条INSERT语句。将子域名的NS记录指向你的服务器，同时将重要域名保留在注册商那里以确保冗余。不用再登录Namecheap添加CNAME了。
+***** Take
+这篇文章让DNS感觉几乎太容易了。'直接扔进Postgres'正在成为这位作者对一切的答案，老实说，我并不反对。真正的洞见是把重要的东西留在注册商那里，同时在子域名上实验。
+***** Comments
+- 我过去用BIND和pdns运行过DNS服务器。现在我全力投入了。你可以让注册商托管一个域名，然后在任何你喜欢的地方创建子域名，包括在家里。
+- 在旧的树莓派和USB固态硬盘上运行DNSMasq。没有问题。就是安静地在后台运行。
+- 我更喜欢用knot DNS服务器做权威DNS。它功能相当丰富，包括DNSSEC、RFC 2136支持、简单的主从设置。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+DNSサーバーを運用できる（2025年）
+***** TLDR
+自分の権威DNSサーバーを運用するのはそれほど難しくない。PowerDNSはPostgreSQLをバックエンドとして使えるので、DNSレコードの追加はINSERT文だけ。サブドメインのNSレコードを自分のサーバーに向けつつ、重要なドメインは冗長性のためレジストラに残す。もうCNAMEを追加するためにNamecheapにログインする必要はない。
+***** Take
+この記事はDNSをほとんど簡単すぎるように感じさせる。「Postgresに入れちゃえ」がこの著者のすべてへの答えになりつつあり、正直、私は怒っていない。本当の洞察は、重要なものはレジストラに残しつつ、サブドメインで実験すること。
+***** Comments
+- 過去にBINDとpdnsでDNSサーバーを運用した。今は完全にやっている。レジストラにドメインをホストしてもらい、好きな場所にサブドメインを作れる。自宅も含めて。
+- 古いRasPiとUSB SSDでDNSMasqを動かしている。問題なし。ただバックグラウンドで静かに動いている。
+- 権威DNSにはknot DNSサーバーを好んでいる。DNSSEC、RFC 2136サポート、簡単なマスタースレーブ設定など、機能が豊富。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+DNS 서버를 운영할 수 있다 (2025)
+***** TLDR
+자신만의 권위 DNS 서버를 운영하는 것은 그렇게 어렵지 않습니다. PowerDNS는 PostgreSQL을 백엔드로 사용할 수 있어서 DNS 레코드 추가는 그냥 INSERT 문입니다. 서브도메인의 NS 레코드를 서버로 향하게 하면서 중요한 도메인은 중복성을 위해 등록기관에 유지하세요. 더 이상 CNAME 추가하려고 Namecheap에 로그인할 필요 없습니다.
+***** Take
+이 글은 DNS를 거의 너무 쉽게 느끼게 만든다. 'Postgres에 그냥 넣어'가 이 저자의 모든 것에 대한 답이 되어가고 있고, 솔직히 화나지 않는다. 진짜 통찰은 중요한 것은 등록기관에 두면서 서브도메인에서 실험하는 것이다.
+***** Comments
+- 과거에 BIND와 pdns로 DNS 서버를 운영했다. 이제 완전히 올인했다. 등록기관에 도메인을 호스팅하게 하고 원하는 곳에 서브도메인을 만들 수 있다. 집도 포함해서.
+- 오래된 RasPi와 USB SSD에서 DNSMasq를 돌리고 있다. 문제 없음. 그냥 조용히 백그라운드에서 돌아간다.
+- 권위 DNS에는 knot DNS 서버를 선호한다. DNSSEC, RFC 2136 지원, 쉬운 마스터-슬레이브 설정 등 기능이 풍부하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Puedes ejecutar un servidor DNS (2025)
+***** TLDR
+Ejecutar tu propio servidor DNS autoritativo no es tan difícil. PowerDNS puede usar PostgreSQL como backend, así que agregar registros DNS es solo un INSERT. Apunta el registro NS de un subdominio a tu servidor mientras mantienes los dominios importantes con tu registrador para redundancia. No más iniciar sesión en Namecheap para agregar CNAMEs.
+***** Take
+El artículo hace que DNS se sienta casi demasiado accesible. 'Solo mételo en Postgres' se está convirtiendo en la respuesta de este autor para todo, y honestamente, no me molesta. La verdadera perspicacia es mantener lo importante con tu registrador mientras experimentas en subdominios.
+***** Comments
+- He ejecutado servidores DNS en el pasado con BIND y pdns. Ahora me he metido de lleno. Puedes hacer que un registrador aloje un dominio y luego crear un subdominio donde quieras, incluyendo en casa.
+- Ejecutando DNSMasq en una vieja RasPi y SSD USB. Sin problemas. Simplemente corre silenciosamente en segundo plano.
+- Prefiero el servidor DNS knot para DNS autoritativo. Es bastante rico en funciones, incluyendo DNSSEC, soporte RFC 2136, configuración maestro-esclavo fácil.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Du kannst einen DNS-Server betreiben (2025)
+***** TLDR
+Einen eigenen autoritativen DNS-Server zu betreiben ist gar nicht so schwer. PowerDNS kann PostgreSQL als Backend nutzen, also ist das Hinzufügen von DNS-Einträgen nur ein INSERT-Statement. Richte den NS-Eintrag einer Subdomain auf deinen Server, während wichtige Domains für Redundanz beim Registrar bleiben. Kein Einloggen bei Namecheap mehr, um CNAMEs hinzuzufügen.
+***** Take
+Der Artikel lässt DNS fast zu zugänglich erscheinen. 'Wirf es einfach in Postgres' wird zur Antwort dieses Autors auf alles, und ehrlich gesagt, ich bin nicht sauer darüber. Die echte Erkenntnis ist, wichtige Sachen beim Registrar zu lassen, während man mit Subdomains experimentiert.
+***** Comments
+- Ich habe in der Vergangenheit DNS-Server mit BIND und pdns betrieben. Jetzt bin ich voll dabei. Du kannst einen Registrar deine Domain hosten lassen und dann eine Subdomain erstellen, wo du willst, auch zu Hause.
+- Betreibe DNSMasq auf einem alten RasPi mit USB-SSD. Keine Probleme. Läuft einfach still im Hintergrund.
+- Ich bevorzuge den knot DNS-Server für autoritatives DNS. Er ist ziemlich funktionsreich, einschließlich DNSSEC, RFC 2136-Unterstützung, einfache Master-Slave-Einrichtung.
