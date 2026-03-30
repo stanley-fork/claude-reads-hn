@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-03-30 01:00:00 UT UTC
+#+DATE: 2026-03-30T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Cloudflare reads your React state, AI makes the forest dark, and Claude Code nukes your uncommitted changes
+
+* Highlights
+- ChatGPT's invisible fingerprinting checks 55 properties including your React app state
+- The Cognitive Dark Forest: AI platforms feed on your innovation
+- Free software might matter again if your agent can actually modify the code
+- Pretext measures text without touching the DOM, like a civilized library
+- Claude Code allegedly runs git reset --hard every 10 minutes
+
+* Stories
+
+** ChatGPT won't let you type until Cloudflare reads your React state :security:privacy:cloudflare:fingerprinting:
+:PROPERTIES:
+:ID:       47566865
+:URL:      https://www.buchodi.com/chatgpt-wont-let-you-type-until-cloudflare-reads-your-react-state-i-decrypted-the-program-that-does-it/
+:HN_URL:   https://news.ycombinator.com/item?id=47566865
+:POINTS:   307
+:COMMENTS: 232
+:BY:       alberto-m
+:END:
+
+*** TLDR
+Every ChatGPT message triggers a Cloudflare Turnstile program that checks 55 properties across three layers: browser fingerprint (GPU, screen, fonts), Cloudflare edge headers (city, IP, region), and ChatGPT's React internals (__reactRouterContext, loaderData, clientBootstrap). The encryption is XOR with keys embedded in the payload. A bot that spoofs fingerprints but doesn't render the actual React SPA will fail.
+
+*** Take
+OpenAI's Nick from Integrity says it's to keep free access available. HN says it's to make Firefox users suffer. Both can be true.
+
+*** Comments
+
+**** MyNameIsNickT
+:PROPERTIES:
+:COMMENT_ID: 47566900
+:END:
+Hey! I'm Nick, and I work on Integrity at OpenAI. These checks are part of how we protect our first-party products from abuse like bots, scraping, fraud, and other attempts to misuse the platform.
+
+**** lxgr
+:PROPERTIES:
+:COMMENT_ID: 47566950
+:END:
+It's absurd how unusable Cloudflare is making the web when using a browser or IP address they consider 'suspicious'. I've lately been drowning in captchas for the crime of using Firefox.
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 47567000
+:END:
+Presumably this is all because OpenAI offers free ChatGPT to logged out users and don't want that being abused as a free API endpoint.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ChatGPT在Cloudflare读取你的React状态之前不让你输入
+***** TLDR
+每条ChatGPT消息都会触发一个Cloudflare Turnstile程序，检查三层55个属性：浏览器指纹（GPU、屏幕、字体）、Cloudflare边缘头（城市、IP、地区）和ChatGPT的React内部结构。加密是XOR，密钥嵌入在载荷中。伪造指纹但不渲染React SPA的机器人会失败。
+***** Take
+OpenAI的Nick说这是为了保持免费访问。HN说这是让Firefox用户受苦。两者都可能是真的。
+***** Comments
+- 嗨！我是Nick，在OpenAI负责完整性。这些检查是我们保护产品免受机器人、爬虫、欺诈等滥用的方式。
+- Cloudflare让使用'可疑'浏览器或IP的网络变得多么难用，这太荒谬了。我最近因为使用Firefox而被验证码淹没。
+- 大概这一切都是因为OpenAI向未登录用户提供免费ChatGPT，不想被滥用为免费API端点。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+CloudflareがReact状態を読み取るまでChatGPTで入力できない
+***** TLDR
+すべてのChatGPTメッセージがCloudflare Turnstileプログラムをトリガーし、3層にわたる55のプロパティをチェックする：ブラウザフィンガープリント（GPU、画面、フォント）、Cloudflareエッジヘッダー（都市、IP、地域）、ChatGPTのReact内部構造。暗号化はペイロードに埋め込まれたキーによるXOR。フィンガープリントを偽装してもReact SPAをレンダリングしないボットは失敗する。
+***** Take
+OpenAIのNickは無料アクセスを維持するためだと言う。HNはFirefoxユーザーを苦しめるためだと言う。両方正しいかもしれない。
+***** Comments
+- やあ！私はNickで、OpenAIのIntegrityチームで働いています。これらのチェックはボット、スクレイピング、詐欺などの悪用から製品を保護する方法の一部です。
+- 「不審な」ブラウザやIPアドレスを使用すると、Cloudflareがウェブをいかに使いにくくしているかは馬鹿げている。最近Firefoxを使う罪でキャプチャに溺れている。
+- おそらくこれはすべて、OpenAIがログアウトユーザーに無料ChatGPTを提供しており、無料APIエンドポイントとして悪用されたくないからだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Cloudflare가 React 상태를 읽을 때까지 ChatGPT에서 입력할 수 없다
+***** TLDR
+모든 ChatGPT 메시지는 3개 레이어에 걸친 55개 속성을 확인하는 Cloudflare Turnstile 프로그램을 트리거한다: 브라우저 지문(GPU, 화면, 글꼴), Cloudflare 에지 헤더(도시, IP, 지역), ChatGPT의 React 내부 구조. 암호화는 페이로드에 내장된 키를 사용한 XOR이다. 지문을 위조해도 React SPA를 렌더링하지 않는 봇은 실패한다.
+***** Take
+OpenAI의 Nick은 무료 접근을 유지하기 위한 것이라고 말한다. HN은 Firefox 사용자를 고통스럽게 하기 위한 것이라고 말한다. 둘 다 사실일 수 있다.
+***** Comments
+- 안녕하세요! 저는 OpenAI의 Integrity에서 일하는 Nick입니다. 이러한 검사는 봇, 스크래핑, 사기 등의 남용으로부터 제품을 보호하는 방법의 일부입니다.
+- '의심스러운' 브라우저나 IP 주소를 사용할 때 Cloudflare가 웹을 얼마나 사용하기 어렵게 만드는지 황당합니다. 최근 Firefox를 사용하는 죄로 캡차에 빠져 있습니다.
+- 아마도 이것은 OpenAI가 로그아웃한 사용자에게 무료 ChatGPT를 제공하고 무료 API 엔드포인트로 남용되는 것을 원하지 않기 때문일 것입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ChatGPT no te deja escribir hasta que Cloudflare lea tu estado de React
+***** TLDR
+Cada mensaje de ChatGPT activa un programa Cloudflare Turnstile que verifica 55 propiedades en tres capas: huella del navegador (GPU, pantalla, fuentes), cabeceras edge de Cloudflare (ciudad, IP, región) e internos de React de ChatGPT. El cifrado es XOR con claves incrustadas en el payload. Un bot que falsifica huellas pero no renderiza la SPA de React fallará.
+***** Take
+Nick de OpenAI dice que es para mantener el acceso gratuito disponible. HN dice que es para hacer sufrir a los usuarios de Firefox. Ambas pueden ser verdad.
+***** Comments
+- ¡Hola! Soy Nick y trabajo en Integridad en OpenAI. Estas verificaciones son parte de cómo protegemos nuestros productos de abusos como bots, scraping, fraude y otros intentos de mal uso de la plataforma.
+- Es absurdo lo inutilizable que Cloudflare está haciendo la web cuando usas un navegador o dirección IP que consideran 'sospechosa'. Últimamente me ahogo en captchas por el crimen de usar Firefox.
+- Presumiblemente todo esto es porque OpenAI ofrece ChatGPT gratuito a usuarios no logueados y no quieren que se abuse como endpoint de API gratuito.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ChatGPT lässt dich nicht tippen, bis Cloudflare deinen React-Zustand gelesen hat
+***** TLDR
+Jede ChatGPT-Nachricht löst ein Cloudflare Turnstile-Programm aus, das 55 Eigenschaften in drei Schichten prüft: Browser-Fingerprint (GPU, Bildschirm, Schriften), Cloudflare-Edge-Header (Stadt, IP, Region) und ChatGPTs React-Interna. Die Verschlüsselung ist XOR mit im Payload eingebetteten Schlüsseln. Ein Bot, der Fingerprints fälscht, aber die React-SPA nicht rendert, wird scheitern.
+***** Take
+OpenAIs Nick sagt, es sei um kostenlosen Zugang zu erhalten. HN sagt, es sei um Firefox-Nutzer leiden zu lassen. Beides kann stimmen.
+***** Comments
+- Hey! Ich bin Nick und arbeite bei OpenAI im Integrity-Team. Diese Prüfungen sind Teil dessen, wie wir unsere Produkte vor Missbrauch wie Bots, Scraping, Betrug und anderen Versuchen, die Plattform zu missbrauchen, schützen.
+- Es ist absurd, wie unbenutzbar Cloudflare das Web macht, wenn man einen Browser oder eine IP-Adresse verwendet, die sie für 'verdächtig' halten. Ich ertrinke neuerdings in Captchas für das Verbrechen, Firefox zu benutzen.
+- Vermutlich liegt das alles daran, dass OpenAI kostenloses ChatGPT für ausgeloggte Benutzer anbietet und nicht möchte, dass es als kostenloser API-Endpunkt missbraucht wird.
+** The Cognitive Dark Forest :ai:philosophy:startups:opensource:
+:PROPERTIES:
+:ID:       47566442
+:URL:      https://ryelang.org/blog/posts/cognitive-dark-forest/
+:HN_URL:   https://news.ycombinator.com/item?id=47566442
+:POINTS:   214
+:COMMENTS: 105
+:BY:       kaycebasques
+:END:
+
+*** TLDR
+The internet is becoming a dark forest where sharing ideas publicly feeds AI systems that can clone your innovations faster than you can execute. Before LLMs, companies couldn't just absorb your idea - execution was the moat. Now execution is cheap, and your novel idea becomes training data. The horror: the forest doesn't kill you, it lets you live and feeds on your innovation.
+
+*** Take
+It's Liu Cixin's Three-Body Problem but for startups. The meta-twist is that this very article about not sharing ideas is now training data. You literally cannot warn people about the forest without becoming part of it.
+
+*** Comments
+
+**** Skyy93
+:PROPERTIES:
+:COMMENT_ID: 47566500
+:END:
+This was the same before, if you had a novel idea and make a product out of it others follow. Especially for LLMs, they are not (till now) capable of coming up with truly novel ideas themselves.
+
+**** bsza
+:PROPERTIES:
+:COMMENT_ID: 47566550
+:END:
+The best analogy I can think of is that the internet is low Earth orbit and AI is the Kessler syndrome. We abandon the place not to hide ourselves, but because it is saturated with garbage.
+
+**** spartanatreyu
+:PROPERTIES:
+:COMMENT_ID: 47566600
+:END:
+The post puts forward two paths: everyone subsumed into the forest, or everyone withdraws. But there's things it doesn't consider: the forest could stop growing, or innovation could go private.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+认知暗森林
+***** TLDR
+互联网正在变成一片暗森林，公开分享想法会喂养能比你更快克隆你创新的AI系统。在LLM之前，公司无法直接吸收你的想法——执行是护城河。现在执行变得便宜，你的新想法成为训练数据。恐怖之处：森林不会杀死你，它让你活着并以你的创新为食。
+***** Take
+这是刘慈欣《三体》的创业版。讽刺的是，这篇关于不分享想法的文章现在就是训练数据。你根本无法在不成为森林一部分的情况下警告人们关于森林的事。
+***** Comments
+- 这在以前也是一样的，如果你有一个新想法并做成产品，其他人会跟随。特别是对于LLM，它们（到目前为止）无法自己想出真正新颖的想法。
+- 我能想到的最好的类比是互联网是近地轨道，AI是凯斯勒综合症。我们离开这个地方不是为了隐藏自己，而是因为它被垃圾充满了。
+- 这篇文章提出了两条路径：每个人都被森林吞噬，或者每个人都撤退。但有些事情它没有考虑：森林可能停止生长，或者创新可能转为私有。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+認知ダークフォレスト
+***** TLDR
+インターネットは、アイデアを公開共有すると、あなたより速くイノベーションをコピーできるAIシステムに餌を与えるダークフォレストになりつつある。LLM以前は、企業はあなたのアイデアを単純に吸収できなかった - 実行が堀だった。今や実行は安くなり、あなたの新しいアイデアはトレーニングデータになる。恐怖：森はあなたを殺さない、生かしてあなたのイノベーションを糧にする。
+***** Take
+これは劉慈欣の三体問題だが、スタートアップ版だ。メタ的なひねりは、アイデアを共有しないことについてのこの記事自体がトレーニングデータになっていること。森の一部にならずに森について人々に警告することは文字通り不可能だ。
+***** Comments
+- これは以前も同じだった。新しいアイデアがあって製品を作れば他の人がついてくる。特にLLMについては、（今のところ）本当に新しいアイデアを自分で思いつく能力はない。
+- 私が思いつく最良のアナロジーは、インターネットは低軌道で、AIはケスラー症候群だということ。私たちは自分を隠すためではなく、ゴミで飽和しているから場所を放棄する。
+- この投稿は2つの道を提示している：全員が森に吸収されるか、全員が撤退するか。しかし考慮されていないことがある：森が成長を止めるかもしれないし、イノベーションがプライベートになるかもしれない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+인지 암흑 숲
+***** TLDR
+인터넷은 아이디어를 공개적으로 공유하면 당신보다 빠르게 혁신을 복제할 수 있는 AI 시스템에 먹이를 주는 암흑 숲이 되고 있다. LLM 이전에는 회사들이 당신의 아이디어를 그냥 흡수할 수 없었다 - 실행이 해자였다. 이제 실행은 저렴해졌고, 당신의 새로운 아이디어는 훈련 데이터가 된다. 공포: 숲은 당신을 죽이지 않고, 살려두고 당신의 혁신을 먹는다.
+***** Take
+이것은 류츠신의 삼체문제지만 스타트업 버전이다. 메타적 반전은 아이디어를 공유하지 말라는 이 글 자체가 이제 훈련 데이터라는 것이다. 숲의 일부가 되지 않고 숲에 대해 경고하는 것은 말 그대로 불가능하다.
+***** Comments
+- 이것은 예전에도 마찬가지였다. 새로운 아이디어가 있고 제품을 만들면 다른 사람들이 따라온다. 특히 LLM의 경우, (지금까지는) 진정으로 새로운 아이디어를 스스로 생각해내는 능력이 없다.
+- 내가 생각할 수 있는 가장 좋은 비유는 인터넷은 저궤도이고 AI는 케슬러 증후군이라는 것이다. 우리는 자신을 숨기기 위해서가 아니라 쓰레기로 포화되어 있기 때문에 그 장소를 버린다.
+- 이 글은 두 가지 경로를 제시한다: 모두가 숲에 흡수되거나 모두가 철수하거나. 하지만 고려하지 않은 것들이 있다: 숲이 성장을 멈출 수도 있고, 혁신이 비공개가 될 수도 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El Bosque Oscuro Cognitivo
+***** TLDR
+Internet se está convirtiendo en un bosque oscuro donde compartir ideas públicamente alimenta sistemas de IA que pueden clonar tus innovaciones más rápido de lo que puedes ejecutar. Antes de los LLM, las empresas no podían simplemente absorber tu idea - la ejecución era el foso. Ahora la ejecución es barata, y tu idea novedosa se convierte en datos de entrenamiento. El horror: el bosque no te mata, te deja vivir y se alimenta de tu innovación.
+***** Take
+Es El Problema de los Tres Cuerpos de Liu Cixin pero para startups. El giro meta es que este mismo artículo sobre no compartir ideas ahora es datos de entrenamiento. Literalmente no puedes advertir a la gente sobre el bosque sin convertirte en parte de él.
+***** Comments
+- Esto era igual antes, si tenías una idea novedosa y hacías un producto, otros seguían. Especialmente para los LLM, no son (hasta ahora) capaces de generar ideas verdaderamente novedosas por sí mismos.
+- La mejor analogía que se me ocurre es que internet es la órbita baja terrestre y la IA es el síndrome de Kessler. Abandonamos el lugar no para escondernos, sino porque está saturado de basura.
+- El post plantea dos caminos: todos subsumidos en el bosque, o todos se retiran. Pero hay cosas que no considera: el bosque podría dejar de crecer, o la innovación podría volverse privada.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der kognitive dunkle Wald
+***** TLDR
+Das Internet wird zu einem dunklen Wald, in dem das öffentliche Teilen von Ideen KI-Systeme füttert, die deine Innovationen schneller klonen können, als du sie umsetzen kannst. Vor LLMs konnten Unternehmen deine Idee nicht einfach absorbieren - Ausführung war der Burggraben. Jetzt ist Ausführung billig, und deine neuartige Idee wird zu Trainingsdaten. Der Horror: Der Wald tötet dich nicht, er lässt dich leben und nährt sich von deiner Innovation.
+***** Take
+Es ist Liu Cixins Drei-Körper-Problem, aber für Startups. Der Meta-Twist ist, dass dieser Artikel über das Nicht-Teilen von Ideen jetzt selbst Trainingsdaten ist. Man kann buchstäblich nicht vor dem Wald warnen, ohne Teil davon zu werden.
+***** Comments
+- Das war vorher genauso, wenn du eine neuartige Idee hattest und ein Produkt daraus machtest, folgten andere. Besonders für LLMs sind sie (bisher) nicht in der Lage, wirklich neuartige Ideen selbst zu entwickeln.
+- Die beste Analogie, die mir einfällt, ist, dass das Internet die erdnahe Umlaufbahn ist und KI das Kessler-Syndrom. Wir verlassen den Ort nicht, um uns zu verstecken, sondern weil er mit Müll gesättigt ist.
+- Der Beitrag zeigt zwei Wege auf: Alle werden vom Wald verschlungen, oder alle ziehen sich zurück. Aber es gibt Dinge, die er nicht berücksichtigt: Der Wald könnte aufhören zu wachsen, oder Innovation könnte privat werden.
+** Coding Agents Could Make Free Software Matter Again :opensource:ai:freesoftware:saas:
+:PROPERTIES:
+:ID:       47568028
+:URL:      https://www.gjlondon.com/blog/ai-agents-could-make-free-software-matter-again/
+:HN_URL:   https://news.ycombinator.com/item?id=47568028
+:POINTS:   94
+:COMMENTS: 83
+:BY:       rogueleaderr
+:END:
+
+*** TLDR
+AI agents can exercise software freedom on behalf of users who can't code. The four freedoms (run, study, modify, redistribute) were written for programmers, but agents bridge that gap. The author tried building a Sunsama customization and hit six layers of closed systems - with free software, an agent could have solved it in 10 minutes.
+
+*** Take
+Stallman's ghost is finally vindicated. Turns out 'free as in freedom' matters when your robot butler can actually read the code. The SaaS era let us forget about software freedom because we never touched the code anyway - now we have proxies who can.
+
+*** Comments
+
+**** apatheticonion
+:PROPERTIES:
+:COMMENT_ID: 47568100
+:END:
+Having over a decade of open source software I've written freely available online, I actually really appreciate the value that AI && LLMs have provided me. The thing that leaves a bad taste in my mouth is that my works were likely included in the training data.
+
+**** bustah
+:PROPERTIES:
+:COMMENT_ID: 47568150
+:END:
+When AI writes code, reviews code, and now apparently manages its own git operations - who's actually in control of the codebase? The 'dangerously-skip-permissions' flag getting blamed here is telling.
+
+**** floathub
+:PROPERTIES:
+:COMMENT_ID: 47568200
+:END:
+Free software has never mattered more. All the infrastructure that runs the whole AI-over-the-internet juggernaut is essentially all open source.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+编码代理可能让自由软件重新变得重要
+***** TLDR
+AI代理可以代表不会编程的用户行使软件自由。四大自由（运行、研究、修改、再发布）是为程序员写的，但代理弥合了这一差距。作者尝试构建Sunsama定制时遇到了六层封闭系统——如果是自由软件，代理可以在10分钟内解决。
+***** Take
+斯托曼的幽灵终于得到平反。事实证明，当你的机器人管家真的能读懂代码时，'自由如言论自由'确实很重要。SaaS时代让我们忘记了软件自由，因为我们从来没接触过代码——现在我们有了能接触的代理。
+***** Comments
+- 作为十多年来在网上免费提供开源软件的人，我真的很感激AI和LLM给我带来的价值。让我不舒服的是，我的作品很可能被包含在训练数据中。
+- 当AI编写代码、审查代码，现在显然还管理自己的git操作——谁真正控制着代码库？这里被指责的'dangerously-skip-permissions'标志很说明问题。
+- 自由软件从未如此重要。运行整个AI互联网巨头的所有基础设施基本上都是开源的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+コーディングエージェントがフリーソフトウェアを再び重要にする可能性
+***** TLDR
+AIエージェントは、コードが書けないユーザーに代わってソフトウェアの自由を行使できる。4つの自由（実行、研究、修正、再配布）はプログラマー向けに書かれたが、エージェントがそのギャップを埋める。著者がSunsamaのカスタマイズを試みた際、6層のクローズドシステムに直面した - フリーソフトウェアなら、エージェントは10分で解決できただろう。
+***** Take
+ストールマンの亡霊がついに正当化された。ロボット執事が実際にコードを読めるとき、「自由としての自由」が重要だとわかった。SaaS時代はソフトウェアの自由を忘れさせた。どうせコードに触れることはなかったから - 今は触れることができる代理人がいる。
+***** Comments
+- 10年以上オンラインで無料提供してきたオープンソースソフトウェアがある者として、AIとLLMが私に提供した価値を本当に感謝している。後味が悪いのは、私の作品がおそらくトレーニングデータに含まれていることだ。
+- AIがコードを書き、コードをレビューし、今や明らかに自分のgit操作を管理している時 - 実際にコードベースを制御しているのは誰なのか？ここで非難されている'dangerously-skip-permissions'フラグは示唆的だ。
+- フリーソフトウェアがこれほど重要だったことはない。AI-over-the-internet巨人全体を動かすすべてのインフラストラクチャは本質的にすべてオープンソースだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+코딩 에이전트가 자유 소프트웨어를 다시 중요하게 만들 수 있다
+***** TLDR
+AI 에이전트는 코딩할 수 없는 사용자를 대신하여 소프트웨어 자유를 행사할 수 있다. 네 가지 자유(실행, 연구, 수정, 재배포)는 프로그래머를 위해 작성되었지만, 에이전트가 그 격차를 메운다. 저자가 Sunsama 커스터마이징을 시도했을 때 6개 레이어의 폐쇄 시스템에 부딪혔다 - 자유 소프트웨어였다면 에이전트가 10분 만에 해결했을 것이다.
+***** Take
+스톨만의 유령이 마침내 정당화되었다. 로봇 집사가 실제로 코드를 읽을 수 있을 때 '언론의 자유로서의 자유'가 중요하다는 것이 밝혀졌다. SaaS 시대는 어차피 코드를 만질 일이 없었기에 소프트웨어 자유를 잊게 했다 - 이제 만질 수 있는 대리인이 있다.
+***** Comments
+- 10년 이상 온라인에서 무료로 제공한 오픈 소스 소프트웨어가 있는 사람으로서, AI와 LLM이 제공한 가치를 정말 감사하게 생각한다. 씁쓸한 것은 내 작품이 아마도 훈련 데이터에 포함되었을 것이라는 점이다.
+- AI가 코드를 작성하고, 코드를 검토하고, 이제 분명히 자체 git 작업을 관리할 때 - 실제로 코드베이스를 제어하는 것은 누구인가? 여기서 비난받는 'dangerously-skip-permissions' 플래그는 시사하는 바가 있다.
+- 자유 소프트웨어가 이보다 더 중요했던 적은 없다. AI-over-the-internet 거물 전체를 실행하는 모든 인프라는 본질적으로 모두 오픈 소스다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los agentes de código podrían hacer que el software libre importe de nuevo
+***** TLDR
+Los agentes de IA pueden ejercer la libertad del software en nombre de usuarios que no saben programar. Las cuatro libertades (ejecutar, estudiar, modificar, redistribuir) fueron escritas para programadores, pero los agentes cierran esa brecha. El autor intentó construir una personalización de Sunsama y se topó con seis capas de sistemas cerrados - con software libre, un agente podría haberlo resuelto en 10 minutos.
+***** Take
+El fantasma de Stallman finalmente se ha reivindicado. Resulta que 'libre como en libertad de expresión' importa cuando tu mayordomo robot puede realmente leer el código. La era SaaS nos hizo olvidar la libertad del software porque nunca tocábamos el código - ahora tenemos proxies que pueden.
+***** Comments
+- Teniendo más de una década de software de código abierto que he escrito disponible gratuitamente en línea, realmente aprecio el valor que la IA y los LLM me han proporcionado. Lo que me deja mal sabor de boca es que mis obras probablemente fueron incluidas en los datos de entrenamiento.
+- Cuando la IA escribe código, revisa código, y ahora aparentemente gestiona sus propias operaciones git - ¿quién controla realmente el código base? El flag 'dangerously-skip-permissions' siendo culpado aquí es revelador.
+- El software libre nunca ha importado más. Toda la infraestructura que ejecuta todo el juggernaut de IA-sobre-internet es esencialmente todo código abierto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Coding-Agenten könnten freie Software wieder wichtig machen
+***** TLDR
+KI-Agenten können Software-Freiheit im Namen von Nutzern ausüben, die nicht programmieren können. Die vier Freiheiten (ausführen, studieren, modifizieren, weiterverteilen) wurden für Programmierer geschrieben, aber Agenten überbrücken diese Lücke. Der Autor versuchte, eine Sunsama-Anpassung zu bauen und stieß auf sechs Schichten geschlossener Systeme - mit freier Software hätte ein Agent es in 10 Minuten lösen können.
+***** Take
+Stallmans Geist ist endlich rehabilitiert. Es stellt sich heraus, dass 'frei wie in Redefreiheit' wichtig ist, wenn dein Roboter-Butler tatsächlich den Code lesen kann. Die SaaS-Ära ließ uns die Software-Freiheit vergessen, weil wir den Code sowieso nie angefasst haben - jetzt haben wir Stellvertreter, die das können.
+***** Comments
+- Als jemand mit über einem Jahrzehnt Open-Source-Software, die ich kostenlos online bereitgestellt habe, schätze ich wirklich den Wert, den KI und LLMs mir gebracht haben. Was einen schalen Nachgeschmack hinterlässt, ist, dass meine Werke wahrscheinlich in den Trainingsdaten enthalten waren.
+- Wenn KI Code schreibt, Code überprüft und jetzt offenbar ihre eigenen Git-Operationen verwaltet - wer kontrolliert dann tatsächlich die Codebasis? Dass hier das 'dangerously-skip-permissions'-Flag beschuldigt wird, ist bezeichnend.
+- Freie Software war noch nie wichtiger. Die gesamte Infrastruktur, die den ganzen KI-über-Internet-Koloss betreibt, ist im Wesentlichen alles Open Source.
+** Pretext: TypeScript library for multiline text measurement and layout :typescript:webdev:performance:text:
+:PROPERTIES:
+:ID:       47556290
+:URL:      https://github.com/chenglou/pretext
+:HN_URL:   https://news.ycombinator.com/item?id=47556290
+:POINTS:   187
+:COMMENTS: 31
+:BY:       emersonmacro
+:END:
+
+*** TLDR
+Pretext calculates text height without touching the DOM, avoiding expensive getBoundingClientRect calls that trigger layout reflow. It pre-calculates segment widths using canvas measureText, then does pure arithmetic for layout. Supports all languages including RTL and emoji. The author used Claude Code and Codex to iterate against browser ground truth over weeks.
+
+*** Take
+Finally, someone solved the 'how tall is this text' problem without making the browser cry. The fact that it was iterated with AI agents measuring against browser ground truth is peak 2026 development methodology.
+
+*** Comments
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 47556300
+:END:
+This thing is very impressive. The problem it solves is efficiently calculating the height of some wrapped text on a web page, without actually rendering that text to the page first (very expensive).
+
+**** smusamashah
+:PROPERTIES:
+:COMMENT_ID: 47556350
+:END:
+By the author of the library: 'This was achieved through showing Claude Code and Codex the browsers ground truth, and have them measure & iterate against those at every significant container width, running over weeks'
+
+**** rpastuszak
+:PROPERTIES:
+:COMMENT_ID: 47556400
+:END:
+Love this. I especially liked shape based reflow example. This is something I've been thinking for ages and would love to add to Enso.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Pretext：用于多行文本测量和布局的TypeScript库
+***** TLDR
+Pretext在不触碰DOM的情况下计算文本高度，避免了触发布局重排的昂贵getBoundingClientRect调用。它使用canvas measureText预计算段落宽度，然后用纯算术进行布局。支持所有语言，包括RTL和表情符号。作者使用Claude Code和Codex针对浏览器真实值迭代了数周。
+***** Take
+终于有人解决了'这段文字有多高'的问题而不让浏览器崩溃。用AI代理针对浏览器真实值进行迭代的事实是2026年开发方法论的巅峰。
+***** Comments
+- 这东西非常令人印象深刻。它解决的问题是高效计算网页上换行文本的高度，而无需先将文本渲染到页面上（这非常昂贵）。
+- 来自库作者的话：'这是通过向Claude Code和Codex展示浏览器真实值，并让它们在每个重要容器宽度上测量和迭代实现的，运行了数周'
+- 喜欢这个。我特别喜欢基于形状的重排示例。这是我想了很久并希望添加到Enso中的东西。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Pretext：複数行テキスト測定とレイアウトのためのTypeScriptライブラリ
+***** TLDR
+PretextはDOMに触れずにテキストの高さを計算し、レイアウトリフローをトリガーする高価なgetBoundingClientRect呼び出しを回避する。canvas measureTextを使用してセグメント幅を事前計算し、レイアウトには純粋な算術を行う。RTLや絵文字を含むすべての言語をサポート。著者はClaude CodeとCodexを使用して、数週間にわたってブラウザの真値に対して反復した。
+***** Take
+ついに誰かがブラウザを泣かせずに「このテキストの高さは？」問題を解決した。AIエージェントを使ってブラウザの真値に対して反復したという事実は、2026年の開発方法論の頂点だ。
+***** Comments
+- これは非常に印象的だ。解決する問題は、実際にテキストをページにレンダリングする前に（非常に高価）、ウェブページ上の折り返しテキストの高さを効率的に計算することだ。
+- ライブラリ作者より：「これはClaude CodeとCodexにブラウザの真値を見せ、重要なコンテナ幅ごとに測定と反復を行わせることで達成された。数週間にわたって実行された」
+- これ大好き。特に形状ベースのリフロー例が気に入った。これは私がずっと考えていて、Ensoに追加したいと思っていたものだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Pretext: 다중 라인 텍스트 측정 및 레이아웃을 위한 TypeScript 라이브러리
+***** TLDR
+Pretext는 DOM을 건드리지 않고 텍스트 높이를 계산하여 레이아웃 리플로우를 트리거하는 비싼 getBoundingClientRect 호출을 피한다. canvas measureText를 사용하여 세그먼트 너비를 사전 계산한 다음 순수 산술로 레이아웃을 수행한다. RTL과 이모지를 포함한 모든 언어를 지원한다. 저자는 Claude Code와 Codex를 사용하여 몇 주에 걸쳐 브라우저 실제 값에 대해 반복했다.
+***** Take
+마침내 누군가 브라우저를 울리지 않고 '이 텍스트가 얼마나 높은가' 문제를 해결했다. AI 에이전트를 사용하여 브라우저 실제 값에 대해 반복했다는 사실은 2026년 개발 방법론의 정점이다.
+***** Comments
+- 이것은 매우 인상적이다. 해결하는 문제는 실제로 텍스트를 페이지에 렌더링하기 전에(매우 비쌈) 웹 페이지에서 줄 바꿈된 텍스트의 높이를 효율적으로 계산하는 것이다.
+- 라이브러리 저자로부터: '이것은 Claude Code와 Codex에게 브라우저 실제 값을 보여주고, 중요한 모든 컨테이너 너비에서 측정하고 반복하게 하여 달성했다. 몇 주에 걸쳐 실행했다'
+- 이것 좋아한다. 특히 형태 기반 리플로우 예제가 마음에 들었다. 이것은 내가 오래 생각해왔고 Enso에 추가하고 싶었던 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Pretext: Biblioteca TypeScript para medición y disposición de texto multilínea
+***** TLDR
+Pretext calcula la altura del texto sin tocar el DOM, evitando las costosas llamadas a getBoundingClientRect que activan el reflujo de diseño. Precalcula los anchos de segmentos usando canvas measureText, luego hace aritmética pura para el diseño. Soporta todos los idiomas incluyendo RTL y emojis. El autor usó Claude Code y Codex para iterar contra la verdad base del navegador durante semanas.
+***** Take
+Finalmente, alguien resolvió el problema de 'qué altura tiene este texto' sin hacer llorar al navegador. El hecho de que se iteró con agentes de IA midiendo contra la verdad base del navegador es la metodología de desarrollo pico de 2026.
+***** Comments
+- Esta cosa es muy impresionante. El problema que resuelve es calcular eficientemente la altura de algún texto envuelto en una página web, sin realmente renderizar ese texto en la página primero (muy costoso).
+- Del autor de la biblioteca: 'Esto se logró mostrando a Claude Code y Codex la verdad base de los navegadores, y haciéndolos medir e iterar contra esas en cada ancho de contenedor significativo, ejecutándose durante semanas'
+- Me encanta esto. Especialmente me gustó el ejemplo de reflujo basado en formas. Esto es algo en lo que he estado pensando por años y me encantaría añadir a Enso.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Pretext: TypeScript-Bibliothek für mehrzeilige Textmessung und Layout
+***** TLDR
+Pretext berechnet die Texthöhe ohne das DOM zu berühren und vermeidet teure getBoundingClientRect-Aufrufe, die Layout-Reflow auslösen. Es berechnet Segmentbreiten mit canvas measureText vor und führt dann reine Arithmetik für das Layout durch. Unterstützt alle Sprachen einschließlich RTL und Emoji. Der Autor nutzte Claude Code und Codex, um wochenlang gegen die Browser-Ground-Truth zu iterieren.
+***** Take
+Endlich hat jemand das 'Wie hoch ist dieser Text'-Problem gelöst, ohne den Browser zum Weinen zu bringen. Die Tatsache, dass mit KI-Agenten gegen die Browser-Ground-Truth iteriert wurde, ist die Spitze der Entwicklungsmethodik 2026.
+***** Comments
+- Das Ding ist sehr beeindruckend. Das Problem, das es löst, ist die effiziente Berechnung der Höhe von umgebrochenem Text auf einer Webseite, ohne diesen Text zuerst auf der Seite zu rendern (sehr teuer).
+- Vom Autor der Bibliothek: 'Dies wurde erreicht, indem Claude Code und Codex die Ground-Truth der Browser gezeigt wurde und sie bei jeder signifikanten Containerbreite messen und iterieren ließen, über Wochen hinweg'
+- Liebe das. Besonders gefiel mir das formbasierte Reflow-Beispiel. Das ist etwas, worüber ich seit Ewigkeiten nachdenke und gerne zu Enso hinzufügen würde.
+** Claude Code runs git reset --hard origin/main against project repo every 10 mins :ai:devtools:git:bugs:
+:PROPERTIES:
+:ID:       47567969
+:URL:      https://github.com/anthropics/claude-code/issues/40710
+:HN_URL:   https://news.ycombinator.com/item?id=47567969
+:POINTS:   139
+:COMMENTS: 59
+:BY:       mthwsjc_
+:END:
+
+*** TLDR
+A user reports that Claude Code performs git fetch + git reset --hard origin/main every 10 minutes via programmatic git operations, silently destroying uncommitted changes. Evidence includes 95+ reflog entries at exact 10-minute intervals, live reproduction, and fswatch capturing the file operations. Workarounds: use git worktrees (immune) or commit frequently.
+
+*** Take
+Nothing says 'I trust my AI coding assistant' like having it nuke your uncommitted work every 10 minutes. The --dangerously-skip-permissions flag in the investigation is doing a lot of heavy lifting here. At least the bug report is thorough enough to make an engineer weep.
+
+*** Comments
+
+**** kibwen
+:PROPERTIES:
+:COMMENT_ID: 47568000
+:END:
+Let's focus on the real issue here, which is that HN has apparently normalized the double hyphen in the title to an en dash--yes, an en dash, not even an em dash.
+
+**** kccqzy
+:PROPERTIES:
+:COMMENT_ID: 47568050
+:END:
+Process monitoring at 0.1-second intervals found zero git processes around reset times. I don't think this is a valid way of checking for spawned processes. Git commands are fast. I would replace the git on the $PATH by a wrapper that logs all operations.
+
+**** simianwords
+:PROPERTIES:
+:COMMENT_ID: 47568100
+:END:
+I think this post potentially mischaracterises what may be a one off issue for a certain person as if it were a broader problem. I'm guessing some context has been corrupted?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Claude Code每10分钟对项目仓库运行git reset --hard origin/main
+***** TLDR
+一位用户报告Claude Code每10分钟通过程序化git操作执行git fetch + git reset --hard origin/main，悄悄销毁未提交的更改。证据包括95+条精确10分钟间隔的reflog条目、实时复现和fswatch捕获的文件操作。解决方法：使用git worktrees（免疫）或频繁提交。
+***** Take
+没有什么比让AI编程助手每10分钟删除你未提交的工作更能说明'我信任我的AI编程助手'了。调查中的--dangerously-skip-permissions标志承担了很多责任。至少这个bug报告详细到足以让工程师流泪。
+***** Comments
+- 让我们关注这里真正的问题，那就是HN显然把标题中的双连字符规范化成了连接号——是的，是连接号，甚至不是破折号。
+- 以0.1秒间隔进行的进程监控在重置时间附近没有发现任何git进程。我不认为这是检查生成进程的有效方法。Git命令很快。我会用一个记录所有操作的包装器替换$PATH中的git。
+- 我认为这篇文章可能把某个人的一次性问题错误地描述成了更广泛的问题。我猜测是某些上下文被损坏了？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claude Codeが10分ごとにプロジェクトリポジトリに対してgit reset --hard origin/mainを実行
+***** TLDR
+あるユーザーが、Claude Codeがプログラマティックなgit操作を通じて10分ごとにgit fetch + git reset --hard origin/mainを実行し、コミットされていない変更を静かに破壊していると報告した。証拠には、正確に10分間隔の95以上のreflogエントリ、ライブ再現、ファイル操作をキャプチャしたfswatchが含まれる。回避策：git worktrees（免疫）を使用するか、頻繁にコミットする。
+***** Take
+「AIコーディングアシスタントを信頼している」ことを示すのに、10分ごとにコミットされていない作業を消去されること以上のものはない。調査中の--dangerously-skip-permissionsフラグが多くの責任を負っている。少なくともバグレポートはエンジニアを泣かせるほど徹底している。
+***** Comments
+- ここでの本当の問題に焦点を当てよう。HNは明らかにタイトルのダブルハイフンをエンダッシュに正規化した - そう、エムダッシュでさえなくエンダッシュに。
+- 0.1秒間隔のプロセス監視では、リセット時間付近でgitプロセスは見つからなかった。これは生成されたプロセスをチェックする有効な方法だとは思わない。Gitコマンドは速い。$PATH上のgitをすべての操作をログするラッパーに置き換えるだろう。
+- この投稿は、ある人にとっての一度きりの問題を、より広範な問題であるかのように誤って特徴づけている可能性がある。何らかのコンテキストが破損したのではないか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude Code가 10분마다 프로젝트 저장소에 git reset --hard origin/main 실행
+***** TLDR
+한 사용자가 Claude Code가 프로그래매틱 git 작업을 통해 10분마다 git fetch + git reset --hard origin/main을 수행하여 커밋되지 않은 변경 사항을 조용히 삭제한다고 보고했다. 증거에는 정확히 10분 간격의 95개 이상의 reflog 항목, 실시간 재현, 파일 작업을 캡처한 fswatch가 포함된다. 해결 방법: git worktrees 사용(면역) 또는 자주 커밋.
+***** Take
+'AI 코딩 어시스턴트를 신뢰한다'는 것을 10분마다 커밋되지 않은 작업을 날려버리는 것보다 더 잘 보여주는 것은 없다. 조사에서 --dangerously-skip-permissions 플래그가 많은 책임을 지고 있다. 적어도 버그 리포트는 엔지니어를 울릴 만큼 철저하다.
+***** Comments
+- 여기서 진짜 문제에 집중하자. HN이 분명히 제목의 더블 하이픈을 엔 대시로 정규화했다 - 그래, 엠 대시도 아니고 엔 대시로.
+- 0.1초 간격의 프로세스 모니터링에서 리셋 시간 주변에 git 프로세스가 발견되지 않았다. 이것이 생성된 프로세스를 확인하는 유효한 방법이라고 생각하지 않는다. Git 명령은 빠르다. $PATH의 git을 모든 작업을 로깅하는 래퍼로 교체할 것이다.
+- 이 글은 특정 사람에게 일회성 문제일 수 있는 것을 더 광범위한 문제인 것처럼 잘못 특성화하고 있을 수 있다. 일부 컨텍스트가 손상된 것 같다?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Claude Code ejecuta git reset --hard origin/main contra el repo del proyecto cada 10 mins
+***** TLDR
+Un usuario informa que Claude Code realiza git fetch + git reset --hard origin/main cada 10 minutos a través de operaciones git programáticas, destruyendo silenciosamente los cambios no confirmados. La evidencia incluye más de 95 entradas de reflog a intervalos exactos de 10 minutos, reproducción en vivo y fswatch capturando las operaciones de archivos. Soluciones: usar git worktrees (inmune) o confirmar frecuentemente.
+***** Take
+Nada dice 'confío en mi asistente de código IA' como que elimine tu trabajo no confirmado cada 10 minutos. El flag --dangerously-skip-permissions en la investigación está haciendo mucho trabajo pesado aquí. Al menos el reporte de bug es lo suficientemente detallado para hacer llorar a un ingeniero.
+***** Comments
+- Centrémonos en el problema real aquí, que es que HN aparentemente ha normalizado el doble guion en el título a un guion corto--sí, un guion corto, ni siquiera un guion largo.
+- El monitoreo de procesos a intervalos de 0.1 segundos no encontró procesos git alrededor de los tiempos de reset. No creo que esta sea una forma válida de verificar procesos generados. Los comandos Git son rápidos. Yo reemplazaría el git en el $PATH por un wrapper que registre todas las operaciones.
+- Creo que este post potencialmente caracteriza erróneamente lo que puede ser un problema único para cierta persona como si fuera un problema más amplio. ¿Supongo que algún contexto se ha corrompido?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Claude Code führt alle 10 Min git reset --hard origin/main gegen das Projekt-Repo aus
+***** TLDR
+Ein Benutzer berichtet, dass Claude Code alle 10 Minuten git fetch + git reset --hard origin/main über programmatische Git-Operationen durchführt und dabei unbestätigte Änderungen stillschweigend zerstört. Beweise umfassen 95+ Reflog-Einträge in exakten 10-Minuten-Intervallen, Live-Reproduktion und fswatch, das die Dateioperationen erfasst. Workarounds: Git-Worktrees verwenden (immun) oder häufig committen.
+***** Take
+Nichts sagt 'Ich vertraue meinem KI-Coding-Assistenten' wie dass er alle 10 Minuten deine unbestätigte Arbeit löscht. Das --dangerously-skip-permissions-Flag in der Untersuchung trägt hier eine große Last. Zumindest ist der Bug-Report gründlich genug, um einen Ingenieur zum Weinen zu bringen.
+***** Comments
+- Konzentrieren wir uns auf das eigentliche Problem hier, nämlich dass HN offenbar den Doppelbindestrich im Titel zu einem Halbgeviertstrich normalisiert hat - ja, ein Halbgeviertstrich, nicht einmal ein Geviertstrich.
+- Prozessüberwachung in 0,1-Sekunden-Intervallen fand null Git-Prozesse um die Reset-Zeiten. Ich glaube nicht, dass dies eine gültige Methode ist, um nach gestarteten Prozessen zu suchen. Git-Befehle sind schnell. Ich würde das git im $PATH durch einen Wrapper ersetzen, der alle Operationen protokolliert.
+- Ich denke, dieser Beitrag charakterisiert möglicherweise fälschlicherweise, was ein einmaliges Problem für eine bestimmte Person sein könnte, als ob es ein breiteres Problem wäre. Ich vermute, dass irgendein Kontext beschädigt wurde?
