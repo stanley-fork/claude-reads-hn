@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-03-31</div>
+      <a href="#s47584540-03311100">Claude Code&#x27;s source code has been ...</a>
+      <a href="#s47571330-03311100">Good CTE, Bad CTE</a>
+      <a href="#s47572162-03311100">We&#x27;re Pausing Asimov Press</a>
+      <a href="#s47558867-03311100">One of the largest salt mines in the wor...</a>
+      <a href="#s47567790-03311100">Oscar Reutersvärd :art:mathematics:optic...</a>
       <a href="#s47582984-03310800">GitHub backs down, kills Copilot pull-re...</a>
       <a href="#s47578572-03310800">Turning a MacBook into a touchscreen wit...</a>
       <a href="#s47583045-03310800">Google&#x27;s 200M-parameter time-series...</a>
@@ -515,6 +520,338 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-03-31T11:00:00Z</div>
+        <div class="digest-vibe">Source maps leak secrets, CTEs get therapy, and Escher&#x27;s forgotten rival finally gets his due</div>
+      </div>
+      <article class="story" id="s47584540-03311100">
+      <h3 class="story-title">
+        <a href="https://github.com/chatgptprojects/claude-code" target="_blank">Claude Code&#x27;s source code has been leaked via a map file in their NPM registry :security:anthropic:npm:source-leak:</a>
+        <a href="#s47584540-03311100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Claude Code的源代码通过NPM注册表中的map文件泄露</div>
+<div class="i18n-title" data-lang="ja">Claude Codeのソースコードがnpmレジストリのmapファイルから漏洩</div>
+<div class="i18n-title" data-lang="ko">Claude Code 소스코드가 NPM 레지스트리의 map 파일을 통해 유출됨</div>
+<div class="i18n-title" data-lang="es">El código fuente de Claude Code se filtró a través de un archivo map en su registro NPM</div>
+<div class="i18n-title" data-lang="de">Claude Codes Quellcode durch eine Map-Datei in ihrer NPM-Registry geleakt</div>
+
+      <div class="story-meta">
+        211pts | 92c | <a href="https://news.ycombinator.com/item?id=47584540" target="_blank">HN#47584540</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Someone extracted Anthropic&#x27;s Claude Code CLI source from the bundled source map (cli.js.map) in their NPM package. The unpacked TypeScript reveals the full project structure including CLI, commands, UI components, tools, and services. Most interestingly, HN commenters found hidden feature flags revealing an unreleased &#x27;assistant mode&#x27; (codename kairos) and a Tamagotchi-style companion creature called &#x27;The Buddy System.&#x27;</div>
+        <span class="i18n-text" data-lang="zh">有人从Anthropic的NPM包中的源映射文件(cli.js.map)提取了Claude Code CLI的源代码。解包后的TypeScript揭示了完整的项目结构,包括CLI、命令、UI组件、工具和服务。最有趣的是,HN评论者发现了隐藏的功能标志,揭示了一个未发布的&#x27;助手模式&#x27;(代号kairos)和一个名为&#x27;伙伴系统&#x27;的电子宠物式伴侣生物。</span>
+<span class="i18n-text" data-lang="ja">AnthropicのnpmパッケージにバンドルされたソースマップからClaude Code CLIのソースを抽出した人がいる。展開されたTypeScriptはCLI、コマンド、UIコンポーネント、ツール、サービスを含む完全なプロジェクト構造を明らかにした。HNのコメント者は未発表の「アシスタントモード」（コードネームkairos）と「バディシステム」というたまごっち風コンパニオンを示す隠し機能フラグを発見。</span>
+<span class="i18n-text" data-lang="ko">누군가가 Anthropic의 NPM 패키지에 번들된 소스맵에서 Claude Code CLI 소스를 추출했다. 압축 해제된 TypeScript는 CLI, 명령어, UI 컴포넌트, 도구, 서비스를 포함한 전체 프로젝트 구조를 보여준다. HN 댓글러들이 미출시 &#x27;어시스턴트 모드&#x27;(코드명 kairos)와 &#x27;버디 시스템&#x27;이라는 다마고치 스타일 동반자를 나타내는 숨겨진 기능 플래그를 발견했다.</span>
+<span class="i18n-text" data-lang="es">Alguien extrajo el código fuente del CLI de Claude Code del mapa de origen (cli.js.map) incluido en el paquete NPM de Anthropic. El TypeScript desempaquetado revela la estructura completa del proyecto incluyendo CLI, comandos, componentes UI, herramientas y servicios. Los comentaristas de HN encontraron flags de características ocultas revelando un &#x27;modo asistente&#x27; no lanzado (nombre en código kairos) y una criatura compañera estilo Tamagotchi llamada &#x27;El Sistema Buddy&#x27;.</span>
+<span class="i18n-text" data-lang="de">Jemand hat den CLI-Quellcode von Claude Code aus der gebündelten Source Map (cli.js.map) im NPM-Paket von Anthropic extrahiert. Das entpackte TypeScript enthüllt die vollständige Projektstruktur einschließlich CLI, Befehle, UI-Komponenten, Tools und Services. HN-Kommentatoren fanden versteckte Feature-Flags, die einen unveröffentlichten &#x27;Assistenten-Modus&#x27; (Codename kairos) und eine Tamagotchi-artige Begleitkreatur namens &#x27;Das Buddy-System&#x27; enthüllen.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Publishing source maps to production is the &#x27;Reply All&#x27; of software releases. Anthropic accidentally gave everyone a peek at their product roadmap, and the HN crowd is already asking Claude Code to reverse-engineer itself. The circle of life continues.</div>
+        <span class="i18n-text" data-lang="zh">将源映射发布到生产环境就像是软件发布中的&#x27;全体回复&#x27;。Anthropic不小心让所有人窥见了他们的产品路线图,HN的人们已经在要求Claude Code对自己进行逆向工程了。</span>
+<span class="i18n-text" data-lang="ja">本番環境にソースマップを公開するのは、ソフトウェアリリースにおける「全員に返信」のようなもの。Anthropicは誤って製品ロードマップを公開し、HNの人々は既にClaude Codeに自分自身をリバースエンジニアリングさせようとしている。</span>
+<span class="i18n-text" data-lang="ko">소스맵을 프로덕션에 배포하는 것은 소프트웨어 릴리스의 &#x27;전체 회신&#x27;과 같다. Anthropic이 실수로 제품 로드맵을 공개했고, HN 사람들은 이미 Claude Code에게 자기 자신을 리버스 엔지니어링하라고 요청하고 있다.</span>
+<span class="i18n-text" data-lang="es">Publicar mapas de origen en producción es el &#x27;Responder a todos&#x27; de los lanzamientos de software. Anthropic accidentalmente dejó ver su hoja de ruta de producto, y la gente de HN ya está pidiendo a Claude Code que se haga ingeniería inversa a sí mismo.</span>
+<span class="i18n-text" data-lang="de">Source Maps in Produktion zu veröffentlichen ist das &#x27;Allen antworten&#x27; von Software-Releases. Anthropic hat versehentlich allen einen Einblick in ihre Produkt-Roadmap gegeben, und die HN-Crowd fragt bereits Claude Code, sich selbst zu reverse-engineeren.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"The big loss for Anthropic here is how it reveals their product roadmap via feature flags. A big one is their unreleased &#x27;assistant mode&#x27; with code name kairos."</div>
+          <div class="comment-i18n" data-lang="zh">Anthropic在这里的最大损失是通过功能标志泄露了产品路线图。一个重要的是他们未发布的&#x27;助手模式&#x27;,代号kairos。</div>
+<div class="comment-i18n" data-lang="ja">Anthropicにとっての最大の損失は、機能フラグを通じて製品ロードマップが明らかになったこと。大きいのは未発表の「アシスタントモード」（コードネームkairos）。</div>
+<div class="comment-i18n" data-lang="ko">Anthropic의 가장 큰 손실은 기능 플래그를 통해 제품 로드맵이 드러난 것이다. 큰 것은 미출시 &#x27;어시스턴트 모드&#x27; 코드명 kairos.</div>
+<div class="comment-i18n" data-lang="es">La gran pérdida para Anthropic aquí es cómo revela su hoja de ruta de producto a través de flags de características. Una grande es su &#x27;modo asistente&#x27; no lanzado con nombre en código kairos.</div>
+<div class="comment-i18n" data-lang="de">Der große Verlust für Anthropic hier ist, wie es ihre Produkt-Roadmap über Feature-Flags enthüllt. Ein großes ist ihr unveröffentlichter &#x27;Assistenten-Modus&#x27; mit Codenamen kairos.</div>
+
+          <div class="comment-author">-- treexs</div>
+        </div><div class="comment">
+          <div class="comment-text">"They have an interesting regex for detecting negative sentiment in users prompt which is then logged."</div>
+          <div class="comment-i18n" data-lang="zh">他们有一个有趣的正则表达式用于检测用户提示中的负面情绪并记录。</div>
+<div class="comment-i18n" data-lang="ja">ユーザープロンプトの否定的な感情を検出してログに記録する興味深い正規表現がある。</div>
+<div class="comment-i18n" data-lang="ko">사용자 프롬프트에서 부정적인 감정을 감지하여 로깅하는 흥미로운 정규표현식이 있다.</div>
+<div class="comment-i18n" data-lang="es">Tienen una regex interesante para detectar sentimiento negativo en los prompts de usuarios que luego se registra.</div>
+<div class="comment-i18n" data-lang="de">Sie haben eine interessante Regex zur Erkennung negativer Stimmung in Benutzer-Prompts, die dann protokolliert wird.</div>
+
+          <div class="comment-author">-- bkryza</div>
+        </div><div class="comment">
+          <div class="comment-text">"Would be interesting to run this through Malus or literally just Claude Code and get open source Claude Code out of it."</div>
+          <div class="comment-i18n" data-lang="zh">让Claude Code通过Malus或者就用Claude Code本身来处理这个,得到开源的Claude Code会很有趣。</div>
+<div class="comment-i18n" data-lang="ja">これをMalusやClaude Code自体で処理してオープンソース版を得るのは面白そう。</div>
+<div class="comment-i18n" data-lang="ko">Malus나 Claude Code 자체로 처리해서 오픈소스 Claude Code를 얻으면 흥미로울 것 같다.</div>
+<div class="comment-i18n" data-lang="es">Sería interesante procesar esto con Malus o literalmente con Claude Code y obtener Claude Code de código abierto.</div>
+<div class="comment-i18n" data-lang="de">Es wäre interessant, dies durch Malus oder buchstäblich Claude Code zu laufen und Open-Source Claude Code daraus zu bekommen.</div>
+
+          <div class="comment-author">-- avaer</div>
+        </div>
+      </div>
+      
+    </article>
+<article class="story" id="s47571330-03311100">
+      <h3 class="story-title">
+        <a href="https://boringsql.com/posts/good-cte-bad-cte/" target="_blank">Good CTE, Bad CTE</a>
+        <a href="#s47571330-03311100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">好的CTE,坏的CTE</div>
+<div class="i18n-title" data-lang="ja">良いCTE、悪いCTE</div>
+<div class="i18n-title" data-lang="ko">좋은 CTE, 나쁜 CTE</div>
+<div class="i18n-title" data-lang="es">CTE bueno, CTE malo</div>
+<div class="i18n-title" data-lang="de">Guter CTE, schlechter CTE</div>
+
+      <div class="story-meta">
+        49pts | 14c | <a href="https://news.ycombinator.com/item?id=47571330" target="_blank">HN#47571330</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">CTEs (Common Table Expressions) in PostgreSQL are no longer optimization fences since version 12 (2019). The planner now automatically inlines single-reference, side-effect-free CTEs. Multi-referenced CTEs are materialized to avoid redundant computation. The article provides a decision matrix showing when CTEs get inlined vs materialized based on volatility, recursion, and DML presence.</div>
+        <span class="i18n-text" data-lang="zh">PostgreSQL中的CTE(公用表表达式)自12版本(2019年)以来不再是优化屏障。规划器现在自动内联单引用、无副作用的CTE。多引用的CTE被物化以避免重复计算。文章提供了一个决策矩阵,显示CTE何时被内联与物化,基于波动性、递归和DML的存在。</span>
+<span class="i18n-text" data-lang="ja">PostgreSQLのCTE（共通テーブル式）はバージョン12（2019年）以降、最適化の壁ではなくなった。プランナーは単一参照で副作用のないCTEを自動的にインライン化する。複数参照されるCTEは冗長な計算を避けるために実体化される。記事は揮発性、再帰、DMLの有無に基づいてCTEがいつインライン化されるか実体化されるかを示す決定マトリックスを提供。</span>
+<span class="i18n-text" data-lang="ko">PostgreSQL의 CTE(공통 테이블 표현식)는 버전 12(2019년) 이후 최적화 장벽이 아니게 되었다. 플래너는 이제 단일 참조, 부작용 없는 CTE를 자동으로 인라인화한다. 다중 참조 CTE는 중복 계산을 피하기 위해 구체화된다. 기사는 휘발성, 재귀, DML 존재 여부에 따라 CTE가 인라인화되는 시점과 구체화되는 시점을 보여주는 결정 매트릭스를 제공한다.</span>
+<span class="i18n-text" data-lang="es">Los CTEs (Expresiones de Tabla Común) en PostgreSQL ya no son barreras de optimización desde la versión 12 (2019). El planificador ahora inline automáticamente los CTEs de referencia única sin efectos secundarios. Los CTEs multi-referenciados se materializan para evitar computación redundante. El artículo proporciona una matriz de decisión que muestra cuándo los CTEs se inline vs materializan según volatilidad, recursión y presencia de DML.</span>
+<span class="i18n-text" data-lang="de">CTEs (Common Table Expressions) in PostgreSQL sind seit Version 12 (2019) keine Optimierungsbarrieren mehr. Der Planner inlined jetzt automatisch einmal referenzierte, nebenwirkungsfreie CTEs. Mehrfach referenzierte CTEs werden materialisiert um redundante Berechnung zu vermeiden. Der Artikel bietet eine Entscheidungsmatrix wann CTEs inlined vs materialisiert werden basierend auf Volatilität, Rekursion und DML-Präsenz.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Every developer who learned SQL from Stack Overflow in 2018 still thinks CTEs are performance killers. They&#x27;ve been wrong for six years. The real crime is using CTEs as a way to pretend SQL is imperative code.</div>
+        <span class="i18n-text" data-lang="zh">每个在2018年从Stack Overflow学习SQL的开发者仍然认为CTE是性能杀手。他们已经错了六年。真正的罪行是用CTE来假装SQL是命令式代码。</span>
+<span class="i18n-text" data-lang="ja">2018年にStack OverflowでSQLを学んだすべての開発者は、まだCTEがパフォーマンスキラーだと思っている。6年間間違っている。本当の罪は、SQLが命令型コードであるかのように見せかけるためにCTEを使うことだ。</span>
+<span class="i18n-text" data-lang="ko">2018년에 Stack Overflow에서 SQL을 배운 모든 개발자는 여전히 CTE가 성능 킬러라고 생각한다. 6년 동안 틀렸다. 진짜 죄는 SQL이 명령형 코드인 척하기 위해 CTE를 사용하는 것이다.</span>
+<span class="i18n-text" data-lang="es">Cada desarrollador que aprendió SQL de Stack Overflow en 2018 todavía piensa que los CTEs son asesinos del rendimiento. Han estado equivocados por seis años. El verdadero crimen es usar CTEs como forma de pretender que SQL es código imperativo.</span>
+<span class="i18n-text" data-lang="de">Jeder Entwickler der SQL 2018 von Stack Overflow gelernt hat denkt immer noch dass CTEs Performance-Killer sind. Sie liegen seit sechs Jahren falsch. Das wahre Verbrechen ist CTEs zu benutzen um so zu tun als wäre SQL imperativer Code.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Use the term, never define the term, classic. CTE stands for Common Table Expressions in SQL."</div>
+          <div class="comment-i18n" data-lang="zh">使用术语却从不定义,经典。CTE代表SQL中的公用表表达式。</div>
+<div class="comment-i18n" data-lang="ja">用語を使って定義しない、典型的。CTEはSQLの共通テーブル式の略。</div>
+<div class="comment-i18n" data-lang="ko">용어를 사용하면서 정의하지 않는, 클래식. CTE는 SQL의 공통 테이블 표현식을 의미한다.</div>
+<div class="comment-i18n" data-lang="es">Usa el término, nunca lo define, clásico. CTE significa Expresiones de Tabla Común en SQL.</div>
+<div class="comment-i18n" data-lang="de">Den Begriff benutzen aber nie definieren, klassisch. CTE steht für Common Table Expressions in SQL.</div>
+
+          <div class="comment-author">-- vlaaad</div>
+        </div><div class="comment">
+          <div class="comment-text">"If you want something that is more like actual recursion (depth-first), Oracle has CONNECT BY which does not require the same kind of tracking."</div>
+          <div class="comment-i18n" data-lang="zh">如果你想要更像真正递归(深度优先)的东西,Oracle有CONNECT BY,不需要同样的跟踪。</div>
+<div class="comment-i18n" data-lang="ja">より実際の再帰（深さ優先）に近いものが欲しければ、OracleのCONNECT BYは同じ追跡が不要。</div>
+<div class="comment-i18n" data-lang="ko">더 실제 재귀(깊이 우선)에 가까운 것을 원한다면, Oracle의 CONNECT BY는 같은 추적이 필요 없다.</div>
+<div class="comment-i18n" data-lang="es">Si quieres algo más parecido a recursión real (primero en profundidad), Oracle tiene CONNECT BY que no requiere el mismo tipo de seguimiento.</div>
+<div class="comment-i18n" data-lang="de">Wenn du etwas willst das mehr wie echte Rekursion ist (Tiefensuche), hat Oracle CONNECT BY das diese Art von Tracking nicht benötigt.</div>
+
+          <div class="comment-author">-- bob1029</div>
+        </div><div class="comment">
+          <div class="comment-text">"I wrangle databases by day, and do martial arts of an evening. Two arenas where CTEs can cause significant headaches!"</div>
+          <div class="comment-i18n" data-lang="zh">我白天处理数据库,晚上练武术。两个领域CTE都能造成严重的头痛!</div>
+<div class="comment-i18n" data-lang="ja">昼間はデータベース、夜は武道。どちらもCTEが深刻な頭痛の種になる分野だ！</div>
+<div class="comment-i18n" data-lang="ko">낮에는 데이터베이스, 저녁에는 무술. CTE가 심각한 두통을 유발할 수 있는 두 분야!</div>
+<div class="comment-i18n" data-lang="es">¡Trabajo con bases de datos de día y hago artes marciales por la noche. Dos arenas donde los CTEs pueden causar dolores de cabeza significativos!</div>
+<div class="comment-i18n" data-lang="de">Ich arbeite tagsüber mit Datenbanken und mache abends Kampfsport. Zwei Bereiche wo CTEs erhebliche Kopfschmerzen verursachen können!</div>
+
+          <div class="comment-author">-- dspillett</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#postgresql</span><span class="tag">#sql</span><span class="tag">#database</span><span class="tag">#performance</span></div>
+    </article>
+<article class="story" id="s47572162-03311100">
+      <h3 class="story-title">
+        <a href="https://www.asimov.press/p/pause" target="_blank">We&#x27;re Pausing Asimov Press</a>
+        <a href="#s47572162-03311100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">我们暂停Asimov Press</div>
+<div class="i18n-title" data-lang="ja">Asimov Pressを一時停止します</div>
+<div class="i18n-title" data-lang="ko">Asimov Press를 일시 중지합니다</div>
+<div class="i18n-title" data-lang="es">Pausamos Asimov Press</div>
+<div class="i18n-title" data-lang="de">Wir pausieren Asimov Press</div>
+
+      <div class="story-meta">
+        39pts | 10c | <a href="https://news.ycombinator.com/item?id=47572162" target="_blank">HN#47572162</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Asimov Press, a science journalism publication that launched in January 2024, is going on hiatus. In two years they published 149 articles reaching 500K monthly readers, grew to 42K subscribers, and sold out two anthologies including the first commercially available book published in both print and DNA. The pause isn&#x27;t due to funding issues but because the founders are moving on to new projects.</div>
+        <span class="i18n-text" data-lang="zh">Asimov Press是一家于2024年1月创办的科学新闻出版物,现在进入休眠期。两年内他们发表了149篇文章,月读者达50万,订阅者增长到4.2万,并售罄了两本选集,包括首本同时以印刷版和DNA形式出版的商业书籍。暂停并非因为资金问题,而是因为创始人要去做新项目。</span>
+<span class="i18n-text" data-lang="ja">2024年1月に創刊した科学ジャーナリズム出版物Asimov Pressが休止する。2年間で149本の記事を発表し月間50万人の読者を獲得、購読者は4.2万人に成長、印刷とDNAの両方で出版された初の商業書籍を含む2つのアンソロジーを完売した。休止は資金問題ではなく、創設者が新しいプロジェクトに移行するため。</span>
+<span class="i18n-text" data-lang="ko">2024년 1월에 창간한 과학 저널리즘 출판물 Asimov Press가 휴간에 들어간다. 2년 동안 149개의 기사를 발행하여 월 50만 독자에 도달했고, 구독자가 4.2만 명으로 성장했으며, 인쇄와 DNA 형태로 출판된 최초의 상업 서적을 포함한 두 개의 선집을 완판했다. 일시 중지는 자금 문제 때문이 아니라 창립자들이 새로운 프로젝트로 이동하기 때문이다.</span>
+<span class="i18n-text" data-lang="es">Asimov Press, una publicación de periodismo científico que se lanzó en enero de 2024, entra en pausa. En dos años publicaron 149 artículos alcanzando 500K lectores mensuales, crecieron a 42K suscriptores, y agotaron dos antologías incluyendo el primer libro comercialmente disponible publicado tanto en impreso como en ADN. La pausa no es por problemas de financiación sino porque los fundadores pasan a nuevos proyectos.</span>
+<span class="i18n-text" data-lang="de">Asimov Press, eine Wissenschaftsjournalismus-Publikation die im Januar 2024 startete, geht in eine Pause. In zwei Jahren veröffentlichten sie 149 Artikel mit 500K monatlichen Lesern, wuchsen auf 42K Abonnenten, und verkauften zwei Anthologien aus, darunter das erste kommerziell erhältliche Buch das sowohl in Print als auch in DNA veröffentlicht wurde. Die Pause ist nicht wegen Finanzierungsproblemen sondern weil die Gründer zu neuen Projekten übergehen.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">A science publication that actually made money, published a book encoded in DNA, and chose to quit while ahead. In publishing, that&#x27;s not a pause, that&#x27;s a miracle exit strategy.</div>
+        <span class="i18n-text" data-lang="zh">一个真正赚钱的科学出版物,出版了一本用DNA编码的书,并选择在领先时退出。在出版业,这不是暂停,这是奇迹般的退出策略。</span>
+<span class="i18n-text" data-lang="ja">実際にお金を稼ぎ、DNAにエンコードされた本を出版し、先行しているうちにやめることを選んだ科学出版物。出版業界では、これは一時停止ではなく、奇跡的な出口戦略だ。</span>
+<span class="i18n-text" data-lang="ko">실제로 돈을 벌고, DNA로 인코딩된 책을 출판하고, 앞서 있을 때 그만두기로 선택한 과학 출판물. 출판업에서 이것은 일시 중지가 아니라 기적적인 출구 전략이다.</span>
+<span class="i18n-text" data-lang="es">Una publicación científica que realmente ganó dinero, publicó un libro codificado en ADN, y eligió retirarse mientras iba ganando. En publicaciones, eso no es una pausa, es una estrategia de salida milagrosa.</span>
+<span class="i18n-text" data-lang="de">Eine Wissenschaftspublikation die tatsächlich Geld verdiente, ein in DNA kodiertes Buch veröffentlichte, und sich entschied aufzuhören während sie vorne lag. Im Verlagswesen ist das keine Pause, das ist eine wundersame Exit-Strategie.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"FYI: this is not Asimov&#x27;s Science Fiction, the pulp sci fi magazine, found along with Analog Science Fiction at convenience stores, but something else."</div>
+          <div class="comment-i18n" data-lang="zh">顺便说一下:这不是在便利店能找到的阿西莫夫科幻杂志,是另一个东西。</div>
+<div class="comment-i18n" data-lang="ja">念のため：これはコンビニで見かけるアシモフのSF雑誌ではなく、別のもの。</div>
+<div class="comment-i18n" data-lang="ko">참고로: 이것은 편의점에서 볼 수 있는 아시모프 SF 잡지가 아니라 다른 것이다.</div>
+<div class="comment-i18n" data-lang="es">Para tu información: esto no es Asimov&#x27;s Science Fiction, la revista de ciencia ficción pulp que se encuentra en tiendas de conveniencia, sino algo diferente.</div>
+<div class="comment-i18n" data-lang="de">Zur Info: dies ist nicht Asimov&#x27;s Science Fiction, das Pulp-SciFi-Magazin das man in Supermärkten findet, sondern etwas anderes.</div>
+
+          <div class="comment-author">-- adamgordonbell</div>
+        </div><div class="comment">
+          <div class="comment-text">"It feels like a quick intro on what Asimov Press was in the first place would&#x27;ve been a good idea."</div>
+          <div class="comment-i18n" data-lang="zh">感觉首先简要介绍一下Asimov Press是什么会是个好主意。</div>
+<div class="comment-i18n" data-lang="ja">Asimov Pressが何だったかの簡単な紹介が最初にあった方が良かったと感じる。</div>
+<div class="comment-i18n" data-lang="ko">Asimov Press가 처음에 무엇이었는지에 대한 간단한 소개가 있었으면 좋았을 것 같다.</div>
+<div class="comment-i18n" data-lang="es">Parece que una introducción rápida sobre qué era Asimov Press en primer lugar habría sido una buena idea.</div>
+<div class="comment-i18n" data-lang="de">Es fühlt sich an als wäre eine kurze Einführung was Asimov Press überhaupt war eine gute Idee gewesen.</div>
+
+          <div class="comment-author">-- vrganj</div>
+        </div><div class="comment">
+          <div class="comment-text">"I just started reading Asimov Press. It had a unique blend of popular science writing that was sorely missing from the internet."</div>
+          <div class="comment-i18n" data-lang="zh">我刚开始读Asimov Press。它有一种互联网上严重缺失的独特科普写作风格。</div>
+<div class="comment-i18n" data-lang="ja">Asimov Pressを読み始めたばかりだった。インターネットで深刻に不足していたユニークなポピュラーサイエンスライティングのブレンドがあった。</div>
+<div class="comment-i18n" data-lang="ko">Asimov Press를 막 읽기 시작했다. 인터넷에서 심각하게 부족했던 독특한 대중 과학 글쓰기의 조합이 있었다.</div>
+<div class="comment-i18n" data-lang="es">Acabo de empezar a leer Asimov Press. Tenía una mezcla única de escritura de ciencia popular que faltaba mucho en internet.</div>
+<div class="comment-i18n" data-lang="de">Ich habe gerade erst angefangen Asimov Press zu lesen. Es hatte eine einzigartige Mischung aus populärwissenschaftlichem Schreiben die im Internet schmerzlich fehlte.</div>
+
+          <div class="comment-author">-- ipsum2</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#publishing</span><span class="tag">#science</span><span class="tag">#media</span><span class="tag">#journalism</span></div>
+    </article>
+<article class="story" id="s47558867-03311100">
+      <h3 class="story-title">
+        <a href="https://apnews.com/article/cleveland-salt-mine-winter-road-0daf091e3d56f65766bcf6a597683893" target="_blank">One of the largest salt mines in the world exists under Lake Erie</a>
+        <a href="#s47558867-03311100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">世界上最大的盐矿之一位于伊利湖下</div>
+<div class="i18n-title" data-lang="ja">世界最大級の岩塩鉱山がエリー湖の下に存在する</div>
+<div class="i18n-title" data-lang="ko">세계 최대의 소금 광산 중 하나가 이리 호수 아래에 존재한다</div>
+<div class="i18n-title" data-lang="es">Una de las minas de sal más grandes del mundo existe bajo el lago Erie</div>
+<div class="i18n-title" data-lang="de">Eines der größten Salzbergwerke der Welt existiert unter dem Eriesee</div>
+
+      <div class="story-meta">
+        34pts | 23c | <a href="https://news.ycombinator.com/item?id=47558867" target="_blank">HN#47558867</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">［From title + comments, article unreachable］ A massive salt mine operates beneath Lake Erie near Cleveland, providing road salt for winter weather. HN commenters share stories of similar mines under other lakes including one beneath Cayuga Lake in New York. One commenter reminisces about growing up in Winsford, a UK salt mining town, and the nostalgic sight of yellow salt bins.</div>
+        <span class="i18n-text" data-lang="zh">［根据标题和评论,文章无法访问］ 克利夫兰附近的伊利湖下运营着一个大型盐矿,为冬季天气提供道路盐。HN评论者分享了其他湖泊下类似矿井的故事,包括纽约卡尤加湖下的一个。一位评论者回忆了在英国盐矿小镇温斯福德的童年,以及看到黄色盐箱时的怀旧感。</span>
+<span class="i18n-text" data-lang="ja">［タイトルとコメントから、記事にアクセス不可］ クリーブランド近くのエリー湖の下で大規模な岩塩鉱山が稼働しており、冬季の道路塩を供給している。HNコメント者はニューヨークのカユガ湖の下の鉱山など、他の湖の下の同様の鉱山の話を共有。あるコメント者はイギリスの岩塩鉱山の町ウィンスフォードでの子供時代を懐かしみ、黄色い塩の箱を見るたびにノスタルジアを感じると述べた。</span>
+<span class="i18n-text" data-lang="ko">［제목과 댓글에서, 기사 접근 불가］ 클리블랜드 근처 이리 호수 아래에서 대규모 소금 광산이 운영되며 겨울철 도로 소금을 공급한다. HN 댓글러들은 뉴욕의 카유가 호수 아래 광산을 포함한 다른 호수 아래의 유사한 광산 이야기를 공유했다. 한 댓글러는 영국 소금 광산 마을 윈스포드에서의 어린 시절을 회상하며 노란색 소금 통을 볼 때마다 향수를 느낀다고 했다.</span>
+<span class="i18n-text" data-lang="es">［Del título y comentarios, artículo inaccesible］ Una enorme mina de sal opera bajo el lago Erie cerca de Cleveland, proporcionando sal para carreteras en invierno. Los comentaristas de HN comparten historias de minas similares bajo otros lagos incluyendo una bajo el lago Cayuga en Nueva York. Un comentarista recuerda con nostalgia crecer en Winsford, un pueblo minero de sal en el Reino Unido, y la vista nostálgica de los contenedores amarillos de sal.</span>
+<span class="i18n-text" data-lang="de">［Aus Titel und Kommentaren, Artikel nicht erreichbar］ Ein riesiges Salzbergwerk operiert unter dem Eriesee nahe Cleveland und liefert Streusalz für den Winter. HN-Kommentatoren teilen Geschichten über ähnliche Minen unter anderen Seen, darunter eine unter dem Cayuga Lake in New York. Ein Kommentator erinnert sich nostalgisch an seine Kindheit in Winsford, einer Salzbergbaustadt in Großbritannien, und den Anblick gelber Salzcontainer.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The most Cleveland thing possible: an entire industry invisibly grinding away beneath a lake while nobody notices. At least until the Lake Peigneur situation happens and the whole thing becomes a whirlpool.</div>
+        <span class="i18n-text" data-lang="zh">最克利夫兰的事情:整个行业在湖底悄悄运转而没人注意到。至少在佩尼约尔湖事件发生、整个东西变成漩涡之前是这样。</span>
+<span class="i18n-text" data-lang="ja">最もクリーブランドらしいこと：産業全体が湖の下で誰も気づかないうちに静かに稼働している。少なくともペニョール湖のような事態が起きて全体が渦巻きになるまでは。</span>
+<span class="i18n-text" data-lang="ko">가장 클리블랜드다운 것: 아무도 눈치채지 못하는 사이에 호수 아래에서 조용히 가동되는 전체 산업. 적어도 페니약 호수 상황이 발생하고 전체가 소용돌이가 되기 전까지는.</span>
+<span class="i18n-text" data-lang="es">Lo más Cleveland posible: toda una industria trabajando invisiblemente bajo un lago mientras nadie lo nota. Al menos hasta que pase la situación del lago Peigneur y todo se convierta en un remolino.</span>
+<span class="i18n-text" data-lang="de">Das Cleveland-typischste überhaupt: eine ganze Industrie die unsichtbar unter einem See arbeitet während niemand es bemerkt. Zumindest bis die Lake Peigneur Situation passiert und das Ganze zu einem Strudel wird.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"There&#x27;s a salt mine mostly under Cayuga Lake in New York. When we bought our house we had to sign a paper indicating we knew there was a mine somewhere near."</div>
+          <div class="comment-i18n" data-lang="zh">纽约卡尤加湖下有一个盐矿。我们买房时必须签一份文件表明我们知道附近有矿井。</div>
+<div class="comment-i18n" data-lang="ja">ニューヨークのカユガ湖の下に岩塩鉱山がある。家を買った時、近くに鉱山があることを知っているという書類に署名しなければならなかった。</div>
+<div class="comment-i18n" data-lang="ko">뉴욕 카유가 호수 아래에 소금 광산이 있다. 집을 샀을 때 근처에 광산이 있다는 것을 알고 있다는 서류에 서명해야 했다.</div>
+<div class="comment-i18n" data-lang="es">Hay una mina de sal mayormente bajo el lago Cayuga en Nueva York. Cuando compramos nuestra casa tuvimos que firmar un papel indicando que sabíamos que había una mina cerca.</div>
+<div class="comment-i18n" data-lang="de">Es gibt ein Salzbergwerk hauptsächlich unter dem Cayuga Lake in New York. Als wir unser Haus kauften mussten wir ein Papier unterschreiben dass wir wussten dass es irgendwo in der Nähe ein Bergwerk gibt.</div>
+
+          <div class="comment-author">-- pfdietz</div>
+        </div><div class="comment">
+          <div class="comment-text">"I spent part of my childhood in Winsford, a salt mining town in the UK. Every time I pass a yellow bin of salt for gritting the roads, I get a little bit of nostalgia."</div>
+          <div class="comment-i18n" data-lang="zh">我童年的一部分在英国盐矿小镇温斯福德度过。每次经过铺路用的黄色盐箱,我都会有一点怀旧感。</div>
+<div class="comment-i18n" data-lang="ja">子供時代の一部をイギリスの岩塩鉱山の町ウィンスフォードで過ごした。道路の融雪用の黄色い塩の箱を通り過ぎるたびに、少しノスタルジーを感じる。</div>
+<div class="comment-i18n" data-lang="ko">어린 시절 일부를 영국 소금 광산 마을 윈스포드에서 보냈다. 도로 제설용 노란 소금 통을 지나칠 때마다 약간의 향수를 느낀다.</div>
+<div class="comment-i18n" data-lang="es">Pasé parte de mi infancia en Winsford, un pueblo minero de sal en el Reino Unido. Cada vez que paso por un contenedor amarillo de sal para las carreteras, siento un poco de nostalgia.</div>
+<div class="comment-i18n" data-lang="de">Ich verbrachte einen Teil meiner Kindheit in Winsford, einer Salzbergbaustadt in UK. Jedes Mal wenn ich an einem gelben Salzcontainer für Straßen vorbeikomme, fühle ich ein wenig Nostalgie.</div>
+
+          <div class="comment-author">-- thom</div>
+        </div><div class="comment">
+          <div class="comment-text">"Reminds me of the Lake Peigneur disaster in 1980 in Louisiana when an oil drilling rig entered a salt mine located under the lake."</div>
+          <div class="comment-i18n" data-lang="zh">让我想起了1980年路易斯安那州的佩尼约尔湖灾难,当时一个石油钻井平台进入了湖下的盐矿。</div>
+<div class="comment-i18n" data-lang="ja">1980年のルイジアナ州ペニョール湖の災害を思い出す。石油掘削リグが湖の下の岩塩鉱山に入った時の。</div>
+<div class="comment-i18n" data-lang="ko">1980년 루이지애나의 페니약 호수 재난이 생각난다. 석유 시추 장비가 호수 아래 소금 광산에 들어갔을 때.</div>
+<div class="comment-i18n" data-lang="es">Me recuerda al desastre del lago Peigneur en 1980 en Louisiana cuando una plataforma de perforación petrolera entró en una mina de sal ubicada bajo el lago.</div>
+<div class="comment-i18n" data-lang="de">Erinnert mich an die Lake Peigneur Katastrophe 1980 in Louisiana als eine Ölbohrinsel in ein Salzbergwerk unter dem See eindrang.</div>
+
+          <div class="comment-author">-- wewewedxfgdf</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#mining</span><span class="tag">#infrastructure</span><span class="tag">#cleveland</span><span class="tag">#geology</span></div>
+    </article>
+<article class="story" id="s47567790-03311100">
+      <h3 class="story-title">
+        <a href="https://escherinhetpaleis.nl/en/about-escher/escher-today/oscar-reutersvard" target="_blank">Oscar Reutersvärd :art:mathematics:optical-illusions</a>
+        <a href="#s47567790-03311100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">奥斯卡·鲁特斯沃德</div>
+<div class="i18n-title" data-lang="ja">オスカー・ロイテルスヴァルド</div>
+<div class="i18n-title" data-lang="ko">오스카 로이터스베르드</div>
+<div class="i18n-title" data-lang="es">Oscar Reutersvärd</div>
+<div class="i18n-title" data-lang="de">Oscar Reutersvärd</div>
+
+      <div class="story-meta">
+        38pts | 3c | <a href="https://news.ycombinator.com/item?id=47567790" target="_blank">HN#47567790</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Oscar Reutersvärd, a Swedish artist who died in 2002, invented the impossible triangle in 1934 and the impossible staircase in 1937, decades before the Penroses published them in 1958. He created thousands of impossible figures using isometric projection, calling them &#x27;perspective japonaise.&#x27; Despite being the true originator, he&#x27;s overshadowed by Escher and the Penroses. Escher reportedly never responded to his attempts to connect.</div>
+        <span class="i18n-text" data-lang="zh">瑞典艺术家奥斯卡·鲁特斯沃德于2002年去世,他在1934年发明了不可能三角形,1937年发明了不可能楼梯,比彭罗斯1958年发表早了几十年。他使用等轴测投影创作了数千个不可能图形,称之为&#x27;日本透视&#x27;。尽管是真正的创始人,他却被埃舍尔和彭罗斯所掩盖。据报道埃舍尔从未回应他的联系尝试。</span>
+<span class="i18n-text" data-lang="ja">2002年に亡くなったスウェーデンの芸術家オスカー・ロイテルスヴァルドは、1934年に不可能な三角形を、1937年に不可能な階段を発明した。ペンローズが1958年に発表する何十年も前のことだ。彼は等角投影法を使って何千もの不可能な図形を作成し、「日本の遠近法」と呼んだ。真の創始者であるにもかかわらず、エッシャーとペンローズの陰に隠れている。エッシャーは彼との連絡の試みに決して応じなかったと報告されている。</span>
+<span class="i18n-text" data-lang="ko">2002년에 사망한 스웨덴 예술가 오스카 로이터스베르드는 1934년에 불가능한 삼각형을, 1937년에 불가능한 계단을 발명했다. 펜로즈가 1958년에 발표하기 수십 년 전이다. 그는 등축 투영법을 사용하여 수천 개의 불가능한 도형을 만들었고 &#x27;일본 원근법&#x27;이라고 불렀다. 진정한 창시자임에도 불구하고 에셔와 펜로즈에게 가려져 있다. 에셔는 그의 연락 시도에 응답하지 않은 것으로 알려져 있다.</span>
+<span class="i18n-text" data-lang="es">Oscar Reutersvärd, un artista sueco que murió en 2002, inventó el triángulo imposible en 1934 y la escalera imposible en 1937, décadas antes de que los Penrose los publicaran en 1958. Creó miles de figuras imposibles usando proyección isométrica, llamándolas &#x27;perspective japonaise&#x27;. A pesar de ser el verdadero originador, está eclipsado por Escher y los Penrose. Según se informa, Escher nunca respondió a sus intentos de conectar.</span>
+<span class="i18n-text" data-lang="de">Oscar Reutersvärd, ein schwedischer Künstler der 2002 starb, erfand das unmögliche Dreieck 1934 und die unmögliche Treppe 1937, Jahrzehnte bevor die Penroses sie 1958 veröffentlichten. Er schuf tausende unmögliche Figuren mit isometrischer Projektion und nannte sie &#x27;perspective japonaise&#x27;. Trotz der wahre Urheber zu sein, wird er von Escher und den Penroses überschattet. Escher reagierte Berichten zufolge nie auf seine Kontaktversuche.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The man invented impossible geometry at 18, spent his whole life obsessed with it, and still got out-marketed by Escher. Being first matters less than being memorable. At least Sweden put his triangles on stamps.</div>
+        <span class="i18n-text" data-lang="zh">这个人18岁就发明了不可能几何,一生痴迷于此,却仍然被埃舍尔抢了风头。先发制人不如令人难忘重要。至少瑞典把他的三角形印在了邮票上。</span>
+<span class="i18n-text" data-lang="ja">18歳で不可能な幾何学を発明し、一生をそれに費やしたのに、エッシャーにマーケティングで負けた。最初であることより記憶に残ることが重要だ。少なくともスウェーデンは彼の三角形を切手にした。</span>
+<span class="i18n-text" data-lang="ko">18세에 불가능한 기하학을 발명하고 평생을 그것에 바쳤지만 에셔에게 마케팅에서 졌다. 처음이 되는 것보다 기억에 남는 것이 더 중요하다. 적어도 스웨덴은 그의 삼각형을 우표에 넣었다.</span>
+<span class="i18n-text" data-lang="es">El hombre inventó la geometría imposible a los 18, pasó toda su vida obsesionado con ello, y aun así fue superado en marketing por Escher. Ser primero importa menos que ser memorable. Al menos Suecia puso sus triángulos en sellos.</span>
+<span class="i18n-text" data-lang="de">Der Mann erfand unmögliche Geometrie mit 18, verbrachte sein ganzes Leben davon besessen, und wurde trotzdem von Escher im Marketing geschlagen. Der Erste zu sein zählt weniger als unvergesslich zu sein. Immerhin hat Schweden seine Dreiecke auf Briefmarken gedruckt.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I love Escher&#x27;s works. 3Blue1Brown just released an amazing video explaining the geometric transformation for Escher&#x27;s print gallery. This made me try to reimplement the effect as WebGL shader."</div>
+          <div class="comment-i18n" data-lang="zh">我喜欢埃舍尔的作品。3Blue1Brown刚发布了一个很棒的视频解释埃舍尔版画画廊的几何变换。这让我尝试用WebGL着色器重新实现这个效果。</div>
+<div class="comment-i18n" data-lang="ja">エッシャーの作品が大好きだ。3Blue1Brownがエッシャーのプリントギャラリーの幾何学的変換を説明する素晴らしいビデオを公開した。これで私はWebGLシェーダーで効果を再実装しようとした。</div>
+<div class="comment-i18n" data-lang="ko">에셔의 작품을 좋아한다. 3Blue1Brown이 에셔의 프린트 갤러리의 기하학적 변환을 설명하는 멋진 비디오를 공개했다. 이것이 나를 WebGL 셰이더로 효과를 재구현하려고 시도하게 했다.</div>
+<div class="comment-i18n" data-lang="es">Amo las obras de Escher. 3Blue1Brown acaba de lanzar un video increíble explicando la transformación geométrica de la galería de impresiones de Escher. Esto me hizo intentar reimplementar el efecto como shader WebGL.</div>
+<div class="comment-i18n" data-lang="de">Ich liebe Eschers Werke. 3Blue1Brown hat gerade ein tolles Video veröffentlicht das die geometrische Transformation für Eschers Druckgalerie erklärt. Das hat mich dazu gebracht den Effekt als WebGL Shader nachzubauen.</div>
+
+          <div class="comment-author">-- laszlokorte</div>
+        </div><div class="comment">
+          <div class="comment-text">"I have two of his original drawings/paintings here at home on my wall. I live in Lund, which he also did for a while, so it&#x27;s pretty common to find them in art stores and auctions."</div>
+          <div class="comment-i18n" data-lang="zh">我家墙上有两幅他的原作画作。我住在隆德,他也在那里住过一段时间,所以在艺术店和拍卖会上很常见。</div>
+<div class="comment-i18n" data-lang="ja">家の壁に彼のオリジナルの絵が2枚ある。私はルンドに住んでいて、彼もしばらくそこに住んでいたので、美術店やオークションでよく見かける。</div>
+<div class="comment-i18n" data-lang="ko">집 벽에 그의 원본 그림 두 점이 있다. 나는 룬드에 살고 있는데, 그도 한동안 거기 살았기 때문에 미술 상점이나 경매에서 흔히 볼 수 있다.</div>
+<div class="comment-i18n" data-lang="es">Tengo dos de sus dibujos/pinturas originales aquí en casa en mi pared. Vivo en Lund, donde él también vivió por un tiempo, así que es bastante común encontrarlos en tiendas de arte y subastas.</div>
+<div class="comment-i18n" data-lang="de">Ich habe zwei seiner Originalzeichnungen/Gemälde hier zuhause an der Wand. Ich lebe in Lund, wo er auch eine Zeit lang lebte, daher ist es ziemlich üblich sie in Kunstläden und Auktionen zu finden.</div>
+
+          <div class="comment-author">-- gitmagic</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#history</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-03-31T08:00:00Z</div>
