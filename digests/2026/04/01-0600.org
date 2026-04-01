@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-04-01 06:00:00 UT UTC
+#+DATE: 2026-04-01T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+13 parameters learn to reason, Neanderthals outlast your startup, and C++ debates string views
+
+* Highlights
+- TinyLoRA: 91% accuracy on math with just 13 trained parameters
+- Neanderthals: 350k years of inbreeding, still outlasted most tech companies
+- TruffleRuby: A tribute to Chris Seaton's legacy
+
+* Stories
+
+** TinyLoRA – Learning to Reason in 13 Parameters :ai:ml:research:lora:
+:PROPERTIES:
+:ID:       47541733
+:URL:      https://arxiv.org/abs/2602.04118
+:HN_URL:   https://news.ycombinator.com/item?id=47541733
+:POINTS:   136
+:COMMENTS: 16
+:BY:       sorenjan
+:END:
+
+*** TLDR
+Researchers trained Qwen2.5-8B to 91% accuracy on GSM8K math benchmark with only 13 parameters (26 bytes total). TinyLoRA scales low-rank adapters down to single-parameter sizes, suggesting that reasoning capability may already exist in models and only requires minimal 'steering' rather than heavy training.
+
+*** Take
+If 13 parameters can unlock reasoning, we've been massively overthinking this whole 'train bigger models' thing. The real unlock is that most capability is already baked in - we just needed to find the right 26 bytes to flip.
+
+*** Comments
+
+**** sachaa
+:PROPERTIES:
+:COMMENT_ID: 47541800
+:END:
+If 13 parameters can unlock better reasoning, then we will not be 'training' models, we'll be steering them. Most of the capability is already there. The real unlock isn't TinyLoRA, it's what this implies: ultra-cheap, continuous adaptation.
+
+**** dollo_7
+:PROPERTIES:
+:COMMENT_ID: 47541850
+:END:
+Not sure if I buy it. SVD decomposition is computationally expensive, and the '13 parameters' looks like bait - it's one result on GSM8K, an already saturated benchmark.
+
+**** kgeist
+:PROPERTIES:
+:COMMENT_ID: 47541900
+:END:
+Learning to generate longer outputs may be possible in few parameters. Reminded me of budget forcing research on test-time compute.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+TinyLoRA - 用13个参数学习推理
+***** TLDR
+研究人员仅用13个参数（共26字节）将Qwen2.5-8B在GSM8K数学基准测试上训练到91%的准确率。TinyLoRA将低秩适配器缩小到单参数规模，表明推理能力可能已存在于模型中，只需最少的'引导'而非大量训练。
+***** Take
+如果13个参数就能解锁推理能力，我们一直在过度思考'训练更大模型'这件事。真正的突破在于大部分能力已经内置了——我们只需要找到正确的26字节来翻转。
+***** Comments
+- 如果13个参数就能解锁更好的推理，我们就不是在'训练'模型，而是在引导它们。大部分能力已经存在。
+- 不太确定能信服。SVD分解计算成本很高，'13个参数'看起来像是噱头——这只是在GSM8K上的一个结果。
+- 用很少的参数学习生成更长的输出是可能的。让我想起了测试时计算的预算强制研究。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+TinyLoRA - 13パラメータで推論を学習
+***** TLDR
+研究者はQwen2.5-8Bをわずか13パラメータ（合計26バイト）でGSM8K数学ベンチマークにおいて91%の精度に訓練した。TinyLoRAは低ランクアダプターを単一パラメータサイズまで縮小し、推論能力はすでにモデルに存在し、大規模な訓練ではなく最小限の'ステアリング'のみが必要であることを示唆。
+***** Take
+13パラメータで推論が解放されるなら、私たちは「より大きなモデルを訓練する」ということを大げさに考えすぎていた。本当のブレークスルーは、ほとんどの能力がすでに組み込まれていること—正しい26バイトを見つければいいだけだった。
+***** Comments
+- 13パラメータでより良い推論が解放されるなら、モデルを'訓練'するのではなく、操縦することになる。ほとんどの能力はすでにある。
+- 信じられるかわからない。SVD分解は計算コストが高く、'13パラメータ'は釣りに見える—GSM8Kでの一つの結果に過ぎない。
+- 少ないパラメータでより長い出力を生成することを学習できるかもしれない。テスト時計算のバジェットフォーシング研究を思い出した。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+TinyLoRA - 13개 파라미터로 추론 학습
+***** TLDR
+연구자들이 단 13개 파라미터(총 26바이트)로 Qwen2.5-8B를 GSM8K 수학 벤치마크에서 91% 정확도로 훈련시켰다. TinyLoRA는 저순위 어댑터를 단일 파라미터 크기까지 축소하며, 추론 능력이 이미 모델에 존재하고 대규모 훈련 대신 최소한의 '조향'만 필요함을 시사한다.
+***** Take
+13개 파라미터로 추론을 해제할 수 있다면, 우리는 '더 큰 모델 훈련'에 대해 너무 과하게 생각해왔다. 진짜 돌파구는 대부분의 능력이 이미 내장되어 있다는 것—올바른 26바이트만 찾으면 됐다.
+***** Comments
+- 13개 파라미터로 더 나은 추론이 가능하다면, 모델을 '훈련'하는 게 아니라 조향하는 것이다. 대부분의 능력은 이미 있다.
+- 믿을 수 있을지 모르겠다. SVD 분해는 계산 비용이 높고, '13개 파라미터'는 미끼처럼 보인다—이미 포화된 GSM8K에서의 하나의 결과일 뿐.
+- 적은 파라미터로 더 긴 출력을 생성하는 것을 학습할 수 있을 것이다. 테스트 시간 컴퓨팅의 예산 강제 연구가 생각났다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+TinyLoRA - Aprendiendo a razonar con 13 parámetros
+***** TLDR
+Investigadores entrenaron Qwen2.5-8B al 91% de precisión en el benchmark de matemáticas GSM8K con solo 13 parámetros (26 bytes en total). TinyLoRA escala adaptadores de bajo rango a tamaños de un solo parámetro, sugiriendo que la capacidad de razonamiento ya existe en los modelos y solo requiere una 'dirección' mínima en lugar de entrenamiento intensivo.
+***** Take
+Si 13 parámetros pueden desbloquear el razonamiento, hemos estado sobrecomplicando esto de 'entrenar modelos más grandes'. El verdadero avance es que la mayoría de la capacidad ya está incorporada—solo necesitábamos encontrar los 26 bytes correctos.
+***** Comments
+- Si 13 parámetros pueden desbloquear mejor razonamiento, no estaremos 'entrenando' modelos, los estaremos dirigiendo. La mayoría de la capacidad ya está ahí.
+- No estoy seguro de creerlo. La descomposición SVD es computacionalmente costosa, y los '13 parámetros' parecen un anzuelo—es un resultado en GSM8K, un benchmark ya saturado.
+- Aprender a generar salidas más largas puede ser posible con pocos parámetros. Me recordó la investigación sobre forzado de presupuesto en cómputo en tiempo de prueba.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+TinyLoRA - Lernen zu schlussfolgern mit 13 Parametern
+***** TLDR
+Forscher trainierten Qwen2.5-8B auf 91% Genauigkeit beim GSM8K-Mathe-Benchmark mit nur 13 Parametern (26 Bytes insgesamt). TinyLoRA skaliert Low-Rank-Adapter auf Ein-Parameter-Größen, was darauf hindeutet, dass Schlussfolgerungsfähigkeit bereits in Modellen existiert und nur minimales 'Steuern' statt intensivem Training erfordert.
+***** Take
+Wenn 13 Parameter das Schlussfolgern freischalten können, haben wir das Ganze mit 'größere Modelle trainieren' massiv überdacht. Der eigentliche Durchbruch ist, dass die meisten Fähigkeiten bereits eingebaut sind—wir mussten nur die richtigen 26 Bytes finden.
+***** Comments
+- Wenn 13 Parameter besseres Schlussfolgern freischalten können, werden wir Modelle nicht 'trainieren', sondern steuern. Die meisten Fähigkeiten sind bereits da.
+- Bin nicht sicher, ob ich das glaube. SVD-Zerlegung ist rechenintensiv, und '13 Parameter' wirkt wie Köder—es ist ein Ergebnis auf GSM8K, einem bereits gesättigten Benchmark.
+- Das Erlernen längerer Ausgaben könnte mit wenigen Parametern möglich sein. Erinnerte mich an Forschung zu Budget-Forcing bei Test-Zeit-Compute.
+** Neanderthals survived on a knife's edge for 350k years :science:anthropology:evolution:
+:PROPERTIES:
+:ID:       47595572
+:URL:      https://www.science.org/content/article/neanderthals-survived-knife-s-edge-350-000-years
+:HN_URL:   https://news.ycombinator.com/item?id=47595572
+:POINTS:   86
+:COMMENTS: 30
+:BY:       Hooke
+:END:
+
+*** TLDR
+［Article behind Cloudflare, from title + comments］ Neanderthals maintained small, inbred populations across Eurasia for nearly 400,000 years. Despite harmful mutation accumulation from inbreeding, they survived through effective weeding of bad genes over extended periods. They lived with stone tools, spears, and fire until their eventual extinction.
+
+*** Take
+350,000 years of just vibing with stone tools and fire. Now we get to watch God being made in a datacenter while arguing about string views in C++. Progress, I guess.
+
+*** Comments
+
+**** hax0ron3
+:PROPERTIES:
+:COMMENT_ID: 47595600
+:END:
+It's wild to think how long very human-like beings existed before the technological revolution. Hundreds of thousands of years of stone tools, spears, cloth made from hides, and fire. Then about 12,000 years ago, the agricultural revolution.
+
+**** Nevermark
+:PROPERTIES:
+:COMMENT_ID: 47595650
+:END:
+Inbreeding for extended periods actually weeds out both dominant and recessive bad genes very effectively. Not as surprising that small groups can last a long time.
+
+**** atleastoptimal
+:PROPERTIES:
+:COMMENT_ID: 47595700
+:END:
+350,000 years of just chilling, picking berries, you die in identical technological and cultural environment as when you were born. Now we got to be around when God is made in a data center.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+尼安德特人在刀锋边缘生存了35万年
+***** TLDR
+［文章在Cloudflare后面，根据标题和评论］ 尼安德特人在欧亚大陆维持着小型近亲繁殖的种群近40万年。尽管近亲繁殖导致有害突变积累，他们通过长期有效地淘汰不良基因而存活下来。他们使用石器、矛和火，直到最终灭绝。
+***** Take
+35万年用石器和火悠闲度日。现在我们看着神在数据中心被创造，同时争论C++中的字符串视图。这大概就是进步吧。
+***** Comments
+- 想想非常接近人类的生物在技术革命之前存在了多久真是疯狂。几十万年的石器、矛、兽皮衣服和火。然后大约12000年前，农业革命来了。
+- 长期近亲繁殖实际上能非常有效地淘汰显性和隐性不良基因。小群体能存活很长时间并不那么令人惊讶。
+- 35万年就是闲逛、采浆果，你死的时候技术和文化环境和出生时一模一样。现在我们有幸见证神在数据中心被创造。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ネアンデルタール人は35万年間ギリギリで生き延びた
+***** TLDR
+［記事はCloudflareの背後、タイトルとコメントより］ ネアンデルタール人は約40万年間、ユーラシア大陸全体で小規模な近親交配集団を維持していた。近親交配による有害な突然変異の蓄積にもかかわらず、長期間にわたって悪い遺伝子を効果的に排除することで生き延びた。彼らは石器、槍、火とともに絶滅まで暮らしていた。
+***** Take
+35万年間、石器と火でのんびり過ごす。今や私たちはC++の文字列ビューについて議論しながら、データセンターで神が作られるのを見ている。これが進歩というものか。
+***** Comments
+- 技術革命が始まる前に、人間に非常に近い存在がどれほど長く存在していたかを考えると驚くべきだ。何十万年もの石器、槍、皮の服、火。そして約1万2千年前、農業革命が起きた。
+- 長期間の近親交配は実際に優性と劣性の両方の悪い遺伝子を非常に効果的に排除する。小さなグループが長く続くのはそれほど驚くことではない。
+- 35万年間ただのんびり、ベリーを摘み、生まれた時と同じ技術的・文化的環境で死んでいく。今や私たちはデータセンターで神が作られる時代に生きている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+네안데르탈인은 35만 년간 아슬아슬하게 생존했다
+***** TLDR
+［기사는 Cloudflare 뒤에 있음, 제목과 댓글 기반］ 네안데르탈인은 약 40만 년 동안 유라시아 전역에서 소규모 근친 교배 집단을 유지했다. 근친 교배로 인한 유해 돌연변이 축적에도 불구하고, 오랜 기간에 걸쳐 나쁜 유전자를 효과적으로 제거하며 생존했다. 그들은 석기, 창, 불과 함께 멸종할 때까지 살았다.
+***** Take
+35만 년 동안 석기와 불로 그냥 지내기. 이제 우리는 C++의 문자열 뷰에 대해 논쟁하면서 데이터센터에서 신이 만들어지는 것을 지켜본다. 이게 진보인가 보다.
+***** Comments
+- 기술 혁명이 시작되기 전에 매우 인간 같은 존재들이 얼마나 오래 존재했는지 생각하면 놀랍다. 수십만 년의 석기, 창, 가죽옷, 불. 그리고 약 12,000년 전 농업 혁명.
+- 장기간의 근친 교배는 실제로 우성과 열성 나쁜 유전자를 매우 효과적으로 제거한다. 작은 그룹이 오래 지속될 수 있다는 것은 그렇게 놀랍지 않다.
+- 35만 년 동안 그냥 놀고, 베리 따고, 태어났을 때와 똑같은 기술적 문화적 환경에서 죽는다. 이제 우리는 데이터센터에서 신이 만들어지는 시대에 살고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los neandertales sobrevivieron al borde del abismo durante 350 mil años
+***** TLDR
+［Artículo detrás de Cloudflare, basado en título y comentarios］ Los neandertales mantuvieron poblaciones pequeñas y endogámicas en toda Eurasia durante casi 400,000 años. A pesar de la acumulación de mutaciones dañinas por endogamia, sobrevivieron eliminando efectivamente los genes malos durante períodos prolongados. Vivieron con herramientas de piedra, lanzas y fuego hasta su eventual extinción.
+***** Take
+350,000 años simplemente pasándola bien con herramientas de piedra y fuego. Ahora podemos ver cómo se crea a Dios en un centro de datos mientras discutimos sobre string views en C++. Progreso, supongo.
+***** Comments
+- Es increíble pensar cuánto tiempo existieron seres muy similares a los humanos antes de la revolución tecnológica. Cientos de miles de años de herramientas de piedra, lanzas, ropa de pieles y fuego. Luego, hace unos 12,000 años, la revolución agrícola.
+- La endogamia durante períodos prolongados en realidad elimina tanto los genes malos dominantes como recesivos muy efectivamente. No es tan sorprendente que grupos pequeños puedan durar mucho tiempo.
+- 350,000 años simplemente relajándose, recolectando bayas, mueres en un entorno tecnológico y cultural idéntico al de cuando naciste. Ahora nos toca presenciar cómo se crea a Dios en un centro de datos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Neandertaler überlebten 350.000 Jahre lang auf Messers Schneide
+***** TLDR
+［Artikel hinter Cloudflare, aus Titel und Kommentaren］ Neandertaler hielten fast 400.000 Jahre lang kleine, ingezüchtete Populationen in ganz Eurasien aufrecht. Trotz der Anhäufung schädlicher Mutationen durch Inzucht überlebten sie durch effektives Ausmerzen schlechter Gene über längere Zeiträume. Sie lebten mit Steinwerkzeugen, Speeren und Feuer bis zu ihrem endgültigen Aussterben.
+***** Take
+350.000 Jahre einfach chillen mit Steinwerkzeugen und Feuer. Jetzt dürfen wir zusehen, wie Gott in einem Rechenzentrum erschaffen wird, während wir über String Views in C++ diskutieren. Fortschritt, schätze ich.
+***** Comments
+- Es ist verrückt zu denken, wie lange sehr menschenähnliche Wesen vor der technologischen Revolution existierten. Hunderttausende Jahre Steinwerkzeuge, Speere, Kleidung aus Fellen und Feuer. Dann vor etwa 12.000 Jahren die landwirtschaftliche Revolution.
+- Langfristige Inzucht merzt sowohl dominante als auch rezessive schlechte Gene sehr effektiv aus. Es ist nicht so überraschend, dass kleine Gruppen lange überleben können.
+- 350.000 Jahre einfach chillen, Beeren sammeln, du stirbst in identischer technologischer und kultureller Umgebung wie bei deiner Geburt. Jetzt dürfen wir dabei sein, wenn Gott in einem Rechenzentrum erschaffen wird.
+** Use string views instead of passing std::wstring by const& :cpp:programming:performance:
+:PROPERTIES:
+:ID:       47569773
+:URL:      https://giodicanio.com/2024/05/14/why-dont-you-use-string-views-like-std-wstring_view-instead-of-passing-std-wstring-by-const-reference/
+:HN_URL:   https://news.ycombinator.com/item?id=47569773
+:POINTS:   34
+:COMMENTS: 30
+:BY:       Orochikaku
+:END:
+
+*** TLDR
+The article advocates for using std::wstring_view instead of const std::wstring& for function parameters. String views provide a lightweight, non-owning reference to string data that works with any contiguous character sequence, not just std::wstring objects.
+
+*** Take
+The C++ community's endless quest to find new ways to pass strings around. Meanwhile the zero-terminated string remains C's worst design decision, single-handedly responsible for most security CVEs. Pascal strings deserved better.
+
+*** Comments
+
+**** abcde666777
+:PROPERTIES:
+:COMMENT_ID: 47569800
+:END:
+I really don't miss working in C++. Used to be my daily driver until I ended up in C# land. I understand why C++ is the way it is, but in terms of the experience of using the language... I wouldn't want to go back.
+
+**** delta_p_delta_x
+:PROPERTIES:
+:COMMENT_ID: 47569850
+:END:
+The zero-terminated string is by far C's worst design decision. It is single-handedly the cause for most performance, correctness, and security bugs, including many high-profile CVEs. I really wish Pascal strings had caught on earlier.
+
+**** Surac
+:PROPERTIES:
+:COMMENT_ID: 47569900
+:END:
+I work on embedded with 64K RAM using C99. Any form of alloc is forbidden. So I implemented a string lib that works with views - length and content in preallocated arrays. Each string has exactly 127 characters and is also zero-terminated for C-API needs.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+使用字符串视图代替通过const&传递std::wstring
+***** TLDR
+文章主张在函数参数中使用std::wstring_view而不是const std::wstring&。字符串视图提供对字符串数据的轻量级、非拥有引用，可以与任何连续字符序列一起工作，而不仅仅是std::wstring对象。
+***** Take
+C++社区无尽地寻找传递字符串的新方法。与此同时，零终止字符串仍然是C最糟糕的设计决策，独自造成了大多数安全CVE。Pascal字符串值得更好的待遇。
+***** Comments
+- 我真的不怀念在C++工作的日子。它曾是我的日常工具，直到我进入了C#领域。我理解C++为什么是这样的，但就使用体验而言...我不想回去。
+- 零终止字符串无疑是C最糟糕的设计决策。它独自造成了大多数性能、正确性和安全漏洞，包括许多高知名度的CVE。我真希望Pascal字符串能早点流行起来。
+- 我在64K RAM的嵌入式系统上用C99工作。禁止任何形式的alloc。所以我实现了一个使用视图的字符串库——长度和内容在预分配数组中。每个字符串正好127个字符，也是零终止的以满足C-API需求。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+const&でstd::wstringを渡す代わりに文字列ビューを使用する
+***** TLDR
+この記事は関数パラメータにconst std::wstring&ではなくstd::wstring_viewを使用することを提唱している。文字列ビューは文字列データへの軽量な非所有参照を提供し、std::wstringオブジェクトだけでなく、任意の連続した文字シーケンスで動作する。
+***** Take
+C++コミュニティの文字列を渡す新しい方法を見つける終わりなき探求。一方、ゼロ終端文字列はCの最悪の設計決定のままで、ほとんどのセキュリティCVEの単独の原因となっている。Pascal文字列はもっと良い扱いを受けるべきだった。
+***** Comments
+- C++で働いていた頃が懐かしいとは全く思わない。C#の世界に来るまで日常的に使っていた。C++がなぜそうなのかは理解しているが、言語を使う体験としては...戻りたくない。
+- ゼロ終端文字列は間違いなくCの最悪の設計決定だ。多くの著名なCVEを含む、ほとんどのパフォーマンス、正確性、セキュリティバグの単独の原因となっている。Pascal文字列がもっと早く普及していればと本当に思う。
+- 64K RAMの組み込みシステムでC99を使って働いている。いかなる形のallocも禁止されている。そこでビューで動作する文字列ライブラリを実装した—長さとコンテンツを事前割り当て配列に保持。各文字列は正確に127文字で、C-APIのニーズのためにゼロ終端もしている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+std::wstring을 const&로 전달하는 대신 문자열 뷰 사용하기
+***** TLDR
+이 기사는 함수 매개변수에 const std::wstring& 대신 std::wstring_view를 사용할 것을 권장한다. 문자열 뷰는 문자열 데이터에 대한 경량의 비소유 참조를 제공하며, std::wstring 객체뿐만 아니라 모든 연속 문자 시퀀스와 함께 작동한다.
+***** Take
+C++ 커뮤니티의 문자열을 전달하는 새로운 방법을 찾는 끝없는 탐구. 한편 널 종단 문자열은 여전히 C의 최악의 설계 결정으로, 대부분의 보안 CVE의 단독 원인이다. Pascal 문자열은 더 나은 대우를 받을 자격이 있었다.
+***** Comments
+- C++에서 일하던 것이 전혀 그립지 않다. C# 세계에 오기 전까지 매일 쓰던 도구였다. C++가 왜 그런지 이해하지만, 언어를 사용하는 경험 면에서는... 돌아가고 싶지 않다.
+- 널 종단 문자열은 단연 C의 최악의 설계 결정이다. 많은 유명한 CVE를 포함해 대부분의 성능, 정확성, 보안 버그의 단독 원인이다. Pascal 문자열이 더 일찍 유행했으면 좋았을 텐데.
+- 64K RAM 임베디드에서 C99로 작업한다. 어떤 형태의 alloc도 금지되어 있다. 그래서 뷰로 작동하는 문자열 라이브러리를 구현했다—길이와 내용을 사전 할당된 배열에 저장. 각 문자열은 정확히 127자이고 C-API 요구를 위해 널 종단도 된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Usa string views en lugar de pasar std::wstring por const&
+***** TLDR
+El artículo aboga por usar std::wstring_view en lugar de const std::wstring& para parámetros de función. Los string views proporcionan una referencia ligera y no propietaria a datos de cadena que funciona con cualquier secuencia contigua de caracteres, no solo objetos std::wstring.
+***** Take
+La búsqueda interminable de la comunidad C++ para encontrar nuevas formas de pasar cadenas. Mientras tanto, la cadena terminada en cero sigue siendo la peor decisión de diseño de C, responsable por sí sola de la mayoría de los CVEs de seguridad. Las cadenas Pascal merecían algo mejor.
+***** Comments
+- Realmente no extraño trabajar en C++. Solía ser mi herramienta diaria hasta que terminé en el mundo de C#. Entiendo por qué C++ es como es, pero en términos de la experiencia de usar el lenguaje... no querría volver.
+- La cadena terminada en cero es, con diferencia, la peor decisión de diseño de C. Es la única causa de la mayoría de los bugs de rendimiento, corrección y seguridad, incluyendo muchos CVEs de alto perfil. Realmente desearía que las cadenas Pascal hubieran triunfado antes.
+- Trabajo en sistemas embebidos con 64K de RAM usando C99. Cualquier forma de alloc está prohibida. Así que implementé una biblioteca de cadenas que funciona con vistas—longitud y contenido en arrays preasignados. Cada cadena tiene exactamente 127 caracteres y también está terminada en cero para necesidades de API C.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Verwende String Views statt std::wstring per const& zu übergeben
+***** TLDR
+Der Artikel plädiert für die Verwendung von std::wstring_view anstelle von const std::wstring& für Funktionsparameter. String Views bieten eine leichtgewichtige, nicht-besitzende Referenz auf String-Daten, die mit jeder zusammenhängenden Zeichensequenz funktioniert, nicht nur mit std::wstring-Objekten.
+***** Take
+Die endlose Suche der C++-Community nach neuen Wegen, Strings zu übergeben. Unterdessen bleibt der nullterminierte String Cs schlimmste Designentscheidung, allein verantwortlich für die meisten Sicherheits-CVEs. Pascal-Strings hätten Besseres verdient.
+***** Comments
+- Ich vermisse die Arbeit mit C++ wirklich nicht. Es war mein tägliches Werkzeug, bis ich in der C#-Welt gelandet bin. Ich verstehe, warum C++ so ist wie es ist, aber was die Erfahrung bei der Verwendung der Sprache angeht... ich würde nicht zurückgehen wollen.
+- Der nullterminierte String ist bei weitem Cs schlimmste Designentscheidung. Er ist allein die Ursache für die meisten Performance-, Korrektheit- und Sicherheitsfehler, einschließlich vieler hochkarätiger CVEs. Ich wünschte wirklich, Pascal-Strings hätten sich früher durchgesetzt.
+- Ich arbeite an Embedded-Systemen mit 64K RAM und C99. Jede Form von alloc ist verboten. Also habe ich eine String-Bibliothek implementiert, die mit Views arbeitet—Länge und Inhalt in vorallokierten Arrays. Jeder String hat genau 127 Zeichen und ist auch nullterminiert für C-API-Anforderungen.
+** Back to FreeBSD – Part 2 – Jails :freebsd:containers:devops:
+:PROPERTIES:
+:ID:       47546775
+:URL:      https://hypha.pub/back-to-freebsd-part-2
+:HN_URL:   https://news.ycombinator.com/item?id=47546775
+:POINTS:   65
+:COMMENTS: 13
+:BY:       vermaden
+:END:
+
+*** TLDR
+［Article behind verification, from title + comments］ A guide on returning to FreeBSD and using its Jails containerization system. Discussion focuses on whether FreeBSD should adopt OCI/Dockerfile semantics for better Docker compatibility, and how to leverage ZFS layering effectively.
+
+*** Take
+FreeBSD jails predate Docker by over a decade, but the container zeitgeist moved on. Now the community debates whether to embrace Docker semantics or keep telling everyone 'we had this first and did it better.'
+
+*** Comments
+
+**** ggm
+:PROPERTIES:
+:COMMENT_ID: 47546800
+:END:
+They understate the importance of accepting OCI and Dockerfile semantics. Saying 'we don't need these abstractions' ignores that people want to run Docker-based behavior and have it emerge as a jail.
+
+**** rtpg
+:PROPERTIES:
+:COMMENT_ID: 47546850
+:END:
+How do we take advantage of ZFS layering if not via Docker-style layering? Dockerfile layering is unsatisfying because step 5 might depend on step 2 but not 3 or 4.
+
+**** NooneAtAll3
+:PROPERTIES:
+:COMMENT_ID: 47546900
+:END:
+Failed to verify your browser Code 11
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+回归FreeBSD - 第2部分 - Jails
+***** TLDR
+［文章需要验证，根据标题和评论］ 关于回归FreeBSD并使用其Jails容器化系统的指南。讨论集中在FreeBSD是否应该采用OCI/Dockerfile语义以获得更好的Docker兼容性，以及如何有效利用ZFS分层。
+***** Take
+FreeBSD jails比Docker早了十多年，但容器潮流已经转移。现在社区在争论是拥抱Docker语义，还是继续告诉所有人'我们先有的，而且做得更好'。
+***** Comments
+- 他们低估了接受OCI和Dockerfile语义的重要性。说'我们不需要这些抽象'忽略了人们想要运行基于Docker的行为并让它作为jail出现。
+- 如果不通过Docker风格的分层，我们如何利用ZFS分层？Dockerfile分层令人不满意，因为第5步可能依赖第2步但不依赖第3或第4步。
+- 验证浏览器失败 代码11
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+FreeBSDに戻る - パート2 - Jails
+***** TLDR
+［記事は認証が必要、タイトルとコメントより］ FreeBSDに戻り、そのJailsコンテナ化システムを使用するガイド。議論はFreeBSDがより良いDocker互換性のためにOCI/Dockerfileセマンティクスを採用すべきかどうか、そしてZFSレイヤリングを効果的に活用する方法に焦点を当てている。
+***** Take
+FreeBSD jailsはDockerより10年以上前からあるが、コンテナのトレンドは移り変わった。今コミュニティはDockerセマンティクスを受け入れるか、みんなに「私たちが先にこれをやっていて、もっとうまくやっていた」と言い続けるかで議論している。
+***** Comments
+- 彼らはOCIとDockerfileセマンティクスを受け入れる重要性を過小評価している。「これらの抽象化は必要ない」と言うのは、人々がDockerベースの動作を実行してそれをjailとして出現させたいということを無視している。
+- Dockerスタイルのレイヤリングでなければ、どうやってZFSレイヤリングを活用するのか？Dockerfileレイヤリングは不満が残る。なぜならステップ5はステップ2に依存するかもしれないが、3や4には依存しないから。
+- ブラウザの認証に失敗しました コード11
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+FreeBSD로 돌아가기 - 파트 2 - Jails
+***** TLDR
+［기사는 인증 필요, 제목과 댓글 기반］ FreeBSD로 돌아가서 Jails 컨테이너화 시스템을 사용하는 가이드. 토론은 FreeBSD가 더 나은 Docker 호환성을 위해 OCI/Dockerfile 의미론을 채택해야 하는지, 그리고 ZFS 레이어링을 효과적으로 활용하는 방법에 초점을 맞추고 있다.
+***** Take
+FreeBSD jails는 Docker보다 10년 이상 앞섰지만, 컨테이너 시대정신은 넘어갔다. 이제 커뮤니티는 Docker 의미론을 받아들일지, 아니면 모두에게 '우리가 먼저 했고 더 잘했다'고 계속 말할지 논쟁 중이다.
+***** Comments
+- 그들은 OCI와 Dockerfile 의미론을 수용하는 중요성을 과소평가한다. '이러한 추상화가 필요 없다'고 말하는 것은 사람들이 Docker 기반 동작을 실행하고 jail로 나타나게 하고 싶어한다는 것을 무시하는 것이다.
+- Docker 스타일 레이어링이 아니면 ZFS 레이어링을 어떻게 활용하나? Dockerfile 레이어링은 불만족스럽다. 5단계가 2단계에는 의존하지만 3이나 4에는 의존하지 않을 수 있기 때문이다.
+- 브라우저 인증 실패 코드 11
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Volver a FreeBSD - Parte 2 - Jails
+***** TLDR
+［Artículo requiere verificación, basado en título y comentarios］ Una guía sobre volver a FreeBSD y usar su sistema de contenedorización Jails. La discusión se centra en si FreeBSD debería adoptar la semántica OCI/Dockerfile para mejor compatibilidad con Docker, y cómo aprovechar efectivamente el layering de ZFS.
+***** Take
+Los jails de FreeBSD son más de una década anteriores a Docker, pero el zeitgeist de contenedores siguió adelante. Ahora la comunidad debate si abrazar la semántica de Docker o seguir diciéndole a todos 'nosotros lo tuvimos primero y lo hicimos mejor'.
+***** Comments
+- Subestiman la importancia de aceptar la semántica OCI y Dockerfile. Decir 'no necesitamos estas abstracciones' ignora que la gente quiere ejecutar comportamiento basado en Docker y que emerja como un jail.
+- ¿Cómo aprovechamos el layering de ZFS si no es mediante el estilo de capas de Docker? El layering de Dockerfile es insatisfactorio porque el paso 5 podría depender del paso 2 pero no del 3 o 4.
+- Error al verificar su navegador Código 11
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zurück zu FreeBSD - Teil 2 - Jails
+***** TLDR
+［Artikel erfordert Verifizierung, aus Titel und Kommentaren］ Ein Leitfaden zur Rückkehr zu FreeBSD und zur Nutzung seines Jails-Containerisierungssystems. Die Diskussion konzentriert sich darauf, ob FreeBSD OCI/Dockerfile-Semantik für bessere Docker-Kompatibilität übernehmen sollte und wie ZFS-Layering effektiv genutzt werden kann.
+***** Take
+FreeBSD Jails sind über ein Jahrzehnt älter als Docker, aber der Container-Zeitgeist ist weitergezogen. Jetzt debattiert die Community, ob man Docker-Semantik annehmen oder weiterhin allen sagen soll 'wir hatten das zuerst und haben es besser gemacht'.
+***** Comments
+- Sie unterschätzen die Wichtigkeit, OCI- und Dockerfile-Semantik zu akzeptieren. Zu sagen 'wir brauchen diese Abstraktionen nicht' ignoriert, dass Menschen Docker-basiertes Verhalten ausführen und es als Jail entstehen lassen wollen.
+- Wie nutzen wir ZFS-Layering, wenn nicht über Docker-Style Layering? Dockerfile-Layering ist unbefriedigend, weil Schritt 5 von Schritt 2 abhängen könnte, aber nicht von 3 oder 4.
+- Browser konnte nicht verifiziert werden Code 11
+** TruffleRuby :ruby:programming:graalvm:rip:
+:PROPERTIES:
+:ID:       47557171
+:URL:      https://chrisseaton.com/truffleruby/
+:HN_URL:   https://news.ycombinator.com/item?id=47557171
+:POINTS:   93
+:COMMENTS: 4
+:BY:       tosh
+:END:
+
+*** TLDR
+TruffleRuby is a high-performance Ruby implementation on the GraalVM using the Truffle framework. Created by Chris Seaton, it achieves impressive performance by using partial evaluation and just-in-time compilation. The page serves as a memorial after Seaton's passing.
+
+*** Take
+Rest in peace, Chris Seaton. You built a Ruby implementation that was genuinely impressive, not just 'impressive for Ruby.' The community lost one of its best.
+
+*** Comments
+
+**** semiquaver
+:PROPERTIES:
+:COMMENT_ID: 47557200
+:END:
+Spoke to Chris in person at a conference shortly before he died. What a tragic loss. Rest in peace.
+
+**** drzaiusx11
+:PROPERTIES:
+:COMMENT_ID: 47557250
+:END:
+I've used JRuby with some success in production to bridge two codebases. It honestly worked well, but I always wondered about TruffleRuby. I may still give truffle a go.
+
+**** claudiug
+:PROPERTIES:
+:COMMENT_ID: 47557300
+:END:
+Rest in peace Chris Seaton.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+TruffleRuby
+***** TLDR
+TruffleRuby是基于GraalVM使用Truffle框架的高性能Ruby实现。由Chris Seaton创建，它通过使用部分求值和即时编译实现了令人印象深刻的性能。在Seaton去世后，该页面作为纪念。
+***** Take
+安息吧，Chris Seaton。你构建了一个真正令人印象深刻的Ruby实现，不仅仅是'对Ruby来说令人印象深刻'。社区失去了最优秀的人之一。
+***** Comments
+- 在他去世前不久，我在一次会议上亲自与Chris交谈过。多么悲惨的损失。安息吧。
+- 我在生产环境中成功使用过JRuby来连接两个代码库。说实话效果很好，但我一直很好奇TruffleRuby。我可能还会尝试truffle。
+- 安息吧Chris Seaton。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+TruffleRuby
+***** TLDR
+TruffleRubyはTruffleフレームワークを使用したGraalVM上の高性能Ruby実装。Chris Seatonによって作成され、部分評価とジャストインタイムコンパイルを使用して印象的なパフォーマンスを達成している。Seatonの死後、このページは追悼として機能している。
+***** Take
+Chris Seaton、安らかに。あなたは「Rubyにしては印象的」ではなく、本当に印象的なRuby実装を作った。コミュニティは最高の人物の一人を失った。
+***** Comments
+- 彼が亡くなる少し前にカンファレンスで直接Chrisと話した。なんて悲劇的な損失だ。安らかに。
+- 本番環境で2つのコードベースを橋渡しするためにJRubyをそれなりに成功裏に使ってきた。正直うまくいったが、ずっとTruffleRubyについて気になっていた。まだtruffleを試すかもしれない。
+- Chris Seaton、安らかに。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+TruffleRuby
+***** TLDR
+TruffleRuby는 Truffle 프레임워크를 사용한 GraalVM 기반의 고성능 Ruby 구현체이다. Chris Seaton이 만들었으며, 부분 평가와 JIT 컴파일을 사용하여 인상적인 성능을 달성한다. Seaton의 사망 후 이 페이지는 추모의 역할을 한다.
+***** Take
+편히 쉬세요, Chris Seaton. 당신은 'Ruby치고 인상적인' 것이 아니라 진정으로 인상적인 Ruby 구현체를 만들었습니다. 커뮤니티는 최고의 인재 중 한 명을 잃었습니다.
+***** Comments
+- 그가 돌아가시기 얼마 전 컨퍼런스에서 Chris와 직접 이야기를 나눴다. 정말 비극적인 손실이다. 편히 쉬세요.
+- 프로덕션에서 두 코드베이스를 연결하기 위해 JRuby를 꽤 성공적으로 사용해왔다. 솔직히 잘 작동했지만, 항상 TruffleRuby가 궁금했다. 아직 truffle을 시도해볼 수도 있다.
+- Chris Seaton, 편히 쉬세요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+TruffleRuby
+***** TLDR
+TruffleRuby es una implementación de Ruby de alto rendimiento en GraalVM usando el framework Truffle. Creado por Chris Seaton, logra un rendimiento impresionante usando evaluación parcial y compilación just-in-time. La página sirve como memorial tras el fallecimiento de Seaton.
+***** Take
+Descansa en paz, Chris Seaton. Construiste una implementación de Ruby que era genuinamente impresionante, no solo 'impresionante para Ruby.' La comunidad perdió a uno de los mejores.
+***** Comments
+- Hablé con Chris en persona en una conferencia poco antes de que muriera. Qué pérdida tan trágica. Descansa en paz.
+- He usado JRuby con algo de éxito en producción para conectar dos bases de código. Honestamente funcionó bien, pero siempre me pregunté sobre TruffleRuby. Todavía podría probar truffle.
+- Descansa en paz Chris Seaton.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+TruffleRuby
+***** TLDR
+TruffleRuby ist eine hochperformante Ruby-Implementierung auf der GraalVM unter Verwendung des Truffle-Frameworks. Von Chris Seaton erstellt, erreicht sie beeindruckende Leistung durch partielle Evaluation und Just-in-Time-Kompilierung. Die Seite dient nach Seatons Tod als Gedenkstätte.
+***** Take
+Ruhe in Frieden, Chris Seaton. Du hast eine Ruby-Implementierung gebaut, die wirklich beeindruckend war, nicht nur 'beeindruckend für Ruby.' Die Community hat einen ihrer Besten verloren.
+***** Comments
+- Ich habe kurz vor seinem Tod auf einer Konferenz persönlich mit Chris gesprochen. Was für ein tragischer Verlust. Ruhe in Frieden.
+- Ich habe JRuby mit einigem Erfolg in der Produktion verwendet, um zwei Codebasen zu verbinden. Es hat ehrlich gesagt gut funktioniert, aber ich habe mich immer über TruffleRuby gewundert. Vielleicht probiere ich truffle noch aus.
+- Ruhe in Frieden Chris Seaton.
