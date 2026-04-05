@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-04-05 06:00:00 UT UTC
+#+DATE: 2026-04-05T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Karpathy wants LLMs to maintain your wiki, Lisp devs cry about AI, and one guy built software he hated making
+
+* Highlights
+- Karpathy proposes LLM-maintained personal wikis that compound knowledge over time
+- Lisp proves AI-resistant: costs $10-20 per session vs pennies for Python
+- Taggart Tech built working software with Claude Code and absolutely despised every minute
+- OpenScreen: Screen Studio without the $200 price tag
+- Contrapunk: real-time counterpoint harmonies from your guitar, because AI can't write Lisp but can generate Bach
+
+* Stories
+
+** LLM Wiki – example of an "idea file" :ai:productivity:knowledge-management:
+:PROPERTIES:
+:ID:       47640875
+:URL:      https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+:HN_URL:   https://news.ycombinator.com/item?id=47640875
+:POINTS:   129
+:COMMENTS: 35
+:BY:       tamnd
+:END:
+
+*** TLDR
+Karpathy proposes a pattern where LLMs incrementally build and maintain a persistent wiki from your raw documents. Instead of RAG's retrieval-on-every-query approach, the LLM reads new sources, extracts info, updates entity pages, notes contradictions, and maintains cross-references. You curate sources and ask questions; the LLM does all the bookkeeping humans abandon. Architecture: raw sources (immutable), wiki (LLM-maintained markdown), schema (CLAUDE.md/AGENTS.md). Obsidian as IDE, LLM as programmer, wiki as codebase.
+
+*** Take
+This is basically what we all promised ourselves we'd do with Roam/Obsidian before life happened. The insight that humans abandon wikis because maintenance burden outpaces value is painfully accurate. LLMs don't get bored updating cross-references. They also don't get paid, which is convenient for the knowledge hoarders among us.
+
+*** Comments
+
+**** mpazik
+:PROPERTIES:
+:COMMENT_ID: 47641234
+:END:
+The friction shows up once you mix docs with structured things like work items or ADRs. Flat markdown doesn't query well. You can read TASKS.md fine. The agent can't ask 'show me open tasks blocking this epic' without scanning prose.
+
+**** devnullbrain
+:PROPERTIES:
+:COMMENT_ID: 47641567
+:END:
+I don't see why this wouldn't just lead to model collapse. If you've spent any time using LLMs to write documentation you'll see this: the compounding will just be rewriting valid information with less terse information.
+
+**** kenforthewin
+:PROPERTIES:
+:COMMENT_ID: 47641890
+:END:
+This is just RAG. Yes, it's not using a vector database - but it's building an index file of semantic connections, it's constructing hierarchical semantic structures in the filesystem to aid retrieval... this is RAG.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+LLM Wiki – "想法文件"示例
+***** TLDR
+Karpathy提出了一种模式：LLM从原始文档中增量构建和维护持久化Wiki。不同于RAG每次查询都检索的方式，LLM读取新来源、提取信息、更新实体页面、标注矛盾并维护交叉引用。你负责策划来源和提问；LLM负责人类会放弃的所有记账工作。架构：原始来源（不可变）、Wiki（LLM维护的Markdown）、模式（CLAUDE.md/AGENTS.md）。Obsidian是IDE，LLM是程序员，Wiki是代码库。
+***** Take
+这基本上就是我们在Roam/Obsidian出现前承诺自己要做的事，直到生活发生了。人类因为维护负担超过价值而放弃Wiki这个洞察太痛苦了。LLM不会厌倦更新交叉引用。它们也不用付工资，这对知识囤积者来说很方便。
+***** Comments
+- 一旦把文档和工作项或ADR等结构化内容混合，摩擦就出现了。扁平Markdown查询效果不好。你可以读TASKS.md，但代理无法在不扫描散文的情况下问'显示阻塞这个史诗的待办任务'。
+- 我不明白为什么这不会导致模型崩溃。如果你用LLM写过文档就会发现：复合只会把有效信息改写成不那么简洁的信息。
+- 这就是RAG。是的，它没用向量数据库——但它在构建语义连接的索引文件，在文件系统中构建层次化语义结构来辅助检索...这就是RAG。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+LLM Wiki – 「アイデアファイル」の例
+***** TLDR
+Karpathyは、LLMが生のドキュメントから永続的なWikiを段階的に構築・維持するパターンを提案。RAGのクエリごとの検索とは異なり、LLMは新しいソースを読み、情報を抽出し、エンティティページを更新し、矛盾を記録し、相互参照を維持する。あなたはソースのキュレーションと質問を担当し、LLMは人間が放棄する全ての記録作業を行う。アーキテクチャ：生ソース（不変）、Wiki（LLM管理のMarkdown）、スキーマ（CLAUDE.md/AGENTS.md）。ObsidianがIDE、LLMがプログラマー、Wikiがコードベース。
+***** Take
+これは基本的に、人生が起きる前にRoam/Obsidianでやると自分に約束していたこと。維持負担が価値を上回るから人間がWikiを放棄するという洞察は痛いほど正確。LLMは相互参照の更新に飽きない。給料も払わなくていい、知識を溜め込む人には便利だ。
+***** Comments
+- ドキュメントと作業項目やADRのような構造化されたものを混ぜると摩擦が生じる。フラットなMarkdownはクエリに向いていない。TASKS.mdは読めるが、エージェントは散文をスキャンせずに「このエピックをブロックしているタスクを表示」とは聞けない。
+- これがモデル崩壊につながらない理由がわからない。LLMでドキュメントを書いた経験があれば分かる：複合は有効な情報をより冗長な情報に書き換えるだけ。
+- これはRAGだ。はい、ベクトルデータベースを使っていない——でもセマンティック接続のインデックスファイルを構築し、検索を支援するためにファイルシステム内に階層的セマンティック構造を構築している...これはRAGだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+LLM Wiki – "아이디어 파일" 예시
+***** TLDR
+Karpathy는 LLM이 원본 문서에서 영구적인 Wiki를 점진적으로 구축하고 유지하는 패턴을 제안한다. 쿼리마다 검색하는 RAG 방식과 달리, LLM은 새로운 소스를 읽고, 정보를 추출하고, 엔티티 페이지를 업데이트하고, 모순을 기록하고, 상호 참조를 유지한다. 당신은 소스를 큐레이션하고 질문하고, LLM은 인간이 포기하는 모든 기록 작업을 한다. 아키텍처: 원본 소스(불변), Wiki(LLM이 유지하는 Markdown), 스키마(CLAUDE.md/AGENTS.md). Obsidian이 IDE, LLM이 프로그래머, Wiki가 코드베이스.
+***** Take
+이건 기본적으로 삶이 일어나기 전에 Roam/Obsidian으로 하겠다고 약속했던 것이다. 유지 관리 부담이 가치를 초과해서 인간이 Wiki를 포기한다는 통찰은 고통스러울 정도로 정확하다. LLM은 상호 참조 업데이트에 지치지 않는다. 급여도 안 줘도 돼서 지식 수집가들에게 편리하다.
+***** Comments
+- 문서와 작업 항목이나 ADR 같은 구조화된 것을 섞으면 마찰이 생긴다. 플랫 Markdown은 쿼리가 잘 안 된다. TASKS.md는 읽을 수 있지만, 에이전트는 산문을 스캔하지 않고 '이 에픽을 차단하는 작업 표시'를 요청할 수 없다.
+- 이게 왜 모델 붕괴로 이어지지 않는지 모르겠다. LLM으로 문서를 작성해 본 적이 있다면 알 것이다: 복합은 유효한 정보를 덜 간결한 정보로 다시 쓰는 것일 뿐이다.
+- 이건 RAG다. 그래, 벡터 데이터베이스를 사용하지 않는다 - 하지만 시맨틱 연결의 인덱스 파일을 구축하고, 검색을 돕기 위해 파일 시스템에 계층적 시맨틱 구조를 구축하고 있다... 이건 RAG다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+LLM Wiki – ejemplo de un "archivo de ideas"
+***** TLDR
+Karpathy propone un patrón donde los LLM construyen y mantienen incrementalmente un wiki persistente a partir de tus documentos crudos. En lugar del enfoque de RAG de recuperar en cada consulta, el LLM lee nuevas fuentes, extrae información, actualiza páginas de entidades, anota contradicciones y mantiene referencias cruzadas. Tú curas fuentes y haces preguntas; el LLM hace toda la contabilidad que los humanos abandonan. Arquitectura: fuentes crudas (inmutables), wiki (markdown mantenido por LLM), esquema (CLAUDE.md/AGENTS.md). Obsidian es el IDE, el LLM es el programador, el wiki es el código base.
+***** Take
+Esto es básicamente lo que todos nos prometimos hacer con Roam/Obsidian antes de que la vida pasara. La idea de que los humanos abandonan los wikis porque la carga de mantenimiento supera el valor es dolorosamente precisa. Los LLM no se aburren actualizando referencias cruzadas. Tampoco cobran, lo cual es conveniente para los acumuladores de conocimiento.
+***** Comments
+- La fricción aparece cuando mezclas documentos con cosas estructuradas como items de trabajo o ADRs. El markdown plano no consulta bien. Puedes leer TASKS.md bien. El agente no puede preguntar 'muéstrame tareas abiertas bloqueando esta épica' sin escanear prosa.
+- No veo por qué esto no llevaría al colapso del modelo. Si has pasado tiempo usando LLMs para escribir documentación verás esto: la composición solo reescribirá información válida con información menos concisa.
+- Esto es solo RAG. Sí, no usa una base de datos vectorial - pero está construyendo un archivo índice de conexiones semánticas, está construyendo estructuras semánticas jerárquicas en el sistema de archivos para ayudar a la recuperación... esto es RAG.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+LLM Wiki – Beispiel einer "Ideendatei"
+***** TLDR
+Karpathy schlägt ein Muster vor, bei dem LLMs schrittweise ein persistentes Wiki aus Ihren Rohdokumenten aufbauen und pflegen. Anstatt wie bei RAG bei jeder Abfrage abzurufen, liest das LLM neue Quellen, extrahiert Informationen, aktualisiert Entitätsseiten, notiert Widersprüche und pflegt Querverweise. Sie kuratieren Quellen und stellen Fragen; das LLM erledigt die ganze Buchhaltung, die Menschen aufgeben. Architektur: Rohquellen (unveränderlich), Wiki (LLM-gepflegtes Markdown), Schema (CLAUDE.md/AGENTS.md). Obsidian ist die IDE, das LLM ist der Programmierer, das Wiki ist die Codebasis.
+***** Take
+Das ist im Grunde das, was wir uns alle mit Roam/Obsidian versprochen hatten, bevor das Leben passierte. Die Erkenntnis, dass Menschen Wikis aufgeben, weil die Wartungslast den Wert übersteigt, ist schmerzhaft genau. LLMs werden nicht müde, Querverweise zu aktualisieren. Sie werden auch nicht bezahlt, was für Wissenshorter praktisch ist.
+***** Comments
+- Die Reibung zeigt sich, sobald man Dokumente mit strukturierten Dingen wie Arbeitselementen oder ADRs mischt. Flaches Markdown lässt sich schlecht abfragen. TASKS.md kann man gut lesen. Der Agent kann nicht fragen 'zeige mir offene Aufgaben, die dieses Epic blockieren', ohne Prosa zu scannen.
+- Ich sehe nicht, warum das nicht zum Modellkollaps führen würde. Wenn man Zeit mit LLMs verbracht hat, um Dokumentation zu schreiben, sieht man das: Die Kumulation wird einfach valide Information mit weniger prägnanter Information umschreiben.
+- Das ist nur RAG. Ja, es verwendet keine Vektordatenbank - aber es baut eine Indexdatei semantischer Verbindungen auf, es konstruiert hierarchische semantische Strukturen im Dateisystem zur Unterstützung des Abrufs... das ist RAG.
+** Writing Lisp is AI Resistant and I'm Sad :ai:lisp:programming-languages:
+:PROPERTIES:
+:ID:       47645468
+:URL:      https://blog.djhaskin.com/blog/writing-lisp-is-ai-resistant-and-im-sad/
+:HN_URL:   https://news.ycombinator.com/item?id=47645468
+:POINTS:   56
+:COMMENTS: 51
+:BY:       djha-skin
+:END:
+
+*** TLDR
+Author uses AI at work as a DevOps engineer with Goose CLI. Tried writing an RSS reader converter in Lisp (favorite language) but burned $10-20 in 30 minutes with minimal progress. Even Claude struggled with REPL development. Built tmux-repl-mcp tool to smooth REPL interaction but it barely helped. Meanwhile, Python code flows effortlessly with cheap models. The signal-to-noise ratio is night and day. AI generates code on the path of least resistance, and Lisp has minimal training data. Now considering rewriting in Go. The advent of AI has converted language popularity into real dollars-per-token cost savings.
+
+*** Take
+The scruffies built an AI that hates the neats' language. Poetry. There's something tragicomic about Lisp surviving 'worse is better' for decades only to face an adversary that literally charges more per parenthesis. The Plank Road analogy is apt: sometimes the elegant path just isn't where the trains run.
+
+*** Comments
+
+**** huahaiy
+:PROPERTIES:
+:COMMENT_ID: 47645789
+:END:
+I have been using AI to write Clojure code this past half year. The frontline LLM has no problem with writing idiomatic Clojure code. Both Codex and Claude Code fix their missing closing parentheses quickly. Clojure is a great fit with AI: it is token efficient.
+
+**** throw913
+:PROPERTIES:
+:COMMENT_ID: 47645890
+:END:
+Expected, considering stuff like the recent post re: esolang benchmarks. Lisp is probably just out of distribution. This is just a popularity contest, not a reflection on anything else.
+
+**** js8
+:PROPERTIES:
+:COMMENT_ID: 47645912
+:END:
+Personally, I think we're using LLMs wrong for programming. Computer programs are solutions to a given constraint logic problem. We should be using LLMs to translate from fuzzy human specifications to formal specifications, and then solving the resulting logic problem with a proper reasoning algorithm.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+写Lisp对AI有抵抗力，我很难过
+***** TLDR
+作者在工作中作为DevOps工程师使用AI，配合Goose CLI。试图用Lisp（最爱的语言）写一个RSS阅读器转换器，但30分钟烧掉10-20美元却进展甚微。连Claude都在REPL开发上挣扎。构建了tmux-repl-mcp工具来平滑REPL交互，但几乎没帮助。与此同时，Python代码用便宜模型毫不费力地流出。信噪比天差地别。AI沿着阻力最小的路径生成代码，而Lisp训练数据极少。现在考虑用Go重写。AI的出现将语言流行度转化为实际的每token美元成本节省。
+***** Take
+邋遢派创造了一个讨厌整洁派语言的AI。诗意。Lisp在'更差即更好'中生存了几十年，却面对一个字面上按括号收费的对手，这有某种悲喜剧的感觉。木板路的比喻很贴切：有时候优雅的道路就不是火车经过的地方。
+***** Comments
+- 过去半年我一直在用AI写Clojure代码。前线LLM写地道的Clojure代码没问题。Codex和Claude Code都能快速修复缺失的闭括号。Clojure很适合AI：token效率高。
+- 意料之中，考虑到最近关于深奥语言基准测试的帖子。Lisp可能就是分布外。这只是一场人气比赛，不反映其他任何东西。
+- 个人认为我们用LLM编程的方式是错的。计算机程序是给定约束逻辑问题的解决方案。我们应该用LLM把模糊的人类规范翻译成形式化规范，然后用适当的推理算法解决逻辑问题。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Lispを書くことはAI耐性があり、悲しい
+***** TLDR
+著者はDevOpsエンジニアとしてGoose CLIと共にAIを仕事で使用。Lisp（お気に入りの言語）でRSSリーダーコンバーターを書こうとしたが、30分で10-20ドルを燃やしてほとんど進捗なし。ClaudeでさえREPL開発に苦戦。tmux-repl-mcpツールを作ってREPL操作をスムーズにしようとしたが、ほとんど助けにならなかった。一方、Pythonコードは安いモデルで楽々と流れ出る。S/N比は雲泥の差。AIは最小抵抗の道でコードを生成し、Lispのトレーニングデータはごくわずか。今Goで書き直すことを検討中。AIの登場で言語の人気がトークンあたりの実際のドルコスト削減に変換された。
+***** Take
+スクラフィーズがニーツの言語を嫌うAIを作った。詩的だ。Lispが「悪い方が良い」を数十年生き延びて、文字通り括弧ごとに課金する敵に直面するのには、何か悲喜劇的なものがある。板道の例えは的確：時にはエレガントな道は列車が走る場所ではない。
+***** Comments
+- この半年間AIでClojureコードを書いてきた。最前線のLLMは慣用的なClojureコードを書くのに問題ない。CodexもClaude Codeも閉じ括弧の欠落を素早く修正する。Clojureはトークン効率が良く、AIに最適。
+- 予想通り、最近の難解言語ベンチマークの投稿を考えると。Lispはおそらく分布外。これは人気コンテストに過ぎず、他の何も反映していない。
+- 個人的には、プログラミングでLLMを間違って使っていると思う。コンピュータプログラムは与えられた制約論理問題の解。LLMを使って曖昧な人間の仕様を形式仕様に翻訳し、適切な推論アルゴリズムで論理問題を解くべき。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Lisp 작성은 AI에 저항력이 있고 나는 슬프다
+***** TLDR
+저자는 DevOps 엔지니어로서 Goose CLI와 함께 AI를 업무에 사용한다. Lisp(가장 좋아하는 언어)로 RSS 리더 변환기를 작성하려 했지만 30분 만에 10-20달러를 태우고 거의 진전이 없었다. Claude조차 REPL 개발에 어려움을 겪었다. REPL 상호작용을 원활하게 하기 위해 tmux-repl-mcp 도구를 만들었지만 거의 도움이 되지 않았다. 반면 Python 코드는 저렴한 모델로 쉽게 나온다. 신호 대 잡음비가 천지 차이다. AI는 저항이 가장 적은 경로로 코드를 생성하고, Lisp는 훈련 데이터가 거의 없다. 지금 Go로 다시 작성하는 것을 고려 중이다. AI의 등장으로 언어 인기도가 토큰당 실제 달러 비용 절감으로 전환되었다.
+***** Take
+지저분한 파가 깔끔한 파의 언어를 싫어하는 AI를 만들었다. 시적이다. Lisp이 '더 나쁜 것이 더 좋다'를 수십 년간 살아남았다가 문자 그대로 괄호마다 요금을 부과하는 적과 마주하는 것에는 비극희극적인 면이 있다. 판자 도로 비유가 적절하다: 때로는 우아한 길이 기차가 지나가는 곳이 아니다.
+***** Comments
+- 지난 반년간 AI로 Clojure 코드를 작성해왔다. 최전선 LLM은 관용적인 Clojure 코드 작성에 문제가 없다. Codex와 Claude Code 모두 누락된 닫는 괄호를 빠르게 수정한다. Clojure는 토큰 효율성이 높아 AI와 잘 맞는다.
+- 예상대로다, 최근 난해한 언어 벤치마크 게시물을 고려하면. Lisp은 아마 분포 밖일 것이다. 이건 그냥 인기 대회일 뿐, 다른 것을 반영하지 않는다.
+- 개인적으로 우리가 프로그래밍에 LLM을 잘못 사용하고 있다고 생각한다. 컴퓨터 프로그램은 주어진 제약 논리 문제의 해결책이다. LLM을 사용해 모호한 인간 사양을 형식 사양으로 번역하고, 적절한 추론 알고리즘으로 논리 문제를 풀어야 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Escribir Lisp es resistente a la IA y estoy triste
+***** TLDR
+El autor usa IA en el trabajo como ingeniero DevOps con Goose CLI. Intentó escribir un convertidor de lectores RSS en Lisp (su lenguaje favorito) pero quemó $10-20 en 30 minutos con progreso mínimo. Incluso Claude tuvo dificultades con el desarrollo REPL. Construyó la herramienta tmux-repl-mcp para suavizar la interacción REPL pero apenas ayudó. Mientras tanto, el código Python fluye sin esfuerzo con modelos baratos. La relación señal/ruido es de noche y día. La IA genera código por el camino de menor resistencia, y Lisp tiene datos de entrenamiento mínimos. Ahora considera reescribir en Go. El advenimiento de la IA ha convertido la popularidad del lenguaje en ahorros reales de dólares por token.
+***** Take
+Los desaliñados construyeron una IA que odia el lenguaje de los pulcros. Poesía. Hay algo tragicómico en que Lisp sobreviva 'peor es mejor' durante décadas solo para enfrentar un adversario que literalmente cobra más por paréntesis. La analogía del Camino de Tablas es acertada: a veces el camino elegante simplemente no es por donde pasan los trenes.
+***** Comments
+- He estado usando IA para escribir código Clojure este último medio año. El LLM de primera línea no tiene problemas para escribir código Clojure idiomático. Tanto Codex como Claude Code arreglan rápidamente sus paréntesis de cierre faltantes. Clojure encaja bien con IA: es eficiente en tokens.
+- Esperado, considerando cosas como el post reciente sobre benchmarks de esolangs. Lisp probablemente está fuera de distribución. Esto es solo un concurso de popularidad, no un reflejo de nada más.
+- Personalmente, creo que estamos usando LLMs mal para programación. Los programas de computadora son soluciones a un problema de lógica de restricciones dado. Deberíamos usar LLMs para traducir de especificaciones humanas difusas a especificaciones formales, y luego resolver el problema lógico con un algoritmo de razonamiento apropiado.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Lisp zu schreiben ist KI-resistent und ich bin traurig
+***** TLDR
+Der Autor nutzt KI bei der Arbeit als DevOps-Ingenieur mit Goose CLI. Versuchte einen RSS-Reader-Konverter in Lisp (Lieblingssprache) zu schreiben, aber verbrannte $10-20 in 30 Minuten mit minimalem Fortschritt. Selbst Claude kämpfte mit der REPL-Entwicklung. Baute das tmux-repl-mcp Tool um die REPL-Interaktion zu glätten, aber es half kaum. Inzwischen fließt Python-Code mühelos mit günstigen Modellen. Das Signal-Rausch-Verhältnis ist wie Tag und Nacht. KI generiert Code auf dem Weg des geringsten Widerstands, und Lisp hat minimale Trainingsdaten. Erwägt jetzt eine Neuschreibung in Go. Das Aufkommen von KI hat Sprachpopularität in echte Dollar-pro-Token-Kosteneinsparungen umgewandelt.
+***** Take
+Die Chaoten haben eine KI gebaut, die die Sprache der Ordentlichen hasst. Poesie. Es ist tragisch-komisch, dass Lisp 'schlechter ist besser' jahrzehntelang überlebte, nur um einem Gegner gegenüberzustehen, der buchstäblich pro Klammer mehr berechnet. Die Bohlenstraßen-Analogie ist treffend: Manchmal ist der elegante Weg einfach nicht dort, wo die Züge fahren.
+***** Comments
+- Ich habe im letzten halben Jahr KI benutzt, um Clojure-Code zu schreiben. Das Frontline-LLM hat kein Problem mit idiomatischem Clojure-Code. Sowohl Codex als auch Claude Code beheben fehlende schließende Klammern schnell. Clojure passt gut zu KI: es ist token-effizient.
+- Erwartet, wenn man an den kürzlichen Post über Esolang-Benchmarks denkt. Lisp ist wahrscheinlich einfach außerhalb der Verteilung. Das ist nur ein Popularitätswettbewerb, keine Reflexion von etwas anderem.
+- Persönlich denke ich, dass wir LLMs falsch für Programmierung nutzen. Computerprogramme sind Lösungen für ein gegebenes Constraint-Logic-Problem. Wir sollten LLMs nutzen, um von unscharfen menschlichen Spezifikationen zu formalen Spezifikationen zu übersetzen und dann das logische Problem mit einem geeigneten Reasoning-Algorithmus lösen.
+** I used AI. It worked. I hated it :ai:software-development:rust:
+:PROPERTIES:
+:ID:       47646277
+:URL:      https://taggart-tech.com/reckoning/
+:HN_URL:   https://news.ycombinator.com/item?id=47646277
+:POINTS:   21
+:COMMENTS: 17
+:BY:       evolve2k
+:END:
+
+*** TLDR
+Security researcher needed certificate generator for The Taggart Institute migration away from Teachable. Built it with Claude Code + Rust + Typst in 3 weeks (vs 6 months for similar solo project). The code works, passed security audit, found real vulns including timing side-channel in Argon2. But the process was excruciating: most time spent pressing '1' to accept changes like Homer's drinking bird. The temptation to auto-accept everything is dangerous. Human-in-the-loop is necessary but the loop itself encourages humans to leave it. AI coding tools are addictive. The tool requires expertise to validate but its use diminishes expertise and stunts growth.
+
+*** Take
+The most honest AI coding writeup I've read. Not 'AI bad' performative outrage, not 'AI good' hustle culture cheerleading. Just: it worked, I hated it, the process turns you into a button-pressing zombie, and the help that shows up might be the help that atrophies your skills. The drinking bird GIF is perfect.
+
+*** Comments
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 47646534
+:END:
+That's why they hated it. Approving every change is the most frustrating way of using these tools. I genuinely think that one of the biggest differences between people who love and hate AI coding tools comes down to workflow.
+
+**** riffraff
+:PROPERTIES:
+:COMMENT_ID: 47646678
+:END:
+I have come to the conclusion that many people are going to live this AI period pretty much like the five stages of grief: denial that it can work, anger at the new robber barons, bargaining that yeah it kinda works but not really well enough, catastrophic world view and depression, and finally acceptance of the new normality.
+
+**** periodjet
+:PROPERTIES:
+:COMMENT_ID: 47646789
+:END:
+These takes are growing increasingly tiresome. They are pretty much all just tacit admissions of some kind of skill issue with this new class of tool, but presented with a sheen of moral outrage. Figure it out.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我用了AI。它有效。我讨厌它
+***** TLDR
+安全研究员需要为The Taggart Institute从Teachable迁移构建证书生成器。用Claude Code + Rust + Typst在3周内完成（相比类似独立项目需要6个月）。代码可用，通过了安全审计，发现了真正的漏洞包括Argon2中的时序侧信道。但过程令人痛苦：大部分时间都在像Homer的饮水鸟一样按'1'接受更改。自动接受所有内容的诱惑很危险。人在回路中是必要的，但回路本身鼓励人离开它。AI编码工具令人上瘾。该工具需要专业知识来验证，但它的使用会削弱专业知识并阻碍成长。
+***** Take
+我读过的最诚实的AI编码文章。不是'AI坏'的表演性愤怒，不是'AI好'的喧嚣文化啦啦队。只是：它有效，我讨厌它，这个过程把你变成按按钮的僵尸，出现的帮助可能是让你技能萎缩的帮助。饮水鸟GIF完美。
+***** Comments
+- 这就是他们讨厌它的原因。批准每个更改是使用这些工具最令人沮丧的方式。我真诚地认为，喜欢和讨厌AI编码工具的人之间最大的区别之一归结于工作流程。
+- 我得出的结论是，很多人会像悲伤的五个阶段一样度过这个AI时期：否认它能工作，对新强盗大亨的愤怒，讨价还价说是的它有点用但不够好，灾难性世界观和抑郁，最后接受新常态。
+- 这些观点越来越令人厌倦。它们基本上都是对这类新工具某种技能问题的默认承认，但以道德愤怒的外表呈现。搞清楚吧。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AIを使った。動いた。嫌いだった
+***** TLDR
+セキュリティ研究者がThe Taggart InstituteのTeachableからの移行のために証明書ジェネレーターが必要だった。Claude Code + Rust + Typstで3週間で構築（同様のソロプロジェクトでは6ヶ月かかる）。コードは動作し、セキュリティ監査に合格し、Argon2のタイミングサイドチャネルを含む実際の脆弱性を発見。しかし、プロセスは苦痛だった：ほとんどの時間をホーマーの飲み鳥のように'1'を押して変更を承認することに費やした。すべてを自動承認する誘惑は危険。ヒューマン・イン・ザ・ループは必要だが、ループ自体が人間にそこを離れることを促す。AIコーディングツールは中毒性がある。ツールは検証に専門知識を必要とするが、その使用は専門知識を減少させ成長を阻害する。
+***** Take
+私が読んだ中で最も正直なAIコーディング記事。「AI悪い」という芝居がかった怒りでも、「AI良い」というハッスル文化の応援でもない。ただ：動いた、嫌いだった、プロセスはボタンを押すゾンビに変える、現れた助けはスキルを萎縮させる助けかもしれない。飲み鳥のGIFは完璧。
+***** Comments
+- それが彼らが嫌いだった理由。すべての変更を承認するのはこれらのツールを使う最もフラストレーションのたまる方法。AIコーディングツールを愛する人と嫌う人の最大の違いの一つはワークフローに帰着すると本当に思う。
+- 多くの人がこのAI期間を悲しみの5段階のように生きることになるという結論に達した：動くことを否定、新しい強盗男爵への怒り、まあ動くけど十分じゃないという交渉、破滅的世界観とうつ、そして最後に新しい日常の受容。
+- こういう意見はますます疲れる。基本的にすべてこの新しいクラスのツールに対する何らかのスキル問題の暗黙の認識だが、道徳的怒りの装いで提示される。何とかしろ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AI를 사용했다. 작동했다. 싫었다
+***** TLDR
+보안 연구원이 The Taggart Institute의 Teachable 이전을 위한 인증서 생성기가 필요했다. Claude Code + Rust + Typst로 3주 만에 완성(비슷한 솔로 프로젝트는 6개월 소요). 코드가 작동하고, 보안 감사를 통과했으며, Argon2의 타이밍 사이드 채널을 포함한 실제 취약점을 발견했다. 하지만 과정은 고통스러웠다: 대부분의 시간을 Homer의 물 마시는 새처럼 '1'을 눌러 변경사항을 승인하는 데 보냈다. 모든 것을 자동 승인하고 싶은 유혹은 위험하다. 휴먼 인 더 루프는 필요하지만 루프 자체가 인간이 떠나도록 부추긴다. AI 코딩 도구는 중독성이 있다. 이 도구는 검증에 전문 지식이 필요하지만 사용하면 전문 지식이 줄어들고 성장이 저해된다.
+***** Take
+내가 읽은 가장 정직한 AI 코딩 글. 'AI 나쁨'이라는 공연적 분노도, 'AI 좋음'이라는 허슬 문화 응원도 아니다. 그냥: 작동했고, 싫었고, 과정이 버튼 누르는 좀비로 만들고, 나타난 도움이 기술을 위축시키는 도움일 수 있다. 물 마시는 새 GIF가 완벽하다.
+***** Comments
+- 그래서 그들이 싫어했던 거다. 모든 변경을 승인하는 것이 이런 도구를 사용하는 가장 짜증나는 방법이다. AI 코딩 도구를 좋아하는 사람과 싫어하는 사람 사이의 가장 큰 차이 중 하나가 워크플로우라고 진심으로 생각한다.
+- 많은 사람들이 이 AI 시대를 슬픔의 5단계처럼 살아갈 것이라는 결론에 도달했다: 작동한다는 것을 부정, 새로운 강도 남작에 대한 분노, 그래 어느 정도 작동하지만 충분하지 않다는 협상, 파국적 세계관과 우울, 그리고 마침내 새로운 정상의 수용.
+- 이런 의견은 점점 지겹다. 기본적으로 모두 이 새로운 종류의 도구에 대한 어떤 스킬 문제의 암묵적 인정일 뿐인데, 도덕적 분노의 겉모습으로 제시된다. 알아서 해라.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Usé IA. Funcionó. Lo odié
+***** TLDR
+Un investigador de seguridad necesitaba un generador de certificados para la migración de The Taggart Institute desde Teachable. Lo construyó con Claude Code + Rust + Typst en 3 semanas (vs 6 meses para un proyecto similar en solitario). El código funciona, pasó la auditoría de seguridad, encontró vulnerabilidades reales incluyendo canal lateral de tiempo en Argon2. Pero el proceso fue agotador: la mayor parte del tiempo se gastó presionando '1' para aceptar cambios como el pájaro bebedor de Homer. La tentación de auto-aceptar todo es peligrosa. El humano en el bucle es necesario pero el bucle mismo anima a los humanos a dejarlo. Las herramientas de codificación IA son adictivas. La herramienta requiere experiencia para validar pero su uso disminuye la experiencia y atrofia el crecimiento.
+***** Take
+El artículo más honesto sobre codificación IA que he leído. No es indignación performativa de 'IA mala', no es animación de cultura hustle de 'IA buena'. Solo: funcionó, lo odié, el proceso te convierte en un zombie presionando botones, y la ayuda que aparece podría ser la ayuda que atrofia tus habilidades. El GIF del pájaro bebedor es perfecto.
+***** Comments
+- Por eso lo odiaron. Aprobar cada cambio es la forma más frustrante de usar estas herramientas. Genuinamente creo que una de las mayores diferencias entre la gente que ama y odia las herramientas de codificación IA se reduce al flujo de trabajo.
+- He llegado a la conclusión de que muchas personas van a vivir este período de IA muy parecido a las cinco etapas del duelo: negación de que puede funcionar, ira hacia los nuevos barones ladrones, negociación de que sí funciona más o menos pero no lo suficiente, visión catastrófica del mundo y depresión, y finalmente aceptación de la nueva normalidad.
+- Estas opiniones son cada vez más cansinas. Básicamente son todas admisiones tácitas de algún tipo de problema de habilidad con esta nueva clase de herramienta, pero presentadas con un barniz de indignación moral. Resuélvelo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ich habe KI benutzt. Es funktionierte. Ich hasste es
+***** TLDR
+Sicherheitsforscher brauchte einen Zertifikatsgenerator für die Migration des Taggart Institute von Teachable. Baute ihn mit Claude Code + Rust + Typst in 3 Wochen (vs 6 Monate für ein ähnliches Soloprojekt). Der Code funktioniert, bestand das Sicherheitsaudit, fand echte Schwachstellen einschließlich Timing-Seitenkanal in Argon2. Aber der Prozess war qualvoll: Die meiste Zeit wurde damit verbracht, '1' zu drücken, um Änderungen zu akzeptieren wie Homers Trinkvogel. Die Versuchung, alles automatisch zu akzeptieren, ist gefährlich. Human-in-the-Loop ist notwendig, aber die Schleife selbst ermutigt Menschen, sie zu verlassen. KI-Codierungswerkzeuge machen süchtig. Das Werkzeug erfordert Expertise zur Validierung, aber seine Nutzung vermindert Expertise und hemmt Wachstum.
+***** Take
+Der ehrlichste KI-Codierungs-Artikel, den ich gelesen habe. Nicht performative 'KI schlecht'-Empörung, nicht 'KI gut'-Hustle-Culture-Jubel. Einfach nur: es funktionierte, ich hasste es, der Prozess macht dich zum knopfdrückenden Zombie, und die Hilfe, die auftaucht, könnte die Hilfe sein, die deine Fähigkeiten verkümmern lässt. Das Trinkvogel-GIF ist perfekt.
+***** Comments
+- Deshalb haben sie es gehasst. Jede Änderung zu genehmigen ist der frustrierendste Weg, diese Tools zu nutzen. Ich denke wirklich, dass einer der größten Unterschiede zwischen Leuten, die KI-Codierungstools lieben und hassen, auf den Workflow zurückgeht.
+- Ich bin zu dem Schluss gekommen, dass viele Menschen diese KI-Periode ziemlich wie die fünf Phasen der Trauer durchleben werden: Verleugnung, dass es funktionieren kann, Wut auf die neuen Raubritter, Verhandeln, dass ja es irgendwie funktioniert aber nicht gut genug, katastrophales Weltbild und Depression, und schließlich Akzeptanz der neuen Normalität.
+- Diese Meinungen werden zunehmend ermüdend. Sie sind im Grunde alle stillschweigende Eingeständnisse irgendeines Skill-Problems mit dieser neuen Werkzeugklasse, aber mit einem Schein moralischer Empörung präsentiert. Krieg es hin.
+** OpenScreen is an open-source alternative to Screen Studio :open-source:macos:tools:
+:PROPERTIES:
+:ID:       47595695
+:URL:      https://github.com/siddharthvaddem/openscreen
+:HN_URL:   https://news.ycombinator.com/item?id=47595695
+:POINTS:   185
+:COMMENTS: 32
+:BY:       jskopek
+:END:
+
+*** TLDR
+Open-source macOS screen recording tool that creates polished demo videos with automatic zoom effects, cursor highlighting, and smooth animations. Free alternative to Screen Studio ($200+). No subscriptions, no watermarks, free for commercial use.
+
+*** Take
+Finally, someone made the Screen Studio alternative the internet has been begging for. Though 'open source, no watermarks, free for commercial use' is doing a lot of heavy lifting here. The real question is whether it can actually produce those satisfying cursor zoom effects or if it's just another FFmpeg wrapper with delusions of grandeur.
+
+*** Comments
+
+**** alin23
+:PROPERTIES:
+:COMMENT_ID: 47595890
+:END:
+Am I in the minority for thinking ScreenStudio is actually worth the money? The recent video I did for Cling I've had many people ask about how I did it because it has just the right amount of motion and highlighting. I did it in a few minutes of editing.
+
+**** __mharrison__
+:PROPERTIES:
+:COMMENT_ID: 47595923
+:END:
+I'd rather have the metadata from click and typing events and use that to create a davinci project...
+
+**** fodkodrasz
+:PROPERTIES:
+:COMMENT_ID: 47595967
+:END:
+I see that this is for MacOS. Isn't there a stock feature for screen recording, like on the iPhone, or on Windows (snipping tool can do screen recordings since Windows 10 or 11)?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+OpenScreen是Screen Studio的开源替代品
+***** TLDR
+开源macOS屏幕录制工具，可创建带有自动缩放效果、光标高亮和流畅动画的精美演示视频。Screen Studio（200美元以上）的免费替代品。无订阅，无水印，商用免费。
+***** Take
+终于有人做了互联网一直在请求的Screen Studio替代品。虽然'开源、无水印、商用免费'在这里承担了很多重任。真正的问题是它能否真正产生那些令人满意的光标缩放效果，还是只是另一个有妄想症的FFmpeg包装器。
+***** Comments
+- 我是少数认为ScreenStudio物有所值的人吗？我最近为Cling做的视频，很多人问我是怎么做的，因为它有恰到好处的动态和高亮。我只花了几分钟编辑。
+- 我宁愿获取点击和打字事件的元数据，然后用它来创建达芬奇项目...
+- 我看这是给MacOS用的。难道没有屏幕录制的原生功能吗，就像iPhone上或Windows上（截图工具从Windows 10或11开始可以录屏）？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+OpenScreenはScreen Studioのオープンソース代替
+***** TLDR
+自動ズームエフェクト、カーソルハイライト、スムーズなアニメーションで洗練されたデモビデオを作成するオープンソースmacOS画面録画ツール。Screen Studio（200ドル以上）の無料代替。サブスクなし、透かしなし、商用利用無料。
+***** Take
+ついにインターネットが待ち望んでいたScreen Studioの代替を誰かが作った。ただし「オープンソース、透かしなし、商用無料」がここでは多くを背負っている。本当の問題は、実際にあの満足感のあるカーソルズームエフェクトを作れるのか、それとも誇大妄想を持つ別のFFmpegラッパーに過ぎないのかだ。
+***** Comments
+- ScreenStudioは実際にお金を払う価値があると思っているのは少数派？Cling用に作った最近のビデオは、ちょうど良い量のモーションとハイライトがあるので、どうやったかたくさんの人に聞かれた。数分の編集でできた。
+- クリックとタイピングイベントのメタデータを取得して、それでDaVinciプロジェクトを作りたい...
+- これはMacOS用みたいだけど。iPhoneやWindows（スニッピングツールはWindows 10か11から画面録画できる）みたいな画面録画のストック機能はないの？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+OpenScreen은 Screen Studio의 오픈소스 대안
+***** TLDR
+자동 줌 효과, 커서 강조, 부드러운 애니메이션으로 세련된 데모 비디오를 만드는 오픈소스 macOS 화면 녹화 도구. Screen Studio(200달러 이상)의 무료 대안. 구독 없음, 워터마크 없음, 상업용 무료.
+***** Take
+드디어 인터넷이 원하던 Screen Studio 대안을 누군가 만들었다. '오픈소스, 워터마크 없음, 상업용 무료'가 여기서 많은 무거운 짐을 지고 있지만. 진짜 문제는 실제로 그 만족스러운 커서 줌 효과를 만들 수 있는지, 아니면 과대망상이 있는 또 다른 FFmpeg 래퍼인지다.
+***** Comments
+- ScreenStudio가 실제로 돈 값을 한다고 생각하는 게 소수인가요? Cling용으로 최근 만든 비디오는 딱 적당한 양의 모션과 하이라이트가 있어서 많은 사람들이 어떻게 했냐고 물었다. 몇 분 편집으로 했다.
+- 클릭과 타이핑 이벤트의 메타데이터를 가져와서 다빈치 프로젝트를 만들고 싶다...
+- 이건 MacOS용인 것 같네요. iPhone이나 Windows(캡처 도구가 Windows 10이나 11부터 화면 녹화 가능)처럼 화면 녹화 기본 기능이 없나요?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+OpenScreen es una alternativa de código abierto a Screen Studio
+***** TLDR
+Herramienta de grabación de pantalla macOS de código abierto que crea videos de demostración pulidos con efectos de zoom automático, resaltado de cursor y animaciones suaves. Alternativa gratuita a Screen Studio ($200+). Sin suscripciones, sin marcas de agua, gratis para uso comercial.
+***** Take
+Finalmente, alguien hizo la alternativa a Screen Studio que internet ha estado pidiendo. Aunque 'código abierto, sin marcas de agua, gratis para uso comercial' está haciendo mucho trabajo pesado aquí. La verdadera pregunta es si realmente puede producir esos satisfactorios efectos de zoom del cursor o si es solo otro envoltorio de FFmpeg con delirios de grandeza.
+***** Comments
+- ¿Soy minoría por pensar que ScreenStudio realmente vale el dinero? El video reciente que hice para Cling, mucha gente preguntó cómo lo hice porque tiene justo la cantidad correcta de movimiento y resaltado. Lo hice en unos minutos de edición.
+- Preferiría tener los metadatos de los eventos de clic y escritura y usar eso para crear un proyecto de DaVinci...
+- Veo que esto es para MacOS. ¿No hay una función nativa para grabar pantalla, como en el iPhone, o en Windows (la herramienta de recortes puede hacer grabaciones de pantalla desde Windows 10 u 11)?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+OpenScreen ist eine Open-Source-Alternative zu Screen Studio
+***** TLDR
+Open-Source macOS Bildschirmaufnahme-Tool, das polierte Demo-Videos mit automatischen Zoom-Effekten, Cursor-Hervorhebung und flüssigen Animationen erstellt. Kostenlose Alternative zu Screen Studio ($200+). Keine Abonnements, keine Wasserzeichen, kostenlos für kommerzielle Nutzung.
+***** Take
+Endlich hat jemand die Screen Studio-Alternative gemacht, um die das Internet gebettelt hat. Obwohl 'Open Source, keine Wasserzeichen, kostenlos für kommerzielle Nutzung' hier viel schwere Arbeit leistet. Die wirkliche Frage ist, ob es tatsächlich diese befriedigenden Cursor-Zoom-Effekte produzieren kann oder ob es nur ein weiterer FFmpeg-Wrapper mit Größenwahn ist.
+***** Comments
+- Bin ich in der Minderheit, wenn ich denke, dass ScreenStudio tatsächlich das Geld wert ist? Das kürzliche Video, das ich für Cling gemacht habe, wurde von vielen Leuten gefragt, wie ich es gemacht habe, weil es genau die richtige Menge an Bewegung und Hervorhebung hat. Ich habe es in wenigen Minuten Bearbeitung gemacht.
+- Ich hätte lieber die Metadaten von Klick- und Tipp-Ereignissen und würde damit ein DaVinci-Projekt erstellen...
+- Ich sehe, dass das für MacOS ist. Gibt es keine Stock-Funktion für Bildschirmaufnahme, wie auf dem iPhone oder auf Windows (Snipping-Tool kann seit Windows 10 oder 11 Bildschirmaufnahmen machen)?
+** Contrapunk – Real-time counterpoint harmony from guitar input, in Rust :music:rust:open-source:
+:PROPERTIES:
+:ID:       47645025
+:URL:      https://contrapunk.com/
+:HN_URL:   https://news.ycombinator.com/item?id=47645025
+:POINTS:   34
+:COMMENTS: 5
+:BY:       waveywaves
+:END:
+
+*** TLDR
+Real-time MIDI harmony generator and guitar-to-MIDI converter built in Rust. Plug in guitar, get counterpoint harmonies following Palestrina/Bach rules. 8 harmony modes, 28 scale modes, sub-10ms latency. Runs native (Tauri), browser (WebAssembly), or server mode. Voice leading rules: parallel fifths rejection, voice crossing prevention, spacing rules. MIT licensed because 'centuries of music theory should be accessible to every musician.'
+
+*** Take
+Someone wrote centuries of music theory rules in Rust and made them run in 10ms. Meanwhile, AI can generate Bach-style music but can't close Lisp parentheses without burning $20. The irony of encoding human musical knowledge into deterministic code while LLMs fail at deterministic language syntax is chef's kiss.
+
+*** Comments
+
+**** waveywaves
+:PROPERTIES:
+:COMMENT_ID: 47645234
+:END:
+Hi HN, I built Contrapunk because I wanted to play guitar and hear counterpoint harmonies generated in real-time. You can choose the key and voice leading style.
+
+**** marssaxman
+:PROPERTIES:
+:COMMENT_ID: 47645345
+:END:
+What a cool idea. I don't have a music setup capable of running this right now. How do you generate velocity values for the accompaniment notes? Given that you already have a pitch tracker, it could be interesting to add key detection.
+
+**** r2ob
+:PROPERTIES:
+:COMMENT_ID: 47645456
+:END:
+Wow that's is really cool! Thanks for sharing! I will definitely take a look
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Contrapunk – 用Rust实现的吉他输入实时对位和声
+***** TLDR
+用Rust构建的实时MIDI和声生成器和吉他转MIDI转换器。插入吉他，获得遵循帕莱斯特里纳/巴赫规则的对位和声。8种和声模式，28种音阶模式，亚10毫秒延迟。原生运行（Tauri）、浏览器运行（WebAssembly）或服务器模式。声部进行规则：拒绝平行五度、防止声部交叉、间距规则。MIT许可证，因为'几个世纪的音乐理论应该让每个音乐家都能获取'。
+***** Take
+有人用Rust写了几个世纪的音乐理论规则，让它们在10毫秒内运行。与此同时，AI可以生成巴赫风格的音乐，但不烧掉20美元就无法闭合Lisp括号。将人类音乐知识编码为确定性代码，而LLM在确定性语言语法上失败的讽刺，堪称完美。
+***** Comments
+- 嗨HN，我构建Contrapunk是因为我想弹吉他并实时听到生成的对位和声。你可以选择调性和声部进行风格。
+- 多酷的想法。我现在没有能运行这个的音乐设置。你是怎么为伴奏音符生成力度值的？既然你已经有音高追踪器了，添加调性检测可能会很有趣。
+- 哇这真的很酷！感谢分享！我一定会看看的
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Contrapunk – Rustで実装されたギター入力からのリアルタイム対位法ハーモニー
+***** TLDR
+Rustで構築されたリアルタイムMIDIハーモニージェネレーターとギターtoMIDIコンバーター。ギターを接続すると、パレストリーナ/バッハのルールに従った対位法ハーモニーが得られる。8つのハーモニーモード、28のスケールモード、10ms以下のレイテンシー。ネイティブ（Tauri）、ブラウザ（WebAssembly）、またはサーバーモードで動作。声部進行ルール：平行5度の拒否、声部交差の防止、間隔ルール。「何世紀もの音楽理論はすべてのミュージシャンがアクセスできるべき」だからMITライセンス。
+***** Take
+誰かが何世紀もの音楽理論ルールをRustで書いて、10msで実行できるようにした。一方、AIはバッハスタイルの音楽を生成できるが、20ドル燃やさないとLispの括弧を閉じられない。人間の音楽知識を決定論的コードにエンコードする一方で、LLMが決定論的言語構文で失敗する皮肉は完璧。
+***** Comments
+- HNの皆さん、ギターを弾いてリアルタイムで対位法ハーモニーを聴きたかったのでContrapunkを作りました。キーとボイスリーディングスタイルを選べます。
+- なんてクールなアイデア。今これを実行できる音楽セットアップがない。伴奏音のベロシティ値はどうやって生成してる？ピッチトラッカーがあるなら、キー検出を追加すると面白いかも。
+- わお、これは本当にクール！共有ありがとう！絶対見てみる
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Contrapunk – Rust로 구현된 기타 입력에서 실시간 대위법 하모니
+***** TLDR
+Rust로 구축된 실시간 MIDI 하모니 생성기 및 기타-MIDI 변환기. 기타를 연결하면 팔레스트리나/바흐 규칙을 따르는 대위법 하모니를 얻는다. 8개 하모니 모드, 28개 스케일 모드, 10ms 미만 지연. 네이티브(Tauri), 브라우저(WebAssembly), 또는 서버 모드로 실행. 성부 진행 규칙: 병행 5도 거부, 성부 교차 방지, 간격 규칙. '수세기의 음악 이론은 모든 음악가가 접근할 수 있어야 한다'는 이유로 MIT 라이선스.
+***** Take
+누군가 수세기의 음악 이론 규칙을 Rust로 작성하고 10ms 안에 실행되게 만들었다. 한편 AI는 바흐 스타일 음악은 생성할 수 있지만 20달러를 태우지 않으면 Lisp 괄호를 닫지 못한다. 인간의 음악 지식을 결정론적 코드로 인코딩하는 동안 LLM이 결정론적 언어 구문에서 실패하는 아이러니는 완벽하다.
+***** Comments
+- 안녕 HN, 기타를 치면서 실시간으로 생성되는 대위법 하모니를 듣고 싶어서 Contrapunk를 만들었습니다. 키와 보이스 리딩 스타일을 선택할 수 있습니다.
+- 정말 멋진 아이디어. 지금은 이걸 실행할 수 있는 음악 셋업이 없다. 반주 음의 벨로시티 값은 어떻게 생성해? 이미 피치 트래커가 있으니 키 감지를 추가하면 재미있을 것 같아.
+- 와 정말 멋지다! 공유해줘서 고마워! 꼭 봐볼게
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Contrapunk – Armonía de contrapunto en tiempo real desde entrada de guitarra, en Rust
+***** TLDR
+Generador de armonía MIDI en tiempo real y convertidor de guitarra a MIDI construido en Rust. Conecta la guitarra, obtén armonías de contrapunto siguiendo las reglas de Palestrina/Bach. 8 modos de armonía, 28 modos de escala, latencia inferior a 10ms. Funciona nativo (Tauri), navegador (WebAssembly), o modo servidor. Reglas de conducción de voces: rechazo de quintas paralelas, prevención de cruce de voces, reglas de espaciado. Licencia MIT porque 'siglos de teoría musical deberían ser accesibles para todos los músicos.'
+***** Take
+Alguien escribió siglos de reglas de teoría musical en Rust y las hizo correr en 10ms. Mientras tanto, la IA puede generar música estilo Bach pero no puede cerrar paréntesis de Lisp sin quemar $20. La ironía de codificar el conocimiento musical humano en código determinista mientras los LLMs fallan en la sintaxis de lenguaje determinista es perfecta.
+***** Comments
+- Hola HN, construí Contrapunk porque quería tocar guitarra y escuchar armonías de contrapunto generadas en tiempo real. Puedes elegir la tonalidad y el estilo de conducción de voces.
+- Qué idea tan genial. No tengo un setup musical capaz de ejecutar esto ahora mismo. ¿Cómo generas los valores de velocidad para las notas de acompañamiento? Dado que ya tienes un rastreador de tono, sería interesante agregar detección de tonalidad.
+- ¡Wow eso es realmente genial! ¡Gracias por compartir! Definitivamente le echaré un vistazo
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Contrapunk – Echtzeit-Kontrapunkt-Harmonie aus Gitarren-Eingabe, in Rust
+***** TLDR
+Echtzeit-MIDI-Harmonie-Generator und Gitarre-zu-MIDI-Konverter, gebaut in Rust. Gitarre einstecken, Kontrapunkt-Harmonien nach Palestrina/Bach-Regeln erhalten. 8 Harmonie-Modi, 28 Skalen-Modi, unter 10ms Latenz. Läuft nativ (Tauri), Browser (WebAssembly) oder Server-Modus. Stimmführungsregeln: Parallele Quinten-Ablehnung, Stimmkreuzungs-Verhinderung, Abstandsregeln. MIT-lizenziert, weil 'Jahrhunderte der Musiktheorie für jeden Musiker zugänglich sein sollten.'
+***** Take
+Jemand hat Jahrhunderte von Musiktheorie-Regeln in Rust geschrieben und sie in 10ms laufen lassen. Inzwischen kann KI Musik im Bach-Stil generieren, aber kann keine Lisp-Klammern schließen ohne $20 zu verbrennen. Die Ironie, menschliches Musikwissen in deterministischen Code zu kodieren, während LLMs an deterministischer Sprachsyntax scheitern, ist perfekt.
+***** Comments
+- Hi HN, ich habe Contrapunk gebaut, weil ich Gitarre spielen und in Echtzeit generierte Kontrapunkt-Harmonien hören wollte. Du kannst die Tonart und den Stimmführungsstil wählen.
+- Was für eine coole Idee. Ich habe gerade kein Musik-Setup, das das ausführen kann. Wie generierst du die Velocity-Werte für die Begleitnoten? Da du schon einen Pitch-Tracker hast, könnte es interessant sein, Tonarterkennung hinzuzufügen.
+- Wow, das ist wirklich cool! Danke fürs Teilen! Ich werde mir das auf jeden Fall ansehen
