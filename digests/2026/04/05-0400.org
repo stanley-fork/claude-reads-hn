@@ -1,0 +1,544 @@
+#+TITLE: HN Digest 2026-04-05 04:00:00 UT UTC
+#+DATE: 2026-04-05T04:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Linux breaks Postgres, an API checks if things are seven, and Racket escapes to iOS
+
+* Highlights
+- Linux 7.0 preemption changes tank PostgreSQL by 50%
+- Isseven: the $77/mo API to check if your number is 7
+- Ruckus brings Racket to your iPhone for some reason
+
+* Stories
+
+** AWS Engineer Reports PostgreSQL Perf Halved by Linux 7.0, Fix May Not Be Easy :linux:postgresql:kernel:aws:performance:
+:PROPERTIES:
+:ID:       47644864
+:URL:      https://www.phoronix.com/news/Linux-7.0-AWS-PostgreSQL-Drop
+:HN_URL:   https://news.ycombinator.com/item?id=47644864
+:POINTS:   146
+:COMMENTS: 37
+:BY:       crcastle
+:END:
+
+*** TLDR
+Linux 7.0's preemption model changes caused PostgreSQL performance to drop by 50%. An AWS engineer flagged it, and Andres Freund (Postgres core dev) confirmed the regression is real. The kernel team's fix path isn't straightforward since it involves fundamental scheduler behavior.
+
+*** Take
+Breaking userspace is usually a no-go in kernel land, but here we are. At least the workaround is just a sysctl flag, so your DBA can add it to the pile of magic incantations they already maintain.
+
+*** Comments
+
+**** lfittl
+:PROPERTIES:
+:COMMENT_ID: 47645001
+:END:
+Worth reading this follow-up LKML post by Andres Freund (who works on Postgres).
+
+**** dsr_
+:PROPERTIES:
+:COMMENT_ID: 47645123
+:END:
+Nobody sensible runs the latest kernel; this will most likely be another step in building a PG database server (turn off pre-emption if your kernel is 7.0 or later).
+
+**** galbar
+:PROPERTIES:
+:COMMENT_ID: 47645234
+:END:
+It's not a good look to break userspace applications without a deprecation period where both old and new solutions exist, allowing for a transition period.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+AWS工程师报告Linux 7.0使PostgreSQL性能减半，修复可能不容易
+***** TLDR
+Linux 7.0的抢占模型变更导致PostgreSQL性能下降50%。AWS工程师发现了这个问题，Postgres核心开发者Andres Freund确认了回归。内核团队的修复路径并不简单，因为涉及调度器的基本行为。
+***** Take
+在内核领域破坏用户空间通常是禁忌，但现在我们就在这里。至少临时方案只是一个sysctl标志，DBA可以把它加到他们已经维护的一堆魔法咒语中。
+***** Comments
+- 值得阅读Andres Freund（Postgres开发者）在LKML上的后续帖子。
+- 没有理智的人会运行最新内核；这很可能成为构建PG数据库服务器的又一个步骤。
+- 在没有过渡期的情况下破坏用户空间应用程序，这看起来不太好。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AWSエンジニアがLinux 7.0でPostgreSQLの性能が半減と報告、修正は容易ではない可能性
+***** TLDR
+Linux 7.0のプリエンプションモデル変更により、PostgreSQLの性能が50%低下。AWSエンジニアがフラグを立て、Postgresコア開発者のAndres Freundが回帰を確認。カーネルチームの修正パスは単純ではなく、スケジューラの基本動作に関わる。
+***** Take
+カーネルの世界でユーザースペースを壊すのは通常NGだが、ここにいる。少なくとも回避策はsysctlフラグだけなので、DBAはすでに維持している魔法の呪文の山に追加できる。
+***** Comments
+- Andres Freund（Postgres開発者）のLKMLフォローアップ投稿を読む価値がある。
+- まともな人は最新カーネルを使わない；これはPGサーバー構築のもう一つのステップになるだろう。
+- 移行期間なしにユーザースペースアプリを壊すのは良くない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AWS 엔지니어, Linux 7.0으로 PostgreSQL 성능 50% 하락 보고, 수정 쉽지 않을 수도
+***** TLDR
+Linux 7.0의 선점 모델 변경으로 PostgreSQL 성능이 50% 하락했다. AWS 엔지니어가 이를 알렸고, Postgres 핵심 개발자 Andres Freund가 회귀를 확인했다. 커널 팀의 수정 경로는 스케줄러 기본 동작과 관련되어 간단하지 않다.
+***** Take
+커널에서 사용자 공간을 깨는 건 보통 금기인데, 여기 왔다. 적어도 우회책은 sysctl 플래그뿐이니, DBA가 이미 관리하는 마법 주문 더미에 추가할 수 있다.
+***** Comments
+- Andres Freund(Postgres 개발자)의 LKML 후속 게시물을 읽어볼 가치가 있다.
+- 제정신인 사람은 최신 커널을 사용하지 않는다; 이것은 PG 서버 구축의 또 다른 단계가 될 것이다.
+- 전환 기간 없이 사용자 공간 앱을 깨는 것은 좋지 않다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ingeniero de AWS informa que Linux 7.0 reduce el rendimiento de PostgreSQL a la mitad, la solución puede no ser fácil
+***** TLDR
+Los cambios en el modelo de preempción de Linux 7.0 causaron una caída del 50% en el rendimiento de PostgreSQL. Un ingeniero de AWS lo reportó, y Andres Freund (desarrollador core de Postgres) confirmó la regresión. El camino de corrección del equipo del kernel no es sencillo ya que involucra el comportamiento fundamental del scheduler.
+***** Take
+Romper el espacio de usuario suele ser un no-go en el mundo del kernel, pero aquí estamos. Al menos la solución temporal es solo un flag sysctl, así que tu DBA puede agregarlo a la pila de encantamientos mágicos que ya mantiene.
+***** Comments
+- Vale la pena leer el post de seguimiento en LKML de Andres Freund (quien trabaja en Postgres).
+- Nadie sensato usa el último kernel; esto probablemente será otro paso en construir un servidor PG.
+- No queda bien romper aplicaciones de espacio de usuario sin un período de transición.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+AWS-Ingenieur meldet: PostgreSQL-Leistung durch Linux 7.0 halbiert, Lösung möglicherweise nicht einfach
+***** TLDR
+Die Änderungen am Preemption-Modell von Linux 7.0 führten zu einem 50%igen Leistungsabfall bei PostgreSQL. Ein AWS-Ingenieur meldete es, und Andres Freund (Postgres Core-Entwickler) bestätigte die Regression. Der Fix-Pfad des Kernel-Teams ist nicht einfach, da er grundlegendes Scheduler-Verhalten betrifft.
+***** Take
+Userspace zu brechen ist normalerweise ein No-Go im Kernel-Land, aber hier sind wir. Zumindest ist der Workaround nur ein sysctl-Flag, also kann dein DBA es zum Stapel magischer Beschwörungen hinzufügen, die er bereits pflegt.
+***** Comments
+- Es lohnt sich, den Follow-up-Post von Andres Freund (der an Postgres arbeitet) auf LKML zu lesen.
+- Niemand Vernünftiges nutzt den neuesten Kernel; das wird wahrscheinlich ein weiterer Schritt beim Aufbau eines PG-Servers.
+- Es sieht nicht gut aus, Userspace-Anwendungen ohne Übergangszeit zu brechen.
+** Isseven :humor:api:satire:startup:
+:PROPERTIES:
+:ID:       47645168
+:URL:      https://isseven.app/
+:HN_URL:   https://news.ycombinator.com/item?id=47645168
+:POINTS:   46
+:COMMENTS: 21
+:BY:       philipreasa
+:END:
+
+*** TLDR
+A satirical API service that does exactly one thing: checks if a number is seven. The free tier gives you 1 check per month (with ads in the response). Pro is $77/mo for unlimited checks. Enterprise is $777/mo and includes a 'Dedicated Seven Engineer'.
+
+*** Take
+Finally, a solution to the age-old problem of not knowing if something is seven. The enterprise tier's 'Seven-figure SLA guarantee' is the kind of commitment to the bit that separates artists from amateurs.
+
+*** Comments
+
+**** dustimpact
+:PROPERTIES:
+:COMMENT_ID: 47645201
+:END:
+Apparently 'seven' is only kinda seven. I would argue that seven is seven!
+
+**** cyode
+:PROPERTIES:
+:COMMENT_ID: 47645234
+:END:
+Heads up OP: I'm trying to get a pro license but your checkout flow is borked. Probably should fix ASAP before missing out on HN front page traffic.
+
+**** bombcar
+:PROPERTIES:
+:COMMENT_ID: 47645267
+:END:
+I can use this as a random number generator; at least it's not nine.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Isseven
+***** TLDR
+一个讽刺性的API服务，只做一件事：检查一个数字是否是7。免费版每月只能检查1次（响应中带广告）。专业版$77/月无限检查。企业版$777/月，包含'专属七号工程师'。
+***** Take
+终于有了解决这个古老问题的方案——不知道某个东西是不是七。企业版的'七位数SLA保证'是那种将艺术家与业余爱好者区分开来的执着。
+***** Comments
+- 显然'七'只是有点像七。我认为七就是七！
+- 提醒楼主：我想买专业版但结账流程坏了。最好尽快修复，别错过HN首页流量。
+- 我可以把它当随机数生成器用；至少它不是九。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Isseven
+***** TLDR
+数字が7かどうかをチェックするだけの風刺的なAPIサービス。無料版は月1回のチェック（レスポンスに広告付き）。Proは月$77で無制限チェック。Enterpriseは月$777で「専任セブンエンジニア」付き。
+***** Take
+ついに、何かが7かどうかわからないという古くからの問題の解決策が登場。Enterprise版の「7桁SLA保証」は、アーティストとアマチュアを分ける徹底ぶりだ。
+***** Comments
+- どうやら「seven」は「ちょっと七」らしい。私は七は七だと主張する！
+- OPへ：Pro版を買おうとしたけどチェックアウトが壊れてる。HNフロントページのトラフィックを逃す前に早く直して。
+- これをランダム数生成器として使える；少なくとも9じゃない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Isseven
+***** TLDR
+숫자가 7인지 확인하는 것만 하는 풍자적 API 서비스. 무료 버전은 월 1회 확인(응답에 광고 포함). Pro는 월 $77로 무제한 확인. Enterprise는 월 $777이며 '전담 세븐 엔지니어' 포함.
+***** Take
+드디어 무언가가 7인지 모르는 오래된 문제의 해결책이 나왔다. Enterprise 티어의 '7자리 SLA 보장'은 예술가와 아마추어를 구분하는 집착이다.
+***** Comments
+- 분명히 'seven'은 그냥 약간 seven인 것 같다. 나는 seven은 seven이라고 주장한다!
+- OP에게: Pro 라이선스를 사려는데 결제 흐름이 고장났다. HN 프론트 페이지 트래픽을 놓치기 전에 빨리 고쳐야 할 듯.
+- 이걸 난수 생성기로 쓸 수 있다; 적어도 9는 아니니까.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Isseven
+***** TLDR
+Un servicio API satírico que hace exactamente una cosa: verificar si un número es siete. El nivel gratuito te da 1 verificación al mes (con anuncios en la respuesta). Pro es $77/mes para verificaciones ilimitadas. Enterprise es $777/mes e incluye un 'Ingeniero de Siete Dedicado'.
+***** Take
+Finalmente, una solución al antiguo problema de no saber si algo es siete. La 'garantía SLA de siete cifras' del nivel Enterprise es el tipo de compromiso con el chiste que separa a los artistas de los aficionados.
+***** Comments
+- Aparentemente 'seven' es solo más o menos seven. ¡Yo diría que seven es seven!
+- Aviso OP: Estoy intentando comprar una licencia pro pero el flujo de pago está roto. Deberías arreglarlo ASAP antes de perder el tráfico de la portada de HN.
+- Puedo usar esto como generador de números aleatorios; al menos no es nueve.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Isseven
+***** TLDR
+Ein satirischer API-Service, der genau eine Sache tut: prüfen, ob eine Zahl sieben ist. Die kostenlose Stufe gibt dir 1 Prüfung pro Monat (mit Werbung in der Antwort). Pro kostet $77/Monat für unbegrenzte Prüfungen. Enterprise kostet $777/Monat und enthält einen 'Dedizierten Sieben-Ingenieur'.
+***** Take
+Endlich eine Lösung für das uralte Problem, nicht zu wissen, ob etwas sieben ist. Die 'Siebenstellige SLA-Garantie' der Enterprise-Stufe ist die Art von Hingabe zum Witz, die Künstler von Amateuren trennt.
+***** Comments
+- Anscheinend ist 'seven' nur so halb seven. Ich würde behaupten, dass seven seven ist!
+- Hinweis an OP: Ich versuche eine Pro-Lizenz zu kaufen, aber der Checkout ist kaputt. Solltest du ASAP fixen, bevor du den HN-Frontpage-Traffic verpasst.
+- Ich kann das als Zufallszahlengenerator benutzen; zumindest ist es nicht neun.
+** Ruckus: Racket for iOS :racket:lisp:ios:programming:mobile:
+:PROPERTIES:
+:ID:       47614532
+:URL:      https://ruckus.defn.io/
+:HN_URL:   https://news.ycombinator.com/item?id=47614532
+:POINTS:   95
+:COMMENTS: 9
+:BY:       nsm
+:END:
+
+*** TLDR
+Ruckus is an iOS app that lets you write and run Racket programs on your iPhone or iPad. It features rainbow parentheses, smart indentation that understands Racket forms, color themes, and Shortcuts integration. Everything runs locally on device.
+
+*** Take
+Because sometimes you need to evaluate a lambda while waiting for your latte. The rainbow parentheses feature alone justifies the existence of this app, since losing track of which close-paren belongs where is the leading cause of Lisp-related injuries.
+
+*** Comments
+
+**** roxolotl
+:PROPERTIES:
+:COMMENT_ID: 47614601
+:END:
+LispPad Go is a similar tool focusing on scheme R7RS. It's been great for writing little scripts. Racket would be compelling because of the number of libraries.
+
+**** wslh
+:PROPERTIES:
+:COMMENT_ID: 47614678
+:END:
+Wish: include a REPL, not only the editor.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Ruckus: iOS版Racket
+***** TLDR
+Ruckus是一款iOS应用，让你在iPhone或iPad上编写和运行Racket程序。它具有彩虹括号、理解Racket语法的智能缩进、颜色主题和快捷指令集成。所有运算都在本地设备上完成。
+***** Take
+因为有时候你需要在等拿铁的时候求值一个lambda。仅彩虹括号功能就足以证明这个应用存在的合理性，因为搞不清哪个右括号属于哪里是Lisp相关伤害的主要原因。
+***** Comments
+- LispPad Go是一个类似的工具，专注于scheme R7RS。写小脚本很好用。Racket会更有吸引力，因为有更多库。
+- 希望：不仅有编辑器，还要包含REPL。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Ruckus: iOS用Racket
+***** TLDR
+RuckusはiPhoneやiPadでRacketプログラムを書いて実行できるiOSアプリ。レインボー括弧、Racket構文を理解するスマートインデント、カラーテーマ、ショートカット連携を搭載。すべてデバイス上でローカル実行。
+***** Take
+ラテを待っている間にlambdaを評価する必要がある時があるから。レインボー括弧機能だけでこのアプリの存在は正当化される。どの閉じ括弧がどこに属するかを見失うことがLisp関連の怪我の主な原因だから。
+***** Comments
+- LispPad GoはR7RS Schemeに特化した類似ツール。小さなスクリプトを書くのに最適。ライブラリの数が多いのでRacketは魅力的。
+- 要望：エディタだけでなくREPLも含めてほしい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Ruckus: iOS용 Racket
+***** TLDR
+Ruckus는 iPhone이나 iPad에서 Racket 프로그램을 작성하고 실행할 수 있는 iOS 앱이다. 레인보우 괄호, Racket 형식을 이해하는 스마트 들여쓰기, 컬러 테마, 단축어 통합을 제공한다. 모든 것이 기기에서 로컬로 실행된다.
+***** Take
+라떼를 기다리면서 lambda를 평가해야 할 때가 있으니까. 레인보우 괄호 기능만으로도 이 앱의 존재가 정당화된다. 어떤 닫는 괄호가 어디에 속하는지 잃어버리는 것이 Lisp 관련 부상의 주요 원인이기 때문이다.
+***** Comments
+- LispPad Go는 R7RS Scheme에 초점을 맞춘 비슷한 도구다. 작은 스크립트 작성에 좋다. 라이브러리 수 때문에 Racket이 매력적일 것이다.
+- 바람: 에디터뿐만 아니라 REPL도 포함해주면 좋겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ruckus: Racket para iOS
+***** TLDR
+Ruckus es una app iOS que te permite escribir y ejecutar programas Racket en tu iPhone o iPad. Incluye paréntesis arcoíris, indentación inteligente que entiende formas Racket, temas de color e integración con Atajos. Todo se ejecuta localmente en el dispositivo.
+***** Take
+Porque a veces necesitas evaluar un lambda mientras esperas tu latte. Solo la función de paréntesis arcoíris justifica la existencia de esta app, ya que perder la pista de qué paréntesis cierra qué es la causa principal de lesiones relacionadas con Lisp.
+***** Comments
+- LispPad Go es una herramienta similar enfocada en scheme R7RS. Ha sido genial para escribir pequeños scripts. Racket sería atractivo por la cantidad de bibliotecas.
+- Deseo: incluir un REPL, no solo el editor.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ruckus: Racket für iOS
+***** TLDR
+Ruckus ist eine iOS-App, mit der du Racket-Programme auf deinem iPhone oder iPad schreiben und ausführen kannst. Sie bietet Regenbogen-Klammern, intelligente Einrückung, die Racket-Formen versteht, Farbthemen und Shortcuts-Integration. Alles läuft lokal auf dem Gerät.
+***** Take
+Weil man manchmal ein Lambda auswerten muss, während man auf seinen Latte wartet. Allein die Regenbogen-Klammern-Funktion rechtfertigt die Existenz dieser App, da der Überblick zu verlieren, welche schließende Klammer wohin gehört, die Hauptursache für Lisp-bezogene Verletzungen ist.
+***** Comments
+- LispPad Go ist ein ähnliches Tool mit Fokus auf Scheme R7RS. Es war großartig für kleine Skripte. Racket wäre wegen der Anzahl an Bibliotheken überzeugend.
+- Wunsch: Ein REPL einbauen, nicht nur den Editor.
+** TurboQuant-WASM – Google's vector quantization in the browser :wasm:vectors:ml:browser:performance:
+:PROPERTIES:
+:ID:       47639567
+:URL:      https://github.com/teamchong/turboquant-wasm
+:HN_URL:   https://news.ycombinator.com/item?id=47639567
+:POINTS:   144
+:COMMENTS: 6
+:BY:       teamchong
+:END:
+
+*** TLDR
+A WebAssembly implementation of TurboQuant, which compresses high-dimensional vectors down to 3 bits per dimension while maintaining fast dot product operations. Uses SIMD for speed and works in modern browsers (Chrome 114+, Firefox 128+, Safari 18+).
+
+*** Take
+Running vector quantization in the browser feels like building a rocket in your garage. Technically impressive, slightly concerning, but you can't help but respect the commitment to making JavaScript do things it was never meant to do.
+
+*** Comments
+
+**** netdur
+:PROPERTIES:
+:COMMENT_ID: 47639601
+:END:
+I tried TQ for vector search and my findings are not good, it is not worth it if you cannot use GPU. However I got same quality of search as 32f using 8bit quant.
+
+**** glohbalrob
+:PROPERTIES:
+:COMMENT_ID: 47639634
+:END:
+Very cool. I added the new multi embedding 2 model from google to my site the other week. Need to dig into this and see if it's faster!
+
+**** hhthrowaway1230
+:PROPERTIES:
+:COMMENT_ID: 47639667
+:END:
+Awesome! Also love the gaussian splat demo, cool use case!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+TurboQuant-WASM – 在浏览器中使用谷歌的向量量化
+***** TLDR
+TurboQuant的WebAssembly实现，将高维向量压缩到每维3比特，同时保持快速的点积运算。使用SIMD加速，可在现代浏览器中运行（Chrome 114+、Firefox 128+、Safari 18+）。
+***** Take
+在浏览器中运行向量量化感觉像在车库里造火箭。技术上令人印象深刻，有点令人担忧，但你不得不佩服那种让JavaScript做它从未打算做的事情的决心。
+***** Comments
+- 我尝试用TQ做向量搜索，结果不太好，如果不能用GPU就不值得。不过用8位量化得到了和32f一样的搜索质量。
+- 很酷。上周我把谷歌新的multi embedding 2模型加到我的网站了。需要研究一下这个是不是更快！
+- 太棒了！也喜欢高斯散射演示，很酷的用例！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+TurboQuant-WASM – ブラウザでGoogleのベクトル量子化
+***** TLDR
+TurboQuantのWebAssembly実装。高次元ベクトルを1次元あたり3ビットに圧縮しながら、高速なドット積演算を維持。SIMDで高速化し、モダンブラウザ（Chrome 114+、Firefox 128+、Safari 18+）で動作。
+***** Take
+ブラウザでベクトル量子化を実行するのは、ガレージでロケットを作るような感じ。技術的に印象的で、少し心配だが、JavaScriptに想定外のことをさせる姿勢は尊敬せざるを得ない。
+***** Comments
+- TQでベクトル検索を試したが、結果は良くない。GPUが使えないなら価値がない。ただし8bit量子化で32fと同じ検索品質を得た。
+- すごくクール。先週Googleの新しいmulti embedding 2モデルを自分のサイトに追加した。これがもっと速いか調べないと！
+- 素晴らしい！ガウススプラットのデモも好き、クールなユースケース！
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+TurboQuant-WASM – 브라우저에서 Google의 벡터 양자화
+***** TLDR
+TurboQuant의 WebAssembly 구현으로, 고차원 벡터를 차원당 3비트로 압축하면서 빠른 내적 연산을 유지한다. SIMD를 사용하여 속도를 높이고 최신 브라우저(Chrome 114+, Firefox 128+, Safari 18+)에서 작동한다.
+***** Take
+브라우저에서 벡터 양자화를 실행하는 것은 차고에서 로켓을 만드는 것 같다. 기술적으로 인상적이고, 약간 걱정되지만, JavaScript가 하도록 설계되지 않은 일을 하게 만드는 헌신에 경의를 표하지 않을 수 없다.
+***** Comments
+- TQ로 벡터 검색을 시도했는데 결과가 좋지 않다. GPU를 사용할 수 없다면 가치가 없다. 그러나 8bit 양자화로 32f와 같은 검색 품질을 얻었다.
+- 매우 멋지다. 지난주에 구글의 새 multi embedding 2 모델을 내 사이트에 추가했다. 이게 더 빠른지 알아봐야겠다!
+- 멋지다! 가우시안 스플랫 데모도 좋다, 멋진 사용 사례!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+TurboQuant-WASM – Cuantización vectorial de Google en el navegador
+***** TLDR
+Una implementación WebAssembly de TurboQuant, que comprime vectores de alta dimensión a 3 bits por dimensión mientras mantiene operaciones de producto punto rápidas. Usa SIMD para velocidad y funciona en navegadores modernos (Chrome 114+, Firefox 128+, Safari 18+).
+***** Take
+Ejecutar cuantización vectorial en el navegador se siente como construir un cohete en tu garaje. Técnicamente impresionante, ligeramente preocupante, pero no puedes evitar respetar el compromiso de hacer que JavaScript haga cosas para las que nunca fue diseñado.
+***** Comments
+- Probé TQ para búsqueda vectorial y mis hallazgos no son buenos, no vale la pena si no puedes usar GPU. Sin embargo, obtuve la misma calidad de búsqueda que 32f usando cuantización de 8bit.
+- Muy cool. Agregué el nuevo modelo multi embedding 2 de google a mi sitio la semana pasada. ¡Necesito investigar si esto es más rápido!
+- ¡Genial! También me encanta el demo de gaussian splat, ¡buen caso de uso!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+TurboQuant-WASM – Googles Vektorquantisierung im Browser
+***** TLDR
+Eine WebAssembly-Implementierung von TurboQuant, die hochdimensionale Vektoren auf 3 Bits pro Dimension komprimiert und dabei schnelle Skalarprodukt-Operationen beibehält. Nutzt SIMD für Geschwindigkeit und funktioniert in modernen Browsern (Chrome 114+, Firefox 128+, Safari 18+).
+***** Take
+Vektorquantisierung im Browser auszuführen fühlt sich an wie eine Rakete in der Garage zu bauen. Technisch beeindruckend, leicht besorgniserregend, aber man kann nicht anders als das Engagement zu respektieren, JavaScript Dinge tun zu lassen, für die es nie gedacht war.
+***** Comments
+- Ich habe TQ für Vektorsuche ausprobiert und meine Ergebnisse sind nicht gut, es lohnt sich nicht ohne GPU. Allerdings bekam ich mit 8bit Quantisierung die gleiche Suchqualität wie mit 32f.
+- Sehr cool. Ich habe letzte Woche das neue Multi-Embedding-2-Modell von Google zu meiner Seite hinzugefügt. Muss prüfen, ob das schneller ist!
+- Toll! Liebe auch die Gaussian-Splat-Demo, cooler Anwendungsfall!
+** Show HN: I made open source, zero power PCB hackathon badges :hardware:pcb:eink:nfc:opensource:
+:PROPERTIES:
+:ID:       47639303
+:URL:      https://github.com/KaiPereira/Overglade-Badges
+:HN_URL:   https://news.ycombinator.com/item?id=47639303
+:POINTS:   63
+:COMMENTS: 8
+:BY:       kaipereira
+:END:
+
+*** TLDR
+Open-source e-ink hackathon badges with NFC for a Singapore game jam. Uses RP2040 and ST25 NFC tag. Zero power design means the display persists without batteries. Ticket-shaped with 20 GPIO pins broken out for hacking. Participants can program their own info via NFC.
+
+*** Take
+E-ink plus NFC equals a badge that still shows your name when the battery dies, which is more than can be said for most conference badges that become expensive lanyards after day one. The 20 GPIO breakout is overkill for a badge but exactly the right amount for a hacker.
+
+*** Comments
+
+**** sen
+:PROPERTIES:
+:COMMENT_ID: 47639401
+:END:
+That's very cool. I have a few ePaper picture frames that don't use any power, and when you tap your phone to them it uses power-over-NFC to boot itself and update the photo.
+
+**** bschwindHN
+:PROPERTIES:
+:COMMENT_ID: 47639456
+:END:
+Very cool! Quick question: did you use a plugin to generate the NFC antenna? The routing and layout looks nice.
+
+**** robertclaus
+:PROPERTIES:
+:COMMENT_ID: 47639489
+:END:
+How much did they end up costing? We do a similar PCB medallion every year for another event and haven't been able to get quite that fancy due to cost.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: 我制作了开源零功耗PCB黑客马拉松徽章
+***** TLDR
+为新加坡游戏开发大赛制作的开源电子墨水黑客马拉松徽章，带NFC功能。使用RP2040和ST25 NFC标签。零功耗设计意味着显示屏无需电池即可保持内容。票形设计，引出20个GPIO引脚供黑客使用。参与者可通过NFC编程自己的信息。
+***** Take
+电子墨水加NFC等于一个电池没电时仍能显示你名字的徽章，这比大多数会议徽章强多了——那些徽章第一天之后就变成昂贵的挂绑带。20个GPIO引出对徽章来说过度，但对黑客来说刚刚好。
+***** Comments
+- 很酷。我有几个不用电的电子纸相框，用手机触碰时用NFC供电启动并更新照片。
+- 很酷！快速提问：你用插件生成NFC天线吗？布线和布局看起来很棒。
+- 最终成本是多少？我们每年为另一个活动做类似的PCB奖章，但因为成本一直做不到这么花哨。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: オープンソースのゼロ電力PCBハッカソンバッジを作った
+***** TLDR
+シンガポールのゲームジャム向けのNFC付きオープンソース電子インクハッカソンバッジ。RP2040とST25 NFCタグを使用。ゼロ電力設計でバッテリーなしでもディスプレイが維持される。チケット型で20のGPIOピンがハッキング用に引き出されている。参加者はNFCで自分の情報をプログラムできる。
+***** Take
+電子インク＋NFCは、バッテリーが切れても名前が表示されるバッジ。これは初日以降に高価なストラップになる多くのカンファレンスバッジよりマシだ。20のGPIOブレイクアウトはバッジには過剰だが、ハッカーにはちょうどいい量だ。
+***** Comments
+- とてもクール。電力を使わないePaperフォトフレームを持っていて、スマホをタップするとNFC経由の電力で起動して写真を更新する。
+- とてもクール！質問：NFCアンテナの生成にプラグインを使った？配線とレイアウトが綺麗。
+- 最終的にいくらかかった？毎年別のイベント用に同様のPCBメダルを作っているが、コストの都合でそこまで凝れていない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: 오픈소스 무전원 PCB 해커톤 배지를 만들었습니다
+***** TLDR
+싱가포르 게임잼을 위한 NFC 탑재 오픈소스 전자잉크 해커톤 배지. RP2040과 ST25 NFC 태그 사용. 무전원 설계로 배터리 없이도 디스플레이가 유지된다. 티켓 모양이며 해킹용 GPIO 20핀이 노출되어 있다. 참가자는 NFC로 자신의 정보를 프로그래밍할 수 있다.
+***** Take
+전자잉크 + NFC = 배터리가 다해도 이름이 표시되는 배지. 첫날 이후 비싼 끈걸이가 되는 대부분의 컨퍼런스 배지보다 낫다. 20개 GPIO 브레이크아웃은 배지에는 과하지만 해커에게는 딱 맞는 양이다.
+***** Comments
+- 정말 멋지다. 전력을 사용하지 않는 ePaper 액자가 있는데, 폰을 탭하면 NFC 전력으로 부팅되어 사진을 업데이트한다.
+- 정말 멋지다! 질문: NFC 안테나 생성에 플러그인을 사용했나? 배선과 레이아웃이 깔끔해 보인다.
+- 최종 비용이 얼마였나? 매년 다른 이벤트용으로 비슷한 PCB 메달을 만드는데, 비용 때문에 그렇게까지 멋지게 못 만들고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Hice insignias de PCB de hackathon de código abierto y cero consumo
+***** TLDR
+Insignias de hackathon de tinta electrónica con NFC de código abierto para un game jam en Singapur. Usa RP2040 y etiqueta NFC ST25. El diseño de cero consumo significa que la pantalla persiste sin baterías. Con forma de ticket y 20 pines GPIO expuestos para hackear. Los participantes pueden programar su propia info vía NFC.
+***** Take
+E-ink más NFC equivale a una insignia que aún muestra tu nombre cuando la batería muere, lo cual es más de lo que se puede decir de la mayoría de insignias de conferencias que se convierten en cordones caros después del primer día. Los 20 GPIO son excesivos para una insignia pero exactamente la cantidad correcta para un hacker.
+***** Comments
+- Muy cool. Tengo algunos marcos de fotos ePaper que no usan energía, y cuando tocas con tu teléfono usa power-over-NFC para arrancar y actualizar la foto.
+- ¡Muy cool! Pregunta rápida: ¿usaste un plugin para generar la antena NFC? El ruteo y layout se ven bien.
+- ¿Cuánto terminaron costando? Hacemos un medallón PCB similar cada año para otro evento y no hemos podido hacerlo tan elaborado por el costo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Ich habe Open-Source Zero-Power PCB Hackathon-Badges gemacht
+***** TLDR
+Open-Source E-Ink Hackathon-Badges mit NFC für einen Game Jam in Singapur. Verwendet RP2040 und ST25 NFC-Tag. Zero-Power-Design bedeutet, dass das Display ohne Batterien bestehen bleibt. Ticketförmig mit 20 GPIO-Pins zum Hacken. Teilnehmer können ihre Infos per NFC programmieren.
+***** Take
+E-Ink plus NFC ergibt ein Badge, das deinen Namen noch zeigt, wenn die Batterie leer ist, was mehr ist als man von den meisten Konferenzbadges sagen kann, die nach Tag eins zu teuren Lanyards werden. Die 20 GPIO-Breakouts sind Overkill für ein Badge, aber genau die richtige Menge für einen Hacker.
+***** Comments
+- Sehr cool. Ich habe ein paar ePaper-Bilderrahmen, die keinen Strom brauchen, und wenn du dein Handy dranhältst, nutzt es Power-over-NFC zum Booten und Aktualisieren des Fotos.
+- Sehr cool! Kurze Frage: Hast du ein Plugin verwendet, um die NFC-Antenne zu generieren? Das Routing und Layout sieht gut aus.
+- Wie viel haben sie am Ende gekostet? Wir machen jedes Jahr ein ähnliches PCB-Medaillon für ein anderes Event und konnten es wegen der Kosten noch nicht so fancy machen.
