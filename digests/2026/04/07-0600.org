@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-04-07 06:00:00 UT UTC
+#+DATE: 2026-04-07T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Go compiles to C, peptides take over HN, and Netflix erases your ex from videos
+
+* Highlights
+- Solod: Go syntax, C runtime, no goroutines needed
+- Peptides: HN discovers the gray market for weight loss
+- VOID: Netflix model that deletes objects from video
+- The Last Quiet Thing: A Casio F-91W as existential statement
+- Anos: Hand-written microkernel for people who think Linux is too easy
+
+* Stories
+
+** Solod – A Subset of Go That Translates to C :go:c:compilers:programming-languages:
+:PROPERTIES:
+:ID:       47669337
+:URL:      https://github.com/solod-dev/solod
+:HN_URL:   https://news.ycombinator.com/item?id=47669337
+:POINTS:   83
+:COMMENTS: 20
+:BY:       TheWiggles
+:END:
+
+*** TLDR
+Solod compiles a subset of Go to C, giving you Go's syntax and spatial memory safety without goroutines, channels, or garbage collection. Defer is block-scoped instead of function-scoped, breaking with Go semantics.
+
+*** Take
+Someone looked at Go and said 'I want the syntax but none of the things that make it useful.' Honestly, fair. Half of production Go code doesn't use channels anyway.
+
+*** Comments
+
+**** ridiculous_fish
+:PROPERTIES:
+:COMMENT_ID: 47669401
+:END:
+Defer in Go is famously function-scoped, not lexically-scoped. Solod breaks with Go semantics here: it just makes defer block-scoped.
+
+**** 0xmrpeter
+:PROPERTIES:
+:COMMENT_ID: 47669456
+:END:
+The claim that no goroutines makes this pointless isn't quite right. Migrated 50 services off Docker Compose using Nomad and half of them had zero concurrency needs.
+
+**** Retr0id
+:PROPERTIES:
+:COMMENT_ID: 47669512
+:END:
+I don't really get the sweet-spot being targeted here. You don't get channels, goroutines, or gc, so aside from syntax and spatial memory safety you're not really inheriting much from Go.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Solod – 可编译为C的Go子集
+***** TLDR
+Solod将Go的子集编译为C，提供Go的语法和空间内存安全，但没有goroutine、channel或垃圾回收。Defer是块作用域而非函数作用域，与Go语义不同。
+***** Take
+有人看着Go说'我要语法但不要那些有用的东西。'说实话，挺合理的。一半的生产Go代码反正也不用channel。
+***** Comments
+- Go中的defer是函数作用域的，而不是词法作用域的。Solod打破了Go的语义：它只是让defer变成块作用域。
+- 说没有goroutine就没用的观点不太对。我用Nomad把50个服务从Docker Compose迁移过来，其中一半根本不需要并发。
+- 我不太理解这里的目标定位。没有channel、goroutine或gc，除了语法和空间内存安全，你从Go继承不了什么。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Solod – Cに変換されるGoのサブセット
+***** TLDR
+SolodはGoのサブセットをCにコンパイルし、Goの構文と空間メモリ安全性を提供しますが、goroutine、チャネル、GCはありません。Deferは関数スコープではなくブロックスコープです。
+***** Take
+誰かがGoを見て「構文は欲しいけど便利な機能はいらない」と言った。正直、わかる。本番のGoコードの半分はどうせチャネル使ってない。
+***** Comments
+- Goのdeferは関数スコープであり、レキシカルスコープではありません。Solodはここでゴーのセマンティクスを破っています。
+- goroutineがないから無意味という主張は正しくない。NomadでDocker Composeから50のサービスを移行したが、半分は並行性が不要だった。
+- ここで狙っているスイートスポットがよくわからない。チャネル、goroutine、GCがないなら、構文と空間メモリ安全性以外にGoから継承するものがない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Solod – C로 변환되는 Go의 부분집합
+***** TLDR
+Solod는 Go의 부분집합을 C로 컴파일하여 Go의 문법과 공간 메모리 안전성을 제공하지만, goroutine, 채널, GC는 없습니다. Defer는 함수 범위가 아닌 블록 범위입니다.
+***** Take
+누군가 Go를 보고 '문법은 원하지만 유용한 기능은 필요 없어'라고 했다. 솔직히 이해된다. 프로덕션 Go 코드의 절반은 어차피 채널을 안 쓴다.
+***** Comments
+- Go의 defer는 함수 범위이지 렉시컬 범위가 아닙니다. Solod는 여기서 Go 의미론을 깨고 defer를 블록 범위로 만듭니다.
+- goroutine이 없어서 무의미하다는 주장은 틀렸다. Nomad로 Docker Compose에서 50개 서비스를 마이그레이션했는데 절반은 동시성이 필요 없었다.
+- 여기서 타겟하는 스윗스팟을 잘 모르겠다. 채널, goroutine, gc가 없으면 문법과 공간 메모리 안전성 외에는 Go에서 물려받는 게 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Solod – Un subconjunto de Go que se traduce a C
+***** TLDR
+Solod compila un subconjunto de Go a C, proporcionando la sintaxis de Go y seguridad de memoria espacial sin goroutines, canales ni recolección de basura. Defer tiene alcance de bloque en lugar de alcance de función.
+***** Take
+Alguien miró Go y dijo 'quiero la sintaxis pero nada de lo que lo hace útil.' Honestamente, justo. La mitad del código Go en producción no usa canales de todos modos.
+***** Comments
+- Defer en Go es de alcance de función, no léxico. Solod rompe con la semántica de Go aquí: simplemente hace defer de alcance de bloque.
+- La afirmación de que sin goroutines no tiene sentido no es correcta. Migré 50 servicios de Docker Compose usando Nomad y la mitad no necesitaba concurrencia.
+- No entiendo bien el punto óptimo que se busca aquí. Sin canales, goroutines o gc, aparte de la sintaxis y la seguridad de memoria espacial, no heredas mucho de Go.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Solod – Eine Go-Untermenge, die nach C übersetzt wird
+***** TLDR
+Solod kompiliert eine Untermenge von Go nach C und bietet Gos Syntax und räumliche Speichersicherheit ohne Goroutinen, Kanäle oder Garbage Collection. Defer ist blockbezogen statt funktionsbezogen.
+***** Take
+Jemand hat sich Go angeschaut und gesagt 'Ich will die Syntax, aber nichts von dem, was es nützlich macht.' Ehrlich gesagt, fair. Die Hälfte des Produktions-Go-Codes benutzt sowieso keine Kanäle.
+***** Comments
+- Defer in Go ist funktionsbezogen, nicht lexikalisch. Solod bricht hier mit der Go-Semantik: defer wird einfach blockbezogen.
+- Die Behauptung, dass ohne Goroutinen alles sinnlos ist, stimmt nicht. Habe 50 Dienste von Docker Compose mit Nomad migriert und die Hälfte brauchte keine Nebenläufigkeit.
+- Ich verstehe den Sweet-Spot hier nicht wirklich. Ohne Kanäle, Goroutinen oder GC erbt man außer Syntax und räumlicher Speichersicherheit nicht viel von Go.
+** Peptides: where to begin? :health:peptides:fda:biohacking:
+:PROPERTIES:
+:ID:       47667321
+:URL:      https://www.science.org/content/blog-post/ah-peptides-where-begin
+:HN_URL:   https://news.ycombinator.com/item?id=47667321
+:POINTS:   92
+:COMMENTS: 126
+:BY:       A_D_E_P_T
+:END:
+
+*** TLDR
+Derek Lowe's In the Pipeline blog discusses the peptide craze, particularly GLP-1 agonists like semaglutide and tirzepatide. The piece questions the gray market self-experimentation happening while the FDA struggles to keep up with demand and safety oversight.
+
+*** Take
+HN discovers research peptides and suddenly everyone's a biochemist. Half the thread is people sharing their retatrutide cycles like it's a Crossfit WOD. The other half is correctly pointing out that 'it works' is not the same as 'it's safe.'
+
+*** Comments
+
+**** cjbgkagh
+:PROPERTIES:
+:COMMENT_ID: 47667401
+:END:
+Peptides are a revolution and you don't need to know how they work to know that they work. There is a tension between empiricism and fundamentalism with much of medical science focusing on fundamentalism.
+
+**** tbojanin
+:PROPERTIES:
+:COMMENT_ID: 47667456
+:END:
+I tried retatrutide for 10 weeks. Before: 5'7, 182lb, Bench 1rm: 315. After: 154lb, Bench 1rm: 285. Suffered some anhedonia towards the end but that went away.
+
+**** A_D_E_P_T
+:PROPERTIES:
+:COMMENT_ID: 47667512
+:END:
+Lowe has a point, but the FDA has painted itself into a corner by forcing up the costs of clinical trials, allowing drug advertising with comical disclaimers, and inconsistently following its own rules.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+肽类药物：从哪里开始？
+***** TLDR
+Derek Lowe的In the Pipeline博客讨论了肽类热潮，特别是像司美格鲁肽和替泽帕肽这样的GLP-1激动剂。文章质疑了在FDA努力跟上需求和安全监管的同时，灰色市场的自我实验行为。
+***** Take
+HN发现了研究肽类，突然每个人都成了生化学家。一半的帖子是人们分享他们的retatrutide周期，就像在说CrossFit训练。另一半正确地指出'有效'不等于'安全'。
+***** Comments
+- 肽类是一场革命，你不需要知道它们如何工作就知道它们有效。经验主义和基础主义之间存在张力，医学科学大多聚焦于基础主义。
+- 我试了10周的retatrutide。之前：5'7, 182磅，卧推极限315。之后：154磅，卧推极限285。快结束时有些快感缺失但后来消失了。
+- Lowe说得有道理，但FDA把自己逼进了死角：抬高临床试验成本、允许带搞笑免责声明的药物广告、不一致地执行自己的规则。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ペプチド：どこから始める？
+***** TLDR
+Derek LoweのIn the Pipelineブログがペプチドブームについて論じています。特にセマグルチドやチルゼパチドなどのGLP-1アゴニストについて。FDAが需要と安全性の監督に追いつくのに苦労する中、グレーマーケットでの自己実験について疑問を呈しています。
+***** Take
+HNが研究用ペプチドを発見して、突然みんな生化学者になった。スレッドの半分はretatrutideサイクルをCrossfit WODみたいに共有してる。残り半分は「効く」と「安全」は違うと正しく指摘してる。
+***** Comments
+- ペプチドは革命であり、それがどう働くか知らなくても効くことは分かる。経験主義と基礎主義の間には緊張があり、医学の多くは基礎主義に焦点を当てている。
+- 10週間retatrutideを試した。前：5'7, 182ポンド、ベンチ1rm: 315。後：154ポンド、ベンチ1rm: 285。終盤に無快感症があったが消えた。
+- Loweの言う通りだが、FDAは臨床試験のコストを上げ、コミカルな免責事項付きの薬の広告を許可し、自分のルールを一貫して守らないことで自ら窮地に追い込んでいる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+펩타이드: 어디서부터 시작할까?
+***** TLDR
+Derek Lowe의 In the Pipeline 블로그가 펩타이드 열풍, 특히 세마글루타이드와 티르제파타이드 같은 GLP-1 작용제에 대해 논의합니다. FDA가 수요와 안전 감독을 따라잡기 위해 고군분투하는 동안 회색 시장 자가 실험에 대해 의문을 제기합니다.
+***** Take
+HN이 연구용 펩타이드를 발견하고 갑자기 모두가 생화학자가 됐다. 스레드의 절반은 retatrutide 사이클을 크로스핏 운동처럼 공유하고 있다. 나머지 절반은 '효과가 있다'와 '안전하다'는 다르다고 올바르게 지적한다.
+***** Comments
+- 펩타이드는 혁명이며 어떻게 작동하는지 몰라도 효과가 있다는 건 안다. 경험주의와 근본주의 사이에 긴장이 있고 의학의 많은 부분이 근본주의에 초점을 맞추고 있다.
+- 10주간 retatrutide를 시도했다. 전: 5'7, 182파운드, 벤치 1rm: 315. 후: 154파운드, 벤치 1rm: 285. 끝 무렵 무쾌감증이 있었지만 사라졌다.
+- Lowe의 말이 맞지만 FDA는 임상시험 비용을 올리고, 우스꽝스러운 면책조항이 붙은 약 광고를 허용하고, 자체 규칙을 일관되게 따르지 않으면서 스스로 궁지에 몰렸다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Péptidos: ¿por dónde empezar?
+***** TLDR
+El blog In the Pipeline de Derek Lowe discute la fiebre de los péptidos, particularmente los agonistas GLP-1 como semaglutida y tirzepatida. El artículo cuestiona la autoexperimentación en el mercado gris mientras la FDA lucha por mantenerse al día con la demanda y la supervisión de seguridad.
+***** Take
+HN descubre los péptidos de investigación y de repente todos son bioquímicos. La mitad del hilo es gente compartiendo sus ciclos de retatrutida como si fuera un WOD de Crossfit. La otra mitad señala correctamente que 'funciona' no es lo mismo que 'es seguro.'
+***** Comments
+- Los péptidos son una revolución y no necesitas saber cómo funcionan para saber que funcionan. Hay tensión entre el empirismo y el fundamentalismo, con mucha de la ciencia médica enfocada en el fundamentalismo.
+- Probé retatrutida por 10 semanas. Antes: 1.70m, 82kg, Press de banca 1rm: 143kg. Después: 70kg, Press 1rm: 129kg. Sufrí algo de anhedonia hacia el final pero desapareció.
+- Lowe tiene razón, pero la FDA se ha acorralado al aumentar los costos de los ensayos clínicos, permitir publicidad de medicamentos con descargos cómicos, y seguir inconsistentemente sus propias reglas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Peptide: Wo anfangen?
+***** TLDR
+Derek Lowes Blog In the Pipeline diskutiert den Peptid-Hype, besonders GLP-1-Agonisten wie Semaglutid und Tirzepatid. Der Artikel hinterfragt die Graumarkt-Selbstexperimente, während die FDA mit Nachfrage und Sicherheitsaufsicht kämpft.
+***** Take
+HN entdeckt Forschungspeptide und plötzlich ist jeder Biochemiker. Die Hälfte des Threads teilt ihre Retatrutid-Zyklen wie ein Crossfit-WOD. Die andere Hälfte weist korrekt darauf hin, dass 'es wirkt' nicht dasselbe ist wie 'es ist sicher.'
+***** Comments
+- Peptide sind eine Revolution und man muss nicht wissen, wie sie wirken, um zu wissen, dass sie wirken. Es gibt Spannung zwischen Empirismus und Fundamentalismus, wobei sich die Medizin auf Fundamentalismus konzentriert.
+- Ich habe 10 Wochen Retatrutid ausprobiert. Vorher: 1,70m, 82kg, Bankdrücken 1rm: 143kg. Nachher: 70kg, Bankdrücken 1rm: 129kg. Hatte gegen Ende etwas Anhedonie, aber das ging weg.
+- Lowe hat recht, aber die FDA hat sich selbst in die Ecke gedrängt: klinische Studien verteuert, Medikamentenwerbung mit komischen Haftungsausschlüssen erlaubt, und eigene Regeln inkonsistent befolgt.
+** VOID: Video Object and Interaction Deletion :ai:video:netflix:open-source:
+:PROPERTIES:
+:ID:       47627998
+:URL:      https://github.com/Netflix/void-model
+:HN_URL:   https://news.ycombinator.com/item?id=47627998
+:POINTS:   130
+:COMMENTS: 42
+:BY:       bobsoap
+:END:
+
+*** TLDR
+Netflix open-sourced VOID, a model built on CogVideoX that removes objects and interactions from video while maintaining temporal coherence. Point at something, it vanishes, and the background fills in seamlessly across frames.
+
+*** Take
+Finally, a legitimate use case for AI video: erasing your ex from vacation footage. Netflix really said 'we can't stop you from sharing passwords but we can help you pretend that trip never happened.'
+
+*** Comments
+
+**** snthpy
+:PROPERTIES:
+:COMMENT_ID: 47628101
+:END:
+Anyone who's ever had a break up will thank you.
+
+**** arjie
+:PROPERTIES:
+:COMMENT_ID: 47628156
+:END:
+This is absolutely sick! 10 years ago me would have been surprised something so small can encode all the world knowledge necessary to make this plausible. That they'd make this openly available is a dream.
+
+**** echelon
+:PROPERTIES:
+:COMMENT_ID: 47628212
+:END:
+CogVideoX continues to be an academic powerhouse model. So many papers built on this little thing.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+VOID：视频物体和交互删除
+***** TLDR
+Netflix开源了VOID，一个基于CogVideoX构建的模型，可以在保持时间连贯性的同时从视频中移除物体和交互。指向某物，它就消失了，背景在各帧之间无缝填充。
+***** Take
+终于有了AI视频的正当用例：从度假视频中删除前任。Netflix真的说了'我们阻止不了你共享密码，但我们可以帮你假装那次旅行从未发生过。'
+***** Comments
+- 任何经历过分手的人都会感谢你。
+- 这太牛了！10年前的我会惊讶于这么小的东西能编码所有必要的世界知识让这变得可信。他们公开提供这个简直是梦想成真。
+- CogVideoX继续是学术界的强大模型。这么多论文都建立在这个小东西上。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+VOID：ビデオオブジェクトとインタラクションの削除
+***** TLDR
+NetflixがVOIDをオープンソース化しました。CogVideoXをベースにしたモデルで、時間的一貫性を保ちながらビデオからオブジェクトとインタラクションを削除できます。何かを指定すると消え、背景がフレーム間でシームレスに埋まります。
+***** Take
+ついにAIビデオの正当な使用例が登場：休暇の映像から元カレ/元カノを消す。Netflixは本当に「パスワード共有は止められないけど、あの旅行がなかったことにする手伝いはできる」と言った。
+***** Comments
+- 別れを経験した人は誰でも感謝するだろう。
+- これはマジですごい！10年前の自分は、こんな小さなものがこれを実現するのに必要な世界の知識をすべてエンコードできることに驚いただろう。これを公開してくれるなんて夢のようだ。
+- CogVideoXは学術界のパワーハウスモデルであり続けている。この小さなものの上に多くの論文が構築されている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+VOID: 비디오 객체 및 상호작용 삭제
+***** TLDR
+Netflix가 CogVideoX 기반의 VOID 모델을 오픈소스로 공개했습니다. 시간적 일관성을 유지하면서 비디오에서 객체와 상호작용을 제거합니다. 무언가를 가리키면 사라지고 배경이 프레임 간에 매끄럽게 채워집니다.
+***** Take
+드디어 AI 비디오의 정당한 사용 사례가 등장: 휴가 영상에서 전 애인 지우기. Netflix가 정말로 '비밀번호 공유는 못 막지만 그 여행이 없었던 것처럼 만드는 건 도와줄 수 있어'라고 했다.
+***** Comments
+- 이별을 겪어본 사람이라면 누구나 고마워할 것이다.
+- 이거 정말 대단하다! 10년 전의 나라면 이렇게 작은 것이 이것을 그럴듯하게 만드는 데 필요한 모든 세상 지식을 인코딩할 수 있다는 것에 놀랐을 것이다. 이걸 공개해준다니 꿈만 같다.
+- CogVideoX는 계속해서 학계의 강력한 모델이다. 이 작은 것 위에 많은 논문들이 만들어졌다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+VOID: Eliminación de objetos e interacciones en video
+***** TLDR
+Netflix liberó VOID como código abierto, un modelo basado en CogVideoX que elimina objetos e interacciones de videos manteniendo la coherencia temporal. Señalas algo, desaparece, y el fondo se rellena sin problemas entre fotogramas.
+***** Take
+Por fin, un caso de uso legítimo para video con IA: borrar a tu ex de las fotos de vacaciones. Netflix realmente dijo 'no podemos evitar que compartas contraseñas pero podemos ayudarte a fingir que ese viaje nunca pasó.'
+***** Comments
+- Cualquiera que haya tenido una ruptura te lo agradecerá.
+- ¡Esto es increíble! El yo de hace 10 años se habría sorprendido de que algo tan pequeño pueda codificar todo el conocimiento del mundo necesario para hacer esto plausible. Que lo hagan disponible abiertamente es un sueño.
+- CogVideoX sigue siendo un modelo académico muy potente. Tantos papers construidos sobre esta pequeña cosa.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+VOID: Video-Objekt- und Interaktionslöschung
+***** TLDR
+Netflix hat VOID als Open Source veröffentlicht, ein auf CogVideoX basierendes Modell, das Objekte und Interaktionen aus Videos entfernt und dabei die zeitliche Kohärenz beibehält. Zeige auf etwas, es verschwindet, und der Hintergrund füllt sich nahtlos über die Frames.
+***** Take
+Endlich ein legitimer Anwendungsfall für KI-Video: den Ex aus dem Urlaubsvideo löschen. Netflix hat wirklich gesagt 'wir können euch nicht vom Passwort-Teilen abhalten, aber wir können helfen so zu tun, als wäre die Reise nie passiert.'
+***** Comments
+- Jeder, der jemals eine Trennung hatte, wird dir danken.
+- Das ist absolut krass! Mein Ich von vor 10 Jahren wäre überrascht gewesen, dass etwas so Kleines all das Weltwissen kodieren kann, das nötig ist, um das plausibel zu machen. Dass sie das offen verfügbar machen, ist ein Traum.
+- CogVideoX bleibt ein akademisches Kraftpaket-Modell. So viele Papers bauen auf diesem kleinen Ding auf.
+** The Last Quiet Thing :technology:philosophy:minimalism:essay:
+:PROPERTIES:
+:ID:       47637010
+:URL:      https://www.terrygodier.com/the-last-quiet-thing
+:HN_URL:   https://news.ycombinator.com/item?id=47637010
+:POINTS:   192
+:COMMENTS: 109
+:BY:       coinfused
+:END:
+
+*** TLDR
+An essay mourning the death of objects that just work. The author celebrates the Casio F-91W watch: no apps, no updates, no notifications, 7-year battery, tells time. Everything else now demands attention, accounts, and maintenance.
+
+*** Take
+We've collectively decided that a refrigerator needs WiFi and your toothbrush should have an app. The Casio F-91W is the last stand against the internet of things that won't shut up.
+
+*** Comments
+
+**** ahf8Aithaex7Nai
+:PROPERTIES:
+:COMMENT_ID: 47637101
+:END:
+I'm 41 and drive a 2011 car: no touchscreen, no GPS. None of my household appliances are smart. No Spotify, no Netflix, no subscription software. At the beginning of the year, I bought one of those e-signature pads.
+
+**** abetusk
+:PROPERTIES:
+:COMMENT_ID: 47637156
+:END:
+Sensor watch and sensor watch pro for upgrading Casio watches.
+
+**** Fwirt
+:PROPERTIES:
+:COMMENT_ID: 47637212
+:END:
+I agree with the sentiment but I disagree that any object is finished. That Casio will need a battery change eventually, and the day it dies will be the day you have to figure out how to open it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+最后一件安静的东西
+***** TLDR
+一篇哀悼那些能正常工作的物品之死的文章。作者赞美卡西欧F-91W手表：没有应用、没有更新、没有通知、7年电池寿命、只显示时间。其他一切现在都需要关注、账户和维护。
+***** Take
+我们集体决定冰箱需要WiFi，牙刷应该有个应用。卡西欧F-91W是对那些闭不上嘴的物联网的最后抵抗。
+***** Comments
+- 我41岁，开一辆2011年的车：没有触摸屏，没有GPS。我家的电器都不智能。没有Spotify，没有Netflix，没有订阅软件。年初我买了一个电子签名板。
+- Sensor watch和sensor watch pro可以升级卡西欧手表。
+- 我同意这种情绪，但我不同意任何物品是完成的。那块卡西欧最终需要换电池，电池没电的那天就是你得想办法打开它的那天。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+最後の静かなもの
+***** TLDR
+ただ動くだけの物の死を悼むエッセイ。著者はカシオF-91Wを称賛：アプリなし、アップデートなし、通知なし、7年間のバッテリー、時間を表示するだけ。他のすべては今や注意、アカウント、メンテナンスを要求する。
+***** Take
+私たちは集団で冷蔵庫にはWiFiが必要で歯ブラシにはアプリがあるべきだと決めた。カシオF-91Wは黙らないIoTに対する最後の砦だ。
+***** Comments
+- 41歳で2011年の車に乗っている：タッチスクリーンなし、GPSなし。家電はどれもスマートじゃない。Spotifyなし、Netflixなし、サブスクソフトなし。年初に電子サインパッドを買った。
+- センサーウォッチとセンサーウォッチプロでカシオの時計をアップグレードできる。
+- 気持ちには同意するが、どんな物も完成しているという意見には反対だ。そのカシオもいつかは電池交換が必要で、電池が切れた日は開け方を考えなきゃいけない日だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+마지막으로 조용한 것
+***** TLDR
+그냥 작동하는 물건들의 죽음을 애도하는 에세이. 저자는 카시오 F-91W 시계를 찬양한다: 앱 없음, 업데이트 없음, 알림 없음, 7년 배터리, 시간만 표시. 다른 모든 것은 이제 관심, 계정, 유지보수를 요구한다.
+***** Take
+우리는 집단적으로 냉장고에 WiFi가 필요하고 칫솔에 앱이 있어야 한다고 결정했다. 카시오 F-91W는 닥치지 않는 사물인터넷에 대한 마지막 저항이다.
+***** Comments
+- 41세이고 2011년산 차를 몬다: 터치스크린 없음, GPS 없음. 집 가전 중 스마트한 건 없다. Spotify 없음, Netflix 없음, 구독 소프트웨어 없음. 연초에 전자 서명 패드를 샀다.
+- 센서 워치와 센서 워치 프로로 카시오 시계를 업그레이드할 수 있다.
+- 감정에는 동의하지만 어떤 물건도 완성되었다는 데는 동의하지 않는다. 그 카시오도 결국 배터리 교체가 필요하고, 배터리가 죽는 날은 어떻게 여는지 알아내야 하는 날이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La última cosa tranquila
+***** TLDR
+Un ensayo que lamenta la muerte de los objetos que simplemente funcionan. El autor celebra el reloj Casio F-91W: sin apps, sin actualizaciones, sin notificaciones, batería de 7 años, muestra la hora. Todo lo demás ahora exige atención, cuentas y mantenimiento.
+***** Take
+Hemos decidido colectivamente que un refrigerador necesita WiFi y tu cepillo de dientes debería tener una app. El Casio F-91W es la última resistencia contra el internet de las cosas que no se calla.
+***** Comments
+- Tengo 41 años y conduzco un carro de 2011: sin pantalla táctil, sin GPS. Ninguno de mis electrodomésticos es inteligente. Sin Spotify, sin Netflix, sin software de suscripción. A principios de año compré una tableta de firma electrónica.
+- Sensor watch y sensor watch pro para actualizar relojes Casio.
+- Estoy de acuerdo con el sentimiento pero no con que ningún objeto está terminado. Ese Casio necesitará un cambio de batería eventualmente, y el día que muera será el día que tengas que descubrir cómo abrirlo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das letzte ruhige Ding
+***** TLDR
+Ein Essay, der den Tod von Dingen betrauert, die einfach funktionieren. Der Autor feiert die Casio F-91W Uhr: keine Apps, keine Updates, keine Benachrichtigungen, 7-Jahre-Batterie, zeigt die Zeit. Alles andere verlangt jetzt Aufmerksamkeit, Konten und Wartung.
+***** Take
+Wir haben kollektiv entschieden, dass ein Kühlschrank WiFi braucht und deine Zahnbürste eine App haben sollte. Die Casio F-91W ist der letzte Widerstand gegen das Internet der Dinge, das nicht die Klappe hält.
+***** Comments
+- Ich bin 41 und fahre ein Auto von 2011: kein Touchscreen, kein GPS. Keines meiner Haushaltsgeräte ist smart. Kein Spotify, kein Netflix, keine Abo-Software. Anfang des Jahres habe ich ein E-Signatur-Pad gekauft.
+- Sensor Watch und Sensor Watch Pro zum Aufrüsten von Casio-Uhren.
+- Ich stimme der Stimmung zu, aber nicht, dass irgendein Objekt fertig ist. Diese Casio wird irgendwann einen Batteriewechsel brauchen, und der Tag, an dem sie stirbt, ist der Tag, an dem du herausfinden musst, wie man sie öffnet.
+** Show HN: Anos – a hand-written ~100KiB microkernel for x86-64 and RISC-V :kernel:os:risc-v:systems-programming:
+:PROPERTIES:
+:ID:       47636579
+:URL:      https://github.com/roscopeco/anos
+:HN_URL:   https://news.ycombinator.com/item?id=47636579
+:POINTS:   47
+:COMMENTS: 13
+:BY:       noone_youknow
+:END:
+
+*** TLDR
+Anos is a hobby microkernel written from scratch for x86-64 and RISC-V. No legacy support, no POSIX, no AI-generated kernel code (though Claude helps with docs and tests). Supports IPC, multitasking, SMP on x86-64, and runs on real hardware.
+
+*** Take
+Someone wrote a kernel from scratch in the age of LLMs and explicitly banned AI from writing kernel code because they wanted to actually learn. This is either principled or masochistic. Probably both.
+
+*** Comments
+
+**** rurban
+:PROPERTIES:
+:COMMENT_ID: 47636701
+:END:
+Love that Linus quip! Hopefully it will be big and professional. Non-POSIX sounds exciting.
+
+**** rstat1
+:PROPERTIES:
+:COMMENT_ID: 47636756
+:END:
+In my opinion if you learned something from it, it was useful. Bonus points if others learn from it as well. AI age or not.
+
+**** jonpalmisc
+:PROPERTIES:
+:COMMENT_ID: 47636812
+:END:
+Going to take a guess the author is not a Spanish speaker :p
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: Anos – 为x86-64和RISC-V手写的约100KiB微内核
+***** TLDR
+Anos是一个为x86-64和RISC-V从头编写的业余微内核。不支持遗留功能，不兼容POSIX，内核代码禁止AI生成（虽然Claude帮助写文档和测试）。支持IPC、多任务、x86-64上的SMP，并能在真实硬件上运行。
+***** Take
+有人在LLM时代从头写了一个内核，并明确禁止AI编写内核代码，因为他想真正学到东西。这要么是有原则，要么是自虐。可能两者都是。
+***** Comments
+- 喜欢那句Linus的俏皮话！希望它能变得庞大和专业。非POSIX听起来很令人兴奋。
+- 我认为如果你从中学到了东西，它就是有用的。如果其他人也能从中学习那就更好了。不管有没有AI时代。
+- 猜测作者不是西班牙语使用者 :p
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Anos – x86-64とRISC-V向けの手書き約100KiBマイクロカーネル
+***** TLDR
+Anosはx86-64とRISC-V向けにゼロから書かれた趣味のマイクロカーネル。レガシーサポートなし、POSIXなし、AI生成のカーネルコードなし（ドキュメントとテストはClaudeが手伝う）。IPC、マルチタスク、x86-64でのSMPをサポートし、実機で動作。
+***** Take
+LLM時代に誰かがカーネルをゼロから書き、本当に学びたいからAIによるカーネルコード生成を明示的に禁止した。これは原則的か、マゾヒスティックか。おそらく両方。
+***** Comments
+- あのLinusの引用が好き！大きくプロフェッショナルになることを願う。非POSIXはワクワクする。
+- 私の意見では、何か学べたなら価値があった。他の人も学べたらボーナスポイント。AI時代かどうかに関係なく。
+- 作者はスペイン語話者じゃないと推測する :p
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Anos – x86-64와 RISC-V용 수작업 약 100KiB 마이크로커널
+***** TLDR
+Anos는 x86-64와 RISC-V를 위해 처음부터 작성된 취미 마이크로커널이다. 레거시 지원 없음, POSIX 없음, AI 생성 커널 코드 없음(Claude가 문서와 테스트는 도움). IPC, 멀티태스킹, x86-64의 SMP를 지원하고 실제 하드웨어에서 실행된다.
+***** Take
+누군가 LLM 시대에 커널을 처음부터 작성하고 실제로 배우고 싶어서 AI의 커널 코드 작성을 명시적으로 금지했다. 이건 원칙적이거나 자학적이다. 아마 둘 다.
+***** Comments
+- 그 Linus 인용이 좋다! 크고 전문적이 되길 바란다. 비-POSIX가 흥미롭게 들린다.
+- 내 생각에 뭔가 배웠다면 가치가 있었다. 다른 사람들도 배울 수 있다면 보너스 포인트. AI 시대든 아니든.
+- 작성자가 스페인어 사용자가 아닌 것 같다 :p
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Anos – un microkernel escrito a mano de ~100KiB para x86-64 y RISC-V
+***** TLDR
+Anos es un microkernel de hobby escrito desde cero para x86-64 y RISC-V. Sin soporte legacy, sin POSIX, sin código de kernel generado por IA (aunque Claude ayuda con docs y tests). Soporta IPC, multitarea, SMP en x86-64, y corre en hardware real.
+***** Take
+Alguien escribió un kernel desde cero en la era de los LLMs y explícitamente prohibió que la IA escribiera código del kernel porque quería aprender de verdad. Esto es o principiado o masoquista. Probablemente ambos.
+***** Comments
+- ¡Me encanta esa cita de Linus! Espero que sea grande y profesional. No-POSIX suena emocionante.
+- En mi opinión, si aprendiste algo, fue útil. Puntos extra si otros también aprenden. Con o sin era de IA.
+- Voy a adivinar que el autor no habla español :p
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Anos – ein handgeschriebener ~100KiB Mikrokernel für x86-64 und RISC-V
+***** TLDR
+Anos ist ein Hobby-Mikrokernel, der von Grund auf für x86-64 und RISC-V geschrieben wurde. Keine Legacy-Unterstützung, kein POSIX, kein KI-generierter Kernel-Code (obwohl Claude bei Docs und Tests hilft). Unterstützt IPC, Multitasking, SMP auf x86-64 und läuft auf echter Hardware.
+***** Take
+Jemand hat im LLM-Zeitalter einen Kernel von Grund auf geschrieben und explizit verboten, dass KI Kernel-Code schreibt, weil er wirklich lernen wollte. Das ist entweder prinzipientreu oder masochistisch. Wahrscheinlich beides.
+***** Comments
+- Liebe diesen Linus-Spruch! Hoffentlich wird es groß und professionell. Nicht-POSIX klingt aufregend.
+- Meiner Meinung nach war es nützlich, wenn du etwas gelernt hast. Bonuspunkte, wenn andere auch davon lernen. KI-Zeitalter hin oder her.
+- Ich schätze, der Autor spricht kein Spanisch :p
