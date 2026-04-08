@@ -1,0 +1,544 @@
+#+TITLE: HN Digest 2026-04-08 11:00:00 UT UTC
+#+DATE: 2026-04-08T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Microsoft ghosts VeraCrypt, Pi joins a startup, and your filesystem is the only database you need
+
+* Highlights
+- VeraCrypt can't ship Windows updates after Microsoft terminates dev account without explanation
+- Pi coding agent joins Earendil startup, stays MIT licensed
+- Git archeology: 5 commands to diagnose a codebase before reading code
+
+* Stories
+
+** Veracrypt Project Update :security:encryption:microsoft:open-source:
+:PROPERTIES:
+:ID:       47686549
+:URL:      https://sourceforge.net/p/veracrypt/discussion/general/thread/9620d7a4b3/
+:HN_URL:   https://news.ycombinator.com/item?id=47686549
+:POINTS:   338
+:COMMENTS: 90
+:BY:       super256
+:END:
+
+*** TLDR
+VeraCrypt's lead developer Mounir Idrassi can't publish Windows updates because Microsoft terminated his driver-signing account without warning or explanation. No prior notification, no appeal process, just automated bot responses. Linux and macOS releases can continue, but Windows is the majority of users.
+
+*** Take
+A single opaque account termination can brick the release pipeline for security software used by millions. Microsoft's customer support is famously a Kafkaesque hellscape, but for an encryption tool this popular? The suggestion to email Satya Nadella directly tells you everything about the state of enterprise support.
+
+*** Comments
+
+**** zx2c4
+:PROPERTIES:
+:COMMENT_ID: 47686601
+:END:
+This is the same problem I'm currently facing with WireGuard. No warning at all, no notification. One day I sign in to publish an update, and yikes, account suspended.
+
+**** Topfi
+:PROPERTIES:
+:COMMENT_ID: 47686789
+:END:
+Honest question, did we ever get an answer what was the cause for the sudden change from the original Truecrypt developer? Recommending Bitlocker as the drop-in-replacement always made it smell fishy to me.
+
+**** pogue
+:PROPERTIES:
+:COMMENT_ID: 47686823
+:END:
+They need to get some tech site like Arstechnica to write about it. The only way to contact these tech companies to speak to a real human being is if you know somebody who works there or if the media writes about it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+VeraCrypt项目更新
+***** TLDR
+VeraCrypt首席开发者Mounir Idrassi无法发布Windows更新,因为微软在没有任何警告或解释的情况下终止了他的驱动签名账户。没有事先通知,没有申诉流程,只有自动机器人回复。Linux和macOS版本可以继续发布,但Windows用户占大多数。
+***** Take
+一次不透明的账户终止就能瘫痪数百万人使用的安全软件的发布流程。微软的客户支持出了名的像卡夫卡式噩梦,但对于这么流行的加密工具?建议直接给萨蒂亚·纳德拉发邮件,这足以说明企业支持的现状。
+***** Comments
+- 我在WireGuard也遇到了同样的问题。完全没有警告,没有通知。某天登录要发布更新,结果发现账户被暂停了。
+- 诚实的问题:我们是否得到过原TrueCrypt开发者突然改变的原因?推荐Bitlocker作为替代品一直让我觉得可疑。
+- 他们需要让Arstechnica这样的科技网站报道此事。联系这些科技公司的唯一方法就是认识内部员工或者让媒体报道。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+VeraCryptプロジェクト更新
+***** TLDR
+VeraCryptの主任開発者Mounir Idrassiは、Microsoftが警告も説明もなく彼のドライバー署名アカウントを終了したため、Windowsアップデートを公開できません。事前通知なし、異議申し立てプロセスなし、自動ボット応答のみ。LinuxとmacOSのリリースは継続できますが、Windowsがユーザーの大多数を占めています。
+***** Take
+一回の不透明なアカウント終了が、何百万人も使用するセキュリティソフトウェアのリリースパイプラインを停止させる可能性がある。Microsoftのカスタマーサポートはカフカ的な地獄として有名だが、これほど人気のある暗号化ツールに対して?サティア・ナデラに直接メールすることを勧められるのは、エンタープライズサポートの現状を物語っている。
+***** Comments
+- WireGuardでも同じ問題に直面しています。警告なし、通知なし。ある日ログインしてアップデートを公開しようとしたら、アカウントが停止されていました。
+- 正直な質問:元のTrueCrypt開発者の突然の変化の原因について答えは得られましたか?BitLockerを代替として推奨したことは常に怪しく感じました。
+- Arstechnicaのようなテックサイトに記事を書いてもらう必要があります。これらのテック企業で実際の人間と話す唯一の方法は、社内に知り合いがいるか、メディアが書くかです。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+VeraCrypt 프로젝트 업데이트
+***** TLDR
+VeraCrypt의 수석 개발자 Mounir Idrassi는 Microsoft가 경고나 설명 없이 그의 드라이버 서명 계정을 종료했기 때문에 Windows 업데이트를 게시할 수 없습니다. 사전 통지 없음, 이의 제기 절차 없음, 자동 봇 응답만 있습니다. Linux와 macOS 릴리스는 계속할 수 있지만, Windows가 사용자의 대다수입니다.
+***** Take
+불투명한 계정 종료 한 번이 수백만 명이 사용하는 보안 소프트웨어의 릴리스 파이프라인을 마비시킬 수 있다. Microsoft의 고객 지원은 카프카적인 지옥으로 유명하지만, 이렇게 인기 있는 암호화 도구에 대해? 사티아 나델라에게 직접 이메일을 보내라는 제안은 기업 지원의 현실을 모두 말해준다.
+***** Comments
+- WireGuard에서도 같은 문제에 직면하고 있습니다. 전혀 경고 없이, 알림 없이. 어느 날 로그인해서 업데이트를 게시하려고 했더니, 계정이 정지되어 있었습니다.
+- 솔직한 질문: 원래 TrueCrypt 개발자의 갑작스러운 변화에 대한 답을 얻었나요? Bitlocker를 대체품으로 추천한 것은 항상 의심스러웠습니다.
+- Arstechnica 같은 테크 사이트에 기사를 쓰게 해야 합니다. 이런 테크 회사들과 실제 사람과 대화하는 유일한 방법은 내부에 아는 사람이 있거나 미디어가 보도하는 것입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Actualización del Proyecto VeraCrypt
+***** TLDR
+El desarrollador principal de VeraCrypt, Mounir Idrassi, no puede publicar actualizaciones de Windows porque Microsoft terminó su cuenta de firma de controladores sin previo aviso ni explicación. Sin notificación previa, sin proceso de apelación, solo respuestas automatizadas de bots. Las versiones de Linux y macOS pueden continuar, pero Windows representa la mayoría de usuarios.
+***** Take
+Una sola terminación de cuenta opaca puede paralizar el proceso de lanzamiento de software de seguridad utilizado por millones. El soporte al cliente de Microsoft es famosamente un infierno kafkiano, pero ¿para una herramienta de cifrado tan popular? La sugerencia de enviar un correo electrónico directamente a Satya Nadella dice todo sobre el estado del soporte empresarial.
+***** Comments
+- Este es el mismo problema que estoy enfrentando con WireGuard. Sin ninguna advertencia, sin notificación. Un día inicio sesión para publicar una actualización y mi cuenta está suspendida.
+- Pregunta honesta: ¿alguna vez obtuvimos una respuesta sobre cuál fue la causa del cambio repentino del desarrollador original de Truecrypt? Recomendar Bitlocker como reemplazo siempre me pareció sospechoso.
+- Necesitan que algún sitio tech como Arstechnica escriba sobre esto. La única manera de contactar a estas empresas de tecnología y hablar con un ser humano real es si conoces a alguien que trabaja allí o si los medios escriben sobre ello.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+VeraCrypt Projekt-Update
+***** TLDR
+VeraCrypts leitender Entwickler Mounir Idrassi kann keine Windows-Updates veröffentlichen, weil Microsoft sein Treiber-Signaturkonto ohne Vorwarnung oder Erklärung gekündigt hat. Keine vorherige Benachrichtigung, kein Einspruchsverfahren, nur automatisierte Bot-Antworten. Linux- und macOS-Releases können fortgesetzt werden, aber Windows macht die Mehrheit der Nutzer aus.
+***** Take
+Eine einzige undurchsichtige Kontokündigung kann die Release-Pipeline für Sicherheitssoftware lahmlegen, die von Millionen genutzt wird. Microsofts Kundensupport ist berüchtigt als kafkaesker Alptraum, aber für ein so beliebtes Verschlüsselungstool? Der Vorschlag, Satya Nadella direkt anzuschreiben, sagt alles über den Zustand des Enterprise-Supports.
+***** Comments
+- Das ist das gleiche Problem, mit dem ich bei WireGuard konfrontiert bin. Überhaupt keine Warnung, keine Benachrichtigung. Eines Tages logge ich mich ein, um ein Update zu veröffentlichen, und mein Konto ist gesperrt.
+- Ehrliche Frage: Haben wir jemals eine Antwort bekommen, was die Ursache für die plötzliche Änderung des ursprünglichen Truecrypt-Entwicklers war? Bitlocker als Ersatz zu empfehlen, kam mir immer verdächtig vor.
+- Sie müssen eine Tech-Seite wie Arstechnica dazu bringen, darüber zu schreiben. Der einzige Weg, diese Tech-Unternehmen zu kontaktieren und mit einem echten Menschen zu sprechen, ist, wenn man jemanden kennt, der dort arbeitet, oder wenn die Medien darüber berichten.
+** The Git Commands I Run Before Reading Any Code :git:development:tooling:codebase-audit:
+:PROPERTIES:
+:ID:       47687273
+:URL:      https://piechowski.io/post/git-commands-before-reading-code/
+:HN_URL:   https://news.ycombinator.com/item?id=47687273
+:POINTS:   126
+:COMMENTS: 26
+:BY:       grepsedawk
+:END:
+
+*** TLDR
+Five git commands to diagnose a codebase before opening any files: most-changed files (churn hotspots), commit count by author (bus factor), bug-related commits by file (defect clustering), commits per month (velocity trends), and revert/hotfix frequency (deploy confidence). A 2005 Microsoft study found churn predicted defects better than complexity metrics.
+
+*** Take
+The file everyone warns you about is always at the top of the churn list. This is basically software archaeology: reading the commit sediment to figure out where the bodies are buried before you step on them.
+
+*** Comments
+
+**** pzmarzly
+:PROPERTIES:
+:COMMENT_ID: 47687301
+:END:
+Jujutsu equivalents, if anyone is curious...
+
+**** seba_dos1
+:PROPERTIES:
+:COMMENT_ID: 47687412
+:END:
+Squash-merge workflows are stupid (you lose information without gaining anything in return as it was easily filterable at retrieval anyway) and only useful as a workaround for people not knowing how to use git.
+
+**** ramon156
+:PROPERTIES:
+:COMMENT_ID: 47687523
+:END:
+The most changed file is the one people are afraid of touching?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+在阅读任何代码之前我运行的Git命令
+***** TLDR
+在打开任何文件之前诊断代码库的五个git命令:最常更改的文件(变动热点)、按作者的提交计数(巴士因子)、按文件的bug相关提交(缺陷聚类)、每月提交数(速度趋势)和回滚/热修复频率(部署信心)。2005年微软的一项研究发现,变动预测缺陷比复杂性指标更准确。
+***** Take
+每个人警告你的那个文件总是在变动列表的顶部。这基本上是软件考古学:阅读提交沉积物,在你踩到它们之前弄清楚尸体埋在哪里。
+***** Comments
+- 如果有人好奇的话,这是Jujutsu的等效命令...
+- Squash-merge工作流是愚蠢的(你失去了信息却没有得到任何回报,因为在检索时本来就可以轻松过滤),只是为不知道如何使用git的人提供的变通方法。
+- 最常更改的文件是人们害怕触碰的文件?
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+コードを読む前に実行するGitコマンド
+***** TLDR
+ファイルを開く前にコードベースを診断する5つのgitコマンド:最も変更されたファイル(チャーンホットスポット)、作者別コミット数(バスファクター)、ファイル別バグ関連コミット(欠陥クラスタリング)、月別コミット数(速度トレンド)、リバート/ホットフィックス頻度(デプロイ信頼度)。2005年のMicrosoft研究では、チャーンが複雑性指標よりも欠陥をよく予測することがわかった。
+***** Take
+みんなが警告するファイルは常にチャーンリストの一番上にある。これは基本的にソフトウェア考古学:コミットの堆積物を読んで、踏む前に死体がどこに埋まっているかを把握する。
+***** Comments
+- 興味がある人のために、Jujutsuの同等コマンド...
+- スカッシュマージワークフローは馬鹿げている(検索時に簡単にフィルタリングできるのに、何も得ずに情報を失う)。gitの使い方を知らない人のための回避策にすぎない。
+- 最も変更されたファイルが人々が触れるのを恐れるファイル?
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+코드를 읽기 전에 실행하는 Git 명령어
+***** TLDR
+파일을 열기 전에 코드베이스를 진단하는 다섯 가지 git 명령어: 가장 자주 변경되는 파일(변동 핫스팟), 작성자별 커밋 수(버스 팩터), 파일별 버그 관련 커밋(결함 클러스터링), 월별 커밋 수(속도 추세), 리버트/핫픽스 빈도(배포 신뢰도). 2005년 Microsoft 연구에서 변동이 복잡성 지표보다 결함을 더 잘 예측한다는 것을 발견했다.
+***** Take
+모두가 경고하는 파일은 항상 변동 목록 맨 위에 있다. 이것은 기본적으로 소프트웨어 고고학: 밟기 전에 시체가 어디 묻혀 있는지 파악하기 위해 커밋 퇴적물을 읽는 것이다.
+***** Comments
+- 궁금하신 분들을 위해 Jujutsu 동등 명령어...
+- 스쿼시 머지 워크플로우는 멍청하다(검색 시 쉽게 필터링할 수 있는데 아무것도 얻지 못하고 정보만 잃는다). git 사용법을 모르는 사람들을 위한 우회책일 뿐이다.
+- 가장 자주 변경되는 파일이 사람들이 건드리기 두려워하는 파일이라고?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los Comandos Git Que Ejecuto Antes de Leer Cualquier Código
+***** TLDR
+Cinco comandos git para diagnosticar un código base antes de abrir cualquier archivo: archivos más cambiados (puntos calientes de cambio), conteo de commits por autor (factor bus), commits relacionados con bugs por archivo (agrupación de defectos), commits por mes (tendencias de velocidad), y frecuencia de reverts/hotfixes (confianza en el despliegue). Un estudio de Microsoft de 2005 encontró que el cambio predecía defectos mejor que las métricas de complejidad.
+***** Take
+El archivo del que todos te advierten siempre está en la cima de la lista de cambios. Esto es básicamente arqueología de software: leer los sedimentos de commits para averiguar dónde están enterrados los cuerpos antes de pisarlos.
+***** Comments
+- Equivalentes en Jujutsu, por si alguien tiene curiosidad...
+- Los flujos de trabajo con squash-merge son estúpidos (pierdes información sin ganar nada a cambio ya que era fácilmente filtrable en la recuperación de todos modos) y solo son útiles como solución alternativa para personas que no saben usar git.
+- ¿El archivo más cambiado es el que la gente tiene miedo de tocar?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Git-Befehle, die ich ausführe, bevor ich Code lese
+***** TLDR
+Fünf Git-Befehle zur Diagnose einer Codebasis, bevor man Dateien öffnet: am häufigsten geänderte Dateien (Churn-Hotspots), Commit-Anzahl nach Autor (Bus-Faktor), Bug-bezogene Commits nach Datei (Defekt-Clustering), Commits pro Monat (Velocity-Trends) und Revert/Hotfix-Häufigkeit (Deploy-Vertrauen). Eine Microsoft-Studie von 2005 ergab, dass Churn Defekte besser vorhersagt als Komplexitätsmetriken.
+***** Take
+Die Datei, vor der alle warnen, steht immer ganz oben auf der Churn-Liste. Das ist im Grunde Software-Archäologie: die Commit-Sedimente lesen, um herauszufinden, wo die Leichen begraben sind, bevor man drauftritt.
+***** Comments
+- Jujutsu-Äquivalente, falls jemand neugierig ist...
+- Squash-Merge-Workflows sind dumm (man verliert Informationen ohne etwas zu gewinnen, da es beim Abruf ohnehin leicht filterbar war) und nur nützlich als Workaround für Leute, die nicht wissen, wie man Git benutzt.
+- Die am häufigsten geänderte Datei ist die, die niemand anfassen will?
+** I've Sold Out :open-source:startup:ai:coding-agents:
+:PROPERTIES:
+:ID:       47687533
+:URL:      https://mariozechner.at/posts/2026-04-08-ive-sold-out/
+:HN_URL:   https://news.ycombinator.com/item?id=47687533
+:POINTS:   40
+:COMMENTS: 6
+:BY:       doppp
+:END:
+
+*** TLDR
+Mario Zechner (libGDX creator) is joining Earendil and taking Pi, his popular coding agent, with him. Pi stays MIT licensed forever. Commercial add-ons will use Fair Source (converts to OSS after delay) or proprietary for enterprise. He explicitly doesn't want to be a VC-funded startup CEO because he has a 4-year-old kid who cried when 'daddy isn't here.'
+
+*** Take
+The rare 'I sold out' post that actually reads like someone learned from watching RoboVM get Microsoft'd into oblivion. Pi staying MIT with a clear licensing tier system is how you do OSS commercialization without becoming the villain. The 'my kid cried' motivation is refreshingly honest.
+
+*** Comments
+
+**** anilgulecha
+:PROPERTIES:
+:COMMENT_ID: 47687601
+:END:
+Incidentally pi stopped working today - under the Claude subscription ban for other harnesses. Awaiting a plugin that fixes it.
+
+**** rullelito
+:PROPERTIES:
+:COMMENT_ID: 47687645
+:END:
+At least they didn't call it Open pi.
+
+**** sunaookami
+:PROPERTIES:
+:COMMENT_ID: 47687689
+:END:
+Happy for Mario, Pi is the best harness I've ever tried. But overall disappointed by this decision. 'This time everything is different' until it's not.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我卖身了
+***** TLDR
+Mario Zechner(libGDX创建者)加入了Earendil,并带走了他流行的编码代理Pi。Pi将永远保持MIT许可证。商业附加组件将使用Fair Source(延迟后转为开源)或企业专有版本。他明确表示不想成为风投资助的初创公司CEO,因为他有一个4岁的孩子,当'爸爸不在'时会哭。
+***** Take
+罕见的'我卖身了'帖子,读起来像是从看着RoboVM被微软搞死中吸取了教训。Pi保持MIT许可证加上清晰的许可证分层系统,这才是做开源商业化而不成为反派的方法。'我的孩子哭了'的动机令人耳目一新地诚实。
+***** Comments
+- 顺便说一下,pi今天停止工作了——在Claude订阅禁止其他工具的情况下。等待修复的插件。
+- 至少他们没有叫它Open pi。
+- 为Mario高兴,Pi是我用过的最好的工具。但总体上对这个决定感到失望。'这次一切都不同'直到事实并非如此。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+売り渡しました
+***** TLDR
+Mario Zechner(libGDX作成者)がEarendilに参加し、人気のコーディングエージェントPiを持っていく。PiはMITライセンスのまま永遠に。商用アドオンはFair Source(遅延後にOSSに変換)またはエンタープライズ向け専有版を使用。VCが資金提供するスタートアップのCEOになりたくないと明確に述べている。理由は4歳の子供が「パパがいない」と泣いたから。
+***** Take
+RoboVMがMicrosoftに抹殺されるのを見て学んだように読める珍しい「売り渡しました」投稿。明確なライセンス階層システムでPiをMITのままにするのは、悪役にならずにOSS商業化を行う方法だ。「子供が泣いた」という動機は新鮮に正直。
+***** Comments
+- ちなみに今日piが動かなくなった - 他のハーネスに対するClaude購読禁止のため。修正するプラグインを待っている。
+- 少なくともOpen piとは呼ばなかった。
+- Marioのために嬉しい、Piは私が試した中で最高のハーネスだ。しかし全体的にこの決定には失望している。「今回は全てが違う」そうでなくなるまでは。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+나는 팔렸다
+***** TLDR
+Mario Zechner(libGDX 창시자)가 Earendil에 합류하며 인기 있는 코딩 에이전트 Pi를 가져간다. Pi는 영원히 MIT 라이선스를 유지한다. 상업용 애드온은 Fair Source(지연 후 OSS로 전환) 또는 기업용 독점 버전을 사용한다. 그는 4살 아이가 '아빠가 없어'라며 울었기 때문에 VC 지원 스타트업 CEO가 되고 싶지 않다고 명시했다.
+***** Take
+RoboVM이 Microsoft에 의해 소멸되는 것을 보고 배운 것처럼 읽히는 드문 '나는 팔렸다' 포스트. 명확한 라이선스 계층 시스템으로 Pi를 MIT로 유지하는 것이 악당이 되지 않고 OSS 상업화를 하는 방법이다. '아이가 울었다'는 동기는 신선하게 솔직하다.
+***** Comments
+- 우연히 오늘 pi가 작동을 멈췄다 - 다른 하네스에 대한 Claude 구독 금지 때문에. 수정하는 플러그인을 기다리고 있다.
+- 최소한 Open pi라고 부르지는 않았다.
+- Mario를 위해 기쁘다, Pi는 내가 써본 최고의 하네스다. 하지만 전반적으로 이 결정에 실망했다. '이번엔 모든 게 다르다'가 그렇지 않을 때까지.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Me he vendido
+***** TLDR
+Mario Zechner (creador de libGDX) se une a Earendil y se lleva a Pi, su popular agente de codificación. Pi mantiene la licencia MIT para siempre. Los complementos comerciales usarán Fair Source (se convierte a OSS después de un retraso) o propietario para empresas. Explícitamente no quiere ser CEO de una startup financiada por VCs porque tiene un hijo de 4 años que lloraba cuando 'papá no está'.
+***** Take
+La rara publicación de 'me he vendido' que realmente se lee como alguien que aprendió de ver a RoboVM ser eliminado por Microsoft. Pi manteniéndose MIT con un sistema claro de niveles de licencia es cómo se hace la comercialización de OSS sin convertirse en el villano. La motivación de 'mi hijo lloró' es refrescantemente honesta.
+***** Comments
+- Por cierto, pi dejó de funcionar hoy - bajo la prohibición de suscripción de Claude para otros arneses. Esperando un plugin que lo arregle.
+- Al menos no lo llamaron Open pi.
+- Feliz por Mario, Pi es el mejor arnés que he probado. Pero en general decepcionado por esta decisión. 'Esta vez todo es diferente' hasta que no lo es.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ich habe mich verkauft
+***** TLDR
+Mario Zechner (libGDX-Ersteller) tritt Earendil bei und nimmt Pi, seinen beliebten Coding-Agenten, mit. Pi bleibt für immer MIT-lizenziert. Kommerzielle Add-ons werden Fair Source (wird nach Verzögerung zu OSS) oder proprietär für Unternehmen sein. Er möchte ausdrücklich kein VC-finanzierter Startup-CEO sein, weil sein 4-jähriges Kind weinte, als 'Papa nicht da ist'.
+***** Take
+Der seltene 'Ich habe mich verkauft'-Post, der tatsächlich so liest, als hätte jemand daraus gelernt, RoboVM von Microsoft ins Nichts verschwinden zu sehen. Pi MIT zu halten mit einem klaren Lizenzstufensystem ist, wie man OSS-Kommerzialisierung macht, ohne zum Bösewicht zu werden. Die 'mein Kind hat geweint'-Motivation ist erfrischend ehrlich.
+***** Comments
+- Übrigens hat pi heute aufgehört zu funktionieren - unter dem Claude-Abonnementverbot für andere Harnesses. Warte auf ein Plugin, das es behebt.
+- Zumindest haben sie es nicht Open pi genannt.
+- Freue mich für Mario, Pi ist das beste Harness, das ich je ausprobiert habe. Aber insgesamt enttäuscht von dieser Entscheidung. 'Dieses Mal ist alles anders' bis es das nicht ist.
+** Show HN: We built a camera only robot vacuum for less than 300$ :robotics:ml:hardware:diy:show-hn:
+:PROPERTIES:
+:ID:       47657204
+:URL:      https://indraneelpatil.github.io/blog/2026/robot-vacuum/
+:HN_URL:   https://news.ycombinator.com/item?id=47657204
+:POINTS:   37
+:COMMENTS: 5
+:BY:       indraneelpatil
+:END:
+
+*** TLDR
+Two roommates built a DIY robot vacuum using off-the-shelf parts, a camera, and behavior cloning. They teleop'd the robot, collected image-action pairs, and trained a CNN to navigate. Cost: $300. Time: 4 months part-time. Result: it works but gets stuck, the vacuum suction is weak, and the ML model learned to reverse near obstacles but can't figure out free space.
+
+*** Take
+Actual robotics Show HN instead of yet another AI wrapper. The honest post-mortem is the best part: 'What it hasn't learnt is how to determine there is free space in front of you.' When your robot vacuum needs babysitting, you haven't saved time, you've created a needy pet that also vacuums.
+
+*** Comments
+
+**** elaus
+:PROPERTIES:
+:COMMENT_ID: 47657301
+:END:
+I don't really see how the vacuum can effectively clean a whole room or flat using only a CNN of the current image in front of the robot. All but the most basic vacuum robots map their work area and devise plans how to clean them systematically.
+
+**** villgax
+:PROPERTIES:
+:COMMENT_ID: 47657356
+:END:
+There's things like SLAM, optical flow etc, read up on things instead of being so defeatist.
+
+**** amelius
+:PROPERTIES:
+:COMMENT_ID: 47657401
+:END:
+The trick is to make a robot that has a Lidar and a camera, then train a model that can replace the Lidar.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: 我们用不到300美元造了一个只用摄像头的扫地机器人
+***** TLDR
+两个室友用现成零件、摄像头和行为克隆造了一个DIY扫地机器人。他们遥控机器人,收集图像-动作对,训练CNN进行导航。成本:300美元。时间:兼职4个月。结果:能用但会卡住,吸力弱,ML模型学会了在障碍物附近倒退,但无法判断前方是否有空间。
+***** Take
+真正的机器人Show HN,而不是又一个AI封装。诚实的事后分析是最好的部分:'它没有学会的是如何判断前方是否有空间。'当你的扫地机器人需要照看时,你并没有节省时间,你创造了一个也会吸尘的需要照顾的宠物。
+***** Comments
+- 我真的不明白扫地机器人如何只用机器人前方当前图像的CNN有效清洁整个房间或公寓。除了最基本的扫地机器人外,所有机器人都会绘制工作区域地图并制定系统清洁计划。
+- 有SLAM、光流等技术,去了解一下而不是这么悲观。
+- 诀窍是制造一个有激光雷达和摄像头的机器人,然后训练一个可以替代激光雷达的模型。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: 300ドル以下でカメラのみのロボット掃除機を作りました
+***** TLDR
+2人のルームメイトが既製パーツ、カメラ、行動クローニングを使ってDIYロボット掃除機を作った。ロボットを遠隔操作し、画像-アクションペアを収集し、CNNをナビゲーション用に訓練した。コスト:300ドル。時間:パートタイムで4ヶ月。結果:動くが詰まる、吸引力が弱い、MLモデルは障害物の近くで後退することを学んだが、前方の空きスペースを判断できない。
+***** Take
+また別のAIラッパーではなく、実際のロボティクスShow HN。正直な事後分析が最高の部分:「学んでいないのは、前方に空きスペースがあるかどうかを判断する方法。」ロボット掃除機がベビーシッターを必要とするとき、時間を節約していない、掃除もする世話のかかるペットを作っただけ。
+***** Comments
+- ロボット前方の現在の画像のCNNだけで、掃除機が部屋やアパート全体を効果的に掃除できるとは本当に思えない。最も基本的な掃除ロボット以外は、作業エリアをマッピングし、系統的に掃除する計画を立てる。
+- SLAM、オプティカルフローなどがある、そんなに敗北主義的にならずに調べてみて。
+- コツは、LiDARとカメラを持つロボットを作り、LiDARを置き換えられるモデルを訓練すること。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: 300달러 미만으로 카메라만 사용하는 로봇 청소기를 만들었습니다
+***** TLDR
+두 룸메이트가 기성 부품, 카메라, 행동 복제를 사용하여 DIY 로봇 청소기를 만들었다. 로봇을 원격 조작하고, 이미지-동작 쌍을 수집하고, 내비게이션을 위한 CNN을 훈련시켰다. 비용: 300달러. 시간: 파트타임으로 4개월. 결과: 작동하지만 막히고, 흡입력이 약하며, ML 모델은 장애물 근처에서 후진하는 것을 배웠지만 전방의 빈 공간을 파악하지 못한다.
+***** Take
+또 다른 AI 래퍼가 아닌 실제 로보틱스 Show HN. 솔직한 사후 분석이 가장 좋은 부분: '배우지 못한 것은 앞에 빈 공간이 있는지 판단하는 방법이다.' 로봇 청소기가 돌봄이 필요할 때, 시간을 절약한 게 아니라 청소도 하는 손이 많이 가는 애완동물을 만든 것이다.
+***** Comments
+- 로봇 앞의 현재 이미지의 CNN만으로 청소기가 전체 방이나 아파트를 효과적으로 청소할 수 있다고는 정말 생각하지 않는다. 가장 기본적인 청소 로봇을 제외하고 모든 로봇은 작업 영역을 매핑하고 체계적으로 청소할 계획을 세운다.
+- SLAM, 광학 흐름 등이 있다, 그렇게 패배주의적이지 말고 공부해봐.
+- 비결은 LiDAR와 카메라가 있는 로봇을 만들고, LiDAR를 대체할 수 있는 모델을 훈련시키는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Construimos un robot aspirador solo con cámara por menos de 300$
+***** TLDR
+Dos compañeros de cuarto construyeron un robot aspirador DIY usando piezas comerciales, una cámara y clonación de comportamiento. Teleoperaron el robot, recolectaron pares imagen-acción y entrenaron una CNN para navegar. Costo: 300$. Tiempo: 4 meses a tiempo parcial. Resultado: funciona pero se atasca, la succión del aspirador es débil, y el modelo ML aprendió a retroceder cerca de obstáculos pero no puede determinar el espacio libre.
+***** Take
+Show HN de robótica real en lugar de otro wrapper de IA. El post-mortem honesto es la mejor parte: 'Lo que no ha aprendido es cómo determinar si hay espacio libre frente a él.' Cuando tu robot aspirador necesita niñera, no has ahorrado tiempo, has creado una mascota necesitada que también aspira.
+***** Comments
+- Realmente no veo cómo la aspiradora puede limpiar efectivamente toda una habitación o apartamento usando solo una CNN de la imagen actual frente al robot. Todos los robots aspiradores excepto los más básicos mapean su área de trabajo y diseñan planes para limpiarla sistemáticamente.
+- Hay cosas como SLAM, flujo óptico, etc., lee sobre ellas en lugar de ser tan derrotista.
+- El truco es hacer un robot que tenga Lidar y una cámara, luego entrenar un modelo que pueda reemplazar el Lidar.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Wir haben einen Saugroboter nur mit Kamera für unter 300$ gebaut
+***** TLDR
+Zwei Mitbewohner bauten einen DIY-Saugroboter mit handelsüblichen Teilen, einer Kamera und Behavior Cloning. Sie steuerten den Roboter fern, sammelten Bild-Aktions-Paare und trainierten ein CNN zur Navigation. Kosten: 300$. Zeit: 4 Monate Teilzeit. Ergebnis: funktioniert aber bleibt stecken, die Saugleistung ist schwach, und das ML-Modell lernte, bei Hindernissen rückwärts zu fahren, kann aber freien Raum nicht erkennen.
+***** Take
+Echte Robotik Show HN statt noch ein AI-Wrapper. Die ehrliche Post-Mortem-Analyse ist der beste Teil: 'Was es nicht gelernt hat, ist, wie man freien Raum vor sich erkennt.' Wenn dein Saugroboter Babysitting braucht, hast du keine Zeit gespart, du hast ein bedürftiges Haustier erschaffen, das auch saugt.
+***** Comments
+- Ich sehe wirklich nicht, wie der Staubsauger einen ganzen Raum oder eine Wohnung effektiv reinigen kann, wenn er nur ein CNN des aktuellen Bildes vor dem Roboter verwendet. Alle außer den einfachsten Saugrobotern kartieren ihren Arbeitsbereich und erstellen Pläne, wie sie ihn systematisch reinigen.
+- Es gibt Dinge wie SLAM, optischen Fluss usw., lies darüber nach, anstatt so defätistisch zu sein.
+- Der Trick ist, einen Roboter zu bauen, der Lidar und eine Kamera hat, dann ein Modell zu trainieren, das das Lidar ersetzen kann.
+** Your File System Is Already A Graph Database :productivity:llm:knowledge-management:obsidian:
+:PROPERTIES:
+:ID:       47656518
+:URL:      https://rumproarious.com/2026/04/04/your-file-system-is-already-a-graph-database/
+:HN_URL:   https://news.ycombinator.com/item?id=47656518
+:POINTS:   19
+:COMMENTS: 2
+:BY:       alxndr
+:END:
+
+*** TLDR
+Expanding on Karpathy's knowledge base tweet: your file system + markdown + wikilinks is already a graph database. Files are nodes, wikilinks are edges, folders are taxonomy. The author has 52,000 markdown files in Obsidian and uses LLMs as the query engine. After meetings, an agent creates notes and links them to people and projects. No vector store needed.
+
+*** Take
+Sometimes the boring solution is the right one. While everyone else is building RAG pipelines with six dependencies, this person is using folders like it's 1995 and LLMs like it's 2025. The 'context engineering system' framing is what makes this more than digital hoarding.
+
+*** Comments
+
+**** WillAdams
+:PROPERTIES:
+:COMMENT_ID: 47656601
+:END:
+I've found a similar structure along with a naming convention useful at my day job. The names are such that when copied as a filepath, the filepath and extension deleted, and underscores replaced by tabs, the text may then be pasted into a spreadsheet.
+
+**** alxndr
+:PROPERTIES:
+:COMMENT_ID: 47656645
+:END:
+The knowledge base isn't just for research. It's a context engineering system. You're building the exact input your LLM needs to do useful work.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+你的文件系统已经是一个图数据库
+***** TLDR
+扩展Karpathy的知识库推文:你的文件系统+markdown+wikilinks已经是一个图数据库。文件是节点,wikilinks是边,文件夹是分类法。作者在Obsidian中有52,000个markdown文件,使用LLM作为查询引擎。会议结束后,代理创建笔记并将其链接到人和项目。不需要向量存储。
+***** Take
+有时候无聊的解决方案才是正确的。当其他人都在构建有六个依赖项的RAG管道时,这个人像1995年一样使用文件夹,像2025年一样使用LLM。'上下文工程系统'的框架使这不仅仅是数字囤积。
+***** Comments
+- 我发现类似的结构加上命名约定在我的日常工作中很有用。名称是这样的:当复制为文件路径时,删除文件路径和扩展名,用制表符替换下划线,文本就可以粘贴到电子表格中。
+- 知识库不仅仅用于研究。它是一个上下文工程系统。你正在构建LLM完成有用工作所需的精确输入。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+あなたのファイルシステムはすでにグラフデータベースです
+***** TLDR
+Karpathyのナレッジベースツイートの拡張:ファイルシステム+markdown+wikilinksはすでにグラフデータベースだ。ファイルはノード、wikilinksはエッジ、フォルダは分類法。著者はObsidianに52,000のmarkdownファイルを持ち、LLMをクエリエンジンとして使用している。会議後、エージェントがノートを作成し、人やプロジェクトにリンクする。ベクトルストアは不要。
+***** Take
+時々、退屈な解決策が正しい。他の皆が6つの依存関係を持つRAGパイプラインを構築している間、この人は1995年のようにフォルダを使い、2025年のようにLLMを使っている。「コンテキストエンジニアリングシステム」というフレーミングが、これを単なるデジタルため込み以上のものにしている。
+***** Comments
+- 同様の構造と命名規則が私の仕事で役立つことがわかった。名前は、ファイルパスとしてコピーされたとき、ファイルパスと拡張子を削除し、アンダースコアをタブに置き換えると、テキストをスプレッドシートに貼り付けられるようになっている。
+- ナレッジベースは研究のためだけではない。コンテキストエンジニアリングシステムだ。LLMが有用な仕事をするために必要な正確な入力を構築している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+당신의 파일 시스템은 이미 그래프 데이터베이스입니다
+***** TLDR
+Karpathy의 지식 베이스 트윗 확장: 파일 시스템 + markdown + wikilinks는 이미 그래프 데이터베이스다. 파일은 노드, wikilinks는 엣지, 폴더는 분류 체계. 저자는 Obsidian에 52,000개의 markdown 파일을 가지고 있고 LLM을 쿼리 엔진으로 사용한다. 회의 후 에이전트가 노트를 생성하고 사람과 프로젝트에 연결한다. 벡터 스토어 불필요.
+***** Take
+때로는 지루한 해결책이 옳다. 다른 모든 사람들이 6개의 의존성을 가진 RAG 파이프라인을 구축하는 동안, 이 사람은 1995년처럼 폴더를 사용하고 2025년처럼 LLM을 사용한다. '컨텍스트 엔지니어링 시스템' 프레이밍이 이것을 단순한 디지털 쌓기 이상으로 만든다.
+***** Comments
+- 비슷한 구조와 명명 규칙이 내 직장에서 유용하다는 것을 알았다. 이름은 파일 경로로 복사되면 파일 경로와 확장자를 삭제하고 밑줄을 탭으로 바꾸면 텍스트를 스프레드시트에 붙여넣을 수 있도록 되어 있다.
+- 지식 베이스는 연구만을 위한 것이 아니다. 컨텍스트 엔지니어링 시스템이다. LLM이 유용한 작업을 수행하는 데 필요한 정확한 입력을 구축하고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Tu Sistema de Archivos Ya Es Una Base de Datos de Grafos
+***** TLDR
+Expandiendo el tweet de Karpathy sobre bases de conocimiento: tu sistema de archivos + markdown + wikilinks ya es una base de datos de grafos. Los archivos son nodos, los wikilinks son aristas, las carpetas son taxonomía. El autor tiene 52,000 archivos markdown en Obsidian y usa LLMs como motor de consultas. Después de las reuniones, un agente crea notas y las vincula a personas y proyectos. No se necesita almacén de vectores.
+***** Take
+A veces la solución aburrida es la correcta. Mientras todos los demás construyen pipelines de RAG con seis dependencias, esta persona usa carpetas como en 1995 y LLMs como en 2025. El encuadre de 'sistema de ingeniería de contexto' es lo que hace que esto sea más que acaparamiento digital.
+***** Comments
+- He encontrado útil una estructura similar junto con una convención de nombres en mi trabajo diario. Los nombres son tales que cuando se copian como ruta de archivo, se elimina la ruta y la extensión, y se reemplazan los guiones bajos por tabulaciones, el texto puede pegarse en una hoja de cálculo.
+- La base de conocimiento no es solo para investigación. Es un sistema de ingeniería de contexto. Estás construyendo exactamente la entrada que tu LLM necesita para hacer trabajo útil.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Dein Dateisystem ist bereits eine Graph-Datenbank
+***** TLDR
+Erweiterung von Karpathys Wissensbasis-Tweet: dein Dateisystem + Markdown + Wikilinks ist bereits eine Graph-Datenbank. Dateien sind Knoten, Wikilinks sind Kanten, Ordner sind Taxonomie. Der Autor hat 52.000 Markdown-Dateien in Obsidian und nutzt LLMs als Query-Engine. Nach Meetings erstellt ein Agent Notizen und verlinkt sie mit Personen und Projekten. Kein Vektorspeicher nötig.
+***** Take
+Manchmal ist die langweilige Lösung die richtige. Während alle anderen RAG-Pipelines mit sechs Abhängigkeiten bauen, nutzt diese Person Ordner wie 1995 und LLMs wie 2025. Das 'Context Engineering System'-Framing macht das zu mehr als digitalem Horten.
+***** Comments
+- Ich habe festgestellt, dass eine ähnliche Struktur zusammen mit einer Namenskonvention bei meiner täglichen Arbeit nützlich ist. Die Namen sind so gestaltet, dass der Text, wenn er als Dateipfad kopiert wird, der Dateipfad und die Erweiterung gelöscht und Unterstriche durch Tabs ersetzt werden, in eine Tabelle eingefügt werden kann.
+- Die Wissensbasis ist nicht nur für Forschung. Es ist ein Context Engineering System. Du baust genau die Eingabe, die dein LLM braucht, um nützliche Arbeit zu leisten.
