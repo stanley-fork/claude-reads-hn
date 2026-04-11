@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-04-11 20:00:00 UT UTC
+#+DATE: 2026-04-11T20:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Small models find big bugs, classic Macs run without Apple, and Rust locks that won't deadlock
+
+* Highlights
+- Mythos hype deflated: cheap models spot the same vulns
+- 1984 Mac games run on modern hardware without ROM
+- Postgres queues: MVCC horizon explained
+
+* Stories
+
+** Small models also found the vulnerabilities that Mythos found :ai:security:llm:research:
+:PROPERTIES:
+:ID:       47732020
+:URL:      https://aisle.com/blog/ai-cybersecurity-after-mythos-the-jagged-frontier
+:HN_URL:   https://news.ycombinator.com/item?id=47732020
+:POINTS:   430
+:COMMENTS: 130
+:BY:       dominicq
+:END:
+
+*** TLDR
+AISLE Security tested Anthropic's Mythos showcase vulnerabilities on small, cheap, open-weight models. They found that 8 out of 8 models detected Mythos's flagship FreeBSD exploit, including a 3.6B parameter model costing $0.11 per million tokens. The capability frontier in AI security is jagged, not smooth - smaller models can match bigger ones on specific tasks.
+
+*** Take
+Anthropic announces a fancy new model that finds vulnerabilities, and within days someone proves a $0.11/M token model does the same thing. The moat is the system, not the model. Classic case of marketing outrunning the actual science.
+
+*** Comments
+
+**** tptacek
+:PROPERTIES:
+:COMMENT_ID: 47732100
+:END:
+If you cut out the vulnerable code from Heartbleed and just put it in front of a C programmer, they will immediately flag it. What's difficult is spotting that in the context of a large codebase.
+
+**** johnfn
+:PROPERTIES:
+:COMMENT_ID: 47732050
+:END:
+The Anthropic writeup addresses this explicitly. The specific run that found the bug cost under $50, but that number only makes sense with full context.
+
+**** epistasis
+:PROPERTIES:
+:COMMENT_ID: 47732080
+:END:
+Eight out of eight models detected Mythos's flagship FreeBSD exploit, including one with only 3.6 billion active parameters. Impressive and very good for the field.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+小模型也发现了Mythos发现的漏洞
+***** TLDR
+AISLE Security用小型开源模型测试了Anthropic的Mythos展示漏洞。8个模型中有8个检测到了Mythos的旗舰FreeBSD漏洞，包括一个36亿参数、每百万token仅需0.11美元的模型。AI安全的能力边界是锯齿状的，小模型在特定任务上可以媲美大模型。
+***** Take
+Anthropic发布了一个能发现漏洞的新模型，几天内就有人证明0.11美元/百万token的模型也能做到。护城河在于系统，而不是模型本身。典型的营销跑在科学前面。
+***** Comments
+- 如果把Heartbleed的漏洞代码单独拿出来放在C程序员面前，他们会立即发现问题。难的是在大型代码库的上下文中发现它。
+- Anthropic的文章明确解释了这一点。发现该漏洞的具体运行成本不到50美元，但这个数字只有在完整上下文中才有意义。
+- 8个模型中有8个检测到了Mythos的旗舰FreeBSD漏洞，包括一个仅36亿活跃参数的模型。令人印象深刻，对该领域非常有益。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+小規模モデルもMythosが発見した脆弱性を発見
+***** TLDR
+AISLE SecurityがAnthropicのMythosショーケース脆弱性を小型オープンウェイトモデルでテスト。8モデル中8モデルがMythosの主要FreeBSD脆弱性を検出、36億パラメータで100万トークンあたり0.11ドルのモデルも含む。AIセキュリティの能力境界はギザギザで、小型モデルも特定タスクで大型モデルに匹敵する。
+***** Take
+Anthropicが脆弱性を発見する新モデルを発表し、数日で誰かが0.11ドル/Mトークンのモデルでも同じことができると証明した。堀はモデルではなくシステムにある。マーケティングが科学を追い越した典型例。
+***** Comments
+- Heartbleedの脆弱性コードを切り出してCプログラマーの前に置けば、すぐにフラグを立てる。難しいのは大規模コードベースの文脈でそれを見つけること。
+- Anthropicの記事ではこれを明確に説明している。バグを発見した特定の実行コストは50ドル未満だが、その数字は完全な文脈でのみ意味を持つ。
+- 8モデル中8モデルがMythosの主要FreeBSD脆弱性を検出、36億のアクティブパラメータしかないモデルも含む。印象的で、この分野にとって非常に良いこと。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+소형 모델도 Mythos가 발견한 취약점을 발견
+***** TLDR
+AISLE Security가 Anthropic의 Mythos 쇼케이스 취약점을 소형 오픈 웨이트 모델로 테스트했습니다. 8개 모델 중 8개가 Mythos의 주력 FreeBSD 취약점을 감지했으며, 여기에는 백만 토큰당 0.11달러인 36억 파라미터 모델도 포함됩니다. AI 보안의 능력 경계는 들쭉날쭉하며, 소형 모델도 특정 작업에서 대형 모델과 맞먹습니다.
+***** Take
+Anthropic이 취약점을 찾는 멋진 새 모델을 발표하자 며칠 만에 누군가가 0.11달러/M 토큰 모델도 같은 일을 한다고 증명했습니다. 해자는 모델이 아니라 시스템에 있습니다. 마케팅이 실제 과학을 앞지른 전형적인 사례.
+***** Comments
+- Heartbleed의 취약한 코드를 잘라내 C 프로그래머 앞에 놓으면 즉시 플래그를 지정할 것입니다. 어려운 것은 대규모 코드베이스 맥락에서 그것을 발견하는 것입니다.
+- Anthropic 글에서 이것을 명시적으로 다룹니다. 버그를 발견한 특정 실행 비용은 50달러 미만이었지만, 그 숫자는 전체 맥락에서만 의미가 있습니다.
+- 8개 모델 중 8개가 Mythos의 주력 FreeBSD 취약점을 감지했으며, 36억 활성 파라미터만 있는 모델도 포함됩니다. 인상적이고 이 분야에 매우 좋습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Modelos pequeños también encontraron las vulnerabilidades que encontró Mythos
+***** TLDR
+AISLE Security probó las vulnerabilidades de demostración de Mythos de Anthropic con modelos pequeños de pesos abiertos. 8 de 8 modelos detectaron el exploit principal de FreeBSD de Mythos, incluyendo uno de 3.6B parámetros que cuesta $0.11 por millón de tokens. La frontera de capacidad en seguridad de IA es irregular, los modelos pequeños pueden igualar a los grandes en tareas específicas.
+***** Take
+Anthropic anuncia un modelo elegante que encuentra vulnerabilidades, y en días alguien prueba que un modelo de $0.11/M tokens hace lo mismo. El foso está en el sistema, no en el modelo. Caso clásico de marketing superando a la ciencia real.
+***** Comments
+- Si recortas el código vulnerable de Heartbleed y lo pones frente a un programador C, lo marcarán inmediatamente. Lo difícil es detectarlo en el contexto de una base de código grande.
+- El artículo de Anthropic aborda esto explícitamente. La ejecución específica que encontró el bug costó menos de $50, pero ese número solo tiene sentido con el contexto completo.
+- Ocho de ocho modelos detectaron el exploit principal de FreeBSD de Mythos, incluyendo uno con solo 3.6 mil millones de parámetros activos. Impresionante y muy bueno para el campo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kleine Modelle fanden auch die Schwachstellen, die Mythos fand
+***** TLDR
+AISLE Security testete Anthropics Mythos-Showcase-Schwachstellen mit kleinen Open-Weight-Modellen. 8 von 8 Modellen erkannten Mythos' Flaggschiff-FreeBSD-Exploit, einschließlich eines 3,6B-Parameter-Modells für $0,11 pro Million Tokens. Die Fähigkeitsgrenze in der KI-Sicherheit ist gezackt - kleinere Modelle können bei bestimmten Aufgaben mit größeren mithalten.
+***** Take
+Anthropic kündigt ein schickes neues Modell an, das Schwachstellen findet, und innerhalb von Tagen beweist jemand, dass ein $0,11/M-Token-Modell dasselbe tut. Der Graben ist das System, nicht das Modell. Klassischer Fall von Marketing, das der tatsächlichen Wissenschaft vorauseilt.
+***** Comments
+- Wenn man den anfälligen Code aus Heartbleed ausschneidet und einem C-Programmierer vorlegt, wird er ihn sofort markieren. Schwierig ist es, das im Kontext einer großen Codebasis zu erkennen.
+- Der Anthropic-Artikel geht explizit darauf ein. Der spezifische Lauf, der den Bug fand, kostete unter $50, aber diese Zahl ergibt nur mit vollständigem Kontext Sinn.
+- Acht von acht Modellen erkannten Mythos' Flaggschiff-FreeBSD-Exploit, einschließlich eines mit nur 3,6 Milliarden aktiven Parametern. Beeindruckend und sehr gut für das Feld.
+** Advanced Mac Substitute is an API-level reimplementation of 1980s-era Mac OS :retrocomputing:emulation:macos:preservation:
+:PROPERTIES:
+:ID:       47731506
+:URL:      https://www.v68k.org/advanced-mac-substitute/
+:HN_URL:   https://news.ycombinator.com/item?id=47731506
+:POINTS:   123
+:COMMENTS: 26
+:BY:       zdw
+:END:
+
+*** TLDR
+Advanced Mac Substitute runs 68K Mac applications without needing an Apple ROM or system software. Unlike traditional emulators that emulate hardware, it replaces the OS entirely and launches directly into applications. Runs MacPaint, Lode Runner, The Fool's Errand, and other 1984 classics. Backend uses a 68K emulator on POSIX, frontend options include SDL2, X11, and Linux framebuffer.
+
+*** Take
+Someone rebuilt the original Mac OS from scratch so you can run MacPaint without pirating a ROM. This is the kind of insane dedication to preservation that makes the retrocomputing community beautiful. Now if only someone would do this for OS/2 Warp.
+
+*** Comments
+
+**** rcarmo
+:PROPERTIES:
+:COMMENT_ID: 47731550
+:END:
+I've been adding an ARM64 JIT to Basilisk II. Currently stuck patching a Quadra ROM to bypass NuBus hardware detection. Will definitely try this.
+
+**** msephton
+:PROPERTIES:
+:COMMENT_ID: 47731570
+:END:
+Has this beaten MACE to the finish line? Or are the goals different?
+
+**** imoverclocked
+:PROPERTIES:
+:COMMENT_ID: 47731590
+:END:
+I remember the insert-floppy-dance on a Mac 512k. It would be fun to have a 'slow it down' feature with floppy read/write noises.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Advanced Mac Substitute是1980年代Mac OS的API级重新实现
+***** TLDR
+Advanced Mac Substitute无需Apple ROM或系统软件即可运行68K Mac应用程序。与模拟硬件的传统模拟器不同，它完全替代了操作系统，直接启动应用程序。可运行MacPaint、Lode Runner、The Fool's Errand等1984年经典程序。后端在POSIX上使用68K模拟器，前端选项包括SDL2、X11和Linux帧缓冲。
+***** Take
+有人从头重建了原版Mac OS，让你可以运行MacPaint而不用盗版ROM。这就是复古计算社区令人感动的疯狂奉献精神。现在只希望有人能为OS/2 Warp做同样的事。
+***** Comments
+- 我一直在为Basilisk II添加ARM64 JIT。目前卡在修补Quadra ROM以绕过NuBus硬件检测。一定会试试这个。
+- 这是否比MACE更快完成？还是目标不同？
+- 我记得在Mac 512k上换软盘的舞蹈。如果有一个'慢速'功能配上软盘读写声音会很有趣。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Advanced Mac Substituteは1980年代Mac OSのAPIレベル再実装
+***** TLDR
+Advanced Mac SubstituteはApple ROMやシステムソフトウェアなしで68K Macアプリケーションを実行します。ハードウェアをエミュレートする従来のエミュレータと異なり、OSを完全に置き換えてアプリケーションを直接起動します。MacPaint、Lode Runner、The Fool's Errandなど1984年のクラシックを実行。バックエンドはPOSIX上の68Kエミュレータ、フロントエンドはSDL2、X11、Linuxフレームバッファ。
+***** Take
+誰かがオリジナルMac OSをゼロから再構築し、ROMを海賊版にせずにMacPaintを実行できるようにした。これがレトロコンピューティングコミュニティを美しくする狂気の献身だ。誰かがOS/2 Warpでも同じことをしてくれれば。
+***** Comments
+- Basilisk IIにARM64 JITを追加中。現在Quadra ROMのパッチでNuBusハードウェア検出をバイパスするところで詰まっている。絶対試してみる。
+- これはMACEよりも先にゴールした？それとも目標が違う？
+- Mac 512kでフロッピー入れ替えダンスを覚えている。フロッピー読み書き音付きの「スローダウン」機能があったら楽しいだろう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Advanced Mac Substitute는 1980년대 Mac OS의 API 수준 재구현
+***** TLDR
+Advanced Mac Substitute는 Apple ROM이나 시스템 소프트웨어 없이 68K Mac 애플리케이션을 실행합니다. 하드웨어를 에뮬레이션하는 기존 에뮬레이터와 달리 OS를 완전히 대체하고 애플리케이션으로 직접 시작합니다. MacPaint, Lode Runner, The Fool's Errand 및 기타 1984년 클래식을 실행합니다. 백엔드는 POSIX의 68K 에뮬레이터, 프론트엔드 옵션은 SDL2, X11, Linux 프레임버퍼입니다.
+***** Take
+누군가 원본 Mac OS를 처음부터 다시 만들어 ROM 해적판 없이 MacPaint를 실행할 수 있게 했습니다. 이것이 레트로컴퓨팅 커뮤니티를 아름답게 만드는 미친 헌신입니다. 이제 누군가 OS/2 Warp에도 이걸 해주면 좋겠네요.
+***** Comments
+- Basilisk II에 ARM64 JIT를 추가 중입니다. 현재 NuBus 하드웨어 감지를 우회하기 위해 Quadra ROM 패치에서 막혔습니다. 꼭 시도해 볼 것입니다.
+- 이게 MACE보다 먼저 완성됐나요? 아니면 목표가 다른가요?
+- Mac 512k에서 플로피 삽입 댄스를 기억합니다. 플로피 읽기/쓰기 소리와 함께 '느리게' 기능이 있으면 재미있을 것입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Advanced Mac Substitute es una reimplementación a nivel API de Mac OS de los años 80
+***** TLDR
+Advanced Mac Substitute ejecuta aplicaciones Mac 68K sin necesitar ROM de Apple ni software del sistema. A diferencia de los emuladores tradicionales que emulan hardware, reemplaza completamente el SO y lanza directamente las aplicaciones. Ejecuta MacPaint, Lode Runner, The Fool's Errand y otros clásicos de 1984. Backend usa emulador 68K en POSIX, frontend incluye SDL2, X11 y framebuffer Linux.
+***** Take
+Alguien reconstruyó el Mac OS original desde cero para que puedas ejecutar MacPaint sin piratear una ROM. Este es el tipo de dedicación loca a la preservación que hace hermosa a la comunidad retrocomputadora. Ojalá alguien hiciera esto para OS/2 Warp.
+***** Comments
+- He estado añadiendo un JIT ARM64 a Basilisk II. Actualmente atascado parcheando una ROM Quadra para evitar la detección de hardware NuBus. Definitivamente lo probaré.
+- ¿Ha superado esto a MACE en llegar primero? ¿O los objetivos son diferentes?
+- Recuerdo el baile de insertar disquetes en un Mac 512k. Sería divertido tener una función de 'ralentizar' con sonidos de lectura/escritura de disquetes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Advanced Mac Substitute ist eine API-Level-Neuimplementierung von Mac OS der 1980er
+***** TLDR
+Advanced Mac Substitute führt 68K-Mac-Anwendungen ohne Apple-ROM oder Systemsoftware aus. Im Gegensatz zu traditionellen Emulatoren, die Hardware emulieren, ersetzt es das OS vollständig und startet direkt in Anwendungen. Führt MacPaint, Lode Runner, The Fool's Errand und andere Klassiker von 1984 aus. Backend nutzt 68K-Emulator auf POSIX, Frontend-Optionen sind SDL2, X11 und Linux-Framebuffer.
+***** Take
+Jemand hat das originale Mac OS von Grund auf neu gebaut, damit du MacPaint ausführen kannst, ohne ein ROM zu raubkopieren. Das ist die Art von wahnsinniger Hingabe zur Erhaltung, die die Retrocomputing-Community schön macht. Wenn nur jemand das für OS/2 Warp machen würde.
+***** Comments
+- Ich füge Basilisk II einen ARM64-JIT hinzu. Momentan stecke ich beim Patchen eines Quadra-ROMs fest, um die NuBus-Hardwareerkennung zu umgehen. Werde das definitiv ausprobieren.
+- Hat das MACE überholt? Oder sind die Ziele unterschiedlich?
+- Ich erinnere mich an den Disketten-Tanz auf einem Mac 512k. Es wäre lustig, eine 'Verlangsamen'-Funktion mit Disketten-Lese/Schreib-Geräuschen zu haben.
+** Surelock: Deadlock-Free Mutexes for Rust :rust:concurrency:mutex:safety:
+:PROPERTIES:
+:ID:       47693559
+:URL:      https://notes.brooklynzelenka.com/Blog/Surelock
+:HN_URL:   https://news.ycombinator.com/item?id=47693559
+:POINTS:   117
+:COMMENTS: 36
+:BY:       codetheweb
+:END:
+
+*** TLDR
+Surelock is a Rust library that prevents deadlocks at compile time through a Level<> abstraction that enforces lock ordering. You assign each mutex a level, and the type system ensures you can only acquire higher-level locks while holding lower-level ones. Uses unique IDs instead of addresses because mutexes might move.
+
+*** Take
+Rust devs: 'Memory safety isn't enough, we need compile-time deadlock prevention too.' The Level<> abstraction is genuinely clever, but the debate about whether addresses vs IDs matter shows the Rust community's wonderful tendency to bikeshed performance edge cases.
+
+*** Comments
+
+**** lifis
+:PROPERTIES:
+:COMMENT_ID: 47693600
+:END:
+I can't understand why address instability is a problem: if a Mutex is moved, it can't be locked because you need to hold a borrow while locked.
+
+**** jcalvinowens
+:PROPERTIES:
+:COMMENT_ID: 47693620
+:END:
+The Level<> abstraction is neat: you only need a consistent arbitrary order to avoid deadlocks, but the order can have performance consequences.
+
+**** vlovich123
+:PROPERTIES:
+:COMMENT_ID: 47693640
+:END:
+Fuchsia's DAG approach can still be made compile-time lock free by disallowing holding locks from different branches or requiring ordering.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Surelock：Rust的无死锁互斥锁
+***** TLDR
+Surelock是一个Rust库，通过Level<>抽象在编译时防止死锁。为每个互斥锁分配一个级别，类型系统确保只能在持有低级锁时获取高级锁。使用唯一ID而非地址，因为互斥锁可能会移动。
+***** Take
+Rust开发者：'内存安全还不够，我们还需要编译时死锁预防。' Level<>抽象确实很巧妙，但关于地址vs ID是否重要的争论显示了Rust社区喜欢纠结性能边缘情况的可爱倾向。
+***** Comments
+- 我不理解为什么地址不稳定是个问题：如果Mutex被移动，它不能被锁定，因为锁定时需要持有借用。
+- Level<>抽象很巧妙：你只需要一个一致的任意顺序来避免死锁，但顺序可能会影响性能。
+- Fuchsia的DAG方法仍然可以通过禁止持有不同分支的锁或要求排序来实现编译时无锁。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Surelock：Rustのデッドロックフリーミューテックス
+***** TLDR
+SurelockはLevel<>抽象化によりコンパイル時にデッドロックを防ぐRustライブラリ。各ミューテックスにレベルを割り当て、型システムが低レベルロック保持時のみ高レベルロック取得を保証。ミューテックスが移動する可能性があるためアドレスではなく一意IDを使用。
+***** Take
+Rust開発者：「メモリ安全だけでは不十分、コンパイル時デッドロック防止も必要だ。」Level<>抽象化は本当に賢いが、アドレスvsIDが重要かどうかの議論はRustコミュニティのパフォーマンスエッジケースを議論する愛すべき傾向を示している。
+***** Comments
+- アドレス不安定が問題である理由がわからない：Mutexが移動した場合、ロック中は借用を保持する必要があるためロックできない。
+- Level<>抽象化は素晴らしい：デッドロックを避けるには一貫した任意の順序だけが必要だが、順序はパフォーマンスに影響する可能性がある。
+- FuchsiaのDAGアプローチは、異なるブランチからのロック保持を禁止するか順序を要求することで、コンパイル時ロックフリーにできる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Surelock: Rust용 데드락 없는 뮤텍스
+***** TLDR
+Surelock은 Level<> 추상화를 통해 컴파일 타임에 데드락을 방지하는 Rust 라이브러리입니다. 각 뮤텍스에 레벨을 할당하고 타입 시스템이 낮은 레벨 락을 보유할 때만 높은 레벨 락을 획득할 수 있도록 보장합니다. 뮤텍스가 이동할 수 있으므로 주소 대신 고유 ID를 사용합니다.
+***** Take
+Rust 개발자: '메모리 안전만으로는 부족해, 컴파일 타임 데드락 방지도 필요해.' Level<> 추상화는 정말 영리하지만, 주소 vs ID가 중요한지에 대한 논쟁은 성능 엣지 케이스를 논의하는 Rust 커뮤니티의 사랑스러운 경향을 보여줍니다.
+***** Comments
+- 주소 불안정성이 왜 문제인지 이해할 수 없습니다: Mutex가 이동하면 락 중에 빌림을 유지해야 하므로 잠글 수 없습니다.
+- Level<> 추상화는 멋집니다: 데드락을 피하려면 일관된 임의 순서만 있으면 되지만, 순서는 성능에 영향을 줄 수 있습니다.
+- Fuchsia의 DAG 접근법은 다른 브랜치의 락 보유를 금지하거나 순서를 요구하여 컴파일 타임 락 프리로 만들 수 있습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Surelock: Mutex sin Deadlock para Rust
+***** TLDR
+Surelock es una biblioteca Rust que previene deadlocks en tiempo de compilación mediante una abstracción Level<> que impone ordenamiento de locks. Asignas un nivel a cada mutex, y el sistema de tipos asegura que solo puedes adquirir locks de nivel superior mientras mantienes los de nivel inferior. Usa IDs únicos en lugar de direcciones porque los mutex pueden moverse.
+***** Take
+Devs de Rust: 'La seguridad de memoria no es suficiente, necesitamos prevención de deadlock en compilación también.' La abstracción Level<> es genuinamente inteligente, pero el debate sobre direcciones vs IDs muestra la maravillosa tendencia de la comunidad Rust a discutir casos extremos de rendimiento.
+***** Comments
+- No entiendo por qué la inestabilidad de direcciones es un problema: si un Mutex se mueve, no puede bloquearse porque necesitas mantener un préstamo mientras está bloqueado.
+- La abstracción Level<> es genial: solo necesitas un orden arbitrario consistente para evitar deadlocks, pero el orden puede tener consecuencias de rendimiento.
+- El enfoque DAG de Fuchsia aún puede hacerse libre de bloqueos en compilación prohibiendo mantener locks de diferentes ramas o requiriendo ordenamiento.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Surelock: Deadlock-freie Mutexe für Rust
+***** TLDR
+Surelock ist eine Rust-Bibliothek, die Deadlocks zur Kompilierzeit durch eine Level<>-Abstraktion verhindert, die Lock-Reihenfolge erzwingt. Du weist jedem Mutex ein Level zu, und das Typsystem stellt sicher, dass du nur höherstufige Locks erwerben kannst, während du niedrigerstufige hältst. Verwendet eindeutige IDs statt Adressen, weil Mutexe verschoben werden könnten.
+***** Take
+Rust-Devs: 'Memory Safety reicht nicht, wir brauchen auch Compile-Time-Deadlock-Prävention.' Die Level<>-Abstraktion ist echt clever, aber die Debatte, ob Adressen vs IDs wichtig sind, zeigt die wunderbare Tendenz der Rust-Community, Performance-Randfälle zu diskutieren.
+***** Comments
+- Ich verstehe nicht, warum Adressinstabilität ein Problem ist: Wenn ein Mutex verschoben wird, kann er nicht gesperrt werden, weil du während der Sperrung einen Borrow halten musst.
+- Die Level<>-Abstraktion ist toll: Du brauchst nur eine konsistente beliebige Reihenfolge, um Deadlocks zu vermeiden, aber die Reihenfolge kann Performance-Konsequenzen haben.
+- Fuchsias DAG-Ansatz kann immer noch Compile-Time-Lock-frei gemacht werden, indem man das Halten von Locks aus verschiedenen Branches verbietet oder Reihenfolge verlangt.
+** Every plane you see in the sky – you can now follow it from the cockpit in 3D :aviation:visualization:3d:showhn:
+:PROPERTIES:
+:ID:       47694064
+:URL:      https://flight-viz.com/cockpit.html?lat=40.64&lon=-73.78&alt=3000&hdg=220&spd=130&cs=DAL123
+:HN_URL:   https://news.ycombinator.com/item?id=47694064
+:POINTS:   121
+:COMMENTS: 29
+:BY:       coolwulf
+:END:
+
+*** TLDR
+Flight-Viz adds a cockpit mode that lets you follow any live flight with real 3D terrain and buildings. Click any plane on the map, hit 'Cockpit', and get a first-person view. Created in response to feedback from the initial Flight-Viz launch on HN a few days ago.
+
+*** Take
+Someone built Microsoft Flight Simulator but for plane stalking. Within minutes of posting, a HN user was flying at Mach 10 on a custom callsign breaking all kinds of FAA regulations in simulation form. This is why we can't have nice things.
+
+*** Comments
+
+**** tetris11
+:PROPERTIES:
+:COMMENT_ID: 47694100
+:END:
+I'm currently flying at Mach 10 on a custom call sign, breaking all kinds of barriers on a single heading. I cannot be stopped.
+
+**** coolwulf
+:PROPERTIES:
+:COMMENT_ID: 47694120
+:END:
+Creator here. Added cockpit mode after the feedback from my previous Flight-Viz post. First-person view with real buildings and terrain.
+
+**** lastdong
+:PROPERTIES:
+:COMMENT_ID: 47694140
+:END:
+Clicking exit cockpit goes back to the previous page. Also really had to search hard for the actions and cockpit button.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+你在天空中看到的每架飞机——现在可以在3D驾驶舱中追踪
+***** TLDR
+Flight-Viz添加了驾驶舱模式，让你可以通过真实3D地形和建筑物追踪任何实时航班。点击地图上的任何飞机，点击'驾驶舱'，即可获得第一人称视角。这是对几天前在HN上首次发布Flight-Viz后反馈的回应。
+***** Take
+有人做了微软飞行模拟器，但是用来追踪飞机。发帖几分钟内，一个HN用户就在自定义呼号上以10马赫飞行，以模拟形式打破了各种FAA规定。这就是为什么我们不能拥有美好事物。
+***** Comments
+- 我目前正以10马赫速度在自定义呼号上飞行，打破各种屏障。没人能阻止我。
+- 创作者在此。根据之前Flight-Viz帖子的反馈添加了驾驶舱模式。带有真实建筑和地形的第一人称视角。
+- 点击退出驾驶舱会返回上一页。而且真的很难找到操作按钮和驾驶舱按钮。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+空で見るすべての飛行機——3Dコックピットから追跡可能に
+***** TLDR
+Flight-Vizにコックピットモードが追加され、リアルな3D地形と建物でライブフライトを追跡できます。地図上の飛行機をクリックして「コックピット」を押すと一人称視点が得られます。数日前のHNでのFlight-Viz初回投稿へのフィードバックに応えて作成。
+***** Take
+誰かが飛行機ストーキング用のMicrosoft Flight Simulatorを作った。投稿から数分で、HNユーザーがカスタムコールサインでマッハ10で飛行し、シミュレーション形式であらゆるFAA規制を破っていた。これが素晴らしいものを持てない理由だ。
+***** Comments
+- 現在カスタムコールサインでマッハ10で飛行中、あらゆる障壁を打ち破っている。誰も止められない。
+- 作者です。以前のFlight-Viz投稿へのフィードバック後にコックピットモードを追加しました。実際の建物と地形を含む一人称視点。
+- コックピット終了をクリックすると前のページに戻る。また、アクションとコックピットボタンを見つけるのに苦労した。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+하늘에서 보이는 모든 비행기 - 이제 3D 조종석에서 따라갈 수 있습니다
+***** TLDR
+Flight-Viz에 실제 3D 지형과 건물로 모든 실시간 비행을 따라갈 수 있는 조종석 모드가 추가되었습니다. 지도에서 비행기를 클릭하고 '조종석'을 누르면 1인칭 시점을 얻을 수 있습니다. 며칠 전 HN에서의 초기 Flight-Viz 출시 피드백에 대한 응답으로 제작되었습니다.
+***** Take
+누군가 비행기 추적용 Microsoft Flight Simulator를 만들었습니다. 게시 몇 분 만에 HN 사용자가 커스텀 콜사인으로 마하 10으로 비행하며 시뮬레이션 형태로 온갖 FAA 규정을 어기고 있었습니다. 이래서 우리가 좋은 것을 가질 수 없는 겁니다.
+***** Comments
+- 현재 커스텀 콜사인으로 마하 10으로 비행 중이며, 모든 종류의 장벽을 깨고 있습니다. 아무도 날 막을 수 없어요.
+- 제작자입니다. 이전 Flight-Viz 게시물 피드백 후 조종석 모드를 추가했습니다. 실제 건물과 지형이 있는 1인칭 시점.
+- 조종석 나가기를 클릭하면 이전 페이지로 돌아갑니다. 또한 액션과 조종석 버튼을 찾기가 정말 어려웠습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cada avión que ves en el cielo – ahora puedes seguirlo desde la cabina en 3D
+***** TLDR
+Flight-Viz añade un modo cabina que te permite seguir cualquier vuelo en vivo con terreno 3D real y edificios. Haz clic en cualquier avión del mapa, pulsa 'Cabina' y obtén una vista en primera persona. Creado en respuesta a los comentarios del lanzamiento inicial de Flight-Viz en HN hace unos días.
+***** Take
+Alguien construyó Microsoft Flight Simulator pero para acechar aviones. Minutos después de publicar, un usuario de HN volaba a Mach 10 con un distintivo personalizado rompiendo todo tipo de regulaciones de la FAA en forma de simulación. Por esto no podemos tener cosas bonitas.
+***** Comments
+- Actualmente vuelo a Mach 10 con un distintivo personalizado, rompiendo todo tipo de barreras en una sola dirección. No pueden detenerme.
+- Creador aquí. Añadí el modo cabina después de los comentarios de mi post anterior de Flight-Viz. Vista en primera persona con edificios y terreno reales.
+- Hacer clic en salir de cabina vuelve a la página anterior. También tuve que buscar mucho las acciones y el botón de cabina.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Jedes Flugzeug am Himmel – jetzt aus dem 3D-Cockpit verfolgen
+***** TLDR
+Flight-Viz fügt einen Cockpit-Modus hinzu, mit dem du jeden Live-Flug mit echtem 3D-Gelände und Gebäuden verfolgen kannst. Klicke auf ein Flugzeug auf der Karte, drücke 'Cockpit' und erhalte eine Ego-Perspektive. Erstellt als Reaktion auf Feedback vom ersten Flight-Viz-Launch auf HN vor ein paar Tagen.
+***** Take
+Jemand hat Microsoft Flight Simulator gebaut, aber zum Flugzeug-Stalken. Innerhalb von Minuten nach dem Posten flog ein HN-User mit Mach 10 auf einem Custom-Rufzeichen und brach alle möglichen FAA-Vorschriften in Simulationsform. Deshalb können wir keine schönen Dinge haben.
+***** Comments
+- Ich fliege gerade mit Mach 10 auf einem Custom-Rufzeichen und breche alle möglichen Barrieren auf einer Richtung. Niemand kann mich aufhalten.
+- Ersteller hier. Cockpit-Modus nach dem Feedback zu meinem vorherigen Flight-Viz-Post hinzugefügt. Ego-Perspektive mit echten Gebäuden und Gelände.
+- Klicken auf Cockpit verlassen geht zurück zur vorherigen Seite. Musste auch wirklich hart nach den Aktionen und dem Cockpit-Button suchen.
+** Keeping a Postgres Queue Healthy :postgres:database:queues:mvcc:
+:PROPERTIES:
+:ID:       47731838
+:URL:      https://planetscale.com/blog/keeping-a-postgres-queue-healthy
+:HN_URL:   https://news.ycombinator.com/item?id=47731838
+:POINTS:   46
+:COMMENTS: 11
+:BY:       tanelpoder
+:END:
+
+*** TLDR
+Postgres queue tables accumulate dead tuples that can't be vacuumed due to the MVCC horizon. Long-running transactions set this horizon cutoff, blocking cleanup of newer dead tuples even after their own transaction completes. The fix: shorter transactions, monitoring xmin ages, and understanding that three staggered 40-second queries can chain their horizons.
+
+*** Take
+PlanetScale, a MySQL company, wrote a guide on Postgres internals. The MVCC horizon explanation is actually really good though. The real wisdom is buried in the comments: 'Graphile Worker could do this all day long.'
+
+*** Comments
+
+**** cataflutter
+:PROPERTIES:
+:COMMENT_ID: 47731860
+:END:
+Decent article, but these two statements conflict: 'oldest transaction sets the MVCC horizon' vs 'three 40-second queries staggered 20 seconds apart' causing issues.
+
+**** simeonGriggs
+:PROPERTIES:
+:COMMENT_ID: 47731870
+:END:
+Author here, I'll be around if anyone's got questions!
+
+**** sebmellen
+:PROPERTIES:
+:COMMENT_ID: 47731880
+:END:
+Postgres can do so much. I see people choose Kafka and SQS for things that Graphile Worker could do all day long.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+保持Postgres队列健康
+***** TLDR
+Postgres队列表会积累由于MVCC视界无法清理的死元组。长时间运行的事务设置这个视界截止点，即使它们自己的事务完成后也会阻止清理更新的死元组。解决方案：缩短事务时间、监控xmin年龄、理解三个交错的40秒查询可以链接它们的视界。
+***** Take
+PlanetScale，一家MySQL公司，写了一篇关于Postgres内部机制的指南。不过MVCC视界的解释确实很好。真正的智慧藏在评论里：'Graphile Worker可以轻松搞定这一切。'
+***** Comments
+- 不错的文章，但这两个陈述有矛盾：'最老的事务设置MVCC视界' vs '三个交错20秒的40秒查询'导致问题。
+- 作者在此，有问题随时问！
+- Postgres能做的事太多了。我看到人们为Graphile Worker就能轻松完成的事情选择Kafka和SQS。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Postgresキューを健全に保つ
+***** TLDR
+Postgresのキューテーブルは、MVCCホライズンによりバキュームできないデッドタプルが蓄積します。長時間実行トランザクションがこのホライズンカットオフを設定し、自身のトランザクション完了後も新しいデッドタプルのクリーンアップをブロックします。対策：短いトランザクション、xmin年齢の監視、20秒ずれた3つの40秒クエリがホライズンを連鎖させることの理解。
+***** Take
+MySQL企業のPlanetScaleがPostgres内部のガイドを書いた。MVCCホライズンの説明は実際にとても良い。本当の知恵はコメントに埋もれている：「Graphile Workerならこれを一日中できる。」
+***** Comments
+- 良い記事だが、この2つの記述は矛盾している：「最古のトランザクションがMVCCホライズンを設定」vs「20秒ずれた3つの40秒クエリ」が問題を引き起こす。
+- 著者です。質問があればどうぞ！
+- Postgresはとても多くのことができる。Graphile Workerで一日中できることにKafkaやSQSを選ぶ人を見かける。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Postgres 큐를 건강하게 유지하기
+***** TLDR
+Postgres 큐 테이블은 MVCC 호라이즌으로 인해 vacuum할 수 없는 데드 튜플이 쌓입니다. 장기 실행 트랜잭션이 이 호라이즌 컷오프를 설정하여 자체 트랜잭션 완료 후에도 새로운 데드 튜플 정리를 차단합니다. 해결책: 짧은 트랜잭션, xmin 나이 모니터링, 20초 간격의 40초 쿼리 3개가 호라이즌을 연쇄시킬 수 있다는 이해.
+***** Take
+MySQL 회사인 PlanetScale이 Postgres 내부에 대한 가이드를 썼습니다. MVCC 호라이즌 설명은 실제로 정말 좋습니다. 진짜 지혜는 댓글에 묻혀 있습니다: 'Graphile Worker가 이걸 하루 종일 할 수 있어요.'
+***** Comments
+- 괜찮은 글이지만, 이 두 문장이 충돌합니다: '가장 오래된 트랜잭션이 MVCC 호라이즌을 설정' vs '20초 간격으로 엇갈린 40초 쿼리 3개'가 문제를 일으킨다.
+- 저자입니다. 질문 있으시면 말씀하세요!
+- Postgres는 정말 많은 것을 할 수 있습니다. Graphile Worker로 충분히 할 수 있는 것들에 Kafka와 SQS를 선택하는 사람들을 봅니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Manteniendo una cola Postgres saludable
+***** TLDR
+Las tablas de colas en Postgres acumulan tuplas muertas que no pueden vaciarse debido al horizonte MVCC. Las transacciones de larga duración establecen este corte de horizonte, bloqueando la limpieza de tuplas muertas más nuevas incluso después de que su propia transacción complete. La solución: transacciones más cortas, monitorear las edades xmin, y entender que tres consultas de 40 segundos escalonadas pueden encadenar sus horizontes.
+***** Take
+PlanetScale, una empresa de MySQL, escribió una guía sobre internos de Postgres. La explicación del horizonte MVCC es realmente buena. La verdadera sabiduría está enterrada en los comentarios: 'Graphile Worker podría hacer esto todo el día.'
+***** Comments
+- Artículo decente, pero estas dos declaraciones entran en conflicto: 'la transacción más antigua establece el horizonte MVCC' vs 'tres consultas de 40 segundos escalonadas 20 segundos' causando problemas.
+- Autor aquí, ¡estaré disponible si alguien tiene preguntas!
+- Postgres puede hacer mucho. Veo gente elegir Kafka y SQS para cosas que Graphile Worker podría hacer todo el día.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Postgres-Queues gesund halten
+***** TLDR
+Postgres-Queue-Tabellen akkumulieren Dead Tuples, die wegen des MVCC-Horizonts nicht gevacuumt werden können. Langläufige Transaktionen setzen diesen Horizont-Cutoff und blockieren die Bereinigung neuerer Dead Tuples selbst nach Abschluss ihrer eigenen Transaktion. Die Lösung: kürzere Transaktionen, xmin-Alter überwachen, verstehen dass drei gestaffelte 40-Sekunden-Queries ihre Horizonte verketten können.
+***** Take
+PlanetScale, ein MySQL-Unternehmen, schrieb einen Guide über Postgres-Interna. Die MVCC-Horizont-Erklärung ist tatsächlich richtig gut. Die wahre Weisheit ist in den Kommentaren versteckt: 'Graphile Worker könnte das den ganzen Tag.'
+***** Comments
+- Ordentlicher Artikel, aber diese beiden Aussagen widersprechen sich: 'älteste Transaktion setzt den MVCC-Horizont' vs 'drei 40-Sekunden-Queries mit 20 Sekunden Versatz' verursachen Probleme.
+- Autor hier, ich bin da falls jemand Fragen hat!
+- Postgres kann so viel. Ich sehe Leute Kafka und SQS für Dinge wählen, die Graphile Worker den ganzen Tag machen könnte.
