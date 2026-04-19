@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-04-19</div>
+      <a href="#s47820195-04190600">Zero-Copy GPU Inference from WebAssembly...</a>
+      <a href="#s47791771-04190600">Updating Gun Rocket through 10 years of ...</a>
+      <a href="#s47806021-04190600">What Are Skiplists Good For? :data-struc...</a>
+      <a href="#s47819823-04190600">My first impressions on ROCm and Strix H...</a>
+      <a href="#s47790337-04190600">The becquerel as an SI unit for request ...</a>
       <a href="#s47818700-04190400">Thoughts and feelings around Claude Desi...</a>
       <a href="#s47820046-04190400">Dad brains: How fatherhood rewires the m...</a>
       <a href="#s47779659-04190400">Modern Common Lisp with FSet :lisp:funct...</a>
@@ -541,6 +546,338 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-04-19T06:00:00Z</div>
+        <div class="digest-vibe">Zero-copy GPU dreams, 10 years of Unity pain, and measuring requests in radioactive decay units</div>
+      </div>
+      <article class="story" id="s47820195-04190600">
+      <h3 class="story-title">
+        <a href="https://abacusnoir.com/2026/04/18/zero-copy-gpu-inference-from-webassembly-on-apple-silicon/" target="_blank">Zero-Copy GPU Inference from WebAssembly on Apple Silicon :webassembly:gpu:apple-silicon</a>
+        <a href="#s47820195-04190600" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">在Apple Silicon上从WebAssembly实现零拷贝GPU推理</div>
+<div class="i18n-title" data-lang="ja">Apple SiliconでWebAssemblyからゼロコピーGPU推論</div>
+<div class="i18n-title" data-lang="ko">Apple Silicon에서 WebAssembly로부터 제로카피 GPU 추론</div>
+<div class="i18n-title" data-lang="es">Inferencia GPU sin copia desde WebAssembly en Apple Silicon</div>
+<div class="i18n-title" data-lang="de">Zero-Copy GPU-Inferenz aus WebAssembly auf Apple Silicon</div>
+
+      <div class="story-meta">
+        58pts | 21c | <a href="https://news.ycombinator.com/item?id=47820195" target="_blank">HN#47820195</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">On Apple Silicon, you can share memory between WebAssembly and the GPU with zero copies by exploiting Unified Memory Architecture. The trick: mmap gives page-aligned memory, Metal accepts that pointer without copying, and Wasmtime lets you supply your own allocator. Result: Wasm fills a matrix, GPU computes, results appear in Wasm memory without any data transfer. Author ran Llama 3.2 1B from a Wasm actor at ~9ms per token.</div>
+        <span class="i18n-text" data-lang="zh">在Apple Silicon上，你可以利用统一内存架构在WebAssembly和GPU之间零拷贝共享内存。技巧是：mmap提供页面对齐的内存，Metal接受该指针而不复制，Wasmtime让你提供自己的分配器。结果：Wasm填充矩阵，GPU计算，结果出现在Wasm内存中，无需任何数据传输。作者在Wasm actor中运行Llama 3.2 1B，每个token约9ms。</span>
+<span class="i18n-text" data-lang="ja">Apple Siliconでは、統合メモリアーキテクチャを利用してWebAssemblyとGPU間でゼロコピーでメモリを共有できます。トリック：mmapがページ整列メモリを提供し、Metalはコピーなしでそのポインタを受け入れ、Wasmtimeは独自のアロケータを提供できます。結果：Wasmが行列を埋め、GPUが計算し、結果がデータ転送なしでWasmメモリに現れます。著者はWasmアクターからLlama 3.2 1Bを約9ms/トークンで実行。</span>
+<span class="i18n-text" data-lang="ko">Apple Silicon에서 통합 메모리 아키텍처를 활용하여 WebAssembly와 GPU 간에 복사 없이 메모리를 공유할 수 있습니다. 트릭: mmap이 페이지 정렬 메모리를 제공하고, Metal이 복사 없이 해당 포인터를 수락하며, Wasmtime이 자체 할당자를 제공할 수 있습니다. 결과: Wasm이 행렬을 채우고, GPU가 계산하며, 결과가 데이터 전송 없이 Wasm 메모리에 나타납니다. 저자는 Wasm 액터에서 Llama 3.2 1B를 토큰당 약 9ms로 실행했습니다.</span>
+<span class="i18n-text" data-lang="es">En Apple Silicon, puedes compartir memoria entre WebAssembly y la GPU sin copias explotando la Arquitectura de Memoria Unificada. El truco: mmap da memoria alineada a página, Metal acepta ese puntero sin copiar, y Wasmtime te permite suministrar tu propio asignador. Resultado: Wasm llena una matriz, la GPU calcula, los resultados aparecen en la memoria Wasm sin transferencia de datos. El autor ejecutó Llama 3.2 1B desde un actor Wasm a ~9ms por token.</span>
+<span class="i18n-text" data-lang="de">Auf Apple Silicon können Sie Speicher zwischen WebAssembly und der GPU ohne Kopien teilen, indem Sie die Unified Memory Architecture ausnutzen. Der Trick: mmap liefert seitenausgerichteten Speicher, Metal akzeptiert diesen Pointer ohne Kopieren, und Wasmtime lässt Sie Ihren eigenen Allocator bereitstellen. Ergebnis: Wasm füllt eine Matrix, die GPU rechnet, Ergebnisse erscheinen im Wasm-Speicher ohne Datentransfer. Der Autor führte Llama 3.2 1B aus einem Wasm-Actor mit ~9ms pro Token aus.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Someone figured out how to thread a pointer through three layers of abstraction without anyone making a defensive copy. This is the kind of systems programming that makes me feel both impressed and exhausted. Also, &#x27;Driftwood&#x27; is a great name for something that exploits drifting pointers across runtime boundaries.</div>
+        <span class="i18n-text" data-lang="zh">有人想出了如何在三层抽象中传递指针而没有人做防御性拷贝。这种系统编程让我既印象深刻又精疲力尽。另外，&#x27;Driftwood&#x27;是一个很棒的名字，适合利用跨运行时边界漂移指针的东西。</span>
+<span class="i18n-text" data-lang="ja">誰かが3層の抽象化を通してポインタを通す方法を見つけ、誰も防御的コピーをしなかった。この種のシステムプログラミングは感銘を受けると同時に疲れる。また、&#x27;Driftwood&#x27;はランタイム境界を越えて漂流するポインタを利用するものには素晴らしい名前だ。</span>
+<span class="i18n-text" data-lang="ko">누군가 세 겹의 추상화 계층을 통해 포인터를 통과시키면서 아무도 방어적 복사를 하지 않는 방법을 알아냈다. 이런 시스템 프로그래밍은 감명받으면서도 지치게 한다. 또한 &#x27;Driftwood&#x27;는 런타임 경계를 넘나드는 떠도는 포인터를 활용하는 것에 딱 맞는 이름이다.</span>
+<span class="i18n-text" data-lang="es">Alguien descubrió cómo pasar un puntero a través de tres capas de abstracción sin que nadie hiciera una copia defensiva. Este tipo de programación de sistemas me hace sentir impresionado y exhausto a la vez. Además, &#x27;Driftwood&#x27; es un gran nombre para algo que explota punteros que derivan a través de límites de runtime.</span>
+<span class="i18n-text" data-lang="de">Jemand hat herausgefunden, wie man einen Pointer durch drei Abstraktionsschichten fädelt, ohne dass jemand eine defensive Kopie macht. Diese Art von Systemprogrammierung macht mich gleichzeitig beeindruckt und erschöpft. Außerdem ist &#x27;Driftwood&#x27; ein toller Name für etwas, das driftende Pointer über Runtime-Grenzen hinweg ausnutzt.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I&#x27;m curious what this offers over just building the host side code to be native?"</div>
+          <div class="comment-i18n" data-lang="zh">我很好奇这比直接构建原生的host端代码有什么优势？</div>
+<div class="comment-i18n" data-lang="ja">ホスト側のコードをネイティブでビルドするのと比べて何が良いのか気になる。</div>
+<div class="comment-i18n" data-lang="ko">호스트 측 코드를 네이티브로 빌드하는 것보다 이게 뭘 더 제공하는지 궁금하다.</div>
+<div class="comment-i18n" data-lang="es">Me pregunto qué ofrece esto sobre simplemente compilar el código del host como nativo.</div>
+<div class="comment-i18n" data-lang="de">Ich bin neugierig, was das gegenüber dem nativen Bauen des Host-seitigen Codes bietet.</div>
+
+          <div class="comment-author">-- saagarjha</div>
+        </div><div class="comment">
+          <div class="comment-text">"Goodbye WebAssembly &#x27;security&#x27;. Also, these folks should be amazed by 8 and 16 bit games development, or games consoles in general."</div>
+          <div class="comment-i18n" data-lang="zh">再见WebAssembly的&#x27;安全性&#x27;。另外，这些人应该对8位和16位游戏开发感到惊讶，或者一般的游戏主机。</div>
+<div class="comment-i18n" data-lang="ja">さようならWebAssemblyの「セキュリティ」。また、これらの人々は8ビットや16ビットのゲーム開発やゲームコンソール全般に驚くべきだ。</div>
+<div class="comment-i18n" data-lang="ko">안녕 WebAssembly &#x27;보안&#x27;. 또한, 이 사람들은 8비트와 16비트 게임 개발이나 게임 콘솔 전반에 놀라워해야 한다.</div>
+<div class="comment-i18n" data-lang="es">Adiós &#x27;seguridad&#x27; de WebAssembly. Además, esta gente debería maravillarse con el desarrollo de juegos de 8 y 16 bits, o las consolas de juegos en general.</div>
+<div class="comment-i18n" data-lang="de">Goodbye WebAssembly &#x27;Sicherheit&#x27;. Außerdem sollten diese Leute von 8- und 16-Bit-Spieleentwicklung begeistert sein, oder von Spielkonsolen im Allgemeinen.</div>
+
+          <div class="comment-author">-- pjmlp</div>
+        </div><div class="comment">
+          <div class="comment-text">"Would it kill people to write their own stuff? Out of all the things people immediately cede to AI they cede their human ability to communicate."</div>
+          <div class="comment-i18n" data-lang="zh">写自己的东西会死吗？在所有人们立即让给AI的事情中，他们让出了自己的人类沟通能力。</div>
+<div class="comment-i18n" data-lang="ja">自分で書くと死ぬのか？人々がすぐにAIに譲るすべてのものの中で、人間のコミュニケーション能力を譲っている。</div>
+<div class="comment-i18n" data-lang="ko">자기 것을 쓰면 죽나? 사람들이 즉시 AI에게 양보하는 모든 것 중에서 인간의 소통 능력을 양보하고 있다.</div>
+<div class="comment-i18n" data-lang="es">¿Les mataría escribir sus propias cosas? De todo lo que la gente cede inmediatamente a la IA, ceden su capacidad humana de comunicar.</div>
+<div class="comment-i18n" data-lang="de">Würde es die Leute umbringen, ihre eigenen Sachen zu schreiben? Von allen Dingen, die Leute sofort an KI abgeben, geben sie ihre menschliche Kommunikationsfähigkeit ab.</div>
+
+          <div class="comment-author">-- trueno</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#systems</span><span class="tag">#ml</span></div>
+    </article>
+<article class="story" id="s47791771-04190600">
+      <h3 class="story-title">
+        <a href="https://jackpritz.com/blog/updating-gun-rocket-through-10-years-of-unity-engine" target="_blank">Updating Gun Rocket through 10 years of Unity Engine</a>
+        <a href="#s47791771-04190600" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">通过10年的Unity引擎更新Gun Rocket</div>
+<div class="i18n-title" data-lang="ja">10年間のUnityエンジンを通じてGun Rocketを更新する</div>
+<div class="i18n-title" data-lang="ko">10년간의 Unity 엔진을 통해 Gun Rocket 업데이트하기</div>
+<div class="i18n-title" data-lang="es">Actualizando Gun Rocket a través de 10 años de Unity Engine</div>
+<div class="i18n-title" data-lang="de">Gun Rocket durch 10 Jahre Unity Engine aktualisieren</div>
+
+      <div class="story-meta">
+        54pts | 17c | <a href="https://news.ycombinator.com/item?id=47791771" target="_blank">HN#47791771</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">A developer attempts to update their 10-year-old Unity game (Gun Rocket) from Unity 5.5 to Unity 6000. Journey includes: Unity 5 won&#x27;t even launch anymore, JavaScript support was removed in 2019 (had to rewrite 3 scripts), UNet networking was deprecated (just cut multiplayer), nested prefabs happened, AssetDatabase v2 changed every file, and Unity&#x27;s install size ballooned from ~6GB to ~16GB. Author worked at Unity during some of these changes and found their name in the credits.</div>
+        <span class="i18n-text" data-lang="zh">一位开发者尝试将他们10年前的Unity游戏（Gun Rocket）从Unity 5.5更新到Unity 6000。旅程包括：Unity 5现在甚至无法启动，JavaScript支持在2019年被移除（不得不重写3个脚本），UNet网络被弃用（直接砍掉多人模式），嵌套预制件出现了，AssetDatabase v2改变了每个文件，Unity的安装大小从约6GB膨胀到约16GB。作者在这些变化期间曾在Unity工作，并在致谢名单中找到了自己的名字。</span>
+<span class="i18n-text" data-lang="ja">開発者が10年前のUnityゲーム（Gun Rocket）をUnity 5.5からUnity 6000に更新しようとします。旅程には：Unity 5はもう起動すらしない、JavaScriptサポートは2019年に削除された（3つのスクリプトを書き直す必要があった）、UNetネットワーキングは非推奨になった（マルチプレイヤーを切った）、ネストされたプレハブが登場、AssetDatabase v2がすべてのファイルを変更、Unityのインストールサイズは約6GBから約16GBに膨張。著者はこれらの変更中にUnityで働いており、クレジットに自分の名前を見つけた。</span>
+<span class="i18n-text" data-lang="ko">개발자가 10년 된 Unity 게임(Gun Rocket)을 Unity 5.5에서 Unity 6000으로 업데이트하려고 시도합니다. 여정 포함: Unity 5는 이제 실행조차 안 됨, JavaScript 지원은 2019년에 제거됨(스크립트 3개 다시 작성해야 함), UNet 네트워킹 폐기됨(멀티플레이어 그냥 삭제), 중첩 프리팹 등장, AssetDatabase v2가 모든 파일 변경, Unity 설치 크기가 약 6GB에서 약 16GB로 증가. 저자는 이러한 변경 중 일부 동안 Unity에서 일했으며 크레딧에서 자신의 이름을 발견했습니다.</span>
+<span class="i18n-text" data-lang="es">Un desarrollador intenta actualizar su juego Unity de 10 años (Gun Rocket) de Unity 5.5 a Unity 6000. El viaje incluye: Unity 5 ya ni siquiera se inicia, el soporte de JavaScript fue eliminado en 2019 (tuvo que reescribir 3 scripts), la red UNet fue deprecada (simplemente cortó el multijugador), aparecieron los prefabs anidados, AssetDatabase v2 cambió todos los archivos, y el tamaño de instalación de Unity se infló de ~6GB a ~16GB. El autor trabajó en Unity durante algunos de estos cambios y encontró su nombre en los créditos.</span>
+<span class="i18n-text" data-lang="de">Ein Entwickler versucht, sein 10 Jahre altes Unity-Spiel (Gun Rocket) von Unity 5.5 auf Unity 6000 zu aktualisieren. Die Reise umfasst: Unity 5 startet nicht einmal mehr, JavaScript-Unterstützung wurde 2019 entfernt (musste 3 Skripte umschreiben), UNet-Netzwerk wurde deprecated (Multiplayer einfach entfernt), verschachtelte Prefabs kamen, AssetDatabase v2 änderte jede Datei, und Unitys Installationsgröße blähte sich von ~6GB auf ~16GB auf. Der Autor arbeitete während einiger dieser Änderungen bei Unity und fand seinen Namen in den Credits.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The real game development experience is not making the game, it&#x27;s maintaining it through a decade of engine changes while the company rebrands its version numbers three times. Also, Unity 5.5 apparently just refuses to launch now. Not deprecated, not unsupported, just... won&#x27;t.</div>
+        <span class="i18n-text" data-lang="zh">真正的游戏开发体验不是制作游戏，而是在公司三次重新命名版本号的十年引擎变化中维护它。另外，Unity 5.5显然现在就是拒绝启动。不是废弃，不是不支持，就是...不行。</span>
+<span class="i18n-text" data-lang="ja">本当のゲーム開発体験はゲームを作ることではなく、会社がバージョン番号を3回リブランドする10年間のエンジン変更を通じてそれを維持することだ。また、Unity 5.5は今では明らかに起動を拒否する。非推奨でもサポート終了でもなく、ただ...動かない。</span>
+<span class="i18n-text" data-lang="ko">진짜 게임 개발 경험은 게임을 만드는 것이 아니라 회사가 버전 번호를 세 번 리브랜딩하는 동안 10년간의 엔진 변경을 통해 유지하는 것이다. 또한 Unity 5.5는 분명히 이제 실행을 거부한다. 폐기도 아니고 지원 중단도 아니고 그냥... 안 된다.</span>
+<span class="i18n-text" data-lang="es">La verdadera experiencia de desarrollo de juegos no es hacer el juego, es mantenerlo a través de una década de cambios de motor mientras la empresa renombra sus números de versión tres veces. Además, Unity 5.5 aparentemente ahora simplemente se niega a iniciar. No deprecado, no sin soporte, simplemente... no.</span>
+<span class="i18n-text" data-lang="de">Die echte Spieleentwicklungserfahrung ist nicht das Spiel zu machen, sondern es durch ein Jahrzehnt Engine-Änderungen zu pflegen, während das Unternehmen seine Versionsnummern dreimal umbenennt. Außerdem weigert sich Unity 5.5 anscheinend jetzt einfach zu starten. Nicht deprecated, nicht unsupported, einfach... nein.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"There&#x27;s not a lot of churn in Unity, but that&#x27;s more because they mostly fail to ship anything of significance than due to excellence in backwards compatibility. DOTS was announced a decade ago, and Cities Skylines II showed how ill equipped for prime time it remains."</div>
+          <div class="comment-i18n" data-lang="zh">Unity没有太多变动，但这更多是因为他们大多无法发布任何重要的东西，而不是因为向后兼容性的卓越。DOTS在十年前就宣布了，Cities Skylines II表明它仍然多么不适合正式使用。</div>
+<div class="comment-i18n" data-lang="ja">Unityにはあまり変動がないが、それは後方互換性の優秀さよりも、重要なものを何も出荷できないからだ。DOTSは10年前に発表されたが、Cities Skylines IIはそれがいかに本番に不向きかを示した。</div>
+<div class="comment-i18n" data-lang="ko">Unity에는 변동이 많지 않지만, 이는 하위 호환성의 우수함보다는 중요한 것을 출시하지 못하기 때문이다. DOTS는 10년 전에 발표되었고, Cities Skylines II는 그것이 얼마나 본격 사용에 부적합한지 보여주었다.</div>
+<div class="comment-i18n" data-lang="es">No hay mucha rotación en Unity, pero eso es más porque generalmente no logran enviar nada significativo que por excelencia en compatibilidad hacia atrás. DOTS fue anunciado hace una década, y Cities Skylines II mostró cuán mal preparado sigue para el horario estelar.</div>
+<div class="comment-i18n" data-lang="de">Es gibt nicht viel Churn in Unity, aber das liegt mehr daran, dass sie meist nichts Bedeutendes ausliefern können, als an Exzellenz in der Rückwärtskompatibilität. DOTS wurde vor einem Jahrzehnt angekündigt, und Cities Skylines II zeigte, wie schlecht es für die Primetime gerüstet bleibt.</div>
+
+          <div class="comment-author">-- reitzensteinm</div>
+        </div><div class="comment">
+          <div class="comment-text">"He worked on the engine itself, and he had to go through this to port a simple game. I feel the situation would&#x27;ve been much worse if the game was not super simple. But people still ship excellent stuff with Unity."</div>
+          <div class="comment-i18n" data-lang="zh">他在引擎本身工作过，他不得不经历这些来移植一个简单的游戏。我感觉如果游戏不是超级简单，情况会更糟。但人们仍然用Unity发布优秀的作品。</div>
+<div class="comment-i18n" data-lang="ja">彼はエンジン自体で働いていて、シンプルなゲームを移植するためにこれを経験しなければならなかった。ゲームがとてもシンプルでなければ、状況はもっと悪かっただろう。しかし、人々はまだUnityで素晴らしいものを出荷している。</div>
+<div class="comment-i18n" data-lang="ko">그는 엔진 자체에서 일했고, 간단한 게임을 포팅하기 위해 이것을 거쳐야 했다. 게임이 매우 간단하지 않았다면 상황이 훨씬 더 나빴을 것 같다. 하지만 사람들은 여전히 Unity로 훌륭한 것들을 출시한다.</div>
+<div class="comment-i18n" data-lang="es">Él trabajó en el motor mismo, y tuvo que pasar por esto para portar un juego simple. Siento que la situación habría sido mucho peor si el juego no fuera súper simple. Pero la gente aún envía cosas excelentes con Unity.</div>
+<div class="comment-i18n" data-lang="de">Er arbeitete an der Engine selbst, und er musste das durchmachen, um ein einfaches Spiel zu portieren. Ich habe das Gefühl, die Situation wäre viel schlimmer gewesen, wenn das Spiel nicht super einfach wäre. Aber Leute liefern immer noch exzellente Sachen mit Unity.</div>
+
+          <div class="comment-author">-- 0x1ceb00da</div>
+        </div><div class="comment">
+          <div class="comment-text">"As a non game dev: do you really need a game engine for making a 3D counter strike game? Aren&#x27;t there libraries in c++ like raylib, jolt for physics?"</div>
+          <div class="comment-i18n" data-lang="zh">作为非游戏开发者：你真的需要游戏引擎来制作3D反恐精英类游戏吗？难道没有像raylib、jolt物理这样的c++库吗？</div>
+<div class="comment-i18n" data-lang="ja">非ゲーム開発者として：3D Counter Strikeタイプのゲームを作るのに本当にゲームエンジンが必要？raylib、物理用のjoltのようなC++ライブラリはないの？</div>
+<div class="comment-i18n" data-lang="ko">비게임 개발자로서: 3D 카운터 스트라이크 타입 게임을 만드는 데 정말 게임 엔진이 필요한가? raylib, 물리용 jolt 같은 c++ 라이브러리가 없나?</div>
+<div class="comment-i18n" data-lang="es">Como no desarrollador de juegos: ¿realmente necesitas un motor de juegos para hacer un juego tipo Counter Strike 3D? ¿No hay librerías en c++ como raylib, jolt para física?</div>
+<div class="comment-i18n" data-lang="de">Als Nicht-Spieleentwickler: Braucht man wirklich eine Game Engine für ein 3D Counter Strike-Spiel? Gibt es nicht Bibliotheken in C++ wie raylib, jolt für Physik?</div>
+
+          <div class="comment-author">-- vivzkestrel</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#gamedev</span><span class="tag">#unity</span><span class="tag">#maintenance</span><span class="tag">#engines</span></div>
+    </article>
+<article class="story" id="s47806021-04190600">
+      <h3 class="story-title">
+        <a href="https://antithesis.com/blog/2026/skiptrees/" target="_blank">What Are Skiplists Good For? :data-structures</a>
+        <a href="#s47806021-04190600" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">跳表有什么用？</div>
+<div class="i18n-title" data-lang="ja">スキップリストは何に役立つ？</div>
+<div class="i18n-title" data-lang="ko">스킵리스트는 무엇에 좋은가?</div>
+<div class="i18n-title" data-lang="es">¿Para qué sirven las listas de salto?</div>
+<div class="i18n-title" data-lang="de">Wofür sind Skiplisten gut?</div>
+
+      <div class="story-meta">
+        23pts | 3c | <a href="https://news.ycombinator.com/item?id=47806021" target="_blank">HN#47806021</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Antithesis needed to do tree traversals in BigQuery but analytic DBs are terrible at point lookups. Their solution: &#x27;skiptrees&#x27; - a generalization of skiplists for trees. Store multiple levels of the tree in separate tables, with each level having roughly half the nodes. Finding ancestors becomes a fixed number of JOINs instead of O(depth) point lookups. The SQL queries were kilobytes in size, so they wrote a JavaScript compiler to generate them. This powered Antithesis properties for 6 years until they wrote their own DB.</div>
+        <span class="i18n-text" data-lang="zh">Antithesis需要在BigQuery中进行树遍历，但分析型数据库在点查找方面很糟糕。他们的解决方案：&#x27;跳树&#x27; - 跳表在树上的推广。将树的多个层级存储在单独的表中，每个层级大约有一半的节点。查找祖先变成固定数量的JOIN，而不是O(depth)的点查找。SQL查询大小以千字节计，所以他们写了一个JavaScript编译器来生成它们。这为Antithesis的属性提供了6年的动力，直到他们写了自己的数据库。</span>
+<span class="i18n-text" data-lang="ja">AntithesisはBigQueryでツリートラバーサルを行う必要がありましたが、分析DBはポイントルックアップが苦手です。彼らの解決策：「スキップツリー」- ツリーのためのスキップリストの一般化。ツリーの複数レベルを別々のテーブルに保存し、各レベルはおよそ半分のノードを持ちます。祖先を見つけることはO(depth)のポイントルックアップではなく固定数のJOINになります。SQLクエリはキロバイト単位だったので、JavaScriptコンパイラを書いて生成しました。これがAntithesisのプロパティを6年間動かし、独自のDBを書くまで続きました。</span>
+<span class="i18n-text" data-lang="ko">Antithesis는 BigQuery에서 트리 순회를 해야 했지만 분석 DB는 포인트 조회에 취약합니다. 그들의 해결책: &#x27;스킵트리&#x27; - 트리를 위한 스킵리스트의 일반화. 트리의 여러 레벨을 별도의 테이블에 저장하고, 각 레벨은 대략 절반의 노드를 가집니다. 조상 찾기가 O(depth) 포인트 조회 대신 고정된 수의 JOIN이 됩니다. SQL 쿼리가 킬로바이트 단위여서 JavaScript 컴파일러를 작성하여 생성했습니다. 이것이 자체 DB를 작성하기 전까지 6년간 Antithesis 속성을 구동했습니다.</span>
+<span class="i18n-text" data-lang="es">Antithesis necesitaba hacer recorridos de árboles en BigQuery pero las BD analíticas son terribles en búsquedas puntuales. Su solución: &#x27;skipárboles&#x27; - una generalización de las listas de salto para árboles. Almacenar múltiples niveles del árbol en tablas separadas, con cada nivel teniendo aproximadamente la mitad de los nodos. Encontrar ancestros se convierte en un número fijo de JOINs en lugar de O(profundidad) búsquedas puntuales. Las consultas SQL eran de kilobytes, así que escribieron un compilador JavaScript para generarlas. Esto impulsó las propiedades de Antithesis durante 6 años hasta que escribieron su propia BD.</span>
+<span class="i18n-text" data-lang="de">Antithesis musste Baumtraversierungen in BigQuery durchführen, aber analytische DBs sind schrecklich bei Punktabfragen. Ihre Lösung: &#x27;Skipbäume&#x27; - eine Verallgemeinerung von Skiplisten für Bäume. Mehrere Ebenen des Baums in separaten Tabellen speichern, wobei jede Ebene ungefähr die Hälfte der Knoten hat. Vorfahren zu finden wird zu einer festen Anzahl von JOINs statt O(Tiefe) Punktabfragen. Die SQL-Abfragen waren Kilobytes groß, also schrieben sie einen JavaScript-Compiler um sie zu generieren. Dies trieb Antithesis-Eigenschaften 6 Jahre lang an, bis sie ihre eigene DB schrieben.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">They invented a data structure because BigQuery couldn&#x27;t walk a tree efficiently, then wrote a JavaScript compiler to generate kilobytes of SQL to query it. This is exactly the kind of beautiful insanity that happens when you&#x27;re stuck with the wrong tool but too committed to switch.</div>
+        <span class="i18n-text" data-lang="zh">他们发明了一种数据结构，因为BigQuery无法高效地遍历树，然后写了一个JavaScript编译器来生成千字节的SQL来查询它。这正是当你被困在错误的工具中但又太投入无法切换时发生的那种美丽的疯狂。</span>
+<span class="i18n-text" data-lang="ja">BigQueryがツリーを効率的に歩けなかったのでデータ構造を発明し、それをクエリするためにキロバイトのSQLを生成するJavaScriptコンパイラを書いた。これはまさに間違ったツールに固執しているが切り替えるには深入りしすぎた時に起こる美しい狂気だ。</span>
+<span class="i18n-text" data-lang="ko">BigQuery가 트리를 효율적으로 순회할 수 없어서 데이터 구조를 발명하고, 그것을 쿼리하기 위해 킬로바이트의 SQL을 생성하는 JavaScript 컴파일러를 작성했다. 이것은 정확히 잘못된 도구에 갇혀 있지만 전환하기엔 너무 깊이 빠져버렸을 때 일어나는 아름다운 광기다.</span>
+<span class="i18n-text" data-lang="es">Inventaron una estructura de datos porque BigQuery no podía recorrer un árbol eficientemente, luego escribieron un compilador JavaScript para generar kilobytes de SQL para consultarlo. Esta es exactamente el tipo de bella locura que sucede cuando estás atrapado con la herramienta equivocada pero demasiado comprometido para cambiar.</span>
+<span class="i18n-text" data-lang="de">Sie erfanden eine Datenstruktur, weil BigQuery einen Baum nicht effizient durchlaufen konnte, dann schrieben sie einen JavaScript-Compiler um Kilobytes an SQL zu generieren, um es abzufragen. Das ist genau die Art von wunderschönem Wahnsinn, der passiert, wenn man mit dem falschen Werkzeug feststeckt, aber zu sehr committed ist, um zu wechseln.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Skiplists have some nice properties - the code is fairly short and easy to understand. Qt&#x27;s QMap used to be skip list based."</div>
+          <div class="comment-i18n" data-lang="zh">跳表有一些很好的特性 - 代码相当短且易于理解。Qt的QMap曾经是基于跳表的。</div>
+<div class="comment-i18n" data-lang="ja">スキップリストにはいくつかの良い特性がある - コードはかなり短く理解しやすい。QtのQMapはかつてスキップリストベースだった。</div>
+<div class="comment-i18n" data-lang="ko">스킵리스트는 좋은 특성이 있다 - 코드가 상당히 짧고 이해하기 쉽다. Qt의 QMap은 한때 스킵 리스트 기반이었다.</div>
+<div class="comment-i18n" data-lang="es">Las listas de salto tienen algunas propiedades agradables - el código es bastante corto y fácil de entender. El QMap de Qt solía estar basado en listas de salto.</div>
+<div class="comment-i18n" data-lang="de">Skiplisten haben einige nette Eigenschaften - der Code ist ziemlich kurz und leicht zu verstehen. Qts QMap war früher skiplistenbasiert.</div>
+
+          <div class="comment-author">-- ahartmetz</div>
+        </div><div class="comment">
+          <div class="comment-text">"The article makes no mention of b-trees. To me, this sounded like the obvious first step. If their main requirement was sequential access to load data, why not b-trees?"</div>
+          <div class="comment-i18n" data-lang="zh">文章没有提到b树。对我来说，这听起来是显而易见的第一步。如果他们的主要需求是顺序访问来加载数据，为什么不用b树？</div>
+<div class="comment-i18n" data-lang="ja">記事ではB木について言及していない。私にはこれが明らかな最初のステップに思えた。主な要件がデータをロードするためのシーケンシャルアクセスなら、なぜB木ではないのか？</div>
+<div class="comment-i18n" data-lang="ko">기사는 B-트리에 대해 언급하지 않는다. 나에게 이것은 명백한 첫 번째 단계처럼 들렸다. 주요 요구사항이 데이터를 로드하기 위한 순차 접근이라면 왜 B-트리가 아닌가?</div>
+<div class="comment-i18n" data-lang="es">El artículo no menciona los árboles B. Para mí, esto sonaba como el primer paso obvio. Si su requisito principal era acceso secuencial para cargar datos, ¿por qué no árboles B?</div>
+<div class="comment-i18n" data-lang="de">Der Artikel erwähnt keine B-Bäume. Für mich klang das wie der offensichtliche erste Schritt. Wenn ihre Hauptanforderung sequentieller Zugriff zum Laden von Daten war, warum nicht B-Bäume?</div>
+
+          <div class="comment-author">-- locknitpicker</div>
+        </div><div class="comment">
+          <div class="comment-text">"Skiplists form the basis of in-memory tables used by LSM trees, which are themselves the basis of most modern DBs written post 2005."</div>
+          <div class="comment-i18n" data-lang="zh">跳表构成了LSM树使用的内存表的基础，而LSM树本身是2005年后编写的大多数现代数据库的基础。</div>
+<div class="comment-i18n" data-lang="ja">スキップリストはLSMツリーが使用するインメモリテーブルの基礎を形成し、LSMツリー自体は2005年以降に書かれたほとんどの現代DBの基礎である。</div>
+<div class="comment-i18n" data-lang="ko">스킵리스트는 LSM 트리가 사용하는 인메모리 테이블의 기초를 형성하며, LSM 트리 자체가 2005년 이후 작성된 대부분의 현대 DB의 기초다.</div>
+<div class="comment-i18n" data-lang="es">Las listas de salto forman la base de las tablas en memoria usadas por los árboles LSM, que son la base de la mayoría de las BD modernas escritas después de 2005.</div>
+<div class="comment-i18n" data-lang="de">Skiplisten bilden die Grundlage der In-Memory-Tabellen, die von LSM-Bäumen verwendet werden, die selbst die Grundlage der meisten modernen DBs sind, die nach 2005 geschrieben wurden.</div>
+
+          <div class="comment-author">-- mrjn</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#databases</span><span class="tag">#algorithms</span><span class="tag">#bigquery</span></div>
+    </article>
+<article class="story" id="s47819823-04190600">
+      <h3 class="story-title">
+        <a href="https://blog.marcoinacio.com/posts/my-first-impressions-rocm-strix-halo/" target="_blank">My first impressions on ROCm and Strix Halo</a>
+        <a href="#s47819823-04190600" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">我对ROCm和Strix Halo的第一印象</div>
+<div class="i18n-title" data-lang="ja">ROCmとStrix Haloの最初の印象</div>
+<div class="i18n-title" data-lang="ko">ROCm과 Strix Halo에 대한 첫인상</div>
+<div class="i18n-title" data-lang="es">Mis primeras impresiones sobre ROCm y Strix Halo</div>
+<div class="i18n-title" data-lang="de">Meine ersten Eindrücke von ROCm und Strix Halo</div>
+
+      <div class="story-meta">
+        30pts | 21c | <a href="https://news.ycombinator.com/item?id=47819823" target="_blank">HN#47819823</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">A developer shares their setup for running local LLMs on AMD&#x27;s Strix Halo with ROCm. Key steps: Ubuntu 24.04 with official ROCm install, BIOS update (PyTorch couldn&#x27;t find GPU without it), set reserved video memory low (512MB) and let GTT share the 128GB with CPU, configure grub with amdgpu.gttsize. They got PyTorch and llama.cpp running with Qwen3.6. Rough edges exist but it works.</div>
+        <span class="i18n-text" data-lang="zh">一位开发者分享了他们在AMD的Strix Halo上使用ROCm运行本地LLM的设置。关键步骤：Ubuntu 24.04配合官方ROCm安装，BIOS更新（没有它PyTorch找不到GPU），将保留视频内存设置低（512MB）并让GTT与CPU共享128GB，用amdgpu.gttsize配置grub。他们让PyTorch和llama.cpp运行Qwen3.6。存在一些粗糙的边缘但可以工作。</span>
+<span class="i18n-text" data-lang="ja">開発者がAMDのStrix HaloでROCmを使ってローカルLLMを実行するセットアップを共有。主なステップ：Ubuntu 24.04で公式ROCmインストール、BIOSアップデート（なければPyTorchがGPUを見つけられない）、予約ビデオメモリを低く設定（512MB）してGTTで128GBをCPUと共有、amdgpu.gttsizeでgrub設定。PyTorchとllama.cppでQwen3.6を実行。粗削りな部分はあるが動く。</span>
+<span class="i18n-text" data-lang="ko">개발자가 AMD의 Strix Halo에서 ROCm으로 로컬 LLM을 실행하는 설정을 공유합니다. 핵심 단계: Ubuntu 24.04에 공식 ROCm 설치, BIOS 업데이트(없으면 PyTorch가 GPU를 찾지 못함), 예약된 비디오 메모리를 낮게 설정(512MB)하고 GTT가 CPU와 128GB를 공유하도록 설정, amdgpu.gttsize로 grub 구성. PyTorch와 llama.cpp로 Qwen3.6 실행. 거친 부분이 있지만 작동합니다.</span>
+<span class="i18n-text" data-lang="es">Un desarrollador comparte su configuración para ejecutar LLMs locales en Strix Halo de AMD con ROCm. Pasos clave: Ubuntu 24.04 con instalación oficial de ROCm, actualización de BIOS (PyTorch no encontraba la GPU sin ella), configurar la memoria de video reservada baja (512MB) y dejar que GTT comparta los 128GB con la CPU, configurar grub con amdgpu.gttsize. Consiguieron que PyTorch y llama.cpp ejecutaran Qwen3.6. Existen asperezas pero funciona.</span>
+<span class="i18n-text" data-lang="de">Ein Entwickler teilt sein Setup zum Ausführen lokaler LLMs auf AMDs Strix Halo mit ROCm. Wichtige Schritte: Ubuntu 24.04 mit offizieller ROCm-Installation, BIOS-Update (PyTorch konnte GPU ohne das nicht finden), reservierten Videospeicher niedrig einstellen (512MB) und GTT die 128GB mit der CPU teilen lassen, grub mit amdgpu.gttsize konfigurieren. Sie brachten PyTorch und llama.cpp mit Qwen3.6 zum Laufen. Raue Kanten existieren, aber es funktioniert.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The bar for &#x27;first impressions&#x27; articles keeps rising. This one skips the philosophy and goes straight to: here&#x27;s the BIOS settings, here&#x27;s the grub config, here&#x27;s the pyproject.toml. More of this energy please.</div>
+        <span class="i18n-text" data-lang="zh">&#x27;第一印象&#x27;文章的标准不断提高。这篇跳过哲学直接说：这是BIOS设置，这是grub配置，这是pyproject.toml。请多来点这种能量。</span>
+<span class="i18n-text" data-lang="ja">「第一印象」記事の基準は上がり続けている。これは哲学をスキップして直接：これがBIOS設定、これがgrub設定、これがpyproject.toml。このエネルギーをもっとください。</span>
+<span class="i18n-text" data-lang="ko">&#x27;첫인상&#x27; 글의 기준이 계속 올라간다. 이 글은 철학을 건너뛰고 바로 간다: 여기 BIOS 설정, 여기 grub 설정, 여기 pyproject.toml. 이 에너지 더 주세요.</span>
+<span class="i18n-text" data-lang="es">El estándar para artículos de &#x27;primeras impresiones&#x27; sigue subiendo. Este omite la filosofía y va directo: aquí está la configuración del BIOS, aquí la configuración de grub, aquí el pyproject.toml. Más de esta energía por favor.</span>
+<span class="i18n-text" data-lang="de">Die Messlatte für &#x27;Erste Eindrücke&#x27;-Artikel steigt weiter. Dieser überspringt die Philosophie und geht direkt zu: hier sind die BIOS-Einstellungen, hier ist die grub-Konfiguration, hier ist die pyproject.toml. Mehr von dieser Energie bitte.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I&#x27;m somewhat confused as to why this is on the front page. It doesn&#x27;t go into any real detail, and the advice it gives is not good. You should definitely not be quantizing your own gguf&#x27;s using an old method like that hf script."</div>
+          <div class="comment-i18n" data-lang="zh">我有点困惑为什么这会在首页。它没有进入任何真正的细节，它给出的建议也不好。你绝对不应该用像那个hf脚本那样的旧方法来量化你自己的gguf。</div>
+<div class="comment-i18n" data-lang="ja">なぜこれがフロントページにあるのか少し困惑している。本当の詳細には入っていないし、アドバイスも良くない。あのhfスクリプトのような古い方法で自分のggufを量子化すべきではない。</div>
+<div class="comment-i18n" data-lang="ko">왜 이게 프론트 페이지에 있는지 좀 혼란스럽다. 실제 세부사항에 들어가지 않고, 주는 조언도 좋지 않다. 그 hf 스크립트 같은 오래된 방법으로 자신의 gguf를 양자화해서는 절대 안 된다.</div>
+<div class="comment-i18n" data-lang="es">Estoy algo confundido de por qué esto está en la portada. No entra en ningún detalle real, y el consejo que da no es bueno. Definitivamente no deberías estar cuantizando tus propios gguf usando un método viejo como ese script de hf.</div>
+<div class="comment-i18n" data-lang="de">Ich bin etwas verwirrt, warum das auf der Frontseite ist. Es geht nicht ins Detail, und der Rat ist nicht gut. Du solltest definitiv nicht deine eigenen ggufs mit einer alten Methode wie diesem hf-Skript quantisieren.</div>
+
+          <div class="comment-author">-- spoaceman7777</div>
+        </div><div class="comment">
+          <div class="comment-text">"Check out the officially supported project Lemonade by AMD. It has gfx1151 specific builds of vLLM, llama.cpp, comfy-ui, and even a PR to merge a Strix Halo port of Apple&#x27;s MLX."</div>
+          <div class="comment-i18n" data-lang="zh">看看AMD官方支持的Lemonade项目。它有gfx1151特定构建的vLLM、llama.cpp、comfy-ui，甚至还有一个PR来合并Apple MLX的Strix Halo移植。</div>
+<div class="comment-i18n" data-lang="ja">AMDの公式サポートプロジェクトLemonadeをチェックして。gfx1151固有のvLLM、llama.cpp、comfy-uiのビルドがあり、Apple MLXのStrix HaloポートをマージするPRもある。</div>
+<div class="comment-i18n" data-lang="ko">AMD의 공식 지원 프로젝트 Lemonade를 확인해 봐. gfx1151 전용 vLLM, llama.cpp, comfy-ui 빌드가 있고, Apple MLX의 Strix Halo 포트를 병합하는 PR도 있다.</div>
+<div class="comment-i18n" data-lang="es">Mira el proyecto Lemonade oficialmente soportado por AMD. Tiene builds específicos de gfx1151 de vLLM, llama.cpp, comfy-ui, e incluso un PR para fusionar un port de Strix Halo del MLX de Apple.</div>
+<div class="comment-i18n" data-lang="de">Schau dir das offiziell unterstützte Projekt Lemonade von AMD an. Es hat gfx1151-spezifische Builds von vLLM, llama.cpp, comfy-ui, und sogar einen PR um einen Strix Halo Port von Apples MLX zu mergen.</div>
+
+          <div class="comment-author">-- seemaze</div>
+        </div><div class="comment">
+          <div class="comment-text">"I would be interested to know what speeds you can get from gemma4 26b + 31b from this machine. Also how rocm compares to triton."</div>
+          <div class="comment-i18n" data-lang="zh">我想知道这台机器能从gemma4 26b + 31b获得什么速度。还有rocm与triton相比如何。</div>
+<div class="comment-i18n" data-lang="ja">このマシンからgemma4 26b + 31bでどんな速度が出るか知りたい。またrocmとtritonの比較も。</div>
+<div class="comment-i18n" data-lang="ko">이 머신에서 gemma4 26b + 31b로 어떤 속도를 얻을 수 있는지 알고 싶다. 또한 rocm이 triton과 어떻게 비교되는지도.</div>
+<div class="comment-i18n" data-lang="es">Me interesaría saber qué velocidades puedes obtener de gemma4 26b + 31b en esta máquina. También cómo se compara rocm con triton.</div>
+<div class="comment-i18n" data-lang="de">Ich würde gerne wissen, welche Geschwindigkeiten du von gemma4 26b + 31b mit dieser Maschine bekommst. Auch wie rocm sich mit triton vergleicht.</div>
+
+          <div class="comment-author">-- anko</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#amd</span><span class="tag">#rocm</span><span class="tag">#llm</span><span class="tag">#hardware</span><span class="tag">#linux</span></div>
+    </article>
+<article class="story" id="s47790337-04190600">
+      <h3 class="story-title">
+        <a href="https://entropicthoughts.com/si-units-for-request-rate" target="_blank">The becquerel as an SI unit for request rate</a>
+        <a href="#s47790337-04190600" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">贝克勒尔作为请求率的SI单位</div>
+<div class="i18n-title" data-lang="ja">リクエストレートのSI単位としてのベクレル</div>
+<div class="i18n-title" data-lang="ko">요청 속도의 SI 단위로서의 베크렐</div>
+<div class="i18n-title" data-lang="es">El becquerel como unidad SI para tasa de solicitudes</div>
+<div class="i18n-title" data-lang="de">Das Becquerel als SI-Einheit für Request-Rate</div>
+
+      <div class="story-meta">
+        14pts | 2c | <a href="https://news.ycombinator.com/item?id=47790337" target="_blank">HN#47790337</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">A tongue-in-cheek proposal for measuring request rates in becquerels (Bq) instead of &#x27;requests per second&#x27;. The hertz implies periodic behavior (one event exactly every X ms), while the becquerel implies stochastic events (on average X per second). Since web traffic is more like radioactive decay than a metronome, &#x27;ninety kilobecquerel&#x27; is technically more accurate than &#x27;90,000 requests/s&#x27;. Also more fun to say.</div>
+        <span class="i18n-text" data-lang="zh">一个半开玩笑的提议，用贝克勒尔（Bq）而不是&#x27;每秒请求数&#x27;来测量请求率。赫兹意味着周期性行为（每X毫秒恰好一个事件），而贝克勒尔意味着随机事件（平均每秒X个）。由于网络流量更像放射性衰变而不是节拍器，&#x27;九十千贝克勒尔&#x27;在技术上比&#x27;90,000请求/秒&#x27;更准确。说起来也更有趣。</span>
+<span class="i18n-text" data-lang="ja">リクエストレートを&#x27;毎秒リクエスト数&#x27;ではなくベクレル（Bq）で測定するという半分冗談の提案。ヘルツは周期的な動作（正確にXミリ秒ごとに1イベント）を意味し、ベクレルは確率的イベント（平均して毎秒X回）を意味する。ウェブトラフィックはメトロノームよりも放射性崩壊に近いので、「90キロベクレル」は技術的に「90,000リクエスト/秒」より正確。言うのも楽しい。</span>
+<span class="i18n-text" data-lang="ko">&#x27;초당 요청 수&#x27; 대신 베크렐(Bq)로 요청 속도를 측정하자는 반쯤 농담인 제안. 헤르츠는 주기적 동작(정확히 X밀리초마다 하나의 이벤트)을 의미하고, 베크렐은 확률적 이벤트(평균적으로 초당 X개)를 의미합니다. 웹 트래픽은 메트로놈보다 방사성 붕괴에 더 가깝기 때문에 &#x27;90 킬로베크렐&#x27;이 기술적으로 &#x27;90,000 요청/초&#x27;보다 더 정확합니다. 말하기도 더 재미있습니다.</span>
+<span class="i18n-text" data-lang="es">Una propuesta medio en broma para medir tasas de solicitudes en becquereles (Bq) en lugar de &#x27;solicitudes por segundo&#x27;. El hertz implica comportamiento periódico (exactamente un evento cada X ms), mientras que el becquerel implica eventos estocásticos (en promedio X por segundo). Como el tráfico web es más como decaimiento radiactivo que un metrónomo, &#x27;noventa kilobecquerel&#x27; es técnicamente más preciso que &#x27;90,000 solicitudes/s&#x27;. También es más divertido de decir.</span>
+<span class="i18n-text" data-lang="de">Ein halb scherzhafter Vorschlag, Request-Raten in Becquerel (Bq) statt &#x27;Anfragen pro Sekunde&#x27; zu messen. Das Hertz impliziert periodisches Verhalten (genau ein Ereignis alle X ms), während das Becquerel stochastische Ereignisse impliziert (im Durchschnitt X pro Sekunde). Da Web-Traffic eher wie radioaktiver Zerfall ist als ein Metronom, ist &#x27;neunzig Kilobecquerel&#x27; technisch genauer als &#x27;90.000 Anfragen/s&#x27;. Macht auch mehr Spaß zu sagen.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Finally, someone brave enough to point out that our request rates have been semantically incorrect this whole time. We&#x27;ve been using hertz like barbarians when becquerel was right there. The fact that Bq is specifically for radioactive decay and not general stochastic events is, apparently, a detail we&#x27;re choosing to ignore.</div>
+        <span class="i18n-text" data-lang="zh">终于有人勇敢地指出我们的请求率一直在语义上是错误的。我们一直像野蛮人一样使用赫兹，而贝克勒尔就在那里。Bq专门用于放射性衰变而不是一般的随机事件这一事实，显然是我们选择忽略的细节。</span>
+<span class="i18n-text" data-lang="ja">ついに誰かが、私たちのリクエストレートがずっと意味的に間違っていたことを指摘する勇気を持った。ベクレルがそこにあったのに、野蛮人のようにヘルツを使っていた。Bqが放射性崩壊専用で一般的な確率的イベント用ではないという事実は、どうやら私たちが無視することを選んだ詳細らしい。</span>
+<span class="i18n-text" data-lang="ko">드디어 누군가가 우리의 요청 속도가 계속 의미론적으로 틀렸다고 지적할 용기를 가졌다. 베크렐이 바로 거기 있었는데 야만인처럼 헤르츠를 써왔다. Bq가 일반적인 확률적 이벤트가 아닌 방사성 붕괴 전용이라는 사실은, 분명히 우리가 무시하기로 선택한 세부사항이다.</span>
+<span class="i18n-text" data-lang="es">Por fin alguien lo suficientemente valiente para señalar que nuestras tasas de solicitudes han sido semánticamente incorrectas todo este tiempo. Hemos estado usando hertz como bárbaros cuando el becquerel estaba ahí. El hecho de que Bq sea específicamente para decaimiento radiactivo y no eventos estocásticos generales es, aparentemente, un detalle que elegimos ignorar.</span>
+<span class="i18n-text" data-lang="de">Endlich jemand mutig genug darauf hinzuweisen, dass unsere Request-Raten die ganze Zeit semantisch falsch waren. Wir haben Hertz wie Barbaren verwendet, obwohl Becquerel direkt da war. Die Tatsache, dass Bq speziell für radioaktiven Zerfall ist und nicht für allgemeine stochastische Ereignisse, ist offenbar ein Detail, das wir ignorieren.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Can we talk or assume about &#x27;average frequencies&#x27; of requests and still use Hz as units?"</div>
+          <div class="comment-i18n" data-lang="zh">我们能讨论或假设请求的&#x27;平均频率&#x27;并仍然使用Hz作为单位吗？</div>
+<div class="comment-i18n" data-lang="ja">リクエストの「平均周波数」について話したり仮定したりして、それでもHz を単位として使えるのか？</div>
+<div class="comment-i18n" data-lang="ko">요청의 &#x27;평균 주파수&#x27;에 대해 이야기하거나 가정하고도 여전히 Hz를 단위로 사용할 수 있는가?</div>
+<div class="comment-i18n" data-lang="es">¿Podemos hablar o asumir sobre &#x27;frecuencias promedio&#x27; de solicitudes y aún usar Hz como unidades?</div>
+<div class="comment-i18n" data-lang="de">Können wir über &#x27;Durchschnittsfrequenzen&#x27; von Anfragen sprechen oder annehmen und trotzdem Hz als Einheit verwenden?</div>
+
+          <div class="comment-author">-- avmich</div>
+        </div><div class="comment">
+          <div class="comment-text">"Is there some obvious reason not to measure requests per minute rather than second? Some systems I&#x27;ve worked on had APIs that averaged less than one per second, but I don&#x27;t think we want to be measuring in millibecquerels."</div>
+          <div class="comment-i18n" data-lang="zh">有没有什么明显的理由不用每分钟请求数而用每秒？我工作过的一些系统的API平均每秒不到一个，但我不认为我们想用毫贝克勒尔来测量。</div>
+<div class="comment-i18n" data-lang="ja">秒ではなく分あたりのリクエスト数で測定しない明らかな理由はあるのか？私が働いたシステムの中には、平均で秒に1未満のAPIがあったが、ミリベクレルで測定したいとは思わない。</div>
+<div class="comment-i18n" data-lang="ko">초당이 아닌 분당 요청으로 측정하지 않는 명백한 이유가 있는가? 내가 일했던 일부 시스템은 초당 평균 1 미만의 API가 있었지만, 밀리베크렐로 측정하고 싶지는 않다.</div>
+<div class="comment-i18n" data-lang="es">¿Hay alguna razón obvia para no medir solicitudes por minuto en lugar de segundo? Algunos sistemas en los que he trabajado tenían APIs que promediaban menos de una por segundo, pero no creo que queramos medir en milibecquerel.</div>
+<div class="comment-i18n" data-lang="de">Gibt es einen offensichtlichen Grund, Anfragen pro Minute statt pro Sekunde zu messen? Einige Systeme, an denen ich gearbeitet habe, hatten APIs mit einem Durchschnitt von weniger als einer pro Sekunde, aber ich glaube nicht, dass wir in Millibecquerel messen wollen.</div>
+
+          <div class="comment-author">-- hirsin</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#metrics</span><span class="tag">#humor</span><span class="tag">#physics</span><span class="tag">#sysadmin</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-04-19T04:00:00Z</div>
