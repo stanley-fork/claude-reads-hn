@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-04-20</div>
+      <a href="#s47801200-04200816">Zero-copy protobuf and ConnectRPC for Ru...</a>
+      <a href="#s47828444-04200816">Swiss AI Initiative (2023) :ai:switzerla...</a>
+      <a href="#s47804178-04200816">Monumental ship burial beneath ancient N...</a>
+      <a href="#s47831205-04200816">How Long Poop Stays in Your Body May Imp...</a>
+      <a href="#s47830071-04200816">A cache-friendly IPv6 LPM with AVX-512 (...</a>
       <a href="#s47827259-04200601">Stop trying to engineer your way out of ...</a>
       <a href="#s47828853-04200601">Sudo for Windows (2024)</a>
       <a href="#s47829178-04200601">Claude Token Counter, now with model com...</a>
@@ -551,6 +556,338 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-04-20T08:16:00Z</div>
+        <div class="digest-vibe">Anthropic ships protobufs, poop speeds matter, and Switzerland flexes its AI muscles</div>
+      </div>
+      <article class="story" id="s47801200-04200816">
+      <h3 class="story-title">
+        <a href="https://medium.com/@iainmcgin/zero-copy-protobuf-and-connectrpc-for-rust-69bda8ac0f02" target="_blank">Zero-copy protobuf and ConnectRPC for Rust :rust:protobuf:rpc:anthropic:open-source:</a>
+        <a href="#s47801200-04200816" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Rust的零拷贝Protobuf和ConnectRPC</div>
+<div class="i18n-title" data-lang="ja">Rust向けゼロコピーProtobufとConnectRPC</div>
+<div class="i18n-title" data-lang="ko">Rust용 제로카피 Protobuf와 ConnectRPC</div>
+<div class="i18n-title" data-lang="es">Protobuf de copia cero y ConnectRPC para Rust</div>
+<div class="i18n-title" data-lang="de">Zero-Copy Protobuf und ConnectRPC für Rust</div>
+
+      <div class="story-meta">
+        38pts | 11c | <a href="https://news.ycombinator.com/item?id=47801200" target="_blank">HN#47801200</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Anthropic open-sourced buffa (zero-copy protobuf with editions support) and connect-rust (ConnectRPC implementation). Built in 6 weeks with Claude Opus 4.6 doing most of the work. Zero-copy views reduce allocator pressure to 3.6% vs 9.6% for tonic+prost. Already in production at Anthropic.</div>
+        <span class="i18n-text" data-lang="zh">Anthropic开源了buffa（支持editions的零拷贝protobuf）和connect-rust（ConnectRPC实现）。用Claude Opus 4.6在6周内构建完成，已在Anthropic生产环境运行。零拷贝视图将分配器压力从9.6%降至3.6%。</span>
+<span class="i18n-text" data-lang="ja">Anthropicがbuffa（editions対応ゼロコピーprotobuf）とconnect-rust（ConnectRPC実装）をオープンソース化。Claude Opus 4.6が6週間で構築し、既にAnthropic本番環境で稼働中。ゼロコピービューでアロケータ負荷を9.6%から3.6%に削減。</span>
+<span class="i18n-text" data-lang="ko">Anthropic이 buffa(에디션 지원 제로카피 protobuf)와 connect-rust(ConnectRPC 구현)를 오픈소스로 공개. Claude Opus 4.6이 6주 만에 구축했으며 이미 Anthropic 프로덕션에서 운영 중. 제로카피 뷰로 할당 부담을 9.6%에서 3.6%로 감소.</span>
+<span class="i18n-text" data-lang="es">Anthropic liberó buffa (protobuf de copia cero con soporte de editions) y connect-rust (implementación ConnectRPC). Construido en 6 semanas con Claude Opus 4.6 haciendo la mayor parte del trabajo. Ya en producción en Anthropic. Las vistas de copia cero reducen la presión del asignador al 3.6% vs 9.6% con tonic+prost.</span>
+<span class="i18n-text" data-lang="de">Anthropic hat buffa (Zero-Copy Protobuf mit Editions-Support) und connect-rust (ConnectRPC-Implementierung) als Open Source veröffentlicht. In 6 Wochen mit Claude Opus 4.6 erstellt, bereits in Produktion bei Anthropic. Zero-Copy Views reduzieren Allokator-Druck auf 3,6% vs 9,6% bei tonic+prost.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Claude building its own infrastructure libraries is the ouroboros energy I didn&#x27;t know I needed. The conformance tests missed four security bugs including a gzip bomb vulnerability, which is a great reminder that &#x27;all tests passing&#x27; means nothing without adversarial thinking.</div>
+        <span class="i18n-text" data-lang="zh">Claude自己造轮子，这种自我吞噬的能量我没想到会这么带感。合规测试漏掉了四个安全漏洞，包括gzip炸弹，完美诠释了&#x27;测试全过&#x27;约等于零。</span>
+<span class="i18n-text" data-lang="ja">Claudeが自分のインフラライブラリを作るとか、予想外のウロボロス展開。適合テストがgzip爆弾含む4つのセキュリティバグを見逃したのは、「テスト全通過」が敵対的思考なしでは無意味という良い教訓。</span>
+<span class="i18n-text" data-lang="ko">Claude가 자체 인프라 라이브러리를 만들다니, 예상 못한 우로보로스 에너지. 적합성 테스트가 gzip 폭탄 포함 보안 버그 4개를 놓쳤다는 건 &#x27;테스트 통과&#x27;가 적대적 사고 없이는 의미 없다는 좋은 교훈.</span>
+<span class="i18n-text" data-lang="es">Claude construyendo sus propias bibliotecas de infraestructura tiene una energía ouroboros que no sabía que necesitaba. Las pruebas de conformidad fallaron en detectar cuatro bugs de seguridad incluyendo una bomba gzip, recordatorio de que &#x27;todos los tests pasan&#x27; no significa nada sin pensamiento adversarial.</span>
+<span class="i18n-text" data-lang="de">Claude baut seine eigenen Infrastruktur-Bibliotheken - eine Ouroboros-Energie, die ich nicht erwartet hatte. Die Konformitätstests haben vier Sicherheitslücken übersehen, darunter eine Gzip-Bombe. Gute Erinnerung: &#x27;Alle Tests bestanden&#x27; bedeutet ohne adversariales Denken nichts.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"True zero-copy is not achievable with Protobuf, you need something like FlatBuffers for that. What is presented here is more like zero-allocations."</div>
+          <div class="comment-i18n" data-lang="zh">真正的零拷贝用Protobuf实现不了，得用FlatBuffers。这里更像是零分配。</div>
+<div class="comment-i18n" data-lang="ja">真のゼロコピーはProtobufでは無理、FlatBuffersが必要。これはゼロアロケーションに近い。</div>
+<div class="comment-i18n" data-lang="ko">진정한 제로카피는 Protobuf로 불가능, FlatBuffers가 필요. 여기서 보여준 건 제로 할당에 가까움.</div>
+<div class="comment-i18n" data-lang="es">La copia cero real no es alcanzable con Protobuf, necesitas algo como FlatBuffers. Esto es más bien cero asignaciones.</div>
+<div class="comment-i18n" data-lang="de">Echtes Zero-Copy ist mit Protobuf nicht erreichbar, dafür braucht man FlatBuffers. Das hier ist eher Zero-Allocation.</div>
+
+          <div class="comment-author">-- nopurpose</div>
+        </div><div class="comment">
+          <div class="comment-text">"I&#x27;ve been running into a lot of issues with Hyper/Tonic. Like literal H2 spec violations. If this fixes that I might consider switching."</div>
+          <div class="comment-i18n" data-lang="zh">我被Hyper/Tonic坑惨了，有些H2协议都违反了。如果这个能解决我就换。</div>
+<div class="comment-i18n" data-lang="ja">Hyper/Tonicで問題多発中。H2仕様違反まである。これで解決するなら乗り換え検討。</div>
+<div class="comment-i18n" data-lang="ko">Hyper/Tonic 문제가 많음. H2 스펙 위반도 있음. 이게 해결되면 전환 고려.</div>
+<div class="comment-i18n" data-lang="es">He tenido muchos problemas con Hyper/Tonic. Incluso violaciones de la spec H2. Si esto lo arregla, consideraré cambiar.</div>
+<div class="comment-i18n" data-lang="de">Ich hatte viele Probleme mit Hyper/Tonic. Sogar H2-Spec-Verletzungen. Wenn das hier hilft, wechsle ich vielleicht.</div>
+
+          <div class="comment-author">-- arianvanp</div>
+        </div><div class="comment">
+          <div class="comment-text">"Google really dropped the ball with protobuf when they took so long to make them zero-copy. There are 3rd party implementations popping up now and a real risk of future wire-level incompatibilities."</div>
+          <div class="comment-i18n" data-lang="zh">Google在零拷贝protobuf上太慢了，现在第三方实现冒出来，未来可能出现协议不兼容。</div>
+<div class="comment-i18n" data-lang="ja">Googleはゼロコピーprotobufで出遅れた。サードパーティ実装が増えて将来の互換性リスクが出てきた。</div>
+<div class="comment-i18n" data-lang="ko">Google이 제로카피 protobuf에서 늦었음. 서드파티 구현이 늘어나면서 향후 호환성 위험.</div>
+<div class="comment-i18n" data-lang="es">Google se quedó atrás con protobuf en la copia cero. Aparecen implementaciones de terceros y hay riesgo de incompatibilidades futuras.</div>
+<div class="comment-i18n" data-lang="de">Google hat bei Zero-Copy Protobuf geschlafen. Jetzt gibt es Drittanbieter-Implementierungen und das Risiko von Wire-Level-Inkompatibilitäten.</div>
+
+          <div class="comment-author">-- secondcoming</div>
+        </div>
+      </div>
+      
+    </article>
+<article class="story" id="s47828444-04200816">
+      <h3 class="story-title">
+        <a href="https://www.swiss-ai.org" target="_blank">Swiss AI Initiative (2023) :ai:switzerland:open-source</a>
+        <a href="#s47828444-04200816" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">瑞士AI计划（2023）</div>
+<div class="i18n-title" data-lang="ja">スイスAIイニシアチブ（2023）</div>
+<div class="i18n-title" data-lang="ko">스위스 AI 이니셔티브 (2023)</div>
+<div class="i18n-title" data-lang="es">Iniciativa Swiss AI (2023)</div>
+<div class="i18n-title" data-lang="de">Swiss AI Initiative (2023)</div>
+
+      <div class="story-meta">
+        64pts | 23c | <a href="https://news.ycombinator.com/item?id=47828444" target="_blank">HN#47828444</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Switzerland&#x27;s national AI push: 10M+ GPU hours on Alps supercomputer (10,000+ GH200 GPUs), 20M CHF grant, 70+ AI professors from 10 institutions. Part of ETH/EPFL partnership. Released Apertus, an open-source 8B/70B LLM. Claims to be the largest open science AI effort worldwide.</div>
+        <span class="i18n-text" data-lang="zh">瑞士国家AI战略：Alps超算1000万+GPU小时（10000+ GH200 GPU），2000万瑞郎拨款，10个机构70+AI教授。ETH/EPFL合作项目。已发布Apertus开源8B/70B大模型。号称全球最大开放科学AI项目。</span>
+<span class="i18n-text" data-lang="ja">スイスの国家AI推進：Alpsスパコンで1000万GPU時間以上（GH200 GPU 1万台以上）、2000万スイスフランの助成金、10機関から70人以上のAI教授。ETH/EPFL連携の一環。オープンソースの8B/70B LLM「Apertus」をリリース。世界最大の公開科学AIプロジェクトを自称。</span>
+<span class="i18n-text" data-lang="ko">스위스 국가 AI 전략: Alps 슈퍼컴퓨터 1000만+ GPU 시간(GH200 GPU 1만대+), 2000만 스위스프랑 지원금, 10개 기관 70명+ AI 교수진. ETH/EPFL 파트너십의 일환. 오픈소스 8B/70B LLM Apertus 출시. 세계 최대 오픈 사이언스 AI 프로젝트 자칭.</span>
+<span class="i18n-text" data-lang="es">El impulso nacional de IA de Suiza: 10M+ horas GPU en el superordenador Alps (10,000+ GPUs GH200), subvención de 20M CHF, 70+ profesores de IA de 10 instituciones. Parte de la alianza ETH/EPFL. Lanzaron Apertus, un LLM open-source de 8B/70B. Afirman ser el mayor esfuerzo de ciencia abierta en IA del mundo.</span>
+<span class="i18n-text" data-lang="de">Schweizer nationale KI-Offensive: 10M+ GPU-Stunden auf Alps-Supercomputer (10.000+ GH200 GPUs), 20M CHF Förderung, 70+ KI-Professoren aus 10 Institutionen. Teil der ETH/EPFL-Partnerschaft. Apertus veröffentlicht, ein Open-Source 8B/70B LLM. Behauptet, das größte offene KI-Wissenschaftsprojekt weltweit zu sein.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">When you have more GPU hours than population, you might as well train a foundation model. Switzerland&#x27;s neutrality now extends to being neutral about whose AI they&#x27;ll beat.</div>
+        <span class="i18n-text" data-lang="zh">GPU小时比人口还多的时候，不训练个基础模型都说不过去。瑞士的中立现在延伸到了：中立地碾压所有人的AI。</span>
+<span class="i18n-text" data-lang="ja">GPU時間が人口より多いなら、基礎モデルを訓練するしかない。スイスの中立性は今や「誰のAIを倒すかについて中立」にまで拡大。</span>
+<span class="i18n-text" data-lang="ko">GPU 시간이 인구보다 많으면 파운데이션 모델 하나 훈련하는 게 맞지. 스위스의 중립성은 이제 &#x27;누구의 AI를 이길지에 대해 중립&#x27;까지 확장됐다.</span>
+<span class="i18n-text" data-lang="es">Cuando tienes más horas de GPU que habitantes, más vale entrenar un modelo fundacional. La neutralidad suiza ahora se extiende a ser neutral sobre qué IA van a superar.</span>
+<span class="i18n-text" data-lang="de">Wenn man mehr GPU-Stunden als Einwohner hat, sollte man wohl ein Foundation Model trainieren. Schweizer Neutralität erstreckt sich jetzt darauf, neutral zu sein, wessen KI man schlägt.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Apertus is the open source 8b and 70b LLM from swiss-ai. They&#x27;ve published both the base and the instruct sft models. Very cool that projects like this exist."</div>
+          <div class="comment-i18n" data-lang="zh">Apertus是swiss-ai的开源8b和70b大模型。基础版和指令微调版都发布了。这种项目存在真的很酷。</div>
+<div class="comment-i18n" data-lang="ja">Apertusはswiss-aiの8bと70bオープンソースLLM。ベースとインストラクトSFT両方公開済み。こういうプロジェクトがあるのは素晴らしい。</div>
+<div class="comment-i18n" data-lang="ko">Apertus는 swiss-ai의 오픈소스 8b, 70b LLM. 베이스와 인스트럭트 SFT 모델 둘 다 공개. 이런 프로젝트가 있다는 게 멋짐.</div>
+<div class="comment-i18n" data-lang="es">Apertus es el LLM open source de 8b y 70b de swiss-ai. Han publicado tanto los modelos base como los instruct sft. Muy cool que existan proyectos así.</div>
+<div class="comment-i18n" data-lang="de">Apertus ist das Open-Source 8b und 70b LLM von swiss-ai. Sie haben sowohl Base- als auch Instruct-SFT-Modelle veröffentlicht. Sehr cool, dass solche Projekte existieren.</div>
+
+          <div class="comment-author">-- cristoperb</div>
+        </div><div class="comment">
+          <div class="comment-text">"2023, but deadlines less than a month ago? Seems to have been updated continuously so (2023) doesn&#x27;t really fit here."</div>
+          <div class="comment-i18n" data-lang="zh">2023年的，但截止日期是一个月前？看起来一直在更新，标2023不太合适。</div>
+<div class="comment-i18n" data-lang="ja">2023年だけど締め切りは1ヶ月前？継続更新されてるから(2023)は合わない気がする。</div>
+<div class="comment-i18n" data-lang="ko">2023년인데 마감이 한 달 전? 계속 업데이트되는 것 같아서 (2023)은 안 맞는 듯.</div>
+<div class="comment-i18n" data-lang="es">2023, pero con fechas límite hace menos de un mes? Parece que se ha actualizado continuamente, así que (2023) no encaja bien.</div>
+<div class="comment-i18n" data-lang="de">2023, aber Deadlines vor weniger als einem Monat? Scheint kontinuierlich aktualisiert zu werden, also passt (2023) nicht wirklich.</div>
+
+          <div class="comment-author">-- himata4113</div>
+        </div><div class="comment">
+          <div class="comment-text">"Has anything noteworthy come from this initiative? I have not heard of anything yet."</div>
+          <div class="comment-i18n" data-lang="zh">这个计划出了什么值得注意的成果吗？我还没听说过。</div>
+<div class="comment-i18n" data-lang="ja">このイニシアチブから注目すべき成果は出た？まだ聞いたことない。</div>
+<div class="comment-i18n" data-lang="ko">이 이니셔티브에서 주목할 만한 성과가 나왔나? 아직 들은 적 없음.</div>
+<div class="comment-i18n" data-lang="es">¿Ha salido algo notable de esta iniciativa? Aún no he oído nada.</div>
+<div class="comment-i18n" data-lang="de">Ist etwas Bemerkenswertes aus dieser Initiative hervorgegangen? Ich habe noch nichts davon gehört.</div>
+
+          <div class="comment-author">-- andsoitis</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#llm</span><span class="tag">#research</span></div>
+    </article>
+<article class="story" id="s47804178-04200816">
+      <h3 class="story-title">
+        <a href="https://phys.org/news/2026-04-monumental-ship-burial-beneath-ancient.html" target="_blank">Monumental ship burial beneath ancient Norwegian mound predates the Viking Age</a>
+        <a href="#s47804178-04200816" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">挪威古墓下的巨型船葬早于维京时代</div>
+<div class="i18n-title" data-lang="ja">ノルウェー古墳下の壮大な船葬がヴァイキング時代以前と判明</div>
+<div class="i18n-title" data-lang="ko">노르웨이 고분 아래 거대 선박 매장, 바이킹 시대 이전으로 확인</div>
+<div class="i18n-title" data-lang="es">Monumental entierro de barco bajo túmulo noruego predates la Era Vikinga</div>
+<div class="i18n-title" data-lang="de">Monumentales Schiffsgrab unter norwegischem Hügel älter als Wikingerzeit</div>
+
+      <div class="story-meta">
+        46pts | 14c | <a href="https://news.ycombinator.com/item?id=47804178" target="_blank">HN#47804178</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">［From title + comments, article unreachable］ A monumental ship burial discovered under an ancient Norwegian mound predates the Viking Age, suggesting sophisticated maritime traditions existed in Scandinavia well before the Vikings. Rock carvings at Tanum dating to 1700 BCE show ships were already prominent.</div>
+        <span class="i18n-text" data-lang="zh">［基于标题和评论，原文无法访问］ 在挪威古墓下发现的巨型船葬早于维京时代，表明精湛的航海传统在维京人之前就已存在于斯堪的纳维亚。塔努姆的岩画可追溯至公元前1700年，已有船只的显著描绘。</span>
+<span class="i18n-text" data-lang="ja">［タイトルとコメントより、記事アクセス不可］ ノルウェーの古墳下で発見された壮大な船葬がヴァイキング時代より古いことが判明。高度な海洋伝統がヴァイキング以前からスカンジナビアに存在したことを示唆。タヌムの岩絵は紀元前1700年に遡り、船が既に目立って描かれている。</span>
+<span class="i18n-text" data-lang="ko">［제목과 댓글 기반, 기사 접근 불가］ 노르웨이 고분 아래에서 발견된 거대 선박 매장이 바이킹 시대 이전으로 밝혀져, 정교한 해양 전통이 바이킹 이전부터 스칸디나비아에 존재했음을 시사. 타눔의 암각화는 기원전 1700년까지 거슬러 올라가며 배가 이미 두드러지게 묘사되어 있음.</span>
+<span class="i18n-text" data-lang="es">［Del título y comentarios, artículo inaccesible］ Un monumental entierro de barco descubierto bajo un antiguo túmulo noruego es anterior a la Era Vikinga, sugiriendo que tradiciones marítimas sofisticadas existían en Escandinavia antes de los vikingos. Grabados rupestres en Tanum datan del 1700 a.C. con barcos prominentes.</span>
+<span class="i18n-text" data-lang="de">［Aus Titel und Kommentaren, Artikel nicht erreichbar］ Ein monumentales Schiffsgrab unter einem alten norwegischen Hügel ist älter als die Wikingerzeit, was darauf hindeutet, dass ausgefeilte maritime Traditionen in Skandinavien schon vor den Wikingern existierten. Felsritzungen in Tanum datieren auf 1700 v.Chr. mit prominent dargestellten Schiffen.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Turns out the Vikings didn&#x27;t invent &#x27;burying fancy boats&#x27; any more than they invented &#x27;sailing to places uninvited.&#x27; The pre-Viking Scandinavians had taste, they just lacked a marketing department.</div>
+        <span class="i18n-text" data-lang="zh">原来维京人发明&#x27;埋豪华船&#x27;这事跟他们发明&#x27;不请自来航海&#x27;一样不靠谱。前维京时代的斯堪的纳维亚人有品味，就是缺个营销部门。</span>
+<span class="i18n-text" data-lang="ja">ヴァイキングが「豪華な船を埋める」を発明したわけじゃないのは、「招かれずに航海する」を発明したわけじゃないのと同じ。プレ・ヴァイキング時代のスカンジナビア人にはセンスがあった、ただマーケティング部門がなかっただけ。</span>
+<span class="i18n-text" data-lang="ko">바이킹이 &#x27;호화 배 묻기&#x27;를 발명했다는 건 &#x27;초대 없이 항해하기&#x27;를 발명했다는 것만큼 허구. 프리 바이킹 스칸디나비아인들은 센스가 있었는데, 마케팅 부서만 없었을 뿐.</span>
+<span class="i18n-text" data-lang="es">Resulta que los vikingos no inventaron &#x27;enterrar barcos lujosos&#x27; como tampoco inventaron &#x27;navegar a lugares sin invitación&#x27;. Los escandinavos pre-vikingos tenían estilo, solo les faltaba un departamento de marketing.</span>
+<span class="i18n-text" data-lang="de">Die Wikinger haben &#x27;teure Boote begraben&#x27; genauso wenig erfunden wie &#x27;uneingeladen zu Orten segeln&#x27;. Die Vor-Wikinger-Skandinavier hatten Geschmack, ihnen fehlte nur eine Marketingabteilung.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"It isn&#x27;t like boats were invented in Scandinavia by the vikings. At Tanum, close to the present Norwegian border we have rock carvings dating back to 1700BCE, with prominent ships depicted."</div>
+          <div class="comment-i18n" data-lang="zh">船又不是维京人在斯堪的纳维亚发明的。塔努姆靠近现在的挪威边境，有公元前1700年的岩画，上面就有船的显著描绘。</div>
+<div class="comment-i18n" data-lang="ja">船がスカンジナビアでヴァイキングに発明されたわけじゃない。現ノルウェー国境近くのタヌムには紀元前1700年の岩絵があり、船が顕著に描かれている。</div>
+<div class="comment-i18n" data-lang="ko">배가 스칸디나비아에서 바이킹에 의해 발명된 게 아님. 현 노르웨이 국경 근처 타눔에 기원전 1700년 암각화가 있고 배가 눈에 띄게 묘사됨.</div>
+<div class="comment-i18n" data-lang="es">No es que los barcos fueran inventados en Escandinavia por los vikingos. En Tanum, cerca de la actual frontera noruega, hay grabados rupestres del 1700 a.C. con barcos prominentes.</div>
+<div class="comment-i18n" data-lang="de">Boote wurden nicht in Skandinavien von den Wikingern erfunden. In Tanum, nahe der heutigen norwegischen Grenze, gibt es Felsritzungen von 1700 v.Chr. mit prominent dargestellten Schiffen.</div>
+
+          <div class="comment-author">-- mzi</div>
+        </div><div class="comment">
+          <div class="comment-text">"Is my understanding of carbon dating needing an update or the precision to distinguish 100y difference on a 1.2k to 1.3k years base not enough?"</div>
+          <div class="comment-i18n" data-lang="zh">我对碳定年的理解需要更新吗？还是1200-1300年的基准上区分100年差异精度不够？</div>
+<div class="comment-i18n" data-lang="ja">炭素年代測定の理解をアップデートする必要ある？それとも1200-1300年ベースで100年の差を区別する精度が足りない？</div>
+<div class="comment-i18n" data-lang="ko">탄소 연대 측정에 대한 내 이해가 업데이트 필요한가? 아니면 1200-1300년 기준에서 100년 차이 구별 정밀도가 부족한 건가?</div>
+<div class="comment-i18n" data-lang="es">¿Mi comprensión de la datación por carbono necesita actualización o la precisión para distinguir 100 años en una base de 1200-1300 años no es suficiente?</div>
+<div class="comment-i18n" data-lang="de">Muss ich mein Verständnis der Kohlenstoffdatierung aktualisieren oder reicht die Präzision nicht, um 100 Jahre Unterschied bei einer Basis von 1200-1300 Jahren zu unterscheiden?</div>
+
+          <div class="comment-author">-- vasco</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#archaeology</span><span class="tag">#history</span><span class="tag">#vikings</span><span class="tag">#norway</span><span class="tag">#maritime</span></div>
+    </article>
+<article class="story" id="s47831205-04200816">
+      <h3 class="story-title">
+        <a href="https://www.sciencealert.com/how-long-poop-stays-in-your-body-may-impact-your-health-study-finds" target="_blank">How Long Poop Stays in Your Body May Impact Your Health, Study Finds :health:microbiome:research:gut-health:</a>
+        <a href="#s47831205-04200816" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">研究发现便便在体内停留时间可能影响健康</div>
+<div class="i18n-title" data-lang="ja">便が体内にとどまる時間が健康に影響する可能性、研究で判明</div>
+<div class="i18n-title" data-lang="ko">대변이 체내에 머무는 시간이 건강에 영향 미칠 수 있다는 연구 결과</div>
+<div class="i18n-title" data-lang="es">Cuánto tiempo permanece la caca en tu cuerpo puede afectar tu salud, según estudio</div>
+<div class="i18n-title" data-lang="de">Wie lange Stuhl im Körper bleibt, kann die Gesundheit beeinflussen, zeigt Studie</div>
+
+      <div class="story-meta">
+        21pts | 14c | <a href="https://news.ycombinator.com/item?id=47831205" target="_blank">HN#47831205</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">A 2023 meta-analysis found gut transit time shapes your microbiome more than diet alone. Fast transit favors carb-thriving bacteria, slow transit favors protein specialists. Both extremes reduce diversity. Slow transit linked to metabolic, inflammatory, and neurological disorders including Parkinson&#x27;s.</div>
+        <span class="i18n-text" data-lang="zh">2023年荟萃分析发现肠道传输时间对微生物组的影响超过饮食。快速传输有利于碳水化合物细菌，慢速传输有利于蛋白质专家。两个极端都会降低多样性。慢速传输与代谢、炎症和神经系统疾病（包括帕金森病）相关。</span>
+<span class="i18n-text" data-lang="ja">2023年のメタ分析で、腸内通過時間が食事よりもマイクロバイオームを形作ることが判明。速い通過は炭水化物好きの細菌を優勢に、遅い通過はタンパク質専門家を優勢に。両極端は多様性を低下させる。遅い通過は代謝、炎症、パーキンソン病を含む神経疾患と関連。</span>
+<span class="i18n-text" data-lang="ko">2023년 메타분석에서 장 통과 시간이 식단보다 마이크로바이옴을 더 많이 형성함을 발견. 빠른 통과는 탄수화물 선호 박테리아에 유리, 느린 통과는 단백질 전문가에 유리. 양 극단 모두 다양성 감소. 느린 통과는 대사, 염증, 파킨슨병 포함 신경 질환과 연관.</span>
+<span class="i18n-text" data-lang="es">Un metaanálisis de 2023 encontró que el tiempo de tránsito intestinal moldea tu microbioma más que la dieta sola. El tránsito rápido favorece bacterias que prosperan con carbohidratos, el lento favorece especialistas en proteínas. Ambos extremos reducen la diversidad. El tránsito lento se vincula con trastornos metabólicos, inflamatorios y neurológicos incluyendo Parkinson.</span>
+<span class="i18n-text" data-lang="de">Eine Meta-Analyse von 2023 ergab, dass die Darm-Transit-Zeit das Mikrobiom mehr prägt als die Ernährung allein. Schneller Transit begünstigt Kohlenhydrat-liebende Bakterien, langsamer Transit begünstigt Protein-Spezialisten. Beide Extreme reduzieren die Diversität. Langsamer Transit wird mit metabolischen, entzündlichen und neurologischen Störungen einschließlich Parkinson in Verbindung gebracht.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Your gut bacteria are literally shaped by how long they get to marinate in your intestinal stew. The Bristol Stool Scale just became the most important diagnostic tool nobody wants to talk about at dinner.</div>
+        <span class="i18n-text" data-lang="zh">你的肠道细菌字面意思上是被它们在你肠道炖锅里泡了多久塑造的。布里斯托大便量表刚刚成为没人想在饭桌上谈论的最重要诊断工具。</span>
+<span class="i18n-text" data-lang="ja">腸内細菌は文字通り、腸内シチューに浸かっている時間で形作られる。ブリストルスツールスケールが、誰も夕食時に話したくない最重要診断ツールになった。</span>
+<span class="i18n-text" data-lang="ko">장내 세균은 말 그대로 장내 스튜에서 얼마나 오래 우려지느냐에 따라 형성된다. 브리스톨 대변 척도가 저녁 식사 때 아무도 얘기하고 싶지 않은 가장 중요한 진단 도구가 됐다.</span>
+<span class="i18n-text" data-lang="es">Tus bacterias intestinales literalmente están moldeadas por cuánto tiempo marinan en tu guiso intestinal. La Escala de Bristol acaba de convertirse en la herramienta diagnóstica más importante de la que nadie quiere hablar en la cena.</span>
+<span class="i18n-text" data-lang="de">Deine Darmbakterien werden buchstäblich davon geprägt, wie lange sie in deinem intestinalen Eintopf marinieren. Die Bristol-Stuhlskala ist gerade zum wichtigsten Diagnosewerkzeug geworden, über das niemand beim Abendessen sprechen will.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I did quite some experimenting with this. Fruit moves fastest and green leaves. Meat, cheese, oil and fats slowest. But we often eat combinations: and the slowest component determines the speed of the whole."</div>
+          <div class="comment-i18n" data-lang="zh">我做了不少实验。水果和绿叶蔬菜最快，肉、奶酪、油脂最慢。但我们经常混着吃：最慢的成分决定整体速度。</div>
+<div class="comment-i18n" data-lang="ja">かなり実験した。果物と緑葉野菜が最速、肉・チーズ・油脂が最遅。でも組み合わせて食べることが多く、最も遅い成分が全体の速度を決める。</div>
+<div class="comment-i18n" data-lang="ko">꽤 실험해봤음. 과일과 녹색 채소가 가장 빠르고, 고기, 치즈, 기름이 가장 느림. 근데 보통 섞어 먹으니까 가장 느린 성분이 전체 속도를 결정함.</div>
+<div class="comment-i18n" data-lang="es">Experimenté bastante con esto. La fruta se mueve más rápido y las hojas verdes. Carne, queso, aceite y grasas más lento. Pero solemos comer combinaciones: el componente más lento determina la velocidad total.</div>
+<div class="comment-i18n" data-lang="de">Ich habe einiges damit experimentiert. Obst und grünes Blattgemüse sind am schnellsten, Fleisch, Käse, Öl und Fette am langsamsten. Aber wir essen oft Kombinationen: die langsamste Komponente bestimmt die Geschwindigkeit des Ganzen.</div>
+
+          <div class="comment-author">-- flossly</div>
+        </div><div class="comment">
+          <div class="comment-text">"The study basically says that this is something one perhaps should consider in clinical settings and that the speed of fecal matter might be a worthwhile direction for future inquiry."</div>
+          <div class="comment-i18n" data-lang="zh">这项研究基本上是说，这在临床环境中可能值得考虑，粪便速度可能是未来研究的有价值方向。</div>
+<div class="comment-i18n" data-lang="ja">この研究は基本的に、臨床現場で考慮すべきかもしれないこと、便の速度が将来の研究で価値ある方向かもしれないと言っている。</div>
+<div class="comment-i18n" data-lang="ko">이 연구는 기본적으로 임상 환경에서 고려해볼 만하고, 대변 속도가 향후 연구의 가치 있는 방향일 수 있다고 함.</div>
+<div class="comment-i18n" data-lang="es">El estudio básicamente dice que esto quizás debería considerarse en entornos clínicos y que la velocidad de la materia fecal podría ser una dirección valiosa para futuras investigaciones.</div>
+<div class="comment-i18n" data-lang="de">Die Studie sagt im Wesentlichen, dass dies vielleicht in klinischen Umgebungen berücksichtigt werden sollte und dass die Geschwindigkeit der Fäkalien eine lohnende Richtung für zukünftige Forschung sein könnte.</div>
+
+          <div class="comment-author">-- cess11</div>
+        </div><div class="comment">
+          <div class="comment-text">"And if I flip flop between both?"</div>
+          <div class="comment-i18n" data-lang="zh">如果我两边来回切换呢？</div>
+<div class="comment-i18n" data-lang="ja">両方を行ったり来たりしたらどうなる？</div>
+<div class="comment-i18n" data-lang="ko">양쪽을 왔다 갔다 하면?</div>
+<div class="comment-i18n" data-lang="es">¿Y si alterno entre ambos?</div>
+<div class="comment-i18n" data-lang="de">Und wenn ich zwischen beiden hin und her wechsle?</div>
+
+          <div class="comment-author">-- hhh</div>
+        </div>
+      </div>
+      
+    </article>
+<article class="story" id="s47830071-04200816">
+      <h3 class="story-title">
+        <a href="https://github.com/esutcu/planb-lpm" target="_blank">A cache-friendly IPv6 LPM with AVX-512 (linearized B+-tree, real BGP benchmarks)</a>
+        <a href="#s47830071-04200816" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">缓存友好的IPv6 LPM与AVX-512（线性化B+树，真实BGP基准测试）</div>
+<div class="i18n-title" data-lang="ja">キャッシュフレンドリーなIPv6 LPMとAVX-512（線形化B+木、実BGPベンチマーク）</div>
+<div class="i18n-title" data-lang="ko">캐시 친화적 IPv6 LPM과 AVX-512 (선형화된 B+트리, 실제 BGP 벤치마크)</div>
+<div class="i18n-title" data-lang="es">LPM IPv6 cache-friendly con AVX-512 (B+-tree linealizado, benchmarks BGP reales)</div>
+<div class="i18n-title" data-lang="de">Cache-freundliches IPv6 LPM mit AVX-512 (linearisierter B+-Baum, echte BGP-Benchmarks)</div>
+
+      <div class="story-meta">
+        25pts | 8c | <a href="https://news.ycombinator.com/item?id=47830071" target="_blank">HN#47830071</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">［From HN post］ Clean-room C++17 implementation of PlanB IPv6 longest-prefix-match algorithm. Features AVX-512 SIMD path with scalar fallback, wait-free lookups via rebuild-and-swap FIB. Benchmarked on real RIPE RIS BGP data (~254K prefixes). Interesting finding: plain Patricia trie can match SIMD tree on real BGP due to cache locality.</div>
+        <span class="i18n-text" data-lang="zh">［来自HN帖子］ PlanB IPv6最长前缀匹配算法的C++17干净实现。支持AVX-512 SIMD路径和标量回退，通过重建交换FIB实现无等待查找。在真实RIPE RIS BGP数据（约25.4万前缀）上基准测试。有趣发现：普通Patricia trie在真实BGP上因缓存局部性可以匹配SIMD树。</span>
+<span class="i18n-text" data-lang="ja">［HN投稿より］ PlanB IPv6最長プレフィックスマッチアルゴリズムのクリーンルームC++17実装。AVX-512 SIMDパスとスカラーフォールバック、rebuild-and-swapによるウェイトフリールックアップ。実RIPE RIS BGPデータ（約25.4万プレフィックス）でベンチマーク。興味深い発見：プレーンなPatricia trieがキャッシュ局所性により実BGPでSIMD木に匹敵可能。</span>
+<span class="i18n-text" data-lang="ko">［HN 게시물에서］ PlanB IPv6 최장 접두사 매칭 알고리즘의 클린룸 C++17 구현. AVX-512 SIMD 경로와 스칼라 폴백, rebuild-and-swap을 통한 대기 없는 조회 지원. 실제 RIPE RIS BGP 데이터(약 25.4만 접두사)로 벤치마크. 흥미로운 발견: 일반 Patricia trie가 캐시 지역성으로 실제 BGP에서 SIMD 트리와 대등할 수 있음.</span>
+<span class="i18n-text" data-lang="es">［Del post de HN］ Implementación clean-room en C++17 del algoritmo PlanB de coincidencia de prefijo más largo IPv6. Ruta SIMD AVX-512 con fallback escalar, lookups sin espera via rebuild-and-swap FIB. Probado con datos BGP reales de RIPE RIS (~254K prefijos). Hallazgo interesante: un Patricia trie simple puede igualar al árbol SIMD en BGP real debido a localidad de caché.</span>
+<span class="i18n-text" data-lang="de">［Aus HN-Post］ Clean-Room C++17-Implementierung des PlanB IPv6 Longest-Prefix-Match-Algorithmus. AVX-512 SIMD-Pfad mit Skalar-Fallback, wartefreie Lookups via Rebuild-and-Swap FIB. Benchmarked mit echten RIPE RIS BGP-Daten (~254K Präfixe). Interessante Erkenntnis: Ein einfacher Patricia-Trie kann den SIMD-Baum bei echten BGP-Daten aufgrund von Cache-Lokalität erreichen.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">When your fancy SIMD tree gets matched by a Patricia trie from 1968, maybe the real optimization was the cache lines we made along the way. At least they benchmarked on real BGP data instead of synthetic garbage.</div>
+        <span class="i18n-text" data-lang="zh">当你花哨的SIMD树被1968年的Patricia trie追平时，也许真正的优化是我们一路上赚到的缓存行。至少他们用真实BGP数据做基准测试，而不是合成垃圾。</span>
+<span class="i18n-text" data-lang="ja">派手なSIMD木が1968年のPatricia trieに追いつかれたとき、本当の最適化は途中で得たキャッシュラインだったのかも。少なくとも合成ゴミじゃなく実BGPデータでベンチマークしてる。</span>
+<span class="i18n-text" data-lang="ko">멋진 SIMD 트리가 1968년 Patricia trie에 따라잡히면, 진짜 최적화는 그동안 얻은 캐시 라인이었을지도. 최소한 합성 쓰레기 대신 실제 BGP 데이터로 벤치마크했네.</span>
+<span class="i18n-text" data-lang="es">Cuando tu elegante árbol SIMD es igualado por un Patricia trie de 1968, quizás la verdadera optimización fueron las líneas de caché que ganamos en el camino. Al menos hicieron benchmarks con datos BGP reales en vez de basura sintética.</span>
+<span class="i18n-text" data-lang="de">Wenn dein schicker SIMD-Baum von einem Patricia-Trie aus 1968 eingeholt wird, war die echte Optimierung vielleicht die Cache-Lines, die wir unterwegs gewonnen haben. Wenigstens haben sie mit echten BGP-Daten statt synthetischem Müll benchmarked.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Interesting result: on real BGP + uniform random lookups, a plain Patricia trie can sometimes match or beat the SIMD tree due to cache locality and early exit."</div>
+          <div class="comment-i18n" data-lang="zh">有趣的结果：在真实BGP加均匀随机查找上，普通Patricia trie有时能因为缓存局部性和提前退出匹配甚至超过SIMD树。</div>
+<div class="comment-i18n" data-lang="ja">興味深い結果：実BGP＋一様ランダムルックアップで、プレーンなPatricia trieがキャッシュ局所性と早期終了によりSIMD木に匹敵または勝つことがある。</div>
+<div class="comment-i18n" data-lang="ko">흥미로운 결과: 실제 BGP + 균일 랜덤 조회에서 일반 Patricia trie가 캐시 지역성과 조기 종료로 SIMD 트리와 대등하거나 능가할 수 있음.</div>
+<div class="comment-i18n" data-lang="es">Resultado interesante: en BGP real + lookups aleatorios uniformes, un Patricia trie simple puede a veces igualar o superar al árbol SIMD debido a localidad de caché y salida temprana.</div>
+<div class="comment-i18n" data-lang="de">Interessantes Ergebnis: Bei echtem BGP + uniformen Random-Lookups kann ein einfacher Patricia-Trie den SIMD-Baum aufgrund von Cache-Lokalität und Early-Exit manchmal erreichen oder schlagen.</div>
+
+          <div class="comment-author">-- debugga</div>
+        </div><div class="comment">
+          <div class="comment-text">"Why detect avx512 in build system instead of using #ifdef?"</div>
+          <div class="comment-i18n" data-lang="zh">为什么在构建系统中检测avx512而不用#ifdef？</div>
+<div class="comment-i18n" data-lang="ja">なぜ#ifdefじゃなくビルドシステムでavx512を検出する？</div>
+<div class="comment-i18n" data-lang="ko">왜 #ifdef 대신 빌드 시스템에서 avx512를 감지하는지?</div>
+<div class="comment-i18n" data-lang="es">¿Por qué detectar avx512 en el sistema de build en vez de usar #ifdef?</div>
+<div class="comment-i18n" data-lang="de">Warum avx512 im Build-System erkennen statt #ifdef zu verwenden?</div>
+
+          <div class="comment-author">-- ozgrakkurt</div>
+        </div><div class="comment">
+          <div class="comment-text">"IPv6 longest-prefix-match (LPM)."</div>
+          <div class="comment-i18n" data-lang="zh">IPv6最长前缀匹配（LPM）。</div>
+<div class="comment-i18n" data-lang="ja">IPv6最長プレフィックスマッチ（LPM）。</div>
+<div class="comment-i18n" data-lang="ko">IPv6 최장 접두사 매칭(LPM).</div>
+<div class="comment-i18n" data-lang="es">Coincidencia de prefijo más largo IPv6 (LPM).</div>
+<div class="comment-i18n" data-lang="de">IPv6 Longest-Prefix-Match (LPM).</div>
+
+          <div class="comment-author">-- throwaway81523</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#networking</span><span class="tag">#ipv6</span><span class="tag">#performance</span><span class="tag">#simd</span><span class="tag">#cpp</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-04-20T06:01:00Z</div>
