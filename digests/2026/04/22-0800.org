@@ -1,0 +1,460 @@
+#+TITLE: HN Digest 2026-04-22 08:00:00 UT UTC
+#+DATE: 2026-04-22T08:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+XOR wins popularity contest, Mars reveals ancient organics, and your eyes become smart drug dispensers
+
+* Highlights
+- XOR vs SUB: the x86 zeroing war nobody asked for
+- Mars organics preserved for 3.5 billion years
+- Smart contact lens treats glaucoma without electronics
+
+* Stories
+
+** Fusion Power Plant Simulator :fusion:energy:simulator:physics:
+:PROPERTIES:
+:ID:       47849315
+:URL:      https://www.fusionenergybase.com/fusion-power-plant-simulator
+:HN_URL:   https://news.ycombinator.com/item?id=47849315
+:POINTS:   146
+:COMMENTS: 95
+:BY:       sam
+:END:
+
+*** TLDR
+An interactive web simulator that lets you tweak tokamak fusion parameters like heating energy, pulse rate, scientific gain (Q), and conversion efficiencies to see net power output. Supports both steady-state and pulsed operation modes with advanced options for split conversion streams and blanket multiplication.
+
+*** Take
+Finally, a way to feel smart about fusion without understanding any of the physics. Adjust sliders, watch numbers go up, tell your friends you're basically running ITER from your browser.
+
+*** Comments
+
+**** dale_glass
+:PROPERTIES:
+:COMMENT_ID: 47849420
+:END:
+A good addition would be the sales price per MWh, price for the power plant, and the loan interest rate. Because IMO all that is extremely critical.
+
+**** FiatLuxDave
+:PROPERTIES:
+:COMMENT_ID: 47849521
+:END:
+I actually like the recirculation simulation. Although all kinds of cyclical engines have recirculation of power as part of their function, in fusion there is an important difference.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Simulador de Central de Fusión
+***** TLDR
+Un simulador web interactivo que permite ajustar parámetros de fusión de tokamak como energía de calentamiento, tasa de pulsos, ganancia científica (Q) y eficiencias de conversión para ver la potencia neta.
+***** Take
+Por fin, una forma de sentirse inteligente sobre la fusión sin entender nada de física.
+***** Comments
+- Una buena adición sería el precio de venta por MWh, el precio de la planta y la tasa de interés del préstamo.
+- Me gusta la simulación de recirculación. Aunque todos los motores cíclicos tienen recirculación de potencia, en fusión hay una diferencia importante.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Fusionskraftwerk-Simulator
+***** TLDR
+Ein interaktiver Web-Simulator, mit dem man Tokamak-Fusionsparameter wie Heizenergie, Pulsrate, wissenschaftlichen Gewinn (Q) und Umwandlungseffizienzen anpassen kann.
+***** Take
+Endlich eine Möglichkeit, sich bei Fusion schlau zu fühlen, ohne die Physik zu verstehen.
+***** Comments
+- Eine gute Ergänzung wäre der Verkaufspreis pro MWh, der Kraftwerkspreis und der Kreditzins.
+- Ich mag die Rezirkulationssimulation. Obwohl alle zyklischen Motoren Leistungsrezirkulation haben, gibt es bei Fusion einen wichtigen Unterschied.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+핵융합 발전소 시뮬레이터
+***** TLDR
+가열 에너지, 펄스 속도, 과학적 이득(Q), 변환 효율과 같은 토카막 핵융합 매개변수를 조정하여 순 출력을 확인할 수 있는 대화형 웹 시뮬레이터입니다.
+***** Take
+드디어 물리학을 이해하지 않고도 핵융합에 대해 똑똑한 척할 수 있는 방법이 생겼습니다.
+***** Comments
+- MWh당 판매가, 발전소 가격, 대출 금리를 추가하면 좋겠습니다.
+- 저는 재순환 시뮬레이션이 마음에 듭니다. 모든 순환 엔진에 전력 재순환이 있지만, 핵융합에서는 중요한 차이가 있습니다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+核融合発電所シミュレーター
+***** TLDR
+加熱エネルギー、パルス率、科学的利得（Q）、変換効率などのトカマク核融合パラメータを調整して正味出力を確認できるインタラクティブなWebシミュレーター。
+***** Take
+ついに物理学を理解せずに核融合について賢く見せる方法ができた。
+***** Comments
+- MWhあたりの販売価格、発電所の価格、ローン金利を追加すると良いでしょう。
+- 再循環シミュレーションが気に入っています。すべての循環エンジンには電力再循環がありますが、核融合には重要な違いがあります。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+核聚变发电站模拟器
+***** TLDR
+一个交互式网页模拟器，可以调整托卡马克聚变参数，如加热能量、脉冲率、科学增益（Q）和转换效率，以查看净功率输出。
+***** Take
+终于有办法在不理解任何物理学的情况下对聚变感到聪明了。
+***** Comments
+- 最好能加上每兆瓦时的销售价格、电厂价格和贷款利率。
+- 我喜欢再循环模拟。虽然所有循环引擎都有功率再循环，但在聚变中有一个重要的区别。
+** XOR'ing a register with itself is the idiom for zeroing it out. Why not sub? :assembly:x86:optimization:history:
+:PROPERTIES:
+:ID:       47859861
+:URL:      https://devblogs.microsoft.com/oldnewthing/20260421-00/?p=112247
+:HN_URL:   https://news.ycombinator.com/item?id=47859861
+:POINTS:   34
+:COMMENTS: 14
+:BY:       ingve
+:END:
+
+*** TLDR
+Raymond Chen explains why x86 uses XOR instead of SUB to zero registers despite identical encoding size and cycle count. The answer: social swarming. XOR took a slight early lead (maybe it felt 'cleverer'), compilers adopted it, developers followed, and Intel special-cased both instructions. But some CPUs only optimize XOR, cementing its victory.
+
+*** Take
+This is the QWERTY vs Dvorak of assembly language. Once an instruction wins the popularity contest, it's over. SUB technically clears the AF flag (XOR leaves it undefined), but nobody cares because the war was decided by vibes.
+
+*** Comments
+
+**** Sweepi
+:PROPERTIES:
+:COMMENT_ID: 47859912
+:END:
+Will remember for the next time I write asm for Itanium!
+
+**** NewCzech
+:PROPERTIES:
+:COMMENT_ID: 47859945
+:END:
+The obvious answer is that XOR is faster. To do a subtract, you have to propagate the carry bit from the LSB to MSB. In XOR you don't have to do that because the output of every bit is independent.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+XOR de un registro consigo mismo es el estándar para ponerlo a cero. ¿Por qué no SUB?
+***** TLDR
+Raymond Chen explica por qué x86 usa XOR en lugar de SUB para poner registros a cero a pesar del tamaño y ciclos idénticos. La respuesta: comportamiento de manada social.
+***** Take
+Este es el QWERTY vs Dvorak del lenguaje ensamblador. Una vez que una instrucción gana el concurso de popularidad, se acabó.
+***** Comments
+- ¡Lo recordaré para la próxima vez que escriba asm para Itanium!
+- La respuesta obvia es que XOR es más rápido. Para hacer una resta, hay que propagar el bit de acarreo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+XOR eines Registers mit sich selbst ist der Standard zum Nullsetzen. Warum nicht SUB?
+***** TLDR
+Raymond Chen erklärt, warum x86 XOR statt SUB zum Nullsetzen von Registern verwendet, obwohl Kodierungsgröße und Zyklusanzahl identisch sind. Die Antwort: soziales Schwarmverhalten.
+***** Take
+Das ist das QWERTY vs Dvorak der Assemblersprache. Sobald eine Anweisung den Beliebtheitswettbewerb gewinnt, ist es vorbei.
+***** Comments
+- Werde ich mir merken für das nächste Mal, wenn ich asm für Itanium schreibe!
+- Die offensichtliche Antwort ist, dass XOR schneller ist. Bei einer Subtraktion muss man das Carry-Bit propagieren.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+레지스터를 자기 자신과 XOR하는 것이 0으로 만드는 관용어입니다. 왜 SUB은 안 되나요?
+***** TLDR
+Raymond Chen이 인코딩 크기와 사이클 수가 동일함에도 불구하고 x86이 레지스터를 0으로 만들 때 SUB 대신 XOR을 사용하는 이유를 설명합니다. 답: 사회적 군집 행동.
+***** Take
+이것은 어셈블리 언어의 QWERTY vs Dvorak입니다. 명령어가 인기 경쟁에서 이기면 끝입니다.
+***** Comments
+- 다음에 Itanium용 asm을 작성할 때 기억하겠습니다!
+- 당연한 대답은 XOR이 더 빠르다는 것입니다. 뺄셈을 하려면 캐리 비트를 전파해야 합니다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+レジスタを自身とXORするのがゼロ化の定番。なぜSUBではないのか？
+***** TLDR
+Raymond Chenがエンコーディングサイズとサイクル数が同一にもかかわらず、x86がレジスタをゼロにするのにSUBではなくXORを使う理由を説明。答え：社会的群集行動。
+***** Take
+これはアセンブリ言語のQWERTY vs Dvorakだ。命令が人気コンテストで勝てば、それで終わり。
+***** Comments
+- 次にItanium用のasmを書くときに覚えておきます！
+- 明らかな答えはXORの方が速いということ。減算ではキャリービットを伝播させる必要がある。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用寄存器和自身XOR是清零的惯用法。为什么不用SUB？
+***** TLDR
+Raymond Chen解释了为什么x86使用XOR而不是SUB来清零寄存器，尽管编码大小和周期数相同。答案：社会从众行为。
+***** Take
+这是汇编语言中的QWERTY vs Dvorak。一旦一条指令赢得了人气竞赛，就结束了。
+***** Comments
+- 下次为Itanium写汇编时会记住！
+- 显而易见的答案是XOR更快。做减法需要从最低位到最高位传播进位。
+** Diverse organic molecules on Mars revealed by the first SAM TMAH experiment :mars:space:nasa:astrobiology:
+:PROPERTIES:
+:ID:       47846861
+:URL:      https://www.courthousenews.com/preserved-for-billions-of-years-organic-compounds-found-on-mars/
+:HN_URL:   https://news.ycombinator.com/item?id=47846861
+:POINTS:   63
+:COMMENTS: 2
+:BY:       geox
+:END:
+
+*** TLDR
+NASA's Curiosity rover used a chemical called TMAH for the first time on another planet and identified 20+ organic compounds in Gale Crater rocks, including a nitrogen-bearing molecule similar to DNA building blocks. The organics have been preserved for 3.5 billion years, proving Mars can hold onto complex molecules, but this doesn't confirm life existed.
+
+*** Take
+So Mars has had organic molecules sitting around for 3.5 billion years and we're just now checking. Meanwhile, we can't preserve a banana on the counter for 3.5 days.
+
+*** Comments
+
+**** g8425
+:PROPERTIES:
+:COMMENT_ID: 47846892
+:END:
+Shouldn't this link directly to the paper in question, instead of Courthousenews?
+
+**** philprx
+:PROPERTIES:
+:COMMENT_ID: 47846901
+:END:
+The Hawk Tuah experiment discovered organic matter??? How surprising!
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Diversas moléculas orgánicas en Marte reveladas por el primer experimento SAM TMAH
+***** TLDR
+El rover Curiosity de la NASA usó un químico llamado TMAH por primera vez en otro planeta e identificó más de 20 compuestos orgánicos en rocas del Cráter Gale, preservados durante 3.500 millones de años.
+***** Take
+Marte ha tenido moléculas orgánicas durante 3.500 millones de años y recién ahora las revisamos. Mientras tanto, no podemos conservar un plátano en el mostrador por 3,5 días.
+***** Comments
+- ¿No debería este enlace ir directamente al artículo científico en lugar de a Courthousenews?
+- ¿El experimento Hawk Tuah descubrió materia orgánica??? ¡Qué sorpresa!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Vielfältige organische Moleküle auf dem Mars durch das erste SAM-TMAH-Experiment enthüllt
+***** TLDR
+Der Curiosity-Rover der NASA hat zum ersten Mal auf einem anderen Planeten eine Chemikalie namens TMAH verwendet und über 20 organische Verbindungen in Gale-Krater-Gesteinen identifiziert, die 3,5 Milliarden Jahre erhalten blieben.
+***** Take
+Der Mars hat also seit 3,5 Milliarden Jahren organische Moleküle herumliegen und wir schauen erst jetzt nach. Währenddessen können wir keine Banane 3,5 Tage auf der Theke aufbewahren.
+***** Comments
+- Sollte dieser Link nicht direkt zum Paper führen, anstatt zu Courthousenews?
+- Das Hawk-Tuah-Experiment hat organische Materie entdeckt??? Wie überraschend!
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+첫 번째 SAM TMAH 실험으로 밝혀진 화성의 다양한 유기 분자
+***** TLDR
+NASA의 큐리오시티 로버가 다른 행성에서 처음으로 TMAH라는 화학물질을 사용하여 35억 년 동안 보존된 게일 분화구 암석에서 20개 이상의 유기 화합물을 확인했습니다.
+***** Take
+화성에 35억 년 동안 유기 분자가 있었는데 이제서야 확인하고 있습니다. 그동안 우리는 바나나를 3.5일도 보관하지 못합니다.
+***** Comments
+- 이 링크가 Courthousenews 대신 논문으로 직접 연결되어야 하지 않나요?
+- Hawk Tuah 실험이 유기물을 발견했다고??? 놀랍네요!
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+初のSAM TMAH実験で明らかになった火星の多様な有機分子
+***** TLDR
+NASAのキュリオシティ探査機が他の惑星で初めてTMAHという化学物質を使用し、35億年保存されたゲールクレーターの岩石から20以上の有機化合物を特定しました。
+***** Take
+火星には35億年間有機分子があったのに、今になってやっと調べている。一方、我々はバナナを3.5日もカウンターに保存できない。
+***** Comments
+- このリンクはCourthouswnewsではなく、論文に直接リンクすべきでは？
+- Hawk Tuah実験が有機物を発見した？？？驚きだ！
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+首次SAM TMAH实验揭示火星上的多种有机分子
+***** TLDR
+NASA的好奇号探测器首次在另一个星球上使用一种叫TMAH的化学物质，在盖尔陨石坑的岩石中发现了20多种有机化合物，这些化合物已保存了35亿年。
+***** Take
+火星上有机分子放了35亿年，我们现在才去检查。与此同时，我们连香蕉都放不了3.5天。
+***** Comments
+- 这个链接不应该直接链到论文吗，而不是Courthousenews？
+- Hawk Tuah实验发现了有机物？？？真令人惊讶！
+** Garbage Collection Without Unsafe Code :rust:garbage-collection:memory:programming:
+:PROPERTIES:
+:ID:       47821853
+:URL:      https://fitzgen.com/2024/02/06/safe-gc.html
+:HN_URL:   https://news.ycombinator.com/item?id=47821853
+:POINTS:   24
+:COMMENTS: 1
+:BY:       foota
+:END:
+
+*** TLDR
+The safe-gc Rust crate implements mark-and-sweep garbage collection with zero unsafe code by using arena-based allocation and requiring heap indexing to access GC objects. Instead of dereferencing Gc<T> directly, you index into the Heap. Roots are tracked via Rc<RefCell<...>> for proper lifetime management. Trade-off: not a high-performance collector, but proves GC can be done in pure safe Rust.
+
+*** Take
+Finally someone proved you can do GC in Rust without unsafe. The catch is you can't dereference pointers directly, which defeats half the ergonomic benefit of having GC in the first place. Still, a beautiful proof of concept.
+
+*** Comments
+
+**** foota
+:PROPERTIES:
+:COMMENT_ID: 47821901
+:END:
+I found this while looking for a solution for more easily removing some unsafe code from a library that does a lot of C FFI. I didn't end up going with it though.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Recolección de basura sin código unsafe
+***** TLDR
+La crate safe-gc de Rust implementa recolección de basura mark-and-sweep con cero código unsafe usando asignación basada en arena y requiriendo indexación del heap para acceder a objetos GC.
+***** Take
+Finalmente alguien demostró que se puede hacer GC en Rust sin unsafe. El problema es que no puedes desreferenciar punteros directamente.
+***** Comments
+- Encontré esto mientras buscaba una solución para eliminar más fácilmente código unsafe de una biblioteca con mucho C FFI. Al final no lo usé.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Garbage Collection ohne unsicheren Code
+***** TLDR
+Die safe-gc Rust-Crate implementiert Mark-and-Sweep-Garbage-Collection mit null unsicherem Code durch arena-basierte Allokation und erfordert Heap-Indexierung für den Zugriff auf GC-Objekte.
+***** Take
+Endlich hat jemand bewiesen, dass man GC in Rust ohne unsafe machen kann. Der Haken ist, dass man Zeiger nicht direkt dereferenzieren kann.
+***** Comments
+- Ich habe das gefunden, während ich nach einer Lösung suchte, um unsicheren Code aus einer Bibliothek mit viel C-FFI leichter zu entfernen. Am Ende habe ich es aber nicht verwendet.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+unsafe 코드 없이 가비지 컬렉션
+***** TLDR
+safe-gc Rust 크레이트는 아레나 기반 할당을 사용하고 GC 객체에 접근하기 위해 힙 인덱싱을 요구하여 unsafe 코드 없이 mark-and-sweep 가비지 컬렉션을 구현합니다.
+***** Take
+드디어 누군가가 unsafe 없이 Rust에서 GC를 할 수 있다는 것을 증명했습니다. 문제는 포인터를 직접 역참조할 수 없다는 것입니다.
+***** Comments
+- C FFI를 많이 하는 라이브러리에서 unsafe 코드를 더 쉽게 제거할 방법을 찾다가 이것을 발견했습니다. 결국 사용하지는 않았지만요.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+unsafeコードなしのガベージコレクション
+***** TLDR
+safe-gc Rustクレートはアリーナベースのアロケーションを使用し、GCオブジェクトへのアクセスにヒープインデックスを必要とすることで、unsafeコードゼロでマーク＆スイープGCを実装しています。
+***** Take
+ついに誰かがRustでunsafeなしでGCができることを証明した。問題はポインタを直接デリファレンスできないこと。
+***** Comments
+- C FFIを多用するライブラリからunsafeコードを簡単に削除する方法を探していて見つけました。結局使いませんでしたが。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+不使用unsafe代码的垃圾回收
+***** TLDR
+safe-gc Rust库使用基于arena的分配并要求通过堆索引来访问GC对象，实现了零unsafe代码的标记清除垃圾回收。
+***** Take
+终于有人证明了可以在Rust中不用unsafe实现GC。问题是你不能直接解引用指针。
+***** Comments
+- 我在寻找从大量C FFI的库中更容易删除unsafe代码的方案时发现了这个。不过最后没有使用。
+** Contact Lens Uses Microfluidics to Monitor and Treat Glaucoma :biomedical:wearables:glaucoma:microfluidics:
+:PROPERTIES:
+:ID:       47823654
+:URL:      https://spectrum.ieee.org/smart-contact-lens-glaucoma-microfluidics
+:HN_URL:   https://news.ycombinator.com/item?id=47823654
+:POINTS:   8
+:COMMENTS: 0
+:BY:       pseudolus
+:END:
+
+*** TLDR
+Researchers at Terasaki Institute created an all-polymer contact lens with embedded microfluidics that monitors eye pressure via a red fluid in microchannels (read by a phone app with 94% accuracy) and automatically releases drugs when pressure rises. The silk sponge reservoirs can hold 2 weeks of medicine. Tested on rabbits with no inflammation issues.
+
+*** Take
+Your contact lens is now smarter than most IoT devices. It monitors, diagnoses, and medicates without batteries, WiFi, or a subscription fee. The rabbits are impressed.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Lente de contacto usa microfluídica para monitorear y tratar el glaucoma
+***** TLDR
+Investigadores crearon una lente de contacto de polímero con microfluídica incorporada que monitorea la presión ocular y libera medicamentos automáticamente cuando la presión sube. Los reservorios pueden contener 2 semanas de medicina.
+***** Take
+Tu lente de contacto ahora es más inteligente que la mayoría de dispositivos IoT. Monitorea, diagnostica y medica sin baterías, WiFi ni suscripción.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kontaktlinse nutzt Mikrofluidik zur Überwachung und Behandlung von Glaukom
+***** TLDR
+Forscher haben eine Polymer-Kontaktlinse mit eingebetteter Mikrofluidik entwickelt, die den Augendruck überwacht und automatisch Medikamente freisetzt, wenn der Druck steigt. Die Reservoirs können 2 Wochen Medikamente speichern.
+***** Take
+Ihre Kontaktlinse ist jetzt schlauer als die meisten IoT-Geräte. Sie überwacht, diagnostiziert und verabreicht Medikamente ohne Batterien, WLAN oder Abo.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+녹내장 모니터링 및 치료를 위한 미세유체공학 콘택트렌즈
+***** TLDR
+연구자들이 미세유체공학이 내장된 폴리머 콘택트렌즈를 만들었습니다. 안압을 모니터링하고 압력이 올라가면 자동으로 약물을 방출합니다. 저장고는 2주분의 약을 담을 수 있습니다.
+***** Take
+당신의 콘택트렌즈가 이제 대부분의 IoT 기기보다 똑똑합니다. 배터리, WiFi, 구독료 없이 모니터링, 진단, 투약합니다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+緑内障の監視と治療にマイクロ流体工学を使用するコンタクトレンズ
+***** TLDR
+研究者たちはマイクロ流体工学を内蔵したポリマーコンタクトレンズを作成しました。眼圧を監視し、圧力が上昇すると自動的に薬を放出します。リザーバーは2週間分の薬を保持できます。
+***** Take
+あなたのコンタクトレンズは今やほとんどのIoTデバイスより賢い。バッテリー、WiFi、サブスクなしで監視、診断、投薬する。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+使用微流控技术监测和治疗青光眼的隐形眼镜
+***** TLDR
+研究人员创建了一种内置微流控的全聚合物隐形眼镜，可监测眼压并在压力升高时自动释放药物。储液器可容纳2周的药物。
+***** Take
+你的隐形眼镜现在比大多数物联网设备都聪明。无需电池、WiFi或订阅费就能监测、诊断和用药。
