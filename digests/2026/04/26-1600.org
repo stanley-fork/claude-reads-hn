@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-04-26 16:00:00 UT UTC
+#+DATE: 2026-04-26T16:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Asahi hits 7.0, OpenAI admits benchmarks are broken, and GitHub forgets how links work
+
+* Highlights
+- Asahi Linux 7.0: VRR support, M3 progress, and 20% less idle power
+- OpenAI says SWE-bench Verified is contaminated and we should all stop using it
+- GitHub's new popup UX: Because tabs were too intuitive
+- Statecharts: State machines for people who think state machines are too simple
+- Gaussian Splats become playable games with collision and navmesh
+
+* Stories
+
+** Asahi Linux Progress Report: Linux 7.0 :linux:apple:hardware:reverse-engineering:
+:PROPERTIES:
+:ID:       47909226
+:URL:      https://asahilinux.org/2026/04/progress-report-7-0/
+:HN_URL:   https://news.ycombinator.com/item?id=47909226
+:POINTS:   373
+:COMMENTS: 136
+:BY:       elisaado
+:END:
+
+*** TLDR
+After three years of 6.x kernels, Asahi Linux hits 7.0 with VRR display support (via a workaround since Apple's DCP requires modesets), ambient light sensor calibration, Bluetooth coexistence fixes, PMP power management saving 20% idle power on M1 Pro, and M3 hardware support reaching alpha-level readiness. Also automated their installer deployment.
+
+*** Take
+The amount of reverse engineering these folks do would make the NSA blush. They figured out that a 'power sequencing' parameter was actually VRR all along by just... trying different values. That's not engineering, that's archaeology with a debugger.
+
+*** Comments
+
+**** georgeburdell
+:PROPERTIES:
+:COMMENT_ID: 47909301
+:END:
+Apple Hardware + Linux is the least fscked OS running on the best hardware. MacOS continues to be a tire fire with endless bugs and churn between versions.
+
+**** kakwa_
+:PROPERTIES:
+:COMMENT_ID: 47909285
+:END:
+I remain a bit skeptical. I'm concerned that after all these years, it's still a separate project and not sustained within the kernel mainline and mainstream distributions.
+
+**** brynet
+:PROPERTIES:
+:COMMENT_ID: 47909260
+:END:
+CS42L42 supports all the other common sample rates, and while the register layout is different, the actual values for 48 and 96 kHz are the same across both chips. What would happen if we simply took the values from the datasheet?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Asahi Linux进展报告：Linux 7.0
+***** TLDR
+经过三年的6.x内核开发，Asahi Linux发布7.0版本，支持VRR显示、环境光传感器校准、蓝牙共存修复、PMP电源管理节省20%空闲功耗，M3硬件支持达到alpha级别。
+***** Take
+这些人的逆向工程能力让NSA都自愧不如。他们发现一个'电源时序'参数其实是VRR，就靠尝试不同的值。这不是工程，这是拿调试器做考古。
+***** Comments
+- Apple硬件+Linux是运行在最好硬件上最不混乱的操作系统。MacOS持续是个Bug和版本变动的火坑。
+- 我有些怀疑。担心这么多年后，它仍是独立项目而非内核主线的一部分。
+- CS42L42支持所有常见采样率，如果我们直接用数据手册的值会怎样？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Asahi Linux進捗報告：Linux 7.0
+***** TLDR
+6.xカーネルから3年、Asahi LinuxはVRRディスプレイ対応、環境光センサー、Bluetooth共存修正、M1 Proで20%のアイドル電力削減、M3サポートがアルファレベルに到達した7.0をリリース。
+***** Take
+この人たちのリバースエンジニアリングはNSAも顔負け。「電源シーケンス」パラメータが実はVRRだと、値を変えて試すだけで発見した。これはエンジニアリングじゃない、デバッガを使った考古学だ。
+***** Comments
+- Appleハードウェア+Linuxは最高のハードで動く最もまともなOS。MacOSはバグと変更の連続で炎上中。
+- 少し懐疑的。何年経ってもカーネルメインラインに統合されていないのが気になる。
+- CS42L42は他のサンプルレートもサポート。データシートの値を使ったらどうなる？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Asahi Linux 진행 보고: Linux 7.0
+***** TLDR
+6.x 커널 3년 만에 Asahi Linux 7.0 출시. VRR 디스플레이 지원, 조도 센서 캘리브레이션, 블루투스 공존 수정, M1 Pro 유휴 전력 20% 절감, M3 하드웨어 알파 레벨 지원.
+***** Take
+이 사람들의 리버스 엔지니어링 실력은 NSA도 부끄러워할 정도. '전원 시퀀싱' 파라미터가 사실 VRR이었다는 걸 그냥 값을 바꿔보며 알아냈다. 이건 공학이 아니라 디버거로 하는 고고학이다.
+***** Comments
+- Apple 하드웨어 + Linux는 최고의 하드웨어에서 돌아가는 가장 덜 망가진 OS. MacOS는 계속 버그와 변경의 화재 현장.
+- 좀 회의적이다. 몇 년이 지났는데도 여전히 커널 메인라인이 아닌 별도 프로젝트인 점이 걱정된다.
+- CS42L42는 다른 샘플 레이트도 지원한다. 데이터시트 값을 그냥 쓰면 어떻게 될까?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Informe de Progreso de Asahi Linux: Linux 7.0
+***** TLDR
+Después de tres años de kernels 6.x, Asahi Linux llega a 7.0 con soporte VRR, calibración del sensor de luz ambiental, correcciones de coexistencia Bluetooth, ahorro del 20% en consumo en reposo con PMP, y soporte M3 a nivel alfa.
+***** Take
+La cantidad de ingeniería inversa que hace esta gente haría sonrojar a la NSA. Descubrieron que un parámetro de 'secuencia de energía' era en realidad VRR simplemente... probando valores diferentes. Eso no es ingeniería, es arqueología con depurador.
+***** Comments
+- Apple Hardware + Linux es el SO menos jodido corriendo en el mejor hardware. MacOS sigue siendo un desastre de bugs y cambios.
+- Sigo un poco escéptico. Me preocupa que después de tantos años, siga siendo un proyecto separado y no parte del kernel principal.
+- CS42L42 soporta otras tasas de muestreo. ¿Qué pasaría si usamos los valores de la hoja de datos?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Asahi Linux Fortschrittsbericht: Linux 7.0
+***** TLDR
+Nach drei Jahren mit 6.x-Kerneln erreicht Asahi Linux 7.0 mit VRR-Display-Unterstützung, Umgebungslichtsensor-Kalibrierung, Bluetooth-Koexistenz-Fixes, 20% weniger Leerlaufverbrauch durch PMP und M3-Hardware-Support auf Alpha-Niveau.
+***** Take
+Das Reverse Engineering dieser Leute würde die NSA erröten lassen. Sie fanden heraus, dass ein 'Power-Sequencing'-Parameter eigentlich VRR war, indem sie einfach... verschiedene Werte ausprobierten. Das ist keine Technik, das ist Archäologie mit Debugger.
+***** Comments
+- Apple Hardware + Linux ist das am wenigsten kaputte OS auf der besten Hardware. MacOS ist weiterhin ein Feuer aus Bugs und Änderungen.
+- Ich bleibe etwas skeptisch. Ich mache mir Sorgen, dass es nach all den Jahren immer noch ein separates Projekt ist.
+- CS42L42 unterstützt alle anderen Abtastraten. Was würde passieren, wenn wir die Werte aus dem Datenblatt nehmen?
+** Why SWE-bench Verified no longer measures frontier coding capabilities :ai:benchmarks:openai:software-engineering:
+:PROPERTIES:
+:ID:       47910388
+:URL:      https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/
+:HN_URL:   https://news.ycombinator.com/item?id=47910388
+:POINTS:   74
+:COMMENTS: 59
+:BY:       kmdupree
+:END:
+
+*** TLDR
+OpenAI audited SWE-bench Verified and found 59% of failed tasks had flawed tests that reject correct solutions. Worse, all frontier models showed training contamination - they could reproduce verbatim gold patches or problem descriptions. GPT-5.2, Claude Opus 4.5, and Gemini 3 Flash all leaked task-specific details when probed. OpenAI recommends switching to SWE-bench Pro.
+
+*** Take
+The benchmark the entire industry has been using to measure AI coding progress was broken from day one, and everyone knew it but kept reporting scores anyway because marketing departments needed numbers. At least OpenAI had the decency to write a postmortem instead of quietly pivoting.
+
+*** Comments
+
+**** cowartc
+:PROPERTIES:
+:COMMENT_ID: 47910450
+:END:
+The headline leads with contamination, but buried is that 59% of audited failures had test design defects. That's a measurement system never validated against ground truth before being adopted industry-wide.
+
+**** rustyhancock
+:PROPERTIES:
+:COMMENT_ID: 47910480
+:END:
+An Olympiad format is better. A panel comes up with problems, benchmarks measure performance points and cost, run a couple times per year. Avoids overfitting.
+
+**** Jcampuzano2
+:PROPERTIES:
+:COMMENT_ID: 47910510
+:END:
+Any benchmark that comes out will be outdated and exist within the training data with short measure. There will always be an incentive to optimize specifically for these benchmarks.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么SWE-bench Verified不再衡量前沿编程能力
+***** TLDR
+OpenAI审计SWE-bench Verified发现59%的失败任务存在测试缺陷，会拒绝正确解决方案。更糟的是，所有前沿模型都显示训练污染——能逐字复现gold patch或问题描述。GPT-5.2、Claude Opus 4.5、Gemini 3 Flash都泄露了任务细节。OpenAI建议改用SWE-bench Pro。
+***** Take
+整个行业用来衡量AI编程进展的基准从一开始就是坏的，大家都知道但继续报告分数因为市场部门需要数字。至少OpenAI有诚意写了个事后分析而不是悄悄换方向。
+***** Comments
+- 标题说污染，但深埋的是59%审计失败有测试设计缺陷。一个从未验证就被全行业采用的测量系统。
+- 奥林匹克格式更好。专家小组出题，基准测量性能和成本，每年运行几次。避免过拟合。
+- 任何基准出来都会很快过时并进入训练数据。总有优化特定基准的激励。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+SWE-bench Verifiedがフロンティアコーディング能力を測定しなくなった理由
+***** TLDR
+OpenAIがSWE-bench Verifiedを監査し、失敗タスクの59%がテスト設計の欠陥で正しい解答を拒否していることを発見。さらに、全フロンティアモデルが訓練汚染を示し、gold patchや問題文を逐語的に再現可能。GPT-5.2、Claude Opus 4.5、Gemini 3 Flashがタスク詳細を漏洩。SWE-bench Proへの切り替えを推奨。
+***** Take
+業界全体がAIコーディング進捗の測定に使ってきたベンチマークは最初から壊れていて、みんな知っていたがマーケティング部門が数字を必要としていたので報告し続けた。せめてOpenAIは黙って方向転換せず事後分析を書いた。
+***** Comments
+- 見出しは汚染だが、59%の監査失敗がテスト設計欠陥という話は埋もれている。検証されないまま業界全体で採用された測定システム。
+- オリンピック形式の方が良い。パネルが問題を作り、年に数回実施。過学習を避けられる。
+- どんなベンチマークもすぐ時代遅れになり訓練データに入る。特定ベンチマーク最適化のインセンティブは常にある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+SWE-bench Verified가 더 이상 최첨단 코딩 능력을 측정하지 못하는 이유
+***** TLDR
+OpenAI가 SWE-bench Verified를 감사한 결과 실패 태스크의 59%가 올바른 솔루션을 거부하는 테스트 설계 결함이 있었다. 더 심각한 것은 모든 프론티어 모델이 훈련 오염을 보여 gold patch나 문제 설명을 그대로 재현할 수 있었다. SWE-bench Pro로 전환 권장.
+***** Take
+업계 전체가 AI 코딩 진전을 측정하는 데 사용한 벤치마크가 처음부터 망가져 있었고, 다들 알면서도 마케팅 부서가 숫자가 필요해서 계속 보고했다. 최소한 OpenAI는 조용히 전환하지 않고 사후 분석을 썼다.
+***** Comments
+- 헤드라인은 오염을 말하지만 59%의 감사 실패가 테스트 설계 결함이라는 건 묻혀있다. 검증 없이 업계 전체에 채택된 측정 시스템.
+- 올림피아드 형식이 더 낫다. 패널이 문제를 만들고 연간 몇 번 실행. 과적합을 피할 수 있다.
+- 어떤 벤치마크든 곧 구식이 되고 훈련 데이터에 들어간다. 특정 벤치마크 최적화 인센티브는 항상 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué SWE-bench Verified ya no mide capacidades de programación de frontera
+***** TLDR
+OpenAI auditó SWE-bench Verified y encontró que el 59% de las tareas fallidas tenían tests defectuosos que rechazan soluciones correctas. Peor aún, todos los modelos frontier mostraron contaminación de entrenamiento. GPT-5.2, Claude Opus 4.5 y Gemini 3 Flash filtraron detalles específicos. OpenAI recomienda cambiar a SWE-bench Pro.
+***** Take
+El benchmark que toda la industria usaba para medir el progreso de IA en programación estaba roto desde el día uno, y todos lo sabían pero seguían reportando puntuaciones porque marketing necesitaba números. Al menos OpenAI tuvo la decencia de escribir un postmortem.
+***** Comments
+- El titular habla de contaminación, pero enterrado está que el 59% de fallos auditados tenían defectos de diseño de tests. Un sistema nunca validado antes de ser adoptado por toda la industria.
+- Un formato de Olimpiada es mejor. Un panel crea problemas, se ejecuta unas veces al año. Evita el sobreajuste.
+- Cualquier benchmark quedará obsoleto y entrará en los datos de entrenamiento. Siempre habrá incentivo para optimizar específicamente para estos benchmarks.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum SWE-bench Verified keine Frontier-Coding-Fähigkeiten mehr misst
+***** TLDR
+OpenAI hat SWE-bench Verified geprüft und festgestellt, dass 59% der fehlgeschlagenen Aufgaben fehlerhafte Tests hatten, die korrekte Lösungen ablehnen. Schlimmer noch: Alle Frontier-Modelle zeigten Trainings-Kontamination. GPT-5.2, Claude Opus 4.5 und Gemini 3 Flash leakten aufgabenspezifische Details. OpenAI empfiehlt den Wechsel zu SWE-bench Pro.
+***** Take
+Der Benchmark, den die gesamte Branche zur Messung des KI-Coding-Fortschritts verwendet hat, war von Anfang an kaputt, und jeder wusste es, aber sie berichteten trotzdem Punktzahlen, weil die Marketingabteilung Zahlen brauchte. Immerhin hatte OpenAI den Anstand, eine Nachanalyse zu schreiben.
+***** Comments
+- Die Überschrift spricht von Kontamination, aber vergraben ist, dass 59% der geprüften Fehler Testdesign-Mängel hatten. Ein nie validiertes Messsystem, das branchenweit übernommen wurde.
+- Ein Olympiade-Format ist besser. Ein Panel erstellt Probleme, führt es mehrmals im Jahr durch. Vermeidet Überanpassung.
+- Jeder Benchmark wird veralten und in die Trainingsdaten gelangen. Es wird immer einen Anreiz geben, speziell für diese Benchmarks zu optimieren.
+** Statecharts: hierarchical state machines :programming:state-machines:architecture:frontend:
+:PROPERTIES:
+:ID:       47908833
+:URL:      https://statecharts.dev/
+:HN_URL:   https://news.ycombinator.com/item?id=47908833
+:POINTS:   186
+:COMMENTS: 55
+:BY:       sph
+:END:
+
+*** TLDR
+Statecharts are state machines with superpowers: hierarchy (states within states), parallelism (multiple active states), history (remember where you were), and guards. W3C standardized them as SCXML after 10 years. Benefits include forced exploration of all states, lower bug counts, and non-developers can actually read the diagrams. XState is the popular JS implementation.
+
+*** Take
+Every time someone discovers statecharts they act like they found the Holy Grail. And they're not entirely wrong - the concept is from 1987 and most codebases are still using tangled if-else spaghetti that would make Harel weep.
+
+*** Comments
+
+**** davidkpiano
+:PROPERTIES:
+:COMMENT_ID: 47908900
+:END:
+I created XState, a JS/TS library for statecharts. I've been working on it for 10+ years. The main thing I've learned is that statecharts are most valuable when they're treated as executable behavior, not just documentation.
+
+**** nop_slide
+:PROPERTIES:
+:COMMENT_ID: 47908920
+:END:
+Anyone remember Sproutcore JS? They used state charts.
+
+**** ronin_niron
+:PROPERTIES:
+:COMMENT_ID: 47908940
+:END:
+One thing usually skipped in primers: history pseudo-states make a statechart formally non-deterministic from outside. The 'current state is a pure function of inputs' pitch breaks.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+状态图：层次化状态机
+***** TLDR
+状态图是加强版状态机：层次结构（状态内嵌套状态）、并行（多个活跃状态）、历史（记住之前位置）和守卫。W3C用10年将其标准化为SCXML。好处包括强制探索所有状态、更少Bug、非开发人员也能看懂图表。XState是流行的JS实现。
+***** Take
+每次有人发现状态图都表现得像找到了圣杯。他们也不完全错——这个概念来自1987年，但大多数代码库仍在用乱成一团的if-else面条代码，Harel看了会哭。
+***** Comments
+- 我创建了XState，一个JS/TS状态图库。做了10多年。最重要的是把状态图当作可执行行为而不仅仅是文档。
+- 有人记得Sproutcore JS吗？他们用过状态图。
+- 入门教程通常跳过的一点：历史伪状态让状态图从外部看是非确定性的。'当前状态是输入的纯函数'这个说法就不成立了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ステートチャート：階層型ステートマシン
+***** TLDR
+ステートチャートはスーパーパワーを持つステートマシン：階層構造、並列性、履歴、ガード。W3Cが10年かけてSCXMLとして標準化。すべての状態を強制的に探索、バグ削減、非開発者も図を読める。XStateが人気のJS実装。
+***** Take
+ステートチャートを発見するたびに聖杯を見つけたかのように振る舞う。そして完全に間違いでもない——1987年の概念なのに、ほとんどのコードベースは絡み合ったif-elseスパゲッティを使っていてHarelが泣く。
+***** Comments
+- XStateを作った、JS/TSのステートチャートライブラリ。10年以上取り組んでいる。最も重要なのはステートチャートを単なるドキュメントではなく実行可能な振る舞いとして扱うこと。
+- Sproutcore JS覚えてる？ステートチャート使ってた。
+- 入門でよく飛ばされる点：履歴擬似状態はステートチャートを外部から見て非決定的にする。「現在の状態は入力の純粋関数」という売り文句が崩れる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+스테이트차트: 계층적 상태 머신
+***** TLDR
+스테이트차트는 슈퍼파워를 가진 상태 머신: 계층 구조, 병렬성, 히스토리, 가드. W3C가 10년에 걸쳐 SCXML로 표준화. 모든 상태 강제 탐색, 낮은 버그 수, 비개발자도 다이어그램을 읽을 수 있음. XState가 인기 있는 JS 구현.
+***** Take
+누군가 스테이트차트를 발견할 때마다 성배를 찾은 것처럼 행동한다. 완전히 틀린 것도 아니다 - 1987년 개념인데 대부분의 코드베이스는 여전히 Harel이 울 만큼 엉킨 if-else 스파게티를 쓰고 있다.
+***** Comments
+- XState를 만들었다, JS/TS 스테이트차트 라이브러리. 10년 넘게 작업 중. 가장 중요한 건 스테이트차트를 문서가 아닌 실행 가능한 동작으로 다루는 것.
+- Sproutcore JS 기억나? 스테이트 차트 썼었지.
+- 입문서에서 자주 건너뛰는 점: 히스토리 의사 상태가 스테이트차트를 외부에서 보면 비결정적으로 만든다. '현재 상태는 입력의 순수 함수' 홍보가 무너진다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Statecharts: máquinas de estado jerárquicas
+***** TLDR
+Los statecharts son máquinas de estado con superpoderes: jerarquía, paralelismo, historial y guardas. W3C los estandarizó como SCXML tras 10 años. Beneficios incluyen exploración forzada de todos los estados, menos bugs, y los no-desarrolladores pueden leer los diagramas. XState es la implementación JS popular.
+***** Take
+Cada vez que alguien descubre los statecharts actúa como si hubiera encontrado el Santo Grial. Y no están del todo equivocados - el concepto es de 1987 y la mayoría del código sigue usando espagueti de if-else enredado que haría llorar a Harel.
+***** Comments
+- Creé XState, una librería JS/TS para statecharts. He trabajado en ella más de 10 años. Lo más importante es tratar los statecharts como comportamiento ejecutable, no solo documentación.
+- ¿Alguien recuerda Sproutcore JS? Usaban state charts.
+- Algo que suelen saltar los tutoriales: los pseudo-estados de historial hacen que un statechart sea formalmente no determinista desde fuera. El argumento de 'el estado actual es función pura de las entradas' se rompe.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Statecharts: hierarchische Zustandsmaschinen
+***** TLDR
+Statecharts sind Zustandsmaschinen mit Superkräften: Hierarchie, Parallelität, History und Guards. W3C hat sie nach 10 Jahren als SCXML standardisiert. Vorteile: erzwungene Exploration aller Zustände, weniger Bugs, Nicht-Entwickler können die Diagramme lesen. XState ist die beliebte JS-Implementierung.
+***** Take
+Jedes Mal, wenn jemand Statecharts entdeckt, verhält er sich, als hätte er den Heiligen Gral gefunden. Und sie liegen nicht ganz falsch - das Konzept ist von 1987, aber die meisten Codebasen verwenden immer noch verschlungenes If-Else-Spaghetti, das Harel zum Weinen bringen würde.
+***** Comments
+- Ich habe XState erstellt, eine JS/TS-Bibliothek für Statecharts. Ich arbeite seit über 10 Jahren daran. Das Wichtigste ist, Statecharts als ausführbares Verhalten zu behandeln, nicht nur als Dokumentation.
+- Erinnert sich jemand an Sproutcore JS? Die haben State Charts verwendet.
+- Etwas, das in Einführungen oft übersprungen wird: History-Pseudo-States machen ein Statechart von außen formal nicht-deterministisch. Das 'aktueller Zustand ist eine reine Funktion der Eingaben'-Argument bricht zusammen.
+** GitHub unwanted UX change: issue links now open in a popup :github:ux:developer-tools:microsoft:
+:PROPERTIES:
+:ID:       47910546
+:URL:      https://github.com/orgs/community/discussions/192666
+:HN_URL:   https://news.ycombinator.com/item?id=47910546
+:POINTS:   61
+:COMMENTS: 26
+:BY:       luckman212
+:END:
+
+*** TLDR
+GitHub changed issue links to open in popups instead of new tabs/windows. Users are frustrated because it breaks their workflow - can't middle-click to open in new tab, can't copy link directly, popup obscures context. The most upvoted GitHub Community discussion ever got ignored, so expectations are low.
+
+*** Take
+GitHub is speedrunning the Azure DevOps UX playbook. Next up: an HTML editor that saves CSS from whatever theme you're using and makes issues unreadable in the opposite mode. The Microsoft acquisition continues to pay dividends.
+
+*** Comments
+
+**** willio58
+:PROPERTIES:
+:COMMENT_ID: 47910600
+:END:
+Multi-million and billion dollar tech companies don't have perfect websites. LinkedIn's ad UX is awful, basic things like save and exit are broken. Same with google ads.
+
+**** mwalser
+:PROPERTIES:
+:COMMENT_ID: 47910620
+:END:
+The UX issues annoying me in Azure DevOps are finding their way into GitHub. In case they're chasing Azure DevOps level UX, I recommend implementing an HTML editor that saves CSS from the wrong mode.
+
+**** qwertyforce
+:PROPERTIES:
+:COMMENT_ID: 47910640
+:END:
+It will probably suffer the same fate as the most-upvoted discussion of all time: no reaction.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+GitHub不受欢迎的UX更改：issue链接现在在弹窗中打开
+***** TLDR
+GitHub将issue链接改为在弹窗而非新标签页中打开。用户很沮丧因为这破坏了工作流程——不能中键点击新标签打开，不能直接复制链接，弹窗遮挡上下文。GitHub社区投票最高的讨论被无视了，所以期望很低。
+***** Take
+GitHub在速通Azure DevOps UX剧本。下一步：一个保存你当前主题CSS的HTML编辑器，让issue在相反模式下无法阅读。微软收购继续带来回报。
+***** Comments
+- 数百万和数十亿美元的科技公司网站都不完美。LinkedIn的广告UX很糟糕，保存和退出这种基本功能都坏了。谷歌广告也一样。
+- Azure DevOps中让我烦恼的UX问题正在进入GitHub。如果他们追求Azure DevOps级别的UX，我建议实现一个保存错误模式CSS的HTML编辑器。
+- 可能会和投票最高的讨论一样的命运：没有回应。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GitHub望まれないUX変更：issueリンクがポップアップで開くように
+***** TLDR
+GitHubがissueリンクを新しいタブではなくポップアップで開くように変更。ワークフローが壊れてユーザーは不満——中クリックで新タブが開けない、リンクを直接コピーできない、ポップアップがコンテキストを隠す。GitHub Communityで最も投票された議論も無視されたので期待は低い。
+***** Take
+GitHubはAzure DevOps UXプレイブックをスピードランしている。次は：使用中のテーマのCSSを保存して、反対モードでissueを読めなくするHTMLエディタ。Microsoft買収は配当を出し続けている。
+***** Comments
+- 何百万、何十億ドルのテック企業でも完璧なサイトはない。LinkedInの広告UXはひどく、保存や終了といった基本機能が壊れている。Google広告も同じ。
+- Azure DevOpsで私を悩ませているUX問題がGitHubに入ってきている。Azure DevOpsレベルのUXを目指すなら、間違ったモードのCSSを保存するHTMLエディタの実装を勧める。
+- おそらく史上最も投票された議論と同じ運命：反応なし。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+GitHub 원치 않는 UX 변경: 이슈 링크가 이제 팝업에서 열림
+***** TLDR
+GitHub가 이슈 링크를 새 탭 대신 팝업에서 열리도록 변경. 워크플로우가 깨져서 사용자들이 불만 - 중간 클릭으로 새 탭 열기 불가, 링크 직접 복사 불가, 팝업이 컨텍스트를 가림. GitHub Community에서 가장 많은 투표를 받은 토론도 무시되어서 기대가 낮음.
+***** Take
+GitHub가 Azure DevOps UX 플레이북을 스피드런 중이다. 다음은: 현재 테마의 CSS를 저장해서 반대 모드에서 이슈를 읽을 수 없게 만드는 HTML 에디터. Microsoft 인수가 계속 배당금을 주고 있다.
+***** Comments
+- 수백만, 수십억 달러 테크 회사들도 완벽한 웹사이트가 없다. LinkedIn 광고 UX는 끔찍하고, 저장과 종료 같은 기본 기능이 망가져 있다. 구글 광고도 마찬가지.
+- Azure DevOps에서 나를 짜증나게 하는 UX 문제들이 GitHub에 들어오고 있다. Azure DevOps 수준의 UX를 추구한다면, 잘못된 모드의 CSS를 저장하는 HTML 에디터 구현을 추천한다.
+- 아마 역대 가장 많은 투표를 받은 토론과 같은 운명일 것이다: 반응 없음.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cambio de UX no deseado en GitHub: los enlaces de issues ahora abren en popup
+***** TLDR
+GitHub cambió los enlaces de issues para que abran en popup en vez de nuevas pestañas. Los usuarios están frustrados porque rompe su flujo de trabajo - no pueden hacer clic medio para nueva pestaña, no pueden copiar el enlace directamente, el popup oculta el contexto. La discusión más votada de GitHub Community fue ignorada.
+***** Take
+GitHub está speedrunneando el manual de UX de Azure DevOps. Lo siguiente: un editor HTML que guarda CSS del tema equivocado y hace los issues ilegibles en el modo opuesto. La adquisición de Microsoft sigue dando dividendos.
+***** Comments
+- Empresas tech de millones y miles de millones de dólares no tienen sitios perfectos. El UX de anuncios de LinkedIn es horrible, cosas básicas como guardar y salir están rotas. Igual que Google Ads.
+- Los problemas de UX que me molestan en Azure DevOps están llegando a GitHub. Si persiguen UX nivel Azure DevOps, recomiendo implementar un editor HTML que guarde CSS del modo incorrecto.
+- Probablemente sufrirá el mismo destino que la discusión más votada de la historia: sin reacción.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+GitHub unerwünschte UX-Änderung: Issue-Links öffnen jetzt in einem Popup
+***** TLDR
+GitHub hat Issue-Links so geändert, dass sie in Popups statt neuen Tabs öffnen. Nutzer sind frustriert, weil es ihren Workflow stört - kein Mittelklick für neuen Tab, kein direktes Kopieren von Links, Popup verdeckt Kontext. Die meistgevotete GitHub Community-Diskussion wurde ignoriert, also sind die Erwartungen niedrig.
+***** Take
+GitHub macht einen Speedrun durch das Azure DevOps UX-Playbook. Als nächstes: ein HTML-Editor, der CSS vom falschen Theme speichert und Issues im anderen Modus unlesbar macht. Die Microsoft-Übernahme zahlt weiter Dividenden.
+***** Comments
+- Multi-Millionen und Milliarden-Dollar-Techfirmen haben keine perfekten Websites. LinkedIns Anzeigen-UX ist schrecklich, grundlegende Funktionen wie Speichern und Beenden sind kaputt. Genauso bei Google Ads.
+- Die UX-Probleme, die mich bei Azure DevOps nerven, finden ihren Weg zu GitHub. Falls sie Azure DevOps-Level UX anstreben, empfehle ich einen HTML-Editor, der CSS vom falschen Modus speichert.
+- Es wird wahrscheinlich das gleiche Schicksal erleiden wie die meistgevotete Diskussion aller Zeiten: keine Reaktion.
+** Show HN: Turning a Gaussian Splat into a videogame :gamedev:graphics:gaussian-splatting:webgl:
+:PROPERTIES:
+:ID:       47876071
+:URL:      https://blog.playcanvas.com/turning-a-gaussian-splat-into-a-videogame/
+:HN_URL:   https://news.ycombinator.com/item?id=47876071
+:POINTS:   121
+:COMMENTS: 25
+:BY:       yak32
+:END:
+
+*** TLDR
+PlayCanvas developer built a playable FPS in a browser using Gaussian Splatting for the environment. The catch: splats have no geometry, so they built a pipeline that voxelizes splats into collision meshes, bakes a lightness grid by rendering cube faces at each probe point, generates a Recast navmesh for NPC pathfinding, and adds behavior-tree AI with personalities. All open source.
+
+*** Take
+This is what happens when someone actually finishes a side project. A photorealistic abandoned building scan with physics, pathfinding, and NPCs that have personalities like 'Loot Goblin' and 'Chicken'. The future of game dev is apparently 'scan a building and vibe-code the gameplay.'
+
+*** Comments
+
+**** bane
+:PROPERTIES:
+:COMMENT_ID: 47876150
+:END:
+How do you get such large environments? I'm running out of memory with surprisingly little built even on an RTX6000. Any tips?
+
+**** sev_verso
+:PROPERTIES:
+:COMMENT_ID: 47876180
+:END:
+Plays decently smooth on my M4 Max. Still a long way from production-ready replacement for meshed environments, but I could imagine a hybrid mode for grass and shrubbery.
+
+**** halflife
+:PROPERTIES:
+:COMMENT_ID: 47876200
+:END:
+I'm trying to understand why this is better. It looks like normal high resolution textures with precooked shadow maps. No dynamic lighting, looks like a high quality game from 2006.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: 把高斯泼溅变成电子游戏
+***** TLDR
+PlayCanvas开发者用高斯泼溅环境在浏览器中构建了一个可玩的FPS。问题是：泼溅没有几何体，所以他们建立了管线将泼溅体素化为碰撞网格，通过在每个探测点渲染立方体面来烘焙亮度网格，用Recast生成NPC寻路的导航网格，添加带个性的行为树AI。全部开源。
+***** Take
+这就是有人真正完成副项目时会发生的事。一个带物理、寻路和有'战利品哥布林'、'胆小鬼'等个性NPC的真实废弃建筑扫描。游戏开发的未来显然是'扫描一栋建筑然后氛围编程出玩法'。
+***** Comments
+- 怎么获得这么大的环境？我在RTX6000上建了很少的东西就内存不足了。有什么建议吗？
+- 在M4 Max上运行还算流畅。离生产级别替代网格环境还很远，但我能想象草和灌木用混合模式。
+- 我想理解为什么这更好。看起来像普通的高分辨率纹理加预烘焙阴影贴图。没有动态光照，看起来像2006年的高质量游戏。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: ガウシアンスプラットをビデオゲームに変える
+***** TLDR
+PlayCanvas開発者がガウシアンスプラッティングの環境を使ってブラウザでプレイ可能なFPSを構築。問題：スプラットにはジオメトリがないので、スプラットをボクセル化してコリジョンメッシュに変換、各プローブポイントでキューブ面をレンダリングして明るさグリッドをベイク、NPCのパスファインディング用にRecastナビメッシュを生成、個性付きの行動ツリーAIを追加するパイプラインを構築。全てオープンソース。
+***** Take
+サイドプロジェクトを実際に完成させるとこうなる。物理、パスファインディング、'ルートゴブリン'や'チキン'のような個性を持つNPCがいるフォトリアルな廃墟ビルのスキャン。ゲーム開発の未来は明らかに「建物をスキャンしてゲームプレイをバイブコーディングする」だ。
+***** Comments
+- こんな大きな環境をどうやって作る？RTX6000でも驚くほど少ない量でメモリが足りなくなる。何かヒントは？
+- M4 Maxでかなりスムーズに動く。メッシュ環境の本番レベル代替にはまだ遠いが、草や低木用のハイブリッドモードは想像できる。
+- なぜこれが良いのか理解しようとしている。普通の高解像度テクスチャとプリベイクシャドウマップに見える。動的ライティングなし、2006年の高品質ゲームみたい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: 가우시안 스플랫을 비디오 게임으로 만들기
+***** TLDR
+PlayCanvas 개발자가 가우시안 스플래팅 환경을 사용해 브라우저에서 플레이 가능한 FPS를 만들었다. 문제: 스플랫에는 지오메트리가 없어서 스플랫을 복셀화해 충돌 메시로 변환, 각 프로브 포인트에서 큐브 면을 렌더링해 밝기 그리드를 베이크, NPC 경로 탐색용 Recast 내비메시 생성, 개성 있는 행동 트리 AI 추가하는 파이프라인을 구축. 전부 오픈 소스.
+***** Take
+누군가 실제로 사이드 프로젝트를 끝내면 이렇게 된다. 물리, 경로 탐색, '루트 고블린'이나 '겁쟁이' 같은 개성을 가진 NPC가 있는 사실적인 폐건물 스캔. 게임 개발의 미래는 분명히 '건물 스캔하고 게임플레이를 바이브 코딩하기'다.
+***** Comments
+- 어떻게 그렇게 큰 환경을 만드나요? RTX6000에서도 놀랍도록 적게 만들었는데 메모리가 부족해요. 팁 있나요?
+- M4 Max에서 꽤 부드럽게 돌아간다. 메시 환경의 프로덕션 대체까지는 멀었지만, 풀과 관목용 하이브리드 모드는 상상할 수 있다.
+- 왜 이게 더 나은지 이해하려고 한다. 일반 고해상도 텍스처와 미리 구운 그림자 맵처럼 보인다. 동적 조명 없고, 2006년 고품질 게임처럼 보인다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Convirtiendo un Gaussian Splat en un videojuego
+***** TLDR
+Un desarrollador de PlayCanvas construyó un FPS jugable en navegador usando Gaussian Splatting para el entorno. El problema: los splats no tienen geometría, así que construyeron un pipeline que voxeliza splats en mallas de colisión, hornea una grilla de luminosidad renderizando caras de cubo, genera un navmesh Recast para pathfinding de NPCs, y añade IA de árboles de comportamiento con personalidades. Todo open source.
+***** Take
+Esto es lo que pasa cuando alguien realmente termina un proyecto paralelo. Un escaneo fotorrealista de un edificio abandonado con física, pathfinding y NPCs con personalidades como 'Goblin Saqueador' y 'Gallina'. El futuro del desarrollo de juegos es aparentemente 'escanear un edificio y vibe-codear el gameplay.'
+***** Comments
+- ¿Cómo consigues entornos tan grandes? Me quedo sin memoria con sorprendentemente poco construido incluso en una RTX6000. ¿Algún consejo?
+- Funciona bastante fluido en mi M4 Max. Todavía lejos de ser un reemplazo listo para producción para entornos de malla, pero puedo imaginar un modo híbrido para pasto y arbustos.
+- Estoy tratando de entender por qué esto es mejor. Parece texturas normales de alta resolución con mapas de sombras precocidos. Sin iluminación dinámica, parece un juego de alta calidad de 2006.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Einen Gaussian Splat in ein Videospiel verwandeln
+***** TLDR
+PlayCanvas-Entwickler hat ein spielbares FPS im Browser mit Gaussian Splatting für die Umgebung gebaut. Das Problem: Splats haben keine Geometrie, also bauten sie eine Pipeline, die Splats zu Kollisions-Meshes voxelisiert, ein Helligkeitsgitter durch Rendering von Würfelflächen bakt, ein Recast-Navmesh für NPC-Pathfinding generiert und Behavior-Tree-KI mit Persönlichkeiten hinzufügt. Alles Open Source.
+***** Take
+Das passiert, wenn jemand tatsächlich ein Nebenprojekt fertigstellt. Ein fotorealistischer Scan eines verlassenen Gebäudes mit Physik, Pathfinding und NPCs mit Persönlichkeiten wie 'Loot-Goblin' und 'Huhn'. Die Zukunft der Spieleentwicklung ist offenbar 'Gebäude scannen und das Gameplay vibe-coden.'
+***** Comments
+- Wie bekommt man so große Umgebungen? Mir geht selbst auf einer RTX6000 überraschend schnell der Speicher aus. Irgendwelche Tipps?
+- Läuft ziemlich flüssig auf meinem M4 Max. Noch weit entfernt von einem produktionsreifen Ersatz für Mesh-Umgebungen, aber ich könnte mir einen Hybridmodus für Gras und Sträucher vorstellen.
+- Ich versuche zu verstehen, warum das besser ist. Sieht aus wie normale hochauflösende Texturen mit vorgebackenen Shadow Maps. Keine dynamische Beleuchtung, sieht aus wie ein hochwertiges Spiel von 2006.
