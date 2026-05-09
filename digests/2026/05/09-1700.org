@@ -1,0 +1,535 @@
+#+TITLE: HN Digest 2026-05-09 17:00:00 UT UTC
+#+DATE: 2026-05-09T17:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+LLMs corrupt your docs, Switzerland archives AI, and Dillo wants to fork the web back to 1995
+
+* Highlights
+- LLMs: Even frontier models corrupt 25% of your documents by end of long workflows
+- Internet Archive Switzerland: New foundation partners with St. Gallen to archive AI models
+- Forking the Web: Dillo proposes strict HTML subset with no JavaScript ever
+- fsync removal: FractalBits ditches filesystem calls for 2x throughput
+- GrapheneOS: Fixes VPN leak that Android system_server bypasses
+
+* Stories
+
+** LLMs Corrupt Your Documents When You Delegate :ai:research:llm:delegation:
+:PROPERTIES:
+:ID:       48073246
+:URL:      https://arxiv.org/abs/2604.15597
+:HN_URL:   https://news.ycombinator.com/item?id=48073246
+:POINTS:   163
+:COMMENTS: 53
+:BY:       rbanffy
+:END:
+
+*** TLDR
+Researchers introduce DELEGATE-52 benchmark testing LLMs on long editing workflows across 52 domains. Even frontier models (GPT 5.4, Claude 4.6 Opus, Gemini 3.1 Pro) corrupt an average of 25% of document content during extended delegation. Tool use didn't help. Degradation worsens with document size, interaction length, and distractor files.
+
+*** Take
+That vibe coding workflow where you hand Claude a project and go for coffee? Turns out you're playing telephone with your own codebase. Each pass silently degrades intent like a game of JPEG compression for meaning.
+
+*** Comments
+
+**** timacles
+:PROPERTIES:
+:COMMENT_ID: 48073300
+:END:
+They are essentially like that one JPEG meme, where each pass of saving as JPEG slightly degrades the quality until by the end its unrecognizable.
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 48073350
+:END:
+I'm suspicious of their results with regards to tool usage. Frequent LLM users already know not to round-trip long content.
+
+**** causal
+:PROPERTIES:
+:COMMENT_ID: 48073400
+:END:
+AI-washing any text will degrade it, compounding with each pass. 'Semantic ablation' is my favorite term for it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+委托工作时LLM会损坏你的文档
+***** TLDR
+研究人员推出DELEGATE-52基准测试，测试LLM在52个领域的长时间编辑工作流程。即使是前沿模型也会在延长委托期间损坏平均25%的文档内容。工具使用无济于事。文档越大、交互时间越长、干扰文件越多，退化越严重。
+***** Take
+那个你把项目交给Claude然后去喝咖啡的工作流程？原来你是在和自己的代码库玩传话游戏。每一次传递都像JPEG压缩一样悄悄地降低意图的质量。
+***** Comments
+- 它们基本上就像那个JPEG梗，每次保存为JPEG都会略微降低质量，直到最后面目全非。
+- 我对他们关于工具使用的结果持怀疑态度。经常使用LLM的人都知道不要往返处理长内容。
+- 用AI清洗任何文本都会使其退化，每次传递都会加剧。'语义消融'是我最喜欢的术语。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+委任するとLLMがドキュメントを破損する
+***** TLDR
+研究者がDELEGATE-52ベンチマークを導入し、52分野の長時間編集ワークフローでLLMをテスト。フロンティアモデルでさえ、長時間の委任中に平均25%のドキュメント内容を破損する。ツール使用も効果なし。ドキュメントサイズ、インタラクションの長さ、妨害ファイルで劣化が悪化。
+***** Take
+Claudeにプロジェクトを渡してコーヒーを飲みに行くワークフロー？自分のコードベースで伝言ゲームをしているようなものだった。毎回の受け渡しで意味がJPEG圧縮のように静かに劣化する。
+***** Comments
+- JPEGミームのように、JPEGで保存するたびに品質が少しずつ低下し、最終的には認識できなくなる。
+- ツール使用に関する結果には疑問がある。頻繁にLLMを使う人は長いコンテンツを往復させないことを知っている。
+- AIで洗浄したテキストは劣化し、毎回の処理で悪化する。「セマンティック・アブレーション」がお気に入りの用語だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+위임하면 LLM이 문서를 손상시킨다
+***** TLDR
+연구자들이 52개 분야의 장기 편집 워크플로우에서 LLM을 테스트하는 DELEGATE-52 벤치마크를 도입했다. 프론티어 모델조차 장기 위임 중 평균 25%의 문서 내용을 손상시킨다. 도구 사용도 도움이 되지 않았다. 문서 크기, 상호작용 길이, 방해 파일로 인해 저하가 악화된다.
+***** Take
+Claude에게 프로젝트를 맡기고 커피 마시러 가는 워크플로우? 알고 보니 자신의 코드베이스와 전화 게임을 하고 있었다. 매번 전달할 때마다 의미가 JPEG 압축처럼 조용히 저하된다.
+***** Comments
+- JPEG 밈처럼, JPEG로 저장할 때마다 품질이 조금씩 저하되어 결국 알아볼 수 없게 된다.
+- 도구 사용에 관한 결과가 의심스럽다. LLM을 자주 사용하는 사람들은 긴 콘텐츠를 왕복시키지 않는다는 것을 안다.
+- AI로 세탁한 텍스트는 저하되고, 매번 처리할 때마다 악화된다. '의미적 절삭'이 내가 좋아하는 용어다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los LLM corrompen tus documentos cuando delegas
+***** TLDR
+Los investigadores introducen el benchmark DELEGATE-52 que prueba LLMs en flujos de trabajo de edición largos en 52 dominios. Incluso los modelos de frontera corrompen un promedio del 25% del contenido del documento durante la delegación extendida. El uso de herramientas no ayudó. La degradación empeora con el tamaño del documento, la duración de la interacción y los archivos distractores.
+***** Take
+¿Ese flujo de trabajo donde le pasas un proyecto a Claude y te vas a tomar café? Resulta que estás jugando al teléfono descompuesto con tu propia base de código. Cada pasada degrada silenciosamente la intención como una compresión JPEG del significado.
+***** Comments
+- Son esencialmente como ese meme del JPEG, donde cada guardado como JPEG degrada ligeramente la calidad hasta que al final es irreconocible.
+- Sospecho de sus resultados respecto al uso de herramientas. Los usuarios frecuentes de LLM ya saben que no deben hacer ida y vuelta con contenido largo.
+- Lavar cualquier texto con IA lo degradará, acumulándose con cada pasada. 'Ablación semántica' es mi término favorito.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+LLMs beschädigen Ihre Dokumente bei Delegation
+***** TLDR
+Forscher führen den DELEGATE-52-Benchmark ein, der LLMs bei langen Bearbeitungsabläufen in 52 Bereichen testet. Selbst Frontier-Modelle beschädigen durchschnittlich 25% des Dokumentinhalts während erweiterter Delegation. Werkzeugnutzung half nicht. Die Degradation verschlechtert sich mit Dokumentgröße, Interaktionslänge und Ablenkungsdateien.
+***** Take
+Der Workflow, bei dem du Claude ein Projekt gibst und Kaffee trinken gehst? Stellt sich heraus, du spielst stille Post mit deiner eigenen Codebasis. Jeder Durchlauf degradiert still die Intention wie eine JPEG-Kompression der Bedeutung.
+***** Comments
+- Sie sind im Wesentlichen wie dieses JPEG-Meme, wo jedes Speichern als JPEG die Qualität leicht verschlechtert, bis es am Ende unkenntlich ist.
+- Ich bin skeptisch gegenüber ihren Ergebnissen bezüglich der Werkzeugnutzung. Häufige LLM-Nutzer wissen bereits, dass man lange Inhalte nicht hin- und herschicken sollte.
+- Jeden Text mit KI zu waschen wird ihn degradieren, mit jeder Durchgang kumulierend. 'Semantische Ablation' ist mein Lieblingsbegriff.
+** Internet Archive Switzerland :archiving:ai:switzerland:preservation:
+:PROPERTIES:
+:ID:       48074265
+:URL:      https://internetarchive.ch/
+:HN_URL:   https://news.ycombinator.com/item?id=48074265
+:POINTS:   268
+:COMMENTS: 35
+:BY:       hggh
+:END:
+
+*** TLDR
+New Swiss foundation launches in St. Gallen, partnering with University of St. Gallen to build the Gen AI Archive preserving today's AI models for future generations. Also launching Endangered Archives initiative with UNESCO to rescue vulnerable collections from conflict zones. Independent but mission-aligned with Internet Archive US, Canada, and Europe.
+
+*** Take
+A millennium-old abbey archive city is now archiving AI models. There's something poetic about St. Gallen going from preserving illuminated manuscripts to preserving GPT weights. At least someone's thinking about what happens when OpenAI inevitably loses the backup.
+
+*** Comments
+
+**** input_sh
+:PROPERTIES:
+:COMMENT_ID: 48074300
+:END:
+Internet Archive Switzerland joins a growing group of mission-aligned organizations, alongside Internet Archive, Internet Archive Canada, and Internet Archive Europe. Together, these independent libraries strengthen a shared vision: building a distributed, resilient digital library.
+
+**** insom
+:PROPERTIES:
+:COMMENT_ID: 48074350
+:END:
+That website is really struggling. Very tempting to go to a mirror on archive.org to view it. This seems very distinct from Internet Archive in the US.
+
+**** red_admiral
+:PROPERTIES:
+:COMMENT_ID: 48074400
+:END:
+Sankt Gallen's more physical archive is worth a visit too - one of the oldest continuously active archives in the world.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+瑞士互联网档案馆
+***** TLDR
+新的瑞士基金会在圣加仑成立，与圣加仑大学合作建立Gen AI档案馆，为后代保存当今的AI模型。还与联合国教科文组织合作推出濒危档案倡议，从冲突地区抢救脆弱的收藏品。独立但与美国、加拿大和欧洲的互联网档案馆使命一致。
+***** Take
+一个有千年历史的修道院档案城市现在正在存档AI模型。圣加仑从保存彩绘手稿到保存GPT权重，这里面有一种诗意。至少有人在考虑当OpenAI不可避免地丢失备份时会发生什么。
+***** Comments
+- 瑞士互联网档案馆加入了一个不断壮大的使命一致组织群体，与美国、加拿大和欧洲的互联网档案馆一起，构建分布式、有弹性的数字图书馆。
+- 那个网站真的很挣扎。很想去archive.org的镜像看看。这似乎与美国的互联网档案馆非常不同。
+- 圣加仑的实体档案馆也值得一看——世界上最古老的持续运营的档案馆之一。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+インターネットアーカイブ・スイス
+***** TLDR
+新しいスイス財団がザンクト・ガレンで発足し、ザンクト・ガレン大学と提携してGen AIアーカイブを構築し、現在のAIモデルを将来の世代のために保存する。また、ユネスコと協力して紛争地域から脆弱なコレクションを救出する絶滅危惧アーカイブイニシアチブも開始。独立しているがインターネットアーカイブUS、カナダ、ヨーロッパと使命を共有。
+***** Take
+千年の歴史を持つ修道院アーカイブの街が今やAIモデルをアーカイブしている。ザンクト・ガレンが装飾写本の保存からGPTの重みの保存に移行するのには詩的なものがある。少なくともOpenAIが不可避的にバックアップを失った時に何が起こるか考えている人がいる。
+***** Comments
+- インターネットアーカイブ・スイスは、インターネットアーカイブ、インターネットアーカイブ・カナダ、インターネットアーカイブ・ヨーロッパと並ぶ使命を共有する組織の成長グループに加わる。これらの独立した図書館が共に分散型で回復力のあるデジタルライブラリを構築する。
+- あのウェブサイトは本当に苦戦している。archive.orgのミラーに行きたくなる。これは米国のインターネットアーカイブとはかなり異なるようだ。
+- ザンクト・ガレンの物理的なアーカイブも訪れる価値がある - 世界最古の継続運営アーカイブの一つ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+인터넷 아카이브 스위스
+***** TLDR
+새로운 스위스 재단이 장크트갈렌에서 출범하여 장크트갈렌 대학교와 협력해 Gen AI 아카이브를 구축하고 현재의 AI 모델을 미래 세대를 위해 보존한다. 또한 유네스코와 함께 분쟁 지역에서 취약한 컬렉션을 구출하는 멸종위기 아카이브 이니셔티브도 시작. 독립적이지만 미국, 캐나다, 유럽의 인터넷 아카이브와 미션을 공유한다.
+***** Take
+천년 된 수도원 아카이브 도시가 이제 AI 모델을 아카이브하고 있다. 장크트갈렌이 채색 필사본 보존에서 GPT 가중치 보존으로 전환하는 것에는 시적인 무언가가 있다. 적어도 누군가는 OpenAI가 불가피하게 백업을 잃을 때 무슨 일이 일어날지 생각하고 있다.
+***** Comments
+- 인터넷 아카이브 스위스는 인터넷 아카이브, 인터넷 아카이브 캐나다, 인터넷 아카이브 유럽과 함께 미션을 공유하는 조직 그룹에 합류한다. 이 독립적인 도서관들이 함께 분산되고 회복력 있는 디지털 라이브러리를 구축한다.
+- 그 웹사이트가 정말 힘들어하고 있다. archive.org 미러로 가고 싶은 유혹이 든다. 이것은 미국의 인터넷 아카이브와는 상당히 다른 것 같다.
+- 장크트갈렌의 물리적 아카이브도 방문할 가치가 있다 - 세계에서 가장 오래된 지속 운영 아카이브 중 하나.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Internet Archive Suiza
+***** TLDR
+Nueva fundación suiza se lanza en San Galo, asociándose con la Universidad de San Galo para construir el Gen AI Archive que preserva los modelos de IA actuales para las generaciones futuras. También lanza la iniciativa Archivos en Peligro con UNESCO para rescatar colecciones vulnerables de zonas de conflicto. Independiente pero alineada con la misión de Internet Archive US, Canadá y Europa.
+***** Take
+Una ciudad con un archivo abacial de mil años ahora está archivando modelos de IA. Hay algo poético en que San Galo pase de preservar manuscritos iluminados a preservar pesos de GPT. Al menos alguien está pensando en qué pasará cuando OpenAI inevitablemente pierda el respaldo.
+***** Comments
+- Internet Archive Suiza se une a un grupo creciente de organizaciones alineadas con la misión, junto con Internet Archive, Internet Archive Canadá e Internet Archive Europa. Juntas, estas bibliotecas independientes fortalecen una visión compartida: construir una biblioteca digital distribuida y resiliente.
+- Ese sitio web está luchando mucho. Es muy tentador ir a un espejo en archive.org para verlo. Esto parece muy distinto de Internet Archive en EE.UU.
+- El archivo más físico de San Galo también vale la pena visitarlo - uno de los archivos activos más antiguos del mundo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Internet Archive Schweiz
+***** TLDR
+Neue Schweizer Stiftung startet in St. Gallen, partnerschaftlich mit der Universität St. Gallen für den Aufbau des Gen AI Archive zur Bewahrung heutiger KI-Modelle für künftige Generationen. Startet auch die Endangered Archives Initiative mit UNESCO zur Rettung gefährdeter Sammlungen aus Konfliktgebieten. Unabhängig aber missionsorientiert mit Internet Archive US, Kanada und Europa.
+***** Take
+Eine tausendjährige Klosterarchiv-Stadt archiviert jetzt KI-Modelle. Es ist etwas Poetisches daran, dass St. Gallen von der Bewahrung illuminierter Handschriften zur Bewahrung von GPT-Gewichten übergeht. Wenigstens denkt jemand darüber nach, was passiert, wenn OpenAI unweigerlich das Backup verliert.
+***** Comments
+- Internet Archive Schweiz tritt einer wachsenden Gruppe missionsorientierter Organisationen bei, zusammen mit Internet Archive, Internet Archive Kanada und Internet Archive Europa. Gemeinsam stärken diese unabhängigen Bibliotheken eine gemeinsame Vision: den Aufbau einer verteilten, widerstandsfähigen digitalen Bibliothek.
+- Diese Website kämpft wirklich. Sehr verlockend, zu einem Spiegel auf archive.org zu gehen, um sie anzusehen. Das scheint sich stark vom Internet Archive in den USA zu unterscheiden.
+- St. Gallens physischeres Archiv ist auch einen Besuch wert - eines der ältesten kontinuierlich aktiven Archive der Welt.
+** On Forking the Web :web:browsers:standards:minimalism:
+:PROPERTIES:
+:ID:       48074087
+:URL:      https://dillo-browser.org/lab/web-fork/
+:HN_URL:   https://news.ycombinator.com/item?id=48074087
+:POINTS:   79
+:COMMENTS: 66
+:BY:       wrxd
+:END:
+
+*** TLDR
+Dillo browser developer proposes an alternative web specification: strict HTML subset that fits on a floppy disk (1.44MB compressed), semantic versioning so pages target specific standards, no JavaScript ever, strict grammar that rejects non-compliant pages, and text-first design. Aims to enable simple browsers with low implementation cost while preventing corporate standard capture.
+
+*** Take
+Someone finally said what we're all thinking: the web spec is an 18MB monster and JavaScript was a mistake. The floppy disk constraint is beautifully absurd but also kind of genius. Unfortunately, this ship sailed in 1996 and took the entire economy with it.
+
+*** Comments
+
+**** TazeTSchnitzel
+:PROPERTIES:
+:COMMENT_ID: 48074100
+:END:
+This is what XHTML was, and it was a complete failure. Users want broken pages to work, not to see an error message.
+
+**** RiverCrochet
+:PROPERTIES:
+:COMMENT_ID: 48074150
+:END:
+Web browsers turned into application engines because it was a path to get useable software on PCs without having to deal with Microsoft. A new document-only protocol would be very useful simply for security reasons.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+关于分叉Web
+***** TLDR
+Dillo浏览器开发者提出了一个替代Web规范：严格的HTML子集可以放在软盘上（1.44MB压缩），语义版本控制使页面针对特定标准，永远不使用JavaScript，严格的语法拒绝不合规的页面，以及文本优先的设计。旨在以低实现成本实现简单浏览器，同时防止企业标准捕获。
+***** Take
+终于有人说出了我们都在想的事情：Web规范是一个18MB的怪物，JavaScript是个错误。软盘约束荒谬得很美，但也有点天才。不幸的是，这艘船在1996年就开走了，还把整个经济一起带走了。
+***** Comments
+- 这就是XHTML的样子，它是一个彻底的失败。用户希望破损的页面能够工作，而不是看到错误消息。
+- Web浏览器变成应用程序引擎是因为这是一条在PC上获得可用软件而不必与微软打交道的途径。一个纯文档协议仅仅出于安全原因就会非常有用。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Webをフォークすることについて
+***** TLDR
+Dilloブラウザの開発者が代替Web仕様を提案：フロッピーディスクに収まる厳格なHTMLサブセット（1.44MB圧縮）、ページが特定の標準をターゲットにするセマンティックバージョニング、JavaScriptは一切なし、非準拠ページを拒否する厳格な文法、テキストファーストのデザイン。低い実装コストでシンプルなブラウザを可能にし、企業による標準の乗っ取りを防ぐことを目指す。
+***** Take
+誰もが考えていることをついに誰かが言った：Web仕様は18MBの怪物で、JavaScriptは間違いだった。フロッピーディスクの制約は美しく馬鹿げているが、ある意味天才的でもある。残念ながら、この船は1996年に出航し、経済全体を連れて行った。
+***** Comments
+- これがXHTMLだったが、完全な失敗だった。ユーザーは壊れたページが動作することを望んでおり、エラーメッセージを見たくない。
+- Webブラウザがアプリケーションエンジンになったのは、マイクロソフトに対処せずにPCで使えるソフトウェアを手に入れる方法だったから。ドキュメントのみの新しいプロトコルは、セキュリティ上の理由だけでも非常に有用だろう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+웹 포킹에 대하여
+***** TLDR
+Dillo 브라우저 개발자가 대안적 웹 사양을 제안한다: 플로피 디스크에 들어가는 엄격한 HTML 하위 집합(1.44MB 압축), 페이지가 특정 표준을 대상으로 하는 시맨틱 버저닝, 자바스크립트는 절대 없음, 비준수 페이지를 거부하는 엄격한 문법, 텍스트 우선 디자인. 낮은 구현 비용으로 간단한 브라우저를 가능하게 하면서 기업의 표준 포획을 방지하는 것이 목표.
+***** Take
+드디어 누군가 우리 모두가 생각하던 것을 말했다: 웹 사양은 18MB짜리 괴물이고 자바스크립트는 실수였다. 플로피 디스크 제약은 아름답게 터무니없지만 동시에 천재적이기도 하다. 불행히도 이 배는 1996년에 떠났고 전체 경제를 데리고 갔다.
+***** Comments
+- 이것이 XHTML이었고, 완전한 실패였다. 사용자들은 깨진 페이지가 작동하기를 원하지, 오류 메시지를 보고 싶어하지 않는다.
+- 웹 브라우저가 애플리케이션 엔진이 된 것은 마이크로소프트를 상대하지 않고 PC에서 사용 가능한 소프트웨어를 얻는 경로였기 때문이다. 문서 전용의 새로운 프로토콜은 보안상의 이유만으로도 매우 유용할 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Sobre bifurcar la Web
+***** TLDR
+El desarrollador del navegador Dillo propone una especificación web alternativa: un subconjunto HTML estricto que cabe en un disquete (1.44MB comprimido), versionado semántico para que las páginas apunten a estándares específicos, nunca JavaScript, gramática estricta que rechaza páginas no conformes, y diseño de texto primero. Busca permitir navegadores simples con bajo costo de implementación mientras previene la captura corporativa de estándares.
+***** Take
+Alguien finalmente dijo lo que todos estamos pensando: la especificación web es un monstruo de 18MB y JavaScript fue un error. La restricción del disquete es hermosamente absurda pero también algo genial. Desafortunadamente, este barco zarpó en 1996 y se llevó toda la economía consigo.
+***** Comments
+- Esto es lo que fue XHTML, y fue un completo fracaso. Los usuarios quieren que las páginas rotas funcionen, no ver un mensaje de error.
+- Los navegadores web se convirtieron en motores de aplicaciones porque era un camino para obtener software útil en PC sin tener que lidiar con Microsoft. Un nuevo protocolo solo de documentos sería muy útil simplemente por razones de seguridad.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Über das Forken des Webs
+***** TLDR
+Dillo-Browser-Entwickler schlägt alternative Webspezifikation vor: strenge HTML-Untermenge, die auf eine Diskette passt (1,44MB komprimiert), semantische Versionierung damit Seiten auf bestimmte Standards zielen, niemals JavaScript, strenge Grammatik die nicht-konforme Seiten ablehnt, und Text-First-Design. Zielt darauf ab, einfache Browser mit geringen Implementierungskosten zu ermöglichen und gleichzeitig die Übernahme von Standards durch Unternehmen zu verhindern.
+***** Take
+Endlich hat jemand gesagt, was wir alle denken: Die Webspezifikation ist ein 18MB-Monster und JavaScript war ein Fehler. Die Disketten-Beschränkung ist wunderschön absurd, aber irgendwie auch genial. Leider ist dieses Schiff 1996 abgefahren und hat die gesamte Wirtschaft mitgenommen.
+***** Comments
+- Das war XHTML, und es war ein kompletter Fehlschlag. Benutzer wollen, dass kaputte Seiten funktionieren, nicht dass sie eine Fehlermeldung sehen.
+- Webbrowser wurden zu Anwendungs-Engines, weil es ein Weg war, nutzbare Software auf PCs zu bekommen, ohne mit Microsoft umgehen zu müssen. Ein neues reines Dokumentenprotokoll wäre allein aus Sicherheitsgründen sehr nützlich.
+** Removing fsync from our local storage engine :storage:databases:performance:engineering:
+:PROPERTIES:
+:ID:       48047280
+:URL:      https://fractalbits.com/blog/remove-fsync/
+:HN_URL:   https://news.ycombinator.com/item?id=48047280
+:POINTS:   40
+:COMMENTS: 24
+:BY:       zzsheng
+:END:
+
+*** TLDR
+FractalBits built a local KV storage engine that never calls fsync by using pre-allocated fixed-size files, pre-zeroed extents, O_DIRECT writes, and a journal with 4KB atomic commit blocks aligned to SSD's atomic-write unit. Result: 190K obj/s vs 116K with fsync on AWS NVMe, 1.6x throughput gain. Only works with specific SSD contracts and narrow use case.
+
+*** Take
+Bold move eliminating fsync entirely, but the asterisks here are doing a lot of work. 'Works on specific enterprise NVMe with protected write cache' is doing the heavy lifting. Still, the engineering is legitimately clever if you accept the constraints.
+
+*** Comments
+
+**** sethev
+:PROPERTIES:
+:COMMENT_ID: 48047300
+:END:
+This seems sketchy. O_DIRECT skips the page cache, it does not guarantee that the SSD driver sent the data to the SSD or issued a flush to the drive itself.
+
+**** nh2
+:PROPERTIES:
+:COMMENT_ID: 48047350
+:END:
+fsync doesn't just sync the file's data, it syncs every piece of metadata the file depends on: inode, directory entry, extent map. Famously not the directory entry, as the man page says.
+
+**** matja
+:PROPERTIES:
+:COMMENT_ID: 48047400
+:END:
+Even with O_DIRECT and aligned blocks, I still don't understand how the storage engine can return a 'successful commit' without a sync at some point.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+从本地存储引擎中移除fsync
+***** TLDR
+FractalBits构建了一个从不调用fsync的本地KV存储引擎，通过使用预分配的固定大小文件、预置零的范围、O_DIRECT写入和具有4KB原子提交块（与SSD的原子写入单元对齐）的日志。结果：在AWS NVMe上190K obj/s vs 使用fsync的116K，吞吐量提升1.6倍。仅适用于特定的SSD合约和狭窄的用例。
+***** Take
+完全消除fsync是个大胆的举动，但这里的星号做了很多工作。'适用于具有受保护写缓存的特定企业NVMe'承担了重任。不过，如果你接受这些约束，工程确实很聪明。
+***** Comments
+- 这看起来很可疑。O_DIRECT跳过页面缓存，它不保证SSD驱动程序将数据发送到SSD或向驱动器本身发出刷新。
+- fsync不仅同步文件的数据，还同步文件依赖的每一块元数据：inode、目录条目、范围映射。著名的是不包括目录条目，正如man手册所说。
+- 即使使用O_DIRECT和对齐的块，我仍然不明白存储引擎如何在某个时刻不进行同步就返回'成功提交'。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ローカルストレージエンジンからfsyncを削除
+***** TLDR
+FractalBitsはfsyncを一切呼び出さないローカルKVストレージエンジンを構築した。事前割り当ての固定サイズファイル、事前ゼロ化されたエクステント、O_DIRECT書き込み、SSDのアトミック書き込み単位に合わせた4KBアトミックコミットブロックのジャーナルを使用。結果：AWS NVMeで190K obj/s vs fsync使用時の116K、1.6倍のスループット向上。特定のSSD契約と狭いユースケースでのみ動作。
+***** Take
+fsyncを完全に排除するのは大胆な動きだが、ここでのアスタリスクは多くの仕事をしている。「保護された書き込みキャッシュを持つ特定のエンタープライズNVMeで動作」が重労働をしている。それでも、制約を受け入れれば、エンジニアリングは本当に賢い。
+***** Comments
+- これは怪しいように見える。O_DIRECTはページキャッシュをスキップするが、SSDドライバがデータをSSDに送信したか、ドライブ自体にフラッシュを発行したかを保証するものではない。
+- fsyncはファイルのデータだけでなく、ファイルが依存するすべてのメタデータを同期する：inode、ディレクトリエントリ、エクステントマップ。有名なことに、manページが言うようにディレクトリエントリは含まれない。
+- O_DIRECTとアラインメントされたブロックを使っても、ストレージエンジンがどこかで同期なしに「コミット成功」を返せる仕組みがまだわからない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+로컬 스토리지 엔진에서 fsync 제거
+***** TLDR
+FractalBits는 미리 할당된 고정 크기 파일, 미리 제로화된 익스텐트, O_DIRECT 쓰기, SSD의 원자적 쓰기 단위에 맞춘 4KB 원자적 커밋 블록이 있는 저널을 사용하여 fsync를 전혀 호출하지 않는 로컬 KV 스토리지 엔진을 구축했다. 결과: AWS NVMe에서 190K obj/s vs fsync 사용 시 116K, 1.6배 처리량 향상. 특정 SSD 계약과 좁은 사용 사례에서만 작동.
+***** Take
+fsync를 완전히 제거하는 것은 대담한 움직임이지만, 여기서 별표가 많은 일을 하고 있다. '보호된 쓰기 캐시가 있는 특정 엔터프라이즈 NVMe에서 작동'이 무거운 짐을 지고 있다. 그래도 제약 조건을 받아들이면 엔지니어링은 정말 영리하다.
+***** Comments
+- 이것은 의심스러워 보인다. O_DIRECT는 페이지 캐시를 건너뛰지만, SSD 드라이버가 데이터를 SSD로 보냈거나 드라이브 자체에 플러시를 발행했다는 것을 보장하지 않는다.
+- fsync는 파일의 데이터만 동기화하는 것이 아니라 파일이 의존하는 모든 메타데이터를 동기화한다: inode, 디렉토리 엔트리, 익스텐트 맵. 유명하게도 man 페이지가 말하듯 디렉토리 엔트리는 포함되지 않는다.
+- O_DIRECT와 정렬된 블록을 사용해도, 스토리지 엔진이 어느 시점에서 동기화 없이 '성공적인 커밋'을 반환할 수 있는 방법을 여전히 이해하지 못하겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Eliminando fsync de nuestro motor de almacenamiento local
+***** TLDR
+FractalBits construyó un motor de almacenamiento KV local que nunca llama a fsync usando archivos de tamaño fijo preasignados, extensiones pre-ceroadas, escrituras O_DIRECT, y un journal con bloques de commit atómicos de 4KB alineados con la unidad de escritura atómica del SSD. Resultado: 190K obj/s vs 116K con fsync en AWS NVMe, ganancia de rendimiento de 1.6x. Solo funciona con contratos SSD específicos y casos de uso estrechos.
+***** Take
+Movimiento audaz eliminar fsync por completo, pero los asteriscos aquí están haciendo mucho trabajo. 'Funciona en NVMe empresarial específico con caché de escritura protegida' está haciendo el trabajo pesado. Aún así, la ingeniería es legítimamente inteligente si aceptas las restricciones.
+***** Comments
+- Esto parece sospechoso. O_DIRECT omite la caché de páginas, no garantiza que el driver del SSD envió los datos al SSD o emitió un flush al drive.
+- fsync no solo sincroniza los datos del archivo, sincroniza cada pieza de metadatos de la que depende el archivo: inode, entrada de directorio, mapa de extensiones. Famosamente no la entrada de directorio, como dice la página del manual.
+- Incluso con O_DIRECT y bloques alineados, todavía no entiendo cómo el motor de almacenamiento puede retornar un 'commit exitoso' sin un sync en algún punto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+fsync aus unserer lokalen Storage-Engine entfernen
+***** TLDR
+FractalBits baute eine lokale KV-Storage-Engine, die niemals fsync aufruft, durch Verwendung von vorallokierten Dateien fester Größe, vorgenullten Extents, O_DIRECT-Schreibvorgängen und einem Journal mit 4KB atomaren Commit-Blöcken, die an der atomaren Schreibeinheit der SSD ausgerichtet sind. Ergebnis: 190K obj/s vs 116K mit fsync auf AWS NVMe, 1,6-facher Durchsatzgewinn. Funktioniert nur mit bestimmten SSD-Verträgen und engem Anwendungsfall.
+***** Take
+Mutiger Schritt, fsync vollständig zu eliminieren, aber die Sternchen hier leisten viel Arbeit. 'Funktioniert auf bestimmten Enterprise-NVMe mit geschütztem Schreibcache' trägt die schwere Last. Trotzdem ist das Engineering legitim clever, wenn man die Einschränkungen akzeptiert.
+***** Comments
+- Das erscheint fragwürdig. O_DIRECT überspringt den Page-Cache, garantiert aber nicht, dass der SSD-Treiber die Daten an die SSD gesendet oder einen Flush an das Laufwerk selbst ausgeführt hat.
+- fsync synchronisiert nicht nur die Daten der Datei, es synchronisiert jedes Stück Metadaten, von dem die Datei abhängt: Inode, Verzeichniseintrag, Extent-Map. Berühmterweise nicht den Verzeichniseintrag, wie die Manpage sagt.
+- Selbst mit O_DIRECT und ausgerichteten Blöcken verstehe ich immer noch nicht, wie die Storage-Engine ein 'erfolgreiches Commit' ohne irgendwann einen Sync zurückgeben kann.
+** GrapheneOS fixes Android VPN leak Google refused to patch :android:security:vpn:grapheneos:
+:PROPERTIES:
+:ID:       48075144
+:URL:      https://cyberinsider.com/grapheneos-fixes-android-vpn-leak-google-refused-to-patch/
+:HN_URL:   https://news.ycombinator.com/item?id=48075144
+:POINTS:   75
+:COMMENTS: 8
+:BY:       Georgelemental
+:END:
+
+*** TLDR
+GrapheneOS patched a VPN bypass vulnerability in Android where system_server operates with elevated networking privileges and is exempt from VPN routing restrictions, allowing traffic to leak outside the VPN tunnel. Google classified it as 'not a security issue' and declined to fix it.
+
+*** Take
+Google: 'VPN means Virtual Private Network, not Actually Private Network.' Good thing GrapheneOS exists for the paranoid among us. Bad thing it requires giving up most apps and half your sanity.
+
+*** Comments
+
+**** nottorp
+:PROPERTIES:
+:COMMENT_ID: 48075200
+:END:
+So a VPN isn't a VPN on Android? Regardless of this bug. Do other locked down operating systems act the same?
+
+**** unethical_ban
+:PROPERTIES:
+:COMMENT_ID: 48075250
+:END:
+I know there are bad business reasons, but how can someone classify a VPN leak as 'not a security issue' and keep their pride?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+GrapheneOS修复了谷歌拒绝修补的Android VPN泄漏
+***** TLDR
+GrapheneOS修补了Android中的VPN绕过漏洞，其中system_server以提升的网络权限运行并免受VPN路由限制，允许流量泄漏到VPN隧道外。谷歌将其归类为'非安全问题'并拒绝修复。
+***** Take
+谷歌：'VPN意味着虚拟专用网络，不是真正专用网络。'幸好GrapheneOS为我们中的偏执狂存在。不好的是它需要放弃大多数应用和一半的理智。
+***** Comments
+- 所以在Android上VPN不是VPN？不管这个bug。其他锁定的操作系统也是这样吗？
+- 我知道有不好的商业原因，但怎么能把VPN泄漏归类为'非安全问题'还保持自尊？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GrapheneOSがGoogleが拒否したAndroid VPNリークを修正
+***** TLDR
+GrapheneOSはAndroidのVPNバイパス脆弱性を修正した。system_serverは昇格されたネットワーク権限で動作し、VPNルーティング制限から免除されているため、トラフィックがVPNトンネルの外にリークする可能性があった。Googleはこれを「セキュリティ問題ではない」と分類し、修正を拒否した。
+***** Take
+Google：「VPNは仮想プライベートネットワークを意味し、実際にプライベートなネットワークではない。」偏執狂の私たちのためにGrapheneOSが存在するのは良いこと。悪いことは、ほとんどのアプリと正気の半分を諦める必要があること。
+***** Comments
+- つまりAndroidではVPNはVPNではないのか？このバグに関係なく。他のロックダウンされたOSも同じように動作するのか？
+- 悪いビジネス上の理由があるのは分かるが、VPNリークを「セキュリティ問題ではない」と分類して、どうやってプライドを保てるのか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+GrapheneOS가 구글이 패치 거부한 안드로이드 VPN 유출 수정
+***** TLDR
+GrapheneOS는 안드로이드의 VPN 우회 취약점을 패치했다. system_server가 승격된 네트워킹 권한으로 작동하고 VPN 라우팅 제한에서 면제되어 트래픽이 VPN 터널 외부로 유출될 수 있었다. 구글은 이를 '보안 문제가 아님'으로 분류하고 수정을 거부했다.
+***** Take
+구글: 'VPN은 가상 사설 네트워크를 의미하지, 실제로 사적인 네트워크가 아니다.' 우리 중 편집증 환자들을 위해 GrapheneOS가 존재하는 것은 다행이다. 불행한 것은 대부분의 앱과 정신의 절반을 포기해야 한다는 것이다.
+***** Comments
+- 그래서 안드로이드에서 VPN은 VPN이 아닌 건가? 이 버그와 상관없이. 다른 잠긴 운영 체제도 같은 방식으로 동작하나?
+- 나쁜 사업적 이유가 있다는 건 알지만, VPN 유출을 '보안 문제가 아님'으로 분류하고 어떻게 자존심을 지킬 수 있나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+GrapheneOS corrige la filtración de VPN de Android que Google se negó a parchear
+***** TLDR
+GrapheneOS parchó una vulnerabilidad de bypass de VPN en Android donde system_server opera con privilegios de red elevados y está exento de restricciones de enrutamiento VPN, permitiendo que el tráfico se filtre fuera del túnel VPN. Google lo clasificó como 'no un problema de seguridad' y se negó a corregirlo.
+***** Take
+Google: 'VPN significa Red Privada Virtual, no Red Realmente Privada.' Menos mal que GrapheneOS existe para los paranoicos entre nosotros. Lo malo es que requiere renunciar a la mayoría de las apps y la mitad de tu cordura.
+***** Comments
+- ¿Entonces una VPN no es una VPN en Android? Independientemente de este bug. ¿Otros sistemas operativos bloqueados actúan igual?
+- Sé que hay malas razones de negocio, pero ¿cómo puede alguien clasificar una filtración de VPN como 'no un problema de seguridad' y mantener su orgullo?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+GrapheneOS behebt Android VPN-Leck, das Google nicht patchen wollte
+***** TLDR
+GrapheneOS patchte eine VPN-Bypass-Schwachstelle in Android, bei der system_server mit erhöhten Netzwerkprivilegien arbeitet und von VPN-Routing-Beschränkungen ausgenommen ist, wodurch Datenverkehr außerhalb des VPN-Tunnels lecken kann. Google klassifizierte es als 'kein Sicherheitsproblem' und lehnte eine Behebung ab.
+***** Take
+Google: 'VPN bedeutet Virtuelles Privates Netzwerk, nicht Tatsächlich Privates Netzwerk.' Gut, dass GrapheneOS für die Paranoiden unter uns existiert. Schlecht, dass es erfordert, die meisten Apps und die Hälfte des Verstands aufzugeben.
+***** Comments
+- Also ist ein VPN auf Android kein VPN? Unabhängig von diesem Bug. Verhalten sich andere gesperrte Betriebssysteme genauso?
+- Ich kenne die schlechten geschäftlichen Gründe, aber wie kann jemand ein VPN-Leck als 'kein Sicherheitsproblem' klassifizieren und seinen Stolz behalten?
