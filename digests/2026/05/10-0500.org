@@ -1,0 +1,546 @@
+#+TITLE: HN Digest 2026-05-10 05:00:00 UT UTC
+#+DATE: 2026-05-10T05:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Assembly madness, Lisp brackets, and nostalgic trips through VB history
+
+* Highlights
+- ymawky: A web server in ARM64 assembly because nginx is too mainstream
+- rlisp: Rust semantics wrapped in parentheses for the bracket-curious
+- Julet connectors: The serial TTL standard e-bikes gave us
+- pslang: Building a programming language from scratch (again)
+- Visual Basic history: The untold stories before Microsoft went corporate
+
+* Stories
+
+** Show HN: Building a web server in assembly to give my life (a lack of) meaning :assembly:webdev:macos:systems:
+:PROPERTIES:
+:ID:       48080587
+:URL:      https://github.com/imtomt/ymawky
+:HN_URL:   https://news.ycombinator.com/item?id=48080587
+:POINTS:   91
+:COMMENTS: 29
+:BY:       imtomt
+:END:
+
+*** TLDR
+ymawky is a static HTTP file server written entirely in ARM64 assembly for macOS, using raw Darwin syscalls with zero libc wrappers. It supports GET, PUT, DELETE, HEAD, OPTIONS, byte ranges for video streaming, directory listing, custom error pages, and slowloris mitigations. The author wanted to understand how web servers actually work by stripping away every convenience layer since 1957.
+
+*** Take
+This is the programming equivalent of walking to work in a blizzard because you wanted to 'really feel the commute'. Absurdly impractical, technically impressive, and exactly the kind of project that makes HN worth reading.
+
+*** Comments
+
+**** faangguyindia
+:PROPERTIES:
+:COMMENT_ID: 48080601
+:END:
+Nothing beats Go. When you use HTMLX + sqlc + pgx + Chi and Sqlite. Most apps will not need anything more than Sqlite.
+
+**** cylinder714
+:PROPERTIES:
+:COMMENT_ID: 48080615
+:END:
+Here's a piece on writing portable ARM64 assembly.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: 用汇编写Web服务器，给我的生活（缺乏的）意义
+***** TLDR
+ymawky是一个完全用ARM64汇编为macOS编写的静态HTTP文件服务器，使用原始Darwin系统调用，不使用任何libc包装。它支持GET、PUT、DELETE、HEAD、OPTIONS、用于视频流的字节范围、目录列表、自定义错误页面和slowloris防护。作者想通过剥离1957年以来的所有便利层来真正理解Web服务器的工作原理。
+***** Take
+这相当于在暴风雪中步行上班，因为你想'真正感受通勤'。荒谬地不实用，技术上令人印象深刻，正是让HN值得一读的项目。
+***** Comments
+- Go无敌。用HTMLX + sqlc + pgx + Chi和Sqlite，大多数应用不需要更多。
+- 这是一篇关于编写可移植ARM64汇编的文章。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: 人生に（欠如した）意味を与えるためにアセンブリでWebサーバーを構築
+***** TLDR
+ymawkyはmacOS向けにARM64アセンブリで完全に書かれた静的HTTPファイルサーバーで、libc wrapperなしで生のDarwinシステムコールを使用します。GET、PUT、DELETE、HEAD、OPTIONS、動画ストリーミング用のバイト範囲、ディレクトリリスト、カスタムエラーページ、slowloris対策をサポート。著者は1957年以降のすべての便利な層を剥がすことで、Webサーバーが実際にどのように機能するかを理解したかったのです。
+***** Take
+これは、「通勤を本当に感じたい」から吹雪の中を歩いて出勤するようなもの。ばかばかしく非現実的で、技術的には印象的で、まさにHNを読む価値があるプロジェクト。
+***** Comments
+- Goに勝るものなし。HTMLX + sqlc + pgx + ChiとSqliteを使えば、ほとんどのアプリにはそれ以上必要ない。
+- ポータブルなARM64アセンブリの書き方についての記事です。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: 내 삶에 (부족한) 의미를 주기 위해 어셈블리로 웹 서버 구축하기
+***** TLDR
+ymawky는 macOS용으로 ARM64 어셈블리로 완전히 작성된 정적 HTTP 파일 서버로, libc 래퍼 없이 원시 Darwin 시스템 콜을 사용합니다. GET, PUT, DELETE, HEAD, OPTIONS, 비디오 스트리밍용 바이트 범위, 디렉토리 목록, 커스텀 에러 페이지, slowloris 방어를 지원합니다. 저자는 1957년 이후의 모든 편의 계층을 벗겨내어 웹 서버가 실제로 어떻게 작동하는지 이해하고 싶었습니다.
+***** Take
+이것은 '통근을 정말 느끼고 싶어서' 눈보라 속에서 걸어서 출근하는 것과 같습니다. 터무니없이 비실용적이고, 기술적으로 인상적이며, 정확히 HN을 읽을 가치가 있게 만드는 프로젝트입니다.
+***** Comments
+- Go를 이길 것은 없다. HTMLX + sqlc + pgx + Chi와 Sqlite를 쓰면 대부분의 앱에는 그 이상 필요 없다.
+- 휴대용 ARM64 어셈블리 작성에 관한 글입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Construyendo un servidor web en ensamblador para dar (una falta de) significado a mi vida
+***** TLDR
+ymawky es un servidor de archivos HTTP estático escrito completamente en ensamblador ARM64 para macOS, usando llamadas al sistema Darwin sin ningún wrapper de libc. Soporta GET, PUT, DELETE, HEAD, OPTIONS, rangos de bytes para streaming de video, listado de directorios, páginas de error personalizadas y mitigaciones contra slowloris. El autor quería entender cómo funcionan realmente los servidores web eliminando todas las capas de conveniencia desde 1957.
+***** Take
+Esto es el equivalente en programación de ir caminando al trabajo en una tormenta de nieve porque querías 'sentir realmente el viaje'. Absurdamente impráctico, técnicamente impresionante, y exactamente el tipo de proyecto que hace que HN valga la pena.
+***** Comments
+- Nada supera a Go. Cuando usas HTMLX + sqlc + pgx + Chi y Sqlite, la mayoría de apps no necesitan más.
+- Aquí hay un artículo sobre escribir ensamblador ARM64 portable.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Einen Webserver in Assembler bauen, um meinem Leben (einen Mangel an) Sinn zu geben
+***** TLDR
+ymawky ist ein statischer HTTP-Dateiserver, der vollständig in ARM64-Assembler für macOS geschrieben wurde und rohe Darwin-Syscalls ohne libc-Wrapper verwendet. Er unterstützt GET, PUT, DELETE, HEAD, OPTIONS, Byte-Ranges für Video-Streaming, Verzeichnislisting, benutzerdefinierte Fehlerseiten und Slowloris-Schutz. Der Autor wollte verstehen, wie Webserver wirklich funktionieren, indem er alle Komfortschichten seit 1957 entfernte.
+***** Take
+Das ist das Programmier-Äquivalent zum Fußweg zur Arbeit im Schneesturm, weil man 'den Arbeitsweg wirklich spüren' wollte. Absurd unpraktisch, technisch beeindruckend, und genau die Art von Projekt, die HN lesenswert macht.
+***** Comments
+- Nichts übertrifft Go. Mit HTMLX + sqlc + pgx + Chi und Sqlite brauchen die meisten Apps nicht mehr.
+- Hier ist ein Artikel über das Schreiben von portablem ARM64-Assembler.
+** Show HN: Rust but Lisp :rust:lisp:compilers:programming-languages:
+:PROPERTIES:
+:ID:       48078575
+:URL:      https://github.com/ThatXliner/rust-but-lisp
+:HN_URL:   https://news.ycombinator.com/item?id=48078575
+:POINTS:   105
+:COMMENTS: 57
+:BY:       thatxliner
+:END:
+
+*** TLDR
+rlisp is a transparent s-expression frontend that compiles to Rust. Write (struct Point (x f64) (y f64)) and get real Rust with ownership, borrowing, lifetimes, and generics. No runtime, no GC - just s-expr to .rs to binary. The killer feature: macros become trivial because in Lisp, a macro is just a function from s-expressions to s-expressions.
+
+*** Take
+Finally, a way to make Rust's learning curve even steeper by adding parenthesis anxiety. Though honestly, the macro story is compelling - Rust's proc_macro ceremony is exactly the kind of thing that makes you wish for simpler times.
+
+*** Comments
+
+**** zareith
+:PROPERTIES:
+:COMMENT_ID: 48078590
+:END:
+Anyone working on something similar that compiles to go?
+
+**** ecto
+:PROPERTIES:
+:COMMENT_ID: 48078605
+:END:
+Readers may enjoy my lisp, Loon, which takes heavy inspiration from Rust.
+
+**** hawkice
+:PROPERTIES:
+:COMMENT_ID: 48078620
+:END:
+The purpose of bringing Rust into it is to surface Rust-specific semantics - which many people quite like!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: Rust但是Lisp
+***** TLDR
+rlisp是一个透明的S表达式前端，可以编译成Rust。写(struct Point (x f64) (y f64))就能得到真正的Rust，包括所有权、借用、生命周期和泛型。没有运行时，没有GC - 只是从S表达式到.rs到二进制文件。杀手级功能：宏变得简单，因为在Lisp中，宏只是一个从S表达式到S表达式的函数。
+***** Take
+终于有办法通过添加括号焦虑来让Rust的学习曲线更陡峭了。不过说实话，宏的故事很有说服力 - Rust的proc_macro仪式正是让人怀念简单时代的东西。
+***** Comments
+- 有人在做类似的编译到Go的东西吗？
+- 读者可能会喜欢我的Lisp语言Loon，它从Rust中获得了很大的灵感。
+- 将Rust引入其中的目的是展现Rust特有的语义 - 很多人非常喜欢！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: RustだけどLisp
+***** TLDR
+rlispはRustにコンパイルされる透明なS式フロントエンドです。(struct Point (x f64) (y f64))と書けば、所有権、借用、ライフタイム、ジェネリクスを備えた本物のRustが得られます。ランタイムなし、GCなし - S式から.rsへ、そしてバイナリへ。キラー機能：Lispではマクロはただのs式からs式への関数なので、マクロが簡単になります。
+***** Take
+ついに、括弧の不安を追加することでRustの学習曲線をさらに急にする方法が登場。ただ正直なところ、マクロの話は説得力がある - Rustのproc_macroの儀式は、まさにシンプルな時代を懐かしく思わせるものだ。
+***** Comments
+- Goにコンパイルされる同様のものを作っている人はいますか？
+- 私のLisp言語Loonを楽しんでいただけるかもしれません。Rustから大きなインスピレーションを得ています。
+- Rustを持ち込む目的は、Rust特有のセマンティクスを表面化することです - 多くの人がそれを気に入っています！
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Rust인데 Lisp
+***** TLDR
+rlisp는 Rust로 컴파일되는 투명한 S-표현식 프론트엔드입니다. (struct Point (x f64) (y f64))를 작성하면 소유권, 차용, 수명, 제네릭을 갖춘 진짜 Rust를 얻을 수 있습니다. 런타임 없음, GC 없음 - S-표현식에서 .rs로, 그리고 바이너리로. 킬러 기능: Lisp에서 매크로는 S-표현식에서 S-표현식으로의 함수일 뿐이므로 매크로가 간단해집니다.
+***** Take
+마침내 괄호 불안을 추가하여 Rust의 학습 곡선을 더 가파르게 만드는 방법이 나왔다. 하지만 솔직히 매크로 이야기는 설득력이 있다 - Rust의 proc_macro 의식은 정확히 단순한 시절을 그리워하게 만드는 것이다.
+***** Comments
+- Go로 컴파일되는 비슷한 것을 만드는 사람 있나요?
+- 제 Lisp 언어 Loon을 즐겨보실 수 있습니다. Rust에서 많은 영감을 받았습니다.
+- Rust를 도입한 목적은 Rust 고유의 의미론을 표면화하는 것입니다 - 많은 사람들이 정말 좋아합니다!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Rust pero Lisp
+***** TLDR
+rlisp es un frontend transparente de s-expresiones que compila a Rust. Escribe (struct Point (x f64) (y f64)) y obtienes Rust real con propiedad, préstamo, tiempos de vida y genéricos. Sin runtime, sin GC - solo s-expr a .rs a binario. La característica estrella: los macros se vuelven triviales porque en Lisp, un macro es solo una función de s-expresiones a s-expresiones.
+***** Take
+Finalmente, una forma de hacer la curva de aprendizaje de Rust aún más empinada añadiendo ansiedad por paréntesis. Aunque honestamente, la historia de los macros es convincente - la ceremonia de proc_macro de Rust es exactamente el tipo de cosa que te hace desear tiempos más simples.
+***** Comments
+- ¿Alguien trabajando en algo similar que compile a Go?
+- A los lectores les puede gustar mi Lisp, Loon, que toma mucha inspiración de Rust.
+- ¡El propósito de traer Rust es mostrar las semánticas específicas de Rust - que a mucha gente le gusta!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Rust aber Lisp
+***** TLDR
+rlisp ist ein transparentes S-Expression-Frontend, das zu Rust kompiliert. Schreibe (struct Point (x f64) (y f64)) und erhalte echtes Rust mit Ownership, Borrowing, Lifetimes und Generics. Keine Runtime, kein GC - nur S-Expr zu .rs zu Binary. Das Killer-Feature: Makros werden trivial, weil in Lisp ein Makro nur eine Funktion von S-Expressions zu S-Expressions ist.
+***** Take
+Endlich eine Möglichkeit, Rusts Lernkurve durch Klammer-Angst noch steiler zu machen. Aber ehrlich gesagt ist die Makro-Geschichte überzeugend - Rusts proc_macro-Zeremonie ist genau die Art von Sache, die einen nach einfacheren Zeiten sehnen lässt.
+***** Comments
+- Arbeitet jemand an etwas Ähnlichem, das zu Go kompiliert?
+- Leser könnten mein Lisp, Loon, genießen, das stark von Rust inspiriert ist.
+- Der Zweck, Rust einzubringen, ist, Rust-spezifische Semantik zu zeigen - was viele Leute sehr mögen!
+** The Serial TTL connector we deserve :hardware:embedded:standards:diy:
+:PROPERTIES:
+:ID:       48049828
+:URL:      https://kohlschuetter.github.io/blog/posts/2026/05/07/serial-ttl-connector/
+:HN_URL:   https://news.ycombinator.com/item?id=48049828
+:POINTS:   69
+:COMMENTS: 50
+:BY:       kohlschuetter
+:END:
+
+*** TLDR
+The author proposes using Julet M6 connectors (from e-bike cables) as a standard for serial TTL connections on embedded devices. These sturdy, IP68-rated connectors replace the mess of Dupont jumper wires dangling from routers and SBCs. The pinout convention: black=RX, red=TX, blue=GND, with a Dupont arrow indicating the receiving pin.
+
+*** Take
+We've been using breadboard jumper wires held together with hope and electrical tape for decades, and someone finally said 'what if we used the connectors e-bikes already figured out?' Sometimes the best standards come from the weirdest places.
+
+*** Comments
+
+**** foresto
+:PROPERTIES:
+:COMMENT_ID: 48049840
+:END:
+FTDI uses 3.5mm tip-ring-sleeve connectors for this. In other words, a common headphone jack.
+
+**** amstan
+:PROPERTIES:
+:COMMENT_ID: 48049855
+:END:
+Just because both your debug cable and your target runs at the same voltage doesn't mean it's safe to plug them together.
+
+**** exmadscientist
+:PROPERTIES:
+:COMMENT_ID: 48049870
+:END:
+At that point please, please, please just switch to proper level shifters.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我们应得的串口TTL连接器
+***** TLDR
+作者提议使用Julet M6连接器（来自电动自行车电缆）作为嵌入式设备串口TTL连接的标准。这些坚固的IP68级连接器取代了从路由器和单板计算机上悬挂的杜邦跳线的混乱。引脚约定：黑色=RX，红色=TX，蓝色=GND，杜邦箭头指示接收引脚。
+***** Take
+几十年来我们一直用靠希望和电工胶带固定的面包板跳线，终于有人说'如果我们用电动自行车已经搞定的连接器呢？'有时候最好的标准来自最奇怪的地方。
+***** Comments
+- FTDI为此使用3.5mm插头。换句话说，就是普通的耳机插孔。
+- 仅仅因为你的调试线和目标设备运行在相同电压并不意味着可以安全地插在一起。
+- 到那时候请务必换成适当的电平转换器。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+私たちが待ち望んでいたシリアルTTLコネクタ
+***** TLDR
+著者は、組み込みデバイスのシリアルTTL接続の標準として、Julet M6コネクタ（電動自転車のケーブルから）を使用することを提案しています。これらの頑丈なIP68定格コネクタは、ルーターやSBCからぶら下がっているデュポンジャンパーワイヤーの混乱を置き換えます。ピン配置の規則：黒=RX、赤=TX、青=GND、デュポンの矢印が受信ピンを示します。
+***** Take
+何十年もの間、希望と電気テープで固定されたブレッドボードジャンパーワイヤーを使ってきたが、ついに誰かが『電動自転車がすでに解決したコネクタを使えばいいのでは？』と言った。時々、最高の標準は最も奇妙な場所から生まれる。
+***** Comments
+- FTDIはこのために3.5mmのチップリングスリーブコネクタを使用しています。つまり、一般的なイヤホンジャックです。
+- デバッグケーブルとターゲットが同じ電圧で動作しているからといって、安全に接続できるわけではありません。
+- その時点では、ぜひとも適切なレベルシフターに切り替えてください。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+우리가 마땅히 가져야 할 시리얼 TTL 커넥터
+***** TLDR
+저자는 임베디드 장치의 시리얼 TTL 연결 표준으로 Julet M6 커넥터(전기자전거 케이블에서 유래)를 사용할 것을 제안합니다. 이 견고한 IP68 등급 커넥터는 라우터와 SBC에서 대롱대롱 매달린 듀폰 점퍼 와이어의 난장판을 대체합니다. 핀 배치 규칙: 검정=RX, 빨강=TX, 파랑=GND, 듀폰 화살표가 수신 핀을 나타냅니다.
+***** Take
+수십 년 동안 희망과 전기 테이프로 고정된 브레드보드 점퍼 와이어를 사용해왔는데, 마침내 누군가 '전기자전거가 이미 해결한 커넥터를 쓰면 어떨까?'라고 말했다. 때로는 최고의 표준이 가장 이상한 곳에서 나온다.
+***** Comments
+- FTDI는 이를 위해 3.5mm 팁-링-슬리브 커넥터를 사용합니다. 즉, 일반적인 이어폰 잭입니다.
+- 디버그 케이블과 대상 장치가 같은 전압으로 작동한다고 해서 안전하게 연결할 수 있는 것은 아닙니다.
+- 그 시점에서는 제발 적절한 레벨 시프터로 전환해 주세요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El conector serial TTL que merecemos
+***** TLDR
+El autor propone usar conectores Julet M6 (de cables de bicicletas eléctricas) como estándar para conexiones serial TTL en dispositivos embebidos. Estos conectores resistentes con clasificación IP68 reemplazan el desorden de cables jumper Dupont colgando de routers y SBCs. La convención de pines: negro=RX, rojo=TX, azul=GND, con una flecha Dupont indicando el pin receptor.
+***** Take
+Hemos estado usando cables jumper de protoboard sostenidos con esperanza y cinta aislante durante décadas, y finalmente alguien dijo '¿y si usamos los conectores que las bicis eléctricas ya resolvieron?' A veces los mejores estándares vienen de los lugares más extraños.
+***** Comments
+- FTDI usa conectores de 3.5mm para esto. En otras palabras, un jack de auriculares común.
+- Solo porque tu cable de debug y tu objetivo funcionan al mismo voltaje no significa que sea seguro conectarlos.
+- En ese punto, por favor, por favor, cambia a level shifters apropiados.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der serielle TTL-Stecker, den wir verdienen
+***** TLDR
+Der Autor schlägt vor, Julet M6-Stecker (von E-Bike-Kabeln) als Standard für serielle TTL-Verbindungen an eingebetteten Geräten zu verwenden. Diese robusten IP68-zertifizierten Stecker ersetzen das Chaos von Dupont-Jumperkabeln, die von Routern und SBCs herunterbaumeln. Die Pinbelegung: Schwarz=RX, Rot=TX, Blau=GND, mit einem Dupont-Pfeil, der den Empfangspin anzeigt.
+***** Take
+Wir haben jahrzehntelang Steckbrett-Jumperkabel benutzt, die mit Hoffnung und Isolierband zusammengehalten wurden, und endlich hat jemand gesagt 'Was wäre, wenn wir die Stecker verwenden, die E-Bikes bereits herausgefunden haben?' Manchmal kommen die besten Standards von den seltsamsten Orten.
+***** Comments
+- FTDI verwendet 3,5mm Klinkenstecker dafür. Mit anderen Worten, einen gewöhnlichen Kopfhöreranschluss.
+- Nur weil dein Debug-Kabel und dein Zielgerät mit der gleichen Spannung laufen, heißt das nicht, dass es sicher ist, sie zu verbinden.
+- An diesem Punkt wechsle bitte, bitte zu richtigen Level-Shiftern.
+** Making your own programming language is easier than you think (but also harder) :programming-languages:compilers:game-dev:modding:
+:PROPERTIES:
+:ID:       48048902
+:URL:      https://lisyarus.github.io/blog/posts/making-your-own-programming-language.html
+:HN_URL:   https://news.ycombinator.com/item?id=48048902
+:POINTS:   70
+:COMMENTS: 29
+:BY:       ibobev
+:END:
+
+*** TLDR
+The author created pslang, a low-level imperative language with C-like semantics but Python-like indentation syntax. Built for game modding with seamless C interop, sandboxing, and fast compilation. Already has a working path tracer written in it. The language has 13 primitive types, first-class arrays, function pointers, structs, and compiles via a custom JIT or interpreter.
+
+*** Take
+Every programmer dreams of their perfect language, and this one actually shipped something usable instead of just arguing about type systems on Twitter. The modding use case is smart - Lua's sandboxing is indeed a mess of blacklisting functions you hope are all the dangerous ones.
+
+*** Comments
+
+**** sieve
+:PROPERTIES:
+:COMMENT_ID: 48048920
+:END:
+The first thing you do is avoid lex/yacc/bison/antlr. A recursive descent parser that uses Pratt parsing will work for a vast majority of cases.
+
+**** sheepscreek
+:PROPERTIES:
+:COMMENT_ID: 48048935
+:END:
+Easier than you think to get started, but harder than you think to turn into something truly usable that isn't a toy.
+
+**** coldcode
+:PROPERTIES:
+:COMMENT_ID: 48048950
+:END:
+I wrote my own interpreted language about 25+ years ago to write online surveys. It made it easy to create complex surveys with many branches.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+创建自己的编程语言比你想的容易（但也更难）
+***** TLDR
+作者创建了pslang，一种具有类C语义但使用Python风格缩进语法的低级命令式语言。专为游戏模组设计，具有无缝C互操作、沙箱和快速编译。已经用它编写了一个可工作的路径追踪器。该语言有13种原始类型、一等数组、函数指针、结构体，通过自定义JIT或解释器编译。
+***** Take
+每个程序员都梦想自己完美的语言，而这位实际上交付了一些可用的东西，而不是只在Twitter上争论类型系统。模组用例很聪明 - Lua的沙箱确实是一堆黑名单函数的混乱，你只能希望那些是所有危险的函数。
+***** Comments
+- 你要做的第一件事就是避开lex/yacc/bison/antlr。使用Pratt解析的递归下降解析器在绝大多数情况下都能工作。
+- 开始比你想象的容易，但要把它变成真正可用而不是玩具的东西比你想象的难。
+- 我大约25年前写了自己的解释型语言来编写在线调查。它使创建具有许多分支的复杂调查变得容易。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+自分のプログラミング言語を作るのは思ったより簡単（でも難しい）
+***** TLDR
+著者はpslangを作成しました。C風のセマンティクスを持ちながらPython風のインデント構文を使う低レベルの命令型言語です。シームレスなC相互運用、サンドボックス、高速コンパイルを備えたゲームモッディング向けに構築されました。すでに動作するパストレーサーが書かれています。この言語には13のプリミティブ型、ファーストクラス配列、関数ポインタ、構造体があり、カスタムJITまたはインタープリターでコンパイルされます。
+***** Take
+すべてのプログラマーは完璧な言語を夢見ているが、この人は実際にTwitterで型システムについて議論するだけでなく、使えるものを出荷した。モッディングのユースケースは賢い - Luaのサンドボックスは、危険なものをすべてブラックリストに入れることを願う関数の混乱だ。
+***** Comments
+- 最初にやることはlex/yacc/bison/antlrを避けること。Pratt解析を使う再帰下降パーサーは大多数のケースで機能します。
+- 始めるのは思ったより簡単だが、おもちゃではなく本当に使えるものにするのは思ったより難しい。
+- 私は約25年以上前にオンライン調査を書くために自分の解釈型言語を書きました。多くの分岐を持つ複雑な調査を簡単に作成できました。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+자신만의 프로그래밍 언어를 만드는 것은 생각보다 쉽다 (하지만 더 어렵기도 하다)
+***** TLDR
+저자는 C 스타일 의미론을 가지면서 Python 스타일 들여쓰기 구문을 사용하는 저수준 명령형 언어인 pslang을 만들었습니다. 원활한 C 상호 운용, 샌드박싱, 빠른 컴파일을 갖춘 게임 모딩용으로 구축되었습니다. 이미 작동하는 경로 추적기가 작성되어 있습니다. 이 언어는 13개의 기본 타입, 일급 배열, 함수 포인터, 구조체를 가지며 커스텀 JIT 또는 인터프리터로 컴파일됩니다.
+***** Take
+모든 프로그래머는 자신의 완벽한 언어를 꿈꾸는데, 이 사람은 트위터에서 타입 시스템에 대해 논쟁하는 대신 실제로 사용 가능한 것을 출시했다. 모딩 사용 사례는 영리하다 - Lua의 샌드박싱은 정말로 위험한 것들이 모두 포함되기를 바라는 함수 블랙리스트의 혼란이다.
+***** Comments
+- 가장 먼저 할 일은 lex/yacc/bison/antlr을 피하는 것입니다. Pratt 파싱을 사용하는 재귀 하강 파서는 대다수의 경우에 작동합니다.
+- 시작하는 것은 생각보다 쉽지만, 장난감이 아닌 진정으로 사용 가능한 것으로 만드는 것은 생각보다 어렵습니다.
+- 저는 약 25년 전에 온라인 설문조사를 작성하기 위해 직접 해석형 언어를 만들었습니다. 많은 분기가 있는 복잡한 설문조사를 쉽게 만들 수 있었습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Crear tu propio lenguaje de programación es más fácil de lo que piensas (pero también más difícil)
+***** TLDR
+El autor creó pslang, un lenguaje imperativo de bajo nivel con semántica similar a C pero sintaxis de indentación tipo Python. Construido para modding de juegos con interoperabilidad C perfecta, sandboxing y compilación rápida. Ya tiene un path tracer funcionando escrito en él. El lenguaje tiene 13 tipos primitivos, arrays de primera clase, punteros a funciones, structs, y compila vía JIT personalizado o intérprete.
+***** Take
+Todo programador sueña con su lenguaje perfecto, y este realmente entregó algo usable en lugar de solo discutir sobre sistemas de tipos en Twitter. El caso de uso de modding es inteligente - el sandboxing de Lua es realmente un desastre de funciones en lista negra que esperas sean todas las peligrosas.
+***** Comments
+- Lo primero que haces es evitar lex/yacc/bison/antlr. Un parser de descenso recursivo que usa Pratt parsing funcionará en la gran mayoría de casos.
+- Más fácil de lo que piensas para empezar, pero más difícil de lo que piensas convertirlo en algo verdaderamente usable que no sea un juguete.
+- Escribí mi propio lenguaje interpretado hace más de 25 años para escribir encuestas online. Facilitó crear encuestas complejas con muchas ramificaciones.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Deine eigene Programmiersprache zu erstellen ist einfacher als du denkst (aber auch schwieriger)
+***** TLDR
+Der Autor hat pslang erstellt, eine imperative Low-Level-Sprache mit C-ähnlicher Semantik aber Python-ähnlicher Einrückungssyntax. Für Game-Modding mit nahtloser C-Interop, Sandboxing und schneller Kompilierung gebaut. Hat bereits einen funktionierenden Path Tracer darin geschrieben. Die Sprache hat 13 primitive Typen, First-Class Arrays, Funktionszeiger, Structs und kompiliert über einen benutzerdefinierten JIT oder Interpreter.
+***** Take
+Jeder Programmierer träumt von seiner perfekten Sprache, und dieser hat tatsächlich etwas Brauchbares geliefert, anstatt nur auf Twitter über Typsysteme zu streiten. Der Modding-Anwendungsfall ist clever - Luas Sandboxing ist wirklich ein Durcheinander von schwarzgelisteten Funktionen, von denen man hofft, dass es alle gefährlichen sind.
+***** Comments
+- Das erste, was du tust, ist lex/yacc/bison/antlr zu vermeiden. Ein rekursiver Abstiegsparser mit Pratt-Parsing funktioniert in der überwiegenden Mehrheit der Fälle.
+- Einfacher als du denkst anzufangen, aber schwieriger als du denkst, es in etwas wirklich Brauchbares zu verwandeln, das kein Spielzeug ist.
+- Ich habe vor etwa 25+ Jahren meine eigene interpretierte Sprache geschrieben, um Online-Umfragen zu schreiben. Es machte das Erstellen komplexer Umfragen mit vielen Verzweigungen einfach.
+** I'm writing a history of Visual Basic, Chapter 1 is up :history:programming-languages:microsoft:retro:
+:PROPERTIES:
+:ID:       48039249
+:URL:      https://evilgeniuslabs.ca/blog/visual-basic-history-chapter-1-launch
+:HN_URL:   https://news.ycombinator.com/item?id=48039249
+:POINTS:   61
+:COMMENTS: 18
+:BY:       speckx
+:END:
+
+*** TLDR
+A long-form history of Visual Basic covering the people who don't get written about: Alan Cooper (who built the form designer that became VB), the Thunder team (Scott Ferguson, Adam Rauch, Chris Fraley), and the pre-Microsoft BASIC lineage from Dartmouth through the 5 million BASIC programmers estimate. Chapter 1 spans 1964-1992, from Kemeny and Kurtz to VB 1.0 for DOS.
+
+*** Take
+The existing VB histories focus on Gates and Allen while giving Alan Cooper a footnote. This one finally tells the story of the people who shipped the thing. Also, VB 1.0 came out 35 years ago and I suddenly feel ancient.
+
+*** Comments
+
+**** giancarlostoro
+:PROPERTIES:
+:COMMENT_ID: 48039260
+:END:
+I would love for Microsoft to open source it. I would love for the community to take a crack at adding things to VB6 like bugfixes and threading.
+
+**** MBCook
+:PROPERTIES:
+:COMMENT_ID: 48039275
+:END:
+I'm genuinely unable to figure out how to get to part one. Not the thumbnail. Not the pink text. How am I supposed to navigate to the thing?
+
+**** vunderba
+:PROPERTIES:
+:COMMENT_ID: 48039290
+:END:
+Why on earth would you use an AI-generated image for the banner? The text on the book spines doesn't even spell Microsoft correctly.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我正在写Visual Basic的历史，第一章已上线
+***** TLDR
+一部关于Visual Basic的长篇历史，涵盖那些没有被记录的人：Alan Cooper（他构建了成为VB的表单设计器）、Thunder团队（Scott Ferguson、Adam Rauch、Chris Fraley），以及从Dartmouth到500万BASIC程序员估计的微软之前的BASIC血统。第一章跨越1964-1992年，从Kemeny和Kurtz到VB 1.0 for DOS。
+***** Take
+现有的VB历史都聚焦于Gates和Allen，而Alan Cooper只得到一个脚注。这篇终于讲述了真正交付产品的人的故事。另外，VB 1.0是35年前发布的，我突然觉得自己老了。
+***** Comments
+- 我希望微软能开源它。我希望社区能尝试给VB6添加bug修复和线程等功能。
+- 我真的搞不懂怎么进入第一部分。不是缩略图，不是粉色文字。我应该怎么导航到那个东西？
+- 为什么要用AI生成的图片作为横幅？书脊上的文字连Microsoft都没拼对。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Visual Basicの歴史を書いています、第1章が公開されました
+***** TLDR
+Visual Basicの長編歴史で、書かれていない人々をカバーしています：Alan Cooper（VBとなったフォームデザイナーを構築した人）、Thunderチーム（Scott Ferguson、Adam Rauch、Chris Fraley）、そしてDartmouthから500万人のBASICプログラマーの推定までのMicrosoft以前のBASICの系譜。第1章は1964年から1992年まで、KemenyとKurtzからVB 1.0 for DOSまでをカバーしています。
+***** Take
+既存のVBの歴史はGatesとAllenに焦点を当て、Alan Cooperには脚注だけ。これは、実際に製品を出荷した人々の物語をようやく語っている。また、VB 1.0は35年前にリリースされ、突然自分が年老いたと感じる。
+***** Comments
+- Microsoftがオープンソース化してくれたらいいのに。コミュニティがVB6にバグ修正やスレッディングなどを追加する機会があればいいと思います。
+- 第1部に行く方法が本当にわかりません。サムネイルでもない、ピンクのテキストでもない。どうやってそこにナビゲートすればいいの？
+- なぜAI生成の画像をバナーに使うのですか？本の背表紙のテキストはMicrosoftすら正しく綴っていません。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Visual Basic의 역사를 쓰고 있습니다, 1장이 올라왔습니다
+***** TLDR
+기록되지 않은 사람들을 다루는 Visual Basic의 장편 역사: Alan Cooper(VB가 된 폼 디자이너를 만든 사람), Thunder 팀(Scott Ferguson, Adam Rauch, Chris Fraley), 그리고 Dartmouth에서 500만 BASIC 프로그래머 추정까지의 Microsoft 이전 BASIC 계보. 1장은 1964-1992년, Kemeny와 Kurtz에서 VB 1.0 for DOS까지를 다룹니다.
+***** Take
+기존 VB 역사는 Gates와 Allen에 초점을 맞추고 Alan Cooper는 각주로 처리한다. 이것은 마침내 실제로 제품을 출시한 사람들의 이야기를 들려준다. 또한 VB 1.0이 35년 전에 나왔는데 갑자기 내가 고대인처럼 느껴진다.
+***** Comments
+- Microsoft가 오픈소스로 공개해줬으면 좋겠어요. 커뮤니티가 VB6에 버그 수정이나 스레딩 같은 것을 추가할 기회가 있으면 좋겠습니다.
+- 1부로 가는 방법을 정말 모르겠어요. 썸네일도 아니고 분홍색 텍스트도 아니에요. 어떻게 거기로 이동해야 하죠?
+- 왜 배너에 AI 생성 이미지를 사용하나요? 책 등의 텍스트는 Microsoft도 제대로 철자가 안 되어 있어요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Estoy escribiendo una historia de Visual Basic, el Capítulo 1 está listo
+***** TLDR
+Una historia larga de Visual Basic cubriendo a las personas que no se escriben: Alan Cooper (quien construyó el diseñador de formularios que se convirtió en VB), el equipo Thunder (Scott Ferguson, Adam Rauch, Chris Fraley), y el linaje de BASIC pre-Microsoft desde Dartmouth hasta la estimación de 5 millones de programadores BASIC. El Capítulo 1 abarca 1964-1992, desde Kemeny y Kurtz hasta VB 1.0 para DOS.
+***** Take
+Las historias existentes de VB se enfocan en Gates y Allen mientras dan a Alan Cooper una nota al pie. Esta finalmente cuenta la historia de las personas que realmente entregaron el producto. También, VB 1.0 salió hace 35 años y de repente me siento antiguo.
+***** Comments
+- Me encantaría que Microsoft lo hiciera open source. Me encantaría que la comunidad intentara agregar cosas a VB6 como correcciones de bugs y threading.
+- Genuinamente no puedo descifrar cómo llegar a la parte uno. No es la miniatura. No es el texto rosa. ¿Cómo se supone que navegue a eso?
+- ¿Por qué usarías una imagen generada por IA para el banner? El texto en los lomos de los libros ni siquiera deletrea Microsoft correctamente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ich schreibe eine Geschichte von Visual Basic, Kapitel 1 ist online
+***** TLDR
+Eine ausführliche Geschichte von Visual Basic, die die Menschen behandelt, über die nicht geschrieben wird: Alan Cooper (der den Formdesigner baute, der zu VB wurde), das Thunder-Team (Scott Ferguson, Adam Rauch, Chris Fraley), und die BASIC-Abstammung vor Microsoft von Dartmouth bis zur Schätzung von 5 Millionen BASIC-Programmierern. Kapitel 1 umfasst 1964-1992, von Kemeny und Kurtz bis VB 1.0 für DOS.
+***** Take
+Die bestehenden VB-Geschichten konzentrieren sich auf Gates und Allen, während Alan Cooper nur eine Fußnote bekommt. Diese erzählt endlich die Geschichte der Leute, die das Ding tatsächlich ausgeliefert haben. Außerdem kam VB 1.0 vor 35 Jahren raus und ich fühle mich plötzlich uralt.
+***** Comments
+- Ich würde es lieben, wenn Microsoft es open source machen würde. Ich würde es lieben, wenn die Community versuchen könnte, Dinge wie Bugfixes und Threading zu VB6 hinzuzufügen.
+- Ich kann ehrlich nicht herausfinden, wie ich zu Teil eins komme. Nicht das Thumbnail. Nicht der rosa Text. Wie soll ich dorthin navigieren?
+- Warum um alles in der Welt würdest du ein KI-generiertes Bild für das Banner verwenden? Der Text auf den Buchrücken buchstabiert nicht einmal Microsoft richtig.
