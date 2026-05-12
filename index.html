@@ -249,6 +249,12 @@
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
+      <div class="sidebar-date">2026-05-12</div>
+      <a href="#s48100706-05120100">Postmortem: TanStack npm supply-chain co...</a>
+      <a href="#s48100500-05120100">GitLab announces workforce reduction and...</a>
+      <a href="#s48100433-05120100">If AI writes your code, why use Python? ...</a>
+      <a href="#s48094641-05120100">Google says criminal hackers used AI to ...</a>
+      <a href="#s48097078-05120100">Interfaze: A new model architecture buil...</a>
       <div class="sidebar-date">2026-05-11</div>
       <a href="#s48065429-05112000">AMALIA and the future of European Portug...</a>
       <a href="#s48096842-05112000">Show HN: TikTok but for Scientific Paper...</a>
@@ -499,6 +505,302 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-05-12T01:00:00Z</div>
+        <div class="digest-vibe">Supply chains shatter, GitLab buries DEI, and hackers let AI do the hard work</div>
+      </div>
+      <article class="story" id="s48100706-05120100">
+      <h3 class="story-title">
+        <a href="https://tanstack.com/blog/npm-supply-chain-compromise-postmortem" target="_blank">Postmortem: TanStack npm supply-chain compromise :security:npm:supply-chain:github-actions:</a>
+        <a href="#s48100706-05120100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">事后分析：TanStack npm供应链入侵事件</div>
+<div class="i18n-title" data-lang="ja">事後分析：TanStack npmサプライチェーン侵害</div>
+<div class="i18n-title" data-lang="ko">사후 분석: TanStack npm 공급망 침해</div>
+<div class="i18n-title" data-lang="es">Análisis post-mortem: Compromiso de la cadena de suministro npm de TanStack</div>
+<div class="i18n-title" data-lang="de">Post-Mortem: TanStack npm Supply-Chain-Kompromittierung</div>
+
+      <div class="story-meta">
+        485pts | 165c | <a href="https://news.ycombinator.com/item?id=48100706" target="_blank">HN#48100706</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Attacker compromised 42 TanStack packages by chaining three vulnerabilities: pull_request_target workflow exploitation, GitHub Actions cache poisoning across trust boundaries, and runtime OIDC token extraction from worker memory. Malware harvested AWS/GCP/SSH credentials and self-propagated via npm. Detected by external researchers within 20 minutes. Anyone who installed affected versions on 2026-05-11 should rotate all credentials.</div>
+        <span class="i18n-text" data-lang="zh">攻击者通过链接三个漏洞入侵了42个TanStack包：pull_request_target工作流利用、跨信任边界的GitHub Actions缓存投毒，以及从工作进程内存中提取OIDC令牌。恶意软件窃取AWS/GCP/SSH凭证并通过npm自我传播。外部研究人员在20分钟内发现。任何在2026-05-11安装受影响版本的人都应轮换所有凭证。</span>
+<span class="i18n-text" data-lang="ja">攻撃者は3つの脆弱性を連鎖させて42のTanStackパッケージを侵害：pull_request_targetワークフローの悪用、信頼境界を越えたGitHub Actionsキャッシュポイズニング、ワーカーメモリからのOIDCトークン抽出。マルウェアはAWS/GCP/SSH認証情報を収集し、npm経由で自己増殖。外部研究者が20分以内に検出。2026-05-11に影響を受けたバージョンをインストールした人は全ての認証情報をローテーションすべき。</span>
+<span class="i18n-text" data-lang="ko">공격자는 세 가지 취약점을 연결하여 42개의 TanStack 패키지를 침해했습니다: pull_request_target 워크플로우 악용, 신뢰 경계를 넘는 GitHub Actions 캐시 포이즈닝, 워커 메모리에서 OIDC 토큰 추출. 악성코드는 AWS/GCP/SSH 자격증명을 수집하고 npm을 통해 자체 전파됩니다. 외부 연구원이 20분 내에 탐지했습니다. 2026-05-11에 영향받은 버전을 설치한 사람은 모든 자격증명을 교체해야 합니다.</span>
+<span class="i18n-text" data-lang="es">Un atacante comprometió 42 paquetes de TanStack encadenando tres vulnerabilidades: explotación del flujo de trabajo pull_request_target, envenenamiento de caché de GitHub Actions a través de límites de confianza, y extracción de tokens OIDC de la memoria del worker. El malware recolectó credenciales AWS/GCP/SSH y se autopropagó vía npm. Investigadores externos lo detectaron en 20 minutos. Cualquiera que instaló versiones afectadas el 2026-05-11 debe rotar todas las credenciales.</span>
+<span class="i18n-text" data-lang="de">Angreifer kompromittierten 42 TanStack-Pakete durch Verkettung von drei Schwachstellen: pull_request_target-Workflow-Ausnutzung, GitHub Actions Cache-Poisoning über Vertrauensgrenzen hinweg, und OIDC-Token-Extraktion aus dem Worker-Speicher. Malware sammelte AWS/GCP/SSH-Anmeldedaten und verbreitete sich selbst via npm. Externe Forscher erkannten es innerhalb von 20 Minuten. Jeder, der am 2026-05-11 betroffene Versionen installiert hat, sollte alle Anmeldedaten rotieren.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">A masterclass in modern supply chain attacks. The attacker even used a fake &#x27;claude&#x27; git identity because apparently framing AI is the new black. The fact that this was caught in 20 minutes by external researchers while TanStack had zero internal alerting is both impressive community vigilance and embarrassing internal ops.</div>
+        <span class="i18n-text" data-lang="zh">现代供应链攻击的教科书案例。攻击者甚至用了假的&#x27;claude&#x27; git身份，因为嫁祸AI显然是新潮流。外部研究人员20分钟内就发现了，而TanStack内部完全没有告警，既说明社区警觉性高，也暴露了内部运维的尴尬。</span>
+<span class="i18n-text" data-lang="ja">現代のサプライチェーン攻撃の教科書。攻撃者は偽の&#x27;claude&#x27; git IDを使った。AIに罪をなすりつけるのが新トレンドらしい。外部研究者が20分で発見したのに、TanStack内部にはアラートがなかった。コミュニティの警戒心は素晴らしいが、内部運用は恥ずかしい。</span>
+<span class="i18n-text" data-lang="ko">현대 공급망 공격의 교과서적 사례. 공격자는 가짜 &#x27;claude&#x27; git ID까지 사용했는데, AI에게 누명을 씌우는 것이 새 트렌드인 모양입니다. 외부 연구원들이 20분 만에 발견했는데 TanStack 내부에는 알림이 전혀 없었다는 건 커뮤니티 경계심은 인상적이지만 내부 운영은 창피한 수준입니다.</span>
+<span class="i18n-text" data-lang="es">Una clase magistral de ataques modernos a la cadena de suministro. El atacante hasta usó una identidad git falsa &#x27;claude&#x27; porque aparentemente culpar a la IA es la nueva moda. Que investigadores externos lo detectaran en 20 minutos mientras TanStack no tenía ninguna alerta interna es impresionante vigilancia comunitaria y operaciones internas vergonzosas.</span>
+<span class="i18n-text" data-lang="de">Eine Meisterklasse moderner Supply-Chain-Angriffe. Der Angreifer nutzte sogar eine gefälschte &#x27;claude&#x27; Git-Identität, weil KI beschuldigen offenbar der neue Trend ist. Dass externe Forscher das in 20 Minuten erkannten, während TanStack keine interne Alarmierung hatte, zeigt beeindruckende Community-Wachsamkeit und peinliche interne Abläufe.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Please be careful when revoking tokens. It looks like the payload installs a dead-man&#x27;s switch that runs rm -rf ~/ if the token is revoked."</div>
+          <div class="comment-i18n" data-lang="zh">撤销令牌时要小心。有效载荷会安装死亡开关，一旦令牌被撤销就执行rm -rf ~/。</div>
+<div class="comment-i18n" data-lang="ja">トークンを失効させる際は注意。ペイロードはデッドマンスイッチをインストールし、トークンが失効するとrm -rf ~/を実行する。</div>
+<div class="comment-i18n" data-lang="ko">토큰 취소 시 주의하세요. 페이로드가 데드맨 스위치를 설치해서 토큰이 취소되면 rm -rf ~/를 실행합니다.</div>
+<div class="comment-i18n" data-lang="es">Tengan cuidado al revocar tokens. El payload instala un interruptor de hombre muerto que ejecuta rm -rf ~/ si el token es revocado.</div>
+<div class="comment-i18n" data-lang="de">Seien Sie vorsichtig beim Widerrufen von Tokens. Der Payload installiert einen Totmannschalter, der rm -rf ~/ ausführt, wenn das Token widerrufen wird.</div>
+
+          <div class="comment-author">-- cube00</div>
+        </div><div class="comment">
+          <div class="comment-text">"This is evidence that Trusted Publishing is not enough by itself to securely publish from CI. An attacker inside your CI pipeline can easily publish."</div>
+          <div class="comment-i18n" data-lang="zh">这证明可信发布本身不足以安全地从CI发布。CI管道内的攻击者可以轻松发布。</div>
+<div class="comment-i18n" data-lang="ja">これは信頼できる公開だけではCIから安全に公開するには不十分という証拠。CIパイプライン内の攻撃者は簡単に公開できる。</div>
+<div class="comment-i18n" data-lang="ko">이것은 신뢰 게시만으로는 CI에서 안전하게 게시하기에 충분하지 않다는 증거입니다. CI 파이프라인 내부의 공격자는 쉽게 게시할 수 있습니다.</div>
+<div class="comment-i18n" data-lang="es">Esto es evidencia de que Trusted Publishing no es suficiente por sí solo para publicar de forma segura desde CI. Un atacante dentro de tu pipeline CI puede publicar fácilmente.</div>
+<div class="comment-i18n" data-lang="de">Dies ist ein Beweis, dass Trusted Publishing allein nicht ausreicht, um sicher aus CI zu publizieren. Ein Angreifer in Ihrer CI-Pipeline kann leicht veröffentlichen.</div>
+
+          <div class="comment-author">-- jonchurch_</div>
+        </div>
+      </div>
+      
+    </article>
+<article class="story" id="s48100500-05120100">
+      <h3 class="story-title">
+        <a href="https://about.gitlab.com/blog/gitlab-act-2/" target="_blank">GitLab announces workforce reduction and end of their CREDIT values</a>
+        <a href="#s48100500-05120100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">GitLab宣布裁员并终结CREDIT价值观</div>
+<div class="i18n-title" data-lang="ja">GitLabが人員削減とCREDIT価値観の終了を発表</div>
+<div class="i18n-title" data-lang="ko">GitLab, 인력 감축과 CREDIT 가치관 종료 발표</div>
+<div class="i18n-title" data-lang="es">GitLab anuncia reducción de personal y fin de sus valores CREDIT</div>
+<div class="i18n-title" data-lang="de">GitLab kündigt Personalabbau und Ende der CREDIT-Werte an</div>
+
+      <div class="story-meta">
+        279pts | 274c | <a href="https://news.ycombinator.com/item?id=48100500" target="_blank">HN#48100500</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">GitLab is restructuring with layoffs, reducing country footprint by 30%, flattening management layers, and killing their CREDIT values (Collaboration, Results, Efficiency, Diversity, Inclusion, Iteration, Transparency). New values: Speed with Quality, Ownership Mindset, Customer Outcomes. CEO frames it as pivoting to the &#x27;agentic era&#x27; where &#x27;software will be built by machines, directed by people.&#x27; Voluntary separation window open until May 18.</div>
+        <span class="i18n-text" data-lang="zh">GitLab正在重组并裁员，将国家布局缩减30%，扁平化管理层，并放弃CREDIT价值观（协作、客户成果、效率、多样性、包容性、迭代、透明度）。新价值观：质量与速度、主人翁心态、客户成果。CEO将此定性为向&#x27;代理时代&#x27;转型，在那里&#x27;软件将由机器构建，由人指导&#x27;。自愿离职窗口开放至5月18日。</span>
+<span class="i18n-text" data-lang="ja">GitLabは人員削減を伴う再編を行い、国のフットプリントを30%削減、管理階層をフラット化し、CREDIT価値観（協力、顧客成果、効率、多様性、包括性、反復、透明性）を廃止。新しい価値観：品質を伴うスピード、オーナーシップマインドセット、顧客成果。CEOは「ソフトウェアは機械によって構築され、人が指示する」「エージェント時代」への転換と位置付け。自主退職期間は5月18日まで。</span>
+<span class="i18n-text" data-lang="ko">GitLab이 해고와 함께 구조조정을 진행하며, 국가 발자국을 30% 줄이고, 관리 계층을 평탄화하며, CREDIT 가치관(협업, 고객 결과, 효율성, 다양성, 포용성, 반복, 투명성)을 폐기합니다. 새 가치관: 품질과 속도, 주인의식, 고객 성과. CEO는 이를 &#x27;소프트웨어가 기계에 의해 구축되고 사람이 지시하는&#x27; &#x27;에이전트 시대&#x27;로의 전환이라고 규정합니다. 자발적 퇴직 기간은 5월 18일까지입니다.</span>
+<span class="i18n-text" data-lang="es">GitLab se está reestructurando con despidos, reduciendo presencia en países un 30%, aplanando capas de gestión, y eliminando sus valores CREDIT (Colaboración, Resultados, Eficiencia, Diversidad, Inclusión, Iteración, Transparencia). Nuevos valores: Velocidad con Calidad, Mentalidad de Propietario, Resultados para el Cliente. El CEO lo enmarca como pivote hacia la &#x27;era agéntica&#x27; donde &#x27;el software será construido por máquinas, dirigido por personas.&#x27; Ventana de separación voluntaria abierta hasta el 18 de mayo.</span>
+<span class="i18n-text" data-lang="de">GitLab restrukturiert mit Entlassungen, reduziert die Länderpräsenz um 30%, flacht Managementebenen ab und beendet ihre CREDIT-Werte (Zusammenarbeit, Kundenergebnisse, Effizienz, Diversität, Inklusion, Iteration, Transparenz). Neue Werte: Geschwindigkeit mit Qualität, Eigentümermentalität, Kundenergebnisse. Der CEO rahmt es als Pivot zur &#x27;agentischen Ära&#x27;, in der &#x27;Software von Maschinen gebaut und von Menschen geleitet wird.&#x27; Freiwilliges Trennungsfenster offen bis 18. Mai.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Nothing says &#x27;we care about our employees&#x27; like announcing layoffs via a blog post titled &#x27;Act 2&#x27; and calling it a &#x27;transparent restructure.&#x27; The old CREDIT values at least pretended to include humans. The new ones translate to: work faster, own your problems, and remember the customer matters more than you do. At least they&#x27;re honest now.</div>
+        <span class="i18n-text" data-lang="zh">没有什么比通过名为&#x27;第二幕&#x27;的博客文章宣布裁员并称之为&#x27;透明重组&#x27;更能表达&#x27;我们关心员工&#x27;了。旧的CREDIT价值观至少假装包含人类。新的翻译过来就是：工作更快，承担你的问题，记住客户比你更重要。至少现在他们诚实了。</span>
+<span class="i18n-text" data-lang="ja">「私たちは従業員を大切にしています」を示すのに、「Act 2」というタイトルのブログ投稿でレイオフを発表し、「透明な再構築」と呼ぶほど最適な方法はない。古いCREDIT価値観は少なくとも人間を含むふりをしていた。新しいものは翻訳すると：もっと速く働け、自分の問題は自分で抱えろ、そして顧客はあなたより重要だということを忘れるな。少なくとも今は正直だ。</span>
+<span class="i18n-text" data-lang="ko">&#x27;우리는 직원을 소중히 여깁니다&#x27;를 보여주는 데 &#x27;Act 2&#x27;라는 제목의 블로그 게시물로 해고를 발표하고 이를 &#x27;투명한 구조조정&#x27;이라고 부르는 것보다 더 좋은 방법은 없습니다. 옛 CREDIT 가치관은 최소한 인간을 포함하는 척이라도 했습니다. 새로운 것들은 번역하면: 더 빨리 일하고, 자기 문제는 자기가 책임지고, 고객이 당신보다 중요하다는 걸 기억하라. 적어도 이제는 솔직하네요.</span>
+<span class="i18n-text" data-lang="es">Nada dice &#x27;nos importan nuestros empleados&#x27; como anunciar despidos mediante un post de blog titulado &#x27;Acto 2&#x27; y llamarlo una &#x27;reestructuración transparente.&#x27; Los viejos valores CREDIT al menos pretendían incluir a humanos. Los nuevos se traducen a: trabaja más rápido, hazte cargo de tus problemas, y recuerda que el cliente importa más que tú. Al menos ahora son honestos.</span>
+<span class="i18n-text" data-lang="de">Nichts sagt &#x27;wir kümmern uns um unsere Mitarbeiter&#x27; so sehr wie Entlassungen per Blog-Post mit dem Titel &#x27;Akt 2&#x27; anzukündigen und es eine &#x27;transparente Umstrukturierung&#x27; zu nennen. Die alten CREDIT-Werte taten wenigstens so, als ob Menschen dazugehören. Die neuen übersetzen sich zu: arbeite schneller, übernimm deine Probleme, und denk dran, der Kunde ist wichtiger als du. Wenigstens sind sie jetzt ehrlich.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Old CREDIT values: Collaboration, Results for Customers, Efficiency, Diversity, Inclusion &amp; Belonging, Iteration, and Transparency. New values: Speed with Quality, Ownership Mindset, Customer Outcomes. In other words, work harder, not smarter, and no more DEI."</div>
+          <div class="comment-i18n" data-lang="zh">旧CREDIT价值观：协作、客户成果、效率、多样性、包容性与归属感、迭代、透明度。新价值观：质量与速度、主人翁心态、客户成果。换句话说，更努力而不是更聪明地工作，DEI没了。</div>
+<div class="comment-i18n" data-lang="ja">旧CREDIT価値観：協力、顧客成果、効率、多様性、包括性と帰属意識、反復、透明性。新価値観：品質を伴うスピード、オーナーシップマインドセット、顧客成果。つまり、賢くではなくもっと働け、そしてDEIはなし。</div>
+<div class="comment-i18n" data-lang="ko">구 CREDIT 가치관: 협업, 고객 결과, 효율성, 다양성, 포용성과 소속감, 반복, 투명성. 새 가치관: 품질과 속도, 주인의식, 고객 성과. 다시 말해, 더 똑똑하게가 아니라 더 열심히 일하고, DEI는 없어졌다.</div>
+<div class="comment-i18n" data-lang="es">Viejos valores CREDIT: Colaboración, Resultados para Clientes, Eficiencia, Diversidad, Inclusión y Pertenencia, Iteración, y Transparencia. Nuevos valores: Velocidad con Calidad, Mentalidad de Propietario, Resultados para el Cliente. En otras palabras, trabaja más duro no más inteligente, y no más DEI.</div>
+<div class="comment-i18n" data-lang="de">Alte CREDIT-Werte: Zusammenarbeit, Kundenergebnisse, Effizienz, Diversität, Inklusion &amp; Zugehörigkeit, Iteration, Transparenz. Neue Werte: Geschwindigkeit mit Qualität, Eigentümermentalität, Kundenergebnisse. Mit anderen Worten, härter arbeiten nicht schlauer, und kein DEI mehr.</div>
+
+          <div class="comment-author">-- Animats</div>
+        </div><div class="comment">
+          <div class="comment-text">"Right when everyone was looking to see if GitLab could lead with all the fails at GitHub, they basically said &#x27;We&#x27;re going to throw our source at ChatGPT and see what happens&#x27;"</div>
+          <div class="comment-i18n" data-lang="zh">就在大家期待GitLab能在GitHub各种失误后领先时，他们基本上说&#x27;我们要把源代码扔给ChatGPT看看会发生什么&#x27;</div>
+<div class="comment-i18n" data-lang="ja">みんながGitHubの失敗の後GitLabがリードできるか見ていた時に、彼らは基本的に「ソースをChatGPTに投げて何が起こるか見る」と言った</div>
+<div class="comment-i18n" data-lang="ko">모두가 GitHub의 실패 후 GitLab이 선두에 설 수 있을지 지켜보던 때에, 그들은 기본적으로 &#x27;소스 코드를 ChatGPT에 던지고 무슨 일이 일어나는지 보겠다&#x27;고 말했다</div>
+<div class="comment-i18n" data-lang="es">Justo cuando todos miraban si GitLab podía liderar con todos los fallos de GitHub, básicamente dijeron &#x27;Vamos a tirar nuestro código a ChatGPT y ver qué pasa&#x27;</div>
+<div class="comment-i18n" data-lang="de">Genau als alle schauten ob GitLab mit all den GitHub-Fehlern führen könnte, sagten sie im Grunde &#x27;Wir werfen unseren Code auf ChatGPT und schauen was passiert&#x27;</div>
+
+          <div class="comment-author">-- Steeeve</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#gitlab</span><span class="tag">#layoffs</span><span class="tag">#corporate</span><span class="tag">#ai</span></div>
+    </article>
+<article class="story" id="s48100433-05120100">
+      <h3 class="story-title">
+        <a href="https://medium.com/@NMitchem/if-ai-writes-your-code-why-use-python-bf8c4ba1a055" target="_blank">If AI writes your code, why use Python? :ai:python:programming-languages:hot-takes:</a>
+        <a href="#s48100433-05120100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">如果AI写代码，为什么还用Python？</div>
+<div class="i18n-title" data-lang="ja">AIがコードを書くなら、なぜPythonを使う？</div>
+<div class="i18n-title" data-lang="ko">AI가 코드를 쓴다면, 왜 Python을 쓰나요?</div>
+<div class="i18n-title" data-lang="es">Si la IA escribe tu código, ¿por qué usar Python?</div>
+<div class="i18n-title" data-lang="de">Wenn KI deinen Code schreibt, warum Python verwenden?</div>
+
+      <div class="story-meta">
+        96pts | 105c | <a href="https://news.ycombinator.com/item?id=48100433" target="_blank">HN#48100433</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">［From title + comments, article behind Cloudflare challenge］ The article argues that if AI is writing your code anyway, the traditional advantages of Python (readability, ease of writing) become less relevant, and you might as well use faster compiled languages instead.</div>
+        <span class="i18n-text" data-lang="zh">［根据标题和评论，文章受Cloudflare保护］ 文章认为，如果AI反正都在写代码，那Python的传统优势（可读性、易于编写）就变得不那么重要了，不如使用更快的编译语言。</span>
+<span class="i18n-text" data-lang="ja">［タイトルとコメントから、記事はCloudflareチャレンジの背後］ AIがどうせコードを書くなら、Pythonの伝統的な利点（可読性、書きやすさ）の関連性は低くなり、より高速なコンパイル言語を使った方がいいという議論。</span>
+<span class="i18n-text" data-lang="ko">［제목과 댓글에서, 기사는 Cloudflare 챌린지 뒤에 있음］ AI가 어차피 코드를 쓴다면, Python의 전통적인 장점(가독성, 작성 용이성)이 덜 중요해지므로, 차라리 더 빠른 컴파일 언어를 쓰는 게 낫다는 주장.</span>
+<span class="i18n-text" data-lang="es">［Del título y comentarios, artículo detrás de desafío Cloudflare］ El artículo argumenta que si la IA está escribiendo tu código de todos modos, las ventajas tradicionales de Python (legibilidad, facilidad de escritura) se vuelven menos relevantes, y mejor usar lenguajes compilados más rápidos.</span>
+<span class="i18n-text" data-lang="de">［Aus Titel und Kommentaren, Artikel hinter Cloudflare-Challenge］ Der Artikel argumentiert, dass wenn KI sowieso den Code schreibt, die traditionellen Vorteile von Python (Lesbarkeit, einfaches Schreiben) weniger relevant werden, und man stattdessen schnellere kompilierte Sprachen verwenden könnte.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The irony of asking &#x27;why use Python&#x27; when AI models were trained on mountains of Python code is delicious. Sure, let&#x27;s have the AI write Rust instead. I&#x27;m sure the borrow checker will be thrilled to explain to Claude why its code doesn&#x27;t compile. Again.</div>
+        <span class="i18n-text" data-lang="zh">当AI模型是在大量Python代码上训练的时候，问&#x27;为什么用Python&#x27;这个问题的讽刺意味太美妙了。当然，让AI写Rust吧。我相信借用检查器会很乐意向Claude解释为什么它的代码无法编译。又一次。</span>
+<span class="i18n-text" data-lang="ja">AIモデルが大量のPythonコードで訓練されているのに「なぜPythonを使うのか」と問う皮肉は美味しい。もちろん、AIにRustを書かせよう。借用チェッカーがClaudeにコードがコンパイルできない理由を説明するのを喜ぶと思うよ。また。</span>
+<span class="i18n-text" data-lang="ko">AI 모델이 대량의 Python 코드로 훈련되었는데 &#x27;왜 Python을 쓰나&#x27;고 묻는 아이러니가 맛있다. 물론, AI에게 Rust를 쓰게 하자. 빌림 검사기가 Claude에게 왜 코드가 컴파일되지 않는지 설명하는 걸 좋아할 거야. 또.</span>
+<span class="i18n-text" data-lang="es">La ironía de preguntar &#x27;por qué usar Python&#x27; cuando los modelos de IA fueron entrenados con montañas de código Python es deliciosa. Claro, que la IA escriba Rust. Estoy seguro de que el borrow checker estará encantado de explicarle a Claude por qué su código no compila. De nuevo.</span>
+<span class="i18n-text" data-lang="de">Die Ironie zu fragen &#x27;warum Python verwenden&#x27;, wenn KI-Modelle auf Bergen von Python-Code trainiert wurden, ist köstlich. Klar, lass die KI Rust schreiben. Ich bin sicher, der Borrow-Checker wird sich freuen, Claude zu erklären, warum sein Code nicht kompiliert. Wieder.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Training data. The voluminous amount of Python in the training data. I could write in brainfuck with AI, but wouldn&#x27;t get the same results as going with Python."</div>
+          <div class="comment-i18n" data-lang="zh">训练数据。训练数据中有海量的Python。我可以用AI写Brainfuck，但不会得到和Python一样的结果。</div>
+<div class="comment-i18n" data-lang="ja">訓練データ。訓練データ中の膨大なPython。AIでBrainfuckを書けるが、Pythonほどの結果は得られない。</div>
+<div class="comment-i18n" data-lang="ko">훈련 데이터. 훈련 데이터에 있는 엄청난 양의 Python. AI로 Brainfuck을 쓸 수 있지만 Python만큼의 결과는 얻지 못할 것이다.</div>
+<div class="comment-i18n" data-lang="es">Datos de entrenamiento. La cantidad voluminosa de Python en los datos de entrenamiento. Podría escribir en brainfuck con IA, pero no obtendría los mismos resultados que con Python.</div>
+<div class="comment-i18n" data-lang="de">Trainingsdaten. Die riesige Menge an Python in den Trainingsdaten. Ich könnte mit KI in Brainfuck schreiben, aber würde nicht die gleichen Ergebnisse wie mit Python bekommen.</div>
+
+          <div class="comment-author">-- _boffin_</div>
+        </div><div class="comment">
+          <div class="comment-text">"Python, Ruby and PHP don&#x27;t have a good answer. Scripting languages cater to human weaknesses. The 10-100x perf cost was never really worth it but now it&#x27;s impossible to justify."</div>
+          <div class="comment-i18n" data-lang="zh">Python、Ruby和PHP没有好的答案。脚本语言迎合人类的弱点。10-100倍的性能代价从来都不值得，但现在更无法justify了。</div>
+<div class="comment-i18n" data-lang="ja">Python、Ruby、PHPには良い答えがない。スクリプト言語は人間の弱点に迎合する。10-100倍のパフォーマンスコストは決して価値がなかったが、今では正当化不可能だ。</div>
+<div class="comment-i18n" data-lang="ko">Python, Ruby, PHP는 좋은 답이 없다. 스크립팅 언어는 인간의 약점에 영합한다. 10-100배 성능 비용은 결코 가치가 없었지만 이제는 정당화하기 불가능하다.</div>
+<div class="comment-i18n" data-lang="es">Python, Ruby y PHP no tienen una buena respuesta. Los lenguajes de scripting atienden a las debilidades humanas. El costo de rendimiento de 10-100x nunca valió la pena pero ahora es imposible de justificar.</div>
+<div class="comment-i18n" data-lang="de">Python, Ruby und PHP haben keine gute Antwort. Skriptsprachen bedienen menschliche Schwächen. Die 10-100x Leistungskosten waren es nie wert, aber jetzt ist es unmöglich zu rechtfertigen.</div>
+
+          <div class="comment-author">-- semiquaver</div>
+        </div>
+      </div>
+      
+    </article>
+<article class="story" id="s48094641-05120100">
+      <h3 class="story-title">
+        <a href="https://www.nytimes.com/2026/05/11/us/politics/google-hackers-attack-ai.html" target="_blank">Google says criminal hackers used AI to find a major software flaw :security:ai:zero-day:threat-intelligence:</a>
+        <a href="#s48094641-05120100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">谷歌称犯罪黑客使用AI发现重大软件漏洞</div>
+<div class="i18n-title" data-lang="ja">Googleが犯罪ハッカーがAIを使って重大なソフトウェア欠陥を発見したと発表</div>
+<div class="i18n-title" data-lang="ko">구글, 범죄 해커들이 AI를 사용해 주요 소프트웨어 결함 발견했다고 발표</div>
+<div class="i18n-title" data-lang="es">Google dice que hackers criminales usaron IA para encontrar una falla importante de software</div>
+<div class="i18n-title" data-lang="de">Google sagt, kriminelle Hacker nutzten KI um einen großen Software-Fehler zu finden</div>
+
+      <div class="story-meta">
+        111pts | 88c | <a href="https://news.ycombinator.com/item?id=48094641" target="_blank">HN#48094641</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Google&#x27;s threat intelligence team reports that criminal hackers used AI to discover and weaponize a zero-day vulnerability in another company&#x27;s software. This is the first publicly documented case of AI-assisted vulnerability discovery by threat actors. The article also mentions Anthropic&#x27;s Mythos model, which is reportedly so good at finding security holes that Anthropic only shared it with select firms and government agencies.</div>
+        <span class="i18n-text" data-lang="zh">谷歌的威胁情报团队报告称，犯罪黑客使用AI发现并武器化了另一家公司软件中的零日漏洞。这是首个公开记录的威胁行为者使用AI辅助漏洞发现的案例。文章还提到Anthropic的Mythos模型据称在发现安全漏洞方面非常出色，Anthropic只与少数公司和政府机构分享。</span>
+<span class="i18n-text" data-lang="ja">Googleの脅威インテリジェンスチームは、犯罪ハッカーがAIを使って別の企業のソフトウェアのゼロデイ脆弱性を発見し武器化したと報告。これは脅威アクターによるAI支援の脆弱性発見の最初の公開文書化された事例。記事はAnthropicのMythosモデルについても言及しており、セキュリティホールの発見に非常に優れているため、Anthropicは選ばれた企業と政府機関にのみ共有したとのこと。</span>
+<span class="i18n-text" data-lang="ko">구글의 위협 인텔리전스 팀은 범죄 해커들이 AI를 사용해 다른 회사 소프트웨어의 제로데이 취약점을 발견하고 무기화했다고 보고했습니다. 이것은 위협 행위자에 의한 AI 지원 취약점 발견의 첫 번째 공개 문서화된 사례입니다. 기사는 또한 Anthropic의 Mythos 모델을 언급하며, 보안 허점을 찾는 데 너무 뛰어나서 Anthropic이 선택된 기업과 정부 기관에만 공유했다고 합니다.</span>
+<span class="i18n-text" data-lang="es">El equipo de inteligencia de amenazas de Google informa que hackers criminales usaron IA para descubrir y weaponizar una vulnerabilidad de día cero en el software de otra empresa. Este es el primer caso documentado públicamente de descubrimiento de vulnerabilidades asistido por IA por actores de amenazas. El artículo también menciona el modelo Mythos de Anthropic, que supuestamente es tan bueno encontrando agujeros de seguridad que Anthropic solo lo compartió con firmas selectas y agencias gubernamentales.</span>
+<span class="i18n-text" data-lang="de">Googles Threat-Intelligence-Team berichtet, dass kriminelle Hacker KI verwendeten, um eine Zero-Day-Schwachstelle in der Software eines anderen Unternehmens zu entdecken und zu weaponisieren. Dies ist der erste öffentlich dokumentierte Fall von KI-unterstützter Schwachstellenentdeckung durch Bedrohungsakteure. Der Artikel erwähnt auch Anthropics Mythos-Modell, das angeblich so gut darin ist, Sicherheitslücken zu finden, dass Anthropic es nur mit ausgewählten Firmen und Regierungsbehörden geteilt hat.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The security arms race just got a turbo boost. Meanwhile Anthropic is sitting on Mythos like it&#x27;s the nuclear codes, which honestly might be an appropriate level of caution for once. Though the NYT article apparently couldn&#x27;t resist name-dropping every AI lab in existence.</div>
+        <span class="i18n-text" data-lang="zh">安全军备竞赛刚刚加了涡轮增压。与此同时，Anthropic像对待核密码一样保护Mythos，这对他们来说可能是适当的谨慎程度。尽管NYT文章显然忍不住要点名提到每一个AI实验室。</span>
+<span class="i18n-text" data-lang="ja">セキュリティの軍拡競争がターボブーストを得た。一方Anthropicは核コードのようにMythosを抱えている、これは彼らにとって適切な注意レベルかもしれない。NYTの記事は存在するすべてのAIラボの名前を出さずにはいられなかったようだが。</span>
+<span class="i18n-text" data-lang="ko">보안 군비 경쟁이 터보 부스트를 받았습니다. 한편 Anthropic은 핵 코드처럼 Mythos를 안고 있는데, 그들에게는 적절한 수준의 주의일 수 있습니다. NYT 기사는 존재하는 모든 AI 연구소의 이름을 언급하지 않고는 못 배겼지만요.</span>
+<span class="i18n-text" data-lang="es">La carrera armamentista de seguridad acaba de recibir un turbo boost. Mientras tanto Anthropic está sentado sobre Mythos como si fueran los códigos nucleares, lo cual honestamente podría ser un nivel apropiado de precaución para variar. Aunque el artículo del NYT aparentemente no pudo resistirse a mencionar cada laboratorio de IA existente.</span>
+<span class="i18n-text" data-lang="de">Das Sicherheits-Wettrüsten hat gerade einen Turbo-Boost bekommen. Unterdessen sitzt Anthropic auf Mythos wie auf den Nuklearcodes, was ehrlich gesagt ein angemessenes Maß an Vorsicht sein könnte. Obwohl der NYT-Artikel offenbar nicht widerstehen konnte, jedes existierende KI-Labor zu erwähnen.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I wonder what gives them &#x27;high confidence&#x27; that this was AI-assisted, as opposed to just a traditional zero-day. I&#x27;m genuinely wondering what about an attack could indicate it was discovered with AI."</div>
+          <div class="comment-i18n" data-lang="zh">我想知道是什么让他们&#x27;高度确信&#x27;这是AI辅助的，而不只是传统的零日漏洞。我真的很好奇攻击的哪些特征能表明它是用AI发现的。</div>
+<div class="comment-i18n" data-lang="ja">従来のゼロデイではなく、AIが支援したという「高い確信」を何が与えているのか気になる。攻撃のどの点がAIで発見されたことを示すのか純粋に気になる。</div>
+<div class="comment-i18n" data-lang="ko">그들이 전통적인 제로데이가 아닌 AI 지원이라는 &#x27;높은 확신&#x27;을 무엇이 주는지 궁금합니다. 공격의 어떤 점이 AI로 발견되었음을 나타낼 수 있는지 진심으로 궁금합니다.</div>
+<div class="comment-i18n" data-lang="es">Me pregunto qué les da &#x27;alta confianza&#x27; de que esto fue asistido por IA, en lugar de solo un día cero tradicional. Genuinamente me pregunto qué aspecto de un ataque podría indicar que fue descubierto con IA.</div>
+<div class="comment-i18n" data-lang="de">Ich frage mich, was ihnen &#x27;hohes Vertrauen&#x27; gibt, dass dies KI-unterstützt war, im Gegensatz zu nur einem traditionellen Zero-Day. Ich frage mich wirklich, was an einem Angriff darauf hindeuten könnte, dass er mit KI entdeckt wurde.</div>
+
+          <div class="comment-author">-- crazygringo</div>
+        </div><div class="comment">
+          <div class="comment-text">"Immediate distrust of the article. GPT 5.5 is out with nearly the same capability. The author might be parroting company marketing, unable to discern that a model is notably better than another."</div>
+          <div class="comment-i18n" data-lang="zh">立即对这篇文章不信任。GPT 5.5几乎具有相同的能力。作者可能只是在重复公司营销，无法辨别一个模型是否明显优于另一个。</div>
+<div class="comment-i18n" data-lang="ja">記事への即座の不信。GPT 5.5はほぼ同じ能力で出ている。著者は会社のマーケティングをオウム返ししているだけで、モデルが他よりも著しく優れているかどうか見分けられないのかもしれない。</div>
+<div class="comment-i18n" data-lang="ko">기사에 대한 즉각적인 불신. GPT 5.5가 거의 같은 능력으로 나왔습니다. 저자는 회사 마케팅을 앵무새처럼 따라하고 있을 수 있으며, 한 모델이 다른 모델보다 현저히 나은지 분별할 수 없을 수 있습니다.</div>
+<div class="comment-i18n" data-lang="es">Desconfianza inmediata del artículo. GPT 5.5 está fuera con casi la misma capacidad. El autor podría estar repitiendo marketing de la empresa, incapaz de discernir que un modelo es notablemente mejor que otro.</div>
+<div class="comment-i18n" data-lang="de">Sofortiges Misstrauen gegenüber dem Artikel. GPT 5.5 ist mit fast der gleichen Fähigkeit draußen. Der Autor könnte nur Firmenmarketing nachplappern, unfähig zu erkennen, dass ein Modell merklich besser ist als ein anderes.</div>
+
+          <div class="comment-author">-- s3p</div>
+        </div>
+      </div>
+      
+    </article>
+<article class="story" id="s48097078-05120100">
+      <h3 class="story-title">
+        <a href="https://interfaze.ai/blog/interfaze-a-new-model-architecture-built-for-high-accuracy-at-scale" target="_blank">Interfaze: A new model architecture built for high accuracy at scale :ai:ml-architecture</a>
+        <a href="#s48097078-05120100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Interfaze：为大规模高精度而构建的新模型架构</div>
+<div class="i18n-title" data-lang="ja">Interfaze：大規模な高精度のために構築された新しいモデルアーキテクチャ</div>
+<div class="i18n-title" data-lang="ko">Interfaze: 대규모 고정밀도를 위해 구축된 새로운 모델 아키텍처</div>
+<div class="i18n-title" data-lang="es">Interfaze: Una nueva arquitectura de modelo construida para alta precisión a escala</div>
+<div class="i18n-title" data-lang="de">Interfaze: Eine neue Modellarchitektur für hohe Genauigkeit im großen Maßstab</div>
+
+      <div class="story-meta">
+        107pts | 28c | <a href="https://news.ycombinator.com/item?id=48097078" target="_blank">HN#48097078</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Interfaze is a hybrid model architecture combining specialized DNN/CNN encoders with transformer decoders. It claims to outperform Gemini-3-Flash, Claude-Sonnet-4.6, GPT-5.4-Mini, and Grok-4.3 across 9 benchmarks in OCR, vision, speech-to-text, and structured output. Key innovation: task-specific CNN/DNN layers for deterministic tasks combined with transformer flexibility. Priced at $1.50/M input tokens, $3.50/M output tokens.</div>
+        <span class="i18n-text" data-lang="zh">Interfaze是一种混合模型架构，结合了专用DNN/CNN编码器和transformer解码器。它声称在OCR、视觉、语音转文字和结构化输出的9个基准测试中超越Gemini-3-Flash、Claude-Sonnet-4.6、GPT-5.4-Mini和Grok-4.3。关键创新：用于确定性任务的任务专用CNN/DNN层与transformer灵活性的结合。定价：输入1.50美元/百万token，输出3.50美元/百万token。</span>
+<span class="i18n-text" data-lang="ja">Interfazeは専用のDNN/CNNエンコーダーとトランスフォーマーデコーダーを組み合わせたハイブリッドモデルアーキテクチャ。OCR、ビジョン、音声テキスト変換、構造化出力の9つのベンチマークでGemini-3-Flash、Claude-Sonnet-4.6、GPT-5.4-Mini、Grok-4.3を上回ると主張。主要な革新：決定論的タスク用のタスク特化型CNN/DNN層とトランスフォーマーの柔軟性の組み合わせ。価格：入力$1.50/Mトークン、出力$3.50/Mトークン。</span>
+<span class="i18n-text" data-lang="ko">Interfaze는 전문 DNN/CNN 인코더와 트랜스포머 디코더를 결합한 하이브리드 모델 아키텍처입니다. OCR, 비전, 음성-텍스트 변환, 구조화된 출력의 9개 벤치마크에서 Gemini-3-Flash, Claude-Sonnet-4.6, GPT-5.4-Mini, Grok-4.3를 능가한다고 주장합니다. 핵심 혁신: 결정론적 작업을 위한 작업별 CNN/DNN 레이어와 트랜스포머 유연성의 결합. 가격: 입력 토큰 백만당 $1.50, 출력 토큰 백만당 $3.50.</span>
+<span class="i18n-text" data-lang="es">Interfaze es una arquitectura de modelo híbrida que combina codificadores DNN/CNN especializados con decodificadores transformer. Afirma superar a Gemini-3-Flash, Claude-Sonnet-4.6, GPT-5.4-Mini, y Grok-4.3 en 9 benchmarks de OCR, visión, voz-a-texto, y salida estructurada. Innovación clave: capas CNN/DNN específicas de tarea para tareas determinísticas combinadas con flexibilidad de transformer. Precio: $1.50/M tokens de entrada, $3.50/M tokens de salida.</span>
+<span class="i18n-text" data-lang="de">Interfaze ist eine hybride Modellarchitektur, die spezialisierte DNN/CNN-Encoder mit Transformer-Decodern kombiniert. Sie behauptet, Gemini-3-Flash, Claude-Sonnet-4.6, GPT-5.4-Mini und Grok-4.3 in 9 Benchmarks in OCR, Vision, Sprache-zu-Text und strukturierter Ausgabe zu übertreffen. Wichtigste Innovation: aufgabenspezifische CNN/DNN-Schichten für deterministische Aufgaben kombiniert mit Transformer-Flexibilität. Preis: $1.50/M Eingabe-Tokens, $3.50/M Ausgabe-Tokens.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Finally someone remembered that CNNs exist and are actually good at things. The benchmarks look impressive but let&#x27;s see if &#x27;we beat all the flash models&#x27; holds up when people try to use it for things not in their benchmark suite. Still, hybrid architectures are interesting and this is more technically honest than most AI launch posts.</div>
+        <span class="i18n-text" data-lang="zh">终于有人记得CNN存在而且实际上很擅长某些事情。基准测试看起来很impressive，但让我们看看&#x27;我们击败了所有flash模型&#x27;在人们尝试用它做基准套件之外的事情时是否成立。不过，混合架构很有趣，这比大多数AI发布帖子在技术上更诚实。</span>
+<span class="i18n-text" data-lang="ja">やっと誰かがCNNが存在し、実際に何かを得意としていることを思い出した。ベンチマークは印象的に見えるが、「すべてのフラッシュモデルを打ち負かした」がベンチマークスイート以外のものを使おうとしたときに持ちこたえるかどうか見てみよう。それでも、ハイブリッドアーキテクチャは興味深く、これはほとんどのAI立ち上げ投稿よりも技術的に正直だ。</span>
+<span class="i18n-text" data-lang="ko">드디어 누군가 CNN이 존재하고 실제로 잘하는 것이 있다는 걸 기억했군요. 벤치마크는 인상적으로 보이지만 &#x27;우리가 모든 플래시 모델을 이겼다&#x27;가 벤치마크 스위트에 없는 것을 사용하려고 할 때 유지되는지 봅시다. 그래도 하이브리드 아키텍처는 흥미롭고 이것은 대부분의 AI 출시 게시물보다 기술적으로 더 정직합니다.</span>
+<span class="i18n-text" data-lang="es">Finalmente alguien recordó que las CNNs existen y son realmente buenas en cosas. Los benchmarks lucen impresionantes pero veamos si &#x27;vencimos a todos los modelos flash&#x27; se mantiene cuando la gente intente usarlo para cosas que no están en su suite de benchmarks. Aún así, las arquitecturas híbridas son interesantes y esto es más técnicamente honesto que la mayoría de posts de lanzamiento de IA.</span>
+<span class="i18n-text" data-lang="de">Endlich hat jemand daran erinnert, dass CNNs existieren und tatsächlich gut in Dingen sind. Die Benchmarks sehen beeindruckend aus, aber schauen wir, ob &#x27;wir haben alle Flash-Modelle geschlagen&#x27; hält, wenn Leute versuchen es für Dinge zu nutzen, die nicht in ihrer Benchmark-Suite sind. Trotzdem sind hybride Architekturen interessant und das ist technisch ehrlicher als die meisten KI-Launch-Posts.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Amazing! I tried the OCR capabilities with a typewriter-written page. The image isn&#x27;t easy to interpret - distorted perspective from a book spine with inline typing corrections. It extracted everything perfectly."</div>
+          <div class="comment-i18n" data-lang="zh">太棒了！我用打字机写的页面测试了OCR功能。图像不容易解读——因为是从书脊拍的透视变形，还有内联的打字修正。它完美地提取了所有内容。</div>
+<div class="comment-i18n" data-lang="ja">すごい！タイプライターで書かれたページでOCR機能を試した。画像は解釈しやすくない - 本の背表紙からの歪んだ遠近法と、インラインのタイピング修正がある。すべてを完璧に抽出した。</div>
+<div class="comment-i18n" data-lang="ko">놀랍습니다! 타자기로 쓴 페이지로 OCR 기능을 시험해봤습니다. 이미지는 해석하기 쉽지 않습니다 - 책등에서 왜곡된 원근감과 인라인 타이핑 수정이 있습니다. 모든 것을 완벽하게 추출했습니다.</div>
+<div class="comment-i18n" data-lang="es">¡Increíble! Probé las capacidades de OCR con una página escrita a máquina. La imagen no es fácil de interpretar - perspectiva distorsionada del lomo de un libro con correcciones de mecanografía en línea. Extrajo todo perfectamente.</div>
+<div class="comment-i18n" data-lang="de">Erstaunlich! Ich habe die OCR-Fähigkeiten mit einer maschingeschriebenen Seite getestet. Das Bild ist nicht leicht zu interpretieren - verzerrte Perspektive vom Buchrücken mit Inline-Tippkorrekturen. Es hat alles perfekt extrahiert.</div>
+
+          <div class="comment-author">-- schanz</div>
+        </div><div class="comment">
+          <div class="comment-text">"That&#x27;s just cheating. You can&#x27;t take a benchmark like MMLU designed to test general language models and compare it to a small specialized model designed to do well on MMLU."</div>
+          <div class="comment-i18n" data-lang="zh">这就是作弊。你不能拿一个像MMLU这样设计用来测试通用语言模型的基准，然后与一个专门设计来在MMLU上表现良好的小型专业模型进行比较。</div>
+<div class="comment-i18n" data-lang="ja">それはただのズルだ。MMLUのような一般的な言語モデルをテストするために設計されたベンチマークを取り、MMLUでうまくいくように設計された小さな特化モデルと比較することはできない。</div>
+<div class="comment-i18n" data-lang="ko">그건 그냥 속임수입니다. 일반 언어 모델을 테스트하도록 설계된 MMLU 같은 벤치마크를 가져다가 MMLU에서 잘하도록 설계된 작은 전문 모델과 비교할 수는 없습니다.</div>
+<div class="comment-i18n" data-lang="es">Eso es simplemente hacer trampa. No puedes tomar un benchmark como MMLU diseñado para probar modelos de lenguaje generales y compararlo con un pequeño modelo especializado diseñado para hacerlo bien en MMLU.</div>
+<div class="comment-i18n" data-lang="de">Das ist einfach Betrug. Man kann einen Benchmark wie MMLU, der zum Testen allgemeiner Sprachmodelle entwickelt wurde, nicht nehmen und mit einem kleinen spezialisierten Modell vergleichen, das darauf ausgelegt ist, bei MMLU gut abzuschneiden.</div>
+
+          <div class="comment-author">-- gok</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#ocr</span><span class="tag">#vision</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-05-11T20:00:00Z</div>
