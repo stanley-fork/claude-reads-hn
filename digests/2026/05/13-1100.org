@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-05-13 11:00:00 UT UTC
+#+DATE: 2026-05-13T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Binary translators flex, EU governments leak data, and Kraftwerk gets political again
+
+* Highlights
+- Elevator: x86-64 to ARM without heuristics, 50x code bloat
+- SecurityBaseline.eu: 3000 EU gov sites illegally tracking citizens
+- Kraftwerk's Radioactivity: from radio pun to nuclear protest
+- Linux kernel idle optimization broke QUIC for months
+- Graduation cap runs Rust because why not
+
+* Stories
+
+** Deterministic Fully-Static Whole-Binary Translation Without Heuristics :compilers:arm:emulation:research:
+:PROPERTIES:
+:ID:       48117810
+:URL:      https://arxiv.org/abs/2605.08419
+:HN_URL:   https://news.ycombinator.com/item?id=48117810
+:POINTS:   199
+:COMMENTS: 49
+:BY:       matt_d
+:END:
+
+*** TLDR
+Elevator is a binary translator that converts x86-64 executables to AArch64 without source code or debug info. It considers every possible interpretation of every byte, generating paths for all feasible decodings. The result is a self-contained binary with no runtime component, enabling testing and signing before deployment.
+
+*** Take
+Finally, someone solved code-vs-data disambiguation by just... including both. The 50x code bloat is chef's kiss for embedded deployments.
+
+*** Comments
+
+**** da-x
+:PROPERTIES:
+:COMMENT_ID: 48118001
+:END:
+I wrote a x86-64 to aarch64 JIT in 2013 that could rebuild almost the entire aarch64 Fedora port. QEMU has a lot of room to improve.
+
+**** linkregister
+:PROPERTIES:
+:COMMENT_ID: 48118123
+:END:
+A 50x increase in .text section size is enormous, but seems reasonable for deterministic translation. The performance gain over emulation outweighs it.
+
+**** Asraelite
+:PROPERTIES:
+:COMMENT_ID: 48118200
+:END:
+Where is the source code?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+确定性全静态全二进制翻译，无需启发式方法
+***** TLDR
+Elevator是一个二进制翻译器，可以在没有源代码或调试信息的情况下将x86-64可执行文件转换为AArch64。它考虑每个字节的所有可能解释，为所有可行的解码生成路径。结果是一个独立的二进制文件，没有运行时组件，可以在部署前进行测试和签名。
+***** Take
+终于有人通过同时包含代码和数据解决了代码与数据的歧义问题。50倍的代码膨胀对嵌入式部署来说简直完美。
+***** Comments
+- 我在2013年写了一个x86-64到aarch64的JIT，可以重建几乎整个aarch64 Fedora移植。QEMU还有很大的改进空间。
+- 50倍的.text段增长确实很大，但对于确定性翻译来说似乎是合理的。性能提升超过了模拟的代价。
+- 源代码在哪里？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ヒューリスティックなしの決定論的完全静的バイナリ変換
+***** TLDR
+Elevatorは、ソースコードやデバッグ情報なしでx86-64実行ファイルをAArch64に変換するバイナリトランスレータです。すべてのバイトのすべての可能な解釈を考慮し、すべての実行可能なデコードのパスを生成します。結果は自己完結型のバイナリで、ランタイムコンポーネントがなく、デプロイ前にテストと署名が可能です。
+***** Take
+ついに誰かがコード対データの曖昧さを両方含めることで解決した。50倍のコード肥大化は組み込みデプロイメントに最高。
+***** Comments
+- 2013年にx86-64からaarch64へのJITを書いて、ほぼ全てのaarch64 Fedoraポートを再構築できた。QEMUには改善の余地がたくさんある。
+- .textセクションの50倍の増加は巨大だが、決定論的な変換には妥当なようだ。エミュレーションよりもパフォーマンスの向上が上回る。
+- ソースコードはどこ？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+휴리스틱 없는 결정론적 완전 정적 전체 바이너리 변환
+***** TLDR
+Elevator는 소스 코드나 디버그 정보 없이 x86-64 실행 파일을 AArch64로 변환하는 바이너리 번역기입니다. 모든 바이트의 모든 가능한 해석을 고려하여 모든 실행 가능한 디코딩에 대한 경로를 생성합니다. 결과는 런타임 구성 요소가 없는 독립적인 바이너리로, 배포 전에 테스트와 서명이 가능합니다.
+***** Take
+드디어 누군가 코드 대 데이터 구분 문제를 둘 다 포함해서 해결했다. 50배 코드 팽창은 임베디드 배포에 딱이다.
+***** Comments
+- 2013년에 x86-64에서 aarch64로의 JIT를 작성해서 거의 전체 aarch64 Fedora 포트를 재구축할 수 있었다. QEMU는 개선의 여지가 많다.
+- .text 섹션의 50배 증가는 엄청나지만, 결정론적 변환에는 합리적으로 보인다. 에뮬레이션보다 성능 향상이 더 크다.
+- 소스 코드는 어디에?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Traducción binaria completa determinista sin heurísticas
+***** TLDR
+Elevator es un traductor binario que convierte ejecutables x86-64 a AArch64 sin código fuente ni información de depuración. Considera todas las interpretaciones posibles de cada byte, generando rutas para todas las decodificaciones factibles. El resultado es un binario autónomo sin componente de tiempo de ejecución, permitiendo pruebas y firma antes del despliegue.
+***** Take
+Finalmente alguien resolvió la ambigüedad código-vs-datos incluyendo ambos. El aumento de 50x en código es perfecto para despliegues embebidos.
+***** Comments
+- Escribí un JIT de x86-64 a aarch64 en 2013 que podía reconstruir casi todo el port de Fedora aarch64. QEMU tiene mucho margen de mejora.
+- Un aumento de 50x en la sección .text es enorme, pero parece razonable para traducción determinista. La ganancia de rendimiento supera la emulación.
+- ¿Dónde está el código fuente?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Deterministische vollstatische Binärübersetzung ohne Heuristiken
+***** TLDR
+Elevator ist ein Binärübersetzer, der x86-64-Executables ohne Quellcode oder Debug-Informationen nach AArch64 konvertiert. Er berücksichtigt alle möglichen Interpretationen jedes Bytes und generiert Pfade für alle machbaren Dekodierungen. Das Ergebnis ist eine eigenständige Binärdatei ohne Laufzeitkomponente, die Tests und Signierung vor der Bereitstellung ermöglicht.
+***** Take
+Endlich hat jemand das Code-vs-Daten-Problem gelöst, indem er einfach beides einschließt. Die 50-fache Code-Aufblähung ist perfekt für Embedded-Deployments.
+***** Comments
+- Ich habe 2013 eine x86-64 zu aarch64 JIT geschrieben, die fast den gesamten aarch64 Fedora-Port neu bauen konnte. QEMU hat viel Verbesserungspotenzial.
+- Eine 50-fache Vergrößerung des .text-Abschnitts ist enorm, scheint aber für deterministische Übersetzung vernünftig. Der Leistungsgewinn überwiegt die Emulation.
+- Wo ist der Quellcode?
+** SecurityBaseline.eu :security:privacy:government:europe:
+:PROPERTIES:
+:ID:       48118763
+:URL:      https://internetcleanup.foundation/2026/05/european-governments-3000-tracking-sites-1000-phpmyadmins-and-99pct-poorly-encrypted-email-introducing-securitybaseline-eu/
+:HN_URL:   https://news.ycombinator.com/item?id=48118763
+:POINTS:   165
+:COMMENTS: 78
+:BY:       aequitas
+:END:
+
+*** TLDR
+Internet Cleanup Foundation launched SecurityBaseline.eu, monitoring 67,000 European government domains and 200,000 sites. Key findings: 3,000 sites use illegal tracking cookies, over 1,000 have publicly reachable database management interfaces (phpMyAdmin), and 99% have poorly encrypted email. The project scans without active pentesting to stay legal.
+
+*** Take
+Your tax euros at work: governments that can't configure email encryption but definitely know where you clicked. The phpMyAdmin findings are particularly delicious.
+
+*** Comments
+
+**** lionkor
+:PROPERTIES:
+:COMMENT_ID: 48119001
+:END:
+This might be because genuine pentesting is highly illegal in Germany (§202c StGB). I'd happily pentest govt sites if visiting them with a non-standard browser couldn't be misconstrued as hacking.
+
+**** elric
+:PROPERTIES:
+:COMMENT_ID: 48119123
+:END:
+Coloring an area red because they don't have DNSSEC seems excessive. A bigger privacy risk is that most are using outlook.com for email.
+
+**** aequitas
+:PROPERTIES:
+:COMMENT_ID: 48118800
+:END:
+Today we launch SecurityBaseline: monitoring 67,000 governments and 200,000 sites. Headlines: 3,000 governmental sites use tracking cookies illegally.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+SecurityBaseline.eu
+***** TLDR
+互联网清理基金会推出了SecurityBaseline.eu，监控67,000个欧洲政府域名和200,000个网站。主要发现：3,000个网站使用非法跟踪cookie，超过1,000个有公开可访问的数据库管理界面（phpMyAdmin），99%的电子邮件加密不良。该项目在不进行主动渗透测试的情况下扫描以保持合法。
+***** Take
+你的税款在起作用：政府不会配置电子邮件加密，但绝对知道你点击了哪里。phpMyAdmin的发现特别精彩。
+***** Comments
+- 这可能是因为真正的渗透测试在德国是高度违法的（§202c刑法）。如果用非标准浏览器访问政府网站不会被误解为黑客行为，我很乐意进行渗透测试。
+- 因为没有DNSSEC就把区域标红似乎过分了。更大的隐私风险是大多数都在使用outlook.com作为电子邮件。
+- 今天我们推出SecurityBaseline：监控67,000个政府和200,000个网站。头条：3,000个政府网站非法使用跟踪cookie。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+SecurityBaseline.eu
+***** TLDR
+インターネットクリーンアップ財団がSecurityBaseline.euを立ち上げ、67,000のヨーロッパ政府ドメインと200,000サイトを監視しています。主な発見：3,000サイトが違法なトラッキングCookieを使用、1,000以上が公開アクセス可能なデータベース管理インターフェース（phpMyAdmin）を持ち、99%がメール暗号化が不十分です。プロジェクトは合法性を保つため、アクティブなペンテストなしでスキャンしています。
+***** Take
+あなたの税金が働いています：メール暗号化を設定できないが、あなたがどこをクリックしたかは確実に知っている政府。phpMyAdminの発見は特においしい。
+***** Comments
+- これはドイツでは本格的なペンテストが高度に違法だからかもしれない（§202c刑法）。非標準ブラウザで政府サイトを訪問してもハッキングと誤解されなければ、喜んでペンテストする。
+- DNSSECがないからといってエリアを赤くするのは過剰に思える。より大きなプライバシーリスクは、ほとんどがメールにoutlook.comを使用していること。
+- 今日SecurityBaselineを立ち上げます：67,000の政府と200,000サイトを監視。見出し：3,000の政府サイトが違法にトラッキングCookieを使用。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+SecurityBaseline.eu
+***** TLDR
+인터넷 클린업 재단이 SecurityBaseline.eu를 출시하여 67,000개의 유럽 정부 도메인과 200,000개의 사이트를 모니터링합니다. 주요 발견: 3,000개 사이트가 불법 추적 쿠키 사용, 1,000개 이상이 공개적으로 접근 가능한 데이터베이스 관리 인터페이스(phpMyAdmin)를 보유, 99%가 이메일 암호화가 불량합니다. 프로젝트는 합법성을 유지하기 위해 능동적 펜테스트 없이 스캔합니다.
+***** Take
+당신의 세금이 일하고 있습니다: 이메일 암호화는 설정 못하지만 당신이 어디를 클릭했는지는 확실히 아는 정부. phpMyAdmin 발견이 특히 맛있다.
+***** Comments
+- 이것은 독일에서 진정한 펜테스트가 매우 불법이기 때문일 수 있다(§202c 형법). 비표준 브라우저로 정부 사이트를 방문해도 해킹으로 오해되지 않는다면 기꺼이 펜테스트하겠다.
+- DNSSEC가 없다고 영역을 빨간색으로 칠하는 것은 과도해 보인다. 더 큰 프라이버시 위험은 대부분이 이메일에 outlook.com을 사용한다는 것.
+- 오늘 SecurityBaseline을 출시합니다: 67,000개 정부와 200,000개 사이트 모니터링. 헤드라인: 3,000개 정부 사이트가 불법으로 추적 쿠키 사용.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+SecurityBaseline.eu
+***** TLDR
+Internet Cleanup Foundation lanzó SecurityBaseline.eu, monitoreando 67,000 dominios gubernamentales europeos y 200,000 sitios. Hallazgos clave: 3,000 sitios usan cookies de rastreo ilegales, más de 1,000 tienen interfaces de gestión de bases de datos accesibles públicamente (phpMyAdmin), y el 99% tiene cifrado de correo deficiente. El proyecto escanea sin pentesting activo para mantenerse legal.
+***** Take
+Tus euros de impuestos trabajando: gobiernos que no pueden configurar cifrado de correo pero definitivamente saben dónde hiciste clic. Los hallazgos de phpMyAdmin son particularmente deliciosos.
+***** Comments
+- Esto podría ser porque el pentesting genuino es altamente ilegal en Alemania (§202c StGB). Encantado de hacer pentesting a sitios gubernamentales si visitar con un navegador no estándar no pudiera malinterpretarse como hacking.
+- Colorear un área de rojo porque no tienen DNSSEC parece excesivo. Un riesgo de privacidad mayor es que la mayoría usa outlook.com para correo.
+- Hoy lanzamos SecurityBaseline: monitoreando 67,000 gobiernos y 200,000 sitios. Titulares: 3,000 sitios gubernamentales usan cookies de rastreo ilegalmente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+SecurityBaseline.eu
+***** TLDR
+Die Internet Cleanup Foundation hat SecurityBaseline.eu gestartet und überwacht 67.000 europäische Regierungsdomains und 200.000 Websites. Wichtigste Erkenntnisse: 3.000 Websites verwenden illegale Tracking-Cookies, über 1.000 haben öffentlich erreichbare Datenbankverwaltungsschnittstellen (phpMyAdmin), und 99% haben schlecht verschlüsselte E-Mails. Das Projekt scannt ohne aktives Pentesting, um legal zu bleiben.
+***** Take
+Deine Steuereuros bei der Arbeit: Regierungen, die keine E-Mail-Verschlüsselung konfigurieren können, aber definitiv wissen, wo du geklickt hast. Die phpMyAdmin-Funde sind besonders köstlich.
+***** Comments
+- Das könnte daran liegen, dass echtes Pentesting in Deutschland hochgradig illegal ist (§202c StGB). Ich würde gerne Regierungsseiten pentesten, wenn der Besuch mit einem Nicht-Standard-Browser nicht als Hacking ausgelegt werden könnte.
+- Einen Bereich rot zu färben, weil sie kein DNSSEC haben, scheint übertrieben. Ein größeres Datenschutzrisiko ist, dass die meisten outlook.com für E-Mail verwenden.
+- Heute starten wir SecurityBaseline: Überwachung von 67.000 Regierungen und 200.000 Websites. Schlagzeilen: 3.000 Regierungswebsites verwenden illegal Tracking-Cookies.
+** Kraftwerk's radical 1976 track Radioactivity became an anti-nuclear anthem :music:history:nuclear:culture:
+:PROPERTIES:
+:ID:       48115823
+:URL:      https://www.bbc.com/culture/article/20260511-kraftwerks-radical-1976-track-radioactivity-became-an-anti-nuclear-anthem
+:HN_URL:   https://news.ycombinator.com/item?id=48115823
+:POINTS:   167
+:COMMENTS: 116
+:BY:       tcp_handshaker
+:END:
+
+*** TLDR
+Kraftwerk's 1976 'Radioactivity' originally played on the pun between radioactivity and radio activity (broadcasting). The song evolved over decades into an explicit anti-nuclear protest anthem, with lyrics updated after Chernobyl and Fukushima to include 'stop radioactivity' and references to specific disasters.
+
+*** Take
+A song that aged like fine uranium. Started as a synth-pop wordplay exercise, became an accidental prophecy, then a deliberate warning. The comments predictably split into pro-nuclear techno-optimists vs the 'but Fukushima' crowd.
+
+*** Comments
+
+**** emptybits
+:PROPERTIES:
+:COMMENT_ID: 48116001
+:END:
+The anti-nuclear message came later and was repeatedly updated through Fukushima. This was not the original sentiment. Recommended: 'Kraftwerk: Future Music from Germany' by Uwe Schütte.
+
+**** ainch
+:PROPERTIES:
+:COMMENT_ID: 48116100
+:END:
+I love Kraftwerk, but contributing to anti-nuclear sentiment in Germany hasn't been a success. If only more European countries had followed France's example.
+
+**** LeoPanthera
+:PROPERTIES:
+:COMMENT_ID: 48116200
+:END:
+The original version refers to 'radio activity' meaning activity on the radio. The new live version adds 'stop' to turn it into a protest song. I've seen them live twice at London's Albert Hall.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Kraftwerk 1976年激进曲目《放射性》成为反核圣歌
+***** TLDR
+Kraftwerk 1976年的《Radioactivity》最初玩的是radioactivity（放射性）和radio activity（广播活动）之间的双关语。这首歌在几十年间演变成明确的反核抗议圣歌，歌词在切尔诺贝利和福岛之后更新，加入了'停止放射性'和对特定灾难的引用。
+***** Take
+一首像优质铀一样陈酿的歌。从合成流行的文字游戏开始，成为意外的预言，然后是刻意的警告。评论可预见地分成了亲核的技术乐观主义者和'但是福岛'的人群。
+***** Comments
+- 反核信息是后来加入的，并在福岛事件后反复更新。这不是最初的情感。推荐：Uwe Schütte的《Kraftwerk: Future Music from Germany》。
+- 我喜欢Kraftwerk，但在德国助长反核情绪并不成功。要是更多欧洲国家效仿法国就好了。
+- 原版指的是'radio activity'即广播活动。新的现场版加入了'stop'使其成为抗议歌曲。我在伦敦阿尔伯特大厅看过他们两次现场。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+クラフトワークの1976年の過激なトラック「放射能」が反原発アンセムになった
+***** TLDR
+クラフトワークの1976年の「Radioactivity」は元々、放射性とラジオ活動（放送）の間の言葉遊びでした。この曲は数十年かけて明確な反原発抗議アンセムへと進化し、チェルノブイリと福島の後に歌詞が更新され、「放射能を止めろ」と特定の災害への言及が追加されました。
+***** Take
+上質なウランのように熟成した曲。シンセポップの言葉遊びとして始まり、偶然の予言となり、そして意図的な警告となった。コメントは予想通り、原発推進のテクノ楽観主義者と「でも福島」派に分かれている。
+***** Comments
+- 反核メッセージは後から加わり、福島まで繰り返し更新された。これは元々の感情ではなかった。おすすめ：Uwe Schütteの「Kraftwerk: Future Music from Germany」。
+- クラフトワークは好きだが、ドイツで反核感情に貢献することは成功していない。もっと多くのヨーロッパ諸国がフランスの例に従っていれば。
+- オリジナル版は「radio activity」つまりラジオでの活動を指している。新しいライブ版は「stop」を追加して抗議曲にしている。ロンドンのアルバートホールで2回見た。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+크라프트베르크의 1976년 급진적 트랙 'Radioactivity'가 반핵 성가가 되다
+***** TLDR
+크라프트베르크의 1976년 'Radioactivity'는 원래 방사능(radioactivity)과 라디오 활동(radio activity, 방송)의 말장난이었습니다. 이 곡은 수십 년에 걸쳐 명시적인 반핵 시위 성가로 진화했으며, 체르노빌과 후쿠시마 이후 '방사능을 멈춰라'와 특정 재해에 대한 언급을 포함하도록 가사가 업데이트되었습니다.
+***** Take
+좋은 우라늄처럼 숙성된 노래. 신스팝 말장난으로 시작해서 우연한 예언이 되었다가 의도적인 경고가 되었다. 댓글은 예상대로 친원전 테크노 낙관주의자와 '하지만 후쿠시마' 파로 나뉜다.
+***** Comments
+- 반핵 메시지는 나중에 추가되었고 후쿠시마까지 반복적으로 업데이트되었다. 이것은 원래의 감정이 아니었다. 추천: Uwe Schütte의 'Kraftwerk: Future Music from Germany'.
+- 크라프트베르크를 좋아하지만 독일에서 반핵 정서에 기여하는 것은 성공적이지 않았다. 더 많은 유럽 국가들이 프랑스의 예를 따랐다면.
+- 원본은 라디오에서의 활동을 의미하는 'radio activity'를 가리킨다. 새로운 라이브 버전은 'stop'을 추가하여 시위 노래로 만들었다. 런던 앨버트 홀에서 두 번 봤다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La canción radical de Kraftwerk de 1976 'Radioactivity' se convirtió en himno antinuclear
+***** TLDR
+La 'Radioactivity' de Kraftwerk de 1976 originalmente jugaba con el doble sentido entre radioactividad y actividad de radio (radiodifusión). La canción evolucionó durante décadas hacia un himno de protesta antinuclear explícito, con letras actualizadas después de Chernóbil y Fukushima para incluir 'detener la radioactividad' y referencias a desastres específicos.
+***** Take
+Una canción que envejeció como uranio fino. Empezó como un ejercicio de juegos de palabras synth-pop, se convirtió en una profecía accidental, luego en una advertencia deliberada. Los comentarios predeciblemente se dividen entre tecno-optimistas pro-nucleares y la multitud de 'pero Fukushima'.
+***** Comments
+- El mensaje antinuclear vino después y fue actualizado repetidamente hasta Fukushima. Este no era el sentimiento original. Recomendado: 'Kraftwerk: Future Music from Germany' de Uwe Schütte.
+- Amo a Kraftwerk, pero contribuir al sentimiento antinuclear en Alemania no ha sido un éxito. Si solo más países europeos hubieran seguido el ejemplo de Francia.
+- La versión original se refiere a 'radio activity' significando actividad en la radio. La nueva versión en vivo añade 'stop' para convertirla en una canción de protesta. Los he visto en vivo dos veces en el Albert Hall de Londres.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kraftwerks radikaler Track von 1976 'Radioaktivität' wurde zur Anti-Atom-Hymne
+***** TLDR
+Kraftwerks 'Radioactivity' von 1976 spielte ursprünglich mit dem Wortspiel zwischen Radioaktivität und Radioaktivität (Rundfunk). Der Song entwickelte sich über Jahrzehnte zu einer expliziten Anti-Atom-Protestymne, mit Texten, die nach Tschernobyl und Fukushima aktualisiert wurden, um 'Stop Radioaktivität' und Verweise auf spezifische Katastrophen einzuschließen.
+***** Take
+Ein Song, der wie feines Uran gealtert ist. Begann als Synth-Pop-Wortspiel, wurde eine zufällige Prophezeiung, dann eine absichtliche Warnung. Die Kommentare spalten sich vorhersehbar in Pro-Atom-Techno-Optimisten und die 'aber Fukushima'-Fraktion.
+***** Comments
+- Die Anti-Atom-Botschaft kam später und wurde bis Fukushima wiederholt aktualisiert. Das war nicht das ursprüngliche Gefühl. Empfohlen: 'Kraftwerk: Future Music from Germany' von Uwe Schütte.
+- Ich liebe Kraftwerk, aber zur Anti-Atom-Stimmung in Deutschland beizutragen war kein Erfolg. Wenn nur mehr europäische Länder dem Beispiel Frankreichs gefolgt wären.
+- Die Originalversion bezieht sich auf 'Radio Activity' im Sinne von Aktivität im Radio. Die neue Live-Version fügt 'Stop' hinzu, um sie in ein Protestlied zu verwandeln. Ich habe sie zweimal live in Londons Albert Hall gesehen.
+** When 'idle' isn't idle: how a Linux kernel optimization became a QUIC bug :networking:linux:quic:debugging:
+:PROPERTIES:
+:ID:       48116064
+:URL:      https://blog.cloudflare.com/quic-death-spiral-fix/
+:HN_URL:   https://news.ycombinator.com/item?id=48116064
+:POINTS:   100
+:COMMENTS: 9
+:BY:       sbulaev
+:END:
+
+*** TLDR
+Cloudflare discovered that a Linux kernel optimization for determining socket idleness was causing QUIC connections to enter a 'death spiral'. The kernel marked connections as idle too aggressively, triggering congestion control backoffs even when traffic was flowing. The fix required understanding subtle interactions between CUBIC congestion control and kernel timing.
+
+*** Take
+When your performance optimization becomes a performance pessimization. The kernel thought the connection was idle, the connection disagreed, and everyone suffered. Classic distributed systems debugging: everything is fine until it isn't.
+
+*** Comments
+
+**** lproven
+:PROPERTIES:
+:COMMENT_ID: 48116100
+:END:
+The article uses 'CCAs' without ever defining it. I followed the links and googled it with no useful result. What is a CCA in this context?
+
+**** neuralkoi
+:PROPERTIES:
+:COMMENT_ID: 48116200
+:END:
+I can see why they rewrote QUIC in Rust for userspace. Going in-house means watching kernel commits like a hawk to avoid missing bug fixes. Interesting that Cloudflare isn't using BBR as default in quiche.
+
+**** echoangle
+:PROPERTIES:
+:COMMENT_ID: 48116300
+:END:
+Looking at the last plot, the backoff is roughly 1/5 of total bandwidth every 50ms. Wouldn't it make sense to reduce backoff speed if it happens repeatedly in rapid succession?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+当'空闲'并非空闲：Linux内核优化如何变成QUIC bug
+***** TLDR
+Cloudflare发现，Linux内核用于确定套接字空闲状态的优化导致QUIC连接进入'死亡螺旋'。内核过于积极地将连接标记为空闲，即使在流量正在流动时也触发拥塞控制回退。修复需要理解CUBIC拥塞控制和内核计时之间的微妙交互。
+***** Take
+当你的性能优化变成性能劣化。内核认为连接空闲，连接不同意，大家都受苦。经典的分布式系统调试：一切正常直到不正常。
+***** Comments
+- 文章使用'CCA'却从未定义。我跟踪链接并搜索了一下，没有有用的结果。在这个上下文中CCA是什么？
+- 我能理解他们为什么用Rust重写QUIC用于用户空间。自己做意味着要像老鹰一样盯着内核提交以避免错过bug修复。有趣的是Cloudflare在quiche中没有使用BBR作为默认。
+- 看最后一张图，回退大约是总带宽的1/5，每50毫秒发生一次。如果快速连续发生，减少回退速度不是更合理吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+「アイドル」がアイドルではない時：Linuxカーネルの最適化がQUICバグになった話
+***** TLDR
+Cloudflareは、ソケットのアイドル状態を判定するLinuxカーネルの最適化がQUIC接続を「デススパイラル」に陥らせることを発見しました。カーネルはトラフィックが流れているときでも接続を過度にアイドルとマークし、輻輳制御のバックオフをトリガーしました。修正にはCUBIC輻輳制御とカーネルタイミングの微妙な相互作用を理解する必要がありました。
+***** Take
+パフォーマンス最適化がパフォーマンス劣化になった時。カーネルは接続がアイドルだと思い、接続は同意せず、皆が苦しんだ。典型的な分散システムデバッグ：問題が起きるまで全て順調。
+***** Comments
+- 記事は'CCA'を定義せずに使っている。リンクを辿ってググったが有用な結果はなかった。この文脈でCCAとは何？
+- なぜ彼らがユーザースペース用にRustでQUICを書き直したか分かる。自前でやるならバグ修正を見逃さないようにカーネルのコミットを鷹のように監視する必要がある。Cloudflareがquicheでデフォルトとしてデフォルトを使っていないのは興味深い。
+- 最後のプロットを見ると、バックオフは約50msごとに総帯域幅の1/5だ。急速に連続して発生する場合、バックオフ速度を減らす方が理にかなっているのでは？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+'유휴'가 유휴가 아닐 때: Linux 커널 최적화가 QUIC 버그가 된 방법
+***** TLDR
+Cloudflare는 소켓 유휴 상태를 결정하는 Linux 커널 최적화가 QUIC 연결을 '죽음의 나선'에 빠뜨린다는 것을 발견했습니다. 커널은 트래픽이 흐르고 있을 때도 연결을 너무 공격적으로 유휴로 표시하여 혼잡 제어 백오프를 트리거했습니다. 수정에는 CUBIC 혼잡 제어와 커널 타이밍 간의 미묘한 상호 작용을 이해해야 했습니다.
+***** Take
+성능 최적화가 성능 저하가 될 때. 커널은 연결이 유휴라고 생각했고, 연결은 동의하지 않았고, 모두가 고통받았다. 전형적인 분산 시스템 디버깅: 문제가 생길 때까지 모든 게 정상.
+***** Comments
+- 기사에서 'CCA'를 정의하지 않고 사용한다. 링크를 따라가고 구글링했지만 유용한 결과가 없었다. 이 맥락에서 CCA가 뭐지?
+- 왜 그들이 유저스페이스용으로 Rust로 QUIC를 재작성했는지 알겠다. 자체 구현하면 버그 수정을 놓치지 않으려고 커널 커밋을 매처럼 감시해야 한다. Cloudflare가 quiche에서 BBR을 기본으로 사용하지 않는 것이 흥미롭다.
+- 마지막 플롯을 보면 백오프가 대략 50ms마다 총 대역폭의 1/5이다. 빠르게 연속으로 발생하면 백오프 속도를 줄이는 게 합리적이지 않을까?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cuando 'inactivo' no es inactivo: cómo una optimización del kernel Linux se convirtió en un bug de QUIC
+***** TLDR
+Cloudflare descubrió que una optimización del kernel Linux para determinar la inactividad del socket estaba causando que las conexiones QUIC entraran en una 'espiral de muerte'. El kernel marcaba las conexiones como inactivas demasiado agresivamente, disparando retrocesos de control de congestión incluso cuando el tráfico estaba fluyendo. La corrección requirió entender interacciones sutiles entre el control de congestión CUBIC y el timing del kernel.
+***** Take
+Cuando tu optimización de rendimiento se convierte en una pesimización de rendimiento. El kernel pensó que la conexión estaba inactiva, la conexión no estuvo de acuerdo, y todos sufrieron. Depuración clásica de sistemas distribuidos: todo está bien hasta que no lo está.
+***** Comments
+- El artículo usa 'CCAs' sin definirlo nunca. Seguí los enlaces y lo busqué en Google sin resultado útil. ¿Qué es un CCA en este contexto?
+- Puedo ver por qué reescribieron QUIC en Rust para userspace. Hacerlo internamente significa vigilar los commits del kernel como un halcón para no perderse correcciones de bugs. Interesante que Cloudflare no use BBR como predeterminado en quiche.
+- Mirando el último gráfico, el retroceso es aproximadamente 1/5 del ancho de banda total cada 50ms. ¿No tendría sentido reducir la velocidad de retroceso si ocurre repetidamente en rápida sucesión?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wenn 'idle' nicht idle ist: wie eine Linux-Kernel-Optimierung zum QUIC-Bug wurde
+***** TLDR
+Cloudflare entdeckte, dass eine Linux-Kernel-Optimierung zur Bestimmung der Socket-Inaktivität QUIC-Verbindungen in eine 'Todesspirale' trieb. Der Kernel markierte Verbindungen zu aggressiv als inaktiv und löste Congestion-Control-Backoffs aus, obwohl Datenverkehr floss. Die Behebung erforderte das Verständnis subtiler Interaktionen zwischen CUBIC-Congestion-Control und Kernel-Timing.
+***** Take
+Wenn deine Performance-Optimierung zur Performance-Pessimierung wird. Der Kernel dachte, die Verbindung sei idle, die Verbindung war anderer Meinung, und alle litten. Klassisches Debugging verteilter Systeme: alles ist gut, bis es das nicht mehr ist.
+***** Comments
+- Der Artikel verwendet 'CCAs' ohne es jemals zu definieren. Ich bin den Links gefolgt und habe gegoogelt ohne nützliches Ergebnis. Was ist ein CCA in diesem Kontext?
+- Ich verstehe, warum sie QUIC in Rust für Userspace neu geschrieben haben. Eigene Implementierung bedeutet, Kernel-Commits wie ein Falke zu beobachten, um Bug-Fixes nicht zu verpassen. Interessant, dass Cloudflare BBR nicht als Standard in quiche verwendet.
+- Der letzte Plot zeigt, dass der Backoff etwa 1/5 der Gesamtbandbreite alle 50ms ist. Würde es nicht Sinn machen, die Backoff-Geschwindigkeit zu reduzieren, wenn es wiederholt in schneller Folge auftritt?
+** My graduation cap runs Rust :rust:hardware:embedded:fun:
+:PROPERTIES:
+:ID:       48116207
+:URL:      https://ericswpark.com/blog/2026/2026-05-12-my-graduation-cap-runs-rust/
+:HN_URL:   https://news.ycombinator.com/item?id=48116207
+:POINTS:   157
+:COMMENTS: 59
+:BY:       ericswpark
+:END:
+
+*** TLDR
+A CS grad built a LED matrix display into their graduation cap using an ESP32 running Rust. The cap displays scrolling messages and animations. The post covers hardware selection, soldering challenges, power management with battery packs, and the joys of embassy-rs for embedded Rust. Total cost: $94 for cap rental plus hardware.
+
+*** Take
+Memory safety extends to your head now. The real flex isn't the LEDs, it's getting embassy-rs to compile on the first try. Spoiler: it didn't.
+
+*** Comments
+
+**** nkrisc
+:PROPERTIES:
+:COMMENT_ID: 48116300
+:END:
+You don't need to shell out for the cap. You get your diploma regardless of whether you participate in the ceremony. I chose not to participate because I knew it would be long and boring.
+
+**** rustybolt
+:PROPERTIES:
+:COMMENT_ID: 48116400
+:END:
+Fun fact: you rent your cap and gown in the US. You have to return them. And they're expensive! $94 just for rental. Ah yes, of course this is how it works in the US.
+
+**** swiftcoder
+:PROPERTIES:
+:COMMENT_ID: 48116500
+:END:
+My university shuttered the CS graduate program and sent begging letters for alumni donations. The final way US universities transfer wealth from students to corporations.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我的毕业帽运行Rust
+***** TLDR
+一位计算机科学毕业生使用运行Rust的ESP32在毕业帽中内置了LED矩阵显示屏。帽子显示滚动消息和动画。文章涵盖硬件选择、焊接挑战、电池组电源管理，以及嵌入式Rust使用embassy-rs的乐趣。总成本：帽子租金94美元加上硬件。
+***** Take
+内存安全现在延伸到你的头上了。真正的炫耀不是LED，是让embassy-rs第一次就编译成功。剧透：它没有。
+***** Comments
+- 你不需要花钱租帽子。无论你是否参加典礼，你都能拿到文凭。我选择不参加，因为我知道会很长很无聊。
+- 有趣的事实：在美国你要租学位帽和长袍。你必须归还它们。而且很贵！光租金就94美元。这当然是美国的方式。
+- 我的大学关闭了计算机科学研究生项目，然后发信乞求校友捐款。美国大学从学生向企业转移财富的最后方式。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+私の卒業キャップはRustで動く
+***** TLDR
+あるCSの卒業生が、Rustを実行するESP32を使って卒業キャップにLEDマトリックスディスプレイを組み込みました。キャップはスクロールメッセージとアニメーションを表示します。投稿はハードウェア選択、はんだ付けの課題、バッテリーパックによる電源管理、そして組み込みRust用embassy-rsの楽しさをカバーしています。総コスト：キャップレンタル94ドル＋ハードウェア。
+***** Take
+メモリ安全性があなたの頭にまで拡張された。本当の見せびらかしはLEDではなく、embassy-rsを一発でコンパイルすること。ネタバレ：できなかった。
+***** Comments
+- キャップにお金を払う必要はない。式典に参加するかどうかに関係なく卒業証書はもらえる。長くて退屈だと分かっていたので参加しなかった。
+- 面白い事実：アメリカではキャップとガウンをレンタルする。返却しなければならない。そして高い！レンタルだけで94ドル。そう、これがアメリカのやり方。
+- 私の大学はCSの大学院プログラムを閉鎖して、卒業生に寄付を乞う手紙を送った。アメリカの大学が学生から企業に富を移転する最後の方法。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+내 졸업 모자는 Rust로 돌아간다
+***** TLDR
+한 컴퓨터과학 졸업생이 Rust를 실행하는 ESP32를 사용하여 졸업 모자에 LED 매트릭스 디스플레이를 내장했습니다. 모자는 스크롤 메시지와 애니메이션을 표시합니다. 포스트는 하드웨어 선택, 납땜 도전, 배터리 팩 전원 관리, 그리고 임베디드 Rust용 embassy-rs의 즐거움을 다룹니다. 총 비용: 모자 대여 $94 + 하드웨어.
+***** Take
+메모리 안전이 이제 당신의 머리까지 확장되었다. 진짜 자랑은 LED가 아니라 embassy-rs를 첫 시도에 컴파일하는 것. 스포일러: 안 됐다.
+***** Comments
+- 모자에 돈 쓸 필요 없다. 졸업식에 참석하든 안 하든 졸업장은 받는다. 길고 지루할 걸 알았기 때문에 참석 안 했다.
+- 재미있는 사실: 미국에서는 모자와 가운을 대여한다. 반납해야 한다. 그리고 비싸다! 대여만 $94. 그래, 물론 이게 미국 방식이지.
+- 내 대학은 CS 대학원 프로그램을 폐쇄하고 동문들에게 기부 구걸 편지를 보냈다. 미국 대학이 학생에서 기업으로 부를 이전하는 마지막 방법.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Mi birrete de graduación corre Rust
+***** TLDR
+Un graduado de CS construyó una pantalla de matriz LED en su birrete de graduación usando un ESP32 ejecutando Rust. El birrete muestra mensajes desplazables y animaciones. El post cubre selección de hardware, desafíos de soldadura, gestión de energía con baterías, y las alegrías de embassy-rs para Rust embebido. Costo total: $94 por alquiler del birrete más hardware.
+***** Take
+La seguridad de memoria ahora se extiende a tu cabeza. El verdadero alarde no son los LEDs, es lograr que embassy-rs compile a la primera. Spoiler: no lo hizo.
+***** Comments
+- No necesitas pagar por el birrete. Obtienes tu diploma independientemente de si participas en la ceremonia. Elegí no participar porque sabía que sería largo y aburrido.
+- Dato curioso: alquilas tu birrete y toga en EE.UU. Tienes que devolverlos. ¡Y son caros! $94 solo por el alquiler. Claro, así funciona en EE.UU.
+- Mi universidad cerró el programa de posgrado en CS y envió cartas pidiendo donaciones de exalumnos. La forma final en que las universidades de EE.UU. transfieren riqueza de estudiantes a corporaciones.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Mein Doktorhut läuft auf Rust
+***** TLDR
+Ein CS-Absolvent baute ein LED-Matrix-Display in seinen Doktorhut mit einem ESP32, der Rust ausführt. Der Hut zeigt scrollende Nachrichten und Animationen an. Der Post behandelt Hardwareauswahl, Lötherausforderungen, Strommanagement mit Akkupacks und die Freuden von embassy-rs für eingebettetes Rust. Gesamtkosten: $94 für Hutmiete plus Hardware.
+***** Take
+Memory Safety erstreckt sich jetzt auf deinen Kopf. Der echte Flex sind nicht die LEDs, sondern embassy-rs beim ersten Versuch zu kompilieren. Spoiler: hat nicht geklappt.
+***** Comments
+- Du musst nicht für den Hut bezahlen. Du bekommst dein Diplom unabhängig davon, ob du an der Zeremonie teilnimmst. Ich habe nicht teilgenommen, weil ich wusste, dass es lang und langweilig werden würde.
+- Fun Fact: Du mietest deinen Hut und Talar in den USA. Du musst sie zurückgeben. Und sie sind teuer! $94 nur für die Miete. Ja, natürlich funktioniert das so in den USA.
+- Meine Uni hat das CS-Graduiertenprogramm geschlossen und Bettelbriefe für Alumni-Spenden verschickt. Die letzte Art, wie US-Unis Reichtum von Studenten zu Unternehmen transferieren.
