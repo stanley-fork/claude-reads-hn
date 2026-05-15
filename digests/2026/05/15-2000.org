@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-05-15 20:00:00 UT UTC
+#+DATE: 2026-05-15T20:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Bun's Rust rewrite ships with UB, DOJ wants your car app data, and Project Gutenberg quietly keeps winning
+
+* Highlights
+- Bun's Rust rewrite fails basic miri checks, sparking 'why not just use c2rust' debates
+- DOJ subpoenas Apple and Google for 100k+ users of emissions-defeat app
+- Project Gutenberg dev shows up to flex recent improvements
+- Jason Scott's 10-year ASCII manual archive hits 13,000 documents
+- Radicle offers sovereign Git forges for the GitHub-skeptical
+
+* Stories
+
+** Bun Rust rewrite: 'codebase fails basic miri checks, allows for UB in safe rust' :rust:bun:javascript:memory-safety:
+:PROPERTIES:
+:ID:       48150900
+:URL:      https://github.com/oven-sh/bun/issues/30719
+:HN_URL:   https://news.ycombinator.com/item?id=48150900
+:POINTS:   261
+:COMMENTS: 168
+:BY:       ndiddy
+:END:
+
+*** TLDR
+Someone ran miri (Rust's undefined behavior detector) on Bun's recently-announced Rust rewrite and found it fails basic checks, with UB lurking in supposedly-safe Rust code. The issue sparked debate about why Oven didn't just use automated Zig-to-Rust translation tools instead of a rushed manual rewrite.
+
+*** Take
+Move fast and break memory safety. The Bun team speedran a Rust rewrite for clout and somehow forgot that 'unsafe' doesn't mean 'trust me bro'. At least when it was Zig nobody expected it to be memory-safe.
+
+*** Comments
+
+**** dangerlibrary
+:PROPERTIES:
+:COMMENT_ID: 48150901
+:END:
+There's a huge asymmetry between the reach of a big, flashy announcement and the relatively small reach of a correction.
+
+**** smasher164
+:PROPERTIES:
+:COMMENT_ID: 48150902
+:END:
+If they were going to translate Zig to unsafe Rust, why not just build a translation tool? They could've hooked up zig translate-c to c2rust.
+
+**** pixelpoet
+:PROPERTIES:
+:COMMENT_ID: 48150903
+:END:
+The comments on that thread are Facebook level cringe. What a dump GitHub has become!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Bun Rust重写：'代码库未通过基本miri检查，在安全rust中存在未定义行为'
+***** TLDR
+有人在Bun最近宣布的Rust重写版本上运行了miri（Rust的未定义行为检测器），发现它未能通过基本检查，在本应安全的Rust代码中潜伏着未定义行为。这个问题引发了关于为什么Oven不直接使用自动化Zig转Rust翻译工具的讨论。
+***** Take
+快速行动，打破内存安全。Bun团队为了博眼球急忙完成Rust重写，却忘了'unsafe'不是'相信我老铁'的意思。至少写Zig的时候没人指望它是内存安全的。
+***** Comments
+- 大张旗鼓的公告和相对无人问津的更正之间存在巨大的不对称。
+- 如果要把Zig翻译成unsafe Rust，为什么不直接做个翻译工具？可以把zig translate-c接到c2rust上。
+- 那个帖子里的评论跟Facebook一个水平。GitHub已经变成垃圾场了！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Bun Rust書き換え：「コードベースは基本的なmiriチェックに失敗し、安全なrustで未定義動作を許容」
+***** TLDR
+誰かがBunの最近発表されたRust書き換え版でmiri（Rustの未定義動作検出器）を実行したところ、基本的なチェックに失敗し、安全なはずのRustコードにUBが潜んでいることが判明。なぜOvenは自動化されたZig-Rust変換ツールを使わなかったのかという議論が起きた。
+***** Take
+速く動いてメモリ安全性を壊せ。Bunチームは注目を集めるためにRust書き換えを急いだが、'unsafe'は'俺を信じろ'という意味じゃないことを忘れていた。Zigの時は誰もメモリ安全を期待していなかったのに。
+***** Comments
+- 派手な発表のリーチと、訂正の比較的小さなリーチの間には大きな非対称性がある。
+- ZigをunsafeなRustに変換するなら、なぜ変換ツールを作らなかったのか？zig translate-cをc2rustに繋げばよかった。
+- あのスレッドのコメントはFacebookレベルの恥ずかしさ。GitHubはゴミ溜めになった！
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Bun Rust 재작성: '코드베이스가 기본 miri 검사에 실패하고, 안전한 rust에서 UB를 허용'
+***** TLDR
+누군가 Bun의 최근 발표된 Rust 재작성 버전에서 miri(Rust의 미정의 동작 검출기)를 실행했더니 기본 검사에 실패하고, 안전해야 할 Rust 코드에 UB가 숨어있었다. Oven이 왜 자동화된 Zig-Rust 변환 도구를 사용하지 않았는지에 대한 논쟁이 촉발됐다.
+***** Take
+빠르게 움직여서 메모리 안전성을 깨뜨려라. Bun 팀은 관심 끌려고 Rust 재작성을 급하게 했는데, 'unsafe'가 '나만 믿어'라는 뜻이 아니라는 걸 잊었다. 적어도 Zig였을 때는 아무도 메모리 안전을 기대 안 했는데.
+***** Comments
+- 화려한 발표의 도달 범위와 상대적으로 작은 수정 범위 사이에는 큰 비대칭이 있다.
+- Zig를 unsafe Rust로 번역할 거면 왜 번역 도구를 만들지 않았을까? zig translate-c를 c2rust에 연결하면 됐을 텐데.
+- 그 스레드의 댓글들은 페이스북 수준의 망신. GitHub은 이제 쓰레기장이 됐다!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Reescritura de Bun en Rust: 'el código no pasa verificaciones básicas de miri, permite UB en rust seguro'
+***** TLDR
+Alguien ejecutó miri (el detector de comportamiento indefinido de Rust) en la recién anunciada reescritura de Bun en Rust y encontró que falla verificaciones básicas, con UB oculto en código Rust supuestamente seguro. El problema generó debate sobre por qué Oven no usó herramientas automatizadas de traducción Zig-a-Rust.
+***** Take
+Muévete rápido y rompe la seguridad de memoria. El equipo de Bun aceleró una reescritura en Rust por fama y olvidaron que 'unsafe' no significa 'confía en mí'. Al menos cuando era Zig nadie esperaba que fuera seguro.
+***** Comments
+- Hay una enorme asimetría entre el alcance de un anuncio llamativo y el alcance relativamente pequeño de una corrección.
+- Si iban a traducir Zig a unsafe Rust, ¿por qué no construir una herramienta de traducción? Podrían haber conectado zig translate-c a c2rust.
+- Los comentarios en ese hilo son vergonzosos nivel Facebook. ¡GitHub se ha vuelto un basurero!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Bun Rust-Neufassung: 'Codebase besteht grundlegende Miri-Checks nicht, erlaubt UB in sicherem Rust'
+***** TLDR
+Jemand hat miri (Rusts Undefined-Behavior-Detektor) auf Buns kürzlich angekündigter Rust-Neufassung ausgeführt und festgestellt, dass sie grundlegende Checks nicht besteht, wobei UB in vermeintlich sicherem Rust-Code lauert. Das Problem löste eine Debatte aus, warum Oven nicht einfach automatisierte Zig-zu-Rust-Übersetzungstools verwendet hat.
+***** Take
+Beweg dich schnell und zerstöre die Speichersicherheit. Das Bun-Team hat eine Rust-Neufassung durchgejagt für Aufmerksamkeit und vergessen, dass 'unsafe' nicht 'vertrau mir' bedeutet. Wenigstens hat bei Zig niemand Speichersicherheit erwartet.
+***** Comments
+- Es gibt eine riesige Asymmetrie zwischen der Reichweite einer großen, auffälligen Ankündigung und der relativ kleinen Reichweite einer Korrektur.
+- Wenn sie Zig in unsafe Rust übersetzen wollten, warum nicht einfach ein Übersetzungstool bauen? Sie hätten zig translate-c an c2rust anschließen können.
+- Die Kommentare in diesem Thread sind Facebook-Niveau peinlich. GitHub ist zur Müllhalde verkommen!
+** U.S. DOJ demands Apple and Google unmask over 100k users of car-tinkering app :privacy:government:automotive:environment:
+:PROPERTIES:
+:ID:       48151383
+:URL:      https://macdailynews.com/2026/05/15/u-s-doj-demands-apple-and-google-unmask-over-100000-users-of-popular-car-tinkering-app-in-emissions-crackdown/
+:HN_URL:   https://news.ycombinator.com/item?id=48151383
+:POINTS:   196
+:COMMENTS: 107
+:BY:       tencentshill
+:END:
+
+*** TLDR
+The DOJ is demanding Apple and Google hand over identifying information for over 100,000 users of an app used to defeat vehicle emissions controls. The government claims it needs this data to find witnesses, but critics point out they're essentially fishing for suspects without prior evidence.
+
+*** Take
+The feds want to know who downloaded the 'roll coal' app so they can interview 100k 'witnesses.' Very normal behavior for a free country. Maybe just ban diesel engines if this is such a priority?
+
+*** Comments
+
+**** embedding-shape
+:PROPERTIES:
+:COMMENT_ID: 48151384
+:END:
+Why start this investigation if you don't already have witnesses? Sounds like they're fishing for suspects.
+
+**** midtake
+:PROPERTIES:
+:COMMENT_ID: 48151385
+:END:
+This app is used to delete factory emissions controls. I don't feel sorry for anyone who uses this to roll coal.
+
+**** codedokode
+:PROPERTIES:
+:COMMENT_ID: 48151386
+:END:
+That's why you should be downloading from F-Droid anonymously.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+美国司法部要求苹果和谷歌公开汽车改装应用的10万多用户身份
+***** TLDR
+司法部要求苹果和谷歌交出10万多名使用一款用于绕过汽车排放控制的应用用户的身份信息。政府声称需要这些数据来寻找证人，但批评者指出他们实际上是在没有事先证据的情况下钓鱼式搜寻嫌疑人。
+***** Take
+联邦政府想知道谁下载了'喷黑烟'应用，好去约谈10万'证人'。一个自由国家的正常操作。如果这么重要的话，干脆禁止柴油发动机算了？
+***** Comments
+- 如果没有证人的话为什么要启动这个调查？听起来像是在钓鱼找嫌疑人。
+- 这个应用是用来删除出厂排放控制的。用它来喷黑烟的人不值得同情。
+- 所以你应该从F-Droid匿名下载。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+米司法省、AppleとGoogleに車改造アプリの10万人以上のユーザー身元開示を要求
+***** TLDR
+司法省はAppleとGoogleに、車両排出規制を無効化するアプリの10万人以上のユーザーの身元情報を提出するよう要求している。政府は証人を見つけるためにこのデータが必要だと主張しているが、批判者は事前の証拠なしに容疑者を探しているだけだと指摘している。
+***** Take
+連邦政府は誰が「黒煙を吹く」アプリをダウンロードしたか知りたがっていて、10万人の「証人」を聴取するつもりらしい。自由の国の普通の行動だね。そんなに重要なら、ディーゼルエンジンを禁止すれば？
+***** Comments
+- 証人がいないならなぜ調査を始めたのか？容疑者を釣っているように聞こえる。
+- このアプリは工場出荷時の排出制御を削除するために使われている。黒煙を吹くために使う人に同情はしない。
+- だからF-Droidから匿名でダウンロードすべきなんだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+미국 법무부, 애플과 구글에 차량 튜닝 앱 사용자 10만 명 이상 신원 공개 요구
+***** TLDR
+법무부가 애플과 구글에 차량 배출가스 제어 장치를 무력화하는 앱 사용자 10만 명 이상의 신원 정보를 넘기라고 요구하고 있다. 정부는 증인을 찾기 위해 이 데이터가 필요하다고 주장하지만, 비평가들은 사전 증거 없이 용의자를 낚시질하는 것이라고 지적한다.
+***** Take
+연방정부가 '매연 뿜기' 앱을 누가 다운로드했는지 알고 싶어서 10만 '증인'을 인터뷰하겠다고. 자유의 나라답네. 이렇게 중요하면 그냥 디젤 엔진을 금지시키지?
+***** Comments
+- 이미 증인이 없으면 왜 조사를 시작했을까? 용의자를 낚시질하는 것 같다.
+- 이 앱은 공장 출하 배출 제어를 삭제하는 데 사용된다. 매연 뿜으려고 쓰는 사람들한테 동정심 없다.
+- 그래서 F-Droid에서 익명으로 다운로드해야 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El DOJ de EE.UU. exige a Apple y Google revelar más de 100 mil usuarios de app para modificar autos
+***** TLDR
+El DOJ exige que Apple y Google entreguen información identificativa de más de 100,000 usuarios de una app usada para desactivar controles de emisiones vehiculares. El gobierno afirma necesitar estos datos para encontrar testigos, pero los críticos señalan que están buscando sospechosos sin evidencia previa.
+***** Take
+Los federales quieren saber quién descargó la app de 'echar humo negro' para entrevistar a 100k 'testigos'. Muy normal para un país libre. ¿Quizás simplemente prohibir los motores diésel si es tan prioritario?
+***** Comments
+- ¿Por qué iniciar esta investigación si no tienes testigos? Parece que están pescando sospechosos.
+- Esta app se usa para eliminar controles de emisiones de fábrica. No siento lástima por nadie que la use para contaminar.
+- Por eso deberías descargar de F-Droid anónimamente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+US-Justizministerium fordert Apple und Google auf, über 100.000 Nutzer einer Auto-Tuning-App zu identifizieren
+***** TLDR
+Das Justizministerium fordert Apple und Google auf, Identifikationsdaten von über 100.000 Nutzern einer App herauszugeben, die zur Umgehung von Fahrzeug-Emissionskontrollen verwendet wird. Die Regierung behauptet, diese Daten zu benötigen, um Zeugen zu finden, aber Kritiker weisen darauf hin, dass sie im Grunde ohne vorherige Beweise nach Verdächtigen fischen.
+***** Take
+Die Bundesbehörden wollen wissen, wer die 'Schwarzrauch-App' heruntergeladen hat, um 100k 'Zeugen' zu befragen. Sehr normales Verhalten für ein freies Land. Vielleicht einfach Dieselmotoren verbieten, wenn das so wichtig ist?
+***** Comments
+- Warum diese Untersuchung starten, wenn man keine Zeugen hat? Klingt so, als würden sie nach Verdächtigen fischen.
+- Diese App wird benutzt, um Werks-Emissionskontrollen zu löschen. Ich habe kein Mitleid mit Leuten, die damit Schwarzrauch produzieren.
+- Deshalb sollte man anonym von F-Droid herunterladen.
+** Project Gutenberg – keeps getting better :books:open-source:digital-archive:history:
+:PROPERTIES:
+:ID:       48150431
+:URL:      https://www.gutenberg.org/
+:HN_URL:   https://news.ycombinator.com/item?id=48150431
+:POINTS:   437
+:COMMENTS: 126
+:BY:       JSeiko
+:END:
+
+*** TLDR
+A Project Gutenberg developer posted on HN to highlight recent improvements to the site. The project started in 1971 when Michael Hart digitized the Declaration of Independence on a university mainframe, making it the oldest digital library. Recent updates have modernized the site considerably.
+
+*** Take
+The OG digital library, started before most HN readers' parents met, still quietly churning out free books while everyone argues about DRM. Standard Ebooks may have prettier typesetting, but Gutenberg has been doing this since Nixon was president.
+
+*** Comments
+
+**** JSeiko
+:PROPERTIES:
+:COMMENT_ID: 48150432
+:END:
+Hi! I'm one of the programmers at Gutenberg. We've been improving the site a lot over the past few months.
+
+**** throw0101c
+:PROPERTIES:
+:COMMENT_ID: 48150433
+:END:
+Project Gutenberg started back in 1971 when Michael S. Hart digitized the US Declaration of Independence on a Xerox Sigma V mainframe.
+
+**** thangalin
+:PROPERTIES:
+:COMMENT_ID: 48150434
+:END:
+Project Gutenberg is a treasure trove, though Standard Ebooks takes consistency to an unbelievable level for typesetting.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+古腾堡计划——越来越好
+***** TLDR
+一位古腾堡计划开发者在HN上发帖，介绍网站最近的改进。该项目始于1971年，当时Michael Hart在大学主机上数字化了《独立宣言》，使其成为最古老的数字图书馆。最近的更新大大现代化了网站。
+***** Take
+元祖数字图书馆，在大多数HN读者的父母相识之前就开始了，在大家争论DRM的时候依然默默地提供免费书籍。Standard Ebooks的排版可能更漂亮，但古腾堡从尼克松当总统时就在做这件事了。
+***** Comments
+- 嗨！我是古腾堡的程序员之一。过去几个月我们对网站做了很多改进。
+- 古腾堡计划始于1971年，当时Michael S. Hart在Xerox Sigma V主机上数字化了美国《独立宣言》。
+- 古腾堡计划是个宝库，不过Standard Ebooks在排版一致性上达到了令人难以置信的水平。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Project Gutenberg - どんどん良くなっている
+***** TLDR
+Project Gutenbergの開発者がHNに投稿し、サイトの最近の改善点を紹介した。このプロジェクトは1971年にMichael Hartが大学のメインフレームで独立宣言をデジタル化した時に始まり、最古のデジタル図書館となっている。最近のアップデートでサイトは大幅に近代化された。
+***** Take
+元祖デジタル図書館は、ほとんどのHN読者の両親が出会う前から始まっており、みんながDRMについて議論している間も静かに無料の本を提供し続けている。Standard Ebooksの方が組版は綺麗かもしれないが、Gutenbergはニクソン大統領時代からこれをやっている。
+***** Comments
+- こんにちは！私はGutenbergのプログラマーの一人です。過去数ヶ月でサイトを大幅に改善してきました。
+- Project Gutenbergは1971年に始まりました。Michael S. HartがXerox Sigma Vメインフレームでアメリカ独立宣言をデジタル化した時です。
+- Project Gutenbergは宝の山ですが、組版の一貫性ではStandard Ebooksが信じられないレベルに達しています。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+프로젝트 구텐베르크 - 계속 좋아지고 있다
+***** TLDR
+프로젝트 구텐베르크 개발자가 HN에 글을 올려 사이트의 최근 개선 사항을 소개했다. 이 프로젝트는 1971년 Michael Hart가 대학 메인프레임에서 독립선언문을 디지털화하면서 시작되어 가장 오래된 디지털 도서관이 되었다. 최근 업데이트로 사이트가 상당히 현대화되었다.
+***** Take
+원조 디지털 도서관, 대부분의 HN 독자들 부모님이 만나기도 전에 시작해서, 다들 DRM 논쟁하는 동안 조용히 무료 책을 만들어내고 있다. Standard Ebooks가 조판은 더 예쁠지 몰라도, 구텐베르크는 닉슨이 대통령이던 시절부터 이걸 해왔다.
+***** Comments
+- 안녕하세요! 저는 구텐베르크의 프로그래머 중 한 명입니다. 지난 몇 달간 사이트를 많이 개선해왔습니다.
+- 프로젝트 구텐베르크는 1971년 Michael S. Hart가 Xerox Sigma V 메인프레임에서 미국 독립선언문을 디지털화하면서 시작되었습니다.
+- 프로젝트 구텐베르크는 보물창고지만, 조판 일관성에서는 Standard Ebooks가 믿을 수 없는 수준입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Project Gutenberg - sigue mejorando
+***** TLDR
+Un desarrollador de Project Gutenberg publicó en HN para destacar las mejoras recientes del sitio. El proyecto comenzó en 1971 cuando Michael Hart digitalizó la Declaración de Independencia en un mainframe universitario, convirtiéndola en la biblioteca digital más antigua. Las actualizaciones recientes han modernizado considerablemente el sitio.
+***** Take
+La biblioteca digital original, iniciada antes de que los padres de la mayoría de lectores de HN se conocieran, sigue produciendo libros gratis mientras todos discuten sobre DRM. Standard Ebooks puede tener mejor tipografía, pero Gutenberg ha estado haciendo esto desde que Nixon era presidente.
+***** Comments
+- ¡Hola! Soy uno de los programadores de Gutenberg. Hemos estado mejorando mucho el sitio en los últimos meses.
+- Project Gutenberg comenzó en 1971 cuando Michael S. Hart digitalizó la Declaración de Independencia de EE.UU. en un mainframe Xerox Sigma V.
+- Project Gutenberg es un tesoro, aunque Standard Ebooks lleva la consistencia tipográfica a un nivel increíble.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Project Gutenberg – wird immer besser
+***** TLDR
+Ein Entwickler von Project Gutenberg hat auf HN gepostet, um die jüngsten Verbesserungen der Website hervorzuheben. Das Projekt begann 1971, als Michael Hart die Unabhängigkeitserklärung auf einem Universitäts-Mainframe digitalisierte, und ist damit die älteste digitale Bibliothek. Jüngste Updates haben die Website erheblich modernisiert.
+***** Take
+Die ursprüngliche digitale Bibliothek, gestartet bevor die Eltern der meisten HN-Leser sich kennenlernten, produziert immer noch leise kostenlose Bücher, während alle über DRM streiten. Standard Ebooks mag schöneren Schriftsatz haben, aber Gutenberg macht das seit Nixon Präsident war.
+***** Comments
+- Hallo! Ich bin einer der Programmierer bei Gutenberg. Wir haben die Seite in den letzten Monaten stark verbessert.
+- Project Gutenberg begann 1971, als Michael S. Hart die US-Unabhängigkeitserklärung auf einem Xerox Sigma V Mainframe digitalisierte.
+- Project Gutenberg ist eine Fundgrube, obwohl Standard Ebooks beim Schriftsatz ein unglaubliches Konsistenzniveau erreicht.
+** ASCII by Jason Scott :archive:history:open-source:preservation:
+:PROPERTIES:
+:ID:       48148726
+:URL:      https://ascii.textfiles.com/
+:HN_URL:   https://news.ycombinator.com/item?id=48148726
+:POINTS:   112
+:COMMENTS: 20
+:BY:       bookofjoe
+:END:
+
+*** TLDR
+Jason Scott's decade-long ASCII project has digitized and archived over 13,000 manuals to the Internet Archive. The project runs at about 3.5 manuals per day for ten years. Scott is also known for digitizing over 1,300 magnetic media tapes from a NYC collector's lifetime archive.
+
+*** Take
+While everyone's busy training AI on copyrighted material, Jason Scott has been manually scanning dusty manuals for a decade like some kind of digital monk. 13,000 manuals. The absolute madman.
+
+*** Comments
+
+**** dcminter
+:PROPERTIES:
+:COMMENT_ID: 48148727
+:END:
+I vaguely remember chipping in some paltry sum on some early plea for donations. Amazing work after ten years.
+
+**** embedding-shape
+:PROPERTIES:
+:COMMENT_ID: 48148728
+:END:
+About 3.5 manuals PER DAY, for a decade! Few people are as dedicated as Jason Scott.
+
+**** rhgraysonii
+:PROPERTIES:
+:COMMENT_ID: 48148729
+:END:
+Over the past 4-5 years he's digitized over 1300 tapes from a lifetime collection I acquired. He's an absolutely delightful person.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Jason Scott的ASCII项目
+***** TLDR
+Jason Scott长达十年的ASCII项目已经将超过13,000份手册数字化并存档到互联网档案馆。该项目十年来平均每天处理约3.5份手册。Scott还因将一位纽约收藏家毕生收藏的1300多盘磁带数字化而闻名。
+***** Take
+当所有人都忙着用版权材料训练AI时，Jason Scott像个数字苦行僧一样手动扫描布满灰尘的手册已经十年了。13000份手册。这个绝对的疯子。
+***** Comments
+- 我隐约记得在某次早期捐款呼吁中投了一点小钱。十年后的成果令人惊叹。
+- 十年来每天约3.5份手册！很少有人像Jason Scott这样执着。
+- 在过去4-5年里，他将我收购的一个毕生收藏中的1300多盘磁带数字化了。他是一个非常令人愉快的人。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Jason ScottのASCIIプロジェクト
+***** TLDR
+Jason Scottの10年にわたるASCIIプロジェクトは、13,000以上のマニュアルをデジタル化しInternet Archiveに保存してきた。10年間で1日あたり約3.5冊のペース。ScottはNYCのコレクターの生涯アーカイブから1,300本以上の磁気テープをデジタル化したことでも知られている。
+***** Take
+みんなが著作権のある素材でAIを訓練するのに忙しい中、Jason Scottは10年間デジタル僧侶のように埃まみれのマニュアルを手動でスキャンし続けてきた。13,000冊のマニュアル。なんという狂人。
+***** Comments
+- 初期の寄付のお願いで少額を寄付した記憶がうっすらある。10年後の成果は素晴らしい。
+- 10年間、1日あたり約3.5冊のマニュアル！Jason Scottほど献身的な人は稀だ。
+- 過去4-5年で、私が入手したコレクションから1300本以上のテープをデジタル化してくれた。本当に素敵な人だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Jason Scott의 ASCII 프로젝트
+***** TLDR
+Jason Scott의 10년에 걸친 ASCII 프로젝트는 13,000개 이상의 매뉴얼을 디지털화하여 인터넷 아카이브에 보관했다. 10년간 하루 평균 약 3.5개의 매뉴얼을 처리했다. Scott은 또한 뉴욕 수집가의 평생 아카이브에서 1,300개 이상의 자기 테이프를 디지털화한 것으로도 알려져 있다.
+***** Take
+모두가 저작권 있는 자료로 AI 훈련시키느라 바쁠 때, Jason Scott은 10년 동안 디지털 수도승처럼 먼지 쌓인 매뉴얼을 수동으로 스캔해왔다. 13,000개의 매뉴얼. 진정한 미친 사람.
+***** Comments
+- 초기 기부 요청에 적은 금액을 기부했던 기억이 어렴풋이 난다. 10년 후의 놀라운 성과.
+- 10년간 하루에 약 3.5개의 매뉴얼! Jason Scott만큼 헌신적인 사람은 드물다.
+- 지난 4-5년간 그가 내가 입수한 평생 컬렉션에서 1300개 이상의 테이프를 디지털화했다. 정말 유쾌한 사람이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ASCII por Jason Scott
+***** TLDR
+El proyecto ASCII de una década de Jason Scott ha digitalizado y archivado más de 13,000 manuales en Internet Archive. El proyecto procesa unos 3.5 manuales por día durante diez años. Scott también es conocido por digitalizar más de 1,300 cintas magnéticas del archivo de toda una vida de un coleccionista de NYC.
+***** Take
+Mientras todos están ocupados entrenando IA con material con derechos de autor, Jason Scott ha estado escaneando manualmente manuales polvorientos durante una década como una especie de monje digital. 13,000 manuales. Un completo loco.
+***** Comments
+- Vagamente recuerdo haber contribuido una suma pequeña en alguna petición temprana de donaciones. Trabajo increíble después de diez años.
+- ¡Unos 3.5 manuales POR DÍA, durante una década! Pocas personas son tan dedicadas como Jason Scott.
+- En los últimos 4-5 años ha digitalizado más de 1300 cintas de una colección de toda una vida que adquirí. Es una persona absolutamente encantadora.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ASCII von Jason Scott
+***** TLDR
+Jason Scotts zehn Jahre dauerndes ASCII-Projekt hat über 13.000 Handbücher digitalisiert und im Internet Archive archiviert. Das Projekt verarbeitet etwa 3,5 Handbücher pro Tag über zehn Jahre. Scott ist auch dafür bekannt, über 1.300 Magnetbänder aus dem Lebenswerk eines NYC-Sammlers digitalisiert zu haben.
+***** Take
+Während alle damit beschäftigt sind, KI mit urheberrechtlich geschütztem Material zu trainieren, hat Jason Scott ein Jahrzehnt lang wie ein digitaler Mönch verstaubte Handbücher manuell gescannt. 13.000 Handbücher. Der absolute Wahnsinnige.
+***** Comments
+- Ich erinnere mich vage, bei einem frühen Spendenaufruf einen kleinen Betrag gegeben zu haben. Erstaunliche Arbeit nach zehn Jahren.
+- Etwa 3,5 Handbücher PRO TAG, für ein Jahrzehnt! Wenige Menschen sind so engagiert wie Jason Scott.
+- In den letzten 4-5 Jahren hat er über 1300 Bänder aus einer Lebenssammlung, die ich erworben habe, digitalisiert. Er ist ein absolut wunderbarer Mensch.
+** Radicle: Sovereign code forge built on Git :git:decentralized:open-source:privacy:
+:PROPERTIES:
+:ID:       48147603
+:URL:      https://radicle.dev/
+:HN_URL:   https://news.ycombinator.com/item?id=48147603
+:POINTS:   177
+:COMMENTS: 49
+:BY:       KolmogorovComp
+:END:
+
+*** TLDR
+Radicle is a decentralized, local-first code forge built on Git that lets developers host repositories without relying on centralized platforms. Unlike similar projects, it has solid support for private repos. The project has been around since 2020 and has matured significantly.
+
+*** Take
+For when GitHub feels too much like a landlord and you want to host your repos like it's 2005 but with cryptographic identity. It's Git, but make it sovereign citizen.
+
+*** Comments
+
+**** figbert
+:PROPERTIES:
+:COMMENT_ID: 48147604
+:END:
+I discovered Radicle back in 2020. I bounced off of it due to being unable to effectively delete repositories.
+
+**** josh-sematic
+:PROPERTIES:
+:COMMENT_ID: 48147605
+:END:
+Unlike tangled.org this is local-first and has a solid story around private repos. I'm bullish on distributed forges.
+
+**** deknos
+:PROPERTIES:
+:COMMENT_ID: 48147606
+:END:
+Does Radicle work over TOR? Does it support Git LFS and/or Git Annex?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Radicle：基于Git构建的自主代码托管平台
+***** TLDR
+Radicle是一个基于Git构建的去中心化、本地优先的代码托管平台，让开发者可以在不依赖中心化平台的情况下托管代码库。与类似项目不同，它对私有仓库有完善的支持。该项目自2020年以来一直存在，已经相当成熟。
+***** Take
+当GitHub感觉太像房东，而你想像2005年那样托管你的代码库但带有加密身份时。这就是Git，但让它变成主权公民版。
+***** Comments
+- 我在2020年发现了Radicle。因为无法有效删除仓库而放弃了它。
+- 与tangled.org不同，这是本地优先的，而且在私有仓库方面有完善的方案。我看好分布式代码托管。
+- Radicle能通过TOR运行吗？支持Git LFS和/或Git Annex吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Radicle：Gitベースの自己主権コードフォージ
+***** TLDR
+Radicleは、中央集権プラットフォームに頼らずにリポジトリをホストできる、Gitベースの分散型ローカルファーストコードフォージだ。類似プロジェクトとは異なり、プライベートリポジトリのサポートがしっかりしている。2020年から存在し、大きく成熟した。
+***** Take
+GitHubが大家っぽく感じて、2005年みたいにリポジトリをホストしたいけど暗号化IDは欲しい時のために。Gitだけど、主権市民バージョン。
+***** Comments
+- 2020年にRadicleを発見した。リポジトリを効果的に削除できなかったので離れた。
+- tangled.orgと違ってローカルファーストで、プライベートリポジトリの話もしっかりしている。分散フォージには強気だ。
+- RadicleはTOR経由で動く？Git LFSやGit Annexはサポートしてる？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Radicle: Git 기반의 자주적 코드 포지
+***** TLDR
+Radicle은 중앙화된 플랫폼에 의존하지 않고 저장소를 호스팅할 수 있는 Git 기반의 분산형 로컬 우선 코드 포지다. 유사한 프로젝트와 달리 비공개 저장소를 탄탄하게 지원한다. 2020년부터 존재했으며 상당히 성숙해졌다.
+***** Take
+GitHub이 집주인처럼 느껴지고 암호화 신원과 함께 2005년처럼 저장소를 호스팅하고 싶을 때를 위해. Git인데, 주권 시민 버전으로.
+***** Comments
+- 2020년에 Radicle을 발견했다. 저장소를 효과적으로 삭제할 수 없어서 포기했다.
+- tangled.org와 달리 로컬 우선이고 비공개 저장소에 대한 탄탄한 스토리가 있다. 분산 포지에 낙관적이다.
+- Radicle이 TOR로 작동하나요? Git LFS나 Git Annex를 지원하나요?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Radicle: Forja de código soberana construida sobre Git
+***** TLDR
+Radicle es una forja de código descentralizada y local-first construida sobre Git que permite a los desarrolladores alojar repositorios sin depender de plataformas centralizadas. A diferencia de proyectos similares, tiene soporte sólido para repos privados. El proyecto existe desde 2020 y ha madurado significativamente.
+***** Take
+Para cuando GitHub se siente demasiado como un propietario y quieres alojar tus repos como en 2005 pero con identidad criptográfica. Es Git, pero versión ciudadano soberano.
+***** Comments
+- Descubrí Radicle en 2020. Lo abandoné porque no podía eliminar repositorios efectivamente.
+- A diferencia de tangled.org esto es local-first y tiene una historia sólida sobre repos privados. Soy optimista sobre las forjas distribuidas.
+- ¿Radicle funciona sobre TOR? ¿Soporta Git LFS y/o Git Annex?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Radicle: Souveräne Code-Forge basierend auf Git
+***** TLDR
+Radicle ist eine dezentrale, Local-First Code-Forge basierend auf Git, die es Entwicklern ermöglicht, Repositories zu hosten, ohne auf zentrale Plattformen angewiesen zu sein. Anders als ähnliche Projekte hat es solide Unterstützung für private Repos. Das Projekt existiert seit 2020 und ist erheblich gereift.
+***** Take
+Für wenn sich GitHub zu sehr wie ein Vermieter anfühlt und du deine Repos wie 2005 hosten willst, aber mit kryptographischer Identität. Es ist Git, aber mach es zum souveränen Bürger.
+***** Comments
+- Ich entdeckte Radicle 2020. Ich hab's aufgegeben, weil ich Repositories nicht effektiv löschen konnte.
+- Anders als tangled.org ist es Local-First und hat eine solide Geschichte rund um private Repos. Ich bin optimistisch für verteilte Forges.
+- Funktioniert Radicle über TOR? Unterstützt es Git LFS und/oder Git Annex?
