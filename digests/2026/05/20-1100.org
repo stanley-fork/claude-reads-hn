@@ -1,0 +1,546 @@
+#+TITLE: HN Digest 2026-05-20 11:00:00 UT UTC
+#+DATE: 2026-05-20T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+100K Rust lines, kernel escapes, and Google finally kills Search as we knew it
+
+* Highlights
+- 100K Rust lines in 4 weeks: AI vibe coding reaches distributed systems
+- CopyFail: 4 bytes to escape your Kubernetes pod
+- Google Search box gets AI lobotomy, comments explode
+- Railway post-mortem: GCP murdered them, then blamed automation
+- Gold obsession: humans still hypnotized by shiny rocks
+
+* Stories
+
+** Learnings from 100K lines of Rust with AI :rust:ai:distributed-systems:vibe-coding:
+:PROPERTIES:
+:ID:       48205415
+:URL:      https://zfhuang99.github.io/rust/claude%20code/codex/contracts/spec-driven%20development/2025/12/01/rust-with-ai.html
+:HN_URL:   https://news.ycombinator.com/item?id=48205415
+:POINTS:   22
+:COMMENTS: 13
+:BY:       pramodbiligiri
+:END:
+
+*** TLDR
+AI Director at Texas Instruments built a Rust-based multi-Paxos consensus engine (modernizing Azure's RSL) in 3 months: 100K lines in 4 weeks, then 3 weeks of optimization from 23K to 300K ops/sec. Key techniques: AI-generated code contracts with preconditions/postconditions/invariants that catch bugs, lightweight spec-driven development via user stories, and iterative AI-assisted performance tuning where AI instruments code, analyzes bottlenecks, and proposes fixes.
+
+*** Take
+The $100/month Anthropic subscription as psychological forcing function is peak vibe coding energy. 'If I don't ship before bed, I'm wasting money.' Finally, a productivity hack that doesn't involve cold showers.
+
+*** Comments
+
+**** jdw64
+:PROPERTIES:
+:COMMENT_ID: 48205416
+:END:
+Whenever I use AI for Rust, it makes an insane amount of lifetime errors. I have no idea how people are churning out so many lines of code so quickly.
+
+**** faangguyindia
+:PROPERTIES:
+:COMMENT_ID: 48205417
+:END:
+Rust code generation consumes lot of token. Go is much better target, i've observed rails/ruby code is also much easier for AI to spit out. And Haskell flies with AI
+
+**** torben-friis
+:PROPERTIES:
+:COMMENT_ID: 48205418
+:END:
+~1300 tests for 130k lines averages out to a test per 100 lines - isn't this awfully low for a highly reliable distributed systems codebase?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用AI编写10万行Rust代码的经验教训
+***** TLDR
+TI的AI总监用3个月构建了Rust版多Paxos共识引擎(现代化Azure RSL):4周写10万行代码,3周将性能从2.3万ops/s优化到30万ops/s。核心技术:AI生成代码契约捕获bug,轻量级用户故事驱动开发,以及AI辅助性能调优。
+***** Take
+每月100美元的Anthropic订阅成了心理鞭策工具。'睡前不写代码就是浪费钱'——终于有个不用洗冷水澡的生产力技巧了。
+***** Comments
+- 每次用AI写Rust都会产生大量生命周期错误。不知道大家是怎么这么快写出这么多代码的。
+- Rust代码生成消耗大量token。Go更适合,Ruby/Rails也容易生成。Haskell配合AI效果很好。
+- 13万行代码只有1300个测试,平均100行一个测试——对高可靠分布式系统来说是不是太少了?
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AIで10万行のRustを書いて学んだこと
+***** TLDR
+TIのAIディレクターが3ヶ月でRustベースのマルチPaxosコンセンサスエンジンを構築。10万行を4週間で、23K ops/secから30万ops/secへの最適化を3週間で達成。AI生成のコード契約、ユーザーストーリー駆動開発、AI支援のパフォーマンスチューニングが鍵。
+***** Take
+月額100ドルのAnthropicサブスクを心理的な強制力として使うのは究極のバイブコーディング。「寝る前にコード書かないとお金の無駄」。冷水シャワー不要の生産性ハック。
+***** Comments
+- AIでRust書くと大量のライフタイムエラーが出る。みんなどうやってそんなに速くコード書けてるの？
+- Rustのコード生成はトークン消費が激しい。Goの方が良い。Haskellは AIと相性抜群。
+- 13万行に1300テストは100行に1テスト——高信頼性分散システムには少なすぎない？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AI로 10만 줄의 Rust를 작성하며 배운 것들
+***** TLDR
+TI의 AI 디렉터가 3개월 만에 Rust 기반 멀티 Paxos 합의 엔진 구축. 4주 만에 10만 줄, 3주 만에 23K에서 30만 ops/sec로 최적화. AI 생성 코드 계약, 사용자 스토리 기반 개발, AI 보조 성능 튜닝이 핵심.
+***** Take
+월 100달러 Anthropic 구독을 심리적 강제 도구로 사용하는 건 바이브 코딩의 정점. '자기 전에 코드 안 쓰면 돈 낭비.' 드디어 찬물 샤워 없는 생산성 해킹.
+***** Comments
+- AI로 Rust 쓰면 엄청난 라이프타임 에러가 난다. 사람들이 어떻게 그렇게 빨리 코드를 쓰는지 모르겠다.
+- Rust 코드 생성은 토큰을 많이 소모한다. Go가 더 낫고, Haskell은 AI와 잘 맞는다.
+- 13만 줄에 1300개 테스트면 100줄당 1개인데—고신뢰성 분산 시스템치고 너무 적지 않나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Aprendizajes de 100K líneas de Rust con IA
+***** TLDR
+Director de IA en TI construyó motor de consenso multi-Paxos en Rust en 3 meses: 100K líneas en 4 semanas, optimización de 23K a 300K ops/seg en 3 semanas. Técnicas clave: contratos de código generados por IA, desarrollo dirigido por historias de usuario, y ajuste de rendimiento asistido por IA.
+***** Take
+La suscripción de $100/mes a Anthropic como mecanismo psicológico de presión es puro vibe coding. 'Si no programo antes de dormir, estoy desperdiciando dinero.' Por fin un hack de productividad sin duchas frías.
+***** Comments
+- Cada vez que uso IA para Rust, genera una cantidad absurda de errores de lifetime. No entiendo cómo la gente escribe tanto código tan rápido.
+- La generación de código Rust consume muchos tokens. Go es mejor objetivo. Haskell vuela con IA.
+- ~1300 tests para 130k líneas es un test cada 100 líneas—¿no es muy poco para sistemas distribuidos de alta fiabilidad?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Erkenntnisse aus 100K Zeilen Rust mit KI
+***** TLDR
+KI-Direktor bei TI baute Rust-basierte Multi-Paxos Konsens-Engine in 3 Monaten: 100K Zeilen in 4 Wochen, Optimierung von 23K auf 300K ops/sec in 3 Wochen. Schlüsseltechniken: KI-generierte Code-Verträge, User-Story-getriebene Entwicklung und KI-gestützte Performance-Optimierung.
+***** Take
+Das $100/Monat Anthropic-Abo als psychologischer Zwangsmechanismus ist Peak Vibe Coding. 'Wenn ich vor dem Schlafen nicht programmiere, verschwende ich Geld.' Endlich ein Produktivitäts-Hack ohne Kaltduschen.
+***** Comments
+- Wenn ich KI für Rust nutze, produziert sie wahnsinnig viele Lifetime-Fehler. Keine Ahnung, wie Leute so schnell so viel Code schreiben.
+- Rust-Codegenerierung verbraucht viele Tokens. Go ist besser geeignet. Haskell fliegt mit KI.
+- ~1300 Tests für 130k Zeilen bedeutet ein Test pro 100 Zeilen—ist das nicht sehr wenig für hochzuverlässige verteilte Systeme?
+** CopyFail: From Pod to Host :security:kubernetes:linux:container-escape:
+:PROPERTIES:
+:ID:       48196337
+:URL:      https://xint.io/blog/copy-fail-pod-to-host
+:HN_URL:   https://news.ycombinator.com/item?id=48196337
+:POINTS:   23
+:COMMENTS: 3
+:BY:       tptacek
+:END:
+
+*** TLDR
+CVE-2026-31431 (CopyFail) is a kernel memory corruption flaw that gives attackers a controlled 4-byte write into the Linux page cache. It works by confusing IPSec ESP code via AF_ALG sockets. Unlike typical kernel exploits, it's deterministic and portable across kernels from 2017-2026. Attack paths include cross-container poisoning (corrupt shared image layers in page cache to backdoor neighboring pods) and full container escape (poison runc binary to get host root on next kubectl exec).
+
+*** Take
+A 4-byte write primitive that crosses container boundaries through shared page cache. The fact that it affects 9 years of kernels while being invisible to disk scanners is the kind of thing that keeps security engineers awake at night. At least VMs still work.
+
+*** Comments
+
+**** exceptione
+:PROPERTIES:
+:COMMENT_ID: 48196338
+:END:
+I had tried this exploit with rootless podman containers to write to read-only mounts, but the exploit failed. I am not sure if the default container runtime in Podman is resistant against these attacks.
+
+**** AlfieJones
+:PROPERTIES:
+:COMMENT_ID: 48196339
+:END:
+It feels like AI is speeding up bug discovery faster than security can keep up. Curious if this is temporary or just the new normal.
+
+**** louwrentius
+:PROPERTIES:
+:COMMENT_ID: 48196340
+:END:
+Maybe I'm missing something but because of this kind of risk, an old fashioned virtual machine feels like a more robust security boundary.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+CopyFail:从Pod逃逸到宿主机
+***** TLDR
+CVE-2026-31431(CopyFail)是一个内核内存损坏漏洞,可向Linux页面缓存进行可控的4字节写入。它通过AF_ALG套接字混淆IPSec ESP代码。与典型内核漏洞不同,它具有确定性且可移植(2017-2026年内核)。攻击路径包括跨容器投毒(污染共享镜像层)和完整容器逃逸(污染runc二进制获取宿主机root权限)。
+***** Take
+一个4字节写入原语就能通过共享页面缓存跨越容器边界。这个漏洞影响9年的内核且对磁盘扫描器不可见,是让安全工程师彻夜难眠的那种东西。至少虚拟机还能用。
+***** Comments
+- 我尝试用rootless podman容器测试这个漏洞写入只读挂载,但失败了。不确定Podman的默认容器运行时是否能抵御这类攻击。
+- 感觉AI加速发现bug的速度比安全能跟上的还快。好奇这是暂时的还是新常态。
+- 也许我遗漏了什么,但因为这类风险,传统虚拟机感觉是更稳固的安全边界。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+CopyFail: Podからホストへの脱出
+***** TLDR
+CVE-2026-31431(CopyFail)はLinuxページキャッシュへの制御された4バイト書き込みを可能にするカーネルメモリ破損の脆弱性。AF_ALGソケット経由でIPSec ESPコードを混乱させる。典型的なカーネルエクスプロイトと異なり、決定論的で2017-2026年のカーネルに移植可能。攻撃経路は、クロスコンテナ汚染（共有イメージレイヤーを汚染）と完全なコンテナエスケープ（runcバイナリを汚染してホストroot取得）。
+***** Take
+共有ページキャッシュを通じてコンテナ境界を越える4バイト書き込みプリミティブ。9年分のカーネルに影響し、ディスクスキャナーに見えないという事実は、セキュリティエンジニアを夜も眠れなくさせる類のもの。少なくともVMはまだ使える。
+***** Comments
+- rootless podmanコンテナでこのエクスプロイトを試したが、読み取り専用マウントへの書き込みは失敗した。Podmanのデフォルトランタイムがこの攻撃に耐性があるかは不明。
+- AIがセキュリティが追いつけるより速くバグを発見している気がする。これが一時的なのか新しい常態なのか気になる。
+- 何か見落としてるかもしれないが、このようなリスクがあると、昔ながらのVMの方が堅牢なセキュリティ境界に感じる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+CopyFail: Pod에서 호스트로 탈출
+***** TLDR
+CVE-2026-31431(CopyFail)은 Linux 페이지 캐시에 제어된 4바이트 쓰기를 허용하는 커널 메모리 손상 취약점. AF_ALG 소켓으로 IPSec ESP 코드를 혼란시킨다. 일반적인 커널 익스플로잇과 달리 결정론적이고 2017-2026 커널에 이식 가능. 공격 경로: 크로스 컨테이너 오염(공유 이미지 레이어 오염)과 완전한 컨테이너 탈출(runc 바이너리 오염으로 호스트 root 획득).
+***** Take
+공유 페이지 캐시를 통해 컨테이너 경계를 넘는 4바이트 쓰기 프리미티브. 9년간의 커널에 영향을 미치면서 디스크 스캐너에 보이지 않는다는 사실은 보안 엔지니어를 밤잠 못 자게 하는 종류다. 적어도 VM은 아직 작동한다.
+***** Comments
+- rootless podman 컨테이너에서 읽기 전용 마운트에 쓰기를 시도했지만 실패했다. Podman의 기본 런타임이 이 공격에 저항력이 있는지 모르겠다.
+- AI가 보안이 따라갈 수 있는 것보다 빠르게 버그를 발견하는 것 같다. 이게 일시적인지 새로운 일상인지 궁금하다.
+- 뭔가 놓치고 있을 수도 있지만, 이런 위험 때문에 구식 가상 머신이 더 견고한 보안 경계처럼 느껴진다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+CopyFail: Del Pod al Host
+***** TLDR
+CVE-2026-31431 (CopyFail) es una vulnerabilidad de corrupción de memoria del kernel que permite escritura controlada de 4 bytes en la caché de páginas de Linux. Funciona confundiendo código IPSec ESP vía sockets AF_ALG. A diferencia de exploits típicos, es determinístico y portable en kernels de 2017-2026. Rutas de ataque: envenenamiento cross-container y escape completo de contenedor (envenenar binario runc para obtener root en el host).
+***** Take
+Un primitivo de escritura de 4 bytes que cruza límites de contenedores a través de la caché de páginas compartida. El hecho de que afecte 9 años de kernels siendo invisible a escáneres de disco es lo que mantiene despiertos a los ingenieros de seguridad. Al menos las VMs todavía funcionan.
+***** Comments
+- Intenté este exploit con contenedores podman rootless para escribir en montajes de solo lectura, pero falló. No estoy seguro si el runtime por defecto de Podman es resistente a estos ataques.
+- Parece que la IA está acelerando el descubrimiento de bugs más rápido de lo que la seguridad puede seguir. Curioso si esto es temporal o la nueva normalidad.
+- Quizás me falta algo, pero por este tipo de riesgo, una máquina virtual tradicional parece un límite de seguridad más robusto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+CopyFail: Vom Pod zum Host
+***** TLDR
+CVE-2026-31431 (CopyFail) ist eine Kernel-Speicherkorruptionslücke mit kontrolliertem 4-Byte-Schreiben in den Linux-Page-Cache. Sie verwirrt IPSec-ESP-Code über AF_ALG-Sockets. Anders als typische Kernel-Exploits ist sie deterministisch und über Kernel von 2017-2026 portabel. Angriffspfade: Cross-Container-Vergiftung und vollständiger Container-Escape (runc-Binary vergiften für Host-Root).
+***** Take
+Ein 4-Byte-Schreib-Primitiv, das Container-Grenzen über geteilten Page-Cache überschreitet. Die Tatsache, dass es 9 Jahre an Kerneln betrifft und für Disk-Scanner unsichtbar ist, ist genau das, was Security-Engineers nachts wach hält. Wenigstens funktionieren VMs noch.
+***** Comments
+- Ich habe diesen Exploit mit rootless Podman-Containern versucht, um auf Read-Only-Mounts zu schreiben, aber es schlug fehl. Nicht sicher, ob Podmans Standard-Runtime gegen diese Angriffe resistent ist.
+- Es fühlt sich an, als würde KI Bugs schneller entdecken, als die Sicherheit mithalten kann. Interessant, ob das temporär ist oder die neue Normalität.
+- Vielleicht übersehe ich etwas, aber wegen solcher Risiken fühlt sich eine altmodische VM wie eine robustere Sicherheitsgrenze an.
+** Google changes its search box :google:search:ai:agents:
+:PROPERTIES:
+:ID:       48197370
+:URL:      https://blog.google/products-and-platforms/products/search/search-io-2026/
+:HN_URL:   https://news.ycombinator.com/item?id=48197370
+:POINTS:   565
+:COMMENTS: 749
+:BY:       berkeleyjunk
+:END:
+
+*** TLDR
+Google announced the biggest Search box upgrade in 25 years at I/O 2026. The new AI-powered box dynamically expands, offers AI suggestions beyond autocomplete, accepts multimodal inputs (text, images, files, videos, Chrome tabs). Gemini 3.5 Flash is now default in AI Mode. Also announced: 'information agents' that monitor the web 24/7 for your specific queries, agentic booking for local services, and 'Antigravity' integration that builds custom mini-apps/dashboards in Search.
+
+*** Take
+The 'Search agents' monitoring the web 24/7 is Google's way of saying 'we're now watching what you're interested in, forever, in real-time.' Nilay Patel's 'Google Zero' prediction is basically here: why click a link when the AI already synthesized it for you?
+
+*** Comments
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 48197371
+:END:
+Nilay Patel has been talking about 'Google Zero' - the moment when Google effectively stops sending any traffic to other sites - for a few years now.
+
+**** notsydonia
+:PROPERTIES:
+:COMMENT_ID: 48197372
+:END:
+I only use Google for opening hours and product research these days. Yesterday I clicked on AI mode and it was clearly infiltrated by undisclosed advertising.
+
+**** imoverclocked
+:PROPERTIES:
+:COMMENT_ID: 48197373
+:END:
+I don't trust facts from LLMs. When searching for something, I usually want primary sources. As soon as a number is involved, I do my best to not even look at the AI output.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Google改变了它的搜索框
+***** TLDR
+Google在I/O 2026上宣布了25年来最大的搜索框升级。新的AI搜索框动态扩展,提供超越自动补全的AI建议,接受多模态输入(文字、图片、文件、视频、Chrome标签)。Gemini 3.5 Flash现在是AI模式的默认模型。还宣布了全天候监控网络的'信息代理'、本地服务的代理预订功能,以及在搜索中构建定制迷你应用的'Antigravity'集成。
+***** Take
+'搜索代理'全天候监控网络是Google在说'我们现在实时永久监视你感兴趣的东西'。Nilay Patel的'Google Zero'预测基本实现了:既然AI已经帮你综合好了,为什么还要点链接?
+***** Comments
+- Nilay Patel几年来一直在谈论'Google Zero'——Google实际上停止向其他网站发送流量的时刻。
+- 现在我只用Google查营业时间和产品研究。昨天我点了AI模式,里面明显有未披露的广告。
+- 我不信任LLM的事实。搜索时我通常想要原始来源。只要涉及数字,我就尽量不看AI输出。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Googleが検索ボックスを変更
+***** TLDR
+GoogleはI/O 2026で25年ぶりの最大の検索ボックスアップグレードを発表。新しいAI搭載ボックスは動的に拡張し、オートコンプリートを超えたAI提案を提供し、マルチモーダル入力（テキスト、画像、ファイル、動画、Chromeタブ）を受け付ける。Gemini 3.5 FlashがAIモードのデフォルトに。また、24時間ウェブを監視する「情報エージェント」、ローカルサービスのエージェント予約、検索でカスタムミニアプリを構築する「Antigravity」統合も発表。
+***** Take
+24時間ウェブを監視する「検索エージェント」は、Googleが「あなたの興味を永遠にリアルタイムで監視します」と言っているようなもの。Nilay Patelの「Google Zero」予測はほぼ実現：AIがすでに要約してくれるのに、なぜリンクをクリックする？
+***** Comments
+- Nilay Patelは何年も前から「Google Zero」について話している——Googleが他のサイトへのトラフィック送信を事実上停止する瞬間のこと。
+- 最近はGoogleを営業時間と商品リサーチにしか使わない。昨日AIモードをクリックしたら、明らかに非開示の広告が入っていた。
+- LLMの事実を信用しない。検索する時は一次情報が欲しい。数字が関わると、AI出力を見ないように心がけている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Google이 검색창을 바꾸다
+***** TLDR
+Google이 I/O 2026에서 25년 만의 최대 검색창 업그레이드를 발표. 새로운 AI 검색창은 동적으로 확장되고, 자동완성을 넘어서는 AI 제안을 제공하며, 멀티모달 입력(텍스트, 이미지, 파일, 동영상, Chrome 탭)을 받는다. Gemini 3.5 Flash가 AI 모드의 기본값이 됨. 또한 24시간 웹을 모니터링하는 '정보 에이전트', 로컬 서비스의 에이전트 예약, 검색에서 커스텀 미니 앱을 만드는 'Antigravity' 통합도 발표.
+***** Take
+24시간 웹을 모니터링하는 '검색 에이전트'는 Google이 '이제 당신의 관심사를 실시간으로 영원히 지켜보겠다'고 말하는 것. Nilay Patel의 'Google Zero' 예측이 거의 실현됐다: AI가 이미 종합해줬는데 왜 링크를 클릭해?
+***** Comments
+- Nilay Patel은 몇 년 전부터 'Google Zero'에 대해 이야기해왔다—Google이 다른 사이트로 트래픽을 보내는 것을 사실상 중단하는 순간.
+- 요즘은 Google을 영업시간과 제품 조사에만 사용한다. 어제 AI 모드를 클릭했는데 비공개 광고가 분명히 침투해 있었다.
+- LLM의 사실을 신뢰하지 않는다. 검색할 때 보통 1차 출처를 원한다. 숫자가 관련되면 AI 출력을 안 보려고 노력한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Google cambia su caja de búsqueda
+***** TLDR
+Google anunció la mayor actualización de la caja de búsqueda en 25 años en I/O 2026. La nueva caja con IA se expande dinámicamente, ofrece sugerencias de IA más allá del autocompletado, acepta entradas multimodales (texto, imágenes, archivos, videos, pestañas de Chrome). Gemini 3.5 Flash es ahora el modelo predeterminado en modo IA. También anunciaron 'agentes de información' que monitorean la web 24/7, reservas agénticas para servicios locales, e integración 'Antigravity' que construye mini-apps personalizadas en Search.
+***** Take
+Los 'agentes de búsqueda' monitoreando la web 24/7 es la forma de Google de decir 'ahora estamos observando lo que te interesa, para siempre, en tiempo real.' La predicción de 'Google Zero' de Nilay Patel está básicamente aquí: ¿por qué hacer clic en un enlace cuando la IA ya lo sintetizó?
+***** Comments
+- Nilay Patel ha estado hablando de 'Google Zero'—el momento en que Google efectivamente deja de enviar tráfico a otros sitios—desde hace años.
+- Solo uso Google para horarios de apertura e investigación de productos hoy en día. Ayer hice clic en modo IA y claramente estaba infiltrado con publicidad no revelada.
+- No confío en los hechos de los LLMs. Cuando busco algo, usualmente quiero fuentes primarias. Cuando hay números involucrados, hago lo posible por no mirar la salida de IA.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Google ändert seine Suchbox
+***** TLDR
+Google kündigte auf der I/O 2026 das größte Suchbox-Upgrade seit 25 Jahren an. Die neue KI-gestützte Box erweitert sich dynamisch, bietet KI-Vorschläge über Autovervollständigung hinaus und akzeptiert multimodale Eingaben (Text, Bilder, Dateien, Videos, Chrome-Tabs). Gemini 3.5 Flash ist jetzt Standard im KI-Modus. Außerdem angekündigt: 'Informationsagenten' die das Web 24/7 überwachen, agentische Buchung für lokale Dienste und 'Antigravity'-Integration die Custom-Mini-Apps in Search baut.
+***** Take
+Die 'Such-Agenten' die das Web 24/7 überwachen sind Googles Art zu sagen 'wir beobachten jetzt für immer in Echtzeit, was dich interessiert.' Nilay Patels 'Google Zero'-Vorhersage ist praktisch da: Warum auf einen Link klicken, wenn die KI es schon für dich zusammengefasst hat?
+***** Comments
+- Nilay Patel spricht seit Jahren über 'Google Zero'—den Moment, in dem Google effektiv aufhört, Traffic an andere Seiten zu senden.
+- Ich nutze Google heutzutage nur noch für Öffnungszeiten und Produktrecherche. Gestern klickte ich auf KI-Modus und es war eindeutig mit nicht offengelegter Werbung durchsetzt.
+- Ich vertraue Fakten von LLMs nicht. Beim Suchen will ich normalerweise Primärquellen. Sobald eine Zahl dabei ist, versuche ich die KI-Ausgabe nicht mal anzusehen.
+** Incident Report: Railway Blocked by Google Cloud (Resolved) :cloud:gcp:outage:postmortem:
+:PROPERTIES:
+:ID:       48201484
+:URL:      https://blog.railway.com/p/incident-report-may-19-2026-gcp-account-outage
+:HN_URL:   https://news.ycombinator.com/item?id=48201484
+:POINTS:   483
+:COMMENTS: 309
+:BY:       aarondf
+:END:
+
+*** TLDR
+Railway's GCP account was suspended on May 19 at 22:20 UTC as part of an automated action affecting many accounts. The 8-hour outage cascaded beyond GCP: their network control plane was GCP-hosted, so when route caches expired, workloads on Railway Metal and AWS also returned 404s. Post-mortem reveals the architectural flaw: single dependency on GCP for workload discoverability. Railway is now removing GCP from their data plane hot path and extending HA database shards across AWS and Metal.
+
+*** Take
+It has been 0 days since GCP took down a startup. Railway's post-mortem is refreshingly honest: 'We own this one. Your customers don't care if it was Google or Railway.' The fact that they're now removing GCP from the hot path says everything about cloud vendor trust.
+
+*** Comments
+
+**** tardwrangler
+:PROPERTIES:
+:COMMENT_ID: 48201485
+:END:
+Everyone is eager to point a finger at Google, but I've been a user of Railway for a while now, and I've seen enough nonsense to want to hear what GCP has to say about this before drawing conclusions.
+
+**** dangoodmanUT
+:PROPERTIES:
+:COMMENT_ID: 48201486
+:END:
+It has been 0 days since GCP has taken down a startup (again). You see this at least once a year. Never heard of this from AWS or Azure.
+
+**** r721
+:PROPERTIES:
+:COMMENT_ID: 48201487
+:END:
+Post mortem is now available: https://blog.railway.com/p/incident-report-may-19-2026-gcp-account-outage
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+事故报告:Railway被Google Cloud封禁(已解决)
+***** TLDR
+Railway的GCP账户于5月19日22:20 UTC因影响多个账户的自动化操作被暂停。8小时的故障影响超出了GCP:他们的网络控制平面托管在GCP上,当路由缓存过期后,Railway Metal和AWS上的工作负载也返回404。事后分析揭示了架构缺陷:工作负载发现对GCP的单一依赖。Railway现在正在将GCP从数据平面热路径中移除,并将HA数据库分片扩展到AWS和Metal。
+***** Take
+GCP搞垮创业公司已经0天了。Railway的事后分析相当诚实:'这是我们的问题。你的客户不在乎是Google还是Railway的错。'他们现在要把GCP从热路径移除,这说明了一切关于云厂商信任的问题。
+***** Comments
+- 大家都急着指责Google,但我用Railway有段时间了,见过足够多的问题,想在下结论前听听GCP怎么说。
+- GCP搞垮创业公司已经0天了。每年至少一次。AWS或Azure从没听说过这种事。
+- 事后分析已发布:https://blog.railway.com/p/incident-report-may-19-2026-gcp-account-outage
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+インシデントレポート: RailwayがGoogle Cloudにブロックされる（解決済み）
+***** TLDR
+RailwayのGCPアカウントは5月19日22:20 UTCに、多数のアカウントに影響する自動化アクションの一環として停止された。8時間の障害はGCPを超えて波及：ネットワークコントロールプレーンがGCPホストだったため、ルートキャッシュが期限切れになると、Railway MetalとAWSのワークロードも404を返すように。ポストモーテムが明らかにした設計上の欠陥：ワークロード検出のGCPへの単一依存。Railwayは現在、GCPをデータプレーンのホットパスから除去し、HAデータベースシャードをAWSとMetalに拡張中。
+***** Take
+GCPがスタートアップを潰してから0日が経過。Railwayのポストモーテムは驚くほど正直：「これは私たちの責任。あなたの顧客はGoogleかRailwayかなんて気にしない。」GCPをホットパスから除去するという事実が、クラウドベンダーへの信頼について全てを物語っている。
+***** Comments
+- みんなGoogleを責めたがっているが、Railwayを使ってきて十分な問題を見てきた。結論を出す前にGCPの言い分を聞きたい。
+- GCPがスタートアップを潰してから0日。毎年最低1回はある。AWSやAzureでこんな話は聞いたことない。
+- ポストモーテムが公開された: https://blog.railway.com/p/incident-report-may-19-2026-gcp-account-outage
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+사건 보고서: Railway가 Google Cloud에 의해 차단됨 (해결됨)
+***** TLDR
+Railway의 GCP 계정이 5월 19일 22:20 UTC에 여러 계정에 영향을 미치는 자동화 조치의 일환으로 정지됨. 8시간 장애는 GCP를 넘어 확산: 네트워크 컨트롤 플레인이 GCP에 호스팅되어 있어 라우트 캐시가 만료되자 Railway Metal과 AWS의 워크로드도 404를 반환. 사후 분석이 밝힌 설계 결함: 워크로드 검색의 GCP 단일 의존성. Railway는 현재 GCP를 데이터 플레인 핫 패스에서 제거하고 HA 데이터베이스 샤드를 AWS와 Metal로 확장 중.
+***** Take
+GCP가 스타트업을 죽인 지 0일. Railway의 사후 분석은 놀라울 정도로 솔직하다: '이건 우리 책임. 당신의 고객은 Google인지 Railway인지 신경 쓰지 않는다.' GCP를 핫 패스에서 제거한다는 사실이 클라우드 벤더 신뢰에 대해 모든 것을 말해준다.
+***** Comments
+- 모두 Google을 비난하고 싶어하지만, Railway를 꽤 오래 썼고 충분한 문제를 봤다. 결론 내리기 전에 GCP 입장을 듣고 싶다.
+- GCP가 스타트업을 죽인 지 0일. 매년 최소 한 번은 있다. AWS나 Azure에서는 이런 얘기 못 들었다.
+- 사후 분석 공개됨: https://blog.railway.com/p/incident-report-may-19-2026-gcp-account-outage
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Informe de Incidente: Railway Bloqueado por Google Cloud (Resuelto)
+***** TLDR
+La cuenta GCP de Railway fue suspendida el 19 de mayo a las 22:20 UTC como parte de una acción automatizada que afectó a muchas cuentas. La interrupción de 8 horas se propagó más allá de GCP: su plano de control de red estaba alojado en GCP, así que cuando las cachés de rutas expiraron, las cargas de trabajo en Railway Metal y AWS también devolvieron 404. El post-mortem revela el fallo arquitectónico: dependencia única de GCP para el descubrimiento de cargas. Railway ahora está eliminando GCP de la ruta crítica de su plano de datos y extendiendo los shards de base de datos HA a AWS y Metal.
+***** Take
+Han pasado 0 días desde que GCP tumbó una startup. El post-mortem de Railway es refrescantemente honesto: 'Esto es responsabilidad nuestra. A tus clientes no les importa si fue Google o Railway.' El hecho de que estén eliminando GCP de la ruta crítica dice todo sobre la confianza en proveedores cloud.
+***** Comments
+- Todos quieren culpar a Google, pero he usado Railway un tiempo y he visto suficientes problemas como para querer escuchar qué dice GCP antes de sacar conclusiones.
+- Han pasado 0 días desde que GCP tumbó una startup (otra vez). Esto pasa al menos una vez al año. Nunca he oído esto de AWS o Azure.
+- El post-mortem ya está disponible: https://blog.railway.com/p/incident-report-may-19-2026-gcp-account-outage
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Vorfallbericht: Railway von Google Cloud blockiert (Gelöst)
+***** TLDR
+Railways GCP-Konto wurde am 19. Mai um 22:20 UTC als Teil einer automatisierten Aktion suspendiert, die viele Konten betraf. Der 8-stündige Ausfall weitete sich über GCP hinaus aus: Ihre Netzwerk-Control-Plane war GCP-gehostet, also als die Route-Caches abliefen, gaben auch Workloads auf Railway Metal und AWS 404er zurück. Das Post-Mortem enthüllt den Architekturfehler: einzelne Abhängigkeit von GCP für Workload-Erkennung. Railway entfernt jetzt GCP aus dem Hot Path ihrer Data Plane und erweitert HA-Datenbank-Shards auf AWS und Metal.
+***** Take
+Es sind 0 Tage vergangen seit GCP ein Startup abgeschossen hat. Railways Post-Mortem ist erfrischend ehrlich: 'Das geht auf uns. Deine Kunden interessiert nicht, ob es Google oder Railway war.' Die Tatsache, dass sie jetzt GCP aus dem Hot Path entfernen, sagt alles über Cloud-Anbieter-Vertrauen.
+***** Comments
+- Alle wollen auf Google zeigen, aber ich nutze Railway schon eine Weile und habe genug Unsinn gesehen, um erst hören zu wollen, was GCP dazu sagt, bevor ich Schlüsse ziehe.
+- Es sind 0 Tage vergangen seit GCP ein Startup abgeschossen hat (wieder). Das passiert mindestens einmal im Jahr. Von AWS oder Azure hört man das nie.
+- Post-Mortem ist jetzt verfügbar: https://blog.railway.com/p/incident-report-may-19-2026-gcp-account-outage
+** The weird, wild story of humanity's obsession with gold :economics:history:gold:
+:PROPERTIES:
+:ID:       48205026
+:URL:      https://www.economist.com/culture/2026/05/14/the-weird-wild-story-of-humanitys-obsession-with-gold
+:HN_URL:   https://news.ycombinator.com/item?id=48205026
+:POINTS:   8
+:COMMENTS: 2
+:BY:       andsoitis
+:END:
+
+*** TLDR
+Lloyd Blankfein (Goldman Sachs) once bought a gold kilogram as a conversation piece. At dinner parties, guests would become 'slightly mesmerised' and 'no one ever wanted to let go of it.' ［Full article paywalled - The Economist reviews a new book on gold's history as store of value, not too rare to be useless, not common enough to lose its allure.］
+
+*** Take
+Humans spent millennia obsessing over shiny rocks, then created Bitcoin to obsess over imaginary ones. At least gold doesn't require a power grid.
+
+*** Comments
+
+**** Schlagbohrer
+:PROPERTIES:
+:COMMENT_ID: 48205027
+:END:
+One of gold's biggest virtues as a store of value on planet earth is that it isn't so rare as to be useless, but it's rare enough that it functions as currency or high value storage. A goldilocks material for wealth transfer.
+
+**** sandworm101
+:PROPERTIES:
+:COMMENT_ID: 48205028
+:END:
+Is this an ad for shady 'buy gold' investment scams?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+人类痴迷黄金的奇异狂野故事
+***** TLDR
+Lloyd Blankfein(高盛)曾买了一公斤黄金作为谈资。在晚宴上,客人们会'有些入迷','没人想放下它'。［全文付费墙-《经济学人》评论一本关于黄金作为价值储存历史的新书,不太稀有以至于无用,但又不够普遍以至于失去魅力。］
+***** Take
+人类花了数千年痴迷闪闪发光的石头,然后创造了比特币来痴迷虚拟的。至少黄金不需要电网。
+***** Comments
+- 黄金作为地球价值储存的最大优点之一是它不至于稀有到无用,但又足够稀有可以作为货币或高价值存储。一种财富转移的'金发女孩'材料。
+- 这是不正当'买黄金'投资骗局的广告吗?
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+人類の金への執着の奇妙で荒々しい物語
+***** TLDR
+Lloyd Blankfein（ゴールドマン・サックス）はかつて会話のネタとして金1キロを購入。ディナーパーティーで、ゲストは「少し魅了され」「誰も手放したがらなかった」。［記事全文は有料—エコノミスト誌が金の価値貯蔵としての歴史に関する新刊をレビュー。使えないほど稀少ではなく、魅力を失うほど一般的でもない。］
+***** Take
+人類は何千年もキラキラした石に執着し、それから仮想のものに執着するためにビットコインを作った。少なくとも金は電力網を必要としない。
+***** Comments
+- 地球上で金が価値貯蔵として持つ最大の美点の一つは、使えないほど稀少ではないが、通貨や高価値貯蔵として機能するには十分稀少だということ。富の移転にちょうど良い素材。
+- これは怪しい「金を買え」投資詐欺の広告？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+인류의 금에 대한 기이하고 야생적인 집착 이야기
+***** TLDR
+Lloyd Blankfein(골드만삭스)은 한때 대화 소재로 금 1kg을 샀다. 저녁 파티에서 손님들은 '약간 매혹되어' '아무도 놓고 싶어하지 않았다'. ［전체 기사 유료—이코노미스트가 가치 저장 수단으로서의 금 역사에 관한 신간을 리뷰. 쓸모없을 정도로 희귀하지 않지만, 매력을 잃을 정도로 흔하지도 않다.］
+***** Take
+인류는 수천 년 동안 반짝이는 돌에 집착했고, 그 다음엔 가상의 것에 집착하려고 비트코인을 만들었다. 적어도 금은 전력망이 필요 없다.
+***** Comments
+- 지구에서 금이 가치 저장 수단으로 가진 가장 큰 장점 중 하나는 쓸모없을 정도로 희귀하지 않지만, 화폐나 고가치 저장으로 기능할 정도로 충분히 희귀하다는 것. 부의 이전에 딱 맞는 골디락스 물질.
+- 이거 수상한 '금 사라' 투자 사기 광고인가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La extraña y salvaje historia de la obsesión de la humanidad con el oro
+***** TLDR
+Lloyd Blankfein (Goldman Sachs) una vez compró un kilogramo de oro como pieza de conversación. En las cenas, los invitados quedaban 'ligeramente hipnotizados' y 'nadie quería soltarlo'. ［Artículo completo tras paywall—The Economist reseña un nuevo libro sobre la historia del oro como depósito de valor, no tan raro como para ser inútil, no tan común como para perder su atractivo.］
+***** Take
+Los humanos pasaron milenios obsesionados con rocas brillantes, luego crearon Bitcoin para obsesionarse con las imaginarias. Al menos el oro no requiere una red eléctrica.
+***** Comments
+- Una de las mayores virtudes del oro como depósito de valor en el planeta es que no es tan raro como para ser inútil, pero es lo suficientemente raro para funcionar como moneda o almacenamiento de alto valor. Un material de ricitos de oro para la transferencia de riqueza.
+- ¿Es esto un anuncio de estafas turbias de inversión en oro?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die seltsame, wilde Geschichte der menschlichen Obsession mit Gold
+***** TLDR
+Lloyd Blankfein (Goldman Sachs) kaufte einmal ein Kilogramm Gold als Gesprächsstoff. Bei Dinnerpartys waren Gäste 'leicht fasziniert' und 'niemand wollte es loslassen'. ［Vollständiger Artikel hinter Paywall—The Economist rezensiert ein neues Buch über Golds Geschichte als Wertspeicher, nicht so selten um nutzlos zu sein, nicht häufig genug um seinen Reiz zu verlieren.］
+***** Take
+Menschen haben Jahrtausende damit verbracht, sich über glänzende Steine zu besessen, dann Bitcoin erschaffen, um sich über imaginäre zu obsessen. Wenigstens braucht Gold kein Stromnetz.
+***** Comments
+- Eine der größten Tugenden von Gold als Wertspeicher auf der Erde ist, dass es nicht so selten ist, um nutzlos zu sein, aber selten genug, um als Währung oder Hochwertspeicher zu funktionieren. Ein Goldlöckchen-Material für Vermögenstransfer.
+- Ist das eine Werbung für zwielichtige 'Gold kaufen'-Investmentbetrügereien?
