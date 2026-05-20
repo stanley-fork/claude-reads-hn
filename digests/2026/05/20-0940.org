@@ -1,0 +1,535 @@
+#+TITLE: HN Digest 2026-05-20 09:40:00 UT UTC
+#+DATE: 2026-05-20T09:40:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+C is cursed, Japan's trees wage war on sinuses, and Swiss cloud goes nonprofit
+
+* Highlights
+- Everything in C is undefined behavior (your compiler agrees)
+- Japan planted allergy trees nationwide in the 1950s - 43% now suffer
+- Infomaniak becomes a foundation to escape US data grabs
+- RISC-V's floating point: an extension for every occasion
+- Nostalgic electronics kits for those who miss soldering burns
+
+* Stories
+
+** Everything in C is undefined behavior :c:programming:compilers:undefined-behavior:
+:PROPERTIES:
+:ID:       48203698
+:URL:      https://blog.habets.se/2026/05/Everything-in-C-is-undefined-behavior.html
+:HN_URL:   https://news.ycombinator.com/item?id=48203698
+:POINTS:   168
+:COMMENTS: 177
+:BY:       lycopodiopsida
+:END:
+
+*** TLDR
+Blog post exploring the surprising amount of undefined behavior in C, from volatile access to unaligned pointers. Even reading a volatile int twice in printf() is technically UB. The language spec is more minefield than specification.
+
+*** Take
+After 20 years of writing C, HN commenters suddenly discover the language is held together by vibes and compiler goodwill. The real UB was the friends we segfaulted along the way.
+
+*** Comments
+
+**** muvlon
+:PROPERTIES:
+:COMMENT_ID: 48203712
+:END:
+Here's a way weirder example: volatile int x = 5; printf("%d in hex is 0x%x.\n", x, x); This is totally fine if x is just an int, but the volatile makes it UB.
+
+**** parasti
+:PROPERTIES:
+:COMMENT_ID: 48203756
+:END:
+I have never in my 20 years of writing C heard so much about undefined behavior as I have in the past 6 months on Hacker News. You write the code. If it doesn't work, you debug it.
+
+**** beeforpork
+:PROPERTIES:
+:COMMENT_ID: 48203801
+:END:
+The UB in unaligned pointers is even worse: an unaligned pointer in itself is UB, not only an access to it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+C语言中的一切都是未定义行为
+***** TLDR
+博客文章探讨了C语言中令人惊讶的大量未定义行为，从volatile访问到未对齐的指针。甚至在printf()中两次读取volatile int在技术上也是UB。
+***** Take
+写了20年C代码后，HN评论者突然发现这门语言全靠编译器的善意维系。真正的UB是我们一路上段错误的朋友们。
+***** Comments
+- 这有一个更奇怪的例子：volatile int x = 5; printf()中使用两次x在技术上是UB。
+- 我写了20年C从没在HN上听到这么多关于未定义行为的讨论。代码写了就调试。
+- 未对齐指针的UB更糟：未对齐的指针本身就是UB，不仅仅是访问它。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Cにおける全ては未定義動作
+***** TLDR
+volatile アクセスからアラインされていないポインタまで、C言語の驚くべき未定義動作について探求するブログ記事。printf()でvolatile intを2回読むことすら技術的にはUB。
+***** Take
+20年間Cを書いてきたHNコメンターが、この言語がコンパイラの善意で成り立っていることに突然気づいた。本当のUBは道中でセグフォした友達だった。
+***** Comments
+- もっと奇妙な例：volatile int x = 5; printf()で2回使うとUB。
+- 20年Cを書いてきたが、この半年でHNでこれほどUBの話を聞いたことはない。コードを書いて動かなければデバッグする。
+- アラインされていないポインタのUBはもっとひどい：アクセスだけでなくポインタ自体がUB。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+C의 모든 것은 정의되지 않은 동작이다
+***** TLDR
+volatile 접근부터 정렬되지 않은 포인터까지 C 언어의 놀라운 정의되지 않은 동작을 탐구하는 블로그 글. printf()에서 volatile int를 두 번 읽는 것조차 기술적으로 UB다.
+***** Take
+20년간 C를 작성한 HN 댓글러들이 갑자기 이 언어가 컴파일러의 선의로 유지된다는 걸 깨달았다. 진짜 UB는 길에서 세그폴트한 친구들이었다.
+***** Comments
+- 더 이상한 예시: volatile int x = 5; printf()에서 두 번 사용하면 UB.
+- 20년간 C를 작성했지만 지난 6개월간 HN에서 이렇게 UB 얘기를 많이 들은 적이 없다.
+- 정렬되지 않은 포인터의 UB는 더 심하다: 접근뿐 아니라 포인터 자체가 UB다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Todo en C es comportamiento indefinido
+***** TLDR
+Artículo de blog explorando la sorprendente cantidad de comportamiento indefinido en C, desde acceso volatile hasta punteros no alineados. Incluso leer un volatile int dos veces en printf() es técnicamente UB.
+***** Take
+Después de 20 años escribiendo C, los comentaristas de HN descubren que el lenguaje se sostiene con buena voluntad del compilador. El verdadero UB fueron los amigos que segfaulteamos en el camino.
+***** Comments
+- Un ejemplo más raro: volatile int x = 5; printf() con x dos veces es UB.
+- En 20 años escribiendo C nunca escuché tanto sobre UB como en los últimos 6 meses en HN.
+- El UB en punteros no alineados es peor: el puntero mismo es UB, no solo el acceso.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Alles in C ist undefiniertes Verhalten
+***** TLDR
+Blogartikel über die überraschende Menge an undefiniertem Verhalten in C, von volatile-Zugriff bis zu nicht ausgerichteten Zeigern. Selbst das zweimalige Lesen eines volatile int in printf() ist technisch UB.
+***** Take
+Nach 20 Jahren C-Programmierung entdecken HN-Kommentatoren, dass die Sprache nur durch Compiler-Wohlwollen zusammengehalten wird. Das wahre UB waren die Freunde, die wir unterwegs gesegfaultet haben.
+***** Comments
+- Ein noch seltsameres Beispiel: volatile int x = 5; printf() mit x zweimal ist UB.
+- In 20 Jahren C habe ich nie so viel über UB gehört wie in den letzten 6 Monaten auf HN.
+- UB bei nicht ausgerichteten Zeigern ist schlimmer: Der Zeiger selbst ist UB, nicht nur der Zugriff.
+** Japan is gripped by mass allergies. A 1950s project is to blame :japan:environment:health:history:
+:PROPERTIES:
+:ID:       48202047
+:URL:      https://www.bbc.com/future/article/20260515-the-1950s-blunder-which-causes-mass-hay-fever-in-japan
+:HN_URL:   https://news.ycombinator.com/item?id=48202047
+:POINTS:   89
+:COMMENTS: 31
+:BY:       ranit
+:END:
+
+*** TLDR
+Post-WWII Japan planted vast monocultures of Japanese cedar for lumber. Now 43% of the population suffers from pollen allergies. The trees release massive yellow clouds of pollen every spring, and unlike German tree farms with similar history, Japan's cedar pollen is particularly allergenic.
+
+*** Take
+Japan speedran a 70-year experiment in giving an entire nation seasonal misery. At least German spruce forests just look depressing.
+
+*** Comments
+
+**** flohofwoe
+:PROPERTIES:
+:COMMENT_ID: 48202089
+:END:
+Most German forests are also vast monoculture tree farms and have been for 250 years, yet I'm not aware that pollen allergies are as prevalent.
+
+**** rimworld
+:PROPERTIES:
+:COMMENT_ID: 48202112
+:END:
+Estimated 43% of the population - wow
+
+**** hastily3114
+:PROPERTIES:
+:COMMENT_ID: 48202134
+:END:
+I noticed many people have hay fever in Japan, but I always assumed it was genetic. I wonder if living there for a long time will make you more sensitive.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+日本深陷大规模过敏危机，1950年代的项目难辞其咎
+***** TLDR
+二战后日本大量种植日本柳杉单一林用于木材。如今43%的人口患有花粉过敏。每年春天这些树木释放大量黄色花粉云。
+***** Take
+日本用70年完成了让全国人民季节性痛苦的实验。至少德国的云杉林只是看起来压抑。
+***** Comments
+- 大多数德国森林也是单一树种农场，已有250年历史，但花粉过敏似乎没这么普遍。
+- 估计43%的人口——哇
+- 我注意到日本很多人有花粉症，但我一直以为是遗传。住久了会不会更敏感？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+日本を襲う大規模アレルギー、1950年代のプロジェクトが原因
+***** TLDR
+戦後日本は木材用にスギの単一林を大量に植林。今では人口の43%が花粉症に苦しむ。毎春、これらの木々は大量の黄色い花粉雲を放出する。
+***** Take
+日本は70年かけて国民全員に季節性の苦しみを与える実験を完了した。少なくともドイツのトウヒ林は見た目が暗いだけだ。
+***** Comments
+- ドイツの森も250年間単一栽培だが、花粉症がこれほど多いとは聞かない。
+- 人口の43%って、すごい
+- 日本で花粉症の人が多いのは気づいていたが、遺伝だと思っていた。長く住むと敏感になるのかな。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+일본의 대규모 알레르기, 1950년대 프로젝트가 원인
+***** TLDR
+2차대전 후 일본은 목재용으로 삼나무 단일림을 대량 조성. 현재 인구의 43%가 꽃가루 알레르기를 겪고 있다. 매년 봄 이 나무들은 거대한 노란 꽃가루 구름을 방출한다.
+***** Take
+일본은 70년에 걸쳐 전 국민에게 계절성 고통을 주는 실험을 완료했다. 최소한 독일 가문비나무 숲은 그냥 우울해 보이기만 한다.
+***** Comments
+- 독일 숲도 250년간 단일 수종 농장이지만 꽃가루 알레르기가 이렇게 만연하다는 건 모르겠다.
+- 인구의 43%라니 - 와
+- 일본에서 꽃가루 알레르기가 많다는 건 알았지만 유전인 줄 알았다. 오래 살면 더 민감해지나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Japón sufre alergias masivas. Un proyecto de los años 50 es el culpable
+***** TLDR
+Japón de posguerra plantó vastos monocultivos de cedro japonés para madera. Ahora el 43% de la población sufre de alergias al polen. Los árboles liberan nubes amarillas masivas de polen cada primavera.
+***** Take
+Japón completó un experimento de 70 años para darle miseria estacional a toda una nación. Al menos los bosques de abetos alemanes solo se ven deprimentes.
+***** Comments
+- La mayoría de los bosques alemanes también son monocultivos de 250 años, pero no sé que las alergias sean tan prevalentes.
+- 43% de la población estimada - wow
+- Noté que mucha gente tiene alergia en Japón, pero asumí que era genético.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Japan leidet unter Massenallergien. Ein Projekt aus den 1950ern ist schuld
+***** TLDR
+Nachkriegs-Japan pflanzte riesige Monokulturen japanischer Zedern für Holz. Jetzt leiden 43% der Bevölkerung an Pollenallergien. Die Bäume setzen jeden Frühling massive gelbe Pollenwolken frei.
+***** Take
+Japan hat ein 70-jähriges Experiment abgeschlossen, einer ganzen Nation saisonales Elend zu bescheren. Zumindest sehen deutsche Fichtenwälder nur deprimierend aus.
+***** Comments
+- Die meisten deutschen Wälder sind auch seit 250 Jahren Monokulturen, aber Pollenallergien scheinen nicht so verbreitet.
+- Geschätzte 43% der Bevölkerung - wow
+- Mir fiel auf, dass viele in Japan Heuschnupfen haben, aber ich dachte es wäre genetisch.
+** Infomaniak transitions to a foundation model to protect user data privacy :privacy:cloud:switzerland:data-sovereignty:
+:PROPERTIES:
+:ID:       48203536
+:URL:      https://news.infomaniak.com/en/infomaniak-foundation-sovereign-cloud/
+:HN_URL:   https://news.ycombinator.com/item?id=48203536
+:POINTS:   69
+:COMMENTS: 12
+:BY:       darktoto
+:END:
+
+*** TLDR
+Swiss cloud provider Infomaniak is converting to a foundation structure, making it impossible to sell user data or the company itself to outside interests. Part of a broader trend of European tech companies shielding themselves from US data jurisdiction.
+
+*** Take
+Switzerland already has bank secrecy and chocolate. Adding 'companies that legally cannot sell you out' to the list is on brand.
+
+*** Comments
+
+**** ku1ik
+:PROPERTIES:
+:COMMENT_ID: 48203567
+:END:
+This is good news. I moved my domains from DNSimple to Infomaniak last year as part of my rely-less-on-US-infra-and-services strategy.
+
+**** InsideOutSanta
+:PROPERTIES:
+:COMMENT_ID: 48203589
+:END:
+I wonder if it has any impact on Infomaniak's earlier position on Switzerland's privacy laws.
+
+**** alex_suzuki
+:PROPERTIES:
+:COMMENT_ID: 48203612
+:END:
+I use Infomaniak for personal domains. I really want to like them. But their management UI is just... horrible?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Infomaniak转型为基金会模式以保护用户数据隐私
+***** TLDR
+瑞士云服务商Infomaniak正在转型为基金会结构，使其无法将用户数据或公司出售给外部利益方。这是欧洲科技公司抵御美国数据管辖权的更广泛趋势的一部分。
+***** Take
+瑞士已经有银行保密和巧克力。'无法出卖你的公司'加入清单很符合品牌。
+***** Comments
+- 好消息。我去年把域名从DNSimple迁到Infomaniak，作为减少依赖美国基础设施策略的一部分。
+- 不知道这对Infomaniak此前在瑞士隐私法上的立场有何影响。
+- 我用Infomaniak托管个人域名。我真的想喜欢他们。但他们的管理界面...太糟了？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Infomaniakがユーザーデータプライバシー保護のため財団モデルに移行
+***** TLDR
+スイスのクラウドプロバイダーInfomaniakが財団構造に移行し、ユーザーデータや会社自体を外部に売却することが不可能に。欧州テック企業が米国のデータ管轄権から身を守る広いトレンドの一部。
+***** Take
+スイスには既に銀行の秘密保持とチョコレートがある。「法的にあなたを売り渡せない会社」をリストに加えるのはブランドに合っている。
+***** Comments
+- 良いニュース。昨年DNSimpleからInfomaniakにドメインを移した。米国インフラへの依存を減らす戦略の一環。
+- スイスのプライバシー法に関するInfomaniakの以前の立場に影響があるか気になる。
+- 個人ドメインにInfomaniakを使っている。好きになりたいけど、管理UIがひどい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Infomaniak, 사용자 데이터 프라이버시 보호를 위해 재단 모델로 전환
+***** TLDR
+스위스 클라우드 제공업체 Infomaniak이 재단 구조로 전환하여 사용자 데이터나 회사 자체를 외부에 판매하는 것이 불가능해졌다. 유럽 기술 기업들이 미국 데이터 관할권으로부터 자신을 보호하는 광범위한 추세의 일부.
+***** Take
+스위스에는 이미 은행 비밀과 초콜릿이 있다. '법적으로 당신을 팔 수 없는 회사'를 목록에 추가하는 것은 브랜드에 맞다.
+***** Comments
+- 좋은 소식. 작년에 미국 인프라 의존도를 줄이는 전략의 일환으로 DNSimple에서 Infomaniak으로 도메인을 옮겼다.
+- 스위스 개인정보보호법에 대한 Infomaniak의 이전 입장에 영향이 있을지 궁금하다.
+- 개인 도메인에 Infomaniak을 사용한다. 좋아하고 싶은데 관리 UI가 끔찍하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Infomaniak transiciona a modelo de fundación para proteger la privacidad de datos
+***** TLDR
+El proveedor de nube suizo Infomaniak está convirtiéndose en una estructura de fundación, haciendo imposible vender datos de usuarios o la empresa a intereses externos. Parte de una tendencia más amplia de empresas tech europeas protegiéndose de la jurisdicción de datos de EE.UU.
+***** Take
+Suiza ya tiene secreto bancario y chocolate. Agregar 'empresas que legalmente no pueden venderte' a la lista es muy de marca.
+***** Comments
+- Buenas noticias. Moví mis dominios de DNSimple a Infomaniak el año pasado como parte de mi estrategia de depender menos de infraestructura de EE.UU.
+- Me pregunto si esto impacta la posición anterior de Infomaniak sobre las leyes de privacidad suizas.
+- Uso Infomaniak para dominios personales. Quiero que me gusten. Pero su UI de gestión es... horrible.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Infomaniak wird Stiftung zum Schutz der Nutzerdaten
+***** TLDR
+Der Schweizer Cloud-Anbieter Infomaniak wandelt sich in eine Stiftungsstruktur um, wodurch es unmöglich wird, Nutzerdaten oder das Unternehmen an externe Interessen zu verkaufen. Teil eines breiteren Trends europäischer Tech-Unternehmen, sich vor US-Datenhoheit zu schützen.
+***** Take
+Die Schweiz hat bereits Bankgeheimnis und Schokolade. 'Unternehmen, die Sie legal nicht verkaufen können' zur Liste hinzuzufügen, passt zur Marke.
+***** Comments
+- Gute Nachrichten. Ich habe letztes Jahr meine Domains von DNSimple zu Infomaniak verschoben als Teil meiner Strategie, weniger auf US-Infrastruktur zu setzen.
+- Ich frage mich, ob das Auswirkungen auf Infomaniaks frühere Position zu Schweizer Datenschutzgesetzen hat.
+- Ich nutze Infomaniak für persönliche Domains. Ich will sie mögen. Aber ihre Verwaltungs-UI ist einfach... schrecklich?
+** RISC-V and Floating-Point :risc-v:hardware:floating-point:cpu-architecture:
+:PROPERTIES:
+:ID:       48179531
+:URL:      https://fprox.substack.com/p/risc-v-and-floating-point
+:HN_URL:   https://news.ycombinator.com/item?id=48179531
+:POINTS:   19
+:COMMENTS: 10
+:BY:       hasheddan
+:END:
+
+*** TLDR
+Deep dive into RISC-V's floating-point extensions ecosystem. The architecture has separate extensions for single-precision (F), double-precision (D), quad-precision (Q), half-precision (Zfh), and more. The naming scheme and sheer number of extensions makes the ecosystem challenging to navigate.
+
+*** Take
+RISC-V's philosophy of 'why have one floating-point extension when you can have seventeen' continues to confuse everyone except the people writing the specs.
+
+*** Comments
+
+**** Netch
+:PROPERTIES:
+:COMMENT_ID: 48179562
+:END:
+From a bystander's POV it is excessively hard to memorize all the mess with multiple different extensions. The naming style doesn't alleviate the task.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+RISC-V与浮点运算
+***** TLDR
+深入探讨RISC-V的浮点扩展生态系统。该架构有单精度(F)、双精度(D)、四精度(Q)、半精度(Zfh)等独立扩展。命名方案和扩展数量之多使生态系统难以导航。
+***** Take
+RISC-V的'为什么只有一个浮点扩展，可以有十七个'理念继续让除了写规范的人之外的所有人困惑。
+***** Comments
+- 从旁观者的角度来看，要记住所有不同扩展的混乱是极其困难的。命名风格也没有帮助。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+RISC-Vと浮動小数点
+***** TLDR
+RISC-Vの浮動小数点拡張エコシステムの深掘り。単精度(F)、倍精度(D)、四倍精度(Q)、半精度(Zfh)などの独立した拡張がある。命名規則と拡張の数の多さがエコシステムのナビゲーションを困難にしている。
+***** Take
+RISC-Vの「1つの浮動小数点拡張で済むのに17個持てるのはなぜ」という哲学は、仕様を書く人以外全員を混乱させ続けている。
+***** Comments
+- 傍観者の視点からすると、異なる拡張の混乱をすべて覚えるのは非常に難しい。命名スタイルも助けにならない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+RISC-V와 부동소수점
+***** TLDR
+RISC-V의 부동소수점 확장 생태계에 대한 심층 분석. 단정밀도(F), 배정밀도(D), 4배정밀도(Q), 반정밀도(Zfh) 등의 별도 확장이 있다. 명명 체계와 확장의 수가 많아 생태계 탐색이 어렵다.
+***** Take
+RISC-V의 '하나의 부동소수점 확장으로 충분한데 왜 17개를 가질 수 없나' 철학은 사양을 작성하는 사람들 외에 모두를 계속 혼란스럽게 한다.
+***** Comments
+- 방관자 입장에서 여러 다른 확장의 혼란을 모두 기억하기가 지나치게 어렵다. 명명 스타일도 도움이 안 된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+RISC-V y punto flotante
+***** TLDR
+Análisis profundo del ecosistema de extensiones de punto flotante de RISC-V. La arquitectura tiene extensiones separadas para precisión simple (F), doble (D), cuádruple (Q), media (Zfh) y más. El esquema de nombres y la cantidad de extensiones dificultan la navegación.
+***** Take
+La filosofía de RISC-V de 'por qué tener una extensión de punto flotante cuando puedes tener diecisiete' sigue confundiendo a todos excepto a quienes escriben las especificaciones.
+***** Comments
+- Desde el punto de vista de un espectador, es excesivamente difícil memorizar todo el desorden de las múltiples extensiones. El estilo de nombres no ayuda.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+RISC-V und Gleitkomma
+***** TLDR
+Tiefgehende Analyse des RISC-V Gleitkomma-Erweiterungs-Ökosystems. Die Architektur hat separate Erweiterungen für einfache (F), doppelte (D), vierfache (Q), halbe Genauigkeit (Zfh) und mehr. Das Benennungsschema und die schiere Anzahl der Erweiterungen machen das Ökosystem schwer navigierbar.
+***** Take
+RISC-Vs Philosophie 'warum eine Gleitkomma-Erweiterung haben, wenn man siebzehn haben kann' verwirrt weiterhin alle außer denen, die die Spezifikationen schreiben.
+***** Comments
+- Aus der Sicht eines Beobachters ist es übermäßig schwer, sich das ganze Durcheinander mit den verschiedenen Erweiterungen zu merken. Der Benennungsstil hilft nicht.
+** Nostalgic Kits Central (2024) :electronics:diy:nostalgia:hardware:
+:PROPERTIES:
+:ID:       48170855
+:URL:      https://www.nostalgickitscentral.com/
+:HN_URL:   https://news.ycombinator.com/item?id=48170855
+:POINTS:   23
+:COMMENTS: 10
+:BY:       cf100clunk
+:END:
+
+*** TLDR
+A comprehensive archive of vintage electronics kits from brands like Heathkit, Lectron, and Dynaco. The site catalogs the DIY electronics hobby from an era when building your own hi-fi equipment or learning electronics through kits was common.
+
+*** Take
+Before Arduino made everyone think they're an engineer, there was Heathkit making everyone's dad think they were an engineer. Same energy, better documentation.
+
+*** Comments
+
+**** bigiain
+:PROPERTIES:
+:COMMENT_ID: 48170889
+:END:
+As a young kid I had one of these Lectron sets. It had a great 10-year-old friendly manual.
+
+**** autoexec
+:PROPERTIES:
+:COMMENT_ID: 48170912
+:END:
+Are there similar kits still being made and sold today? It seems like it'd be easier and cheaper than ever to make kits that can do some very cool things.
+
+**** mitchbob
+:PROPERTIES:
+:COMMENT_ID: 48170934
+:END:
+I'd drool over the Heathkit catalogs as a kid. I still have a Van Alstine-modified Dynaco PAT 5 preamp that's been the heart of my audio system for almost 40 years.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+怀旧套件中心 (2024)
+***** TLDR
+一个全面的复古电子套件档案，包括Heathkit、Lectron和Dynaco等品牌。该网站记录了DIY电子爱好的时代，那时自己组装音响设备或通过套件学习电子学是很常见的。
+***** Take
+在Arduino让每个人都以为自己是工程师之前，Heathkit让每个人的爸爸都以为自己是工程师。同样的能量，更好的文档。
+***** Comments
+- 小时候我有一套Lectron。它有一本非常适合10岁孩子的手册。
+- 现在还有类似的套件在制造和销售吗？做出很酷的东西应该比以前更容易更便宜了。
+- 小时候我会对着Heathkit目录流口水。我现在还有一台改装过的Dynaco PAT 5前置放大器，它已经是我音响系统的核心近40年了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ノスタルジックキットセントラル (2024)
+***** TLDR
+Heathkit、Lectron、Dynacoなどのブランドのヴィンテージ電子キットの包括的なアーカイブ。自分でオーディオ機器を組み立てたり、キットで電子工学を学ぶことが一般的だった時代のDIY電子趣味を記録している。
+***** Take
+Arduinoが皆を自分はエンジニアだと思わせる前、Heathkitが皆のお父さんを自分はエンジニアだと思わせていた。同じエネルギー、より良いドキュメント。
+***** Comments
+- 子供の頃このLectronセットを持っていた。10歳に優しいマニュアルがあった。
+- 今でも同様のキットが作られて売られている？とてもクールなものを作るのは以前より簡単で安くなったはずなのに。
+- 子供の頃Heathkitのカタログを見てよだれを垂らしていた。今でも40年近く私のオーディオシステムの心臓部であるDynaco PAT 5プリアンプを持っている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+노스탤직 키트 센트럴 (2024)
+***** TLDR
+Heathkit, Lectron, Dynaco 등 브랜드의 빈티지 전자 키트 종합 아카이브. DIY 전자 취미 시대를 기록하며, 당시에는 직접 오디오 장비를 만들거나 키트로 전자공학을 배우는 것이 일반적이었다.
+***** Take
+Arduino가 모두를 엔지니어라고 생각하게 만들기 전에, Heathkit이 모든 아버지들을 엔지니어라고 생각하게 만들었다. 같은 에너지, 더 나은 문서.
+***** Comments
+- 어렸을 때 이 Lectron 세트를 가지고 있었다. 10살에게 친화적인 매뉴얼이 있었다.
+- 오늘날에도 비슷한 키트가 만들어지고 판매되나? 정말 멋진 것을 만드는 게 그 어느 때보다 쉽고 저렴할 텐데.
+- 어렸을 때 Heathkit 카탈로그를 보며 침을 흘렸다. 아직도 거의 40년간 내 오디오 시스템의 심장인 Dynaco PAT 5 프리앰프를 가지고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Nostalgic Kits Central (2024)
+***** TLDR
+Un archivo completo de kits de electrónica vintage de marcas como Heathkit, Lectron y Dynaco. El sitio cataloga el hobby de la electrónica DIY de una era cuando construir tu propio equipo de hi-fi o aprender electrónica a través de kits era común.
+***** Take
+Antes de que Arduino hiciera que todos pensaran que son ingenieros, Heathkit hacía que los papás de todos pensaran que eran ingenieros. Misma energía, mejor documentación.
+***** Comments
+- De niño tuve uno de estos sets Lectron. Tenía un manual muy amigable para niños de 10 años.
+- ¿Todavía se fabrican y venden kits similares hoy? Parece que sería más fácil y barato que nunca hacer kits que hagan cosas muy geniales.
+- De niño babeaba sobre los catálogos de Heathkit. Todavía tengo un preamplificador Dynaco PAT 5 modificado que ha sido el corazón de mi sistema de audio por casi 40 años.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Nostalgic Kits Central (2024)
+***** TLDR
+Ein umfassendes Archiv von Vintage-Elektronik-Bausätzen von Marken wie Heathkit, Lectron und Dynaco. Die Seite katalogisiert das DIY-Elektronik-Hobby aus einer Zeit, als der Selbstbau von Hi-Fi-Geräten oder das Lernen von Elektronik durch Bausätze üblich war.
+***** Take
+Bevor Arduino jeden denken ließ, er sei Ingenieur, ließ Heathkit jeden Vater denken, er sei Ingenieur. Gleiche Energie, bessere Dokumentation.
+***** Comments
+- Als Kind hatte ich eines dieser Lectron-Sets. Es hatte ein tolles 10-Jährigen-freundliches Handbuch.
+- Werden heute noch ähnliche Bausätze hergestellt und verkauft? Es sollte einfacher und billiger als je zuvor sein, Bausätze zu machen, die coole Sachen können.
+- Als Kind sabberte ich über die Heathkit-Kataloge. Ich habe noch einen Van Alstine-modifizierten Dynaco PAT 5 Vorverstärker, der seit fast 40 Jahren das Herz meines Audiosystems ist.
