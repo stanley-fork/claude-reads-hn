@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-05-24 11:00:00 UT UTC
+#+DATE: 2026-05-24T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Patching i3 for Emacs glory, hand-drawing charts like it's 1920, and ClickHouse builds fibers while Greg Brockman explains why he quit OpenAI in 24 hours
+
+* Highlights
+- i3-Emacs: Someone patched their window manager because emacsclient was too slow
+- 50 Hours to Draw Lines: Why use PowerPoint when you can suffer artistically
+- Silk: ClickHouse's answer to 'what if threads, but actually good'
+- Integer to String in 2ns: SIMD wizardry for the most mundane task
+- Greg Brockman: The 72 hours that almost killed OpenAI (again)
+
+* Stories
+
+** My I3-Emacs Integration :emacs:linux:i3:window-manager:
+:PROPERTIES:
+:ID:       48252535
+:URL:      https://khz.ac/software/i3-integration.html
+:HN_URL:   https://news.ycombinator.com/item?id=48252535
+:POINTS:   77
+:COMMENTS: 22
+:BY:       nosolace
+:END:
+
+*** TLDR
+Author patches i3 window manager to forward keybindings to Emacs when focused instead of handling them globally. The xdotool/emacsclient approach had 30-100ms latency which was unacceptable, so they modified i3's source to check window class and re-emit key events to Emacs directly. Includes parser DSL changes and elisp for bidirectional window navigation.
+
+*** Take
+When your text editor is so important that you'll patch your window manager's C code and modify its parser DSL just to shave off 30ms of latency. This is either peak engineering or a cry for help. Possibly both.
+
+*** Comments
+
+**** SubiculumCode
+:PROPERTIES:
+:COMMENT_ID: 48252600
+:END:
+Side note: I am really enjoying HN today with the set of stories with personal hacks like this i3-emacs integration, someone's desk setup, someone's writer-deck laptop install... Fun geeky stuff that isn't AI.
+
+**** nesarkvechnep
+:PROPERTIES:
+:COMMENT_ID: 48252650
+:END:
+I did the same integration with an Erlang daemon. All relevant key presses are sent to it and based on the current focused application the daemon does different things.
+
+**** Zambyte
+:PROPERTIES:
+:COMMENT_ID: 48252700
+:END:
+My long term vision is to make an Emacs implementation that is compatible only in philosophy. It would use Guile instead of Elisp, default to bindings that are more familiar to people coming from more modern systems.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我的 i3-Emacs 集成方案
+***** TLDR
+作者修补了 i3 窗口管理器,使其在聚焦 Emacs 时将按键绑定转发给 Emacs,而不是全局处理。xdotool/emacsclient 方案有 30-100ms 延迟,无法接受,所以直接修改 i3 源码检查窗口类并重新发送键盘事件给 Emacs。
+***** Take
+当你的文本编辑器如此重要,以至于你愿意修补窗口管理器的 C 代码,只为减少 30ms 延迟。这要么是工程巅峰,要么是求救信号。可能两者皆是。
+***** Comments
+- 旁注:今天 HN 上这些个人 hack 文章太棒了,像这个 i3-emacs 集成,有人的桌面设置,有人的写作本...有趣的极客内容,不是 AI。
+- 我用 Erlang 守护进程做了同样的集成。所有相关按键都发送给它,根据当前聚焦的应用程序做不同的事情。
+- 我的长期愿景是做一个只在理念上兼容的 Emacs 实现。使用 Guile 而不是 Elisp,默认使用更现代的绑定。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+私のi3-Emacs統合
+***** TLDR
+著者はi3ウィンドウマネージャーにパッチを当て、Emacsがフォーカスされている時にキーバインディングをグローバルに処理する代わりにEmacsに転送するようにした。xdotool/emacsclientアプローチは30-100msの遅延があり許容できなかったため、i3のソースコードを直接変更してウィンドウクラスをチェックし、キーイベントをEmacsに再送信する。
+***** Take
+テキストエディタが重要すぎて、30msの遅延を削るためにウィンドウマネージャーのCコードにパッチを当てる。これは究極のエンジニアリングか、助けを求める叫びか。おそらく両方。
+***** Comments
+- 余談:今日のHNは本当に楽しい。このi3-emacs統合のような個人的なハック、誰かのデスクセットアップ、writerdeck...AIじゃない楽しいギークなもの。
+- 私はErlangデーモンで同じ統合を行った。関連するすべてのキー押下がそこに送られ、現在フォーカスされているアプリケーションに基づいて異なることを行う。
+- 私の長期的なビジョンは、哲学的にのみ互換性のあるEmacs実装を作ること。ElispではなくGuileを使用し、より現代的なシステムに慣れた人向けのデフォルトバインディング。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+나의 i3-Emacs 통합
+***** TLDR
+저자가 i3 윈도우 매니저를 패치하여 Emacs가 포커스되었을 때 키 바인딩을 전역적으로 처리하는 대신 Emacs로 전달하도록 했다. xdotool/emacsclient 방식은 30-100ms 지연이 있어 허용할 수 없었기에 i3 소스 코드를 직접 수정하여 윈도우 클래스를 확인하고 키 이벤트를 Emacs로 재전송한다.
+***** Take
+텍스트 에디터가 너무 중요해서 30ms 지연을 줄이려고 윈도우 매니저의 C 코드를 패치한다. 이것은 최고의 엔지니어링이거나 도움을 요청하는 외침이다. 아마 둘 다.
+***** Comments
+- 여담: 오늘 HN은 정말 즐겁다. 이 i3-emacs 통합 같은 개인 해킹, 누군가의 데스크 셋업, writerdeck... AI가 아닌 재미있는 긱 콘텐츠.
+- 나는 Erlang 데몬으로 같은 통합을 했다. 모든 관련 키 누름이 거기로 전송되고, 현재 포커스된 애플리케이션에 따라 다른 작업을 수행한다.
+- 내 장기 비전은 철학적으로만 호환되는 Emacs 구현을 만드는 것이다. Elisp 대신 Guile을 사용하고, 더 현대적인 시스템에 익숙한 사람들을 위한 기본 바인딩.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Mi integración i3-Emacs
+***** TLDR
+El autor parchea el gestor de ventanas i3 para reenviar las teclas a Emacs cuando está enfocado en lugar de manejarlas globalmente. El enfoque xdotool/emacsclient tenía 30-100ms de latencia inaceptable, así que modificaron el código fuente de i3 para verificar la clase de ventana y reenviar eventos de teclado a Emacs directamente.
+***** Take
+Cuando tu editor de texto es tan importante que parcheas el código C de tu gestor de ventanas solo para reducir 30ms de latencia. Esto es ingeniería de élite o un grito de auxilio. Posiblemente ambos.
+***** Comments
+- Nota al margen: Estoy disfrutando mucho HN hoy con historias de hacks personales como esta integración i3-emacs, la configuración de escritorio de alguien, el writerdeck... Cosas geek divertidas que no son IA.
+- Hice la misma integración con un daemon Erlang. Todas las teclas relevantes se envían ahí y según la aplicación enfocada hace cosas diferentes.
+- Mi visión a largo plazo es hacer una implementación de Emacs compatible solo en filosofía. Usaría Guile en lugar de Elisp, con bindings más familiares para gente de sistemas modernos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Meine i3-Emacs Integration
+***** TLDR
+Der Autor patcht den i3 Window Manager, um Tastenkombinationen an Emacs weiterzuleiten, wenn es fokussiert ist, anstatt sie global zu verarbeiten. Der xdotool/emacsclient-Ansatz hatte 30-100ms Latenz, was inakzeptabel war, also wurde der i3-Quellcode direkt modifiziert, um die Fensterklasse zu prüfen und Tastaturereignisse an Emacs weiterzuleiten.
+***** Take
+Wenn dein Texteditor so wichtig ist, dass du den C-Code deines Window Managers patcht, nur um 30ms Latenz einzusparen. Das ist entweder Spitzen-Engineering oder ein Hilferuf. Möglicherweise beides.
+***** Comments
+- Randnotiz: Ich genieße HN heute wirklich mit persönlichen Hacks wie dieser i3-emacs Integration, jemandes Desk-Setup, jemandes Writerdeck... Lustiges Geek-Zeug, das nicht KI ist.
+- Ich habe die gleiche Integration mit einem Erlang-Daemon gemacht. Alle relevanten Tastendrücke werden dorthin gesendet und je nach fokussierter Anwendung werden verschiedene Dinge ausgeführt.
+- Meine langfristige Vision ist eine Emacs-Implementierung, die nur philosophisch kompatibel ist. Sie würde Guile statt Elisp verwenden, mit Standard-Bindings für Leute aus moderneren Systemen.
+** I spent 50 hours drawing a line graph :data-viz:art:drafting:analog:
+:PROPERTIES:
+:ID:       48223997
+:URL:      https://www.dougmacdowell.com/50-hours-to-draw-some-lines.html
+:HN_URL:   https://news.ycombinator.com/item?id=48223997
+:POINTS:   37
+:COMMENTS: 5
+:BY:       dougdude3339
+:END:
+
+*** TLDR
+Author describes hand-drawing data visualizations using traditional drafting tools: T-squares, rulers, triangles, ink, and lettering kits. The technique involves plotting data points, using circle stencils to set line weights, connecting circles with a debit card edge, then inking over the pencil. References 1920s drafting manuals and W.E.B. Du Bois's data portraits.
+
+*** Take
+While the rest of us reach for matplotlib or D3.js, this person went full 1920s draftsman and spent a week doing what PowerPoint does in 20 minutes. The result looks like a lost NASA chart from the Apollo era. Sometimes the long way is the point.
+
+*** Comments
+
+**** pram
+:PROPERTIES:
+:COMMENT_ID: 48224100
+:END:
+They look really good. I really enjoy looking at midcentury engineering charts/diagrams and stuff like jeppesen charts. NASA has a lot of good ones. The way the text looks, the line economy, the general aesthetic. Well worth the effort imo!
+
+**** jstummbillig
+:PROPERTIES:
+:COMMENT_ID: 48224150
+:END:
+A professional draftsman of the 1920's may cringe at the imperfections in my line graph above. They can suck it. (I love everything about this btw) - but the kerning is still killing me.
+
+**** dougdude3339
+:PROPERTIES:
+:COMMENT_ID: 48224200
+:END:
+What's been more interesting to me lately than using software to design data visualizations is learning to draw data by hand. The feeling of erasing graphite to reveal clean, crisp lines is something that software cannot recreate.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我花了50小时手绘一张折线图
+***** TLDR
+作者描述了使用传统绘图工具手绘数据可视化的过程:丁字尺、直尺、三角板、墨水和刻字工具。技术包括绘制数据点,用圆形模板设置线宽,用银行卡边缘连接圆圈,然后用墨水覆盖铅笔线。参考了1920年代的绘图手册和杜波依斯的数据肖像。
+***** Take
+当我们其他人都在用 matplotlib 或 D3.js 时,这位仁兄全力回归1920年代绘图师风格,花了一周时间做 PowerPoint 20分钟能完成的事。结果看起来像阿波罗时代遗失的NASA图表。有时候,绕远路才是意义所在。
+***** Comments
+- 看起来真的很棒。我很喜欢看中世纪的工程图表和杰普森图表之类的东西。NASA有很多好的。文字的样子,线条的简洁,整体美学。完全值得付出努力!
+- 1920年代的专业绘图员可能会对我上面折线图的不完美皱眉。让他们见鬼去吧。(顺便说一句,我喜欢这一切)——但字距还是让我抓狂。
+- 最近对我来说,比用软件设计数据可视化更有趣的是学习手绘数据。擦掉石墨,露出干净清晰线条的感觉,是软件无法重现的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+折れ線グラフを描くのに50時間かけた
+***** TLDR
+著者は伝統的な製図ツールを使ってデータビジュアライゼーションを手描きする方法を説明している：T定規、定規、三角定規、インク、レタリングキット。技術はデータポイントをプロットし、円形テンプレートで線の太さを設定し、デビットカードの端で円を繋ぎ、鉛筆の上からインクで描く。1920年代の製図マニュアルとW.E.B.デュボイスのデータポートレートを参照。
+***** Take
+私たちがmatplotlibやD3.jsに手を伸ばす間、この人は1920年代の製図士モードに入り、PowerPointが20分でできることに一週間かけた。結果はアポロ時代の失われたNASAチャートのよう。時には遠回りこそが意味がある。
+***** Comments
+- とても良く見える。中世紀のエンジニアリングチャートやジェプセンチャートのようなものを見るのが本当に好き。NASAには良いものがたくさんある。テキストの見た目、線のエコノミー、全体的な美学。努力する価値あり!
+- 1920年代のプロの製図士は私の上の折れ線グラフの不完全さに顔をしかめるかもしれない。知ったことか。(ところで、これの全てが大好き)——でもカーニングはまだ殺してる。
+- 最近ソフトウェアでデータビジュアライゼーションを設計するよりも興味深いのは、手でデータを描くことを学ぶこと。黒鉛を消してきれいでクリアな線を現す感覚は、ソフトウェアでは再現できない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+선 그래프 하나 그리는데 50시간을 썼다
+***** TLDR
+저자가 전통적인 제도 도구를 사용하여 데이터 시각화를 수작업으로 그리는 방법을 설명한다: T자, 자, 삼각자, 잉크, 레터링 키트. 데이터 포인트를 찍고, 원형 스텐실로 선 두께를 설정하고, 체크카드 가장자리로 원을 연결한 다음, 연필 위에 잉크로 덧그린다. 1920년대 제도 매뉴얼과 W.E.B. 듀보이스의 데이터 초상화 참조.
+***** Take
+우리가 matplotlib이나 D3.js를 쓰는 동안, 이 사람은 1920년대 제도사 모드로 돌아가 PowerPoint가 20분에 하는 일에 일주일을 썼다. 결과물은 아폴로 시대에 잃어버린 NASA 차트 같다. 때로는 먼 길이 핵심이다.
+***** Comments
+- 정말 좋아 보인다. 중세기 엔지니어링 차트와 제프센 차트 같은 것들을 보는 걸 정말 좋아한다. NASA에 좋은 것들이 많다. 텍스트 모양, 선의 절제, 전반적인 미학. 노력할 가치가 있다고 생각!
+- 1920년대의 전문 제도사는 위의 내 선 그래프의 불완전함에 인상을 찌푸릴 수 있다. 상관없다. (그런데 이것의 모든 것이 좋다) - 하지만 커닝은 여전히 나를 죽이고 있다.
+- 최근 나에게 소프트웨어로 데이터 시각화를 디자인하는 것보다 더 흥미로운 것은 손으로 데이터를 그리는 법을 배우는 것이다. 흑연을 지우고 깨끗하고 선명한 선을 드러내는 느낌은 소프트웨어로는 재현할 수 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Pasé 50 horas dibujando un gráfico de líneas
+***** TLDR
+El autor describe cómo dibujar visualizaciones de datos a mano usando herramientas de dibujo tradicionales: reglas T, reglas, escuadras, tinta y kits de rotulación. La técnica consiste en trazar puntos de datos, usar plantillas circulares para establecer el grosor de línea, conectar círculos con el borde de una tarjeta, luego entintar sobre el lápiz. Referencias a manuales de dibujo de los años 1920 y los retratos de datos de W.E.B. Du Bois.
+***** Take
+Mientras el resto usamos matplotlib o D3.js, esta persona se fue al modo dibujante de los 1920 y pasó una semana haciendo lo que PowerPoint hace en 20 minutos. El resultado parece un gráfico perdido de NASA de la era Apolo. A veces el camino largo es el punto.
+***** Comments
+- Se ven muy bien. Realmente disfruto mirando gráficos de ingeniería de mediados de siglo y cosas como los gráficos jeppesen. NASA tiene muchos buenos. La forma del texto, la economía de líneas, la estética general. ¡Vale la pena el esfuerzo!
+- Un dibujante profesional de los 1920 podría hacer una mueca ante las imperfecciones en mi gráfico. Que se jodan. (Me encanta todo esto) - pero el kerning todavía me mata.
+- Lo que me ha resultado más interesante últimamente que usar software para diseñar visualizaciones es aprender a dibujar datos a mano. La sensación de borrar el grafito para revelar líneas limpias y nítidas es algo que el software no puede recrear.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ich habe 50 Stunden damit verbracht, ein Liniendiagramm zu zeichnen
+***** TLDR
+Der Autor beschreibt das Handzeichnen von Datenvisualisierungen mit traditionellen Zeichenwerkzeugen: T-Lineal, Lineale, Dreiecke, Tinte und Beschriftungssets. Die Technik beinhaltet das Plotten von Datenpunkten, die Verwendung von Kreisschablonen zur Festlegung der Linienstärke, das Verbinden von Kreisen mit einer Kartenkante, dann das Tuschen über den Bleistift. Verweise auf Zeichenhandbücher der 1920er Jahre und W.E.B. Du Bois' Datenporträts.
+***** Take
+Während der Rest von uns zu matplotlib oder D3.js greift, ging diese Person voll in den 1920er-Zeichner-Modus und verbrachte eine Woche damit, was PowerPoint in 20 Minuten schafft. Das Ergebnis sieht aus wie ein verlorenes NASA-Diagramm aus der Apollo-Ära. Manchmal ist der lange Weg der Sinn.
+***** Comments
+- Sie sehen wirklich gut aus. Ich genieße es wirklich, Mitte-des-Jahrhunderts Engineering-Charts und Jeppesen-Karten zu betrachten. NASA hat viele gute. Die Art wie der Text aussieht, die Linienökonomie, die allgemeine Ästhetik. Die Mühe absolut wert!
+- Ein professioneller Zeichner der 1920er könnte bei den Unvollkommenheiten in meinem Liniendiagramm zusammenzucken. Die können mich mal. (Ich liebe übrigens alles daran) - aber das Kerning bringt mich immer noch um.
+- Was mich in letzter Zeit mehr interessiert als Software für Datenvisualisierungen zu nutzen, ist das Handzeichnen von Daten zu lernen. Das Gefühl, Graphit zu radieren, um saubere, klare Linien freizulegen, ist etwas, das Software nicht nachbilden kann.
+** Silk: Open-source cooperative fiber scheduler :cpp:concurrency:clickhouse:io-uring:
+:PROPERTIES:
+:ID:       48210937
+:URL:      https://github.com/ClickHouse/silk
+:HN_URL:   https://news.ycombinator.com/item?id=48210937
+:POINTS:   37
+:COMMENTS: 4
+:BY:       animetyan
+:END:
+
+*** TLDR
+ClickHouse open-sources Silk, a cooperative fiber scheduler for Linux with per-CPU scheduler threads, io_uring integration, and NUMA-aware work-stealing. Fibers are stackful coroutines that suspend rather than block OS threads. Includes synchronization primitives, GDB extensions, and benchmarks showing superior performance over thread-per-connection servers.
+
+*** Take
+ClickHouse looked at the thread-per-connection model and said 'we can do better than a thousand active connections choking on context switches.' Finally, a fiber library that isn't just another toy project abandoned after the author got a job at FAANG.
+
+*** Comments
+
+**** nasretdinov
+:PROPERTIES:
+:COMMENT_ID: 48211000
+:END:
+Looks really interesting. I assume this suggests that ClickHouse is going to gradually switch to using this library for network and I/O, thus addressing the main weakness of C++ thread-per-connection servers, which is they can't really handle more than a thousand active connections at the same time.
+
+**** feverzsj
+:PROPERTIES:
+:COMMENT_ID: 48211050
+:END:
+Seems not exception safe when task switching during unwind.
+
+**** jeffreygoesto
+:PROPERTIES:
+:COMMENT_ID: 48211100
+:END:
+Is this comparable to Seastar?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Silk: 开源协作式纤程调度器
+***** TLDR
+ClickHouse 开源了 Silk,这是一个用于 Linux 的协作式纤程调度器,具有每 CPU 调度线程、io_uring 集成和 NUMA 感知的工作窃取。纤程是有栈协程,挂起而不是阻塞操作系统线程。包括同步原语、GDB 扩展和基准测试,显示比线程-每连接服务器更优的性能。
+***** Take
+ClickHouse 看着线程-每连接模型说'我们能做得比一千个活动连接在上下文切换中窒息更好'。终于,一个纤程库不只是作者在 FAANG 找到工作后就被抛弃的玩具项目。
+***** Comments
+- 看起来很有趣。我假设这表明 ClickHouse 将逐渐切换到使用这个库进行网络和 I/O,从而解决 C++ 线程-每连接服务器的主要弱点,即它们无法真正同时处理超过一千个活动连接。
+- 在展开期间任务切换时似乎不是异常安全的。
+- 这与 Seastar 相比如何?
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Silk: オープンソースの協調型ファイバースケジューラ
+***** TLDR
+ClickHouseがSilkをオープンソース化。LinuxのためのCPUごとのスケジューラスレッド、io_uring統合、NUMAアウェアなワークスティーリングを備えた協調型ファイバースケジューラ。ファイバーはOSスレッドをブロックするのではなくサスペンドするスタックフルコルーチン。同期プリミティブ、GDB拡張、スレッド-パー-コネクションサーバーより優れたパフォーマンスを示すベンチマーク付き。
+***** Take
+ClickHouseはスレッド-パー-コネクションモデルを見て、「千のアクティブな接続がコンテキストスイッチで窒息するより良くできる」と言った。ついに、作者がFAANGに就職した後に放棄されるおもちゃプロジェクトではないファイバーライブラリ。
+***** Comments
+- とても興味深い。これはClickHouseがネットワークとI/Oにこのライブラリを段階的に使用するようになることを示唆していると思う。C++スレッド-パー-コネクションサーバーの主な弱点、つまり千以上のアクティブな接続を同時に処理できないことに対処する。
+- アンワインド中のタスク切り替え時に例外安全ではないようだ。
+- これはSeastarと比較できる?
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Silk: 오픈소스 협력적 파이버 스케줄러
+***** TLDR
+ClickHouse가 Silk를 오픈소스로 공개했다. CPU당 스케줄러 스레드, io_uring 통합, NUMA 인식 워크 스틸링을 갖춘 Linux용 협력적 파이버 스케줄러다. 파이버는 OS 스레드를 차단하지 않고 일시 중단하는 스택풀 코루틴이다. 동기화 프리미티브, GDB 확장, 스레드-당-연결 서버보다 우수한 성능을 보여주는 벤치마크 포함.
+***** Take
+ClickHouse는 스레드-당-연결 모델을 보고 '천 개의 활성 연결이 컨텍스트 스위치에서 질식하는 것보다 더 잘할 수 있다'고 말했다. 드디어, 저자가 FAANG에 취직한 후 버려지는 또 다른 장난감 프로젝트가 아닌 파이버 라이브러리.
+***** Comments
+- 정말 흥미로워 보인다. 이것은 ClickHouse가 네트워크와 I/O에 이 라이브러리를 점진적으로 사용하게 될 것임을 시사한다고 생각한다. C++ 스레드-당-연결 서버의 주요 약점, 즉 천 개 이상의 활성 연결을 동시에 처리할 수 없다는 점을 해결한다.
+- 언와인드 중 태스크 전환 시 예외 안전하지 않은 것 같다.
+- 이것은 Seastar와 비교할 수 있나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Silk: Programador de fibras cooperativo de código abierto
+***** TLDR
+ClickHouse publica Silk como código abierto, un programador de fibras cooperativo para Linux con hilos de programador por CPU, integración con io_uring y robo de trabajo consciente de NUMA. Las fibras son corutinas con pila que suspenden en lugar de bloquear hilos del SO. Incluye primitivas de sincronización, extensiones GDB y benchmarks que muestran rendimiento superior a servidores hilo-por-conexión.
+***** Take
+ClickHouse miró el modelo hilo-por-conexión y dijo 'podemos hacerlo mejor que mil conexiones activas ahogándose en cambios de contexto'. Por fin, una biblioteca de fibras que no es solo otro proyecto de juguete abandonado después de que el autor consiguió trabajo en FAANG.
+***** Comments
+- Parece muy interesante. Asumo que esto sugiere que ClickHouse cambiará gradualmente a usar esta biblioteca para red e I/O, abordando así la principal debilidad de los servidores C++ hilo-por-conexión, que no pueden manejar más de mil conexiones activas simultáneamente.
+- Parece no ser seguro para excepciones cuando se cambia de tarea durante el desenrollado.
+- ¿Es esto comparable a Seastar?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Silk: Open-Source kooperativer Fiber-Scheduler
+***** TLDR
+ClickHouse veröffentlicht Silk als Open Source, einen kooperativen Fiber-Scheduler für Linux mit Scheduler-Threads pro CPU, io_uring-Integration und NUMA-bewusstem Work-Stealing. Fibers sind Stackful-Coroutinen, die suspendieren statt OS-Threads zu blockieren. Enthält Synchronisationsprimitive, GDB-Erweiterungen und Benchmarks, die überlegene Leistung gegenüber Thread-per-Connection-Servern zeigen.
+***** Take
+ClickHouse schaute sich das Thread-per-Connection-Modell an und sagte 'wir können besser als tausend aktive Verbindungen, die an Context-Switches ersticken'. Endlich eine Fiber-Bibliothek, die nicht nur ein weiteres Spielzeugprojekt ist, das aufgegeben wird, nachdem der Autor einen Job bei FAANG bekommen hat.
+***** Comments
+- Sieht wirklich interessant aus. Ich nehme an, das deutet darauf hin, dass ClickHouse schrittweise auf diese Bibliothek für Netzwerk und I/O umsteigen wird, um damit die Hauptschwäche von C++ Thread-per-Connection-Servern anzugehen, nämlich dass sie nicht wirklich mehr als tausend aktive Verbindungen gleichzeitig handhaben können.
+- Scheint nicht exception-safe zu sein, wenn während des Unwinds Task-Switching stattfindet.
+- Ist das vergleichbar mit Seastar?
+** Converting an Integer to a Decimal String in Under Two Nanoseconds :performance:simd:avx512:cpp:
+:PROPERTIES:
+:ID:       48194857
+:URL:      https://onlinelibrary.wiley.com/doi/10.1002/spe.70079
+:HN_URL:   https://news.ycombinator.com/item?id=48194857
+:POINTS:   40
+:COMMENTS: 13
+:BY:       mpweiher
+:END:
+
+*** TLDR
+Daniel Lemire and co-author use AVX-512 IFMA instructions to convert integers to decimal strings 1.4-4x faster than std::to_chars. The core trick: use multiplicative inverses with _mm512_madd52lo_epu64 to extract all 8 digits simultaneously in just two instructions. Works by broadcasting the number to 8 lanes and applying different reciprocals to extract each digit position.
+
+*** Take
+Leave it to Lemire to optimize the most mundane operation imaginable. 'How do you print a number?' 'Two SIMD instructions.' This is what happens when someone actually reads the Intel intrinsics manual for fun.
+
+*** Comments
+
+**** Nokinside
+:PROPERTIES:
+:COMMENT_ID: 48195000
+:END:
+Sounds familiar. If one of the authors Lemire? Of course. SIMD-accelerated integer-to-string conversion. Other speedy things: On-Demand JSON, Parsing Millions of URLs per Second.
+
+**** xlii
+:PROPERTIES:
+:COMMENT_ID: 48195050
+:END:
+I wonder if this can be categorized as galactic algorithm. I can't imagine systems where bulk of processing goes into integer to decimal string conversion but maybe there are such.
+
+**** Cold_Miserable
+:PROPERTIES:
+:COMMENT_ID: 48195100
+:END:
+This is just a worse copy of the original ifma method. Sneller is even better for max throughput.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+两纳秒内将整数转换为十进制字符串
+***** TLDR
+Daniel Lemire 和合著者使用 AVX-512 IFMA 指令将整数转换为十进制字符串,比 std::to_chars 快 1.4-4 倍。核心技巧:使用 _mm512_madd52lo_epu64 的乘法逆元,仅用两条指令同时提取所有 8 位数字。通过将数字广播到 8 个通道并应用不同的倒数来提取每个数字位置。
+***** Take
+让 Lemire 来优化你能想象到的最平凡的操作。'你怎么打印一个数字?' '两条 SIMD 指令。' 这就是当有人真的把 Intel intrinsics 手册当消遣读的结果。
+***** Comments
+- 听起来很熟悉。作者之一是 Lemire 吗?当然。SIMD 加速的整数到字符串转换。其他快速的东西:按需 JSON,每秒解析数百万个 URL。
+- 我想知道这是否可以归类为银河算法。我无法想象大量处理都花在整数到十进制字符串转换上的系统,但也许有这样的。
+- 这只是原始 ifma 方法的较差副本。Sneller 在最大吞吐量方面更好。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+整数を2ナノ秒未満で10進文字列に変換
+***** TLDR
+Daniel Lemireと共著者がAVX-512 IFMA命令を使用して整数を10進文字列に変換し、std::to_charsより1.4-4倍高速。コアトリック：_mm512_madd52lo_epu64で乗法逆元を使用し、わずか2命令で8桁すべてを同時に抽出。数値を8レーンにブロードキャストし、各桁位置を抽出するために異なる逆数を適用する。
+***** Take
+想像できる最も平凡な操作を最適化するのはLemireに任せよう。「数字をどう印刷する？」「2つのSIMD命令。」これはIntel intrinsicsマニュアルを趣味で読む人がいるとこうなる。
+***** Comments
+- 聞き覚えがある。著者の一人はLemire？もちろん。SIMD加速整数-文字列変換。他の高速なもの：オンデマンドJSON、毎秒数百万URLのパース。
+- これは銀河アルゴリズムに分類できるのだろうか。処理の大部分が整数から10進文字列変換に費やされるシステムは想像できないが、あるかもしれない。
+- これは元のifmaメソッドの劣化コピーにすぎない。Snellerは最大スループットでさらに優れている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+정수를 2나노초 미만에 10진 문자열로 변환
+***** TLDR
+Daniel Lemire와 공저자가 AVX-512 IFMA 명령어를 사용하여 정수를 10진 문자열로 std::to_chars보다 1.4-4배 빠르게 변환한다. 핵심 트릭: _mm512_madd52lo_epu64로 곱셈 역원을 사용하여 단 두 개의 명령어로 8자리를 모두 동시에 추출. 숫자를 8개 레인에 브로드캐스트하고 각 자릿수 위치를 추출하기 위해 다른 역수를 적용한다.
+***** Take
+상상할 수 있는 가장 평범한 연산을 최적화하는 건 Lemire에게 맡기자. '숫자를 어떻게 출력해?' '두 개의 SIMD 명령어.' 이것이 누군가가 Intel intrinsics 매뉴얼을 재미로 읽을 때 일어나는 일이다.
+***** Comments
+- 익숙하게 들린다. 저자 중 한 명이 Lemire인가? 물론이다. SIMD 가속 정수-문자열 변환. 다른 빠른 것들: 온디맨드 JSON, 초당 수백만 URL 파싱.
+- 이것이 은하계 알고리즘으로 분류될 수 있는지 궁금하다. 처리의 대부분이 정수에서 10진 문자열 변환에 들어가는 시스템은 상상할 수 없지만 아마 있을 것이다.
+- 이것은 원래 ifma 메서드의 열등한 복사본일 뿐이다. Sneller가 최대 처리량에서 더 낫다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Convertir un entero a cadena decimal en menos de dos nanosegundos
+***** TLDR
+Daniel Lemire y coautor usan instrucciones AVX-512 IFMA para convertir enteros a cadenas decimales 1.4-4x más rápido que std::to_chars. El truco central: usar inversos multiplicativos con _mm512_madd52lo_epu64 para extraer los 8 dígitos simultáneamente en solo dos instrucciones. Funciona transmitiendo el número a 8 carriles y aplicando diferentes recíprocos para extraer cada posición de dígito.
+***** Take
+Déjale a Lemire optimizar la operación más mundana imaginable. '¿Cómo imprimes un número?' 'Dos instrucciones SIMD.' Esto es lo que pasa cuando alguien realmente lee el manual de intrínsecos de Intel por diversión.
+***** Comments
+- Suena familiar. ¿Uno de los autores es Lemire? Por supuesto. Conversión entero-cadena acelerada por SIMD. Otras cosas rápidas: JSON bajo demanda, Parseando millones de URLs por segundo.
+- Me pregunto si esto puede categorizarse como algoritmo galáctico. No puedo imaginar sistemas donde la mayor parte del procesamiento va a conversión de entero a cadena decimal pero quizás los hay.
+- Esto es solo una copia peor del método ifma original. Sneller es aún mejor para máximo rendimiento.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Eine Ganzzahl in unter zwei Nanosekunden in eine Dezimalzeichenkette umwandeln
+***** TLDR
+Daniel Lemire und Co-Autor nutzen AVX-512 IFMA-Befehle, um Ganzzahlen 1,4-4x schneller als std::to_chars in Dezimalstrings zu konvertieren. Der Kerntrick: Multiplikative Inverse mit _mm512_madd52lo_epu64 verwenden, um alle 8 Ziffern gleichzeitig in nur zwei Befehlen zu extrahieren. Funktioniert durch Broadcast der Zahl auf 8 Lanes und Anwenden verschiedener Kehrwerte zur Extraktion jeder Ziffernposition.
+***** Take
+Überlasst es Lemire, die banalste Operation überhaupt zu optimieren. 'Wie druckst du eine Zahl?' 'Zwei SIMD-Befehle.' Das passiert, wenn jemand das Intel Intrinsics-Handbuch zum Spaß liest.
+***** Comments
+- Klingt vertraut. Ist einer der Autoren Lemire? Natürlich. SIMD-beschleunigte Integer-zu-String-Konvertierung. Andere schnelle Sachen: On-Demand JSON, Millionen URLs pro Sekunde parsen.
+- Ich frage mich, ob das als galaktischer Algorithmus kategorisiert werden kann. Ich kann mir keine Systeme vorstellen, bei denen der Großteil der Verarbeitung in Integer-zu-Dezimalstring-Konvertierung geht, aber vielleicht gibt es solche.
+- Das ist nur eine schlechtere Kopie der ursprünglichen ifma-Methode. Sneller ist noch besser für maximalen Durchsatz.
+** Greg Brockman: Inside the 72 Hours That Almost Killed OpenAI :ai:openai:startups:drama:
+:PROPERTIES:
+:ID:       48255593
+:URL:      https://fs.blog/knowledge-project-podcast/greg-brockman/
+:HN_URL:   https://news.ycombinator.com/item?id=48255593
+:POINTS:   24
+:COMMENTS: 6
+:BY:       prakashqwerty
+:END:
+
+*** TLDR
+OpenAI co-founder Greg Brockman gives a rare interview covering the November 2023 board crisis. He reveals he quit the same day Sam Altman was fired, how they designed 'Phoenix' (a backup company) at Sam's house the next morning, and how Ilya Sutskever's tweet changed everything. Also discusses how most OpenAI code is now AI-generated and why they stopped showing reasoning traces.
+
+*** Take
+The guy who quit OpenAI within hours of Sam's firing is now doing a victory lap podcast about it. At least he's honest about the 'what will take me to $1B' diary entry. Nothing says nonprofit mission like contingency planning your for-profit escape hatch.
+
+*** Comments
+
+**** embedding-shape
+:PROPERTIES:
+:COMMENT_ID: 48255700
+:END:
+Not feeling like 1 hour of my Sunday is worth listening to this. Does anyone have the non-clickbait answers to the two 'previews' mentioned? What was the technical plan and what was the real reason they abandoned the nonprofit structure?
+
+**** H8crilA
+:PROPERTIES:
+:COMMENT_ID: 48255750
+:END:
+As far as Brockman's account goes, there's also his personal diary which was made public as part of that lawsuit by Musk. Includes the line: 'Financially what will take me to $1B?' BTW, Musk lost because he filed too late, lol.
+
+**** optimalsolver
+:PROPERTIES:
+:COMMENT_ID: 48255800
+:END:
+So many people were trying to sign the petition at once that it actually crashed Google Docs. I still wonder how much peer pressure was behind that. What if you think Sam is a scumbag but people are waving this petition in your face?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Greg Brockman: 差点杀死 OpenAI 的 72 小时内幕
+***** TLDR
+OpenAI 联合创始人 Greg Brockman 接受了一次罕见的采访,讲述了 2023 年 11 月的董事会危机。他透露自己在 Sam Altman 被解雇的同一天辞职,他们第二天早上如何在 Sam 家里设计了 'Phoenix'(一家备用公司),以及 Ilya Sutskever 的推文如何改变了一切。还讨论了 OpenAI 的大部分代码现在是 AI 生成的,以及为什么他们停止显示推理过程。
+***** Take
+这个在 Sam 被解雇几小时内就辞职的人现在正在做一个胜利圈播客。至少他对'什么能让我赚到10亿美元'的日记条目很诚实。没有什么比为你的营利性逃生舱做应急计划更能体现非营利使命了。
+***** Comments
+- 不觉得我周日的一小时值得花在听这个上。有人有那两个'预览'中提到的非标题党答案吗?技术计划是什么,他们放弃非营利结构的真正原因是什么?
+- 至于 Brockman 的叙述,还有他的个人日记,作为 Musk 诉讼的一部分被公开了。包括这句话:'在财务上什么能让我达到10亿美元?' 顺便说一下,Musk 输了因为他提交得太晚了,哈哈。
+- 太多人同时试图签署请愿书,实际上把 Google Docs 搞崩溃了。我仍然想知道背后有多少同伴压力。如果你认为 Sam 是个混蛋,但人们在你面前挥舞着这份请愿书呢?
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Greg Brockman: OpenAIを殺しかけた72時間の内幕
+***** TLDR
+OpenAI共同創設者のGreg Brockmanが2023年11月の取締役会危機について稀なインタビューを行った。Sam Altmanが解雇されたその日に辞任したこと、翌朝Samの家で「Phoenix」（バックアップ会社）をどう設計したか、Ilya Sutskeverのツイートがすべてを変えたことを明かした。また、OpenAIのコードのほとんどが今やAI生成であること、なぜ推論トレースの表示をやめたかについても議論。
+***** Take
+Samの解雇から数時間で辞めた男が、それについて勝利のポッドキャストをやっている。少なくとも「何が私を10億ドルに導くか」という日記の記述については正直だ。非営利ミッションを体現するものは、営利目的の脱出口の緊急計画以外にない。
+***** Comments
+- 日曜日の1時間をこれを聞くのに費やす価値があるとは思えない。言及されている2つの「プレビュー」のクリックベイトではない答えを持っている人はいますか？技術計画は何で、非営利構造を放棄した本当の理由は何でしたか？
+- Brockmanの説明に関しては、Muskによる訴訟の一部として公開された彼の個人日記もある。「財政的に何が私を10億ドルに導くか？」という行を含む。ちなみに、Muskは提出が遅すぎたので負けた、笑。
+- あまりにも多くの人が一度に請願書に署名しようとして、実際にGoogle Docsがクラッシュした。その背後にどれだけの同調圧力があったのかまだ不思議に思う。Samがクズだと思っているのに、人々が目の前で請願書を振っていたらどうする？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Greg Brockman: OpenAI를 거의 죽일 뻔한 72시간의 내막
+***** TLDR
+OpenAI 공동 창립자 Greg Brockman이 2023년 11월 이사회 위기에 대한 드문 인터뷰를 진행했다. Sam Altman이 해고된 같은 날 사임했다는 것, 다음 날 아침 Sam의 집에서 'Phoenix'(백업 회사)를 어떻게 설계했는지, Ilya Sutskever의 트윗이 어떻게 모든 것을 바꿨는지 밝혔다. 또한 OpenAI 코드의 대부분이 이제 AI가 생성하고 왜 추론 추적 표시를 중단했는지도 논의.
+***** Take
+Sam이 해고된 지 몇 시간 만에 OpenAI를 그만둔 사람이 이제 그것에 대해 승리 랩 팟캐스트를 하고 있다. 적어도 '무엇이 나를 10억 달러로 이끌 것인가' 일기 항목에 대해서는 솔직하다. 영리 탈출구에 대한 비상 계획만큼 비영리 미션을 잘 보여주는 것은 없다.
+***** Comments
+- 일요일 한 시간을 이것 듣는 데 쓸 가치가 있다고 느끼지 않는다. 언급된 두 '프리뷰'에 대한 클릭베이트가 아닌 답변을 가진 사람이 있나? 기술 계획은 무엇이었고 비영리 구조를 포기한 진짜 이유는 무엇이었나?
+- Brockman의 설명에 관해서는 Musk의 소송의 일부로 공개된 그의 개인 일기도 있다. '재정적으로 무엇이 나를 10억 달러로 이끌 것인가?'라는 줄을 포함한다. 참고로 Musk는 너무 늦게 제출해서 졌다, ㅋㅋ.
+- 너무 많은 사람들이 동시에 청원서에 서명하려고 해서 실제로 Google Docs가 다운됐다. 그 뒤에 얼마나 많은 동료 압력이 있었는지 여전히 궁금하다. Sam이 쓰레기라고 생각하는데 사람들이 당신 얼굴 앞에서 이 청원서를 흔들고 있다면?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Greg Brockman: Dentro de las 72 horas que casi matan a OpenAI
+***** TLDR
+El cofundador de OpenAI Greg Brockman da una rara entrevista cubriendo la crisis del consejo de noviembre 2023. Revela que renunció el mismo día que Sam Altman fue despedido, cómo diseñaron 'Phoenix' (una empresa de respaldo) en la casa de Sam la mañana siguiente, y cómo el tweet de Ilya Sutskever lo cambió todo. También discute cómo la mayoría del código de OpenAI es ahora generado por IA y por qué dejaron de mostrar trazas de razonamiento.
+***** Take
+El tipo que renunció a OpenAI horas después del despido de Sam ahora está haciendo un podcast de vuelta de victoria sobre eso. Al menos es honesto sobre la entrada del diario 'qué me llevará a $1B'. Nada dice misión sin fines de lucro como planificar contingencias para tu escape con fines de lucro.
+***** Comments
+- No siento que 1 hora de mi domingo valga escuchar esto. ¿Alguien tiene las respuestas no-clickbait a los dos 'avances' mencionados? ¿Cuál era el plan técnico y cuál fue la verdadera razón por la que abandonaron la estructura sin fines de lucro?
+- En cuanto al relato de Brockman, también está su diario personal que se hizo público como parte de esa demanda de Musk. Incluye la línea: '¿Financieramente qué me llevará a $1B?' Por cierto, Musk perdió porque presentó muy tarde, jaja.
+- Tanta gente estaba tratando de firmar la petición que realmente colapsó Google Docs. Todavía me pregunto cuánta presión de pares había detrás. ¿Qué pasa si piensas que Sam es un imbécil pero la gente está agitando esta petición en tu cara?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Greg Brockman: Einblicke in die 72 Stunden, die OpenAI fast getötet hätten
+***** TLDR
+OpenAI-Mitgründer Greg Brockman gibt ein seltenes Interview über die Vorstandskrise im November 2023. Er enthüllt, dass er am selben Tag kündigte, als Sam Altman gefeuert wurde, wie sie am nächsten Morgen in Sams Haus 'Phoenix' (eine Backup-Firma) entwarfen, und wie Ilya Sutskeveres Tweet alles veränderte. Diskutiert auch, dass der meiste OpenAI-Code jetzt KI-generiert ist und warum sie aufgehört haben, Reasoning-Traces zu zeigen.
+***** Take
+Der Typ, der OpenAI innerhalb von Stunden nach Sams Entlassung verließ, macht jetzt einen Sieges-Podcast darüber. Zumindest ist er ehrlich über den 'was wird mich zu $1B bringen' Tagebucheintrag. Nichts sagt Non-Profit-Mission wie die Notfallplanung deines For-Profit-Notausgangs.
+***** Comments
+- Fühle nicht, dass 1 Stunde meines Sonntags es wert ist, das zu hören. Hat jemand die Nicht-Clickbait-Antworten auf die zwei erwähnten 'Vorschauen'? Was war der technische Plan und was war der wahre Grund, warum sie die Non-Profit-Struktur aufgaben?
+- Was Brockmans Bericht angeht, gibt es auch sein persönliches Tagebuch, das als Teil dieser Klage von Musk öffentlich wurde. Enthält die Zeile: 'Finanziell was wird mich zu $1B bringen?' Übrigens, Musk verlor, weil er zu spät eingereicht hat, lol.
+- So viele Leute versuchten gleichzeitig die Petition zu unterschreiben, dass es tatsächlich Google Docs zum Absturz brachte. Ich frage mich immer noch, wie viel Gruppenzwang dahinter steckte. Was wenn du denkst Sam ist ein Mistkerl, aber Leute wedeln mit dieser Petition vor deinem Gesicht?
