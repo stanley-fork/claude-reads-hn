@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-05-29 10:00:00 UT UTC
+#+DATE: 2026-05-29T10:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+VW kills your smart home, Opus gets smarter, and someone actually read the clouds
+
+* Highlights
+- Volkswagen blocks Home Assistant with OAuth changes
+- Opus 4.8 brings dynamic workflows and better judgment
+- Claude Code has secrets the docs forgot to mention
+- NOAA reminds us clouds have names
+- HeidiSQL: the database manager nobody asked about
+
+* Stories
+
+** Volkswagen blocks Home Assistant by requiring client assertion :automotive:home-assistant:iot:privacy:
+:PROPERTIES:
+:ID:       48319509
+:URL:      https://github.com/robinostlund/homeassistant-volkswagencarnet/issues/967
+:HN_URL:   https://news.ycombinator.com/item?id=48319509
+:POINTS:   163
+:COMMENTS: 84
+:BY:       Kwastie
+:END:
+
+*** TLDR
+Volkswagen added OAuth client assertion requirements to their API, breaking third-party integrations like Home Assistant's volkswagencarnet plugin. Users can no longer check their car's charge status or location from their smart home dashboards. The change appears to be an anti-third-party lock-in move rather than a security improvement.
+
+*** Take
+VW's business model: sell you a $50k car, then charge extra for the privilege of knowing where you parked it. The CANBUS sniffer guy in the comments is the real hero here.
+
+*** Comments
+
+**** venzaspa
+:PROPERTIES:
+:COMMENT_ID: 48319601
+:END:
+Quite a few other manufacturers have done the same thing. I'm building a CANBUS sniffer because I don't trust they won't do the same.
+
+**** vincnetas
+:PROPERTIES:
+:COMMENT_ID: 48319580
+:END:
+Why are they shooting themselves in the feet? Is this really a tangible income stream? Is it really increasing security?
+
+**** Retr0id
+:PROPERTIES:
+:COMMENT_ID: 48319550
+:END:
+Client Assertion is an OAuth feature, but that is not at all what is being discussed here, if anyone else was confused.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+大众通过要求客户端断言来阻止Home Assistant
+***** TLDR
+大众在其API中添加了OAuth客户端断言要求，破坏了像Home Assistant这样的第三方集成。用户无法再从智能家居仪表板检查汽车充电状态或位置。
+***** Take
+大众的商业模式：卖给你一辆5万美元的车，然后为了让你知道停在哪里而额外收费。
+***** Comments
+- 其他制造商也做了同样的事。我正在制作CANBUS嗅探器因为我不信任他们。
+- 为什么他们要搬石头砸自己的脚？这真的是可观的收入来源吗？
+- 客户端断言是OAuth功能，但这根本不是这里讨论的内容。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+フォルクスワーゲンがクライアントアサーションを要求してHome Assistantをブロック
+***** TLDR
+フォルクスワーゲンがAPIにOAuthクライアントアサーション要件を追加し、Home Assistantなどのサードパーティ統合を破壊した。ユーザーはスマートホームダッシュボードから車の充電状態や位置を確認できなくなった。
+***** Take
+VWのビジネスモデル：5万ドルの車を売り、どこに駐車したか知る特権に追加料金を請求する。
+***** Comments
+- 他のメーカーも同じことをしている。信用できないのでCANBUSスニファーを作っている。
+- なぜ自分の足を撃っているのか？これは本当に収益源になるのか？
+- クライアントアサーションはOAuth機能だが、ここで議論されているのはそれではない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+폭스바겐, 클라이언트 어설션 요구로 Home Assistant 차단
+***** TLDR
+폭스바겐이 API에 OAuth 클라이언트 어설션 요구 사항을 추가하여 Home Assistant와 같은 서드파티 통합을 깨뜨렸다. 사용자는 더 이상 스마트 홈 대시보드에서 차량 충전 상태나 위치를 확인할 수 없다.
+***** Take
+VW의 비즈니스 모델: 5만 달러짜리 차를 팔고, 주차 위치를 알 권리에 추가 요금을 부과한다.
+***** Comments
+- 다른 제조업체들도 같은 짓을 했다. 믿을 수 없어서 CANBUS 스니퍼를 만들고 있다.
+- 왜 자충수를 두는 거지? 이게 정말 수익원이 되나?
+- 클라이언트 어설션은 OAuth 기능이지만, 여기서 논의되는 건 그게 아니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Volkswagen bloquea Home Assistant requiriendo aserción de cliente
+***** TLDR
+Volkswagen agregó requisitos de aserción de cliente OAuth a su API, rompiendo integraciones de terceros como Home Assistant. Los usuarios ya no pueden verificar el estado de carga o ubicación de su auto desde sus paneles de hogar inteligente.
+***** Take
+El modelo de negocio de VW: venderte un auto de $50k, luego cobrarte extra por saber dónde lo estacionaste.
+***** Comments
+- Otros fabricantes han hecho lo mismo. Estoy construyendo un sniffer CANBUS porque no confío en ellos.
+- ¿Por qué se disparan en el pie? ¿Es realmente una fuente de ingresos tangible?
+- Client Assertion es una característica de OAuth, pero eso no es lo que se discute aquí.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Volkswagen blockiert Home Assistant durch Client-Assertion-Anforderung
+***** TLDR
+Volkswagen hat OAuth-Client-Assertion-Anforderungen zu ihrer API hinzugefügt und damit Drittanbieter-Integrationen wie Home Assistant zerstört. Nutzer können den Ladestatus oder Standort ihres Autos nicht mehr über Smart-Home-Dashboards prüfen.
+***** Take
+VWs Geschäftsmodell: Dir ein 50.000€-Auto verkaufen, dann extra kassieren für das Privileg zu wissen, wo du geparkt hast.
+***** Comments
+- Andere Hersteller haben dasselbe gemacht. Ich baue einen CANBUS-Sniffer, weil ich ihnen nicht traue.
+- Warum schießen sie sich selbst ins Knie? Ist das wirklich eine nennenswerte Einnahmequelle?
+- Client Assertion ist ein OAuth-Feature, aber das ist nicht das, was hier diskutiert wird.
+** Claude Opus 4.8 :ai:llm:anthropic:claude:
+:PROPERTIES:
+:ID:       48311647
+:URL:      https://www.anthropic.com/news/claude-opus-4-8
+:HN_URL:   https://news.ycombinator.com/item?id=48311647
+:POINTS:   1531
+:COMMENTS: 1196
+:BY:       craigmart
+:END:
+
+*** TLDR
+［REVISIT - comments 2.8x since last coverage］ Anthropic released Opus 4.8 with modest benchmark improvements, better judgment in agentic tasks, and new features: dynamic workflows in Claude Code for large-scale problems, adjustable effort levels in claude.ai, and fast mode now 3x cheaper. Early testers report it catches its own mistakes and pushes back when plans don't make sense.
+
+*** Take
+The third minor version bump on Opus 4.5 suggests we've entered the 'diminishing returns but we still need to ship something' phase. The honest 'modest but tangible improvement' framing is refreshing though.
+
+*** Comments
+
+**** NiloCK
+:PROPERTIES:
+:COMMENT_ID: 48311700
+:END:
+This is the first time we've had a third minor version bump on a frontier Anthropic model. Each posting fairly modest claimed gains.
+
+**** senko
+:PROPERTIES:
+:COMMENT_ID: 48311750
+:END:
+My fav coding benchmark is building a simple RTS game in one file. Claude Code with Opus 4.8 in ultracode mode nailed it, the best result so far.
+
+**** colonCapitalDee
+:PROPERTIES:
+:COMMENT_ID: 48311800
+:END:
+You can now turn off adaptive thinking in the web UI. I've had problems with thinking not triggering and sub-par output. Glad we can finally turn it off.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Claude Opus 4.8
+***** TLDR
+［重访 - 评论数增长2.8倍］ Anthropic发布了Opus 4.8，基准测试有适度改进，代理任务判断更好，新功能：Claude Code中的动态工作流、可调节的努力程度、快速模式便宜3倍。
+***** Take
+Opus 4.5的第三个次要版本升级表明我们进入了'收益递减但仍需发布'阶段。不过'适度但切实的改进'这种诚实说法令人耳目一新。
+***** Comments
+- 这是Anthropic前沿模型首次进行第三次次要版本更新。每次都声称有适度改进。
+- 我最喜欢的编码基准是在一个文件中构建简单的RTS游戏。Opus 4.8在ultracode模式下表现最佳。
+- 你现在可以在网页UI中关闭自适应思考。我遇到过思考不触发的问题。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claude Opus 4.8
+***** TLDR
+［再訪 - コメント2.8倍増］ AnthropicがOpus 4.8をリリース。ベンチマークの改善、エージェントタスクでの判断力向上、新機能：Claude Codeの動的ワークフロー、調整可能な努力レベル、高速モードが3倍安く。
+***** Take
+Opus 4.5の3回目のマイナーバージョンアップは、「収穫逓減だけど何か出さないと」フェーズに入ったことを示唆。「控えめだが確実な改善」という正直な表現は新鮮だ。
+***** Comments
+- Anthropicのフロンティアモデルで3回目のマイナーバージョンアップは初めて。
+- お気に入りのコーディングベンチマークは1ファイルで簡単なRTSゲームを作ること。Opus 4.8が最高の結果だった。
+- WebUIで適応的思考をオフにできるようになった。思考がトリガーされない問題があった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude Opus 4.8
+***** TLDR
+［재방문 - 댓글 2.8배 증가］ Anthropic이 Opus 4.8을 출시했다. 벤치마크 개선, 에이전트 작업에서 더 나은 판단력, 새 기능: Claude Code의 동적 워크플로우, 조절 가능한 노력 수준, 빠른 모드가 3배 저렴해짐.
+***** Take
+Opus 4.5의 세 번째 마이너 버전 업데이트는 '수확 체감이지만 뭔가 출시해야 한다' 단계에 들어섰음을 시사한다. '겸손하지만 실질적인 개선'이라는 솔직한 표현은 신선하다.
+***** Comments
+- Anthropic 프론티어 모델에서 세 번째 마이너 버전 업데이트는 처음이다.
+- 내가 좋아하는 코딩 벤치마크는 한 파일로 간단한 RTS 게임 만들기. Opus 4.8이 최고였다.
+- 이제 웹 UI에서 적응형 사고를 끌 수 있다. 사고가 트리거되지 않는 문제가 있었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Claude Opus 4.8
+***** TLDR
+［REVISITA - comentarios 2.8x］ Anthropic lanzó Opus 4.8 con mejoras modestas en benchmarks, mejor juicio en tareas agénticas, y nuevas características: flujos de trabajo dinámicos en Claude Code, niveles de esfuerzo ajustables, modo rápido 3x más barato.
+***** Take
+El tercer bump de versión menor en Opus 4.5 sugiere que entramos en la fase de 'rendimientos decrecientes pero aún necesitamos lanzar algo'. Aunque el framing honesto de 'mejora modesta pero tangible' es refrescante.
+***** Comments
+- Es la primera vez que tenemos un tercer bump de versión menor en un modelo frontera de Anthropic.
+- Mi benchmark favorito es construir un juego RTS simple en un archivo. Opus 4.8 en modo ultracode lo clavó.
+- Ahora puedes desactivar el pensamiento adaptativo en la UI web. Tuve problemas con el pensamiento no activándose.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Claude Opus 4.8
+***** TLDR
+［WIEDERBESUCH - Kommentare 2,8x］ Anthropic hat Opus 4.8 veröffentlicht mit moderaten Benchmark-Verbesserungen, besserem Urteilsvermögen bei agentischen Aufgaben, und neuen Features: dynamische Workflows in Claude Code, einstellbare Aufwandsstufen, Fast-Modus 3x günstiger.
+***** Take
+Der dritte Minor-Version-Bump auf Opus 4.5 deutet darauf hin, dass wir in die Phase 'sinkende Erträge aber wir müssen trotzdem was releasen' eingetreten sind. Das ehrliche 'bescheidene aber greifbare Verbesserung'-Framing ist aber erfrischend.
+***** Comments
+- Das ist das erste Mal, dass wir einen dritten Minor-Version-Bump bei einem Frontier-Modell von Anthropic haben.
+- Mein Lieblings-Coding-Benchmark ist ein einfaches RTS-Spiel in einer Datei. Opus 4.8 im Ultracode-Modus hat es perfekt hinbekommen.
+- Man kann jetzt adaptives Denken in der Web-UI ausschalten. Ich hatte Probleme damit, dass das Denken nicht ausgelöst wurde.
+** Claude Code – Everything You Can Configure That the Docs Don't Tell You :claude-code:anthropic:developer-tools:documentation:
+:PROPERTIES:
+:ID:       48318174
+:URL:      https://buildingbetter.tech/p/i-read-the-claude-code-source-code
+:HN_URL:   https://news.ycombinator.com/item?id=48318174
+:POINTS:   92
+:COMMENTS: 21
+:BY:       ankitg12
+:END:
+
+*** TLDR
+Someone reverse-engineered Claude Code's source to find undocumented features: a 'magic doc' feature for project context, autodream prompts for autonomous planning, and various feature flags. Most are either documented elsewhere, gated by feature flags, or of limited use.
+
+*** Take
+The fact that someone had to read the source code to find these features is either a documentation failure or intentional gatekeeping. Either way, 'at this rate, the next pope will be from Anthropic' made me snort.
+
+*** Comments
+
+**** sheept
+:PROPERTIES:
+:COMMENT_ID: 48318200
+:END:
+I'm curious about that 'magic doc' feature. Is that meant to go in CLAUDE.md or a project file?
+
+**** exhaze
+:PROPERTIES:
+:COMMENT_ID: 48318220
+:END:
+Claude Code's feature cardinality is breathtaking. At this rate, the next pope will be from Anthropic.
+
+**** 0123456789ABCDE
+:PROPERTIES:
+:COMMENT_ID: 48318250
+:END:
+Most of these are in fact documented, the rest either no longer exists, is still gated by feature flags, or has little use to most users.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Claude Code - 文档没告诉你的所有配置
+***** TLDR
+有人逆向工程了Claude Code的源代码，发现了未记录的功能：用于项目上下文的'魔法文档'功能、用于自主规划的autodream提示符，以及各种功能标志。
+***** Take
+有人必须阅读源代码才能找到这些功能，这要么是文档失败，要么是有意设置门槛。
+***** Comments
+- 我很好奇那个'魔法文档'功能。是放在CLAUDE.md还是项目文件中？
+- Claude Code的功能数量令人叹为观止。照这个速度，下一任教皇将来自Anthropic。
+- 这些大多实际上有文档，其余要么不再存在，要么仍被功能标志限制。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claude Code - ドキュメントに書いていない設定すべて
+***** TLDR
+誰かがClaude Codeのソースをリバースエンジニアリングして、未文書化の機能を発見：プロジェクトコンテキスト用の「マジックドック」機能、自律計画用のautodreamプロンプト、各種フィーチャーフラグ。
+***** Take
+これらの機能を見つけるためにソースコードを読まなければならなかった事実は、ドキュメントの失敗か意図的なゲートキーピングだ。
+***** Comments
+- その「マジックドック」機能が気になる。CLAUDE.mdに入れるの？
+- Claude Codeの機能の多さは驚異的。このペースだと、次の教皇はAnthropicから出る。
+- これらのほとんどは実際に文書化されていて、残りは存在しないか、フィーチャーフラグで制限されている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude Code - 문서에 없는 모든 설정
+***** TLDR
+누군가 Claude Code 소스를 리버스 엔지니어링하여 문서화되지 않은 기능을 발견했다: 프로젝트 컨텍스트용 '매직 독' 기능, 자율 계획용 autodream 프롬프트, 다양한 기능 플래그.
+***** Take
+이 기능들을 찾기 위해 소스 코드를 읽어야 했다는 사실은 문서 실패이거나 의도적인 게이트키핑이다.
+***** Comments
+- 그 '매직 독' 기능이 궁금하다. CLAUDE.md에 넣는 건가?
+- Claude Code의 기능 수는 숨이 멎을 정도다. 이 속도라면 다음 교황은 Anthropic 출신이 될 것이다.
+- 이것들 대부분은 실제로 문서화되어 있고, 나머지는 없어졌거나 기능 플래그로 제한되어 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Claude Code - Todo lo que puedes configurar que la documentación no dice
+***** TLDR
+Alguien hizo ingeniería inversa del código fuente de Claude Code y encontró características no documentadas: una función 'magic doc' para contexto de proyecto, prompts autodream para planificación autónoma, y varios feature flags.
+***** Take
+El hecho de que alguien tuviera que leer el código fuente para encontrar estas características es un fallo de documentación o gatekeeping intencional.
+***** Comments
+- Tengo curiosidad por esa función 'magic doc'. ¿Va en CLAUDE.md o en un archivo de proyecto?
+- La cardinalidad de características de Claude Code es impresionante. A este ritmo, el próximo papa será de Anthropic.
+- La mayoría de estos están documentados, el resto ya no existe o está limitado por feature flags.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Claude Code - Alles was du konfigurieren kannst, was die Docs nicht verraten
+***** TLDR
+Jemand hat den Claude Code Quellcode reverse-engineered und undokumentierte Features gefunden: eine 'Magic Doc'-Funktion für Projektkontext, Autodream-Prompts für autonome Planung, und verschiedene Feature-Flags.
+***** Take
+Dass jemand den Quellcode lesen musste um diese Features zu finden, ist entweder ein Dokumentationsfehler oder absichtliches Gatekeeping.
+***** Comments
+- Mich interessiert dieses 'Magic Doc'-Feature. Kommt das in CLAUDE.md oder eine Projektdatei?
+- Claude Codes Feature-Kardinalität ist atemberaubend. Bei diesem Tempo kommt der nächste Papst von Anthropic.
+- Die meisten davon sind tatsächlich dokumentiert, der Rest existiert nicht mehr oder ist durch Feature-Flags eingeschränkt.
+** Ten Basic Clouds :weather:science:education:meteorology:
+:PROPERTIES:
+:ID:       48261377
+:URL:      https://www.noaa.gov/jetstream/clouds/ten-basic-clouds
+:HN_URL:   https://news.ycombinator.com/item?id=48261377
+:POINTS:   120
+:COMMENTS: 33
+:BY:       nopg
+:END:
+
+*** TLDR
+［Article unreachable - from title + comments］ NOAA's JetStream education page classifies clouds into ten basic types across three altitude levels: high (Cirrus, Cirrocumulus, Cirrostratus), middle (Altocumulus, Altostratus, Nimbostratus), and low (Cumulus, Stratocumulus, Stratus, Cumulonimbus). Meteorological observers still manually encode cloud observations.
+
+*** Take
+Finally, a government website that teaches you something useful without asking for your SSN. The commenter who spent time in Antarctica learning cloud types for METOBS might be the most wholesome HN character arc I've seen.
+
+*** Comments
+
+**** circadian
+:PROPERTIES:
+:COMMENT_ID: 48261400
+:END:
+During my spell in Antarctica, I had to act as a meteorological observer. This required learning the 10 types. It made me a total cloud addict.
+
+**** srean
+:PROPERTIES:
+:COMMENT_ID: 48261420
+:END:
+What I find fascinating are the ways different clouds modify light or are illuminated by different kinds of light, from the belt of Venus to crepuscular rays.
+
+**** falloon
+:PROPERTIES:
+:COMMENT_ID: 48261450
+:END:
+If you're interested in learning more about clouds I'd recommend the international cloud atlas website. Personal top three: Nacreous clouds, Altocumulus lenticularis, Cirrus homogenitus.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+十种基本云
+***** TLDR
+［无法获取文章］ NOAA的JetStream教育页面将云分为三个高度层的十种基本类型：高层（卷云、卷积云、卷层云）、中层（高积云、高层云、雨层云）、低层（积云、层积云、层云、积雨云）。
+***** Take
+终于有一个政府网站教你有用的东西，而不需要你的社保号。那个在南极洲学习云类型的评论者可能是我见过的最温馨的HN人物成长弧。
+***** Comments
+- 在南极洲期间，我必须担任气象观察员。这需要学习10种类型。这让我完全迷上了云。
+- 我觉得迷人的是不同的云如何改变光线，从金星带到曙暮光线。
+- 如果你想了解更多关于云的知识，我推荐国际云图网站。个人前三：珠母云、荚状高积云、人为卷云。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+10種類の基本的な雲
+***** TLDR
+［記事取得不可］ NOAAのJetStream教育ページは、雲を3つの高度レベルで10の基本タイプに分類：高層（巻雲、巻積雲、巻層雲）、中層（高積雲、高層雲、乱層雲）、低層（積雲、層積雲、層雲、積乱雲）。
+***** Take
+やっと社会保障番号を求めずに役立つことを教えてくれる政府サイトが。南極で雲の種類を学んだコメンターは、私が見た中で最も心温まるHNキャラクターアークかもしれない。
+***** Comments
+- 南極滞在中、気象観測員として活動しなければならなかった。10種類を学ぶ必要があった。完全に雲中毒になった。
+- 魅力的なのは、金星の帯から薄明光線まで、異なる雲がどのように光を変化させるかだ。
+- 雲についてもっと学びたいなら、国際雲図のウェブサイトをお勧めする。個人的トップ3：真珠雲、レンズ雲、飛行機雲。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+열 가지 기본 구름
+***** TLDR
+［기사 접근 불가］ NOAA의 JetStream 교육 페이지는 구름을 세 고도 수준의 10가지 기본 유형으로 분류한다: 상층(권운, 권적운, 권층운), 중층(고적운, 고층운, 난층운), 하층(적운, 층적운, 층운, 적란운).
+***** Take
+드디어 사회보장번호를 요구하지 않고 유용한 것을 가르쳐주는 정부 웹사이트가. 남극에서 구름 유형을 배운 댓글러는 내가 본 가장 훈훈한 HN 캐릭터 아크일 것이다.
+***** Comments
+- 남극에 있을 때 기상 관측자로 활동해야 했다. 10가지 유형을 배워야 했다. 완전히 구름 중독이 됐다.
+- 흥미로운 것은 금성의 띠부터 박명광선까지, 다른 구름들이 빛을 어떻게 변형시키는가이다.
+- 구름에 대해 더 알고 싶다면 국제 구름 도감 웹사이트를 추천한다. 개인 톱3: 진주운, 렌즈구름, 비행기구름.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Diez nubes básicas
+***** TLDR
+［Artículo inaccesible］ La página educativa JetStream de NOAA clasifica las nubes en diez tipos básicos en tres niveles de altitud: alto (Cirrus, Cirrocumulus, Cirrostratus), medio (Altocumulus, Altostratus, Nimbostratus), bajo (Cumulus, Stratocumulus, Stratus, Cumulonimbus).
+***** Take
+Finalmente, un sitio web del gobierno que te enseña algo útil sin pedir tu número de seguro social. El comentarista que pasó tiempo en la Antártida aprendiendo tipos de nubes podría ser el arco de personaje más wholesome que he visto en HN.
+***** Comments
+- Durante mi estancia en la Antártida, tuve que actuar como observador meteorológico. Esto requería aprender los 10 tipos. Me volví adicto a las nubes.
+- Lo fascinante es cómo diferentes nubes modifican la luz, desde el cinturón de Venus hasta los rayos crepusculares.
+- Si te interesa aprender más sobre nubes, recomiendo el sitio del atlas internacional de nubes. Mis tres favoritas: nubes nacaradas, Altocumulus lenticularis, Cirrus homogenitus.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zehn Grundwolken
+***** TLDR
+［Artikel nicht erreichbar］ Die NOAA JetStream-Bildungsseite klassifiziert Wolken in zehn Grundtypen auf drei Höhenstufen: hoch (Cirrus, Cirrocumulus, Cirrostratus), mittel (Altocumulus, Altostratus, Nimbostratus), niedrig (Cumulus, Stratocumulus, Stratus, Cumulonimbus).
+***** Take
+Endlich eine Regierungswebsite, die dir etwas Nützliches beibringt ohne nach deiner Sozialversicherungsnummer zu fragen. Der Kommentator, der in der Antarktis Wolkentypen gelernt hat, könnte der wholesome-ste HN-Charakter-Arc sein.
+***** Comments
+- Während meiner Zeit in der Antarktis musste ich als meteorologischer Beobachter fungieren. Das erforderte das Lernen der 10 Typen. Es machte mich zum Wolken-Süchtigen.
+- Faszinierend ist, wie verschiedene Wolken Licht modifizieren, vom Venusgürtel bis zu Dämmerungsstrahlen.
+- Wenn du mehr über Wolken lernen willst, empfehle ich die internationale Wolkenatlas-Website. Meine Top 3: Perlmuttwolken, Altocumulus lenticularis, Cirrus homogenitus.
+** HeidiSQL – Lightweight MariaDB, MySQL, SQL Server, PostgreSQL and SQLite Manager :database:tools:open-source:sql:
+:PROPERTIES:
+:ID:       48318568
+:URL:      https://github.com/HeidiSQL/HeidiSQL
+:HN_URL:   https://news.ycombinator.com/item?id=48318568
+:POINTS:   20
+:COMMENTS: 5
+:BY:       peter_d_sherman
+:END:
+
+*** TLDR
+HeidiSQL is a free, open-source database management tool for Windows that supports MariaDB, MySQL, SQL Server, PostgreSQL, and SQLite. Written in Delphi, it's been around since 2006 and offers a lightweight alternative to heavier tools like DBeaver.
+
+*** Take
+The eternal question: 'Does it do anything DBeaver doesn't do?' The answer is yes - it loads faster and uses less RAM. Sometimes boring is the feature.
+
+*** Comments
+
+**** articsputnik
+:PROPERTIES:
+:COMMENT_ID: 48318600
+:END:
+I use neovim for querying my databases with DBUI and tpope dadbod. But HeidiSQL and DBeaver are great, and open source.
+
+**** dominicrose
+:PROPERTIES:
+:COMMENT_ID: 48318620
+:END:
+Does it do anything DBeaver doesn't do?
+
+**** orionblastar
+:PROPERTIES:
+:COMMENT_ID: 48318650
+:END:
+Looks good, but I can't afford Delphi. I might try their Community Free Edition, though.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+HeidiSQL - 轻量级MariaDB、MySQL、SQL Server、PostgreSQL和SQLite管理器
+***** TLDR
+HeidiSQL是一个免费开源的Windows数据库管理工具，支持MariaDB、MySQL、SQL Server、PostgreSQL和SQLite。用Delphi编写，自2006年以来一直存在，是DBeaver等重型工具的轻量替代品。
+***** Take
+永恒的问题：'它能做DBeaver做不了的事吗？'答案是能 - 它加载更快，使用更少的RAM。有时候无聊就是功能。
+***** Comments
+- 我用neovim配合DBUI和tpope dadbod查询数据库。但HeidiSQL和DBeaver都很棒，都是开源的。
+- 它能做DBeaver做不了的事吗？
+- 看起来不错，但我买不起Delphi。不过我可能会试试他们的社区免费版。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+HeidiSQL - 軽量なMariaDB、MySQL、SQL Server、PostgreSQL、SQLiteマネージャー
+***** TLDR
+HeidiSQLは、MariaDB、MySQL、SQL Server、PostgreSQL、SQLiteをサポートする無料のオープンソースWindows用データベース管理ツール。Delphiで書かれ、2006年から存在し、DBeaver のような重いツールの軽量な代替となる。
+***** Take
+永遠の質問：「DBeaverにできないことができる？」答えはイエス - 起動が速く、RAMを少なく使う。時には退屈さが機能だ。
+***** Comments
+- DBUIとtpope dadbodでneovimを使ってデータベースをクエリしている。でもHeidiSQLとDBeaverは素晴らしく、オープンソースだ。
+- DBeaverにできないことができる？
+- 良さそうだけど、Delphiは買えない。Community Free Editionを試すかも。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+HeidiSQL - 경량 MariaDB, MySQL, SQL Server, PostgreSQL, SQLite 관리자
+***** TLDR
+HeidiSQL은 MariaDB, MySQL, SQL Server, PostgreSQL, SQLite를 지원하는 무료 오픈소스 Windows용 데이터베이스 관리 도구다. Delphi로 작성되었으며 2006년부터 존재해왔고, DBeaver 같은 무거운 도구의 경량 대안이다.
+***** Take
+영원한 질문: 'DBeaver가 못하는 걸 할 수 있나요?' 답은 예 - 더 빨리 로드되고 RAM을 적게 쓴다. 때로는 지루함이 기능이다.
+***** Comments
+- DBUI와 tpope dadbod로 neovim을 사용해 데이터베이스를 쿼리한다. 하지만 HeidiSQL과 DBeaver도 훌륭하고 오픈소스다.
+- DBeaver가 못하는 걸 할 수 있나요?
+- 좋아 보이지만 Delphi를 살 여유가 없다. Community Free Edition을 시도해볼까.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+HeidiSQL - Gestor ligero de MariaDB, MySQL, SQL Server, PostgreSQL y SQLite
+***** TLDR
+HeidiSQL es una herramienta gratuita y de código abierto para Windows que soporta MariaDB, MySQL, SQL Server, PostgreSQL y SQLite. Escrita en Delphi, existe desde 2006 y ofrece una alternativa ligera a herramientas pesadas como DBeaver.
+***** Take
+La pregunta eterna: '¿Hace algo que DBeaver no hace?' La respuesta es sí - carga más rápido y usa menos RAM. A veces lo aburrido es la característica.
+***** Comments
+- Uso neovim para consultar mis bases de datos con DBUI y tpope dadbod. Pero HeidiSQL y DBeaver son geniales, y de código abierto.
+- ¿Hace algo que DBeaver no hace?
+- Se ve bien, pero no puedo pagar Delphi. Podría probar su Community Free Edition.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+HeidiSQL - Leichtgewichtiger MariaDB, MySQL, SQL Server, PostgreSQL und SQLite Manager
+***** TLDR
+HeidiSQL ist ein kostenloses, quelloffenes Datenbank-Management-Tool für Windows, das MariaDB, MySQL, SQL Server, PostgreSQL und SQLite unterstützt. In Delphi geschrieben, existiert es seit 2006 und bietet eine leichtgewichtige Alternative zu schwereren Tools wie DBeaver.
+***** Take
+Die ewige Frage: 'Kann es etwas, was DBeaver nicht kann?' Die Antwort ist ja - es lädt schneller und braucht weniger RAM. Manchmal ist langweilig das Feature.
+***** Comments
+- Ich nutze neovim mit DBUI und tpope dadbod für Datenbankabfragen. Aber HeidiSQL und DBeaver sind großartig und Open Source.
+- Kann es etwas, was DBeaver nicht kann?
+- Sieht gut aus, aber ich kann mir Delphi nicht leisten. Vielleicht probiere ich die Community Free Edition.
