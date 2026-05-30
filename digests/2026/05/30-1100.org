@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-05-30 11:00:00 UT UTC
+#+DATE: 2026-05-30T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Zig builds faster, Denmark dumps SpaceX, and HN debates whether AI will render us all economically decorative
+
+* Highlights
+- Zig splits build into configurer + maker, compilation times go brr
+- Danish pension fund tells SpaceX: your governance is giving venture capital
+- The Dead Economy Theory hits 1165 comments as HN processes its feelings about AI unemployment
+
+* Stories
+
+** Zig: Build System Reworked :zig:compilers:build-systems:performance:
+:PROPERTIES:
+:ID:       48334048
+:URL:      https://ziglang.org/devlog/2026/#2026-05-26
+:HN_URL:   https://news.ycombinator.com/item?id=48334048
+:POINTS:   83
+:COMMENTS: 11
+:BY:       tosh
+:END:
+
+*** TLDR
+Andrew Kelley landed a major refactor splitting Zig's build system into two processes: a 'configurer' that compiles build.zig into a lightweight debug binary to construct the build graph, and a 'maker' that executes it. The build graph is now serialized to a binary config file and cached, while the maker compiles asynchronously in release mode.
+
+*** Take
+Zig continues to be that language you pick up to 'hack something together' and somehow end up rewriting your entire codebase in. The 'language for artisanal Japanese carpenters' line from the comments is too accurate.
+
+*** Comments
+
+**** portly
+:PROPERTIES:
+:COMMENT_ID: 48334049
+:END:
+After having used Zig for a couple of months now I am convinced it is a fantastic tool language. You just pick it up to hack some idea together freely.
+
+**** KingMob
+:PROPERTIES:
+:COMMENT_ID: 48334050
+:END:
+The language for artisanal Japanese carpenters
+
+**** epolanski
+:PROPERTIES:
+:COMMENT_ID: 48334051
+:END:
+This sounds like great news, Zig's compilation times are already terrific and this is going to only make them better.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Zig：构建系统重构
+***** TLDR
+Andrew Kelley完成了一次重大重构，将Zig的构建系统拆分为两个进程：一个'配置器'将build.zig编译成轻量级调试二进制文件来构建依赖图，另一个'执行器'来执行它。构建图现在被序列化为二进制配置文件并缓存，执行器则异步以发布模式编译。
+***** Take
+Zig继续作为那种你拿来'随便写点什么'结果最后把整个代码库都用它重写的语言。评论区说它是'日本手工匠人的编程语言'，太准确了。
+***** Comments
+- 用了Zig几个月后，我确信它是一个绝佳的工具语言。你可以随心所欲地用它来实现各种想法。
+- 日本手工匠人的编程语言
+- 这是个好消息，Zig的编译时间本来就很快，这只会让它更快。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Zig：ビルドシステムの刷新
+***** TLDR
+Andrew Kelleyがビルドシステムの大規模リファクタリングを完了。build.zigを軽量なデバッグバイナリにコンパイルしてビルドグラフを構築する「configurer」と、それを実行する「maker」の2プロセスに分離。ビルドグラフはバイナリ設定ファイルにシリアライズされキャッシュされ、makerは非同期でリリースモードでコンパイルされる。
+***** Take
+Zigは「ちょっとしたものを作る」つもりで触り始めて、気づいたらコードベース全体を書き直している、そんな言語であり続けている。コメントの「日本の職人のための言語」は的確すぎる。
+***** Comments
+- Zigを数ヶ月使ってみて、素晴らしいツール言語だと確信した。自由にアイデアを形にできる。
+- 日本の職人のための言語
+- 素晴らしいニュース。Zigのコンパイル時間は既に優秀だが、さらに良くなる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Zig: 빌드 시스템 개편
+***** TLDR
+Andrew Kelley가 Zig의 빌드 시스템을 두 개의 프로세스로 분리하는 대규모 리팩토링을 완료했다. build.zig를 가벼운 디버그 바이너리로 컴파일하여 빌드 그래프를 구성하는 'configurer'와 이를 실행하는 'maker'로 나뉜다. 빌드 그래프는 바이너리 설정 파일로 직렬화되어 캐시되고, maker는 릴리스 모드에서 비동기적으로 컴파일된다.
+***** Take
+Zig는 '뭔가 간단히 만들어보자'고 시작했다가 결국 전체 코드베이스를 다시 작성하게 되는 그런 언어다. 댓글의 '일본 장인을 위한 언어'라는 표현이 너무 정확하다.
+***** Comments
+- Zig를 몇 달 사용해보니 환상적인 도구 언어라고 확신하게 됐다. 자유롭게 아이디어를 구현할 수 있다.
+- 일본 장인을 위한 언어
+- 좋은 소식이다. Zig의 컴파일 시간은 이미 훌륭한데 더 좋아질 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Zig: Sistema de construcción rediseñado
+***** TLDR
+Andrew Kelley completó una refactorización mayor dividiendo el sistema de construcción de Zig en dos procesos: un 'configurador' que compila build.zig en un binario de depuración ligero para construir el grafo de dependencias, y un 'ejecutor' que lo ejecuta. El grafo se serializa ahora a un archivo de configuración binario y se cachea, mientras el ejecutor compila asincrónicamente en modo release.
+***** Take
+Zig sigue siendo ese lenguaje que empiezas a usar para 'hacer algo rápido' y terminas reescribiendo todo tu código en él. El comentario de 'el lenguaje para carpinteros artesanales japoneses' es demasiado preciso.
+***** Comments
+- Después de usar Zig un par de meses, estoy convencido de que es un lenguaje fantástico. Puedes implementar ideas libremente.
+- El lenguaje para carpinteros artesanales japoneses
+- Grandes noticias. Los tiempos de compilación de Zig ya son excelentes y esto solo los mejorará.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zig: Build-System überarbeitet
+***** TLDR
+Andrew Kelley hat ein großes Refactoring abgeschlossen und Zigs Build-System in zwei Prozesse aufgeteilt: einen 'Configurer', der build.zig zu einer leichten Debug-Binary kompiliert, um den Build-Graphen zu erstellen, und einen 'Maker', der ihn ausführt. Der Build-Graph wird jetzt in eine binäre Konfigurationsdatei serialisiert und gecacht, während der Maker asynchron im Release-Modus kompiliert wird.
+***** Take
+Zig bleibt die Sprache, die man 'mal eben für was Schnelles' anfängt und dann plötzlich die ganze Codebase damit umschreibt. Der Kommentar 'die Sprache für japanische Handwerker' ist zu treffend.
+***** Comments
+- Nach ein paar Monaten mit Zig bin ich überzeugt, dass es eine fantastische Werkzeugsprache ist. Man kann frei Ideen umsetzen.
+- Die Sprache für japanische Handwerker
+- Tolle Neuigkeiten. Zigs Kompilierzeiten sind schon ausgezeichnet und werden nur noch besser.
+** Danish pension fund excludes SpaceX citing governance and valuation :finance:spacex:esg:investing:governance:
+:PROPERTIES:
+:ID:       48333820
+:URL:      https://www.reuters.com/legal/transactional/danish-pension-fund-excludes-spacex-citing-governance-valuation-2026-05-29/
+:HN_URL:   https://news.ycombinator.com/item?id=48333820
+:POINTS:   162
+:COMMENTS: 107
+:BY:       vrganj
+:END:
+
+*** TLDR
+AkademikerPension, a Danish pension fund, has excluded SpaceX from its portfolio over governance concerns and valuation issues. They've already excluded Tesla and companies involved in weapons, fossil fuels, and human rights violations. Despite the exclusions, the fund actually outperformed peers from 2009-2021.
+
+*** Take
+Turns out you can exclude the companies run by main characters on social media AND still beat the market. The ESG skeptics are typing furiously.
+
+*** Comments
+
+**** devlovstad
+:PROPERTIES:
+:COMMENT_ID: 48333821
+:END:
+I have AkademikerPension as my pension fund through work and this move suits me quite well. They've already excluded Tesla as well as a variety of companies that profit of weapon production, fossil fuel production or are suspected for human rights violations.
+
+**** runeks
+:PROPERTIES:
+:COMMENT_ID: 48333822
+:END:
+I wanted to see how well Akademikerpension has done wrt. returns. This graph shows average yearly return from the financial crisis 2009 until 2021 and they are actually the best performing among other Danish pension funds.
+
+**** brikym
+:PROPERTIES:
+:COMMENT_ID: 48333823
+:END:
+I really want a QQQ/VOO replacement that excludes these new rushed IPOs that are just exit liquidity. There are ETFs that exclude harmful industries. How about an ETF that doesn't include IPOs for six months or until insider lock ups periods are over.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+丹麦养老基金因治理和估值问题排除SpaceX
+***** TLDR
+丹麦养老基金AkademikerPension因治理问题和估值担忧将SpaceX从其投资组合中排除。他们此前已排除特斯拉以及涉及武器、化石燃料和侵犯人权的公司。尽管有这些排除，该基金在2009-2021年间实际上跑赢了同行。
+***** Take
+原来你可以排除那些在社交媒体上当主角的公司创始人，同时还能跑赢市场。ESG怀疑论者正在疯狂打字。
+***** Comments
+- 我的工作养老金就是AkademikerPension，这个举措很合我意。他们已经排除了特斯拉以及各种从武器生产、化石燃料或涉嫌侵犯人权中获利的公司。
+- 我想看看AkademikerPension的回报表现如何。这张图显示了从2009年金融危机到2021年的平均年回报率，他们实际上是丹麦养老基金中表现最好的。
+- 我真的想要一个排除这些仓促上市、只为让内部人套现的新IPO的QQQ/VOO替代品。有排除有害行业的ETF，为什么不能有一个六个月内或内部锁定期结束前不包含IPO的ETF呢。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+デンマーク年金基金、ガバナンスと評価額を理由にSpaceXを除外
+***** TLDR
+デンマークの年金基金AkademikerPensionがガバナンス上の懸念と評価額の問題を理由にSpaceXをポートフォリオから除外した。テスラや武器・化石燃料・人権侵害に関わる企業も既に除外済み。これらの除外にもかかわらず、2009年から2021年にかけて同業他社を上回るパフォーマンスを達成している。
+***** Take
+SNSで主役を張る人物が率いる企業を除外しても市場を上回れることが判明。ESG懐疑派が猛烈にタイピング中。
+***** Comments
+- 私の職場の年金もAkademikerPensionで、この動きは大歓迎だ。テスラや武器生産、化石燃料、人権侵害に関わる企業も既に除外している。
+- AkademikerPensionのリターンを見てみたかった。2009年の金融危機から2021年までの平均年間リターンを見ると、デンマークの年金基金の中で実際に最高のパフォーマンスだ。
+- 急いで上場した出口流動性のためだけのIPOを除外したQQQ/VOOの代替品が本当に欲しい。有害な産業を除外するETFはある。6ヶ月間かインサイダーのロックアップ期間が終わるまでIPOを含まないETFはどうだろう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+덴마크 연기금, 거버넌스와 밸류에이션 문제로 SpaceX 제외
+***** TLDR
+덴마크 연기금 AkademikerPension이 거버넌스 우려와 밸류에이션 문제를 이유로 SpaceX를 포트폴리오에서 제외했다. 이미 테슬라와 무기, 화석연료, 인권 침해 관련 기업들도 제외한 바 있다. 이러한 제외에도 불구하고 이 펀드는 2009-2021년 동안 실제로 동종 업계 대비 초과 수익을 달성했다.
+***** Take
+소셜 미디어에서 주인공 행세하는 사람들이 운영하는 회사를 제외하고도 시장을 이길 수 있다는 게 밝혀졌다. ESG 회의론자들이 맹렬히 타이핑 중.
+***** Comments
+- 내 직장 연금이 AkademikerPension인데, 이 결정이 마음에 든다. 그들은 이미 테슬라와 무기 생산, 화석 연료, 인권 침해 혐의가 있는 다양한 기업들을 제외했다.
+- AkademikerPension의 수익률이 어떤지 보고 싶었다. 이 그래프는 2009년 금융위기부터 2021년까지의 평균 연간 수익률을 보여주는데, 실제로 덴마크 연기금 중 최고 성과를 보였다.
+- 급하게 상장해서 내부자 엑시트 유동성에 불과한 신규 IPO를 제외한 QQQ/VOO 대체품이 정말 필요하다. 유해 산업을 제외하는 ETF가 있다. 6개월 동안이나 내부자 락업 기간이 끝날 때까지 IPO를 포함하지 않는 ETF는 어떨까.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Fondo de pensiones danés excluye a SpaceX por gobernanza y valoración
+***** TLDR
+AkademikerPension, un fondo de pensiones danés, ha excluido a SpaceX de su cartera por preocupaciones de gobernanza y valoración. Ya habían excluido a Tesla y empresas involucradas en armas, combustibles fósiles y violaciones de derechos humanos. A pesar de las exclusiones, el fondo superó a sus pares entre 2009 y 2021.
+***** Take
+Resulta que puedes excluir a las empresas dirigidas por protagonistas de redes sociales Y aún así superar al mercado. Los escépticos del ESG están tecleando furiosamente.
+***** Comments
+- Mi pensión laboral es AkademikerPension y esta decisión me parece bien. Ya han excluido a Tesla y a varias empresas que lucran con la producción de armas, combustibles fósiles o sospechosas de violar derechos humanos.
+- Quería ver qué tal le ha ido a Akademikerpension en rendimientos. Este gráfico muestra el retorno anual promedio desde la crisis de 2009 hasta 2021 y en realidad son los mejores entre los fondos de pensiones daneses.
+- Realmente quiero un reemplazo de QQQ/VOO que excluya estas IPOs apresuradas que solo son liquidez de salida. Hay ETFs que excluyen industrias dañinas. ¿Qué tal un ETF que no incluya IPOs por seis meses o hasta que terminen los períodos de bloqueo de insiders?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Dänischer Pensionsfonds schließt SpaceX wegen Governance und Bewertung aus
+***** TLDR
+Der dänische Pensionsfonds AkademikerPension hat SpaceX wegen Governance-Bedenken und Bewertungsfragen aus seinem Portfolio ausgeschlossen. Tesla und Unternehmen aus den Bereichen Waffen, fossile Brennstoffe und Menschenrechtsverletzungen wurden bereits ausgeschlossen. Trotz dieser Ausschlüsse übertraf der Fonds von 2009 bis 2021 tatsächlich seine Mitbewerber.
+***** Take
+Es stellt sich heraus, dass man die von Social-Media-Hauptfiguren geführten Unternehmen ausschließen UND trotzdem den Markt schlagen kann. Die ESG-Skeptiker tippen wütend.
+***** Comments
+- Meine betriebliche Altersvorsorge ist AkademikerPension und diese Entscheidung gefällt mir. Sie haben bereits Tesla und diverse Unternehmen ausgeschlossen, die von Waffenproduktion, fossilen Brennstoffen oder mutmaßlichen Menschenrechtsverletzungen profitieren.
+- Ich wollte sehen, wie gut Akademikerpension bei den Renditen abschneidet. Diese Grafik zeigt die durchschnittliche Jahresrendite von der Finanzkrise 2009 bis 2021, und sie sind tatsächlich die bestperformenden unter den dänischen Pensionsfonds.
+- Ich hätte gerne einen QQQ/VOO-Ersatz, der diese überstürzten IPOs ausschließt, die nur Exit-Liquidität sind. Es gibt ETFs, die schädliche Branchen ausschließen. Wie wäre es mit einem ETF, der IPOs sechs Monate lang oder bis zum Ende der Insider-Sperrfristen nicht einbezieht?
+** The dead economy theory :ai:economics:labor:automation:future:
+:PROPERTIES:
+:ID:       48324712
+:URL:      https://www.owenmcgrann.com/p/the-dead-economy-theory
+:HN_URL:   https://news.ycombinator.com/item?id=48324712
+:POINTS:   1028
+:COMMENTS: 1165
+:BY:       WillDaSilva
+:END:
+
+*** TLDR
+［REVISIT - 1165 comments］ The article argues that AI automation will create a 'dead economy' where most human labor becomes unnecessary, but unlike previous tech revolutions, there's no new sector to absorb displaced workers. Money will flow in B2B transactions while regular people see increasingly little of it.
+
+*** Take
+HN hit 1165 comments processing this existential dread. The debate spans 'AI will make everyone lawyers' to 'money will exist but humans won't touch it'. We're all just watching the discourse unfold like a nature documentary about our own extinction.
+
+*** Comments
+
+**** iliaxj
+:PROPERTIES:
+:COMMENT_ID: 48324713
+:END:
+If AI suddenly makes it possible for a law firm to be run with a skeleton crew, then what's stopping all those people you fired from starting new law companies, where AI also does most of the work, and competing with you for the same market?
+
+**** My_Name
+:PROPERTIES:
+:COMMENT_ID: 48324714
+:END:
+Not many people see that the end result is that when ordinary people stop earning money, and stop buying products, all the money will be used purely for B2B transactions. Money will still exist, but people will not see hardly any of it.
+
+**** movpasd
+:PROPERTIES:
+:COMMENT_ID: 48324715
+:END:
+This article puts into words a lot of things that had been on my mind as missing in AI discourse. Most significantly, actually considering the systemic consequences of the promised AI future, how it interacts with political economy.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+死亡经济理论
+***** TLDR
+［重访 - 1165条评论］ 文章认为AI自动化将创造一个'死亡经济'，大多数人类劳动将变得不必要，但与以往的技术革命不同，没有新的行业来吸收被取代的工人。资金将在B2B交易中流动，而普通人能接触到的越来越少。
+***** Take
+HN用1165条评论来消化这种存在性焦虑。讨论从'AI会让每个人都能当律师'到'钱还会存在但人类碰不到它'。我们都只是像看自然纪录片一样看着关于我们自身灭绝的讨论展开。
+***** Comments
+- 如果AI突然使得律所可以用极少数人运营，那么被你解雇的那些人为什么不能开新的律所，也让AI做大部分工作，跟你竞争同一个市场呢？
+- 很少有人意识到，最终结果是当普通人不再赚钱、不再购买产品时，所有的钱将纯粹用于B2B交易。钱仍然存在，但人们几乎看不到它。
+- 这篇文章把很多我认为AI讨论中缺失的东西用文字表达了出来。最重要的是，它实际考虑了承诺中的AI未来的系统性后果，以及它如何与政治经济相互作用。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+死んだ経済理論
+***** TLDR
+［再訪 - 1165件のコメント］ この記事は、AIオートメーションがほとんどの人間の労働が不要になる「死んだ経済」を生み出すと主張している。しかし過去の技術革命と異なり、解雇された労働者を吸収する新しいセクターがない。お金はB2B取引で流れ続けるが、一般の人々が目にする機会はますます減っていく。
+***** Take
+HNはこの実存的な不安を処理するのに1165件のコメントを費やした。議論は「AIで誰もが弁護士になれる」から「お金は存在するが人間は触れられない」まで及ぶ。私たちは自分たちの絶滅についての議論を自然ドキュメンタリーを見るように眺めている。
+***** Comments
+- AIによって法律事務所が少人数で運営できるようになったとして、解雇された人たちが新しい法律事務所を作って、同じくAIに仕事をさせて、同じ市場で競争することを止めるものは何だ？
+- 普通の人々がお金を稼がなくなり、製品を買わなくなったとき、すべてのお金がB2B取引だけに使われるようになることに気づいている人は少ない。お金は存在し続けるが、人々はほとんど見ることがなくなる。
+- この記事は、AI議論で欠けていると思っていた多くのことを言葉にしている。最も重要なのは、約束されたAIの未来の体系的な結果と、それが政治経済とどう相互作用するかを実際に考慮していること。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+죽은 경제 이론
+***** TLDR
+［재방문 - 1165개 댓글］ 이 기사는 AI 자동화가 대부분의 인간 노동이 불필요해지는 '죽은 경제'를 만들어낼 것이라고 주장한다. 하지만 이전 기술 혁명과 달리 해고된 노동자들을 흡수할 새로운 분야가 없다. 돈은 B2B 거래에서 흐르겠지만 일반인들이 볼 수 있는 돈은 점점 줄어든다.
+***** Take
+HN은 이 실존적 공포를 처리하는 데 1165개의 댓글을 썼다. 'AI가 모든 사람을 변호사로 만들 것'부터 '돈은 존재하지만 인간은 만질 수 없을 것'까지 논쟁이 펼쳐진다. 우리는 모두 우리 자신의 멸종에 대한 담론이 펼쳐지는 것을 자연 다큐멘터리처럼 지켜보고 있다.
+***** Comments
+- AI가 갑자기 로펌을 소수의 인원으로 운영할 수 있게 해준다면, 해고된 사람들이 새로운 로펌을 차리고 AI가 대부분의 일을 하게 해서 같은 시장에서 경쟁하는 것을 막을 수 있는 게 뭐가 있나?
+- 일반 사람들이 돈을 벌지 않고 제품을 사지 않게 되면 모든 돈이 순전히 B2B 거래에만 사용될 것이라는 걸 아는 사람이 많지 않다. 돈은 여전히 존재하겠지만 사람들은 거의 보지 못할 것이다.
+- 이 기사는 AI 담론에서 빠져 있다고 생각했던 많은 것들을 말로 표현했다. 가장 중요한 것은 약속된 AI 미래의 체계적인 결과와 그것이 정치경제와 어떻게 상호작용하는지를 실제로 고려한다는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La teoría de la economía muerta
+***** TLDR
+［REVISITA - 1165 comentarios］ El artículo argumenta que la automatización por IA creará una 'economía muerta' donde la mayoría del trabajo humano se vuelve innecesario, pero a diferencia de revoluciones tecnológicas anteriores, no hay un nuevo sector para absorber a los trabajadores desplazados. El dinero fluirá en transacciones B2B mientras la gente común ve cada vez menos de él.
+***** Take
+HN llegó a 1165 comentarios procesando esta angustia existencial. El debate abarca desde 'la IA hará que todos sean abogados' hasta 'el dinero existirá pero los humanos no lo tocarán'. Todos estamos viendo el discurso desarrollarse como un documental de naturaleza sobre nuestra propia extinción.
+***** Comments
+- Si la IA de repente hace posible que un bufete de abogados funcione con un equipo mínimo, ¿qué impide que todas las personas que despediste inicien nuevas firmas legales, donde la IA también hace la mayor parte del trabajo, y compitan contigo por el mismo mercado?
+- Poca gente ve que el resultado final es que cuando la gente común deje de ganar dinero y de comprar productos, todo el dinero se usará puramente para transacciones B2B. El dinero seguirá existiendo, pero la gente apenas lo verá.
+- Este artículo pone en palabras muchas cosas que tenía en mente como faltantes en el discurso sobre IA. Lo más significativo es considerar realmente las consecuencias sistémicas del prometido futuro con IA, cómo interactúa con la economía política.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Theorie der toten Wirtschaft
+***** TLDR
+［REVISIT - 1165 Kommentare］ Der Artikel argumentiert, dass KI-Automatisierung eine 'tote Wirtschaft' schaffen wird, in der die meiste menschliche Arbeit unnötig wird, aber anders als bei früheren Technologierevolutionen gibt es keinen neuen Sektor, der verdrängte Arbeitnehmer aufnehmen könnte. Geld wird in B2B-Transaktionen fließen, während normale Menschen immer weniger davon sehen.
+***** Take
+HN hat 1165 Kommentare gebraucht, um diese existenzielle Angst zu verarbeiten. Die Debatte reicht von 'KI wird alle zu Anwälten machen' bis 'Geld wird existieren, aber Menschen werden es nicht anfassen'. Wir alle schauen nur zu, wie sich der Diskurs wie eine Naturdokumentation über unsere eigene Ausrottung entfaltet.
+***** Comments
+- Wenn KI plötzlich ermöglicht, dass eine Anwaltskanzlei mit einer Skelettbesetzung geführt werden kann, was hindert dann all die gefeuerten Leute daran, neue Kanzleien zu gründen, wo KI auch die meiste Arbeit macht, und mit dir um den gleichen Markt zu konkurrieren?
+- Wenige Menschen sehen, dass das Endergebnis ist: Wenn normale Leute aufhören Geld zu verdienen und Produkte zu kaufen, wird alles Geld nur noch für B2B-Transaktionen verwendet. Geld wird weiter existieren, aber Menschen werden kaum welches sehen.
+- Dieser Artikel bringt vieles in Worte, das mir im KI-Diskurs als fehlend erschien. Am bedeutsamsten ist die tatsächliche Betrachtung der systemischen Konsequenzen der versprochenen KI-Zukunft, wie sie mit der politischen Ökonomie interagiert.
+** SQLite is all you need for durable workflows :sqlite:databases:workflows:architecture:infrastructure:
+:PROPERTIES:
+:ID:       48326802
+:URL:      https://obeli.sk/blog/sqlite-is-all-you-need-for-durable-workflows/
+:HN_URL:   https://news.ycombinator.com/item?id=48326802
+:POINTS:   553
+:COMMENTS: 280
+:BY:       tomasol
+:END:
+
+*** TLDR
+［REVISIT - 280 comments］ The article argues that SQLite can handle durable workflow orchestration without needing heavy infrastructure like Temporal or complex message queues. The classic 'cycle of expertise' emerges: learning X, hitting limits, reaching for Y, then realizing Y is overkill and returning to X.
+
+*** Take
+We've reached the 'SQLite is all you need' phase of the workflow engine hype cycle. Next month: 'Why we migrated from SQLite to Postgres'. Then: 'Actually SQLite was fine the whole time'. The comments are a beautiful trainwreck of 'use Postgres' vs 'SQLite handles concurrency better than you think'.
+
+*** Comments
+
+**** utopiah
+:PROPERTIES:
+:COMMENT_ID: 48326803
+:END:
+The cycle of expertise: what is X, I just do Y. Wow I can see so many limits of Y, now I do X. I use X for literally everything. Now that I properly understand the limits of Y but also the heavy constraints of X... maybe Y is enough. I use Y for literally everything. Rinse and repeat.
+
+**** bitexploder
+:PROPERTIES:
+:COMMENT_ID: 48326804
+:END:
+I started setting up my workflows using Temporal. It deploys as relatively light weight local app. For an isolated local installation it uses SQLite. It makes the process of dealing with API retries and organizing workflows and tasks really simple.
+
+**** levkk
+:PROPERTIES:
+:COMMENT_ID: 48326805
+:END:
+I don't understand this obsession with SQLite for real, production apps. SQLite is an embedded database, completely unsuitable for managing concurrency. This is what database servers are for, e.g., Postgres, MySQL. Their entire job is to allow you to modify data from multiple processes.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+SQLite就是你实现持久工作流所需的一切
+***** TLDR
+［重访 - 280条评论］ 文章认为SQLite可以处理持久工作流编排，不需要Temporal这样的重型基础设施或复杂的消息队列。经典的'专业度循环'浮现：学习X，遇到限制，转向Y，然后意识到Y过度杀伤，回到X。
+***** Take
+我们已经到了工作流引擎炒作周期中'SQLite就是你所需的一切'阶段。下个月：'为什么我们从SQLite迁移到了Postgres'。然后：'其实SQLite一直就够用了'。评论区是一场精彩的'用Postgres'vs'SQLite处理并发比你想的好'的撕逼。
+***** Comments
+- 专业度循环：X是什么，我就用Y。哇，我看到了Y的很多限制，现在我用X。我什么都用X。现在我既理解了Y的限制，也理解了X的重度约束...也许Y就够了。我什么都用Y。如此循环。
+- 我开始用Temporal来设置我的工作流。它部署起来是个相对轻量的本地应用。对于隔离的本地安装，它使用SQLite。它让处理API重试和组织工作流和任务变得非常简单。
+- 我不理解对SQLite用于真实生产应用的痴迷。SQLite是一个嵌入式数据库，完全不适合管理并发。这正是数据库服务器的用途，比如Postgres、MySQL。它们的全部工作就是让你从多个进程修改数据。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+SQLiteがあれば永続的ワークフローに必要な全てが揃う
+***** TLDR
+［再訪 - 280件のコメント］ この記事は、SQLiteがTemporalのような重いインフラや複雑なメッセージキューなしに永続的ワークフローオーケストレーションを処理できると主張している。典型的な「熟練度のサイクル」が浮上：Xを学び、限界にぶつかり、Yに手を伸ばし、Yが過剰だと気づいてXに戻る。
+***** Take
+ワークフローエンジンのハイプサイクルで「SQLiteがあれば全て解決」フェーズに到達した。来月：「なぜSQLiteからPostgresに移行したか」。その後：「実はSQLiteで十分だった」。コメント欄は「Postgres使え」vs「SQLiteの並行処理は思ったより優秀」の美しい修羅場。
+***** Comments
+- 熟練度のサイクル：Xって何、とりあえずYでやる。うわ、Yの限界が見えてきた、今度はXを使う。Xを何にでも使う。Yの限界もXの重い制約もちゃんと理解した今...Yで十分かも。Yを何にでも使う。繰り返し。
+- Temporalでワークフローを設定し始めた。比較的軽量なローカルアプリとしてデプロイできる。隔離されたローカルインストールではSQLiteを使う。APIリトライの処理やワークフローとタスクの整理がとても簡単になる。
+- 本番アプリにSQLiteを使うという執着が理解できない。SQLiteは組み込みデータベースで、並行処理の管理には全く不向き。それがデータベースサーバーの仕事だ、PostgresやMySQLのような。複数プロセスからデータを変更できるようにするのが彼らの全仕事だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+SQLite만 있으면 지속성 있는 워크플로우에 충분하다
+***** TLDR
+［재방문 - 280개 댓글］ 기사는 SQLite가 Temporal 같은 무거운 인프라나 복잡한 메시지 큐 없이도 지속성 있는 워크플로우 오케스트레이션을 처리할 수 있다고 주장한다. 전형적인 '전문성 사이클'이 나타난다: X를 배우고, 한계에 부딪히고, Y로 갔다가, Y가 과하다는 걸 깨닫고 X로 돌아온다.
+***** Take
+워크플로우 엔진 하이프 사이클에서 'SQLite만 있으면 된다' 단계에 도달했다. 다음 달: '왜 우리는 SQLite에서 Postgres로 마이그레이션했나'. 그 다음: '사실 SQLite가 처음부터 괜찮았다'. 댓글은 'Postgres 쓰세요' vs 'SQLite 동시성은 생각보다 잘 처리함'의 아름다운 난장판이다.
+***** Comments
+- 전문성 사이클: X가 뭐지, 그냥 Y를 쓴다. 우와 Y의 한계가 너무 많이 보인다, 이제 X를 쓴다. X를 모든 곳에 쓴다. 이제 Y의 한계도 X의 무거운 제약도 제대로 이해했다... Y가 충분할 수도. Y를 모든 곳에 쓴다. 반복.
+- Temporal로 워크플로우를 설정하기 시작했다. 상대적으로 가벼운 로컬 앱으로 배포된다. 격리된 로컬 설치에서는 SQLite를 사용한다. API 재시도 처리와 워크플로우, 태스크 정리가 정말 간단해진다.
+- 실제 프로덕션 앱에 SQLite를 쓴다는 집착을 이해 못 하겠다. SQLite는 임베디드 데이터베이스로 동시성 관리에 완전히 부적합하다. 그게 데이터베이스 서버가 하는 일이다, Postgres나 MySQL 같은. 여러 프로세스에서 데이터를 수정할 수 있게 하는 게 그들의 전체 업무다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+SQLite es todo lo que necesitas para workflows duraderos
+***** TLDR
+［REVISITA - 280 comentarios］ El artículo argumenta que SQLite puede manejar la orquestación de workflows duraderos sin necesitar infraestructura pesada como Temporal o colas de mensajes complejas. El clásico 'ciclo de experiencia' emerge: aprender X, encontrar límites, recurrir a Y, luego darse cuenta de que Y es excesivo y volver a X.
+***** Take
+Hemos llegado a la fase 'SQLite es todo lo que necesitas' del ciclo de hype de motores de workflow. El próximo mes: 'Por qué migramos de SQLite a Postgres'. Luego: 'En realidad SQLite estaba bien todo el tiempo'. Los comentarios son un hermoso desastre de 'usa Postgres' vs 'SQLite maneja la concurrencia mejor de lo que crees'.
+***** Comments
+- El ciclo de experiencia: qué es X, yo solo uso Y. Wow puedo ver tantos límites de Y, ahora uso X. Uso X para literalmente todo. Ahora que entiendo bien los límites de Y pero también las pesadas restricciones de X... quizás Y es suficiente. Uso Y para literalmente todo. Repetir.
+- Empecé a configurar mis workflows usando Temporal. Se despliega como una app local relativamente ligera. Para una instalación local aislada usa SQLite. Hace que el proceso de manejar reintentos de API y organizar workflows y tareas sea muy simple.
+- No entiendo esta obsesión con SQLite para apps reales de producción. SQLite es una base de datos embebida, completamente inadecuada para manejar concurrencia. Para eso son los servidores de bases de datos, como Postgres, MySQL. Todo su trabajo es permitirte modificar datos desde múltiples procesos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+SQLite ist alles, was du für dauerhafte Workflows brauchst
+***** TLDR
+［REVISIT - 280 Kommentare］ Der Artikel argumentiert, dass SQLite die Orchestrierung dauerhafter Workflows bewältigen kann, ohne schwere Infrastruktur wie Temporal oder komplexe Nachrichtenwarteschlangen zu benötigen. Der klassische 'Zyklus der Expertise' taucht auf: X lernen, auf Grenzen stoßen, zu Y greifen, dann feststellen, dass Y übertrieben ist und zu X zurückkehren.
+***** Take
+Wir haben die 'SQLite ist alles was du brauchst'-Phase des Workflow-Engine-Hype-Zyklus erreicht. Nächsten Monat: 'Warum wir von SQLite zu Postgres migriert sind'. Dann: 'Eigentlich war SQLite die ganze Zeit in Ordnung'. Die Kommentare sind ein wunderschönes Desaster von 'nutze Postgres' vs 'SQLite handhabt Nebenläufigkeit besser als du denkst'.
+***** Comments
+- Der Zyklus der Expertise: Was ist X, ich mache einfach Y. Wow, ich sehe so viele Grenzen von Y, jetzt mache ich X. Ich benutze X für buchstäblich alles. Jetzt wo ich die Grenzen von Y richtig verstehe, aber auch die schweren Einschränkungen von X... vielleicht reicht Y. Ich benutze Y für buchstäblich alles. Und von vorn.
+- Ich habe angefangen, meine Workflows mit Temporal einzurichten. Es wird als relativ leichtgewichtige lokale App bereitgestellt. Für eine isolierte lokale Installation verwendet es SQLite. Es macht den Umgang mit API-Retries und die Organisation von Workflows und Aufgaben wirklich einfach.
+- Ich verstehe diese Besessenheit mit SQLite für echte Produktions-Apps nicht. SQLite ist eine eingebettete Datenbank, völlig ungeeignet für die Verwaltung von Nebenläufigkeit. Dafür sind Datenbankserver da, z.B. Postgres, MySQL. Ihre gesamte Aufgabe ist es, dir zu ermöglichen, Daten von mehreren Prozessen aus zu ändern.
+** MCP is dead? :mcp:ai:protocols:llm:infrastructure:
+:PROPERTIES:
+:ID:       48330436
+:URL:      https://www.quandri.io/engineering-blog/mcp-is-dead
+:HN_URL:   https://news.ycombinator.com/item?id=48330436
+:POINTS:   251
+:COMMENTS: 219
+:BY:       nadis
+:END:
+
+*** TLDR
+［REVISIT - 219 comments］ The article argues MCP (Model Context Protocol) is dying because it devours context windows, has poor security, and creates friction. But the real news is in the comments: an OpenAI employee running ChatGPT App Store and MCP pushes back, saying 'practically every company on the planet is building an MCP server'.
+
+*** Take
+Nothing says 'not dead' quite like an OpenAI employee showing up in the HN comments to argue it isn't dead. The article's critique about context window bloat is valid, but MCP is probably 'too big to fail' at this point. Every company on earth apparently has an MCP server now, whether they need one or not.
+
+*** Comments
+
+**** mxstbr
+:PROPERTIES:
+:COMMENT_ID: 48330437
+:END:
+I run the team at OpenAI that's responsible for the ChatGPT App Store, Codex plugins, and all things MCP. The thing that all these 'MCP is dead' posts are missing is that whether or not MCP is used as a transport protocol is actually completely irrelevant. The reason MCP isn't dead is because practically every company on the planet is building an MCP server.
+
+**** CSMastermind
+:PROPERTIES:
+:COMMENT_ID: 48330438
+:END:
+Was this written by AI? MCP is essentially just JSON RPC with a few special fields that must be included. There needs to be some 'service discovery' layer for LLMs to interface with.
+
+**** rixed
+:PROPERTIES:
+:COMMENT_ID: 48330439
+:END:
+Problem 1: It Devours the Context Window. Like would running linearcli --help then notioncli --help then slackcli --help etc? At least with MCP your harness could add in the context only the title of each tool and add full documentation on demand.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+MCP死了吗？
+***** TLDR
+［重访 - 219条评论］ 文章认为MCP（模型上下文协议）正在消亡，因为它吞噬上下文窗口、安全性差、制造摩擦。但真正的新闻在评论里：一位负责ChatGPT应用商店和MCP的OpenAI员工反驳说'地球上几乎每家公司都在构建MCP服务器'。
+***** Take
+没有什么比OpenAI员工出现在HN评论区争辩它没死更能说明'没死'了。文章对上下文窗口膨胀的批评是有道理的，但MCP此时可能已经'大到不能倒'了。地球上每家公司现在显然都有MCP服务器，不管他们需不需要。
+***** Comments
+- 我负责OpenAI的ChatGPT应用商店、Codex插件和所有MCP相关事务的团队。所有这些'MCP已死'的帖子遗漏的是，MCP是否被用作传输协议其实完全无关紧要。MCP没死的原因是地球上几乎每家公司都在构建MCP服务器。
+- 这是AI写的吗？MCP本质上就是带有几个必须包含的特殊字段的JSON RPC。LLM需要某种'服务发现'层来接口。
+- 问题1：它吞噬上下文窗口。就像运行linearcli --help然后notioncli --help然后slackcli --help等等？至少用MCP，你的框架可以只添加每个工具的标题作为上下文，按需添加完整文档。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+MCPは死んだ？
+***** TLDR
+［再訪 - 219件のコメント］ この記事はMCP（Model Context Protocol）がコンテキストウィンドウを食い尽くし、セキュリティが貧弱で、摩擦を生むため消滅しつつあると主張している。しかし本当のニュースはコメント欄にある：ChatGPT App StoreとMCPを担当するOpenAI従業員が「地球上のほぼすべての企業がMCPサーバーを構築している」と反論している。
+***** Take
+「死んでいない」ことを示すのに、HNのコメント欄にOpenAI従業員が現れて死んでいないと主張するほど説得力のあることはない。コンテキストウィンドウの肥大化に関する記事の批判は正当だが、MCPはこの時点でおそらく「大きすぎて潰せない」。地球上のすべての企業が今やMCPサーバーを持っているらしい、必要かどうかに関わらず。
+***** Comments
+- 私はOpenAIでChatGPT App Store、Codexプラグイン、すべてのMCP関連を担当するチームを率いている。これらの「MCPは死んだ」という投稿が見逃しているのは、MCPがトランスポートプロトコルとして使われるかどうかは実際には全く無関係だということ。MCPが死んでいない理由は、地球上のほぼすべての企業がMCPサーバーを構築しているから。
+- これはAIが書いた？MCPは本質的にいくつかの特別なフィールドを含む必要があるJSON RPCだ。LLMがインターフェースするための何らかの「サービスディスカバリー」レイヤーが必要。
+- 問題1：コンテキストウィンドウを食い尽くす。linearcli --helpを実行してからnotioncli --help、slackcli --helpなどを実行するようなもの？少なくともMCPなら、各ツールのタイトルだけをコンテキストに追加し、完全なドキュメントはオンデマンドで追加できる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+MCP는 죽었나?
+***** TLDR
+［재방문 - 219개 댓글］ 기사는 MCP(Model Context Protocol)가 컨텍스트 윈도우를 잡아먹고, 보안이 허술하고, 마찰을 만들어서 죽어가고 있다고 주장한다. 하지만 진짜 뉴스는 댓글에 있다: ChatGPT 앱스토어와 MCP를 담당하는 OpenAI 직원이 '지구상의 거의 모든 회사가 MCP 서버를 만들고 있다'고 반박했다.
+***** Take
+'죽지 않았다'는 것을 증명하는 데 OpenAI 직원이 HN 댓글에 나타나 죽지 않았다고 논쟁하는 것만큼 확실한 게 없다. 컨텍스트 윈도우 비대화에 대한 기사의 비판은 타당하지만, MCP는 이 시점에서 아마 '너무 커서 실패할 수 없는' 상태일 것이다. 지구상의 모든 회사가 이제 MCP 서버를 갖고 있는 것 같다, 필요하든 아니든.
+***** Comments
+- 나는 OpenAI에서 ChatGPT 앱스토어, Codex 플러그인, 그리고 모든 MCP 관련 업무를 담당하는 팀을 이끌고 있다. 이 모든 'MCP는 죽었다' 글들이 놓치고 있는 것은 MCP가 전송 프로토콜로 사용되는지 여부가 실제로는 완전히 무관하다는 것이다. MCP가 죽지 않은 이유는 지구상의 거의 모든 회사가 MCP 서버를 만들고 있기 때문이다.
+- 이거 AI가 쓴 거야? MCP는 본질적으로 몇 가지 특별한 필드가 포함되어야 하는 JSON RPC일 뿐이다. LLM이 인터페이스할 수 있는 어떤 '서비스 디스커버리' 레이어가 필요하다.
+- 문제 1: 컨텍스트 윈도우를 잡아먹는다. linearcli --help 실행하고 notioncli --help 실행하고 slackcli --help 등등 실행하는 것처럼? 적어도 MCP로는 각 도구의 제목만 컨텍스트에 추가하고 전체 문서는 필요할 때 추가할 수 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿MCP está muerto?
+***** TLDR
+［REVISITA - 219 comentarios］ El artículo argumenta que MCP (Model Context Protocol) está muriendo porque devora ventanas de contexto, tiene pobre seguridad y crea fricción. Pero la verdadera noticia está en los comentarios: un empleado de OpenAI a cargo del App Store de ChatGPT y MCP responde que 'prácticamente todas las empresas del planeta están construyendo un servidor MCP'.
+***** Take
+Nada dice 'no está muerto' como un empleado de OpenAI apareciendo en los comentarios de HN para argumentar que no está muerto. La crítica del artículo sobre la inflación de la ventana de contexto es válida, pero MCP probablemente sea 'demasiado grande para caer' a estas alturas. Todas las empresas del mundo aparentemente tienen un servidor MCP ahora, lo necesiten o no.
+***** Comments
+- Dirijo el equipo en OpenAI responsable del App Store de ChatGPT, plugins de Codex y todo lo relacionado con MCP. Lo que todos estos posts de 'MCP está muerto' están perdiendo es que si MCP se usa como protocolo de transporte es en realidad completamente irrelevante. La razón por la que MCP no está muerto es porque prácticamente todas las empresas del planeta están construyendo un servidor MCP.
+- ¿Esto fue escrito por IA? MCP es esencialmente solo JSON RPC con algunos campos especiales que deben incluirse. Necesita haber alguna capa de 'descubrimiento de servicios' para que los LLMs se conecten.
+- Problema 1: Devora la ventana de contexto. ¿Como ejecutar linearcli --help luego notioncli --help luego slackcli --help etc? Al menos con MCP tu arnés podría agregar al contexto solo el título de cada herramienta y agregar documentación completa bajo demanda.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ist MCP tot?
+***** TLDR
+［REVISIT - 219 Kommentare］ Der Artikel argumentiert, dass MCP (Model Context Protocol) stirbt, weil es Kontextfenster verschlingt, schlechte Sicherheit hat und Reibung erzeugt. Aber die echte Nachricht ist in den Kommentaren: Ein OpenAI-Mitarbeiter, der für den ChatGPT App Store und MCP verantwortlich ist, widerspricht: 'praktisch jedes Unternehmen auf dem Planeten baut einen MCP-Server'.
+***** Take
+Nichts sagt 'nicht tot' so deutlich wie ein OpenAI-Mitarbeiter, der in den HN-Kommentaren auftaucht, um zu argumentieren, dass es nicht tot ist. Die Kritik des Artikels am aufgeblähten Kontextfenster ist berechtigt, aber MCP ist an diesem Punkt wahrscheinlich 'too big to fail'. Jedes Unternehmen der Welt hat offenbar jetzt einen MCP-Server, ob sie einen brauchen oder nicht.
+***** Comments
+- Ich leite das Team bei OpenAI, das für den ChatGPT App Store, Codex-Plugins und alles rund um MCP verantwortlich ist. Was all diese 'MCP ist tot'-Posts übersehen: Ob MCP als Transportprotokoll verwendet wird, ist eigentlich völlig irrelevant. Der Grund, warum MCP nicht tot ist: praktisch jedes Unternehmen auf dem Planeten baut einen MCP-Server.
+- Wurde das von KI geschrieben? MCP ist im Wesentlichen nur JSON RPC mit ein paar speziellen Feldern, die enthalten sein müssen. Es muss eine Art 'Service Discovery'-Schicht geben, mit der LLMs interagieren können.
+- Problem 1: Es verschlingt das Kontextfenster. Wie wenn man linearcli --help, dann notioncli --help, dann slackcli --help usw. ausführt? Zumindest mit MCP könnte dein Harness nur den Titel jedes Tools zum Kontext hinzufügen und vollständige Dokumentation bei Bedarf ergänzen.
