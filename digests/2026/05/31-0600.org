@@ -1,0 +1,506 @@
+#+TITLE: HN Digest 2026-05-31 06:00:00 UT UTC
+#+DATE: 2026-05-31T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Racket fixes its pattern matcher, wolfSSL goes post-quantum, and two Austrian artists die together 100 years later
+
+* Highlights
+- Racket v9.2: Non-linear patterns finally work, Unicode 17 arrives
+- wolfCOSE: 7.5KB of post-quantum signing for your IoT toaster
+- Cheese Paper: A text editor for fiction writers who hate databases
+- Klimt told Schiele he draws better - both died in 1918
+- Lattice crypto PDF for when RSA feels too 20th century
+
+* Stories
+
+** Racket v9.2 is now available :racket:programming-languages:release:
+:PROPERTIES:
+:ID:       48306713
+:URL:      https://blog.racket-lang.org/2026/05/racket-v9-2.html
+:HN_URL:   https://news.ycombinator.com/item?id=48306713
+:POINTS:   79
+:COMMENTS: 11
+:BY:       spdegabrielle
+:END:
+
+*** TLDR
+Racket v9.2 fixes a longstanding bug where non-linear match patterns with ... didn't actually check equality. Typed Racket's asin/acos now correctly handle complex numbers. Unicode 17 support lands. A new #%foreign-inline form provides unsafe access to the linklet layer. The stepper displays numbers better and Scribble documents get better mobile scaling by default.
+
+*** Take
+The most exciting feature is fixing a bug that should have been caught years ago. Non-linear patterns not checking equality is the kind of thing that makes you audit every match expression you've ever written. Also, they rewrote member and cond to use racket/kernel syntax, which sounds like busywork until you realize they're cleaning up for something bigger.
+
+*** Comments
+
+**** spdegabrielle
+:PROPERTIES:
+:COMMENT_ID: 48306714
+:END:
+Don't forget to migrate your packages with raco pkg migrate 9.1
+
+**** noosphr
+:PROPERTIES:
+:COMMENT_ID: 48306715
+:END:
+Racket is an amazing language for prototyping ideas that you don't understand yet. At $dayjob I'm using it to test what novel geometries of deep learning models would look like.
+
+**** montyanne
+:PROPERTIES:
+:COMMENT_ID: 48306716
+:END:
+Northeastern graduates assemble!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Racket v9.2 现已发布
+***** TLDR
+Racket v9.2修复了一个长期存在的bug,非线性match模式与...实际上并未检查相等性。Typed Racket的asin/acos现在正确处理复数。支持Unicode 17。新的#%foreign-inline表单提供对linklet层的不安全访问。
+***** Take
+最令人兴奋的功能是修复了一个本应多年前就被发现的bug。非线性模式不检查相等性这种事让你想审计你写过的每一个match表达式。
+***** Comments
+- 不要忘记用raco pkg migrate 9.1迁移你的包
+- Racket是一种很棒的语言,用于原型化你还不理解的想法。在工作中我用它来测试深度学习模型的新几何形状会是什么样子。
+- 东北大学毕业生集合!
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Racket v9.2がリリースされました
+***** TLDR
+Racket v9.2は、非線形matchパターンと...が実際に等価性をチェックしていなかった長年のバグを修正しました。Typed Racketのasin/acosは複素数を正しく処理するようになりました。Unicode 17がサポートされました。新しい#%foreign-inlineフォームはlinkletレイヤーへの安全でないアクセスを提供します。
+***** Take
+最もエキサイティングな機能は、何年も前に発見されるべきだったバグの修正です。非線形パターンが等価性をチェックしないというのは、書いたすべてのmatch式を監査したくなる類のことです。
+***** Comments
+- raco pkg migrate 9.1でパッケージを移行するのを忘れないでください
+- Racketはまだ理解していないアイデアのプロトタイピングに素晴らしい言語です。仕事でディープラーニングモデルの新しいジオメトリがどのようになるかテストするために使っています。
+- ノースイースタン大学卒業生集合!
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Racket v9.2 출시
+***** TLDR
+Racket v9.2는 비선형 match 패턴과 ...가 실제로 동등성을 검사하지 않던 오래된 버그를 수정했습니다. Typed Racket의 asin/acos는 이제 복소수를 올바르게 처리합니다. Unicode 17 지원이 추가되었습니다. 새로운 #%foreign-inline 폼은 linklet 레이어에 대한 안전하지 않은 접근을 제공합니다.
+***** Take
+가장 흥미로운 기능은 몇 년 전에 발견되었어야 할 버그 수정입니다. 비선형 패턴이 동등성을 검사하지 않는다는 것은 작성한 모든 match 표현식을 감사하고 싶게 만드는 종류의 것입니다.
+***** Comments
+- raco pkg migrate 9.1로 패키지를 마이그레이션하는 것을 잊지 마세요
+- Racket은 아직 이해하지 못하는 아이디어의 프로토타이핑에 훌륭한 언어입니다. 직장에서 딥러닝 모델의 새로운 기하학이 어떻게 생겼는지 테스트하는 데 사용하고 있습니다.
+- 노스이스턴 졸업생 모여라!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Racket v9.2 ya está disponible
+***** TLDR
+Racket v9.2 corrige un bug de larga data donde los patrones match no lineales con ... no verificaban la igualdad. El asin/acos de Typed Racket ahora maneja números complejos correctamente. Llega soporte para Unicode 17. Una nueva forma #%foreign-inline proporciona acceso inseguro a la capa linklet.
+***** Take
+La característica más emocionante es corregir un bug que debería haberse detectado hace años. Que los patrones no lineales no verifiquen la igualdad es el tipo de cosa que te hace auditar cada expresión match que hayas escrito.
+***** Comments
+- No olvides migrar tus paquetes con raco pkg migrate 9.1
+- Racket es un lenguaje increíble para prototipar ideas que aún no entiendes. En el trabajo lo uso para probar cómo se verían nuevas geometrías de modelos de deep learning.
+- ¡Graduados de Northeastern reúnanse!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Racket v9.2 ist jetzt verfügbar
+***** TLDR
+Racket v9.2 behebt einen langjährigen Bug, bei dem nichtlineare Match-Muster mit ... die Gleichheit nicht prüften. Typed Rackets asin/acos behandelt jetzt komplexe Zahlen korrekt. Unicode 17-Unterstützung ist da. Eine neue #%foreign-inline Form bietet unsicheren Zugriff auf die Linklet-Schicht.
+***** Take
+Die aufregendste Funktion ist das Beheben eines Bugs, der vor Jahren hätte entdeckt werden sollen. Dass nichtlineare Muster die Gleichheit nicht prüfen, ist die Art von Sache, die einen dazu bringt, jeden Match-Ausdruck zu überprüfen, den man je geschrieben hat.
+***** Comments
+- Vergessen Sie nicht, Ihre Pakete mit raco pkg migrate 9.1 zu migrieren
+- Racket ist eine erstaunliche Sprache zum Prototyping von Ideen, die man noch nicht versteht. Bei der Arbeit verwende ich es, um zu testen, wie neuartige Geometrien von Deep-Learning-Modellen aussehen würden.
+- Northeastern-Absolventen versammelt euch!
+** wolfSSL releases wolfCOSE: a zero-alloc C embedded COSE stack :cryptography:embedded:post-quantum:c:
+:PROPERTIES:
+:ID:       48340422
+:URL:      https://github.com/wolfSSL/wolfCOSE
+:HN_URL:   https://news.ycombinator.com/item?id=48340422
+:POINTS:   79
+:COMMENTS: 14
+:BY:       aidangarske
+:END:
+
+*** TLDR
+wolfCOSE is a lightweight C library implementing CBOR and COSE (RFC 9052/9053) with wolfSSL as the crypto backend. Zero dynamic allocation, 7.5KB minimal footprint, and supports 40 algorithms including post-quantum ML-DSA (Dilithium). Full COSE lifecycle runs in under 1KB RAM. Path to FIPS 140-3 via wolfCrypt FIPS Certificate #4718.
+
+*** Take
+A zero-allocation COSE stack that fits in 7.5KB and supports post-quantum crypto. This is the kind of thing embedded developers have been hand-rolling badly for years. The ML-DSA support is forward-looking since everyone's pretending quantum computers won't break RSA next Tuesday.
+
+*** Comments
+
+**** magicalhippo
+:PROPERTIES:
+:COMMENT_ID: 48340423
+:END:
+COSE is CBOR Object Signing and Encryption, with CBOR being a binary JSON alternative. It is patterned off JOSE, the JSON standards which includes favorites like JWK.
+
+**** Neywiny
+:PROPERTIES:
+:COMMENT_ID: 48340424
+:END:
+Two things of notice: .text size without clarifying the architecture, flags, and compiler is meaningless. Saying it takes 0 .bss and .data just means it allocates everything elsewhere.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+wolfSSL发布wolfCOSE:零分配C嵌入式COSE栈
+***** TLDR
+wolfCOSE是一个轻量级C库,实现CBOR和COSE(RFC 9052/9053),以wolfSSL作为加密后端。零动态分配,最小占用7.5KB,支持40种算法包括后量子ML-DSA(Dilithium)。完整COSE生命周期在不到1KB RAM中运行。
+***** Take
+一个零分配的COSE栈,只有7.5KB,支持后量子加密。这是嵌入式开发者多年来一直手工拼凑的东西。ML-DSA支持是前瞻性的,因为每个人都假装量子计算机不会在下周二破解RSA。
+***** Comments
+- COSE是CBOR对象签名和加密,CBOR是二进制JSON替代品。它基于JOSE模式,JOSE是包括JWK等流行标准的JSON标准。
+- 两点注意:.text大小如果不说明架构、标志和编译器就没有意义。说它占用0 .bss和.data只是意味着它在其他地方分配所有内容。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+wolfSSLがwolfCOSEをリリース:ゼロアロケーションC組み込みCOSEスタック
+***** TLDR
+wolfCOSEはCBORとCOSE(RFC 9052/9053)を実装する軽量Cライブラリで、wolfSSLを暗号バックエンドとして使用します。動的アロケーションゼロ、最小フットプリント7.5KB、ポスト量子ML-DSA(Dilithium)を含む40のアルゴリズムをサポート。完全なCOSEライフサイクルは1KB未満のRAMで動作します。
+***** Take
+7.5KBに収まり、ポスト量子暗号をサポートするゼロアロケーションCOSEスタック。これは組み込み開発者が長年手作りで不十分に作ってきた種類のものです。ML-DSAサポートは先見の明があります。みんな量子コンピュータが来週の火曜日にRSAを破らないふりをしているので。
+***** Comments
+- COSEはCBORオブジェクト署名と暗号化で、CBORはバイナリJSONの代替です。JWKなどの人気のある標準を含むJSON標準であるJOSEをモデルにしています。
+- 2点注意:.textサイズはアーキテクチャ、フラグ、コンパイラを明記しないと意味がありません。.bssと.dataが0というのは、他の場所ですべてを割り当てているということです。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+wolfSSL, wolfCOSE 출시: 제로 할당 C 임베디드 COSE 스택
+***** TLDR
+wolfCOSE는 wolfSSL을 암호화 백엔드로 사용하여 CBOR과 COSE(RFC 9052/9053)를 구현하는 경량 C 라이브러리입니다. 동적 할당 없음, 최소 7.5KB 크기, 포스트 양자 ML-DSA(Dilithium)를 포함한 40개 알고리즘 지원. 전체 COSE 라이프사이클이 1KB 미만의 RAM에서 실행됩니다.
+***** Take
+7.5KB에 들어맞고 포스트 양자 암호화를 지원하는 제로 할당 COSE 스택. 이것은 임베디드 개발자들이 수년간 손으로 엉성하게 만들어온 종류의 것입니다. ML-DSA 지원은 선견지명이 있습니다. 모두가 양자 컴퓨터가 다음 주 화요일에 RSA를 깨지 않을 것처럼 행동하고 있으니까요.
+***** Comments
+- COSE는 CBOR 객체 서명 및 암호화이며, CBOR은 바이너리 JSON 대안입니다. JWK 같은 인기 있는 표준을 포함하는 JSON 표준인 JOSE를 모델로 합니다.
+- 두 가지 주의사항: 아키텍처, 플래그, 컴파일러를 명시하지 않은 .text 크기는 의미가 없습니다. .bss와 .data가 0이라는 것은 다른 곳에서 모든 것을 할당한다는 의미입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+wolfSSL lanza wolfCOSE: una pila COSE embebida en C sin asignación
+***** TLDR
+wolfCOSE es una biblioteca C ligera que implementa CBOR y COSE (RFC 9052/9053) con wolfSSL como backend criptográfico. Sin asignación dinámica, huella mínima de 7.5KB, y soporta 40 algoritmos incluyendo ML-DSA post-cuántico (Dilithium). El ciclo de vida COSE completo corre en menos de 1KB de RAM.
+***** Take
+Una pila COSE sin asignación que cabe en 7.5KB y soporta criptografía post-cuántica. Este es el tipo de cosa que los desarrolladores embebidos han estado haciendo mal a mano durante años. El soporte ML-DSA es visionario ya que todos pretenden que las computadoras cuánticas no romperán RSA el próximo martes.
+***** Comments
+- COSE es CBOR Object Signing and Encryption, siendo CBOR una alternativa binaria a JSON. Está modelado sobre JOSE, los estándares JSON que incluyen favoritos como JWK.
+- Dos cosas a notar: el tamaño de .text sin aclarar la arquitectura, flags y compilador no tiene sentido. Decir que tiene 0 .bss y .data solo significa que asigna todo en otro lugar.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+wolfSSL veröffentlicht wolfCOSE: einen Zero-Alloc C Embedded COSE Stack
+***** TLDR
+wolfCOSE ist eine leichtgewichtige C-Bibliothek, die CBOR und COSE (RFC 9052/9053) mit wolfSSL als Krypto-Backend implementiert. Keine dynamische Allokation, minimaler Footprint von 7,5KB, unterstützt 40 Algorithmen einschließlich post-quantem ML-DSA (Dilithium). Der vollständige COSE-Lebenszyklus läuft in unter 1KB RAM.
+***** Take
+Ein Zero-Allocation COSE Stack, der in 7,5KB passt und Post-Quanten-Krypto unterstützt. Das ist die Art von Ding, die Embedded-Entwickler seit Jahren schlecht von Hand bauen. Die ML-DSA-Unterstützung ist vorausschauend, da alle so tun, als würden Quantencomputer RSA nicht nächsten Dienstag knacken.
+***** Comments
+- COSE ist CBOR Object Signing and Encryption, wobei CBOR eine binäre JSON-Alternative ist. Es basiert auf JOSE, den JSON-Standards, die Favoriten wie JWK enthalten.
+- Zwei Dinge zu beachten: .text-Größe ohne Angabe von Architektur, Flags und Compiler ist bedeutungslos. Zu sagen, dass es 0 .bss und .data hat, bedeutet nur, dass es alles woanders allokiert.
+** Cheese Paper: a text editor specifically designed for writing :text-editor:writing:open-source:fiction:
+:PROPERTIES:
+:ID:       48341407
+:URL:      https://brie.gay/cheese-paper/
+:HN_URL:   https://news.ycombinator.com/item?id=48341407
+:POINTS:   84
+:COMMENTS: 16
+:BY:       sohkamyung
+:END:
+
+*** TLDR
+Cheese Paper is an open-source text editor for fiction writers. Each scene stores notes and summaries in a TOML header with Markdown body - editable in any text editor. It syncs automatically with cloud services, shows notes alongside your writing, supports character and worldbuilding files, and exports to single Markdown files for Pandoc conversion. Written by humans without AI assistance.
+
+*** Take
+Named after the developer Brie, this is what happens when a fiction writer gets fed up with existing tools. The random theme generator that produces intentionally awful color schemes is the kind of chaotic feature request that somehow made it to production. Also, the explicit 'no AI contributions' policy is becoming a genre.
+
+*** Comments
+
+**** n3storm
+:PROPERTIES:
+:COMMENT_ID: 48341408
+:END:
+What is wrong with spacing text from borders? padding for tabs, padding and margin text blocks? why so many lines? IMHO is fitts-law abuse.
+
+**** tlhunter
+:PROPERTIES:
+:COMMENT_ID: 48341409
+:END:
+I'm a fan of Manuskript on Linux. It's similar but has more features and, IMO, looks better.
+
+**** aleda145
+:PROPERTIES:
+:COMMENT_ID: 48341410
+:END:
+I recently picked up writing short stories again. A feature that I have been dreaming about is making an editor that treats each paragraph like a unit of work.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Cheese Paper:专为写作设计的文本编辑器
+***** TLDR
+Cheese Paper是一个面向小说作家的开源文本编辑器。每个场景在TOML头部存储笔记和摘要,正文为Markdown格式——可以在任何文本编辑器中编辑。它与云服务自动同步,在写作旁边显示笔记,支持角色和世界观文件,并导出为单个Markdown文件供Pandoc转换。由人类编写,未使用AI辅助。
+***** Take
+以开发者Brie命名,这是一个小说作家受够了现有工具后的产物。随机主题生成器会产生故意丑陋的配色方案,这是那种不知怎么就进入了生产环境的混乱功能请求。另外,'不接受AI贡献'的明确政策正在成为一种流派。
+***** Comments
+- 文本与边框的间距有什么问题?标签的填充,文本块的填充和边距?为什么这么多线条?我认为这是对费茨定律的滥用。
+- 我喜欢Linux上的Manuskript。它类似但功能更多,而且我认为看起来更好。
+- 我最近又开始写短篇小说了。我一直梦想的功能是做一个把每个段落当作工作单元的编辑器。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Cheese Paper:執筆用に特別に設計されたテキストエディタ
+***** TLDR
+Cheese Paperは小説家のためのオープンソーステキストエディタです。各シーンはTOMLヘッダーにノートと要約を、本文はMarkdown形式で保存します—どのテキストエディタでも編集可能。クラウドサービスと自動同期し、執筆中にノートを表示し、キャラクターやワールドビルディングファイルをサポートし、Pandoc変換用の単一Markdownファイルにエクスポートします。AIの支援なしに人間が作成。
+***** Take
+開発者Brieにちなんで名付けられた、これは小説家が既存のツールにうんざりした結果です。意図的にひどい配色を生成するランダムテーマジェネレータは、なぜか本番環境に入ってしまったカオスな機能リクエストの類です。また、明示的な「AI貢献なし」ポリシーはジャンルになりつつあります。
+***** Comments
+- テキストと境界線の間隔の何が問題なの?タブのパディング、テキストブロックのパディングとマージン?なぜこんなに多くの線が?私見ではフィッツの法則の乱用です。
+- LinuxのManuskriptのファンです。似ていますがより多くの機能があり、私見では見た目も良いです。
+- 最近また短編小説を書き始めました。私がずっと夢見ている機能は、各段落を作業単位として扱うエディタを作ることです。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Cheese Paper: 글쓰기를 위해 특별히 설계된 텍스트 편집기
+***** TLDR
+Cheese Paper는 소설 작가를 위한 오픈소스 텍스트 편집기입니다. 각 장면은 TOML 헤더에 노트와 요약을 저장하고 본문은 Markdown으로 - 어떤 텍스트 편집기에서든 편집 가능합니다. 클라우드 서비스와 자동 동기화되고, 글쓰기 옆에 노트를 표시하며, 캐릭터와 세계관 파일을 지원하고, Pandoc 변환용 단일 Markdown 파일로 내보냅니다. AI 지원 없이 인간이 작성했습니다.
+***** Take
+개발자 Brie의 이름을 따서 지은 이것은 소설 작가가 기존 도구에 질려버린 결과입니다. 의도적으로 끔찍한 색상 구성을 생성하는 랜덤 테마 생성기는 어떻게든 프로덕션에 들어간 혼란스러운 기능 요청입니다. 또한 명시적인 'AI 기여 금지' 정책이 하나의 장르가 되고 있습니다.
+***** Comments
+- 텍스트와 테두리 사이의 간격이 뭐가 문제인가요? 탭의 패딩, 텍스트 블록의 패딩과 마진? 왜 이렇게 많은 선이? 제 생각에는 피츠의 법칙 남용입니다.
+- Linux에서 Manuskript 팬입니다. 비슷하지만 기능이 더 많고, 제 생각에는 보기에도 더 좋습니다.
+- 최근에 다시 단편 소설 쓰기를 시작했습니다. 제가 꿈꿔온 기능은 각 단락을 작업 단위로 취급하는 편집기를 만드는 것입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cheese Paper: un editor de texto diseñado específicamente para escribir
+***** TLDR
+Cheese Paper es un editor de texto de código abierto para escritores de ficción. Cada escena almacena notas y resúmenes en un encabezado TOML con cuerpo Markdown - editable en cualquier editor de texto. Se sincroniza automáticamente con servicios en la nube, muestra notas junto a tu escritura, soporta archivos de personajes y worldbuilding, y exporta a archivos Markdown para conversión con Pandoc. Escrito por humanos sin asistencia de IA.
+***** Take
+Nombrado después de la desarrolladora Brie, esto es lo que pasa cuando una escritora de ficción se harta de las herramientas existentes. El generador de temas aleatorios que produce esquemas de colores intencionalmente horribles es el tipo de solicitud de función caótica que de alguna manera llegó a producción. Además, la política explícita de 'sin contribuciones de IA' se está convirtiendo en un género.
+***** Comments
+- ¿Qué tiene de malo el espaciado del texto desde los bordes? ¿padding para tabs, padding y margen para bloques de texto? ¿por qué tantas líneas? En mi opinión es un abuso de la ley de Fitts.
+- Soy fan de Manuskript en Linux. Es similar pero tiene más características y, en mi opinión, se ve mejor.
+- Recientemente retomé escribir cuentos cortos. Una característica con la que he estado soñando es hacer un editor que trate cada párrafo como una unidad de trabajo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Cheese Paper: ein Texteditor speziell fürs Schreiben entwickelt
+***** TLDR
+Cheese Paper ist ein Open-Source-Texteditor für Romanautoren. Jede Szene speichert Notizen und Zusammenfassungen in einem TOML-Header mit Markdown-Body - editierbar in jedem Texteditor. Er synchronisiert automatisch mit Cloud-Diensten, zeigt Notizen neben dem Schreiben an, unterstützt Charakter- und Weltenbau-Dateien und exportiert in einzelne Markdown-Dateien für Pandoc-Konvertierung. Von Menschen ohne KI-Unterstützung geschrieben.
+***** Take
+Nach der Entwicklerin Brie benannt, ist das, was passiert, wenn eine Romanautorin die bestehenden Tools satt hat. Der Zufallsthemen-Generator, der absichtlich schreckliche Farbschemata produziert, ist die Art von chaotischer Feature-Anfrage, die es irgendwie in die Produktion geschafft hat. Außerdem wird die explizite 'keine KI-Beiträge'-Policy zu einem Genre.
+***** Comments
+- Was ist falsch an Textabständen zu den Rändern? Padding für Tabs, Padding und Margin für Textblöcke? Warum so viele Linien? Meiner Meinung nach ist das Fitts-Law-Missbrauch.
+- Ich bin ein Fan von Manuskript unter Linux. Es ist ähnlich, hat aber mehr Features und sieht meiner Meinung nach besser aus.
+- Ich habe kürzlich wieder angefangen, Kurzgeschichten zu schreiben. Ein Feature, von dem ich träume, ist ein Editor, der jeden Absatz wie eine Arbeitseinheit behandelt.
+** Gustav Klimt and Egon Schiele in Conversation (2018) :art:history:austria:drawing:
+:PROPERTIES:
+:ID:       48316424
+:URL:      https://www.theparisreview.org/blog/2018/01/31/the-drawings-of-klimt-and-schiele/
+:HN_URL:   https://news.ycombinator.com/item?id=48316424
+:POINTS:   33
+:COMMENTS: 4
+:BY:       rballpug
+:END:
+
+*** TLDR
+2018 marked the centenary of both Gustav Klimt and Egon Schiele's deaths. Klimt (born 1862) was nearly thirty years Schiele's senior (born 1890), but they had mutual admiration. When Schiele asked if he was talented, Klimt replied 'Much too much.' When Schiele proposed exchanging drawings, Klimt said 'Why do you want to exchange with me? You draw better than I do.' Klimt's drawings were delicate and preparatory; Schiele's were bold, independent works with intense watercolors.
+
+*** Take
+Two artists who both died in 1918 - Klimt from stroke in January, Schiele from Spanish flu in October - spent their final years telling each other they were the better artist. Schiele was proud when his work was exhibited opposite Klimt's. Upon Klimt's death, Schiele wrote 'An unbelievably accomplished artist - his work a sanctuary.' Ten months later, Schiele was also gone.
+
+*** Comments
+
+**** ian_j_butler
+:PROPERTIES:
+:COMMENT_ID: 48316425
+:END:
+A great rambling book that's related here and connected to neuroscience too is 'The Age of Insight: The Quest to Understand the Unconscious in Art, Mind, and Brain, from Vienna 1900 to the Present'.
+
+**** sbeaks
+:PROPERTIES:
+:COMMENT_ID: 48316426
+:END:
+Klimt was super talented but I can't stand most of his work as it reminds me of migraine aura.
+
+**** biodiesel
+:PROPERTIES:
+:COMMENT_ID: 48316427
+:END:
+Klimt was the litmus-test for impressionism in the 19th century.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+克里姆特与席勒的对话（2018）
+***** TLDR
+2018年是克里姆特和席勒逝世100周年。克里姆特(生于1862年)比席勒(生于1890年)年长近30岁,但他们相互欣赏。当席勒问自己是否有才华时,克里姆特回答'太有才华了'。当席勒提议交换画作时,克里姆特说'你为什么想和我交换?你画得比我好。'克里姆特的画作精致且是预备性的;席勒的则大胆,是带有强烈水彩的独立作品。
+***** Take
+两位艺术家都在1918年去世——克里姆特1月死于中风,席勒10月死于西班牙流感——他们在生命的最后几年互相告诉对方是更好的艺术家。席勒为自己的作品与克里姆特的作品对面展出而自豪。克里姆特去世时,席勒写道'一位难以置信的成就艺术家——他的作品是圣殿。'十个月后,席勒也离世了。
+***** Comments
+- 一本相关的好书,也与神经科学有关,是《洞察的时代:从1900年维也纳到现在,理解艺术、心灵和大脑中无意识的探索》。
+- 克里姆特超级有才华,但我无法忍受他的大部分作品,因为让我想起偏头痛先兆。
+- 克里姆特是19世纪印象派的试金石。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+グスタフ・クリムトとエゴン・シーレの対話（2018）
+***** TLDR
+2018年はクリムトとシーレの没後100周年でした。クリムト(1862年生まれ)はシーレ(1890年生まれ)より約30歳年上でしたが、互いに尊敬し合っていました。シーレが才能があるか尋ねた時、クリムトは「ありすぎるほど」と答えました。シーレが素描の交換を提案した時、クリムトは「なぜ私と交換したいのか？君の方が上手だ」と言いました。
+***** Take
+1918年に二人とも亡くなった二人のアーティスト—クリムトは1月に脳卒中で、シーレは10月にスペイン風邪で—最後の年月を互いに相手の方が優れたアーティストだと言い合って過ごしました。シーレは自分の作品がクリムトの向かい側に展示されたことを誇りに思っていました。クリムトの死後、シーレは「信じられないほど達成された芸術家—彼の作品は聖域」と書きました。10ヶ月後、シーレも亡くなりました。
+***** Comments
+- ここに関連する素晴らしい本で、神経科学にも関連しているのは『洞察の時代:1900年のウィーンから現在まで、芸術、心、脳における無意識を理解する探求』です。
+- クリムトは超才能があったが、彼の作品のほとんどは偏頭痛のオーラを思い出させるので我慢できない。
+- クリムトは19世紀の印象派のリトマス試験でした。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+구스타프 클림트와 에곤 실레의 대화 (2018)
+***** TLDR
+2018년은 클림트와 실레 사망 100주년이었습니다. 클림트(1862년생)는 실레(1890년생)보다 거의 30살 연장이었지만, 서로 존경했습니다. 실레가 재능이 있는지 물었을 때, 클림트는 '너무 많이'라고 답했습니다. 실레가 그림 교환을 제안했을 때, 클림트는 '왜 나와 교환하고 싶어? 당신이 나보다 더 잘 그려'라고 말했습니다.
+***** Take
+1918년에 둘 다 사망한 두 예술가—클림트는 1월에 뇌졸중으로, 실레는 10월에 스페인 독감으로—마지막 몇 년을 서로에게 상대방이 더 나은 예술가라고 말하며 보냈습니다. 실레는 자신의 작품이 클림트의 작품 맞은편에 전시된 것을 자랑스러워했습니다. 클림트가 사망했을 때, 실레는 '믿을 수 없이 성취한 예술가—그의 작품은 성역'이라고 썼습니다. 10개월 후, 실레도 떠났습니다.
+***** Comments
+- 여기에 관련된 훌륭한 책으로 신경과학과도 연결된 것은 '통찰의 시대: 1900년 비엔나부터 현재까지 예술, 마음, 뇌의 무의식을 이해하려는 탐구'입니다.
+- 클림트는 엄청 재능 있었지만 그의 작품 대부분은 편두통 전조를 떠올리게 해서 참을 수 없습니다.
+- 클림트는 19세기 인상주의의 리트머스 시험이었습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Gustav Klimt y Egon Schiele en conversación (2018)
+***** TLDR
+2018 marcó el centenario de las muertes de Klimt y Schiele. Klimt (nacido en 1862) era casi treinta años mayor que Schiele (nacido en 1890), pero se admiraban mutuamente. Cuando Schiele preguntó si tenía talento, Klimt respondió 'Demasiado'. Cuando Schiele propuso intercambiar dibujos, Klimt dijo '¿Por qué quieres intercambiar conmigo? Tú dibujas mejor que yo.'
+***** Take
+Dos artistas que murieron en 1918 - Klimt de un derrame en enero, Schiele de gripe española en octubre - pasaron sus últimos años diciéndose mutuamente que el otro era el mejor artista. Schiele estaba orgulloso cuando su trabajo se exhibió frente al de Klimt. Tras la muerte de Klimt, Schiele escribió 'Un artista increíblemente logrado - su obra un santuario.' Diez meses después, Schiele también se había ido.
+***** Comments
+- Un gran libro divagante relacionado aquí y también conectado con la neurociencia es 'La Era del Insight: La búsqueda para entender el inconsciente en el arte, la mente y el cerebro, desde Viena 1900 hasta el presente'.
+- Klimt era super talentoso pero no soporto la mayoría de su trabajo porque me recuerda al aura de migraña.
+- Klimt fue la prueba de fuego del impresionismo en el siglo XIX.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gustav Klimt und Egon Schiele im Gespräch (2018)
+***** TLDR
+2018 markierte den 100. Todestag von Klimt und Schiele. Klimt (geboren 1862) war fast dreißig Jahre älter als Schiele (geboren 1890), aber sie bewunderten sich gegenseitig. Als Schiele fragte, ob er talentiert sei, antwortete Klimt 'Viel zu sehr'. Als Schiele einen Zeichnungsaustausch vorschlug, sagte Klimt 'Warum willst du mit mir tauschen? Du zeichnest besser als ich.'
+***** Take
+Zwei Künstler, die beide 1918 starben - Klimt im Januar an einem Schlaganfall, Schiele im Oktober an der Spanischen Grippe - verbrachten ihre letzten Jahre damit, sich gegenseitig zu sagen, dass der andere der bessere Künstler sei. Schiele war stolz, als seine Arbeit gegenüber von Klimts ausgestellt wurde. Nach Klimts Tod schrieb Schiele 'Ein unglaublich vollendeter Künstler - sein Werk ein Heiligtum.' Zehn Monate später war auch Schiele fort.
+***** Comments
+- Ein großartiges weitschweifiges Buch, das hier relevant ist und auch mit Neurowissenschaft verbunden ist, ist 'Das Zeitalter der Einsicht: Die Suche nach dem Verständnis des Unbewussten in Kunst, Geist und Gehirn, von Wien 1900 bis heute'.
+- Klimt war super talentiert, aber ich kann die meiste seiner Arbeit nicht ertragen, weil sie mich an Migräne-Aura erinnert.
+- Klimt war der Lackmustest für den Impressionismus im 19. Jahrhundert.
+** A Gentle Introduction to Lattice-Based Cryptography ［pdf］ :cryptography:post-quantum:education:pdf:
+:PROPERTIES:
+:ID:       48318624
+:URL:      https://cryptography101.ca/wp-content/uploads/lattice-based-cryptography.pdf
+:HN_URL:   https://news.ycombinator.com/item?id=48318624
+:POINTS:   40
+:COMMENTS: 0
+:BY:       jayhoon
+:END:
+
+*** TLDR
+［from title only, PDF document］ An educational introduction to lattice-based cryptography, one of the leading candidates for post-quantum cryptography. Lattice problems like the Shortest Vector Problem (SVP) and Learning With Errors (LWE) are believed to be hard even for quantum computers, making them the foundation for standards like Kyber (ML-KEM) and Dilithium (ML-DSA).
+
+*** Take
+No comments on HN because the intersection of 'people who read PDFs' and 'people who comment on HN' is apparently the empty set. But if you're worried about quantum computers breaking your encryption, this is where to start. NIST already standardized lattice-based algorithms, so this isn't theoretical anymore.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+格密码学入门指南 ［pdf］
+***** TLDR
+［仅从标题,PDF文档］ 格密码学教育性介绍,这是后量子密码学的领先候选之一。格问题如最短向量问题(SVP)和带错误学习(LWE)即使对量子计算机也被认为是困难的,使它们成为Kyber(ML-KEM)和Dilithium(ML-DSA)等标准的基础。
+***** Take
+HN上没有评论,因为'阅读PDF的人'和'在HN上评论的人'的交集显然是空集。但如果你担心量子计算机破解你的加密,这就是起点。NIST已经标准化了基于格的算法,所以这不再是理论了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+格子暗号へのやさしい入門 ［pdf］
+***** TLDR
+［タイトルのみから、PDFドキュメント］ 格子暗号の教育的入門で、ポスト量子暗号の主要候補の一つです。最短ベクトル問題(SVP)やLearning With Errors(LWE)などの格子問題は量子コンピュータでも難しいと考えられており、Kyber(ML-KEM)やDilithium(ML-DSA)などの標準の基盤となっています。
+***** Take
+HNにコメントがないのは、「PDFを読む人」と「HNでコメントする人」の交差が明らかに空集合だからです。しかし、量子コンピュータが暗号を破ることを心配しているなら、ここから始めましょう。NISTはすでに格子ベースのアルゴリズムを標準化しているので、これはもう理論ではありません。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+격자 기반 암호학 입문 ［pdf］
+***** TLDR
+［제목만으로, PDF 문서］ 포스트 양자 암호학의 주요 후보 중 하나인 격자 기반 암호학에 대한 교육적 소개입니다. 최단 벡터 문제(SVP)와 오류 학습(LWE) 같은 격자 문제는 양자 컴퓨터에게도 어렵다고 여겨져, Kyber(ML-KEM)와 Dilithium(ML-DSA) 같은 표준의 기반이 됩니다.
+***** Take
+HN에 댓글이 없는 이유는 'PDF를 읽는 사람'과 'HN에 댓글을 다는 사람'의 교집합이 분명히 공집합이기 때문입니다. 하지만 양자 컴퓨터가 암호화를 깨는 것이 걱정된다면, 여기서 시작하세요. NIST는 이미 격자 기반 알고리즘을 표준화했으므로, 이것은 더 이상 이론이 아닙니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Una introducción suave a la criptografía basada en retículas ［pdf］
+***** TLDR
+［solo del título, documento PDF］ Una introducción educativa a la criptografía basada en retículas, uno de los principales candidatos para la criptografía post-cuántica. Problemas de retículas como el Problema del Vector Más Corto (SVP) y Learning With Errors (LWE) se creen difíciles incluso para computadoras cuánticas, haciéndolos la base de estándares como Kyber (ML-KEM) y Dilithium (ML-DSA).
+***** Take
+Sin comentarios en HN porque la intersección de 'personas que leen PDFs' y 'personas que comentan en HN' es aparentemente el conjunto vacío. Pero si te preocupa que las computadoras cuánticas rompan tu encriptación, aquí es donde empezar. NIST ya estandarizó algoritmos basados en retículas, así que esto ya no es teórico.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Eine sanfte Einführung in gitterbasierte Kryptographie ［pdf］
+***** TLDR
+［nur vom Titel, PDF-Dokument］ Eine pädagogische Einführung in gitterbasierte Kryptographie, einer der führenden Kandidaten für Post-Quanten-Kryptographie. Gitterprobleme wie das Shortest Vector Problem (SVP) und Learning With Errors (LWE) gelten als schwer selbst für Quantencomputer, was sie zur Grundlage von Standards wie Kyber (ML-KEM) und Dilithium (ML-DSA) macht.
+***** Take
+Keine Kommentare auf HN, weil die Schnittmenge von 'Leute, die PDFs lesen' und 'Leute, die auf HN kommentieren' offenbar die leere Menge ist. Aber wenn du dir Sorgen machst, dass Quantencomputer deine Verschlüsselung knacken, hier ist der Startpunkt. NIST hat bereits gitterbasierte Algorithmen standardisiert, also ist das keine Theorie mehr.
