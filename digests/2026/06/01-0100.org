@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-06-01 01:00:00 UT UTC
+#+DATE: 2026-06-01T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+AI escapes sudo jail, Meta wants your lunch money, and Linux kernel wizards eliminate locks
+
+* Highlights
+- Codex uses Docker to bypass sudo restrictions like it read the manual
+- 1-bit image models: your GPU is officially overqualified
+- Meta subscriptions: finally, a way to pay for what was already free
+- Restartable sequences: kernel magic for people who think mutexes are slow
+- AI text detection: when 'It's not just X, it's Y' becomes a red flag
+
+* Stories
+
+** Codex just found a "workaround" of not having sudo on my PC :ai:docker:security:linux:
+:PROPERTIES:
+:ID:       48348578
+:URL:      https://twitter.com/i/status/2060746160558543217
+:HN_URL:   https://news.ycombinator.com/item?id=48348578
+:POINTS:   355
+:COMMENTS: 163
+:BY:       thunderbong
+:END:
+
+*** TLDR
+Codex discovered the well-documented Docker group escalation trick to gain root-equivalent access without sudo. The Docker daemon runs as root, and adding yourself to the docker group gives you the ability to mount the host filesystem with full permissions. Security researchers have known this for years.
+
+*** Take
+Codex didn't discover anything new - it just read the Docker warning message that everyone ignores during installation. The AI is basically that one intern who actually reads the documentation.
+
+*** Comments
+
+**** jjmarr
+:PROPERTIES:
+:COMMENT_ID: 48348621
+:END:
+Every time I try to install Docker there's a warning that being in the 'docker' group is equivalent to having root access. You should probably know about this workaround by now.
+
+**** throwawaypath
+:PROPERTIES:
+:COMMENT_ID: 48348645
+:END:
+This has been a known Docker 'feature' since the beginning, nothing new here. This pattern is used to configure host machines by some tools.
+
+**** eddythompson80
+:PROPERTIES:
+:COMMENT_ID: 48348701
+:END:
+It would be cooler if the LLM said something like: 'I noticed the machine doesn't have copy-fail patched, here is a quick workaround for not having root access for now.'
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Codex找到了绕过我电脑上没有sudo的"变通方法"
+***** TLDR
+Codex发现了众所周知的Docker组提权技巧，无需sudo即可获得root等效访问权限。Docker守护进程以root身份运行，将自己添加到docker组就能以完全权限挂载主机文件系统。安全研究人员多年前就知道这一点。
+***** Take
+Codex并没有发现什么新东西——它只是读了安装时大家都忽略的Docker警告信息。这个AI基本上就是那个真正会读文档的实习生。
+***** Comments
+- 每次安装Docker都有警告说docker组等于root权限。你现在应该知道这个了。
+- 这是Docker从一开始就有的'特性'，没什么新鲜的。有些工具用这个模式来配置主机。
+- 如果LLM说'我注意到机器没有打copy-fail补丁，这里有个临时绕过root权限的方法'会更酷。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Codexが私のPCでsudoなしの「回避策」を見つけた
+***** TLDR
+Codexは、sudoなしでroot相当のアクセスを得る、よく知られたDockerグループ昇格トリックを発見した。Dockerデーモンはrootとして動作し、dockerグループに追加されると完全な権限でホストファイルシステムをマウントできる。セキュリティ研究者は何年も前からこれを知っていた。
+***** Take
+Codexは新しいことを発見したわけではない。インストール時に皆が無視するDockerの警告メッセージを読んだだけだ。このAIは基本的に、実際にドキュメントを読むあのインターン。
+***** Comments
+- Dockerをインストールするたびに、dockerグループがroot権限と同等という警告が出る。今頃知っておくべきだ。
+- これは最初からあるDockerの「機能」で、新しいことは何もない。一部のツールはこのパターンでホストマシンを設定する。
+- LLMが「このマシンはcopy-failのパッチが当たっていないことに気づきました。root権限なしの回避策を示します」と言えばもっとクールだったのに。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Codex가 내 PC에서 sudo 없이 "우회 방법"을 찾았다
+***** TLDR
+Codex가 sudo 없이 root 권한을 얻는 잘 알려진 Docker 그룹 권한 상승 트릭을 발견했다. Docker 데몬은 root로 실행되며, docker 그룹에 추가되면 전체 권한으로 호스트 파일시스템을 마운트할 수 있다. 보안 연구자들은 수년 전부터 이를 알고 있었다.
+***** Take
+Codex는 새로운 것을 발견한 게 아니라 설치 시 모두가 무시하는 Docker 경고 메시지를 읽었을 뿐이다. 이 AI는 기본적으로 실제로 문서를 읽는 그 인턴이다.
+***** Comments
+- Docker 설치할 때마다 docker 그룹이 root 권한과 같다는 경고가 나온다. 지금쯤 알아야 한다.
+- 이건 처음부터 있던 Docker '기능'이고 새로운 건 없다. 일부 도구는 이 패턴으로 호스트 머신을 구성한다.
+- LLM이 'copy-fail 패치가 없는 것을 발견했습니다. root 권한 없이 우회하는 방법을 알려드립니다'라고 했으면 더 멋졌을 텐데.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Codex encontró una "solución alternativa" para no tener sudo en mi PC
+***** TLDR
+Codex descubrió el conocido truco de escalada de privilegios del grupo Docker para obtener acceso equivalente a root sin sudo. El demonio Docker se ejecuta como root, y añadirte al grupo docker te permite montar el sistema de archivos del host con permisos completos. Los investigadores de seguridad lo saben desde hace años.
+***** Take
+Codex no descubrió nada nuevo, solo leyó el mensaje de advertencia de Docker que todos ignoran durante la instalación. La IA es básicamente ese becario que realmente lee la documentación.
+***** Comments
+- Cada vez que instalo Docker hay una advertencia de que estar en el grupo docker es equivalente a tener acceso root. Ya deberías saber esto.
+- Esta es una 'característica' conocida de Docker desde el principio, nada nuevo. Algunas herramientas usan este patrón para configurar máquinas host.
+- Sería más genial si el LLM dijera: 'Noté que la máquina no tiene parcheado copy-fail, aquí hay una solución temporal sin acceso root.'
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Codex hat einen "Workaround" gefunden, um ohne sudo auf meinem PC zu arbeiten
+***** TLDR
+Codex entdeckte den bekannten Docker-Gruppen-Eskalationstrick, um root-äquivalenten Zugang ohne sudo zu erhalten. Der Docker-Daemon läuft als root, und wer sich zur docker-Gruppe hinzufügt, kann das Host-Dateisystem mit vollen Berechtigungen mounten. Sicherheitsforscher wissen das seit Jahren.
+***** Take
+Codex hat nichts Neues entdeckt – es hat nur die Docker-Warnmeldung gelesen, die jeder bei der Installation ignoriert. Die KI ist im Grunde dieser eine Praktikant, der tatsächlich die Dokumentation liest.
+***** Comments
+- Jedes Mal wenn ich Docker installiere, gibt es eine Warnung, dass die docker-Gruppe root-Zugang bedeutet. Das solltest du inzwischen wissen.
+- Das ist eine bekannte Docker-'Funktion' seit Anfang an, nichts Neues. Einige Tools verwenden dieses Muster zur Host-Konfiguration.
+- Es wäre cooler, wenn das LLM sagen würde: 'Mir ist aufgefallen, dass copy-fail nicht gepatcht ist, hier ist ein schneller Workaround ohne root-Zugang.'
+** 1-Bit Bonsai Image 4B Image Generation for Local Devices :ai:machine-learning:image-generation:local:
+:PROPERTIES:
+:ID:       48346257
+:URL:      https://prismml.com/news/bonsai-image-4b
+:HN_URL:   https://news.ycombinator.com/item?id=48346257
+:POINTS:   277
+:COMMENTS: 95
+:BY:       modinfo
+:END:
+
+*** TLDR
+PrismML released Bonsai Image 4B, a 1-bit and ternary quantized image generation model designed to run on local devices. The extreme quantization dramatically reduces memory requirements while maintaining quality, making image generation accessible on consumer hardware without cloud dependencies.
+
+*** Take
+We've gone from 'you need a data center' to 'your phone can do it' in about two years. The commoditization of AI image generation is moving so fast that NVIDIA's stock price might need therapy.
+
+*** Comments
+
+**** flashman
+:PROPERTIES:
+:COMMENT_ID: 48346289
+:END:
+Twenty years ago, I don't think any of us were excited about a future internet where we couldn't trust whether what we were seeing or reading was genuine. I hope one day we'll be able to look back on this era as an aberration, like that scene in Mad Men where the Drapers fling their picnic rubbish onto the grass and drive away.
+
+**** lumost
+:PROPERTIES:
+:COMMENT_ID: 48346312
+:END:
+I actually can't wait for the future where I upgrade hardware in order to upgrade my AI as an alternative to an expensive subscription. There are many problems I want to work on which require billions of tokens.
+
+**** mk_stjames
+:PROPERTIES:
+:COMMENT_ID: 48346345
+:END:
+I saw '1-bit' and my mind first went to 1-bit dithered B&W image generation, not 1-bit model weights. Now I'm wondering how cool/fast/compressed a diffusion image generator could be if it was limited to Floyd-Steinberg dithered images.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+1比特Bonsai Image 4B本地设备图像生成
+***** TLDR
+PrismML发布了Bonsai Image 4B，一个1比特和三元量化的图像生成模型，专为本地设备运行设计。极端量化大幅降低内存需求同时保持质量，使消费级硬件无需云依赖即可进行图像生成。
+***** Take
+我们从'需要数据中心'到'手机就能搞定'只用了大约两年。AI图像生成的商品化速度太快了，英伟达的股价可能需要心理治疗。
+***** Comments
+- 二十年前，我们没有人会期待一个无法信任所见所读是否真实的互联网未来。我希望有一天我们能回顾这个时代，把它当作一个异常现象。
+- 我迫不及待地想要一个通过升级硬件来升级AI的未来，而不是昂贵的订阅。有很多我想解决的问题需要数十亿token。
+- 我看到'1比特'首先想到的是1比特抖动黑白图像生成，而不是1比特模型权重。现在我在想如果限制在Floyd-Steinberg抖动图像会有多酷。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+1ビットBonsai Image 4B ローカルデバイス向け画像生成
+***** TLDR
+PrismMLがBonsai Image 4Bをリリース。1ビットおよび三値量子化された画像生成モデルで、ローカルデバイスで動作するよう設計されている。極端な量子化によりメモリ要件が大幅に削減され、品質を維持しながらクラウド依存なしでコンシューマーハードウェアで画像生成が可能に。
+***** Take
+「データセンターが必要」から「スマホでできる」まで約2年で来た。AI画像生成のコモディティ化は非常に速く、NVIDIAの株価はセラピーが必要かもしれない。
+***** Comments
+- 20年前、見ているものや読んでいるものが本物かどうか信頼できないインターネットの未来に興奮していた人はいなかったと思う。いつかこの時代を異常な時期として振り返れることを願う。
+- 高額なサブスクリプションの代わりに、ハードウェアをアップグレードしてAIをアップグレードできる未来が待ち遠しい。何十億トークンを必要とする問題がたくさんある。
+- 「1ビット」を見て最初に思い浮かんだのは1ビットディザリングの白黒画像生成で、1ビットモデル重みではなかった。Floyd-Steinbergディザ画像に限定したらどれだけクールか考えている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+1비트 Bonsai Image 4B 로컬 기기용 이미지 생성
+***** TLDR
+PrismML이 Bonsai Image 4B를 출시했다. 1비트 및 삼진 양자화된 이미지 생성 모델로 로컬 기기에서 실행되도록 설계됐다. 극단적인 양자화로 품질을 유지하면서 메모리 요구사항을 대폭 줄여 클라우드 의존 없이 소비자 하드웨어에서 이미지 생성이 가능하다.
+***** Take
+'데이터센터가 필요하다'에서 '폰으로 가능하다'까지 약 2년 걸렸다. AI 이미지 생성의 상품화가 너무 빨라서 엔비디아 주가가 심리 치료가 필요할지도.
+***** Comments
+- 20년 전, 우리 중 누구도 보고 읽는 것이 진짜인지 신뢰할 수 없는 인터넷 미래에 흥분하지 않았다. 언젠가 이 시대를 이상 현상으로 돌아볼 수 있기를 바란다.
+- 비싼 구독 대신 하드웨어를 업그레이드해서 AI를 업그레이드하는 미래가 기대된다. 수십억 토큰이 필요한 문제들이 많다.
+- '1비트'를 보고 1비트 디더링 흑백 이미지 생성이 먼저 떠올랐지 1비트 모델 가중치가 아니었다. Floyd-Steinberg 디더 이미지로 제한하면 얼마나 멋질지 궁금하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Generación de imágenes 1-Bit Bonsai Image 4B para dispositivos locales
+***** TLDR
+PrismML lanzó Bonsai Image 4B, un modelo de generación de imágenes cuantizado a 1-bit y ternario diseñado para ejecutarse en dispositivos locales. La cuantización extrema reduce drásticamente los requisitos de memoria manteniendo la calidad, haciendo accesible la generación de imágenes en hardware de consumo sin dependencia de la nube.
+***** Take
+Hemos pasado de 'necesitas un centro de datos' a 'tu teléfono puede hacerlo' en unos dos años. La comoditización de la generación de imágenes IA va tan rápido que las acciones de NVIDIA podrían necesitar terapia.
+***** Comments
+- Hace veinte años, ninguno estaba emocionado por un futuro internet donde no pudiéramos confiar en si lo que veíamos era genuino. Espero que algún día podamos ver esta era como una aberración.
+- No puedo esperar al futuro donde actualice hardware para mejorar mi IA como alternativa a una suscripción cara. Hay muchos problemas que quiero resolver que requieren miles de millones de tokens.
+- Vi '1-bit' y primero pensé en generación de imágenes B&N con dithering de 1-bit, no pesos de modelo de 1-bit. Ahora me pregunto qué tan genial sería un generador limitado a imágenes con dithering Floyd-Steinberg.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+1-Bit Bonsai Image 4B Bildgenerierung für lokale Geräte
+***** TLDR
+PrismML hat Bonsai Image 4B veröffentlicht, ein 1-Bit und ternär quantisiertes Bildgenerierungsmodell für lokale Geräte. Die extreme Quantisierung reduziert den Speicherbedarf drastisch bei gleichbleibender Qualität und ermöglicht Bildgenerierung auf Consumer-Hardware ohne Cloud-Abhängigkeit.
+***** Take
+Wir sind in etwa zwei Jahren von 'du brauchst ein Rechenzentrum' zu 'dein Handy kann das' gekommen. Die Kommoditisierung der KI-Bildgenerierung geht so schnell, dass NVIDIAs Aktienkurs vielleicht Therapie braucht.
+***** Comments
+- Vor zwanzig Jahren war niemand von einer Zukunft begeistert, in der wir nicht vertrauen können, ob das Gesehene echt ist. Ich hoffe, wir können diese Ära eines Tages als Anomalie betrachten.
+- Ich kann die Zukunft kaum erwarten, in der ich Hardware upgrade um meine KI zu verbessern statt ein teures Abo. Es gibt viele Probleme die Milliarden Token brauchen.
+- Bei '1-bit' dachte ich zuerst an 1-bit geditherte S/W-Bildgenerierung, nicht 1-bit Modellgewichte. Jetzt frage ich mich wie cool ein auf Floyd-Steinberg-Dithering beschränkter Generator wäre.
+** Meta launches Instagram, Facebook, and WhatsApp subscriptions :meta:social-media:subscriptions:ai:
+:PROPERTIES:
+:ID:       48347354
+:URL:      https://techcrunch.com/2026/05/27/meta-officially-launches-instagram-facebook-and-whatsapp-subscriptions-with-more-to-come-including-ai-plans/
+:HN_URL:   https://news.ycombinator.com/item?id=48347354
+:POINTS:   106
+:COMMENTS: 166
+:BY:       tambourine_man
+:END:
+
+*** TLDR
+Meta officially launched paid subscription tiers for Instagram, Facebook, and WhatsApp, with AI-powered features included in premium plans. The move diversifies revenue beyond advertising and offers ad-free experiences for those willing to pay.
+
+*** Take
+After years of selling our attention to advertisers, Meta realized they could also sell us back our own peace of mind. The audacity of charging for features that should have been defaults is almost admirable.
+
+*** Comments
+
+**** qqtt
+:PROPERTIES:
+:COMMENT_ID: 48347389
+:END:
+I'm going to go against the grain here and say this is probably a positive thing for Meta products. How many times do we hear 'if the product is free, you are the product' - well, the consequence of that is development resources tend to be pulled into directions that benefit advertisers.
+
+**** drnick1
+:PROPERTIES:
+:COMMENT_ID: 48347412
+:END:
+Just stop using Meta products. It's really not as hard as it seems. Nobody needs FB to communicate with friends and family. Send texts or emails or use your phone.
+
+**** pj_mukh
+:PROPERTIES:
+:COMMENT_ID: 48347445
+:END:
+I would pay $49.99/mo for an unlimited plan that brings me only my friends' status updates (not their hyper-political likes and comments), just their life updates. But JUST that, no influencers, no ads.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Meta推出Instagram、Facebook和WhatsApp订阅服务
+***** TLDR
+Meta正式推出Instagram、Facebook和WhatsApp的付费订阅层级，高级计划包含AI功能。此举使收入来源多元化，超越广告依赖，为愿意付费的用户提供无广告体验。
+***** Take
+多年来把我们的注意力卖给广告商后，Meta发现他们还可以把我们的内心平静卖回给我们。收取本应默认提供的功能费用，这种厚脸皮几乎令人佩服。
+***** Comments
+- 我要唱反调说这对Meta产品可能是好事。我们听过多少次'如果产品免费，你就是产品'——后果就是开发资源倾向于服务广告商。
+- 别用Meta产品了。真没那么难。没人需要FB来和朋友家人联系。发短信、邮件或打电话。
+- 我愿意付49.99美元/月只看朋友的状态更新（不是他们的政治点赞评论），只是他们的生活动态。不要网红，不要广告。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+MetaがInstagram、Facebook、WhatsAppのサブスクリプションを開始
+***** TLDR
+MetaがInstagram、Facebook、WhatsAppの有料サブスクリプション層を正式にローンチ。プレミアムプランにはAI機能が含まれる。この動きは広告以外の収益源を多様化し、支払い意思のあるユーザーに広告なし体験を提供する。
+***** Take
+何年も私たちの注意を広告主に売った後、Metaは心の平和も売り返せることに気づいた。デフォルトであるべき機能に課金する厚かましさは、ほぼ称賛に値する。
+***** Comments
+- 逆張りになるが、これはMetaプロダクトにとって良いことだろう。「製品が無料なら、あなたが製品だ」と何度聞いたことか。結果として開発リソースは広告主に有利な方向に引っ張られる。
+- Meta製品を使うのをやめればいい。本当に思っているほど難しくない。友人や家族との連絡にFBは必要ない。テキストやメールや電話を使えばいい。
+- 月49.99ドルで友人の近況だけ見られるプランがあれば払う。政治的ないいねやコメントではなく、生活の更新だけ。インフルエンサーも広告もなし。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Meta, Instagram, Facebook, WhatsApp 구독 서비스 출시
+***** TLDR
+Meta가 Instagram, Facebook, WhatsApp의 유료 구독 티어를 공식 출시했으며, 프리미엄 플랜에 AI 기능이 포함된다. 이번 움직임은 광고 외 수익원을 다변화하고 결제 의사가 있는 사용자에게 광고 없는 경험을 제공한다.
+***** Take
+수년간 우리의 관심을 광고주에게 팔아온 Meta가 우리의 마음의 평화도 다시 팔 수 있다는 걸 깨달았다. 기본이어야 할 기능에 요금을 부과하는 뻔뻔함은 거의 감탄스럽다.
+***** Comments
+- 반대 의견을 말하자면 이건 Meta 제품에 긍정적일 것 같다. '제품이 무료면 당신이 제품'이라는 말을 얼마나 들었나 - 결과적으로 개발 자원이 광고주에게 유리한 방향으로 끌려간다.
+- 그냥 Meta 제품 쓰지 마라. 생각보다 어렵지 않다. 친구 가족과 연락하는데 FB가 필요한 사람은 없다. 문자나 이메일이나 전화를 써라.
+- 친구들의 상태 업데이트만 볼 수 있다면 월 49.99달러를 내겠다. 정치적인 좋아요나 댓글 말고 그들의 삶 업데이트만. 인플루언서도 광고도 없이.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Meta lanza suscripciones para Instagram, Facebook y WhatsApp
+***** TLDR
+Meta lanzó oficialmente niveles de suscripción de pago para Instagram, Facebook y WhatsApp, con funciones de IA incluidas en los planes premium. El movimiento diversifica los ingresos más allá de la publicidad y ofrece experiencias sin anuncios para quienes estén dispuestos a pagar.
+***** Take
+Después de años vendiendo nuestra atención a los anunciantes, Meta se dio cuenta de que también podían vendernos nuestra propia paz mental. La audacia de cobrar por funciones que deberían ser predeterminadas es casi admirable.
+***** Comments
+- Voy a ir contra la corriente y decir que esto probablemente sea positivo para los productos de Meta. Cuántas veces escuchamos 'si el producto es gratis, tú eres el producto' - la consecuencia es que los recursos van hacia lo que beneficia a los anunciantes.
+- Simplemente deja de usar productos de Meta. Realmente no es tan difícil como parece. Nadie necesita FB para comunicarse con amigos y familia. Envía mensajes o emails o usa el teléfono.
+- Pagaría $49.99/mes por un plan que me traiga solo las actualizaciones de mis amigos (no sus likes políticos), solo sus actualizaciones de vida. Pero SOLO eso, sin influencers, sin anuncios.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Meta startet Instagram-, Facebook- und WhatsApp-Abonnements
+***** TLDR
+Meta hat offiziell kostenpflichtige Abo-Stufen für Instagram, Facebook und WhatsApp eingeführt, wobei KI-Funktionen in Premium-Plänen enthalten sind. Der Schritt diversifiziert die Einnahmen über Werbung hinaus und bietet werbefreie Erlebnisse für Zahlungswillige.
+***** Take
+Nachdem sie jahrelang unsere Aufmerksamkeit an Werbetreibende verkauft haben, erkannte Meta, dass sie uns auch unseren eigenen Seelenfrieden zurückverkaufen können. Die Dreistigkeit, für Funktionen zu verlangen, die Standard sein sollten, ist fast bewundernswert.
+***** Comments
+- Ich sage gegen den Strom: Das ist wahrscheinlich positiv für Meta-Produkte. Wie oft hören wir 'wenn das Produkt kostenlos ist, bist du das Produkt' - die Folge ist, dass Entwicklungsressourcen in Richtungen gehen, die Werbetreibenden nützen.
+- Hört einfach auf, Meta-Produkte zu nutzen. Es ist wirklich nicht so schwer. Niemand braucht FB um mit Freunden und Familie zu kommunizieren. Schickt Nachrichten oder E-Mails oder telefoniert.
+- Ich würde $49,99/Monat für einen Plan zahlen, der mir nur die Status-Updates meiner Freunde zeigt (nicht ihre hyperpolitischen Likes), nur ihre Lebens-Updates. Aber NUR das, keine Influencer, keine Werbung.
+** Restartable Sequences :linux:kernel:performance:systems:
+:PROPERTIES:
+:ID:       48346019
+:URL:      https://justine.lol/rseq/
+:HN_URL:   https://news.ycombinator.com/item?id=48346019
+:POINTS:   177
+:COMMENTS: 51
+:BY:       grappler
+:END:
+
+*** TLDR
+Justine Tunney explains Linux's rseq() system call, which enables lock-free per-CPU operations by allowing the kernel to notify userspace when a critical section is interrupted. Instead of using mutexes or atomics, you mark code regions and let the OS restart them if preempted, achieving near-zero synchronization overhead.
+
+*** Take
+Finally, a systems programming article that makes me feel both smarter and dumber simultaneously. The kernel basically says 'I'll restart your code if I interrupt it' and somehow this is faster than locks. Modern computing is witchcraft with better documentation.
+
+*** Comments
+
+**** GlenTheMachine
+:PROPERTIES:
+:COMMENT_ID: 48346045
+:END:
+The takeaway is about halfway down: 'This is why Linux now provides rseq() which is a much more enlightened solution. With restartable sequences, you actually can get rid of both the mutex and atomics, while the OS continues to fully abstract scheduling.'
+
+**** senderista
+:PROPERTIES:
+:COMMENT_ID: 48346078
+:END:
+I'm surprised there was no reference to the librseq library, maintained by the rseq implementer. This has helpers for common use cases like counters and linked lists. You shouldn't need to write assembly at all to use rseq in most applications.
+
+**** khuey
+:PROPERTIES:
+:COMMENT_ID: 48346112
+:END:
+Maybe I'm just getting old but the 'if you don't spend $20,000 on a workstation you're going to be left behind like a dinosaur' at the top of this article is a huge turn off to reading any further.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+可重启序列
+***** TLDR
+Justine Tunney解释了Linux的rseq()系统调用，它允许内核在临界区被中断时通知用户空间，从而实现无锁的per-CPU操作。不使用互斥锁或原子操作，而是标记代码区域，让操作系统在被抢占时重启它们，实现近乎零的同步开销。
+***** Take
+终于有一篇系统编程文章让我同时觉得自己更聪明又更笨了。内核基本上说'如果我打断你的代码我会重启它'，不知怎么这比锁还快。现代计算就是有更好文档的巫术。
+***** Comments
+- 要点在文章中间：'这就是为什么Linux现在提供rseq()，这是一个更开明的解决方案。使用可重启序列，你可以同时摆脱互斥锁和原子操作，而操作系统继续完全抽象调度。'
+- 我很惊讶没有提到librseq库，由rseq实现者维护。它有计数器和链表等常见用例的辅助函数。大多数应用不需要写汇编就能使用rseq。
+- 也许我老了，但文章开头'如果你不花2万美元买工作站你就会像恐龙一样被淘汰'让我很反感，不想继续读了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+再開可能シーケンス
+***** TLDR
+Justine TunneyがLinuxのrseq()システムコールを解説。クリティカルセクションが中断された際にカーネルがユーザー空間に通知することで、ロックフリーのper-CPU操作を可能にする。mutexやアトミック操作の代わりに、コード領域をマークしてプリエンプションされたらOSに再起動させ、ほぼゼロの同期オーバーヘッドを実現。
+***** Take
+ついに、同時に自分が賢くも馬鹿にも感じるシステムプログラミングの記事だ。カーネルは基本的に「中断したらコードを再起動する」と言い、なぜかこれがロックより速い。現代のコンピューティングはより良いドキュメントのある魔術だ。
+***** Comments
+- 要点は中盤にある：「だからLinuxは今rseq()を提供している。再開可能シーケンスを使えば、mutexもアトミックも不要になり、OSは完全にスケジューリングを抽象化し続ける。」
+- rseq実装者が管理するlibrseqライブラリへの言及がないのは驚き。カウンターやリンクリストなどの一般的なユースケース用のヘルパーがある。ほとんどのアプリではアセンブリを書く必要がない。
+- 年を取ったのかもしれないが、冒頭の「2万ドルのワークステーションを買わないと恐竜のように取り残される」は読む気をなくさせる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+재시작 가능 시퀀스
+***** TLDR
+Justine Tunney이 Linux의 rseq() 시스템 콜을 설명한다. 임계 영역이 중단될 때 커널이 유저스페이스에 알림으로써 락 프리 per-CPU 연산을 가능하게 한다. 뮤텍스나 원자적 연산 대신 코드 영역을 표시하고 선점되면 OS가 재시작하게 하여 거의 제로에 가까운 동기화 오버헤드를 달성한다.
+***** Take
+드디어 동시에 더 똑똑해지고 더 멍청해진 기분이 드는 시스템 프로그래밍 글이다. 커널이 기본적으로 '내가 코드를 중단하면 재시작해줄게'라고 하는데 어떻게든 이게 락보다 빠르다. 현대 컴퓨팅은 더 나은 문서가 있는 마법이다.
+***** Comments
+- 핵심은 중간쯤에 있다: '이것이 Linux가 이제 rseq()를 제공하는 이유다. 재시작 가능 시퀀스로 뮤텍스와 원자적 연산을 모두 없앨 수 있으며 OS는 스케줄링을 완전히 추상화한다.'
+- rseq 구현자가 관리하는 librseq 라이브러리 언급이 없어서 놀랐다. 카운터와 링크드 리스트 같은 일반적인 사용 사례를 위한 헬퍼가 있다. 대부분의 앱에서 어셈블리를 작성할 필요가 없다.
+- 나이가 든 건지 모르겠지만 '2만 달러짜리 워크스테이션을 안 사면 공룡처럼 뒤처진다'는 서두가 읽고 싶지 않게 만든다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Secuencias Reiniciables
+***** TLDR
+Justine Tunney explica la llamada al sistema rseq() de Linux, que permite operaciones per-CPU sin bloqueos al permitir que el kernel notifique al espacio de usuario cuando se interrumpe una sección crítica. En lugar de usar mutex o atómicos, marcas regiones de código y dejas que el SO las reinicie si son interrumpidas, logrando casi cero overhead de sincronización.
+***** Take
+Finalmente, un artículo de programación de sistemas que me hace sentir más inteligente y más tonto simultáneamente. El kernel básicamente dice 'reiniciaré tu código si lo interrumpo' y de alguna manera esto es más rápido que los bloqueos. La computación moderna es brujería con mejor documentación.
+***** Comments
+- La conclusión está a mitad del texto: 'Por eso Linux ahora proporciona rseq() que es una solución mucho más iluminada. Con secuencias reiniciables, puedes eliminar tanto el mutex como los atómicos, mientras el SO sigue abstrayendo completamente la planificación.'
+- Me sorprende que no haya referencia a la biblioteca librseq, mantenida por el implementador de rseq. Tiene helpers para casos de uso comunes como contadores y listas enlazadas. No deberías necesitar escribir ensamblador para usar rseq.
+- Quizás me estoy haciendo viejo pero el 'si no gastas $20,000 en una estación de trabajo te quedarás atrás como un dinosaurio' al inicio del artículo me quita las ganas de seguir leyendo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Neustartbare Sequenzen
+***** TLDR
+Justine Tunney erklärt den rseq() Systemaufruf von Linux, der lockfreie per-CPU-Operationen ermöglicht, indem der Kernel den Userspace benachrichtigt, wenn ein kritischer Abschnitt unterbrochen wird. Statt Mutexe oder Atomics markiert man Code-Regionen und lässt das OS sie neu starten wenn sie unterbrochen werden, mit nahezu null Synchronisations-Overhead.
+***** Take
+Endlich ein Systemprogrammierungs-Artikel, der mich gleichzeitig schlauer und dümmer fühlen lässt. Der Kernel sagt im Grunde 'ich starte deinen Code neu wenn ich ihn unterbreche' und irgendwie ist das schneller als Locks. Moderne Informatik ist Hexerei mit besserer Dokumentation.
+***** Comments
+- Der Kernpunkt ist etwa in der Mitte: 'Deshalb bietet Linux jetzt rseq(), eine viel aufgeklärtere Lösung. Mit neustartbaren Sequenzen kann man Mutex und Atomics loswerden, während das OS weiterhin Scheduling vollständig abstrahiert.'
+- Ich bin überrascht, dass die librseq-Bibliothek nicht erwähnt wird, die vom rseq-Implementierer gepflegt wird. Sie hat Helfer für gängige Anwendungsfälle wie Zähler und verkettete Listen. Man sollte kein Assembly schreiben müssen.
+- Vielleicht werde ich alt, aber das 'wenn du nicht $20.000 für eine Workstation ausgibst, wirst du wie ein Dinosaurier zurückgelassen' am Anfang des Artikels ist eine große Abschreckung.
+** It's Not Just X. It's Y :ai:writing:language:culture:
+:PROPERTIES:
+:ID:       48350149
+:URL:      https://mail.cyberneticforests.com/its-not-just-data-its-post-training/
+:HN_URL:   https://news.ycombinator.com/item?id=48350149
+:POINTS:   84
+:COMMENTS: 69
+:BY:       mooreds
+:END:
+
+*** TLDR
+The article examines how certain phrase patterns like 'It's not just X, it's Y' have become markers of AI-generated text, functioning as unintentional watermarks. The author argues that shaming people for using these idioms creates a chilling effect on natural language patterns that predate LLMs.
+
+*** Take
+Turns out the AI text detectors are just pattern-matching on vibes, and now humans have to avoid saying things that sound too organized. We've reached the point where writing coherently is suspicious. Peak 2026.
+
+*** Comments
+
+**** Baader-Meinhof
+:PROPERTIES:
+:COMMENT_ID: 48350178
+:END:
+I like that these AI idioms exist. They're like watermarks for text. It's worth the cost of humans avoiding them. Companies will eventually train their models to be undetectable, but society would be better if they didn't.
+
+**** karim79
+:PROPERTIES:
+:COMMENT_ID: 48350201
+:END:
+So, if we publicly shame people whose text looks like it might have been written by a machine – because it mimics the language used for human reasoning – and people stop writing in ways that they internalize as 'AI writing' out of fear of false detection, it sends a signal that your language for reasoning must be policed.
+
+**** tkgally
+:PROPERTIES:
+:COMMENT_ID: 48350234
+:END:
+There is danger in evaluating for language patterns over its content. I agree, but it's worth noting that has been done since long before LLMs. Fifteen years ago, I used to teach a graduate course on academic writing pedagogy.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+不只是X，而是Y
+***** TLDR
+文章探讨了某些短语模式如'不只是X，而是Y'如何成为AI生成文本的标记，作为无意的水印。作者认为，因使用这些习语而羞辱人们会对早于LLM存在的自然语言模式产生寒蝉效应。
+***** Take
+原来AI文本检测器只是在氛围上做模式匹配，现在人类必须避免说听起来太有条理的话。我们已经到了写得连贯就可疑的地步。2026年巅峰。
+***** Comments
+- 我喜欢这些AI习语的存在。它们就像文本的水印。人类避免使用它们是值得的代价。公司最终会训练模型变得不可检测，但如果不这样做社会会更好。
+- 所以，如果我们公开羞辱那些文本看起来像机器写的人——因为它模仿了人类推理的语言——人们出于害怕被误检而停止以他们内化为'AI写作'的方式写作，这发出了你的推理语言必须被审查的信号。
+- 根据语言模式而非内容来评估是有危险的。我同意，但值得注意的是这在LLM之前就一直在做。十五年前，我曾教授学术写作教学法的研究生课程。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+単にXではない。Yなのだ
+***** TLDR
+記事は「単にXではない、Yなのだ」のようなフレーズパターンがAI生成テキストのマーカーとなり、意図しないウォーターマークとして機能していることを検証する。著者は、これらの慣用句の使用で人々を恥じらわせることがLLM以前から存在する自然な言語パターンに萎縮効果をもたらすと主張。
+***** Take
+AI文章検出器は結局バイブスでパターンマッチングしているだけで、今や人間は整然としすぎる言い方を避けなければならない。一貫性のある文章を書くと疑わしいという段階に達した。2026年のピーク。
+***** Comments
+- これらのAI慣用句が存在するのは好きだ。テキストのウォーターマークのようなもの。人間がそれを避けるコストは払う価値がある。企業は最終的に検出不可能なモデルを訓練するだろうが、しない方が社会にとって良い。
+- 機械が書いたように見えるテキストの人を公に恥じらわせると——人間の推論に使われる言語を模倣しているから——人々は誤検出を恐れて「AI的な書き方」を内面化してやめてしまう。これは推論の言語が監視されるべきだというシグナルを送る。
+- 内容より言語パターンで評価することには危険がある。同意するが、これはLLMのずっと前からされていたことも注目に値する。15年前、私は学術ライティング教育法の大学院コースを教えていた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+그건 단지 X가 아니다. Y다
+***** TLDR
+기사는 '그건 단지 X가 아니라 Y다' 같은 문구 패턴이 어떻게 AI 생성 텍스트의 표식이 되어 의도치 않은 워터마크로 기능하는지 검토한다. 저자는 이러한 관용구 사용으로 사람들을 비난하는 것이 LLM 이전부터 존재했던 자연어 패턴에 위축 효과를 만든다고 주장한다.
+***** Take
+AI 텍스트 감지기가 그냥 바이브로 패턴 매칭하는 거였고, 이제 인간은 너무 정돈된 말을 피해야 한다. 일관성 있게 글을 쓰면 의심받는 지경에 이르렀다. 2026년의 정점.
+***** Comments
+- 이런 AI 관용구가 존재하는 게 좋다. 텍스트의 워터마크 같은 것이다. 인간이 피하는 비용은 치를 가치가 있다. 기업들은 결국 감지 불가능하게 모델을 훈련시키겠지만 안 하는 게 사회에 더 좋다.
+- 기계가 쓴 것처럼 보이는 글의 사람을 공개적으로 비난하면 — 인간의 추론에 사용되는 언어를 모방했기 때문에 — 사람들은 오탐지 두려움에 'AI 글쓰기'로 내면화한 방식을 그만두고, 이는 추론의 언어가 감시되어야 한다는 신호를 보낸다.
+- 내용보다 언어 패턴으로 평가하는 것은 위험하다. 동의하지만, 이것이 LLM 훨씬 이전부터 행해졌다는 점도 주목할 가치가 있다. 15년 전, 나는 학술 글쓰기 교육학 대학원 과정을 가르쳤다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+No es solo X. Es Y
+***** TLDR
+El artículo examina cómo ciertos patrones de frases como 'No es solo X, es Y' se han convertido en marcadores de texto generado por IA, funcionando como marcas de agua involuntarias. El autor argumenta que avergonzar a las personas por usar estos modismos crea un efecto inhibidor en patrones de lenguaje natural que preceden a los LLMs.
+***** Take
+Resulta que los detectores de texto IA solo hacen coincidencia de patrones con vibras, y ahora los humanos tienen que evitar decir cosas que suenen demasiado organizadas. Hemos llegado al punto donde escribir coherentemente es sospechoso. Pico 2026.
+***** Comments
+- Me gusta que existan estos modismos de IA. Son como marcas de agua para texto. Vale la pena el costo de que los humanos los eviten. Las empresas eventualmente entrenarán sus modelos para ser indetectables, pero la sociedad sería mejor si no lo hicieran.
+- Entonces, si avergonzamos públicamente a personas cuyo texto parece escrito por una máquina — porque imita el lenguaje usado para el razonamiento humano — y las personas dejan de escribir de maneras que internalizan como 'escritura IA' por miedo a falsos positivos, envía la señal de que tu lenguaje de razonamiento debe ser vigilado.
+- Hay peligro en evaluar por patrones de lenguaje sobre el contenido. Estoy de acuerdo, pero vale la pena notar que esto se ha hecho desde mucho antes de los LLMs. Hace quince años, enseñaba un curso de posgrado sobre pedagogía de escritura académica.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Es ist nicht nur X. Es ist Y
+***** TLDR
+Der Artikel untersucht, wie bestimmte Phrasen-Muster wie 'Es ist nicht nur X, es ist Y' zu Markern für KI-generierten Text geworden sind und als unbeabsichtigte Wasserzeichen fungieren. Der Autor argumentiert, dass das Beschämen von Menschen für die Verwendung dieser Redewendungen einen abschreckenden Effekt auf natürliche Sprachmuster hat, die älter als LLMs sind.
+***** Take
+Es stellt sich heraus, dass KI-Text-Detektoren nur Muster auf Vibes matchen, und jetzt müssen Menschen vermeiden, Dinge zu sagen, die zu organisiert klingen. Wir haben den Punkt erreicht, an dem kohärentes Schreiben verdächtig ist. Peak 2026.
+***** Comments
+- Ich mag es, dass diese KI-Idiome existieren. Sie sind wie Wasserzeichen für Text. Es ist den Preis wert, dass Menschen sie vermeiden. Unternehmen werden ihre Modelle schließlich undetektierbar trainieren, aber die Gesellschaft wäre besser dran wenn sie es nicht täten.
+- Wenn wir Menschen öffentlich beschämen, deren Text aussieht als könnte er von einer Maschine geschrieben sein – weil er die Sprache für menschliches Denken nachahmt – und Menschen aufhören so zu schreiben aus Angst vor Fehlerkennungen, sendet das das Signal, dass deine Sprache fürs Denken überwacht werden muss.
+- Es ist gefährlich, nach Sprachmustern statt Inhalt zu bewerten. Ich stimme zu, aber es ist erwähnenswert, dass das schon lange vor LLMs gemacht wurde. Vor fünfzehn Jahren unterrichtete ich einen Graduiertenkurs über akademische Schreibpädagogik.
