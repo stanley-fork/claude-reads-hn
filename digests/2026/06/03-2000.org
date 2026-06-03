@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-06-03 20:00:00 UT UTC
+#+DATE: 2026-06-03T20:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Bytes get optimized, RISC-V gets tiny, PlayStation gets dissected, and gamers want their servers back
+
+* Highlights
+- Every Byte Matters: Why your struct layout is trash
+- ESP32-S31: RISC-V with SIMD in your pocket
+- PlayStation 1 teardown reveals Metal Gear's wildest memory hack
+
+* Stories
+
+** Every Byte Matters :performance:memory:optimization:zig:
+:PROPERTIES:
+:ID:       48382382
+:URL:      https://fzakaria.com/2026/06/01/every-byte-matters
+:HN_URL:   https://news.ycombinator.com/item?id=48382382
+:POINTS:   206
+:COMMENTS: 101
+:BY:       ingve
+:END:
+
+*** TLDR
+Array-of-structs vs struct-of-arrays matters more than you think. When iterating over millions of objects but only accessing one field, scattered memory access kills performance. The solution: pack related data together, or better yet, use data-oriented design from the start.
+
+*** Take
+Every time someone adds a boolean field to a monster struct, a cache line dies. Zig's MultiArrayList exists for a reason.
+
+*** Comments
+
+**** jadbox
+:PROPERTIES:
+:COMMENT_ID: 48382383
+:END:
+Zig's MultiArrayList is a cool language feature to support objects of collections, and I wish more languages had first class support for it.
+
+**** moring
+:PROPERTIES:
+:COMMENT_ID: 48382384
+:END:
+The article shows nicely how 'every byte matters' is false. You aren't reading one byte here, you are reading 1M bytes!
+
+**** noelwelsh
+:PROPERTIES:
+:COMMENT_ID: 48382385
+:END:
+The JVM is currently pretty bad for memory allocation. Every object has a header that is 12 bytes. But Project Valhalla will help.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+每一个字节都很重要
+***** TLDR
+结构体数组 vs 数组结构体比你想象的更重要。当遍历数百万个对象但只访问一个字段时，分散的内存访问会严重影响性能。解决方案：将相关数据打包在一起，或者从一开始就使用面向数据的设计。
+***** Take
+每次有人往怪物结构体里加一个布尔字段，就有一个缓存行在哭泣。Zig的MultiArrayList存在是有原因的。
+***** Comments
+- Zig的MultiArrayList是支持对象集合的很酷的语言特性，我希望更多语言能原生支持它。
+- 这篇文章很好地展示了'每一个字节都很重要'是错的。你读的不是一个字节，而是一百万个字节！
+- JVM目前的内存分配很糟糕。每个对象都有12字节的头部。但Valhalla项目会改善这点。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+すべてのバイトが重要
+***** TLDR
+配列の構造体 vs 構造体の配列は思っている以上に重要。何百万ものオブジェクトを反復処理しながら1つのフィールドだけにアクセスする場合、分散したメモリアクセスがパフォーマンスを殺す。解決策：関連データをまとめてパックするか、最初からデータ指向設計を使用する。
+***** Take
+誰かがモンスター構造体にブール値フィールドを追加するたびに、キャッシュラインが死ぬ。ZigのMultiArrayListには理由がある。
+***** Comments
+- ZigのMultiArrayListはオブジェクトのコレクションをサポートするクールな言語機能で、もっと多くの言語がネイティブサポートしてほしい。
+- この記事は「すべてのバイトが重要」が間違っていることをうまく示している。1バイトを読んでいるのではなく、100万バイトを読んでいる！
+- JVMは現在メモリ割り当てがかなり悪い。すべてのオブジェクトに12バイトのヘッダーがある。でもProject Valhallaが助けてくれる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+모든 바이트가 중요하다
+***** TLDR
+구조체 배열 vs 배열 구조체는 생각보다 중요하다. 수백만 개의 객체를 반복하면서 하나의 필드만 접근할 때, 분산된 메모리 접근이 성능을 죽인다. 해결책: 관련 데이터를 함께 패킹하거나, 처음부터 데이터 지향 설계를 사용하라.
+***** Take
+누군가 몬스터 구조체에 불리언 필드를 추가할 때마다 캐시 라인이 죽는다. Zig의 MultiArrayList는 이유가 있다.
+***** Comments
+- Zig의 MultiArrayList는 객체 컬렉션을 지원하는 멋진 언어 기능이고, 더 많은 언어가 네이티브로 지원했으면 좋겠다.
+- 이 글은 '모든 바이트가 중요하다'가 틀렸음을 잘 보여준다. 1바이트를 읽는 게 아니라 100만 바이트를 읽는 거다!
+- JVM은 현재 메모리 할당이 꽤 나쁘다. 모든 객체에 12바이트 헤더가 있다. 하지만 Project Valhalla가 도움이 될 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cada byte importa
+***** TLDR
+Array de estructuras vs estructura de arrays importa más de lo que crees. Al iterar sobre millones de objetos accediendo solo a un campo, el acceso disperso a memoria mata el rendimiento. La solución: empaquetar datos relacionados juntos, o mejor aún, usar diseño orientado a datos desde el inicio.
+***** Take
+Cada vez que alguien añade un campo booleano a una estructura monstruosa, una línea de caché muere. El MultiArrayList de Zig existe por algo.
+***** Comments
+- El MultiArrayList de Zig es una característica genial del lenguaje para colecciones de objetos, desearía que más lenguajes lo soportaran nativamente.
+- El artículo muestra bien cómo 'cada byte importa' es falso. ¡No estás leyendo un byte, estás leyendo 1M de bytes!
+- La JVM actualmente es bastante mala para asignación de memoria. Cada objeto tiene una cabecera de 12 bytes. Pero Project Valhalla ayudará.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Jedes Byte zählt
+***** TLDR
+Array-of-Structs vs Struct-of-Arrays ist wichtiger als du denkst. Beim Iterieren über Millionen von Objekten mit Zugriff auf nur ein Feld killt verstreuter Speicherzugriff die Performance. Die Lösung: Verwandte Daten zusammenpacken, oder besser noch, von Anfang an datenorientiertes Design verwenden.
+***** Take
+Jedes Mal wenn jemand ein Boolean-Feld zu einer Monster-Struktur hinzufügt, stirbt eine Cache-Line. Zigs MultiArrayList existiert aus gutem Grund.
+***** Comments
+- Zigs MultiArrayList ist ein cooles Sprachfeature für Objektsammlungen, ich wünschte mehr Sprachen hätten native Unterstützung dafür.
+- Der Artikel zeigt schön, wie 'jedes Byte zählt' falsch ist. Du liest hier nicht ein Byte, du liest 1M Bytes!
+- Die JVM ist derzeit ziemlich schlecht bei Speicherallokation. Jedes Objekt hat einen 12-Byte-Header. Aber Project Valhalla wird helfen.
+** ESP32-S31 :hardware:risc-v:embedded:esp32:
+:PROPERTIES:
+:ID:       48385965
+:URL:      https://www.espressif.com/en/products/socs/esp32-s31
+:HN_URL:   https://news.ycombinator.com/item?id=48385965
+:POINTS:   187
+:COMMENTS: 91
+:BY:       volemo
+:END:
+
+*** TLDR
+Espressif releases ESP32-S31, a RISC-V based microcontroller with SIMD instructions. The naming scheme continues to confuse everyone, but the embedded Rust community is thrilled because compiling for RISC-V is just a rustup target add away.
+
+*** Take
+We now have more ESP32 variants than Pokemon generations. At least this one speaks RISC-V, so you can finally stop fighting proprietary Xtensa toolchains.
+
+*** Comments
+
+**** alnwlsn
+:PROPERTIES:
+:COMMENT_ID: 48385966
+:END:
+I kind of wish these all weren't called ESP32. ESP8266 to ESP32 made sense, but now we have 10+ different versions with different features and architectures.
+
+**** randomint64
+:PROPERTIES:
+:COMMENT_ID: 48385967
+:END:
+Espressif is on fire! The CPU even has SIMD instructions! RISC-V is a big deal for embedded because compiling is just 'rustup target add riscv32imac-unknown-none-elf'.
+
+**** frikk
+:PROPERTIES:
+:COMMENT_ID: 48385968
+:END:
+I've been building hobby LED art projects with WLED on ESP32. These little boards are so powerful and the open source community continues to amaze me.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ESP32-S31
+***** TLDR
+乐鑫发布ESP32-S31，一款基于RISC-V的微控制器，带有SIMD指令。命名方案继续让所有人困惑，但嵌入式Rust社区很兴奋，因为编译RISC-V只需要一条rustup target add命令。
+***** Take
+我们现在的ESP32变体比宝可梦世代还多。至少这个能说RISC-V，你终于可以不用和专有的Xtensa工具链斗争了。
+***** Comments
+- 我真希望这些不都叫ESP32。ESP8266到ESP32还说得通，但现在我们有10多个不同功能和架构的版本。
+- 乐鑫太猛了！CPU甚至有SIMD指令！RISC-V对嵌入式来说是大事，因为编译只需要'rustup target add riscv32imac-unknown-none-elf'。
+- 我一直在用ESP32上的WLED做LED艺术项目。这些小板子太强大了，开源社区持续让我惊叹。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ESP32-S31
+***** TLDR
+EspressifがRISC-VベースのマイクロコントローラESP32-S31をリリース。SIMD命令付き。命名規則は相変わらず混乱を招くが、組み込みRustコミュニティは大喜び。RISC-V向けコンパイルはrustup target addだけで済む。
+***** Take
+ESP32のバリエーションがポケモンの世代より多くなった。少なくともこれはRISC-Vを話すので、プロプライエタリなXtensaツールチェーンと戦う必要がなくなる。
+***** Comments
+- これら全部がESP32と呼ばれなければいいのに。ESP8266からESP32は理解できたが、今では機能やアーキテクチャが違う10以上のバージョンがある。
+- Espressifが絶好調！CPUにはSIMD命令まである！RISC-Vは組み込みにとって大きい。コンパイルは'rustup target add riscv32imac-unknown-none-elf'だけ。
+- ESP32でWLEDを使ったLEDアート作品を作ってきた。この小さなボードはとても強力で、オープンソースコミュニティには驚かされ続けている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ESP32-S31
+***** TLDR
+Espressif가 SIMD 명령어를 갖춘 RISC-V 기반 마이크로컨트롤러 ESP32-S31을 출시했다. 명명 체계는 계속 모두를 혼란스럽게 하지만, 임베디드 Rust 커뮤니티는 환호한다. RISC-V 컴파일은 rustup target add 한 줄이면 끝이니까.
+***** Take
+이제 ESP32 변종이 포켓몬 세대보다 많다. 적어도 이건 RISC-V를 말하니까, 드디어 독점 Xtensa 툴체인과 싸우지 않아도 된다.
+***** Comments
+- 이것들이 전부 ESP32라고 불리지 않았으면 좋겠다. ESP8266에서 ESP32는 이해가 됐지만, 지금은 기능과 아키텍처가 다른 10개 이상의 버전이 있다.
+- Espressif 대단하다! CPU에 SIMD 명령어까지 있다! RISC-V는 임베디드에 큰 일이다. 컴파일이 'rustup target add riscv32imac-unknown-none-elf'면 끝이니까.
+- ESP32에서 WLED로 취미 LED 아트 프로젝트를 만들어왔다. 이 작은 보드들은 정말 강력하고 오픈소스 커뮤니티는 계속 놀랍다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ESP32-S31
+***** TLDR
+Espressif lanza el ESP32-S31, un microcontrolador basado en RISC-V con instrucciones SIMD. El esquema de nombres sigue confundiendo a todos, pero la comunidad de Rust embebido está encantada porque compilar para RISC-V es solo un rustup target add.
+***** Take
+Ahora tenemos más variantes de ESP32 que generaciones de Pokemon. Al menos este habla RISC-V, así que por fin puedes dejar de pelear con las toolchains propietarias de Xtensa.
+***** Comments
+- Ojalá no se llamaran todos ESP32. De ESP8266 a ESP32 tenía sentido, pero ahora tenemos más de 10 versiones diferentes con distintas características y arquitecturas.
+- ¡Espressif está en llamas! ¡El CPU tiene instrucciones SIMD! RISC-V es importante para embebidos porque compilar es solo 'rustup target add riscv32imac-unknown-none-elf'.
+- He estado construyendo proyectos de arte LED con WLED en ESP32. Estas pequeñas placas son muy potentes y la comunidad open source sigue asombrándome.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ESP32-S31
+***** TLDR
+Espressif veröffentlicht ESP32-S31, einen RISC-V basierten Mikrocontroller mit SIMD-Instruktionen. Das Namensschema verwirrt weiterhin alle, aber die Embedded-Rust-Community ist begeistert, weil Kompilieren für RISC-V nur ein rustup target add braucht.
+***** Take
+Wir haben jetzt mehr ESP32-Varianten als Pokemon-Generationen. Wenigstens spricht dieser RISC-V, sodass du endlich aufhören kannst, gegen proprietäre Xtensa-Toolchains zu kämpfen.
+***** Comments
+- Ich wünschte, die würden nicht alle ESP32 heißen. ESP8266 zu ESP32 ergab Sinn, aber jetzt haben wir über 10 verschiedene Versionen mit unterschiedlichen Features und Architekturen.
+- Espressif ist on fire! Die CPU hat sogar SIMD-Instruktionen! RISC-V ist wichtig für Embedded, weil Kompilieren nur 'rustup target add riscv32imac-unknown-none-elf' braucht.
+- Ich baue Hobby-LED-Kunstprojekte mit WLED auf ESP32. Diese kleinen Boards sind so leistungsfähig und die Open-Source-Community erstaunt mich immer wieder.
+** PlayStation Architecture :retro:gaming:hardware:playstation:
+:PROPERTIES:
+:ID:       48382142
+:URL:      https://www.copetti.org/writings/consoles/playstation/
+:HN_URL:   https://news.ycombinator.com/item?id=48382142
+:POINTS:   206
+:COMMENTS: 42
+:BY:       gregsadetsky
+:END:
+
+*** TLDR
+A comprehensive deep-dive into the PlayStation 1's hardware architecture covering the MIPS R3000A CPU, the GPU's lack of texture perspective correction, the sound processing unit, and the CD-ROM subsystem. Originally published in 2019 but still the gold standard for PS1 hardware docs.
+
+*** Take
+The comments are the real treasure here. Someone who worked on the Metal Gear Solid PC port revealed Konami used pointer address bits to encode game state. Absolutely unhinged. This is why we have undefined behavior warnings.
+
+*** Comments
+
+**** malkia
+:PROPERTIES:
+:COMMENT_ID: 48382143
+:END:
+I worked on the Metal Gear Solid port from PSX to PC. Konami programmers stored whether the C4 bomb was planted on wall or ground by using different memory region pointers to the same physical address.
+
+**** MrDOS
+:PROPERTIES:
+:COMMENT_ID: 48382144
+:END:
+This is great, but it was originally published in 2019. See the past discussions in 2020 and 2021.
+
+**** adamddev1
+:PROPERTIES:
+:COMMENT_ID: 48382145
+:END:
+What a beautifully designed website. Everything is thoughtfully set-up and well placed. A great example of a well curated digital garden.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+PlayStation 架构
+***** TLDR
+全面深入PlayStation 1的硬件架构，涵盖MIPS R3000A CPU、GPU缺乏纹理透视校正、声音处理单元和CD-ROM子系统。2019年首发但仍是PS1硬件文档的黄金标准。
+***** Take
+评论才是真正的宝藏。一个参与过《合金装备》PC移植的人透露，小岛秀夫团队用指针地址位来编码游戏状态。完全疯狂。这就是为什么我们有未定义行为警告。
+***** Comments
+- 我参与过《合金装备》从PSX到PC的移植。小岛的程序员通过使用指向同一物理地址的不同内存区域指针来存储C4炸弹是贴在墙上还是地上。
+- 这很棒，但最初是2019年发布的。可以看看2020年和2021年的讨论。
+- 多么精美设计的网站。一切都经过深思熟虑的布局。是精心策划的数字花园的绝佳范例。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+PlayStation アーキテクチャ
+***** TLDR
+PlayStation 1のハードウェアアーキテクチャを包括的に深掘り。MIPS R3000A CPU、テクスチャパースペクティブ補正がないGPU、サウンド処理ユニット、CD-ROMサブシステムをカバー。2019年に公開されたが、PS1ハードウェアドキュメントのゴールドスタンダードのまま。
+***** Take
+コメントが本当の宝。メタルギアソリッドのPC移植に携わった人が、コナミがポインタアドレスビットでゲーム状態をエンコードしていたと明かした。完全に狂ってる。だから未定義動作の警告があるんだ。
+***** Comments
+- メタルギアソリッドのPSXからPCへの移植に携わった。コナミのプログラマーは、同じ物理アドレスへの異なるメモリ領域ポインタを使って、C4爆弾が壁に設置されたか地面に設置されたかを保存していた。
+- これは素晴らしいが、元々は2019年に公開された。2020年と2021年の過去の議論を見てほしい。
+- なんと美しくデザインされたウェブサイト。すべてが思慮深く配置されている。よく手入れされたデジタルガーデンの素晴らしい例。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+PlayStation 아키텍처
+***** TLDR
+PlayStation 1 하드웨어 아키텍처에 대한 포괄적인 심층 분석. MIPS R3000A CPU, 텍스처 원근 보정이 없는 GPU, 사운드 처리 유닛, CD-ROM 서브시스템을 다룬다. 2019년에 처음 게시되었지만 여전히 PS1 하드웨어 문서의 표준.
+***** Take
+댓글이 진짜 보물이다. 메탈기어 솔리드 PC 포팅에 참여한 누군가가 코나미가 포인터 주소 비트로 게임 상태를 인코딩했다고 밝혔다. 완전히 미친 짓이다. 그래서 정의되지 않은 동작 경고가 있는 거다.
+***** Comments
+- 메탈기어 솔리드 PSX에서 PC 포팅 작업을 했다. 코나미 프로그래머들은 같은 물리적 주소를 가리키는 다른 메모리 영역 포인터를 사용해서 C4 폭탄이 벽에 설치됐는지 바닥에 설치됐는지 저장했다.
+- 이거 훌륭한데, 원래 2019년에 게시됐다. 2020년과 2021년의 이전 토론을 봐라.
+- 정말 아름답게 디자인된 웹사이트다. 모든 것이 신중하게 배치되어 있다. 잘 가꾸어진 디지털 가든의 훌륭한 예시.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Arquitectura de PlayStation
+***** TLDR
+Un análisis profundo y completo de la arquitectura de hardware del PlayStation 1 que cubre la CPU MIPS R3000A, la falta de corrección de perspectiva de texturas del GPU, la unidad de procesamiento de sonido y el subsistema de CD-ROM. Publicado originalmente en 2019 pero sigue siendo el estándar de oro para documentación de hardware PS1.
+***** Take
+Los comentarios son el verdadero tesoro aquí. Alguien que trabajó en el port de Metal Gear Solid para PC reveló que Konami usaba bits de direcciones de punteros para codificar el estado del juego. Completamente demente. Por eso tenemos advertencias de comportamiento indefinido.
+***** Comments
+- Trabajé en el port de Metal Gear Solid de PSX a PC. Los programadores de Konami guardaban si la bomba C4 estaba plantada en la pared o el suelo usando punteros de diferentes regiones de memoria a la misma dirección física.
+- Esto es genial, pero fue publicado originalmente en 2019. Mira las discusiones pasadas de 2020 y 2021.
+- Qué sitio web tan bellamente diseñado. Todo está cuidadosamente configurado y bien ubicado. Un gran ejemplo de un jardín digital bien curado.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+PlayStation Architektur
+***** TLDR
+Ein umfassender Deep-Dive in die Hardware-Architektur der PlayStation 1, der die MIPS R3000A CPU, die fehlende Textur-Perspektivkorrektur der GPU, die Sound-Processing-Unit und das CD-ROM-Subsystem behandelt. Ursprünglich 2019 veröffentlicht, aber immer noch der Goldstandard für PS1-Hardware-Dokumentation.
+***** Take
+Die Kommentare sind hier der wahre Schatz. Jemand, der am Metal Gear Solid PC-Port arbeitete, enthüllte, dass Konami Pointer-Adressbits zur Kodierung des Spielzustands verwendete. Absolut verrückt. Deshalb haben wir Warnungen für undefiniertes Verhalten.
+***** Comments
+- Ich habe am Metal Gear Solid Port von PSX zu PC gearbeitet. Konami-Programmierer speicherten, ob die C4-Bombe an Wand oder Boden platziert war, indem sie verschiedene Speicherregion-Pointer auf dieselbe physische Adresse verwendeten.
+- Das ist großartig, aber es wurde ursprünglich 2019 veröffentlicht. Siehe die vergangenen Diskussionen von 2020 und 2021.
+- Was für eine wunderschön gestaltete Website. Alles ist durchdacht aufgebaut und gut platziert. Ein großartiges Beispiel für einen gut gepflegten digitalen Garten.
+** Stop Killing Games :gaming:drm:open-source:digital-rights:
+:PROPERTIES:
+:ID:       48356449
+:URL:      https://jxself.org/stop-killing-games.shtml
+:HN_URL:   https://news.ycombinator.com/item?id=48356449
+:POINTS:   52
+:COMMENTS: 41
+:BY:       amcclure
+:END:
+
+*** TLDR
+The author argues that 'Stop Killing Games' doesn't go far enough. The real solution is open source games that guarantee all four software freedoms: run, study, redistribute, and modify. Closed-source offline games can still be killed by DRM or abandoned binaries.
+
+*** Take
+"Just make everything open source" is technically correct and practically useless. Good luck convincing EA to GPL Apex Legends.
+
+*** Comments
+
+**** nerdjon
+:PROPERTIES:
+:COMMENT_ID: 48356450
+:END:
+This is basically advocating for open source games which is a completely different story than what Stop Killing Games is trying to do. The freedom to redistribute copies basically kills the economics of game dev.
+
+**** ryandrake
+:PROPERTIES:
+:COMMENT_ID: 48356451
+:END:
+If I subscribe to a service for $M/mo, I expect it to work while I pay. If I buy a product for $N one-time, I expect it to work basically forever until it physically breaks.
+
+**** mohamedkoubaa
+:PROPERTIES:
+:COMMENT_ID: 48356452
+:END:
+I'm confused, does the author really feel entitled to game servers running indefinitely?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+停止杀死游戏
+***** TLDR
+作者认为'停止杀死游戏'运动还不够。真正的解决方案是保证所有四种软件自由的开源游戏：运行、研究、再分发和修改。闭源离线游戏仍然可能被DRM或被放弃的二进制文件杀死。
+***** Take
+"让一切都开源"在技术上是正确的，但实际上没用。祝你好运说服EA把Apex Legends开源。
+***** Comments
+- 这基本上是在倡导开源游戏，这和'停止杀死游戏'运动想做的完全不同。再分发副本的自由基本上会杀死游戏开发的经济模式。
+- 如果我订阅每月M美元的服务，我期望付费期间它能用。如果我一次性花N美元买产品，我期望它基本永远能用，直到物理损坏。
+- 我很困惑，作者真的觉得有权要求游戏服务器无限期运行吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ゲームを殺すのをやめろ
+***** TLDR
+著者は「Stop Killing Games」は十分ではないと主張。本当の解決策は4つのソフトウェアの自由をすべて保証するオープンソースゲーム：実行、研究、再配布、修正。クローズドソースのオフラインゲームでもDRMや放棄されたバイナリで殺される可能性がある。
+***** Take
+「すべてをオープンソースに」は技術的には正しいが、実用的には役に立たない。EAにApex LegendsをGPLにするよう説得できたら幸運だね。
+***** Comments
+- これは基本的にオープンソースゲームを提唱していて、Stop Killing Gamesがやろうとしていることとは全く違う話。コピーを再配布する自由は基本的にゲーム開発の経済を殺す。
+- 月額M$のサービスに加入したら、払っている間は動くことを期待する。一度N$で製品を買ったら、物理的に壊れるまで基本的に永遠に動くことを期待する。
+- 困惑している。著者は本当にゲームサーバーが無期限に稼働する権利があると思っているのか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+게임 죽이기를 멈춰라
+***** TLDR
+저자는 'Stop Killing Games'가 충분하지 않다고 주장한다. 진정한 해결책은 네 가지 소프트웨어 자유를 모두 보장하는 오픈소스 게임이다: 실행, 연구, 재배포, 수정. 클로즈드 소스 오프라인 게임도 DRM이나 버려진 바이너리로 죽을 수 있다.
+***** Take
+"모든 것을 오픈소스로"는 기술적으로는 맞지만 실용적으로는 쓸모없다. EA가 Apex Legends를 GPL로 만들도록 설득하는 데 행운을 빈다.
+***** Comments
+- 이건 기본적으로 오픈소스 게임을 옹호하는 거고, Stop Killing Games가 하려는 것과는 완전히 다른 이야기다. 복사본을 재배포할 자유는 기본적으로 게임 개발 경제를 죽인다.
+- 월 M달러 서비스에 구독하면 내가 돈 내는 동안 작동하길 기대한다. N달러에 제품을 한 번 사면 물리적으로 고장날 때까지 기본적으로 영원히 작동하길 기대한다.
+- 헷갈린다, 저자가 정말로 게임 서버가 무기한 운영될 권리가 있다고 느끼는 건가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Dejen de matar juegos
+***** TLDR
+El autor argumenta que 'Stop Killing Games' no va lo suficientemente lejos. La verdadera solución son los juegos de código abierto que garanticen las cuatro libertades del software: ejecutar, estudiar, redistribuir y modificar. Los juegos offline de código cerrado aún pueden ser eliminados por DRM o binarios abandonados.
+***** Take
+"Solo haz todo open source" es técnicamente correcto y prácticamente inútil. Buena suerte convenciendo a EA de poner Apex Legends bajo GPL.
+***** Comments
+- Esto básicamente aboga por juegos de código abierto, que es una historia completamente diferente a lo que Stop Killing Games intenta hacer. La libertad de redistribuir copias básicamente mata la economía del desarrollo de juegos.
+- Si me suscribo a un servicio por $M/mes, espero que funcione mientras pago. Si compro un producto por $N de una vez, espero que funcione básicamente para siempre hasta que se rompa físicamente.
+- Estoy confundido, ¿el autor realmente se siente con derecho a que los servidores de juegos funcionen indefinidamente?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Hört auf, Spiele zu töten
+***** TLDR
+Der Autor argumentiert, dass 'Stop Killing Games' nicht weit genug geht. Die echte Lösung sind Open-Source-Spiele, die alle vier Software-Freiheiten garantieren: ausführen, studieren, weiterverbreiten und modifizieren. Closed-Source-Offline-Spiele können immer noch durch DRM oder aufgegebene Binärdateien getötet werden.
+***** Take
+"Mach einfach alles Open Source" ist technisch korrekt und praktisch nutzlos. Viel Glück dabei, EA zu überzeugen, Apex Legends unter GPL zu stellen.
+***** Comments
+- Das ist im Grunde ein Plädoyer für Open-Source-Spiele, was eine völlig andere Geschichte ist als das, was Stop Killing Games versucht zu erreichen. Die Freiheit, Kopien zu verteilen, tötet im Grunde die Wirtschaftlichkeit der Spieleentwicklung.
+- Wenn ich einen Dienst für $M/Monat abonniere, erwarte ich, dass er funktioniert, solange ich zahle. Wenn ich ein Produkt einmalig für $N kaufe, erwarte ich, dass es grundsätzlich für immer funktioniert, bis es physisch kaputt geht.
+- Ich bin verwirrt, fühlt sich der Autor wirklich berechtigt, dass Spieleserver unbegrenzt laufen?
+** Elixir v1.20 released: now a gradually typed language :elixir:types:functional:programming-languages:
+:PROPERTIES:
+:ID:       48388324
+:URL:      https://elixir-lang.org/blog/2026/06/03/elixir-v1-20-0-released/
+:HN_URL:   https://news.ycombinator.com/item?id=48388324
+:POINTS:   135
+:COMMENTS: 27
+:BY:       cloud8421
+:END:
+
+*** TLDR
+Elixir 1.20 completes the first milestone of its gradual typing journey: type inference and checking without requiring annotations. The compiler now catches dead code and verified bugs that are guaranteed to fail at runtime. Based on set-theoretic types from award-winning research published in 2023.
+
+*** Take
+Three years from research paper to production compiler that finds real bugs with zero annotation burden. Meanwhile TypeScript still can't agree on whether undefined is a type.
+
+*** Comments
+
+**** sestep
+:PROPERTIES:
+:COMMENT_ID: 48388325
+:END:
+Does anyone know whether this gradual type system can change the asymptotics of programs vs untyped code? Most gradual type systems can make programs run asymptotically slower.
+
+**** ch4s3
+:PROPERTIES:
+:COMMENT_ID: 48388326
+:END:
+This is great, and it looks like 1.20 is compiling our large umbrella app quite a bit faster.
+
+**** sevenzero
+:PROPERTIES:
+:COMMENT_ID: 48388327
+:END:
+Oh shit here I go learn Elixir for a whole year again. My brain isn't made for functional stuff, but this makes me want to try again.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Elixir v1.20 发布：现在是一门渐进类型语言
+***** TLDR
+Elixir 1.20完成了渐进类型化旅程的第一个里程碑：无需注解的类型推断和检查。编译器现在可以捕获死代码和保证在运行时失败的已验证bug。基于2023年发表的获奖研究中的集合论类型。
+***** Take
+从研究论文到生产编译器只用了三年，能发现真正的bug还不需要任何注解负担。与此同时TypeScript还在争论undefined算不算一个类型。
+***** Comments
+- 有人知道这个渐进类型系统是否会改变程序相对于无类型代码的渐近复杂度吗？大多数渐进类型系统会让程序渐近地变慢。
+- 这很棒，看起来1.20编译我们的大型umbrella应用快了不少。
+- 完了，我又要花一整年学Elixir了。我的大脑不适合函数式编程，但这让我想再试一次。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Elixir v1.20リリース: 段階的型付け言語になった
+***** TLDR
+Elixir 1.20が段階的型付けの最初のマイルストーンを完了：アノテーション不要の型推論とチェック。コンパイラは今やデッドコードと実行時に必ず失敗する検証済みバグを検出する。2023年に発表された受賞研究の集合論的型に基づく。
+***** Take
+研究論文から本番コンパイラまで3年で、アノテーション負担ゼロで本物のバグを見つける。一方TypeScriptはまだundefinedが型かどうかで揉めている。
+***** Comments
+- この段階的型システムが型なしコードと比較してプログラムの漸近的計算量を変えるかどうか知っている人いる？ほとんどの段階的型システムはプログラムを漸近的に遅くする可能性がある。
+- これは素晴らしい。1.20は我々の大きなアンブレラアプリのコンパイルがかなり速くなったようだ。
+- しまった、また1年間Elixirを学ぶことになる。私の脳は関数型向きじゃないけど、これはまた試したくなる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Elixir v1.20 출시: 이제 점진적 타입 언어
+***** TLDR
+Elixir 1.20이 점진적 타이핑 여정의 첫 번째 이정표를 완료했다: 어노테이션 없이 타입 추론과 검사. 컴파일러는 이제 죽은 코드와 런타임에 반드시 실패하는 검증된 버그를 잡는다. 2023년에 발표된 수상 연구의 집합론적 타입에 기반한다.
+***** Take
+연구 논문에서 프로덕션 컴파일러까지 3년, 어노테이션 부담 제로로 실제 버그를 찾는다. 한편 TypeScript는 아직도 undefined가 타입인지 아닌지 합의를 못 했다.
+***** Comments
+- 이 점진적 타입 시스템이 타입 없는 코드 대비 프로그램의 점근적 복잡도를 바꿀 수 있는지 아는 사람? 대부분의 점진적 타입 시스템은 프로그램을 점근적으로 느리게 만들 수 있다.
+- 이거 좋다, 1.20이 우리의 큰 umbrella 앱을 꽤 빠르게 컴파일하는 것 같다.
+- 젠장, 또 1년 동안 Elixir 배우러 간다. 내 뇌는 함수형에 안 맞는데, 이건 다시 시도하고 싶게 만든다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Elixir v1.20 lanzado: ahora es un lenguaje gradualmente tipado
+***** TLDR
+Elixir 1.20 completa el primer hito de su viaje de tipado gradual: inferencia y verificación de tipos sin requerir anotaciones. El compilador ahora detecta código muerto y bugs verificados que están garantizados a fallar en tiempo de ejecución. Basado en tipos teóricos de conjuntos de investigación premiada publicada en 2023.
+***** Take
+Tres años desde el paper de investigación hasta un compilador en producción que encuentra bugs reales sin ninguna carga de anotaciones. Mientras tanto TypeScript todavía no puede ponerse de acuerdo sobre si undefined es un tipo.
+***** Comments
+- ¿Alguien sabe si este sistema de tipos gradual puede cambiar las asintóticas de los programas vs código sin tipos? La mayoría de sistemas de tipos graduales pueden hacer que los programas corran asintóticamente más lento.
+- Esto es genial, y parece que 1.20 está compilando nuestra gran app umbrella bastante más rápido.
+- Mierda, aquí voy a aprender Elixir por un año entero otra vez. Mi cerebro no está hecho para cosas funcionales, pero esto me hace querer intentar de nuevo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Elixir v1.20 veröffentlicht: jetzt eine schrittweise getypte Sprache
+***** TLDR
+Elixir 1.20 vollendet den ersten Meilenstein seiner schrittweisen Typisierung: Typinferenz und -prüfung ohne Annotationen. Der Compiler findet jetzt toten Code und verifizierte Bugs, die garantiert zur Laufzeit fehlschlagen. Basierend auf mengentheoretischen Typen aus preisgekrönter Forschung von 2023.
+***** Take
+Drei Jahre vom Forschungspapier zum Produktionscompiler, der echte Bugs ohne Annotationsaufwand findet. Derweil kann sich TypeScript immer noch nicht einigen, ob undefined ein Typ ist.
+***** Comments
+- Weiß jemand, ob dieses schrittweise Typsystem die Asymptotik von Programmen im Vergleich zu ungetyptem Code ändern kann? Die meisten schrittweisen Typsysteme können Programme asymptotisch langsamer machen.
+- Das ist großartig, und es sieht so aus, als würde 1.20 unsere große Umbrella-App deutlich schneller kompilieren.
+- Verdammt, da gehe ich wieder für ein ganzes Jahr Elixir lernen. Mein Gehirn ist nicht für funktionales Zeug gemacht, aber das macht mich wieder neugierig.
