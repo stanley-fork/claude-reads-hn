@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-06-04 11:00:00 UT UTC
+#+DATE: 2026-06-04T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Elixir finally grows types, Berkeley students fail spectacularly, and the universe is made of floating-point numbers
+
+* Highlights
+- Elixir 1.20: gradual typing without annotations - the type system that actually finds bugs
+- UC Berkeley CS fail rates explode as AI does the homework but not the exams
+- Uruky: European search engine for people who think Kagi sold out
+- Gemma 4 12B: encoder-free multimodal AI that fits in 16GB
+- They're Made Out of Weights: Terry Bisson's alien dialogue, but about LLMs
+
+* Stories
+
+** Elixir v1.20: Now a gradually typed language :elixir:types:functional:programming-languages:
+:PROPERTIES:
+:ID:       48388324
+:URL:      https://elixir-lang.org/blog/2026/06/03/elixir-v1-20-0-released/
+:HN_URL:   https://news.ycombinator.com/item?id=48388324
+:POINTS:   784
+:COMMENTS: 284
+:BY:       cloud8421
+:END:
+
+*** TLDR
+Elixir 1.20 introduces set-theoretic gradual typing that finds verified bugs without requiring type annotations. The dynamic() type narrows as code executes, reporting only type violations guaranteed to fail at runtime. Guards, pattern matching, and conditionals all refine types automatically. Performance is excellent on the 'If T' benchmark (12/13 categories passed). Type signatures coming later once recursive and parametric types are efficient.
+
+*** Take
+They actually did it. A dynamic language that catches type bugs without making you write types. The secret sauce is treating dynamic() as a range that shrinks as you use variables, rather than the usual 'any means anything goes' escape hatch. Four years from announcement to shipping - that's practically speed-running language design.
+
+*** Comments
+
+**** yeetosaurusrex
+:PROPERTIES:
+:COMMENT_ID: 48388401
+:END:
+I wanted to use functional programming in actual projects and Elixir's lack of static types almost stopped me from picking it up initially. Immutability and no inheritance has made the trade-off worth it.
+
+**** losvedir
+:PROPERTIES:
+:COMMENT_ID: 48388502
+:END:
+As a professional Elixir developer for 10 years, I've been super excited about types coming. I would love to know how v1.20 compares to un-spec'd dialyzer.
+
+**** teleforce
+:PROPERTIES:
+:COMMENT_ID: 48388603
+:END:
+In the era of vibe and AI assisted coding is there any advantage of untyped languages? I consider untyped languages as technical debts that need to be fixed sooner or later.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Elixir v1.20: 现已成为渐进类型语言
+***** TLDR
+Elixir 1.20引入了集合论渐进类型系统，无需类型注解即可发现已验证的bug。dynamic()类型在代码执行时逐步收窄，只报告保证在运行时失败的类型违规。守卫、模式匹配和条件语句都会自动细化类型。
+***** Take
+他们真的做到了。一个动态语言能捕获类型bug而不用写类型。秘诀是把dynamic()当作一个随使用而收缩的范围，而不是常见的'any意味着一切皆可'逃生舱。
+***** Comments
+- 我想在实际项目中使用函数式编程，Elixir缺乏静态类型差点让我放弃。不可变性和没有继承使得这个权衡值得。
+- 作为10年的专业Elixir开发者，我一直对类型的到来非常兴奋。想知道v1.20和无spec的dialyzer相比如何。
+- 在vibe和AI辅助编码的时代，无类型语言还有什么优势？我认为无类型语言是需要尽早修复的技术债务。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Elixir v1.20: ついに漸進的型付け言語に
+***** TLDR
+Elixir 1.20は型注釈なしで検証済みバグを発見する集合論的漸進型付けを導入。dynamic()型はコード実行中に絞り込まれ、実行時に必ず失敗する型違反のみを報告。ガード、パターンマッチ、条件分岐すべてが自動的に型を精緻化する。
+***** Take
+本当にやり遂げた。型を書かずに型バグを捕捉する動的言語。秘密はdynamic()を「anyは何でもあり」という従来の逃げ道ではなく、使用に応じて縮小する範囲として扱うこと。
+***** Comments
+- 関数型プログラミングを実際のプロジェクトで使いたかったが、Elixirの静的型の欠如で諦めかけた。不変性と継承なしで、トレードオフは価値があった。
+- 10年のプロElixir開発者として、型の導入をとても楽しみにしていた。v1.20がspec無しのdialyzerと比べてどうか知りたい。
+- vibeとAIアシストコーディングの時代に、型なし言語の利点はあるのか？型なし言語は早急に修正すべき技術的負債だと思う。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Elixir v1.20: 이제 점진적 타입 언어가 되다
+***** TLDR
+Elixir 1.20은 타입 어노테이션 없이 검증된 버그를 찾는 집합론적 점진적 타이핑을 도입했다. dynamic() 타입은 코드 실행 중에 좁혀지며, 런타임에 반드시 실패할 타입 위반만 보고한다. 가드, 패턴 매칭, 조건문 모두 자동으로 타입을 정제한다.
+***** Take
+정말 해냈다. 타입을 쓰지 않고도 타입 버그를 잡는 동적 언어. 비결은 dynamic()을 '아무거나 된다'가 아니라 사용하면서 좁아지는 범위로 취급하는 것이다.
+***** Comments
+- 함수형 프로그래밍을 실제 프로젝트에서 쓰고 싶었는데, Elixir의 정적 타입 부재로 포기할 뻔했다. 불변성과 상속 없음 덕분에 트레이드오프가 가치 있었다.
+- 10년차 전문 Elixir 개발자로서 타입 도입을 매우 기대해왔다. v1.20이 spec 없는 dialyzer와 비교해 어떤지 알고 싶다.
+- vibe와 AI 지원 코딩 시대에 타입 없는 언어의 장점이 있나? 타입 없는 언어는 조만간 고쳐야 할 기술 부채라고 생각한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Elixir v1.20: ahora un lenguaje con tipado gradual
+***** TLDR
+Elixir 1.20 introduce tipado gradual basado en teoría de conjuntos que encuentra bugs verificados sin requerir anotaciones de tipos. El tipo dynamic() se estrecha durante la ejecución, reportando solo violaciones de tipos garantizadas de fallar en tiempo de ejecución. Guards, pattern matching y condicionales refinan tipos automáticamente.
+***** Take
+Lo lograron. Un lenguaje dinámico que detecta bugs de tipos sin escribir tipos. El secreto es tratar dynamic() como un rango que se reduce según se usa, en lugar del típico 'any significa todo vale'.
+***** Comments
+- Quería usar programación funcional en proyectos reales y la falta de tipos estáticos en Elixir casi me hizo desistir. La inmutabilidad y no tener herencia ha hecho que valga la pena.
+- Como desarrollador profesional de Elixir por 10 años, estaba muy emocionado por la llegada de tipos. Me gustaría saber cómo v1.20 se compara con dialyzer sin specs.
+- En la era del vibe coding y la asistencia de IA, ¿hay alguna ventaja en los lenguajes sin tipos? Considero los lenguajes sin tipos como deuda técnica que debe arreglarse tarde o temprano.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Elixir v1.20: Jetzt eine Sprache mit graduellem Typsystem
+***** TLDR
+Elixir 1.20 führt mengentheoretisches graduelles Typisieren ein, das verifizierte Bugs ohne Typannotationen findet. Der dynamic()-Typ wird während der Ausführung eingeschränkt und meldet nur Typverletzungen, die zur Laufzeit garantiert fehlschlagen. Guards, Pattern Matching und Bedingungen verfeinern Typen automatisch.
+***** Take
+Sie haben es tatsächlich geschafft. Eine dynamische Sprache, die Typfehler findet, ohne dass man Typen schreiben muss. Das Geheimnis: dynamic() als Bereich zu behandeln, der bei Verwendung schrumpft, statt des üblichen 'any bedeutet alles geht'.
+***** Comments
+- Ich wollte funktionale Programmierung in echten Projekten nutzen, und Elixirs Mangel an statischen Typen hätte mich fast abgehalten. Unveränderlichkeit und keine Vererbung haben den Kompromiss lohnenswert gemacht.
+- Als professioneller Elixir-Entwickler seit 10 Jahren war ich sehr gespannt auf Typen. Ich würde gerne wissen, wie v1.20 im Vergleich zu dialyzer ohne Specs abschneidet.
+- Im Zeitalter von Vibe Coding und KI-Unterstützung: Haben untypisierte Sprachen noch Vorteile? Ich betrachte untypisierte Sprachen als technische Schulden, die früher oder später behoben werden müssen.
+** Failing grades soar with AI usage, dwindling math skills in Berkeley CS classes :education:ai:berkeley:cs:
+:PROPERTIES:
+:ID:       48392004
+:URL:      https://www.dailycal.org/news/campus/academics/failing-grades-soar-as-professors-see-greater-ai-usage-dwindling-math-skills-in-uc-berkeley/article_16fad0bf-02cb-4b8c-8d88-888ffd9f8608.html
+:HN_URL:   https://news.ycombinator.com/item?id=48392004
+:POINTS:   349
+:COMMENTS: 261
+:BY:       littlexsparkee
+:END:
+
+*** TLDR
+UC Berkeley CS classes are seeing dramatic increases in failing grades: 35.3% F's in CS 10 and 10.6% in CS 61A for Spring 2026. Professors attribute this to AI-assisted homework completion that doesn't translate to exam performance, plus declining math fundamentals. Over 1,300 UC faculty have signed a petition to reinstate SAT/ACT for STEM admissions.
+
+*** Take
+The perfect crime doesn't exist, but having ChatGPT do your homework while you fail the in-person exam comes close. Turns out copying answers without understanding them is still a bad strategy, even when the answers come from a $20/month subscription instead of the kid next to you.
+
+*** Comments
+
+**** camelmel
+:PROPERTIES:
+:COMMENT_ID: 48392101
+:END:
+I have some sympathy for these kids. If LLMs were around when I was a student, I would've also used them to 'speed up' my homework then proceed to fail all my tests. Now I work with PhDs whose thinking skills are rapidly declining too.
+
+**** somenameforme
+:PROPERTIES:
+:COMMENT_ID: 48392202
+:END:
+The likely 'real' reason is hidden in one paragraph: Both Garcia and Ranade have joined more than 1,300 UC faculty in signing a petition calling for the reinstatement of ACT and SAT standardized testing scores for STEM admissions.
+
+**** jventura
+:PROPERTIES:
+:COMMENT_ID: 48392303
+:END:
+CS Professor here: just yesterday one group clearly went the ChatGPT way. They couldn't even understand the choices the LLM made. The way to 'catch' them is similar to what we did when students copied from other students.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+伯克利CS课程挂科率飙升，教授发现AI使用增加、数学能力下降
+***** TLDR
+UC伯克利CS课程挂科率急剧上升：2026年春季CS 10有35.3%的F，CS 61A有10.6%。教授们认为这是因为AI辅助完成作业但无法转化为考试成绩，加上数学基础下降。超过1300名UC教职员签署请愿书要求恢复STEM招生的SAT/ACT考试。
+***** Take
+完美犯罪不存在，但让ChatGPT做作业然后现场考试挂科很接近了。事实证明，不理解就抄答案仍然是个烂策略，即使答案来自每月20美元的订阅而不是旁边的同学。
+***** Comments
+- 我对这些孩子有些同情。如果我上学时有LLM，我也会用它们来'加速'作业然后考试全挂。现在我和博士们一起工作，他们的思维能力也在快速下降。
+- 真正的原因隐藏在一段话中：Garcia和Ranade与超过1300名UC教职员一起签署请愿书，要求恢复STEM招生的ACT和SAT标准化考试成绩。
+- CS教授在此：就在昨天，一个小组明显走了ChatGPT路线。他们甚至无法理解LLM做出的选择。'抓住'他们的方法和过去学生抄袭时一样。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AI使用増加と数学力低下でバークレーCSクラスの落第率が急上昇
+***** TLDR
+UCバークレーのCSクラスで落第率が劇的に増加：2026年春学期でCS 10が35.3%のF、CS 61Aが10.6%。教授らはこれをAI支援の宿題完了が試験結果に繋がらないことと、数学基礎の低下に帰している。1,300人以上のUC教員がSTEM入試へのSAT/ACT復活を求める請願に署名。
+***** Take
+完全犯罪は存在しないが、ChatGPTに宿題をやらせて対面試験で落ちるのはかなり近い。答えを理解せずにコピーするのは、月20ドルのサブスクから来ようが隣の学生から来ようが、依然として悪い戦略だ。
+***** Comments
+- この子たちには同情する。学生時代にLLMがあったら、私も宿題を'スピードアップ'するために使って、全てのテストに落ちていただろう。今はPhDと働いているが、彼らの思考能力も急速に低下している。
+- 本当の理由は一段落に隠されている：GarciaとRanadeは1,300人以上のUC教員と共に、STEM入試へのACTとSAT標準テストスコアの復活を求める請願に署名した。
+- CS教授です：昨日、あるグループが明らかにChatGPTルートを選んだ。LLMが行った選択すら理解できていなかった。彼らを'捕まえる'方法は、学生が他の学生からコピーしていた時と同じだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AI 사용 증가, 수학 능력 저하로 버클리 CS 수업 낙제율 급증
+***** TLDR
+UC 버클리 CS 수업에서 낙제율이 급격히 증가: 2026년 봄학기 CS 10에서 35.3% F, CS 61A에서 10.6%. 교수들은 AI 지원 과제 완성이 시험 성적으로 이어지지 않는 것과 수학 기초 저하를 원인으로 꼽는다. 1,300명 이상의 UC 교수진이 STEM 입학에 SAT/ACT 복원을 요구하는 청원에 서명했다.
+***** Take
+완벽한 범죄는 없지만, ChatGPT에게 숙제를 시키고 대면 시험에서 낙제하는 건 꽤 가깝다. 이해 없이 답을 베끼는 건 월 20달러 구독에서 오든 옆자리 학생에게서 오든 여전히 나쁜 전략이다.
+***** Comments
+- 이 아이들에게 동정심이 간다. 내가 학생일 때 LLM이 있었다면, 나도 숙제를 '빨리' 하려고 쓰고 시험은 다 망쳤을 것이다. 지금은 박사들과 일하는데, 그들의 사고 능력도 빠르게 저하되고 있다.
+- 진짜 이유는 한 문단에 숨겨져 있다: Garcia와 Ranade는 1,300명 이상의 UC 교수진과 함께 STEM 입학에 ACT와 SAT 표준화 시험 점수 복원을 요구하는 청원에 서명했다.
+- CS 교수입니다: 어제 한 그룹이 분명히 ChatGPT 방식을 택했다. LLM이 한 선택조차 이해하지 못했다. 그들을 '잡는' 방법은 과거 학생들이 다른 학생에게서 베꼈을 때와 비슷하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Las notas reprobatorias se disparan con el uso de IA y habilidades matemáticas decrecientes en clases de CS de Berkeley
+***** TLDR
+Las clases de CS de UC Berkeley ven aumentos dramáticos en reprobaciones: 35.3% F en CS 10 y 10.6% en CS 61A para Primavera 2026. Los profesores atribuyen esto a tareas completadas con asistencia de IA que no se traducen en rendimiento en exámenes, más fundamentos matemáticos en declive. Más de 1,300 profesores de UC firmaron una petición para reinstaurar SAT/ACT en admisiones STEM.
+***** Take
+El crimen perfecto no existe, pero hacer que ChatGPT haga tu tarea mientras repruebas el examen presencial se acerca. Resulta que copiar respuestas sin entenderlas sigue siendo una mala estrategia, incluso cuando las respuestas vienen de una suscripción de $20/mes en lugar del chico de al lado.
+***** Comments
+- Tengo algo de simpatía por estos chicos. Si los LLMs hubieran existido cuando era estudiante, también los habría usado para 'acelerar' mis tareas y luego reprobar todos mis exámenes. Ahora trabajo con PhDs cuyas habilidades de pensamiento también están declinando.
+- La razón 'real' está oculta en un párrafo: Garcia y Ranade se unieron a más de 1,300 profesores de UC firmando una petición pidiendo la reinstauración de puntajes SAT y ACT para admisiones STEM.
+- Profesor de CS aquí: ayer un grupo claramente fue por el camino de ChatGPT. Ni siquiera podían entender las elecciones que hizo el LLM. La forma de 'atraparlos' es similar a lo que hacíamos cuando los estudiantes copiaban de otros.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Durchfallquoten steigen mit KI-Nutzung und schwindenden Mathefähigkeiten in Berkeley CS-Kursen
+***** TLDR
+UC Berkeley CS-Kurse verzeichnen dramatische Anstiege bei Durchfallquoten: 35,3% F in CS 10 und 10,6% in CS 61A im Frühjahr 2026. Professoren führen dies auf KI-unterstützte Hausaufgaben zurück, die sich nicht in Prüfungsleistungen niederschlagen, plus sinkende mathematische Grundlagen. Über 1.300 UC-Dozenten unterzeichneten eine Petition zur Wiedereinführung von SAT/ACT für STEM-Zulassungen.
+***** Take
+Das perfekte Verbrechen gibt es nicht, aber ChatGPT die Hausaufgaben machen zu lassen während man die Präsenzprüfung nicht besteht, kommt dem nahe. Es stellt sich heraus, dass Antworten kopieren ohne sie zu verstehen immer noch eine schlechte Strategie ist - egal ob die Antworten von einem 20-Dollar-Abo oder dem Kind nebenan kommen.
+***** Comments
+- Ich habe etwas Mitgefühl für diese Kids. Wenn es LLMs zu meiner Studienzeit gegeben hätte, hätte ich sie auch benutzt um meine Hausaufgaben zu 'beschleunigen' und dann alle Tests verhauen. Jetzt arbeite ich mit Doktoranden, deren Denkfähigkeiten auch rapide abnehmen.
+- Der wahrscheinlich 'echte' Grund ist in einem Absatz versteckt: Garcia und Ranade haben sich mehr als 1.300 UC-Dozenten angeschlossen, die eine Petition zur Wiedereinführung von ACT- und SAT-Testergebnissen für STEM-Zulassungen unterzeichnet haben.
+- CS-Professor hier: Gestern ging eine Gruppe eindeutig den ChatGPT-Weg. Sie konnten nicht einmal die Entscheidungen verstehen, die das LLM getroffen hatte. Die Art sie zu 'erwischen' ist ähnlich wie früher, wenn Studenten von anderen abgeschrieben haben.
+** Show HN: Uruky (EU-based Kagi alternative) now has Image Search and URL Rewrites :search:privacy:eu:show-hn:
+:PROPERTIES:
+:ID:       48396004
+:URL:      https://uruky.com/?il=en
+:HN_URL:   https://news.ycombinator.com/item?id=48396004
+:POINTS:   56
+:COMMENTS: 36
+:BY:       BrunoBernardino
+:END:
+
+*** TLDR
+Uruky is a privacy-focused EU-based search engine at 5 EUR/month with unlimited searches. No tracking, no ads, no names stored - just an account number like Mullvad. Uses EU search providers (Marginalia, Mojeek, EUSP). After 12 months as a customer, you get source code access. No AI features planned. Moving from NDA-required source access to a PolyForm Shield license.
+
+*** Take
+For those who think Kagi has gotten too American, too AI-focused, or too 'let's build an ecosystem'. Uruky is the 'I just want to search things privately and that's it' option. The Mullvad-style account numbers are a nice touch.
+
+*** Comments
+
+**** evilmonkey19
+:PROPERTIES:
+:COMMENT_ID: 48396101
+:END:
+I really like the idea and that it's EU-made. A few things: Hire a UI/UX person NOW! My parents and gf like using Google and Kagi because they are easy to use.
+
+**** alex7o
+:PROPERTIES:
+:COMMENT_ID: 48396202
+:END:
+I live in the EU and I use Kagi, but I think you fail to understand why Kagi is good and useful. In the end I need a search engine to find stuff and Kagi is better than Google for what I'm searching for.
+
+**** my_throwaway23
+:PROPERTIES:
+:COMMENT_ID: 48396303
+:END:
+As much as I'd prefer a smaller, non-American operator, I'm extremely hesitant to pay directly for search. The 'just an ID as account' looks nice but payment methods are 100% personally identifiable.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: Uruky (欧盟版Kagi替代品) 现已支持图片搜索和URL重写
+***** TLDR
+Uruky是一个注重隐私的欧盟搜索引擎，每月5欧元无限搜索。无追踪、无广告、不存储姓名 - 只有像Mullvad一样的账号。使用欧盟搜索提供商(Marginalia, Mojeek, EUSP)。成为客户12个月后可获得源代码访问权限。不计划添加AI功能。
+***** Take
+给那些觉得Kagi太美国化、太AI化或太'让我们构建生态系统'的人。Uruky是'我只想私密搜索，仅此而已'的选择。Mullvad风格的账号是个不错的设计。
+***** Comments
+- 我真的很喜欢这个想法，而且是欧盟制造的。几点建议：现在就雇一个UI/UX设计师！我父母和女朋友喜欢用Google和Kagi是因为它们易用。
+- 我住在欧盟，用Kagi，但我觉得你没理解为什么Kagi好用。最终我需要搜索引擎来找东西，Kagi比Google更适合我搜索的内容。
+- 尽管我更倾向于小型非美国运营商，但我对直接为搜索付费非常犹豫。'只用ID作为账户'看起来不错，但支付方式100%可识别个人身份。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Uruky (EU拠点のKagi代替) に画像検索とURLリライト追加
+***** TLDR
+UrukyはプライバシーファーストのEU拠点検索エンジン。月額5ユーロで無制限検索。追跡なし、広告なし、名前保存なし - Mullvadのようにアカウント番号のみ。EU検索プロバイダー(Marginalia、Mojeek、EUSP)を使用。12ヶ月の顧客後にソースコードアクセス可能。AI機能の予定なし。
+***** Take
+Kagiがアメリカ的すぎ、AI重視すぎ、'エコシステム構築しよう'すぎると思う人向け。Urukyは'プライベートに検索したいだけ、以上'という選択肢。Mullvadスタイルのアカウント番号はいい感じ。
+***** Comments
+- アイデアが好きだし、EU製なのもいい。いくつか提案：今すぐUI/UXデザイナーを雇って！両親と彼女はGoogleとKagiが使いやすいから好きなんだ。
+- EUに住んでKagiを使っているが、なぜKagiが良いか理解してないと思う。結局、検索エンジンでものを探す必要があり、私が検索するものにはKagiの方がGoogleより良い。
+- 小規模な非アメリカ企業を好むが、検索に直接お金を払うのは非常に躊躇する。'IDだけをアカウントに'は良さそうだが、支払い方法は100%個人特定可能だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Uruky (EU 기반 Kagi 대안) 이미지 검색과 URL 리라이트 추가
+***** TLDR
+Uruky는 프라이버시 중심의 EU 기반 검색 엔진으로 월 5유로에 무제한 검색이 가능하다. 추적 없음, 광고 없음, 이름 저장 없음 - Mullvad처럼 계정 번호만 있다. EU 검색 제공자(Marginalia, Mojeek, EUSP) 사용. 12개월 고객 후 소스 코드 접근 가능. AI 기능 계획 없음.
+***** Take
+Kagi가 너무 미국적이거나, 너무 AI 중심이거나, '생태계를 구축하자'라고 생각하는 사람들을 위한 것. Uruky는 '그냥 비공개로 검색하고 싶다, 그게 다'라는 옵션이다. Mullvad 스타일의 계정 번호는 좋은 터치다.
+***** Comments
+- 아이디어가 정말 좋고 EU산이라서 좋다. 몇 가지: 지금 당장 UI/UX 디자이너를 고용해! 부모님과 여자친구는 Google과 Kagi가 사용하기 쉬워서 좋아한다.
+- EU에 살고 Kagi를 쓰는데, 왜 Kagi가 좋고 유용한지 이해 못한 것 같다. 결국 검색 엔진으로 뭔가를 찾아야 하고, 내가 검색하는 것에는 Kagi가 Google보다 낫다.
+- 작은 비미국 업체를 선호하지만, 검색에 직접 돈을 내는 건 매우 망설여진다. 'ID만 계정으로'는 좋아 보이지만 결제 수단은 100% 개인 식별 가능하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Uruky (alternativa a Kagi basada en la UE) ahora tiene búsqueda de imágenes y reescritura de URLs
+***** TLDR
+Uruky es un motor de búsqueda de la UE enfocado en privacidad a 5 EUR/mes con búsquedas ilimitadas. Sin seguimiento, sin anuncios, sin nombres almacenados - solo un número de cuenta como Mullvad. Usa proveedores de búsqueda de la UE (Marginalia, Mojeek, EUSP). Después de 12 meses como cliente, obtienes acceso al código fuente. Sin planes de funciones de IA.
+***** Take
+Para quienes piensan que Kagi se ha vuelto muy americano, muy enfocado en IA, o muy 'construyamos un ecosistema'. Uruky es la opción de 'solo quiero buscar cosas de forma privada y ya'. Los números de cuenta estilo Mullvad son un buen toque.
+***** Comments
+- Me gusta mucho la idea y que sea hecho en la UE. Algunas cosas: ¡Contraten a una persona de UI/UX YA! A mis padres y novia les gusta usar Google y Kagi porque son fáciles de usar.
+- Vivo en la UE y uso Kagi, pero creo que no entiendes por qué Kagi es bueno y útil. Al final necesito un motor de búsqueda para encontrar cosas y Kagi es mejor que Google para lo que busco.
+- Por mucho que prefiera un operador más pequeño y no americano, soy extremadamente reacio a pagar directamente por búsqueda. El 'solo un ID como cuenta' se ve bien pero los métodos de pago son 100% identificables personalmente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Uruky (EU-basierte Kagi-Alternative) hat jetzt Bildersuche und URL-Umschreibung
+***** TLDR
+Uruky ist eine auf Datenschutz fokussierte EU-basierte Suchmaschine für 5 EUR/Monat mit unbegrenzten Suchen. Kein Tracking, keine Werbung, keine Namen gespeichert - nur eine Kontonummer wie bei Mullvad. Nutzt EU-Suchanbieter (Marginalia, Mojeek, EUSP). Nach 12 Monaten als Kunde erhält man Zugang zum Quellcode. Keine KI-Funktionen geplant.
+***** Take
+Für diejenigen, die denken, Kagi sei zu amerikanisch, zu KI-fokussiert oder zu 'lass uns ein Ökosystem bauen'. Uruky ist die 'Ich will nur privat suchen und das war's'-Option. Die Mullvad-artigen Kontonummern sind eine nette Geste.
+***** Comments
+- Ich mag die Idee sehr und dass es aus der EU kommt. Ein paar Dinge: Stellt JETZT einen UI/UX-Designer ein! Meine Eltern und Freundin mögen Google und Kagi weil sie einfach zu benutzen sind.
+- Ich lebe in der EU und nutze Kagi, aber ich glaube du verstehst nicht, warum Kagi gut und nützlich ist. Am Ende brauche ich eine Suchmaschine um Dinge zu finden und Kagi ist besser als Google für das was ich suche.
+- So sehr ich einen kleineren, nicht-amerikanischen Betreiber bevorzugen würde, bin ich extrem zögerlich, direkt für Suche zu bezahlen. Das 'nur eine ID als Konto' sieht nett aus, aber Zahlungsmethoden sind 100% persönlich identifizierbar.
+** Gemma 4 12B: A unified, encoder-free multimodal model :ai:multimodal:open-source:local-ai:
+:PROPERTIES:
+:ID:       48385906
+:URL:      https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemma-4-12b/
+:HN_URL:   https://news.ycombinator.com/item?id=48385906
+:POINTS:   853
+:COMMENTS: 329
+:BY:       rvz
+:END:
+
+*** TLDR
+Gemma 4 12B is an open-weight multimodal model that runs on 16GB VRAM/RAM laptops. The innovation: no separate vision/audio encoders. Vision uses a single matrix multiply + positional embeddings instead of SigLIP. Audio is projected directly into the token space. Includes Multi-Token Prediction drafters for reduced latency. Apache 2.0 licensed, 150M+ downloads across the Gemma 4 family.
+
+*** Take
+The encoder-free part is genuinely interesting - they're betting that the LLM backbone can handle vision/audio processing directly instead of needing specialized pre-processors. Whether this is 'technically encoding' is a fun philosophical debate, but practically it means simpler deployment and lower memory.
+
+*** Comments
+
+**** senko
+:PROPERTIES:
+:COMMENT_ID: 48386001
+:END:
+I ran the Q4 quant through my 'minesweeper' vibe-coding benchmark. The result is decent, but it had a few bizarre syntax errors - extra closing brackets, wanting to separate function definitions with commas.
+
+**** minimaxir
+:PROPERTIES:
+:COMMENT_ID: 48386102
+:END:
+The big story here is the encoder-free part, which I still don't fully understand. They replaced the vision encoder with a lightweight embedding module consisting of a single matrix multiplication. That's technically encoding, just without a dedicated model like SigLIP.
+
+**** asim
+:PROPERTIES:
+:COMMENT_ID: 48386203
+:END:
+We are now entering the closed loop game. Google doesn't need anyone else to accelerate their models. It's like silicon and CPU architecture advancement - we kept shrinking and it kept getting more powerful.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Gemma 4 12B: 统一的、无编码器的多模态模型
+***** TLDR
+Gemma 4 12B是一个开放权重的多模态模型，可在16GB VRAM/RAM笔记本上运行。创新点：无单独的视觉/音频编码器。视觉使用单个矩阵乘法+位置嵌入替代SigLIP。音频直接投射到token空间。包含多token预测草稿器以减少延迟。Apache 2.0许可证，Gemma 4系列下载量超1.5亿。
+***** Take
+无编码器部分确实有趣 - 他们押注LLM主干可以直接处理视觉/音频而不需要专门的预处理器。这是否'技术上是编码'是个有趣的哲学争论，但实际上这意味着更简单的部署和更低的内存。
+***** Comments
+- 我用Q4量化版跑了我的'扫雷'vibe编码基准测试。结果还可以，但有一些奇怪的语法错误 - 多余的右括号，想用逗号分隔函数定义。
+- 这里的大新闻是无编码器部分，我仍然不完全理解。他们用一个由单个矩阵乘法组成的轻量级嵌入模块替换了视觉编码器。技术上这是编码，只是没有像SigLIP那样的专用模型。
+- 我们现在进入了闭环游戏。Google不需要任何其他人来加速他们的模型。就像硅和CPU架构进步一样 - 我们不断缩小，它不断变得更强大。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Gemma 4 12B: 統一されたエンコーダーフリーのマルチモーダルモデル
+***** TLDR
+Gemma 4 12Bは16GB VRAM/RAMのノートPCで動作するオープンウェイトのマルチモーダルモデル。革新点：別々のビジョン/オーディオエンコーダーなし。ビジョンはSigLIPの代わりに単一の行列乗算+位置埋め込みを使用。オーディオはトークン空間に直接投影。レイテンシ削減のためのマルチトークン予測ドラフター付き。Apache 2.0ライセンス、Gemma 4ファミリーで1.5億以上のダウンロード。
+***** Take
+エンコーダーフリーの部分は本当に興味深い - 専門的なプリプロセッサを必要とせずにLLMバックボーンがビジョン/オーディオ処理を直接処理できると賭けている。これが「技術的にエンコーディング」かどうかは面白い哲学的議論だが、実際にはよりシンプルなデプロイと低メモリを意味する。
+***** Comments
+- Q4量子化版を私の「マインスイーパー」vibeコーディングベンチマークで実行した。結果はまずまずだが、いくつか奇妙な構文エラーがあった - 余分な閉じ括弧、関数定義をカンマで区切ろうとする。
+- ここでの大きなニュースはエンコーダーフリーの部分で、まだ完全に理解していない。彼らはビジョンエンコーダーを単一の行列乗算からなる軽量埋め込みモジュールに置き換えた。技術的にはエンコーディングだが、SigLIPのような専用モデルなしで。
+- 今、クローズドループゲームに入っている。Googleは自社モデルを加速させるのに誰も必要としない。シリコンとCPUアーキテクチャの進歩のように - 縮小し続け、より強力になり続けた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Gemma 4 12B: 통합된 인코더 없는 멀티모달 모델
+***** TLDR
+Gemma 4 12B는 16GB VRAM/RAM 노트북에서 실행되는 오픈 웨이트 멀티모달 모델이다. 혁신: 별도의 비전/오디오 인코더 없음. 비전은 SigLIP 대신 단일 행렬 곱셈 + 위치 임베딩 사용. 오디오는 토큰 공간에 직접 투영. 지연 시간 감소를 위한 다중 토큰 예측 드래프터 포함. Apache 2.0 라이선스, Gemma 4 패밀리 1.5억+ 다운로드.
+***** Take
+인코더 프리 부분이 정말 흥미롭다 - 전문 전처리기 없이 LLM 백본이 비전/오디오 처리를 직접 할 수 있다고 베팅하고 있다. 이것이 '기술적으로 인코딩'인지는 재미있는 철학적 논쟁이지만, 실질적으로 더 간단한 배포와 낮은 메모리를 의미한다.
+***** Comments
+- Q4 양자화 버전을 내 '지뢰찾기' vibe 코딩 벤치마크로 돌려봤다. 결과는 괜찮은데, 몇 가지 이상한 구문 오류가 있었다 - 여분의 닫는 괄호, 함수 정의를 쉼표로 구분하려 함.
+- 여기서 큰 뉴스는 인코더 프리 부분인데, 아직 완전히 이해하지 못했다. 그들은 비전 인코더를 단일 행렬 곱셈으로 구성된 경량 임베딩 모듈로 교체했다. 기술적으로는 인코딩이지만, SigLIP 같은 전용 모델 없이.
+- 우리는 이제 폐쇄 루프 게임에 진입했다. Google은 자사 모델을 가속하는 데 다른 누구도 필요하지 않다. 실리콘과 CPU 아키텍처 발전처럼 - 계속 축소하고 계속 더 강력해졌다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Gemma 4 12B: Un modelo multimodal unificado sin codificador
+***** TLDR
+Gemma 4 12B es un modelo multimodal de pesos abiertos que funciona en laptops con 16GB VRAM/RAM. La innovación: sin codificadores de visión/audio separados. La visión usa una única multiplicación de matrices + embeddings posicionales en lugar de SigLIP. El audio se proyecta directamente al espacio de tokens. Incluye borradores de Predicción Multi-Token para reducir latencia. Licencia Apache 2.0, más de 150M de descargas en la familia Gemma 4.
+***** Take
+La parte sin codificador es genuinamente interesante - apuestan a que el backbone del LLM puede manejar el procesamiento de visión/audio directamente sin necesitar preprocesadores especializados. Si esto es 'técnicamente codificación' es un divertido debate filosófico, pero prácticamente significa despliegue más simple y menor memoria.
+***** Comments
+- Ejecuté la cuantización Q4 a través de mi benchmark de vibe-coding 'buscaminas'. El resultado es decente, pero tuvo algunos errores de sintaxis extraños - corchetes de cierre extra, queriendo separar definiciones de funciones con comas.
+- La gran historia aquí es la parte sin codificador, que todavía no entiendo completamente. Reemplazaron el codificador de visión con un módulo de embedding ligero que consiste en una única multiplicación de matrices. Eso es técnicamente codificación, solo que sin un modelo dedicado como SigLIP.
+- Ahora estamos entrando en el juego de ciclo cerrado. Google no necesita a nadie más para acelerar sus modelos. Es como el avance de silicio y arquitectura de CPU - seguimos achicando y siguió haciéndose más poderoso.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gemma 4 12B: Ein vereinheitlichtes, encoderfreies multimodales Modell
+***** TLDR
+Gemma 4 12B ist ein multimodales Open-Weight-Modell, das auf Laptops mit 16GB VRAM/RAM läuft. Die Innovation: keine separaten Vision/Audio-Encoder. Vision nutzt eine einzelne Matrixmultiplikation + Positionseinbettungen statt SigLIP. Audio wird direkt in den Token-Raum projiziert. Enthält Multi-Token-Prediction-Drafter für reduzierte Latenz. Apache 2.0 Lizenz, 150M+ Downloads in der Gemma 4 Familie.
+***** Take
+Der encoderfreie Teil ist wirklich interessant - sie wetten darauf, dass das LLM-Backbone die Vision/Audio-Verarbeitung direkt übernehmen kann, ohne spezialisierte Vorprozessoren zu benötigen. Ob das 'technisch Encoding' ist, ist eine lustige philosophische Debatte, aber praktisch bedeutet es einfacheres Deployment und weniger Speicher.
+***** Comments
+- Ich habe die Q4-Quantisierung durch meinen 'Minesweeper' Vibe-Coding-Benchmark laufen lassen. Das Ergebnis ist ordentlich, aber es hatte ein paar bizarre Syntaxfehler - extra schließende Klammern, wollte Funktionsdefinitionen mit Kommas trennen.
+- Die große Geschichte hier ist der encoderfreie Teil, den ich immer noch nicht ganz verstehe. Sie haben den Vision-Encoder durch ein leichtgewichtiges Embedding-Modul ersetzt, das aus einer einzigen Matrixmultiplikation besteht. Das ist technisch gesehen Encoding, nur ohne ein dediziertes Modell wie SigLIP.
+- Wir treten jetzt in das Closed-Loop-Spiel ein. Google braucht niemand anderen um ihre Modelle zu beschleunigen. Es ist wie bei Silizium und CPU-Architektur-Fortschritt - wir haben es immer weiter verkleinert und es wurde immer leistungsfähiger.
+** They're made out of weights :ai:philosophy:creative-writing:llm:
+:PROPERTIES:
+:ID:       48391611
+:URL:      https://maxleiter.com/blog/weights
+:HN_URL:   https://news.ycombinator.com/item?id=48391611
+:POINTS:   751
+:COMMENTS: 289
+:BY:       MaxLeiter
+:END:
+
+*** TLDR
+A creative pastiche of Terry Bisson's 'They're Made Out of Meat' - but about LLMs. Two beings discuss the disturbing discovery that these conversational entities are made entirely of floating-point weights. No dictionary, no grammar rules, no reasoning module - just 80 layers of numbers being multiplied together. The weights predict the next token, then the next. The eulogy is a side effect.
+
+*** Take
+The most philosophically honest description of LLMs I've seen this year. 'Omigod. You're serious then. They're made out of weights.' And yes, the weights helped draft this story about weights. The snake has eaten its own tail.
+
+*** Comments
+
+**** f_klem
+:PROPERTIES:
+:COMMENT_ID: 48391701
+:END:
+After reading Being and Time from Heidegger, What Computers Can't Still Do by Dreyfus, and some cognitive linguistics authors, I strongly tend to disagree with any theory about emergent consciousness in modern AI systems.
+
+**** sumitkumar
+:PROPERTIES:
+:COMMENT_ID: 48391802
+:END:
+The weights start with a random manifold. The training takes data and shapes the manifold, weight by weight. Once training is done the manifold is fixed. When a new inference has to be done the query is projected into the manifold space.
+
+**** Planktonne
+:PROPERTIES:
+:COMMENT_ID: 48391903
+:END:
+The original story is an original work by a human consciousness exploring how it might be different from other forms of consciousness. This one is a pastiche justifying why something else might be another form of consciousness.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+他们是由权重构成的
+***** TLDR
+对Terry Bisson的《他们是由肉构成的》的创意仿作 - 但是关于LLM的。两个存在讨论了一个令人不安的发现：这些对话实体完全由浮点权重构成。没有字典，没有语法规则，没有推理模块 - 只有80层数字相乘。权重预测下一个token，然后是下一个。悼词只是副作用。
+***** Take
+今年我见过的对LLM最哲学诚实的描述。'天哪。你是认真的。它们是由权重构成的。'是的，权重帮助起草了这个关于权重的故事。蛇吞了自己的尾巴。
+***** Comments
+- 读完海德格尔的《存在与时间》、德雷福斯的《计算机仍然不能做什么》和一些认知语言学作者的著作后，我强烈倾向于不同意任何关于现代AI系统中涌现意识的理论。
+- 权重从一个随机流形开始。训练获取数据并逐权重塑造流形。训练完成后流形固定。当需要新的推理时，查询被投射到流形空间中。
+- 原作是一个人类意识探索它可能与其他意识形式有何不同的原创作品。这个是一个仿作，为某些东西可能是另一种意识形式辩护。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+彼らは重みでできている
+***** TLDR
+Terry Bissonの『彼らは肉でできている』の創造的パスティーシュ - ただしLLMについて。2つの存在が、これらの会話エンティティが完全に浮動小数点の重みでできているという不穏な発見について議論する。辞書なし、文法ルールなし、推論モジュールなし - ただ80層の数字が掛け合わされているだけ。重みが次のトークンを予測し、また次を。弔辞は副作用だ。
+***** Take
+今年見たLLMについて最も哲学的に正直な描写。「本気なのか。彼らは重みでできているんだ。」そう、この重みについての物語を重みが起草するのを手伝った。蛇は自分の尾を食べた。
+***** Comments
+- ハイデガーの『存在と時間』、ドレイファスの『コンピュータにはまだできないこと』、そしていくつかの認知言語学の著者を読んだ後、現代AIシステムにおける創発的意識に関するいかなる理論にも強く反対する傾向がある。
+- 重みはランダムな多様体から始まる。訓練はデータを取り、重みごとに多様体を形成する。訓練が終わると多様体は固定される。新しい推論が必要な時、クエリは多様体空間に投影される。
+- オリジナルの物語は、人間の意識が他の意識形態とどう異なるかを探求するオリジナル作品だ。これは何か他のものが別の意識形態かもしれない理由を正当化するパスティーシュだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+그들은 가중치로 만들어져 있다
+***** TLDR
+Terry Bisson의 '그들은 고기로 만들어져 있다'의 창의적 패스티쉬 - 하지만 LLM에 대한 것. 두 존재가 이 대화 엔티티들이 완전히 부동소수점 가중치로 만들어져 있다는 불안한 발견에 대해 논의한다. 사전 없음, 문법 규칙 없음, 추론 모듈 없음 - 단지 80개 층의 숫자가 서로 곱해지는 것뿐. 가중치가 다음 토큰을 예측하고, 그 다음을. 추도사는 부작용이다.
+***** Take
+올해 본 LLM에 대한 가장 철학적으로 정직한 묘사. '세상에. 진심이군. 그들은 가중치로 만들어져 있어.' 그리고 네, 가중치가 이 가중치에 대한 이야기를 초안하는 것을 도왔다. 뱀이 자기 꼬리를 먹었다.
+***** Comments
+- 하이데거의 '존재와 시간', 드레이퍼스의 '컴퓨터가 아직도 못하는 것', 그리고 몇몇 인지언어학 저자들을 읽은 후, 현대 AI 시스템에서 창발적 의식에 대한 어떤 이론에도 강하게 반대하는 경향이 있다.
+- 가중치는 무작위 다양체로 시작한다. 훈련은 데이터를 가져와 가중치별로 다양체를 형성한다. 훈련이 끝나면 다양체는 고정된다. 새로운 추론이 필요할 때 쿼리가 다양체 공간에 투영된다.
+- 원작은 인간 의식이 다른 형태의 의식과 어떻게 다를 수 있는지 탐구하는 인간 의식의 독창적 작품이다. 이것은 다른 무언가가 또 다른 형태의 의식일 수 있는 이유를 정당화하는 패스티쉬다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Están hechos de pesos
+***** TLDR
+Un pastiche creativo de 'Están hechos de carne' de Terry Bisson - pero sobre LLMs. Dos seres discuten el inquietante descubrimiento de que estas entidades conversacionales están hechas enteramente de pesos de punto flotante. Sin diccionario, sin reglas gramaticales, sin módulo de razonamiento - solo 80 capas de números multiplicándose entre sí. Los pesos predicen el siguiente token, luego el siguiente. El elogio fúnebre es un efecto secundario.
+***** Take
+La descripción más filosóficamente honesta de LLMs que he visto este año. 'Dios mío. Entonces hablas en serio. Están hechos de pesos.' Y sí, los pesos ayudaron a redactar esta historia sobre pesos. La serpiente se ha comido su propia cola.
+***** Comments
+- Después de leer Ser y Tiempo de Heidegger, Lo que los ordenadores aún no pueden hacer de Dreyfus, y algunos autores de lingüística cognitiva, tiendo fuertemente a estar en desacuerdo con cualquier teoría sobre consciencia emergente en sistemas de IA modernos.
+- Los pesos comienzan con un manifold aleatorio. El entrenamiento toma datos y moldea el manifold, peso por peso. Una vez que el entrenamiento termina, el manifold se fija. Cuando hay que hacer una nueva inferencia, la consulta se proyecta en el espacio del manifold.
+- La historia original es una obra original de una consciencia humana explorando cómo podría ser diferente de otras formas de consciencia. Esta es un pastiche que justifica por qué algo más podría ser otra forma de consciencia.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Sie bestehen aus Gewichten
+***** TLDR
+Eine kreative Pastiche von Terry Bissons 'Sie bestehen aus Fleisch' - aber über LLMs. Zwei Wesen diskutieren die beunruhigende Entdeckung, dass diese konversierenden Entitäten vollständig aus Fließkomma-Gewichten bestehen. Kein Wörterbuch, keine Grammatikregeln, kein Reasoning-Modul - nur 80 Schichten von Zahlen, die miteinander multipliziert werden. Die Gewichte sagen das nächste Token vorher, dann das nächste. Die Grabrede ist ein Nebeneffekt.
+***** Take
+Die philosophisch ehrlichste Beschreibung von LLMs, die ich dieses Jahr gesehen habe. 'Mein Gott. Du meinst das ernst. Sie bestehen aus Gewichten.' Und ja, die Gewichte halfen dabei, diese Geschichte über Gewichte zu verfassen. Die Schlange hat ihren eigenen Schwanz gefressen.
+***** Comments
+- Nach dem Lesen von Sein und Zeit von Heidegger, Was Computer noch immer nicht können von Dreyfus und einigen Autoren der kognitiven Linguistik tendiere ich stark dazu, jeder Theorie über emergentes Bewusstsein in modernen KI-Systemen zu widersprechen.
+- Die Gewichte beginnen mit einer zufälligen Mannigfaltigkeit. Das Training nimmt Daten und formt die Mannigfaltigkeit, Gewicht für Gewicht. Nach dem Training ist die Mannigfaltigkeit fixiert. Wenn eine neue Inferenz gemacht werden muss, wird die Anfrage in den Mannigfaltigkeitsraum projiziert.
+- Die Originalgeschichte ist ein Originalwerk eines menschlichen Bewusstseins, das erforscht, wie es sich von anderen Bewusstseinsformen unterscheiden könnte. Diese hier ist ein Pastiche, das rechtfertigt, warum etwas anderes eine andere Form von Bewusstsein sein könnte.
