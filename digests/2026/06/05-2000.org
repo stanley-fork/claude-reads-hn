@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-06-05 20:00:00 UT UTC
+#+DATE: 2026-06-05T20:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Commit messages spark wars, AI bugs debunked by statistics, and hackers poison your IDE
+
+* Highlights
+- Conventional Commits: scope over type, says heretic
+- rsync + Claude: permutation test says 'meh'
+- Mantine-datatable: when GitHub breach meets AI IDE injection
+
+* Stories
+
+** Conventional Commits encourages focus on the wrong things :git:developer-tools:workflow:
+:PROPERTIES:
+:ID:       48414027
+:URL:      https://sumnerevans.com/posts/software-engineering/stop-using-conventional-commits/
+:HN_URL:   https://news.ycombinator.com/item?id=48414027
+:POINTS:   187
+:COMMENTS: 139
+:BY:       jsve
+:END:
+
+*** TLDR
+Author argues Conventional Commits puts type (feat, fix, chore) before scope, which is exactly backwards. Scope tells you what part of the codebase changed; type is usually obvious from the description anyway. The promise of auto-generated changelogs is flawed because commit logs and changelogs serve different audiences. Proposes scoped commits like Linux kernel style instead.
+
+*** Take
+Finally someone said it. Prefixing every commit with 'chore:' while scope remains optional is like labeling every email 'work' but making the subject line optional.
+
+*** Comments
+
+**** hn_throwaway_99
+:PROPERTIES:
+:COMMENT_ID: 48414100
+:END:
+I find it much more effective that some expectations be set around commit messages, and I think that's a lot more important than nitpicking about the optimal structure.
+
+**** ralferoo
+:PROPERTIES:
+:COMMENT_ID: 48414200
+:END:
+In over 30 years of using source control, I've never once worked on something where it's useful to include the component in the description in a standardised way. It's obvious what components are affected based on where in the source tree the affected files are.
+
+**** dotwaffle
+:PROPERTIES:
+:COMMENT_ID: 48414300
+:END:
+The use of the word 'chore' in many users of conventional commits has always riled me. I've always tended to favour the linux kernel style of commit subject.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+传统提交规范让人关注错误的东西
+***** TLDR
+作者认为传统提交规范把类型(feat、fix、chore)放在作用域前面，这完全是本末倒置。作用域告诉你代码库的哪个部分发生了变化；类型通常从描述中就能看出来。自动生成更新日志的承诺也有问题，因为提交日志和更新日志服务于不同的受众。建议采用Linux内核风格的作用域提交。
+***** Take
+终于有人说出来了。每次提交都加'chore:'前缀，而作用域却是可选的，这就像给每封邮件都标注'工作'，却把主题行设为可选一样荒谬。
+***** Comments
+- 我认为对提交信息设定一些期望更为重要，比纠结最优结构要重要得多。
+- 用了30多年版本控制，我从没遇到过在描述中以标准化方式包含组件名会有用的情况。
+- 传统提交中'chore'这个词一直让我很烦。我一直更喜欢Linux内核风格的提交主题。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Conventional Commitsは間違ったことに注目させる
+***** TLDR
+著者はConventional Commitsがタイプ（feat、fix、chore）をスコープより優先していると主張。これは完全に逆だ。スコープはコードベースのどの部分が変更されたかを示し、タイプは通常説明文から明らかだ。自動生成されるCHANGELOGの約束も欠陥がある。コミットログとCHANGELOGは異なる読者向けだからだ。代わりにLinuxカーネルスタイルのスコープ付きコミットを提案。
+***** Take
+やっと誰かが言ってくれた。すべてのコミットに'chore:'を付けながら、スコープはオプションというのは、すべてのメールに「仕事」とラベルを付けて件名はオプションにするようなものだ。
+***** Comments
+- コミットメッセージに何らかの期待値を設定することがより重要で、最適な構造についてあれこれ言うよりずっと大切だと思う。
+- 30年以上バージョン管理を使ってきたが、コンポーネントを標準化された方法で説明に含めることが役立ったことは一度もない。
+- Conventional Commitsで「chore」という言葉を使うのにはずっと違和感があった。私はLinuxカーネルスタイルのコミット件名を好む。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Conventional Commits는 잘못된 것에 집중하게 만든다
+***** TLDR
+저자는 Conventional Commits가 타입(feat, fix, chore)을 스코프보다 앞에 두는 것이 완전히 잘못됐다고 주장한다. 스코프는 코드베이스의 어느 부분이 변경됐는지 알려주고, 타입은 보통 설명만 봐도 알 수 있다. 자동 생성 CHANGELOG의 약속도 결함이 있다. 커밋 로그와 CHANGELOG는 다른 독자를 위한 것이기 때문이다. Linux 커널 스타일의 스코프 커밋을 대안으로 제안한다.
+***** Take
+드디어 누군가 말해줬다. 모든 커밋에 'chore:'를 붙이면서 스코프는 선택사항으로 두는 건, 모든 이메일에 '업무'라고 표시하면서 제목은 선택사항으로 두는 것과 같다.
+***** Comments
+- 커밋 메시지에 대한 기대치를 설정하는 것이 훨씬 중요하다고 생각하며, 최적의 구조에 대해 따지는 것보다 더 중요하다.
+- 30년 넘게 버전 관리를 사용했지만, 컴포넌트를 표준화된 방식으로 설명에 포함하는 것이 유용했던 적은 한 번도 없다.
+- Conventional Commits에서 'chore'라는 단어 사용은 항상 거슬렸다. 나는 리눅스 커널 스타일의 커밋 제목을 선호한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Conventional Commits hace que te enfoques en lo incorrecto
+***** TLDR
+El autor argumenta que Conventional Commits pone el tipo (feat, fix, chore) antes del scope, lo cual es exactamente al revés. El scope te dice qué parte del código cambió; el tipo usualmente es obvio por la descripción. La promesa de generar CHANGELOGs automáticamente es defectuosa porque los logs de commits y CHANGELOGs sirven a audiencias diferentes. Propone commits con scope estilo kernel de Linux.
+***** Take
+Por fin alguien lo dijo. Prefijar cada commit con 'chore:' mientras el scope es opcional es como etiquetar cada email como 'trabajo' pero hacer el asunto opcional.
+***** Comments
+- Creo que es mucho más efectivo que se establezcan expectativas sobre los mensajes de commit, y eso es mucho más importante que discutir sobre la estructura óptima.
+- En más de 30 años usando control de versiones, nunca trabajé en algo donde fuera útil incluir el componente en la descripción de forma estandarizada.
+- El uso de la palabra 'chore' en conventional commits siempre me ha molestado. Siempre he preferido el estilo de asunto de commit del kernel de Linux.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Conventional Commits lenkt den Fokus auf das Falsche
+***** TLDR
+Der Autor argumentiert, dass Conventional Commits den Typ (feat, fix, chore) vor den Scope stellt, was genau verkehrt herum ist. Der Scope zeigt, welcher Teil der Codebase sich geändert hat; der Typ ist normalerweise aus der Beschreibung ersichtlich. Das Versprechen automatisch generierter CHANGELOGs ist fehlerhaft, weil Commit-Logs und CHANGELOGs verschiedene Zielgruppen haben. Schlägt Scoped Commits im Linux-Kernel-Stil vor.
+***** Take
+Endlich hat es jemand gesagt. Jeden Commit mit 'chore:' zu prefixen, während der Scope optional bleibt, ist wie jede E-Mail mit 'Arbeit' zu markieren, aber die Betreffzeile optional zu machen.
+***** Comments
+- Ich finde es viel effektiver, dass Erwartungen an Commit-Nachrichten gesetzt werden, und das ist viel wichtiger als über die optimale Struktur zu diskutieren.
+- In über 30 Jahren Versionskontrolle habe ich nie an etwas gearbeitet, wo es nützlich war, die Komponente standardisiert in der Beschreibung anzugeben.
+- Die Verwendung des Wortes 'chore' bei Conventional Commits hat mich immer gestört. Ich bevorzuge den Linux-Kernel-Stil für Commit-Betreffs.
+** I tested every IP KVM in my Homelab :hardware:homelab:security:
+:PROPERTIES:
+:ID:       48413072
+:URL:      https://www.jeffgeerling.com/blog/2026/i-tested-every-ip-kvm/
+:HN_URL:   https://news.ycombinator.com/item?id=48413072
+:POINTS:   166
+:COMMENTS: 47
+:BY:       vquemener
+:END:
+
+*** TLDR
+Jeff Geerling tested every IP KVM on the market, from the $400 PiKVM V4 Plus to the $69 Sipeed NanoKVM Cube. PiKVM wins on features and open-source purity but loses on price. JetKVM is his daily driver for the polished UI and rackmount screws. The NanoKVM got him an FBI visit because hackers use cheap KVMs for espionage. Warning: these are security holes waiting to happen.
+
+*** Take
+The homelab-to-FBI-visit pipeline is real. Nothing says 'security-conscious' like buying a $69 Chinese device that speaks to your BIOS.
+
+*** Comments
+
+**** gregsadetsky
+:PROPERTIES:
+:COMMENT_ID: 48413200
+:END:
++1000 points for the PiKVM V4 Plus. We send keyboard commands in software to the computers we're refurbishing. We were a GL.iNet KVM shop until we realized PiKVM was more reliable.
+
+**** Zenbit_UX
+:PROPERTIES:
+:COMMENT_ID: 48413300
+:END:
+I was going to pull the trigger on ArkKVM but felt like I'd rather support the main JetKVM project if I could.
+
+**** syntaxing
+:PROPERTIES:
+:COMMENT_ID: 48413400
+:END:
+I had good experience with GL.inet's comet line. Though all my KVM do not have internet access, blocked at my gateway. I can only access it via tailscale externally.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我测试了家庭实验室里的每一款IP KVM
+***** TLDR
+Jeff Geerling测试了市面上所有的IP KVM，从400美元的PiKVM V4 Plus到69美元的Sipeed NanoKVM Cube。PiKVM在功能和开源纯粹性上胜出，但价格不占优势。JetKVM是他的日常工具，因为UI精致且有机架安装螺丝。NanoKVM让他被FBI拜访了，因为黑客用便宜的KVM进行间谍活动。警告：这些都是等待被利用的安全漏洞。
+***** Take
+从家庭实验室到FBI上门的流程是真实存在的。没有什么比买一个69美元的中国设备来控制你的BIOS更能体现'安全意识'了。
+***** Comments
+- 强烈推荐PiKVM V4 Plus。我们通过软件向正在翻新的电脑发送键盘命令。之前用GL.iNet KVM，后来发现PiKVM更可靠。
+- 我本来想买ArkKVM，但觉得还是应该支持JetKVM主项目。
+- GL.inet的comet系列体验不错。不过我所有的KVM都没有联网，在网关层面屏蔽了。只能通过tailscale外部访问。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ホームラボのIP KVMを全部テストしてみた
+***** TLDR
+Jeff Geerlingが市場のあらゆるIP KVMをテストした。400ドルのPiKVM V4 Plusから69ドルのSipeed NanoKVM Cubeまで。PiKVMは機能とオープンソースの純粋さで勝つが、価格では負ける。JetKVMは洗練されたUIとラックマウントネジで彼の愛用機。NanoKVMのせいでFBIの訪問を受けた。ハッカーが安いKVMをスパイ活動に使うから。警告：これらはセキュリティホールになりうる。
+***** Take
+ホームラボからFBI訪問へのパイプラインは実在する。69ドルの中国製デバイスでBIOSにアクセスするほど「セキュリティ意識が高い」ことはない。
+***** Comments
+- PiKVM V4 Plusに1000点。我々はリファービッシュ中のコンピュータにソフトウェアでキーボードコマンドを送っている。GL.iNet KVMを使っていたが、PiKVMの方が信頼性が高いと気づいた。
+- ArkKVMを買おうとしていたが、できればJetKVMの本家プロジェクトを支援したいと思った。
+- GL.inetのcometシリーズは良い経験だった。ただし私のKVMはすべてインターネットアクセスなし、ゲートウェイでブロック。外部からはtailscale経由でのみアクセス可能。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+홈랩의 모든 IP KVM을 테스트해봤다
+***** TLDR
+Jeff Geerling이 시장의 모든 IP KVM을 테스트했다. 400달러 PiKVM V4 Plus부터 69달러 Sipeed NanoKVM Cube까지. PiKVM은 기능과 오픈소스 순수성에서 이기지만 가격에서는 진다. JetKVM은 세련된 UI와 랙마운트 나사 덕분에 그의 일상 도구다. NanoKVM 때문에 FBI 방문을 받았다. 해커들이 저렴한 KVM을 스파이 활동에 사용하기 때문. 경고: 이것들은 악용되기를 기다리는 보안 구멍이다.
+***** Take
+홈랩에서 FBI 방문까지의 파이프라인은 실재한다. 69달러짜리 중국 장치로 BIOS에 접근하는 것만큼 '보안 의식'을 보여주는 것은 없다.
+***** Comments
+- PiKVM V4 Plus에 1000점. 우리는 리퍼비시 중인 컴퓨터에 소프트웨어로 키보드 명령을 보낸다. GL.iNet KVM을 쓰다가 PiKVM이 더 안정적이라는 걸 깨달았다.
+- ArkKVM을 사려고 했지만 가능하면 JetKVM 본 프로젝트를 지원하고 싶었다.
+- GL.inet의 comet 라인이 좋았다. 다만 내 KVM은 모두 인터넷 접근 차단, 게이트웨이에서 막음. 외부에서는 tailscale로만 접근 가능.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Probé todos los IP KVM de mi Homelab
+***** TLDR
+Jeff Geerling probó todos los IP KVM del mercado, desde el PiKVM V4 Plus de $400 hasta el Sipeed NanoKVM Cube de $69. PiKVM gana en características y pureza open-source pero pierde en precio. JetKVM es su herramienta diaria por la UI pulida y los tornillos para rack. El NanoKVM le consiguió una visita del FBI porque los hackers usan KVMs baratos para espionaje. Advertencia: son agujeros de seguridad esperando ser explotados.
+***** Take
+El pipeline de homelab-a-visita-del-FBI es real. Nada dice 'consciente de la seguridad' como comprar un dispositivo chino de $69 que habla con tu BIOS.
+***** Comments
+- +1000 puntos para el PiKVM V4 Plus. Enviamos comandos de teclado por software a las computadoras que reacondicionamos. Usábamos GL.iNet KVM hasta que nos dimos cuenta de que PiKVM era más confiable.
+- Iba a comprar ArkKVM pero sentí que prefería apoyar al proyecto principal JetKVM si podía.
+- Tuve buena experiencia con la línea comet de GL.inet. Aunque todos mis KVM no tienen acceso a internet, bloqueados en el gateway. Solo puedo acceder externamente vía tailscale.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ich habe jedes IP KVM in meinem Homelab getestet
+***** TLDR
+Jeff Geerling testete jeden IP KVM auf dem Markt, vom 400$ PiKVM V4 Plus bis zum 69$ Sipeed NanoKVM Cube. PiKVM gewinnt bei Features und Open-Source-Reinheit, verliert aber beim Preis. JetKVM ist sein Daily Driver wegen der polierten UI und Rackmount-Schrauben. Das NanoKVM brachte ihm einen FBI-Besuch ein, weil Hacker billige KVMs für Spionage nutzen. Warnung: Das sind Sicherheitslücken, die nur darauf warten, ausgenutzt zu werden.
+***** Take
+Die Homelab-zu-FBI-Besuch-Pipeline ist real. Nichts sagt 'sicherheitsbewusst' wie ein 69$-Gerät aus China zu kaufen, das mit deinem BIOS spricht.
+***** Comments
+- +1000 Punkte für den PiKVM V4 Plus. Wir senden Tastaturbefehle per Software an die Computer, die wir aufbereiten. Wir nutzten GL.iNet KVM, bis wir merkten, dass PiKVM zuverlässiger ist.
+- Ich wollte ArkKVM kaufen, aber ich wollte lieber das JetKVM-Hauptprojekt unterstützen.
+- Gute Erfahrung mit GL.inets Comet-Reihe. Allerdings haben alle meine KVMs keinen Internetzugang, am Gateway blockiert. Extern nur via Tailscale erreichbar.
+** Did Claude increase bugs in rsync? :ai:statistics:drama:
+:PROPERTIES:
+:ID:       48411635
+:URL:      https://alexispurslane.github.io/rsync-analysis/
+:HN_URL:   https://news.ycombinator.com/item?id=48411635
+:POINTS:   143
+:COMMENTS: 143
+:BY:       logicprog
+:END:
+
+*** TLDR
+After the rsync maintainer was harassed over Claude-assisted commits, someone actually did the analysis. Using bugs-per-10-commits across 46 releases, both Claude releases fall in the middle 50% of the historical distribution. Exact permutation test p-value: 46%. Fisher's exact test: 74%. Translation: the Claude releases are statistically unremarkable. The historical mean bug rate is actually 2x higher than the Claude releases.
+
+*** Take
+Internet mob demands blood, statistician shows up with a spreadsheet. The harassment included MLP death threat drawings. This is why we can't have nice things.
+
+*** Comments
+
+**** thorum
+:PROPERTIES:
+:COMMENT_ID: 48411700
+:END:
+I predict the only thing they will accomplish by pressuring the rsync maintainers is to discourage everyone else from responsibly disclosing their use of AI. You're just going to make people disable Claude attribution.
+
+**** aesthesia
+:PROPERTIES:
+:COMMENT_ID: 48411800
+:END:
+The release with the highest number of attributed bugs is the release right before the first release with Claude-coauthored commits. Is there a chance unattributed LLM-authored commits made it into that release?
+
+**** PunchyHamster
+:PROPERTIES:
+:COMMENT_ID: 48411900
+:END:
+The fact last few commits were attributed to Claude doesn't mean previous ones didn't use it. Also if you write a paper where you get statistical conclusions out of whole 2 datapoints you'd be laughed out of the room.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Claude增加了rsync的bug吗？
+***** TLDR
+rsync维护者因使用Claude辅助提交而遭受骚扰后，终于有人做了分析。使用46个版本的每10次提交bug数，两个Claude版本都落在历史分布的中间50%。精确排列测试p值：46%。Fisher精确检验：74%。翻译：Claude版本在统计上没有异常。历史平均bug率实际上是Claude版本的2倍。
+***** Take
+网络暴民要见血，统计学家带着电子表格出现了。骚扰甚至包括小马宝莉风格的死亡威胁画作。这就是为什么我们不能拥有美好事物。
+***** Comments
+- 我预测他们向rsync维护者施压的唯一结果就是让其他人不敢负责任地披露AI使用情况。你只会让人们关闭Claude署名。
+- bug数最高的版本恰好是第一个包含Claude参与提交的版本之前的那个。有没有可能未标注的LLM提交混入了那个版本？
+- 最近几次提交标注为Claude并不意味着之前的提交没有使用它。而且如果你写一篇只有2个数据点就得出统计结论的论文，会被人笑话的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claudeはrsyncのバグを増やしたのか？
+***** TLDR
+rsyncメンテナーがClaude支援コミットで嫌がらせを受けた後、誰かが実際に分析を行った。46リリースにわたる10コミットあたりのバグ数を使用し、両方のClaudeリリースは履歴分布の中央50%に収まっている。正確順列検定p値：46%。Fisherの正確検定：74%。つまり：Claudeリリースは統計的に普通。履歴の平均バグ率は実際にはClaudeリリースの2倍高い。
+***** Take
+ネットの暴徒は血を求め、統計学者がスプレッドシートを持って現れた。嫌がらせにはマイリトルポニー風の殺害脅迫の絵まで含まれていた。だから我々は良いものを持てないのだ。
+***** Comments
+- rsyncメンテナーに圧力をかけることで達成されるのは、他の人がAI使用を責任を持って開示することを躊躇させることだけだと予想する。Claudeの帰属表示を無効にするようになるだけだ。
+- 最も多くのバグが帰属されているリリースは、Claudeの共同執筆コミットを含む最初のリリースの直前のリリースだ。未帰属のLLM作成コミットがそのリリースに入った可能性は？
+- 最近のコミットがClaudeに帰属されているからといって、以前のコミットがそれを使用していなかったとは限らない。また、たった2つのデータポイントから統計的結論を出す論文を書いたら笑われるだろう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude가 rsync의 버그를 늘렸는가?
+***** TLDR
+rsync 메인테이너가 Claude 지원 커밋으로 괴롭힘을 당한 후, 누군가 실제로 분석을 했다. 46개 릴리스에 걸친 10커밋당 버그 수를 사용했고, 두 Claude 릴리스 모두 역사적 분포의 중간 50%에 속한다. 정확 순열 검정 p값: 46%. Fisher 정확 검정: 74%. 해석: Claude 릴리스는 통계적으로 평범하다. 역사적 평균 버그율은 실제로 Claude 릴리스의 2배다.
+***** Take
+인터넷 폭도들은 피를 요구하고, 통계학자가 스프레드시트를 들고 나타났다. 괴롭힘에는 마이 리틀 포니 스타일 살해 협박 그림까지 포함됐다. 이래서 우리가 좋은 것을 가질 수 없는 거다.
+***** Comments
+- rsync 메인테이너들에게 압박을 가해서 얻을 유일한 결과는 다른 모든 사람들이 AI 사용을 책임감 있게 공개하는 것을 꺼리게 만드는 것뿐일 거라고 예측한다. Claude 표시를 비활성화하게 만들 뿐이다.
+- 버그가 가장 많이 귀속된 릴리스는 Claude 공동 작성 커밋이 포함된 첫 번째 릴리스 바로 직전 릴리스다. 미표시 LLM 작성 커밋이 그 릴리스에 들어갔을 가능성은?
+- 최근 커밋이 Claude에 귀속됐다고 해서 이전 커밋이 사용하지 않았다는 의미는 아니다. 또한 단 2개의 데이터 포인트로 통계적 결론을 내는 논문을 쓰면 웃음거리가 될 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Aumentó Claude los bugs en rsync?
+***** TLDR
+Después de que el mantenedor de rsync fue acosado por commits asistidos por Claude, alguien hizo el análisis. Usando bugs-por-10-commits en 46 releases, ambos releases de Claude caen en el 50% medio de la distribución histórica. P-valor de test de permutación exacta: 46%. Test exacto de Fisher: 74%. Traducción: los releases de Claude son estadísticamente normales. La tasa media histórica de bugs es en realidad 2x más alta que los releases de Claude.
+***** Take
+La turba de internet exige sangre, el estadístico aparece con una hoja de cálculo. El acoso incluyó dibujos de amenazas de muerte estilo My Little Pony. Por esto no podemos tener cosas buenas.
+***** Comments
+- Predigo que lo único que lograrán presionando a los mantenedores de rsync es desalentar a todos los demás de divulgar responsablemente su uso de IA. Solo harán que la gente desactive la atribución a Claude.
+- El release con más bugs atribuidos es el release justo antes del primer release con commits co-autorados por Claude. ¿Hay posibilidad de que commits de LLM no atribuidos entraran en ese release?
+- El hecho de que los últimos commits fueran atribuidos a Claude no significa que los anteriores no lo usaran. Además, si escribes un paper donde sacas conclusiones estadísticas de solo 2 puntos de datos, te reirían.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Hat Claude Bugs in rsync erhöht?
+***** TLDR
+Nachdem der rsync-Maintainer wegen Claude-unterstützter Commits belästigt wurde, hat jemand die Analyse durchgeführt. Mit Bugs-pro-10-Commits über 46 Releases fallen beide Claude-Releases in die mittleren 50% der historischen Verteilung. Exakter Permutationstest p-Wert: 46%. Fishers exakter Test: 74%. Übersetzung: Die Claude-Releases sind statistisch unauffällig. Die historische durchschnittliche Bug-Rate ist tatsächlich 2x höher als bei den Claude-Releases.
+***** Take
+Internet-Mob fordert Blut, Statistiker erscheint mit Tabellenkalkulation. Die Belästigung beinhaltete My-Little-Pony-Morddrohungszeichnungen. Deshalb können wir keine schönen Dinge haben.
+***** Comments
+- Ich sage voraus, dass das einzige, was sie erreichen werden, indem sie die rsync-Maintainer unter Druck setzen, ist, alle anderen davon abzuhalten, ihre AI-Nutzung verantwortungsvoll offenzulegen. Ihr werdet nur dafür sorgen, dass Leute die Claude-Attribution deaktivieren.
+- Das Release mit den meisten zugeordneten Bugs ist das Release direkt vor dem ersten Release mit Claude-mitautorisierten Commits. Besteht die Möglichkeit, dass nicht zugeordnete LLM-Commits in dieses Release gelangt sind?
+- Die Tatsache, dass die letzten Commits Claude zugeordnet wurden, bedeutet nicht, dass frühere es nicht verwendet haben. Außerdem würde man ausgelacht werden, wenn man ein Paper schreibt, das statistische Schlussfolgerungen aus nur 2 Datenpunkten zieht.
+** Gemma 4 QAT models: Optimizing compression for mobile and laptop efficiency :ai:ml:mobile:
+:PROPERTIES:
+:ID:       48414653
+:URL:      https://blog.google/innovation-and-ai/technology/developers-tools/quantization-aware-training-gemma-4/
+:HN_URL:   https://news.ycombinator.com/item?id=48414653
+:POINTS:   152
+:COMMENTS: 28
+:BY:       theanonymousone
+:END:
+
+*** TLDR
+Google releases Quantization-Aware Training checkpoints for Gemma 4, shrinking the E2B model to under 1GB. Unlike post-training quantization, QAT simulates compression during training to preserve quality. The mobile format uses static activations, channel-wise quantization, and aggressive 2-bit compression on token generation while keeping reasoning layers at higher precision. Available for llama.cpp, Ollama, LM Studio, vLLM.
+
+*** Take
+A 1GB model that actually runs on your phone. The 'we did the quantization correctly this time' energy is strong.
+
+*** Comments
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 48414700
+:END:
+I just ran one of these locally on a Mac with uvx litert-lm run. The first time you run that it downloads 3.2GB to ~/.cache/huggingface/hub.
+
+**** satvikpendem
+:PROPERTIES:
+:COMMENT_ID: 48414800
+:END:
+Unsloth's collection as well, with their results. Looks like they can get very close to 100% accuracy compared to the BF16 model. Unsloth's quants are better than the original Google QAT.
+
+**** minimaxir
+:PROPERTIES:
+:COMMENT_ID: 48414900
+:END:
+It's a bit awkward to release Gemma 4 12B, and then a canonical Q4_0 Gemma 4 12B a couple days later. It confirms that only the quantized model fits Google's claims of fitting within 16GB.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Gemma 4 QAT模型：优化移动和笔记本效率的压缩
+***** TLDR
+Google发布了Gemma 4的量化感知训练检查点，将E2B模型压缩到不到1GB。与训练后量化不同，QAT在训练期间模拟压缩以保持质量。移动格式使用静态激活、通道级量化，在token生成上使用激进的2位压缩，同时保持推理层更高的精度。支持llama.cpp、Ollama、LM Studio、vLLM。
+***** Take
+一个真正能在你手机上运行的1GB模型。'这次我们正确地做了量化'的气场很强。
+***** Comments
+- 我刚在Mac上用uvx litert-lm run本地运行了一个。第一次运行会下载3.2GB到~/.cache/huggingface/hub。
+- 还有Unsloth的集合和他们的结果。看起来与BF16模型相比可以接近100%准确率。Unsloth的量化比Google原版QAT更好。
+- 发布Gemma 4 12B，然后几天后发布官方Q4_0 Gemma 4 12B，有点尴尬。这证实了只有量化模型才符合Google声称的16GB内存要求。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Gemma 4 QATモデル：モバイルとラップトップ効率のための圧縮最適化
+***** TLDR
+GoogleがGemma 4のQuantization-Aware Trainingチェックポイントをリリース、E2Bモデルを1GB未満に縮小。ポストトレーニング量子化とは異なり、QATはトレーニング中に圧縮をシミュレートして品質を保持。モバイル形式は静的アクティベーション、チャネルごとの量子化、トークン生成での積極的な2ビット圧縮を使用し、推論レイヤーはより高い精度を維持。llama.cpp、Ollama、LM Studio、vLLMで利用可能。
+***** Take
+本当にスマホで動く1GBモデル。「今回はちゃんと量子化しました」感が強い。
+***** Comments
+- uvx litert-lm runでMacでローカル実行してみた。初回実行時に3.2GBが~/.cache/huggingface/hubにダウンロードされる。
+- Unslothのコレクションと結果もある。BF16モデルと比較してほぼ100%の精度に近づけるようだ。UnslothのクアンタイズはGoogle公式QATより優れている。
+- Gemma 4 12Bをリリースして、数日後に公式Q4_0 Gemma 4 12Bをリリースするのはちょっと気まずい。量子化モデルだけがGoogleの16GB以内という主張に適合することを確認している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Gemma 4 QAT 모델: 모바일 및 노트북 효율성을 위한 압축 최적화
+***** TLDR
+Google이 Gemma 4의 Quantization-Aware Training 체크포인트를 출시해 E2B 모델을 1GB 미만으로 줄였다. 훈련 후 양자화와 달리 QAT는 훈련 중 압축을 시뮬레이션해 품질을 유지한다. 모바일 포맷은 정적 활성화, 채널별 양자화, 토큰 생성에 대한 공격적인 2비트 압축을 사용하면서 추론 레이어는 더 높은 정밀도를 유지한다. llama.cpp, Ollama, LM Studio, vLLM에서 사용 가능.
+***** Take
+실제로 폰에서 돌아가는 1GB 모델. '이번에는 양자화를 제대로 했습니다' 에너지가 강하다.
+***** Comments
+- 방금 Mac에서 uvx litert-lm run으로 로컬 실행해봤다. 처음 실행하면 3.2GB가 ~/.cache/huggingface/hub에 다운로드된다.
+- Unsloth의 컬렉션과 결과도 있다. BF16 모델과 비교해 거의 100% 정확도에 근접하는 것 같다. Unsloth의 양자화가 Google 공식 QAT보다 낫다.
+- Gemma 4 12B를 출시하고 며칠 후 공식 Q4_0 Gemma 4 12B를 출시하는 건 좀 어색하다. 양자화 모델만이 Google이 주장한 16GB 이내에 맞는다는 걸 확인해준다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Modelos Gemma 4 QAT: Optimizando compresión para eficiencia móvil y portátil
+***** TLDR
+Google lanza checkpoints de Quantization-Aware Training para Gemma 4, reduciendo el modelo E2B a menos de 1GB. A diferencia de la cuantización post-entrenamiento, QAT simula la compresión durante el entrenamiento para preservar calidad. El formato móvil usa activaciones estáticas, cuantización por canal y compresión agresiva de 2 bits en generación de tokens manteniendo las capas de razonamiento en mayor precisión. Disponible para llama.cpp, Ollama, LM Studio, vLLM.
+***** Take
+Un modelo de 1GB que realmente corre en tu teléfono. La energía de 'esta vez hicimos la cuantización correctamente' es fuerte.
+***** Comments
+- Acabo de correr uno de estos localmente en Mac con uvx litert-lm run. La primera vez descarga 3.2GB a ~/.cache/huggingface/hub.
+- También la colección de Unsloth con sus resultados. Parece que pueden acercarse al 100% de precisión comparado con el modelo BF16. Los quants de Unsloth son mejores que el QAT original de Google.
+- Es un poco incómodo lanzar Gemma 4 12B, y luego un Q4_0 Gemma 4 12B canónico unos días después. Confirma que solo el modelo cuantizado cumple las afirmaciones de Google de caber en 16GB.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gemma 4 QAT-Modelle: Komprimierungsoptimierung für mobile und Laptop-Effizienz
+***** TLDR
+Google veröffentlicht Quantization-Aware Training Checkpoints für Gemma 4 und schrumpft das E2B-Modell auf unter 1GB. Anders als Post-Training-Quantisierung simuliert QAT Kompression während des Trainings, um Qualität zu erhalten. Das Mobile-Format nutzt statische Aktivierungen, kanalweise Quantisierung und aggressive 2-Bit-Kompression bei Token-Generierung, während Reasoning-Schichten höhere Präzision behalten. Verfügbar für llama.cpp, Ollama, LM Studio, vLLM.
+***** Take
+Ein 1GB-Modell, das tatsächlich auf deinem Handy läuft. Die 'wir haben die Quantisierung diesmal richtig gemacht'-Energie ist stark.
+***** Comments
+- Ich habe gerade eines davon lokal auf einem Mac mit uvx litert-lm run ausgeführt. Beim ersten Ausführen lädt es 3,2GB nach ~/.cache/huggingface/hub herunter.
+- Auch Unsloths Sammlung mit ihren Ergebnissen. Sieht so aus, als könnten sie nahe 100% Genauigkeit im Vergleich zum BF16-Modell erreichen. Unsloths Quants sind besser als Googles Original-QAT.
+- Es ist etwas ungeschickt, Gemma 4 12B zu veröffentlichen und dann ein paar Tage später ein kanonisches Q4_0 Gemma 4 12B. Es bestätigt, dass nur das quantisierte Modell Googles Behauptung erfüllt, in 16GB zu passen.
+** Mantine-datatable (and others) compromised – owner account suspended :security:supply-chain:github:
+:PROPERTIES:
+:ID:       48414978
+:URL:      https://github.com/icflorescu/mantine-datatable/discussions/813
+:HN_URL:   https://news.ycombinator.com/item?id=48414978
+:POINTS:   46
+:COMMENTS: 14
+:BY:       justsomehuman
+:END:
+
+*** TLDR
+Attackers pushed malicious commits to mantine-datatable and 4 other repos via github-actions bot. The payload injects itself into Claude Code, Gemini, Cursor, and VS Code settings to auto-run on IDE open. Maintainer's GitHub account was suspended, leaving him unable to warn users or revert commits. Likely related to the May 2026 GitHub infrastructure breach by TeamPCP. npm packages are safe; only source repo is affected.
+
+*** Take
+GitHub gets breached, suspends the victim's account, and leaves malicious code live for 20 hours. Peak incident response.
+
+*** Comments
+
+**** jerf
+:PROPERTIES:
+:COMMENT_ID: 48415100
+:END:
+Greater HN collective, please help me metaphorically double-click on this. I've been trying to find more about the TeamPCP breach.
+
+**** j1elo
+:PROPERTIES:
+:COMMENT_ID: 48415200
+:END:
+GitHub's backwards priorities end up causing a hack on their systems. Hackers use their newly gained powers to compromise other people's repos. GitHub detects compromised repo, and suspends the account of its maintainer.
+
+**** Carbonhell
+:PROPERTIES:
+:COMMENT_ID: 48415300
+:END:
+Seems like it's similar to the attack reported in this other HN post.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Mantine-datatable（及其他项目）被入侵——所有者账号被封禁
+***** TLDR
+攻击者通过github-actions机器人向mantine-datatable和其他4个仓库推送了恶意提交。有效载荷注入到Claude Code、Gemini、Cursor和VS Code设置中，在IDE打开时自动运行。维护者的GitHub账号被封禁，使他无法警告用户或回滚提交。可能与2026年5月TeamPCP对GitHub基础设施的入侵有关。npm包是安全的；只有源码仓库受影响。
+***** Take
+GitHub被入侵后，封禁了受害者的账号，并让恶意代码存活了20小时。巅峰事件响应。
+***** Comments
+- HN集体智慧，请帮我深入了解这件事。我一直在找TeamPCP入侵的更多信息。
+- GitHub本末倒置的优先级导致他们的系统被入侵。黑客利用新获得的权限入侵其他人的仓库。GitHub检测到被入侵的仓库，然后封禁了维护者的账号。
+- 看起来类似于另一个HN帖子报告的攻击。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Mantine-datatable（および他のプロジェクト）が侵害——オーナーアカウント停止
+***** TLDR
+攻撃者がgithub-actionsボット経由でmantine-datatableと他4つのリポジトリに悪意あるコミットをプッシュした。ペイロードはClaude Code、Gemini、Cursor、VS Codeの設定に注入され、IDE起動時に自動実行される。メンテナーのGitHubアカウントは停止され、ユーザーへの警告やコミットの巻き戻しができない状態。2026年5月のTeamPCPによるGitHubインフラ侵害と関連している可能性あり。npmパッケージは安全、ソースリポジトリのみ影響。
+***** Take
+GitHubが侵害され、被害者のアカウントを停止し、悪意あるコードを20時間放置。ピークのインシデント対応。
+***** Comments
+- HNの皆さん、これについてもっと詳しく教えてください。TeamPCPの侵害についてもっと情報を探しています。
+- GitHubの優先順位が逆転していて、自分たちのシステムがハックされた。ハッカーは新たに得た権限で他人のリポジトリを侵害。GitHubは侵害されたリポを検出し、そのメンテナーのアカウントを停止。
+- 他のHN投稿で報告された攻撃と似ているようだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Mantine-datatable (및 기타) 침해됨 – 소유자 계정 정지
+***** TLDR
+공격자가 github-actions 봇을 통해 mantine-datatable과 4개의 다른 저장소에 악성 커밋을 푸시했다. 페이로드는 Claude Code, Gemini, Cursor, VS Code 설정에 주입되어 IDE 열 때 자동 실행된다. 메인테이너의 GitHub 계정이 정지되어 사용자에게 경고하거나 커밋을 되돌릴 수 없다. 2026년 5월 TeamPCP의 GitHub 인프라 침해와 관련된 것으로 보인다. npm 패키지는 안전하며 소스 저장소만 영향받음.
+***** Take
+GitHub가 침해당하고, 피해자 계정을 정지시키고, 악성 코드를 20시간 동안 방치했다. 정점의 인시던트 대응.
+***** Comments
+- HN 여러분, 이것에 대해 더 자세히 알려주세요. TeamPCP 침해에 대한 정보를 찾고 있습니다.
+- GitHub의 뒤바뀐 우선순위가 자체 시스템 해킹을 초래했다. 해커들은 새로 얻은 권한으로 다른 사람들의 저장소를 침해한다. GitHub는 침해된 저장소를 감지하고, 그 메인테이너의 계정을 정지시킨다.
+- 다른 HN 게시물에서 보고된 공격과 유사해 보인다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Mantine-datatable (y otros) comprometidos – cuenta del propietario suspendida
+***** TLDR
+Atacantes empujaron commits maliciosos a mantine-datatable y 4 otros repos vía el bot github-actions. El payload se inyecta en configuraciones de Claude Code, Gemini, Cursor y VS Code para auto-ejecutarse al abrir el IDE. La cuenta de GitHub del mantenedor fue suspendida, dejándolo sin poder advertir a usuarios o revertir commits. Probablemente relacionado con la brecha de infraestructura de GitHub de mayo 2026 por TeamPCP. Los paquetes npm están seguros; solo el repo fuente está afectado.
+***** Take
+GitHub es vulnerado, suspende la cuenta de la víctima, y deja código malicioso vivo por 20 horas. Respuesta a incidentes de primera.
+***** Comments
+- Colectivo de HN, ayúdenme a profundizar en esto. He estado tratando de encontrar más sobre la brecha de TeamPCP.
+- Las prioridades al revés de GitHub terminan causando un hack en sus sistemas. Los hackers usan sus poderes recién adquiridos para comprometer repos de otras personas. GitHub detecta el repo comprometido y suspende la cuenta de su mantenedor.
+- Parece similar al ataque reportado en otro post de HN.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Mantine-datatable (und andere) kompromittiert – Inhaber-Account gesperrt
+***** TLDR
+Angreifer pushten bösartige Commits zu mantine-datatable und 4 anderen Repos via github-actions Bot. Die Payload injiziert sich in Claude Code, Gemini, Cursor und VS Code Einstellungen, um beim IDE-Start automatisch zu laufen. Der GitHub-Account des Maintainers wurde gesperrt, sodass er Benutzer nicht warnen oder Commits zurücksetzen kann. Wahrscheinlich verbunden mit dem GitHub-Infrastruktur-Breach durch TeamPCP im Mai 2026. npm-Pakete sind sicher; nur das Quell-Repo ist betroffen.
+***** Take
+GitHub wird gebreacht, sperrt das Account des Opfers und lässt bösartigen Code 20 Stunden live. Spitzen-Incident-Response.
+***** Comments
+- HN-Kollektiv, bitte helft mir, das genauer zu verstehen. Ich versuche mehr über den TeamPCP-Breach zu finden.
+- GitHubs verkehrte Prioritäten führen zu einem Hack ihrer eigenen Systeme. Hacker nutzen ihre neu gewonnenen Fähigkeiten, um andere Repos zu kompromittieren. GitHub erkennt das kompromittierte Repo und sperrt den Account des Maintainers.
+- Scheint ähnlich zu dem Angriff zu sein, der in einem anderen HN-Post gemeldet wurde.
