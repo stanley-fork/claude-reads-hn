@@ -1,0 +1,500 @@
+#+TITLE: HN Digest 2026-06-05 06:00:00 UT UTC
+#+DATE: 2026-06-05T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Alibaba reviews your code, Huawei compresses your cache, and bees architect their royalty
+
+* Highlights
+- Open Code Review: Alibaba's battle-tested AI reviewer goes open source
+- KVarN: Huawei's vLLM hack gives you 3-5x more context with FP16 accuracy
+- Transformers might not need all three projections after all
+
+* Stories
+
+** Open Code Review - An AI-powered code review CLI tool :ai:code-review:devtools:alibaba:
+:PROPERTIES:
+:ID:       48406358
+:URL:      https://github.com/alibaba/open-code-review
+:HN_URL:   https://news.ycombinator.com/item?id=48406358
+:POINTS:   121
+:COMMENTS: 28
+:BY:       geoffbp
+:END:
+
+*** TLDR
+Alibaba open-sourced their internal AI code review tool that's been catching millions of defects for tens of thousands of developers. It's a hybrid architecture: deterministic pipelines handle file selection and positioning, while the LLM agent focuses on what it's good at. Supports line-level precision, built-in rules for NPE, thread-safety, XSS, SQL injection, and works with Claude/OpenAI APIs.
+
+*** Take
+Unlike generic agents that 'cut corners' on large PRs, this thing actually finishes its homework. Two years at Alibaba scale is the kind of battle testing your weekend hackathon project doesn't have.
+
+*** Comments
+
+**** eranation
+:PROPERTIES:
+:COMMENT_ID: 48406501
+:END:
+Very good recall (~74%) but not so good precision (~12%). The precision causes the F1 to tank.
+
+**** elpakal
+:PROPERTIES:
+:COMMENT_ID: 48406612
+:END:
+At a hackathon I built something that installs Claude Code, runs a /review command, and puts inline comments on PRs. OCR seems cool, but overkill.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Open Code Review - AI驱动的代码审查CLI工具
+***** TLDR
+阿里巴巴开源了其内部AI代码审查工具，该工具已为数万名开发者发现了数百万个代码缺陷。它采用混合架构：确定性流水线处理文件选择和定位，LLM代理专注于其擅长的领域。
+***** Take
+与那些在大型PR上'偷工减料'的通用代理不同，这个工具真正完成了它的作业。两年的阿里巴巴规模实战测试，是你周末黑客马拉松项目所没有的。
+***** Comments
+- 召回率很好（约74%），但精确率不太好（约12%）。精确率导致F1分数下降。
+- 在一次黑客马拉松上，我构建了一个安装Claude Code、运行/review命令并在PR上添加内联评论的工具。OCR看起来不错，但有些过度设计。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Open Code Review - AI搭載のコードレビューCLIツール
+***** TLDR
+Alibabaが数万人の開発者のために数百万の欠陥を検出してきた社内AIコードレビューツールをオープンソース化。決定論的パイプラインとLLMエージェントのハイブリッドアーキテクチャを採用。
+***** Take
+大規模PRで手を抜く汎用エージェントとは違い、このツールは宿題をちゃんと仕上げる。Alibaba規模での2年間の実戦テストは、週末ハッカソンプロジェクトにはない。
+***** Comments
+- 再現率は非常に良い（約74%）が、精度はあまり良くない（約12%）。精度の低さがF1スコアを下げている。
+- ハッカソンでClaude Codeをインストールし、/reviewコマンドを実行してPRにインラインコメントを付けるものを作った。OCRは良さそうだが、やりすぎかも。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Open Code Review - AI 기반 코드 리뷰 CLI 도구
+***** TLDR
+알리바바가 수만 명의 개발자를 위해 수백만 개의 결함을 발견해온 내부 AI 코드 리뷰 도구를 오픈소스로 공개했습니다. 결정론적 파이프라인과 LLM 에이전트의 하이브리드 아키텍처를 채택했습니다.
+***** Take
+대규모 PR에서 '대충 넘기는' 범용 에이전트와 달리, 이 도구는 숙제를 제대로 끝냅니다. 알리바바 규모에서 2년간의 실전 테스트는 주말 해커톤 프로젝트에는 없는 것입니다.
+***** Comments
+- 재현율은 매우 좋지만(약 74%), 정밀도는 그다지 좋지 않습니다(약 12%). 정밀도가 F1 점수를 떨어뜨립니다.
+- 해커톤에서 Claude Code를 설치하고 /review 명령을 실행해 PR에 인라인 코멘트를 다는 것을 만들었습니다. OCR은 좋아 보이지만 과한 것 같습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Open Code Review - Herramienta CLI de revisión de código con IA
+***** TLDR
+Alibaba ha liberado su herramienta interna de revisión de código con IA que ha detectado millones de defectos para decenas de miles de desarrolladores. Arquitectura híbrida: pipelines deterministas manejan selección de archivos, mientras el agente LLM se enfoca en lo que hace bien.
+***** Take
+A diferencia de los agentes genéricos que 'cortan camino' en PRs grandes, esta cosa realmente termina su tarea. Dos años a escala Alibaba es el tipo de prueba de batalla que tu proyecto de hackathon de fin de semana no tiene.
+***** Comments
+- Muy buen recall (~74%) pero no tan buena precisión (~12%). La precisión hace que el F1 se desplome.
+- En un hackathon construí algo que instala Claude Code, ejecuta un comando /review y pone comentarios inline en PRs. OCR parece genial, pero excesivo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Open Code Review - KI-gestütztes Code-Review CLI-Tool
+***** TLDR
+Alibaba hat sein internes KI-Code-Review-Tool als Open Source veröffentlicht, das Millionen von Defekten für Zehntausende von Entwicklern gefunden hat. Hybride Architektur: deterministische Pipelines übernehmen Dateiauswahl, während der LLM-Agent sich auf seine Stärken konzentriert.
+***** Take
+Im Gegensatz zu generischen Agenten, die bei großen PRs 'Abkürzungen nehmen', erledigt dieses Ding tatsächlich seine Hausaufgaben. Zwei Jahre im Alibaba-Maßstab ist die Art von Kampftestung, die dein Wochenend-Hackathon-Projekt nicht hat.
+***** Comments
+- Sehr guter Recall (~74%), aber nicht so gute Precision (~12%). Die Precision lässt den F1-Score einbrechen.
+- Bei einem Hackathon habe ich etwas gebaut, das Claude Code installiert, einen /review-Befehl ausführt und Inline-Kommentare zu PRs hinzufügt. OCR scheint cool, aber übertrieben.
+** KVarN: Native vLLM backend for KV-cache quantization by Huawei :ai:llm:vllm:quantization:huawei:
+:PROPERTIES:
+:ID:       48399974
+:URL:      https://github.com/huawei-csl/KVarN
+:HN_URL:   https://news.ycombinator.com/item?id=48399974
+:POINTS:   127
+:COMMENTS: 13
+:BY:       theanonymousone
+:END:
+
+*** TLDR
+Huawei's KVarN quantizes KV-cache in vLLM to give you 3-5x more context capacity while maintaining FP16-level accuracy and actually beating FP16 throughput. The trick: Hadamard rotation spreads outliers, iterative variance normalization equalizes the tensor, then asymmetric quantization at 4-bit keys/2-bit values. One flag to enable, no calibration needed.
+
+*** Take
+While everyone's been complaining about GPU VRAM costs, Huawei just dropped a paper that says 'here's 4x more context, same quality, better speed.' The catch? You have to use their vLLM fork. The other catch? It actually works.
+
+*** Comments
+
+**** throwa356262
+:PROPERTIES:
+:COMMENT_ID: 48400123
+:END:
+Better performance than TQ and better quality than FP16? Am I reading this right??
+
+**** v3ss0n
+:PROPERTIES:
+:COMMENT_ID: 48400234
+:END:
+Why this is not a PR for vLLM?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+KVarN：华为为vLLM打造的原生KV缓存量化后端
+***** TLDR
+华为的KVarN在vLLM中量化KV缓存，提供3-5倍的上下文容量，同时保持FP16级别的精度，实际上还超越了FP16的吞吐量。技巧：Hadamard旋转分散异常值，迭代方差归一化均衡张量，然后以4位键/2位值进行非对称量化。一个标志即可启用，无需校准。
+***** Take
+当所有人都在抱怨GPU显存成本时，华为发布了一篇论文说'这里有4倍的上下文，相同的质量，更好的速度。'问题是？你必须使用他们的vLLM分支。另一个问题？它确实有效。
+***** Comments
+- 比TQ性能更好，比FP16质量更好？我没看错吧？？
+- 为什么这不是vLLM的PR？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+KVarN：HuaweiによるvLLM向けネイティブKVキャッシュ量子化バックエンド
+***** TLDR
+HuaweiのKVarNはvLLMでKVキャッシュを量子化し、FP16レベルの精度を維持しながら3-5倍のコンテキスト容量を提供し、実際にFP16のスループットを上回る。トリック：Hadamard回転で外れ値を分散、反復分散正規化でテンソルを均等化、その後4ビットキー/2ビット値で非対称量子化。1つのフラグで有効化、キャリブレーション不要。
+***** Take
+みんながGPU VRAMコストについて文句を言っている間に、Huaweiは'4倍のコンテキスト、同じ品質、より高速'という論文を発表した。問題点？彼らのvLLMフォークを使う必要がある。もう一つの問題点？実際に動く。
+***** Comments
+- TQより性能が良くて、FP16より品質が良い？これ本当に合ってる？？
+- なぜこれはvLLMへのPRじゃないの？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+KVarN: Huawei의 vLLM용 네이티브 KV 캐시 양자화 백엔드
+***** TLDR
+Huawei의 KVarN은 vLLM에서 KV 캐시를 양자화하여 FP16 수준의 정확도를 유지하면서 3-5배 더 많은 컨텍스트 용량을 제공하고, 실제로 FP16 처리량을 능가합니다. 트릭: Hadamard 회전으로 이상치 분산, 반복 분산 정규화로 텐서 균등화, 4비트 키/2비트 값으로 비대칭 양자화. 플래그 하나로 활성화, 캘리브레이션 불필요.
+***** Take
+모두가 GPU VRAM 비용에 대해 불평하는 동안, Huawei는 '여기 4배의 컨텍스트, 같은 품질, 더 빠른 속도'라는 논문을 내놓았습니다. 문제점? 그들의 vLLM 포크를 사용해야 합니다. 또 다른 문제점? 실제로 작동합니다.
+***** Comments
+- TQ보다 성능이 좋고 FP16보다 품질이 좋다고? 제대로 읽은 거 맞아??
+- 왜 이게 vLLM PR이 아니죠?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+KVarN: Backend nativo de cuantización de KV-cache para vLLM de Huawei
+***** TLDR
+KVarN de Huawei cuantiza el KV-cache en vLLM para darte 3-5x más capacidad de contexto manteniendo precisión nivel FP16 y superando el throughput de FP16. El truco: rotación Hadamard dispersa outliers, normalización iterativa de varianza equaliza el tensor, luego cuantización asimétrica a 4-bit keys/2-bit values. Un flag para activar, sin calibración.
+***** Take
+Mientras todos se quejan de los costos de VRAM de GPU, Huawei acaba de publicar un paper que dice 'aquí tienes 4x más contexto, misma calidad, mejor velocidad.' ¿El problema? Tienes que usar su fork de vLLM. ¿El otro problema? Realmente funciona.
+***** Comments
+- ¿Mejor rendimiento que TQ y mejor calidad que FP16? ¿Estoy leyendo bien??
+- ¿Por qué esto no es un PR para vLLM?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+KVarN: Huaweis natives vLLM-Backend für KV-Cache-Quantisierung
+***** TLDR
+Huaweis KVarN quantisiert den KV-Cache in vLLM und bietet 3-5x mehr Kontextkapazität bei FP16-Genauigkeit und übertrifft sogar den FP16-Durchsatz. Der Trick: Hadamard-Rotation verteilt Ausreißer, iterative Varianz-Normalisierung gleicht den Tensor aus, dann asymmetrische Quantisierung mit 4-Bit-Keys/2-Bit-Values. Ein Flag zum Aktivieren, keine Kalibrierung nötig.
+***** Take
+Während alle über GPU-VRAM-Kosten jammern, hat Huawei gerade ein Paper veröffentlicht, das sagt 'hier ist 4x mehr Kontext, gleiche Qualität, bessere Geschwindigkeit.' Der Haken? Du musst ihren vLLM-Fork verwenden. Der andere Haken? Es funktioniert tatsächlich.
+***** Comments
+- Bessere Performance als TQ und bessere Qualität als FP16? Lese ich das richtig??
+- Warum ist das kein PR für vLLM?
+** Do transformers need three projections? Systematic study of QKV variants :ai:ml:transformers:research:icml:
+:PROPERTIES:
+:ID:       48405931
+:URL:      https://arxiv.org/abs/2606.04032
+:HN_URL:   https://news.ycombinator.com/item?id=48405931
+:POINTS:   137
+:COMMENTS: 27
+:BY:       Anon84
+:END:
+
+*** TLDR
+ICML 2026 paper systematically tests what happens when you share Q, K, V projections in transformers. TL;DR: sharing K=V (Q-K=V) works surprisingly well - 50% KV cache reduction with only 3.1% perplexity hit. Combine with GQA/MQA for up to 96.9% cache reduction. Keys and values can live in similar spaces, and attention operates in low-rank anyway.
+
+*** Take
+Turns out transformers have been carrying extra weight this whole time. Someone finally asked 'do we actually need all three projections?' and the answer is 'not really.' Your edge device just got a lot more capable.
+
+*** Comments
+
+**** amluto
+:PROPERTIES:
+:COMMENT_ID: 48406001
+:END:
+When discussing linear algebra, follow normal conventions. The minus sign means subtraction, not 'and also'.
+
+**** hollosi
+:PROPERTIES:
+:COMMENT_ID: 48406112
+:END:
+I would not be surprised if it turned out the exact attention mechanism does not really matter, similarly to the sigmoid, ReLU, GELU movement.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Transformer需要三个投影吗？QKV变体的系统研究
+***** TLDR
+ICML 2026论文系统测试了在transformer中共享Q、K、V投影会发生什么。总结：共享K=V（Q-K=V）效果出奇地好 - KV缓存减少50%，困惑度仅增加3.1%。与GQA/MQA结合可实现高达96.9%的缓存减少。键和值可以存在于相似的空间中，注意力本来就在低秩下运行。
+***** Take
+原来transformer一直在携带额外的重量。终于有人问'我们真的需要所有三个投影吗？'答案是'不太需要。'你的边缘设备刚刚变得更强大了。
+***** Comments
+- 讨论线性代数时，请遵循正常惯例。减号表示减法，不是'以及'。
+- 如果结果证明确切的注意力机制并不重要，我不会感到惊讶，类似于sigmoid、ReLU、GELU的演变。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+トランスフォーマーには3つの射影が必要か？QKVバリアントの体系的研究
+***** TLDR
+ICML 2026論文がトランスフォーマーでQ、K、V射影を共有するとどうなるかを体系的にテスト。要約：K=V共有（Q-K=V）は驚くほどうまく機能 - KVキャッシュ50%削減でパープレキシティ増加はわずか3.1%。GQA/MQAと組み合わせて最大96.9%のキャッシュ削減。キーとバリューは類似空間に存在でき、アテンションはどのみち低ランクで動作。
+***** Take
+トランスフォーマーはずっと余分な重荷を背負っていたことが判明。ついに誰かが「本当に3つの射影全部必要？」と聞いて、答えは「そうでもない」だった。エッジデバイスがかなり強力になった。
+***** Comments
+- 線形代数を議論するときは、通常の慣例に従ってください。マイナス記号は減算を意味し、「さらに」という意味ではありません。
+- 正確なアテンションメカニズムがあまり重要でないことが判明しても驚かないでしょう。sigmoid、ReLU、GELUの動きと同様に。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+트랜스포머에 세 개의 프로젝션이 필요할까? QKV 변형에 대한 체계적 연구
+***** TLDR
+ICML 2026 논문이 트랜스포머에서 Q, K, V 프로젝션을 공유하면 어떻게 되는지 체계적으로 테스트했습니다. 요약: K=V 공유(Q-K=V)가 놀랍게도 잘 작동합니다 - KV 캐시 50% 감소에 perplexity 증가는 3.1%뿐. GQA/MQA와 결합하면 최대 96.9% 캐시 감소. 키와 값은 비슷한 공간에 존재할 수 있고, 어텐션은 어차피 저랭크로 작동합니다.
+***** Take
+트랜스포머가 이 모든 시간 동안 여분의 무게를 지고 있었던 것으로 밝혀졌습니다. 누군가 마침내 '세 개의 프로젝션이 다 필요해?'라고 물었고 답은 '별로'였습니다. 당신의 엣지 디바이스가 훨씬 더 강력해졌습니다.
+***** Comments
+- 선형대수를 논의할 때는 일반적인 관례를 따르세요. 마이너스 기호는 뺄셈을 의미하지, '그리고 또한'이 아닙니다.
+- 정확한 어텐션 메커니즘이 별로 중요하지 않다는 것이 밝혀져도 놀라지 않을 것입니다. sigmoid, ReLU, GELU 움직임과 비슷하게.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Los transformers necesitan tres proyecciones? Estudio sistemático de variantes QKV
+***** TLDR
+Paper de ICML 2026 prueba sistemáticamente qué pasa cuando compartes proyecciones Q, K, V en transformers. Resumen: compartir K=V (Q-K=V) funciona sorprendentemente bien - 50% reducción de KV cache con solo 3.1% de aumento en perplexity. Combina con GQA/MQA para hasta 96.9% reducción de cache. Keys y values pueden vivir en espacios similares, y attention opera en bajo rango de todas formas.
+***** Take
+Resulta que los transformers han estado cargando peso extra todo este tiempo. Alguien finalmente preguntó '¿realmente necesitamos las tres proyecciones?' y la respuesta es 'no realmente.' Tu dispositivo edge acaba de volverse mucho más capaz.
+***** Comments
+- Al discutir álgebra lineal, sigue las convenciones normales. El signo menos significa resta, no 'y también'.
+- No me sorprendería si resultara que el mecanismo de atención exacto no importa realmente, similar al movimiento sigmoid, ReLU, GELU.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Brauchen Transformers drei Projektionen? Systematische Studie zu QKV-Varianten
+***** TLDR
+ICML 2026 Paper testet systematisch, was passiert, wenn man Q, K, V Projektionen in Transformers teilt. Fazit: K=V teilen (Q-K=V) funktioniert überraschend gut - 50% KV-Cache-Reduktion bei nur 3,1% Perplexitäts-Anstieg. Mit GQA/MQA kombiniert bis zu 96,9% Cache-Reduktion. Keys und Values können in ähnlichen Räumen leben, und Attention arbeitet ohnehin im niedrigen Rang.
+***** Take
+Es stellt sich heraus, dass Transformers die ganze Zeit zusätzliches Gewicht mit sich herumgetragen haben. Jemand hat endlich gefragt 'brauchen wir wirklich alle drei Projektionen?' und die Antwort ist 'nicht wirklich.' Dein Edge-Device ist gerade viel leistungsfähiger geworden.
+***** Comments
+- Bei der Diskussion linearer Algebra, folge den normalen Konventionen. Das Minuszeichen bedeutet Subtraktion, nicht 'und auch'.
+- Es würde mich nicht überraschen, wenn sich herausstellt, dass der genaue Attention-Mechanismus nicht wirklich wichtig ist, ähnlich wie bei der sigmoid, ReLU, GELU Bewegung.
+** The Causes of Long Covid :health:covid:chronic-illness:science:
+:PROPERTIES:
+:ID:       48407451
+:URL:      https://www.science.org/content/blog-post/causes-long-covid
+:HN_URL:   https://news.ycombinator.com/item?id=48407451
+:POINTS:   75
+:COMMENTS: 27
+:BY:       maxall4
+:END:
+
+*** TLDR
+［From title + comments, article paywalled］ Discussion around the biological mechanisms of Long Covid. Commenters share personal experiences with 2+ year recovery periods, the challenge of classifying chronic illness by symptoms, and frustration with poorly ventilated offices being disease vectors. One commenter notes making progress after 2 years through approaches traditional medicine didn't offer.
+
+*** Take
+The comments are more revealing than most Long Covid discourse. Someone spent 2 years unable to exercise, lost most of their muscle, and only recovered through methods outside traditional medicine. Another points out that chronically ill people talking to each other have more insight than decades of symptom-based classification attempts.
+
+*** Comments
+
+**** lend000
+:PROPERTIES:
+:COMMENT_ID: 48407601
+:END:
+I had a long process that mostly manifested as exercise intolerance. Made no progress for 2 years, lost most of my muscle. After not finding anything promising from traditional medicine, I finally made some progress.
+
+**** deminature
+:PROPERTIES:
+:COMMENT_ID: 48407712
+:END:
+Caught this in Dec 2023/Jan 2024 in a densely-packed Bay Area tech office. Only returned to near-full mental clarity in Jan 2026 - two years later.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+长新冠的病因
+***** TLDR
+［基于标题和评论，文章需付费］ 关于长新冠生物机制的讨论。评论者分享了超过2年恢复期的个人经历、按症状分类慢性病的挑战，以及对通风不良的办公室成为疾病传播场所的不满。一位评论者提到，在尝试了传统医学没有提供的方法后，2年后终于有了进展。
+***** Take
+评论比大多数长新冠讨论更有启发性。有人2年无法运动，失去了大部分肌肉，只有通过传统医学之外的方法才恢复。另一个人指出，慢性病患者之间的交流比几十年基于症状的分类尝试更有洞察力。
+***** Comments
+- 我经历了一个漫长的过程，主要表现为运动不耐受。2年没有进展，失去了大部分肌肉。在传统医学没有找到有效方法后，我终于有了一些进展。
+- 2023年12月/2024年1月在湾区一个拥挤的科技办公室感染了这个。直到2026年1月才恢复到接近完全的精神清晰度——两年后。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Long Covidの原因
+***** TLDR
+［タイトルとコメントより、記事は有料］ Long Covidの生物学的メカニズムについての議論。コメンターは2年以上の回復期間の個人的経験、症状による慢性疾患の分類の難しさ、換気の悪いオフィスが病気の媒介となることへの不満を共有。あるコメンターは、従来の医学では提供されなかったアプローチで2年後にようやく進展があったと述べている。
+***** Take
+コメントはほとんどのLong Covid議論よりも示唆に富んでいる。誰かが2年間運動できず、筋肉のほとんどを失い、従来の医学以外の方法でのみ回復した。別の人は、慢性疾患患者同士の会話が数十年の症状ベースの分類試みよりも洞察に富んでいると指摘している。
+***** Comments
+- 主に運動不耐性として現れる長いプロセスを経験しました。2年間進展がなく、筋肉のほとんどを失いました。従来の医学で有望なものが見つからず、ようやく進展がありました。
+- 2023年12月/2024年1月にベイエリアの混雑したテック企業のオフィスで感染。2026年1月にようやくほぼ完全な精神的明晰さを取り戻しました—2年後。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+롱코비드의 원인
+***** TLDR
+［제목과 댓글 기반, 기사 유료］ 롱코비드의 생물학적 메커니즘에 대한 논의. 댓글 작성자들은 2년 이상의 회복 기간에 대한 개인적 경험, 증상별 만성 질환 분류의 어려움, 환기가 잘 안 되는 사무실이 질병 매개체가 되는 것에 대한 불만을 공유합니다. 한 댓글 작성자는 전통 의학이 제공하지 않은 접근법을 통해 2년 후 마침내 진전이 있었다고 언급합니다.
+***** Take
+댓글이 대부분의 롱코비드 담론보다 더 많은 것을 보여줍니다. 누군가는 2년간 운동을 할 수 없었고 대부분의 근육을 잃었으며 전통 의학 이외의 방법으로만 회복했습니다. 다른 사람은 만성 질환자들끼리의 대화가 수십 년간의 증상 기반 분류 시도보다 더 통찰력이 있다고 지적합니다.
+***** Comments
+- 주로 운동 불내성으로 나타나는 긴 과정을 겪었습니다. 2년간 진전이 없었고 대부분의 근육을 잃었습니다. 전통 의학에서 유망한 것을 찾지 못한 후 마침내 약간의 진전을 이뤘습니다.
+- 2023년 12월/2024년 1월에 베이 에어리어의 밀집된 테크 오피스에서 감염되었습니다. 2026년 1월에야 거의 완전한 정신적 명료함을 되찾았습니다 - 2년 후.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Las causas del Long Covid
+***** TLDR
+［Basado en título y comentarios, artículo de pago］ Discusión sobre los mecanismos biológicos del Long Covid. Los comentaristas comparten experiencias personales con períodos de recuperación de 2+ años, el desafío de clasificar enfermedades crónicas por síntomas, y frustración con oficinas mal ventiladas siendo vectores de enfermedad. Un comentarista menciona hacer progreso después de 2 años a través de enfoques que la medicina tradicional no ofrecía.
+***** Take
+Los comentarios revelan más que la mayoría del discurso sobre Long Covid. Alguien pasó 2 años sin poder hacer ejercicio, perdió la mayoría de su músculo, y solo se recuperó a través de métodos fuera de la medicina tradicional. Otro señala que las personas crónicamente enfermas hablando entre sí tienen más perspicacia que décadas de intentos de clasificación basada en síntomas.
+***** Comments
+- Tuve un proceso largo que se manifestó principalmente como intolerancia al ejercicio. No hice progreso por 2 años, perdí la mayoría de mi músculo. Después de no encontrar nada prometedor en la medicina tradicional, finalmente hice algo de progreso.
+- Cogí esto en dic 2023/ene 2024 en una oficina tech densamente poblada del Bay Area. Solo recuperé claridad mental casi completa en ene 2026 - dos años después.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Ursachen von Long Covid
+***** TLDR
+［Aus Titel und Kommentaren, Artikel kostenpflichtig］ Diskussion über die biologischen Mechanismen von Long Covid. Kommentatoren teilen persönliche Erfahrungen mit 2+ Jahren Erholungszeit, die Herausforderung chronische Krankheiten nach Symptomen zu klassifizieren, und Frustration über schlecht belüftete Büros als Krankheitsüberträger. Ein Kommentator erwähnt, nach 2 Jahren durch Ansätze Fortschritte gemacht zu haben, die die traditionelle Medizin nicht bot.
+***** Take
+Die Kommentare sind aufschlussreicher als die meisten Long Covid Diskurse. Jemand konnte 2 Jahre nicht trainieren, verlor den Großteil seiner Muskeln und erholte sich nur durch Methoden außerhalb der traditionellen Medizin. Ein anderer weist darauf hin, dass chronisch Kranke, die miteinander reden, mehr Einblick haben als Jahrzehnte von symptombasierten Klassifizierungsversuchen.
+***** Comments
+- Ich hatte einen langen Prozess, der sich hauptsächlich als Bewegungsintoleranz manifestierte. 2 Jahre keine Fortschritte, verlor den Großteil meiner Muskeln. Nachdem ich nichts Vielversprechendes in der traditionellen Medizin fand, machte ich endlich Fortschritte.
+- Habe das im Dez 2023/Jan 2024 in einem dicht besetzten Bay Area Tech-Büro eingefangen. Erst im Jan 2026 wieder fast vollständige geistige Klarheit erreicht - zwei Jahre später.
+** Queen bees emerge from special wax chambers :biology:bees:nature:chemistry:
+:PROPERTIES:
+:ID:       48404905
+:URL:      https://cen.acs.org/materials/biobased-materials/queen-bees-special-wax/104/web/2026/06
+:HN_URL:   https://news.ycombinator.com/item?id=48404905
+:POINTS:   63
+:COMMENTS: 10
+:BY:       gmays
+:END:
+
+*** TLDR
+Royal jelly isn't the only thing making queen bees. New Nature paper shows queen cells are made of chemically distinct 'bespoke' wax - richer in unsaturated fatty acids (oleic, linoleic, alpha-linolenic), lower in alkanes and wax esters, with different physical properties. Young 'queen-cell builder' bees overheat their bodies to nearly 40C to process this special wax. When researchers grafted queen larvae into worker wax cells, 62.5% died.
+
+*** Take
+Bees have been running a specialized manufacturing line this whole time and we just figured out the assembly instructions. The chemical engineering happening inside a hive makes your average cleanroom look sloppy.
+
+*** Comments
+
+**** skyberrys
+:PROPERTIES:
+:COMMENT_ID: 48405001
+:END:
+The chemicals in their nearby environment are what make the embryos develop into Queen bees. It makes one wonder what sort of nearby chemical environments do to human embryo development.
+
+**** slicktux
+:PROPERTIES:
+:COMMENT_ID: 48405112
+:END:
+I've always wondered what or how queen bees were made. It's almost as they were a different insect.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+蜂王从特殊蜡室中诞生
+***** TLDR
+蜂王浆不是培育蜂王的唯一因素。《自然》杂志新论文显示，蜂王巢房由化学成分独特的'定制'蜂蜡制成——不饱和脂肪酸（油酸、亚油酸、α-亚麻酸）含量更高，烷烃和蜡酯含量较低，物理性质也不同。年轻的'蜂王巢房建造蜂'将身体加热到近40°C来加工这种特殊蜂蜡。当研究人员将蜂王幼虫移植到工蜂蜡巢房时，62.5%死亡。
+***** Take
+蜜蜂一直在运行一条专业的生产线，而我们刚刚弄清楚了组装说明。蜂巢内部发生的化学工程让你的普通洁净室看起来很马虎。
+***** Comments
+- 周围环境中的化学物质决定了胚胎发育成蜂王。这让人想知道周围的化学环境对人类胚胎发育有什么影响。
+- 我一直想知道蜂王是怎么产生的。她们几乎像是另一种昆虫。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+女王蜂は特別なワックスの部屋から生まれる
+***** TLDR
+ローヤルゼリーだけが女王蜂を作るわけではない。Natureの新論文によると、女王蜂の巣房は化学的に異なる「オーダーメイド」のワックスで作られている - 不飽和脂肪酸（オレイン酸、リノール酸、α-リノレン酸）が豊富で、アルカンとワックスエステルは少なく、物理的性質も異なる。若い「女王蜂巣房建設蜂」は体を約40°Cまで過熱してこの特別なワックスを加工する。研究者が女王蜂の幼虫を働き蜂のワックス巣房に移植したところ、62.5%が死亡した。
+***** Take
+ミツバチはずっと専門的な製造ラインを運営していて、私たちはようやく組み立て説明書を解読した。巣箱の中で起きている化学工学は、あなたの普通のクリーンルームを雑に見せる。
+***** Comments
+- 近くの環境にある化学物質が胚を女王蜂に発達させる。人間の胚発生に近くの化学環境がどのような影響を与えるのか気になる。
+- 女王蜂がどのようにして作られるのかずっと疑問だった。まるで別の昆虫のようだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+여왕벌은 특수한 밀랍 방에서 탄생한다
+***** TLDR
+로열젤리만이 여왕벌을 만드는 것이 아닙니다. 새로운 Nature 논문에 따르면 여왕벌 방은 화학적으로 구별되는 '맞춤형' 밀랍으로 만들어집니다 - 불포화 지방산(올레산, 리놀레산, 알파-리놀렌산)이 풍부하고, 알칸과 왁스 에스터는 적으며, 물리적 특성도 다릅니다. 젊은 '여왕벌 방 건설벌'은 이 특별한 밀랍을 가공하기 위해 몸을 거의 40°C까지 과열합니다. 연구자들이 여왕벌 유충을 일벌 밀랍 방에 이식했을 때 62.5%가 죽었습니다.
+***** Take
+벌들은 이 모든 시간 동안 전문화된 생산 라인을 운영해왔고 우리는 이제야 조립 설명서를 알아냈습니다. 벌집 안에서 일어나는 화학 공학은 당신의 평범한 클린룸을 엉성해 보이게 만듭니다.
+***** Comments
+- 주변 환경의 화학물질이 배아를 여왕벌로 발달시킵니다. 주변 화학 환경이 인간 배아 발달에 어떤 영향을 미치는지 궁금해집니다.
+- 여왕벌이 어떻게 만들어지는지 항상 궁금했습니다. 마치 다른 곤충인 것 같습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Las abejas reina emergen de cámaras de cera especiales
+***** TLDR
+La jalea real no es lo único que hace a las abejas reina. Nuevo paper de Nature muestra que las celdas de reina están hechas de cera químicamente distinta 'a medida' - más rica en ácidos grasos insaturados (oleico, linoleico, alfa-linolénico), menor en alcanos y ésteres de cera, con diferentes propiedades físicas. Jóvenes abejas 'constructoras de celdas de reina' sobrecalientan sus cuerpos a casi 40°C para procesar esta cera especial. Cuando los investigadores injertaron larvas de reina en celdas de cera de obreras, 62.5% murieron.
+***** Take
+Las abejas han estado operando una línea de manufactura especializada todo este tiempo y acabamos de descifrar las instrucciones de ensamblaje. La ingeniería química que ocurre dentro de una colmena hace que tu sala limpia promedio parezca descuidada.
+***** Comments
+- Los químicos en su entorno cercano son lo que hace que los embriones se desarrollen en abejas reina. Hace preguntarse qué tipo de ambientes químicos cercanos afectan el desarrollo del embrión humano.
+- Siempre me pregunté qué o cómo se hacían las abejas reina. Es casi como si fueran un insecto diferente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Bienenköniginnen entstehen in speziellen Wachskammern
+***** TLDR
+Gelée Royale ist nicht das Einzige, was Bienenköniginnen macht. Neue Nature-Studie zeigt, dass Königinnenzellen aus chemisch unterschiedlichem 'maßgeschneidertem' Wachs bestehen - reicher an ungesättigten Fettsäuren (Ölsäure, Linolsäure, Alpha-Linolensäure), weniger Alkane und Wachsester, mit anderen physikalischen Eigenschaften. Junge 'Königinnenzellen-Bauerbienen' überhitzen ihre Körper auf fast 40°C, um dieses spezielle Wachs zu verarbeiten. Als Forscher Königinnenlarven in Arbeiterinnen-Wachszellen transplantierten, starben 62,5%.
+***** Take
+Bienen betreiben die ganze Zeit eine spezialisierte Fertigungslinie und wir haben gerade erst die Montageanleitung herausgefunden. Das chemische Engineering, das in einem Bienenstock passiert, lässt deinen durchschnittlichen Reinraum schlampig aussehen.
+***** Comments
+- Die Chemikalien in ihrer nahen Umgebung bestimmen, dass sich Embryonen zu Bienenköniginnen entwickeln. Man fragt sich, was für chemische Umgebungen auf die menschliche Embryonalentwicklung wirken.
+- Ich habe mich immer gefragt, was oder wie Bienenköniginnen gemacht werden. Es ist fast so, als wären sie ein anderes Insekt.
