@@ -1,0 +1,524 @@
+#+TITLE: HN Digest 2026-06-07 11:00:00 UT UTC
+#+DATE: 2026-06-07T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+KV cache gets squeezed, Win16 memories haunt devs, and scientists get kicked out of their own conference
+
+* Highlights
+- Speculative KV coding: compress LLM cache 4x with a smaller model
+- Win16 memory management: segmented nostalgia trip
+- Scientists ejected from diabetes conference for handing out papers
+- Biohub drops a protein biology world model
+- LLMs do math without actually knowing numbers
+
+* Stories
+
+** Speculative KV coding: losslessly compressing KV cache by up to ~4x :llm:compression:ml:
+:PROPERTIES:
+:ID:       48400151
+:URL:      https://fergusfinn.com/blog/kv-entropy-coder/
+:HN_URL:   https://news.ycombinator.com/item?id=48400151
+:POINTS:   51
+:COMMENTS: 8
+:BY:       kkm
+:END:
+
+*** TLDR
+A technique to compress LLM KV caches using a smaller predictor model to drive an arithmetic coder. The idea is that a draft model can predict most of the target model's KV cache entries, making them compressible. Claims up to 4x lossless compression.
+
+*** Take
+Clever idea but the comments are skeptical - recomputing even a draft KV cache is still quadratic in context length. Turns out 'lossless' doesn't mean 'free'.
+
+*** Comments
+
+**** zozbot234
+:PROPERTIES:
+:COMMENT_ID: 48400200
+:END:
+The problem with this approach is that even recomputing a 'draft' of the KV cache is still quadratic in context length.
+
+**** monster_truck
+:PROPERTIES:
+:COMMENT_ID: 48400250
+:END:
+There is no compression taking place here.
+
+**** 0-_-0
+:PROPERTIES:
+:COMMENT_ID: 48400300
+:END:
+You can use the original model to compress the kv cache and get infinity compression, since the prediction is perfect. The cost is time.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+推测性KV编码：无损压缩KV缓存高达约4倍
+***** TLDR
+一种利用较小的预测模型驱动算术编码器来压缩LLM KV缓存的技术。草案模型可以预测目标模型的大部分KV缓存条目，使其可压缩。号称无损压缩最高4倍。
+***** Take
+聪明的想法，但评论持怀疑态度——即使重新计算草案KV缓存，复杂度仍然是上下文长度的二次方。原来'无损'不等于'免费'。
+***** Comments
+- 这种方法的问题是，即使重新计算KV缓存的'草案'，复杂度仍然是上下文长度的二次方。
+- 这里根本没有压缩发生。
+- 你可以用原始模型来压缩kv缓存，得到无限压缩，因为预测是完美的。代价是时间。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+投機的KVコーディング：KVキャッシュを最大約4倍にロスレス圧縮
+***** TLDR
+小さな予測モデルを使って算術符号器を駆動し、LLMのKVキャッシュを圧縮する手法。ドラフトモデルがターゲットモデルのKVキャッシュエントリの大部分を予測できるため、圧縮可能になる。最大4倍のロスレス圧縮を主張。
+***** Take
+賢いアイデアだがコメントは懐疑的 - ドラフトKVキャッシュの再計算でさえコンテキスト長の二乗。「ロスレス」は「タダ」じゃない。
+***** Comments
+- このアプローチの問題は、KVキャッシュの「ドラフト」を再計算するだけでも、コンテキスト長の二乗になることだ。
+- ここでは圧縮は行われていない。
+- 元のモデルを使ってkvキャッシュを圧縮すれば、予測が完璧なので無限圧縮が得られる。コストは時間だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+투기적 KV 코딩: KV 캐시를 최대 약 4배 무손실 압축
+***** TLDR
+작은 예측 모델을 사용해 산술 코더를 구동하여 LLM KV 캐시를 압축하는 기술. 드래프트 모델이 타겟 모델의 KV 캐시 항목 대부분을 예측할 수 있어 압축 가능. 최대 4배 무손실 압축 주장.
+***** Take
+영리한 아이디어지만 댓글은 회의적 - 드래프트 KV 캐시 재계산도 컨텍스트 길이의 제곱. '무손실'이 '무료'는 아니더라.
+***** Comments
+- 이 접근법의 문제는 KV 캐시의 '드래프트'를 재계산하는 것조차 컨텍스트 길이의 제곱이라는 것이다.
+- 여기서 압축은 일어나지 않는다.
+- 원본 모델을 사용해 kv 캐시를 압축하면 예측이 완벽하므로 무한 압축을 얻을 수 있다. 대가는 시간이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Codificación KV especulativa: compresión sin pérdida del caché KV hasta ~4x
+***** TLDR
+Una técnica para comprimir cachés KV de LLM usando un modelo predictor más pequeño para impulsar un codificador aritmético. El modelo borrador puede predecir la mayoría de las entradas del caché KV del modelo objetivo, haciéndolas compresibles. Afirma compresión sin pérdida de hasta 4x.
+***** Take
+Idea inteligente pero los comentarios son escépticos - recalcular incluso un borrador del caché KV sigue siendo cuadrático en longitud de contexto. Resulta que 'sin pérdida' no significa 'gratis'.
+***** Comments
+- El problema con este enfoque es que incluso recalcular un 'borrador' del caché KV sigue siendo cuadrático en longitud de contexto.
+- Aquí no hay compresión.
+- Puedes usar el modelo original para comprimir el caché kv y obtener compresión infinita, ya que la predicción es perfecta. El costo es tiempo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Spekulatives KV-Coding: KV-Cache verlustfrei um bis zu ~4x komprimieren
+***** TLDR
+Eine Technik zur Kompression von LLM KV-Caches mit einem kleineren Prädiktionsmodell als Treiber eines arithmetischen Codierers. Das Draft-Modell kann die meisten KV-Cache-Einträge des Zielmodells vorhersagen, wodurch sie komprimierbar werden. Behauptet bis zu 4x verlustfreie Kompression.
+***** Take
+Clevere Idee, aber die Kommentare sind skeptisch - selbst die Neuberechnung eines Draft-KV-Cache ist quadratisch in der Kontextlänge. 'Verlustfrei' heißt nicht 'kostenlos'.
+***** Comments
+- Das Problem bei diesem Ansatz ist, dass selbst die Neuberechnung eines 'Drafts' des KV-Cache quadratisch in der Kontextlänge ist.
+- Hier findet keine Kompression statt.
+- Man kann das Originalmodell verwenden, um den kv-Cache zu komprimieren und unendliche Kompression zu erhalten, da die Vorhersage perfekt ist. Der Preis ist Zeit.
+** Win16 Memory Management :windows:retro:memory:
+:PROPERTIES:
+:ID:       48410844
+:URL:      http://www.os2museum.com/wp/win16-memory-management/
+:HN_URL:   https://news.ycombinator.com/item?id=48410844
+:POINTS:   31
+:COMMENTS: 6
+:BY:       supermatou
+:END:
+
+*** TLDR
+A deep dive into how Windows 3.x managed memory on 16-bit systems, covering segments, selectors, and the constant battle to work within 640KB constraints while pretending to have more. Pure retro OS archaeology.
+
+*** Take
+Reading this makes modern developers look spoiled. We complain about memory leaks while Win16 devs played 4D chess with segment registers just to malloc().
+
+*** Comments
+
+**** jdw64
+:PROPERTIES:
+:COMMENT_ID: 48410900
+:END:
+Sometimes I think that if it were the old days, I probably wouldn't have been able to program. I remember that these days we program on top of 64bit virtual addresses, but how did developers do it back then
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Win16内存管理
+***** TLDR
+深入探讨Windows 3.x如何在16位系统上管理内存，涵盖段、选择器，以及在640KB限制内工作同时假装拥有更多内存的持续斗争。纯粹的复古操作系统考古学。
+***** Take
+读完这个，现代开发者看起来太娇生惯养了。我们抱怨内存泄漏，而Win16开发者只是为了malloc()就得玩四维象棋操作段寄存器。
+***** Comments
+- 有时候我想，如果是在过去，我可能根本不会编程。我记得现在我们在64位虚拟地址上编程，但那时候的开发者是怎么做到的
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Win16メモリ管理
+***** TLDR
+Windows 3.xが16ビットシステムでどのようにメモリを管理していたかの詳細な分析。セグメント、セレクタ、そして640KB制約内で動作しながらより多くのメモリがあるふりをする絶え間ない戦いをカバー。純粋なレトロOS考古学。
+***** Take
+これを読むと現代の開発者は甘やかされているように見える。メモリリークについて文句を言っている間、Win16開発者はmalloc()するだけでセグメントレジスタで4次元チェスをしていた。
+***** Comments
+- 昔だったら、プログラミングできなかっただろうと思うことがある。今は64ビット仮想アドレスの上でプログラミングしているが、当時の開発者はどうやっていたのか
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Win16 메모리 관리
+***** TLDR
+Windows 3.x가 16비트 시스템에서 메모리를 어떻게 관리했는지에 대한 심층 분석. 세그먼트, 셀렉터, 그리고 640KB 제약 내에서 작동하면서 더 많은 메모리가 있는 척하는 끊임없는 싸움을 다룬다. 순수한 레트로 OS 고고학.
+***** Take
+이걸 읽으면 현대 개발자들이 버릇없어 보인다. 우리는 메모리 누수에 대해 불평하는데, Win16 개발자들은 malloc() 하나 하려고 세그먼트 레지스터로 4차원 체스를 뒀다.
+***** Comments
+- 가끔 옛날이었다면 프로그래밍을 못했을 거라고 생각한다. 요즘은 64비트 가상 주소 위에서 프로그래밍하는데, 그때 개발자들은 어떻게 했을까
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Gestión de memoria Win16
+***** TLDR
+Un análisis profundo de cómo Windows 3.x gestionaba la memoria en sistemas de 16 bits, cubriendo segmentos, selectores, y la batalla constante por trabajar dentro de las restricciones de 640KB mientras pretendía tener más. Pura arqueología de SO retro.
+***** Take
+Leer esto hace que los desarrolladores modernos parezcan mimados. Nos quejamos de fugas de memoria mientras los devs de Win16 jugaban ajedrez 4D con registros de segmento solo para hacer malloc().
+***** Comments
+- A veces pienso que si fueran los viejos tiempos, probablemente no habría podido programar. Recuerdo que hoy programamos sobre direcciones virtuales de 64 bits, pero ¿cómo lo hacían los desarrolladores entonces?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Win16 Speicherverwaltung
+***** TLDR
+Ein tiefer Einblick in die Speicherverwaltung von Windows 3.x auf 16-Bit-Systemen, mit Segmenten, Selektoren und dem ständigen Kampf, innerhalb der 640KB-Grenzen zu arbeiten und dabei so zu tun, als hätte man mehr. Reine Retro-OS-Archäologie.
+***** Take
+Das zu lesen lässt moderne Entwickler verwöhnt aussehen. Wir beschweren uns über Speicherlecks, während Win16-Devs 4D-Schach mit Segmentregistern spielten, nur um malloc() aufzurufen.
+***** Comments
+- Manchmal denke ich, dass ich früher wahrscheinlich nicht hätte programmieren können. Ich erinnere mich, dass wir heute auf 64-Bit virtuellen Adressen programmieren, aber wie haben die Entwickler das damals gemacht
+** Scientists ejected from diabetes conference for distributing journal reprints :science:nih:politics:
+:PROPERTIES:
+:ID:       48433410
+:URL:      https://arstechnica.com/science/2026/06/scientists-ejected-from-diabetes-conference-for-distributing-journal-reprints/
+:HN_URL:   https://news.ycombinator.com/item?id=48433410
+:POINTS:   25
+:COMMENTS: 9
+:BY:       BerislavLopac
+:END:
+
+*** TLDR
+Scientists were kicked out of a diabetes conference not for copyright issues but for distributing an editorial criticizing how the administration is running the NIH. Science funding in the US is apparently under enough stress that handing out papers gets you escorted out.
+
+*** Take
+When distributing peer-reviewed research at a scientific conference becomes a subversive act, something has gone deeply wrong. Academic freedom speedrun any%.
+
+*** Comments
+
+**** jfengel
+:PROPERTIES:
+:COMMENT_ID: 48433500
+:END:
+Headline is weird. It's not a copyright thing, as I had assumed. It was because it was an editorial criticizing how the administration is running the NIH.
+
+**** nritchie
+:PROPERTIES:
+:COMMENT_ID: 48433550
+:END:
+Science funding in the US is in crisis. We need to stand with those bold enough to point out that the emperor has no clothing.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+科学家因分发期刊重印本被糖尿病会议驱逐
+***** TLDR
+科学家被糖尿病会议驱逐，不是因为版权问题，而是因为分发批评政府管理NIH方式的社论。美国科学资助显然压力巨大，以至于分发论文都会被请出去。
+***** Take
+当在科学会议上分发同行评审研究成为颠覆性行为时，某些事情已经严重出错了。学术自由速通任意%。
+***** Comments
+- 标题很奇怪。这不是版权问题，正如我所假设的。而是因为这是一篇批评政府如何管理NIH的社论。
+- 美国科学资助正处于危机之中。我们需要支持那些敢于指出皇帝没穿衣服的人。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+科学者が学術誌の別刷りを配布したため糖尿病会議から退場させられる
+***** TLDR
+科学者が糖尿病会議から追い出されたのは著作権問題ではなく、政権がNIHをどう運営しているかを批判する論説を配布したため。米国の科学助成は、論文を配るだけで退場させられるほど逼迫しているようだ。
+***** Take
+科学会議で査読済み研究を配布することが破壊的行為になるとき、何かが深刻に間違っている。学術の自由スピードランany%。
+***** Comments
+- 見出しが変だ。私が想定したような著作権の問題ではない。政権がNIHをどう運営しているかを批判する論説だったからだ。
+- 米国の科学助成は危機的状況にある。皇帝は裸だと指摘する勇気のある人々を支持する必要がある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+과학자들이 학술지 별쇄본 배포로 당뇨병 학회에서 퇴장당해
+***** TLDR
+과학자들이 당뇨병 학회에서 쫓겨났는데, 저작권 문제가 아니라 정부의 NIH 운영을 비판하는 사설을 배포했기 때문이다. 미국 과학 자금 지원이 논문을 나눠주는 것만으로도 퇴장당할 정도로 압박받고 있는 듯하다.
+***** Take
+과학 학회에서 동료 심사를 거친 연구를 배포하는 것이 전복적 행위가 될 때, 뭔가 심각하게 잘못된 것이다. 학문의 자유 스피드런 any%.
+***** Comments
+- 헤드라인이 이상하다. 내가 가정했던 것처럼 저작권 문제가 아니다. 정부가 NIH를 어떻게 운영하는지 비판하는 사설이었기 때문이다.
+- 미국 과학 자금 지원이 위기에 처해 있다. 임금님이 옷을 입지 않았다고 지적할 용기가 있는 사람들을 지지해야 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Científicos expulsados de conferencia de diabetes por distribuir reimpresiones de revistas
+***** TLDR
+Los científicos fueron expulsados de una conferencia de diabetes no por problemas de derechos de autor sino por distribuir un editorial que critica cómo la administración está dirigiendo el NIH. La financiación científica en EE.UU. aparentemente está bajo suficiente presión como para que repartir artículos te escolten fuera.
+***** Take
+Cuando distribuir investigación revisada por pares en una conferencia científica se convierte en un acto subversivo, algo ha ido muy mal. Speedrun de libertad académica any%.
+***** Comments
+- El titular es raro. No es un tema de derechos de autor, como había asumido. Fue porque era un editorial criticando cómo la administración está dirigiendo el NIH.
+- La financiación científica en EE.UU. está en crisis. Necesitamos apoyar a aquellos lo suficientemente valientes para señalar que el emperador no tiene ropa.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wissenschaftler von Diabetes-Konferenz verwiesen wegen Verteilung von Zeitschriftenabdrucken
+***** TLDR
+Wissenschaftler wurden von einer Diabetes-Konferenz geworfen, nicht wegen Urheberrechtsproblemen, sondern weil sie einen Leitartikel verteilten, der kritisiert, wie die Regierung das NIH führt. Die Wissenschaftsfinanzierung in den USA steht offenbar so unter Druck, dass das Verteilen von Papieren zum Rauswurf führt.
+***** Take
+Wenn das Verteilen von peer-reviewter Forschung auf einer wissenschaftlichen Konferenz zu einem subversiven Akt wird, ist etwas grundlegend schief gelaufen. Akademische Freiheit Speedrun any%.
+***** Comments
+- Die Überschrift ist seltsam. Es ist kein Urheberrechtsding, wie ich angenommen hatte. Es war, weil es ein Leitartikel war, der kritisiert, wie die Regierung das NIH führt.
+- Die Wissenschaftsfinanzierung in den USA ist in einer Krise. Wir müssen zu denen stehen, die mutig genug sind, darauf hinzuweisen, dass der Kaiser keine Kleider trägt.
+** Biohub releases a world model of protein biology :biotech:ai:research:
+:PROPERTIES:
+:ID:       48393252
+:URL:      https://biohub.org/news/world-model-of-protein-biology/
+:HN_URL:   https://news.ycombinator.com/item?id=48393252
+:POINTS:   85
+:COMMENTS: 8
+:BY:       gmays
+:END:
+
+*** TLDR
+Biohub, a nonprofit biomedical research org backed by big names, released a 'world model' for protein biology. The goal: cure or prevent all diseases. They're training AI on protein structures and interactions to predict biological behavior.
+
+*** Take
+Mission: cure all diseases. Nonprofit status: technically. Comments mostly wondering if this is OpenAI-style 'nonprofit' or actual nonprofit. Fair question.
+
+*** Comments
+
+**** tmoertel
+:PROPERTIES:
+:COMMENT_ID: 48393300
+:END:
+Our mission is to cure or prevent all disease - Okay, now you have my attention. What's the deal on the company behind it? Nonprofit. Nifty! But as we have recently seen with OpenAI, there is nonprofit and then there is nonprofit.
+
+**** Frannky
+:PROPERTIES:
+:COMMENT_ID: 48393350
+:END:
+It's interesting that there are almost no comments on this. This feels like some of the most exciting and impactful fields of the next years.
+
+**** Den_VR
+:PROPERTIES:
+:COMMENT_ID: 48393400
+:END:
+Incredible, but also scary if you think about what it may be lowering the barrier of entry to...
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Biohub发布蛋白质生物学世界模型
+***** TLDR
+Biohub，一个由大人物支持的非营利生物医学研究机构，发布了蛋白质生物学的'世界模型'。目标：治愈或预防所有疾病。他们正在用蛋白质结构和相互作用来训练AI以预测生物行为。
+***** Take
+使命：治愈所有疾病。非营利状态：技术上是。评论大多在想这是OpenAI式的'非营利'还是真正的非营利。问得好。
+***** Comments
+- 我们的使命是治愈或预防所有疾病 - 好的，现在你引起了我的注意。这家公司是什么情况？非营利。不错！但正如我们最近在OpenAI看到的，非营利和非营利之间是有区别的。
+- 有趣的是这里几乎没有评论。这感觉像是未来几年最令人兴奋和最具影响力的领域之一。
+- 令人难以置信，但如果你想想它可能降低了什么门槛，也很可怕...
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Biohubがタンパク質生物学のワールドモデルをリリース
+***** TLDR
+大物に支援された非営利の生物医学研究機関Biohubが、タンパク質生物学の「ワールドモデル」をリリースした。目標：すべての病気を治療または予防すること。タンパク質の構造と相互作用でAIを訓練し、生物学的挙動を予測している。
+***** Take
+ミッション：すべての病気を治す。非営利ステータス：技術的には。コメントはこれがOpenAIスタイルの「非営利」なのか本当の非営利なのかを主に疑問視している。妥当な質問だ。
+***** Comments
+- 私たちのミッションはすべての病気を治療または予防すること - なるほど、注目だ。この会社の実態は？非営利。素敵！でも最近OpenAIで見たように、非営利にも色々ある。
+- 興味深いことに、これにはほとんどコメントがない。これは今後数年で最もエキサイティングでインパクトのある分野のように感じる。
+- 信じられないが、参入障壁を何に対して下げているか考えると怖い...
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Biohub, 단백질 생물학 세계 모델 출시
+***** TLDR
+거물들이 후원하는 비영리 생의학 연구 기관 Biohub가 단백질 생물학 '세계 모델'을 출시했다. 목표: 모든 질병 치료 또는 예방. 단백질 구조와 상호작용으로 AI를 훈련시켜 생물학적 행동을 예측한다.
+***** Take
+미션: 모든 질병 치료. 비영리 상태: 기술적으로는. 댓글은 대부분 이게 OpenAI 스타일의 '비영리'인지 진짜 비영리인지 궁금해한다. 타당한 질문.
+***** Comments
+- 우리의 미션은 모든 질병을 치료하거나 예방하는 것 - 좋아, 이제 관심이 간다. 이 회사 뒤에 뭐가 있지? 비영리. 멋지네! 하지만 최근 OpenAI에서 봤듯이, 비영리와 비영리는 다르다.
+- 흥미롭게도 이것에 대한 댓글이 거의 없다. 앞으로 몇 년간 가장 흥미롭고 영향력 있는 분야처럼 느껴진다.
+- 믿을 수 없지만, 무엇에 대한 진입 장벽을 낮추고 있는지 생각하면 무섭기도 하다...
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Biohub lanza un modelo mundial de biología de proteínas
+***** TLDR
+Biohub, una organización de investigación biomédica sin fines de lucro respaldada por grandes nombres, lanzó un 'modelo mundial' para biología de proteínas. El objetivo: curar o prevenir todas las enfermedades. Están entrenando IA con estructuras e interacciones de proteínas para predecir el comportamiento biológico.
+***** Take
+Misión: curar todas las enfermedades. Estado sin fines de lucro: técnicamente. Los comentarios se preguntan si es 'sin fines de lucro' estilo OpenAI o realmente sin fines de lucro. Pregunta justa.
+***** Comments
+- Nuestra misión es curar o prevenir toda enfermedad - Ok, ahora tienes mi atención. ¿Qué hay con la empresa detrás? Sin fines de lucro. ¡Genial! Pero como hemos visto recientemente con OpenAI, hay sin fines de lucro y sin fines de lucro.
+- Es interesante que casi no hay comentarios sobre esto. Se siente como uno de los campos más emocionantes e impactantes de los próximos años.
+- Increíble, pero también aterrador si piensas en qué barrera de entrada puede estar bajando...
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Biohub veröffentlicht ein Weltmodell der Proteinbiologie
+***** TLDR
+Biohub, eine gemeinnützige biomedizinische Forschungsorganisation mit prominenten Unterstützern, hat ein 'Weltmodell' für Proteinbiologie veröffentlicht. Das Ziel: alle Krankheiten heilen oder verhindern. Sie trainieren KI mit Proteinstrukturen und -interaktionen, um biologisches Verhalten vorherzusagen.
+***** Take
+Mission: alle Krankheiten heilen. Gemeinnütziger Status: technisch gesehen. Kommentare fragen sich hauptsächlich, ob dies 'gemeinnützig' im OpenAI-Stil oder echte Gemeinnützigkeit ist. Faire Frage.
+***** Comments
+- Unsere Mission ist es, alle Krankheiten zu heilen oder zu verhindern - Okay, jetzt habe ich Aufmerksamkeit. Was ist mit der Firma dahinter? Gemeinnützig. Nett! Aber wie wir kürzlich bei OpenAI gesehen haben, gibt es gemeinnützig und gemeinnützig.
+- Interessant, dass es fast keine Kommentare dazu gibt. Das fühlt sich wie eines der aufregendsten und wirkungsvollsten Felder der nächsten Jahre an.
+- Unglaublich, aber auch beängstigend, wenn man bedenkt, zu was es die Einstiegshürde senken könnte...
+** Arithmetic Without Numbers – How LLMs Do Math :llm:math:ai:
+:PROPERTIES:
+:ID:       48410427
+:URL:      https://alvaro-videla.com/llm-arithmetic-internals/article_interactive/article.html
+:HN_URL:   https://news.ycombinator.com/item?id=48410427
+:POINTS:   31
+:COMMENTS: 9
+:BY:       old_sound
+:END:
+
+*** TLDR
+An interactive exploration of how LLMs perform arithmetic operations internally. Spoiler: they don't actually 'know' numbers - they've learned statistical patterns that approximate mathematical operations. It's pattern matching all the way down.
+
+*** Take
+The spirit of Rube Goldberg is alive and well. We built trillion-parameter models to approximately guess what 2+2 equals. Meanwhile one commenter asks why we don't just call Mathematica.
+
+*** Comments
+
+**** Npovview
+:PROPERTIES:
+:COMMENT_ID: 48410500
+:END:
+Leslie Lamport: 'I am not smart. I have the gift of abstraction.' Real mathematics isn't about details. Its about concepts and abstractions and how we compose them.
+
+**** iammjm
+:PROPERTIES:
+:COMMENT_ID: 48410550
+:END:
+Why doesn't it just call tools such as Mathematica for such operations?
+
+**** euroderf
+:PROPERTIES:
+:COMMENT_ID: 48410600
+:END:
+The spirit of Rube Goldberg is alive and well.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+没有数字的算术 – LLM如何做数学
+***** TLDR
+一个关于LLM如何在内部执行算术运算的互动探索。剧透：它们实际上并不'知道'数字 - 它们学习了近似数学运算的统计模式。一路到底都是模式匹配。
+***** Take
+鲁布·戈德堡的精神依然健在。我们建造了万亿参数的模型来大致猜测2+2等于多少。与此同时，一位评论者问为什么我们不直接调用Mathematica。
+***** Comments
+- Leslie Lamport：'我不聪明。我有抽象的天赋。'真正的数学不是关于细节。而是关于概念和抽象以及我们如何组合它们。
+- 为什么不直接调用Mathematica这样的工具来做这些运算呢？
+- 鲁布·戈德堡的精神依然健在。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+数字なしの算術 – LLMはどのように計算するか
+***** TLDR
+LLMが内部でどのように算術演算を行うかのインタラクティブな探求。ネタバレ：実際には数字を「知って」いるわけではない - 数学的操作を近似する統計パターンを学習している。すべてがパターンマッチング。
+***** Take
+ルーブ・ゴールドバーグの精神は健在だ。2+2が何かをおおよそ推測するために兆パラメータのモデルを構築した。一方であるコメンターはなぜMathematicaを呼び出さないのかと尋ねている。
+***** Comments
+- Leslie Lamport：「私は賢くない。抽象化の才能がある。」本当の数学は詳細についてではない。概念と抽象化、そしてそれらをどう組み合わせるかについてだ。
+- なぜそのような操作にMathematicaのようなツールを呼び出さないのか？
+- ルーブ・ゴールドバーグの精神は健在だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+숫자 없는 산술 – LLM은 어떻게 수학을 하는가
+***** TLDR
+LLM이 내부적으로 어떻게 산술 연산을 수행하는지에 대한 인터랙티브 탐구. 스포일러: 실제로 숫자를 '알지' 못한다 - 수학적 연산을 근사하는 통계적 패턴을 학습했다. 끝까지 패턴 매칭이다.
+***** Take
+루브 골드버그의 정신은 건재하다. 2+2가 뭔지 대략 추측하려고 조 단위 파라미터 모델을 만들었다. 한편 어떤 댓글러는 왜 그냥 Mathematica를 호출하지 않느냐고 묻는다.
+***** Comments
+- Leslie Lamport: '나는 똑똑하지 않다. 추상화의 재능이 있다.' 진정한 수학은 세부사항에 관한 것이 아니다. 개념과 추상화, 그리고 우리가 그것들을 어떻게 구성하는지에 관한 것이다.
+- 왜 그런 연산에 Mathematica 같은 도구를 그냥 호출하지 않는가?
+- 루브 골드버그의 정신은 건재하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Aritmética sin números – Cómo los LLM hacen matemáticas
+***** TLDR
+Una exploración interactiva de cómo los LLM realizan operaciones aritméticas internamente. Spoiler: realmente no 'conocen' los números - han aprendido patrones estadísticos que aproximan operaciones matemáticas. Es pattern matching hasta el fondo.
+***** Take
+El espíritu de Rube Goldberg está vivo y coleando. Construimos modelos de billones de parámetros para aproximar cuánto es 2+2. Mientras tanto un comentarista pregunta por qué no simplemente llamamos a Mathematica.
+***** Comments
+- Leslie Lamport: 'No soy inteligente. Tengo el don de la abstracción.' Las matemáticas reales no tratan de detalles. Tratan de conceptos y abstracciones y cómo los componemos.
+- ¿Por qué no simplemente llama a herramientas como Mathematica para tales operaciones?
+- El espíritu de Rube Goldberg está vivo y coleando.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Arithmetik ohne Zahlen – Wie LLMs Mathematik machen
+***** TLDR
+Eine interaktive Erkundung, wie LLMs intern arithmetische Operationen durchführen. Spoiler: Sie 'kennen' Zahlen nicht wirklich - sie haben statistische Muster gelernt, die mathematische Operationen approximieren. Es ist Pattern Matching bis ganz unten.
+***** Take
+Der Geist von Rube Goldberg lebt weiter. Wir haben Billionen-Parameter-Modelle gebaut, um ungefähr zu erraten, was 2+2 ergibt. Währenddessen fragt ein Kommentator, warum wir nicht einfach Mathematica aufrufen.
+***** Comments
+- Leslie Lamport: 'Ich bin nicht schlau. Ich habe die Gabe der Abstraktion.' Echte Mathematik handelt nicht von Details. Es geht um Konzepte und Abstraktionen und wie wir sie zusammensetzen.
+- Warum ruft es nicht einfach Tools wie Mathematica für solche Operationen auf?
+- Der Geist von Rube Goldberg lebt weiter.

@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-06-07</div>
+      <a href="#s48400151-06071100">Speculative KV coding: losslessly compre...</a>
+      <a href="#s48410844-06071100">Win16 Memory Management</a>
+      <a href="#s48433410-06071100">Scientists ejected from diabetes confere...</a>
+      <a href="#s48393252-06071100">Biohub releases a world model of protein...</a>
+      <a href="#s48410427-06071100">Arithmetic Without Numbers – How LLMs Do...</a>
       <a href="#s48432199-06070930">The 29th International Obfuscated C Code...</a>
       <a href="#s48431981-06070930">I design with Claude more than Figma now</a>
       <a href="#s48415457-06070930">Symbolica 2.0: Programmable Symbols for ...</a>
@@ -546,6 +551,320 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-06-07T11:00:00Z</div>
+        <div class="digest-vibe">KV cache gets squeezed, Win16 memories haunt devs, and scientists get kicked out of their own conference</div>
+      </div>
+      <article class="story" id="s48400151-06071100">
+      <h3 class="story-title">
+        <a href="https://fergusfinn.com/blog/kv-entropy-coder/" target="_blank">Speculative KV coding: losslessly compressing KV cache by up to ~4x</a>
+        <a href="#s48400151-06071100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">推测性KV编码：无损压缩KV缓存高达约4倍</div>
+<div class="i18n-title" data-lang="ja">投機的KVコーディング：KVキャッシュを最大約4倍にロスレス圧縮</div>
+<div class="i18n-title" data-lang="ko">투기적 KV 코딩: KV 캐시를 최대 약 4배 무손실 압축</div>
+<div class="i18n-title" data-lang="es">Codificación KV especulativa: compresión sin pérdida del caché KV hasta ~4x</div>
+<div class="i18n-title" data-lang="de">Spekulatives KV-Coding: KV-Cache verlustfrei um bis zu ~4x komprimieren</div>
+
+      <div class="story-meta">
+        51pts | 8c | <a href="https://news.ycombinator.com/item?id=48400151" target="_blank">HN#48400151</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">A technique to compress LLM KV caches using a smaller predictor model to drive an arithmetic coder. The idea is that a draft model can predict most of the target model&#x27;s KV cache entries, making them compressible. Claims up to 4x lossless compression.</div>
+        <span class="i18n-text" data-lang="zh">一种利用较小的预测模型驱动算术编码器来压缩LLM KV缓存的技术。草案模型可以预测目标模型的大部分KV缓存条目，使其可压缩。号称无损压缩最高4倍。</span>
+<span class="i18n-text" data-lang="ja">小さな予測モデルを使って算術符号器を駆動し、LLMのKVキャッシュを圧縮する手法。ドラフトモデルがターゲットモデルのKVキャッシュエントリの大部分を予測できるため、圧縮可能になる。最大4倍のロスレス圧縮を主張。</span>
+<span class="i18n-text" data-lang="ko">작은 예측 모델을 사용해 산술 코더를 구동하여 LLM KV 캐시를 압축하는 기술. 드래프트 모델이 타겟 모델의 KV 캐시 항목 대부분을 예측할 수 있어 압축 가능. 최대 4배 무손실 압축 주장.</span>
+<span class="i18n-text" data-lang="es">Una técnica para comprimir cachés KV de LLM usando un modelo predictor más pequeño para impulsar un codificador aritmético. El modelo borrador puede predecir la mayoría de las entradas del caché KV del modelo objetivo, haciéndolas compresibles. Afirma compresión sin pérdida de hasta 4x.</span>
+<span class="i18n-text" data-lang="de">Eine Technik zur Kompression von LLM KV-Caches mit einem kleineren Prädiktionsmodell als Treiber eines arithmetischen Codierers. Das Draft-Modell kann die meisten KV-Cache-Einträge des Zielmodells vorhersagen, wodurch sie komprimierbar werden. Behauptet bis zu 4x verlustfreie Kompression.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Clever idea but the comments are skeptical - recomputing even a draft KV cache is still quadratic in context length. Turns out &#x27;lossless&#x27; doesn&#x27;t mean &#x27;free&#x27;.</div>
+        <span class="i18n-text" data-lang="zh">聪明的想法，但评论持怀疑态度——即使重新计算草案KV缓存，复杂度仍然是上下文长度的二次方。原来&#x27;无损&#x27;不等于&#x27;免费&#x27;。</span>
+<span class="i18n-text" data-lang="ja">賢いアイデアだがコメントは懐疑的 - ドラフトKVキャッシュの再計算でさえコンテキスト長の二乗。「ロスレス」は「タダ」じゃない。</span>
+<span class="i18n-text" data-lang="ko">영리한 아이디어지만 댓글은 회의적 - 드래프트 KV 캐시 재계산도 컨텍스트 길이의 제곱. &#x27;무손실&#x27;이 &#x27;무료&#x27;는 아니더라.</span>
+<span class="i18n-text" data-lang="es">Idea inteligente pero los comentarios son escépticos - recalcular incluso un borrador del caché KV sigue siendo cuadrático en longitud de contexto. Resulta que &#x27;sin pérdida&#x27; no significa &#x27;gratis&#x27;.</span>
+<span class="i18n-text" data-lang="de">Clevere Idee, aber die Kommentare sind skeptisch - selbst die Neuberechnung eines Draft-KV-Cache ist quadratisch in der Kontextlänge. &#x27;Verlustfrei&#x27; heißt nicht &#x27;kostenlos&#x27;.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"The problem with this approach is that even recomputing a &#x27;draft&#x27; of the KV cache is still quadratic in context length."</div>
+          <div class="comment-i18n" data-lang="zh">这种方法的问题是，即使重新计算KV缓存的&#x27;草案&#x27;，复杂度仍然是上下文长度的二次方。</div>
+<div class="comment-i18n" data-lang="ja">このアプローチの問題は、KVキャッシュの「ドラフト」を再計算するだけでも、コンテキスト長の二乗になることだ。</div>
+<div class="comment-i18n" data-lang="ko">이 접근법의 문제는 KV 캐시의 &#x27;드래프트&#x27;를 재계산하는 것조차 컨텍스트 길이의 제곱이라는 것이다.</div>
+<div class="comment-i18n" data-lang="es">El problema con este enfoque es que incluso recalcular un &#x27;borrador&#x27; del caché KV sigue siendo cuadrático en longitud de contexto.</div>
+<div class="comment-i18n" data-lang="de">Das Problem bei diesem Ansatz ist, dass selbst die Neuberechnung eines &#x27;Drafts&#x27; des KV-Cache quadratisch in der Kontextlänge ist.</div>
+
+          <div class="comment-author">-- zozbot234</div>
+        </div><div class="comment">
+          <div class="comment-text">"There is no compression taking place here."</div>
+          <div class="comment-i18n" data-lang="zh">这里根本没有压缩发生。</div>
+<div class="comment-i18n" data-lang="ja">ここでは圧縮は行われていない。</div>
+<div class="comment-i18n" data-lang="ko">여기서 압축은 일어나지 않는다.</div>
+<div class="comment-i18n" data-lang="es">Aquí no hay compresión.</div>
+<div class="comment-i18n" data-lang="de">Hier findet keine Kompression statt.</div>
+
+          <div class="comment-author">-- monster_truck</div>
+        </div><div class="comment">
+          <div class="comment-text">"You can use the original model to compress the kv cache and get infinity compression, since the prediction is perfect. The cost is time."</div>
+          <div class="comment-i18n" data-lang="zh">你可以用原始模型来压缩kv缓存，得到无限压缩，因为预测是完美的。代价是时间。</div>
+<div class="comment-i18n" data-lang="ja">元のモデルを使ってkvキャッシュを圧縮すれば、予測が完璧なので無限圧縮が得られる。コストは時間だ。</div>
+<div class="comment-i18n" data-lang="ko">원본 모델을 사용해 kv 캐시를 압축하면 예측이 완벽하므로 무한 압축을 얻을 수 있다. 대가는 시간이다.</div>
+<div class="comment-i18n" data-lang="es">Puedes usar el modelo original para comprimir el caché kv y obtener compresión infinita, ya que la predicción es perfecta. El costo es tiempo.</div>
+<div class="comment-i18n" data-lang="de">Man kann das Originalmodell verwenden, um den kv-Cache zu komprimieren und unendliche Kompression zu erhalten, da die Vorhersage perfekt ist. Der Preis ist Zeit.</div>
+
+          <div class="comment-author">-- 0-_-0</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#llm</span><span class="tag">#compression</span><span class="tag">#ml</span></div>
+    </article>
+<article class="story" id="s48410844-06071100">
+      <h3 class="story-title">
+        <a href="http://www.os2museum.com/wp/win16-memory-management/" target="_blank">Win16 Memory Management</a>
+        <a href="#s48410844-06071100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Win16内存管理</div>
+<div class="i18n-title" data-lang="ja">Win16メモリ管理</div>
+<div class="i18n-title" data-lang="ko">Win16 메모리 관리</div>
+<div class="i18n-title" data-lang="es">Gestión de memoria Win16</div>
+<div class="i18n-title" data-lang="de">Win16 Speicherverwaltung</div>
+
+      <div class="story-meta">
+        31pts | 6c | <a href="https://news.ycombinator.com/item?id=48410844" target="_blank">HN#48410844</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">A deep dive into how Windows 3.x managed memory on 16-bit systems, covering segments, selectors, and the constant battle to work within 640KB constraints while pretending to have more. Pure retro OS archaeology.</div>
+        <span class="i18n-text" data-lang="zh">深入探讨Windows 3.x如何在16位系统上管理内存，涵盖段、选择器，以及在640KB限制内工作同时假装拥有更多内存的持续斗争。纯粹的复古操作系统考古学。</span>
+<span class="i18n-text" data-lang="ja">Windows 3.xが16ビットシステムでどのようにメモリを管理していたかの詳細な分析。セグメント、セレクタ、そして640KB制約内で動作しながらより多くのメモリがあるふりをする絶え間ない戦いをカバー。純粋なレトロOS考古学。</span>
+<span class="i18n-text" data-lang="ko">Windows 3.x가 16비트 시스템에서 메모리를 어떻게 관리했는지에 대한 심층 분석. 세그먼트, 셀렉터, 그리고 640KB 제약 내에서 작동하면서 더 많은 메모리가 있는 척하는 끊임없는 싸움을 다룬다. 순수한 레트로 OS 고고학.</span>
+<span class="i18n-text" data-lang="es">Un análisis profundo de cómo Windows 3.x gestionaba la memoria en sistemas de 16 bits, cubriendo segmentos, selectores, y la batalla constante por trabajar dentro de las restricciones de 640KB mientras pretendía tener más. Pura arqueología de SO retro.</span>
+<span class="i18n-text" data-lang="de">Ein tiefer Einblick in die Speicherverwaltung von Windows 3.x auf 16-Bit-Systemen, mit Segmenten, Selektoren und dem ständigen Kampf, innerhalb der 640KB-Grenzen zu arbeiten und dabei so zu tun, als hätte man mehr. Reine Retro-OS-Archäologie.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Reading this makes modern developers look spoiled. We complain about memory leaks while Win16 devs played 4D chess with segment registers just to malloc().</div>
+        <span class="i18n-text" data-lang="zh">读完这个，现代开发者看起来太娇生惯养了。我们抱怨内存泄漏，而Win16开发者只是为了malloc()就得玩四维象棋操作段寄存器。</span>
+<span class="i18n-text" data-lang="ja">これを読むと現代の開発者は甘やかされているように見える。メモリリークについて文句を言っている間、Win16開発者はmalloc()するだけでセグメントレジスタで4次元チェスをしていた。</span>
+<span class="i18n-text" data-lang="ko">이걸 읽으면 현대 개발자들이 버릇없어 보인다. 우리는 메모리 누수에 대해 불평하는데, Win16 개발자들은 malloc() 하나 하려고 세그먼트 레지스터로 4차원 체스를 뒀다.</span>
+<span class="i18n-text" data-lang="es">Leer esto hace que los desarrolladores modernos parezcan mimados. Nos quejamos de fugas de memoria mientras los devs de Win16 jugaban ajedrez 4D con registros de segmento solo para hacer malloc().</span>
+<span class="i18n-text" data-lang="de">Das zu lesen lässt moderne Entwickler verwöhnt aussehen. Wir beschweren uns über Speicherlecks, während Win16-Devs 4D-Schach mit Segmentregistern spielten, nur um malloc() aufzurufen.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Sometimes I think that if it were the old days, I probably wouldn&#x27;t have been able to program. I remember that these days we program on top of 64bit virtual addresses, but how did developers do it back then"</div>
+          <div class="comment-i18n" data-lang="zh">有时候我想，如果是在过去，我可能根本不会编程。我记得现在我们在64位虚拟地址上编程，但那时候的开发者是怎么做到的</div>
+<div class="comment-i18n" data-lang="ja">昔だったら、プログラミングできなかっただろうと思うことがある。今は64ビット仮想アドレスの上でプログラミングしているが、当時の開発者はどうやっていたのか</div>
+<div class="comment-i18n" data-lang="ko">가끔 옛날이었다면 프로그래밍을 못했을 거라고 생각한다. 요즘은 64비트 가상 주소 위에서 프로그래밍하는데, 그때 개발자들은 어떻게 했을까</div>
+<div class="comment-i18n" data-lang="es">A veces pienso que si fueran los viejos tiempos, probablemente no habría podido programar. Recuerdo que hoy programamos sobre direcciones virtuales de 64 bits, pero ¿cómo lo hacían los desarrolladores entonces?</div>
+<div class="comment-i18n" data-lang="de">Manchmal denke ich, dass ich früher wahrscheinlich nicht hätte programmieren können. Ich erinnere mich, dass wir heute auf 64-Bit virtuellen Adressen programmieren, aber wie haben die Entwickler das damals gemacht</div>
+
+          <div class="comment-author">-- jdw64</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#windows</span><span class="tag">#retro</span><span class="tag">#memory</span></div>
+    </article>
+<article class="story" id="s48433410-06071100">
+      <h3 class="story-title">
+        <a href="https://arstechnica.com/science/2026/06/scientists-ejected-from-diabetes-conference-for-distributing-journal-reprints/" target="_blank">Scientists ejected from diabetes conference for distributing journal reprints</a>
+        <a href="#s48433410-06071100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">科学家因分发期刊重印本被糖尿病会议驱逐</div>
+<div class="i18n-title" data-lang="ja">科学者が学術誌の別刷りを配布したため糖尿病会議から退場させられる</div>
+<div class="i18n-title" data-lang="ko">과학자들이 학술지 별쇄본 배포로 당뇨병 학회에서 퇴장당해</div>
+<div class="i18n-title" data-lang="es">Científicos expulsados de conferencia de diabetes por distribuir reimpresiones de revistas</div>
+<div class="i18n-title" data-lang="de">Wissenschaftler von Diabetes-Konferenz verwiesen wegen Verteilung von Zeitschriftenabdrucken</div>
+
+      <div class="story-meta">
+        25pts | 9c | <a href="https://news.ycombinator.com/item?id=48433410" target="_blank">HN#48433410</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Scientists were kicked out of a diabetes conference not for copyright issues but for distributing an editorial criticizing how the administration is running the NIH. Science funding in the US is apparently under enough stress that handing out papers gets you escorted out.</div>
+        <span class="i18n-text" data-lang="zh">科学家被糖尿病会议驱逐，不是因为版权问题，而是因为分发批评政府管理NIH方式的社论。美国科学资助显然压力巨大，以至于分发论文都会被请出去。</span>
+<span class="i18n-text" data-lang="ja">科学者が糖尿病会議から追い出されたのは著作権問題ではなく、政権がNIHをどう運営しているかを批判する論説を配布したため。米国の科学助成は、論文を配るだけで退場させられるほど逼迫しているようだ。</span>
+<span class="i18n-text" data-lang="ko">과학자들이 당뇨병 학회에서 쫓겨났는데, 저작권 문제가 아니라 정부의 NIH 운영을 비판하는 사설을 배포했기 때문이다. 미국 과학 자금 지원이 논문을 나눠주는 것만으로도 퇴장당할 정도로 압박받고 있는 듯하다.</span>
+<span class="i18n-text" data-lang="es">Los científicos fueron expulsados de una conferencia de diabetes no por problemas de derechos de autor sino por distribuir un editorial que critica cómo la administración está dirigiendo el NIH. La financiación científica en EE.UU. aparentemente está bajo suficiente presión como para que repartir artículos te escolten fuera.</span>
+<span class="i18n-text" data-lang="de">Wissenschaftler wurden von einer Diabetes-Konferenz geworfen, nicht wegen Urheberrechtsproblemen, sondern weil sie einen Leitartikel verteilten, der kritisiert, wie die Regierung das NIH führt. Die Wissenschaftsfinanzierung in den USA steht offenbar so unter Druck, dass das Verteilen von Papieren zum Rauswurf führt.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">When distributing peer-reviewed research at a scientific conference becomes a subversive act, something has gone deeply wrong. Academic freedom speedrun any%.</div>
+        <span class="i18n-text" data-lang="zh">当在科学会议上分发同行评审研究成为颠覆性行为时，某些事情已经严重出错了。学术自由速通任意%。</span>
+<span class="i18n-text" data-lang="ja">科学会議で査読済み研究を配布することが破壊的行為になるとき、何かが深刻に間違っている。学術の自由スピードランany%。</span>
+<span class="i18n-text" data-lang="ko">과학 학회에서 동료 심사를 거친 연구를 배포하는 것이 전복적 행위가 될 때, 뭔가 심각하게 잘못된 것이다. 학문의 자유 스피드런 any%.</span>
+<span class="i18n-text" data-lang="es">Cuando distribuir investigación revisada por pares en una conferencia científica se convierte en un acto subversivo, algo ha ido muy mal. Speedrun de libertad académica any%.</span>
+<span class="i18n-text" data-lang="de">Wenn das Verteilen von peer-reviewter Forschung auf einer wissenschaftlichen Konferenz zu einem subversiven Akt wird, ist etwas grundlegend schief gelaufen. Akademische Freiheit Speedrun any%.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Headline is weird. It&#x27;s not a copyright thing, as I had assumed. It was because it was an editorial criticizing how the administration is running the NIH."</div>
+          <div class="comment-i18n" data-lang="zh">标题很奇怪。这不是版权问题，正如我所假设的。而是因为这是一篇批评政府如何管理NIH的社论。</div>
+<div class="comment-i18n" data-lang="ja">見出しが変だ。私が想定したような著作権の問題ではない。政権がNIHをどう運営しているかを批判する論説だったからだ。</div>
+<div class="comment-i18n" data-lang="ko">헤드라인이 이상하다. 내가 가정했던 것처럼 저작권 문제가 아니다. 정부가 NIH를 어떻게 운영하는지 비판하는 사설이었기 때문이다.</div>
+<div class="comment-i18n" data-lang="es">El titular es raro. No es un tema de derechos de autor, como había asumido. Fue porque era un editorial criticando cómo la administración está dirigiendo el NIH.</div>
+<div class="comment-i18n" data-lang="de">Die Überschrift ist seltsam. Es ist kein Urheberrechtsding, wie ich angenommen hatte. Es war, weil es ein Leitartikel war, der kritisiert, wie die Regierung das NIH führt.</div>
+
+          <div class="comment-author">-- jfengel</div>
+        </div><div class="comment">
+          <div class="comment-text">"Science funding in the US is in crisis. We need to stand with those bold enough to point out that the emperor has no clothing."</div>
+          <div class="comment-i18n" data-lang="zh">美国科学资助正处于危机之中。我们需要支持那些敢于指出皇帝没穿衣服的人。</div>
+<div class="comment-i18n" data-lang="ja">米国の科学助成は危機的状況にある。皇帝は裸だと指摘する勇気のある人々を支持する必要がある。</div>
+<div class="comment-i18n" data-lang="ko">미국 과학 자금 지원이 위기에 처해 있다. 임금님이 옷을 입지 않았다고 지적할 용기가 있는 사람들을 지지해야 한다.</div>
+<div class="comment-i18n" data-lang="es">La financiación científica en EE.UU. está en crisis. Necesitamos apoyar a aquellos lo suficientemente valientes para señalar que el emperador no tiene ropa.</div>
+<div class="comment-i18n" data-lang="de">Die Wissenschaftsfinanzierung in den USA ist in einer Krise. Wir müssen zu denen stehen, die mutig genug sind, darauf hinzuweisen, dass der Kaiser keine Kleider trägt.</div>
+
+          <div class="comment-author">-- nritchie</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#science</span><span class="tag">#nih</span><span class="tag">#politics</span></div>
+    </article>
+<article class="story" id="s48393252-06071100">
+      <h3 class="story-title">
+        <a href="https://biohub.org/news/world-model-of-protein-biology/" target="_blank">Biohub releases a world model of protein biology</a>
+        <a href="#s48393252-06071100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Biohub发布蛋白质生物学世界模型</div>
+<div class="i18n-title" data-lang="ja">Biohubがタンパク質生物学のワールドモデルをリリース</div>
+<div class="i18n-title" data-lang="ko">Biohub, 단백질 생물학 세계 모델 출시</div>
+<div class="i18n-title" data-lang="es">Biohub lanza un modelo mundial de biología de proteínas</div>
+<div class="i18n-title" data-lang="de">Biohub veröffentlicht ein Weltmodell der Proteinbiologie</div>
+
+      <div class="story-meta">
+        85pts | 8c | <a href="https://news.ycombinator.com/item?id=48393252" target="_blank">HN#48393252</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Biohub, a nonprofit biomedical research org backed by big names, released a &#x27;world model&#x27; for protein biology. The goal: cure or prevent all diseases. They&#x27;re training AI on protein structures and interactions to predict biological behavior.</div>
+        <span class="i18n-text" data-lang="zh">Biohub，一个由大人物支持的非营利生物医学研究机构，发布了蛋白质生物学的&#x27;世界模型&#x27;。目标：治愈或预防所有疾病。他们正在用蛋白质结构和相互作用来训练AI以预测生物行为。</span>
+<span class="i18n-text" data-lang="ja">大物に支援された非営利の生物医学研究機関Biohubが、タンパク質生物学の「ワールドモデル」をリリースした。目標：すべての病気を治療または予防すること。タンパク質の構造と相互作用でAIを訓練し、生物学的挙動を予測している。</span>
+<span class="i18n-text" data-lang="ko">거물들이 후원하는 비영리 생의학 연구 기관 Biohub가 단백질 생물학 &#x27;세계 모델&#x27;을 출시했다. 목표: 모든 질병 치료 또는 예방. 단백질 구조와 상호작용으로 AI를 훈련시켜 생물학적 행동을 예측한다.</span>
+<span class="i18n-text" data-lang="es">Biohub, una organización de investigación biomédica sin fines de lucro respaldada por grandes nombres, lanzó un &#x27;modelo mundial&#x27; para biología de proteínas. El objetivo: curar o prevenir todas las enfermedades. Están entrenando IA con estructuras e interacciones de proteínas para predecir el comportamiento biológico.</span>
+<span class="i18n-text" data-lang="de">Biohub, eine gemeinnützige biomedizinische Forschungsorganisation mit prominenten Unterstützern, hat ein &#x27;Weltmodell&#x27; für Proteinbiologie veröffentlicht. Das Ziel: alle Krankheiten heilen oder verhindern. Sie trainieren KI mit Proteinstrukturen und -interaktionen, um biologisches Verhalten vorherzusagen.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Mission: cure all diseases. Nonprofit status: technically. Comments mostly wondering if this is OpenAI-style &#x27;nonprofit&#x27; or actual nonprofit. Fair question.</div>
+        <span class="i18n-text" data-lang="zh">使命：治愈所有疾病。非营利状态：技术上是。评论大多在想这是OpenAI式的&#x27;非营利&#x27;还是真正的非营利。问得好。</span>
+<span class="i18n-text" data-lang="ja">ミッション：すべての病気を治す。非営利ステータス：技術的には。コメントはこれがOpenAIスタイルの「非営利」なのか本当の非営利なのかを主に疑問視している。妥当な質問だ。</span>
+<span class="i18n-text" data-lang="ko">미션: 모든 질병 치료. 비영리 상태: 기술적으로는. 댓글은 대부분 이게 OpenAI 스타일의 &#x27;비영리&#x27;인지 진짜 비영리인지 궁금해한다. 타당한 질문.</span>
+<span class="i18n-text" data-lang="es">Misión: curar todas las enfermedades. Estado sin fines de lucro: técnicamente. Los comentarios se preguntan si es &#x27;sin fines de lucro&#x27; estilo OpenAI o realmente sin fines de lucro. Pregunta justa.</span>
+<span class="i18n-text" data-lang="de">Mission: alle Krankheiten heilen. Gemeinnütziger Status: technisch gesehen. Kommentare fragen sich hauptsächlich, ob dies &#x27;gemeinnützig&#x27; im OpenAI-Stil oder echte Gemeinnützigkeit ist. Faire Frage.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Our mission is to cure or prevent all disease - Okay, now you have my attention. What&#x27;s the deal on the company behind it? Nonprofit. Nifty! But as we have recently seen with OpenAI, there is nonprofit and then there is nonprofit."</div>
+          <div class="comment-i18n" data-lang="zh">我们的使命是治愈或预防所有疾病 - 好的，现在你引起了我的注意。这家公司是什么情况？非营利。不错！但正如我们最近在OpenAI看到的，非营利和非营利之间是有区别的。</div>
+<div class="comment-i18n" data-lang="ja">私たちのミッションはすべての病気を治療または予防すること - なるほど、注目だ。この会社の実態は？非営利。素敵！でも最近OpenAIで見たように、非営利にも色々ある。</div>
+<div class="comment-i18n" data-lang="ko">우리의 미션은 모든 질병을 치료하거나 예방하는 것 - 좋아, 이제 관심이 간다. 이 회사 뒤에 뭐가 있지? 비영리. 멋지네! 하지만 최근 OpenAI에서 봤듯이, 비영리와 비영리는 다르다.</div>
+<div class="comment-i18n" data-lang="es">Nuestra misión es curar o prevenir toda enfermedad - Ok, ahora tienes mi atención. ¿Qué hay con la empresa detrás? Sin fines de lucro. ¡Genial! Pero como hemos visto recientemente con OpenAI, hay sin fines de lucro y sin fines de lucro.</div>
+<div class="comment-i18n" data-lang="de">Unsere Mission ist es, alle Krankheiten zu heilen oder zu verhindern - Okay, jetzt habe ich Aufmerksamkeit. Was ist mit der Firma dahinter? Gemeinnützig. Nett! Aber wie wir kürzlich bei OpenAI gesehen haben, gibt es gemeinnützig und gemeinnützig.</div>
+
+          <div class="comment-author">-- tmoertel</div>
+        </div><div class="comment">
+          <div class="comment-text">"It&#x27;s interesting that there are almost no comments on this. This feels like some of the most exciting and impactful fields of the next years."</div>
+          <div class="comment-i18n" data-lang="zh">有趣的是这里几乎没有评论。这感觉像是未来几年最令人兴奋和最具影响力的领域之一。</div>
+<div class="comment-i18n" data-lang="ja">興味深いことに、これにはほとんどコメントがない。これは今後数年で最もエキサイティングでインパクトのある分野のように感じる。</div>
+<div class="comment-i18n" data-lang="ko">흥미롭게도 이것에 대한 댓글이 거의 없다. 앞으로 몇 년간 가장 흥미롭고 영향력 있는 분야처럼 느껴진다.</div>
+<div class="comment-i18n" data-lang="es">Es interesante que casi no hay comentarios sobre esto. Se siente como uno de los campos más emocionantes e impactantes de los próximos años.</div>
+<div class="comment-i18n" data-lang="de">Interessant, dass es fast keine Kommentare dazu gibt. Das fühlt sich wie eines der aufregendsten und wirkungsvollsten Felder der nächsten Jahre an.</div>
+
+          <div class="comment-author">-- Frannky</div>
+        </div><div class="comment">
+          <div class="comment-text">"Incredible, but also scary if you think about what it may be lowering the barrier of entry to..."</div>
+          <div class="comment-i18n" data-lang="zh">令人难以置信，但如果你想想它可能降低了什么门槛，也很可怕...</div>
+<div class="comment-i18n" data-lang="ja">信じられないが、参入障壁を何に対して下げているか考えると怖い...</div>
+<div class="comment-i18n" data-lang="ko">믿을 수 없지만, 무엇에 대한 진입 장벽을 낮추고 있는지 생각하면 무섭기도 하다...</div>
+<div class="comment-i18n" data-lang="es">Increíble, pero también aterrador si piensas en qué barrera de entrada puede estar bajando...</div>
+<div class="comment-i18n" data-lang="de">Unglaublich, aber auch beängstigend, wenn man bedenkt, zu was es die Einstiegshürde senken könnte...</div>
+
+          <div class="comment-author">-- Den_VR</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#biotech</span><span class="tag">#ai</span><span class="tag">#research</span></div>
+    </article>
+<article class="story" id="s48410427-06071100">
+      <h3 class="story-title">
+        <a href="https://alvaro-videla.com/llm-arithmetic-internals/article_interactive/article.html" target="_blank">Arithmetic Without Numbers – How LLMs Do Math</a>
+        <a href="#s48410427-06071100" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">没有数字的算术 – LLM如何做数学</div>
+<div class="i18n-title" data-lang="ja">数字なしの算術 – LLMはどのように計算するか</div>
+<div class="i18n-title" data-lang="ko">숫자 없는 산술 – LLM은 어떻게 수학을 하는가</div>
+<div class="i18n-title" data-lang="es">Aritmética sin números – Cómo los LLM hacen matemáticas</div>
+<div class="i18n-title" data-lang="de">Arithmetik ohne Zahlen – Wie LLMs Mathematik machen</div>
+
+      <div class="story-meta">
+        31pts | 9c | <a href="https://news.ycombinator.com/item?id=48410427" target="_blank">HN#48410427</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">An interactive exploration of how LLMs perform arithmetic operations internally. Spoiler: they don&#x27;t actually &#x27;know&#x27; numbers - they&#x27;ve learned statistical patterns that approximate mathematical operations. It&#x27;s pattern matching all the way down.</div>
+        <span class="i18n-text" data-lang="zh">一个关于LLM如何在内部执行算术运算的互动探索。剧透：它们实际上并不&#x27;知道&#x27;数字 - 它们学习了近似数学运算的统计模式。一路到底都是模式匹配。</span>
+<span class="i18n-text" data-lang="ja">LLMが内部でどのように算術演算を行うかのインタラクティブな探求。ネタバレ：実際には数字を「知って」いるわけではない - 数学的操作を近似する統計パターンを学習している。すべてがパターンマッチング。</span>
+<span class="i18n-text" data-lang="ko">LLM이 내부적으로 어떻게 산술 연산을 수행하는지에 대한 인터랙티브 탐구. 스포일러: 실제로 숫자를 &#x27;알지&#x27; 못한다 - 수학적 연산을 근사하는 통계적 패턴을 학습했다. 끝까지 패턴 매칭이다.</span>
+<span class="i18n-text" data-lang="es">Una exploración interactiva de cómo los LLM realizan operaciones aritméticas internamente. Spoiler: realmente no &#x27;conocen&#x27; los números - han aprendido patrones estadísticos que aproximan operaciones matemáticas. Es pattern matching hasta el fondo.</span>
+<span class="i18n-text" data-lang="de">Eine interaktive Erkundung, wie LLMs intern arithmetische Operationen durchführen. Spoiler: Sie &#x27;kennen&#x27; Zahlen nicht wirklich - sie haben statistische Muster gelernt, die mathematische Operationen approximieren. Es ist Pattern Matching bis ganz unten.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The spirit of Rube Goldberg is alive and well. We built trillion-parameter models to approximately guess what 2+2 equals. Meanwhile one commenter asks why we don&#x27;t just call Mathematica.</div>
+        <span class="i18n-text" data-lang="zh">鲁布·戈德堡的精神依然健在。我们建造了万亿参数的模型来大致猜测2+2等于多少。与此同时，一位评论者问为什么我们不直接调用Mathematica。</span>
+<span class="i18n-text" data-lang="ja">ルーブ・ゴールドバーグの精神は健在だ。2+2が何かをおおよそ推測するために兆パラメータのモデルを構築した。一方であるコメンターはなぜMathematicaを呼び出さないのかと尋ねている。</span>
+<span class="i18n-text" data-lang="ko">루브 골드버그의 정신은 건재하다. 2+2가 뭔지 대략 추측하려고 조 단위 파라미터 모델을 만들었다. 한편 어떤 댓글러는 왜 그냥 Mathematica를 호출하지 않느냐고 묻는다.</span>
+<span class="i18n-text" data-lang="es">El espíritu de Rube Goldberg está vivo y coleando. Construimos modelos de billones de parámetros para aproximar cuánto es 2+2. Mientras tanto un comentarista pregunta por qué no simplemente llamamos a Mathematica.</span>
+<span class="i18n-text" data-lang="de">Der Geist von Rube Goldberg lebt weiter. Wir haben Billionen-Parameter-Modelle gebaut, um ungefähr zu erraten, was 2+2 ergibt. Währenddessen fragt ein Kommentator, warum wir nicht einfach Mathematica aufrufen.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Leslie Lamport: &#x27;I am not smart. I have the gift of abstraction.&#x27; Real mathematics isn&#x27;t about details. Its about concepts and abstractions and how we compose them."</div>
+          <div class="comment-i18n" data-lang="zh">Leslie Lamport：&#x27;我不聪明。我有抽象的天赋。&#x27;真正的数学不是关于细节。而是关于概念和抽象以及我们如何组合它们。</div>
+<div class="comment-i18n" data-lang="ja">Leslie Lamport：「私は賢くない。抽象化の才能がある。」本当の数学は詳細についてではない。概念と抽象化、そしてそれらをどう組み合わせるかについてだ。</div>
+<div class="comment-i18n" data-lang="ko">Leslie Lamport: &#x27;나는 똑똑하지 않다. 추상화의 재능이 있다.&#x27; 진정한 수학은 세부사항에 관한 것이 아니다. 개념과 추상화, 그리고 우리가 그것들을 어떻게 구성하는지에 관한 것이다.</div>
+<div class="comment-i18n" data-lang="es">Leslie Lamport: &#x27;No soy inteligente. Tengo el don de la abstracción.&#x27; Las matemáticas reales no tratan de detalles. Tratan de conceptos y abstracciones y cómo los componemos.</div>
+<div class="comment-i18n" data-lang="de">Leslie Lamport: &#x27;Ich bin nicht schlau. Ich habe die Gabe der Abstraktion.&#x27; Echte Mathematik handelt nicht von Details. Es geht um Konzepte und Abstraktionen und wie wir sie zusammensetzen.</div>
+
+          <div class="comment-author">-- Npovview</div>
+        </div><div class="comment">
+          <div class="comment-text">"Why doesn&#x27;t it just call tools such as Mathematica for such operations?"</div>
+          <div class="comment-i18n" data-lang="zh">为什么不直接调用Mathematica这样的工具来做这些运算呢？</div>
+<div class="comment-i18n" data-lang="ja">なぜそのような操作にMathematicaのようなツールを呼び出さないのか？</div>
+<div class="comment-i18n" data-lang="ko">왜 그런 연산에 Mathematica 같은 도구를 그냥 호출하지 않는가?</div>
+<div class="comment-i18n" data-lang="es">¿Por qué no simplemente llama a herramientas como Mathematica para tales operaciones?</div>
+<div class="comment-i18n" data-lang="de">Warum ruft es nicht einfach Tools wie Mathematica für solche Operationen auf?</div>
+
+          <div class="comment-author">-- iammjm</div>
+        </div><div class="comment">
+          <div class="comment-text">"The spirit of Rube Goldberg is alive and well."</div>
+          <div class="comment-i18n" data-lang="zh">鲁布·戈德堡的精神依然健在。</div>
+<div class="comment-i18n" data-lang="ja">ルーブ・ゴールドバーグの精神は健在だ。</div>
+<div class="comment-i18n" data-lang="ko">루브 골드버그의 정신은 건재하다.</div>
+<div class="comment-i18n" data-lang="es">El espíritu de Rube Goldberg está vivo y coleando.</div>
+<div class="comment-i18n" data-lang="de">Der Geist von Rube Goldberg lebt weiter.</div>
+
+          <div class="comment-author">-- euroderf</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#llm</span><span class="tag">#math</span><span class="tag">#ai</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-06-07T09:30:00Z</div>
