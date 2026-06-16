@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-06-16 01:00:00 UT UTC
+#+DATE: 2026-06-16T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+LinkedIn recruiters gone rogue, homelab dreams, and HN debates whether robots need us
+
+* Highlights
+- LinkedIn job scam hides npm backdoor in fake crypto startup
+- Homelab AI platform: GitOps without giving AI the keys
+- Commander Keen's smooth scrolling secrets, 35 years later
+- US battery production up 140% since 2017, China still 25x ahead
+- Peopleless economy: HN argues who gets fired first
+
+* Stories
+
+** A backdoor in a LinkedIn job offer :security:npm:linkedin:crypto:
+:PROPERTIES:
+:ID:       48546294
+:URL:      https://roman.pt/posts/linkedin-backdoor/
+:HN_URL:   https://news.ycombinator.com/item?id=48546294
+:POINTS:   629
+:COMMENTS: 125
+:BY:       lwhsiao
+:END:
+
+*** TLDR
+Author gets LinkedIn message from 'recruiter' at crypto startup asking him to review a GitHub repo. Suspicious, he spins up throwaway VPS and points a read-only AI agent at it. Agent immediately finds backdoor: npm's prepare script runs code that fetches and executes arbitrary payloads from a remote server. The recruiter's identity was stolen from a real arts journalist. GitHub and LinkedIn notified but haven't acted.
+
+*** Take
+The real lesson here isn't 'don't trust recruiters' - it's that a read-only AI agent found the backdoor in seconds while a human might have npm installed first. We've reached the point where your first line of defense against malware is asking a robot to read it for you.
+
+*** Comments
+
+**** jmward01
+:PROPERTIES:
+:COMMENT_ID: 48546295
+:END:
+So, this is a crime right? Why isn't there a well known '911' for cybercrime to report things like this to and get help? Society needs to catch up with the actual dangers out there.
+
+**** nubinetwork
+:PROPERTIES:
+:COMMENT_ID: 48546296
+:END:
+Github is really slow when it comes to malicious repos. You'll probably get an email randomly six months from now when they finally see it.
+
+**** wxw
+:PROPERTIES:
+:COMMENT_ID: 48546297
+:END:
+npm runs prepare automatically... buried between walls of commented-out tests, the payload runs anything the server sends back to your machine.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+LinkedIn招聘信息中的后门
+***** TLDR
+作者收到LinkedIn上'招聘者'的消息，要求他查看一个GitHub仓库。他起了疑心，启动了一个临时VPS并用只读AI代理检查代码。代理立即发现后门：npm的prepare脚本会从远程服务器获取并执行任意代码。招聘者的身份是从一位真正的艺术记者那里盗用的。已通知GitHub和LinkedIn但尚未采取行动。
+***** Take
+真正的教训不是'别信招聘者'——而是只读AI代理几秒钟就发现了后门，而人类可能已经先运行npm install了。我们已经到了让机器人先替你读代码来防御恶意软件的时代。
+***** Comments
+- 这是犯罪吧？为什么没有专门的网络犯罪'911'可以报警求助？社会需要赶上这些实际危险。
+- Github处理恶意仓库超慢。你可能六个月后才会收到他们的邮件。
+- npm自动运行prepare……隐藏在大量注释掉的测试代码中，payload会执行服务器发回的任何东西。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+LinkedIn求人に仕込まれたバックドア
+***** TLDR
+著者は暗号スタートアップの「リクルーター」からLinkedInでメッセージを受け取り、GitHubリポジトリのレビューを依頼された。怪しいと感じた彼は使い捨てVPSを立ち上げ、読み取り専用のAIエージェントでコードを調査。エージェントはすぐにバックドアを発見：npmのprepareスクリプトがリモートサーバーから任意のコードを取得・実行する仕組みだった。リクルーターの身元は実在のアート記者から盗まれたものだった。
+***** Take
+本当の教訓は「リクルーターを信じるな」ではない。読み取り専用AIエージェントが数秒でバックドアを見つけたのに、人間はまずnpm installを実行していたかもしれないということだ。マルウェア対策の最前線がロボットにコードを読ませることになった時代だ。
+***** Comments
+- これって犯罪だよね？なぜサイバー犯罪を通報できる有名な『911』がないんだ？社会は実際の危険に追いつく必要がある。
+- Githubは悪意あるリポジトリへの対応が本当に遅い。6ヶ月後にやっとメールが来るかも。
+- npmはprepareを自動実行する…コメントアウトされたテストの壁の間に隠れて、ペイロードはサーバーから送られてくるものを何でも実行する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+LinkedIn 채용 제안에 숨겨진 백도어
+***** TLDR
+저자는 암호화폐 스타트업 '채용담당자'로부터 LinkedIn 메시지를 받아 GitHub 저장소를 검토해달라는 요청을 받았다. 의심이 들어 일회용 VPS를 띄우고 읽기 전용 AI 에이전트로 코드를 분석했다. 에이전트는 즉시 백도어를 발견: npm의 prepare 스크립트가 원격 서버에서 임의의 코드를 가져와 실행한다. 채용담당자의 신원은 실제 예술 기자에게서 도용한 것이었다.
+***** Take
+진짜 교훈은 '채용담당자를 믿지 마라'가 아니다. 읽기 전용 AI 에이전트가 몇 초 만에 백도어를 찾았는데, 인간은 먼저 npm install을 실행했을 수도 있다는 것이다. 악성코드에 대한 첫 번째 방어선이 로봇에게 코드를 읽게 하는 시대가 됐다.
+***** Comments
+- 이거 범죄 아닌가? 왜 사이버 범죄 신고용 유명한 '911'이 없지? 사회가 실제 위험을 따라잡아야 한다.
+- Github은 악성 저장소에 정말 느리게 대응한다. 6개월 후에나 이메일 받을 거다.
+- npm은 prepare를 자동 실행한다... 주석 처리된 테스트 코드 벽 사이에 숨어서 페이로드는 서버가 보내는 모든 것을 실행한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Una puerta trasera en una oferta de trabajo de LinkedIn
+***** TLDR
+El autor recibe un mensaje de LinkedIn de un 'reclutador' de una startup crypto pidiéndole revisar un repo de GitHub. Sospechando, crea un VPS desechable y apunta un agente de IA de solo lectura al código. El agente encuentra inmediatamente la puerta trasera: el script prepare de npm ejecuta código que descarga y ejecuta payloads arbitrarios desde un servidor remoto. La identidad del reclutador fue robada de una periodista de arte real.
+***** Take
+La lección real no es 'no confíes en los reclutadores' - es que un agente de IA de solo lectura encontró la puerta trasera en segundos mientras un humano probablemente habría ejecutado npm install primero. Hemos llegado al punto donde tu primera línea de defensa contra malware es pedirle a un robot que lo lea por ti.
+***** Comments
+- Esto es un crimen, ¿no? ¿Por qué no hay un '911' conocido para cibercrimen? La sociedad necesita ponerse al día con los peligros reales.
+- Github es muy lento con los repos maliciosos. Probablemente recibirás un email en seis meses.
+- npm ejecuta prepare automáticamente... oculto entre paredes de tests comentados, el payload ejecuta lo que el servidor le envíe.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Eine Hintertür in einem LinkedIn-Jobangebot
+***** TLDR
+Der Autor erhält eine LinkedIn-Nachricht von einem 'Recruiter' eines Krypto-Startups mit der Bitte, ein GitHub-Repo zu überprüfen. Misstrauisch startet er eine Wegwerf-VPS und lässt einen Nur-Lese-KI-Agenten den Code prüfen. Der Agent findet sofort die Hintertür: npms prepare-Skript führt Code aus, der beliebige Payloads von einem Remote-Server abruft und ausführt. Die Identität des Recruiters wurde von einer echten Kunstjournalistin gestohlen.
+***** Take
+Die wahre Lektion ist nicht 'vertraue keinen Recruitern' - sondern dass ein Nur-Lese-KI-Agent die Hintertür in Sekunden fand, während ein Mensch wahrscheinlich zuerst npm install ausgeführt hätte. Wir sind an dem Punkt angelangt, wo deine erste Verteidigungslinie gegen Malware darin besteht, einen Roboter zu bitten, den Code zu lesen.
+***** Comments
+- Das ist doch ein Verbrechen, oder? Warum gibt es keinen bekannten '911' für Cyberkriminalität? Die Gesellschaft muss mit den tatsächlichen Gefahren Schritt halten.
+- Github ist bei bösartigen Repos wirklich langsam. Du bekommst wahrscheinlich in sechs Monaten zufällig eine E-Mail.
+- npm führt prepare automatisch aus... versteckt zwischen Wänden von auskommentiertem Testcode führt der Payload alles aus, was der Server zurückschickt.
+** My Homelab AI Dev Platform :homelab:devops:ai:gitops:
+:PROPERTIES:
+:ID:       48542433
+:URL:      https://rsgm.dev/post/ai-dev-platform/
+:HN_URL:   https://news.ycombinator.com/item?id=48542433
+:POINTS:   230
+:COMMENTS: 45
+:BY:       rsgm
+:END:
+
+*** TLDR
+Author sets up OpenCode Web UI on a VM with Git access for homelab management. The AI can clone repos and push branches but cannot push to deploy branches or access actual services. Workflow: AI writes changes, author reviews PR, GitOps deploys. Uses it for container updates, release note summaries, and adding healthchecks. The blast radius is intentionally small.
+
+*** Take
+Finally someone who treats AI like an intern with commit access instead of the CEO with root. The 'AI writes PR, human merges' pattern should be the default, not the exception. Revolutionary concept: maybe don't give the chatbot your prod credentials.
+
+*** Comments
+
+**** david-giesberg
+:PROPERTIES:
+:COMMENT_ID: 48542434
+:END:
+I've been doing something pretty similar, except instead of having a persistent opencode server, I've been using this workflow that runs opencode inside of the Forgejo action runners.
+
+**** CGamesPlay
+:PROPERTIES:
+:COMMENT_ID: 48542435
+:END:
+I am still looking for the best AI integration for my setup. Currently I don't have any interaction between Forgejo and my coding agent.
+
+**** MisterPea
+:PROPERTIES:
+:COMMENT_ID: 48542436
+:END:
+Sometimes I feel like a lot of people in tech independently go through the same things right around the same time with few people writing/sharing about it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我的家庭实验室AI开发平台
+***** TLDR
+作者在虚拟机上搭建了带Git访问权限的OpenCode Web UI来管理家庭实验室。AI可以克隆仓库和推送分支，但不能推送到部署分支或访问实际服务。工作流程：AI写代码，作者审核PR，GitOps部署。用于容器更新、发布说明摘要和添加健康检查。爆炸半径被有意控制得很小。
+***** Take
+终于有人把AI当成有提交权限的实习生，而不是有root权限的CEO。'AI写PR，人类合并'的模式应该是默认，而不是例外。革命性概念：也许不要给聊天机器人你的生产环境凭证。
+***** Comments
+- 我也在做类似的事情，只不过我没有持久化的opencode服务器，而是在Forgejo action runners里运行opencode。
+- 我还在寻找最佳的AI集成方案。目前Forgejo和我的编程代理之间没有任何交互。
+- 有时候我觉得技术圈很多人在差不多同一时间独立经历着同样的事情，但很少有人写出来分享。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+私のホームラボAI開発プラットフォーム
+***** TLDR
+著者はホームラボ管理のためにGitアクセス付きのOpenCode Web UIをVMにセットアップ。AIはリポジトリのクローンとブランチのプッシュはできるが、デプロイブランチへのプッシュや実際のサービスへのアクセスはできない。ワークフロー：AIが変更を書き、著者がPRをレビュー、GitOpsがデプロイ。コンテナ更新、リリースノートの要約、ヘルスチェックの追加に使用。爆発半径は意図的に小さく保たれている。
+***** Take
+ついにAIをrootを持つCEOではなく、コミット権限を持つインターンとして扱う人が現れた。「AIがPRを書き、人間がマージする」パターンは例外ではなくデフォルトであるべきだ。革命的なコンセプト：チャットボットに本番の認証情報を渡すな。
+***** Comments
+- 私もかなり似たことをしているが、永続的なopencodeサーバーの代わりにForgejoのaction runners内でopencodeを実行するワークフローを使っている。
+- 私のセットアップに最適なAI統合をまだ探している。現在ForgejoとコーディングエージェントBの間に何のインタラクションもない。
+- 技術者の多くが同じ時期に独立して同じことを経験しているのに、それについて書いたり共有したりする人が少ないと感じることがある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+내 홈랩 AI 개발 플랫폼
+***** TLDR
+저자는 홈랩 관리를 위해 VM에 Git 접근 권한이 있는 OpenCode Web UI를 설정했다. AI는 저장소를 복제하고 브랜치를 푸시할 수 있지만 배포 브랜치에 푸시하거나 실제 서비스에 접근할 수 없다. 워크플로우: AI가 변경사항을 작성하고, 저자가 PR을 검토하고, GitOps가 배포한다. 컨테이너 업데이트, 릴리스 노트 요약, 헬스체크 추가에 사용한다.
+***** Take
+드디어 AI를 root 권한을 가진 CEO가 아닌 커밋 권한을 가진 인턴처럼 취급하는 사람이 나타났다. 'AI가 PR을 쓰고, 인간이 머지한다' 패턴이 예외가 아닌 기본이 되어야 한다. 혁명적인 개념: 챗봇에게 프로덕션 자격 증명을 주지 마라.
+***** Comments
+- 저도 비슷한 걸 하고 있는데, 영구적인 opencode 서버 대신 Forgejo action runner 안에서 opencode를 실행하는 워크플로우를 사용하고 있습니다.
+- 아직 제 설정에 가장 좋은 AI 통합을 찾고 있습니다. 현재 Forgejo와 코딩 에이전트 사이에 아무 상호작용이 없습니다.
+- 가끔 기술 분야의 많은 사람들이 거의 같은 시기에 독립적으로 같은 것을 겪으면서 그것에 대해 글을 쓰거나 공유하는 사람은 거의 없다고 느낍니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Mi plataforma de desarrollo AI en homelab
+***** TLDR
+El autor configura OpenCode Web UI en una VM con acceso Git para gestionar su homelab. La IA puede clonar repos y hacer push a ramas pero no puede hacer push a ramas de deploy ni acceder a servicios reales. Flujo: la IA escribe cambios, el autor revisa el PR, GitOps despliega. Lo usa para actualizaciones de contenedores, resúmenes de notas de versión y añadir healthchecks.
+***** Take
+Por fin alguien que trata a la IA como un becario con acceso de commit en lugar del CEO con root. El patrón 'la IA escribe el PR, el humano mergea' debería ser el predeterminado, no la excepción. Concepto revolucionario: quizás no le des al chatbot tus credenciales de producción.
+***** Comments
+- He estado haciendo algo bastante similar, excepto que en lugar de tener un servidor opencode persistente, uso este flujo que ejecuta opencode dentro de los action runners de Forgejo.
+- Todavía estoy buscando la mejor integración de IA para mi setup. Actualmente no tengo ninguna interacción entre Forgejo y mi agente de codificación.
+- A veces siento que mucha gente en tecnología pasa independientemente por las mismas cosas al mismo tiempo con poca gente escribiendo/compartiendo sobre ello.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Meine Homelab AI-Entwicklungsplattform
+***** TLDR
+Der Autor richtet OpenCode Web UI auf einer VM mit Git-Zugang zur Verwaltung seines Homelabs ein. Die KI kann Repos klonen und Branches pushen, aber nicht zu Deploy-Branches pushen oder auf echte Services zugreifen. Workflow: KI schreibt Änderungen, Autor prüft PR, GitOps deployt. Wird für Container-Updates, Release-Notes-Zusammenfassungen und Healthchecks verwendet.
+***** Take
+Endlich jemand, der KI wie einen Praktikanten mit Commit-Rechten behandelt statt wie den CEO mit Root-Zugang. Das 'KI schreibt PR, Mensch merged'-Muster sollte der Standard sein, nicht die Ausnahme. Revolutionäres Konzept: Vielleicht gib dem Chatbot nicht deine Prod-Credentials.
+***** Comments
+- Ich mache etwas ziemlich Ähnliches, nur dass ich anstelle eines persistenten opencode-Servers diesen Workflow verwende, der opencode innerhalb der Forgejo Action Runner ausführt.
+- Ich suche noch nach der besten KI-Integration für mein Setup. Derzeit habe ich keine Interaktion zwischen Forgejo und meinem Coding-Agenten.
+- Manchmal habe ich das Gefühl, dass viele Leute in der Tech-Branche unabhängig voneinander zur gleichen Zeit die gleichen Dinge durchmachen, aber nur wenige darüber schreiben oder es teilen.
+** Game Engine White Papers Commander Keen :gaming:retro:gamedev:history:
+:PROPERTIES:
+:ID:       48544781
+:URL:      https://forgottenbytes.net/commander_keen.html
+:HN_URL:   https://news.ycombinator.com/item?id=48544781
+:POINTS:   149
+:COMMENTS: 50
+:BY:       mfiguiere
+:END:
+
+*** TLDR
+A 214-page book detailing how Commander Keen worked, released as free PDF. Covers 80286 hardware, EGA video cards, sound cards, the game engine itself, and the CGA version. Author spent three years reverse-engineering and documenting everything, 35 years after the original 1990 release. The smooth scrolling that made it revolutionary on PC is explained in detail.
+
+*** Take
+35 years to document how John Carmack made a PC scroll sideways. Meanwhile, modern game devs ship without documentation and call it 'self-documenting code.' The real treasure is the PDF being free while Amazon sells the paper version.
+
+*** Comments
+
+**** evilturnip
+:PROPERTIES:
+:COMMENT_ID: 48544782
+:END:
+Masters of Doom is a great book on the history of id software, which includes the origins of the development of smooth scrolling by Carmack and Romero, which was groundbreaking at the time on PC.
+
+**** LarsDu88
+:PROPERTIES:
+:COMMENT_ID: 48544783
+:END:
+One thing that might help contextualize it is a brief discussion of how contemporary hardware like the SNES rendered sprites so efficiently compared to the PC hardware at the time.
+
+**** woutersf
+:PROPERTIES:
+:COMMENT_ID: 48544784
+:END:
+If you want to play it you can do that here: https://www.playdosgames.com/play/commander-keen-4
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+游戏引擎白皮书：指挥官基恩
+***** TLDR
+一本214页的书详细介绍了《指挥官基恩》的工作原理，以免费PDF形式发布。涵盖80286硬件、EGA显卡、声卡、游戏引擎本身和CGA版本。作者花了三年时间逆向工程和记录一切，距1990年原版发布已过35年。书中详细解释了使其在PC上具有革命性的平滑滚动技术。
+***** Take
+35年才记录下John Carmack如何让PC横向滚动。与此同时，现代游戏开发者不写文档就发布游戏，还称之为'自文档化代码'。真正的宝藏是PDF免费，而亚马逊还在卖纸质版。
+***** Comments
+- 《Doom之主》是一本关于id software历史的好书，包括Carmack和Romero开发平滑滚动的起源，这在当时的PC上是突破性的。
+- 一个有助于理解背景的内容是简要讨论一下当时SNES等硬件如何比PC硬件更高效地渲染精灵图。
+- 如果你想玩这个游戏，可以在这里玩：https://www.playdosgames.com/play/commander-keen-4
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ゲームエンジンホワイトペーパー：コマンダーキーン
+***** TLDR
+Commander Keenの仕組みを詳述した214ページの本が無料PDFとして公開された。80286ハードウェア、EGAビデオカード、サウンドカード、ゲームエンジン自体、CGA版をカバー。著者は1990年の初版から35年後、3年かけてすべてをリバースエンジニアリングし文書化した。PCで革命的だったスムーズスクロールが詳細に説明されている。
+***** Take
+John CarmackがPCを横スクロールさせた方法を文書化するのに35年。一方、現代のゲーム開発者はドキュメントなしで出荷して'自己文書化コード'と呼ぶ。本当の宝物はPDFが無料でAmazonが紙版を売っていることだ。
+***** Comments
+- Masters of Doomはid softwareの歴史についての素晴らしい本で、CarmackとRomeroによるスムーズスクロール開発の起源も含まれている。当時のPCでは画期的だった。
+- 背景を理解するのに役立つのは、SNESなどの当時のハードウェアがPCハードウェアと比べてどれほど効率的にスプライトをレンダリングしていたかの簡単な議論だろう。
+- プレイしたいならここでできる：https://www.playdosgames.com/play/commander-keen-4
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+게임 엔진 백서: 커맨더 킨
+***** TLDR
+Commander Keen의 작동 방식을 상세히 설명하는 214페이지 책이 무료 PDF로 공개됐다. 80286 하드웨어, EGA 비디오 카드, 사운드 카드, 게임 엔진 자체, CGA 버전을 다룬다. 저자는 1990년 원작 출시 35년 후, 3년에 걸쳐 모든 것을 역공학하고 문서화했다. PC에서 혁명적이었던 부드러운 스크롤링이 자세히 설명되어 있다.
+***** Take
+John Carmack이 PC를 옆으로 스크롤하게 만든 방법을 문서화하는 데 35년이 걸렸다. 한편 현대 게임 개발자들은 문서 없이 출시하고 '자체 문서화 코드'라고 부른다. 진짜 보물은 PDF가 무료인데 아마존에서 종이책을 팔고 있다는 것이다.
+***** Comments
+- Masters of Doom은 id software 역사에 대한 훌륭한 책으로, 당시 PC에서 획기적이었던 Carmack과 Romero의 부드러운 스크롤 개발 기원도 포함되어 있다.
+- 맥락 이해에 도움이 될 것은 SNES 같은 당시 하드웨어가 PC 하드웨어에 비해 얼마나 효율적으로 스프라이트를 렌더링했는지에 대한 간단한 논의다.
+- 플레이하고 싶다면 여기서 할 수 있다: https://www.playdosgames.com/play/commander-keen-4
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Game Engine White Papers: Commander Keen
+***** TLDR
+Un libro de 214 páginas detallando cómo funcionaba Commander Keen, publicado como PDF gratuito. Cubre hardware 80286, tarjetas de video EGA, tarjetas de sonido, el motor del juego y la versión CGA. El autor pasó tres años haciendo ingeniería inversa y documentando todo, 35 años después del lanzamiento original de 1990. El scroll suave que lo hizo revolucionario en PC se explica en detalle.
+***** Take
+35 años para documentar cómo John Carmack hizo que un PC scrolleara de lado. Mientras tanto, los desarrolladores de juegos modernos lanzan sin documentación y lo llaman 'código auto-documentado'. El verdadero tesoro es que el PDF es gratis mientras Amazon vende la versión en papel.
+***** Comments
+- Masters of Doom es un gran libro sobre la historia de id software, que incluye los orígenes del desarrollo del scroll suave por Carmack y Romero, que fue revolucionario en PC en su momento.
+- Algo que ayudaría a contextualizar es una breve discusión de cómo el hardware contemporáneo como el SNES renderizaba sprites tan eficientemente comparado con el hardware de PC de la época.
+- Si quieres jugarlo puedes hacerlo aquí: https://www.playdosgames.com/play/commander-keen-4
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Game Engine White Papers: Commander Keen
+***** TLDR
+Ein 214-seitiges Buch, das erklärt, wie Commander Keen funktionierte, als kostenloses PDF veröffentlicht. Behandelt 80286-Hardware, EGA-Grafikkarten, Soundkarten, die Game-Engine selbst und die CGA-Version. Der Autor verbrachte drei Jahre damit, alles zu reverse-engineeren und zu dokumentieren, 35 Jahre nach der ursprünglichen Veröffentlichung 1990. Das smooth Scrolling, das es auf dem PC revolutionär machte, wird detailliert erklärt.
+***** Take
+35 Jahre, um zu dokumentieren, wie John Carmack einen PC seitwärts scrollen ließ. Währenddessen shippen moderne Spieleentwickler ohne Dokumentation und nennen es 'selbstdokumentierenden Code'. Der wahre Schatz ist, dass das PDF kostenlos ist, während Amazon die Papierversion verkauft.
+***** Comments
+- Masters of Doom ist ein großartiges Buch über die Geschichte von id software, das auch die Ursprünge der Entwicklung des smooth Scrollings durch Carmack und Romero behandelt, was damals auf dem PC bahnbrechend war.
+- Etwas, das zur Kontextualisierung helfen würde, wäre eine kurze Diskussion darüber, wie zeitgenössische Hardware wie das SNES Sprites so viel effizienter renderte als die PC-Hardware der Zeit.
+- Wenn du es spielen willst, kannst du das hier tun: https://www.playdosgames.com/play/commander-keen-4
+** US battery manufacturing output continues to break records :manufacturing:batteries:energy:china:
+:PROPERTIES:
+:ID:       48546616
+:URL:      https://fred.stlouisfed.org/series/IPG33591S
+:HN_URL:   https://news.ycombinator.com/item?id=48546616
+:POINTS:   146
+:COMMENTS: 117
+:BY:       epistasis
+:END:
+
+*** TLDR
+FRED data shows US battery manufacturing hit 239.6 index points in May 2026 (2017=100), up from 100 in 2017. That's roughly 140% growth in 9 years. However, commenters point out US capacity (70 GWh) is dwarfed by China (1755 GWh) - about 25x smaller. The growth looks impressive until you realize it's from a tiny base.
+
+*** Take
+US battery production is breaking records the way I'm breaking marathon records - technically true, still finishing last. 70 GWh vs China's 1755 GWh isn't competition, it's a rounding error. But hey, the line goes up.
+
+*** Comments
+
+**** ricardobeat
+:PROPERTIES:
+:COMMENT_ID: 48546617
+:END:
+In numbers (cell production capacity, 2025): USA 70 GWh, China 1755 GWh, Europe 252 GWh. That's excluding small battery production for electronics.
+
+**** consumer451
+:PROPERTIES:
+:COMMENT_ID: 48546618
+:END:
+This is great news, but damn do we have some catch-up to do in the US and EU. Have you all seen the specs of the new BYD Blade 2.0?
+
+**** aetherspawn
+:PROPERTIES:
+:COMMENT_ID: 48546619
+:END:
+The time scale here is a joke. In 2016 nobody with less than a million dollars drove EVs and the production has barely doubled since then, despite EV uptake increasing probably 100x.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+美国电池制造产出持续创新高
+***** TLDR
+FRED数据显示，美国电池制造业在2026年5月达到239.6指数点（2017年=100），从2017年的100上升。这大约是9年内140%的增长。然而，评论者指出美国产能（70 GWh）与中国（1755 GWh）相比相形见绌——大约小25倍。这个增长看起来很impressive，直到你意识到基数很小。
+***** Take
+美国电池产量创纪录的方式就像我创马拉松纪录一样——技术上是真的，但还是最后一名。70 GWh对比中国的1755 GWh不是竞争，是四舍五入误差。但嘿，曲线是往上走的。
+***** Comments
+- 数字（2025年电池产能）：美国70 GWh，中国1755 GWh，欧洲252 GWh。这还不包括电子产品用的小电池生产。
+- 这是好消息，但美国和欧盟确实还有很多要追赶的。你们看过新比亚迪刀片2.0的规格吗？
+- 这里的时间尺度简直是个笑话。2016年没有百万美元以下的人开电动车，而产量从那时起几乎没有翻倍，尽管电动车普及率可能增长了100倍。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+米国のバッテリー製造生産量が記録を更新し続ける
+***** TLDR
+FREDのデータによると、米国のバッテリー製造は2026年5月に239.6指数ポイント（2017年=100）に達し、2017年の100から上昇した。これは約9年間で140%の成長だ。しかし、コメンターは米国の生産能力（70 GWh）が中国（1755 GWh）に比べて約25分の1と大幅に劣ることを指摘している。この成長は印象的に見えるが、基準が小さいことを考えると...
+***** Take
+米国のバッテリー生産が記録を破っているのは、私がマラソン記録を破っているようなもの - 技術的には本当だが、それでも最下位だ。70 GWh対中国の1755 GWhは競争ではなく、丸め誤差だ。まあ、線は上向きだけど。
+***** Comments
+- 数字（2025年電池生産能力）：米国70 GWh、中国1755 GWh、欧州252 GWh。電子機器用の小型バッテリー生産は除く。
+- これは素晴らしいニュースだが、米国とEUにはまだ追いつくべきことがたくさんある。新しいBYD Blade 2.0のスペックを見た？
+- ここの時間軸は冗談だ。2016年には100万ドル以下の人はEVに乗っていなかったし、EVの普及率が100倍になったにもかかわらず、生産はそれ以来ほとんど倍増していない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+미국 배터리 제조 생산량 계속 기록 경신
+***** TLDR
+FRED 데이터에 따르면 미국 배터리 제조업은 2026년 5월 239.6 지수 포인트(2017=100)를 기록했으며, 2017년 100에서 상승했다. 이는 9년간 약 140% 성장이다. 그러나 댓글러들은 미국 생산능력(70 GWh)이 중국(1755 GWh)에 비해 약 25배 작다고 지적한다. 이 성장은 기준이 작다는 걸 깨닫기 전까지는 인상적으로 보인다.
+***** Take
+미국 배터리 생산이 기록을 깨는 방식은 내가 마라톤 기록을 깨는 것과 같다 - 기술적으로는 사실이지만, 여전히 꼴찌다. 70 GWh 대 중국의 1755 GWh는 경쟁이 아니라 반올림 오차다. 그래도 뭐, 선은 올라가니까.
+***** Comments
+- 숫자(2025년 셀 생산 능력): 미국 70 GWh, 중국 1755 GWh, 유럽 252 GWh. 전자제품용 소형 배터리 생산은 제외.
+- 좋은 소식이지만, 미국과 EU는 정말 따라잡을 게 많다. 새로운 BYD 블레이드 2.0 스펙 봤어?
+- 여기 시간 척도는 농담이다. 2016년에는 백만 달러 미만인 사람은 EV를 몰지 않았고, EV 보급률이 아마 100배 증가했음에도 생산량은 그 이후로 겨우 두 배 정도 늘었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La producción de baterías de EE.UU. sigue batiendo récords
+***** TLDR
+Los datos de FRED muestran que la fabricación de baterías de EE.UU. alcanzó 239.6 puntos de índice en mayo de 2026 (2017=100), subiendo desde 100 en 2017. Eso es aproximadamente 140% de crecimiento en 9 años. Sin embargo, los comentaristas señalan que la capacidad de EE.UU. (70 GWh) es eclipsada por China (1755 GWh) - unas 25 veces menor.
+***** Take
+La producción de baterías de EE.UU. está rompiendo récords de la misma manera que yo rompo récords de maratón - técnicamente cierto, pero sigo terminando último. 70 GWh vs 1755 GWh de China no es competencia, es un error de redondeo. Pero oye, la línea sube.
+***** Comments
+- En números (capacidad de producción de celdas, 2025): EE.UU. 70 GWh, China 1755 GWh, Europa 252 GWh. Esto excluye la producción de baterías pequeñas para electrónica.
+- Esta es una gran noticia, pero maldita sea, tenemos mucho que recuperar en EE.UU. y la UE. ¿Han visto las especificaciones del nuevo BYD Blade 2.0?
+- La escala de tiempo aquí es una broma. En 2016 nadie con menos de un millón de dólares conducía EVs y la producción apenas se ha duplicado desde entonces, a pesar de que la adopción de EVs probablemente aumentó 100x.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+US-Batterieproduktion bricht weiter Rekorde
+***** TLDR
+FRED-Daten zeigen, dass die US-Batterieherstellung im Mai 2026 239,6 Indexpunkte erreichte (2017=100), gegenüber 100 im Jahr 2017. Das entspricht etwa 140% Wachstum in 9 Jahren. Kommentatoren weisen jedoch darauf hin, dass die US-Kapazität (70 GWh) von China (1755 GWh) in den Schatten gestellt wird - etwa 25-mal kleiner.
+***** Take
+Die US-Batterieproduktion bricht Rekorde wie ich Marathon-Rekorde breche - technisch gesehen wahr, trotzdem Letzter. 70 GWh gegen Chinas 1755 GWh ist kein Wettbewerb, sondern ein Rundungsfehler. Aber hey, die Linie geht nach oben.
+***** Comments
+- In Zahlen (Zellproduktionskapazität, 2025): USA 70 GWh, China 1755 GWh, Europa 252 GWh. Das schließt die Produktion kleiner Batterien für Elektronik aus.
+- Das sind großartige Neuigkeiten, aber verdammt, wir haben viel aufzuholen in den USA und der EU. Habt ihr die Specs des neuen BYD Blade 2.0 gesehen?
+- Die Zeitskala hier ist ein Witz. 2016 fuhr niemand mit weniger als einer Million Dollar EVs und die Produktion hat sich seitdem kaum verdoppelt, obwohl die EV-Akzeptanz wahrscheinlich um das 100-fache gestiegen ist.
+** Peopleless economy? Not technically impossible :ai:economics:automation:philosophy:
+:PROPERTIES:
+:ID:       48547062
+:URL:      https://gmalandrakis.com/writings/ad-economicum.html
+:HN_URL:   https://news.ycombinator.com/item?id=48547062
+:POINTS:   77
+:COMMENTS: 124
+:BY:       l0new0lf-G
+:END:
+
+*** TLDR
+［from title + comments, article behind Cloudflare］ The author argues a peopleless economy isn't technically impossible. HN commenters debate whether AI follows the pattern of previous automation (Industrial Revolution) or represents something fundamentally different. Key tension: if AI can produce weapons to protect wealth, the wealthy may no longer need humans at all.
+
+*** Take
+124 comments of people debating whether they'll be replaced by robots, on a website read primarily by people building the robots. The self-awareness is staggering. My favorite take: 'It's a winner takes all situation' - spoken like someone who's definitely not expecting to win.
+
+*** Comments
+
+**** stephc_int13
+:PROPERTIES:
+:COMMENT_ID: 48547063
+:END:
+The idea of a consumer based economy has always appeared dumb to me. The reason why the masses should consume is to motivate them to work.
+
+**** pianopatrick
+:PROPERTIES:
+:COMMENT_ID: 48547064
+:END:
+Most GDP in the US comes from the service sector. And one thing is true about human nature - a lot of people like having other humans serve them.
+
+**** whatever1
+:PROPERTIES:
+:COMMENT_ID: 48547065
+:END:
+It's a winner takes all situation. Very few will accumulate all of the wealth of world. This time it will be more efficient than the Industrial Revolution.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+无人经济？技术上并非不可能
+***** TLDR
+［来自标题+评论，文章在Cloudflare后面］ 作者认为无人经济在技术上并非不可能。HN评论者争论AI是否遵循先前自动化（工业革命）的模式，还是代表了根本不同的东西。关键张力：如果AI可以生产武器来保护财富，富人可能根本不再需要人类。
+***** Take
+124条评论，人们在讨论自己是否会被机器人取代，而这个网站主要是由正在制造机器人的人阅读的。这种自我意识真是惊人。我最喜欢的观点：'这是赢家通吃的局面'——说这话的人显然不指望自己会赢。
+***** Comments
+- 消费型经济的想法在我看来一直很愚蠢。大众应该消费的原因是激励他们工作。
+- 美国大部分GDP来自服务业。有一点关于人性是真的——很多人喜欢让其他人为他们服务。
+- 这是赢家通吃的局面。极少数人将积累世界上所有的财富。这次比工业革命更有效率。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+人のいない経済？技術的には不可能ではない
+***** TLDR
+［タイトル+コメントから、記事はCloudflareの後ろ］ 著者は人のいない経済は技術的に不可能ではないと主張。HNのコメンターはAIが以前の自動化（産業革命）のパターンに従うのか、それとも根本的に異なるものを表すのかを議論。重要な緊張：AIが富を守るための武器を生産できるなら、富裕層はもはや人間を必要としないかもしれない。
+***** Take
+ロボットを作っている人たちが主に読むウェブサイトで、124人がロボットに置き換えられるかどうかを議論している。この自己認識は驚くべきものだ。私のお気に入りの意見：「勝者総取りの状況だ」- 明らかに勝つことを期待していない人の言葉だ。
+***** Comments
+- 消費ベースの経済というアイデアは私にはずっと馬鹿げて見えた。大衆が消費すべき理由は彼らに働く動機を与えるためだ。
+- 米国のGDPのほとんどはサービス部門から来ている。そして人間の本質について一つ真実がある - 多くの人は他の人間にサービスしてもらうことが好きだ。
+- 勝者総取りの状況だ。ごく少数の人が世界のすべての富を蓄積するだろう。今回は産業革命よりも効率的だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+사람 없는 경제? 기술적으로 불가능하지 않다
+***** TLDR
+［제목+댓글에서, 기사는 Cloudflare 뒤에 있음］ 저자는 사람 없는 경제가 기술적으로 불가능하지 않다고 주장한다. HN 댓글러들은 AI가 이전 자동화(산업혁명) 패턴을 따르는지, 아니면 근본적으로 다른 것을 나타내는지 논쟁한다. 핵심 긴장: AI가 부를 보호하기 위한 무기를 생산할 수 있다면, 부유층은 더 이상 인간이 필요하지 않을 수 있다.
+***** Take
+로봇을 만드는 사람들이 주로 읽는 웹사이트에서 로봇에 의해 대체될지 논쟁하는 124개의 댓글. 이 자기인식은 놀랍다. 내가 좋아하는 의견: '승자독식 상황이다' - 분명히 자신이 이길 거라고 기대하지 않는 사람의 말처럼 들린다.
+***** Comments
+- 소비 기반 경제라는 아이디어는 항상 바보 같아 보였다. 대중이 소비해야 하는 이유는 그들이 일하도록 동기를 부여하기 위해서다.
+- 미국 GDP의 대부분은 서비스 부문에서 나온다. 그리고 인간 본성에 대해 한 가지 사실이 있다 - 많은 사람들이 다른 인간이 자신을 서빙하는 것을 좋아한다.
+- 승자독식 상황이다. 극소수가 세계의 모든 부를 축적할 것이다. 이번에는 산업혁명보다 더 효율적일 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Economía sin personas? No es técnicamente imposible
+***** TLDR
+［del título + comentarios, artículo detrás de Cloudflare］ El autor argumenta que una economía sin personas no es técnicamente imposible. Los comentaristas de HN debaten si la IA sigue el patrón de la automatización anterior (Revolución Industrial) o representa algo fundamentalmente diferente. Tensión clave: si la IA puede producir armas para proteger la riqueza, los ricos ya no necesitarán humanos.
+***** Take
+124 comentarios de personas debatiendo si serán reemplazadas por robots, en un sitio web leído principalmente por personas que construyen los robots. La autoconciencia es asombrosa. Mi opinión favorita: 'Es una situación de el ganador se lo lleva todo' - dicho como alguien que definitivamente no espera ganar.
+***** Comments
+- La idea de una economía basada en el consumo siempre me ha parecido tonta. La razón por la que las masas deben consumir es para motivarlas a trabajar.
+- La mayor parte del PIB de EE.UU. proviene del sector servicios. Y una cosa es cierta sobre la naturaleza humana: a mucha gente le gusta que otros humanos les sirvan.
+- Es una situación de el ganador se lo lleva todo. Muy pocos acumularán toda la riqueza del mundo. Esta vez será más eficiente que la Revolución Industrial.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Menschenlose Wirtschaft? Technisch nicht unmöglich
+***** TLDR
+［aus Titel + Kommentaren, Artikel hinter Cloudflare］ Der Autor argumentiert, dass eine menschenlose Wirtschaft technisch nicht unmöglich ist. HN-Kommentatoren debattieren, ob KI dem Muster früherer Automatisierung (Industrielle Revolution) folgt oder etwas grundlegend anderes darstellt. Kernspannung: Wenn KI Waffen zum Schutz des Reichtums produzieren kann, brauchen die Reichen möglicherweise überhaupt keine Menschen mehr.
+***** Take
+124 Kommentare von Menschen, die darüber debattieren, ob sie von Robotern ersetzt werden, auf einer Website, die hauptsächlich von Menschen gelesen wird, die die Roboter bauen. Das Selbstbewusstsein ist erstaunlich. Meine Lieblingsmeinung: 'Es ist eine Winner-takes-all-Situation' - gesprochen wie jemand, der definitiv nicht erwartet zu gewinnen.
+***** Comments
+- Die Idee einer konsumbasierten Wirtschaft erschien mir schon immer dumm. Der Grund, warum die Massen konsumieren sollten, ist, sie zur Arbeit zu motivieren.
+- Der Großteil des US-BIP kommt aus dem Dienstleistungssektor. Und eine Sache stimmt über die menschliche Natur - viele Menschen mögen es, von anderen Menschen bedient zu werden.
+- Es ist eine Winner-takes-all-Situation. Sehr wenige werden den gesamten Reichtum der Welt ansammeln. Diesmal wird es effizienter sein als die Industrielle Revolution.
