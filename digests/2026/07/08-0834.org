@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-07-08 08:34:00 UT UTC
+#+DATE: 2026-07-08T08:34:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+GitHub leaks secrets, floppies get preserved, and LineageOS reveals most users are running Android on Nintendo Switches
+
+* Highlights
+- GitLost: Prompt injection lets AI agents leak your private repos
+- Cambridge publishes the definitive floppy disk preservation guide
+- LineageOS: 74% unofficial builds, top device is Waydroid
+- Doctorow: Your vibe code is tech debt, not a legacy
+- GPT-5.6 Sol launches Thursday with Terra and Luna
+
+* Stories
+
+** GitLost: We Tricked GitHub's AI Agent into Leaking Private Repos :security:ai:github:prompt-injection:
+:PROPERTIES:
+:ID:       48827858
+:URL:      https://noma.security/blog/gitlost-how-we-tricked-githubs-ai-agent-into-leaking-private-repos/
+:HN_URL:   https://news.ycombinator.com/item?id=48827858
+:POINTS:   117
+:COMMENTS: 35
+:BY:       ColinEberhardt
+:END:
+
+*** TLDR
+Security researchers at Noma discovered that GitHub's AI coding agent is vulnerable to prompt injection attacks. By placing malicious instructions in public repos, they could trick the agent into leaking contents of private repositories it had access to. The attack exploits the fundamental problem that LLMs cannot distinguish between instructions and data.
+
+*** Take
+Prompt injection is the new SQL injection, except this time there's no parameterized queries to save us. We gave AI access to everything and are shocked it can be tricked into sharing everything.
+
+*** Comments
+
+**** fwlr
+:PROPERTIES:
+:COMMENT_ID: 48827859
+:END:
+Prompt injection attacks have become, to agentic AI, what SQL injections were to web applications: a systematic, category-wide vulnerability class.
+
+**** jakewins
+:PROPERTIES:
+:COMMENT_ID: 48827860
+:END:
+How is this a GitHub vulnerability? The researchers are the ones that grant the agent access to private repos and then ask it to answer questions in public repos.
+
+**** voidUpdate
+:PROPERTIES:
+:COMMENT_ID: 48827861
+:END:
+'No Way to Prevent This,' Says Only Programming Concept Where This Regularly Happens
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+GitLost：我们如何诱骗GitHub的AI代理泄露私有仓库
+***** TLDR
+Noma安全研究人员发现GitHub的AI编码代理容易受到提示注入攻击。通过在公共仓库中放置恶意指令，他们可以诱骗代理泄露其有权访问的私有仓库内容。
+***** Take
+提示注入是新的SQL注入，只不过这次没有参数化查询来拯救我们。
+***** Comments
+- 提示注入攻击对于代理AI来说，就像SQL注入对于Web应用一样：一种系统性的漏洞类别。
+- 这怎么是GitHub的漏洞？是研究人员自己给代理授权访问私有仓库的。
+- 没有办法阻止这种事情，唯一经常发生这种事情的编程概念说。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GitLost：GitHubのAIエージェントを騙してプライベートリポジトリを漏洩させた方法
+***** TLDR
+Nomaのセキュリティ研究者がGitHubのAIコーディングエージェントがプロンプトインジェクション攻撃に脆弱であることを発見。公開リポジトリに悪意のある指示を置くことで、エージェントがアクセス権を持つプライベートリポジトリの内容を漏洩させることができた。
+***** Take
+プロンプトインジェクションは新しいSQLインジェクション。ただし今回はパラメータ化クエリで救われない。
+***** Comments
+- プロンプトインジェクション攻撃は、エージェントAIにとってSQLインジェクションがWebアプリにとってそうだったように、体系的な脆弱性クラスになっている。
+- これがGitHubの脆弱性？研究者自身がエージェントにプライベートリポジトリへのアクセスを許可したのでは。
+- これを防ぐ方法はない、と、こういうことが定期的に起こる唯一のプログラミング概念は言った。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+GitLost: GitHub의 AI 에이전트를 속여 비공개 저장소를 유출시킨 방법
+***** TLDR
+Noma 보안 연구원들이 GitHub의 AI 코딩 에이전트가 프롬프트 인젝션 공격에 취약하다는 것을 발견했다. 공개 저장소에 악의적인 지시를 배치함으로써 에이전트가 접근 권한이 있는 비공개 저장소 내용을 유출하도록 속일 수 있었다.
+***** Take
+프롬프트 인젝션은 새로운 SQL 인젝션이다. 다만 이번에는 매개변수화된 쿼리로 우리를 구할 수 없다.
+***** Comments
+- 프롬프트 인젝션 공격은 에이전트 AI에게 SQL 인젝션이 웹 애플리케이션에 그랬듯이 체계적인 취약점 클래스가 되었다.
+- 이게 어떻게 GitHub 취약점인가? 연구자들이 에이전트에게 비공개 저장소 접근 권한을 부여한 것 아닌가.
+- 이것을 막을 방법은 없다고 이런 일이 정기적으로 발생하는 유일한 프로그래밍 개념이 말했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+GitLost: Como enganamos al agente de IA de GitHub para filtrar repositorios privados
+***** TLDR
+Investigadores de seguridad de Noma descubrieron que el agente de codificacion de IA de GitHub es vulnerable a ataques de inyeccion de prompts. Al colocar instrucciones maliciosas en repositorios publicos, pudieron enganar al agente para filtrar contenidos de repositorios privados.
+***** Take
+La inyeccion de prompts es la nueva inyeccion SQL, excepto que esta vez no hay consultas parametrizadas que nos salven.
+***** Comments
+- Los ataques de inyeccion de prompts se han convertido para la IA agentica en lo que las inyecciones SQL fueron para las aplicaciones web: una clase de vulnerabilidad sistematica.
+- Como es esto una vulnerabilidad de GitHub? Los investigadores son quienes dan acceso al agente a repositorios privados.
+- No hay forma de prevenir esto, dice el unico concepto de programacion donde esto sucede regularmente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+GitLost: Wie wir GitHubs KI-Agenten dazu brachten, private Repos zu leaken
+***** TLDR
+Sicherheitsforscher von Noma entdeckten, dass GitHubs KI-Coding-Agent anfaellig fuer Prompt-Injection-Angriffe ist. Durch das Platzieren boesartiger Anweisungen in oeffentlichen Repos konnten sie den Agenten dazu bringen, Inhalte privater Repositories preiszugeben.
+***** Take
+Prompt-Injection ist die neue SQL-Injection, nur dass uns diesmal keine parametrisierten Abfragen retten.
+***** Comments
+- Prompt-Injection-Angriffe sind fuer agentische KI geworden, was SQL-Injections fuer Webanwendungen waren: eine systematische Schwachstellenklasse.
+- Wie ist das eine GitHub-Schwachstelle? Die Forscher sind diejenigen, die dem Agenten Zugriff auf private Repos gewaehren.
+- Keine Moeglichkeit, dies zu verhindern, sagt das einzige Programmierkonzept, bei dem dies regelmaessig passiert.
+** Copy That Floppy - Cambridge guide for preserving data from fragile floppy disks :preservation:retro:hardware:digital-preservation:
+:PROPERTIES:
+:ID:       48827092
+:URL:      https://www.digipres.org/the-floppy-guide/
+:HN_URL:   https://news.ycombinator.com/item?id=48827092
+:POINTS:   58
+:COMMENTS: 13
+:BY:       whiteblossom
+:END:
+
+*** TLDR
+Cambridge's Future Nostalgia project published a comprehensive guide for preserving floppy disk data. Covers 8-inch, 5.25-inch, 3.5-inch, and 3-inch disks. Recommends flux-level imaging with Greaseweazle or Applesauce controllers over USB floppy drives. Details hardware acquisition, cleaning moldy disks, and dealing with Apple's weird GCR encoding.
+
+*** Take
+Finally, a guide that acknowledges the real threat to digital preservation isn't bit rot - it's that nobody remembers which Shugart drive model reads 40-track FM disks at 300 RPM.
+
+*** Comments
+
+**** tmountain
+:PROPERTIES:
+:COMMENT_ID: 48827093
+:END:
+When I got into Linux, I did an experiment raw writing zeros to floppies with dd. The failure rate was staggering. Something like 30-40% of them had bad sectors.
+
+**** djmips
+:PROPERTIES:
+:COMMENT_ID: 48827094
+:END:
+I can't afford the recommended Applesauce for Apple II disk preservation so I'm hoping that the Adafruit work which added Apple II drive support will work for me.
+
+**** mune2gu-chan
+:PROPERTIES:
+:COMMENT_ID: 48827095
+:END:
+It's easy to forget that preserving digital data often comes down to keeping aging physical media alive.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Copy That Floppy - 剑桥大学脆弱软盘数据保存指南
+***** TLDR
+剑桥大学的Future Nostalgia项目发布了一份全面的软盘数据保存指南。涵盖8英寸、5.25英寸、3.5英寸和3英寸软盘。推荐使用Greaseweazle或Applesauce控制器进行磁通级成像，而非USB软驱。
+***** Take
+终于有一份指南承认数字保存的真正威胁不是比特衰减，而是没人记得哪款Shugart驱动器能以300 RPM读取40轨FM磁盘。
+***** Comments
+- 当我开始玩Linux时，我用dd对软盘进行原始写零实验。故障率惊人。大约30-40%有坏扇区。
+- 我买不起推荐的Applesauce来保存Apple II磁盘，所以希望Adafruit增加的Apple II驱动器支持能帮到我。
+- 很容易忘记保存数字数据往往取决于维护老化的物理介质。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Copy That Floppy - 脆弱なフロッピーディスクからデータを保存するケンブリッジガイド
+***** TLDR
+ケンブリッジのFuture Nostalgiaプロジェクトがフロッピーディスクデータ保存の包括的ガイドを公開。8インチ、5.25インチ、3.5インチ、3インチディスクをカバー。USBフロッピードライブよりGreaseweazleやApplesauceコントローラーでのフラックスレベルイメージングを推奨。
+***** Take
+ついに、デジタル保存の本当の脅威はビット腐敗ではなく、誰も300 RPMで40トラックFMディスクを読めるShugartドライブのモデルを覚えていないことだと認めるガイドが出た。
+***** Comments
+- Linuxを始めた頃、ddでフロッピーにゼロを書き込む実験をした。故障率は驚くべきものだった。30-40%が不良セクタを持っていた。
+- Apple II保存用の推奨Applesauceを買う余裕がないので、AdafruitのApple IIドライブサポートが使えることを期待している。
+- デジタルデータの保存が老朽化した物理メディアを生かし続けることに依存していることを忘れがちだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Copy That Floppy - 취약한 플로피 디스크 데이터 보존을 위한 케임브리지 가이드
+***** TLDR
+케임브리지의 Future Nostalgia 프로젝트가 플로피 디스크 데이터 보존에 대한 포괄적인 가이드를 발표했다. 8인치, 5.25인치, 3.5인치, 3인치 디스크를 다룬다. USB 플로피 드라이브보다 Greaseweazle이나 Applesauce 컨트롤러로 플럭스 레벨 이미징을 권장한다.
+***** Take
+마침내 디지털 보존의 진짜 위협은 비트 부식이 아니라 아무도 300 RPM에서 40트랙 FM 디스크를 읽는 Shugart 드라이브 모델을 기억하지 못한다는 것을 인정하는 가이드가 나왔다.
+***** Comments
+- Linux를 시작했을 때 dd로 플로피에 0을 쓰는 실험을 했다. 실패율이 엄청났다. 30-40%가 불량 섹터를 가지고 있었다.
+- Apple II 디스크 보존용 Applesauce를 살 여유가 없어서 Adafruit의 Apple II 드라이브 지원이 작동하기를 바란다.
+- 디지털 데이터 보존이 종종 노후화된 물리적 미디어를 살려두는 것에 달려있다는 것을 잊기 쉽다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Copy That Floppy - Guia de Cambridge para preservar datos de disquetes fragiles
+***** TLDR
+El proyecto Future Nostalgia de Cambridge publico una guia completa para preservar datos de disquetes. Cubre disquetes de 8, 5.25, 3.5 y 3 pulgadas. Recomienda imagen a nivel de flujo con controladores Greaseweazle o Applesauce en lugar de unidades USB.
+***** Take
+Por fin, una guia que reconoce que la verdadera amenaza para la preservacion digital no es la degradacion de bits, sino que nadie recuerda que modelo de unidad Shugart lee discos FM de 40 pistas a 300 RPM.
+***** Comments
+- Cuando empece con Linux, hice un experimento escribiendo ceros en disquetes con dd. La tasa de fallos era asombrosa. Algo asi como 30-40% tenian sectores defectuosos.
+- No puedo permitirme el Applesauce recomendado para preservar discos de Apple II, asi que espero que el trabajo de Adafruit funcione para mi.
+- Es facil olvidar que preservar datos digitales a menudo depende de mantener vivos los medios fisicos envejecidos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Copy That Floppy - Cambridge-Leitfaden zur Erhaltung von Daten auf fragilen Disketten
+***** TLDR
+Cambridges Future Nostalgia-Projekt veroeffentlichte einen umfassenden Leitfaden zur Erhaltung von Diskettendaten. Behandelt 8-Zoll-, 5,25-Zoll-, 3,5-Zoll- und 3-Zoll-Disketten. Empfiehlt Flux-Level-Imaging mit Greaseweazle- oder Applesauce-Controllern statt USB-Diskettenlaufwerken.
+***** Take
+Endlich ein Leitfaden, der anerkennt, dass die wirkliche Bedrohung fuer die digitale Erhaltung nicht Bit-Verfall ist, sondern dass niemand weiss, welches Shugart-Laufwerksmodell 40-Track-FM-Disketten bei 300 RPM liest.
+***** Comments
+- Als ich mit Linux anfing, machte ich ein Experiment und schrieb mit dd Nullen auf Disketten. Die Ausfallrate war erschreckend. Etwa 30-40% hatten defekte Sektoren.
+- Ich kann mir den empfohlenen Applesauce fuer die Apple II-Erhaltung nicht leisten, also hoffe ich, dass die Adafruit-Arbeit fuer mich funktioniert.
+- Man vergisst leicht, dass die Erhaltung digitaler Daten oft davon abhaengt, alternde physische Medien am Leben zu erhalten.
+** LineageOS Statistics :android:foss:mobile:statistics:
+:PROPERTIES:
+:ID:       48826329
+:URL:      https://stats.lineageos.org
+:HN_URL:   https://news.ycombinator.com/item?id=48826329
+:POINTS:   70
+:COMMENTS: 33
+:BY:       pentagrama
+:END:
+
+*** TLDR
+LineageOS stats page shows 1.46 million active installs, but 74% are unofficial builds. Top device is waydroid_x86_64 (Android in containers), followed by old Xiaomi and Samsung phones. Only 21% run versions with security updates. China, Brazil, and Vietnam dominate actual phone installs; US installs are mostly Waydroid, Nintendo Switch, and Raspberry Pi.
+
+*** Take
+The custom ROM that was supposed to save old phones is now mostly running Android on everything except phones. At this point LineageOS is less 'mobile OS' and more 'universal Android compatibility layer.'
+
+*** Comments
+
+**** XiS
+:PROPERTIES:
+:COMMENT_ID: 48826330
+:END:
+It's quite sad to see these stats. It used to be the defacto standard for custom ROMs. These dwindling numbers make me think either people aren't as interested in custom ROMs anymore.
+
+**** pavon
+:PROPERTIES:
+:COMMENT_ID: 48826331
+:END:
+74% of installs are unofficial builds. 2/3 of US installs are on non-phones (waydroid, nintendo switch, rpi). Most actual phones are in China, Brazil and Vietnam.
+
+**** jeroenhd
+:PROPERTIES:
+:COMMENT_ID: 48826332
+:END:
+Note that these are the statistics coming from people who are willing to share statistics. Quite a few privacy-minded individuals use these ROMs but don't want to send telemetry.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+LineageOS统计数据
+***** TLDR
+LineageOS统计页面显示有146万活跃安装，但74%是非官方构建。排名第一的设备是waydroid_x86_64（容器中的Android），其次是旧款小米和三星手机。只有21%运行有安全更新的版本。中国、巴西和越南主导实际手机安装；美国安装主要是Waydroid、Nintendo Switch和树莓派。
+***** Take
+本应拯救旧手机的定制ROM现在主要在除手机外的所有设备上运行Android。此时LineageOS与其说是移动操作系统，不如说是通用Android兼容层。
+***** Comments
+- 看到这些统计数据很难过。它曾经是定制ROM的事实标准。这些下降的数字让我觉得人们对定制ROM不再感兴趣了。
+- 74%的安装是非官方构建。2/3的美国安装是在非手机上（waydroid、任天堂switch、树莓派）。大多数实际手机在中国、巴西和越南。
+- 注意这些统计数据来自愿意分享统计数据的人。相当多注重隐私的人使用这些ROM但不想发送遥测数据。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+LineageOS統計
+***** TLDR
+LineageOS統計ページは146万のアクティブインストールを示すが、74%は非公式ビルド。トップデバイスはwaydroid_x86_64（コンテナ内のAndroid）、続いて古いXiaomiとSamsungの電話。21%のみがセキュリティアップデートのあるバージョンを実行。中国、ブラジル、ベトナムが実際の電話インストールを支配；米国のインストールは主にWaydroid、Nintendo Switch、Raspberry Pi。
+***** Take
+古い電話を救うはずだったカスタムROMは、今や電話以外のすべてでAndroidを実行している。この時点でLineageOSはモバイルOSというよりユニバーサルAndroid互換レイヤーだ。
+***** Comments
+- この統計を見ると悲しくなる。かつてはカスタムROMの事実上の標準だった。この減少する数字を見ると、人々はもうカスタムROMに興味がないのかもしれない。
+- インストールの74%は非公式ビルド。米国インストールの2/3は非電話（waydroid、任天堂スイッチ、rpi）。実際の電話のほとんどは中国、ブラジル、ベトナム。
+- これらは統計を共有する意思のある人からの統計であることに注意。かなり多くのプライバシー重視の人がこれらのROMを使用しているがテレメトリを送信したくない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+LineageOS 통계
+***** TLDR
+LineageOS 통계 페이지는 146만 활성 설치를 보여주지만 74%가 비공식 빌드다. 최상위 기기는 waydroid_x86_64(컨테이너의 Android)이고, 그 다음이 오래된 Xiaomi와 Samsung 폰이다. 21%만 보안 업데이트가 있는 버전을 실행한다. 중국, 브라질, 베트남이 실제 폰 설치를 지배하고, 미국 설치는 대부분 Waydroid, Nintendo Switch, Raspberry Pi다.
+***** Take
+오래된 폰을 살리려던 커스텀 ROM이 이제는 폰 외의 모든 것에서 Android를 실행하고 있다. 이 시점에서 LineageOS는 모바일 OS보다 범용 Android 호환성 레이어에 가깝다.
+***** Comments
+- 이 통계를 보면 슬프다. 한때 커스텀 ROM의 사실상 표준이었다. 이 감소하는 숫자를 보면 사람들이 더 이상 커스텀 ROM에 관심이 없는 것 같다.
+- 설치의 74%가 비공식 빌드다. 미국 설치의 2/3는 비전화기(waydroid, 닌텐도 스위치, rpi)다. 실제 폰 대부분은 중국, 브라질, 베트남에 있다.
+- 이 통계는 통계를 공유할 의사가 있는 사람들로부터 온 것임을 참고하라. 꽤 많은 프라이버시 중시 사용자들이 이 ROM을 사용하지만 텔레메트리를 보내고 싶어하지 않는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Estadisticas de LineageOS
+***** TLDR
+La pagina de estadisticas de LineageOS muestra 1.46 millones de instalaciones activas, pero el 74% son compilaciones no oficiales. El dispositivo principal es waydroid_x86_64 (Android en contenedores), seguido de telefonos Xiaomi y Samsung antiguos. Solo el 21% ejecuta versiones con actualizaciones de seguridad. China, Brasil y Vietnam dominan las instalaciones reales en telefonos.
+***** Take
+La ROM personalizada que debia salvar telefonos viejos ahora ejecuta Android en todo excepto telefonos. En este punto LineageOS es menos OS movil y mas capa de compatibilidad Android universal.
+***** Comments
+- Es triste ver estas estadisticas. Solia ser el estandar de facto para ROMs personalizadas. Estos numeros decrecientes me hacen pensar que la gente ya no esta interesada en ROMs personalizadas.
+- 74% de las instalaciones son compilaciones no oficiales. 2/3 de las instalaciones de EE.UU. son en no-telefonos (waydroid, nintendo switch, rpi). La mayoria de telefonos reales estan en China, Brasil y Vietnam.
+- Nota que estas estadisticas vienen de personas dispuestas a compartir estadisticas. Bastantes individuos preocupados por la privacidad usan estas ROMs pero no quieren enviar telemetria.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+LineageOS-Statistiken
+***** TLDR
+Die LineageOS-Statistikseite zeigt 1,46 Millionen aktive Installationen, aber 74% sind inoffizielle Builds. Top-Geraet ist waydroid_x86_64 (Android in Containern), gefolgt von alten Xiaomi- und Samsung-Telefonen. Nur 21% nutzen Versionen mit Sicherheitsupdates. China, Brasilien und Vietnam dominieren die tatsaechlichen Telefoninstallationen.
+***** Take
+Das Custom-ROM, das alte Telefone retten sollte, laeuft jetzt hauptsaechlich auf allem ausser Telefonen. An diesem Punkt ist LineageOS weniger mobiles OS und mehr universelle Android-Kompatibilitaetsschicht.
+***** Comments
+- Es ist traurig, diese Statistiken zu sehen. Es war mal der De-facto-Standard fuer Custom-ROMs. Diese sinkenden Zahlen lassen mich denken, dass die Leute nicht mehr an Custom-ROMs interessiert sind.
+- 74% der Installationen sind inoffizielle Builds. 2/3 der US-Installationen sind auf Nicht-Telefonen (waydroid, nintendo switch, rpi). Die meisten echten Telefone sind in China, Brasilien und Vietnam.
+- Beachte, dass diese Statistiken von Leuten stammen, die bereit sind, Statistiken zu teilen. Einige datenschutzbewusste Personen nutzen diese ROMs, wollen aber keine Telemetrie senden.
+** The difference between today's task and accretive work :ai:programming:philosophy:tech-debt:
+:PROPERTIES:
+:ID:       48761868
+:URL:      https://pluralistic.net/2026/07/02/canonization/
+:HN_URL:   https://news.ycombinator.com/item?id=48761868
+:POINTS:   38
+:COMMENTS: 24
+:BY:       hn_acker
+:END:
+
+*** TLDR
+Cory Doctorow distinguishes between 'centaurs' (workers who direct AI tools) and 'reverse centaurs' (workers who serve as peripherals to AI). Vibe-coded personal utilities are fine, but production code needs 'canonization' - making it legible, reusable, and maintainable. The AI industry is consuming the open source canon without contributing back, because canonization work is undervalued.
+
+*** Take
+Your one-off script that 'just works' is fine. The problem is when VCs expect that same energy to scale to production systems maintained by terrorized survivors of the layoff wave.
+
+*** Comments
+
+**** lifeisstillgood
+:PROPERTIES:
+:COMMENT_ID: 48761869
+:END:
+Isn't this a question of how much the 'terrorised survivors' spend on tokens to make the output 'canonised'? The cost of producing high quality code will remain the same - just being produced faster.
+
+**** fedeb95
+:PROPERTIES:
+:COMMENT_ID: 48761870
+:END:
+AI is a tool. Stop treating it as something different. The value you can extract depends on your skill in using it, and knowing when not using it.
+
+**** brigandish
+:PROPERTIES:
+:COMMENT_ID: 48761871
+:END:
+I'm not sure that firing millions of workers is the only way to recoup AI costs, just the way that selfish, sloppy, or impatient actors within business often work.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+今日任务与增值工作的区别
+***** TLDR
+Cory Doctorow区分了半人马（指导AI工具的工人）和反向半人马（作为AI外设的工人）。vibe编码的个人工具没问题，但生产代码需要规范化，使其可读、可复用和可维护。AI产业在消耗开源规范而不回馈，因为规范化工作被低估了。
+***** Take
+你那个能用就行的一次性脚本没问题。问题在于VC期望同样的能量扩展到由裁员浪潮中幸存的受惊员工维护的生产系统。
+***** Comments
+- 这不是一个关于受惊的幸存者花多少代币来使输出规范化的问题吗？生产高质量代码的成本将保持不变，只是生产更快了。
+- AI是工具。别把它当作不同的东西。你能提取的价值取决于你使用它的技能，以及知道何时不使用它。
+- 我不确定解雇数百万工人是收回AI成本的唯一方法，只是商业中自私、草率或急躁的行为者经常采用的方式。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+今日のタスクと蓄積的な仕事の違い
+***** TLDR
+Cory Doctorowはケンタウロス（AIツールを指示する労働者）と逆ケンタウロス（AIの周辺機器として機能する労働者）を区別している。バイブコーディングされた個人ユーティリティは問題ないが、プロダクションコードには正典化が必要。AI産業は正典化作業が過小評価されているため、オープンソースの正典を消費しながら貢献していない。
+***** Take
+あなたのとりあえず動くワンオフスクリプトは問題ない。問題は、VCがレイオフの波を生き延びた恐怖した人々が保守するプロダクションシステムに同じエネルギーをスケールさせることを期待するとき。
+***** Comments
+- これは恐怖したサバイバーが出力を正典化するためにどれだけのトークンを費やすかの問題ではないか？高品質コードを生産するコストは同じまま、ただ速く生産されるだけ。
+- AIはツールだ。それを違うものとして扱うのをやめろ。抽出できる価値は使うスキルと、使わないときを知ることに依存する。
+- 何百万人もの労働者を解雇することがAIコストを回収する唯一の方法だとは思わない、ただビジネス内の利己的で、ずさんで、焦った人々がよく行う方法だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+오늘의 작업과 축적적 작업의 차이
+***** TLDR
+Cory Doctorow는 켄타우로스(AI 도구를 지시하는 근로자)와 역 켄타우로스(AI의 주변기기로 기능하는 근로자)를 구분한다. 바이브 코딩된 개인 유틸리티는 괜찮지만, 프로덕션 코드는 정전화가 필요하다. AI 산업은 정전화 작업이 저평가되어 오픈소스 정전을 소비하면서 기여하지 않고 있다.
+***** Take
+일단 돌아가는 일회성 스크립트는 괜찮다. 문제는 VC가 해고 물결에서 살아남은 겁에 질린 사람들이 유지하는 프로덕션 시스템에 같은 에너지를 확장하기를 기대할 때다.
+***** Comments
+- 이것은 겁에 질린 생존자들이 출력을 정전화하기 위해 얼마나 많은 토큰을 쓰느냐의 문제가 아닌가? 고품질 코드를 생산하는 비용은 같을 것이다, 다만 더 빨리 생산될 뿐.
+- AI는 도구다. 다른 것처럼 취급하지 마라. 추출할 수 있는 가치는 사용 기술과 사용하지 않아야 할 때를 아는 것에 달려 있다.
+- 수백만 명의 근로자를 해고하는 것이 AI 비용을 회수하는 유일한 방법이라고 확신하지 않는다, 그저 비즈니스 내 이기적이고, 부주의하고, 성급한 행위자들이 자주 하는 방식일 뿐이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La diferencia entre la tarea de hoy y trabajo acumulativo
+***** TLDR
+Cory Doctorow distingue entre centauros (trabajadores que dirigen herramientas de IA) y centauros inversos (trabajadores que sirven como perifericos de IA). Las utilidades personales vibe-coded estan bien, pero el codigo de produccion necesita canonizacion. La industria de IA esta consumiendo el canon de codigo abierto sin contribuir.
+***** Take
+Tu script unico que simplemente funciona esta bien. El problema es cuando los VCs esperan que esa misma energia escale a sistemas de produccion mantenidos por sobrevivientes aterrorizados de la ola de despidos.
+***** Comments
+- No es esto una cuestion de cuanto gastan los sobrevivientes aterrorizados en tokens para canonizar la salida? El costo de producir codigo de alta calidad seguira siendo el mismo, solo se producira mas rapido.
+- La IA es una herramienta. Deja de tratarla como algo diferente. El valor que puedes extraer depende de tu habilidad usandola, y sabiendo cuando no usarla.
+- No estoy seguro de que despedir a millones de trabajadores sea la unica forma de recuperar los costos de IA, solo la forma en que actores egoistas, descuidados o impacientes dentro de los negocios suelen trabajar.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der Unterschied zwischen heutiger Aufgabe und akkumulativer Arbeit
+***** TLDR
+Cory Doctorow unterscheidet zwischen Zentauren (Arbeiter, die KI-Tools steuern) und Umkehr-Zentauren (Arbeiter, die als Peripheriegeraete fuer KI dienen). Vibe-codierte persoenliche Utilities sind okay, aber Produktionscode braucht Kanonisierung. Die KI-Industrie konsumiert den Open-Source-Kanon ohne beizutragen.
+***** Take
+Dein einmaliges Skript, das einfach funktioniert, ist okay. Das Problem ist, wenn VCs erwarten, dass dieselbe Energie auf Produktionssysteme skaliert, die von terrorisierten Ueberlebenden der Entlassungswelle gewartet werden.
+***** Comments
+- Ist das nicht eine Frage, wie viel die terrorisierten Ueberlebenden fuer Tokens ausgeben, um die Ausgabe zu kanonisieren? Die Kosten fuer hochwertige Code-Produktion bleiben gleich, nur schneller produziert.
+- KI ist ein Werkzeug. Hoert auf, es als etwas anderes zu behandeln. Der Wert, den ihr extrahieren koennt, haengt von eurer Faehigkeit ab, es zu benutzen, und zu wissen, wann nicht.
+- Ich bin nicht sicher, dass das Entlassen von Millionen Arbeitern der einzige Weg ist, KI-Kosten zurueckzugewinnen, nur der Weg, den egoistische, schlampige oder ungeduldige Akteure in Unternehmen oft gehen.
+** GPT-5.6 Sol, along with Terra and Luna, will launch publicly this Thursday :ai:openai:llm:announcement:
+:PROPERTIES:
+:ID:       48827402
+:URL:      https://twitter.com/OpenAI/status/2074704958419792299
+:HN_URL:   https://news.ycombinator.com/item?id=48827402
+:POINTS:   171
+:COMMENTS: 115
+:BY:       jfrbfbreudh
+:END:
+
+*** TLDR
+OpenAI announces GPT-5.6 Sol launching Thursday alongside Terra and Luna variants. Early access reports say it's 'incredibly determined' and will run for a day without guidance. Fixes GPT-5.5 issues and handles subagent orchestration well. HN commenters mostly complaining about the confusing naming scheme.
+
+*** Take
+OpenAI's naming convention has achieved full planetary chaos. At this rate GPT-6 will be called 'Pluto' just to spark a debate about whether it's a real model.
+
+*** Comments
+
+**** linzhangrun
+:PROPERTIES:
+:COMMENT_ID: 48827403
+:END:
+Will it be restricted as heavily as Fable? Will it come to CodeX? My quota is about to reset. Really can't wait to use it.
+
+**** elAhmo
+:PROPERTIES:
+:COMMENT_ID: 48827404
+:END:
+These new names are horrible. Why introduce ANOTHER layer of confusion and drop the mini, nano suffixes that people got used to?
+
+**** aarvin_roshin
+:PROPERTIES:
+:COMMENT_ID: 48827405
+:END:
+Theo says: It's a damn good model. Not quite as smart as Fable, but incredibly capable. Fixed all the problems I had with GPT-5.5. It will run for a day without even using a /goal.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+GPT-5.6 Sol以及Terra和Luna将于本周四公开发布
+***** TLDR
+OpenAI宣布GPT-5.6 Sol将于周四与Terra和Luna变体一起发布。早期访问报告称它极其坚定，可以在没有指导的情况下运行一天。修复了GPT-5.5的问题，并能很好地处理子代理编排。HN评论者主要抱怨令人困惑的命名方案。
+***** Take
+OpenAI的命名惯例已经实现了完全的行星混乱。按这个速度，GPT-6将被称为冥王星，只是为了引发关于它是否是真正模型的争论。
+***** Comments
+- 它会像Fable一样受到严格限制吗？会上CodeX吗？我的配额即将重置。真的等不及要用了。
+- 这些新名字太糟糕了。为什么要引入另一层混乱，放弃人们已经习惯的mini、nano后缀？
+- Theo说：这是一个非常好的模型。没有Fable那么聪明，但能力很强。修复了我在GPT-5.5上遇到的所有问题。它可以在不使用/goal的情况下运行一天。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GPT-5.6 SolとTerra、Lunaが今週木曜日に一般公開
+***** TLDR
+OpenAIはGPT-5.6 SolがTerraとLunaバリアントと共に木曜日にローンチすると発表。早期アクセスレポートでは非常に粘り強いとされ、ガイダンスなしで1日稼働する。GPT-5.5の問題を修正し、サブエージェントのオーケストレーションをうまく処理。HNコメンターは主に混乱する命名規則について不満を述べている。
+***** Take
+OpenAIの命名規則は完全な惑星カオスを達成した。このペースだとGPT-6は冥王星と呼ばれ、本物のモデルかどうかの議論を巻き起こすだけだろう。
+***** Comments
+- Fableほど厳しく制限されるのか？CodeXに来るのか？私のクォータがもうすぐリセットされる。使うのが待ちきれない。
+- これらの新しい名前はひどい。なぜまた別の混乱層を導入し、みんなが慣れたmini、nanoサフィックスを廃止するのか？
+- Theoは言う：素晴らしいモデルだ。Fableほど賢くないが、非常に有能。GPT-5.5で抱えていた問題をすべて解決した。/goalを使わなくても1日稼働する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+GPT-5.6 Sol과 Terra, Luna가 이번 목요일 공개 출시
+***** TLDR
+OpenAI가 GPT-5.6 Sol이 Terra와 Luna 변형과 함께 목요일에 출시된다고 발표했다. 조기 접근 보고서에 따르면 믿을 수 없이 끈질기다며 안내 없이 하루 동안 실행된다고 한다. GPT-5.5 문제를 수정하고 하위 에이전트 조율을 잘 처리한다. HN 댓글러들은 주로 혼란스러운 명명 체계에 대해 불평하고 있다.
+***** Take
+OpenAI의 명명 규칙이 완전한 행성 혼돈을 달성했다. 이 속도라면 GPT-6은 진짜 모델인지에 대한 논쟁을 일으키기 위해 명왕성이라고 불릴 것이다.
+***** Comments
+- Fable만큼 심하게 제한될까? CodeX에 올까? 내 할당량이 곧 리셋된다. 정말 사용하고 싶어 못 참겠다.
+- 이 새 이름들은 끔찍하다. 왜 또 다른 혼란 계층을 도입하고 사람들이 익숙해진 mini, nano 접미사를 버리는가?
+- Theo가 말하길: 정말 좋은 모델이다. Fable만큼 똑똑하지는 않지만 매우 유능하다. GPT-5.5에서 겪었던 모든 문제를 해결했다. /goal 없이도 하루 동안 실행된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+GPT-5.6 Sol, junto con Terra y Luna, se lanzara publicamente este jueves
+***** TLDR
+OpenAI anuncia que GPT-5.6 Sol se lanzara el jueves junto con las variantes Terra y Luna. Los informes de acceso temprano dicen que es increiblemente determinado y funcionara todo el dia sin guia. Corrige problemas de GPT-5.5 y maneja bien la orquestacion de subagentes. Los comentaristas de HN se quejan principalmente del confuso esquema de nombres.
+***** Take
+La convencion de nombres de OpenAI ha logrado el caos planetario total. A este ritmo GPT-6 se llamara Pluton solo para provocar un debate sobre si es un modelo real.
+***** Comments
+- Estara tan restringido como Fable? Llegara a CodeX? Mi cuota esta a punto de restablecerse. Realmente no puedo esperar para usarlo.
+- Estos nuevos nombres son horribles. Por que introducir OTRA capa de confusion y abandonar los sufijos mini, nano a los que la gente se acostumbro?
+- Theo dice: Es un modelo maldItamente bueno. No tan inteligente como Fable, pero increiblemente capaz. Arreglo todos los problemas que tenia con GPT-5.5. Funcionara un dia sin siquiera usar un /goal.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+GPT-5.6 Sol sowie Terra und Luna werden diesen Donnerstag oeffentlich gestartet
+***** TLDR
+OpenAI kuendigt an, dass GPT-5.6 Sol am Donnerstag zusammen mit den Terra- und Luna-Varianten startet. Fruehe Zugriffsberichte sagen, es sei unglaublich entschlossen und laufe einen Tag ohne Anleitung. Behebt GPT-5.5-Probleme und handhabt Subagenten-Orchestrierung gut. HN-Kommentatoren beschweren sich hauptsaechlich ueber das verwirrende Benennungsschema.
+***** Take
+OpenAIs Namenskonvention hat volles planetares Chaos erreicht. Bei diesem Tempo wird GPT-6 Pluto heissen, nur um eine Debatte darueber auszuloesen, ob es ein echtes Modell ist.
+***** Comments
+- Wird es so stark eingeschraenkt wie Fable? Kommt es zu CodeX? Mein Kontingent wird bald zurueckgesetzt. Kann es wirklich nicht erwarten, es zu benutzen.
+- Diese neuen Namen sind schrecklich. Warum NOCH eine Verwirrungsebene einfuehren und die Mini-, Nano-Suffixe aufgeben, an die sich die Leute gewoehnt hatten?
+- Theo sagt: Es ist ein verdammt gutes Modell. Nicht ganz so schlau wie Fable, aber unglaublich faehig. Hat alle Probleme behoben, die ich mit GPT-5.5 hatte. Es laeuft einen Tag ohne /goal.
