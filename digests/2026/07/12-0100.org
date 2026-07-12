@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-07-12 01:00:00 UT UTC
+#+DATE: 2026-07-12T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+SQLite gets strict, Nvidia plays circular financing, and mice learn to deadlift for science
+
+* Highlights
+- SQLite strict tables: the missing feature you should've been using since 2021
+- Nvidia invests in neoclouds who buy... Nvidia GPUs (you're shocked, I know)
+- Ant: another JS runtime because we definitely needed more of those
+- Mice at Virginia Tech lift weights and now have better glucose control than you
+- ShipThatCode: build Redis from scratch instead of just importing it
+
+* Stories
+
+** Prefer strict tables in SQLite :sqlite:databases:typing:
+:PROPERTIES:
+:ID:       48873940
+:URL:      https://evanhahn.com/prefer-strict-tables-in-sqlite/
+:HN_URL:   https://news.ycombinator.com/item?id=48873940
+:POINTS:   215
+:COMMENTS: 102
+:BY:       ingve
+:END:
+
+*** TLDR
+SQLite has had STRICT tables since v3.37.0 (November 2021), which enforce rigid typing and prevent you from accidentally stuffing text into integer columns. Just add STRICT at the end of your CREATE TABLE statement. The SQLite developers themselves disagree this is better, but they also give you the option anyway.
+
+*** Take
+The fact that SQLite lets you create columns with type 'GARBAGE' by default is both its greatest superpower and its greatest crime. Five years in, most codebases still don't use STRICT because nobody reads changelogs.
+
+*** Comments
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 48873941
+:END:
+This inspired me to add a feature to my sqlite-utils Python library and CLI tool, so you can now transform non-strict tables to strict.
+
+**** ezekiel68
+:PROPERTIES:
+:COMMENT_ID: 48873942
+:END:
+Coming from the enterprise SQL world, I never took SQLite seriously for the very reason that field types were not enforced by default.
+
+**** jll29
+:PROPERTIES:
+:COMMENT_ID: 48873943
+:END:
+I'd like to see STRICT as the default. That's pretty much the only disagreement with the SQLite developer, who is an amazing guy.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+SQLite中应该优先使用STRICT表
+***** TLDR
+SQLite从3.37.0版本(2021年11月)开始支持STRICT表，可以强制类型检查，防止你意外把文本塞进整数列。只需在CREATE TABLE语句末尾加上STRICT即可。SQLite开发者本人不太认同这更好，但还是给了你这个选项。
+***** Take
+SQLite默认允许创建类型为'GARBAGE'的列，这既是它最大的超能力，也是它最大的罪过。五年过去了，大多数代码库仍然不用STRICT，因为没人看更新日志。
+***** Comments
+- 这启发我为sqlite-utils Python库添加了一个功能，现在可以把非严格表转换为严格表。
+- 作为企业级SQL出身，我一直没把SQLite当回事，正是因为字段类型默认不强制。
+- 我希望STRICT成为默认值。这几乎是我和SQLite开发者唯一的分歧。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+SQLiteではSTRICTテーブルを使うべき
+***** TLDR
+SQLiteはv3.37.0(2021年11月)からSTRICTテーブルをサポートしており、厳密な型付けを強制し、テキストを整数カラムに入れてしまうミスを防げる。CREATE TABLE文の末尾にSTRICTを追加するだけ。SQLiteの開発者自身はこれが良いとは思っていないが、オプションとして提供している。
+***** Take
+SQLiteがデフォルトで'GARBAGE'型のカラムを作れるのは、最大の強みであり最大の罪。5年経っても、誰も変更履歴を読まないからSTRICTを使っていないコードベースがほとんど。
+***** Comments
+- これに触発されて、sqlite-utils Pythonライブラリに非strictテーブルをstrictに変換する機能を追加した。
+- エンタープライズSQLの世界から来た私は、フィールド型がデフォルトで強制されないという理由でSQLiteを真剣に受け止めてこなかった。
+- STRICTをデフォルトにしてほしい。これが素晴らしいSQLite開発者との唯一の意見の相違。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+SQLite에서 STRICT 테이블을 사용해야 하는 이유
+***** TLDR
+SQLite는 v3.37.0(2021년 11월)부터 STRICT 테이블을 지원하여 엄격한 타입 검사를 강제하고, 실수로 텍스트를 정수 컬럼에 넣는 것을 방지한다. CREATE TABLE 문 끝에 STRICT만 추가하면 된다. SQLite 개발자들은 이게 더 낫다고 생각하지 않지만, 어쨌든 옵션을 제공한다.
+***** Take
+SQLite가 기본적으로 'GARBAGE' 타입 컬럼을 만들 수 있게 하는 건 최고의 강점이자 최악의 죄악이다. 5년이 지났는데도 대부분의 코드베이스가 STRICT를 안 쓴다. 아무도 변경 로그를 안 읽으니까.
+***** Comments
+- 이것에 영감을 받아 sqlite-utils Python 라이브러리에 non-strict 테이블을 strict로 변환하는 기능을 추가했다.
+- 엔터프라이즈 SQL 세계에서 왔기에 필드 타입이 기본적으로 강제되지 않는다는 이유로 SQLite를 진지하게 생각하지 않았다.
+- STRICT가 기본값이 되었으면 좋겠다. 훌륭한 SQLite 개발자와의 유일한 의견 차이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Prefiere tablas STRICT en SQLite
+***** TLDR
+SQLite tiene tablas STRICT desde v3.37.0 (noviembre 2021), que imponen tipado estricto y evitan meter texto en columnas enteras por error. Solo añade STRICT al final de tu CREATE TABLE. Los desarrolladores de SQLite no creen que sea mejor, pero te dan la opción.
+***** Take
+El hecho de que SQLite te deje crear columnas tipo 'GARBAGE' por defecto es su mayor superpoder y su mayor crimen. Cinco años después, la mayoría de proyectos no usan STRICT porque nadie lee los changelogs.
+***** Comments
+- Esto me inspiró a añadir una función a mi biblioteca sqlite-utils de Python, para transformar tablas no estrictas a estrictas.
+- Viniendo del mundo SQL empresarial, nunca tomé SQLite en serio precisamente porque los tipos de campo no se aplicaban por defecto.
+- Me gustaría que STRICT fuera el valor por defecto. Es prácticamente el único desacuerdo con el desarrollador de SQLite.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Bevorzuge STRICT-Tabellen in SQLite
+***** TLDR
+SQLite hat STRICT-Tabellen seit v3.37.0 (November 2021), die strikte Typisierung erzwingen und verhindern, dass versehentlich Text in Integer-Spalten landet. Einfach STRICT am Ende des CREATE TABLE hinzufügen. Die SQLite-Entwickler selbst finden das nicht besser, geben dir aber trotzdem die Option.
+***** Take
+Dass SQLite standardmäßig erlaubt, Spalten vom Typ 'GARBAGE' zu erstellen, ist seine größte Stärke und sein größtes Verbrechen. Fünf Jahre später nutzen die meisten Codebasen immer noch kein STRICT, weil niemand Changelogs liest.
+***** Comments
+- Das hat mich inspiriert, eine Funktion zu meiner sqlite-utils Python-Bibliothek hinzuzufügen, um nicht-strikte in strikte Tabellen umzuwandeln.
+- Aus der Enterprise-SQL-Welt kommend, habe ich SQLite nie ernst genommen, eben weil Feldtypen standardmäßig nicht erzwungen wurden.
+- Ich hätte gerne STRICT als Standard. Das ist so ziemlich die einzige Meinungsverschiedenheit mit dem SQLite-Entwickler.
+** Show HN: Ant - A JavaScript runtime and ecosystem :javascript:runtime:showhn:
+:PROPERTIES:
+:ID:       48875377
+:URL:      https://antjs.org
+:HN_URL:   https://news.ycombinator.com/item?id=48875377
+:POINTS:   167
+:COMMENTS: 74
+:BY:       theMackabu
+:END:
+
+*** TLDR
+Ant is a 9MB JavaScript runtime with its own hand-built engine (not V8, JSC, or SpiderMonkey), a package manager, registry (ants.land), and VM-isolated sandbox. Claims 5.4ms cold start vs Bun's 12.8ms. Runs npm packages, TypeScript without build step, and has WinterTC conformance.
+
+*** Take
+The JavaScript ecosystem heard you liked runtimes so they put a runtime in your runtime. At least this one actually ships its own engine instead of wrapping V8 like everyone else. The HN comments immediately focused on whether it was vaporware built on AI-generated code from an AGPL project.
+
+*** Comments
+
+**** tekacs
+:PROPERTIES:
+:COMMENT_ID: 48875378
+:END:
+The 'from-scratch hand-built' framing grates given the original heavy lifting from an existing AGPL codebase.
+
+**** hoistbypetard
+:PROPERTIES:
+:COMMENT_ID: 48875379
+:END:
+Seems odd not to acknowledge and differentiate yourself from Apache Ant. Failure to do so makes me think the new project isn't very serious.
+
+**** lucb1e
+:PROPERTIES:
+:COMMENT_ID: 48875380
+:END:
+Why call it 'Ant' and not 'Antjs' when there is already Ant from Apache?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: Ant - 一个JavaScript运行时和生态系统
+***** TLDR
+Ant是一个9MB的JavaScript运行时，拥有自己手工打造的引擎(不是V8、JSC或SpiderMonkey)，包管理器，注册表(ants.land)和VM隔离沙箱。号称冷启动5.4ms，而Bun是12.8ms。能运行npm包，无需构建步骤即可运行TypeScript。
+***** Take
+JavaScript生态听说你喜欢运行时，于是在你的运行时里放了个运行时。至少这个真的自己造了引擎而不是像其他人一样包装V8。HN评论立刻开始讨论这是不是用AI从AGPL项目生成的空壳软件。
+***** Comments
+- 考虑到原始代码来自现有AGPL代码库，'从零手工打造'的说法让人不舒服。
+- 不承认并区分Apache Ant很奇怪，这让我觉得新项目不太认真。
+- 既然已经有Apache Ant了，为什么叫'Ant'而不是'Antjs'？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Ant - JavaScriptランタイムとエコシステム
+***** TLDR
+Antは9MBのJavaScriptランタイムで、独自のエンジン(V8、JSC、SpiderMonkeyではない)、パッケージマネージャー、レジストリ(ants.land)、VM分離サンドボックスを持つ。コールドスタート5.4msを謳い、Bunの12.8msと比較。npmパッケージ実行可能、ビルドなしでTypeScript実行。
+***** Take
+JSエコシステムは、ランタイムが好きだと聞いて、ランタイムの中にランタイムを入れた。少なくともこれは他のように V8をラップするのではなく、本当に独自エンジンを作っている。HNのコメントはすぐにAGPLプロジェクトからAI生成されたvaporwareかどうかに焦点を当てた。
+***** Comments
+- AGPLコードベースからの重労働を考えると、『ゼロから手作り』という表現は引っかかる。
+- Apache Antと区別しないのは奇妙で、プロジェクトが本気じゃないように見える。
+- すでにApache Antがあるのに、なぜ'Antjs'ではなく'Ant'と呼ぶのか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Ant - JavaScript 런타임과 생태계
+***** TLDR
+Ant는 9MB JavaScript 런타임으로 자체 제작 엔진(V8, JSC, SpiderMonkey 아님), 패키지 매니저, 레지스트리(ants.land), VM 격리 샌드박스를 갖추고 있다. 콜드 스타트 5.4ms로 Bun의 12.8ms보다 빠르다고 주장. npm 패키지 실행, 빌드 없이 TypeScript 실행 가능.
+***** Take
+JS 생태계가 런타임을 좋아한다고 해서 런타임 안에 런타임을 넣었다. 적어도 이건 다른 것들처럼 V8를 래핑하는 대신 실제로 자체 엔진을 만들었다. HN 댓글은 즉시 AGPL 프로젝트에서 AI로 생성된 베이퍼웨어인지에 초점을 맞췄다.
+***** Comments
+- 기존 AGPL 코드베이스의 노력을 생각하면 '처음부터 수작업으로'라는 표현이 거슬린다.
+- Apache Ant와 구분하지 않는 것이 이상하고, 프로젝트가 진지하지 않아 보인다.
+- 이미 Apache Ant가 있는데 왜 'Antjs'가 아니라 'Ant'라고 부르나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Ant - Un runtime y ecosistema JavaScript
+***** TLDR
+Ant es un runtime JavaScript de 9MB con su propio motor hecho a mano (no V8, JSC ni SpiderMonkey), gestor de paquetes, registro (ants.land) y sandbox aislado por VM. Presume arranque en frío de 5.4ms vs 12.8ms de Bun. Ejecuta paquetes npm y TypeScript sin paso de compilación.
+***** Take
+El ecosistema JavaScript escuchó que te gustan los runtimes así que puso un runtime dentro de tu runtime. Al menos este realmente construye su propio motor en lugar de envolver V8 como todos los demás. Los comentarios de HN inmediatamente se centraron en si era vaporware construido con código generado por IA de un proyecto AGPL.
+***** Comments
+- El enfoque de 'hecho a mano desde cero' chirría dado el trabajo pesado original de un código AGPL existente.
+- Parece raro no reconocer y diferenciarse de Apache Ant. No hacerlo me hace pensar que el proyecto no es serio.
+- ¿Por qué llamarlo 'Ant' y no 'Antjs' cuando ya existe Ant de Apache?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Ant - Eine JavaScript-Runtime und Ökosystem
+***** TLDR
+Ant ist eine 9MB JavaScript-Runtime mit eigener, handgebauter Engine (nicht V8, JSC oder SpiderMonkey), Paketmanager, Registry (ants.land) und VM-isolierter Sandbox. Behauptet 5.4ms Kaltstart vs. Buns 12.8ms. Führt npm-Pakete aus, TypeScript ohne Build-Schritt.
+***** Take
+Das JS-Ökosystem hörte, dass du Runtimes magst, also haben sie eine Runtime in deine Runtime gepackt. Wenigstens baut diese tatsächlich ihre eigene Engine, anstatt V8 zu wrappen wie alle anderen. Die HN-Kommentare fokussierten sich sofort darauf, ob es Vaporware war, die mit KI-generiertem Code aus einem AGPL-Projekt gebaut wurde.
+***** Comments
+- Der 'von Grund auf handgebaut'-Rahmen nervt angesichts der ursprünglichen Arbeit aus einer bestehenden AGPL-Codebasis.
+- Es wirkt seltsam, sich nicht von Apache Ant abzugrenzen. Das lässt mich denken, das Projekt ist nicht ernst gemeint.
+- Warum heißt es 'Ant' und nicht 'Antjs', wenn es schon Ant von Apache gibt?
+** Nvidia, CoreWeave, and Nebius: Inside the Circular Financing of the GPU Boom :nvidia:ai:finance:infrastructure:
+:PROPERTIES:
+:ID:       48873836
+:URL:      https://io-fund.com/ai-stocks/nvidia-coreweave-nebius-circular-financing-gpu-boom
+:HN_URL:   https://news.ycombinator.com/item?id=48873836
+:POINTS:   149
+:COMMENTS: 55
+:BY:       adletbalzhanov
+:END:
+
+*** TLDR
+Nvidia invested $2B each in CoreWeave and Nebius, who turn around and spend $35B+ on Nvidia GPUs annually. Microsoft and Meta have committed $122B+ to these neoclouds for compute capacity. CoreWeave has -$22.6B net cash and rising debt, while hyperscalers shift capex to opex by leasing instead of building.
+
+*** Take
+It's the GPU equivalent of a money printer: Nvidia gives you $2B, you give Nvidia $35B, they call it 'strategic investment.' The article lays out the circular financing so clearly that even the bulls in the comments struggled to call it a nothing-burger.
+
+*** Comments
+
+**** aurareturn
+:PROPERTIES:
+:COMMENT_ID: 48873837
+:END:
+Nvidia's $2B investment is only 5.7% of CoreWeave's single year CapEx. The other $32B is coming from other sources. This is hardly circular.
+
+**** ilaksh
+:PROPERTIES:
+:COMMENT_ID: 48873838
+:END:
+What is more interesting is whether there's a path to these builds becoming economically profitable.
+
+**** bwfan123
+:PROPERTIES:
+:COMMENT_ID: 48873839
+:END:
+Circular financing is a dead horse. Instead, what metrics to watch are: ROI per token per dollar, enterprise token budgets.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+英伟达、CoreWeave和Nebius：GPU热潮背后的循环融资
+***** TLDR
+英伟达分别向CoreWeave和Nebius投资了20亿美元，而这两家公司每年在英伟达GPU上花费超过350亿美元。微软和Meta已向这些新云服务商承诺超过1220亿美元的计算容量。CoreWeave净现金为-226亿美元且债务不断攀升，而超大规模企业通过租赁而非建设将资本支出转为运营支出。
+***** Take
+这就是GPU版的印钞机：英伟达给你20亿，你给英伟达350亿，他们称之为'战略投资'。文章把循环融资讲得太清楚了，连评论区的多头都很难说这不是什么大事。
+***** Comments
+- 英伟达20亿投资仅占CoreWeave单年资本支出的5.7%。其他320亿来自其他来源。这算不上循环。
+- 更有趣的是这些建设是否有实现经济盈利的路径。
+- 循环融资已经是老生常谈。应该关注的指标是：每美元每token的ROI，企业token预算。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Nvidia、CoreWeave、Nebius：GPUブームの循環ファイナンスの内幕
+***** TLDR
+NvidiaはCoreWeaveとNebiusにそれぞれ20億ドルを投資し、両社は年間350億ドル以上をNvidia GPUに費やしている。MicrosoftとMetaはこれらのネオクラウドに1220億ドル以上のコンピュート容量を約束。CoreWeaveは-226億ドルの純現金と増加する負債を抱え、ハイパースケーラーは建設ではなくリースでCapexをOpexに移行。
+***** Take
+これはGPU版のマネープリンター：Nvidiaが20億ドルをくれて、あなたがNvidiaに350億ドルを渡し、それを「戦略的投資」と呼ぶ。記事は循環ファイナンスを非常に明確に説明しており、コメント欄の強気派でさえ大したことないとは言いにくかった。
+***** Comments
+- Nvidiaの20億ドルの投資はCoreWeaveの単年度CapExのわずか5.7%。残りの320億ドルは他のソースから。これは循環とは言い難い。
+- より興味深いのは、これらの建設が経済的に収益性のあるものになる道筋があるかどうかだ。
+- 循環ファイナンスは死んだ馬。代わりに注目すべき指標は：ドル当たりトークンあたりのROI、企業のトークン予算。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Nvidia, CoreWeave, Nebius: GPU 붐의 순환 금융 내막
+***** TLDR
+Nvidia는 CoreWeave와 Nebius에 각각 20억 달러를 투자했고, 이들은 연간 350억 달러 이상을 Nvidia GPU에 쓴다. Microsoft와 Meta는 이 네오클라우드들에 1220억 달러 이상의 컴퓨팅 용량을 약속했다. CoreWeave는 순현금 -226억 달러에 부채 증가 중이며, 하이퍼스케일러들은 건설 대신 임대로 CapEx를 OpEx로 전환 중.
+***** Take
+GPU 버전의 돈 찍는 기계: Nvidia가 20억 달러를 주고, 당신은 Nvidia에 350억 달러를 주고, 그들은 이것을 '전략적 투자'라고 부른다. 기사가 순환 금융을 너무 명확하게 설명해서 댓글의 불 마저도 별일 아니라고 하기 어려웠다.
+***** Comments
+- Nvidia의 20억 달러 투자는 CoreWeave 단일 연도 CapEx의 5.7%에 불과하다. 나머지 320억 달러는 다른 출처에서 온다. 이건 순환이라고 보기 어렵다.
+- 더 흥미로운 것은 이 건설들이 경제적으로 수익성 있는 경로가 있는지 여부다.
+- 순환 금융은 죽은 말이다. 대신 주목할 지표: 달러당 토큰당 ROI, 기업 토큰 예산.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Nvidia, CoreWeave y Nebius: Dentro del Financiamiento Circular del Boom de GPUs
+***** TLDR
+Nvidia invirtió $2B en CoreWeave y Nebius cada uno, quienes a su vez gastan $35B+ anuales en GPUs de Nvidia. Microsoft y Meta han comprometido $122B+ en capacidad de cómputo con estas neoclouds. CoreWeave tiene -$22.6B en efectivo neto y deuda creciente, mientras los hyperscalers pasan CapEx a OpEx alquilando en vez de construir.
+***** Take
+Es el equivalente GPU de una impresora de dinero: Nvidia te da $2B, tú le das $35B a Nvidia, y lo llaman 'inversión estratégica'. El artículo explica el financiamiento circular tan claramente que hasta los alcistas en los comentarios lucharon por decir que no era nada.
+***** Comments
+- La inversión de $2B de Nvidia es solo el 5.7% del CapEx anual de CoreWeave. Los otros $32B vienen de otras fuentes. Esto difícilmente es circular.
+- Lo más interesante es si hay un camino para que estas construcciones sean económicamente rentables.
+- El financiamiento circular es un caballo muerto. Las métricas a observar son: ROI por token por dólar, presupuestos de tokens empresariales.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Nvidia, CoreWeave und Nebius: Die zirkuläre Finanzierung des GPU-Booms
+***** TLDR
+Nvidia investierte jeweils $2B in CoreWeave und Nebius, die ihrerseits jährlich $35B+ für Nvidia-GPUs ausgeben. Microsoft und Meta haben diesen Neoclouds $122B+ an Rechenkapazität zugesagt. CoreWeave hat -$22,6B Netto-Cash und steigende Schulden, während Hyperscaler CapEx durch Leasing statt Bauen zu OpEx verschieben.
+***** Take
+Es ist das GPU-Äquivalent einer Gelddruckmaschine: Nvidia gibt dir $2B, du gibst Nvidia $35B, und sie nennen es 'strategische Investition'. Der Artikel legt die zirkuläre Finanzierung so klar dar, dass selbst die Bullen in den Kommentaren es schwer hatten, es als Nichts abzutun.
+***** Comments
+- Nvidias $2B-Investition macht nur 5,7% von CoreWeaves jährlichem CapEx aus. Die anderen $32B kommen aus anderen Quellen. Das ist kaum zirkulär.
+- Interessanter ist, ob es einen Weg gibt, diese Bauten wirtschaftlich profitabel zu machen.
+- Zirkuläre Finanzierung ist ein totes Pferd. Stattdessen zu beobachtende Metriken: ROI pro Token pro Dollar, Unternehmens-Token-Budgets.
+** Show HN: Learn by rebuilding Redis, Git, a database from scratch :education:programming:showhn:
+:PROPERTIES:
+:ID:       48871973
+:URL:      https://shipthatcode.com
+:HN_URL:   https://news.ycombinator.com/item?id=48871973
+:POINTS:   119
+:COMMENTS: 35
+:BY:       acley
+:END:
+
+*** TLDR
+ShipThatCode offers 80+ build-from-scratch courses across 9 languages, teaching by making you implement Redis, Git, Docker, and databases yourself. Career paths for backend, frontend, DevOps, and data science. Free tier available, no credit card required.
+
+*** Take
+Finally, a coding course that forces you to actually type code instead of watching someone else do it. The comments immediately asked 'how is this different from CodeCrafters?' which is simultaneously the best and worst question you can ask a competitor.
+
+*** Comments
+
+**** isityettime
+:PROPERTIES:
+:COMMENT_ID: 48871974
+:END:
+There's a book about doing this with Git. I wonder how much of the content is cribbed from sources like that, laundered through LLMs.
+
+**** xqb64
+:PROPERTIES:
+:COMMENT_ID: 48871975
+:END:
+How does this differ from codecrafters.io?
+
+**** qainsights
+:PROPERTIES:
+:COMMENT_ID: 48871976
+:END:
+Signing up is throwing 'rate limit exceeded, please try again later'
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: 通过从零重建Redis、Git、数据库来学习
+***** TLDR
+ShipThatCode提供80多个从零构建的课程，涵盖9种语言，让你自己实现Redis、Git、Docker和数据库来学习。有后端、前端、DevOps和数据科学的职业路径。有免费版，无需信用卡。
+***** Take
+终于有一个编程课程强迫你实际写代码而不是看别人写。评论立刻问'这和CodeCrafters有什么区别？'，这既是你能问竞争对手的最好问题，也是最坏的问题。
+***** Comments
+- 有一本关于用Git做这件事的书。我想知道有多少内容是从这类来源抄袭的，通过LLM洗白。
+- 这和codecrafters.io有什么区别？
+- 注册时显示'超过速率限制，请稍后重试'
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Redis、Git、データベースをゼロから再構築して学ぶ
+***** TLDR
+ShipThatCodeは9言語で80以上のゼロから構築コースを提供し、Redis、Git、Docker、データベースを自分で実装して学ぶ。バックエンド、フロントエンド、DevOps、データサイエンスのキャリアパスあり。無料枠あり、クレジットカード不要。
+***** Take
+やっと、他の人がやるのを見るのではなく、実際にコードを書くことを強制するコーディングコースが登場。コメントは即座に「CodeCraftersと何が違うの？」と聞いた。これは競合他社に聞ける最高の質問であり最悪の質問でもある。
+***** Comments
+- Gitでこれをやる本がある。LLMを通して洗浄された、そういった情報源からどれだけ流用されているか気になる。
+- codecrafters.ioとどう違うの？
+- サインアップで「レート制限超過、後でやり直してください」と出る
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Redis, Git, 데이터베이스를 처음부터 다시 만들며 배우기
+***** TLDR
+ShipThatCode는 9개 언어로 80개 이상의 처음부터 만드는 과정을 제공하며, Redis, Git, Docker, 데이터베이스를 직접 구현하며 배운다. 백엔드, 프론트엔드, DevOps, 데이터 사이언스 커리어 패스 제공. 무료 티어, 신용카드 불필요.
+***** Take
+드디어 다른 사람이 하는 걸 보는 대신 실제로 코드를 치게 만드는 코딩 과정이 나왔다. 댓글은 즉시 'CodeCrafters랑 뭐가 다르냐'고 물었는데, 이건 경쟁자에게 할 수 있는 최고이자 최악의 질문이다.
+***** Comments
+- Git으로 이걸 하는 책이 있다. 그런 출처에서 얼마나 베꼈는지, LLM으로 세탁했는지 궁금하다.
+- codecrafters.io랑 뭐가 다른가요?
+- 가입하면 '속도 제한 초과, 나중에 다시 시도하세요'라고 뜬다
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Aprende reconstruyendo Redis, Git, una base de datos desde cero
+***** TLDR
+ShipThatCode ofrece 80+ cursos de construcción desde cero en 9 lenguajes, enseñando haciendo que implementes Redis, Git, Docker y bases de datos tú mismo. Rutas profesionales para backend, frontend, DevOps y ciencia de datos. Nivel gratuito disponible, sin tarjeta de crédito.
+***** Take
+Por fin, un curso de programación que te obliga a escribir código en lugar de ver a alguien más hacerlo. Los comentarios inmediatamente preguntaron '¿en qué se diferencia de CodeCrafters?' que es simultáneamente la mejor y peor pregunta que puedes hacerle a un competidor.
+***** Comments
+- Hay un libro sobre hacer esto con Git. Me pregunto cuánto contenido está copiado de fuentes así, lavado a través de LLMs.
+- ¿En qué se diferencia de codecrafters.io?
+- Al registrarse aparece 'límite de velocidad excedido, intente más tarde'
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Lerne durch Neuaufbau von Redis, Git, einer Datenbank von Grund auf
+***** TLDR
+ShipThatCode bietet 80+ Kurse zum Aufbau von Grund auf in 9 Sprachen, wo du Redis, Git, Docker und Datenbanken selbst implementierst. Karrierepfade für Backend, Frontend, DevOps und Data Science. Kostenlose Stufe verfügbar, keine Kreditkarte nötig.
+***** Take
+Endlich ein Coding-Kurs, der dich zwingt, tatsächlich Code zu schreiben, anstatt jemand anderem dabei zuzusehen. Die Kommentare fragten sofort 'Wie unterscheidet sich das von CodeCrafters?' - gleichzeitig die beste und schlechteste Frage, die man einem Konkurrenten stellen kann.
+***** Comments
+- Es gibt ein Buch darüber, das mit Git zu machen. Ich frage mich, wie viel vom Inhalt aus solchen Quellen kopiert und durch LLMs gewaschen wurde.
+- Wie unterscheidet sich das von codecrafters.io?
+- Bei der Anmeldung kommt 'Ratenlimit überschritten, bitte später erneut versuchen'
+** Weightlifting beats running for blood sugar control, researchers find :health:research:fitness:
+:PROPERTIES:
+:ID:       48876593
+:URL:      https://news.vt.edu/articles/2025/11/research_fralinbiomed_yanweightlifting.html
+:HN_URL:   https://news.ycombinator.com/item?id=48876593
+:POINTS:   92
+:COMMENTS: 44
+:BY:       sublinear
+:END:
+
+*** TLDR
+Virginia Tech researchers built tiny weighted food lids that forced mice to squat to eat, mimicking resistance training. After 8 weeks on high-fat diets, weightlifting mice showed better glucose tolerance, lower insulin resistance, and less body fat than the treadmill runners. Both beat the couch potatoes.
+
+*** Take
+Scientists literally made mice do squats to access their food. If that's not the most HN-bait study methodology I've ever seen, I don't know what is. The comments predictably split into 'I told you so' from the gym bros and 'the exercise you actually do is the best one' from realists.
+
+*** Comments
+
+**** beejiu
+:PROPERTIES:
+:COMMENT_ID: 48876594
+:END:
+So the mice had to lift the lid while wearing a small shoulder collar, causing a squat-like movement. Mice did squats.
+
+**** umvi
+:PROPERTIES:
+:COMMENT_ID: 48876595
+:END:
+Dr. Bernstein has long argued this. Muscles act like natural glucose sinks that drain sugar directly out of the bloodstream.
+
+**** gentooflux
+:PROPERTIES:
+:COMMENT_ID: 48876596
+:END:
+The exercise you like doing and will do beats no exercise at all for blood sugar control.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+研究发现举重比跑步更能控制血糖
+***** TLDR
+弗吉尼亚理工大学研究人员制作了小型加重食物盖，迫使老鼠蹲下才能吃东西，模拟抗阻训练。在高脂饮食8周后，举重老鼠比跑步机老鼠表现出更好的葡萄糖耐量、更低的胰岛素抵抗和更少的体脂。两者都比不运动的好。
+***** Take
+科学家真的让老鼠做深蹲才能吃东西。如果这不是我见过的最HN风格的研究方法，我不知道什么才是。评论可预见地分成了健身房兄弟的'我早说过'和现实主义者的'你实际会做的运动才是最好的'。
+***** Comments
+- 所以老鼠必须戴着小肩套举起盖子，产生类似深蹲的动作。老鼠做了深蹲。
+- Bernstein医生早就这么说了。肌肉就像天然的葡萄糖槽，直接从血液中吸收糖分。
+- 你喜欢做的、会坚持做的运动才是控制血糖最好的运动。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+研究者、血糖コントロールにはランニングよりウェイトトレーニングが効果的と発見
+***** TLDR
+バージニア工科大学の研究者は、マウスにレジスタンストレーニングを模倣して、食べるためにスクワットをさせる小さな重り付きの餌蓋を作った。高脂肪食で8週間後、ウェイトリフティングをしたマウスはトレッドミルランナーより良い耐糖能、低いインスリン抵抗性、少ない体脂肪を示した。両方とも運動しないより良かった。
+***** Take
+科学者は文字通り、マウスに食事のためにスクワットをさせた。これが私が見た中で最もHN向けの研究方法論でなければ、何がそうなのかわからない。コメントは予想通り、ジムブロの「だから言ったでしょ」と現実主義者の「実際にやる運動が一番」に分かれた。
+***** Comments
+- つまりマウスは小さな肩カラーを着けながら蓋を持ち上げ、スクワットのような動きをした。マウスがスクワットをした。
+- Bernstein博士は長年これを主張してきた。筋肉は血流から直接糖を排出する天然のグルコースシンクとして機能する。
+- 好きでやり続ける運動が、血糖コントロールには全く運動しないより良い。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+연구자들, 웨이트 트레이닝이 달리기보다 혈당 조절에 효과적이라고 밝혀
+***** TLDR
+버지니아 공대 연구원들은 쥐가 먹으려면 스쿼트를 해야 하는 작은 무게 달린 먹이 뚜껑을 만들어 저항 운동을 모방했다. 고지방 식단으로 8주 후, 웨이트 트레이닝 쥐가 러닝머신 쥐보다 더 나은 포도당 내성, 낮은 인슐린 저항성, 적은 체지방을 보였다. 둘 다 운동 안 하는 것보다 나았다.
+***** Take
+과학자들이 말 그대로 쥐를 먹이에 접근하려면 스쿼트를 하게 만들었다. 이게 내가 본 가장 HN 스러운 연구 방법론이 아니면 뭐가 그런지 모르겠다. 댓글은 예상대로 헬스장 형님들의 '내가 뭐랬어'와 현실주의자들의 '실제로 하는 운동이 최고'로 나뉘었다.
+***** Comments
+- 그래서 쥐가 작은 어깨 칼라를 착용하고 뚜껑을 들어올려 스쿼트 같은 동작을 했다. 쥐가 스쿼트를 했다.
+- 번스타인 박사는 오래전부터 이를 주장해왔다. 근육은 혈류에서 직접 당을 빼내는 천연 포도당 싱크 역할을 한다.
+- 좋아하고 실제로 할 운동이 혈당 조절에는 아무 운동도 안 하는 것보다 낫다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Investigadores descubren que el levantamiento de pesas supera al running para el control del azúcar en sangre
+***** TLDR
+Investigadores de Virginia Tech construyeron pequeñas tapas de comida con peso que obligaban a los ratones a hacer sentadillas para comer, imitando el entrenamiento de resistencia. Después de 8 semanas con dietas altas en grasa, los ratones que levantaban pesas mostraron mejor tolerancia a la glucosa, menor resistencia a la insulina y menos grasa corporal que los corredores de cinta. Ambos superaron a los sedentarios.
+***** Take
+Los científicos literalmente hicieron que los ratones hicieran sentadillas para acceder a su comida. Si esa no es la metodología de estudio más HN-bait que he visto, no sé cuál es. Los comentarios predeciblemente se dividieron entre el 'te lo dije' de los gym bros y 'el ejercicio que realmente haces es el mejor' de los realistas.
+***** Comments
+- Así que los ratones tenían que levantar la tapa usando un pequeño collar de hombro, causando un movimiento tipo sentadilla. Los ratones hicieron sentadillas.
+- El Dr. Bernstein lo ha argumentado desde hace tiempo. Los músculos actúan como sumideros naturales de glucosa que drenan el azúcar directamente del torrente sanguíneo.
+- El ejercicio que te gusta hacer y que harás supera a no hacer ejercicio para el control del azúcar en sangre.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Forscher finden: Gewichtheben schlägt Laufen bei der Blutzuckerkontrolle
+***** TLDR
+Forscher der Virginia Tech bauten kleine gewichtete Futterdeckel, die Mäuse zum Kniebeugen zwangen, um zu essen, als Nachahmung von Krafttraining. Nach 8 Wochen Hochfettdiät zeigten die Gewichtheber-Mäuse bessere Glukosetoleranz, niedrigere Insulinresistenz und weniger Körperfett als die Laufband-Läufer. Beide schlugen die Couch-Potatoes.
+***** Take
+Wissenschaftler haben Mäuse buchstäblich Kniebeugen machen lassen, um an ihr Futter zu kommen. Wenn das nicht die HN-köderigste Studienmethodik ist, die ich je gesehen habe, weiß ich nicht, was es ist. Die Kommentare teilten sich vorhersehbar in 'Hab ich doch gesagt' von den Gym-Bros und 'Die Übung, die du tatsächlich machst, ist die beste' von den Realisten.
+***** Comments
+- Die Mäuse mussten also den Deckel heben, während sie einen kleinen Schulterkragen trugen, was eine kniebeugenartige Bewegung verursachte. Mäuse machten Kniebeugen.
+- Dr. Bernstein hat das lange argumentiert. Muskeln fungieren als natürliche Glukosesenken, die Zucker direkt aus dem Blutkreislauf ziehen.
+- Die Übung, die du gerne machst und auch tatsächlich machst, schlägt keine Übung bei der Blutzuckerkontrolle.
