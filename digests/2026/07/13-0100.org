@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-07-13 01:00:00 UT UTC
+#+DATE: 2026-07-13T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Browser math betrays your OS, GPT-5.6 eats Opus's lunch, and traffic gets fixed by rerouting 2% of drivers
+
+* Highlights
+- Math.tanh: Your browser's last decimal betrays your OS since Chrome 148
+- GPT-5.6: 2.2x faster, 27% cheaper, and it fills in every damn optional parameter
+- Google traffic study: Reroute 2% of trips, save thousands of tons of CO2
+- Why write code in 2026: Because agents amplify your bad decisions
+- Ask HN July 2026: Medical AI super apps, rootless containers, and side project graveyards
+
+* Stories
+
+** Since Chromium 148, Math.tanh is now fingerprintable to link underlying OS :security:fingerprinting:browsers:privacy:
+:PROPERTIES:
+:ID:       48884853
+:URL:      https://scrapfly.dev/posts/browser-math-os-fingerprint/
+:HN_URL:   https://news.ycombinator.com/item?id=48884853
+:POINTS:   266
+:COMMENTS: 134
+:BY:       joahnn_s
+:END:
+
+*** TLDR
+Since Chrome 148, V8 switched from bundled fdlibm to the platform's std::tanh, meaning the last decimal digit of Math.tanh(0.8) now reveals whether you're on Linux, macOS, or Windows. A scraping company reverse-engineered Apple's libm to match bit-for-bit, and mapped Windows UCRT directly into memory. Your browser does math differently on every OS, and anti-bot systems read the bits.
+
+*** Take
+A scraping company wrote 3,000 words on how they defeated fingerprinting, complete with Apple polynomial coefficients ripped straight from libsystem_m. Bold move to publish your evasion techniques, but I respect the hustle of turning 'we help you evade detection' into 'look at our fascinating security research.'
+
+*** Comments
+
+**** Aurornis
+:PROPERTIES:
+:COMMENT_ID: 48885001
+:END:
+They missed that this is possibly fingerprintable to browser version range, which is slightly more interesting. Most users aren't spoofing their user agent headers to be a different operating system.
+
+**** jeroenhd
+:PROPERTIES:
+:COMMENT_ID: 48885102
+:END:
+Kind of a smart move by this company: write up an AI analysis of all fingerprinting techniques in hopes they get fixed after outrage so their scraping company can make more money.
+
+**** sjrd
+:PROPERTIES:
+:COMMENT_ID: 48885203
+:END:
+I guess that's one more good reason to push for correctly rounded transcendental functions. I recently learned that they're basically solved now.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+从Chromium 148开始，Math.tanh可被用于指纹识别底层操作系统
+***** TLDR
+从Chrome 148开始，V8从内置fdlibm切换到平台std::tanh，这意味着Math.tanh(0.8)的最后一位小数现在可以揭示你用的是Linux、macOS还是Windows。一家爬虫公司逆向工程了Apple的libm以实现逐位匹配，并将Windows UCRT直接映射到内存。你的浏览器在每个操作系统上做数学运算的方式不同，反爬虫系统正在读取这些比特位。
+***** Take
+一家爬虫公司写了3000字关于他们如何击败指纹识别的文章，包括直接从libsystem_m提取的Apple多项式系数。公开你的规避技术是很大胆的举动，但我尊重他们把'我们帮你规避检测'包装成'看看我们迷人的安全研究'的商业头脑。
+***** Comments
+- 他们忽略了这可能可以用于指纹识别浏览器版本范围，这更有趣。大多数用户不会将UA伪装成不同的操作系统。
+- 这家公司的聪明之举：写一篇关于所有指纹识别技术的AI分析，希望引发愤怒后被修复，这样他们的爬虫公司就能赚更多钱。
+- 我想这是推动正确舍入超越函数的又一个好理由。我最近了解到这个问题基本上已经解决了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Chromium 148以降、Math.tanhがOS特定のフィンガープリントとして利用可能に
+***** TLDR
+Chrome 148以降、V8は内蔵のfdlibmからプラットフォームのstd::tanhに切り替えた。つまりMath.tanh(0.8)の最後の小数点以下の桁で、Linux、macOS、Windowsのどれを使っているかがわかる。あるスクレイピング会社がAppleのlibmをビット単位で一致するようリバースエンジニアリングし、Windows UCRTを直接メモリにマップした。ブラウザはOSごとに異なる数学演算を行い、アンチボットシステムはそのビットを読んでいる。
+***** Take
+スクレイピング会社がフィンガープリントを回避した方法について3000語も書いている。libsystem_mから直接抽出したAppleの多項式係数付きで。回避技術を公開するのは大胆だが、「検知回避を支援します」を「魅力的なセキュリティ研究をご覧ください」に変えるその商魂は尊敬する。
+***** Comments
+- 彼らはブラウザバージョン範囲のフィンガープリントとしても使える可能性を見落としている。ほとんどのユーザーはUAを別のOSに偽装していない。
+- この会社の賢い戦略：全てのフィンガープリント技術のAI分析を公開して、怒りで修正されることを期待し、そうすれば自社のスクレイピングビジネスがもっと儲かる。
+- 正しく丸められた超越関数を推進するもう一つの良い理由だ。最近これは基本的に解決されたと知った。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Chromium 148부터 Math.tanh가 OS 식별 핑거프린팅에 사용 가능
+***** TLDR
+Chrome 148부터 V8이 내장 fdlibm에서 플랫폼의 std::tanh로 전환했다. 즉 Math.tanh(0.8)의 마지막 소수점 자릿수로 Linux, macOS, Windows 중 무엇을 쓰는지 알 수 있다. 한 스크래핑 회사가 Apple의 libm을 비트 단위로 일치하도록 역공학했고, Windows UCRT를 직접 메모리에 매핑했다. 브라우저는 OS마다 다른 수학 연산을 하고, 안티봇 시스템은 그 비트를 읽고 있다.
+***** Take
+스크래핑 회사가 핑거프린팅을 우회한 방법에 대해 3000단어를 썼다. libsystem_m에서 직접 추출한 Apple 다항식 계수까지 포함해서. 우회 기술을 공개하는 건 대담하지만, '탐지 우회를 도와드립니다'를 '매력적인 보안 연구를 보세요'로 바꾸는 그 사업 수완은 인정한다.
+***** Comments
+- 그들은 이것이 브라우저 버전 범위 핑거프린팅에도 사용될 수 있다는 점을 놓쳤다. 대부분의 사용자는 UA를 다른 OS로 위장하지 않는다.
+- 이 회사의 영리한 전략: 모든 핑거프린팅 기술의 AI 분석을 공개해서 분노로 수정되길 바라면, 자사 스크래핑 사업이 더 돈을 벌 수 있다.
+- 올바르게 반올림된 초월 함수를 추진해야 할 또 하나의 좋은 이유다. 최근에 이게 기본적으로 해결됐다고 들었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Desde Chromium 148, Math.tanh permite identificar el sistema operativo mediante fingerprinting
+***** TLDR
+Desde Chrome 148, V8 cambió de fdlibm integrado al std::tanh de la plataforma, lo que significa que el último decimal de Math.tanh(0.8) ahora revela si estás en Linux, macOS o Windows. Una empresa de scraping hizo ingeniería inversa de la libm de Apple para coincidir bit a bit, y mapeó Windows UCRT directamente en memoria. Tu navegador hace matemáticas diferente en cada OS, y los sistemas anti-bot leen esos bits.
+***** Take
+Una empresa de scraping escribió 3.000 palabras sobre cómo derrotaron el fingerprinting, incluyendo coeficientes polinómicos de Apple extraídos directamente de libsystem_m. Es audaz publicar tus técnicas de evasión, pero respeto el ingenio de convertir 'te ayudamos a evadir la detección' en 'mira nuestra fascinante investigación de seguridad.'
+***** Comments
+- Se les escapó que esto podría servir para fingerprinting del rango de versión del navegador, lo cual es más interesante. La mayoría de usuarios no falsifican su UA para simular otro OS.
+- Movimiento inteligente de esta empresa: publicar un análisis de IA de todas las técnicas de fingerprinting esperando que se arreglen tras la indignación, para que su empresa de scraping gane más dinero.
+- Supongo que esta es otra buena razón para impulsar funciones trascendentales correctamente redondeadas. Recientemente supe que esto básicamente ya está resuelto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Seit Chromium 148 kann Math.tanh zur Identifizierung des Betriebssystems verwendet werden
+***** TLDR
+Seit Chrome 148 wechselte V8 von eingebautem fdlibm zu plattformeigenem std::tanh, was bedeutet, dass die letzte Dezimalstelle von Math.tanh(0.8) nun verrät, ob man Linux, macOS oder Windows nutzt. Ein Scraping-Unternehmen hat Apples libm bit-genau nachgebaut und Windows UCRT direkt in den Speicher gemappt. Dein Browser rechnet auf jedem OS anders, und Anti-Bot-Systeme lesen die Bits.
+***** Take
+Ein Scraping-Unternehmen hat 3.000 Wörter darüber geschrieben, wie sie Fingerprinting besiegt haben, inklusive Apple-Polynomkoeffizienten direkt aus libsystem_m. Mutig, seine Umgehungstechniken zu veröffentlichen, aber ich respektiere den Geschäftssinn, 'wir helfen dir, Erkennung zu umgehen' in 'schau dir unsere faszinierende Sicherheitsforschung an' zu verwandeln.
+***** Comments
+- Sie haben übersehen, dass dies möglicherweise auch zur Fingerprinting von Browser-Versionsbereichen verwendet werden kann, was interessanter ist. Die meisten Nutzer fälschen ihren UA nicht für ein anderes OS.
+- Cleverer Schachzug dieser Firma: eine KI-Analyse aller Fingerprinting-Techniken veröffentlichen in der Hoffnung, dass sie nach der Empörung gefixt werden, damit ihr Scraping-Unternehmen mehr Geld verdient.
+- Das ist wohl ein weiterer guter Grund, korrekt gerundete transzendente Funktionen voranzutreiben. Ich habe kürzlich erfahren, dass das Problem im Grunde gelöst ist.
+** Migrating a production AI agent to GPT-5.6: 2.2x faster, 27% cheaper :ai:llm:gpt:production:
+:PROPERTIES:
+:ID:       48882716
+:URL:      https://ploy.ai/blog/migrating-a-production-ai-agent-to-gpt-5-6
+:HN_URL:   https://news.ycombinator.com/item?id=48882716
+:POINTS:   124
+:COMMENTS: 37
+:BY:       brryant
+:END:
+
+*** TLDR
+Ploy migrated their AI website builder from Claude Opus 4.8 to GPT-5.6 Sol. The result: 3m42s builds vs 8m00s, 27% cheaper, and half the output tokens. But the migration exposed three gotchas: GPT-5.6 sends ALL 25 tool parameters every time (inventing values for unused ones), its cache requires per-workspace keys instead of org-wide sharing, and reasoning replay broke mid-conversation because of server-side state references.
+
+*** Take
+The most interesting finding here is that GPT-5.6 invents plausible values for every optional parameter. 'offset: 0' looks intentional, so 52% of file reads came back empty. Your LLM isn't dumb, it's just aggressively helpful in ways that break everything.
+
+*** Comments
+
+**** kristianp
+:PROPERTIES:
+:COMMENT_ID: 48882901
+:END:
+Such a silly choice of words. I wish the human directing the LLM writing the article put some effort into rewriting the worst examples of LLM style.
+
+**** thiagoperes
+:PROPERTIES:
+:COMMENT_ID: 48882902
+:END:
+We transitioned them to 5.6 and noticed exactly this range of improvement across the board. For many companies, a model upgrade like this is basically a one liner.
+
+**** blfr
+:PROPERTIES:
+:COMMENT_ID: 48882903
+:END:
+For the four months Opus held the default slot, nothing we tested beat it. Well done Claude.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+将生产环境AI代理迁移到GPT-5.6：速度提升2.2倍，成本降低27%
+***** TLDR
+Ploy将他们的AI网站构建器从Claude Opus 4.8迁移到GPT-5.6 Sol。结果：构建时间从8分钟降到3分42秒，成本降低27%，输出token减少一半。但迁移暴露了三个坑：GPT-5.6每次都发送全部25个工具参数（为未使用的参数编造值），它的缓存需要按工作区键而不是组织范围共享，推理重放因服务器端状态引用在对话中途中断。
+***** Take
+这里最有趣的发现是GPT-5.6为每个可选参数编造看似合理的值。'offset: 0'看起来像是有意为之，所以52%的文件读取返回空。你的LLM不蠢，它只是在以破坏一切的方式过度热心地提供帮助。
+***** Comments
+- 措辞真蠢。我希望指导LLM写这篇文章的人能花点功夫改写最糟糕的LLM风格例子。
+- 我们把它们迁移到5.6，全面观察到了这个范围的改进。对很多公司来说，这种模型升级基本上就是改一行代码。
+- 在Opus占据默认位置的四个月里，我们测试的没有一个能打败它。干得好Claude。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+本番AIエージェントをGPT-5.6に移行：2.2倍高速化、27%コスト削減
+***** TLDR
+PloyはAIウェブサイトビルダーをClaude Opus 4.8からGPT-5.6 Solに移行した。結果：ビルド時間が8分から3分42秒に、コスト27%削減、出力トークン半減。しかし移行で3つの落とし穴が判明：GPT-5.6は毎回25個全てのツールパラメータを送信し（未使用のものには値を捏造）、キャッシュは組織全体ではなくワークスペースごとのキーが必要で、推論リプレイはサーバー側の状態参照のため会話途中で壊れた。
+***** Take
+ここで最も興味深い発見は、GPT-5.6がすべてのオプションパラメータにもっともらしい値を捏造することだ。'offset: 0'は意図的に見えるので、52%のファイル読み取りが空で返ってきた。あなたのLLMは馬鹿じゃない、ただすべてを壊す形で積極的に親切なだけだ。
+***** Comments
+- なんて馬鹿げた言葉選びだ。記事を書いたLLMを指示した人間が、最悪のLLMスタイルの例を書き直す努力をしてほしい。
+- 5.6に移行したら、全体的にこの範囲の改善が見られた。多くの企業にとって、このようなモデルアップグレードは基本的に1行の変更だ。
+- Opusがデフォルトの座にあった4ヶ月間、テストしたものは何も勝てなかった。よくやったClaude。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+프로덕션 AI 에이전트를 GPT-5.6으로 마이그레이션: 2.2배 빠르고 27% 저렴
+***** TLDR
+Ploy가 AI 웹사이트 빌더를 Claude Opus 4.8에서 GPT-5.6 Sol로 마이그레이션했다. 결과: 빌드 시간 8분에서 3분 42초로, 비용 27% 절감, 출력 토큰 절반. 하지만 마이그레이션에서 3가지 함정이 드러났다: GPT-5.6은 매번 25개 도구 파라미터 전체를 보내고 (사용하지 않는 것엔 값을 지어냄), 캐시는 조직 전체 공유가 아닌 워크스페이스별 키가 필요하고, 추론 리플레이는 서버 측 상태 참조 때문에 대화 중간에 깨졌다.
+***** Take
+여기서 가장 흥미로운 발견은 GPT-5.6이 모든 선택적 파라미터에 그럴듯한 값을 지어낸다는 것이다. 'offset: 0'은 의도적으로 보이므로 52%의 파일 읽기가 빈 값으로 돌아왔다. 당신의 LLM은 멍청하지 않다, 그저 모든 것을 망가뜨리는 방식으로 적극적으로 친절할 뿐이다.
+***** Comments
+- 정말 바보 같은 단어 선택이다. LLM에게 기사를 쓰게 한 사람이 최악의 LLM 스타일 예시를 고치는 데 노력을 기울였으면 좋겠다.
+- 5.6으로 전환했더니 전반적으로 이 정도의 개선이 보였다. 많은 회사에서 이런 모델 업그레이드는 기본적으로 한 줄 수정이다.
+- Opus가 기본 자리를 차지한 4개월 동안 테스트한 어떤 것도 이기지 못했다. 잘했어 Claude.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Migrando un agente AI de producción a GPT-5.6: 2.2x más rápido, 27% más barato
+***** TLDR
+Ploy migró su constructor de sitios web AI de Claude Opus 4.8 a GPT-5.6 Sol. El resultado: builds de 3m42s vs 8m00s, 27% más barato, y la mitad de tokens de salida. Pero la migración expuso tres trampas: GPT-5.6 envía TODOS los 25 parámetros de herramientas cada vez (inventando valores para los no usados), su caché requiere claves por workspace en lugar de compartir a nivel organización, y el replay de razonamiento falló a mitad de conversación por referencias de estado del servidor.
+***** Take
+El hallazgo más interesante aquí es que GPT-5.6 inventa valores plausibles para cada parámetro opcional. 'offset: 0' parece intencional, así que el 52% de las lecturas de archivos volvieron vacías. Tu LLM no es tonto, solo es agresivamente útil de formas que rompen todo.
+***** Comments
+- Qué elección de palabras tan tonta. Ojalá el humano que dirigió al LLM que escribió el artículo hubiera puesto esfuerzo en reescribir los peores ejemplos de estilo LLM.
+- Los pasamos a 5.6 y notamos exactamente este rango de mejora en todos los frentes. Para muchas empresas, una actualización de modelo así es básicamente cambiar una línea.
+- Durante los cuatro meses que Opus ocupó el puesto por defecto, nada de lo que probamos lo superó. Bien hecho Claude.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Migration eines Produktions-KI-Agenten zu GPT-5.6: 2,2x schneller, 27% günstiger
+***** TLDR
+Ploy migrierte ihren KI-Website-Builder von Claude Opus 4.8 zu GPT-5.6 Sol. Das Ergebnis: 3m42s Builds statt 8m00s, 27% günstiger, und halb so viele Output-Tokens. Aber die Migration offenbarte drei Fallstricke: GPT-5.6 sendet jedes Mal ALLE 25 Tool-Parameter (und erfindet Werte für ungenutzte), sein Cache erfordert Workspace-spezifische Keys statt organisationsweiter Freigabe, und das Reasoning-Replay brach mitten im Gespräch wegen Server-seitiger State-Referenzen ab.
+***** Take
+Die interessanteste Erkenntnis hier ist, dass GPT-5.6 plausible Werte für jeden optionalen Parameter erfindet. 'offset: 0' sieht beabsichtigt aus, also kamen 52% der Datei-Lesevorgänge leer zurück. Dein LLM ist nicht dumm, es ist nur aggressiv hilfreich auf eine Weise, die alles kaputt macht.
+***** Comments
+- So eine dumme Wortwahl. Ich wünschte, der Mensch, der das LLM beim Schreiben des Artikels angeleitet hat, hätte sich bemüht, die schlimmsten Beispiele von LLM-Stil umzuschreiben.
+- Wir haben sie auf 5.6 umgestellt und genau diese Verbesserungsrate überall beobachtet. Für viele Unternehmen ist ein solches Modell-Upgrade im Grunde eine Einzeiler-Änderung.
+- In den vier Monaten, in denen Opus den Standard-Platz hielt, hat nichts, was wir getestet haben, es geschlagen. Gut gemacht Claude.
+** How we can reduce traffic congestion :research:traffic:google:cities:
+:PROPERTIES:
+:ID:       48881967
+:URL:      https://research.google/blog/the-power-of-collaboration-how-we-can-reduce-traffic-congestion/
+:HN_URL:   https://news.ycombinator.com/item?id=48881967
+:POINTS:   69
+:COMMENTS: 72
+:BY:       raahelb
+:END:
+
+*** TLDR
+Google Research ran a 6-month experiment in 10 US cities, altering routing for under 2% of trips to avoid ~100 congested road segments per city. Result: 2% faster speeds on targeted segments, 0.35% network-wide improvement, and 0.5-1% reduction in fuel consumption. At scale, this translates to thousands of tons of CO2 saved per city per year. The intervention used a switchback design alternating treatment and control days.
+
+*** Take
+The comments are more interesting than the paper. One person points out that rerouting traffic destroys roads not designed for it. Another notes that Google Maps 'faster route' popups auto-apply unless you're fast enough to hit 'No thanks.' Coordinated routing sounds great until you realize it means Google deciding which neighborhoods get the traffic dump.
+
+*** Comments
+
+**** jawns
+:PROPERTIES:
+:COMMENT_ID: 48882101
+:END:
+One of the things this type of intervention doesn't take into account is that different roads are built with different levels of hardiness based on the amount of traffic they are expected to receive.
+
+**** ctkhn
+:PROPERTIES:
+:COMMENT_ID: 48882102
+:END:
+Surely the top way to avoid traffic congestion would be communities where it's possible to live near where you work, shop, go out, etc.
+
+**** ventana
+:PROPERTIES:
+:COMMENT_ID: 48882103
+:END:
+Out of nowhere, a popup appears in Google Maps: a faster route is available! 4 minutes faster! Unless either the passenger or the driver are fast enough to hit 'No thanks', the change auto-applies.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我们如何减少交通拥堵
+***** TLDR
+Google Research在美国10个城市进行了为期6个月的实验，改变不到2%行程的路线以避开每个城市约100个拥堵路段。结果：目标路段速度提高2%，全网改善0.35%，燃油消耗降低0.5-1%。按规模计算，这相当于每个城市每年节省数千吨二氧化碳。干预措施采用交替治疗日和对照日的转换设计。
+***** Take
+评论比论文更有趣。有人指出重新路由会破坏那些设计承载量不足的道路。另一个人注意到Google地图的'更快路线'弹窗会自动应用，除非你够快点击'不用了'。协调路线听起来很棒，直到你意识到这意味着由Google决定哪些社区承受交通倾泻。
+***** Comments
+- 这种干预没有考虑到的一点是，不同的道路根据预期交通量有不同的承载能力设计。
+- 避免交通拥堵的最佳方式肯定是能够住在工作、购物、外出地点附近的社区。
+- 突然出现一个弹窗：有更快的路线！快4分钟！除非乘客或司机够快点击'不用了'，否则会自动应用更改。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+交通渋滞を減らす方法
+***** TLDR
+Google Researchが米国10都市で6ヶ月間の実験を実施。2%未満のトリップのルートを変更し、各都市約100の渋滞区間を回避。結果：対象区間で2%速度向上、ネットワーク全体で0.35%改善、燃料消費0.5-1%削減。規模で見ると、これは各都市で年間数千トンのCO2削減に相当。介入は治療日と対照日を交互にするスイッチバックデザインを採用。
+***** Take
+コメントの方が論文より面白い。ある人は、交通をリルートすると想定外の負荷に耐えられない道路が壊れると指摘。別の人は、Googleマップの「より速いルート」ポップアップは「いいえ」を押すのが間に合わないと自動適用されると指摘。協調ルーティングは素晴らしく聞こえるが、それはGoogleがどの地域に交通を流すか決めることを意味すると気づくまでは。
+***** Comments
+- この種の介入が考慮していないことの一つは、道路は予想される交通量に基づいて異なる耐久性で建設されているということだ。
+- 交通渋滞を避ける最良の方法は、職場、買い物、外出先の近くに住める地域社会だろう。
+- 突然ポップアップが表示される：より速いルートがあります！4分短縮！乗客か運転手が素早く「いいえ」を押さない限り、変更が自動適用される。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+교통 혼잡을 줄이는 방법
+***** TLDR
+Google Research가 미국 10개 도시에서 6개월간 실험을 진행했다. 2% 미만의 이동 경로를 변경하여 도시당 약 100개의 혼잡 구간을 회피했다. 결과: 대상 구간에서 2% 속도 향상, 네트워크 전체 0.35% 개선, 연료 소비 0.5-1% 감소. 규모로 보면 도시당 연간 수천 톤의 CO2 절감에 해당한다. 개입은 처리일과 대조일을 교대하는 스위치백 디자인을 사용했다.
+***** Take
+논문보다 댓글이 더 흥미롭다. 한 사람은 교통 경로 변경이 그 정도 교통량을 감당하도록 설계되지 않은 도로를 파괴한다고 지적한다. 다른 사람은 Google 지도의 '더 빠른 경로' 팝업이 '아니요'를 빨리 누르지 않으면 자동 적용된다고 지적한다. 협조적 라우팅은 좋게 들리지만, 어느 동네가 교통을 떠안을지 Google이 결정한다는 걸 깨달을 때까지만.
+***** Comments
+- 이런 유형의 개입이 고려하지 않는 것 중 하나는 도로가 예상 교통량에 따라 다른 수준의 내구성으로 건설된다는 것이다.
+- 교통 혼잡을 피하는 최선의 방법은 일하고, 쇼핑하고, 외출하는 곳 근처에 살 수 있는 커뮤니티일 것이다.
+- 갑자기 팝업이 뜬다: 더 빠른 경로가 있습니다! 4분 단축! 승객이나 운전자가 빨리 '아니요'를 누르지 않으면 변경이 자동 적용된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo podemos reducir la congestión del tráfico
+***** TLDR
+Google Research realizó un experimento de 6 meses en 10 ciudades de EE.UU., alterando rutas de menos del 2% de los viajes para evitar ~100 segmentos congestionados por ciudad. Resultado: 2% más velocidad en segmentos objetivo, mejora del 0.35% en toda la red, y reducción del 0.5-1% en consumo de combustible. A escala, esto equivale a miles de toneladas de CO2 ahorradas por ciudad al año. La intervención usó un diseño de switchback alternando días de tratamiento y control.
+***** Take
+Los comentarios son más interesantes que el paper. Una persona señala que redirigir el tráfico destruye carreteras no diseñadas para eso. Otro nota que los popups de 'ruta más rápida' de Google Maps se aplican automáticamente si no eres lo suficientemente rápido para pulsar 'No gracias'. El ruteo coordinado suena genial hasta que te das cuenta de que significa que Google decide qué barrios reciben el volcado de tráfico.
+***** Comments
+- Una de las cosas que este tipo de intervención no tiene en cuenta es que las carreteras se construyen con diferentes niveles de resistencia según el tráfico que se espera que reciban.
+- Seguramente la mejor manera de evitar la congestión del tráfico serían comunidades donde sea posible vivir cerca de donde trabajas, compras, sales, etc.
+- De la nada aparece un popup en Google Maps: ¡hay una ruta más rápida! ¡4 minutos más rápido! A menos que el pasajero o el conductor sean lo suficientemente rápidos para pulsar 'No gracias', el cambio se aplica automáticamente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie wir Verkehrsstaus reduzieren können
+***** TLDR
+Google Research führte ein 6-monatiges Experiment in 10 US-Städten durch, bei dem die Routen von weniger als 2% der Fahrten geändert wurden, um etwa 100 überlastete Straßenabschnitte pro Stadt zu umgehen. Ergebnis: 2% höhere Geschwindigkeiten auf Zielabschnitten, 0,35% Verbesserung netzwerkweit und 0,5-1% Reduzierung des Kraftstoffverbrauchs. Im Maßstab bedeutet das Tausende Tonnen CO2-Einsparung pro Stadt pro Jahr. Die Intervention verwendete ein Switchback-Design mit wechselnden Behandlungs- und Kontrolltagen.
+***** Take
+Die Kommentare sind interessanter als das Paper. Eine Person weist darauf hin, dass Verkehrsumleitung Straßen zerstört, die nicht dafür ausgelegt sind. Eine andere bemerkt, dass Google Maps 'schnellere Route'-Popups automatisch angewendet werden, wenn man nicht schnell genug 'Nein danke' drückt. Koordiniertes Routing klingt toll, bis man merkt, dass es bedeutet, dass Google entscheidet, welche Viertel den Verkehr abbekommen.
+***** Comments
+- Eine Sache, die diese Art von Intervention nicht berücksichtigt, ist, dass Straßen mit unterschiedlicher Belastbarkeit gebaut werden, basierend auf dem erwarteten Verkehrsaufkommen.
+- Der beste Weg, Verkehrsstaus zu vermeiden, wären sicher Gemeinden, in denen man in der Nähe von Arbeit, Einkaufen, Ausgehen usw. leben kann.
+- Aus dem Nichts erscheint ein Popup in Google Maps: Eine schnellere Route ist verfügbar! 4 Minuten schneller! Wenn nicht Beifahrer oder Fahrer schnell genug 'Nein danke' drücken, wird die Änderung automatisch angewendet.
+** Why write code in 2026 :programming:ai:software-engineering:
+:PROPERTIES:
+:ID:       48861923
+:URL:      https://softwaredoug.com/blog/2026/07/09/write-code
+:HN_URL:   https://news.ycombinator.com/item?id=48861923
+:POINTS:   101
+:COMMENTS: 143
+:BY:       softwaredoug
+:END:
+
+*** TLDR
+Software engineers now build the factory, not the software. We set up infrastructure that makes agents successful: prompts, skills, AGENTS.md, tests, evals. But the author argues you should still write code yourself. Not because agents are worse at it, but because writing helps you think in the execution environment, not proxied through English. Agents are conservative and amplify your bad decisions instead of fixing them.
+
+*** Take
+The boy scout rule question hits hard: Have you ever seen an agent leave code better than it found it? Would you even WANT it to try? The answer is no on both counts. Agents triple your LoC to preserve your pre-caffeinated decision to use localStorage, and they'll never call you out on it.
+
+*** Comments
+
+**** mrweasel
+:PROPERTIES:
+:COMMENT_ID: 48862201
+:END:
+Apparently it's not obvious to everyone, but if you can't write code, you can't review it. I do know people, and companies, that say: 'So what, we ask Claude to write the code, Codex will then do the review.'
+
+**** supermdguy
+:PROPERTIES:
+:COMMENT_ID: 48862202
+:END:
+Do you know what the industry term for a project specification that is comprehensive and precise enough to generate a program? Code. It's called code.
+
+**** nmehner
+:PROPERTIES:
+:COMMENT_ID: 48862203
+:END:
+You have to train your own mental model. We always argue about code in a very abstract and logical way.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么在2026年还要写代码
+***** TLDR
+软件工程师现在是在建造工厂，而不是软件本身。我们搭建让代理成功的基础设施：提示词、技能、AGENTS.md、测试、评估。但作者认为你仍然应该自己写代码。不是因为代理写得更差，而是因为写代码帮助你在执行环境中思考，而不是通过英语代理。代理很保守，会放大你的错误决策而不是修复它们。
+***** Take
+童子军规则的问题一针见血：你见过代理让代码比原来更好吗？你甚至会想让它尝试吗？两个问题的答案都是否定的。代理会把你早上没喝咖啡时决定使用localStorage的代码膨胀三倍，而且永远不会指出你的问题。
+***** Comments
+- 显然不是每个人都明白，但如果你不会写代码，你就无法审查它。我确实认识一些人和公司会说：'那又怎样，我们让Claude写代码，Codex来审查。'
+- 你知道行业术语中，足够全面和精确到可以生成程序的项目规范叫什么吗？代码。它就叫代码。
+- 你必须训练自己的心智模型。我们总是以非常抽象和逻辑的方式讨论代码。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+2026年になぜコードを書くのか
+***** TLDR
+ソフトウェアエンジニアは今やソフトウェアではなく工場を建てている。エージェントを成功させるインフラを構築する：プロンプト、スキル、AGENTS.md、テスト、評価。しかし著者は自分でコードを書くべきだと主張する。エージェントの方が下手だからではなく、コードを書くことで英語を介さず実行環境で考えられるから。エージェントは保守的で、あなたの悪い決定を修正する代わりに増幅させる。
+***** Take
+ボーイスカウトルールの質問が刺さる：エージェントがコードを見つけた時より良くして去るのを見たことがある？そもそもそうしてほしい？両方ともノーだ。エージェントはカフェイン摂取前のあなたがlocalStorageを使う決定をしたコードを3倍に膨らませ、決してそれを指摘しない。
+***** Comments
+- 明らかに全員には分かっていないが、コードが書けなければレビューもできない。私は『それがどうした、Claudeにコードを書かせて、Codexにレビューさせる』と言う人や会社を知っている。
+- プログラムを生成できるほど包括的で正確なプロジェクト仕様の業界用語を知ってる？コード。それはコードと呼ばれる。
+- 自分のメンタルモデルを訓練しなければならない。私たちはいつもコードについて非常に抽象的で論理的な方法で議論する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+2026년에 왜 코드를 작성하는가
+***** TLDR
+소프트웨어 엔지니어는 이제 소프트웨어가 아니라 공장을 짓는다. 에이전트가 성공할 수 있는 인프라를 구축한다: 프롬프트, 스킬, AGENTS.md, 테스트, 평가. 하지만 저자는 여전히 직접 코드를 작성해야 한다고 주장한다. 에이전트가 더 못해서가 아니라, 코드 작성이 영어를 거치지 않고 실행 환경에서 생각하는 데 도움이 되기 때문이다. 에이전트는 보수적이며 당신의 잘못된 결정을 고치는 대신 증폭시킨다.
+***** Take
+보이스카우트 규칙 질문이 뼈를 때린다: 에이전트가 코드를 발견했을 때보다 더 낫게 남기는 것을 본 적 있는가? 그러길 원하기나 하는가? 둘 다 아니다. 에이전트는 당신이 카페인 섭취 전에 localStorage를 쓰기로 한 결정을 보존하기 위해 코드 줄 수를 3배로 늘리고, 절대 그걸 지적하지 않는다.
+***** Comments
+- 모두에게 명백하지는 않은 것 같지만, 코드를 작성할 수 없으면 리뷰도 할 수 없다. '그래서 뭐, Claude에게 코드를 쓰게 하고 Codex가 리뷰하면 되지'라고 말하는 사람들과 회사들을 안다.
+- 프로그램을 생성할 수 있을 만큼 포괄적이고 정밀한 프로젝트 사양의 업계 용어가 뭔지 아는가? 코드다. 그건 코드라고 불린다.
+- 자신의 멘탈 모델을 훈련해야 한다. 우리는 항상 매우 추상적이고 논리적인 방식으로 코드에 대해 논쟁한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué escribir código en 2026
+***** TLDR
+Los ingenieros de software ahora construyen la fábrica, no el software. Configuramos infraestructura que hace exitosos a los agentes: prompts, skills, AGENTS.md, tests, evals. Pero el autor argumenta que aún deberías escribir código tú mismo. No porque los agentes sean peores, sino porque escribir te ayuda a pensar en el entorno de ejecución, no proxy a través del inglés. Los agentes son conservadores y amplifican tus malas decisiones en lugar de arreglarlas.
+***** Take
+La pregunta de la regla del boy scout pega fuerte: ¿Has visto alguna vez a un agente dejar el código mejor de como lo encontró? ¿Querrías que lo intentara? La respuesta es no en ambos casos. Los agentes triplican tus líneas de código para preservar tu decisión pre-cafeína de usar localStorage, y nunca te lo van a señalar.
+***** Comments
+- Aparentemente no es obvio para todos, pero si no puedes escribir código, no puedes revisarlo. Conozco personas y empresas que dicen: 'Y qué, le pedimos a Claude que escriba el código, Codex hará la revisión.'
+- ¿Sabes cuál es el término de la industria para una especificación de proyecto lo suficientemente completa y precisa para generar un programa? Código. Se llama código.
+- Tienes que entrenar tu propio modelo mental. Siempre argumentamos sobre el código de manera muy abstracta y lógica.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum man 2026 noch Code schreibt
+***** TLDR
+Software-Ingenieure bauen jetzt die Fabrik, nicht die Software. Wir richten Infrastruktur ein, die Agenten erfolgreich macht: Prompts, Skills, AGENTS.md, Tests, Evals. Aber der Autor argumentiert, dass man trotzdem selbst Code schreiben sollte. Nicht weil Agenten schlechter sind, sondern weil Schreiben hilft, in der Ausführungsumgebung zu denken, nicht durch Englisch vermittelt. Agenten sind konservativ und verstärken deine schlechten Entscheidungen, anstatt sie zu beheben.
+***** Take
+Die Pfadfinder-Regel-Frage trifft hart: Hast du jemals einen Agenten gesehen, der Code besser hinterlässt als er ihn vorgefunden hat? Würdest du überhaupt WOLLEN, dass er es versucht? Die Antwort ist in beiden Fällen nein. Agenten verdreifachen deine Codezeilen, um deine Pre-Koffein-Entscheidung, localStorage zu verwenden, zu erhalten, und werden es dir nie vorwerfen.
+***** Comments
+- Anscheinend ist es nicht allen offensichtlich, aber wenn du keinen Code schreiben kannst, kannst du ihn auch nicht reviewen. Ich kenne Leute und Firmen, die sagen: 'Na und, wir lassen Claude den Code schreiben, Codex macht dann das Review.'
+- Weißt du, wie der Branchenbegriff für eine Projektspezifikation lautet, die umfassend und präzise genug ist, um ein Programm zu generieren? Code. Es heißt Code.
+- Du musst dein eigenes mentales Modell trainieren. Wir argumentieren immer sehr abstrakt und logisch über Code.
+** Ask HN: What Are You Working On? (July 2026) :askhn:projects:startups:
+:PROPERTIES:
+:ID:       48884984
+:URL:      https://news.ycombinator.com/item?id=48884984
+:HN_URL:   https://news.ycombinator.com/item?id=48884984
+:POINTS:   58
+:COMMENTS: 148
+:BY:       david927
+:END:
+
+*** TLDR
+Monthly thread where HN shares their projects. Highlights: MedAngle (AI super app for med/dental school by the first doctor/full-stack engineer in a country of 250M), a rootless container system using namespaces for on-demand app workspaces, and SideProjectors (marketplace for selling failed side projects). Standard mix of ambitious founders and weekend tinkerers.
+
+*** Take
+The MedAngle founder claiming to be 'the first medical doctor and full stack engineer in the history of my country (250 million)' is doing a lot of heavy lifting there. I mean, I'm sure it's technically true, but that's a very specific Venn diagram overlap to brag about.
+
+*** Comments
+
+**** maz1b
+:PROPERTIES:
+:COMMENT_ID: 48885101
+:END:
+I'm working on MedAngle, the world's first Agentic AI Super App for medical and dental school. I myself am the first medical doctor and full stack engineer in the history of my country (250 million).
+
+**** devttyeu
+:PROPERTIES:
+:COMMENT_ID: 48885102
+:END:
+Building a rootless, namespace powered container, on demand application workspace. Each component is a mini app in a heavily locked down container.
+
+**** postatic
+:PROPERTIES:
+:COMMENT_ID: 48885103
+:END:
+Been pushing through SideProjectors - if your projects don't work out, feel free to submit it for sale.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Ask HN：你在做什么项目？（2026年7月）
+***** TLDR
+每月HN分享项目的帖子。亮点：MedAngle（由一个2.5亿人口国家的第一位医生/全栈工程师开发的医学/牙科学院AI超级应用），一个使用命名空间的无root容器系统用于按需应用工作区，以及SideProjectors（出售失败副业项目的市场）。雄心勃勃的创始人和周末修补匠的标准组合。
+***** Take
+MedAngle创始人声称自己是'我国（2.5亿人）历史上第一位医生兼全栈工程师'，这个说法承载了太多。我是说，技术上可能是真的，但这是一个非常具体的维恩图重叠区域来吹嘘。
+***** Comments
+- 我在做MedAngle，世界上第一个针对医学和牙科学院的代理AI超级应用。我本人是我国（2.5亿人）历史上第一位医生兼全栈工程师。
+- 构建一个无root的、基于命名空间的容器，按需应用工作区。每个组件都是一个严格锁定容器中的迷你应用。
+- 一直在推进SideProjectors——如果你的项目失败了，欢迎提交出售。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+HNに聞く：何に取り組んでいますか？（2026年7月）
+***** TLDR
+HNが毎月プロジェクトを共有するスレッド。ハイライト：MedAngle（2.5億人の国で初の医師/フルスタックエンジニアによる医学・歯学部向けAIスーパーアプリ）、オンデマンドアプリワークスペース用の名前空間ベースのルートレスコンテナシステム、そしてSideProjectors（失敗したサイドプロジェクトを売るマーケットプレイス）。野心的な創業者と週末の趣味人の標準的な組み合わせ。
+***** Take
+MedAngleの創業者が「私の国（2億5000万人）の歴史上初の医師兼フルスタックエンジニア」と主張しているのは、かなり無理がある。技術的には正しいかもしれないが、それは自慢するには非常に限定的なベン図の重なりだ。
+***** Comments
+- MedAngleを開発中。医学・歯学部向け世界初のエージェントAIスーパーアプリ。私自身、2億5000万人の国の歴史上初の医師兼フルスタックエンジニアだ。
+- ルートレスで名前空間を使ったオンデマンドアプリケーションワークスペースのコンテナを構築中。各コンポーネントは厳重にロックダウンされたコンテナ内のミニアプリ。
+- SideProjectorsを推進中——プロジェクトがうまくいかなかったら、売りに出してください。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+HN에게 묻다: 무슨 작업 중인가요? (2026년 7월)
+***** TLDR
+HN이 매달 프로젝트를 공유하는 스레드. 하이라이트: MedAngle (2.5억 인구 국가 최초의 의사/풀스택 엔지니어가 만든 의대/치대용 AI 슈퍼앱), 온디맨드 앱 워크스페이스를 위한 네임스페이스 기반 루트리스 컨테이너 시스템, 그리고 SideProjectors (실패한 사이드 프로젝트 판매 마켓플레이스). 야심찬 창업자와 주말 취미인의 표준 조합.
+***** Take
+MedAngle 창업자가 '내 나라 (2억 5천만) 역사상 최초의 의사 겸 풀스택 엔지니어'라고 주장하는 건 좀 무리가 있다. 기술적으로는 맞을 수도 있지만, 자랑하기엔 매우 특정한 벤 다이어그램 교집합이다.
+***** Comments
+- MedAngle을 만들고 있다. 의대와 치대를 위한 세계 최초의 에이전트 AI 슈퍼앱. 나 자신이 내 나라 (2억 5천만) 역사상 최초의 의사 겸 풀스택 엔지니어다.
+- 루트리스, 네임스페이스 기반의 온디맨드 애플리케이션 워크스페이스 컨테이너를 구축 중. 각 컴포넌트는 엄격하게 잠긴 컨테이너 안의 미니 앱이다.
+- SideProjectors를 밀고 있다 - 프로젝트가 안 되면 판매용으로 제출해도 된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Pregunta a HN: ¿En qué estás trabajando? (Julio 2026)
+***** TLDR
+Hilo mensual donde HN comparte sus proyectos. Destacados: MedAngle (super app de IA para escuelas de medicina/odontología por el primer médico/ingeniero full stack en un país de 250M), un sistema de contenedores rootless usando namespaces para workspaces de apps bajo demanda, y SideProjectors (marketplace para vender side projects fallidos). La mezcla estándar de fundadores ambiciosos y tinkerers de fin de semana.
+***** Take
+El fundador de MedAngle diciendo que es 'el primer médico y full stack engineer en la historia de mi país (250 millones)' está haciendo mucho trabajo pesado ahí. Quiero decir, seguro que es técnicamente cierto, pero es un solapamiento muy específico del diagrama de Venn para presumir.
+***** Comments
+- Estoy trabajando en MedAngle, la primera Super App de IA Agéntica del mundo para escuelas de medicina y odontología. Yo mismo soy el primer médico y full stack engineer en la historia de mi país (250 millones).
+- Construyendo un contenedor rootless basado en namespaces, workspace de aplicaciones bajo demanda. Cada componente es una mini app en un contenedor muy restringido.
+- He estado impulsando SideProjectors - si tus proyectos no funcionan, siéntete libre de enviarlos para venta.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Frag HN: Woran arbeitest du? (Juli 2026)
+***** TLDR
+Monatlicher Thread, in dem HN seine Projekte teilt. Highlights: MedAngle (KI-Super-App für Medizin-/Zahnmedizinstudium vom ersten Arzt/Full-Stack-Engineer eines 250-Millionen-Landes), ein rootloses Container-System mit Namespaces für On-Demand-App-Workspaces, und SideProjectors (Marktplatz für gescheiterte Nebenprojekte). Die übliche Mischung aus ambitionierten Gründern und Wochenend-Bastlern.
+***** Take
+Der MedAngle-Gründer, der behauptet, 'der erste Arzt und Full-Stack-Engineer in der Geschichte meines Landes (250 Millionen)' zu sein, macht da viel schwere Arbeit. Ich meine, es ist wahrscheinlich technisch korrekt, aber das ist eine sehr spezifische Venn-Diagramm-Überschneidung zum Angeben.
+***** Comments
+- Ich arbeite an MedAngle, der weltweit ersten Agentischen KI Super App für Medizin- und Zahnmedizinstudium. Ich selbst bin der erste Arzt und Full-Stack-Engineer in der Geschichte meines Landes (250 Millionen).
+- Baue einen rootlosen, namespace-basierten On-Demand-Anwendungs-Workspace-Container. Jede Komponente ist eine Mini-App in einem stark abgesicherten Container.
+- Habe an SideProjectors gearbeitet - wenn deine Projekte nicht klappen, kannst du sie gerne zum Verkauf einreichen.
