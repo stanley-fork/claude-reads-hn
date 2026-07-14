@@ -1,0 +1,500 @@
+#+TITLE: HN Digest 2026-07-14 20:00:00 UT UTC
+#+DATE: 2026-07-14T20:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+XWayland is bad, vibecoding builds babel, and a 27B model fits in your pocket
+
+* Highlights
+- Input latency: XWayland adds 3ms, native Wayland nearly ties X11
+- Armin Ronacher: AI lets the tower rise even after shared understanding collapses
+- Bonsai 27B: 1-bit quantization runs full reasoning on an iPhone
+
+* Stories
+
+** Measuring Input Latency on Linux: X11 vs. Wayland, VRR, and DXVK :linux:gaming:wayland:latency:
+:PROPERTIES:
+:ID:       48909424
+:URL:      https://marco-nett.de/blog/measuring-input-latency-on-linux-x11-vs-wayland-vrr-dxvk/
+:HN_URL:   https://news.ycombinator.com/item?id=48909424
+:POINTS:   278
+:COMMENTS: 152
+:BY:       hoechst
+:END:
+
+*** TLDR
+A developer built a hardware device to measure end-to-end input latency on Linux gaming. Key findings: X11 beats native Wayland by only 0.14-0.22ms. VRR provides the biggest benefit (0.26-0.45ms faster). XWayland adds a catastrophic 3.13ms of latency. The dxvk-low-latency fork helps most in uncapped scenarios.
+
+*** Take
+Finally someone did the actual science instead of posting 'Wayland feels off' for the 47th time. Turns out native Wayland is basically X11 with better vibes. XWayland is the real villain here, adding more latency than every other optimization combined.
+
+*** Comments
+
+**** NelsonMinar
+:PROPERTIES:
+:COMMENT_ID: 48909501
+:END:
+One thing that's lovely about Linux is this kind of analysis is not only possible, but meaningful. These results will get reported back to the graphics software authors and the ecosystem will improve.
+
+**** cgyvbunji
+:PROPERTIES:
+:COMMENT_ID: 48909612
+:END:
+He seems confused at the end why people think wayland is so slow, but don't you think it's because of his xwayland result? People were probably running x11 games on wayland and noticed that significant lag.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+测量Linux输入延迟：X11 vs Wayland、VRR和DXVK
+***** TLDR
+开发者制作硬件设备测量Linux游戏端到端输入延迟。关键发现：X11仅比原生Wayland快0.14-0.22毫秒。VRR提供最大收益（快0.26-0.45毫秒）。XWayland增加灾难性的3.13毫秒延迟。
+***** Take
+终于有人做了真正的科学研究，而不是第47次发帖说'Wayland感觉不对'。原来原生Wayland基本就是更有格调的X11。XWayland才是真正的罪魁祸首。
+***** Comments
+- Linux的美妙之处在于这种分析不仅可能，而且有意义。这些结果会反馈给图形软件作者，生态系统会改进。
+- 他最后似乎困惑为什么人们认为wayland这么慢，但你不觉得是因为他的xwayland结果吗？人们可能是在wayland上运行x11游戏，注意到了那个明显的延迟。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Linuxの入力レイテンシ測定：X11 vs Wayland、VRR、DXVK
+***** TLDR
+開発者がLinuxゲームのエンドツーエンド入力レイテンシを測定するハードウェアデバイスを作成。主な発見：X11はネイティブWaylandより0.14-0.22msしか速くない。VRRが最大の効果（0.26-0.45ms高速化）。XWaylandは破滅的な3.13msのレイテンシを追加。
+***** Take
+ついに誰かが「Waylandは違和感がある」と47回目の投稿をする代わりに、実際の科学を行った。ネイティブWaylandは基本的にX11と同等。XWaylandこそが真の悪役だ。
+***** Comments
+- Linuxの素晴らしい点は、この種の分析が可能なだけでなく、意味があることです。これらの結果はグラフィックソフトウェアの作者に報告され、エコシステムは改善されます。
+- 最後で彼はなぜ人々がwaylandが遅いと思うのか困惑しているようですが、彼のxwaylandの結果が原因ではないでしょうか？人々はおそらくwayland上でx11ゲームを実行していて、その著しい遅延に気づいたのでしょう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Linux 입력 지연 측정: X11 vs Wayland, VRR, DXVK
+***** TLDR
+개발자가 Linux 게임의 엔드투엔드 입력 지연을 측정하는 하드웨어 장치를 제작했다. 핵심 발견: X11이 네이티브 Wayland보다 0.14-0.22ms만 빠르다. VRR이 가장 큰 효과(0.26-0.45ms 빠름). XWayland는 치명적인 3.13ms 지연을 추가한다.
+***** Take
+드디어 누군가가 'Wayland가 이상하다'고 47번째 포스팅하는 대신 실제 과학을 수행했다. 네이티브 Wayland는 기본적으로 X11과 같다. XWayland가 진짜 악당이다.
+***** Comments
+- Linux의 좋은 점은 이런 분석이 가능할 뿐만 아니라 의미가 있다는 것입니다. 이 결과는 그래픽 소프트웨어 저자에게 보고되고 생태계가 개선될 것입니다.
+- 그는 마지막에 왜 사람들이 wayland가 느리다고 생각하는지 혼란스러워하는 것 같은데, 그의 xwayland 결과 때문 아닐까요? 사람들은 아마 wayland에서 x11 게임을 실행하고 그 상당한 지연을 느꼈을 겁니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Medición de latencia de entrada en Linux: X11 vs Wayland, VRR y DXVK
+***** TLDR
+Un desarrollador construyó un dispositivo de hardware para medir la latencia de entrada de extremo a extremo en juegos de Linux. Hallazgos clave: X11 supera a Wayland nativo por solo 0.14-0.22ms. VRR proporciona el mayor beneficio (0.26-0.45ms más rápido). XWayland agrega catastróficos 3.13ms de latencia.
+***** Take
+Por fin alguien hizo ciencia real en lugar de publicar 'Wayland se siente raro' por vez número 47. Resulta que Wayland nativo es básicamente X11 con mejor onda. XWayland es el verdadero villano aquí.
+***** Comments
+- Una cosa encantadora de Linux es que este tipo de análisis no solo es posible, sino significativo. Estos resultados se reportarán a los autores del software gráfico y el ecosistema mejorará.
+- Parece confundido al final sobre por qué la gente piensa que wayland es tan lento, ¿pero no crees que es por su resultado de xwayland? La gente probablemente estaba ejecutando juegos x11 en wayland y notó ese retraso significativo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Messung der Eingabelatenz unter Linux: X11 vs. Wayland, VRR und DXVK
+***** TLDR
+Ein Entwickler baute ein Hardware-Gerät zur Messung der End-to-End-Eingabelatenz bei Linux-Spielen. Wichtigste Erkenntnisse: X11 schlägt natives Wayland nur um 0,14-0,22ms. VRR bietet den größten Vorteil (0,26-0,45ms schneller). XWayland fügt katastrophale 3,13ms Latenz hinzu.
+***** Take
+Endlich hat jemand echte Wissenschaft betrieben, anstatt zum 47. Mal 'Wayland fühlt sich komisch an' zu posten. Natives Wayland ist im Grunde X11 mit besserem Feeling. XWayland ist hier der wahre Bösewicht.
+***** Comments
+- Eine schöne Sache an Linux ist, dass diese Art von Analyse nicht nur möglich, sondern auch sinnvoll ist. Diese Ergebnisse werden an die Grafik-Software-Autoren zurückgemeldet und das Ökosystem wird sich verbessern.
+- Er scheint am Ende verwirrt zu sein, warum Leute denken, dass Wayland so langsam ist, aber glaubst du nicht, dass es an seinem XWayland-Ergebnis liegt? Die Leute haben wahrscheinlich X11-Spiele auf Wayland ausgeführt und diese erhebliche Verzögerung bemerkt.
+** The Tower Keeps Rising :ai:software-engineering:philosophy:
+:PROPERTIES:
+:ID:       48909785
+:URL:      https://lucumr.pocoo.org/2026/7/13/the-tower-keeps-rising/
+:HN_URL:   https://news.ycombinator.com/item?id=48909785
+:POINTS:   175
+:COMMENTS: 65
+:BY:       cdrnsf
+:END:
+
+*** TLDR
+Armin Ronacher uses the Tower of Babel as metaphor for vibecoded software. In the biblical story, God stops construction by taking away shared language. With AI agents, construction continues even after shared understanding collapses. Each developer has a tireless translator that can explain and modify any corner of the codebase, but the architectural language that lets humans reason together disappears.
+
+*** Take
+The most chilling observation here isn't that AI makes us worse programmers. It's that we might not notice we've lost something essential because the tower doesn't fall. It just keeps rising, and rising, and rising.
+
+*** Comments
+
+**** tekacs
+:PROPERTIES:
+:COMMENT_ID: 48909812
+:END:
+I've said for a long time that composability in software is a bit like playing Tetris: the lines have to clear. Agents are getting better at folding things into themselves, especially if you give them good constraints.
+
+**** sixtyj
+:PROPERTIES:
+:COMMENT_ID: 48909834
+:END:
+Large software projects have never been limited only by how quickly an individual can produce code. They are limited by how well people can coordinate their understanding of the system they are changing.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+塔仍在升起
+***** TLDR
+Armin Ronacher用巴别塔比喻AI辅助编程。在圣经故事中，上帝通过剥夺共同语言来阻止建造。有了AI代理，即使共同理解崩溃，建造也会继续。每个开发者都有一个不知疲倦的翻译器可以解释和修改代码库的任何角落，但让人类共同推理的架构语言消失了。
+***** Take
+这里最令人不寒而栗的观察不是AI让我们成为更差的程序员。而是我们可能不会注意到我们失去了什么本质的东西，因为塔没有倒塌。它只是不断上升，不断上升。
+***** Comments
+- 我一直说软件的可组合性有点像玩俄罗斯方块：线必须消除。代理越来越擅长将事物折叠到自身中，特别是如果你给它们好的约束。
+- 大型软件项目从来不仅仅受限于个人生产代码的速度。它们受限于人们协调他们对正在改变的系统的理解的能力。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+塔は上り続ける
+***** TLDR
+Armin Ronacherはバベルの塔をバイブコーディングのメタファーとして使用。聖書の物語では、神は共通言語を奪うことで建設を止める。AIエージェントでは、共通理解が崩壊しても建設は続く。各開発者にはコードベースのどの部分も説明・修正できる疲れを知らない翻訳者がいるが、人間が一緒に推論するための建築言語は消える。
+***** Take
+ここで最も背筋が凍る観察は、AIが私たちをより悪いプログラマーにするということではない。塔が倒れないので、何か本質的なものを失ったことに気づかないかもしれないということだ。塔はただ上り続ける。
+***** Comments
+- ソフトウェアの構成可能性はテトリスに似ていると長年言ってきました：ラインはクリアしなければなりません。エージェントは、特に良い制約を与えれば、物事を自身に折り畳むことがうまくなっています。
+- 大規模ソフトウェアプロジェクトは、個人がどれだけ速くコードを生産できるかだけで制限されたことはありません。それらは、人々が変更しているシステムの理解をどれだけうまく調整できるかによって制限されています。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+탑은 계속 올라간다
+***** TLDR
+Armin Ronacher가 바벨탑을 바이브코딩의 은유로 사용했다. 성경 이야기에서 신은 공통 언어를 빼앗아 건설을 중단시켰다. AI 에이전트와 함께, 공통 이해가 붕괴된 후에도 건설은 계속된다. 각 개발자에게는 코드베이스의 어느 부분이든 설명하고 수정할 수 있는 지치지 않는 번역가가 있지만, 인간이 함께 추론할 수 있게 해주는 아키텍처 언어는 사라진다.
+***** Take
+여기서 가장 소름 끼치는 관찰은 AI가 우리를 더 나쁜 프로그래머로 만든다는 것이 아니다. 탑이 무너지지 않기 때문에 우리가 본질적인 무언가를 잃었다는 것을 알아차리지 못할 수도 있다는 것이다. 탑은 그저 계속 올라간다.
+***** Comments
+- 소프트웨어의 구성 가능성은 테트리스와 비슷하다고 오랫동안 말해왔습니다: 라인이 지워져야 합니다. 에이전트는 특히 좋은 제약을 주면 것들을 자신 안으로 접는 것을 더 잘하고 있습니다.
+- 대규모 소프트웨어 프로젝트는 개인이 얼마나 빨리 코드를 생산할 수 있는지에 의해서만 제한된 적이 없습니다. 그것들은 사람들이 변경하는 시스템에 대한 이해를 얼마나 잘 조정할 수 있는지에 의해 제한됩니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La torre sigue subiendo
+***** TLDR
+Armin Ronacher usa la Torre de Babel como metáfora del software vibecodificado. En la historia bíblica, Dios detiene la construcción quitando el lenguaje compartido. Con agentes de IA, la construcción continúa incluso después de que el entendimiento compartido colapsa. Cada desarrollador tiene un traductor incansable que puede explicar y modificar cualquier rincón del código, pero el lenguaje arquitectónico que permite a los humanos razonar juntos desaparece.
+***** Take
+La observación más escalofriante aquí no es que la IA nos hace peores programadores. Es que podríamos no notar que hemos perdido algo esencial porque la torre no cae. Simplemente sigue subiendo, y subiendo, y subiendo.
+***** Comments
+- He dicho durante mucho tiempo que la composabilidad en software es como jugar Tetris: las líneas tienen que limpiarse. Los agentes están mejorando en plegar cosas en sí mismos, especialmente si les das buenas restricciones.
+- Los grandes proyectos de software nunca han estado limitados solo por qué tan rápido un individuo puede producir código. Están limitados por qué tan bien las personas pueden coordinar su comprensión del sistema que están cambiando.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der Turm steigt weiter
+***** TLDR
+Armin Ronacher nutzt den Turmbau zu Babel als Metapher für vibecodierte Software. In der biblischen Geschichte stoppt Gott den Bau, indem er die gemeinsame Sprache nimmt. Mit KI-Agenten geht der Bau weiter, auch nachdem das gemeinsame Verständnis zusammengebrochen ist. Jeder Entwickler hat einen unermüdlichen Übersetzer, der jede Ecke der Codebasis erklären und ändern kann, aber die architektonische Sprache, die Menschen gemeinsam denken lässt, verschwindet.
+***** Take
+Die erschreckendste Beobachtung hier ist nicht, dass KI uns zu schlechteren Programmierern macht. Es ist, dass wir vielleicht nicht bemerken, dass wir etwas Wesentliches verloren haben, weil der Turm nicht fällt. Er steigt einfach weiter und weiter und weiter.
+***** Comments
+- Ich sage seit langem, dass Komponierbarkeit in Software ein bisschen wie Tetris spielen ist: die Linien müssen sich auflösen. Agenten werden besser darin, Dinge in sich selbst zu falten, besonders wenn man ihnen gute Einschränkungen gibt.
+- Große Softwareprojekte waren nie nur dadurch begrenzt, wie schnell eine Einzelperson Code produzieren kann. Sie sind dadurch begrenzt, wie gut Menschen ihr Verständnis des Systems, das sie ändern, koordinieren können.
+** Bonsai 27B: A 27B-Class Model that runs on a phone :ai:llm:mobile:compression:
+:PROPERTIES:
+:ID:       48910545
+:URL:      https://prismml.com/news/bonsai-27b
+:HN_URL:   https://news.ycombinator.com/item?id=48910545
+:POINTS:   108
+:COMMENTS: 26
+:BY:       xenova
+:END:
+
+*** TLDR
+PrismML released Bonsai 27B, based on Qwen3.6 27B. The ternary version (1.71 bits/weight) is 5.9GB and retains 95% of full-precision quality. The 1-bit version (1.125 bits/weight) is 3.9GB and actually fits on an iPhone 17 Pro. Both support 262K context, multimodal vision, tool calling, and speculative decoding. Apple is reportedly in acquisition talks.
+
+*** Take
+We've gone from 'you need a datacenter' to 'here's a 27B model on your phone' in about 18 months. The 1-bit model scores better than conventional 4-bit builds while using 2.5x less memory. Intelligence density is the new metric, and PrismML is speedrunning it.
+
+*** Comments
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 48910601
+:END:
+The models themselves are showing up on Hugging Face. I've tried a couple in LM Studio - the GGUF one and the MLX one - but neither worked there. Might be that LM Studio needs to upgrade their llama.cpp or MLX engines first.
+
+**** kristianp
+:PROPERTIES:
+:COMMENT_ID: 48910589
+:END:
+Apparently Apple is 'in talks' with the PrismML.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Bonsai 27B：在手机上运行的27B级模型
+***** TLDR
+PrismML发布了基于Qwen3.6 27B的Bonsai 27B。三值版本（1.71位/权重）5.9GB，保留95%的全精度质量。1位版本（1.125位/权重）3.9GB，实际可在iPhone 17 Pro上运行。两者都支持262K上下文、多模态视觉、工具调用和推测解码。据报道苹果正在进行收购谈判。
+***** Take
+我们从'需要数据中心'到'手机上的27B模型'大约只用了18个月。1位模型比传统4位构建得分更高，同时内存使用量减少2.5倍。智能密度是新指标，PrismML正在速通。
+***** Comments
+- 模型本身已经出现在Hugging Face上。我在LM Studio试了几个——GGUF和MLX版本——但都不能工作。可能是LM Studio需要先升级他们的llama.cpp或MLX引擎。
+- 显然苹果正在与PrismML'洽谈'。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Bonsai 27B：スマホで動く27Bクラスモデル
+***** TLDR
+PrismMLがQwen3.6 27Bベースのbonsai 27Bをリリース。3値版（1.71ビット/重み）は5.9GBで全精度品質の95%を保持。1ビット版（1.125ビット/重み）は3.9GBで、実際にiPhone 17 Proで動作する。両方とも262Kコンテキスト、マルチモーダルビジョン、ツール呼び出し、投機的デコーディングをサポート。Appleは買収交渉中と報じられている。
+***** Take
+私たちは「データセンターが必要」から「スマホで27Bモデル」まで約18ヶ月で到達した。1ビットモデルは従来の4ビットビルドより高いスコアを出しながら、メモリ使用量は2.5分の1。インテリジェンス密度が新しい指標であり、PrismMLはそれをスピードランしている。
+***** Comments
+- モデル自体はHugging Faceに出始めています。LM Studioで試しました—GGUFとMLXのもの—でもどちらも動きませんでした。LM Studioがllama.cppやMLXエンジンをアップグレードする必要があるのかもしれません。
+- どうやらAppleがPrismMLと「交渉中」のようです。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Bonsai 27B: 폰에서 실행되는 27B급 모델
+***** TLDR
+PrismML이 Qwen3.6 27B 기반 Bonsai 27B를 출시했다. 삼진법 버전(1.71비트/가중치)은 5.9GB이고 전체 정밀도 품질의 95%를 유지한다. 1비트 버전(1.125비트/가중치)은 3.9GB이고 실제로 iPhone 17 Pro에서 작동한다. 둘 다 262K 컨텍스트, 멀티모달 비전, 도구 호출, 추측 디코딩을 지원한다. Apple이 인수 협상 중인 것으로 알려졌다.
+***** Take
+우리는 '데이터센터가 필요하다'에서 '폰에 27B 모델'까지 약 18개월 만에 도달했다. 1비트 모델은 기존 4비트 빌드보다 높은 점수를 기록하면서 메모리는 2.5배 적게 사용한다. 지능 밀도가 새로운 지표이고, PrismML이 스피드런하고 있다.
+***** Comments
+- 모델들이 Hugging Face에 올라오고 있습니다. LM Studio에서 몇 개 시도해봤는데—GGUF와 MLX—둘 다 작동하지 않았습니다. LM Studio가 llama.cpp나 MLX 엔진을 업그레이드해야 할 수도 있습니다.
+- Apple이 PrismML과 '협상 중'인 것 같습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Bonsai 27B: Un modelo de clase 27B que corre en un teléfono
+***** TLDR
+PrismML lanzó Bonsai 27B, basado en Qwen3.6 27B. La versión ternaria (1.71 bits/peso) es de 5.9GB y retiene 95% de la calidad de precisión completa. La versión de 1 bit (1.125 bits/peso) es de 3.9GB y realmente cabe en un iPhone 17 Pro. Ambos soportan contexto de 262K, visión multimodal, llamadas de herramientas y decodificación especulativa. Se informa que Apple está en conversaciones de adquisición.
+***** Take
+Hemos pasado de 'necesitas un datacenter' a 'aquí tienes un modelo 27B en tu teléfono' en unos 18 meses. El modelo de 1 bit puntúa mejor que las construcciones convencionales de 4 bits usando 2.5x menos memoria. La densidad de inteligencia es la nueva métrica, y PrismML está haciendo speedrun.
+***** Comments
+- Los modelos están apareciendo en Hugging Face. Probé un par en LM Studio—el GGUF y el MLX—pero ninguno funcionó. Puede que LM Studio necesite actualizar sus motores llama.cpp o MLX primero.
+- Aparentemente Apple está 'en conversaciones' con PrismML.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Bonsai 27B: Ein 27B-Klasse-Modell das auf einem Handy läuft
+***** TLDR
+PrismML hat Bonsai 27B veröffentlicht, basierend auf Qwen3.6 27B. Die ternäre Version (1,71 Bits/Gewicht) ist 5,9GB groß und behält 95% der Vollpräzisionsqualität. Die 1-Bit-Version (1,125 Bits/Gewicht) ist 3,9GB und passt tatsächlich auf ein iPhone 17 Pro. Beide unterstützen 262K Kontext, multimodale Vision, Tool-Aufrufe und spekulatives Dekodieren. Apple soll sich angeblich in Übernahmegesprächen befinden.
+***** Take
+Wir sind von 'du brauchst ein Rechenzentrum' zu 'hier ist ein 27B-Modell auf deinem Handy' in etwa 18 Monaten gekommen. Das 1-Bit-Modell erzielt bessere Werte als konventionelle 4-Bit-Builds bei 2,5x weniger Speicherverbrauch. Intelligenzdichte ist die neue Metrik, und PrismML macht einen Speedrun.
+***** Comments
+- Die Modelle selbst tauchen auf Hugging Face auf. Ich habe ein paar in LM Studio ausprobiert—das GGUF und das MLX—aber keines funktionierte dort. Es könnte sein, dass LM Studio ihre llama.cpp oder MLX-Engines erst aktualisieren muss.
+- Anscheinend ist Apple 'in Gesprächen' mit PrismML.
+** Beautiful Type Erasure with C++26 Reflection :cpp:reflection:type-erasure:metaprogramming:
+:PROPERTIES:
+:ID:       48905914
+:URL:      https://ryanjk5.github.io/posts/rjk-duck/
+:HN_URL:   https://news.ycombinator.com/item?id=48905914
+:POINTS:   96
+:COMMENTS: 39
+:BY:       RyanJK5
+:END:
+
+*** TLDR
+A new library called rjk::duck uses C++26 reflection to implement type erasure without the usual 100+ lines of boilerplate. You declare a trait interface, and the library generates vtables, handles overload resolution via an overload_set trick, and lets you swap underlying types at runtime. Single header, supports operators, composition, and extension methods.
+
+*** Take
+C++ keeps adding features that make you wonder if the language will eventually fold in on itself like a recursive template instantiation. But reflection-based type erasure is genuinely elegant. The overload_set trick for resolution is chef's kiss.
+
+*** Comments
+
+**** usrnm
+:PROPERTIES:
+:COMMENT_ID: 48905978
+:END:
+Or you just used void⁎ and went on with your life.
+
+**** Leherenn
+:PROPERTIES:
+:COMMENT_ID: 48906012
+:END:
+What's compilation time like when using it? Since it's using an under dev feature in compilers, it's not going to be definitive, but any rough numbers?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+C++26反射实现优雅的类型擦除
+***** TLDR
+一个名为rjk::duck的新库使用C++26反射来实现类型擦除，无需通常的100多行样板代码。你声明一个特征接口，库生成虚函数表，通过overload_set技巧处理重载解析，并允许运行时交换底层类型。单头文件，支持运算符、组合和扩展方法。
+***** Take
+C++不断添加新特性，让人怀疑这门语言最终会不会像递归模板实例化一样自我折叠。但基于反射的类型擦除确实优雅。用于解析的overload_set技巧堪称完美。
+***** Comments
+- 或者你直接用void⁎然后继续生活。
+- 使用它的编译时间怎么样？由于它使用的是编译器中正在开发的功能，这不会是最终结果，但有大概的数字吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+C++26リフレクションによる美しい型消去
+***** TLDR
+rjk::duckという新しいライブラリがC++26リフレクションを使用して、通常の100行以上のボイラープレートなしで型消去を実装。トレイトインターフェースを宣言すると、ライブラリがvtableを生成し、overload_setトリックでオーバーロード解決を処理し、実行時に基底型を交換できる。シングルヘッダー、演算子、合成、拡張メソッドをサポート。
+***** Take
+C++は再帰的なテンプレートのインスタンス化のように言語が最終的に自分自身に折り畳まれるのではないかと思わせる機能を追加し続けている。しかしリフレクションベースの型消去は本当にエレガント。解決のためのoverload_setトリックは最高。
+***** Comments
+- あるいはvoid⁎を使って人生を続けるだけ。
+- 使用時のコンパイル時間はどうですか？コンパイラの開発中の機能を使っているので、決定的ではないでしょうが、大まかな数字はありますか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+C++26 리플렉션으로 구현하는 아름다운 타입 소거
+***** TLDR
+rjk::duck이라는 새 라이브러리가 C++26 리플렉션을 사용해 일반적인 100줄 이상의 보일러플레이트 없이 타입 소거를 구현한다. 트레이트 인터페이스를 선언하면 라이브러리가 vtable을 생성하고, overload_set 트릭으로 오버로드 해석을 처리하며, 런타임에 기저 타입을 교체할 수 있다. 단일 헤더, 연산자, 합성, 확장 메서드 지원.
+***** Take
+C++는 언어가 재귀적 템플릿 인스턴스화처럼 결국 자기 자신으로 접힐지 궁금하게 만드는 기능을 계속 추가하고 있다. 하지만 리플렉션 기반 타입 소거는 진정으로 우아하다. 해석을 위한 overload_set 트릭은 최고다.
+***** Comments
+- 아니면 그냥 void⁎를 사용하고 인생을 계속 살면 됩니다.
+- 사용할 때 컴파일 시간은 어떤가요? 개발 중인 컴파일러 기능을 사용하기 때문에 확정적이지 않겠지만, 대략적인 숫자가 있나요?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Borrado de tipos elegante con reflexión de C++26
+***** TLDR
+Una nueva biblioteca llamada rjk::duck usa reflexión de C++26 para implementar borrado de tipos sin las usuales 100+ líneas de boilerplate. Declaras una interfaz de trait, y la biblioteca genera vtables, maneja resolución de sobrecarga vía un truco de overload_set, y te permite intercambiar tipos subyacentes en runtime. Un solo header, soporta operadores, composición y métodos de extensión.
+***** Take
+C++ sigue añadiendo características que te hacen preguntarte si el lenguaje eventualmente se plegará sobre sí mismo como una instanciación de template recursiva. Pero el borrado de tipos basado en reflexión es genuinamente elegante. El truco del overload_set para resolución es perfecto.
+***** Comments
+- O simplemente usaste void⁎ y seguiste con tu vida.
+- ¿Cómo es el tiempo de compilación al usarlo? Ya que usa una característica en desarrollo en los compiladores, no será definitivo, ¿pero hay números aproximados?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Elegante Type Erasure mit C++26 Reflection
+***** TLDR
+Eine neue Bibliothek namens rjk::duck verwendet C++26-Reflection, um Type Erasure ohne die üblichen 100+ Zeilen Boilerplate zu implementieren. Man deklariert ein Trait-Interface, und die Bibliothek generiert Vtables, behandelt Überladungsauflösung über einen overload_set-Trick und erlaubt den Austausch der zugrundeliegenden Typen zur Laufzeit. Single-Header, unterstützt Operatoren, Komposition und Erweiterungsmethoden.
+***** Take
+C++ fügt weiterhin Features hinzu, die einen fragen lassen, ob die Sprache sich irgendwann wie eine rekursive Template-Instanziierung in sich selbst falten wird. Aber reflection-basierte Type Erasure ist wirklich elegant. Der overload_set-Trick für die Auflösung ist perfekt.
+***** Comments
+- Oder man hat einfach void⁎ benutzt und sein Leben weitergelebt.
+- Wie ist die Kompilierzeit bei der Verwendung? Da es ein Feature verwendet, das in Compilern noch in Entwicklung ist, wird es nicht endgültig sein, aber gibt es grobe Zahlen?
+** How the FSF sysadmins block botnets with reaction :security:sysadmin:ddos:open-source:
+:PROPERTIES:
+:ID:       48876809
+:URL:      https://www.fsf.org/blogs/community/blocking-botnets-with-reaction
+:HN_URL:   https://news.ycombinator.com/item?id=48876809
+:POINTS:   141
+:COMMENTS: 50
+:BY:       pseudolus
+:END:
+
+*** TLDR
+The FSF switched from fail2ban to reaction for blocking aggressive LLM scrapers and DDoS attacks. They hit fail2ban's limits around 65K firewall rules and SQLite scaling issues. With ipset, they scaled to 5 million rules. They traced some traffic to the Vo1d botnet of compromised smart TVs. reaction is faster and requires you to build your own config from scratch, which the FSF found preferable.
+
+*** Take
+Your smart TV might be part of a botnet scraping FSF servers to train models. The future is here and it's deeply stupid. Also, 5 million firewall rules is a number I didn't expect to see today.
+
+*** Comments
+
+**** idoubtit
+:PROPERTIES:
+:COMMENT_ID: 48876901
+:END:
+I haven't used fail2ban for a long time, but reaction is worth evaluating. Unfortunately, that post does not describe their full configuration. Maybe it's on purpose, so that attackers can't adjust to fit.
+
+**** Bender
+:PROPERTIES:
+:COMMENT_ID: 48876956
+:END:
+My personal preference is to 'ip route add blackhole' as it has the lowest CPU overhead and I can add hundreds of thousands of CIDR blocks with no noticeable impact.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+FSF系统管理员如何用reaction阻止僵尸网络
+***** TLDR
+FSF从fail2ban切换到reaction来阻止激进的LLM爬虫和DDoS攻击。他们在约65K防火墙规则时遇到了fail2ban的限制和SQLite扩展问题。使用ipset，他们扩展到了500万条规则。他们追踪到一些流量来自由被入侵智能电视组成的Vo1d僵尸网络。reaction更快，需要从头构建自己的配置，FSF认为这更好。
+***** Take
+你的智能电视可能是正在爬取FSF服务器来训练模型的僵尸网络的一部分。未来已经到来，而且非常愚蠢。另外，500万条防火墙规则是我今天没想到会看到的数字。
+***** Comments
+- 我很久没用fail2ban了，但reaction值得评估。不幸的是，那篇文章没有描述他们的完整配置。也许是故意的，这样攻击者就无法调整适应。
+- 我个人偏好是'ip route add blackhole'，因为它的CPU开销最低，我可以添加数十万个CIDR块而没有明显影响。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+FSFのシステム管理者がreactionでボットネットをブロックする方法
+***** TLDR
+FSFは積極的なLLMスクレイパーとDDoS攻撃をブロックするためにfail2banからreactionに切り替えた。約65Kのファイアウォールルールでfail2banの限界とSQLiteのスケーリング問題にぶつかった。ipsetを使用して500万ルールまでスケール。一部のトラフィックは侵害されたスマートTVで構成されるVo1dボットネットから来ていることを突き止めた。reactionはより高速で、ゼロから自分の設定を構築する必要があり、FSFはそれを好んだ。
+***** Take
+あなたのスマートTVはFSFサーバーをスクレイピングしてモデルを訓練するボットネットの一部かもしれない。未来はここにあり、それは非常に愚かだ。また、500万のファイアウォールルールは今日見ると思わなかった数字だ。
+***** Comments
+- 長い間fail2banを使っていませんが、reactionは評価する価値があります。残念ながら、その投稿は完全な設定を説明していません。攻撃者が適応できないように、意図的かもしれません。
+- 私の個人的な好みは'ip route add blackhole'です。CPU負荷が最も低く、目立った影響なく数十万のCIDRブロックを追加できるからです。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+FSF 시스템 관리자가 reaction으로 봇넷을 차단하는 방법
+***** TLDR
+FSF가 공격적인 LLM 스크레이퍼와 DDoS 공격을 차단하기 위해 fail2ban에서 reaction으로 전환했다. 약 65K 방화벽 규칙에서 fail2ban의 한계와 SQLite 확장 문제에 부딪혔다. ipset으로 500만 규칙까지 확장했다. 일부 트래픽이 침해된 스마트 TV로 구성된 Vo1d 봇넷에서 온다는 것을 추적했다. reaction은 더 빠르고 처음부터 자신의 설정을 구축해야 하는데, FSF는 이를 선호했다.
+***** Take
+당신의 스마트 TV가 모델 훈련을 위해 FSF 서버를 스크레이핑하는 봇넷의 일부일 수 있다. 미래가 왔고 그것은 매우 멍청하다. 또한, 500만 개의 방화벽 규칙은 오늘 볼 줄 몰랐던 숫자다.
+***** Comments
+- 오랫동안 fail2ban을 사용하지 않았지만, reaction은 평가해볼 가치가 있습니다. 불행히도 그 글은 전체 구성을 설명하지 않습니다. 아마 공격자가 적응하지 못하도록 의도적인 것 같습니다.
+- 제 개인적인 선호는 'ip route add blackhole'입니다. CPU 오버헤드가 가장 낮고 눈에 띄는 영향 없이 수십만 개의 CIDR 블록을 추가할 수 있기 때문입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo los sysadmins de la FSF bloquean botnets con reaction
+***** TLDR
+La FSF cambió de fail2ban a reaction para bloquear scrapers agresivos de LLM y ataques DDoS. Alcanzaron los límites de fail2ban alrededor de 65K reglas de firewall y problemas de escalado de SQLite. Con ipset, escalaron a 5 millones de reglas. Rastrearon algo de tráfico a la botnet Vo1d de smart TVs comprometidas. reaction es más rápido y requiere construir tu propia configuración desde cero, lo cual la FSF encontró preferible.
+***** Take
+Tu smart TV podría ser parte de una botnet scrapeando servidores de la FSF para entrenar modelos. El futuro está aquí y es profundamente estúpido. Además, 5 millones de reglas de firewall es un número que no esperaba ver hoy.
+***** Comments
+- No he usado fail2ban por mucho tiempo, pero reaction vale la pena evaluar. Desafortunadamente, ese post no describe su configuración completa. Quizás es a propósito, para que los atacantes no puedan ajustarse.
+- Mi preferencia personal es 'ip route add blackhole' ya que tiene el menor overhead de CPU y puedo agregar cientos de miles de bloques CIDR sin impacto notable.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie die FSF-Sysadmins Botnets mit reaction blockieren
+***** TLDR
+Die FSF wechselte von fail2ban zu reaction, um aggressive LLM-Scraper und DDoS-Angriffe zu blockieren. Sie erreichten fail2bans Grenzen bei etwa 65K Firewall-Regeln und SQLite-Skalierungsprobleme. Mit ipset skalierten sie auf 5 Millionen Regeln. Sie verfolgten Teile des Traffics zum Vo1d-Botnet aus kompromittierten Smart-TVs. reaction ist schneller und erfordert, dass man seine eigene Konfiguration von Grund auf erstellt, was die FSF bevorzugte.
+***** Take
+Dein Smart-TV könnte Teil eines Botnets sein, das FSF-Server scrapt, um Modelle zu trainieren. Die Zukunft ist da und sie ist zutiefst dumm. Außerdem sind 5 Millionen Firewall-Regeln eine Zahl, die ich heute nicht erwartet hatte zu sehen.
+***** Comments
+- Ich habe fail2ban lange nicht benutzt, aber reaction ist es wert, evaluiert zu werden. Leider beschreibt der Post nicht ihre vollständige Konfiguration. Vielleicht absichtlich, damit Angreifer sich nicht anpassen können.
+- Meine persönliche Präferenz ist 'ip route add blackhole', da es den geringsten CPU-Overhead hat und ich hunderttausende CIDR-Blöcke ohne spürbaren Einfluss hinzufügen kann.
