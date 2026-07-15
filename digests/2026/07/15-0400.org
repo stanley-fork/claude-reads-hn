@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-07-15 04:00:00 UT UTC
+#+DATE: 2026-07-15T04:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Teens outsmart perverts, Tailscale hands out root, and data centers bill everyone else
+
+* Highlights
+- Vancouver PD's Quick Escape button: panic rooms for the browser age
+- Tailscale SSH let you log in as -i for free root shells
+- Data centers allegedly shifted $23B in electricity costs to regular folks
+- HTMX + Go: the anti-JavaScript coalition grows stronger
+- Phones don't ruin teens, creepy adults do
+
+* Stories
+
+** Vancouver PD website features Quick Escape button that wipes itself from history :security:ux:domestic-violence:browser:
+:PROPERTIES:
+:ID:       48914644
+:URL:      https://vpd.ca/
+:HN_URL:   https://news.ycombinator.com/item?id=48914644
+:POINTS:   177
+:COMMENTS: 66
+:BY:       LookAtThatBacon
+:END:
+
+*** TLDR
+Vancouver Police Department's website has a Quick Escape button that immediately redirects to weather.gc.ca while erasing itself from browser history. It's designed for domestic violence victims who may be monitored. The UK gov design system has a similar pattern triggered by pressing Shift three times. New Zealand's Shielded Site does something similar on bank and council websites.
+
+*** Take
+Genuinely clever UX for a genuinely awful problem. Though I do wonder how many people will accidentally click it while looking for the contact page and spend the next hour confused about why they're reading a weather forecast.
+
+*** Comments
+
+**** quirino
+:PROPERTIES:
+:COMMENT_ID: 48914801
+:END:
+The gov.uk Design System calls this the Exit a page quickly pattern. It can be activated by clicking the Shift key three times. There's a nice blog that explains why they chose Shift instead of other keys.
+
+**** Titan2189
+:PROPERTIES:
+:COMMENT_ID: 48914823
+:END:
+Some New Zealand Government sites have a Javascript-based pop-up called Shielded Site. Pages like Banks or Council websites have it in their footer, so people can lookup information without fear.
+
+**** phillipseamore
+:PROPERTIES:
+:COMMENT_ID: 48914856
+:END:
+The code shows it opens google.ca in the current window, then opens weather.gc.ca in a new tab, and sets document.title to New Tab. Clever layered approach.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+温哥华警察局网站设有快速逃离按钮，可自动清除浏览记录
+***** TLDR
+温哥华警察局网站有一个快速逃离按钮，可立即跳转到weather.gc.ca并从浏览器历史记录中删除自己。这是为可能被监控的家暴受害者设计的。英国政府设计系统有类似的功能，按三次Shift键触发。新西兰的Shielded Site在银行和市政网站上也有类似功能。
+***** Take
+为一个真正糟糕的问题提供的真正聪明的用户体验。不过我确实想知道有多少人在找联系页面时会不小心点到它，然后花一个小时困惑为什么自己在看天气预报。
+***** Comments
+- 英国政府设计系统称之为快速退出页面模式。可以通过按三次Shift键激活。有一篇很好的博客解释了为什么选择Shift而不是其他键。
+- 一些新西兰政府网站有一个基于Javascript的弹出窗口叫Shielded Site。银行或市政网站在页脚有这个功能，让人们可以放心地查询信息。
+- 代码显示它在当前窗口打开google.ca，然后在新标签页打开weather.gc.ca，并将document.title设置为New Tab。聪明的分层方法。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+バンクーバー警察のウェブサイトに履歴を消去するクイックエスケープボタン
+***** TLDR
+バンクーバー警察のウェブサイトにはクイックエスケープボタンがあり、即座にweather.gc.caにリダイレクトし、ブラウザ履歴から自身を消去する。これは監視されている可能性のあるDV被害者向けに設計されている。英国政府のデザインシステムにはShiftキーを3回押すと起動する同様のパターンがある。
+***** Take
+本当にひどい問題に対する本当に賢いUX。ただ、連絡先ページを探しているときに誤ってクリックして、なぜ天気予報を読んでいるのか1時間困惑する人がどれだけいるか気になる。
+***** Comments
+- 英国政府のデザインシステムはこれをページを素早く終了するパターンと呼んでいる。Shiftキーを3回クリックすると起動できる。
+- ニュージーランドの政府サイトにはShielded Siteというjavascriptベースのポップアップがある。銀行や自治体のサイトのフッターにある。
+- コードを見ると、現在のウィンドウでgoogle.caを開き、新しいタブでweather.gc.caを開く。巧妙な多層アプローチ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+밴쿠버 경찰 웹사이트에 기록을 지우는 빠른 탈출 버튼 탑재
+***** TLDR
+밴쿠버 경찰국 웹사이트에는 즉시 weather.gc.ca로 리디렉션하고 브라우저 기록에서 자신을 지우는 빠른 탈출 버튼이 있다. 이는 감시당할 수 있는 가정폭력 피해자를 위해 설계되었다.
+***** Take
+정말 끔찍한 문제에 대한 정말 영리한 UX. 연락처 페이지를 찾다가 실수로 클릭해서 왜 날씨 예보를 보고 있는지 한 시간 동안 혼란스러워할 사람이 얼마나 될지 궁금하긴 하다.
+***** Comments
+- 영국 정부 디자인 시스템에서는 이것을 페이지 빠르게 나가기 패턴이라고 부른다.
+- 뉴질랜드 정부 사이트 중 일부에는 Shielded Site라는 자바스크립트 기반 팝업이 있다.
+- 코드를 보면 현재 창에서 google.ca를 열고 새 탭에서 weather.gc.ca를 연다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El sitio web de la Policia de Vancouver tiene un boton de Escape Rapido que se borra del historial
+***** TLDR
+El sitio web del Departamento de Policia de Vancouver tiene un boton de Escape Rapido que redirige inmediatamente a weather.gc.ca mientras se borra del historial del navegador. Esta disenado para victimas de violencia domestica que pueden estar siendo monitoreadas.
+***** Take
+UX genuinamente inteligente para un problema genuinamente horrible. Aunque me pregunto cuantas personas lo presionaran accidentalmente buscando la pagina de contacto.
+***** Comments
+- El Sistema de Diseno de gov.uk llama a esto el patron Salir de una pagina rapidamente.
+- Algunos sitios del gobierno de Nueva Zelanda tienen un pop-up basado en Javascript llamado Shielded Site.
+- El codigo muestra que abre google.ca en la ventana actual, luego abre weather.gc.ca en una nueva pestana.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Vancouver PD Website hat Quick Escape Button der sich aus dem Verlauf loescht
+***** TLDR
+Die Website der Polizei von Vancouver hat einen Quick Escape-Button, der sofort zu weather.gc.ca weiterleitet und sich dabei aus dem Browserverlauf loescht. Er ist fuer Opfer haeuslicher Gewalt konzipiert.
+***** Take
+Wirklich clevere UX fuer ein wirklich schreckliches Problem. Obwohl ich mich frage, wie viele Leute versehentlich darauf klicken werden.
+***** Comments
+- Das gov.uk Design System nennt dies das Seite schnell verlassen-Muster.
+- Einige neuseelaendische Regierungsseiten haben ein Javascript-basiertes Pop-up namens Shielded Site.
+- Der Code zeigt, dass es google.ca im aktuellen Fenster oeffnet, dann weather.gc.ca in einem neuen Tab.
+** TS-2026-009: Insecure argument handling in Tailscale SSH permitted root access :security:vulnerability:tailscale:ssh:
+:PROPERTIES:
+:ID:       48915004
+:URL:      https://tailscale.com/security-bulletins
+:HN_URL:   https://news.ycombinator.com/item?id=48915004
+:POINTS:   70
+:COMMENTS: 30
+:BY:       jervant
+:END:
+
+*** TLDR
+Tailscale SSH accepted usernames with leading dashes, which on Linux were passed to getent(1). Logging in as -i would be interpreted as --no-idn, causing getent to print the entire passwd file starting with root, opening a root session. Classic argument injection bug dating back to AIX 3. Fixed in version 1.98.9. Anthropic and Ada Logics reported the issue.
+
+*** Take
+The fact that this exact class of bug has existed since AIX 3 in the early 90s and we're still finding it in 2026 security software is either a testament to the timelessness of classic mistakes or a damning indictment of our collective memory. Probably both.
+
+*** Comments
+
+**** tptacek
+:PROPERTIES:
+:COMMENT_ID: 48915101
+:END:
+This is such a venerable and ancient class of bugs, going at least as far back as AIX 3. Glad to see they're still makin em like they used to. If you had SSH access to a host in your Tailscale ACL, you could log in as -i and get a root login.
+
+**** doublepg23
+:PROPERTIES:
+:COMMENT_ID: 48915134
+:END:
+I'm a heavy Tailscale user, so I do trust them quite a bit, but I never used the Tailscale SSH feature. I feel like OpenSSH's security record is pretty unbeatable, not sure why I'd swap over.
+
+**** mintflow
+:PROPERTIES:
+:COMMENT_ID: 48915156
+:END:
+We would like to thank Anthropic and Ada Logics for reporting this issue. It seems Anthropic also uses Tailscale or it's just being discovered by the Mythos model?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+TS-2026-009: Tailscale SSH中不安全的参数处理允许root访问
+***** TLDR
+Tailscale SSH接受以破折号开头的用户名，在Linux上会传递给getent(1)。以-i登录会被解释为--no-idn，导致getent打印整个passwd文件，从root开始，从而打开root会话。这是一个可追溯到AIX 3的经典参数注入漏洞。
+***** Take
+这类漏洞从90年代初的AIX 3就存在了，我们在2026年的安全软件中仍然能发现它，这要么证明了经典错误的永恒性，要么是对我们集体记忆的严厉控诉。可能两者兼有。
+***** Comments
+- 这是一类非常古老的漏洞，至少可以追溯到AIX 3。如果你有Tailscale ACL中主机的SSH访问权限，你可以用-i登录获得root权限。
+- 我是Tailscale的重度用户，但我从未使用过Tailscale SSH功能。我觉得OpenSSH的安全记录是无敌的。
+- 我们要感谢Anthropic和Ada Logics报告了这个问题。看来Anthropic也在使用Tailscale？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+TS-2026-009: Tailscale SSHの安全でない引数処理によりroot権限アクセスが可能に
+***** TLDR
+Tailscale SSHはダッシュで始まるユーザー名を受け入れ、Linuxではgetent(1)に渡されていた。-iとしてログインすると--no-idnと解釈され、getentがrootから始まるpasswdファイル全体を出力し、rootセッションが開かれる。
+***** Take
+90年代初頭のAIX 3から存在するこの種のバグが2026年のセキュリティソフトウェアでまだ見つかるという事実は、古典的なミスの永続性の証か、我々の集団的記憶への厳しい告発か。
+***** Comments
+- これはAIX 3にまで遡る、非常に由緒ある古典的なバグだ。
+- 私はTailscaleのヘビーユーザーだが、Tailscale SSH機能は使ったことがない。
+- AnthropicとAda Logicsに感謝したい。Mythosモデルによって発見されたのか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+TS-2026-009: Tailscale SSH의 안전하지 않은 인수 처리로 root 접근 허용
+***** TLDR
+Tailscale SSH는 대시로 시작하는 사용자 이름을 허용했으며, Linux에서는 getent(1)에 전달되었다. -i로 로그인하면 --no-idn으로 해석되어 root 세션을 열었다.
+***** Take
+90년대 초 AIX 3부터 존재해온 이 종류의 버그가 2026년 보안 소프트웨어에서 여전히 발견된다는 사실은 고전적인 실수의 영원함을 증명한다.
+***** Comments
+- 이것은 적어도 AIX 3까지 거슬러 올라가는 매우 유서 깊고 오래된 종류의 버그다.
+- 나는 Tailscale 헤비 유저지만, Tailscale SSH 기능은 사용한 적이 없다.
+- Anthropic과 Ada Logics에 감사드린다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+TS-2026-009: Manejo inseguro de argumentos en Tailscale SSH permitia acceso root
+***** TLDR
+Tailscale SSH aceptaba nombres de usuario con guiones iniciales, que en Linux se pasaban a getent(1). Iniciar sesion como -i se interpretaba como --no-idn, abriendo una sesion root.
+***** Take
+El hecho de que esta clase exacta de bug haya existido desde AIX 3 a principios de los 90 y todavia lo encontremos en software de seguridad de 2026 es un testamento a la intemporalidad de los errores clasicos.
+***** Comments
+- Esta es una clase de bugs tan venerable y antigua, que se remonta al menos a AIX 3.
+- Soy un usuario intensivo de Tailscale, pero nunca use la funcion de Tailscale SSH.
+- Queremos agradecer a Anthropic y Ada Logics por reportar este problema.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+TS-2026-009: Unsichere Argumentverarbeitung in Tailscale SSH ermoeglichte Root-Zugriff
+***** TLDR
+Tailscale SSH akzeptierte Benutzernamen mit fuehrenden Bindestrichen, die unter Linux an getent(1) uebergeben wurden. Die Anmeldung als -i wurde als --no-idn interpretiert, wodurch eine Root-Session geoeffnet wurde.
+***** Take
+Die Tatsache, dass genau diese Klasse von Bugs seit AIX 3 Anfang der 90er existiert und wir sie 2026 immer noch in Sicherheitssoftware finden, ist ein Zeugnis fuer die Zeitlosigkeit klassischer Fehler.
+***** Comments
+- Dies ist eine so ehrwuerdige und uralte Klasse von Bugs, die mindestens bis AIX 3 zurueckreicht.
+- Ich bin ein intensiver Tailscale-Nutzer, aber ich habe die Tailscale-SSH-Funktion nie benutzt.
+- Wir moechten Anthropic und Ada Logics fuer die Meldung dieses Problems danken.
+** Data centers have hiked electricity prices on the public by $23B :ai:infrastructure:energy:policy:
+:PROPERTIES:
+:ID:       48914683
+:URL:      https://fortune.com/2026/07/14/data-centers-23-billion-electricity-bills/
+:HN_URL:   https://news.ycombinator.com/item?id=48914683
+:POINTS:   113
+:COMMENTS: 65
+:BY:       measurablefunc
+:END:
+
+*** TLDR
+A PJM market report found data center power demand drove $23B in customer price increases across 14 mid-Atlantic/Midwest states through 2028. Data centers can game the coincident peak demand pricing by reducing usage during peak measurement times, avoiding costs that get shifted to residential customers who can't do the same.
+
+*** Take
+Turns out the cloud has a very real carbon footprint and electricity bill, and guess who's subsidizing it? Everyone who can't hire a consultant to optimize their laundry timing around peak demand windows.
+
+*** Comments
+
+**** kmod
+:PROPERTIES:
+:COMMENT_ID: 48914712
+:END:
+This $23B number is not the increase to the public. The wording in the report is about combined total increase in capacity market revenue, not what consumers actually paid. Important distinction.
+
+**** anubistheta
+:PROPERTIES:
+:COMMENT_ID: 48914734
+:END:
+Total revenue for electricity generation was $514B in 2024. So this was a 4-5% increase in costs. And if it's being invested in better generation and aging infrastructure, that seems fine.
+
+**** m-hodges
+:PROPERTIES:
+:COMMENT_ID: 48914789
+:END:
+But what if the power company needs to upgrade the substation for the data center? These costs will likely be shared among all customers. Okay but this is a policy choice.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+数据中心已将公众电费提高了230亿美元
+***** TLDR
+一份PJM市场报告发现，数据中心的电力需求导致14个中大西洋/中西部州到2028年的客户价格上涨了230亿美元。数据中心可以通过在高峰测量时段减少用电量来避免转嫁给居民用户的成本。
+***** Take
+原来云有非常真实的碳足迹和电费账单，猜猜谁在补贴它？所有那些无法聘请顾问来优化洗衣时间的人。
+***** Comments
+- 这个230亿美元的数字不是公众增加的费用。报告中的措辞是关于容量市场收入的综合总增长。
+- 2024年发电总收入为5140亿美元。所以这是4-5%的成本增加。
+- 但如果电力公司需要为数据中心升级变电站呢？这是一个政策选择。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+データセンターが公衆の電気料金を230億ドル引き上げた
+***** TLDR
+PJM市場レポートによると、データセンターの電力需要が2028年までに14の中部大西洋/中西部州で230億ドルの顧客価格上昇を引き起こした。
+***** Take
+クラウドには非常に現実的なカーボンフットプリントと電気代があることが判明し、誰がそれを補助しているか当ててみて？
+***** Comments
+- この230億ドルという数字は公衆への増加ではない。
+- 2024年の発電総収入は5140億ドルだった。つまりこれは4-5%のコスト増加だ。
+- でもデータセンターのために電力会社が変電所をアップグレードする必要がある場合は？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+데이터 센터가 대중의 전기 요금을 230억 달러 인상했다
+***** TLDR
+PJM 시장 보고서에 따르면 데이터 센터의 전력 수요가 2028년까지 14개 중부 대서양/중서부 주에서 230억 달러의 고객 가격 인상을 초래했다.
+***** Take
+클라우드에는 매우 실제적인 탄소 발자국과 전기 요금이 있는 것으로 밝혀졌는데, 누가 보조금을 대고 있는지 맞춰봐.
+***** Comments
+- 이 230억 달러 수치는 대중에 대한 증가가 아니다.
+- 2024년 발전 총 수익은 5140억 달러였다.
+- 하지만 전력 회사가 데이터 센터를 위해 변전소를 업그레이드해야 한다면?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los centros de datos han aumentado los precios de electricidad del publico en $23 mil millones
+***** TLDR
+Un informe del mercado PJM encontro que la demanda de energia de los centros de datos impulso $23 mil millones en aumentos de precios para clientes en 14 estados hasta 2028.
+***** Take
+Resulta que la nube tiene una huella de carbono y factura de electricidad muy reales, y adivina quien la esta subsidiando?
+***** Comments
+- Este numero de $23B no es el aumento al publico.
+- Los ingresos totales por generacion de electricidad fueron $514B en 2024.
+- Pero que pasa si la compania electrica necesita actualizar la subestacion?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Rechenzentren haben die Strompreise fuer die Oeffentlichkeit um 23 Milliarden Dollar erhoeht
+***** TLDR
+Ein PJM-Marktbericht ergab, dass die Stromnachfrage von Rechenzentren bis 2028 Preiserhoehungen von 23 Milliarden Dollar fuer Kunden in 14 Staaten verursachte.
+***** Take
+Es stellt sich heraus, dass die Cloud einen sehr realen CO2-Fussabdruck und eine Stromrechnung hat, und rate mal, wer sie subventioniert?
+***** Comments
+- Diese 23-Milliarden-Dollar-Zahl ist nicht die Erhoehung fuer die Oeffentlichkeit.
+- Die Gesamteinnahmen aus der Stromerzeugung betrugen 2024 514 Milliarden Dollar.
+- Aber was ist, wenn die Stromgesellschaft die Umspannstation aufrüsten muss?
+** How I use HTMX with Go :golang:htmx:web:tutorial:
+:PROPERTIES:
+:ID:       48912175
+:URL:      https://www.alexedwards.net/blog/how-i-use-htmx-with-go
+:HN_URL:   https://news.ycombinator.com/item?id=48912175
+:POINTS:   146
+:COMMENTS: 34
+:BY:       gnabgib
+:END:
+
+*** TLDR
+Alex Edwards shares his HTMX + Go patterns: embedding assets with go:embed, structuring templates with base/pages/partials, creating an htmlRenderer type that clones shared templates and renders partials or full pages based on HX-Request headers. Uses defer for script loading, buffer writes before sending responses, and handles HTMX redirects with HX-Redirect header instead of standard 302s.
+
+*** Take
+Finally, a practical guide that doesn't spend the first 5000 words explaining why React is bloated. Just shows you how to build things with server-rendered HTML like it's 2008 but with better ergonomics.
+
+*** Comments
+
+**** nzoschke
+:PROPERTIES:
+:COMMENT_ID: 48912234
+:END:
+Love Go + HTMX. I pair it with a-h/templ for type safety on templates. I call it the GUS stack - Go, Unix, SQLite. Inspired by the exe.dev GUTS stack but with HTMX instead of Typescript.
+
+**** xp84
+:PROPERTIES:
+:COMMENT_ID: 48912267
+:END:
+I used HTMX on a recent project and really enjoyed it. As a person who knows how the Web worked before AngularJS and React, I deeply appreciate being able to build actual pages and minimize the amount of JS.
+
+**** yawaramin
+:PROPERTIES:
+:COMMENT_ID: 48912289
+:END:
+If you're using htmx, I highly recommend an HTML generation technique that lets you easily componentize in the same way as React. The reason is htmx requires flexibility in backend HTML generation.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我如何将HTMX与Go一起使用
+***** TLDR
+Alex Edwards分享了他的HTMX + Go模式：使用go:embed嵌入资源，用base/pages/partials结构化模板，创建一个htmlRenderer类型，根据HX-Request头克隆共享模板并渲染部分或完整页面。
+***** Take
+终于有一个实用指南，不用在前5000字解释为什么React太臃肿。只是向你展示如何用服务器渲染的HTML构建东西，就像2008年一样，但有更好的人体工程学。
+***** Comments
+- 喜欢Go + HTMX。我把它和a-h/templ配对以获得模板的类型安全。我称之为GUS栈。
+- 我在最近的项目中使用了HTMX，真的很享受。
+- 如果你在使用htmx，我强烈推荐一种HTML生成技术，让你像React一样轻松地组件化。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+私がGoでHTMXをどう使っているか
+***** TLDR
+Alex Edwardsが彼のHTMX + Goパターンを共有：go:embedでアセットを埋め込み、base/pages/partialsでテンプレートを構造化し、htmlRendererタイプを作成。
+***** Take
+ついに、最初の5000語をReactが肥大化している理由の説明に費やさない実用的なガイドだ。
+***** Comments
+- Go + HTMX大好き。テンプレートの型安全性のためにa-h/templとペアにしている。
+- 最近のプロジェクトでHTMXを使って本当に楽しかった。
+- htmxを使っているなら、Reactと同じように簡単にコンポーネント化できるHTML生成テクニックを強くお勧めする。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+내가 Go와 HTMX를 사용하는 방법
+***** TLDR
+Alex Edwards가 그의 HTMX + Go 패턴을 공유한다: go:embed로 에셋 임베딩, base/pages/partials로 템플릿 구조화.
+***** Take
+드디어 처음 5000단어를 React가 왜 비대한지 설명하는 데 쓰지 않는 실용적인 가이드.
+***** Comments
+- Go + HTMX 좋아한다. 템플릿의 타입 안전성을 위해 a-h/templ과 함께 쓴다.
+- 최근 프로젝트에서 HTMX를 사용했는데 정말 즐거웠다.
+- htmx를 사용한다면, React처럼 쉽게 컴포넌트화할 수 있는 HTML 생성 기법을 강력히 추천한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Como uso HTMX con Go
+***** TLDR
+Alex Edwards comparte sus patrones HTMX + Go: incrustar assets con go:embed, estructurar plantillas con base/pages/partials, crear un tipo htmlRenderer.
+***** Take
+Finalmente, una guia practica que no pasa las primeras 5000 palabras explicando por que React esta inflado.
+***** Comments
+- Me encanta Go + HTMX. Lo combino con a-h/templ para seguridad de tipos.
+- Use HTMX en un proyecto reciente y realmente lo disfrute.
+- Si estas usando htmx, recomiendo una tecnica de generacion HTML que te permita componentizar.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie ich HTMX mit Go verwende
+***** TLDR
+Alex Edwards teilt seine HTMX + Go-Muster: Assets mit go:embed einbetten, Templates mit base/pages/partials strukturieren, einen htmlRenderer-Typ erstellen.
+***** Take
+Endlich ein praktischer Leitfaden, der nicht die ersten 5000 Woerter damit verbringt zu erklaeren, warum React aufgeblaeht ist.
+***** Comments
+- Liebe Go + HTMX. Ich kombiniere es mit a-h/templ fuer Typsicherheit.
+- Ich habe HTMX in einem kuerzlichen Projekt verwendet und es wirklich genossen.
+- Wenn du htmx verwendest, empfehle ich dringend eine HTML-Generierungstechnik.
+** The kids with phones are alright :policy:phones:privacy:uk:
+:PROPERTIES:
+:ID:       48870217
+:URL:      https://heatherburns.tech/2026/07/08/the-kids-with-phones-are-alright/
+:HN_URL:   https://news.ycombinator.com/item?id=48870217
+:POINTS:   151
+:COMMENTS: 107
+:BY:       JumpCrisscross
+:END:
+
+*** TLDR
+A viral video showed Scottish train passengers confronting a drunk middle-aged man secretly filming teenage girls. Author argues current phone/social media regulation unfairly targets teens while ignoring that the real problem is adult predators with phones. Notes that restrictive policies come from affluent elite who objectify children as possessions. The teens in the video had phones that helped document and resolve the situation.
+
+*** Take
+The wildest tech policy critique I've read this month, somehow connecting a train pervert to UK's restrictive phone laws via class analysis. The core point lands though: maybe regulate the creeps, not the kids.
+
+*** Comments
+
+**** mcv
+:PROPERTIES:
+:COMMENT_ID: 48870334
+:END:
+Do people want to restrict 16 year olds with phones? That seems like a really bad idea. For 10 year olds it makes sense, but 16 is nearly adult; they need to learn this responsibility.
+
+**** NoPicklez
+:PROPERTIES:
+:COMMENT_ID: 48870389
+:END:
+My question is, okay so what do we do then? Nobody is saying kids shouldn't have phones, but they should be able to use them without being engulfed in social media content that has been shown to be harmful.
+
+**** StingyJelly
+:PROPERTIES:
+:COMMENT_ID: 48870412
+:END:
+Kids with phones are alright. Attention economy of social media is not. Tobacco companies push proposals to regulate phone use by age hoping the problem won't be regulated.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+有手机的孩子们没问题
+***** TLDR
+一段病毒视频显示苏格兰火车乘客与一名偷拍少女的醉酒中年男子对质。作者认为当前的手机/社交媒体监管不公平地针对青少年，而忽视了真正的问题是带手机的成年捕食者。
+***** Take
+这是我本月读过的最疯狂的科技政策批评，不知怎的通过阶级分析把火车变态和英国限制性手机法联系起来。核心观点是对的：也许应该监管那些变态，而不是孩子。
+***** Comments
+- 有人想限制16岁孩子使用手机吗？这似乎是个非常糟糕的主意。
+- 我的问题是，好吧那我们该怎么办？
+- 有手机的孩子没问题。社交媒体的注意力经济才有问题。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+スマホを持つ子供たちは大丈夫
+***** TLDR
+バイラル動画でスコットランドの電車乗客が10代の少女を密かに撮影していた酔った中年男性と対峙する様子が映っていた。著者は現在の電話/ソーシャルメディア規制が不当に10代を標的にしていると主張。
+***** Take
+今月読んだ中で最もワイルドなテックポリシー批評で、なぜか階級分析を通じて電車の変質者と英国の制限的な電話法を結びつけている。
+***** Comments
+- 16歳の電話を制限したい人がいるの？
+- 私の質問は、じゃあどうするの？
+- 電話を持つ子供は大丈夫。ソーシャルメディアの注意経済がダメ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+폰을 가진 아이들은 괜찮다
+***** TLDR
+바이럴 영상에서 스코틀랜드 기차 승객들이 10대 소녀들을 몰래 촬영하던 술 취한 중년 남성과 대치하는 모습이 담겼다.
+***** Take
+이번 달 읽은 것 중 가장 와일드한 테크 정책 비평인데, 어떻게든 계급 분석을 통해 기차 변태와 영국의 제한적인 폰 법을 연결한다.
+***** Comments
+- 16살 아이들의 폰을 제한하고 싶어하는 사람이 있나요?
+- 내 질문은, 그래서 어떻게 해야 하나요?
+- 폰을 가진 아이들은 괜찮다. 소셜 미디어의 관심 경제가 문제다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los ninos con telefonos estan bien
+***** TLDR
+Un video viral mostro a pasajeros de un tren escoces confrontando a un hombre de mediana edad borracho que filmaba secretamente a chicas adolescentes.
+***** Take
+La critica de politica tecnologica mas salvaje que he leido este mes, conectando de alguna manera a un pervertido del tren con las leyes restrictivas de telefonos del Reino Unido.
+***** Comments
+- La gente quiere restringir a los jovenes de 16 anos con telefonos?
+- Mi pregunta es, entonces que hacemos?
+- Los ninos con telefonos estan bien. La economia de la atencion de las redes sociales no.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Kinder mit Handys sind in Ordnung
+***** TLDR
+Ein virales Video zeigte schottische Zugpassagiere, die einen betrunkenen Mann mittleren Alters konfrontierten, der heimlich Teenager-Maedchen filmte.
+***** Take
+Die wildeste Tech-Policy-Kritik, die ich diesen Monat gelesen habe, verbindet irgendwie einen Zug-Perversen mit den restriktiven Telefongesetzen des UK.
+***** Comments
+- Wollen Leute 16-Jaehrige mit Handys einschraenken?
+- Meine Frage ist, okay was machen wir dann?
+- Kinder mit Handys sind in Ordnung. Die Aufmerksamkeitsoekonomie von Social Media nicht.
