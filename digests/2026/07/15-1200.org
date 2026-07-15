@@ -1,0 +1,489 @@
+#+TITLE: HN Digest 2026-07-15 12:00:00 UT UTC
+#+DATE: 2026-07-15T12:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+RPKI nerds count servers, Martin Fowler loves DSLs, and everyone hates you
+
+* Highlights
+- RPKI: The Internet's trust layer runs on hobbyist hardware
+- DSLs + LLMs: Martin Fowler says constrain your models
+- Why tech is hated: Because you made everything worse for ads
+
+* Stories
+
+** Who's running all those tiny RPKI servers? :networking:security:infrastructure:bgp:
+:PROPERTIES:
+:ID:       48917055
+:URL:      https://blog.apnic.net/2026/07/15/whos-running-all-those-tiny-rpki-servers/
+:HN_URL:   https://news.ycombinator.com/item?id=48917055
+:POINTS:   50
+:COMMENTS: 5
+:BY:       enz
+:END:
+
+*** TLDR
+SIDN Labs research analyzed 'small' RPKI publication servers (under 1,300 ROAs). Found they're run by RPKIaaS providers, cross-RIR consolidators, researchers, and hobbyists. 92.4% of ROAs validate correctly, but 53.98% use maxLength contrary to RFC 9319, with 19.6% potentially vulnerable to sub-prefix hijacks. The tiny corner of Internet trust infrastructure includes government domains and services people actually rely on.
+
+*** Take
+The Internet's routing security literally depends on a bunch of nerds running Krill because they think it's 'pretty cool.' Meanwhile, a spam operator is using RPKI servers to add friction to abuse takedowns. Peak Internet.
+
+*** Comments
+
+**** ipdashc
+:PROPERTIES:
+:COMMENT_ID: 48917056
+:END:
+I've never quite understood how RPKI solves route hijacks. The article says it validates that you're allowed to announce a given prefix outright, but I thought the idea behind a BGP hijack was that you just say you have a good route towards a given prefix, and traffic flows through you as a result?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+谁在运行那些小型RPKI服务器？
+***** TLDR
+SIDN Labs研究分析了'小型'RPKI发布服务器（少于1300个ROA）。发现它们由RPKIaaS提供商、跨RIR整合者、研究人员和爱好者运营。92.4%的ROA验证正确，但53.98%使用maxLength违反RFC 9319，19.6%可能存在子前缀劫持漏洞。互联网信任基础设施的这个小角落包括政府域名和人们实际依赖的服务。
+***** Take
+互联网的路由安全实际上依赖于一群极客运行Krill，因为他们觉得这'很酷'。与此同时，一个垃圾邮件运营商正在使用RPKI服务器来增加滥用投诉的阻力。这就是互联网的巅峰。
+***** Comments
+- 我一直不太明白RPKI如何解决路由劫持问题。文章说它验证你是否被允许直接宣布给定前缀，但我认为BGP劫持的想法是你只是说你有一个通向给定前缀的好路由，然后流量就会流经你？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+あの小さなRPKIサーバーを誰が運営しているのか？
+***** TLDR
+SIDN Labsの研究では、「小規模」RPKIパブリケーションサーバー（ROA数1,300未満）を分析。RPKIaaS、複数RIR統合、研究者、ホビイストが運営していることが判明。92.4%のROAが正しく検証されるが、53.98%がRFC 9319に反してmaxLengthを使用し、19.6%がサブプレフィックスハイジャックに脆弱な可能性がある。インターネットの信頼インフラのこの小さな一角には、政府ドメインや人々が実際に依存するサービスが含まれている。
+***** Take
+インターネットのルーティングセキュリティは、「かっこいい」からKrillを動かしているオタクたちに依存している。一方、スパム業者はRPKIサーバーを使って悪用報告の障壁を増やしている。ピークインターネット。
+***** Comments
+- RPKIがルートハイジャックをどう解決するのか、正直よく分からない。記事では特定のプレフィックスを直接アナウンスする権限を検証すると書いてあるが、BGPハイジャックは単にそのプレフィックスへの良いルートがあると言って、トラフィックを流させるものだと思っていた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+그 작은 RPKI 서버들은 누가 운영하고 있나?
+***** TLDR
+SIDN Labs 연구에서 '소규모' RPKI 발행 서버(ROA 1,300개 미만)를 분석했다. RPKIaaS 제공업체, 다중 RIR 통합업체, 연구자, 취미로 운영하는 사람들이 운영하고 있다. ROA의 92.4%가 올바르게 검증되지만, 53.98%가 RFC 9319에 반하여 maxLength를 사용하고, 19.6%가 서브프리픽스 하이재킹에 취약할 수 있다. 인터넷 신뢰 인프라의 이 작은 구석에는 정부 도메인과 사람들이 실제로 의존하는 서비스가 포함되어 있다.
+***** Take
+인터넷 라우팅 보안은 '멋지다'고 생각해서 Krill을 운영하는 너드들에게 의존한다. 한편 스팸 운영자는 RPKI 서버를 사용해 악용 신고에 장애물을 추가하고 있다. 피크 인터넷.
+***** Comments
+- RPKI가 라우트 하이재킹을 어떻게 해결하는지 솔직히 이해가 안 된다. 기사에서는 주어진 프리픽스를 직접 발표할 수 있는 권한을 검증한다고 하는데, BGP 하이재킹은 그냥 해당 프리픽스로 가는 좋은 경로가 있다고 말하면 트래픽이 흘러가는 것 아닌가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Quién está ejecutando todos esos pequeños servidores RPKI?
+***** TLDR
+Una investigación de SIDN Labs analizó servidores de publicación RPKI 'pequeños' (menos de 1.300 ROAs). Descubrieron que son operados por proveedores de RPKIaaS, consolidadores multi-RIR, investigadores y aficionados. El 92,4% de los ROAs se validan correctamente, pero el 53,98% usa maxLength contrario a RFC 9319, con un 19,6% potencialmente vulnerable a secuestros de sub-prefijos. Este pequeño rincón de la infraestructura de confianza de Internet incluye dominios gubernamentales y servicios de los que la gente depende.
+***** Take
+La seguridad de enrutamiento de Internet depende literalmente de un grupo de nerds que ejecutan Krill porque les parece 'genial'. Mientras tanto, un operador de spam usa servidores RPKI para añadir fricción a las denuncias de abuso. Internet en su máxima expresión.
+***** Comments
+- Nunca he entendido del todo cómo RPKI resuelve los secuestros de rutas. El artículo dice que valida si tienes permiso para anunciar un prefijo dado, pero pensaba que la idea detrás de un secuestro BGP era simplemente decir que tienes una buena ruta hacia ese prefijo, y el tráfico fluye a través de ti.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wer betreibt all diese kleinen RPKI-Server?
+***** TLDR
+Eine Studie von SIDN Labs analysierte 'kleine' RPKI-Publikationsserver (unter 1.300 ROAs). Sie werden von RPKIaaS-Anbietern, Multi-RIR-Konsolidierern, Forschern und Hobbyisten betrieben. 92,4% der ROAs validieren korrekt, aber 53,98% verwenden maxLength entgegen RFC 9319, wobei 19,6% potenziell für Subpräfix-Hijacks anfällig sind. Diese kleine Ecke der Internet-Vertrauensinfrastruktur umfasst Regierungsdomains und Dienste, auf die Menschen angewiesen sind.
+***** Take
+Die Routing-Sicherheit des Internets hängt buchstäblich von einer Gruppe Nerds ab, die Krill betreiben, weil sie es 'ziemlich cool' finden. Währenddessen nutzt ein Spam-Betreiber RPKI-Server, um Hürden für Missbrauchsmeldungen aufzubauen. Peak Internet.
+***** Comments
+- Ich habe nie ganz verstanden, wie RPKI Route-Hijacks löst. Der Artikel sagt, es validiert, ob man berechtigt ist, ein bestimmtes Präfix direkt anzukündigen, aber ich dachte, bei einem BGP-Hijack sagt man einfach, man habe eine gute Route zu einem Präfix, und der Traffic fließt durch einen.
+** DSLs Enable Reliable Use of LLMs :ai:programming:dsl:llm:
+:PROPERTIES:
+:ID:       48918575
+:URL:      https://martinfowler.com/articles/llm-and-dsls.html
+:HN_URL:   https://news.ycombinator.com/item?id=48918575
+:POINTS:   14
+:COMMENTS: 3
+:BY:       SirOibaf
+:END:
+
+*** TLDR
+Martin Fowler argues LLMs work best with Domain-Specific Languages because constrained syntax reduces hallucination space. DSLs ship with validators (parsers, schemas, compilers) that let agents self-correct. He demos Tickloom, a semantic model for distributed systems testing where prompts like 'reproduce DDIA quorum read' generate working failure scenarios. Two-phase approach: LLM as brainstorming partner during DSL design, then natural-language interface once vocabulary exists.
+
+*** Take
+Fowler basically said 'give LLMs training wheels and they stop crashing' but took 4,000 words to say it. Still, he's right. Your vague English prompt is the problem, not the model.
+
+*** Comments
+
+**** lelanthran
+:PROPERTIES:
+:COMMENT_ID: 48918576
+:END:
+Pretty much how I use LLMs these days. Even Chatbots are able to work with a 200 line spec for the DSL. You'd think it wouldn't because, well, no training data, but a short spec is usually enough.
+
+**** williamcotton
+:PROPERTIES:
+:COMMENT_ID: 48918577
+:END:
+I agree. What is missing from the discussion about DSLs are the importance of tooling such as linters, LSPs, etc, to give the LLMs further context. For example, charts/plots are often stringly typed with regards to column names and a DSL specific to plotting could give immediate feedback to an LLM.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+DSL使LLM的使用更可靠
+***** TLDR
+Martin Fowler认为LLM与领域特定语言配合最佳，因为受限的语法减少了幻觉空间。DSL自带验证器（解析器、模式、编译器），让代理能够自我修正。他演示了Tickloom，一个用于分布式系统测试的语义模型，其中'重现DDIA仲裁读取'这样的提示可以生成可工作的故障场景。两阶段方法：在DSL设计期间LLM作为头脑风暴伙伴，然后在词汇建立后作为自然语言接口。
+***** Take
+Fowler基本上是说'给LLM装上辅助轮它们就不会撞车了'，但用了4000字才说完。不过他是对的。你那模糊的英语提示才是问题，不是模型。
+***** Comments
+- 这基本上就是我现在使用LLM的方式。即使是聊天机器人也能处理200行的DSL规范。你可能觉得不行，因为没有训练数据，但一个简短的规范通常就够了。
+- 我同意。关于DSL的讨论中缺少的是工具的重要性，比如linter、LSP等，为LLM提供更多上下文。例如，图表在列名方面通常是字符串类型的，特定于绘图的DSL可以给LLM即时反馈。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+DSLはLLMの信頼性の高い使用を可能にする
+***** TLDR
+Martin FowlerはDSLとLLMの相性が良いと主張する。制約された構文がハルシネーションの余地を減らすからだ。DSLにはバリデータ（パーサー、スキーマ、コンパイラ）が付属し、エージェントが自己修正できる。彼はTickloomをデモした。これは分散システムテスト用のセマンティックモデルで、「DDIAのクォーラム読み取りを再現」のようなプロンプトが動作する障害シナリオを生成する。2段階アプローチ：DSL設計時はLLMをブレストパートナーとして、語彙ができたら自然言語インターフェースとして。
+***** Take
+Fowlerは基本的に「LLMに補助輪をつければ衝突しなくなる」と言ったが、それに4000語かかった。でも彼は正しい。あなたの曖昧な英語プロンプトが問題であって、モデルじゃない。
+***** Comments
+- 最近のLLMの使い方はまさにこれ。チャットボットでも200行のDSL仕様で動く。トレーニングデータがないから動かないと思うかもしれないが、短い仕様で十分なことが多い。
+- 同意。DSLの議論で欠けているのは、リンター、LSPなどのツールの重要性だ。LLMにさらなるコンテキストを与えるために。例えば、チャートは列名に関して文字列型であることが多く、プロット専用のDSLがあればLLMに即座にフィードバックを与えられる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+DSL이 LLM의 신뢰할 수 있는 사용을 가능하게 한다
+***** TLDR
+Martin Fowler는 제한된 구문이 환각 공간을 줄이기 때문에 LLM이 도메인 특화 언어와 가장 잘 작동한다고 주장한다. DSL에는 에이전트가 자체 수정할 수 있게 해주는 검증기(파서, 스키마, 컴파일러)가 포함되어 있다. 그는 분산 시스템 테스트를 위한 시맨틱 모델인 Tickloom을 시연했는데, 'DDIA 쿼럼 읽기 재현'과 같은 프롬프트가 작동하는 실패 시나리오를 생성한다. 두 단계 접근법: DSL 설계 중에는 LLM을 브레인스토밍 파트너로, 어휘가 확립되면 자연어 인터페이스로.
+***** Take
+Fowler는 기본적으로 'LLM에 보조 바퀴를 달면 충돌을 멈춘다'고 말했지만 4,000단어나 걸렸다. 그래도 그가 맞다. 당신의 모호한 영어 프롬프트가 문제지, 모델이 아니다.
+***** Comments
+- 요즘 LLM을 사용하는 방식이 정확히 이렇다. 챗봇도 200줄 DSL 사양으로 작동한다. 훈련 데이터가 없으니 안 될 거라 생각하겠지만, 짧은 사양이면 보통 충분하다.
+- 동의한다. DSL 논의에서 빠진 것은 린터, LSP 같은 도구의 중요성이다. LLM에 더 많은 컨텍스트를 제공하기 위해. 예를 들어, 차트/플롯은 종종 열 이름에 대해 문자열 타입이고, 플로팅 전용 DSL은 LLM에 즉각적인 피드백을 줄 수 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los DSLs permiten un uso confiable de los LLMs
+***** TLDR
+Martin Fowler argumenta que los LLMs funcionan mejor con Lenguajes Específicos de Dominio porque la sintaxis restringida reduce el espacio de alucinación. Los DSLs vienen con validadores (parsers, schemas, compiladores) que permiten a los agentes autocorregirse. Demuestra Tickloom, un modelo semántico para pruebas de sistemas distribuidos donde prompts como 'reproducir lectura de quórum DDIA' generan escenarios de fallo funcionales. Enfoque de dos fases: LLM como socio de brainstorming durante el diseño del DSL, luego interfaz de lenguaje natural una vez que existe el vocabulario.
+***** Take
+Fowler básicamente dijo 'dale rueditas de entrenamiento a los LLMs y dejan de estrellarse' pero necesitó 4.000 palabras para decirlo. Aun así, tiene razón. Tu vago prompt en inglés es el problema, no el modelo.
+***** Comments
+- Así es básicamente como uso los LLMs hoy en día. Incluso los Chatbots pueden trabajar con una especificación de 200 líneas para el DSL. Pensarías que no funcionaría porque, bueno, no hay datos de entrenamiento, pero una especificación corta suele ser suficiente.
+- Estoy de acuerdo. Lo que falta en la discusión sobre DSLs es la importancia de herramientas como linters, LSPs, etc., para dar más contexto a los LLMs. Por ejemplo, los gráficos a menudo tienen tipado de cadenas respecto a nombres de columnas y un DSL específico para gráficos podría dar retroalimentación inmediata a un LLM.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+DSLs ermöglichen zuverlässige Nutzung von LLMs
+***** TLDR
+Martin Fowler argumentiert, dass LLMs am besten mit Domain-spezifischen Sprachen funktionieren, weil eingeschränkte Syntax den Halluzinationsraum reduziert. DSLs kommen mit Validatoren (Parser, Schemas, Compiler), die Agenten Selbstkorrektur ermöglichen. Er demonstriert Tickloom, ein semantisches Modell für verteilte Systemtests, bei dem Prompts wie 'DDIA Quorum-Read reproduzieren' funktionierende Fehlerszenarien generieren. Zwei-Phasen-Ansatz: LLM als Brainstorming-Partner während des DSL-Designs, dann natürlichsprachliches Interface sobald das Vokabular existiert.
+***** Take
+Fowler hat im Grunde gesagt 'Gib LLMs Stützräder und sie hören auf zu crashen', aber er brauchte 4.000 Wörter dafür. Trotzdem hat er recht. Dein vager englischer Prompt ist das Problem, nicht das Modell.
+***** Comments
+- So nutze ich LLMs heutzutage im Wesentlichen. Selbst Chatbots können mit einer 200-Zeilen-Spezifikation für das DSL arbeiten. Man würde denken, es funktioniert nicht, weil es keine Trainingsdaten gibt, aber eine kurze Spezifikation reicht normalerweise.
+- Ich stimme zu. Was in der Diskussion über DSLs fehlt, ist die Bedeutung von Tools wie Linters, LSPs usw., um LLMs mehr Kontext zu geben. Zum Beispiel sind Charts/Plots oft string-typisiert bezüglich Spaltennamen und ein Plot-spezifisches DSL könnte einem LLM sofortiges Feedback geben.
+** Why do people hate the tech industry? (2023) :culture:tech-industry:opinion:enshittification:
+:PROPERTIES:
+:ID:       48919242
+:URL:      https://www.sevarg.net/2023/03/25/why-people-hate-tech/
+:HN_URL:   https://news.ycombinator.com/item?id=48919242
+:POINTS:   13
+:COMMENTS: 11
+:BY:       dsego
+:END:
+
+*** TLDR
+An insider's response to tech's clueless self-examination. The industry wedged itself into everything, made it worse for ad revenue, and called it 'disruption.' Everything is now a 'smart device' that spies on you, breaks faster, can't be repaired, and exists to collect data. Monthly subscriptions replaced working software. Social media became outrage factories. Every promised utopia delivered a surveillance dystopia. The tech bubble doesn't see it because their salaries depend on not seeing it.
+
+*** Take
+This 2023 essay aged like fine wine. Tech kept doing exactly what it said they'd do, and people kept hating them exactly for those reasons. The circle of life, but with more enshittification.
+
+*** Comments
+
+**** luco17
+:PROPERTIES:
+:COMMENT_ID: 48919243
+:END:
+Bankers had it bad for a long time. Now it's our turn!
+
+**** l337h4x0rz
+:PROPERTIES:
+:COMMENT_ID: 48919244
+:END:
+In my opinion tech used to be fun and we used to create products that actually empower people. Think MySpace, early-days Facebook, Soundcloud, Ableton Live etc. They exist to empower the masses to connect and to create. Today the business model has made every products and contents to be enshittified. We've optimised for the wrong thing.
+
+**** therobots927
+:PROPERTIES:
+:COMMENT_ID: 48919245
+:END:
+If I had to guess, we're about 50% of the way towards 'peak' hatred of the tech industry. If the AI bubble pops and drags down the economy with it, we will approach peak hatred.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么人们讨厌科技行业？（2023年）
+***** TLDR
+一位内部人士对科技行业无知自我审视的回应。该行业将自己楔入一切，为了广告收入使一切变得更糟，并称之为'颠覆'。现在一切都是'智能设备'，监视你，坏得更快，无法修理，存在只是为了收集数据。月费订阅取代了能用的软件。社交媒体变成了愤怒工厂。每一个承诺的乌托邦都变成了监控反乌托邦。科技泡沫看不到这一点，因为他们的薪水取决于看不到。
+***** Take
+这篇2023年的文章就像陈年美酒。科技行业继续做着他们说会做的事，人们继续因为这些原因讨厌他们。生命的循环，只是多了些垃圾化。
+***** Comments
+- 银行家被讨厌了很长时间。现在轮到我们了！
+- 在我看来，科技曾经很有趣，我们曾经创造真正赋能人们的产品。想想MySpace、早期的Facebook、Soundcloud、Ableton Live等。它们的存在是为了让大众连接和创造。今天的商业模式让每个产品和内容都被垃圾化了。我们优化了错误的东西。
+- 如果我猜测的话，我们大概到了对科技行业'巅峰'仇恨的50%。如果AI泡沫破裂并拖累经济，我们就会接近巅峰仇恨。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+なぜ人々はテック業界を嫌うのか？（2023年）
+***** TLDR
+テック業界の無自覚な自己検証に対する内部者の反応。業界はあらゆるものに入り込み、広告収入のために悪化させ、それを「ディスラプション」と呼んだ。今やすべてが「スマートデバイス」で、監視し、壊れやすく、修理できず、データ収集のために存在する。月額サブスクリプションが動くソフトウェアに取って代わった。ソーシャルメディアは怒りの工場になった。約束されたユートピアはすべて監視ディストピアを生み出した。テックバブルの中にいる人々は見えない。給料がそれを見ないことに依存しているから。
+***** Take
+この2023年のエッセイは上質なワインのように熟成した。テック業界は彼らが言った通りのことを続け、人々はまさにその理由で彼らを嫌い続けた。生命の輪、ただしエンシティフィケーションが増えている。
+***** Comments
+- 銀行家は長い間嫌われてきた。今度は私たちの番だ！
+- 私の意見では、テックは以前は楽しくて、人々を本当にエンパワーする製品を作っていた。MySpace、初期のFacebook、Soundcloud、Ableton Liveなどを考えてみて。彼らは大衆が繋がり、創造することをエンパワーするために存在していた。今日のビジネスモデルはすべての製品とコンテンツをエンシティファイした。私たちは間違ったものを最適化した。
+- 推測すると、テック業界への「ピーク」の嫌悪の50%くらいまで来ていると思う。AIバブルが弾けて経済を引きずり下ろせば、ピークの嫌悪に近づくだろう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+왜 사람들은 테크 산업을 싫어하는가? (2023)
+***** TLDR
+테크 산업의 무지한 자기 성찰에 대한 내부자의 응답. 산업은 모든 것에 끼어들어 광고 수익을 위해 더 나쁘게 만들고 그것을 '파괴적 혁신'이라 불렀다. 이제 모든 것이 '스마트 기기'로, 당신을 감시하고, 더 빨리 고장나고, 수리할 수 없으며, 데이터 수집을 위해 존재한다. 월정액 구독이 작동하는 소프트웨어를 대체했다. 소셜 미디어는 분노 공장이 되었다. 약속된 유토피아는 모두 감시 디스토피아를 낳았다. 테크 버블 안의 사람들은 보지 못한다. 그들의 월급이 보지 않는 것에 달려 있기 때문이다.
+***** Take
+이 2023년 에세이는 고급 와인처럼 숙성되었다. 테크 산업은 그들이 할 것이라고 말한 대로 계속했고, 사람들은 정확히 그 이유로 계속 그들을 싫어했다. 생명의 순환, 다만 엔시티피케이션이 더 많아졌을 뿐.
+***** Comments
+- 은행가들은 오랫동안 미움받았다. 이제 우리 차례다!
+- 내 생각에 테크는 예전에는 재미있었고 사람들에게 진정으로 힘을 주는 제품을 만들었다. MySpace, 초기 Facebook, Soundcloud, Ableton Live 등을 생각해봐. 그것들은 대중이 연결하고 창조하도록 힘을 주기 위해 존재했다. 오늘날의 비즈니스 모델은 모든 제품과 콘텐츠를 엔시티파이했다. 우리는 잘못된 것을 최적화했다.
+- 추측하자면, 테크 산업에 대한 '피크' 혐오의 50% 정도에 와 있다고 본다. AI 버블이 터지고 경제를 끌어내리면 피크 혐오에 접근할 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Por qué la gente odia la industria tecnológica? (2023)
+***** TLDR
+La respuesta de un insider al autoexamen despistado de la tecnología. La industria se metió en todo, lo empeoró por ingresos publicitarios y lo llamó 'disrupción'. Ahora todo es un 'dispositivo inteligente' que te espía, se rompe más rápido, no se puede reparar y existe para recolectar datos. Las suscripciones mensuales reemplazaron el software funcional. Las redes sociales se convirtieron en fábricas de indignación. Cada utopía prometida entregó una distopía de vigilancia. La burbuja tecnológica no lo ve porque sus salarios dependen de no verlo.
+***** Take
+Este ensayo de 2023 envejeció como buen vino. La tecnología siguió haciendo exactamente lo que dijeron que harían, y la gente siguió odiándolos exactamente por esas razones. El círculo de la vida, pero con más enshittificación.
+***** Comments
+- Los banqueros la pasaron mal durante mucho tiempo. ¡Ahora nos toca a nosotros!
+- En mi opinión, la tecnología solía ser divertida y creábamos productos que realmente empoderaban a las personas. Piensa en MySpace, los primeros días de Facebook, Soundcloud, Ableton Live, etc. Existen para empoderar a las masas para conectar y crear. Hoy el modelo de negocio ha enshittificado todos los productos y contenidos. Optimizamos para lo equivocado.
+- Si tuviera que adivinar, estamos aproximadamente al 50% del camino hacia el 'pico' de odio a la industria tecnológica. Si la burbuja de IA explota y arrastra la economía, nos acercaremos al pico de odio.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum hassen Menschen die Tech-Branche? (2023)
+***** TLDR
+Die Antwort eines Insiders auf die ahnungslose Selbstuntersuchung der Tech-Branche. Die Industrie hat sich in alles eingenistet, es für Werbeeinnahmen verschlechtert und es 'Disruption' genannt. Alles ist jetzt ein 'Smart Device', das dich ausspioniert, schneller kaputtgeht, nicht repariert werden kann und existiert um Daten zu sammeln. Monatliche Abonnements ersetzten funktionierende Software. Social Media wurde zur Empörungsfabrik. Jede versprochene Utopie lieferte eine Überwachungsdystopie. Die Tech-Blase sieht es nicht, weil ihre Gehälter davon abhängen, es nicht zu sehen.
+***** Take
+Dieser Essay von 2023 ist wie guter Wein gereift. Tech machte genau das weiter, was sie sagten, und die Leute hassten sie weiter genau dafür. Der Kreislauf des Lebens, aber mit mehr Enshittifizierung.
+***** Comments
+- Banker hatten es lange schwer. Jetzt sind wir dran!
+- Meiner Meinung nach war Tech früher Spaß und wir haben Produkte erschaffen, die Menschen wirklich befähigten. Denk an MySpace, frühe Facebook-Tage, Soundcloud, Ableton Live usw. Sie existieren um die Massen zu befähigen, sich zu verbinden und zu erschaffen. Heute hat das Geschäftsmodell alle Produkte und Inhalte enshittifiziert. Wir haben das Falsche optimiert.
+- Wenn ich raten müsste, sind wir etwa 50% auf dem Weg zum 'Peak'-Hass auf die Tech-Industrie. Wenn die AI-Blase platzt und die Wirtschaft mit runterzieht, werden wir uns dem Peak-Hass nähern.
+** Telegram Serverless :telegram:serverless:bots:javascript:
+:PROPERTIES:
+:ID:       48918534
+:URL:      https://core.telegram.org/bots/serverless
+:HN_URL:   https://news.ycombinator.com/item?id=48918534
+:POINTS:   10
+:COMMENTS: 4
+:BY:       soheilpro
+:END:
+
+*** TLDR
+Telegram now lets you run bot backend code on their infrastructure with zero server management. You write JavaScript modules, deploy with a CLI, and they run in V8 isolates. Comes with SQLite database out of the box, Bot API access, and outbound HTTP. Schema uses Drizzle-style DSL. Deploy with 'npx tgcloud push', migrate with 'npx tgcloud migrate'. Full workflow includes AGENTS.md for AI coding assistants. Notably, the documentation page itself was apparently written by Claude.
+
+*** Take
+Telegram just made bot development embarrassingly easy. Now there's really no excuse for your bot to be 'under maintenance' except that you got distracted by something shiny.
+
+*** Comments
+
+**** raybb
+:PROPERTIES:
+:COMMENT_ID: 48918535
+:END:
+Providing a SQLite db out of the box is a nice touch. I wonder if they're capping it's size in any way.
+
+**** stavros
+:PROPERTIES:
+:COMMENT_ID: 48918536
+:END:
+This is off-topic, but I was kind of surprised to see this page written by Claude. I guess I shouldn't really be surprised, but I somehow didn't expect it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Telegram Serverless
+***** TLDR
+Telegram现在允许你在他们的基础设施上运行机器人后端代码，零服务器管理。你编写JavaScript模块，使用CLI部署，它们在V8隔离环境中运行。开箱即用SQLite数据库、Bot API访问和出站HTTP。Schema使用Drizzle风格的DSL。使用'npx tgcloud push'部署，使用'npx tgcloud migrate'迁移。完整工作流包括为AI编程助手准备的AGENTS.md。值得注意的是，文档页面本身显然是由Claude编写的。
+***** Take
+Telegram刚刚让机器人开发变得简单得令人尴尬。现在你的机器人'维护中'真的没有借口了，除非你被什么闪亮的东西分心了。
+***** Comments
+- 开箱提供SQLite数据库是个不错的细节。我想知道他们是否对大小有任何限制。
+- 这有点跑题，但我看到这个页面是Claude写的有点惊讶。我想我不应该真的惊讶，但我不知怎么没想到。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Telegram Serverless
+***** TLDR
+Telegramでボットのバックエンドコードをサーバー管理ゼロで彼らのインフラで実行できるようになった。JavaScriptモジュールを書き、CLIでデプロイし、V8アイソレートで実行される。SQLiteデータベース、Bot APIアクセス、アウトバウンドHTTPが即座に利用可能。スキーマはDrizzleスタイルのDSLを使用。'npx tgcloud push'でデプロイ、'npx tgcloud migrate'でマイグレーション。完全なワークフローにはAIコーディングアシスタント用のAGENTS.mdが含まれる。注目すべきは、ドキュメントページ自体が明らかにClaudeによって書かれたこと。
+***** Take
+Telegramがボット開発を恥ずかしいほど簡単にした。もうボットが「メンテナンス中」である言い訳は、何かキラキラしたものに気を取られた以外にない。
+***** Comments
+- SQLite DBを最初から提供しているのは良いタッチだ。サイズに何か制限があるのか気になる。
+- 話がそれるけど、このページがClaudeによって書かれたのを見て少し驚いた。驚くべきではないのかもしれないけど、なんとなく予想していなかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Telegram Serverless
+***** TLDR
+Telegram이 이제 서버 관리 없이 그들의 인프라에서 봇 백엔드 코드를 실행할 수 있게 해준다. JavaScript 모듈을 작성하고, CLI로 배포하면 V8 격리 환경에서 실행된다. SQLite 데이터베이스, Bot API 접근, 아웃바운드 HTTP가 기본 제공된다. 스키마는 Drizzle 스타일 DSL을 사용한다. 'npx tgcloud push'로 배포, 'npx tgcloud migrate'로 마이그레이션. 완전한 워크플로에는 AI 코딩 어시스턴트를 위한 AGENTS.md가 포함된다. 주목할 점은 문서 페이지 자체가 분명히 Claude가 작성한 것이다.
+***** Take
+Telegram이 방금 봇 개발을 창피할 정도로 쉽게 만들었다. 이제 봇이 '점검 중'인 이유는 뭔가 반짝이는 것에 정신이 팔린 것 외에는 정말 변명이 없다.
+***** Comments
+- SQLite DB를 기본 제공하는 것은 좋은 터치다. 크기에 어떤 제한이 있는지 궁금하다.
+- 주제에서 벗어나지만, 이 페이지가 Claude가 쓴 것을 보고 좀 놀랐다. 놀라지 않아야 할 것 같은데, 왠지 예상하지 못했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Telegram Serverless
+***** TLDR
+Telegram ahora te permite ejecutar código backend de bots en su infraestructura sin gestión de servidores. Escribes módulos JavaScript, despliegas con CLI, y se ejecutan en aislados V8. Incluye base de datos SQLite de serie, acceso a Bot API y HTTP saliente. El esquema usa DSL estilo Drizzle. Despliega con 'npx tgcloud push', migra con 'npx tgcloud migrate'. El flujo completo incluye AGENTS.md para asistentes de código IA. Notablemente, la página de documentación aparentemente fue escrita por Claude.
+***** Take
+Telegram acaba de hacer el desarrollo de bots vergonzosamente fácil. Ahora realmente no hay excusa para que tu bot esté 'en mantenimiento' excepto que te distrajiste con algo brillante.
+***** Comments
+- Proporcionar una base de datos SQLite de serie es un buen detalle. Me pregunto si están limitando su tamaño de alguna manera.
+- Esto es off-topic, pero me sorprendió un poco ver esta página escrita por Claude. Supongo que no debería sorprenderme realmente, pero de alguna manera no lo esperaba.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Telegram Serverless
+***** TLDR
+Telegram ermöglicht jetzt das Ausführen von Bot-Backend-Code auf ihrer Infrastruktur ohne Serververwaltung. Du schreibst JavaScript-Module, deployst mit CLI, und sie laufen in V8-Isolates. SQLite-Datenbank out of the box, Bot-API-Zugang und ausgehende HTTP-Anfragen. Schema verwendet Drizzle-artiges DSL. Deploy mit 'npx tgcloud push', migriere mit 'npx tgcloud migrate'. Vollständiger Workflow enthält AGENTS.md für KI-Coding-Assistenten. Bemerkenswert: Die Dokumentationsseite selbst wurde offenbar von Claude geschrieben.
+***** Take
+Telegram hat Bot-Entwicklung gerade peinlich einfach gemacht. Jetzt gibt es wirklich keine Ausrede mehr, dass dein Bot 'in Wartung' ist, außer dass du von etwas Glänzendem abgelenkt wurdest.
+***** Comments
+- Eine SQLite-DB out of the box anzubieten ist ein nettes Detail. Ich frage mich, ob sie die Größe irgendwie begrenzen.
+- Das ist off-topic, aber ich war etwas überrascht, diese Seite von Claude geschrieben zu sehen. Ich schätze, ich sollte nicht wirklich überrascht sein, aber irgendwie hatte ich es nicht erwartet.
+** Sleep regularity is a stronger predictor of mortality risk than sleep duration :health:sleep:research:mortality:
+:PROPERTIES:
+:ID:       48919363
+:URL:      https://academic.oup.com/sleep/article/47/1/zsad253/7280269
+:HN_URL:   https://news.ycombinator.com/item?id=48919363
+:POINTS:   34
+:COMMENTS: 1
+:BY:       bilsbie
+:END:
+
+*** TLDR
+［Article behind captcha, based on title and discussion］ Research suggests that when you sleep matters more than how long you sleep. Irregular sleep schedules are more strongly associated with mortality risk than total sleep duration. The single comment captures the collective reaction: 'Well, I'm screwed.'
+
+*** Take
+Science just confirmed what every shift worker, new parent, and doomscroller already knew: your chaotic sleep schedule is killing you, and there's nothing you can do about it.
+
+*** Comments
+
+**** shykes
+:PROPERTIES:
+:COMMENT_ID: 48919364
+:END:
+Well, I'm screwed...
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+睡眠规律性比睡眠时长更能预测死亡风险
+***** TLDR
+［文章有验证码保护，基于标题和讨论］ 研究表明，什么时候睡觉比睡多久更重要。不规律的睡眠时间表与死亡风险的相关性比总睡眠时长更强。唯一的评论捕捉了集体反应：'好吧，我完了。'
+***** Take
+科学刚刚证实了每个轮班工人、新父母和刷手机到深夜的人已经知道的事：你混乱的睡眠时间表正在杀死你，而你无能为力。
+***** Comments
+- 好吧，我完了...
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+睡眠の規則性は睡眠時間よりも死亡リスクの強い予測因子である
+***** TLDR
+［記事はCAPTCHAの後ろ、タイトルと議論に基づく］ 研究によると、いつ寝るかがどれだけ寝るかより重要。不規則な睡眠スケジュールは、総睡眠時間より死亡リスクとより強く関連している。唯一のコメントが集団的反応を捉えている：「やばい、終わった...」
+***** Take
+科学がシフトワーカー、新米親、深夜スマホユーザーが既に知っていたことを確認した：混沌とした睡眠スケジュールがあなたを殺している、そしてどうしようもない。
+***** Comments
+- やばい、終わった...
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+수면 규칙성이 수면 시간보다 사망 위험의 더 강력한 예측 인자다
+***** TLDR
+［기사는 캡차 뒤에 있음, 제목과 토론 기반］ 연구에 따르면 언제 자는지가 얼마나 자는지보다 더 중요하다. 불규칙한 수면 일정은 총 수면 시간보다 사망 위험과 더 강하게 연관된다. 유일한 댓글이 집단적 반응을 담았다: '음, 망했네...'
+***** Take
+과학이 모든 교대 근무자, 신생아 부모, 밤새 스크롤하는 사람들이 이미 알던 것을 확인했다: 당신의 혼란스러운 수면 일정이 당신을 죽이고 있고, 당신이 할 수 있는 것은 없다.
+***** Comments
+- 음, 망했네...
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La regularidad del sueño es un predictor más fuerte del riesgo de mortalidad que la duración del sueño
+***** TLDR
+［Artículo detrás de captcha, basado en título y discusión］ La investigación sugiere que cuándo duermes importa más que cuánto duermes. Los horarios de sueño irregulares están más fuertemente asociados con el riesgo de mortalidad que la duración total del sueño. El único comentario captura la reacción colectiva: 'Bueno, estoy jodido.'
+***** Take
+La ciencia acaba de confirmar lo que todo trabajador de turnos, padre primerizo y doomscroller ya sabía: tu caótico horario de sueño te está matando, y no hay nada que puedas hacer al respecto.
+***** Comments
+- Bueno, estoy jodido...
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Schlafregelmäßigkeit ist ein stärkerer Prädiktor für Sterberisiko als Schlafdauer
+***** TLDR
+［Artikel hinter Captcha, basierend auf Titel und Diskussion］ Forschung deutet darauf hin, dass wann du schläfst wichtiger ist als wie lange. Unregelmäßige Schlafpläne sind stärker mit Sterberisiko assoziiert als die Gesamtschlafdauer. Der einzige Kommentar erfasst die kollektive Reaktion: 'Tja, ich bin am Arsch...'
+***** Take
+Die Wissenschaft hat gerade bestätigt, was jeder Schichtarbeiter, frischgebackene Eltern und Doomscroller bereits wusste: Dein chaotischer Schlafplan bringt dich um, und du kannst nichts dagegen tun.
+***** Comments
+- Tja, ich bin am Arsch...
