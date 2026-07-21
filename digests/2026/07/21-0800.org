@@ -1,0 +1,546 @@
+#+TITLE: HN Digest 2026-07-21 08:00:00 UT UTC
+#+DATE: 2026-07-21T08:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Linux gets relocatable, China wins the AI war (again), and we argue about team psychology
+
+* Highlights
+- Linux kernel to support $ORIGIN via eBPF - Nix rejoices
+- China's open-weights strategy now 4x the discussion - HN can't stop debating
+- Ex Situ maps 100k looted artifacts back to their origins
+- 3D printer waste becomes koi pond art (using 186 glue sticks)
+- Software team psychology: stop treating devs as rockstars
+
+* Stories
+
+** Linux kernel will support $ORIGIN, sort of :linux:nix:kernel:ebpf:
+:PROPERTIES:
+:ID:       48988793
+:URL:      https://fzakaria.com/2026/07/20/linux-kernel-will-support-origin-sort-of
+:HN_URL:   https://news.ycombinator.com/item?id=48988793
+:POINTS:   24
+:COMMENTS: 11
+:BY:       ingve
+:END:
+
+*** TLDR
+Farid Zakaria proposed adding $ORIGIN support to the Linux kernel for relocatable Nix binaries. The VFS maintainer Christian Brauner responded positively and proposed using eBPF with binfmt_misc instead. The result: a programmable way to select interpreters dynamically. A NixOS module is planned once patches land in -next.
+
+*** Take
+The Nix community has been beating the relocatable binaries drum for years, and finally someone sent actual kernel patches. Props to the VFS maintainer for not telling them to F off, which is apparently the default kernel mailing list response. eBPF is eating everything.
+
+*** Comments
+
+**** nextaccountic
+:PROPERTIES:
+:COMMENT_ID: 48988794
+:END:
+I was confused on what $ORIGIN means. The loader in Linux supports the variable $ORIGIN which translates to 'the directory containing the executable.'
+
+**** stabbles
+:PROPERTIES:
+:COMMENT_ID: 48988795
+:END:
+Nice, PT_INTERP is the only non-relocatable thing of ELF files and typically requires wrapper scripts.
+
+**** charcircuit
+:PROPERTIES:
+:COMMENT_ID: 48988796
+:END:
+Nix has caused so much busywork through the entire Linux ecosystem. Rather than fixing their own project they force work upon others.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Linux内核将支持$ORIGIN,某种程度上
+***** TLDR
+Farid Zakaria提议在Linux内核中添加$ORIGIN支持以实现可重定位的Nix二进制文件。VFS维护者Christian Brauner积极回应,提议使用eBPF配合binfmt_misc。结果是一种动态选择解释器的可编程方式。
+***** Take
+Nix社区多年来一直在呼吁可重定位二进制文件,终于有人发送了实际的内核补丁。为VFS维护者没有让他们滚蛋点赞。eBPF正在吞噬一切。
+***** Comments
+- 我对$ORIGIN的含义感到困惑。Linux中的加载器支持$ORIGIN变量,它指向'包含可执行文件的目录'。
+- 不错,PT_INTERP是ELF文件唯一不可重定位的部分,通常需要包装脚本。
+- Nix给整个Linux生态系统带来了太多额外工作。他们不修复自己的项目,却强迫其他人来适应。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Linuxカーネルが$ORIGINをサポートへ、ある意味
+***** TLDR
+Farid ZakariaがNixの再配置可能バイナリのため$ORIGINサポートをLinuxカーネルに追加することを提案。VFSメンテナーのChristian Braunerが前向きに対応し、binfmt_miscと組み合わせたeBPFの使用を提案。結果：インタープリタを動的に選択するプログラマブルな方法が実現。
+***** Take
+Nixコミュニティは何年も再配置可能バイナリを訴え続けてきたが、ついに誰かが実際のカーネルパッチを送った。VFSメンテナーが彼らを追い払わなかったことに拍手。eBPFがすべてを飲み込んでいる。
+***** Comments
+- $ORIGINの意味がわからなかった。Linuxのローダーは$ORIGIN変数をサポートし、'実行ファイルを含むディレクトリ'を指す。
+- 良いね、PT_INTERPはELFファイルで唯一再配置不可能な部分で、通常ラッパースクリプトが必要。
+- NixはLinuxエコシステム全体に多くの余計な作業を生み出した。自分のプロジェクトを直す代わりに他の人に作業を強いている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Linux 커널이 $ORIGIN을 지원하게 됩니다, 어느 정도
+***** TLDR
+Farid Zakaria가 재배치 가능한 Nix 바이너리를 위해 Linux 커널에 $ORIGIN 지원을 추가할 것을 제안했다. VFS 메인테이너 Christian Brauner가 긍정적으로 응답하며 binfmt_misc와 함께 eBPF 사용을 제안했다. 결과: 인터프리터를 동적으로 선택하는 프로그래밍 가능한 방법.
+***** Take
+Nix 커뮤니티는 수년간 재배치 가능한 바이너리를 외쳐왔고, 드디어 누군가 실제 커널 패치를 보냈다. VFS 메인테이너가 그들을 쫓아내지 않은 것에 박수. eBPF가 모든 것을 집어삼키고 있다.
+***** Comments
+- $ORIGIN이 무슨 뜻인지 헷갈렸다. Linux의 로더는 $ORIGIN 변수를 지원하며 '실행 파일이 있는 디렉토리'를 가리킨다.
+- 좋네, PT_INTERP는 ELF 파일에서 유일하게 재배치 불가능한 부분이며 보통 래퍼 스크립트가 필요하다.
+- Nix는 전체 Linux 생태계에 많은 불필요한 작업을 만들어냈다. 자기 프로젝트를 고치는 대신 다른 사람들에게 작업을 강요한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El kernel de Linux soportará $ORIGIN, más o menos
+***** TLDR
+Farid Zakaria propuso añadir soporte $ORIGIN al kernel de Linux para binarios Nix reubicables. El mantenedor de VFS Christian Brauner respondió positivamente y propuso usar eBPF con binfmt_misc. El resultado: una forma programable de seleccionar intérpretes dinámicamente.
+***** Take
+La comunidad Nix lleva años pidiendo binarios reubicables, y finalmente alguien envió parches de kernel reales. Aplausos al mantenedor de VFS por no mandarlos a paseo. eBPF se está comiendo todo.
+***** Comments
+- Estaba confundido sobre qué significa $ORIGIN. El cargador en Linux soporta la variable $ORIGIN que se traduce como 'el directorio que contiene el ejecutable'.
+- Genial, PT_INTERP es lo único no reubicable de los archivos ELF y típicamente requiere scripts wrapper.
+- Nix ha causado mucho trabajo extra en todo el ecosistema Linux. En lugar de arreglar su propio proyecto, fuerzan trabajo sobre otros.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Linux-Kernel wird $ORIGIN unterstützen, irgendwie
+***** TLDR
+Farid Zakaria schlug vor, $ORIGIN-Unterstützung zum Linux-Kernel für verschiebbare Nix-Binärdateien hinzuzufügen. VFS-Maintainer Christian Brauner reagierte positiv und schlug die Verwendung von eBPF mit binfmt_misc vor. Das Ergebnis: eine programmierbare Möglichkeit, Interpreter dynamisch auszuwählen.
+***** Take
+Die Nix-Community trommelt seit Jahren für verschiebbare Binärdateien, und endlich hat jemand echte Kernel-Patches geschickt. Respekt an den VFS-Maintainer, dass er sie nicht weggeschickt hat. eBPF frisst alles.
+***** Comments
+- Ich war verwirrt, was $ORIGIN bedeutet. Der Loader in Linux unterstützt die Variable $ORIGIN, die übersetzt 'das Verzeichnis mit der ausführbaren Datei' bedeutet.
+- Nett, PT_INTERP ist das einzige nicht-verschiebbare Teil von ELF-Dateien und benötigt typischerweise Wrapper-Skripte.
+- Nix hat so viel Mehrarbeit im gesamten Linux-Ökosystem verursacht. Statt ihr eigenes Projekt zu reparieren, zwingen sie anderen Arbeit auf.
+** China's open-weights AI strategy is winning :ai:china:open-source:geopolitics:revisit:
+:PROPERTIES:
+:ID:       48979269
+:URL:      https://werd.io/american-ai-is-locked-down-and-proprietary-its-losing/
+:HN_URL:   https://news.ycombinator.com/item?id=48979269
+:POINTS:   1093
+:COMMENTS: 833
+:BY:       benwerd
+:END:
+
+*** TLDR
+［REVISIT - 4x comment growth］ Ben Werdmuller argues US export controls on GPUs backfired: Chinese companies can train models but can't run global inference services, so they release weights openly instead. a16z claims 80% of startups now use Chinese models. Open almost always wins for infrastructure adoption.
+
+*** Take
+This is the second time HN has blown up over this article. The comments have 4x'd since yesterday, which tells you this nerve is raw. The irony of America, champion of the open internet, losing to China via openness is the kind of tech history twist that writes itself.
+
+*** Comments
+
+**** geophile
+:PROPERTIES:
+:COMMENT_ID: 48979270
+:END:
+The lesson of the last 50 years of the computer and software marketplace is that free and low-end eventually wins. PCs destroyed minicomputers. Windows and Linux destroyed the UNIX marketplace.
+
+**** tyleo
+:PROPERTIES:
+:COMMENT_ID: 48979271
+:END:
+I'm suspicious of some quotes here. '80% of startups using Chinese models' doesn't seem right. I just interviewed at several startups and they were all using US models.
+
+**** postalcoder
+:PROPERTIES:
+:COMMENT_ID: 48979272
+:END:
+This is a very strange article considering that Llama, the mother of all open-weight models, has led to anything but success for Meta.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+中国的开放权重AI战略正在获胜
+***** TLDR
+［重访 - 评论增长4倍］ Ben Werdmuller认为美国GPU出口管制适得其反:中国公司能训练模型但无法运行全球推理服务,所以选择开放权重。a16z声称80%的创业公司现在使用中国模型。开放对于基础设施采用几乎总是获胜。
+***** Take
+这是HN第二次为这篇文章炸锅。评论量比昨天增长了4倍,说明这个话题触动了神经。开放互联网的冠军美国因开放输给中国,这种科技史的讽刺自己就会写出来。
+***** Comments
+- 过去50年计算机和软件市场的教训是免费和低端最终获胜。PC摧毁了小型机。Windows和Linux摧毁了UNIX市场。
+- 我对一些引用持怀疑态度。'80%的创业公司使用中国模型'似乎不对。我最近面试的几家创业公司都在用美国模型。
+- 考虑到Llama这个开放权重模型之母并没有给Meta带来成功,这篇文章很奇怪。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+中国のオープンウェイトAI戦略が勝利している
+***** TLDR
+［再訪問 - コメント4倍増］ Ben Werdmullerは米国のGPU輸出規制が裏目に出たと主張。中国企業はモデルを訓練できるがグローバル推論サービスは運営できないため、代わりにウェイトを公開。a16zによると80%のスタートアップが中国モデルを使用。オープンはインフラ採用でほぼ常に勝つ。
+***** Take
+HNがこの記事で炎上するのは2回目だ。コメントは昨日から4倍に増えた。この神経が敏感であることを示している。オープンインターネットのチャンピオンであるアメリカがオープンさで中国に負けるという皮肉は、自ら書き上げるテック史の転換だ。
+***** Comments
+- 過去50年のコンピュータとソフトウェア市場の教訓は、無料と低価格が最終的に勝つということ。PCはミニコンを破壊した。WindowsとLinuxはUNIX市場を破壊した。
+- いくつかの引用に疑念がある。「80%のスタートアップが中国モデルを使用」は正しくないようだ。最近面接したスタートアップは全て米国モデルを使っていた。
+- Llamaというオープンウェイトモデルの母がMetaに成功をもたらしていないことを考えると、この記事は非常に奇妙だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+중국의 오픈 웨이트 AI 전략이 승리하고 있다
+***** TLDR
+［재방문 - 댓글 4배 증가］ Ben Werdmuller는 미국의 GPU 수출 규제가 역효과를 냈다고 주장한다. 중국 기업들은 모델을 훈련할 수 있지만 글로벌 추론 서비스를 운영할 수 없어서 대신 웨이트를 공개한다. a16z에 따르면 80%의 스타트업이 중국 모델을 사용.
+***** Take
+HN이 이 기사로 폭발하는 것은 두 번째다. 댓글이 어제보다 4배 늘었다. 이 신경이 얼마나 민감한지 보여준다. 오픈 인터넷의 챔피언 미국이 개방성으로 중국에 지는 아이러니는 스스로 쓰여지는 기술 역사의 반전이다.
+***** Comments
+- 지난 50년 컴퓨터와 소프트웨어 시장의 교훈은 무료와 저가가 결국 이긴다는 것이다. PC가 미니컴퓨터를 파괴했다. Windows와 Linux가 UNIX 시장을 파괴했다.
+- 일부 인용에 의심이 간다. '80%의 스타트업이 중국 모델 사용'은 맞지 않는 것 같다. 최근 면접본 여러 스타트업은 모두 미국 모델을 쓰고 있었다.
+- 오픈 웨이트 모델의 어머니인 Llama가 Meta에 성공을 가져다주지 않았다는 점을 고려하면 이 기사는 매우 이상하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La estrategia de pesos abiertos de China está ganando
+***** TLDR
+［REVISITA - 4x crecimiento de comentarios］ Ben Werdmuller argumenta que los controles de exportación de GPUs de EE.UU. fallaron: las empresas chinas pueden entrenar modelos pero no operar servicios de inferencia globales, así que liberan los pesos. a16z afirma que el 80% de las startups usan modelos chinos.
+***** Take
+Esta es la segunda vez que HN explota con este artículo. Los comentarios se han multiplicado por 4 desde ayer. Esto muestra que el nervio está en carne viva. La ironía de América, campeón del internet abierto, perdiendo ante China por apertura es el tipo de giro de la historia tech que se escribe solo.
+***** Comments
+- La lección de los últimos 50 años del mercado de computadoras y software es que lo gratuito y de gama baja eventualmente gana. Los PCs destruyeron las minicomputadoras. Windows y Linux destruyeron el mercado UNIX.
+- Sospecho de algunas citas. '80% de startups usando modelos chinos' no me parece correcto. Acabo de entrevistar en varias startups y todas usaban modelos estadounidenses.
+- Este artículo es muy extraño considerando que Llama, la madre de todos los modelos de pesos abiertos, no ha llevado al éxito a Meta.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Chinas Open-Weights-KI-Strategie gewinnt
+***** TLDR
+［ERNEUTER BESUCH - 4x Kommentarwachstum］ Ben Werdmuller argumentiert, dass US-GPU-Exportkontrollen nach hinten losgingen: Chinesische Unternehmen können Modelle trainieren, aber keine globalen Inferenz-Dienste betreiben, also geben sie die Weights frei. a16z behauptet, 80% der Startups nutzen jetzt chinesische Modelle.
+***** Take
+Das ist das zweite Mal, dass HN wegen dieses Artikels explodiert. Die Kommentare haben sich seit gestern ver-4-facht. Das zeigt, wie roh dieser Nerv liegt. Die Ironie, dass Amerika, Champion des offenen Internets, durch Offenheit gegen China verliert, ist die Art von Tech-Geschichte-Wendung, die sich selbst schreibt.
+***** Comments
+- Die Lektion der letzten 50 Jahre des Computer- und Softwaremarkts ist, dass kostenlos und Low-End letztendlich gewinnt. PCs zerstörten Minicomputer. Windows und Linux zerstörten den UNIX-Markt.
+- Ich bin misstrauisch bei einigen Zitaten. '80% der Startups nutzen chinesische Modelle' scheint mir nicht richtig. Ich habe gerade bei mehreren Startups interviewt und alle nutzten US-Modelle.
+- Dieser Artikel ist sehr seltsam, wenn man bedenkt, dass Llama, die Mutter aller Open-Weight-Modelle, Meta alles andere als Erfolg gebracht hat.
+** A Koi Pond Mosaic Made from 10 Pounds of 3D Printer Waste :3d-printing:art:sustainability:diy:
+:PROPERTIES:
+:ID:       48987831
+:URL:      https://www.instructables.com/A-Koi-Pond-Mosaic-Made-From-10-Pounds-of-3D-Printe/
+:HN_URL:   https://news.ycombinator.com/item?id=48987831
+:POINTS:   31
+:COMMENTS: 22
+:BY:       sudo_cowsay
+:END:
+
+*** TLDR
+A maker saved 56.6 pounds of 3D printer waste over three years (failed prints, purge towers, stringy bits). They turned 10 pounds of it into a koi pond mosaic using 186 hot glue sticks and a TV box for backing. No new material, no paint, just sorted scrap by color.
+
+*** Take
+Someone finally found a use for 3D printer waste that isn't 'I'll grind it and make new filament' (which nobody actually does). The comments pointed out the irony: 10 pounds of recycled plastic required 8.5 pounds of glue. The planet weeps, but it's a pretty fish.
+
+*** Comments
+
+**** esquire_900
+:PROPERTIES:
+:COMMENT_ID: 48987832
+:END:
+So the author recycled 10 pounds of plastic, but used 8.5 pounds of glue to do so. Cool project, but that ratio seems very ineffective.
+
+**** voidUpdate
+:PROPERTIES:
+:COMMENT_ID: 48987833
+:END:
+It's really annoying that shredders and filament makers are so expensive. I probably generate less waste than average but it still pains me to throw it away.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用10磅3D打印废料制作的锦鲤池塘马赛克
+***** TLDR
+一位创客三年间积攒了56.6磅的3D打印废料(失败的打印、清洗塔、拉丝)。他们用186根热熔胶棒和一个电视箱作为背板,将其中10磅变成了锦鲤池塘马赛克。没有新材料,没有油漆,只是按颜色分类的废料。
+***** Take
+终于有人为3D打印废料找到了用途,不是'我要把它磨碎做成新耗材'(实际上没人这么做)。评论指出了讽刺之处:10磅回收塑料用了8.5磅胶水。地球在哭泣,但鱼确实很漂亮。
+***** Comments
+- 作者回收了10磅塑料,但用了8.5磅胶水。很酷的项目,但这个比例似乎非常低效。
+- 碎纸机和耗材制造机这么贵真的很烦人。我产生的废料可能比平均水平少,但扔掉它还是让我很心疼。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+3Dプリンター廃棄物10ポンドで作った錦鯉の池モザイク
+***** TLDR
+あるメイカーが3年間で56.6ポンドの3Dプリンター廃棄物(失敗したプリント、パージタワー、糸引き)を貯めた。186本のホットグルースティックとテレビの箱を使って、10ポンドを錦鯉の池モザイクに変えた。新素材なし、塗料なし、色別に分類した廃材だけ。
+***** Take
+ついに誰かが3Dプリンター廃棄物の使い道を見つけた。「粉砕して新しいフィラメントを作る」(実際には誰もやらない)以外の方法で。コメントは皮肉を指摘した：10ポンドの再利用プラスチックに8.5ポンドの接着剤が必要だった。地球は泣いているが、魚はきれいだ。
+***** Comments
+- 著者は10ポンドのプラスチックをリサイクルしたが、8.5ポンドの接着剤を使った。クールなプロジェクトだが、その比率は非常に非効率に思える。
+- シュレッダーとフィラメントメーカーがこんなに高価なのは本当に腹立たしい。私は平均より廃棄物が少ないと思うが、それでも捨てるのは辛い。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+3D 프린터 폐기물 10파운드로 만든 잉어 연못 모자이크
+***** TLDR
+한 메이커가 3년간 56.6파운드의 3D 프린터 폐기물(실패한 출력물, 퍼지 타워, 실 같은 조각)을 모았다. 186개의 핫글루 스틱과 TV 박스를 사용해 10파운드를 잉어 연못 모자이크로 만들었다. 새 재료 없음, 페인트 없음, 색상별로 분류한 폐기물만.
+***** Take
+드디어 누군가 3D 프린터 폐기물의 용도를 찾았다. '갈아서 새 필라멘트를 만들겠다'(아무도 실제로 하지 않는 것) 말고. 댓글은 아이러니를 지적했다: 10파운드 재활용 플라스틱에 8.5파운드의 접착제가 필요했다. 지구는 울지만, 물고기는 예쁘다.
+***** Comments
+- 저자는 10파운드의 플라스틱을 재활용했지만 8.5파운드의 접착제를 사용했다. 멋진 프로젝트지만 그 비율은 매우 비효율적으로 보인다.
+- 분쇄기와 필라멘트 제조기가 이렇게 비싼 것이 정말 짜증난다. 나는 아마 평균보다 폐기물을 덜 만들지만 그래도 버리는 것이 마음 아프다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un mosaico de estanque de koi hecho con 10 libras de residuos de impresora 3D
+***** TLDR
+Un maker guardó 56.6 libras de residuos de impresora 3D durante tres años (impresiones fallidas, torres de purga, hilos). Convirtió 10 libras en un mosaico de estanque de koi usando 186 barras de pegamento caliente y una caja de TV como base. Sin material nuevo, sin pintura, solo chatarra clasificada por color.
+***** Take
+Alguien finalmente encontró un uso para los residuos de impresora 3D que no es 'lo trituraré y haré nuevo filamento' (que nadie hace realmente). Los comentarios señalaron la ironía: 10 libras de plástico reciclado requirieron 8.5 libras de pegamento. El planeta llora, pero es un pez bonito.
+***** Comments
+- El autor recicló 10 libras de plástico, pero usó 8.5 libras de pegamento. Proyecto genial, pero esa proporción parece muy ineficiente.
+- Es realmente molesto que las trituradoras y las máquinas de filamento sean tan caras. Probablemente genero menos residuos que el promedio pero aún me duele tener que tirarlo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein Koi-Teich-Mosaik aus 10 Pfund 3D-Drucker-Abfall
+***** TLDR
+Ein Maker hat über drei Jahre 56,6 Pfund 3D-Drucker-Abfall gesammelt (fehlgeschlagene Drucke, Purge-Türme, Fäden). Sie verwandelten 10 Pfund davon in ein Koi-Teich-Mosaik mit 186 Heißklebesticks und einem TV-Karton als Rückwand. Kein neues Material, keine Farbe, nur nach Farbe sortierter Schrott.
+***** Take
+Jemand hat endlich eine Verwendung für 3D-Drucker-Abfall gefunden, die nicht 'Ich werde es zerkleinern und neues Filament machen' ist (was niemand wirklich tut). Die Kommentare wiesen auf die Ironie hin: 10 Pfund recycelter Kunststoff erforderten 8,5 Pfund Kleber. Der Planet weint, aber es ist ein hübscher Fisch.
+***** Comments
+- Der Autor hat 10 Pfund Plastik recycelt, aber 8,5 Pfund Kleber dafür verwendet. Cooles Projekt, aber dieses Verhältnis scheint sehr ineffektiv.
+- Es ist wirklich ärgerlich, dass Schredder und Filamenthersteller so teuer sind. Ich produziere wahrscheinlich weniger Abfall als der Durchschnitt, aber es tut mir trotzdem weh, ihn wegzuwerfen.
+** Ex Situ: Open-source spatial index of displaced cultural artifacts :museums:open-source:cultural-heritage:maps:
+:PROPERTIES:
+:ID:       48988158
+:URL:      https://exsitu.app/map
+:HN_URL:   https://news.ycombinator.com/item?id=48988158
+:POINTS:   28
+:COMMENTS: 16
+:BY:       hbyel
+:END:
+
+*** TLDR
+A solo developer built an open-source spatial index mapping 100k+ artifacts from Western museums back to their origin sites. Uses Next.js + Deck.gl frontend, Strapi backend, Python ETL pulling from museum open-access APIs. Shows connecting arcs from origin to current institutional location.
+
+*** Take
+Finally, a project that lets you visualize exactly how much stuff the British Museum has that doesn't belong to them. Japan leads with 20,549 indexed artifacts, followed by Peru and Egypt. One commenter's great-great-great-great grandfather's diaries might explain some of this.
+
+*** Comments
+
+**** arendtio
+:PROPERTIES:
+:COMMENT_ID: 48988159
+:END:
+From a UX perspective, it is very weird to place the toggle button for the right panel at the top of the left panel. After I gave up trying to close it, I found that button a few minutes later.
+
+**** txzl
+:PROPERTIES:
+:COMMENT_ID: 48988160
+:END:
+I think much more lines should go to Moscow. At least from such places as Crimea. But I see you covered only western/euro-american institutions.
+
+**** iamacyborg
+:PROPERTIES:
+:COMMENT_ID: 48988161
+:END:
+One day I really should dig up my great great great great grandfather's diaries to see first hand how he justified bringing back so much stuff to the UK.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Ex Situ: 流离文化文物的开源空间索引
+***** TLDR
+一位独立开发者构建了一个开源空间索引,将西方博物馆中10万多件文物映射回其原产地。使用Next.js + Deck.gl前端,Strapi后端,Python ETL从博物馆开放API拉取数据。展示从原产地到当前机构位置的连接弧线。
+***** Take
+终于有一个项目让你能可视化大英博物馆有多少不属于他们的东西。日本以20,549件索引文物领先,其次是秘鲁和埃及。一位评论者的高高高高祖父的日记可能解释了其中一些。
+***** Comments
+- 从用户体验角度来看,把右侧面板的切换按钮放在左侧面板顶部是非常奇怪的。我放弃关闭后几分钟才找到那个按钮。
+- 我认为应该有更多线指向莫斯科。至少从克里米亚这样的地方。但我看到你只涵盖了西方/欧美机构。
+- 总有一天我应该翻出我高高高高祖父的日记,亲眼看看他是如何为把这么多东西带回英国辩护的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Ex Situ: 移動した文化的遺物のオープンソース空間インデックス
+***** TLDR
+ソロ開発者が西洋の博物館にある10万件以上の遺物を元の場所にマッピングするオープンソース空間インデックスを構築した。Next.js + Deck.glフロントエンド、Strapiバックエンド、博物館のオープンアクセスAPIから取得するPython ETLを使用。起源地から現在の機関所在地への接続アークを表示。
+***** Take
+ついに、大英博物館が自分たちのものでないものをどれだけ持っているか可視化できるプロジェクトが登場した。日本が20,549件の索引付き遺物でトップ、続いてペルーとエジプト。あるコメント者の高高高高祖父の日記がこの一部を説明するかもしれない。
+***** Comments
+- UXの観点から、右パネルのトグルボタンを左パネルの上部に配置するのは非常に奇妙だ。閉じようとして諦めた後、数分後にそのボタンを見つけた。
+- もっと多くの線がモスクワに向かうべきだと思う。少なくともクリミアのような場所から。でも西洋/欧米の機関だけをカバーしているようだ。
+- いつか私の高高高高祖父の日記を掘り出して、彼がどのように多くのものをイギリスに持ち帰ることを正当化したか直接見るべきだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Ex Situ: 이동된 문화 유물의 오픈소스 공간 인덱스
+***** TLDR
+한 솔로 개발자가 서양 박물관에 있는 10만 개 이상의 유물을 원래 장소로 매핑하는 오픈소스 공간 인덱스를 구축했다. Next.js + Deck.gl 프론트엔드, Strapi 백엔드, 박물관 오픈 액세스 API에서 가져오는 Python ETL 사용. 원산지에서 현재 기관 위치까지의 연결 호를 표시.
+***** Take
+마침내 대영박물관이 자기 것이 아닌 물건을 얼마나 많이 가지고 있는지 시각화할 수 있는 프로젝트가 나왔다. 일본이 20,549개의 인덱싱된 유물로 선두, 페루와 이집트가 그 뒤를 잇는다. 한 댓글러의 고고고고조부의 일기가 이것 중 일부를 설명할 수 있을지도.
+***** Comments
+- UX 관점에서 오른쪽 패널의 토글 버튼을 왼쪽 패널 상단에 배치하는 것은 매우 이상하다. 닫으려다 포기한 후 몇 분 뒤에 그 버튼을 찾았다.
+- 더 많은 선이 모스크바로 가야 한다고 생각한다. 적어도 크림반도 같은 곳에서. 하지만 서양/유럽-미국 기관만 다룬 것 같다.
+- 언젠가 고고고고조부의 일기를 파내서 그가 어떻게 그렇게 많은 물건을 영국으로 가져온 것을 정당화했는지 직접 봐야겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ex Situ: Índice espacial de código abierto de artefactos culturales desplazados
+***** TLDR
+Un desarrollador solitario construyó un índice espacial de código abierto que mapea más de 100k artefactos de museos occidentales a sus sitios de origen. Usa Next.js + Deck.gl frontend, Strapi backend, Python ETL extrayendo de APIs de acceso abierto de museos. Muestra arcos conectores desde el origen hasta la ubicación institucional actual.
+***** Take
+Finalmente, un proyecto que te permite visualizar exactamente cuántas cosas tiene el Museo Británico que no les pertenecen. Japón lidera con 20,549 artefactos indexados, seguido de Perú y Egipto. Los diarios del tataratatarabuelo de un comentarista podrían explicar algo de esto.
+***** Comments
+- Desde una perspectiva de UX, es muy raro colocar el botón de alternancia del panel derecho en la parte superior del panel izquierdo. Después de rendirme tratando de cerrarlo, encontré ese botón unos minutos después.
+- Creo que deberían ir muchas más líneas a Moscú. Al menos desde lugares como Crimea. Pero veo que solo cubriste instituciones occidentales/euroamericanas.
+- Algún día debería desenterrar los diarios de mi tataratatarabuelo para ver de primera mano cómo justificó traer tantas cosas al Reino Unido.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ex Situ: Open-Source-Raumindex für versetzte Kulturartefakte
+***** TLDR
+Ein Einzelentwickler hat einen Open-Source-Raumindex erstellt, der über 100k Artefakte aus westlichen Museen auf ihre Herkunftsorte abbildet. Verwendet Next.js + Deck.gl Frontend, Strapi Backend, Python ETL, das von Museum-Open-Access-APIs zieht. Zeigt Verbindungsbögen vom Ursprung zum aktuellen institutionellen Standort.
+***** Take
+Endlich ein Projekt, das visualisiert, wie viel Zeug das British Museum hat, das ihnen nicht gehört. Japan führt mit 20.549 indizierten Artefakten, gefolgt von Peru und Ägypten. Die Tagebücher des Ur-Ur-Ur-Ur-Großvaters eines Kommentators könnten einiges davon erklären.
+***** Comments
+- Aus UX-Sicht ist es sehr seltsam, den Toggle-Button für das rechte Panel oben am linken Panel zu platzieren. Nachdem ich aufgegeben hatte, es zu schließen, fand ich den Button ein paar Minuten später.
+- Ich denke, viel mehr Linien sollten nach Moskau gehen. Zumindest von Orten wie der Krim. Aber ich sehe, du hast nur westliche/euro-amerikanische Institutionen abgedeckt.
+- Eines Tages sollte ich wirklich die Tagebücher meines Ur-Ur-Ur-Ur-Großvaters ausgraben, um aus erster Hand zu sehen, wie er es rechtfertigte, so viel Zeug nach Großbritannien zu bringen.
+** The Psychology of Software Teams :psychology:teams:management:book:
+:PROPERTIES:
+:ID:       48923130
+:URL:      https://www.routledge.com/The-Psychology-of-Software-Teams/Hicks/p/book/9781032963389
+:HN_URL:   https://news.ycombinator.com/item?id=48923130
+:POINTS:   86
+:COMMENTS: 23
+:BY:       dcre
+:END:
+
+*** TLDR
+Cat Hicks, PhD in Quantitative Experimental Psychology, wrote a book on the psychology behind software teams. It argues against the 'rockstar developer' myth, covers psychological safety, sustainable practices, and how to build cultures of collaboration. Published by Routledge/CRC Press.
+
+*** Take
+Every person who reads workplace-psychology books thinks they become an expert diagnostician. But Hicks has actual research credentials and the book explicitly fights the 'rockstar' myth that has poisoned tech culture for decades. The reviewer quote 'if you think culture is soft, this book will disabuse you' is the perfect warning for engineering managers.
+
+*** Comments
+
+**** Aurornis
+:PROPERTIES:
+:COMMENT_ID: 48923131
+:END:
+Every person I've worked with who was into these workplace-psychology books started thinking of themselves as expert diagnosticians of other people's psychology. Every problem got mapped to a scenario from a book they read.
+
+**** internet_points
+:PROPERTIES:
+:COMMENT_ID: 48923132
+:END:
+The author Cat Hicks also co-hosts changetechnically.fyi which has some interesting episodes about the minimal groups paradigm.
+
+**** smiggels10
+:PROPERTIES:
+:COMMENT_ID: 48923133
+:END:
+I really do not recommend buying the ebook from this web shop. It's the worst UX I have ever seen in an online shop.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+软件团队心理学
+***** TLDR
+定量实验心理学博士Cat Hicks写了一本关于软件团队背后心理学的书。它反对'摇滚明星开发者'神话,涵盖心理安全、可持续实践以及如何建立协作文化。由Routledge/CRC Press出版。
+***** Take
+每个读职场心理学书籍的人都觉得自己成了专家诊断师。但Hicks有真正的研究资历,这本书明确反对毒害科技文化几十年的'摇滚明星'神话。评论者说'如果你认为文化是软的,这本书会让你清醒'是对工程经理的完美警告。
+***** Comments
+- 我共事过的每个热衷职场心理学书籍的人都开始认为自己是他人心理的专家诊断师。每个问题都被映射到他们读过的书中的某个场景。
+- 作者Cat Hicks还联合主持changetechnically.fyi,有一些关于最小群体范式的有趣剧集。
+- 我真的不推荐在这个网店买电子书。这是我见过的用户体验最差的在线商店。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ソフトウェアチームの心理学
+***** TLDR
+量的実験心理学の博士号を持つCat Hicksがソフトウェアチームの背後にある心理学についての本を書いた。「ロックスター開発者」神話に反論し、心理的安全性、持続可能な実践、協力文化の構築方法をカバー。Routledge/CRC Press出版。
+***** Take
+職場心理学の本を読む人は皆、自分が専門家の診断者になったと思う。しかしHicksには本物の研究実績があり、この本は数十年間テック文化を毒してきた「ロックスター」神話と明確に戦っている。「文化がソフトだと思うなら、この本がその考えを正す」というレビュアーの引用は、エンジニアリングマネージャーへの完璧な警告だ。
+***** Comments
+- 職場心理学の本に熱中していた同僚は皆、他人の心理の専門家診断者だと思い始めた。あらゆる問題が読んだ本のシナリオにマッピングされた。
+- 著者のCat Hicksはchangetechnically.fyiを共同ホストしており、最小グループパラダイムについての興味深いエピソードがある。
+- このウェブショップで電子書籍を買うのは本当にお勧めしない。オンラインショップで見た中で最悪のUXだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+소프트웨어 팀의 심리학
+***** TLDR
+정량적 실험 심리학 박사 Cat Hicks가 소프트웨어 팀 뒤에 있는 심리학에 대한 책을 썼다. '록스타 개발자' 신화에 반대하고, 심리적 안전, 지속 가능한 관행, 협업 문화 구축 방법을 다룬다. Routledge/CRC Press 출판.
+***** Take
+직장 심리학 책을 읽는 사람들은 모두 자신이 전문 진단사가 됐다고 생각한다. 하지만 Hicks는 실제 연구 자격이 있고 이 책은 수십 년간 기술 문화를 오염시킨 '록스타' 신화와 명확히 싸운다. '문화가 소프트하다고 생각하면 이 책이 그 생각을 바로잡을 것'이라는 리뷰어 인용은 엔지니어링 매니저에게 완벽한 경고다.
+***** Comments
+- 직장 심리학 책에 빠져있던 동료들은 모두 다른 사람의 심리를 진단하는 전문가라고 생각하기 시작했다. 모든 문제가 그들이 읽은 책의 시나리오에 매핑됐다.
+- 저자 Cat Hicks는 changetechnically.fyi를 공동 호스트하며 최소 그룹 패러다임에 대한 흥미로운 에피소드가 있다.
+- 이 웹샵에서 전자책을 사는 것을 정말 추천하지 않는다. 내가 본 온라인 샵 중 최악의 UX다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La Psicología de los Equipos de Software
+***** TLDR
+Cat Hicks, doctora en Psicología Experimental Cuantitativa, escribió un libro sobre la psicología detrás de los equipos de software. Argumenta contra el mito del 'desarrollador estrella de rock', cubre seguridad psicológica, prácticas sostenibles y cómo construir culturas de colaboración. Publicado por Routledge/CRC Press.
+***** Take
+Cada persona que lee libros de psicología laboral piensa que se convierte en un diagnosticador experto. Pero Hicks tiene credenciales de investigación reales y el libro lucha explícitamente contra el mito del 'rockstar' que ha envenenado la cultura tech durante décadas. La cita del crítico 'si crees que la cultura es blanda, este libro te desengañará' es la advertencia perfecta para los gerentes de ingeniería.
+***** Comments
+- Cada persona con la que he trabajado que estaba metida en estos libros de psicología laboral empezó a pensar que era un diagnosticador experto de la psicología de otros. Cada problema se mapeaba a un escenario de un libro que leyeron.
+- La autora Cat Hicks también co-presenta changetechnically.fyi que tiene algunos episodios interesantes sobre el paradigma de grupos mínimos.
+- Realmente no recomiendo comprar el ebook en esta tienda web. Es la peor UX que he visto en una tienda online.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Psychologie von Software-Teams
+***** TLDR
+Cat Hicks, PhD in Quantitativer Experimenteller Psychologie, hat ein Buch über die Psychologie hinter Software-Teams geschrieben. Es argumentiert gegen den 'Rockstar-Entwickler'-Mythos, behandelt psychologische Sicherheit, nachhaltige Praktiken und wie man Kulturen der Zusammenarbeit aufbaut. Veröffentlicht von Routledge/CRC Press.
+***** Take
+Jeder, der Arbeitsplatz-Psychologie-Bücher liest, denkt, er wird zum Experten-Diagnostiker. Aber Hicks hat echte Forschungsreferenzen und das Buch kämpft explizit gegen den 'Rockstar'-Mythos, der die Tech-Kultur seit Jahrzehnten vergiftet hat. Das Rezensenten-Zitat 'wenn du denkst, Kultur ist weich, wird dich dieses Buch eines Besseren belehren' ist die perfekte Warnung für Engineering-Manager.
+***** Comments
+- Jede Person, mit der ich gearbeitet habe, die auf diese Arbeitsplatz-Psychologie-Bücher stand, begann zu denken, sie sei ein Experten-Diagnostiker der Psychologie anderer. Jedes Problem wurde auf ein Szenario aus einem Buch gemappt, das sie gelesen hatten.
+- Die Autorin Cat Hicks hostet auch changetechnically.fyi, das einige interessante Episoden über das Minimal-Groups-Paradigma hat.
+- Ich empfehle wirklich nicht, das E-Book in diesem Webshop zu kaufen. Es ist die schlechteste UX, die ich je in einem Online-Shop gesehen habe.
