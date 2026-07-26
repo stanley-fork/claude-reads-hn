@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-07-26</div>
+      <a href="#s49056112-07261101">Ruff v0.16.0 – Significant new updates –...</a>
+      <a href="#s49055169-07261101">GrapheneOS protections against data extr...</a>
+      <a href="#s49034777-07261101">Stinkpot: SQLite-backed shell history</a>
+      <a href="#s48997828-07261101">Some more things about Django I&#x27;ve ...</a>
+      <a href="#s49005197-07261101">Overloaded Overloading</a>
       <a href="#s49052912-07260833">DeepSeek pause fundraise after comments ...</a>
       <a href="#s49047453-07260833">A shell colon does nothing. Use it anywa...</a>
       <a href="#s49053375-07260833">Inflect-Micro-v2: complete voice in 9.36...</a>
@@ -581,6 +586,329 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-07-26T11:01:00Z</div>
+        <div class="digest-vibe">Ruff gets 7x stricter, GrapheneOS makes forensics teams cry, and Python&#x27;s overloading is overloaded</div>
+      </div>
+      <article class="story" id="s49056112-07261101">
+      <h3 class="story-title">
+        <a href="https://astral.sh/blog/ruff-v0.16.0" target="_blank">Ruff v0.16.0 – Significant new updates – 413 default rules up from 59 :python:rust:linting:developer-tools:</a>
+        <a href="#s49056112-07261101" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Ruff v0.16.0 – 重大更新 – 默认规则从59条增至413条</div>
+<div class="i18n-title" data-lang="ja">Ruff v0.16.0 – 重要な更新 – デフォルトルールが59から413に</div>
+<div class="i18n-title" data-lang="ko">Ruff v0.16.0 – 중요 업데이트 – 기본 규칙이 59개에서 413개로</div>
+<div class="i18n-title" data-lang="es">Ruff v0.16.0 – Actualizaciones importantes – 413 reglas por defecto en lugar de 59</div>
+<div class="i18n-title" data-lang="de">Ruff v0.16.0 – Wichtige Updates – 413 Standardregeln statt 59</div>
+
+      <div class="story-meta">
+        68pts | 11c | <a href="https://news.ycombinator.com/item?id=49056112" target="_blank">HN#49056112</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Ruff&#x27;s new release cranks default enabled rules from 59 to 413. Now includes flake8-bugbear, pyupgrade, and RUF rules out of the box. Also adds Markdown code block formatting, new ruff: ignore comments with reasons, and shows fix diffs inline. The Python ecosystem&#x27;s rust-powered linter just got a lot more opinionated.</div>
+        <span class="i18n-text" data-lang="zh">Ruff新版本将默认启用的规则从59条提升至413条。现在开箱即用包含flake8-bugbear、pyupgrade和RUF规则。还新增了Markdown代码块格式化、带原因说明的ruff: ignore注释，以及内联显示修复差异。Python生态系统的Rust驱动linter变得更加固执己见了。</span>
+<span class="i18n-text" data-lang="ja">Ruffの新リリースでデフォルト有効ルールが59から413に増加。flake8-bugbear、pyupgrade、RUFルールが標準搭載。Markdownコードブロックのフォーマット、理由付きのruff: ignoreコメント、修正差分のインライン表示も追加。PythonエコシステムのRust製リンターがより厳格になった。</span>
+<span class="i18n-text" data-lang="ko">Ruff 새 릴리스에서 기본 활성화 규칙이 59개에서 413개로 증가. flake8-bugbear, pyupgrade, RUF 규칙이 기본 포함. Markdown 코드 블록 포맷팅, 이유 설명 가능한 ruff: ignore 주석, 인라인 수정 diff 표시도 추가. Python 생태계의 Rust 기반 린터가 더욱 엄격해졌다.</span>
+<span class="i18n-text" data-lang="es">La nueva versión de Ruff aumenta las reglas habilitadas por defecto de 59 a 413. Ahora incluye flake8-bugbear, pyupgrade y reglas RUF de fábrica. También añade formateo de bloques de código Markdown, comentarios ruff: ignore con razones, y muestra diffs de correcciones en línea. El linter de Python impulsado por Rust se ha vuelto mucho más estricto.</span>
+<span class="i18n-text" data-lang="de">Ruffs neues Release erhöht die standardmäßig aktivierten Regeln von 59 auf 413. Enthält jetzt flake8-bugbear, pyupgrade und RUF-Regeln sofort einsatzbereit. Fügt auch Markdown-Codeblock-Formatierung, ruff: ignore-Kommentare mit Begründungen und Inline-Fix-Diffs hinzu. Pythons Rust-basierter Linter wurde deutlich strenger.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Your legacy codebase that was &#x27;passing lint&#x27; is about to have a very bad day. On the bright side, at least you&#x27;ll find out about those syntax errors before production does.</div>
+        <span class="i18n-text" data-lang="zh">你那个&#x27;通过lint检查&#x27;的遗留代码库即将迎来糟糕的一天。好消息是，至少你能在生产环境之前发现那些语法错误。</span>
+<span class="i18n-text" data-lang="ja">「lint通過」していたレガシーコードベースは大変な一日を迎えることになる。まあ、本番環境の前に構文エラーを見つけられるのは良いことだ。</span>
+<span class="i18n-text" data-lang="ko">&#x27;린트 통과&#x27;했던 레거시 코드베이스가 끔찍한 하루를 맞이할 것이다. 그나마 프로덕션 전에 문법 오류를 발견할 수 있다는 건 다행이다.</span>
+<span class="i18n-text" data-lang="es">Tu código heredado que &#x27;pasaba el lint&#x27; está a punto de tener un día muy malo. Por el lado positivo, al menos descubrirás esos errores de sintaxis antes de producción.</span>
+<span class="i18n-text" data-lang="de">Deine Legacy-Codebasis, die &#x27;Lint bestand&#x27;, wird einen sehr schlechten Tag haben. Positiv ist, dass du die Syntaxfehler wenigstens vor der Produktion findest.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"The amount of fascination that people have with these &#x27;grammar nazi&#x27; bots implementing completely arbitrary rules doesn&#x27;t stop to amaze me."</div>
+          <div class="comment-i18n" data-lang="zh">人们对这些实施完全武断规则的&#x27;语法纳粹&#x27;机器人的痴迷程度让我惊叹不已。</div>
+<div class="comment-i18n" data-lang="ja">完全に恣意的なルールを実装するこの『文法ナチ』ボットへの人々の熱狂には驚かされる。</div>
+<div class="comment-i18n" data-lang="ko">완전히 자의적인 규칙을 구현하는 &#x27;문법 나치&#x27; 봇에 대한 사람들의 매료됨이 놀랍다.</div>
+<div class="comment-i18n" data-lang="es">La fascinación que la gente tiene con estos bots &#x27;nazis de la gramática&#x27; implementando reglas completamente arbitrarias no deja de asombrarme.</div>
+<div class="comment-i18n" data-lang="de">Die Faszination, die Menschen für diese &#x27;Grammatik-Nazi&#x27;-Bots haben, die völlig willkürliche Regeln implementieren, erstaunt mich immer wieder.</div>
+
+          <div class="comment-author">-- maratc</div>
+        </div><div class="comment">
+          <div class="comment-text">"I wish Go had something like Ruff! A lot of languages are getting amazing tools but Go has a very fragmented ecosystem."</div>
+          <div class="comment-i18n" data-lang="zh">我希望Go也有像Ruff这样的工具！很多语言都有了出色的工具，但Go的生态系统非常分散。</div>
+<div class="comment-i18n" data-lang="ja">GoにもRuffのようなものがあれば！多くの言語に素晴らしいツールがあるが、Goのエコシステムは非常に分断されている。</div>
+<div class="comment-i18n" data-lang="ko">Go에도 Ruff 같은 게 있으면! 많은 언어에 훌륭한 도구가 있는데 Go 생태계는 매우 파편화되어 있다.</div>
+<div class="comment-i18n" data-lang="es">¡Ojalá Go tuviera algo como Ruff! Muchos lenguajes están obteniendo herramientas increíbles pero Go tiene un ecosistema muy fragmentado.</div>
+<div class="comment-i18n" data-lang="de">Ich wünschte, Go hätte so etwas wie Ruff! Viele Sprachen bekommen tolle Tools, aber Go hat ein sehr fragmentiertes Ökosystem.</div>
+
+          <div class="comment-author">-- gempir</div>
+        </div>
+      </div>
+      
+    </article>
+<article class="story" id="s49055169-07261101">
+      <h3 class="story-title">
+        <a href="https://discuss.grapheneos.org/d/40700-grapheneos-protections-against-data-extraction-from-locked-devices" target="_blank">GrapheneOS protections against data extraction from locked devices</a>
+        <a href="#s49055169-07261101" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">GrapheneOS对锁定设备数据提取的保护措施</div>
+<div class="i18n-title" data-lang="ja">GrapheneOSのロックされたデバイスからのデータ抽出に対する保護</div>
+<div class="i18n-title" data-lang="ko">GrapheneOS의 잠긴 기기 데이터 추출 방지 기능</div>
+<div class="i18n-title" data-lang="es">Protecciones de GrapheneOS contra la extracción de datos de dispositivos bloqueados</div>
+<div class="i18n-title" data-lang="de">GrapheneOS-Schutz gegen Datenextraktion von gesperrten Geräten</div>
+
+      <div class="story-meta">
+        94pts | 46c | <a href="https://news.ycombinator.com/item?id=49055169" target="_blank">HN#49055169</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">GrapheneOS provides layered defense against forensic extraction: secure element rate limiting (20 attempts max, delays up to 41 days), insider attack resistance requiring owner auth for firmware updates, 18-hour auto-reboot to Before First Unlock state, USB connection blocking while locked, and a duress PIN that wipes the device. Password limit raised from 16 to 128 characters. Coming to Motorola in 2027.</div>
+        <span class="i18n-text" data-lang="zh">GrapheneOS提供多层防御以抵御取证提取：安全元件速率限制（最多20次尝试，延迟最长41天）、需要机主认证才能更新固件的内部攻击抵抗、18小时自动重启至首次解锁前状态、锁定时阻止USB连接，以及擦除设备的紧急PIN。密码上限从16字符提升至128字符。2027年将登陆摩托罗拉。</span>
+<span class="i18n-text" data-lang="ja">GrapheneOSはフォレンジック抽出に対する多層防御を提供：セキュアエレメントのレート制限（最大20回、最大41日の遅延）、ファームウェア更新にオーナー認証が必要なインサイダー攻撃耐性、18時間での初回ロック解除前状態への自動再起動、ロック中のUSB接続ブロック、デバイスを消去する緊急PIN。パスワード上限が16文字から128文字に引き上げ。2027年にMotorolaに搭載予定。</span>
+<span class="i18n-text" data-lang="ko">GrapheneOS는 포렌식 추출에 대한 다층 방어 제공: 보안 요소 속도 제한(최대 20회 시도, 최대 41일 지연), 펌웨어 업데이트에 소유자 인증 필요한 내부자 공격 저항, 18시간 자동 재부팅으로 첫 번째 잠금 해제 전 상태로 복귀, 잠긴 상태에서 USB 연결 차단, 기기 초기화하는 긴급 PIN. 비밀번호 한도가 16자에서 128자로 증가. 2027년 모토로라에 탑재 예정.</span>
+<span class="i18n-text" data-lang="es">GrapheneOS proporciona defensa en capas contra extracción forense: limitación de velocidad del elemento seguro (máximo 20 intentos, retrasos de hasta 41 días), resistencia a ataques internos que requiere autenticación del propietario para actualizaciones de firmware, reinicio automático a estado Antes del Primer Desbloqueo cada 18 horas, bloqueo de conexiones USB mientras está bloqueado, y un PIN de coacción que borra el dispositivo. Límite de contraseña aumentado de 16 a 128 caracteres. Llegará a Motorola en 2027.</span>
+<span class="i18n-text" data-lang="de">GrapheneOS bietet mehrschichtige Verteidigung gegen forensische Extraktion: Secure-Element-Ratenbegrenzung (max. 20 Versuche, Verzögerungen bis zu 41 Tage), Insider-Angriffs-Resistenz mit Owner-Auth für Firmware-Updates, 18-Stunden-Auto-Reboot in Before-First-Unlock-Zustand, USB-Verbindungsblockierung bei Sperre, und Notfall-PIN zum Löschen. Passwortlimit von 16 auf 128 Zeichen erhöht. 2027 bei Motorola verfügbar.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">If your threat model includes nation-state actors with physical access to your phone, GrapheneOS is basically the only answer. Everyone else just hopes nobody looks too hard.</div>
+        <span class="i18n-text" data-lang="zh">如果你的威胁模型包括能物理接触你手机的国家级对手，GrapheneOS基本上是唯一的答案。其他人只是希望没人仔细看。</span>
+<span class="i18n-text" data-lang="ja">脅威モデルに携帯電話に物理的にアクセスできる国家レベルの攻撃者が含まれるなら、GrapheneOSが基本的に唯一の答えだ。他の人は誰もよく見ないことを祈るだけ。</span>
+<span class="i18n-text" data-lang="ko">위협 모델에 휴대폰에 물리적으로 접근할 수 있는 국가 수준의 공격자가 포함된다면, GrapheneOS가 사실상 유일한 답이다. 다른 사람들은 아무도 자세히 보지 않기를 바랄 뿐이다.</span>
+<span class="i18n-text" data-lang="es">Si tu modelo de amenazas incluye actores estatales con acceso físico a tu teléfono, GrapheneOS es básicamente la única respuesta. Todos los demás solo esperan que nadie mire demasiado.</span>
+<span class="i18n-text" data-lang="de">Wenn dein Bedrohungsmodell staatliche Akteure mit physischem Zugang zu deinem Handy einschließt, ist GrapheneOS praktisch die einzige Antwort. Alle anderen hoffen nur, dass niemand genau hinschaut.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"This was posted in response to news about GrapheneOS helping a journalist protect confidential sources, citing the 18-hour auto-reboot feature."</div>
+          <div class="comment-i18n" data-lang="zh">这是为回应关于GrapheneOS帮助记者保护机密消息来源的新闻而发布的，提到了18小时自动重启功能。</div>
+<div class="comment-i18n" data-lang="ja">これは18時間自動再起動機能に言及し、GrapheneOSがジャーナリストの機密情報源保護に役立ったというニュースへの返答として投稿された。</div>
+<div class="comment-i18n" data-lang="ko">이것은 18시간 자동 재부팅 기능을 언급하며 GrapheneOS가 기자의 기밀 정보원 보호에 도움이 되었다는 뉴스에 대한 응답으로 게시되었다.</div>
+<div class="comment-i18n" data-lang="es">Esto se publicó en respuesta a noticias sobre GrapheneOS ayudando a un periodista a proteger fuentes confidenciales, citando la función de reinicio automático de 18 horas.</div>
+<div class="comment-i18n" data-lang="de">Dies wurde als Reaktion auf Nachrichten gepostet, dass GrapheneOS einem Journalisten half, vertrauliche Quellen zu schützen, unter Berufung auf die 18-Stunden-Auto-Reboot-Funktion.</div>
+
+          <div class="comment-author">-- rzk</div>
+        </div><div class="comment">
+          <div class="comment-text">"What GrapheneOS is missing is a complete backup and restore solution so people can wipe their phone before crossing the border."</div>
+          <div class="comment-i18n" data-lang="zh">GrapheneOS缺少的是完整的备份恢复方案，让人们可以在过境前擦除手机。</div>
+<div class="comment-i18n" data-lang="ja">GrapheneOSに欠けているのは、国境を越える前に電話を消去できる完全なバックアップ・リストアソリューションだ。</div>
+<div class="comment-i18n" data-lang="ko">GrapheneOS에 부족한 것은 국경을 넘기 전에 휴대폰을 초기화할 수 있는 완전한 백업 및 복원 솔루션이다.</div>
+<div class="comment-i18n" data-lang="es">Lo que le falta a GrapheneOS es una solución completa de copia de seguridad y restauración para que la gente pueda borrar su teléfono antes de cruzar la frontera.</div>
+<div class="comment-i18n" data-lang="de">Was GrapheneOS fehlt, ist eine vollständige Backup- und Wiederherstellungslösung, damit Leute ihr Telefon vor Grenzübertritten löschen können.</div>
+
+          <div class="comment-author">-- prmoustache</div>
+        </div><div class="comment">
+          <div class="comment-text">"The pattern lock provides only ~18.57 bits of entropy. Less than 3 random characters or a 6-digit PIN."</div>
+          <div class="comment-i18n" data-lang="zh">图案锁只提供约18.57比特的熵。少于3个随机字符或6位PIN码。</div>
+<div class="comment-i18n" data-lang="ja">パターンロックは約18.57ビットのエントロピーしか提供しない。ランダムな3文字や6桁のPINより少ない。</div>
+<div class="comment-i18n" data-lang="ko">패턴 잠금은 약 18.57비트의 엔트로피만 제공한다. 무작위 3문자나 6자리 PIN보다 적다.</div>
+<div class="comment-i18n" data-lang="es">El bloqueo de patrón proporciona solo ~18.57 bits de entropía. Menos que 3 caracteres aleatorios o un PIN de 6 dígitos.</div>
+<div class="comment-i18n" data-lang="de">Das Muster-Lock bietet nur ~18,57 Bit Entropie. Weniger als 3 zufällige Zeichen oder eine 6-stellige PIN.</div>
+
+          <div class="comment-author">-- muyuu</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#security</span><span class="tag">#android</span><span class="tag">#privacy</span><span class="tag">#mobile</span></div>
+    </article>
+<article class="story" id="s49034777-07261101">
+      <h3 class="story-title">
+        <a href="https://tangled.org/oppi.li/stinkpot" target="_blank">Stinkpot: SQLite-backed shell history</a>
+        <a href="#s49034777-07261101" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Stinkpot：SQLite支持的shell历史记录</div>
+<div class="i18n-title" data-lang="ja">Stinkpot：SQLiteバックエンドのシェル履歴</div>
+<div class="i18n-title" data-lang="ko">Stinkpot: SQLite 기반 셸 히스토리</div>
+<div class="i18n-title" data-lang="es">Stinkpot: historial de shell respaldado por SQLite</div>
+<div class="i18n-title" data-lang="de">Stinkpot: SQLite-gestützte Shell-History</div>
+
+      <div class="story-meta">
+        70pts | 19c | <a href="https://news.ycombinator.com/item?id=49034777" target="_blank">HN#49034777</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Stinkpot is a ~400 line Go program that provides SQLite-backed shell history with a fuzzy search TUI. It&#x27;s a stripped-down alternative to atuin, keeping only session-agnostic history and search while ditching the sync server, AI features, dotfiles manager, and KV store. Named after a tiny turtle species.</div>
+        <span class="i18n-text" data-lang="zh">Stinkpot是一个约400行的Go程序，提供SQLite支持的shell历史记录和模糊搜索TUI。它是atuin的精简替代品，只保留会话无关的历史记录和搜索功能，去掉了同步服务器、AI功能、dotfiles管理器和KV存储。以一种小型龟类命名。</span>
+<span class="i18n-text" data-lang="ja">Stinkpotは約400行のGoプログラムで、SQLiteバックエンドのシェル履歴とファジー検索TUIを提供。atuinの簡素化版で、セッション非依存の履歴と検索のみを保持し、同期サーバー、AI機能、dotfilesマネージャー、KVストアは除外。小さなカメの種にちなんで命名。</span>
+<span class="i18n-text" data-lang="ko">Stinkpot은 약 400줄의 Go 프로그램으로, SQLite 기반 셸 히스토리와 퍼지 검색 TUI를 제공한다. atuin의 간소화 버전으로, 세션 독립적 히스토리와 검색만 유지하고 동기화 서버, AI 기능, dotfiles 관리자, KV 스토어는 제거했다. 작은 거북이 종의 이름을 따서 명명.</span>
+<span class="i18n-text" data-lang="es">Stinkpot es un programa Go de ~400 líneas que proporciona historial de shell respaldado por SQLite con una TUI de búsqueda difusa. Es una alternativa simplificada a atuin, manteniendo solo el historial agnóstico de sesión y la búsqueda, eliminando el servidor de sincronización, funciones de IA, gestor de dotfiles y almacén KV. Nombrado en honor a una especie pequeña de tortuga.</span>
+<span class="i18n-text" data-lang="de">Stinkpot ist ein ~400-zeiliges Go-Programm, das SQLite-gestützte Shell-History mit Fuzzy-Suche-TUI bietet. Es ist eine abgespeckte Alternative zu atuin, die nur sitzungsunabhängige History und Suche behält und Sync-Server, KI-Funktionen, Dotfiles-Manager und KV-Store weglässt. Benannt nach einer kleinen Schildkrötenart.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Finally, someone who looked at atuin and said &#x27;what if we just kept the part that matters?&#x27; Software minimalism isn&#x27;t dead, it&#x27;s just hiding in repos with weird names.</div>
+        <span class="i18n-text" data-lang="zh">终于有人看着atuin说&#x27;如果我们只保留重要的部分呢？&#x27;软件极简主义没有死，只是藏在有奇怪名字的仓库里。</span>
+<span class="i18n-text" data-lang="ja">ついに誰かがatuinを見て『重要な部分だけ残したら？』と言った。ソフトウェアミニマリズムは死んでいない、変な名前のリポジトリに隠れているだけだ。</span>
+<span class="i18n-text" data-lang="ko">드디어 누군가 atuin을 보고 &#x27;중요한 부분만 남기면 어떨까?&#x27;라고 했다. 소프트웨어 미니멀리즘은 죽지 않았다, 이상한 이름의 저장소에 숨어있을 뿐이다.</span>
+<span class="i18n-text" data-lang="es">Finalmente, alguien miró atuin y dijo &#x27;¿y si solo nos quedamos con la parte que importa?&#x27; El minimalismo del software no está muerto, solo se esconde en repos con nombres raros.</span>
+<span class="i18n-text" data-lang="de">Endlich hat jemand atuin angeschaut und gesagt &#x27;was wäre, wenn wir nur den wichtigen Teil behalten?&#x27; Software-Minimalismus ist nicht tot, er versteckt sich nur in Repos mit seltsamen Namen.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I use atuin and am reasonably happy with it. It&#x27;s also sqlite backed when running in local-only mode."</div>
+          <div class="comment-i18n" data-lang="zh">我用atuin，相当满意。在纯本地模式下它也是sqlite支持的。</div>
+<div class="comment-i18n" data-lang="ja">私はatuinを使っていて、まあまあ満足している。ローカルのみモードではsqliteバックエンドだ。</div>
+<div class="comment-i18n" data-lang="ko">나는 atuin을 사용하고 꽤 만족한다. 로컬 전용 모드에서도 sqlite 기반이다.</div>
+<div class="comment-i18n" data-lang="es">Uso atuin y estoy razonablemente contento con él. También usa sqlite cuando funciona en modo solo local.</div>
+<div class="comment-i18n" data-lang="de">Ich benutze atuin und bin zufrieden damit. Es ist auch sqlite-basiert im Nur-Lokal-Modus.</div>
+
+          <div class="comment-author">-- NightMKoder</div>
+        </div><div class="comment">
+          <div class="comment-text">"Would be interesting to have a non-interactive mode so you can ask your AI to look for a command too."</div>
+          <div class="comment-i18n" data-lang="zh">如果有非交互模式就有趣了，这样你可以让AI帮你查找命令。</div>
+<div class="comment-i18n" data-lang="ja">非対話モードがあれば面白いだろう。AIにコマンドを探させることもできる。</div>
+<div class="comment-i18n" data-lang="ko">비대화형 모드가 있으면 재미있을 것 같다. AI에게 명령어를 찾아달라고 할 수 있으니까.</div>
+<div class="comment-i18n" data-lang="es">Sería interesante tener un modo no interactivo para poder pedirle a tu IA que busque un comando.</div>
+<div class="comment-i18n" data-lang="de">Es wäre interessant, einen nicht-interaktiven Modus zu haben, damit man seine KI nach einem Befehl fragen kann.</div>
+
+          <div class="comment-author">-- firasd</div>
+        </div><div class="comment">
+          <div class="comment-text">"For zsh users, I&#x27;ve been a fan of zsh-histdb. Written entirely in shell script with only sqlite as a dependency."</div>
+          <div class="comment-i18n" data-lang="zh">对于zsh用户，我一直喜欢zsh-histdb。完全用shell脚本编写，只依赖sqlite。</div>
+<div class="comment-i18n" data-lang="ja">zshユーザーには、zsh-histdbがお気に入りだ。シェルスクリプトだけで書かれていて、sqliteのみが依存関係。</div>
+<div class="comment-i18n" data-lang="ko">zsh 사용자에게는 zsh-histdb를 추천한다. 순수 셸 스크립트로 작성되었고 sqlite만 의존성으로 가진다.</div>
+<div class="comment-i18n" data-lang="es">Para usuarios de zsh, he sido fan de zsh-histdb. Escrito completamente en script de shell con solo sqlite como dependencia.</div>
+<div class="comment-i18n" data-lang="de">Für zsh-Benutzer bin ich ein Fan von zsh-histdb. Komplett in Shell-Script geschrieben, nur sqlite als Abhängigkeit.</div>
+
+          <div class="comment-author">-- craftkiller</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#cli</span><span class="tag">#shell</span><span class="tag">#golang</span><span class="tag">#sqlite</span></div>
+    </article>
+<article class="story" id="s48997828-07261101">
+      <h3 class="story-title">
+        <a href="https://jvns.ca/blog/2026/07/21/more-nice-django-things/" target="_blank">Some more things about Django I&#x27;ve been enjoying</a>
+        <a href="#s48997828-07261101" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">关于Django我一直喜欢的更多事情</div>
+<div class="i18n-title" data-lang="ja">Djangoについて楽しんでいることをもう少し</div>
+<div class="i18n-title" data-lang="ko">Django에서 즐기고 있는 것들 더 소개</div>
+<div class="i18n-title" data-lang="es">Más cosas sobre Django que he estado disfrutando</div>
+<div class="i18n-title" data-lang="de">Noch mehr Dinge an Django, die ich genieße</div>
+
+      <div class="story-meta">
+        50pts | 22c | <a href="https://news.ycombinator.com/item?id=48997828" target="_blank">HN#48997828</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Julia Evans shares Django discoveries: query set classes for readable filter chaining, template filters like urlize and json_script, the querystring tag for modifying URL params, automatic database migrations, and why function-based views beat inheritance. Also: template caching was accidentally disabled and fixing it 4x&#x27;d throughput from 3 to 12 requests/sec.</div>
+        <span class="i18n-text" data-lang="zh">Julia Evans分享Django发现：用于可读过滤链的查询集类、urlize和json_script等模板过滤器、用于修改URL参数的querystring标签、自动数据库迁移，以及为什么基于函数的视图比继承更好。另外：模板缓存被意外禁用，修复后吞吐量从3提升到12请求/秒，提升4倍。</span>
+<span class="i18n-text" data-lang="ja">Julia EvansがDjangoの発見を共有：読みやすいフィルターチェーンのためのクエリセットクラス、urlizeやjson_scriptなどのテンプレートフィルター、URLパラメータ変更のためのquerystringタグ、自動データベースマイグレーション、そしてなぜ関数ベースのビューが継承より優れているか。また：テンプレートキャッシュが誤って無効になっていて、修正したらスループットが3から12リクエスト/秒に4倍向上。</span>
+<span class="i18n-text" data-lang="ko">Julia Evans가 Django 발견을 공유: 읽기 쉬운 필터 체이닝을 위한 쿼리셋 클래스, urlize와 json_script 같은 템플릿 필터, URL 파라미터 수정을 위한 querystring 태그, 자동 데이터베이스 마이그레이션, 그리고 함수 기반 뷰가 상속보다 나은 이유. 또한: 템플릿 캐싱이 실수로 비활성화되어 있었는데, 수정 후 처리량이 초당 3개에서 12개로 4배 향상.</span>
+<span class="i18n-text" data-lang="es">Julia Evans comparte descubrimientos de Django: clases de query set para encadenamiento legible de filtros, filtros de plantilla como urlize y json_script, la etiqueta querystring para modificar parámetros URL, migraciones automáticas de base de datos, y por qué las vistas basadas en funciones superan a la herencia. También: el caché de plantillas estaba desactivado accidentalmente y arreglarlo cuadruplicó el rendimiento de 3 a 12 peticiones/seg.</span>
+<span class="i18n-text" data-lang="de">Julia Evans teilt Django-Entdeckungen: QuerySet-Klassen für lesbare Filter-Verkettung, Template-Filter wie urlize und json_script, das querystring-Tag zum Ändern von URL-Parametern, automatische Datenbank-Migrationen, und warum funktionsbasierte Views Vererbung schlagen. Außerdem: Template-Caching war versehentlich deaktiviert und die Korrektur vervierfachte den Durchsatz von 3 auf 12 Anfragen/Sek.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Someone tried to make websites the old-fashioned way and documented the experience. Django&#x27;s documentation may be baroque, but at least there&#x27;s documentation.</div>
+        <span class="i18n-text" data-lang="zh">有人尝试用老式方法做网站并记录了这个经历。Django的文档可能很繁复，但至少有文档。</span>
+<span class="i18n-text" data-lang="ja">誰かが昔ながらの方法でウェブサイトを作ろうとして、その経験を記録した。Djangoのドキュメントは煩雑かもしれないが、少なくともドキュメントはある。</span>
+<span class="i18n-text" data-lang="ko">누군가 구식 방법으로 웹사이트를 만들어보고 경험을 기록했다. Django 문서가 복잡할 수 있지만, 적어도 문서는 있다.</span>
+<span class="i18n-text" data-lang="es">Alguien intentó hacer sitios web a la antigua y documentó la experiencia. La documentación de Django puede ser barroca, pero al menos hay documentación.</span>
+<span class="i18n-text" data-lang="de">Jemand hat versucht, Websites auf die altmodische Art zu machen und die Erfahrung dokumentiert. Djangos Dokumentation mag barock sein, aber immerhin gibt es Dokumentation.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Synchronous Django has a lot to commend it. If you deploy it reasonably well it&#x27;s easy to operate in production even under duress."</div>
+          <div class="comment-i18n" data-lang="zh">同步Django有很多值得称赞的地方。如果部署得当，即使在压力下也很容易在生产环境中运行。</div>
+<div class="comment-i18n" data-lang="ja">同期Djangoには称賛すべき点が多い。適切にデプロイすれば、プレッシャー下でも本番環境で運用しやすい。</div>
+<div class="comment-i18n" data-lang="ko">동기 Django는 칭찬할 점이 많다. 적절히 배포하면 압박 상황에서도 프로덕션에서 운영하기 쉽다.</div>
+<div class="comment-i18n" data-lang="es">Django síncrono tiene mucho que recomendar. Si lo despliegas razonablemente bien, es fácil de operar en producción incluso bajo presión.</div>
+<div class="comment-i18n" data-lang="de">Synchrones Django hat viel zu empfehlen. Wenn man es vernünftig deployt, ist es auch unter Druck leicht in Produktion zu betreiben.</div>
+
+          <div class="comment-author">-- CraigJPerry</div>
+        </div><div class="comment">
+          <div class="comment-text">"After turning on template caching, the site went from 2-3 to 12 requests per second. That&#x27;s a huge difference from one config option."</div>
+          <div class="comment-i18n" data-lang="zh">开启模板缓存后，网站从每秒2-3个请求提升到12个。一个配置选项就有这么大的差异。</div>
+<div class="comment-i18n" data-lang="ja">テンプレートキャッシュを有効にしたら、サイトは毎秒2-3リクエストから12に上がった。一つの設定オプションでこれほどの違い。</div>
+<div class="comment-i18n" data-lang="ko">템플릿 캐싱을 켜니 사이트가 초당 2-3 요청에서 12로 올라갔다. 설정 옵션 하나로 이렇게 큰 차이가.</div>
+<div class="comment-i18n" data-lang="es">Después de activar el caché de plantillas, el sitio pasó de 2-3 a 12 peticiones por segundo. Una diferencia enorme por una opción de configuración.</div>
+<div class="comment-i18n" data-lang="de">Nach dem Einschalten des Template-Cachings stieg die Site von 2-3 auf 12 Anfragen pro Sekunde. Ein riesiger Unterschied durch eine Konfigurationsoption.</div>
+
+          <div class="comment-author">-- echoangle</div>
+        </div><div class="comment">
+          <div class="comment-text">"I&#x27;ve been using Django since 0.95. Even in a Go or Java stack, I still use Django for models and migrations."</div>
+          <div class="comment-i18n" data-lang="zh">我从Django 0.95就开始用了。即使在Go或Java技术栈中，我仍然用Django做模型和迁移。</div>
+<div class="comment-i18n" data-lang="ja">Django 0.95から使っている。GoやJavaスタックでも、モデルとマイグレーションにはDjangoを使う。</div>
+<div class="comment-i18n" data-lang="ko">Django 0.95부터 써왔다. Go나 Java 스택에서도 모델과 마이그레이션에는 여전히 Django를 쓴다.</div>
+<div class="comment-i18n" data-lang="es">He estado usando Django desde 0.95. Incluso en un stack de Go o Java, todavía uso Django para modelos y migraciones.</div>
+<div class="comment-i18n" data-lang="de">Ich benutze Django seit 0.95. Selbst in einem Go- oder Java-Stack verwende ich Django für Models und Migrationen.</div>
+
+          <div class="comment-author">-- ranedk</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#python</span><span class="tag">#django</span><span class="tag">#webdev</span><span class="tag">#backend</span></div>
+    </article>
+<article class="story" id="s49005197-07261101">
+      <h3 class="story-title">
+        <a href="https://powerfulpython.com/blog/overloaded-overloading/" target="_blank">Overloaded Overloading</a>
+        <a href="#s49005197-07261101" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">重载的重载</div>
+<div class="i18n-title" data-lang="ja">オーバーロードのオーバーロード</div>
+<div class="i18n-title" data-lang="ko">오버로딩의 오버로딩</div>
+<div class="i18n-title" data-lang="es">Sobrecarga sobrecargada</div>
+<div class="i18n-title" data-lang="de">Überladenes Überladen</div>
+
+      <div class="story-meta">
+        19pts | 4c | <a href="https://news.ycombinator.com/item?id=49005197" target="_blank">HN#49005197</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Python doesn&#x27;t support method overloading (defining multiple methods with the same name but different signatures), but it does support operator overloading via magic methods like __add__. If you need method overloading, you can either write a dispatching method that checks types with isinstance(), or use functools.singledispatch decorator.</div>
+        <span class="i18n-text" data-lang="zh">Python不支持方法重载（定义多个同名但签名不同的方法），但它通过__add__等魔术方法支持运算符重载。如果需要方法重载，可以编写用isinstance()检查类型的分派方法，或使用functools.singledispatch装饰器。</span>
+<span class="i18n-text" data-lang="ja">Pythonはメソッドのオーバーロード（同名で異なるシグネチャの複数メソッド定義）をサポートしないが、__add__などのマジックメソッドによる演算子オーバーロードはサポートする。メソッドオーバーロードが必要な場合、isinstance()で型をチェックするディスパッチメソッドを書くか、functools.singledispatchデコレータを使用できる。</span>
+<span class="i18n-text" data-lang="ko">Python은 메서드 오버로딩(같은 이름에 다른 시그니처를 가진 여러 메서드 정의)을 지원하지 않지만, __add__ 같은 매직 메서드를 통한 연산자 오버로딩은 지원한다. 메서드 오버로딩이 필요하면, isinstance()로 타입을 확인하는 디스패치 메서드를 작성하거나 functools.singledispatch 데코레이터를 사용할 수 있다.</span>
+<span class="i18n-text" data-lang="es">Python no soporta sobrecarga de métodos (definir múltiples métodos con el mismo nombre pero diferentes firmas), pero sí soporta sobrecarga de operadores mediante métodos mágicos como __add__. Si necesitas sobrecarga de métodos, puedes escribir un método despachador que verifique tipos con isinstance(), o usar el decorador functools.singledispatch.</span>
+<span class="i18n-text" data-lang="de">Python unterstützt kein Methoden-Overloading (Definition mehrerer Methoden mit gleichem Namen aber unterschiedlichen Signaturen), aber es unterstützt Operator-Overloading über Magic Methods wie __add__. Wenn du Methoden-Overloading brauchst, kannst du entweder eine Dispatch-Methode schreiben, die Typen mit isinstance() prüft, oder den functools.singledispatch-Dekorator verwenden.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The word &#x27;overloading&#x27; is, itself, overloaded. The Python tutorial we needed but were too embarrassed to ask for.</div>
+        <span class="i18n-text" data-lang="zh">&#x27;重载&#x27;这个词本身就被重载了。这是我们需要但不好意思问的Python教程。</span>
+<span class="i18n-text" data-lang="ja">「オーバーロード」という言葉自体がオーバーロードされている。必要だけど恥ずかしくて聞けなかったPythonチュートリアル。</span>
+<span class="i18n-text" data-lang="ko">&#x27;오버로딩&#x27;이라는 단어 자체가 오버로딩되어 있다. 필요했지만 물어보기 부끄러웠던 Python 튜토리얼.</span>
+<span class="i18n-text" data-lang="es">La palabra &#x27;sobrecarga&#x27; está, en sí misma, sobrecargada. El tutorial de Python que necesitábamos pero nos daba vergüenza pedir.</span>
+<span class="i18n-text" data-lang="de">Das Wort &#x27;Überladen&#x27; ist selbst überladen. Das Python-Tutorial, das wir brauchten, aber uns zu peinlich war danach zu fragen.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I&#x27;m still on the fence regarding how useful or confusing it is. Without good variable names, &#x27;a + b&#x27; is an absolute mystery."</div>
+          <div class="comment-i18n" data-lang="zh">关于它有多有用或多令人困惑，我仍在犹豫。没有好的变量名，&#x27;a + b&#x27;完全是个谜。</div>
+<div class="comment-i18n" data-lang="ja">どれほど便利か、または混乱するかについてまだ迷っている。良い変数名がないと、&#x27;a + b&#x27;は完全に謎だ。</div>
+<div class="comment-i18n" data-lang="ko">얼마나 유용한지 또는 혼란스러운지에 대해 아직 결정을 못 내렸다. 좋은 변수 이름 없이 &#x27;a + b&#x27;는 완전한 미스터리다.</div>
+<div class="comment-i18n" data-lang="es">Todavía estoy indeciso sobre qué tan útil o confuso es. Sin buenos nombres de variables, &#x27;a + b&#x27; es un misterio absoluto.</div>
+<div class="comment-i18n" data-lang="de">Ich bin noch unentschlossen, wie nützlich oder verwirrend es ist. Ohne gute Variablennamen ist &#x27;a + b&#x27; ein absolutes Rätsel.</div>
+
+          <div class="comment-author">-- rf15</div>
+        </div><div class="comment">
+          <div class="comment-text">"This aged well."</div>
+          <div class="comment-i18n" data-lang="zh">这段话经受住了时间的考验。</div>
+<div class="comment-i18n" data-lang="ja">これはよく熟成された。</div>
+<div class="comment-i18n" data-lang="ko">이것은 잘 숙성되었다.</div>
+<div class="comment-i18n" data-lang="es">Esto envejeció bien.</div>
+<div class="comment-i18n" data-lang="de">Das hat sich gut gehalten.</div>
+
+          <div class="comment-author">-- hnd9q09qk4</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#python</span><span class="tag">#programming</span><span class="tag">#tutorial</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-07-26T08:33:00Z</div>
