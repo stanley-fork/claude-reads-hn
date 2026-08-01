@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-08-01</div>
+      <a href="#s49137060-08012001">Postmortem for Kernel Soundness Bug #145...</a>
+      <a href="#s49135257-08012001">Cursor removed cost information from the...</a>
+      <a href="#s49136736-08012001">NetBSD 11.0 :netbsd:bsd:operating-system...</a>
+      <a href="#s49136063-08012001">A directory of people who love RSS</a>
+      <a href="#s49134599-08012001">The Art of 64-bit Assembly</a>
       <a href="#s49133889-08011651">RipGrep musl binaries occasionally segfa...</a>
       <a href="#s49134694-08011651">A Surveillance Treaty in Disguise: Canad...</a>
       <a href="#s49135365-08011651">GitHub has alternatives, but no replacem...</a>
@@ -606,6 +611,347 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-08-01T20:01:00Z</div>
+        <div class="digest-vibe">Lean&#x27;s kernel cracks, Cursor hides the bill, and RSS refuses to die</div>
+      </div>
+      <article class="story" id="s49137060-08012001">
+      <h3 class="story-title">
+        <a href="https://leodemoura.github.io/blog/2026-8-1-postmortem-for-kernel-soundness-bug-14576/" target="_blank">Postmortem for Kernel Soundness Bug #14576 :lean:formal-verification</a>
+        <a href="#s49137060-08012001" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">内核可靠性漏洞 #14576 事后分析</div>
+<div class="i18n-title" data-lang="ja">カーネル健全性バグ #14576 の事後分析</div>
+<div class="i18n-title" data-lang="ko">커널 건전성 버그 #14576 사후 분석</div>
+<div class="i18n-title" data-lang="es">Analisis post-mortem del bug de solidez del kernel #14576</div>
+<div class="i18n-title" data-lang="de">Obduktion des Kernel-Soliditaetsfehlers #14576</div>
+
+      <div class="story-meta">
+        53pts | 20c | <a href="https://news.ycombinator.com/item?id=49137060" target="_blank">HN#49137060</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Leonardo de Moura published a postmortem on a soundness bug in Lean&#x27;s kernel. The bug means verified results should be checked with an independent kernel, requiring current versions of both implementations. Even formal verification systems aren&#x27;t immune to implementation bugs.</div>
+        <span class="i18n-text" data-lang="zh">Leonardo de Moura 发布了 Lean 内核可靠性漏洞的事后分析。该漏洞意味着验证结果应使用独立内核检查，需要两个实现的最新版本。即使是形式验证系统也无法避免实现漏洞。</span>
+<span class="i18n-text" data-lang="ja">Leonardo de Moura が Lean カーネルの健全性バグについて事後分析を公開した。このバグにより、検証結果は独立したカーネルで確認する必要があり、両方の実装の最新版が必要となる。形式検証システムでさえ実装バグから免れない。</span>
+<span class="i18n-text" data-lang="ko">Leonardo de Moura가 Lean 커널의 건전성 버그에 대한 사후 분석을 발표했다. 이 버그로 인해 검증된 결과는 독립적인 커널로 확인해야 하며, 두 구현 모두 최신 버전이 필요하다. 형식 검증 시스템도 구현 버그에서 자유롭지 않다.</span>
+<span class="i18n-text" data-lang="es">Leonardo de Moura publico un analisis post-mortem sobre un bug de solidez en el kernel de Lean. El bug significa que los resultados verificados deben comprobarse con un kernel independiente, requiriendo versiones actuales de ambas implementaciones. Incluso los sistemas de verificacion formal no son inmunes a los bugs de implementacion.</span>
+<span class="i18n-text" data-lang="de">Leonardo de Moura veroeffentlichte eine Nachbesprechung zu einem Soliditaetsfehler im Lean-Kernel. Der Fehler bedeutet, dass verifizierte Ergebnisse mit einem unabhaengigen Kernel ueberprueft werden sollten, was aktuelle Versionen beider Implementierungen erfordert. Selbst formale Verifikationssysteme sind nicht immun gegen Implementierungsfehler.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The people who bet their mathematical careers on &#x27;provably correct&#x27; software just got a reminder that the proof is only as good as the prover. At least Metamath fans get to be smug for a week.</div>
+        <span class="i18n-text" data-lang="zh">那些把数学生涯押在&#x27;可证明正确&#x27;软件上的人刚刚被提醒：证明的可靠性取决于证明器本身。至少 Metamath 粉丝可以得意一周了。</span>
+<span class="i18n-text" data-lang="ja">証明可能な正しさに数学者としてのキャリアを賭けた人々は、証明は証明器の質次第だと改めて思い知らされた。少なくとも Metamath ファンは1週間は自慢できる。</span>
+<span class="i18n-text" data-lang="ko">&#x27;증명 가능한 정확성&#x27; 소프트웨어에 수학 경력을 건 사람들이 증명은 증명기만큼만 좋다는 것을 다시 한번 상기하게 되었다. 적어도 Metamath 팬들은 일주일 동안 으쓱할 수 있다.</span>
+<span class="i18n-text" data-lang="es">Los que apostaron sus carreras matematicas en software &#x27;demostrablemente correcto&#x27; acaban de recibir un recordatorio de que la prueba es tan buena como el probador. Al menos los fans de Metamath pueden presumir durante una semana.</span>
+<span class="i18n-text" data-lang="de">Diejenigen, die ihre mathematischen Karrieren auf &#x27;beweisbar korrekte&#x27; Software gesetzt haben, wurden gerade daran erinnert, dass der Beweis nur so gut ist wie der Beweiser. Wenigstens koennen Metamath-Fans eine Woche lang angeben.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Things like this aren&#x27;t too surprising, given that even much simpler type checkers like Rust&#x27;s have soundness issues occasionally."</div>
+          <div class="comment-i18n" data-lang="zh">这类问题并不令人惊讶，毕竟即使像 Rust 这样简单的类型检查器偶尔也会有可靠性问题。</div>
+<div class="comment-i18n" data-lang="ja">Rust のような単純な型検査器でさえ時折健全性の問題があることを考えると、これは驚くほどのことではない。</div>
+<div class="comment-i18n" data-lang="ko">Rust처럼 단순한 타입 검사기도 가끔 건전성 문제가 있다는 점을 고려하면 그리 놀라운 일은 아니다.</div>
+<div class="comment-i18n" data-lang="es">Cosas asi no son muy sorprendentes, dado que incluso verificadores de tipos mas simples como el de Rust tienen problemas de solidez ocasionalmente.</div>
+<div class="comment-i18n" data-lang="de">Solche Dinge sind nicht allzu ueberraschend, da selbst einfachere Typpruefer wie der von Rust gelegentlich Soliditaetsprobleme haben.</div>
+
+          <div class="comment-author">-- gr_norm</div>
+        </div><div class="comment">
+          <div class="comment-text">"I&#x27;d almost consider the fact soundness bugs are possible as a bug in the ideology. Stuff like this just wouldn&#x27;t happen in Metamath."</div>
+          <div class="comment-i18n" data-lang="zh">我几乎认为可靠性漏洞的存在本身就是这种理念的缺陷。这种事在 Metamath 中根本不会发生。</div>
+<div class="comment-i18n" data-lang="ja">健全性バグが起こりうること自体がイデオロギーのバグだと思う。Metamath ではこんなことは起きない。</div>
+<div class="comment-i18n" data-lang="ko">건전성 버그가 가능하다는 것 자체가 이념의 버그라고 생각한다. Metamath에서는 이런 일이 일어나지 않는다.</div>
+<div class="comment-i18n" data-lang="es">Casi consideraria el hecho de que los bugs de solidez sean posibles como un bug en la ideologia. Esto simplemente no pasaria en Metamath.</div>
+<div class="comment-i18n" data-lang="de">Ich wuerde fast sagen, dass die Moeglichkeit von Soliditaetsfehlern selbst ein Bug in der Ideologie ist. So etwas wuerde in Metamath einfach nicht passieren.</div>
+
+          <div class="comment-author">-- michaelfm1211</div>
+        </div><div class="comment">
+          <div class="comment-text">"If AI is water, Lean is the pipe and collatz is a clog on one end, then surely we&#x27;ll find the cracks."</div>
+          <div class="comment-i18n" data-lang="zh">如果 AI 是水，Lean 是管道，Collatz 是一端的堵塞，那么我们肯定会发现裂缝。</div>
+<div class="comment-i18n" data-lang="ja">AI が水で、Lean がパイプで、コラッツ予想が一端の詰まりなら、必ず亀裂が見つかる。</div>
+<div class="comment-i18n" data-lang="ko">AI가 물이고 Lean이 파이프이고 콜라츠가 한쪽 끝의 막힘이라면, 분명히 균열을 찾게 될 것이다.</div>
+<div class="comment-i18n" data-lang="es">Si la IA es agua, Lean es la tuberia y Collatz es un tapon en un extremo, seguramente encontraremos las grietas.</div>
+<div class="comment-i18n" data-lang="de">Wenn KI Wasser ist, Lean die Leitung und Collatz ein Verstopfung an einem Ende, dann werden wir sicher die Risse finden.</div>
+
+          <div class="comment-author">-- vatsachak</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#math</span><span class="tag">#bugs</span></div>
+    </article>
+<article class="story" id="s49135257-08012001">
+      <h3 class="story-title">
+        <a href="https://forum.cursor.com/t/usage-page-to-token-amount-what/167153" target="_blank">Cursor removed cost information from the usage page and CSV export :cursor:ai-tools</a>
+        <a href="#s49135257-08012001" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Cursor 从使用页面和 CSV 导出中移除了成本信息</div>
+<div class="i18n-title" data-lang="ja">Cursor が使用量ページと CSV エクスポートからコスト情報を削除</div>
+<div class="i18n-title" data-lang="ko">Cursor가 사용 페이지와 CSV 내보내기에서 비용 정보를 제거</div>
+<div class="i18n-title" data-lang="es">Cursor elimino informacion de costos de la pagina de uso y exportacion CSV</div>
+<div class="i18n-title" data-lang="de">Cursor hat Kosteninformationen von der Nutzungsseite und dem CSV-Export entfernt</div>
+
+      <div class="story-meta">
+        227pts | 99c | <a href="https://news.ycombinator.com/item?id=49135257" target="_blank">HN#49135257</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Cursor quietly removed dollar cost information from their usage page and CSV export. A Cursor employee responded saying it was accidental from cleaning up a feature flag, and the CSV export is now fixed. However, users are questioning why cost transparency was tied to a feature flag in the first place.</div>
+        <span class="i18n-text" data-lang="zh">Cursor 悄悄从使用页面和 CSV 导出中移除了美元成本信息。一名 Cursor 员工回应说这是清理功能标志时的意外，CSV 导出现已修复。然而，用户质疑为什么成本透明度一开始就与功能标志挂钩。</span>
+<span class="i18n-text" data-lang="ja">Cursor が使用量ページと CSV エクスポートからドルコスト情報をひっそり削除した。Cursor の従業員は機能フラグのクリーンアップ中の事故だと回答し、CSV エクスポートは修正済みとのこと。しかし、ユーザーはなぜコストの透明性がそもそも機能フラグに紐づいていたのか疑問を呈している。</span>
+<span class="i18n-text" data-lang="ko">Cursor가 사용 페이지와 CSV 내보내기에서 달러 비용 정보를 조용히 제거했다. Cursor 직원은 기능 플래그 정리 중 실수였다고 답변했으며 CSV 내보내기는 수정되었다고 한다. 그러나 사용자들은 왜 비용 투명성이 애초에 기능 플래그에 연결되어 있었는지 의문을 제기하고 있다.</span>
+<span class="i18n-text" data-lang="es">Cursor elimino silenciosamente la informacion de costos en dolares de su pagina de uso y exportacion CSV. Un empleado de Cursor respondio que fue accidental al limpiar una bandera de funcion, y la exportacion CSV ya esta arreglada. Sin embargo, los usuarios cuestionan por que la transparencia de costos estaba vinculada a una bandera de funcion en primer lugar.</span>
+<span class="i18n-text" data-lang="de">Cursor hat still und heimlich Dollar-Kosteninformationen von ihrer Nutzungsseite und dem CSV-Export entfernt. Ein Cursor-Mitarbeiter antwortete, es sei ein Versehen beim Aufraeumen eines Feature-Flags gewesen, und der CSV-Export sei jetzt behoben. Benutzer fragen jedoch, warum Kostentransparenz ueberhaupt an ein Feature-Flag gebunden war.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Nothing says &#x27;we value transparency&#x27; like accidentally hiding how much you&#x27;re charging customers. The &#x27;oops, feature flag cleanup&#x27; excuse is the new &#x27;we take security seriously&#x27;.</div>
+        <span class="i18n-text" data-lang="zh">没什么比&#x27;意外&#x27;隐藏向客户收费金额更能体现&#x27;我们重视透明度&#x27;了。&#x27;哎呀，功能标志清理&#x27;的借口是新版本的&#x27;我们非常重视安全&#x27;。</span>
+<span class="i18n-text" data-lang="ja">顧客への請求額をうっかり隠すほど透明性を重視していますを体現するものはない。おっと、機能フラグのクリーンアップという言い訳は、新しいセキュリティを真剣に考えていますだ。</span>
+<span class="i18n-text" data-lang="ko">고객에게 얼마를 청구하는지 &#x27;실수로&#x27; 숨기는 것만큼 &#x27;투명성을 중시합니다&#x27;를 잘 보여주는 것은 없다. &#x27;앗, 기능 플래그 정리&#x27; 변명은 새로운 &#x27;보안을 진지하게 생각합니다&#x27;다.</span>
+<span class="i18n-text" data-lang="es">Nada dice &#x27;valoramos la transparencia&#x27; como ocultar accidentalmente cuanto estas cobrando a los clientes. La excusa de &#x27;ups, limpieza de bandera de funcion&#x27; es el nuevo &#x27;nos tomamos la seguridad en serio&#x27;.</span>
+<span class="i18n-text" data-lang="de">Nichts sagt &#x27;wir schaetzen Transparenz&#x27; wie das versehentliche Verstecken dessen, was man Kunden berechnet. Die &#x27;Ups, Feature-Flag-Aufraeumung&#x27;-Ausrede ist das neue &#x27;wir nehmen Sicherheit ernst&#x27;.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I regularly measure how many tokens a harness+model combination uses. There are huge token efficiency/bloat differences between agents while working on the same tasks."</div>
+          <div class="comment-i18n" data-lang="zh">我经常测量工具+模型组合使用的令牌数量。不同代理在执行相同任务时令牌效率/膨胀差异巨大。</div>
+<div class="comment-i18n" data-lang="ja">ハーネス+モデルの組み合わせが使用するトークン数を定期的に測定している。同じタスクで作業していても、エージェント間でトークン効率/肥大化に大きな違いがある。</div>
+<div class="comment-i18n" data-lang="ko">하네스+모델 조합이 사용하는 토큰 수를 정기적으로 측정한다. 같은 작업을 수행해도 에이전트 간 토큰 효율성/비대화 차이가 크다.</div>
+<div class="comment-i18n" data-lang="es">Mido regularmente cuantos tokens usa una combinacion de arnes+modelo. Hay enormes diferencias de eficiencia/inflacion de tokens entre agentes trabajando en las mismas tareas.</div>
+<div class="comment-i18n" data-lang="de">Ich messe regelmaessig, wie viele Tokens eine Harness+Modell-Kombination verbraucht. Es gibt riesige Token-Effizienz/Aufblaehungs-Unterschiede zwischen Agenten bei denselben Aufgaben.</div>
+
+          <div class="comment-author">-- tosh</div>
+        </div><div class="comment">
+          <div class="comment-text">"I was an early adopter of Cursor since 2023, but it&#x27;s been 6 months since I opened it. Can someone help me understand what value Cursor offers in 2026?"</div>
+          <div class="comment-i18n" data-lang="zh">我从2023年起就是Cursor的早期用户，但已经6个月没打开过了。有人能告诉我Cursor在2026年还有什么价值吗？</div>
+<div class="comment-i18n" data-lang="ja">2023年からCursorの初期採用者だったが、開いてから6ヶ月経つ。2026年にCursorがどんな価値を提供するか誰か教えてくれないか？</div>
+<div class="comment-i18n" data-lang="ko">2023년부터 Cursor 초기 사용자였는데, 연지 6개월이 됐다. 2026년에 Cursor가 어떤 가치를 제공하는지 알려줄 수 있는 사람?</div>
+<div class="comment-i18n" data-lang="es">Fui un adoptante temprano de Cursor desde 2023, pero han pasado 6 meses desde que lo abri. Alguien puede ayudarme a entender que valor ofrece Cursor en 2026?</div>
+<div class="comment-i18n" data-lang="de">Ich war ein frueher Adopter von Cursor seit 2023, aber ich habe es seit 6 Monaten nicht geoeffnet. Kann mir jemand helfen zu verstehen, welchen Wert Cursor 2026 bietet?</div>
+
+          <div class="comment-author">-- aroman</div>
+        </div><div class="comment">
+          <div class="comment-text">"(I work at Cursor) You can still see what you&#x27;re billed on the Spending page. We accidentally broke dollar costs in the CSV export while cleaning up an old feature flag."</div>
+          <div class="comment-i18n" data-lang="zh">（我在Cursor工作）你仍然可以在消费页面看到账单。我们在清理旧功能标志时意外破坏了CSV导出中的美元成本。</div>
+<div class="comment-i18n" data-lang="ja">（Cursorで働いています）支出ページで請求額は確認できます。古い機能フラグをクリーンアップ中にCSVエクスポートのドルコストを誤って壊してしまいました。</div>
+<div class="comment-i18n" data-lang="ko">(Cursor에서 일합니다) 지출 페이지에서 청구 금액을 확인할 수 있습니다. 오래된 기능 플래그를 정리하다가 실수로 CSV 내보내기의 달러 비용을 깨뜨렸습니다.</div>
+<div class="comment-i18n" data-lang="es">(Trabajo en Cursor) Todavia puedes ver lo que se te factura en la pagina de Gastos. Accidentalmente rompimos los costos en dolares en la exportacion CSV al limpiar una antigua bandera de funcion.</div>
+<div class="comment-i18n" data-lang="de">(Ich arbeite bei Cursor) Du kannst auf der Ausgabenseite sehen, was dir berechnet wird. Wir haben beim Aufraeumen eines alten Feature-Flags versehentlich die Dollar-Kosten im CSV-Export kaputt gemacht.</div>
+
+          <div class="comment-author">-- jonjohnsen</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#pricing</span><span class="tag">#transparency</span></div>
+    </article>
+<article class="story" id="s49136736-08012001">
+      <h3 class="story-title">
+        <a href="https://blog.netbsd.org/tnf/entry/netbsd_11_0_released" target="_blank">NetBSD 11.0 :netbsd:bsd:operating-systems</a>
+        <a href="#s49136736-08012001" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">NetBSD 11.0 发布</div>
+<div class="i18n-title" data-lang="ja">NetBSD 11.0 リリース</div>
+<div class="i18n-title" data-lang="ko">NetBSD 11.0 출시</div>
+<div class="i18n-title" data-lang="es">NetBSD 11.0 lanzado</div>
+<div class="i18n-title" data-lang="de">NetBSD 11.0 veroeffentlicht</div>
+
+      <div class="story-meta">
+        110pts | 23c | <a href="https://news.ycombinator.com/item?id=49136736" target="_blank">HN#49136736</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">NetBSD 11.0 is finally released after what appears to be a long development cycle. The release still supports CD-ROM media, prompting comments about whether anyone still uses optical drives. Available for multiple architectures with bootable ARM images.</div>
+        <span class="i18n-text" data-lang="zh">NetBSD 11.0 经过漫长的开发周期终于发布。该版本仍然支持 CD-ROM 媒体，引发了关于是否还有人使用光驱的评论。支持多种架构，提供可启动的 ARM 镜像。</span>
+<span class="i18n-text" data-lang="ja">長い開発サイクルを経て NetBSD 11.0 がついにリリースされた。このリリースはまだ CD-ROM メディアをサポートしており、光学ドライブを使う人がまだいるのかというコメントが寄せられている。複数のアーキテクチャに対応し、ブート可能な ARM イメージも提供。</span>
+<span class="i18n-text" data-lang="ko">긴 개발 주기 끝에 NetBSD 11.0이 드디어 출시되었다. 이 릴리스는 여전히 CD-ROM 미디어를 지원하며, 아직도 광학 드라이브를 사용하는 사람이 있는지에 대한 댓글이 달렸다. 여러 아키텍처를 지원하며 부팅 가능한 ARM 이미지도 제공된다.</span>
+<span class="i18n-text" data-lang="es">NetBSD 11.0 finalmente se lanza despues de lo que parece un largo ciclo de desarrollo. El lanzamiento todavia soporta medios CD-ROM, lo que provoco comentarios sobre si alguien todavia usa unidades opticas. Disponible para multiples arquitecturas con imagenes ARM arrancables.</span>
+<span class="i18n-text" data-lang="de">NetBSD 11.0 wird nach einem offenbar langen Entwicklungszyklus endlich veroeffentlicht. Das Release unterstuetzt immer noch CD-ROM-Medien, was Kommentare darueber ausloeste, ob noch jemand optische Laufwerke benutzt. Verfuegbar fuer mehrere Architekturen mit bootfaehigen ARM-Images.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">NetBSD ships with CD-ROM support in 2026, proving that somewhere out there, someone is still burning ISOs to plastic discs. The almost apologetic release notes about open issues are refreshingly honest compared to the usual corporate &#x27;revolutionary update&#x27; spin.</div>
+        <span class="i18n-text" data-lang="zh">NetBSD 在2026年还支持 CD-ROM，证明某处还有人在往塑料盘上刻录 ISO。关于未解决问题的近乎道歉式的发布说明，比起通常企业的&#x27;革命性更新&#x27;宣传要诚实得令人耳目一新。</span>
+<span class="i18n-text" data-lang="ja">NetBSD は2026年に CD-ROM サポートを出荷し、どこかで誰かがまだプラスチックディスクに ISO を焼いていることを証明した。未解決の問題についてほぼ謝罪のようなリリースノートは、通常の企業の革命的アップデートスピンと比べて爽やかに正直だ。</span>
+<span class="i18n-text" data-lang="ko">NetBSD가 2026년에 CD-ROM 지원을 제공하며, 어딘가에서 누군가가 여전히 플라스틱 디스크에 ISO를 굽고 있음을 증명했다. 미해결 문제에 대해 거의 사과하는 듯한 릴리스 노트는 일반적인 기업의 &#x27;혁신적 업데이트&#x27; 홍보와 비교하면 상쾌하게 정직하다.</span>
+<span class="i18n-text" data-lang="es">NetBSD se lanza con soporte para CD-ROM en 2026, probando que en algun lugar, alguien todavia esta grabando ISOs en discos de plastico. Las notas de lanzamiento casi disculpandose por problemas abiertos son refrescantemente honestas comparadas con el tipico spin corporativo de &#x27;actualizacion revolucionaria&#x27;.</span>
+<span class="i18n-text" data-lang="de">NetBSD liefert 2026 mit CD-ROM-Unterstuetzung aus und beweist, dass irgendwo da draussen jemand immer noch ISOs auf Plastikscheiben brennt. Die fast entschuldigenden Release-Notes ueber offene Probleme sind erfrischend ehrlich im Vergleich zum ueblichen Unternehmens-Spin von &#x27;revolutionaeres Update&#x27;.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"The release announcement has better details: https://www.netbsd.org/releases/formal-11/NetBSD-11.0.html"</div>
+          <div class="comment-i18n" data-lang="zh">发布公告有更详细的信息：https://www.netbsd.org/releases/formal-11/NetBSD-11.0.html</div>
+<div class="comment-i18n" data-lang="ja">リリースアナウンスにより詳細があります：https://www.netbsd.org/releases/formal-11/NetBSD-11.0.html</div>
+<div class="comment-i18n" data-lang="ko">릴리스 발표에 더 자세한 내용이 있습니다: https://www.netbsd.org/releases/formal-11/NetBSD-11.0.html</div>
+<div class="comment-i18n" data-lang="es">El anuncio del lanzamiento tiene mejores detalles: https://www.netbsd.org/releases/formal-11/NetBSD-11.0.html</div>
+<div class="comment-i18n" data-lang="de">Die Release-Ankuendigung hat bessere Details: https://www.netbsd.org/releases/formal-11/NetBSD-11.0.html</div>
+
+          <div class="comment-author">-- cyberpunk</div>
+        </div><div class="comment">
+          <div class="comment-text">"They are almost apologetic for a release with open issues. But presumably the release closes off many more than it creates. I could see any other org approaching the messaging very differently!"</div>
+          <div class="comment-i18n" data-lang="zh">他们对带有未解决问题的版本几乎是在道歉。但据推测，这个版本解决的问题比制造的多。我能想象其他组织会用完全不同的方式来传达消息！</div>
+<div class="comment-i18n" data-lang="ja">未解決の問題があるリリースについてほぼ謝っている。しかしおそらくリリースは作成するよりも多くの問題を解決しているだろう。他の組織なら全く違うメッセージングをするだろう！</div>
+<div class="comment-i18n" data-lang="ko">미해결 문제가 있는 릴리스에 대해 거의 사과하는 것 같다. 하지만 아마 릴리스가 만드는 것보다 더 많은 문제를 해결할 것이다. 다른 조직은 메시징을 완전히 다르게 했을 것이다!</div>
+<div class="comment-i18n" data-lang="es">Casi se disculpan por un lanzamiento con problemas abiertos. Pero presumiblemente el lanzamiento cierra muchos mas de los que crea. Puedo ver a cualquier otra organizacion abordando el mensaje de manera muy diferente!</div>
+<div class="comment-i18n" data-lang="de">Sie entschuldigen sich fast fuer ein Release mit offenen Problemen. Aber vermutlich schliesst das Release viel mehr als es erzeugt. Ich koennte mir vorstellen, dass jede andere Organisation das Messaging ganz anders angehen wuerde!</div>
+
+          <div class="comment-author">-- jbs789</div>
+        </div><div class="comment">
+          <div class="comment-text">"CD-ROM media? Wow, I just learned I can still buy CD-RW discs. Are there systems that can boot CD-ROM that don&#x27;t have USB boot capability still?"</div>
+          <div class="comment-i18n" data-lang="zh">CD-ROM媒体？哇，我刚知道还能买到CD-RW光盘。还有系统能启动CD-ROM但没有USB启动功能吗？</div>
+<div class="comment-i18n" data-lang="ja">CD-ROMメディア？うわ、まだCD-RWディスクが買えることを知った。USBブート機能がなくてCD-ROMをブートできるシステムってまだあるの？</div>
+<div class="comment-i18n" data-lang="ko">CD-ROM 미디어? 와, 아직도 CD-RW 디스크를 살 수 있다는 걸 알았다. USB 부팅 기능 없이 CD-ROM을 부팅할 수 있는 시스템이 아직 있나?</div>
+<div class="comment-i18n" data-lang="es">Medios CD-ROM? Guau, acabo de saber que todavia puedo comprar discos CD-RW. Hay sistemas que pueden arrancar CD-ROM que no tienen capacidad de arranque USB?</div>
+<div class="comment-i18n" data-lang="de">CD-ROM-Medien? Wow, ich habe gerade gelernt, dass ich immer noch CD-RW-Discs kaufen kann. Gibt es Systeme, die CD-ROM booten koennen, aber keine USB-Boot-Faehigkeit haben?</div>
+
+          <div class="comment-author">-- imoverclocked</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#release</span></div>
+    </article>
+<article class="story" id="s49136063-08012001">
+      <h3 class="story-title">
+        <a href="https://andrewshell.org/2026/07/i-%e2%99%a5-rss/" target="_blank">A directory of people who love RSS</a>
+        <a href="#s49136063-08012001" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">热爱 RSS 的人们目录</div>
+<div class="i18n-title" data-lang="ja">RSS を愛する人々のディレクトリ</div>
+<div class="i18n-title" data-lang="ko">RSS를 사랑하는 사람들의 디렉토리</div>
+<div class="i18n-title" data-lang="es">Un directorio de personas que aman RSS</div>
+<div class="i18n-title" data-lang="de">Ein Verzeichnis von Menschen, die RSS lieben</div>
+
+      <div class="story-meta">
+        130pts | 71c | <a href="https://news.ycombinator.com/item?id=49136063" target="_blank">HN#49136063</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Andrew Shell created a directory of people who love RSS feeds, nostalgic for the era of orange subscribe buttons. The project aims to connect RSS enthusiasts and promote blogging culture. Someone in the comments is also building an RSS feed directory to address outdated/broken feed collections.</div>
+        <span class="i18n-text" data-lang="zh">Andrew Shell 创建了一个热爱 RSS 订阅的人们目录，怀念橙色订阅按钮的时代。该项目旨在连接 RSS 爱好者并推广博客文化。评论中有人也在建立 RSS 订阅源目录，以解决过时/损坏的订阅源集合问题。</span>
+<span class="i18n-text" data-lang="ja">Andrew Shell が RSS フィードを愛する人々のディレクトリを作成した。オレンジ色の購読ボタンの時代を懐かしんでいる。このプロジェクトは RSS 愛好家をつなぎ、ブログ文化を促進することを目指している。コメントでは、古くなった/壊れたフィードコレクションに対処するため、同じく RSS フィードディレクトリを構築中の人もいる。</span>
+<span class="i18n-text" data-lang="ko">Andrew Shell이 RSS 피드를 사랑하는 사람들의 디렉토리를 만들었다. 주황색 구독 버튼 시대를 그리워하며. 이 프로젝트는 RSS 애호가들을 연결하고 블로그 문화를 홍보하는 것을 목표로 한다. 댓글에서 누군가는 오래되거나 손상된 피드 모음을 해결하기 위해 RSS 피드 디렉토리를 구축 중이라고 한다.</span>
+<span class="i18n-text" data-lang="es">Andrew Shell creo un directorio de personas que aman los feeds RSS, nostalgico de la era de los botones naranjas de suscripcion. El proyecto busca conectar entusiastas de RSS y promover la cultura del blogging. Alguien en los comentarios tambien esta construyendo un directorio de feeds RSS para abordar colecciones desactualizadas/rotas.</span>
+<span class="i18n-text" data-lang="de">Andrew Shell erstellte ein Verzeichnis von Menschen, die RSS-Feeds lieben, nostalgisch fuer die Aera der orangefarbenen Abonnieren-Buttons. Das Projekt zielt darauf ab, RSS-Enthusiasten zu verbinden und die Blog-Kultur zu foerdern. Jemand in den Kommentaren baut auch ein RSS-Feed-Verzeichnis, um veraltete/kaputte Feed-Sammlungen anzugehen.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">RSS lovers assembling like it&#x27;s 2005. Meanwhile one commenter correctly points out RSS is a terrible format and we should have switched to Atom two decades ago, but here we are, romanticizing XML namespaces.</div>
+        <span class="i18n-text" data-lang="zh">RSS 爱好者像2005年那样聚集起来。同时一位评论者正确指出 RSS 是个糟糕的格式，我们二十年前就该换成 Atom，但我们却在这里浪漫化 XML 命名空间。</span>
+<span class="i18n-text" data-lang="ja">RSS 愛好者が2005年のように集結している。一方、あるコメンターは正しくも RSS はひどいフォーマットで、20年前に Atom に完全移行すべきだったと指摘しているが、我々はここで XML 名前空間をロマンチックに語っている。</span>
+<span class="i18n-text" data-lang="ko">RSS 팬들이 2005년처럼 모이고 있다. 한편 한 댓글러는 RSS가 형편없는 포맷이고 20년 전에 Atom으로 전환했어야 한다고 정확히 지적했지만, 우리는 여기서 XML 네임스페이스를 낭만화하고 있다.</span>
+<span class="i18n-text" data-lang="es">Los amantes de RSS reuniendose como si fuera 2005. Mientras tanto, un comentarista senala correctamente que RSS es un formato terrible y deberiamos haber cambiado a Atom hace dos decadas, pero aqui estamos, romantizando los espacios de nombres XML.</span>
+<span class="i18n-text" data-lang="de">RSS-Liebhaber versammeln sich wie 2005. Waehrenddessen weist ein Kommentator richtig darauf hin, dass RSS ein schreckliches Format ist und wir vor zwei Jahrzehnten auf Atom haetten wechseln sollen, aber hier sind wir und romantisieren XML-Namespaces.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I hate RSS. It&#x27;s a bad format that developed organically in all the worst ways, and it should have died completely in favour of Atom by about twenty years ago."</div>
+          <div class="comment-i18n" data-lang="zh">我讨厌RSS。它是一个以最糟糕的方式有机发展的坏格式，大约二十年前就应该完全被Atom取代。</div>
+<div class="comment-i18n" data-lang="ja">私はRSSが嫌いだ。最悪の方法で有機的に発展した悪いフォーマットで、約20年前にAtomに完全に取って代わられるべきだった。</div>
+<div class="comment-i18n" data-lang="ko">나는 RSS가 싫다. 최악의 방식으로 유기적으로 발전한 나쁜 포맷이고, 약 20년 전에 Atom에 완전히 자리를 내줬어야 했다.</div>
+<div class="comment-i18n" data-lang="es">Odio RSS. Es un mal formato que se desarrollo organicamente de las peores maneras, y deberia haber muerto completamente a favor de Atom hace unos veinte anos.</div>
+<div class="comment-i18n" data-lang="de">Ich hasse RSS. Es ist ein schlechtes Format, das sich organisch auf die schlimmsten Arten entwickelt hat, und es haette vor etwa zwanzig Jahren vollstaendig zugunsten von Atom sterben sollen.</div>
+
+          <div class="comment-author">-- chrismorgan</div>
+        </div><div class="comment">
+          <div class="comment-text">"I&#x27;m also nearly done building a directory of RSS feeds. It stemmed from a frustration of outdated and broken RSS feed collections."</div>
+          <div class="comment-i18n" data-lang="zh">我也快完成一个RSS订阅源目录了。这源于对过时和损坏的RSS订阅源集合的沮丧。</div>
+<div class="comment-i18n" data-lang="ja">私もRSSフィードのディレクトリをほぼ完成させている。古くなった壊れたRSSフィードコレクションへの不満から生まれた。</div>
+<div class="comment-i18n" data-lang="ko">나도 RSS 피드 디렉토리를 거의 완성했다. 오래되고 손상된 RSS 피드 컬렉션에 대한 좌절감에서 시작됐다.</div>
+<div class="comment-i18n" data-lang="es">Tambien estoy casi terminando de construir un directorio de feeds RSS. Surgio de la frustracion con colecciones de feeds RSS desactualizadas y rotas.</div>
+<div class="comment-i18n" data-lang="de">Ich bin auch fast fertig mit dem Aufbau eines Verzeichnisses von RSS-Feeds. Es entstand aus der Frustration ueber veraltete und kaputte RSS-Feed-Sammlungen.</div>
+
+          <div class="comment-author">-- jjordan</div>
+        </div><div class="comment">
+          <div class="comment-text">"I love RSS but what I love more than RSS are people who blog about stuff. I wish people would blog more like in the old days."</div>
+          <div class="comment-i18n" data-lang="zh">我喜欢RSS，但我更喜欢写博客的人。我希望人们能像过去那样多写博客。</div>
+<div class="comment-i18n" data-lang="ja">RSSは好きだけど、RSSよりも好きなのはいろいろなことについてブログを書く人々だ。昔のようにもっとブログを書いてほしい。</div>
+<div class="comment-i18n" data-lang="ko">RSS를 좋아하지만 RSS보다 더 좋아하는 건 이것저것 블로그에 글 쓰는 사람들이다. 옛날처럼 사람들이 더 많이 블로그했으면 좋겠다.</div>
+<div class="comment-i18n" data-lang="es">Amo RSS pero lo que amo mas que RSS son las personas que bloguean sobre cosas. Desearia que la gente blogueara mas como en los viejos tiempos.</div>
+<div class="comment-i18n" data-lang="de">Ich liebe RSS, aber was ich mehr als RSS liebe, sind Menschen, die ueber Sachen bloggen. Ich wuenschte, die Leute wuerden mehr bloggen wie in den alten Tagen.</div>
+
+          <div class="comment-author">-- mickeyp</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#rss</span><span class="tag">#web</span><span class="tag">#blogging</span><span class="tag">#nostalgia</span></div>
+    </article>
+<article class="story" id="s49134599-08012001">
+      <h3 class="story-title">
+        <a href="https://nostarch.com/art-64-bit-assembly-v2" target="_blank">The Art of 64-bit Assembly</a>
+        <a href="#s49134599-08012001" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">64位汇编的艺术</div>
+<div class="i18n-title" data-lang="ja">64ビットアセンブリの芸術</div>
+<div class="i18n-title" data-lang="ko">64비트 어셈블리의 예술</div>
+<div class="i18n-title" data-lang="es">El Arte del Ensamblador de 64 bits</div>
+<div class="i18n-title" data-lang="de">Die Kunst der 64-Bit-Assemblierung</div>
+
+      <div class="story-meta">
+        130pts | 64c | <a href="https://news.ycombinator.com/item?id=49134599" target="_blank">HN#49134599</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">No Starch Press released &#x27;The Art of 64-bit Assembly&#x27; v2, an ~800-page book on x64 assembly programming for Windows using MASM. The marketing copy mentions AI-generated code, which triggered HN commenters who found it off-putting. ［Article behind Cloudflare, based on title + discussion］</div>
+        <span class="i18n-text" data-lang="zh">No Starch Press 发布了《64位汇编的艺术》第二版，一本约800页的 Windows x64 汇编编程书籍，使用 MASM。营销文案提到了 AI 生成的代码，这让 HN 评论者感到反感。［文章在 Cloudflare 后面，基于标题和讨论］</span>
+<span class="i18n-text" data-lang="ja">No Starch Press が64ビットアセンブリの芸術v2をリリースした。MASM を使用した Windows 向け x64 アセンブリプログラミングの約800ページの本。マーケティングコピーが AI 生成コードに言及しており、HN のコメンターには不評だった。［記事は Cloudflare の背後、タイトル+議論に基づく］</span>
+<span class="i18n-text" data-lang="ko">No Starch Press가 &#x27;64비트 어셈블리의 예술&#x27; v2를 출시했다. MASM을 사용한 Windows용 x64 어셈블리 프로그래밍에 관한 약 800페이지 책이다. 마케팅 카피가 AI 생성 코드를 언급해서 HN 댓글러들의 반감을 샀다. ［기사는 Cloudflare 뒤에 있음, 제목 + 토론 기반］</span>
+<span class="i18n-text" data-lang="es">No Starch Press lanzo &#x27;The Art of 64-bit Assembly&#x27; v2, un libro de ~800 paginas sobre programacion en ensamblador x64 para Windows usando MASM. El texto de marketing menciona codigo generado por IA, lo que molesto a los comentaristas de HN. ［Articulo detras de Cloudflare, basado en titulo + discusion］</span>
+<span class="i18n-text" data-lang="de">No Starch Press veroeffentlichte &#x27;The Art of 64-bit Assembly&#x27; v2, ein ~800-seitiges Buch ueber x64-Assemblerprogrammierung fuer Windows mit MASM. Der Marketingtext erwaehnt KI-generierten Code, was HN-Kommentatoren abstoessig fanden. ［Artikel hinter Cloudflare, basierend auf Titel + Diskussion］</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">An 800-page assembly book gets roasted not for its content, but for starting with &#x27;you can ask AI to do this but it&#x27;ll suck.&#x27; The irony of anti-AI marketing copy that reads like it was written by AI is not lost on anyone.</div>
+        <span class="i18n-text" data-lang="zh">一本800页的汇编书被喷，不是因为内容，而是因为开头写着&#x27;你可以让AI来做这个但它会很烂&#x27;。反AI的营销文案读起来像是AI写的，这个讽刺没人会忽视。</span>
+<span class="i18n-text" data-lang="ja">800ページのアセンブリ本が内容ではなく、AI に頼めるけどダメだろうという書き出しで炎上。アンチ AI のマーケティングコピーが AI が書いたように読めるという皮肉は誰も見逃していない。</span>
+<span class="i18n-text" data-lang="ko">800페이지짜리 어셈블리 책이 내용이 아니라 &#x27;AI한테 시킬 수 있지만 별로일 거야&#x27;로 시작해서 욕먹고 있다. AI가 쓴 것 같은 반AI 마케팅 카피의 아이러니를 아무도 놓치지 않았다.</span>
+<span class="i18n-text" data-lang="es">Un libro de ensamblador de 800 paginas es criticado no por su contenido, sino por empezar con &#x27;puedes pedirle a la IA que haga esto pero sera malo&#x27;. La ironia de un texto de marketing anti-IA que parece escrito por IA no pasa desapercibida para nadie.</span>
+<span class="i18n-text" data-lang="de">Ein 800-seitiges Assembler-Buch wird nicht wegen seines Inhalts kritisiert, sondern weil es mit &#x27;du kannst KI danach fragen, aber es wird schlecht sein&#x27; anfaengt. Die Ironie eines Anti-KI-Marketingtextes, der sich liest, als waere er von KI geschrieben, entgeht niemandem.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"What is going on in this thread? It&#x27;s a nearly 800-page book about the art of programming. Somehow the discussion is 50+ comments of &#x27;I don&#x27;t like the first sentence of the marketing copy&#x27;."</div>
+          <div class="comment-i18n" data-lang="zh">这个帖子怎么回事？这是一本近800页关于编程艺术的书。不知怎的，讨论变成了50多条&#x27;我不喜欢营销文案的第一句话&#x27;的评论。</div>
+<div class="comment-i18n" data-lang="ja">このスレッドどうなってるの？プログラミングの芸術についての約800ページの本なのに。なぜか議論はマーケティングコピーの最初の文が気に入らないという50以上のコメントになっている。</div>
+<div class="comment-i18n" data-lang="ko">이 스레드 뭐야? 프로그래밍의 예술에 관한 거의 800페이지짜리 책인데. 어쩌다 토론이 &#x27;마케팅 카피 첫 문장이 마음에 안 든다&#x27;는 댓글 50개 이상으로 변했지.</div>
+<div class="comment-i18n" data-lang="es">Que esta pasando en este hilo? Es un libro de casi 800 paginas sobre el arte de programar. De alguna manera la discusion es 50+ comentarios de &#x27;no me gusta la primera frase del texto de marketing&#x27;.</div>
+<div class="comment-i18n" data-lang="de">Was ist in diesem Thread los? Es ist ein fast 800-seitiges Buch ueber die Kunst des Programmierens. Irgendwie besteht die Diskussion aus 50+ Kommentaren von &#x27;Ich mag den ersten Satz des Marketingtextes nicht&#x27;.</div>
+
+          <div class="comment-author">-- skippyfish</div>
+        </div><div class="comment">
+          <div class="comment-text">"Starting with &#x27;you can ask AI to... ［but it&#x27;ll do an incomplete and bad job］&#x27; and then launching into a hundred words of AI-produced text is not very appetizing."</div>
+          <div class="comment-i18n" data-lang="zh">以&#x27;你可以问AI...［但它会做得不完整且糟糕］&#x27;开头，然后展开一百字的AI生成文本，这不太吸引人。</div>
+<div class="comment-i18n" data-lang="ja">AIに聞けば...［でも不完全で下手な仕事をする］から始めて、100語のAI生成テキストを展開するのは、あまり食欲をそそらない。</div>
+<div class="comment-i18n" data-lang="ko">&#x27;AI에게 물어볼 수 있지만...［불완전하고 형편없는 일을 할 것이다］&#x27;로 시작해서 AI가 생성한 텍스트 100단어를 펼치는 건 별로 식욕을 돋우지 않는다.</div>
+<div class="comment-i18n" data-lang="es">Empezar con &#x27;puedes preguntarle a la IA... ［pero hara un trabajo incompleto y malo］&#x27; y luego lanzarse con cien palabras de texto producido por IA no es muy apetecible.</div>
+<div class="comment-i18n" data-lang="de">Mit &#x27;du kannst KI fragen... ［aber sie wird unvollstaendige und schlechte Arbeit leisten］&#x27; anzufangen und dann hundert Woerter KI-produzierten Text zu schreiben, ist nicht sehr appetitlich.</div>
+
+          <div class="comment-author">-- tensegrist</div>
+        </div><div class="comment">
+          <div class="comment-text">"Weird title for a book on assembly for x64 on Windows using MASM. There are other 64-bit OSes, CPUs and assemblers."</div>
+          <div class="comment-i18n" data-lang="zh">一本关于使用MASM在Windows上进行x64汇编的书，标题很奇怪。还有其他64位操作系统、CPU和汇编器。</div>
+<div class="comment-i18n" data-lang="ja">MASMを使ったWindows上のx64アセンブリの本にしては変なタイトルだ。他にも64ビットOS、CPU、アセンブラがある。</div>
+<div class="comment-i18n" data-lang="ko">MASM을 사용하는 Windows의 x64 어셈블리 책치고 이상한 제목이다. 다른 64비트 OS, CPU, 어셈블러도 있다.</div>
+<div class="comment-i18n" data-lang="es">Titulo raro para un libro sobre ensamblador para x64 en Windows usando MASM. Hay otros sistemas operativos, CPUs y ensambladores de 64 bits.</div>
+<div class="comment-i18n" data-lang="de">Seltsamer Titel fuer ein Buch ueber Assembler fuer x64 unter Windows mit MASM. Es gibt andere 64-Bit-Betriebssysteme, CPUs und Assembler.</div>
+
+          <div class="comment-author">-- Someone</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#assembly</span><span class="tag">#programming</span><span class="tag">#books</span><span class="tag">#x64</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-08-01T16:51:00Z</div>
