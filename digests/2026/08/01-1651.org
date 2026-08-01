@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-08-01 16:51:00 UT UTC
+#+DATE: 2026-08-01T16:51:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Ripgrep crashes, GitHub has no replacement, and Charlie Stross would like a word with Sam Altman
+
+* Highlights
+- ripgrep's musl binaries crash under load - turns out malloc is hard
+- Canada quietly signs surveillance treaty it previously opposed
+- Charlie Stross on why he'd rather hang AI grifters than use their tools
+
+* Stories
+
+** RipGrep musl binaries occasionally segfault during very-large searches :rust:debugging:musl:performance:
+:PROPERTIES:
+:ID:       49133889
+:URL:      https://github.com/BurntSushi/ripgrep/issues/3494
+:HN_URL:   https://news.ycombinator.com/item?id=49133889
+:POINTS:   164
+:COMMENTS: 93
+:BY:       throwaway2037
+:END:
+
+*** TLDR
+Ripgrep built with musl libc crashes with SIGSEGV during large concurrent searches. The culprit is musl's mallocng allocator choking on high thread contention in opendir() calls. Affects OpenAI Codex's bundled rg binary. Reproduces on 20GB+ trees with 1.8M files.
+
+*** Take
+The tool everyone uses to search code occasionally corrupts its own heap when you push it hard enough. Peak irony that this was discovered in OpenAI's Codex, which presumably uses rg to let AI agents grep through your codebase before hallucinating solutions.
+
+*** Comments
+
+**** Orphis
+:PROPERTIES:
+:COMMENT_ID: 49134201
+:END:
+I get why people don't bother replacing musl's default allocator, but in an app whose purpose is to be FAST, I find it weird they haven't bothered. mallocng is bad at dealing with contention during multithreading.
+
+**** dosman33
+:PROPERTIES:
+:COMMENT_ID: 49134456
+:END:
+Anyone running ripgrep on an HPC cluster against a large cluster filesystem needs to stop and redesign their workflow. This generates high amounts of small I/O which is the Achilles heel of any large cluster filesystem.
+
+**** hyperpape
+:PROPERTIES:
+:COMMENT_ID: 49134512
+:END:
+The analysis of the kernel bug may be a better thing to link to: https://github.com/dfoxfranke/ripgrep-3494-analysis
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+RipGrep的musl二进制文件在超大搜索时偶尔段错误
+***** TLDR
+使用musl libc构建的Ripgrep在大型并发搜索时崩溃并出现SIGSEGV。罪魁祸首是musl的mallocng分配器在opendir()调用中的高线程争用时卡住。影响OpenAI Codex捆绑的rg二进制文件。在20GB+、180万文件的目录树中可复现。
+***** Take
+每个人用来搜索代码的工具在你足够用力时偶尔会损坏自己的堆。讽刺的是这是在OpenAI的Codex中发现的，它大概用rg来让AI代理在你的代码库中grep然后幻觉出解决方案。
+***** Comments
+- 我理解为什么人们懒得替换musl的默认分配器，但在一个以快速为目的的应用中，我觉得很奇怪他们没有费心。mallocng在多线程争用时表现很差。
+- 任何在HPC集群上对大型集群文件系统运行ripgrep的人都需要停下来重新设计工作流程。这会产生大量小型I/O，这是任何大型集群文件系统的致命弱点。
+- 内核bug的分析可能是更好的链接：https://github.com/dfoxfranke/ripgrep-3494-analysis
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+RipGrepのmuslバイナリが超大規模検索時に時々セグフォルト
+***** TLDR
+musl libcでビルドされたRipgrepが大規模な並行検索時にSIGSEGVでクラッシュ。原因はmuslのmallocngアロケータがopendir()呼び出しでの高いスレッド競合に対処できないこと。OpenAI Codexにバンドルされているrgバイナリに影響。20GB以上、180万ファイルのツリーで再現。
+***** Take
+皆がコード検索に使うツールが、十分にプッシュすると時々自分のヒープを破壊する。これがOpenAIのCodexで発見されたのは最高の皮肉だ。CodexはおそらくAIエージェントにコードベースをgrepさせてから解決策を幻覚させている。
+***** Comments
+- muslのデフォルトアロケータを置き換える手間を省く理由は分かるが、高速化が目的のアプリで置き換えていないのは不思議だ。mallocngはマルチスレッドでの競合処理が苦手。
+- HPCクラスタで大規模クラスタファイルシステムに対してripgrepを実行している人は、ワークフローを再設計すべき。小さなI/Oを大量に発生させ、これは大規模クラスタファイルシステムの弱点だ。
+- カーネルバグの分析の方がリンク先として良いかも：https://github.com/dfoxfranke/ripgrep-3494-analysis
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+RipGrep musl 바이너리가 초대형 검색 시 간헐적으로 세그폴트 발생
+***** TLDR
+musl libc로 빌드된 Ripgrep이 대규모 동시 검색 시 SIGSEGV로 크래시. 원인은 musl의 mallocng 할당자가 opendir() 호출에서 높은 스레드 경합을 처리하지 못하는 것. OpenAI Codex에 번들된 rg 바이너리에 영향. 20GB+ 트리에서 180만 파일로 재현.
+***** Take
+모두가 코드 검색에 사용하는 도구가 충분히 밀어붙이면 가끔 자체 힙을 손상시킨다. OpenAI Codex에서 발견된 것이 최고의 아이러니다. Codex는 아마 AI 에이전트가 코드베이스를 grep한 후 해결책을 환각하게 할 것이다.
+***** Comments
+- musl의 기본 할당자를 교체하는 수고를 피하는 이유는 이해하지만, 빠른 것이 목적인 앱에서 교체하지 않은 건 이상하다. mallocng는 멀티스레딩에서 경합 처리가 나쁘다.
+- HPC 클러스터에서 대규모 클러스터 파일시스템에 ripgrep을 실행하는 사람은 워크플로우를 재설계해야 한다. 이는 많은 양의 작은 I/O를 생성하며 이는 대규모 클러스터 파일시스템의 아킬레스건이다.
+- 커널 버그 분석이 더 좋은 링크일 수 있다: https://github.com/dfoxfranke/ripgrep-3494-analysis
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los binarios musl de RipGrep ocasionalmente fallan con segfault durante búsquedas muy grandes
+***** TLDR
+Ripgrep compilado con musl libc falla con SIGSEGV durante búsquedas concurrentes grandes. El culpable es el asignador mallocng de musl atascándose en alta contención de hilos en llamadas opendir(). Afecta al binario rg incluido en OpenAI Codex. Se reproduce en árboles de 20GB+ con 1.8M archivos.
+***** Take
+La herramienta que todos usan para buscar código ocasionalmente corrompe su propio heap cuando la presionas lo suficiente. La ironía máxima es que esto fue descubierto en Codex de OpenAI, que presumiblemente usa rg para que los agentes de IA hagan grep en tu código antes de alucinar soluciones.
+***** Comments
+- Entiendo por qué la gente no se molesta en reemplazar el asignador por defecto de musl, pero en una app cuyo propósito es ser RÁPIDA, me parece raro que no lo hayan hecho. mallocng es malo manejando contención en multihilo.
+- Cualquiera ejecutando ripgrep en un clúster HPC contra un sistema de archivos de clúster grande necesita parar y rediseñar su flujo de trabajo. Esto genera grandes cantidades de I/O pequeño que es el talón de Aquiles de cualquier sistema de archivos de clúster grande.
+- El análisis del bug del kernel puede ser mejor enlace: https://github.com/dfoxfranke/ripgrep-3494-analysis
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+RipGrep musl-Binaries segfaulten gelegentlich bei sehr großen Suchen
+***** TLDR
+Ripgrep mit musl libc kompiliert stürzt bei großen parallelen Suchen mit SIGSEGV ab. Schuld ist musls mallocng-Allokator, der bei hoher Thread-Konkurrenz in opendir()-Aufrufen versagt. Betrifft das rg-Binary in OpenAI Codex. Reproduzierbar in 20GB+ Bäumen mit 1,8M Dateien.
+***** Take
+Das Tool, das jeder zum Code-Durchsuchen nutzt, korrumpiert gelegentlich seinen eigenen Heap, wenn man es hart genug rannimmt. Höchste Ironie, dass dies in OpenAIs Codex entdeckt wurde, das vermutlich rg nutzt, damit AI-Agenten durch deine Codebase greppen, bevor sie Lösungen halluzinieren.
+***** Comments
+- Ich verstehe, warum Leute sich nicht die Mühe machen, musls Standard-Allokator zu ersetzen, aber bei einer App deren Zweck SCHNELLIGKEIT ist, finde ich es seltsam. mallocng ist schlecht bei Konkurrenz im Multithreading.
+- Jeder, der ripgrep auf einem HPC-Cluster gegen ein großes Cluster-Dateisystem laufen lässt, sollte aufhören und seinen Workflow neu designen. Das erzeugt große Mengen kleiner I/O, was die Achillesferse jedes großen Cluster-Dateisystems ist.
+- Die Analyse des Kernel-Bugs ist vielleicht der bessere Link: https://github.com/dfoxfranke/ripgrep-3494-analysis
+** A Surveillance Treaty in Disguise: Canada Signs UN Cybercrime Convention :privacy:surveillance:canada:policy:
+:PROPERTIES:
+:ID:       49134694
+:URL:      https://www.michaelgeist.ca/2026/07/a-surveillance-treaty-in-disguise-the-trouble-with-canadas-quiet-decision-to-sign-the-un-cybercrime-convention/
+:HN_URL:   https://news.ycombinator.com/item?id=49134694
+:POINTS:   134
+:COMMENTS: 62
+:BY:       iamnothere
+:END:
+
+*** TLDR
+Canada quietly signed the UN Cybercrime Convention in mid-July after skipping the signing ceremony 9 months ago alongside the US and other allies. The treaty, which began as a Russian initiative to displace the Budapest Convention, requires real-time interception powers and cross-border data sharing. Signatories include Russia, China, Iran, and North Korea. Twenty Canadian orgs including Amnesty warned against signing.
+
+*** Take
+Canada said 'we'll sit this one out' last October, watched Russia and North Korea sign, then snuck back in during the summer when nobody was paying attention. The treaty is less about cybercrime and more about giving authoritarian regimes a legal framework to demand your data for thoughtcrimes.
+
+*** Comments
+
+**** Waterluvian
+:PROPERTIES:
+:COMMENT_ID: 49135012
+:END:
+It feels like there's this weird layer to domestic and international politics where you do a lot of signalling to one audience while simultaneously winking at other audiences that you're not actually serious. I feel like WYSIWYG politics is what most of us want, but probably doesn't actually work.
+
+**** panarchy
+:PROPERTIES:
+:COMMENT_ID: 49135234
+:END:
+Canada is so lucky to have someone like Michael Geist. He's been reporting on and doing in depth investigations on privacy invasions for about 2 decades now.
+
+**** leonvoss
+:PROPERTIES:
+:COMMENT_ID: 49135456
+:END:
+As of May 2026, the following 76 participants have signed the treaty: Algeria, Angola, Australia, Austria, Azerbaijan, Belarus, Belgium, Brazil, Brunei, Burkina Faso, Cambodia, Columbia, Chile, China, Costa Rica, Ivory Coast, Cuba, Czechia, North Korea...
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+伪装的监控条约：加拿大签署联合国网络犯罪公约
+***** TLDR
+加拿大在七月中旬悄悄签署了联合国网络犯罪公约，此前9个月与美国及其他盟友一起缺席了签署仪式。该条约最初是俄罗斯为取代布达佩斯公约而发起的，要求实时拦截权力和跨境数据共享。签署国包括俄罗斯、中国、伊朗和朝鲜。包括国际特赦组织在内的20个加拿大组织警告不要签署。
+***** Take
+加拿大去年十月说'我们不参加了'，看着俄罗斯和朝鲜签字，然后在夏天没人注意的时候偷偷回来了。这个条约与其说是关于网络犯罪，不如说是给威权政权一个法律框架来索要你的思想犯罪数据。
+***** Comments
+- 感觉国内和国际政治中有这种奇怪的层次，你对一个观众做很多信号传递，同时对其他观众眨眼表示你并不是认真的。我觉得所见即所得的政治是我们大多数人想要的，但可能实际上行不通。
+- 加拿大有Michael Geist这样的人真是太幸运了。他报道和深入调查隐私侵犯已经大约20年了。
+- 截至2026年5月，以下76个参与者签署了该条约：阿尔及利亚、安哥拉、澳大利亚、奥地利、阿塞拜疆、白俄罗斯、比利时、巴西、文莱、布基纳法索、柬埔寨、哥伦比亚、智利、中国、哥斯达黎加、科特迪瓦、古巴、捷克、朝鲜...
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+偽装した監視条約：カナダが国連サイバー犯罪条約に署名
+***** TLDR
+カナダは7月中旬にひっそりと国連サイバー犯罪条約に署名した。9ヶ月前には米国や他の同盟国と共に署名式を欠席していた。この条約はブダペスト条約に取って代わるためのロシアの主導で始まり、リアルタイム傍受権限と国境を越えたデータ共有を要求している。署名国にはロシア、中国、イラン、北朝鮮が含まれる。アムネスティを含む20のカナダ組織が署名に警告した。
+***** Take
+カナダは去年10月に「今回は見送る」と言い、ロシアと北朝鮮が署名するのを見て、誰も注目していない夏にこっそり戻ってきた。この条約はサイバー犯罪というより、独裁政権が思想犯罪であなたのデータを要求する法的枠組みを与えるものだ。
+***** Comments
+- 国内政治と国際政治には奇妙な層があるように感じる。ある聴衆には多くのシグナルを送りながら、他の聴衆には本気じゃないとウィンクする。WYSIWYGな政治が私たちのほとんどが望むものだが、おそらく実際には機能しない。
+- カナダにはMichael Geistのような人がいて本当に幸運だ。彼は約20年間、プライバシー侵害について報告し詳細な調査を行ってきた。
+- 2026年5月現在、以下の76の参加者が条約に署名した：アルジェリア、アンゴラ、オーストラリア、オーストリア、アゼルバイジャン、ベラルーシ、ベルギー、ブラジル、ブルネイ、ブルキナファソ、カンボジア、コロンビア、チリ、中国、コスタリカ、コートジボワール、キューバ、チェコ、北朝鮮...
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+위장된 감시 조약: 캐나다가 UN 사이버범죄 협약에 서명
+***** TLDR
+캐나다는 7월 중순에 조용히 UN 사이버범죄 협약에 서명했다. 9개월 전 미국 및 다른 동맹국들과 함께 서명식에 불참했었다. 이 조약은 부다페스트 협약을 대체하기 위한 러시아 주도로 시작되었으며, 실시간 감청 권한과 국경 간 데이터 공유를 요구한다. 서명국에는 러시아, 중국, 이란, 북한이 포함된다. 국제앰네스티를 포함한 20개 캐나다 단체가 서명에 경고했다.
+***** Take
+캐나다는 작년 10월에 '이번엔 빠지겠다'고 말하고, 러시아와 북한이 서명하는 것을 지켜본 후, 아무도 관심 없는 여름에 슬쩍 돌아왔다. 이 조약은 사이버범죄보다 독재 정권이 사상범죄로 당신의 데이터를 요구할 수 있는 법적 프레임워크를 제공하는 것에 가깝다.
+***** Comments
+- 국내외 정치에는 이상한 층이 있는 것 같다. 한 청중에게는 많은 신호를 보내면서 다른 청중에게는 진심이 아니라고 윙크한다. WYSIWYG 정치가 우리 대부분이 원하는 것이지만, 아마 실제로는 작동하지 않을 것이다.
+- 캐나다는 Michael Geist 같은 사람이 있어서 정말 행운이다. 그는 약 20년간 프라이버시 침해에 대해 보도하고 심층 조사해왔다.
+- 2026년 5월 현재 다음 76개 참가국이 조약에 서명했다: 알제리, 앙골라, 호주, 오스트리아, 아제르바이잔, 벨라루스, 벨기에, 브라질, 브루나이, 부르키나파소, 캄보디아, 콜롬비아, 칠레, 중국, 코스타리카, 코트디부아르, 쿠바, 체코, 북한...
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un Tratado de Vigilancia Disfrazado: Canadá Firma la Convención de la ONU sobre Ciberdelincuencia
+***** TLDR
+Canadá firmó silenciosamente la Convención de la ONU sobre Ciberdelincuencia a mediados de julio después de saltarse la ceremonia de firma hace 9 meses junto con EEUU y otros aliados. El tratado, que comenzó como una iniciativa rusa para desplazar la Convención de Budapest, requiere poderes de interceptación en tiempo real y compartición de datos transfronteriza. Los signatarios incluyen Rusia, China, Irán y Corea del Norte. Veinte organizaciones canadienses incluyendo Amnistía advirtieron contra la firma.
+***** Take
+Canadá dijo 'nos quedamos fuera' en octubre pasado, vio a Rusia y Corea del Norte firmar, y luego volvió a escondidas en verano cuando nadie estaba prestando atención. El tratado trata menos de ciberdelincuencia y más de dar a regímenes autoritarios un marco legal para exigir tus datos por delitos de pensamiento.
+***** Comments
+- Siento que hay esta capa extraña en la política nacional e internacional donde haces muchas señales a una audiencia mientras simultáneamente guiñas a otras audiencias que no eres realmente serio. Siento que la política WYSIWYG es lo que la mayoría queremos, pero probablemente no funciona realmente.
+- Canadá tiene mucha suerte de tener a alguien como Michael Geist. Ha estado reportando y haciendo investigaciones profundas sobre invasiones de privacidad durante unos 2 décadas.
+- A mayo de 2026, los siguientes 76 participantes han firmado el tratado: Argelia, Angola, Australia, Austria, Azerbaiyán, Bielorrusia, Bélgica, Brasil, Brunéi, Burkina Faso, Camboya, Colombia, Chile, China, Costa Rica, Costa de Marfil, Cuba, Chequia, Corea del Norte...
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein getarnter Überwachungsvertrag: Kanada unterzeichnet UN-Cybercrime-Konvention
+***** TLDR
+Kanada unterzeichnete still Mitte Juli die UN-Cybercrime-Konvention, nachdem es vor 9 Monaten zusammen mit den USA und anderen Verbündeten die Unterzeichnungszeremonie übersprungen hatte. Der Vertrag, der als russische Initiative begann um die Budapest-Konvention zu verdrängen, erfordert Echtzeit-Abhörbefugnisse und grenzüberschreitenden Datenaustausch. Unterzeichner sind Russland, China, Iran und Nordkorea. Zwanzig kanadische Organisationen einschließlich Amnesty warnten vor der Unterzeichnung.
+***** Take
+Kanada sagte letzten Oktober 'wir bleiben draußen', sah zu wie Russland und Nordkorea unterschrieben, und schlich dann im Sommer zurück, als niemand aufpasste. Der Vertrag dreht sich weniger um Cyberkriminalität und mehr darum, autoritären Regimen einen rechtlichen Rahmen zu geben, um deine Daten für Gedankenverbrechen zu fordern.
+***** Comments
+- Es fühlt sich an, als gäbe es diese seltsame Ebene in der Innen- und Außenpolitik, wo man einem Publikum viel signalisiert, während man gleichzeitig anderen Publikum zuzwinkert, dass man es nicht ernst meint. Ich glaube, WYSIWYG-Politik ist was die meisten von uns wollen, aber wahrscheinlich nicht wirklich funktioniert.
+- Kanada hat großes Glück, jemanden wie Michael Geist zu haben. Er berichtet und macht tiefgehende Untersuchungen zu Datenschutzverletzungen seit etwa 2 Jahrzehnten.
+- Stand Mai 2026 haben folgende 76 Teilnehmer den Vertrag unterzeichnet: Algerien, Angola, Australien, Österreich, Aserbaidschan, Belarus, Belgien, Brasilien, Brunei, Burkina Faso, Kambodscha, Kolumbien, Chile, China, Costa Rica, Elfenbeinküste, Kuba, Tschechien, Nordkorea...
+** GitHub has alternatives, but no replacement :github:opensource:infrastructure:
+:PROPERTIES:
+:ID:       49135365
+:URL:      https://lalitm.com/post/github-alternatives/
+:HN_URL:   https://news.ycombinator.com/item?id=49135365
+:POINTS:   57
+:COMMENTS: 60
+:BY:       lalitmaganti
+:END:
+
+*** TLDR
+There are plenty of Git hosting alternatives (GitLab, SourceHut, Codeberg, Radicle, Forgejo) but none reproduce GitHub's social layer: shared identities, conventions, and discovery. Self-hosting solves hosting but kills contribution friction and discoverability. Even Ghostty is leaving GitHub due to outages but has no obvious destination.
+
+*** Take
+The author spent years self-hosting Gitea and reached the same conclusion we all do: nobody wants to create yet another account to file a bug report about your hobby project. GitHub won not by being good, but by being where everyone already is. It's the QWERTY of code hosting.
+
+*** Comments
+
+**** cedws
+:PROPERTIES:
+:COMMENT_ID: 49135567
+:END:
+Running a git forge is easy, I find the social coding/network effect the stickiest part of GitHub. I wanted to leave GitHub but I'm still stuck there. What it would take for me to finally leave is some kind of federation of the social features.
+
+**** abc42
+:PROPERTIES:
+:COMMENT_ID: 49135678
+:END:
+Sourcehut: https://sr.ht. Not a drop-in replacement for GitHub admittedly. Requires a bit more skills from the contributors. Which might be a fine gate, actually.
+
+**** VCFundedGenYer
+:PROPERTIES:
+:COMMENT_ID: 49135789
+:END:
+Codeberg is a perfect drop-in 1:1 replacement. I find this article to be pretentious nonsense.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+GitHub有替代品，但没有替代者
+***** TLDR
+有很多Git托管替代品（GitLab、SourceHut、Codeberg、Radicle、Forgejo），但没有一个能复制GitHub的社交层：共享身份、惯例和发现。自托管解决了托管问题但增加了贡献摩擦并破坏了可发现性。就连Ghostty也因为宕机问题要离开GitHub，但没有明显的目的地。
+***** Take
+作者花了好几年自托管Gitea，得出了我们都会得出的结论：没人想为你的业余项目创建另一个账号来提交bug报告。GitHub获胜不是因为它好，而是因为每个人都已经在那里了。它是代码托管界的QWERTY。
+***** Comments
+- 运行git forge很容易，我发现社交编码/网络效应是GitHub最粘人的部分。我想离开GitHub但仍然被困在那里。让我最终离开需要某种社交功能的联邦化。
+- Sourcehut: https://sr.ht。确实不是GitHub的直接替代品。需要贡献者有更多技能。这可能实际上是个不错的门槛。
+- Codeberg是完美的1:1直接替代品。我觉得这篇文章是装腔作势的废话。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GitHubには代替品があるが、置き換えはない
+***** TLDR
+Gitホスティングの代替品は多い（GitLab、SourceHut、Codeberg、Radicle、Forgejo）が、GitHubのソーシャルレイヤーを再現できるものはない：共有アイデンティティ、慣習、発見機能。セルフホスティングはホスティングを解決するがコントリビューションの摩擦を増やし発見性を殺す。Ghosttyさえも障害のためGitHubを離れようとしているが、明確な行き先がない。
+***** Take
+著者は何年もGiteaをセルフホストして、私たち全員が到達する同じ結論に達した：誰もあなたの趣味プロジェクトのバグレポートのためにまた別のアカウントを作りたくない。GitHubは良いから勝ったのではなく、みんながすでにそこにいるから勝った。コードホスティングのQWERTYだ。
+***** Comments
+- git forgeの運用は簡単だが、ソーシャルコーディング/ネットワーク効果がGitHubで最も粘着性のある部分だと思う。GitHubを離れたかったが、まだ囚われている。最終的に離れるには、ソーシャル機能の何らかの連合が必要だ。
+- Sourcehut: https://sr.ht。確かにGitHubの直接的な代替ではない。コントリビューターにもう少しスキルが必要。それは実際には良いゲートかもしれない。
+- Codebergは完璧な1:1の直接代替品だ。この記事は気取ったナンセンスだと思う。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+GitHub에는 대안이 있지만 대체제는 없다
+***** TLDR
+Git 호스팅 대안은 많다(GitLab, SourceHut, Codeberg, Radicle, Forgejo). 하지만 GitHub의 소셜 레이어를 재현하는 것은 없다: 공유된 정체성, 관례, 발견 기능. 셀프 호스팅은 호스팅을 해결하지만 기여 마찰을 높이고 발견 가능성을 죽인다. Ghostty도 장애 때문에 GitHub을 떠나려 하지만 명확한 목적지가 없다.
+***** Take
+저자는 몇 년간 Gitea를 셀프 호스팅하며 우리 모두가 도달하는 같은 결론에 도달했다: 아무도 당신의 취미 프로젝트에 버그 리포트를 제출하기 위해 또 다른 계정을 만들고 싶어하지 않는다. GitHub은 좋아서 이긴 게 아니라 모두가 이미 거기 있어서 이겼다. 코드 호스팅의 QWERTY다.
+***** Comments
+- git forge 운영은 쉽다. 소셜 코딩/네트워크 효과가 GitHub에서 가장 끈적한 부분이라고 본다. GitHub을 떠나고 싶었지만 여전히 거기 갇혀 있다. 최종적으로 떠나려면 소셜 기능의 어떤 종류의 연합이 필요하다.
+- Sourcehut: https://sr.ht. 확실히 GitHub의 직접 대체품은 아니다. 기여자에게 조금 더 많은 기술이 필요하다. 사실 괜찮은 게이트일 수도 있다.
+- Codeberg는 완벽한 1:1 직접 대체품이다. 이 글은 거만한 헛소리라고 본다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+GitHub tiene alternativas, pero no reemplazo
+***** TLDR
+Hay muchas alternativas de hosting Git (GitLab, SourceHut, Codeberg, Radicle, Forgejo) pero ninguna reproduce la capa social de GitHub: identidades compartidas, convenciones y descubrimiento. El autoalojamiento resuelve el hosting pero mata la fricción de contribución y la descubribilidad. Incluso Ghostty está dejando GitHub por las caídas pero no tiene destino obvio.
+***** Take
+El autor pasó años autoalojando Gitea y llegó a la misma conclusión que todos: nadie quiere crear otra cuenta para reportar un bug de tu proyecto hobby. GitHub no ganó por ser bueno, sino por ser donde todos ya están. Es el QWERTY del hosting de código.
+***** Comments
+- Ejecutar un forge git es fácil, encuentro que la codificación social/efecto de red es la parte más pegajosa de GitHub. Quería dejar GitHub pero sigo atrapado ahí. Lo que me haría finalmente irme es algún tipo de federación de las características sociales.
+- Sourcehut: https://sr.ht. Admitidamente no es un reemplazo directo de GitHub. Requiere un poco más de habilidades de los contribuidores. Lo cual podría ser un buen filtro, de hecho.
+- Codeberg es un reemplazo perfecto 1:1. Encuentro este artículo pretencioso sin sentido.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+GitHub hat Alternativen, aber keinen Ersatz
+***** TLDR
+Es gibt viele Git-Hosting-Alternativen (GitLab, SourceHut, Codeberg, Radicle, Forgejo) aber keine reproduziert GitHubs soziale Schicht: geteilte Identitäten, Konventionen und Entdeckung. Selbst-Hosting löst das Hosting-Problem, aber tötet Beitragsfriktion und Auffindbarkeit. Selbst Ghostty verlässt GitHub wegen Ausfällen, hat aber kein offensichtliches Ziel.
+***** Take
+Der Autor verbrachte Jahre mit Selbst-Hosting von Gitea und kam zur selben Schlussfolgerung wie wir alle: Niemand will noch einen Account erstellen, um einen Bug für dein Hobby-Projekt zu melden. GitHub gewann nicht durch Qualität, sondern weil alle schon da sind. Es ist das QWERTY des Code-Hostings.
+***** Comments
+- Eine Git-Forge zu betreiben ist einfach, ich finde den sozialen Coding/Netzwerkeffekt den klebrigsten Teil von GitHub. Ich wollte GitHub verlassen, aber hänge immer noch fest. Was mich endlich gehen lassen würde, wäre eine Art Föderation der sozialen Features.
+- Sourcehut: https://sr.ht. Zugegebenermaßen kein direkter GitHub-Ersatz. Erfordert etwas mehr Fähigkeiten von den Beitragenden. Was vielleicht tatsächlich ein guter Filter ist.
+- Codeberg ist ein perfekter 1:1 direkter Ersatz. Ich finde diesen Artikel ist prätentiöser Unsinn.
+** Solid Queue 1.6.0 now supports fiber workers :ruby:rails:concurrency:backend:
+:PROPERTIES:
+:ID:       49132083
+:URL:      https://github.com/rails/solid_queue/releases/tag/v1.6.0
+:HN_URL:   https://news.ycombinator.com/item?id=49132083
+:POINTS:   68
+:COMMENTS: 24
+:BY:       earcar
+:END:
+
+*** TLDR
+Rails' Solid Queue 1.6.0 adds fiber execution mode using the Async gem. Fibers are cooperative concurrency primitives that let you run many concurrent jobs in a single thread, perfect for I/O-bound work. Less memory overhead than processes, more predictable than threads.
+
+*** Take
+Rails continues its quiet crusade to make Sidekiq unnecessary. Fibers are basically threads that pinky-promise not to preempt each other, which is either genius or terrifying depending on how much you trust your async code to actually yield.
+
+*** Comments
+
+**** symfoniq
+:PROPERTIES:
+:COMMENT_ID: 49132345
+:END:
+As someone who spent 15+ years doing Ruby/Rails, it's nice to see this land. That said, these days you'll pry the BEAM from my cold, dead hands. It's hard to go back to any other concurrency story.
+
+**** jherdman
+:PROPERTIES:
+:COMMENT_ID: 49132456
+:END:
+Has anyone played with this and SQLite? I have no data, just a hunch, but I'd think this is a recipe for corruption if you're doing lots of writes.
+
+**** ramon156
+:PROPERTIES:
+:COMMENT_ID: 49132567
+:END:
+So fibers are a lot like threads but they're more scoped to a task that can be paused and resumed, that's kinda cool
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Solid Queue 1.6.0 现在支持 fiber workers
+***** TLDR
+Rails的Solid Queue 1.6.0使用Async gem添加了fiber执行模式。Fiber是协作式并发原语，让你在单个线程中运行多个并发任务，非常适合I/O密集型工作。比进程的内存开销更小，比线程更可预测。
+***** Take
+Rails继续悄悄地进行着让Sidekiq变得多余的运动。Fiber基本上是保证不会互相抢占的线程，这要么是天才要么是恐怖的，取决于你有多信任你的异步代码会真正让出执行权。
+***** Comments
+- 作为一个做了15年以上Ruby/Rails的人，很高兴看到这个功能落地。话虽如此，现在你得从我冷冰冰的死手中夺走BEAM。很难再回到任何其他并发方案了。
+- 有人用这个和SQLite一起试过吗？我没有数据，只是直觉，但我觉得如果你做很多写操作，这是损坏的配方。
+- 所以fiber很像线程，但它们更局限于可以暂停和恢复的任务，这很酷
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Solid Queue 1.6.0がfiber workersをサポート
+***** TLDR
+RailsのSolid Queue 1.6.0がAsync gemを使用したfiber実行モードを追加。Fiberは協調的な並行性プリミティブで、単一スレッドで多くの並行ジョブを実行でき、I/Oバウンドな作業に最適。プロセスよりメモリオーバーヘッドが少なく、スレッドより予測可能。
+***** Take
+RailsはSidekiqを不要にする静かな聖戦を続けている。Fiberは基本的に互いにプリエンプトしないと小指で約束するスレッドで、これは天才的か恐ろしいかは非同期コードが実際にyieldすることをどれだけ信頼するかによる。
+***** Comments
+- 15年以上Ruby/Railsをやってきた者として、これが入るのを見るのは嬉しい。とはいえ、最近はBEAMを私の冷たい死んだ手から引き剥がす必要がある。他の並行性の話に戻るのは難しい。
+- 誰かこれをSQLiteで試した人いる？データはないけど直感で、書き込みが多いと破損のレシピになりそう。
+- つまりfiberはスレッドに似てるけど、一時停止して再開できるタスクにスコープが限定されてるんだね、クールだ
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Solid Queue 1.6.0이 fiber workers를 지원
+***** TLDR
+Rails의 Solid Queue 1.6.0이 Async gem을 사용한 fiber 실행 모드를 추가. Fiber는 협력적 동시성 프리미티브로, 단일 스레드에서 많은 동시 작업을 실행할 수 있어 I/O 바운드 작업에 완벽. 프로세스보다 메모리 오버헤드가 적고 스레드보다 예측 가능.
+***** Take
+Rails는 Sidekiq을 불필요하게 만드는 조용한 십자군 운동을 계속하고 있다. Fiber는 기본적으로 서로 선점하지 않겠다고 새끼손가락 약속하는 스레드인데, 이게 천재적인지 무서운지는 비동기 코드가 실제로 yield하는지 얼마나 신뢰하느냐에 달렸다.
+***** Comments
+- Ruby/Rails를 15년 이상 해온 사람으로서 이게 들어가는 걸 보니 좋다. 그렇지만 요즘은 BEAM을 내 차갑고 죽은 손에서 뺏어야 할 것이다. 다른 동시성 이야기로 돌아가기 어렵다.
+- 누가 이걸 SQLite랑 써본 적 있나? 데이터는 없고 직감인데, 쓰기를 많이 하면 손상의 레시피가 될 것 같다.
+- 그래서 fiber는 스레드랑 많이 비슷한데 일시 정지하고 재개할 수 있는 작업에 더 범위가 제한되어 있구나, 꽤 쿨하다
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Solid Queue 1.6.0 ahora soporta fiber workers
+***** TLDR
+Solid Queue 1.6.0 de Rails añade modo de ejecución con fibers usando la gema Async. Los fibers son primitivas de concurrencia cooperativa que te permiten ejecutar muchos trabajos concurrentes en un solo hilo, perfecto para trabajo I/O-bound. Menos overhead de memoria que los procesos, más predecible que los hilos.
+***** Take
+Rails continúa su cruzada silenciosa para hacer Sidekiq innecesario. Los fibers son básicamente hilos que prometen con el meñique no adelantarse entre sí, lo cual es genial o terrorífico dependiendo de cuánto confíes en que tu código async realmente ceda.
+***** Comments
+- Como alguien que pasó más de 15 años haciendo Ruby/Rails, es agradable ver esto llegar. Dicho esto, hoy en día tendrás que arrancar el BEAM de mis frías manos muertas. Es difícil volver a cualquier otra historia de concurrencia.
+- ¿Alguien ha jugado con esto y SQLite? No tengo datos, solo una corazonada, pero pensaría que esto es una receta para corrupción si estás haciendo muchas escrituras.
+- Entonces los fibers son muy parecidos a los hilos pero están más limitados a una tarea que puede pausarse y reanudarse, eso es bastante cool
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Solid Queue 1.6.0 unterstützt jetzt Fiber-Worker
+***** TLDR
+Rails' Solid Queue 1.6.0 fügt Fiber-Ausführungsmodus mit dem Async-Gem hinzu. Fibers sind kooperative Nebenläufigkeitsprimitive, die es ermöglichen, viele gleichzeitige Jobs in einem Thread auszuführen, perfekt für I/O-gebundene Arbeit. Weniger Speicher-Overhead als Prozesse, vorhersehbarer als Threads.
+***** Take
+Rails setzt seinen leisen Kreuzzug fort, Sidekiq überflüssig zu machen. Fibers sind im Grunde Threads, die sich mit dem kleinen Finger versprechen, sich nicht gegenseitig zu unterbrechen, was entweder genial oder erschreckend ist, je nachdem wie sehr du deinem async Code vertraust, tatsächlich nachzugeben.
+***** Comments
+- Als jemand, der 15+ Jahre Ruby/Rails gemacht hat, ist es schön das ankommen zu sehen. Allerdings werden Sie mir heute die BEAM aus meinen kalten, toten Händen reißen müssen. Es ist schwer, zu irgendeiner anderen Nebenläufigkeitsgeschichte zurückzukehren.
+- Hat jemand damit mit SQLite gespielt? Ich habe keine Daten, nur eine Ahnung, aber ich denke das ist ein Rezept für Korruption, wenn du viele Schreibvorgänge machst.
+- Also Fibers sind sehr wie Threads, aber sie sind mehr auf eine Aufgabe beschränkt, die pausiert und fortgesetzt werden kann, das ist ziemlich cool
+** Charlie Stross – On the non-use of AI in my writing process :ai:writing:copyright:opinion:
+:PROPERTIES:
+:ID:       49134038
+:URL:      https://www.antipope.org/charlie/blog-static/2026/08/on-the-non-use-of-ai-in-my-wri.html
+:HN_URL:   https://news.ycombinator.com/item?id=49134038
+:POINTS:   57
+:COMMENTS: 46
+:BY:       jwx48
+:END:
+
+*** TLDR
+Hugo-winning SF author Charlie Stross declares he doesn't use LLMs and never will. His reasons: he writes compulsively for fun, LLMs were trained on stolen content (he's party to the Anthropic class action), his blog gets hammered by scraping bots, and any prompts you feed become training data. He sees a narrow use case for local models analyzing his own manuscripts for timeline mapping.
+
+*** Take
+A man who's been imagining futures for 40 years looks at the current AI hype and sees nothing but digital pickpockets selling your luggage back to you. When he says Sam Altman makes him 'question the wisdom of having stopped' hanging people for theft, I believe him.
+
+*** Comments
+
+**** LogicFailsMe
+:PROPERTIES:
+:COMMENT_ID: 49134201
+:END:
+I don't think it ever gets old to restate that the singularity and all of the grandiose promises of a glorious 21st century have last mile problems. But this post seems to mostly channel Harlan Ellison.
+
+**** ainch
+:PROPERTIES:
+:COMMENT_ID: 49134345
+:END:
+I could be misreading this, but I hope the author doesn't think GANs are used in LLMs. They are cool, though.
+
+**** FL33TW00D
+:PROPERTIES:
+:COMMENT_ID: 49134456
+:END:
+Crazy how forward thinking this guy was in 2005 vs today.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Charlie Stross – 关于我写作过程中不使用AI
+***** TLDR
+雨果奖获奖科幻作家Charlie Stross宣布他不使用LLM，也永远不会使用。他的理由是：他写作是出于热爱和乐趣，LLM是用偷来的内容训练的（他是Anthropic集体诉讼的当事人），他的博客被爬虫机器人疯狂抓取，而且你提供的任何提示都会成为训练数据。他认为本地模型分析自己的手稿进行时间线映射有狭窄的用例。
+***** Take
+一个40年来一直在想象未来的人看着当前的AI热潮，只看到数字扒手把你的行李卖回给你。当他说Sam Altman让他'质疑停止绞死窃贼的智慧'时，我相信他。
+***** Comments
+- 我认为重申奇点和所有辉煌21世纪的宏大承诺都有最后一英里问题永远不会过时。但这篇帖子似乎主要在模仿Harlan Ellison。
+- 我可能理解错了，但我希望作者不认为GAN被用于LLM。不过它们确实很酷。
+- 疯狂的是这个人2005年的前瞻性思维vs今天。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Charlie Stross – 執筆プロセスでAIを使わない理由
+***** TLDR
+ヒューゴー賞受賞SF作家Charlie Strossは、LLMを使わないし使うつもりもないと宣言。理由は：彼は楽しみで強迫的に書いている、LLMは盗まれたコンテンツで訓練された（彼はAnthropicの集団訴訟の当事者）、彼のブログはスクレイピングボットに叩かれている、そして入力したプロンプトは訓練データになる。彼は自分の原稿をタイムラインマッピングのために分析するローカルモデルの狭いユースケースを見ている。
+***** Take
+40年間未来を想像してきた男が現在のAIハイプを見て、デジタルスリがあなたの荷物を売り返しているだけだと見ている。彼がSam Altmanは「窃盗で人を吊るすのをやめた知恵を疑問視させる」と言うとき、私は彼を信じる。
+***** Comments
+- シンギュラリティと輝かしい21世紀の壮大な約束がすべてラストマイル問題を抱えていることを再確認するのは決して古くならないと思う。しかしこの投稿は主にHarlan Ellisonをチャネリングしているようだ。
+- 読み間違いかもしれないが、著者がGANがLLMで使われていると思っていないことを願う。でも、クールだけどね。
+- この人が2005年にどれだけ先見の明があったか vs 今日、クレイジーだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Charlie Stross – 내 글쓰기 과정에서 AI를 사용하지 않는 이유
+***** TLDR
+휴고상 수상 SF 작가 Charlie Stross는 LLM을 사용하지 않으며 앞으로도 사용하지 않겠다고 선언. 이유: 그는 재미로 강박적으로 글을 쓴다, LLM은 도난된 콘텐츠로 훈련되었다(그는 Anthropic 집단소송의 당사자), 그의 블로그는 스크래핑 봇에 두들겨 맞고 있다, 입력한 모든 프롬프트는 훈련 데이터가 된다. 그는 자신의 원고를 타임라인 매핑을 위해 분석하는 로컬 모델의 좁은 사용 사례를 본다.
+***** Take
+40년간 미래를 상상해온 남자가 현재 AI 열풍을 보고 디지털 소매치기가 당신 짐을 되팔고 있는 것만 본다. 그가 Sam Altman이 '도둑을 교수형에 처하는 것을 멈춘 지혜를 의심하게 만든다'고 말할 때, 나는 그를 믿는다.
+***** Comments
+- 특이점과 영광스러운 21세기의 모든 웅장한 약속들이 라스트 마일 문제가 있다고 다시 말하는 것은 절대 오래되지 않는다고 생각한다. 하지만 이 글은 주로 Harlan Ellison을 채널링하는 것 같다.
+- 내가 잘못 읽고 있을 수 있지만, 저자가 GAN이 LLM에 사용된다고 생각하지 않기를 바란다. 근데 쿨하긴 하다.
+- 이 사람이 2005년에 얼마나 선견지명이 있었는지 vs 오늘, 미쳤다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Charlie Stross – Sobre el no uso de IA en mi proceso de escritura
+***** TLDR
+El autor de ciencia ficción ganador del Hugo Charlie Stross declara que no usa LLMs y nunca lo hará. Sus razones: escribe compulsivamente por diversión, los LLMs fueron entrenados con contenido robado (es parte de la demanda colectiva contra Anthropic), su blog es golpeado por bots de scraping, y cualquier prompt que alimentas se convierte en datos de entrenamiento. Ve un caso de uso limitado para modelos locales analizando sus propios manuscritos para mapeo de líneas temporales.
+***** Take
+Un hombre que ha estado imaginando futuros por 40 años mira el hype actual de IA y solo ve carteristas digitales vendiéndote tu equipaje de vuelta. Cuando dice que Sam Altman le hace 'cuestionar la sabiduría de haber dejado de' colgar gente por robo, le creo.
+***** Comments
+- No creo que nunca envejezca reafirmar que la singularidad y todas las promesas grandiosas de un glorioso siglo 21 tienen problemas de última milla. Pero este post parece canalizar principalmente a Harlan Ellison.
+- Podría estar leyendo mal esto, pero espero que el autor no piense que las GANs se usan en los LLMs. Son cool, sin embargo.
+- Loco lo visionario que era este tipo en 2005 vs hoy.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Charlie Stross – Über die Nicht-Verwendung von KI in meinem Schreibprozess
+***** TLDR
+Hugo-prämierter SF-Autor Charlie Stross erklärt, dass er keine LLMs verwendet und niemals wird. Seine Gründe: Er schreibt zwanghaft zum Spaß, LLMs wurden mit gestohlenem Inhalt trainiert (er ist Partei der Anthropic-Sammelklage), sein Blog wird von Scraping-Bots gehämmert, und alle eingegebenen Prompts werden zu Trainingsdaten. Er sieht einen engen Anwendungsfall für lokale Modelle, die seine eigenen Manuskripte für Timeline-Mapping analysieren.
+***** Take
+Ein Mann, der seit 40 Jahren Zukunft imaginiert, schaut auf den aktuellen KI-Hype und sieht nichts als digitale Taschendiebe, die dir dein Gepäck zurückverkaufen. Wenn er sagt, Sam Altman lässt ihn 'die Weisheit hinterfragen, aufgehört zu haben,' Leute für Diebstahl zu hängen, glaube ich ihm.
+***** Comments
+- Ich denke, es wird nie alt zu wiederholen, dass die Singularität und all die großartigen Versprechen eines glorreichen 21. Jahrhunderts Letzte-Meile-Probleme haben. Aber dieser Post scheint hauptsächlich Harlan Ellison zu channeln.
+- Ich könnte das falsch lesen, aber ich hoffe, der Autor denkt nicht, dass GANs in LLMs verwendet werden. Sie sind aber cool.
+- Verrückt, wie vorausschauend dieser Typ 2005 war vs heute.

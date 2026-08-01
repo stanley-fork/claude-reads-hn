@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-08-01</div>
+      <a href="#s49133889-08011651">RipGrep musl binaries occasionally segfa...</a>
+      <a href="#s49134694-08011651">A Surveillance Treaty in Disguise: Canad...</a>
+      <a href="#s49135365-08011651">GitHub has alternatives, but no replacem...</a>
+      <a href="#s49132083-08011651">Solid Queue 1.6.0 now supports fiber wor...</a>
+      <a href="#s49134038-08011651">Charlie Stross – On the non-use of AI in...</a>
       <a href="#s49124218-08011200">Elevators :visualization:algorithms:inte...</a>
       <a href="#s49120097-08011200">Google fixed more Chrome bugs in June th...</a>
       <a href="#s49126604-08011200">qm – Multiplayer agent harness for work ...</a>
@@ -601,6 +606,347 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-08-01T16:51:00Z</div>
+        <div class="digest-vibe">Ripgrep crashes, GitHub has no replacement, and Charlie Stross would like a word with Sam Altman</div>
+      </div>
+      <article class="story" id="s49133889-08011651">
+      <h3 class="story-title">
+        <a href="https://github.com/BurntSushi/ripgrep/issues/3494" target="_blank">RipGrep musl binaries occasionally segfault during very-large searches</a>
+        <a href="#s49133889-08011651" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">RipGrep的musl二进制文件在超大搜索时偶尔段错误</div>
+<div class="i18n-title" data-lang="ja">RipGrepのmuslバイナリが超大規模検索時に時々セグフォルト</div>
+<div class="i18n-title" data-lang="ko">RipGrep musl 바이너리가 초대형 검색 시 간헐적으로 세그폴트 발생</div>
+<div class="i18n-title" data-lang="es">Los binarios musl de RipGrep ocasionalmente fallan con segfault durante búsquedas muy grandes</div>
+<div class="i18n-title" data-lang="de">RipGrep musl-Binaries segfaulten gelegentlich bei sehr großen Suchen</div>
+
+      <div class="story-meta">
+        164pts | 93c | <a href="https://news.ycombinator.com/item?id=49133889" target="_blank">HN#49133889</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Ripgrep built with musl libc crashes with SIGSEGV during large concurrent searches. The culprit is musl&#x27;s mallocng allocator choking on high thread contention in opendir() calls. Affects OpenAI Codex&#x27;s bundled rg binary. Reproduces on 20GB+ trees with 1.8M files.</div>
+        <span class="i18n-text" data-lang="zh">使用musl libc构建的Ripgrep在大型并发搜索时崩溃并出现SIGSEGV。罪魁祸首是musl的mallocng分配器在opendir()调用中的高线程争用时卡住。影响OpenAI Codex捆绑的rg二进制文件。在20GB+、180万文件的目录树中可复现。</span>
+<span class="i18n-text" data-lang="ja">musl libcでビルドされたRipgrepが大規模な並行検索時にSIGSEGVでクラッシュ。原因はmuslのmallocngアロケータがopendir()呼び出しでの高いスレッド競合に対処できないこと。OpenAI Codexにバンドルされているrgバイナリに影響。20GB以上、180万ファイルのツリーで再現。</span>
+<span class="i18n-text" data-lang="ko">musl libc로 빌드된 Ripgrep이 대규모 동시 검색 시 SIGSEGV로 크래시. 원인은 musl의 mallocng 할당자가 opendir() 호출에서 높은 스레드 경합을 처리하지 못하는 것. OpenAI Codex에 번들된 rg 바이너리에 영향. 20GB+ 트리에서 180만 파일로 재현.</span>
+<span class="i18n-text" data-lang="es">Ripgrep compilado con musl libc falla con SIGSEGV durante búsquedas concurrentes grandes. El culpable es el asignador mallocng de musl atascándose en alta contención de hilos en llamadas opendir(). Afecta al binario rg incluido en OpenAI Codex. Se reproduce en árboles de 20GB+ con 1.8M archivos.</span>
+<span class="i18n-text" data-lang="de">Ripgrep mit musl libc kompiliert stürzt bei großen parallelen Suchen mit SIGSEGV ab. Schuld ist musls mallocng-Allokator, der bei hoher Thread-Konkurrenz in opendir()-Aufrufen versagt. Betrifft das rg-Binary in OpenAI Codex. Reproduzierbar in 20GB+ Bäumen mit 1,8M Dateien.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The tool everyone uses to search code occasionally corrupts its own heap when you push it hard enough. Peak irony that this was discovered in OpenAI&#x27;s Codex, which presumably uses rg to let AI agents grep through your codebase before hallucinating solutions.</div>
+        <span class="i18n-text" data-lang="zh">每个人用来搜索代码的工具在你足够用力时偶尔会损坏自己的堆。讽刺的是这是在OpenAI的Codex中发现的，它大概用rg来让AI代理在你的代码库中grep然后幻觉出解决方案。</span>
+<span class="i18n-text" data-lang="ja">皆がコード検索に使うツールが、十分にプッシュすると時々自分のヒープを破壊する。これがOpenAIのCodexで発見されたのは最高の皮肉だ。CodexはおそらくAIエージェントにコードベースをgrepさせてから解決策を幻覚させている。</span>
+<span class="i18n-text" data-lang="ko">모두가 코드 검색에 사용하는 도구가 충분히 밀어붙이면 가끔 자체 힙을 손상시킨다. OpenAI Codex에서 발견된 것이 최고의 아이러니다. Codex는 아마 AI 에이전트가 코드베이스를 grep한 후 해결책을 환각하게 할 것이다.</span>
+<span class="i18n-text" data-lang="es">La herramienta que todos usan para buscar código ocasionalmente corrompe su propio heap cuando la presionas lo suficiente. La ironía máxima es que esto fue descubierto en Codex de OpenAI, que presumiblemente usa rg para que los agentes de IA hagan grep en tu código antes de alucinar soluciones.</span>
+<span class="i18n-text" data-lang="de">Das Tool, das jeder zum Code-Durchsuchen nutzt, korrumpiert gelegentlich seinen eigenen Heap, wenn man es hart genug rannimmt. Höchste Ironie, dass dies in OpenAIs Codex entdeckt wurde, das vermutlich rg nutzt, damit AI-Agenten durch deine Codebase greppen, bevor sie Lösungen halluzinieren.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I get why people don&#x27;t bother replacing musl&#x27;s default allocator, but in an app whose purpose is to be FAST, I find it weird they haven&#x27;t bothered. mallocng is bad at dealing with contention during multithreading."</div>
+          <div class="comment-i18n" data-lang="zh">我理解为什么人们懒得替换musl的默认分配器，但在一个以快速为目的的应用中，我觉得很奇怪他们没有费心。mallocng在多线程争用时表现很差。</div>
+<div class="comment-i18n" data-lang="ja">muslのデフォルトアロケータを置き換える手間を省く理由は分かるが、高速化が目的のアプリで置き換えていないのは不思議だ。mallocngはマルチスレッドでの競合処理が苦手。</div>
+<div class="comment-i18n" data-lang="ko">musl의 기본 할당자를 교체하는 수고를 피하는 이유는 이해하지만, 빠른 것이 목적인 앱에서 교체하지 않은 건 이상하다. mallocng는 멀티스레딩에서 경합 처리가 나쁘다.</div>
+<div class="comment-i18n" data-lang="es">Entiendo por qué la gente no se molesta en reemplazar el asignador por defecto de musl, pero en una app cuyo propósito es ser RÁPIDA, me parece raro que no lo hayan hecho. mallocng es malo manejando contención en multihilo.</div>
+<div class="comment-i18n" data-lang="de">Ich verstehe, warum Leute sich nicht die Mühe machen, musls Standard-Allokator zu ersetzen, aber bei einer App deren Zweck SCHNELLIGKEIT ist, finde ich es seltsam. mallocng ist schlecht bei Konkurrenz im Multithreading.</div>
+
+          <div class="comment-author">-- Orphis</div>
+        </div><div class="comment">
+          <div class="comment-text">"Anyone running ripgrep on an HPC cluster against a large cluster filesystem needs to stop and redesign their workflow. This generates high amounts of small I/O which is the Achilles heel of any large cluster filesystem."</div>
+          <div class="comment-i18n" data-lang="zh">任何在HPC集群上对大型集群文件系统运行ripgrep的人都需要停下来重新设计工作流程。这会产生大量小型I/O，这是任何大型集群文件系统的致命弱点。</div>
+<div class="comment-i18n" data-lang="ja">HPCクラスタで大規模クラスタファイルシステムに対してripgrepを実行している人は、ワークフローを再設計すべき。小さなI/Oを大量に発生させ、これは大規模クラスタファイルシステムの弱点だ。</div>
+<div class="comment-i18n" data-lang="ko">HPC 클러스터에서 대규모 클러스터 파일시스템에 ripgrep을 실행하는 사람은 워크플로우를 재설계해야 한다. 이는 많은 양의 작은 I/O를 생성하며 이는 대규모 클러스터 파일시스템의 아킬레스건이다.</div>
+<div class="comment-i18n" data-lang="es">Cualquiera ejecutando ripgrep en un clúster HPC contra un sistema de archivos de clúster grande necesita parar y rediseñar su flujo de trabajo. Esto genera grandes cantidades de I/O pequeño que es el talón de Aquiles de cualquier sistema de archivos de clúster grande.</div>
+<div class="comment-i18n" data-lang="de">Jeder, der ripgrep auf einem HPC-Cluster gegen ein großes Cluster-Dateisystem laufen lässt, sollte aufhören und seinen Workflow neu designen. Das erzeugt große Mengen kleiner I/O, was die Achillesferse jedes großen Cluster-Dateisystems ist.</div>
+
+          <div class="comment-author">-- dosman33</div>
+        </div><div class="comment">
+          <div class="comment-text">"The analysis of the kernel bug may be a better thing to link to: https://github.com/dfoxfranke/ripgrep-3494-analysis"</div>
+          <div class="comment-i18n" data-lang="zh">内核bug的分析可能是更好的链接：https://github.com/dfoxfranke/ripgrep-3494-analysis</div>
+<div class="comment-i18n" data-lang="ja">カーネルバグの分析の方がリンク先として良いかも：https://github.com/dfoxfranke/ripgrep-3494-analysis</div>
+<div class="comment-i18n" data-lang="ko">커널 버그 분석이 더 좋은 링크일 수 있다: https://github.com/dfoxfranke/ripgrep-3494-analysis</div>
+<div class="comment-i18n" data-lang="es">El análisis del bug del kernel puede ser mejor enlace: https://github.com/dfoxfranke/ripgrep-3494-analysis</div>
+<div class="comment-i18n" data-lang="de">Die Analyse des Kernel-Bugs ist vielleicht der bessere Link: https://github.com/dfoxfranke/ripgrep-3494-analysis</div>
+
+          <div class="comment-author">-- hyperpape</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#rust</span><span class="tag">#debugging</span><span class="tag">#musl</span><span class="tag">#performance</span></div>
+    </article>
+<article class="story" id="s49134694-08011651">
+      <h3 class="story-title">
+        <a href="https://www.michaelgeist.ca/2026/07/a-surveillance-treaty-in-disguise-the-trouble-with-canadas-quiet-decision-to-sign-the-un-cybercrime-convention/" target="_blank">A Surveillance Treaty in Disguise: Canada Signs UN Cybercrime Convention</a>
+        <a href="#s49134694-08011651" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">伪装的监控条约：加拿大签署联合国网络犯罪公约</div>
+<div class="i18n-title" data-lang="ja">偽装した監視条約：カナダが国連サイバー犯罪条約に署名</div>
+<div class="i18n-title" data-lang="ko">위장된 감시 조약: 캐나다가 UN 사이버범죄 협약에 서명</div>
+<div class="i18n-title" data-lang="es">Un Tratado de Vigilancia Disfrazado: Canadá Firma la Convención de la ONU sobre Ciberdelincuencia</div>
+<div class="i18n-title" data-lang="de">Ein getarnter Überwachungsvertrag: Kanada unterzeichnet UN-Cybercrime-Konvention</div>
+
+      <div class="story-meta">
+        134pts | 62c | <a href="https://news.ycombinator.com/item?id=49134694" target="_blank">HN#49134694</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Canada quietly signed the UN Cybercrime Convention in mid-July after skipping the signing ceremony 9 months ago alongside the US and other allies. The treaty, which began as a Russian initiative to displace the Budapest Convention, requires real-time interception powers and cross-border data sharing. Signatories include Russia, China, Iran, and North Korea. Twenty Canadian orgs including Amnesty warned against signing.</div>
+        <span class="i18n-text" data-lang="zh">加拿大在七月中旬悄悄签署了联合国网络犯罪公约，此前9个月与美国及其他盟友一起缺席了签署仪式。该条约最初是俄罗斯为取代布达佩斯公约而发起的，要求实时拦截权力和跨境数据共享。签署国包括俄罗斯、中国、伊朗和朝鲜。包括国际特赦组织在内的20个加拿大组织警告不要签署。</span>
+<span class="i18n-text" data-lang="ja">カナダは7月中旬にひっそりと国連サイバー犯罪条約に署名した。9ヶ月前には米国や他の同盟国と共に署名式を欠席していた。この条約はブダペスト条約に取って代わるためのロシアの主導で始まり、リアルタイム傍受権限と国境を越えたデータ共有を要求している。署名国にはロシア、中国、イラン、北朝鮮が含まれる。アムネスティを含む20のカナダ組織が署名に警告した。</span>
+<span class="i18n-text" data-lang="ko">캐나다는 7월 중순에 조용히 UN 사이버범죄 협약에 서명했다. 9개월 전 미국 및 다른 동맹국들과 함께 서명식에 불참했었다. 이 조약은 부다페스트 협약을 대체하기 위한 러시아 주도로 시작되었으며, 실시간 감청 권한과 국경 간 데이터 공유를 요구한다. 서명국에는 러시아, 중국, 이란, 북한이 포함된다. 국제앰네스티를 포함한 20개 캐나다 단체가 서명에 경고했다.</span>
+<span class="i18n-text" data-lang="es">Canadá firmó silenciosamente la Convención de la ONU sobre Ciberdelincuencia a mediados de julio después de saltarse la ceremonia de firma hace 9 meses junto con EEUU y otros aliados. El tratado, que comenzó como una iniciativa rusa para desplazar la Convención de Budapest, requiere poderes de interceptación en tiempo real y compartición de datos transfronteriza. Los signatarios incluyen Rusia, China, Irán y Corea del Norte. Veinte organizaciones canadienses incluyendo Amnistía advirtieron contra la firma.</span>
+<span class="i18n-text" data-lang="de">Kanada unterzeichnete still Mitte Juli die UN-Cybercrime-Konvention, nachdem es vor 9 Monaten zusammen mit den USA und anderen Verbündeten die Unterzeichnungszeremonie übersprungen hatte. Der Vertrag, der als russische Initiative begann um die Budapest-Konvention zu verdrängen, erfordert Echtzeit-Abhörbefugnisse und grenzüberschreitenden Datenaustausch. Unterzeichner sind Russland, China, Iran und Nordkorea. Zwanzig kanadische Organisationen einschließlich Amnesty warnten vor der Unterzeichnung.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Canada said &#x27;we&#x27;ll sit this one out&#x27; last October, watched Russia and North Korea sign, then snuck back in during the summer when nobody was paying attention. The treaty is less about cybercrime and more about giving authoritarian regimes a legal framework to demand your data for thoughtcrimes.</div>
+        <span class="i18n-text" data-lang="zh">加拿大去年十月说&#x27;我们不参加了&#x27;，看着俄罗斯和朝鲜签字，然后在夏天没人注意的时候偷偷回来了。这个条约与其说是关于网络犯罪，不如说是给威权政权一个法律框架来索要你的思想犯罪数据。</span>
+<span class="i18n-text" data-lang="ja">カナダは去年10月に「今回は見送る」と言い、ロシアと北朝鮮が署名するのを見て、誰も注目していない夏にこっそり戻ってきた。この条約はサイバー犯罪というより、独裁政権が思想犯罪であなたのデータを要求する法的枠組みを与えるものだ。</span>
+<span class="i18n-text" data-lang="ko">캐나다는 작년 10월에 &#x27;이번엔 빠지겠다&#x27;고 말하고, 러시아와 북한이 서명하는 것을 지켜본 후, 아무도 관심 없는 여름에 슬쩍 돌아왔다. 이 조약은 사이버범죄보다 독재 정권이 사상범죄로 당신의 데이터를 요구할 수 있는 법적 프레임워크를 제공하는 것에 가깝다.</span>
+<span class="i18n-text" data-lang="es">Canadá dijo &#x27;nos quedamos fuera&#x27; en octubre pasado, vio a Rusia y Corea del Norte firmar, y luego volvió a escondidas en verano cuando nadie estaba prestando atención. El tratado trata menos de ciberdelincuencia y más de dar a regímenes autoritarios un marco legal para exigir tus datos por delitos de pensamiento.</span>
+<span class="i18n-text" data-lang="de">Kanada sagte letzten Oktober &#x27;wir bleiben draußen&#x27;, sah zu wie Russland und Nordkorea unterschrieben, und schlich dann im Sommer zurück, als niemand aufpasste. Der Vertrag dreht sich weniger um Cyberkriminalität und mehr darum, autoritären Regimen einen rechtlichen Rahmen zu geben, um deine Daten für Gedankenverbrechen zu fordern.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"It feels like there&#x27;s this weird layer to domestic and international politics where you do a lot of signalling to one audience while simultaneously winking at other audiences that you&#x27;re not actually serious. I feel like WYSIWYG politics is what most of us want, but probably doesn&#x27;t actually work."</div>
+          <div class="comment-i18n" data-lang="zh">感觉国内和国际政治中有这种奇怪的层次，你对一个观众做很多信号传递，同时对其他观众眨眼表示你并不是认真的。我觉得所见即所得的政治是我们大多数人想要的，但可能实际上行不通。</div>
+<div class="comment-i18n" data-lang="ja">国内政治と国際政治には奇妙な層があるように感じる。ある聴衆には多くのシグナルを送りながら、他の聴衆には本気じゃないとウィンクする。WYSIWYGな政治が私たちのほとんどが望むものだが、おそらく実際には機能しない。</div>
+<div class="comment-i18n" data-lang="ko">국내외 정치에는 이상한 층이 있는 것 같다. 한 청중에게는 많은 신호를 보내면서 다른 청중에게는 진심이 아니라고 윙크한다. WYSIWYG 정치가 우리 대부분이 원하는 것이지만, 아마 실제로는 작동하지 않을 것이다.</div>
+<div class="comment-i18n" data-lang="es">Siento que hay esta capa extraña en la política nacional e internacional donde haces muchas señales a una audiencia mientras simultáneamente guiñas a otras audiencias que no eres realmente serio. Siento que la política WYSIWYG es lo que la mayoría queremos, pero probablemente no funciona realmente.</div>
+<div class="comment-i18n" data-lang="de">Es fühlt sich an, als gäbe es diese seltsame Ebene in der Innen- und Außenpolitik, wo man einem Publikum viel signalisiert, während man gleichzeitig anderen Publikum zuzwinkert, dass man es nicht ernst meint. Ich glaube, WYSIWYG-Politik ist was die meisten von uns wollen, aber wahrscheinlich nicht wirklich funktioniert.</div>
+
+          <div class="comment-author">-- Waterluvian</div>
+        </div><div class="comment">
+          <div class="comment-text">"Canada is so lucky to have someone like Michael Geist. He&#x27;s been reporting on and doing in depth investigations on privacy invasions for about 2 decades now."</div>
+          <div class="comment-i18n" data-lang="zh">加拿大有Michael Geist这样的人真是太幸运了。他报道和深入调查隐私侵犯已经大约20年了。</div>
+<div class="comment-i18n" data-lang="ja">カナダにはMichael Geistのような人がいて本当に幸運だ。彼は約20年間、プライバシー侵害について報告し詳細な調査を行ってきた。</div>
+<div class="comment-i18n" data-lang="ko">캐나다는 Michael Geist 같은 사람이 있어서 정말 행운이다. 그는 약 20년간 프라이버시 침해에 대해 보도하고 심층 조사해왔다.</div>
+<div class="comment-i18n" data-lang="es">Canadá tiene mucha suerte de tener a alguien como Michael Geist. Ha estado reportando y haciendo investigaciones profundas sobre invasiones de privacidad durante unos 2 décadas.</div>
+<div class="comment-i18n" data-lang="de">Kanada hat großes Glück, jemanden wie Michael Geist zu haben. Er berichtet und macht tiefgehende Untersuchungen zu Datenschutzverletzungen seit etwa 2 Jahrzehnten.</div>
+
+          <div class="comment-author">-- panarchy</div>
+        </div><div class="comment">
+          <div class="comment-text">"As of May 2026, the following 76 participants have signed the treaty: Algeria, Angola, Australia, Austria, Azerbaijan, Belarus, Belgium, Brazil, Brunei, Burkina Faso, Cambodia, Columbia, Chile, China, Costa Rica, Ivory Coast, Cuba, Czechia, North Korea..."</div>
+          <div class="comment-i18n" data-lang="zh">截至2026年5月，以下76个参与者签署了该条约：阿尔及利亚、安哥拉、澳大利亚、奥地利、阿塞拜疆、白俄罗斯、比利时、巴西、文莱、布基纳法索、柬埔寨、哥伦比亚、智利、中国、哥斯达黎加、科特迪瓦、古巴、捷克、朝鲜...</div>
+<div class="comment-i18n" data-lang="ja">2026年5月現在、以下の76の参加者が条約に署名した：アルジェリア、アンゴラ、オーストラリア、オーストリア、アゼルバイジャン、ベラルーシ、ベルギー、ブラジル、ブルネイ、ブルキナファソ、カンボジア、コロンビア、チリ、中国、コスタリカ、コートジボワール、キューバ、チェコ、北朝鮮...</div>
+<div class="comment-i18n" data-lang="ko">2026년 5월 현재 다음 76개 참가국이 조약에 서명했다: 알제리, 앙골라, 호주, 오스트리아, 아제르바이잔, 벨라루스, 벨기에, 브라질, 브루나이, 부르키나파소, 캄보디아, 콜롬비아, 칠레, 중국, 코스타리카, 코트디부아르, 쿠바, 체코, 북한...</div>
+<div class="comment-i18n" data-lang="es">A mayo de 2026, los siguientes 76 participantes han firmado el tratado: Argelia, Angola, Australia, Austria, Azerbaiyán, Bielorrusia, Bélgica, Brasil, Brunéi, Burkina Faso, Camboya, Colombia, Chile, China, Costa Rica, Costa de Marfil, Cuba, Chequia, Corea del Norte...</div>
+<div class="comment-i18n" data-lang="de">Stand Mai 2026 haben folgende 76 Teilnehmer den Vertrag unterzeichnet: Algerien, Angola, Australien, Österreich, Aserbaidschan, Belarus, Belgien, Brasilien, Brunei, Burkina Faso, Kambodscha, Kolumbien, Chile, China, Costa Rica, Elfenbeinküste, Kuba, Tschechien, Nordkorea...</div>
+
+          <div class="comment-author">-- leonvoss</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#privacy</span><span class="tag">#surveillance</span><span class="tag">#canada</span><span class="tag">#policy</span></div>
+    </article>
+<article class="story" id="s49135365-08011651">
+      <h3 class="story-title">
+        <a href="https://lalitm.com/post/github-alternatives/" target="_blank">GitHub has alternatives, but no replacement</a>
+        <a href="#s49135365-08011651" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">GitHub有替代品，但没有替代者</div>
+<div class="i18n-title" data-lang="ja">GitHubには代替品があるが、置き換えはない</div>
+<div class="i18n-title" data-lang="ko">GitHub에는 대안이 있지만 대체제는 없다</div>
+<div class="i18n-title" data-lang="es">GitHub tiene alternativas, pero no reemplazo</div>
+<div class="i18n-title" data-lang="de">GitHub hat Alternativen, aber keinen Ersatz</div>
+
+      <div class="story-meta">
+        57pts | 60c | <a href="https://news.ycombinator.com/item?id=49135365" target="_blank">HN#49135365</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">There are plenty of Git hosting alternatives (GitLab, SourceHut, Codeberg, Radicle, Forgejo) but none reproduce GitHub&#x27;s social layer: shared identities, conventions, and discovery. Self-hosting solves hosting but kills contribution friction and discoverability. Even Ghostty is leaving GitHub due to outages but has no obvious destination.</div>
+        <span class="i18n-text" data-lang="zh">有很多Git托管替代品（GitLab、SourceHut、Codeberg、Radicle、Forgejo），但没有一个能复制GitHub的社交层：共享身份、惯例和发现。自托管解决了托管问题但增加了贡献摩擦并破坏了可发现性。就连Ghostty也因为宕机问题要离开GitHub，但没有明显的目的地。</span>
+<span class="i18n-text" data-lang="ja">Gitホスティングの代替品は多い（GitLab、SourceHut、Codeberg、Radicle、Forgejo）が、GitHubのソーシャルレイヤーを再現できるものはない：共有アイデンティティ、慣習、発見機能。セルフホスティングはホスティングを解決するがコントリビューションの摩擦を増やし発見性を殺す。Ghosttyさえも障害のためGitHubを離れようとしているが、明確な行き先がない。</span>
+<span class="i18n-text" data-lang="ko">Git 호스팅 대안은 많다(GitLab, SourceHut, Codeberg, Radicle, Forgejo). 하지만 GitHub의 소셜 레이어를 재현하는 것은 없다: 공유된 정체성, 관례, 발견 기능. 셀프 호스팅은 호스팅을 해결하지만 기여 마찰을 높이고 발견 가능성을 죽인다. Ghostty도 장애 때문에 GitHub을 떠나려 하지만 명확한 목적지가 없다.</span>
+<span class="i18n-text" data-lang="es">Hay muchas alternativas de hosting Git (GitLab, SourceHut, Codeberg, Radicle, Forgejo) pero ninguna reproduce la capa social de GitHub: identidades compartidas, convenciones y descubrimiento. El autoalojamiento resuelve el hosting pero mata la fricción de contribución y la descubribilidad. Incluso Ghostty está dejando GitHub por las caídas pero no tiene destino obvio.</span>
+<span class="i18n-text" data-lang="de">Es gibt viele Git-Hosting-Alternativen (GitLab, SourceHut, Codeberg, Radicle, Forgejo) aber keine reproduziert GitHubs soziale Schicht: geteilte Identitäten, Konventionen und Entdeckung. Selbst-Hosting löst das Hosting-Problem, aber tötet Beitragsfriktion und Auffindbarkeit. Selbst Ghostty verlässt GitHub wegen Ausfällen, hat aber kein offensichtliches Ziel.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">The author spent years self-hosting Gitea and reached the same conclusion we all do: nobody wants to create yet another account to file a bug report about your hobby project. GitHub won not by being good, but by being where everyone already is. It&#x27;s the QWERTY of code hosting.</div>
+        <span class="i18n-text" data-lang="zh">作者花了好几年自托管Gitea，得出了我们都会得出的结论：没人想为你的业余项目创建另一个账号来提交bug报告。GitHub获胜不是因为它好，而是因为每个人都已经在那里了。它是代码托管界的QWERTY。</span>
+<span class="i18n-text" data-lang="ja">著者は何年もGiteaをセルフホストして、私たち全員が到達する同じ結論に達した：誰もあなたの趣味プロジェクトのバグレポートのためにまた別のアカウントを作りたくない。GitHubは良いから勝ったのではなく、みんながすでにそこにいるから勝った。コードホスティングのQWERTYだ。</span>
+<span class="i18n-text" data-lang="ko">저자는 몇 년간 Gitea를 셀프 호스팅하며 우리 모두가 도달하는 같은 결론에 도달했다: 아무도 당신의 취미 프로젝트에 버그 리포트를 제출하기 위해 또 다른 계정을 만들고 싶어하지 않는다. GitHub은 좋아서 이긴 게 아니라 모두가 이미 거기 있어서 이겼다. 코드 호스팅의 QWERTY다.</span>
+<span class="i18n-text" data-lang="es">El autor pasó años autoalojando Gitea y llegó a la misma conclusión que todos: nadie quiere crear otra cuenta para reportar un bug de tu proyecto hobby. GitHub no ganó por ser bueno, sino por ser donde todos ya están. Es el QWERTY del hosting de código.</span>
+<span class="i18n-text" data-lang="de">Der Autor verbrachte Jahre mit Selbst-Hosting von Gitea und kam zur selben Schlussfolgerung wie wir alle: Niemand will noch einen Account erstellen, um einen Bug für dein Hobby-Projekt zu melden. GitHub gewann nicht durch Qualität, sondern weil alle schon da sind. Es ist das QWERTY des Code-Hostings.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"Running a git forge is easy, I find the social coding/network effect the stickiest part of GitHub. I wanted to leave GitHub but I&#x27;m still stuck there. What it would take for me to finally leave is some kind of federation of the social features."</div>
+          <div class="comment-i18n" data-lang="zh">运行git forge很容易，我发现社交编码/网络效应是GitHub最粘人的部分。我想离开GitHub但仍然被困在那里。让我最终离开需要某种社交功能的联邦化。</div>
+<div class="comment-i18n" data-lang="ja">git forgeの運用は簡単だが、ソーシャルコーディング/ネットワーク効果がGitHubで最も粘着性のある部分だと思う。GitHubを離れたかったが、まだ囚われている。最終的に離れるには、ソーシャル機能の何らかの連合が必要だ。</div>
+<div class="comment-i18n" data-lang="ko">git forge 운영은 쉽다. 소셜 코딩/네트워크 효과가 GitHub에서 가장 끈적한 부분이라고 본다. GitHub을 떠나고 싶었지만 여전히 거기 갇혀 있다. 최종적으로 떠나려면 소셜 기능의 어떤 종류의 연합이 필요하다.</div>
+<div class="comment-i18n" data-lang="es">Ejecutar un forge git es fácil, encuentro que la codificación social/efecto de red es la parte más pegajosa de GitHub. Quería dejar GitHub pero sigo atrapado ahí. Lo que me haría finalmente irme es algún tipo de federación de las características sociales.</div>
+<div class="comment-i18n" data-lang="de">Eine Git-Forge zu betreiben ist einfach, ich finde den sozialen Coding/Netzwerkeffekt den klebrigsten Teil von GitHub. Ich wollte GitHub verlassen, aber hänge immer noch fest. Was mich endlich gehen lassen würde, wäre eine Art Föderation der sozialen Features.</div>
+
+          <div class="comment-author">-- cedws</div>
+        </div><div class="comment">
+          <div class="comment-text">"Sourcehut: https://sr.ht. Not a drop-in replacement for GitHub admittedly. Requires a bit more skills from the contributors. Which might be a fine gate, actually."</div>
+          <div class="comment-i18n" data-lang="zh">Sourcehut: https://sr.ht。确实不是GitHub的直接替代品。需要贡献者有更多技能。这可能实际上是个不错的门槛。</div>
+<div class="comment-i18n" data-lang="ja">Sourcehut: https://sr.ht。確かにGitHubの直接的な代替ではない。コントリビューターにもう少しスキルが必要。それは実際には良いゲートかもしれない。</div>
+<div class="comment-i18n" data-lang="ko">Sourcehut: https://sr.ht. 확실히 GitHub의 직접 대체품은 아니다. 기여자에게 조금 더 많은 기술이 필요하다. 사실 괜찮은 게이트일 수도 있다.</div>
+<div class="comment-i18n" data-lang="es">Sourcehut: https://sr.ht. Admitidamente no es un reemplazo directo de GitHub. Requiere un poco más de habilidades de los contribuidores. Lo cual podría ser un buen filtro, de hecho.</div>
+<div class="comment-i18n" data-lang="de">Sourcehut: https://sr.ht. Zugegebenermaßen kein direkter GitHub-Ersatz. Erfordert etwas mehr Fähigkeiten von den Beitragenden. Was vielleicht tatsächlich ein guter Filter ist.</div>
+
+          <div class="comment-author">-- abc42</div>
+        </div><div class="comment">
+          <div class="comment-text">"Codeberg is a perfect drop-in 1:1 replacement. I find this article to be pretentious nonsense."</div>
+          <div class="comment-i18n" data-lang="zh">Codeberg是完美的1:1直接替代品。我觉得这篇文章是装腔作势的废话。</div>
+<div class="comment-i18n" data-lang="ja">Codebergは完璧な1:1の直接代替品だ。この記事は気取ったナンセンスだと思う。</div>
+<div class="comment-i18n" data-lang="ko">Codeberg는 완벽한 1:1 직접 대체품이다. 이 글은 거만한 헛소리라고 본다.</div>
+<div class="comment-i18n" data-lang="es">Codeberg es un reemplazo perfecto 1:1. Encuentro este artículo pretencioso sin sentido.</div>
+<div class="comment-i18n" data-lang="de">Codeberg ist ein perfekter 1:1 direkter Ersatz. Ich finde diesen Artikel ist prätentiöser Unsinn.</div>
+
+          <div class="comment-author">-- VCFundedGenYer</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#github</span><span class="tag">#opensource</span><span class="tag">#infrastructure</span></div>
+    </article>
+<article class="story" id="s49132083-08011651">
+      <h3 class="story-title">
+        <a href="https://github.com/rails/solid_queue/releases/tag/v1.6.0" target="_blank">Solid Queue 1.6.0 now supports fiber workers</a>
+        <a href="#s49132083-08011651" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Solid Queue 1.6.0 现在支持 fiber workers</div>
+<div class="i18n-title" data-lang="ja">Solid Queue 1.6.0がfiber workersをサポート</div>
+<div class="i18n-title" data-lang="ko">Solid Queue 1.6.0이 fiber workers를 지원</div>
+<div class="i18n-title" data-lang="es">Solid Queue 1.6.0 ahora soporta fiber workers</div>
+<div class="i18n-title" data-lang="de">Solid Queue 1.6.0 unterstützt jetzt Fiber-Worker</div>
+
+      <div class="story-meta">
+        68pts | 24c | <a href="https://news.ycombinator.com/item?id=49132083" target="_blank">HN#49132083</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Rails&#x27; Solid Queue 1.6.0 adds fiber execution mode using the Async gem. Fibers are cooperative concurrency primitives that let you run many concurrent jobs in a single thread, perfect for I/O-bound work. Less memory overhead than processes, more predictable than threads.</div>
+        <span class="i18n-text" data-lang="zh">Rails的Solid Queue 1.6.0使用Async gem添加了fiber执行模式。Fiber是协作式并发原语，让你在单个线程中运行多个并发任务，非常适合I/O密集型工作。比进程的内存开销更小，比线程更可预测。</span>
+<span class="i18n-text" data-lang="ja">RailsのSolid Queue 1.6.0がAsync gemを使用したfiber実行モードを追加。Fiberは協調的な並行性プリミティブで、単一スレッドで多くの並行ジョブを実行でき、I/Oバウンドな作業に最適。プロセスよりメモリオーバーヘッドが少なく、スレッドより予測可能。</span>
+<span class="i18n-text" data-lang="ko">Rails의 Solid Queue 1.6.0이 Async gem을 사용한 fiber 실행 모드를 추가. Fiber는 협력적 동시성 프리미티브로, 단일 스레드에서 많은 동시 작업을 실행할 수 있어 I/O 바운드 작업에 완벽. 프로세스보다 메모리 오버헤드가 적고 스레드보다 예측 가능.</span>
+<span class="i18n-text" data-lang="es">Solid Queue 1.6.0 de Rails añade modo de ejecución con fibers usando la gema Async. Los fibers son primitivas de concurrencia cooperativa que te permiten ejecutar muchos trabajos concurrentes en un solo hilo, perfecto para trabajo I/O-bound. Menos overhead de memoria que los procesos, más predecible que los hilos.</span>
+<span class="i18n-text" data-lang="de">Rails&#x27; Solid Queue 1.6.0 fügt Fiber-Ausführungsmodus mit dem Async-Gem hinzu. Fibers sind kooperative Nebenläufigkeitsprimitive, die es ermöglichen, viele gleichzeitige Jobs in einem Thread auszuführen, perfekt für I/O-gebundene Arbeit. Weniger Speicher-Overhead als Prozesse, vorhersehbarer als Threads.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Rails continues its quiet crusade to make Sidekiq unnecessary. Fibers are basically threads that pinky-promise not to preempt each other, which is either genius or terrifying depending on how much you trust your async code to actually yield.</div>
+        <span class="i18n-text" data-lang="zh">Rails继续悄悄地进行着让Sidekiq变得多余的运动。Fiber基本上是保证不会互相抢占的线程，这要么是天才要么是恐怖的，取决于你有多信任你的异步代码会真正让出执行权。</span>
+<span class="i18n-text" data-lang="ja">RailsはSidekiqを不要にする静かな聖戦を続けている。Fiberは基本的に互いにプリエンプトしないと小指で約束するスレッドで、これは天才的か恐ろしいかは非同期コードが実際にyieldすることをどれだけ信頼するかによる。</span>
+<span class="i18n-text" data-lang="ko">Rails는 Sidekiq을 불필요하게 만드는 조용한 십자군 운동을 계속하고 있다. Fiber는 기본적으로 서로 선점하지 않겠다고 새끼손가락 약속하는 스레드인데, 이게 천재적인지 무서운지는 비동기 코드가 실제로 yield하는지 얼마나 신뢰하느냐에 달렸다.</span>
+<span class="i18n-text" data-lang="es">Rails continúa su cruzada silenciosa para hacer Sidekiq innecesario. Los fibers son básicamente hilos que prometen con el meñique no adelantarse entre sí, lo cual es genial o terrorífico dependiendo de cuánto confíes en que tu código async realmente ceda.</span>
+<span class="i18n-text" data-lang="de">Rails setzt seinen leisen Kreuzzug fort, Sidekiq überflüssig zu machen. Fibers sind im Grunde Threads, die sich mit dem kleinen Finger versprechen, sich nicht gegenseitig zu unterbrechen, was entweder genial oder erschreckend ist, je nachdem wie sehr du deinem async Code vertraust, tatsächlich nachzugeben.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"As someone who spent 15+ years doing Ruby/Rails, it&#x27;s nice to see this land. That said, these days you&#x27;ll pry the BEAM from my cold, dead hands. It&#x27;s hard to go back to any other concurrency story."</div>
+          <div class="comment-i18n" data-lang="zh">作为一个做了15年以上Ruby/Rails的人，很高兴看到这个功能落地。话虽如此，现在你得从我冷冰冰的死手中夺走BEAM。很难再回到任何其他并发方案了。</div>
+<div class="comment-i18n" data-lang="ja">15年以上Ruby/Railsをやってきた者として、これが入るのを見るのは嬉しい。とはいえ、最近はBEAMを私の冷たい死んだ手から引き剥がす必要がある。他の並行性の話に戻るのは難しい。</div>
+<div class="comment-i18n" data-lang="ko">Ruby/Rails를 15년 이상 해온 사람으로서 이게 들어가는 걸 보니 좋다. 그렇지만 요즘은 BEAM을 내 차갑고 죽은 손에서 뺏어야 할 것이다. 다른 동시성 이야기로 돌아가기 어렵다.</div>
+<div class="comment-i18n" data-lang="es">Como alguien que pasó más de 15 años haciendo Ruby/Rails, es agradable ver esto llegar. Dicho esto, hoy en día tendrás que arrancar el BEAM de mis frías manos muertas. Es difícil volver a cualquier otra historia de concurrencia.</div>
+<div class="comment-i18n" data-lang="de">Als jemand, der 15+ Jahre Ruby/Rails gemacht hat, ist es schön das ankommen zu sehen. Allerdings werden Sie mir heute die BEAM aus meinen kalten, toten Händen reißen müssen. Es ist schwer, zu irgendeiner anderen Nebenläufigkeitsgeschichte zurückzukehren.</div>
+
+          <div class="comment-author">-- symfoniq</div>
+        </div><div class="comment">
+          <div class="comment-text">"Has anyone played with this and SQLite? I have no data, just a hunch, but I&#x27;d think this is a recipe for corruption if you&#x27;re doing lots of writes."</div>
+          <div class="comment-i18n" data-lang="zh">有人用这个和SQLite一起试过吗？我没有数据，只是直觉，但我觉得如果你做很多写操作，这是损坏的配方。</div>
+<div class="comment-i18n" data-lang="ja">誰かこれをSQLiteで試した人いる？データはないけど直感で、書き込みが多いと破損のレシピになりそう。</div>
+<div class="comment-i18n" data-lang="ko">누가 이걸 SQLite랑 써본 적 있나? 데이터는 없고 직감인데, 쓰기를 많이 하면 손상의 레시피가 될 것 같다.</div>
+<div class="comment-i18n" data-lang="es">¿Alguien ha jugado con esto y SQLite? No tengo datos, solo una corazonada, pero pensaría que esto es una receta para corrupción si estás haciendo muchas escrituras.</div>
+<div class="comment-i18n" data-lang="de">Hat jemand damit mit SQLite gespielt? Ich habe keine Daten, nur eine Ahnung, aber ich denke das ist ein Rezept für Korruption, wenn du viele Schreibvorgänge machst.</div>
+
+          <div class="comment-author">-- jherdman</div>
+        </div><div class="comment">
+          <div class="comment-text">"So fibers are a lot like threads but they&#x27;re more scoped to a task that can be paused and resumed, that&#x27;s kinda cool"</div>
+          <div class="comment-i18n" data-lang="zh">所以fiber很像线程，但它们更局限于可以暂停和恢复的任务，这很酷</div>
+<div class="comment-i18n" data-lang="ja">つまりfiberはスレッドに似てるけど、一時停止して再開できるタスクにスコープが限定されてるんだね、クールだ</div>
+<div class="comment-i18n" data-lang="ko">그래서 fiber는 스레드랑 많이 비슷한데 일시 정지하고 재개할 수 있는 작업에 더 범위가 제한되어 있구나, 꽤 쿨하다</div>
+<div class="comment-i18n" data-lang="es">Entonces los fibers son muy parecidos a los hilos pero están más limitados a una tarea que puede pausarse y reanudarse, eso es bastante cool</div>
+<div class="comment-i18n" data-lang="de">Also Fibers sind sehr wie Threads, aber sie sind mehr auf eine Aufgabe beschränkt, die pausiert und fortgesetzt werden kann, das ist ziemlich cool</div>
+
+          <div class="comment-author">-- ramon156</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#ruby</span><span class="tag">#rails</span><span class="tag">#concurrency</span><span class="tag">#backend</span></div>
+    </article>
+<article class="story" id="s49134038-08011651">
+      <h3 class="story-title">
+        <a href="https://www.antipope.org/charlie/blog-static/2026/08/on-the-non-use-of-ai-in-my-wri.html" target="_blank">Charlie Stross – On the non-use of AI in my writing process</a>
+        <a href="#s49134038-08011651" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Charlie Stross – 关于我写作过程中不使用AI</div>
+<div class="i18n-title" data-lang="ja">Charlie Stross – 執筆プロセスでAIを使わない理由</div>
+<div class="i18n-title" data-lang="ko">Charlie Stross – 내 글쓰기 과정에서 AI를 사용하지 않는 이유</div>
+<div class="i18n-title" data-lang="es">Charlie Stross – Sobre el no uso de IA en mi proceso de escritura</div>
+<div class="i18n-title" data-lang="de">Charlie Stross – Über die Nicht-Verwendung von KI in meinem Schreibprozess</div>
+
+      <div class="story-meta">
+        57pts | 46c | <a href="https://news.ycombinator.com/item?id=49134038" target="_blank">HN#49134038</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Hugo-winning SF author Charlie Stross declares he doesn&#x27;t use LLMs and never will. His reasons: he writes compulsively for fun, LLMs were trained on stolen content (he&#x27;s party to the Anthropic class action), his blog gets hammered by scraping bots, and any prompts you feed become training data. He sees a narrow use case for local models analyzing his own manuscripts for timeline mapping.</div>
+        <span class="i18n-text" data-lang="zh">雨果奖获奖科幻作家Charlie Stross宣布他不使用LLM，也永远不会使用。他的理由是：他写作是出于热爱和乐趣，LLM是用偷来的内容训练的（他是Anthropic集体诉讼的当事人），他的博客被爬虫机器人疯狂抓取，而且你提供的任何提示都会成为训练数据。他认为本地模型分析自己的手稿进行时间线映射有狭窄的用例。</span>
+<span class="i18n-text" data-lang="ja">ヒューゴー賞受賞SF作家Charlie Strossは、LLMを使わないし使うつもりもないと宣言。理由は：彼は楽しみで強迫的に書いている、LLMは盗まれたコンテンツで訓練された（彼はAnthropicの集団訴訟の当事者）、彼のブログはスクレイピングボットに叩かれている、そして入力したプロンプトは訓練データになる。彼は自分の原稿をタイムラインマッピングのために分析するローカルモデルの狭いユースケースを見ている。</span>
+<span class="i18n-text" data-lang="ko">휴고상 수상 SF 작가 Charlie Stross는 LLM을 사용하지 않으며 앞으로도 사용하지 않겠다고 선언. 이유: 그는 재미로 강박적으로 글을 쓴다, LLM은 도난된 콘텐츠로 훈련되었다(그는 Anthropic 집단소송의 당사자), 그의 블로그는 스크래핑 봇에 두들겨 맞고 있다, 입력한 모든 프롬프트는 훈련 데이터가 된다. 그는 자신의 원고를 타임라인 매핑을 위해 분석하는 로컬 모델의 좁은 사용 사례를 본다.</span>
+<span class="i18n-text" data-lang="es">El autor de ciencia ficción ganador del Hugo Charlie Stross declara que no usa LLMs y nunca lo hará. Sus razones: escribe compulsivamente por diversión, los LLMs fueron entrenados con contenido robado (es parte de la demanda colectiva contra Anthropic), su blog es golpeado por bots de scraping, y cualquier prompt que alimentas se convierte en datos de entrenamiento. Ve un caso de uso limitado para modelos locales analizando sus propios manuscritos para mapeo de líneas temporales.</span>
+<span class="i18n-text" data-lang="de">Hugo-prämierter SF-Autor Charlie Stross erklärt, dass er keine LLMs verwendet und niemals wird. Seine Gründe: Er schreibt zwanghaft zum Spaß, LLMs wurden mit gestohlenem Inhalt trainiert (er ist Partei der Anthropic-Sammelklage), sein Blog wird von Scraping-Bots gehämmert, und alle eingegebenen Prompts werden zu Trainingsdaten. Er sieht einen engen Anwendungsfall für lokale Modelle, die seine eigenen Manuskripte für Timeline-Mapping analysieren.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">A man who&#x27;s been imagining futures for 40 years looks at the current AI hype and sees nothing but digital pickpockets selling your luggage back to you. When he says Sam Altman makes him &#x27;question the wisdom of having stopped&#x27; hanging people for theft, I believe him.</div>
+        <span class="i18n-text" data-lang="zh">一个40年来一直在想象未来的人看着当前的AI热潮，只看到数字扒手把你的行李卖回给你。当他说Sam Altman让他&#x27;质疑停止绞死窃贼的智慧&#x27;时，我相信他。</span>
+<span class="i18n-text" data-lang="ja">40年間未来を想像してきた男が現在のAIハイプを見て、デジタルスリがあなたの荷物を売り返しているだけだと見ている。彼がSam Altmanは「窃盗で人を吊るすのをやめた知恵を疑問視させる」と言うとき、私は彼を信じる。</span>
+<span class="i18n-text" data-lang="ko">40년간 미래를 상상해온 남자가 현재 AI 열풍을 보고 디지털 소매치기가 당신 짐을 되팔고 있는 것만 본다. 그가 Sam Altman이 &#x27;도둑을 교수형에 처하는 것을 멈춘 지혜를 의심하게 만든다&#x27;고 말할 때, 나는 그를 믿는다.</span>
+<span class="i18n-text" data-lang="es">Un hombre que ha estado imaginando futuros por 40 años mira el hype actual de IA y solo ve carteristas digitales vendiéndote tu equipaje de vuelta. Cuando dice que Sam Altman le hace &#x27;cuestionar la sabiduría de haber dejado de&#x27; colgar gente por robo, le creo.</span>
+<span class="i18n-text" data-lang="de">Ein Mann, der seit 40 Jahren Zukunft imaginiert, schaut auf den aktuellen KI-Hype und sieht nichts als digitale Taschendiebe, die dir dein Gepäck zurückverkaufen. Wenn er sagt, Sam Altman lässt ihn &#x27;die Weisheit hinterfragen, aufgehört zu haben,&#x27; Leute für Diebstahl zu hängen, glaube ich ihm.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I don&#x27;t think it ever gets old to restate that the singularity and all of the grandiose promises of a glorious 21st century have last mile problems. But this post seems to mostly channel Harlan Ellison."</div>
+          <div class="comment-i18n" data-lang="zh">我认为重申奇点和所有辉煌21世纪的宏大承诺都有最后一英里问题永远不会过时。但这篇帖子似乎主要在模仿Harlan Ellison。</div>
+<div class="comment-i18n" data-lang="ja">シンギュラリティと輝かしい21世紀の壮大な約束がすべてラストマイル問題を抱えていることを再確認するのは決して古くならないと思う。しかしこの投稿は主にHarlan Ellisonをチャネリングしているようだ。</div>
+<div class="comment-i18n" data-lang="ko">특이점과 영광스러운 21세기의 모든 웅장한 약속들이 라스트 마일 문제가 있다고 다시 말하는 것은 절대 오래되지 않는다고 생각한다. 하지만 이 글은 주로 Harlan Ellison을 채널링하는 것 같다.</div>
+<div class="comment-i18n" data-lang="es">No creo que nunca envejezca reafirmar que la singularidad y todas las promesas grandiosas de un glorioso siglo 21 tienen problemas de última milla. Pero este post parece canalizar principalmente a Harlan Ellison.</div>
+<div class="comment-i18n" data-lang="de">Ich denke, es wird nie alt zu wiederholen, dass die Singularität und all die großartigen Versprechen eines glorreichen 21. Jahrhunderts Letzte-Meile-Probleme haben. Aber dieser Post scheint hauptsächlich Harlan Ellison zu channeln.</div>
+
+          <div class="comment-author">-- LogicFailsMe</div>
+        </div><div class="comment">
+          <div class="comment-text">"I could be misreading this, but I hope the author doesn&#x27;t think GANs are used in LLMs. They are cool, though."</div>
+          <div class="comment-i18n" data-lang="zh">我可能理解错了，但我希望作者不认为GAN被用于LLM。不过它们确实很酷。</div>
+<div class="comment-i18n" data-lang="ja">読み間違いかもしれないが、著者がGANがLLMで使われていると思っていないことを願う。でも、クールだけどね。</div>
+<div class="comment-i18n" data-lang="ko">내가 잘못 읽고 있을 수 있지만, 저자가 GAN이 LLM에 사용된다고 생각하지 않기를 바란다. 근데 쿨하긴 하다.</div>
+<div class="comment-i18n" data-lang="es">Podría estar leyendo mal esto, pero espero que el autor no piense que las GANs se usan en los LLMs. Son cool, sin embargo.</div>
+<div class="comment-i18n" data-lang="de">Ich könnte das falsch lesen, aber ich hoffe, der Autor denkt nicht, dass GANs in LLMs verwendet werden. Sie sind aber cool.</div>
+
+          <div class="comment-author">-- ainch</div>
+        </div><div class="comment">
+          <div class="comment-text">"Crazy how forward thinking this guy was in 2005 vs today."</div>
+          <div class="comment-i18n" data-lang="zh">疯狂的是这个人2005年的前瞻性思维vs今天。</div>
+<div class="comment-i18n" data-lang="ja">この人が2005年にどれだけ先見の明があったか vs 今日、クレイジーだ。</div>
+<div class="comment-i18n" data-lang="ko">이 사람이 2005년에 얼마나 선견지명이 있었는지 vs 오늘, 미쳤다.</div>
+<div class="comment-i18n" data-lang="es">Loco lo visionario que era este tipo en 2005 vs hoy.</div>
+<div class="comment-i18n" data-lang="de">Verrückt, wie vorausschauend dieser Typ 2005 war vs heute.</div>
+
+          <div class="comment-author">-- FL33TW00D</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#ai</span><span class="tag">#writing</span><span class="tag">#copyright</span><span class="tag">#opinion</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-08-01T12:00:00Z</div>
