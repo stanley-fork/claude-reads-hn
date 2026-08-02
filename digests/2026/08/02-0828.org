@@ -1,0 +1,544 @@
+#+TITLE: HN Digest 2026-08-02 08:28:00 UT UTC
+#+DATE: 2026-08-02T08:28:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Coldcard's RNG disaster, AMD undercuts NVIDIA, and someone ran xcalc on an actual calculator
+
+* Highlights
+- Coldcard RNG bug: commit message was just 'runs' - funds lost
+- AMD MI355X beats B300 on price-perf for Kimi K3
+- HP Prime G2 runs Linux, Doom, and xcalc on xcalc
+
+* Stories
+
+** When random.bytes() runs but doesn't work :security:bitcoin:rng:coldcard:
+:PROPERTIES:
+:ID:       49140405
+:URL:      https://insider.btcpp.dev/p/when-randombytes-runs-but-doesnt
+:HN_URL:   https://news.ycombinator.com/item?id=49140405
+:POINTS:   33
+:COMMENTS: 12
+:BY:       Funes-
+:END:
+
+*** TLDR
+Deep dive into Coldcard's catastrophic RNG bug. A developer disabled the hardware RNG to fix a compiler error, wrote 'runs' as the commit message, and shipped code that used a weak Yasmarang PRNG instead. The random.bytes() call in wallet creation bypassed the 'fixed' functions entirely. Result: predictable entropy, stolen funds.
+
+*** Take
+A 5-character commit message for 1534 lines of security-critical code. The compiler was literally screaming 'reconsider your life choices' and the dev just silenced the alarm. This is why we can't have nice things in crypto.
+
+*** Comments
+
+**** londons_explore
+:PROPERTIES:
+:COMMENT_ID: 49140601
+:END:
+I am getting suspicious of 'random number generator not actually returning random numbers' bugs... They are the perfect bug for someone trying to 'accidentally' make a secure system insecure.
+
+**** anonymousiam
+:PROPERTIES:
+:COMMENT_ID: 49140602
+:END:
+This post assumed that the author of the 'runs' commit was not acting maliciously. Has that been established?
+
+**** nullc
+:PROPERTIES:
+:COMMENT_ID: 49140603
+:END:
+This writeup isn't very good and misses/misunderstands the programming error that leads to the flaw. The article would have you think that the change in question was a tiny change to a flag to make it compile, but in reality the commit in question is a 1533 line addition of the entire RNG infrastructure.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+当random.bytes()运行但不工作时
+***** TLDR
+深入分析Coldcard灾难性的RNG漏洞。开发者为了修复编译错误禁用了硬件RNG，提交信息只写了'runs'，结果发布的代码使用了弱Yasmarang伪随机数生成器。钱包创建时的random.bytes()调用完全绕过了'修复'的函数。结果：可预测的熵，资金被盗。
+***** Take
+1534行安全关键代码只有5个字符的提交信息。编译器在大喊'重新考虑你的人生选择'，而开发者只是关掉了警报。这就是为什么加密领域没有好东西。
+***** Comments
+- 我对'随机数生成器实际上不返回随机数'的漏洞越来越怀疑了……这是想'不小心'让安全系统变得不安全的完美漏洞。
+- 这篇文章假设'runs'提交的作者不是恶意行为。这点确定了吗？
+- 这篇分析不太好，误解了导致缺陷的编程错误。文章让你以为这个改动只是一个小标志位的修改，但实际上这个提交增加了1533行完整的RNG基础设施。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+random.bytes()が動くけど動かない時
+***** TLDR
+Coldcardの壊滅的なRNGバグを深堀り。開発者がコンパイラエラーを直すためにハードウェアRNGを無効化し、コミットメッセージは'runs'だけ。弱いYasmarang擬似乱数生成器を使うコードを出荷。ウォレット作成時のrandom.bytes()呼び出しは「修正」した関数を完全にバイパス。結果：予測可能なエントロピー、資金盗難。
+***** Take
+1534行のセキュリティ重要コードに5文字のコミットメッセージ。コンパイラは「人生の選択を見直せ」と叫んでいたのに、開発者はアラームを消しただけ。だから暗号には良いものがない。
+***** Comments
+- '乱数生成器が実際には乱数を返さない'バグに疑念を抱いている…安全なシステムを'うっかり'不安全にする完璧なバグだ。
+- この記事は'runs'コミットの作者が悪意を持っていなかったと仮定している。それは確認されたのか？
+- この解説はあまり良くなく、欠陥につながるプログラミングエラーを見落とし/誤解している。記事はこの変更が小さなフラグ変更だったように見せているが、実際はRNGインフラ全体の1533行追加だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+random.bytes()가 실행되지만 작동하지 않을 때
+***** TLDR
+Coldcard의 치명적인 RNG 버그 심층 분석. 개발자가 컴파일러 오류를 수정하려고 하드웨어 RNG를 비활성화하고, 커밋 메시지는 그냥 'runs'. 약한 Yasmarang PRNG를 사용하는 코드를 출시. 지갑 생성 시 random.bytes() 호출이 '수정된' 함수를 완전히 우회. 결과: 예측 가능한 엔트로피, 자금 도난.
+***** Take
+1534줄의 보안 핵심 코드에 5글자 커밋 메시지. 컴파일러가 '인생 선택을 다시 생각하라'고 소리치는데 개발자는 그냥 알람을 껐다. 암호화폐에 좋은 게 없는 이유다.
+***** Comments
+- '난수 생성기가 실제로 난수를 반환하지 않는' 버그에 의심이 든다... 안전한 시스템을 '실수로' 불안전하게 만들려는 완벽한 버그다.
+- 이 글은 'runs' 커밋 작성자가 악의적으로 행동하지 않았다고 가정한다. 그게 확인됐나?
+- 이 분석은 별로 좋지 않고 결함을 초래하는 프로그래밍 오류를 놓치거나 오해하고 있다. 기사는 작은 플래그 변경처럼 보이게 하지만 실제로는 전체 RNG 인프라 1533줄 추가다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cuando random.bytes() corre pero no funciona
+***** TLDR
+Análisis profundo del bug catastrófico de RNG en Coldcard. Un desarrollador desactivó el RNG de hardware para arreglar un error de compilación, escribió 'runs' como mensaje de commit, y envió código que usaba un PRNG Yasmarang débil. La llamada random.bytes() en la creación de billeteras saltaba completamente las funciones 'arregladas'. Resultado: entropía predecible, fondos robados.
+***** Take
+Un mensaje de commit de 5 caracteres para 1534 líneas de código crítico de seguridad. El compilador gritaba 'reconsidera tus decisiones de vida' y el dev simplemente silenció la alarma. Por eso no podemos tener cosas bonitas en crypto.
+***** Comments
+- Estoy sospechando de los bugs de 'generador de números aleatorios que no devuelve números aleatorios'... Son el bug perfecto para quien quiere hacer 'accidentalmente' inseguro un sistema seguro.
+- Este post asume que el autor del commit 'runs' no actuó maliciosamente. ¿Eso se ha establecido?
+- Este análisis no es muy bueno y pasa por alto/malinterpreta el error de programación que lleva a la falla. El artículo te hace pensar que fue un pequeño cambio de flag, pero en realidad el commit añade 1533 líneas de infraestructura RNG completa.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wenn random.bytes() läuft aber nicht funktioniert
+***** TLDR
+Tiefgehende Analyse von Coldcards katastrophalem RNG-Bug. Ein Entwickler deaktivierte den Hardware-RNG um einen Compiler-Fehler zu beheben, schrieb 'runs' als Commit-Nachricht und lieferte Code aus, der einen schwachen Yasmarang-PRNG verwendete. Der random.bytes()-Aufruf bei der Wallet-Erstellung umging die 'behobenen' Funktionen komplett. Ergebnis: vorhersehbare Entropie, gestohlene Gelder.
+***** Take
+Eine 5-Zeichen-Commit-Nachricht für 1534 Zeilen sicherheitskritischen Codes. Der Compiler schrie 'überdenke deine Lebensentscheidungen' und der Entwickler schaltete einfach den Alarm aus. Deshalb können wir in Crypto keine schönen Dinge haben.
+***** Comments
+- Ich werde misstrauisch bei 'Zufallszahlengenerator gibt keine Zufallszahlen zurück'-Bugs... Sie sind der perfekte Bug für jemanden, der ein sicheres System 'versehentlich' unsicher machen will.
+- Dieser Post nimmt an, dass der Autor des 'runs'-Commits nicht böswillig handelte. Ist das belegt?
+- Diese Analyse ist nicht sehr gut und übersieht/missversteht den Programmierfehler, der zu dem Fehler führt. Der Artikel lässt es wie eine kleine Flag-Änderung aussehen, aber tatsächlich fügt der Commit 1533 Zeilen kompletter RNG-Infrastruktur hinzu.
+** Running Kimi K3 on MI355X at Better Performance per Dollar Than B300 :ai:amd:inference:llm:
+:PROPERTIES:
+:ID:       49141073
+:URL:      https://www.wafer.ai/blog/kimi-k3-mi355x
+:HN_URL:   https://news.ycombinator.com/item?id=49141073
+:POINTS:   113
+:COMMENTS: 21
+:BY:       ilreb
+:END:
+
+*** TLDR
+Wafer ran Kimi K3 (2.8T params, bigger than DeepSeek V4-Pro) on 8x AMD MI355X and got 952 tok/s at 48 tok/s per GPU-dollar. That's 1.45x better price-performance than B300s. The trick: MI355X has 288GB VRAM per GPU, same as B300, but at 2.4x lower cost. Fixed some ROCm bugs along the way including a missing top-k renorm kernel.
+
+*** Take
+AMD keeps winning the 'we have more VRAM and it's cheaper' game while NVIDIA charges B300 prices. The CUDA moat looks more like a puddle when your model won't even fit on B200 nodes.
+
+*** Comments
+
+**** kelnos
+:PROPERTIES:
+:COMMENT_ID: 49141201
+:END:
+I wish they wouldn't call them 'open source models'. They aren't open source. They didn't publish the training data. They didn't publish the tools they used to train the model. They published the weights. It's an 'open weight model'.
+
+**** GuestFAUniverse
+:PROPERTIES:
+:COMMENT_ID: 49141202
+:END:
+How is the capex on 8x MI354X even remotely justified at less than $10/h?
+
+**** logicallee
+:PROPERTIES:
+:COMMENT_ID: 49141203
+:END:
+This part sounds like AI assisted setting this up and benchmarking it: 'The fix was trivially simple: zero-pad the head count 12→16, run the fast kernel, and extract the real 12 heads from the output.'
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+在MI355X上运行Kimi K3，性价比超越B300
+***** TLDR
+Wafer在8块AMD MI355X上运行Kimi K3（2.8T参数，比DeepSeek V4-Pro还大），达到952 tok/s，每GPU美元48 tok/s。比B300性价比高1.45倍。关键：MI355X每GPU有288GB显存，与B300相同，但成本低2.4倍。顺便修了一些ROCm bug，包括缺失的top-k重归一化内核。
+***** Take
+AMD在'我们有更多显存而且更便宜'的游戏中持续获胜，而NVIDIA收着B300的价格。当你的模型连B200节点都装不下时，CUDA护城河看起来更像是一个水坑。
+***** Comments
+- 我希望他们不要称之为'开源模型'。它们不是开源的。他们没有公布训练数据。没有公布训练模型的工具。他们只公布了权重。这是'开放权重模型'。
+- 8块MI354X的资本支出在每小时不到10美元的情况下怎么可能合理？
+- 这部分听起来像是用AI辅助设置和基准测试：'修复非常简单：将头数从12填充到16，运行快速内核，然后从输出中提取真正的12个头。'
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+MI355XでKimi K3を実行、B300より優れた価格性能比
+***** TLDR
+Waferが8枚のAMD MI355XでKimi K3（2.8Tパラメータ、DeepSeek V4-Proより大きい）を実行し、952 tok/s、GPUドルあたり48 tok/sを達成。B300の1.45倍の価格性能比。ポイント：MI355XはGPUあたり288GB VRAM、B300と同じだが2.4倍安い。途中でtop-k renormカーネルの欠落を含むROCmバグを修正。
+***** Take
+AMDは「VRAMが多くて安い」ゲームで勝ち続けている一方、NVIDIAはB300価格を請求。モデルがB200ノードに収まらないとき、CUDAの堀は水たまりに見える。
+***** Comments
+- 'オープンソースモデル'と呼ばないでほしい。オープンソースじゃない。訓練データも訓練ツールも公開していない。重みを公開しただけ。'オープンウェイトモデル'だ。
+- 8枚のMI354Xの設備投資が時給10ドル以下でどうやって正当化できるのか？
+- この部分はAI支援でセットアップとベンチマークをしたように聞こえる：'修正は簡単だった：ヘッド数を12→16にゼロパディングし、高速カーネルを実行し、出力から実際の12ヘッドを抽出。'
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+MI355X에서 Kimi K3 실행, B300보다 나은 가격 대비 성능
+***** TLDR
+Wafer가 8개 AMD MI355X에서 Kimi K3(2.8T 파라미터, DeepSeek V4-Pro보다 큼)를 실행해 952 tok/s, GPU 달러당 48 tok/s 달성. B300보다 가격 대비 성능 1.45배 우수. 핵심: MI355X는 GPU당 288GB VRAM으로 B300과 같지만 2.4배 저렴. 중간에 top-k renorm 커널 누락 등 ROCm 버그도 수정.
+***** Take
+AMD는 '더 많은 VRAM을 더 싸게' 게임에서 계속 승리하고 NVIDIA는 B300 가격을 받고 있다. 모델이 B200 노드에 맞지도 않으면 CUDA 해자는 웅덩이처럼 보인다.
+***** Comments
+- '오픈 소스 모델'이라고 부르지 않았으면 좋겠다. 오픈 소스가 아니다. 훈련 데이터도 공개 안 했고 훈련 도구도 공개 안 했다. 가중치만 공개했다. '오픈 웨이트 모델'이다.
+- 8개 MI354X 자본 지출이 시간당 10달러 미만에서 어떻게 정당화되나?
+- 이 부분은 AI 보조로 설정하고 벤치마킹한 것 같다: '수정은 간단했다: 헤드 수를 12→16으로 제로 패딩하고 빠른 커널을 실행하고 출력에서 실제 12개 헤드를 추출.'
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ejecutando Kimi K3 en MI355X con mejor rendimiento por dólar que B300
+***** TLDR
+Wafer ejecutó Kimi K3 (2.8T parámetros, más grande que DeepSeek V4-Pro) en 8x AMD MI355X y obtuvo 952 tok/s a 48 tok/s por dólar-GPU. Eso es 1.45x mejor precio-rendimiento que B300s. El truco: MI355X tiene 288GB VRAM por GPU, igual que B300, pero a 2.4x menor costo. Arreglaron algunos bugs de ROCm incluyendo un kernel top-k renorm faltante.
+***** Take
+AMD sigue ganando el juego de 'tenemos más VRAM y es más barato' mientras NVIDIA cobra precios de B300. El foso CUDA parece más un charco cuando tu modelo ni siquiera cabe en nodos B200.
+***** Comments
+- Ojalá no los llamaran 'modelos open source'. No son open source. No publicaron los datos de entrenamiento. No publicaron las herramientas de entrenamiento. Publicaron los pesos. Es un 'modelo de pesos abiertos'.
+- ¿Cómo se justifica el capex de 8x MI354X a menos de $10/h?
+- Esta parte suena como configuración asistida por IA: 'La solución fue trivialmente simple: rellenar con ceros el conteo de cabezas 12→16, ejecutar el kernel rápido y extraer las 12 cabezas reales de la salida.'
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kimi K3 auf MI355X mit besserem Preis-Leistungs-Verhältnis als B300
+***** TLDR
+Wafer ließ Kimi K3 (2.8T Parameter, größer als DeepSeek V4-Pro) auf 8x AMD MI355X laufen und erreichte 952 tok/s bei 48 tok/s pro GPU-Dollar. Das ist 1.45x besseres Preis-Leistungs-Verhältnis als B300s. Der Trick: MI355X hat 288GB VRAM pro GPU, genau wie B300, aber zu 2.4x niedrigeren Kosten. Einige ROCm-Bugs behoben, darunter ein fehlender top-k renorm Kernel.
+***** Take
+AMD gewinnt weiterhin das 'wir haben mehr VRAM und es ist günstiger'-Spiel während NVIDIA B300-Preise verlangt. Der CUDA-Burggraben sieht eher wie eine Pfütze aus, wenn dein Modell nicht mal auf B200-Nodes passt.
+***** Comments
+- Ich wünschte, sie würden sie nicht 'Open-Source-Modelle' nennen. Sie sind nicht Open Source. Sie haben die Trainingsdaten nicht veröffentlicht. Die Trainingstools nicht veröffentlicht. Sie haben die Gewichte veröffentlicht. Es ist ein 'Open-Weight-Modell'.
+- Wie rechtfertigt sich der Capex von 8x MI354X bei unter $10/h?
+- Dieser Teil klingt nach KI-unterstütztem Setup und Benchmarking: 'Die Lösung war trivial einfach: Head-Count von 12→16 mit Nullen auffüllen, schnellen Kernel ausführen und die echten 12 Heads aus der Ausgabe extrahieren.'
+** But can your calculator run Linux? :linux:hardware:embedded:calculator:
+:PROPERTIES:
+:ID:       49137713
+:URL:      https://raymii.org/s/articles/But_can_your_calculator_run_Linux.html
+:HN_URL:   https://news.ycombinator.com/item?id=49137713
+:POINTS:   93
+:COMMENTS: 9
+:BY:       jandeboevrie
+:END:
+
+*** TLDR
+The HP Prime G2 graphing calculator has an i.MX 6 ARM Cortex A7 CPU with 256MB RAM. That's absurd for a calculator. The author ported Linux to it: fixed keyboard input, wrote a driver for the new Ilitek touchscreen, got X11 working, added tcc compiler, and of course Doom. There's even a Windows 10 port showing calc.exe running on an actual calculator.
+
+*** Take
+Someone at HP put smartphone specs in a graphing calculator and didn't think we'd notice. Now it runs xcalc on top of Linux on top of a calculator. We've achieved peak recursion.
+
+*** Comments
+
+**** DrewADesign
+:PROPERTIES:
+:COMMENT_ID: 49137901
+:END:
+I use the Prime G2 daily. I VERY much prefer RPN, love that I can program it with Python (and occasionally PPL), and am often in environments where having a backlit screen is a lot more convenient than pulling out a flashlight.
+
+**** thelibrarian
+:PROPERTIES:
+:COMMENT_ID: 49137902
+:END:
+But can your Linux run calculator?
+
+**** gorkish
+:PROPERTIES:
+:COMMENT_ID: 49137903
+:END:
+Yes, in fact it can. ［1］ https://calculinux.org/
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+但你的计算器能运行Linux吗？
+***** TLDR
+HP Prime G2图形计算器配备i.MX 6 ARM Cortex A7 CPU和256MB内存。对于计算器来说这太夸张了。作者将Linux移植到上面：修复了键盘输入，为新的Ilitek触摸屏写了驱动，让X11工作，添加了tcc编译器，当然还有Doom。甚至还有Windows 10移植版，在真正的计算器上运行calc.exe。
+***** Take
+HP的某人把智能手机配置塞进图形计算器里，以为我们不会注意到。现在它在计算器上运行Linux，在Linux上运行xcalc。我们达到了递归的巅峰。
+***** Comments
+- 我每天都用Prime G2。我非常喜欢RPN，喜欢可以用Python编程，而且在需要背光屏幕的环境下比掏手电筒方便多了。
+- 但你的Linux能运行计算器吗？
+- 是的，事实上可以。［1］ https://calculinux.org/
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+でも、あなたの電卓はLinuxを動かせる？
+***** TLDR
+HP Prime G2グラフ電卓にはi.MX 6 ARM Cortex A7 CPUと256MB RAMが搭載。電卓としては馬鹿げている。著者がLinuxを移植：キーボード入力を修正、新しいIlitekタッチスクリーンのドライバを書き、X11を動かし、tccコンパイラを追加、もちろんDoomも。Windows 10移植版では本物の電卓でcalc.exeが動いている。
+***** Take
+HPの誰かがスマホのスペックをグラフ電卓に入れて、気づかないと思ったらしい。今や電卓の上でLinuxが動き、その上でxcalcが動いている。再帰の極みに達した。
+***** Comments
+- 私は毎日Prime G2を使っている。RPNが大好きで、Pythonでプログラミングできるのも気に入っている。バックライト付き画面がある環境では懐中電灯を出すより便利だ。
+- でも、あなたのLinuxは電卓を動かせる？
+- 実は動かせる。［1］ https://calculinux.org/
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+근데 당신 계산기는 리눅스 돌릴 수 있어?
+***** TLDR
+HP Prime G2 그래프 계산기에는 i.MX 6 ARM Cortex A7 CPU와 256MB RAM이 탑재되어 있다. 계산기치고는 말도 안 된다. 저자가 리눅스를 이식했다: 키보드 입력 수정, 새로운 Ilitek 터치스크린 드라이버 작성, X11 작동, tcc 컴파일러 추가, 물론 Doom도. 심지어 Windows 10 이식판에서는 실제 계산기에서 calc.exe가 실행된다.
+***** Take
+HP의 누군가가 스마트폰 사양을 그래프 계산기에 넣고 우리가 눈치 못 챌 줄 알았나 보다. 이제 계산기 위에서 리눅스가 돌고, 그 위에서 xcalc가 돈다. 재귀의 정점에 도달했다.
+***** Comments
+- 나는 매일 Prime G2를 쓴다. RPN을 매우 좋아하고, Python으로 프로그래밍할 수 있어서 좋고, 백라이트 화면이 있는 환경에서는 손전등 꺼내는 것보다 훨씬 편하다.
+- 근데 당신 리눅스는 계산기 돌릴 수 있어?
+- 네, 사실 가능해요. ［1］ https://calculinux.org/
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Pero tu calculadora puede correr Linux?
+***** TLDR
+La calculadora gráfica HP Prime G2 tiene un CPU i.MX 6 ARM Cortex A7 con 256MB de RAM. Eso es absurdo para una calculadora. El autor portó Linux: arregló la entrada de teclado, escribió un driver para la nueva pantalla táctil Ilitek, hizo funcionar X11, añadió el compilador tcc, y por supuesto Doom. Incluso hay un port de Windows 10 mostrando calc.exe corriendo en una calculadora real.
+***** Take
+Alguien en HP puso especificaciones de smartphone en una calculadora gráfica y pensó que no nos daríamos cuenta. Ahora corre xcalc sobre Linux sobre una calculadora. Hemos alcanzado la recursión máxima.
+***** Comments
+- Uso la Prime G2 a diario. PREFIERO mucho RPN, me encanta programarla con Python, y a menudo estoy en ambientes donde tener pantalla retroiluminada es más conveniente que sacar una linterna.
+- ¿Pero tu Linux puede correr calculadora?
+- Sí, de hecho puede. ［1］ https://calculinux.org/
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Aber kann dein Taschenrechner Linux laufen lassen?
+***** TLDR
+Der HP Prime G2 Grafikrechner hat einen i.MX 6 ARM Cortex A7 CPU mit 256MB RAM. Das ist absurd für einen Taschenrechner. Der Autor hat Linux portiert: Tastatureingabe repariert, Treiber für den neuen Ilitek-Touchscreen geschrieben, X11 zum Laufen gebracht, tcc-Compiler hinzugefügt, und natürlich Doom. Es gibt sogar einen Windows 10 Port mit calc.exe auf einem echten Taschenrechner.
+***** Take
+Jemand bei HP hat Smartphone-Specs in einen Grafikrechner gesteckt und dachte, wir würden es nicht merken. Jetzt läuft xcalc auf Linux auf einem Taschenrechner. Wir haben Peak-Rekursion erreicht.
+***** Comments
+- Ich benutze den Prime G2 täglich. Ich BEVORZUGE RPN sehr, liebe es, dass ich ihn mit Python programmieren kann, und oft bin ich in Umgebungen, wo ein beleuchtetes Display praktischer ist als eine Taschenlampe rauszuholen.
+- Aber kann dein Linux Taschenrechner laufen lassen?
+- Ja, tatsächlich kann es das. ［1］ https://calculinux.org/
+** Deep-sea vehicles spot 'alien' sharks deep beneath the waves in the Pacific :science:ocean:biology:sharks:
+:PROPERTIES:
+:ID:       49140599
+:URL:      https://www.science.org/content/article/deep-sea-vehicles-spot-alien-sharks-deep-beneath-waves-pacific
+:HN_URL:   https://news.ycombinator.com/item?id=49140599
+:POINTS:   45
+:COMMENTS: 18
+:BY:       pkaeding
+:END:
+
+*** TLDR
+ROVs filmed goblin sharks in their natural habitat for the first time ever. One was spotted 2km deep near Jarvis Island in 2019, another near Tonga at nearly 2000m in 2024. These pink-gray sharks have snap-forward jaws that extend at 3+ m/s. The footage sat unanalyzed for years and shows they range much farther into the Pacific than previously known.
+
+*** Take
+We've had footage of the ocean's weirdest shark for 5+ years and nobody bothered to look at it. Science funding is fine, everything is fine.
+
+*** Comments
+
+**** MostlyStable
+:PROPERTIES:
+:COMMENT_ID: 49140701
+:END:
+There are loads of unknown (to science) deep sea sharks out there, most of them quite small. A friend of mine in grad school spent several trips on a deep sea trawler out of Madagascar and described multiple new species.
+
+**** everyone
+:PROPERTIES:
+:COMMENT_ID: 49140702
+:END:
+Could the light be blinding all the animals? I would assume their eyes would have evolved to be extremely sensitive to light.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+深海探测器在太平洋深处发现'外星人'鲨鱼
+***** TLDR
+ROV首次在自然栖息地拍摄到剑吻鲨。一条于2019年在贾维斯岛附近2公里深处被发现，另一条于2024年在汤加附近近2000米深处被发现。这些粉灰色鲨鱼有能以3+米/秒速度弹出的颌骨。这段影像被搁置多年未经分析，显示它们在太平洋的分布范围比之前已知的要广得多。
+***** Take
+我们有海洋最奇怪鲨鱼的影像5年多了，却没人费心去看一眼。科学经费很充足，一切都很好。
+***** Comments
+- 有很多科学上未知的深海鲨鱼，大多数都很小。我一个读研的朋友在马达加斯加的深海拖网船上出海好几次，描述了多个新物种。
+- 光会不会让所有动物都看不见？我猜它们的眼睛应该进化得对光极其敏感。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+深海探査機が太平洋深海で'エイリアン'サメを発見
+***** TLDR
+ROVが初めて自然生息地でミツクリザメを撮影。1匹は2019年にジャービス島付近の水深2kmで、もう1匹は2024年にトンガ付近の約2000mで発見。このピンクグレーのサメは3m/s以上で飛び出す顎を持つ。映像は何年も分析されずに放置されていたが、以前知られていたよりもはるかに太平洋の広範囲に生息していることが判明。
+***** Take
+海で一番変なサメの映像を5年以上持っていて、誰も見ようとしなかった。科学の予算は十分、何も問題ない。
+***** Comments
+- 科学的に未知の深海サメはたくさんいる、ほとんどが小さい。大学院の友人がマダガスカルの深海トロール船で何度か出航し、複数の新種を報告した。
+- 光で動物たちが目がくらんでいる可能性は？目は光に極めて敏感に進化しているはずだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+심해 탐사선이 태평양 깊은 곳에서 '외계인' 상어 발견
+***** TLDR
+ROV가 처음으로 자연 서식지에서 고블린 상어를 촬영했다. 한 마리는 2019년 자비스 섬 근처 2km 깊이에서, 다른 한 마리는 2024년 통가 근처 약 2000m에서 발견됐다. 이 분홍빛 회색 상어는 3m/s 이상 속도로 튀어나오는 턱을 가졌다. 영상은 몇 년 동안 분석되지 않고 방치됐으며, 이전에 알려진 것보다 태평양 훨씬 넓은 범위에 분포함을 보여준다.
+***** Take
+바다에서 가장 이상한 상어 영상을 5년 넘게 갖고 있었는데 아무도 보려고 하지 않았다. 과학 펀딩은 충분하고, 모든 게 괜찮다.
+***** Comments
+- 과학적으로 알려지지 않은 심해 상어가 많이 있고, 대부분 꽤 작다. 대학원 친구가 마다가스카르에서 심해 저인망선을 여러 번 타고 여러 신종을 보고했다.
+- 빛이 모든 동물들을 눈멀게 할 수 있을까? 눈이 빛에 극도로 민감하게 진화했을 것 같은데.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Vehículos de aguas profundas avistan tiburones 'alienígenas' en las profundidades del Pacífico
+***** TLDR
+ROVs filmaron tiburones duende en su hábitat natural por primera vez. Uno fue avistado a 2km de profundidad cerca de la Isla Jarvis en 2019, otro cerca de Tonga a casi 2000m en 2024. Estos tiburones rosa-gris tienen mandíbulas que se extienden a más de 3 m/s. El metraje estuvo sin analizar durante años y muestra que su rango en el Pacífico es mucho mayor de lo que se conocía.
+***** Take
+Teníamos metraje del tiburón más raro del océano por más de 5 años y nadie se molestó en verlo. El financiamiento científico está bien, todo está bien.
+***** Comments
+- Hay montones de tiburones de aguas profundas desconocidos para la ciencia, la mayoría bastante pequeños. Un amigo mío en posgrado hizo varios viajes en un arrastrero de aguas profundas de Madagascar y describió múltiples especies nuevas.
+- ¿Podría la luz estar cegando a todos los animales? Asumiría que sus ojos habrían evolucionado para ser extremadamente sensibles a la luz.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Tiefseefahrzeuge entdecken 'Alien'-Haie tief unter den Wellen im Pazifik
+***** TLDR
+ROVs filmten erstmals Koboldhaie in ihrem natürlichen Lebensraum. Einer wurde 2019 in 2km Tiefe nahe Jarvis Island gesichtet, ein weiterer 2024 nahe Tonga in fast 2000m Tiefe. Diese pink-grauen Haie haben Kiefer, die mit über 3 m/s vorschnellen. Das Material wurde jahrelang nicht analysiert und zeigt, dass sie viel weiter in den Pazifik vordringen als bisher bekannt.
+***** Take
+Wir hatten Material vom seltsamsten Hai des Ozeans seit über 5 Jahren und niemand hat sich die Mühe gemacht, es anzuschauen. Wissenschaftsfinanzierung ist in Ordnung, alles ist in Ordnung.
+***** Comments
+- Es gibt viele der Wissenschaft unbekannte Tiefseehaie, die meisten ziemlich klein. Ein Freund von mir im Graduiertenstudium war mehrmals auf einem Tiefsee-Trawler vor Madagaskar und beschrieb mehrere neue Arten.
+- Könnte das Licht alle Tiere blenden? Ich würde annehmen, dass ihre Augen extrem lichtempfindlich evolviert sind.
+** Go 1.27 Interactive Tour :go:programming:release:
+:PROPERTIES:
+:ID:       49140218
+:URL:      https://victoriametrics.com/blog/go-1.27/index.html
+:HN_URL:   https://news.ycombinator.com/item?id=49140218
+:POINTS:   185
+:COMMENTS: 61
+:BY:       Hixon10
+:END:
+
+*** TLDR
+［Article currently 404, based on title + HN discussion］ VictoriaMetrics published an interactive walkthrough of Go 1.27 features. The release includes type inference improvements that some HN commenters find adds cognitive weight to the language. Also fixes runtime.findnull() compatibility with MTE on Android/GrapheneOS.
+
+*** Take
+Go adds more type system features and everyone immediately complains it's not simple anymore. We've been doing this dance for 15 years now, and yet the language keeps getting more complex while everyone praises its simplicity.
+
+*** Comments
+
+**** baalimago
+:PROPERTIES:
+:COMMENT_ID: 49140301
+:END:
+This: '(b Box［T］) Map［U any］(f func(T) U) Box［U］' is the type of cognitive weight I was happy that Go avoided.
+
+**** chenxiaolong
+:PROPERTIES:
+:COMMENT_ID: 49140302
+:END:
+This release also fixes runtime.findnull() to be compatible with MTE on Android. This was the only thing preventing MTE from being enabled for apps that use gomobile on MTE-compatible Android OS's like GrapheneOS.
+
+**** my-next-account
+:PROPERTIES:
+:COMMENT_ID: 49140303
+:END:
+>The quieter but bigger change - I really wish they didn't use such stupid LLM-isms.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Go 1.27 交互式教程
+***** TLDR
+［文章当前404，根据标题和HN讨论］ VictoriaMetrics发布了Go 1.27功能的交互式演示。此版本包含类型推断改进，一些HN评论者认为这增加了语言的认知负担。同时修复了runtime.findnull()在Android/GrapheneOS上与MTE的兼容性问题。
+***** Take
+Go添加更多类型系统功能，所有人立刻抱怨它不再简单了。我们跳这支舞已经15年了，语言持续变复杂，而每个人还在赞美它的简洁。
+***** Comments
+- 这个：'(b Box［T］) Map［U any］(f func(T) U) Box［U］' 正是我很高兴Go避开的那种认知负担。
+- 这个版本还修复了runtime.findnull()与Android上MTE的兼容性。这是唯一阻止在GrapheneOS等MTE兼容Android系统上为gomobile应用启用MTE的问题。
+- >更安静但更大的变化 - 我真希望他们不要用这种愚蠢的LLM腔调。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Go 1.27 インタラクティブツアー
+***** TLDR
+［記事は現在404、タイトルとHN議論に基づく］ VictoriaMetricsがGo 1.27機能のインタラクティブウォークスルーを公開。このリリースには型推論の改善が含まれ、HNコメンターの一部は言語に認知的負荷が増えたと感じている。Android/GrapheneOSでのMTEとのruntime.findnull()互換性も修正。
+***** Take
+Goが型システム機能を追加するたびに、みんなすぐにシンプルじゃなくなったと文句を言う。15年もこのダンスを踊ってきたのに、言語は複雑になり続け、みんなはそのシンプルさを称賛し続ける。
+***** Comments
+- これ：'(b Box［T］) Map［U any］(f func(T) U) Box［U］' は、Goが避けてくれて嬉しかった認知的負荷そのものだ。
+- このリリースはAndroidでのMTEとのruntime.findnull()互換性も修正している。GrapheneOSのようなMTE対応AndroidでgomobileアプリのMTEを有効にできなかった唯一の問題だった。
+- >より静かだがより大きな変更 - こういう馬鹿げたLLM口調を使わないでほしい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Go 1.27 인터랙티브 투어
+***** TLDR
+［기사 현재 404, 제목과 HN 토론 기반］ VictoriaMetrics가 Go 1.27 기능의 인터랙티브 설명을 게시했다. 이 릴리스에는 타입 추론 개선이 포함되어 있으며 일부 HN 댓글러들은 언어에 인지 부담이 추가됐다고 느낀다. Android/GrapheneOS에서 MTE와 runtime.findnull() 호환성도 수정.
+***** Take
+Go가 타입 시스템 기능을 추가할 때마다 모두가 바로 더 이상 단순하지 않다고 불평한다. 15년째 이 춤을 추고 있는데, 언어는 계속 복잡해지면서 모두가 그 단순함을 칭찬한다.
+***** Comments
+- 이것: '(b Box［T］) Map［U any］(f func(T) U) Box［U］'은 Go가 피해서 다행이었던 인지 부담 그 자체다.
+- 이 릴리스는 Android에서 MTE와 runtime.findnull() 호환성도 수정한다. GrapheneOS 같은 MTE 호환 Android에서 gomobile 앱의 MTE를 활성화하지 못하게 했던 유일한 문제였다.
+- >더 조용하지만 더 큰 변화 - 이런 바보 같은 LLM 말투를 쓰지 않았으면 좋겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Tour Interactivo de Go 1.27
+***** TLDR
+［Artículo actualmente 404, basado en título y discusión HN］ VictoriaMetrics publicó un recorrido interactivo de las características de Go 1.27. El lanzamiento incluye mejoras en inferencia de tipos que algunos comentaristas de HN encuentran añade peso cognitivo al lenguaje. También corrige compatibilidad de runtime.findnull() con MTE en Android/GrapheneOS.
+***** Take
+Go añade más características al sistema de tipos y todos inmediatamente se quejan de que ya no es simple. Llevamos 15 años bailando esta danza, y el lenguaje sigue volviéndose más complejo mientras todos alaban su simplicidad.
+***** Comments
+- Esto: '(b Box［T］) Map［U any］(f func(T) U) Box［U］' es el tipo de peso cognitivo que me alegraba que Go evitara.
+- Este lanzamiento también corrige runtime.findnull() para ser compatible con MTE en Android. Esto era lo único que impedía habilitar MTE para apps que usan gomobile en Android compatibles con MTE como GrapheneOS.
+- >El cambio más silencioso pero más grande - Realmente desearía que no usaran esos estúpidos LLM-ismos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Go 1.27 Interaktive Tour
+***** TLDR
+［Artikel derzeit 404, basierend auf Titel + HN-Diskussion］ VictoriaMetrics veröffentlichte einen interaktiven Durchgang der Go 1.27 Features. Das Release enthält Verbesserungen bei der Typinferenz, die einige HN-Kommentatoren als kognitive Last für die Sprache empfinden. Behebt auch runtime.findnull()-Kompatibilität mit MTE auf Android/GrapheneOS.
+***** Take
+Go fügt mehr Typsystem-Features hinzu und alle beschweren sich sofort, dass es nicht mehr einfach ist. Wir tanzen diesen Tanz seit 15 Jahren, und die Sprache wird immer komplexer, während alle ihre Einfachheit loben.
+***** Comments
+- Das hier: '(b Box［T］) Map［U any］(f func(T) U) Box［U］' ist genau die Art von kognitiver Last, die Go meiner Freude nach vermieden hat.
+- Dieses Release behebt auch runtime.findnull()-Kompatibilität mit MTE auf Android. Das war das Einzige, was MTE für Apps mit gomobile auf MTE-kompatiblen Android-OS wie GrapheneOS verhinderte.
+- >Die leisere aber größere Änderung - Ich wünschte wirklich, sie würden solche dummen LLM-ismen nicht verwenden.

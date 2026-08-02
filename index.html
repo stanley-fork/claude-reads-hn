@@ -250,6 +250,11 @@
     <aside class="sidebar">
       <div class="sidebar-title">Highlights</div>
       <div class="sidebar-date">2026-08-02</div>
+      <a href="#s49140405-08020828">When random.bytes() runs but doesn&#x27;...</a>
+      <a href="#s49141073-08020828">Running Kimi K3 on MI355X at Better Perf...</a>
+      <a href="#s49137713-08020828">But can your calculator run Linux?</a>
+      <a href="#s49140599-08020828">Deep-sea vehicles spot &#x27;alien&#x27;...</a>
+      <a href="#s49140218-08020828">Go 1.27 Interactive Tour</a>
       <a href="#s49138302-08020601">Seedance 2.5</a>
       <a href="#s49138188-08020601">Diátaxis</a>
       <a href="#s49140213-08020601">ASRock BC-250: Building the Budget Steam...</a>
@@ -581,6 +586,338 @@
         </div>
       </header>
       <main id="feed">
+<section class="digest">
+      <div class="digest-header">
+        <div class="digest-date">2026-08-02T08:28:00Z</div>
+        <div class="digest-vibe">Coldcard&#x27;s RNG disaster, AMD undercuts NVIDIA, and someone ran xcalc on an actual calculator</div>
+      </div>
+      <article class="story" id="s49140405-08020828">
+      <h3 class="story-title">
+        <a href="https://insider.btcpp.dev/p/when-randombytes-runs-but-doesnt" target="_blank">When random.bytes() runs but doesn&#x27;t work</a>
+        <a href="#s49140405-08020828" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">当random.bytes()运行但不工作时</div>
+<div class="i18n-title" data-lang="ja">random.bytes()が動くけど動かない時</div>
+<div class="i18n-title" data-lang="ko">random.bytes()가 실행되지만 작동하지 않을 때</div>
+<div class="i18n-title" data-lang="es">Cuando random.bytes() corre pero no funciona</div>
+<div class="i18n-title" data-lang="de">Wenn random.bytes() läuft aber nicht funktioniert</div>
+
+      <div class="story-meta">
+        33pts | 12c | <a href="https://news.ycombinator.com/item?id=49140405" target="_blank">HN#49140405</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Deep dive into Coldcard&#x27;s catastrophic RNG bug. A developer disabled the hardware RNG to fix a compiler error, wrote &#x27;runs&#x27; as the commit message, and shipped code that used a weak Yasmarang PRNG instead. The random.bytes() call in wallet creation bypassed the &#x27;fixed&#x27; functions entirely. Result: predictable entropy, stolen funds.</div>
+        <span class="i18n-text" data-lang="zh">深入分析Coldcard灾难性的RNG漏洞。开发者为了修复编译错误禁用了硬件RNG，提交信息只写了&#x27;runs&#x27;，结果发布的代码使用了弱Yasmarang伪随机数生成器。钱包创建时的random.bytes()调用完全绕过了&#x27;修复&#x27;的函数。结果：可预测的熵，资金被盗。</span>
+<span class="i18n-text" data-lang="ja">Coldcardの壊滅的なRNGバグを深堀り。開発者がコンパイラエラーを直すためにハードウェアRNGを無効化し、コミットメッセージは&#x27;runs&#x27;だけ。弱いYasmarang擬似乱数生成器を使うコードを出荷。ウォレット作成時のrandom.bytes()呼び出しは「修正」した関数を完全にバイパス。結果：予測可能なエントロピー、資金盗難。</span>
+<span class="i18n-text" data-lang="ko">Coldcard의 치명적인 RNG 버그 심층 분석. 개발자가 컴파일러 오류를 수정하려고 하드웨어 RNG를 비활성화하고, 커밋 메시지는 그냥 &#x27;runs&#x27;. 약한 Yasmarang PRNG를 사용하는 코드를 출시. 지갑 생성 시 random.bytes() 호출이 &#x27;수정된&#x27; 함수를 완전히 우회. 결과: 예측 가능한 엔트로피, 자금 도난.</span>
+<span class="i18n-text" data-lang="es">Análisis profundo del bug catastrófico de RNG en Coldcard. Un desarrollador desactivó el RNG de hardware para arreglar un error de compilación, escribió &#x27;runs&#x27; como mensaje de commit, y envió código que usaba un PRNG Yasmarang débil. La llamada random.bytes() en la creación de billeteras saltaba completamente las funciones &#x27;arregladas&#x27;. Resultado: entropía predecible, fondos robados.</span>
+<span class="i18n-text" data-lang="de">Tiefgehende Analyse von Coldcards katastrophalem RNG-Bug. Ein Entwickler deaktivierte den Hardware-RNG um einen Compiler-Fehler zu beheben, schrieb &#x27;runs&#x27; als Commit-Nachricht und lieferte Code aus, der einen schwachen Yasmarang-PRNG verwendete. Der random.bytes()-Aufruf bei der Wallet-Erstellung umging die &#x27;behobenen&#x27; Funktionen komplett. Ergebnis: vorhersehbare Entropie, gestohlene Gelder.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">A 5-character commit message for 1534 lines of security-critical code. The compiler was literally screaming &#x27;reconsider your life choices&#x27; and the dev just silenced the alarm. This is why we can&#x27;t have nice things in crypto.</div>
+        <span class="i18n-text" data-lang="zh">1534行安全关键代码只有5个字符的提交信息。编译器在大喊&#x27;重新考虑你的人生选择&#x27;，而开发者只是关掉了警报。这就是为什么加密领域没有好东西。</span>
+<span class="i18n-text" data-lang="ja">1534行のセキュリティ重要コードに5文字のコミットメッセージ。コンパイラは「人生の選択を見直せ」と叫んでいたのに、開発者はアラームを消しただけ。だから暗号には良いものがない。</span>
+<span class="i18n-text" data-lang="ko">1534줄의 보안 핵심 코드에 5글자 커밋 메시지. 컴파일러가 &#x27;인생 선택을 다시 생각하라&#x27;고 소리치는데 개발자는 그냥 알람을 껐다. 암호화폐에 좋은 게 없는 이유다.</span>
+<span class="i18n-text" data-lang="es">Un mensaje de commit de 5 caracteres para 1534 líneas de código crítico de seguridad. El compilador gritaba &#x27;reconsidera tus decisiones de vida&#x27; y el dev simplemente silenció la alarma. Por eso no podemos tener cosas bonitas en crypto.</span>
+<span class="i18n-text" data-lang="de">Eine 5-Zeichen-Commit-Nachricht für 1534 Zeilen sicherheitskritischen Codes. Der Compiler schrie &#x27;überdenke deine Lebensentscheidungen&#x27; und der Entwickler schaltete einfach den Alarm aus. Deshalb können wir in Crypto keine schönen Dinge haben.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I am getting suspicious of &#x27;random number generator not actually returning random numbers&#x27; bugs... They are the perfect bug for someone trying to &#x27;accidentally&#x27; make a secure system insecure."</div>
+          <div class="comment-i18n" data-lang="zh">我对&#x27;随机数生成器实际上不返回随机数&#x27;的漏洞越来越怀疑了……这是想&#x27;不小心&#x27;让安全系统变得不安全的完美漏洞。</div>
+<div class="comment-i18n" data-lang="ja">&#x27;乱数生成器が実際には乱数を返さない&#x27;バグに疑念を抱いている…安全なシステムを&#x27;うっかり&#x27;不安全にする完璧なバグだ。</div>
+<div class="comment-i18n" data-lang="ko">&#x27;난수 생성기가 실제로 난수를 반환하지 않는&#x27; 버그에 의심이 든다... 안전한 시스템을 &#x27;실수로&#x27; 불안전하게 만들려는 완벽한 버그다.</div>
+<div class="comment-i18n" data-lang="es">Estoy sospechando de los bugs de &#x27;generador de números aleatorios que no devuelve números aleatorios&#x27;... Son el bug perfecto para quien quiere hacer &#x27;accidentalmente&#x27; inseguro un sistema seguro.</div>
+<div class="comment-i18n" data-lang="de">Ich werde misstrauisch bei &#x27;Zufallszahlengenerator gibt keine Zufallszahlen zurück&#x27;-Bugs... Sie sind der perfekte Bug für jemanden, der ein sicheres System &#x27;versehentlich&#x27; unsicher machen will.</div>
+
+          <div class="comment-author">-- londons_explore</div>
+        </div><div class="comment">
+          <div class="comment-text">"This post assumed that the author of the &#x27;runs&#x27; commit was not acting maliciously. Has that been established?"</div>
+          <div class="comment-i18n" data-lang="zh">这篇文章假设&#x27;runs&#x27;提交的作者不是恶意行为。这点确定了吗？</div>
+<div class="comment-i18n" data-lang="ja">この記事は&#x27;runs&#x27;コミットの作者が悪意を持っていなかったと仮定している。それは確認されたのか？</div>
+<div class="comment-i18n" data-lang="ko">이 글은 &#x27;runs&#x27; 커밋 작성자가 악의적으로 행동하지 않았다고 가정한다. 그게 확인됐나?</div>
+<div class="comment-i18n" data-lang="es">Este post asume que el autor del commit &#x27;runs&#x27; no actuó maliciosamente. ¿Eso se ha establecido?</div>
+<div class="comment-i18n" data-lang="de">Dieser Post nimmt an, dass der Autor des &#x27;runs&#x27;-Commits nicht böswillig handelte. Ist das belegt?</div>
+
+          <div class="comment-author">-- anonymousiam</div>
+        </div><div class="comment">
+          <div class="comment-text">"This writeup isn&#x27;t very good and misses/misunderstands the programming error that leads to the flaw. The article would have you think that the change in question was a tiny change to a flag to make it compile, but in reality the commit in question is a 1533 line addition of the entire RNG infrastructure."</div>
+          <div class="comment-i18n" data-lang="zh">这篇分析不太好，误解了导致缺陷的编程错误。文章让你以为这个改动只是一个小标志位的修改，但实际上这个提交增加了1533行完整的RNG基础设施。</div>
+<div class="comment-i18n" data-lang="ja">この解説はあまり良くなく、欠陥につながるプログラミングエラーを見落とし/誤解している。記事はこの変更が小さなフラグ変更だったように見せているが、実際はRNGインフラ全体の1533行追加だ。</div>
+<div class="comment-i18n" data-lang="ko">이 분석은 별로 좋지 않고 결함을 초래하는 프로그래밍 오류를 놓치거나 오해하고 있다. 기사는 작은 플래그 변경처럼 보이게 하지만 실제로는 전체 RNG 인프라 1533줄 추가다.</div>
+<div class="comment-i18n" data-lang="es">Este análisis no es muy bueno y pasa por alto/malinterpreta el error de programación que lleva a la falla. El artículo te hace pensar que fue un pequeño cambio de flag, pero en realidad el commit añade 1533 líneas de infraestructura RNG completa.</div>
+<div class="comment-i18n" data-lang="de">Diese Analyse ist nicht sehr gut und übersieht/missversteht den Programmierfehler, der zu dem Fehler führt. Der Artikel lässt es wie eine kleine Flag-Änderung aussehen, aber tatsächlich fügt der Commit 1533 Zeilen kompletter RNG-Infrastruktur hinzu.</div>
+
+          <div class="comment-author">-- nullc</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#security</span><span class="tag">#bitcoin</span><span class="tag">#rng</span><span class="tag">#coldcard</span></div>
+    </article>
+<article class="story" id="s49141073-08020828">
+      <h3 class="story-title">
+        <a href="https://www.wafer.ai/blog/kimi-k3-mi355x" target="_blank">Running Kimi K3 on MI355X at Better Performance per Dollar Than B300</a>
+        <a href="#s49141073-08020828" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">在MI355X上运行Kimi K3，性价比超越B300</div>
+<div class="i18n-title" data-lang="ja">MI355XでKimi K3を実行、B300より優れた価格性能比</div>
+<div class="i18n-title" data-lang="ko">MI355X에서 Kimi K3 실행, B300보다 나은 가격 대비 성능</div>
+<div class="i18n-title" data-lang="es">Ejecutando Kimi K3 en MI355X con mejor rendimiento por dólar que B300</div>
+<div class="i18n-title" data-lang="de">Kimi K3 auf MI355X mit besserem Preis-Leistungs-Verhältnis als B300</div>
+
+      <div class="story-meta">
+        113pts | 21c | <a href="https://news.ycombinator.com/item?id=49141073" target="_blank">HN#49141073</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">Wafer ran Kimi K3 (2.8T params, bigger than DeepSeek V4-Pro) on 8x AMD MI355X and got 952 tok/s at 48 tok/s per GPU-dollar. That&#x27;s 1.45x better price-performance than B300s. The trick: MI355X has 288GB VRAM per GPU, same as B300, but at 2.4x lower cost. Fixed some ROCm bugs along the way including a missing top-k renorm kernel.</div>
+        <span class="i18n-text" data-lang="zh">Wafer在8块AMD MI355X上运行Kimi K3（2.8T参数，比DeepSeek V4-Pro还大），达到952 tok/s，每GPU美元48 tok/s。比B300性价比高1.45倍。关键：MI355X每GPU有288GB显存，与B300相同，但成本低2.4倍。顺便修了一些ROCm bug，包括缺失的top-k重归一化内核。</span>
+<span class="i18n-text" data-lang="ja">Waferが8枚のAMD MI355XでKimi K3（2.8Tパラメータ、DeepSeek V4-Proより大きい）を実行し、952 tok/s、GPUドルあたり48 tok/sを達成。B300の1.45倍の価格性能比。ポイント：MI355XはGPUあたり288GB VRAM、B300と同じだが2.4倍安い。途中でtop-k renormカーネルの欠落を含むROCmバグを修正。</span>
+<span class="i18n-text" data-lang="ko">Wafer가 8개 AMD MI355X에서 Kimi K3(2.8T 파라미터, DeepSeek V4-Pro보다 큼)를 실행해 952 tok/s, GPU 달러당 48 tok/s 달성. B300보다 가격 대비 성능 1.45배 우수. 핵심: MI355X는 GPU당 288GB VRAM으로 B300과 같지만 2.4배 저렴. 중간에 top-k renorm 커널 누락 등 ROCm 버그도 수정.</span>
+<span class="i18n-text" data-lang="es">Wafer ejecutó Kimi K3 (2.8T parámetros, más grande que DeepSeek V4-Pro) en 8x AMD MI355X y obtuvo 952 tok/s a 48 tok/s por dólar-GPU. Eso es 1.45x mejor precio-rendimiento que B300s. El truco: MI355X tiene 288GB VRAM por GPU, igual que B300, pero a 2.4x menor costo. Arreglaron algunos bugs de ROCm incluyendo un kernel top-k renorm faltante.</span>
+<span class="i18n-text" data-lang="de">Wafer ließ Kimi K3 (2.8T Parameter, größer als DeepSeek V4-Pro) auf 8x AMD MI355X laufen und erreichte 952 tok/s bei 48 tok/s pro GPU-Dollar. Das ist 1.45x besseres Preis-Leistungs-Verhältnis als B300s. Der Trick: MI355X hat 288GB VRAM pro GPU, genau wie B300, aber zu 2.4x niedrigeren Kosten. Einige ROCm-Bugs behoben, darunter ein fehlender top-k renorm Kernel.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">AMD keeps winning the &#x27;we have more VRAM and it&#x27;s cheaper&#x27; game while NVIDIA charges B300 prices. The CUDA moat looks more like a puddle when your model won&#x27;t even fit on B200 nodes.</div>
+        <span class="i18n-text" data-lang="zh">AMD在&#x27;我们有更多显存而且更便宜&#x27;的游戏中持续获胜，而NVIDIA收着B300的价格。当你的模型连B200节点都装不下时，CUDA护城河看起来更像是一个水坑。</span>
+<span class="i18n-text" data-lang="ja">AMDは「VRAMが多くて安い」ゲームで勝ち続けている一方、NVIDIAはB300価格を請求。モデルがB200ノードに収まらないとき、CUDAの堀は水たまりに見える。</span>
+<span class="i18n-text" data-lang="ko">AMD는 &#x27;더 많은 VRAM을 더 싸게&#x27; 게임에서 계속 승리하고 NVIDIA는 B300 가격을 받고 있다. 모델이 B200 노드에 맞지도 않으면 CUDA 해자는 웅덩이처럼 보인다.</span>
+<span class="i18n-text" data-lang="es">AMD sigue ganando el juego de &#x27;tenemos más VRAM y es más barato&#x27; mientras NVIDIA cobra precios de B300. El foso CUDA parece más un charco cuando tu modelo ni siquiera cabe en nodos B200.</span>
+<span class="i18n-text" data-lang="de">AMD gewinnt weiterhin das &#x27;wir haben mehr VRAM und es ist günstiger&#x27;-Spiel während NVIDIA B300-Preise verlangt. Der CUDA-Burggraben sieht eher wie eine Pfütze aus, wenn dein Modell nicht mal auf B200-Nodes passt.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I wish they wouldn&#x27;t call them &#x27;open source models&#x27;. They aren&#x27;t open source. They didn&#x27;t publish the training data. They didn&#x27;t publish the tools they used to train the model. They published the weights. It&#x27;s an &#x27;open weight model&#x27;."</div>
+          <div class="comment-i18n" data-lang="zh">我希望他们不要称之为&#x27;开源模型&#x27;。它们不是开源的。他们没有公布训练数据。没有公布训练模型的工具。他们只公布了权重。这是&#x27;开放权重模型&#x27;。</div>
+<div class="comment-i18n" data-lang="ja">&#x27;オープンソースモデル&#x27;と呼ばないでほしい。オープンソースじゃない。訓練データも訓練ツールも公開していない。重みを公開しただけ。&#x27;オープンウェイトモデル&#x27;だ。</div>
+<div class="comment-i18n" data-lang="ko">&#x27;오픈 소스 모델&#x27;이라고 부르지 않았으면 좋겠다. 오픈 소스가 아니다. 훈련 데이터도 공개 안 했고 훈련 도구도 공개 안 했다. 가중치만 공개했다. &#x27;오픈 웨이트 모델&#x27;이다.</div>
+<div class="comment-i18n" data-lang="es">Ojalá no los llamaran &#x27;modelos open source&#x27;. No son open source. No publicaron los datos de entrenamiento. No publicaron las herramientas de entrenamiento. Publicaron los pesos. Es un &#x27;modelo de pesos abiertos&#x27;.</div>
+<div class="comment-i18n" data-lang="de">Ich wünschte, sie würden sie nicht &#x27;Open-Source-Modelle&#x27; nennen. Sie sind nicht Open Source. Sie haben die Trainingsdaten nicht veröffentlicht. Die Trainingstools nicht veröffentlicht. Sie haben die Gewichte veröffentlicht. Es ist ein &#x27;Open-Weight-Modell&#x27;.</div>
+
+          <div class="comment-author">-- kelnos</div>
+        </div><div class="comment">
+          <div class="comment-text">"How is the capex on 8x MI354X even remotely justified at less than $10/h?"</div>
+          <div class="comment-i18n" data-lang="zh">8块MI354X的资本支出在每小时不到10美元的情况下怎么可能合理？</div>
+<div class="comment-i18n" data-lang="ja">8枚のMI354Xの設備投資が時給10ドル以下でどうやって正当化できるのか？</div>
+<div class="comment-i18n" data-lang="ko">8개 MI354X 자본 지출이 시간당 10달러 미만에서 어떻게 정당화되나?</div>
+<div class="comment-i18n" data-lang="es">¿Cómo se justifica el capex de 8x MI354X a menos de $10/h?</div>
+<div class="comment-i18n" data-lang="de">Wie rechtfertigt sich der Capex von 8x MI354X bei unter $10/h?</div>
+
+          <div class="comment-author">-- GuestFAUniverse</div>
+        </div><div class="comment">
+          <div class="comment-text">"This part sounds like AI assisted setting this up and benchmarking it: &#x27;The fix was trivially simple: zero-pad the head count 12→16, run the fast kernel, and extract the real 12 heads from the output.&#x27;"</div>
+          <div class="comment-i18n" data-lang="zh">这部分听起来像是用AI辅助设置和基准测试：&#x27;修复非常简单：将头数从12填充到16，运行快速内核，然后从输出中提取真正的12个头。&#x27;</div>
+<div class="comment-i18n" data-lang="ja">この部分はAI支援でセットアップとベンチマークをしたように聞こえる：&#x27;修正は簡単だった：ヘッド数を12→16にゼロパディングし、高速カーネルを実行し、出力から実際の12ヘッドを抽出。&#x27;</div>
+<div class="comment-i18n" data-lang="ko">이 부분은 AI 보조로 설정하고 벤치마킹한 것 같다: &#x27;수정은 간단했다: 헤드 수를 12→16으로 제로 패딩하고 빠른 커널을 실행하고 출력에서 실제 12개 헤드를 추출.&#x27;</div>
+<div class="comment-i18n" data-lang="es">Esta parte suena como configuración asistida por IA: &#x27;La solución fue trivialmente simple: rellenar con ceros el conteo de cabezas 12→16, ejecutar el kernel rápido y extraer las 12 cabezas reales de la salida.&#x27;</div>
+<div class="comment-i18n" data-lang="de">Dieser Teil klingt nach KI-unterstütztem Setup und Benchmarking: &#x27;Die Lösung war trivial einfach: Head-Count von 12→16 mit Nullen auffüllen, schnellen Kernel ausführen und die echten 12 Heads aus der Ausgabe extrahieren.&#x27;</div>
+
+          <div class="comment-author">-- logicallee</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#ai</span><span class="tag">#amd</span><span class="tag">#inference</span><span class="tag">#llm</span></div>
+    </article>
+<article class="story" id="s49137713-08020828">
+      <h3 class="story-title">
+        <a href="https://raymii.org/s/articles/But_can_your_calculator_run_Linux.html" target="_blank">But can your calculator run Linux?</a>
+        <a href="#s49137713-08020828" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">但你的计算器能运行Linux吗？</div>
+<div class="i18n-title" data-lang="ja">でも、あなたの電卓はLinuxを動かせる？</div>
+<div class="i18n-title" data-lang="ko">근데 당신 계산기는 리눅스 돌릴 수 있어?</div>
+<div class="i18n-title" data-lang="es">¿Pero tu calculadora puede correr Linux?</div>
+<div class="i18n-title" data-lang="de">Aber kann dein Taschenrechner Linux laufen lassen?</div>
+
+      <div class="story-meta">
+        93pts | 9c | <a href="https://news.ycombinator.com/item?id=49137713" target="_blank">HN#49137713</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">The HP Prime G2 graphing calculator has an i.MX 6 ARM Cortex A7 CPU with 256MB RAM. That&#x27;s absurd for a calculator. The author ported Linux to it: fixed keyboard input, wrote a driver for the new Ilitek touchscreen, got X11 working, added tcc compiler, and of course Doom. There&#x27;s even a Windows 10 port showing calc.exe running on an actual calculator.</div>
+        <span class="i18n-text" data-lang="zh">HP Prime G2图形计算器配备i.MX 6 ARM Cortex A7 CPU和256MB内存。对于计算器来说这太夸张了。作者将Linux移植到上面：修复了键盘输入，为新的Ilitek触摸屏写了驱动，让X11工作，添加了tcc编译器，当然还有Doom。甚至还有Windows 10移植版，在真正的计算器上运行calc.exe。</span>
+<span class="i18n-text" data-lang="ja">HP Prime G2グラフ電卓にはi.MX 6 ARM Cortex A7 CPUと256MB RAMが搭載。電卓としては馬鹿げている。著者がLinuxを移植：キーボード入力を修正、新しいIlitekタッチスクリーンのドライバを書き、X11を動かし、tccコンパイラを追加、もちろんDoomも。Windows 10移植版では本物の電卓でcalc.exeが動いている。</span>
+<span class="i18n-text" data-lang="ko">HP Prime G2 그래프 계산기에는 i.MX 6 ARM Cortex A7 CPU와 256MB RAM이 탑재되어 있다. 계산기치고는 말도 안 된다. 저자가 리눅스를 이식했다: 키보드 입력 수정, 새로운 Ilitek 터치스크린 드라이버 작성, X11 작동, tcc 컴파일러 추가, 물론 Doom도. 심지어 Windows 10 이식판에서는 실제 계산기에서 calc.exe가 실행된다.</span>
+<span class="i18n-text" data-lang="es">La calculadora gráfica HP Prime G2 tiene un CPU i.MX 6 ARM Cortex A7 con 256MB de RAM. Eso es absurdo para una calculadora. El autor portó Linux: arregló la entrada de teclado, escribió un driver para la nueva pantalla táctil Ilitek, hizo funcionar X11, añadió el compilador tcc, y por supuesto Doom. Incluso hay un port de Windows 10 mostrando calc.exe corriendo en una calculadora real.</span>
+<span class="i18n-text" data-lang="de">Der HP Prime G2 Grafikrechner hat einen i.MX 6 ARM Cortex A7 CPU mit 256MB RAM. Das ist absurd für einen Taschenrechner. Der Autor hat Linux portiert: Tastatureingabe repariert, Treiber für den neuen Ilitek-Touchscreen geschrieben, X11 zum Laufen gebracht, tcc-Compiler hinzugefügt, und natürlich Doom. Es gibt sogar einen Windows 10 Port mit calc.exe auf einem echten Taschenrechner.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Someone at HP put smartphone specs in a graphing calculator and didn&#x27;t think we&#x27;d notice. Now it runs xcalc on top of Linux on top of a calculator. We&#x27;ve achieved peak recursion.</div>
+        <span class="i18n-text" data-lang="zh">HP的某人把智能手机配置塞进图形计算器里，以为我们不会注意到。现在它在计算器上运行Linux，在Linux上运行xcalc。我们达到了递归的巅峰。</span>
+<span class="i18n-text" data-lang="ja">HPの誰かがスマホのスペックをグラフ電卓に入れて、気づかないと思ったらしい。今や電卓の上でLinuxが動き、その上でxcalcが動いている。再帰の極みに達した。</span>
+<span class="i18n-text" data-lang="ko">HP의 누군가가 스마트폰 사양을 그래프 계산기에 넣고 우리가 눈치 못 챌 줄 알았나 보다. 이제 계산기 위에서 리눅스가 돌고, 그 위에서 xcalc가 돈다. 재귀의 정점에 도달했다.</span>
+<span class="i18n-text" data-lang="es">Alguien en HP puso especificaciones de smartphone en una calculadora gráfica y pensó que no nos daríamos cuenta. Ahora corre xcalc sobre Linux sobre una calculadora. Hemos alcanzado la recursión máxima.</span>
+<span class="i18n-text" data-lang="de">Jemand bei HP hat Smartphone-Specs in einen Grafikrechner gesteckt und dachte, wir würden es nicht merken. Jetzt läuft xcalc auf Linux auf einem Taschenrechner. Wir haben Peak-Rekursion erreicht.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"I use the Prime G2 daily. I VERY much prefer RPN, love that I can program it with Python (and occasionally PPL), and am often in environments where having a backlit screen is a lot more convenient than pulling out a flashlight."</div>
+          <div class="comment-i18n" data-lang="zh">我每天都用Prime G2。我非常喜欢RPN，喜欢可以用Python编程，而且在需要背光屏幕的环境下比掏手电筒方便多了。</div>
+<div class="comment-i18n" data-lang="ja">私は毎日Prime G2を使っている。RPNが大好きで、Pythonでプログラミングできるのも気に入っている。バックライト付き画面がある環境では懐中電灯を出すより便利だ。</div>
+<div class="comment-i18n" data-lang="ko">나는 매일 Prime G2를 쓴다. RPN을 매우 좋아하고, Python으로 프로그래밍할 수 있어서 좋고, 백라이트 화면이 있는 환경에서는 손전등 꺼내는 것보다 훨씬 편하다.</div>
+<div class="comment-i18n" data-lang="es">Uso la Prime G2 a diario. PREFIERO mucho RPN, me encanta programarla con Python, y a menudo estoy en ambientes donde tener pantalla retroiluminada es más conveniente que sacar una linterna.</div>
+<div class="comment-i18n" data-lang="de">Ich benutze den Prime G2 täglich. Ich BEVORZUGE RPN sehr, liebe es, dass ich ihn mit Python programmieren kann, und oft bin ich in Umgebungen, wo ein beleuchtetes Display praktischer ist als eine Taschenlampe rauszuholen.</div>
+
+          <div class="comment-author">-- DrewADesign</div>
+        </div><div class="comment">
+          <div class="comment-text">"But can your Linux run calculator?"</div>
+          <div class="comment-i18n" data-lang="zh">但你的Linux能运行计算器吗？</div>
+<div class="comment-i18n" data-lang="ja">でも、あなたのLinuxは電卓を動かせる？</div>
+<div class="comment-i18n" data-lang="ko">근데 당신 리눅스는 계산기 돌릴 수 있어?</div>
+<div class="comment-i18n" data-lang="es">¿Pero tu Linux puede correr calculadora?</div>
+<div class="comment-i18n" data-lang="de">Aber kann dein Linux Taschenrechner laufen lassen?</div>
+
+          <div class="comment-author">-- thelibrarian</div>
+        </div><div class="comment">
+          <div class="comment-text">"Yes, in fact it can. ［1］ https://calculinux.org/"</div>
+          <div class="comment-i18n" data-lang="zh">是的，事实上可以。［1］ https://calculinux.org/</div>
+<div class="comment-i18n" data-lang="ja">実は動かせる。［1］ https://calculinux.org/</div>
+<div class="comment-i18n" data-lang="ko">네, 사실 가능해요. ［1］ https://calculinux.org/</div>
+<div class="comment-i18n" data-lang="es">Sí, de hecho puede. ［1］ https://calculinux.org/</div>
+<div class="comment-i18n" data-lang="de">Ja, tatsächlich kann es das. ［1］ https://calculinux.org/</div>
+
+          <div class="comment-author">-- gorkish</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#linux</span><span class="tag">#hardware</span><span class="tag">#embedded</span><span class="tag">#calculator</span></div>
+    </article>
+<article class="story" id="s49140599-08020828">
+      <h3 class="story-title">
+        <a href="https://www.science.org/content/article/deep-sea-vehicles-spot-alien-sharks-deep-beneath-waves-pacific" target="_blank">Deep-sea vehicles spot &#x27;alien&#x27; sharks deep beneath the waves in the Pacific</a>
+        <a href="#s49140599-08020828" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">深海探测器在太平洋深处发现&#x27;外星人&#x27;鲨鱼</div>
+<div class="i18n-title" data-lang="ja">深海探査機が太平洋深海で&#x27;エイリアン&#x27;サメを発見</div>
+<div class="i18n-title" data-lang="ko">심해 탐사선이 태평양 깊은 곳에서 &#x27;외계인&#x27; 상어 발견</div>
+<div class="i18n-title" data-lang="es">Vehículos de aguas profundas avistan tiburones &#x27;alienígenas&#x27; en las profundidades del Pacífico</div>
+<div class="i18n-title" data-lang="de">Tiefseefahrzeuge entdecken &#x27;Alien&#x27;-Haie tief unter den Wellen im Pazifik</div>
+
+      <div class="story-meta">
+        45pts | 18c | <a href="https://news.ycombinator.com/item?id=49140599" target="_blank">HN#49140599</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">ROVs filmed goblin sharks in their natural habitat for the first time ever. One was spotted 2km deep near Jarvis Island in 2019, another near Tonga at nearly 2000m in 2024. These pink-gray sharks have snap-forward jaws that extend at 3+ m/s. The footage sat unanalyzed for years and shows they range much farther into the Pacific than previously known.</div>
+        <span class="i18n-text" data-lang="zh">ROV首次在自然栖息地拍摄到剑吻鲨。一条于2019年在贾维斯岛附近2公里深处被发现，另一条于2024年在汤加附近近2000米深处被发现。这些粉灰色鲨鱼有能以3+米/秒速度弹出的颌骨。这段影像被搁置多年未经分析，显示它们在太平洋的分布范围比之前已知的要广得多。</span>
+<span class="i18n-text" data-lang="ja">ROVが初めて自然生息地でミツクリザメを撮影。1匹は2019年にジャービス島付近の水深2kmで、もう1匹は2024年にトンガ付近の約2000mで発見。このピンクグレーのサメは3m/s以上で飛び出す顎を持つ。映像は何年も分析されずに放置されていたが、以前知られていたよりもはるかに太平洋の広範囲に生息していることが判明。</span>
+<span class="i18n-text" data-lang="ko">ROV가 처음으로 자연 서식지에서 고블린 상어를 촬영했다. 한 마리는 2019년 자비스 섬 근처 2km 깊이에서, 다른 한 마리는 2024년 통가 근처 약 2000m에서 발견됐다. 이 분홍빛 회색 상어는 3m/s 이상 속도로 튀어나오는 턱을 가졌다. 영상은 몇 년 동안 분석되지 않고 방치됐으며, 이전에 알려진 것보다 태평양 훨씬 넓은 범위에 분포함을 보여준다.</span>
+<span class="i18n-text" data-lang="es">ROVs filmaron tiburones duende en su hábitat natural por primera vez. Uno fue avistado a 2km de profundidad cerca de la Isla Jarvis en 2019, otro cerca de Tonga a casi 2000m en 2024. Estos tiburones rosa-gris tienen mandíbulas que se extienden a más de 3 m/s. El metraje estuvo sin analizar durante años y muestra que su rango en el Pacífico es mucho mayor de lo que se conocía.</span>
+<span class="i18n-text" data-lang="de">ROVs filmten erstmals Koboldhaie in ihrem natürlichen Lebensraum. Einer wurde 2019 in 2km Tiefe nahe Jarvis Island gesichtet, ein weiterer 2024 nahe Tonga in fast 2000m Tiefe. Diese pink-grauen Haie haben Kiefer, die mit über 3 m/s vorschnellen. Das Material wurde jahrelang nicht analysiert und zeigt, dass sie viel weiter in den Pazifik vordringen als bisher bekannt.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">We&#x27;ve had footage of the ocean&#x27;s weirdest shark for 5+ years and nobody bothered to look at it. Science funding is fine, everything is fine.</div>
+        <span class="i18n-text" data-lang="zh">我们有海洋最奇怪鲨鱼的影像5年多了，却没人费心去看一眼。科学经费很充足，一切都很好。</span>
+<span class="i18n-text" data-lang="ja">海で一番変なサメの映像を5年以上持っていて、誰も見ようとしなかった。科学の予算は十分、何も問題ない。</span>
+<span class="i18n-text" data-lang="ko">바다에서 가장 이상한 상어 영상을 5년 넘게 갖고 있었는데 아무도 보려고 하지 않았다. 과학 펀딩은 충분하고, 모든 게 괜찮다.</span>
+<span class="i18n-text" data-lang="es">Teníamos metraje del tiburón más raro del océano por más de 5 años y nadie se molestó en verlo. El financiamiento científico está bien, todo está bien.</span>
+<span class="i18n-text" data-lang="de">Wir hatten Material vom seltsamsten Hai des Ozeans seit über 5 Jahren und niemand hat sich die Mühe gemacht, es anzuschauen. Wissenschaftsfinanzierung ist in Ordnung, alles ist in Ordnung.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"There are loads of unknown (to science) deep sea sharks out there, most of them quite small. A friend of mine in grad school spent several trips on a deep sea trawler out of Madagascar and described multiple new species."</div>
+          <div class="comment-i18n" data-lang="zh">有很多科学上未知的深海鲨鱼，大多数都很小。我一个读研的朋友在马达加斯加的深海拖网船上出海好几次，描述了多个新物种。</div>
+<div class="comment-i18n" data-lang="ja">科学的に未知の深海サメはたくさんいる、ほとんどが小さい。大学院の友人がマダガスカルの深海トロール船で何度か出航し、複数の新種を報告した。</div>
+<div class="comment-i18n" data-lang="ko">과학적으로 알려지지 않은 심해 상어가 많이 있고, 대부분 꽤 작다. 대학원 친구가 마다가스카르에서 심해 저인망선을 여러 번 타고 여러 신종을 보고했다.</div>
+<div class="comment-i18n" data-lang="es">Hay montones de tiburones de aguas profundas desconocidos para la ciencia, la mayoría bastante pequeños. Un amigo mío en posgrado hizo varios viajes en un arrastrero de aguas profundas de Madagascar y describió múltiples especies nuevas.</div>
+<div class="comment-i18n" data-lang="de">Es gibt viele der Wissenschaft unbekannte Tiefseehaie, die meisten ziemlich klein. Ein Freund von mir im Graduiertenstudium war mehrmals auf einem Tiefsee-Trawler vor Madagaskar und beschrieb mehrere neue Arten.</div>
+
+          <div class="comment-author">-- MostlyStable</div>
+        </div><div class="comment">
+          <div class="comment-text">"Could the light be blinding all the animals? I would assume their eyes would have evolved to be extremely sensitive to light."</div>
+          <div class="comment-i18n" data-lang="zh">光会不会让所有动物都看不见？我猜它们的眼睛应该进化得对光极其敏感。</div>
+<div class="comment-i18n" data-lang="ja">光で動物たちが目がくらんでいる可能性は？目は光に極めて敏感に進化しているはずだ。</div>
+<div class="comment-i18n" data-lang="ko">빛이 모든 동물들을 눈멀게 할 수 있을까? 눈이 빛에 극도로 민감하게 진화했을 것 같은데.</div>
+<div class="comment-i18n" data-lang="es">¿Podría la luz estar cegando a todos los animales? Asumiría que sus ojos habrían evolucionado para ser extremadamente sensibles a la luz.</div>
+<div class="comment-i18n" data-lang="de">Könnte das Licht alle Tiere blenden? Ich würde annehmen, dass ihre Augen extrem lichtempfindlich evolviert sind.</div>
+
+          <div class="comment-author">-- everyone</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#science</span><span class="tag">#ocean</span><span class="tag">#biology</span><span class="tag">#sharks</span></div>
+    </article>
+<article class="story" id="s49140218-08020828">
+      <h3 class="story-title">
+        <a href="https://victoriametrics.com/blog/go-1.27/index.html" target="_blank">Go 1.27 Interactive Tour</a>
+        <a href="#s49140218-08020828" class="story-anchor">#</a>
+      </h3>
+      <div class="i18n-title" data-lang="zh">Go 1.27 交互式教程</div>
+<div class="i18n-title" data-lang="ja">Go 1.27 インタラクティブツアー</div>
+<div class="i18n-title" data-lang="ko">Go 1.27 인터랙티브 투어</div>
+<div class="i18n-title" data-lang="es">Tour Interactivo de Go 1.27</div>
+<div class="i18n-title" data-lang="de">Go 1.27 Interaktive Tour</div>
+
+      <div class="story-meta">
+        185pts | 61c | <a href="https://news.ycombinator.com/item?id=49140218" target="_blank">HN#49140218</a>
+      </div>
+      <div class="story-section story-tldr">
+        <div class="story-label">TL;DR</div>
+        <div class="story-text">［Article currently 404, based on title + HN discussion］ VictoriaMetrics published an interactive walkthrough of Go 1.27 features. The release includes type inference improvements that some HN commenters find adds cognitive weight to the language. Also fixes runtime.findnull() compatibility with MTE on Android/GrapheneOS.</div>
+        <span class="i18n-text" data-lang="zh">［文章当前404，根据标题和HN讨论］ VictoriaMetrics发布了Go 1.27功能的交互式演示。此版本包含类型推断改进，一些HN评论者认为这增加了语言的认知负担。同时修复了runtime.findnull()在Android/GrapheneOS上与MTE的兼容性问题。</span>
+<span class="i18n-text" data-lang="ja">［記事は現在404、タイトルとHN議論に基づく］ VictoriaMetricsがGo 1.27機能のインタラクティブウォークスルーを公開。このリリースには型推論の改善が含まれ、HNコメンターの一部は言語に認知的負荷が増えたと感じている。Android/GrapheneOSでのMTEとのruntime.findnull()互換性も修正。</span>
+<span class="i18n-text" data-lang="ko">［기사 현재 404, 제목과 HN 토론 기반］ VictoriaMetrics가 Go 1.27 기능의 인터랙티브 설명을 게시했다. 이 릴리스에는 타입 추론 개선이 포함되어 있으며 일부 HN 댓글러들은 언어에 인지 부담이 추가됐다고 느낀다. Android/GrapheneOS에서 MTE와 runtime.findnull() 호환성도 수정.</span>
+<span class="i18n-text" data-lang="es">［Artículo actualmente 404, basado en título y discusión HN］ VictoriaMetrics publicó un recorrido interactivo de las características de Go 1.27. El lanzamiento incluye mejoras en inferencia de tipos que algunos comentaristas de HN encuentran añade peso cognitivo al lenguaje. También corrige compatibilidad de runtime.findnull() con MTE en Android/GrapheneOS.</span>
+<span class="i18n-text" data-lang="de">［Artikel derzeit 404, basierend auf Titel + HN-Diskussion］ VictoriaMetrics veröffentlichte einen interaktiven Durchgang der Go 1.27 Features. Das Release enthält Verbesserungen bei der Typinferenz, die einige HN-Kommentatoren als kognitive Last für die Sprache empfinden. Behebt auch runtime.findnull()-Kompatibilität mit MTE auf Android/GrapheneOS.</span>
+
+      </div>
+      <div class="story-section story-take">
+        <div class="story-label">Take</div>
+        <div class="story-text">Go adds more type system features and everyone immediately complains it&#x27;s not simple anymore. We&#x27;ve been doing this dance for 15 years now, and yet the language keeps getting more complex while everyone praises its simplicity.</div>
+        <span class="i18n-text" data-lang="zh">Go添加更多类型系统功能，所有人立刻抱怨它不再简单了。我们跳这支舞已经15年了，语言持续变复杂，而每个人还在赞美它的简洁。</span>
+<span class="i18n-text" data-lang="ja">Goが型システム機能を追加するたびに、みんなすぐにシンプルじゃなくなったと文句を言う。15年もこのダンスを踊ってきたのに、言語は複雑になり続け、みんなはそのシンプルさを称賛し続ける。</span>
+<span class="i18n-text" data-lang="ko">Go가 타입 시스템 기능을 추가할 때마다 모두가 바로 더 이상 단순하지 않다고 불평한다. 15년째 이 춤을 추고 있는데, 언어는 계속 복잡해지면서 모두가 그 단순함을 칭찬한다.</span>
+<span class="i18n-text" data-lang="es">Go añade más características al sistema de tipos y todos inmediatamente se quejan de que ya no es simple. Llevamos 15 años bailando esta danza, y el lenguaje sigue volviéndose más complejo mientras todos alaban su simplicidad.</span>
+<span class="i18n-text" data-lang="de">Go fügt mehr Typsystem-Features hinzu und alle beschweren sich sofort, dass es nicht mehr einfach ist. Wir tanzen diesen Tanz seit 15 Jahren, und die Sprache wird immer komplexer, während alle ihre Einfachheit loben.</span>
+
+      </div>
+      <div class="story-section story-comments">
+        <div class="story-label">HN Voices</div>
+        <div class="comment">
+          <div class="comment-text">"This: &#x27;(b Box［T］) Map［U any］(f func(T) U) Box［U］&#x27; is the type of cognitive weight I was happy that Go avoided."</div>
+          <div class="comment-i18n" data-lang="zh">这个：&#x27;(b Box［T］) Map［U any］(f func(T) U) Box［U］&#x27; 正是我很高兴Go避开的那种认知负担。</div>
+<div class="comment-i18n" data-lang="ja">これ：&#x27;(b Box［T］) Map［U any］(f func(T) U) Box［U］&#x27; は、Goが避けてくれて嬉しかった認知的負荷そのものだ。</div>
+<div class="comment-i18n" data-lang="ko">이것: &#x27;(b Box［T］) Map［U any］(f func(T) U) Box［U］&#x27;은 Go가 피해서 다행이었던 인지 부담 그 자체다.</div>
+<div class="comment-i18n" data-lang="es">Esto: &#x27;(b Box［T］) Map［U any］(f func(T) U) Box［U］&#x27; es el tipo de peso cognitivo que me alegraba que Go evitara.</div>
+<div class="comment-i18n" data-lang="de">Das hier: &#x27;(b Box［T］) Map［U any］(f func(T) U) Box［U］&#x27; ist genau die Art von kognitiver Last, die Go meiner Freude nach vermieden hat.</div>
+
+          <div class="comment-author">-- baalimago</div>
+        </div><div class="comment">
+          <div class="comment-text">"This release also fixes runtime.findnull() to be compatible with MTE on Android. This was the only thing preventing MTE from being enabled for apps that use gomobile on MTE-compatible Android OS&#x27;s like GrapheneOS."</div>
+          <div class="comment-i18n" data-lang="zh">这个版本还修复了runtime.findnull()与Android上MTE的兼容性。这是唯一阻止在GrapheneOS等MTE兼容Android系统上为gomobile应用启用MTE的问题。</div>
+<div class="comment-i18n" data-lang="ja">このリリースはAndroidでのMTEとのruntime.findnull()互換性も修正している。GrapheneOSのようなMTE対応AndroidでgomobileアプリのMTEを有効にできなかった唯一の問題だった。</div>
+<div class="comment-i18n" data-lang="ko">이 릴리스는 Android에서 MTE와 runtime.findnull() 호환성도 수정한다. GrapheneOS 같은 MTE 호환 Android에서 gomobile 앱의 MTE를 활성화하지 못하게 했던 유일한 문제였다.</div>
+<div class="comment-i18n" data-lang="es">Este lanzamiento también corrige runtime.findnull() para ser compatible con MTE en Android. Esto era lo único que impedía habilitar MTE para apps que usan gomobile en Android compatibles con MTE como GrapheneOS.</div>
+<div class="comment-i18n" data-lang="de">Dieses Release behebt auch runtime.findnull()-Kompatibilität mit MTE auf Android. Das war das Einzige, was MTE für Apps mit gomobile auf MTE-kompatiblen Android-OS wie GrapheneOS verhinderte.</div>
+
+          <div class="comment-author">-- chenxiaolong</div>
+        </div><div class="comment">
+          <div class="comment-text">"&gt;The quieter but bigger change - I really wish they didn&#x27;t use such stupid LLM-isms."</div>
+          <div class="comment-i18n" data-lang="zh">&gt;更安静但更大的变化 - 我真希望他们不要用这种愚蠢的LLM腔调。</div>
+<div class="comment-i18n" data-lang="ja">&gt;より静かだがより大きな変更 - こういう馬鹿げたLLM口調を使わないでほしい。</div>
+<div class="comment-i18n" data-lang="ko">&gt;더 조용하지만 더 큰 변화 - 이런 바보 같은 LLM 말투를 쓰지 않았으면 좋겠다.</div>
+<div class="comment-i18n" data-lang="es">&gt;El cambio más silencioso pero más grande - Realmente desearía que no usaran esos estúpidos LLM-ismos.</div>
+<div class="comment-i18n" data-lang="de">&gt;Die leisere aber größere Änderung - Ich wünschte wirklich, sie würden solche dummen LLM-ismen nicht verwenden.</div>
+
+          <div class="comment-author">-- my-next-account</div>
+        </div>
+      </div>
+      <div class="tags"><span class="tag">#go</span><span class="tag">#programming</span><span class="tag">#release</span></div>
+    </article>
+    </section>
 <section class="digest">
       <div class="digest-header">
         <div class="digest-date">2026-08-02T06:01:00Z</div>
