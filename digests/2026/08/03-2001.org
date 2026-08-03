@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-08-03 20:01:00 UT UTC
+#+DATE: 2026-08-03T20:01:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Open weights drop, databases get professors, and your 4GB GPU runs trillion-parameter models
+
+* Highlights
+- MiniMax H3: 2K video with stereo audio on a 3060
+- Andy Pavlo leaves CMU to start ClickHouse Labs
+- AirLLM runs DeepSeek-V3 (671B) on 12GB VRAM
+- Kermit turns 45, gets first release in 15 years
+- SearXNG gets a Rust rewrite nobody asked for
+
+* Stories
+
+** MiniMax H3 Day-0 Support in ComfyUI: Open Weights, Native Audio, and 2K Video :ai:video:open-source:comfyui:
+:PROPERTIES:
+:ID:       49155629
+:URL:      https://blog.comfy.org/p/minimax-h3-day-0-support-in-comfyui
+:HN_URL:   https://news.ycombinator.com/item?id=49155629
+:POINTS:   203
+:COMMENTS: 58
+:BY:       vblanco
+:END:
+
+*** TLDR
+MiniMax releases H3, an open-weights omni-modal video model that generates up to 2K video with native stereo audio. ComfyUI optimized it same-day with a lookup table trick that cuts memory by 66%, letting it run on an RTX 3060. Supports text-to-video, image-to-video, and motion transfer.
+
+*** Take
+The real story is the lookup table optimization that pruned 40% of parameters with 'no loss in output quality.' Either MiniMax shipped a bloated model, or ComfyUI's engineers are wizards. Both possibilities are entertaining.
+
+*** Comments
+
+**** embedding-shape
+:PROPERTIES:
+:COMMENT_ID: 49155700
+:END:
+Is this a common approach to reducing weights with 'no loss in output quality'? Seems almost too simple to work.
+
+**** vblanco
+:PROPERTIES:
+:COMMENT_ID: 49155750
+:END:
+Im running this on my 4070ti super (16 gb vram), and it takes 10 minutes for a 10-seconds 480p video. But the results are spectacular.
+
+**** sheesdev
+:PROPERTIES:
+:COMMENT_ID: 49155800
+:END:
+The mouse render is surprisingly good. Several of those clips stood out to be a pretty big leap in terms of current SOTA models.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+MiniMax H3首日支持ComfyUI：开放权重、原生音频和2K视频
+***** TLDR
+MiniMax发布H3，一个开放权重的全模态视频模型，可生成最高2K视频和原生立体声音频。ComfyUI当天就用查找表技巧优化，内存减少66%，可在RTX 3060上运行。支持文生视频、图生视频和动作迁移。
+***** Take
+真正的故事是查找表优化砍掉了40%的参数，号称'无质量损失'。要么MiniMax发布了臃肿的模型，要么ComfyUI的工程师是魔法师。两种可能都很有趣。
+***** Comments
+- 这种无质量损失减少权重的方法常见吗？看起来太简单了不像能行。
+- 我在4070ti super上跑，16GB显存，10分钟生成10秒480p视频。但效果惊艳。
+- 鼠标渲染效果出奇的好。好几个片段明显比现有SOTA模型有很大提升。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+MiniMax H3がComfyUIで初日サポート：オープンウェイト、ネイティブオーディオ、2K動画
+***** TLDR
+MiniMaxがH3をリリース。オープンウェイトのオムニモーダル動画モデルで、最大2K動画とネイティブステレオ音声を生成。ComfyUIが即日ルックアップテーブルで最適化し、メモリ66%削減、RTX 3060で動作可能に。テキスト・画像からの動画生成とモーション転送をサポート。
+***** Take
+本当の話はルックアップテーブル最適化でパラメータの40%を削減して「品質損失なし」という点。MiniMaxが肥大化したモデルを出荷したか、ComfyUIのエンジニアが魔法使いか。どちらも面白い。
+***** Comments
+- これは品質損失なしでウェイトを削減する一般的なアプローチですか？単純すぎて効くとは思えません。
+- 4070ti super（16GB VRAM）で動かしてますが、10秒480p動画に10分かかります。でも結果は素晴らしい。
+- マウスのレンダリングは驚くほど良い。いくつかのクリップは現在のSOTAモデルと比べて大きな飛躍です。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+MiniMax H3 ComfyUI 첫날 지원: 오픈 웨이트, 네이티브 오디오, 2K 비디오
+***** TLDR
+MiniMax가 H3 출시. 최대 2K 비디오와 네이티브 스테레오 오디오를 생성하는 오픈 웨이트 옴니모달 비디오 모델. ComfyUI가 당일 룩업 테이블 기법으로 최적화해 메모리 66% 절감, RTX 3060에서 실행 가능. 텍스트-투-비디오, 이미지-투-비디오, 모션 전송 지원.
+***** Take
+진짜 이야기는 파라미터 40%를 '품질 손실 없이' 잘라낸 룩업 테이블 최적화다. MiniMax가 비대한 모델을 출시했거나, ComfyUI 엔지니어들이 마법사거나. 둘 다 재밌다.
+***** Comments
+- 이게 품질 손실 없이 웨이트를 줄이는 일반적인 접근법인가요? 너무 단순해서 효과가 있을 것 같지 않네요.
+- 4070ti super(16GB VRAM)에서 돌리는데 10초 480p 비디오에 10분 걸립니다. 하지만 결과는 훌륭해요.
+- 마우스 렌더링이 놀라울 정도로 좋습니다. 현재 SOTA 모델 대비 큰 도약인 클립들이 여럿 있어요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+MiniMax H3 con soporte día cero en ComfyUI: pesos abiertos, audio nativo y video 2K
+***** TLDR
+MiniMax lanza H3, un modelo de video omnimodal de pesos abiertos que genera video hasta 2K con audio estéreo nativo. ComfyUI lo optimizó el mismo día con una tabla de búsqueda que reduce la memoria un 66%, permitiendo ejecutarlo en una RTX 3060. Soporta texto a video, imagen a video y transferencia de movimiento.
+***** Take
+La verdadera historia es la optimización con tabla de búsqueda que eliminó el 40% de los parámetros 'sin pérdida de calidad'. O MiniMax lanzó un modelo inflado, o los ingenieros de ComfyUI son magos. Ambas posibilidades son entretenidas.
+***** Comments
+- ¿Es este un enfoque común para reducir pesos 'sin pérdida de calidad'? Parece demasiado simple para funcionar.
+- Lo estoy ejecutando en mi 4070ti super (16 GB VRAM), y tarda 10 minutos para un video de 10 segundos en 480p. Pero los resultados son espectaculares.
+- El renderizado del ratón es sorprendentemente bueno. Varios de esos clips destacan como un gran salto respecto a los modelos SOTA actuales.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+MiniMax H3 Tag-0-Unterstützung in ComfyUI: Offene Gewichte, nativer Audio und 2K-Video
+***** TLDR
+MiniMax veröffentlicht H3, ein omnimodales Videomodell mit offenen Gewichten, das bis zu 2K-Video mit nativem Stereo-Audio generiert. ComfyUI hat es am selben Tag mit einem Lookup-Table-Trick optimiert, der den Speicher um 66% reduziert und es auf einer RTX 3060 lauffähig macht. Unterstützt Text-zu-Video, Bild-zu-Video und Bewegungsübertragung.
+***** Take
+Die wahre Geschichte ist die Lookup-Table-Optimierung, die 40% der Parameter 'ohne Qualitätsverlust' entfernte. Entweder hat MiniMax ein aufgeblähtes Modell ausgeliefert, oder die ComfyUI-Ingenieure sind Zauberer. Beide Möglichkeiten sind unterhaltsam.
+***** Comments
+- Ist das ein üblicher Ansatz zur Reduzierung von Gewichten 'ohne Qualitätsverlust'? Scheint fast zu einfach, um zu funktionieren.
+- Ich lasse es auf meiner 4070ti super (16 GB VRAM) laufen, und es dauert 10 Minuten für ein 10-Sekunden 480p-Video. Aber die Ergebnisse sind spektakulär.
+- Das Maus-Rendering ist überraschend gut. Mehrere dieser Clips stechen als ziemlich großer Sprung gegenüber aktuellen SOTA-Modellen hervor.
+** Andy Pavlo joins ClickHouse to establish ClickHouse Labs :database:clickhouse:research:academia:
+:PROPERTIES:
+:ID:       49156011
+:URL:      https://clickhouse.com/blog/andy-pavlo-joins-clickhouse
+:HN_URL:   https://news.ycombinator.com/item?id=49156011
+:POINTS:   196
+:COMMENTS: 44
+:BY:       nikolay_sivko
+:END:
+
+*** TLDR
+Andy Pavlo, the CMU database professor famous for his lecture series and dbdb.io, is leaving academia to start ClickHouse Labs. The research group aims to push ClickHouse to the 'bleeding edge' while also working on their PostgreSQL managed service. He's been following ClickHouse since 2016 when he thought it was vaporware.
+
+*** Take
+A database professor leaving tenure to join industry is like a monk leaving the monastery for a hedge fund. But when your whole job is tracking every DBMS ever made and you pick ClickHouse, that's the endorsement money can't buy.
+
+*** Comments
+
+**** remywang
+:PROPERTIES:
+:COMMENT_ID: 49156100
+:END:
+Please also try to convince ClickHouse to consider funding DB research in academia. With all the money being poured into AI, there is almost nothing for DB research anymore.
+
+**** a34729t
+:PROPERTIES:
+:COMMENT_ID: 49156150
+:END:
+I'm very curious about the convergence of the best in class fast OLAP products with Trino. Everybody is going for decoupled compute/storage.
+
+**** tomsanbear
+:PROPERTIES:
+:COMMENT_ID: 49156200
+:END:
+Always enjoyed his lecture series from CMU, hopefully those continue in a sponsored format from ClickHouse.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Andy Pavlo加入ClickHouse创建ClickHouse Labs
+***** TLDR
+CMU数据库教授Andy Pavlo以其讲座系列和dbdb.io闻名，将离开学术界创建ClickHouse Labs。该研究团队旨在将ClickHouse推向'技术前沿'，同时也负责PostgreSQL托管服务。他从2016年起就关注ClickHouse，当时还以为是空头支票。
+***** Take
+一个数据库教授放弃终身教职去加入企业，就像一个僧侣离开寺庙去对冲基金。但当你的工作就是追踪每一个数据库系统然后选择了ClickHouse，这是钱买不到的背书。
+***** Comments
+- 也请尝试说服ClickHouse考虑资助学术界的数据库研究。现在所有钱都投到AI了，数据库研究几乎没有资金。
+- 我很好奇顶级快速OLAP产品与Trino的融合。大家都在走存算分离。
+- 一直很喜欢他在CMU的讲座系列，希望能以ClickHouse赞助的形式继续。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Andy PavloがClickHouseに参加しClickHouse Labsを設立
+***** TLDR
+講義シリーズとdbdb.ioで有名なCMUのデータベース教授Andy Pavloが、アカデミアを離れてClickHouse Labsを立ち上げる。研究グループはClickHouseを「最先端」に押し上げることを目指し、PostgreSQLマネージドサービスにも取り組む。2016年からClickHouseをフォローしており、当時はヴェイパーウェアだと思っていた。
+***** Take
+データベース教授がテニュアを捨てて業界に入るのは、僧侶が寺を出てヘッジファンドに行くようなもの。でも全てのDBMSを追跡する仕事をしていてClickHouseを選んだなら、それはお金で買えない推薦だ。
+***** Comments
+- ClickHouseにアカデミアのDB研究への資金提供も検討するよう説得してください。AIに全ての資金が注がれ、DB研究にはほとんど何もありません。
+- トップクラスの高速OLAP製品とTrinoの収束に興味があります。みんなコンピュートとストレージの分離に向かっています。
+- CMUの講義シリーズはいつも楽しみでした。ClickHouseがスポンサーする形で続くといいですね。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Andy Pavlo가 ClickHouse에 합류해 ClickHouse Labs 설립
+***** TLDR
+강의 시리즈와 dbdb.io로 유명한 CMU 데이터베이스 교수 Andy Pavlo가 학계를 떠나 ClickHouse Labs를 시작한다. 연구 그룹은 ClickHouse를 '최첨단'으로 밀어붙이는 것을 목표로 하며 PostgreSQL 관리형 서비스도 담당한다. 2016년부터 ClickHouse를 팔로우해왔는데, 당시에는 베이퍼웨어라고 생각했다.
+***** Take
+데이터베이스 교수가 종신 교수직을 버리고 산업계로 가는 건 승려가 절을 떠나 헤지펀드로 가는 것과 같다. 하지만 모든 DBMS를 추적하는 게 직업인 사람이 ClickHouse를 선택했다면, 돈으로 살 수 없는 추천이다.
+***** Comments
+- ClickHouse가 학계의 DB 연구 자금 지원도 고려하도록 설득해주세요. AI에 모든 돈이 쏟아지고 DB 연구에는 거의 아무것도 없습니다.
+- 최고 수준의 빠른 OLAP 제품과 Trino의 수렴에 매우 궁금합니다. 모두가 컴퓨팅/스토리지 분리로 가고 있습니다.
+- CMU 강의 시리즈 항상 즐겁게 봤습니다. ClickHouse 후원 형태로 계속되면 좋겠네요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Andy Pavlo se une a ClickHouse para establecer ClickHouse Labs
+***** TLDR
+Andy Pavlo, el profesor de bases de datos de CMU famoso por sus series de conferencias y dbdb.io, deja la academia para iniciar ClickHouse Labs. El grupo de investigación busca llevar ClickHouse a la 'vanguardia' mientras trabaja en su servicio gestionado de PostgreSQL. Ha seguido ClickHouse desde 2016, cuando pensó que era vaporware.
+***** Take
+Un profesor de bases de datos dejando la titularidad para unirse a la industria es como un monje dejando el monasterio por un fondo de cobertura. Pero cuando tu trabajo es rastrear cada DBMS jamás creado y eliges ClickHouse, ese es el respaldo que el dinero no puede comprar.
+***** Comments
+- Por favor, intenta convencer a ClickHouse de considerar financiar investigación de BD en la academia. Con todo el dinero yendo a IA, casi no hay nada para investigación de BD.
+- Tengo mucha curiosidad sobre la convergencia de los mejores productos OLAP rápidos con Trino. Todos van hacia computación/almacenamiento desacoplado.
+- Siempre disfruté sus series de conferencias de CMU, espero que continúen en formato patrocinado por ClickHouse.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Andy Pavlo tritt ClickHouse bei und gründet ClickHouse Labs
+***** TLDR
+Andy Pavlo, der CMU-Datenbankprofessor, berühmt für seine Vorlesungsreihe und dbdb.io, verlässt die Akademie, um ClickHouse Labs zu starten. Die Forschungsgruppe will ClickHouse an die 'Bleeding Edge' bringen und arbeitet auch an ihrem PostgreSQL-Managed-Service. Er verfolgt ClickHouse seit 2016, als er dachte, es sei Vaporware.
+***** Take
+Ein Datenbankprofessor, der Tenure aufgibt, um in die Industrie zu wechseln, ist wie ein Mönch, der das Kloster für einen Hedgefonds verlässt. Aber wenn dein ganzer Job darin besteht, jedes jemals erstellte DBMS zu verfolgen und du ClickHouse wählst, ist das eine Empfehlung, die man nicht kaufen kann.
+***** Comments
+- Bitte versuchen Sie auch, ClickHouse davon zu überzeugen, DB-Forschung in der Akademie zu finanzieren. Mit all dem Geld, das in KI fließt, gibt es fast nichts mehr für DB-Forschung.
+- Ich bin sehr gespannt auf die Konvergenz der besten schnellen OLAP-Produkte mit Trino. Alle gehen Richtung entkoppeltem Compute/Storage.
+- Seine Vorlesungsreihe von CMU hat mir immer gefallen, hoffentlich werden sie in einem von ClickHouse gesponserten Format fortgesetzt.
+** AirLLM 70B inference with single 4GB GPU :ai:llm:inference:hardware:
+:PROPERTIES:
+:ID:       49154228
+:URL:      https://github.com/lyogavin/airllm
+:HN_URL:   https://news.ycombinator.com/item?id=49154228
+:POINTS:   154
+:COMMENTS: 56
+:BY:       Anon84
+:END:
+
+*** TLDR
+AirLLM lets you run massive LLMs on potato GPUs by streaming one layer (or expert) at a time from disk. DeepSeek-V3 (671B) runs on 12GB, Kimi K3 (2.8T) runs on under 4GB. Speed is glacial - Kimi K3 on RTX 6000 Ada (48GB) takes 292 seconds per token - but it works.
+
+*** Take
+Finally, a way to run trillion-parameter models on hardware from 2018. The catch? You could read a novel between tokens. It's the LLM equivalent of loading games from cassette tape, and I kind of love it.
+
+*** Comments
+
+**** imenani
+:PROPERTIES:
+:COMMENT_ID: 49154300
+:END:
+For anyone wondering 'how slow is this?' - Kimi K3 on RTX 6000 Ada (48GB) takes 292 s/token.
+
+**** roger_
+:PROPERTIES:
+:COMMENT_ID: 49154350
+:END:
+Seeing a lot of these 'run 1TB models with 1GB RAM' projects recently. Most seem vibe coded and probably won't be maintained.
+
+**** seu
+:PROPERTIES:
+:COMMENT_ID: 49154400
+:END:
+I love it how the rampocalypse is pushing people to squash all the performance they can. I hope that this also leads to rethinking model architecture.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+AirLLM：单张4GB GPU运行70B推理
+***** TLDR
+AirLLM让你在土豆级GPU上运行超大LLM，通过从磁盘逐层（或逐专家）流式加载。DeepSeek-V3 (671B)只需12GB，Kimi K3 (2.8T)需要不到4GB。速度极慢——Kimi K3在RTX 6000 Ada (48GB)上每个token需要292秒——但它能跑。
+***** Take
+终于有办法在2018年的硬件上运行万亿参数模型了。代价？token之间你能看完一本小说。这是LLM版的磁带加载游戏，但我有点喜欢。
+***** Comments
+- 想知道'这有多慢？'——Kimi K3在RTX 6000 Ada (48GB)上每个token需要292秒。
+- 最近看到很多'用1GB内存运行1TB模型'的项目。大多数看起来是随便写的，可能不会维护。
+- 我喜欢这种显卡末日逼着人们榨取每一点性能的情况。希望这也能推动重新思考模型架构。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AirLLM: 4GB GPU1枚で70B推論
+***** TLDR
+AirLLMは、ディスクから1レイヤー（またはエキスパート）ずつストリーミングすることで、低スペックGPUで巨大LLMを実行可能にする。DeepSeek-V3 (671B)は12GBで、Kimi K3 (2.8T)は4GB以下で動作。速度は超遅い——Kimi K3はRTX 6000 Ada (48GB)で1トークンあたり292秒——でも動く。
+***** Take
+ついに2018年のハードウェアで兆パラメータモデルを動かす方法が。ただし？トークン間に小説が読める。カセットテープからゲームをロードするLLM版で、ちょっと好き。
+***** Comments
+- 'どれくらい遅いの？'という疑問に——Kimi K3はRTX 6000 Ada (48GB)で292秒/トークン。
+- 最近'1GB RAMで1TBモデルを動かす'プロジェクトをよく見る。ほとんどはvibe codedで、メンテされないだろう。
+- rampocalypseが人々にあらゆる性能を絞り出させているのが好き。モデルアーキテクチャの再考にもつながることを願う。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AirLLM: 4GB GPU 하나로 70B 추론
+***** TLDR
+AirLLM은 디스크에서 레이어(또는 전문가)를 하나씩 스트리밍해서 감자급 GPU에서 거대 LLM을 실행할 수 있게 한다. DeepSeek-V3 (671B)는 12GB에서, Kimi K3 (2.8T)는 4GB 미만에서 실행. 속도는 엄청 느림 - Kimi K3가 RTX 6000 Ada (48GB)에서 토큰당 292초 - 하지만 동작한다.
+***** Take
+드디어 2018년 하드웨어에서 조 단위 파라미터 모델을 돌리는 방법이. 대가는? 토큰 사이에 소설 한 권 읽을 수 있음. 카세트 테이프에서 게임 로딩하는 LLM 버전인데, 좀 좋다.
+***** Comments
+- '얼마나 느린가요?' 궁금하신 분들께 - Kimi K3가 RTX 6000 Ada (48GB)에서 토큰당 292초.
+- '1GB RAM으로 1TB 모델 실행' 프로젝트를 최근 많이 봄. 대부분 vibe coded로 보이고 유지보수 안 될 듯.
+- rampocalypse가 사람들에게 모든 성능을 짜내게 만드는 게 좋음. 모델 아키텍처 재고로 이어지길.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+AirLLM: Inferencia de 70B con una sola GPU de 4GB
+***** TLDR
+AirLLM permite ejecutar LLMs masivos en GPUs modestas transmitiendo una capa (o experto) a la vez desde disco. DeepSeek-V3 (671B) corre en 12GB, Kimi K3 (2.8T) corre con menos de 4GB. La velocidad es glacial - Kimi K3 en RTX 6000 Ada (48GB) tarda 292 segundos por token - pero funciona.
+***** Take
+Finalmente, una forma de ejecutar modelos de billones de parámetros en hardware de 2018. ¿El truco? Podrías leer una novela entre tokens. Es el equivalente LLM de cargar juegos desde cinta de casete, y me encanta un poco.
+***** Comments
+- Para los que se preguntan '¿qué tan lento es?' - Kimi K3 en RTX 6000 Ada (48GB) tarda 292 s/token.
+- Viendo muchos de estos proyectos de 'ejecutar modelos de 1TB con 1GB de RAM' recientemente. La mayoría parecen vibe coded y probablemente no se mantendrán.
+- Me encanta cómo el rampocalypse está empujando a la gente a exprimir todo el rendimiento posible. Espero que esto también lleve a repensar la arquitectura de modelos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+AirLLM: 70B-Inferenz mit einer einzelnen 4GB-GPU
+***** TLDR
+AirLLM ermöglicht das Ausführen massiver LLMs auf schwachen GPUs durch schichtweises (oder expertenweises) Streaming von der Festplatte. DeepSeek-V3 (671B) läuft auf 12GB, Kimi K3 (2.8T) auf unter 4GB. Die Geschwindigkeit ist glazial - Kimi K3 auf RTX 6000 Ada (48GB) braucht 292 Sekunden pro Token - aber es funktioniert.
+***** Take
+Endlich eine Möglichkeit, Billionen-Parameter-Modelle auf Hardware von 2018 auszuführen. Der Haken? Man könnte zwischen Tokens einen Roman lesen. Es ist das LLM-Äquivalent zum Laden von Spielen von Kassette, und ich mag es irgendwie.
+***** Comments
+- Für alle, die sich fragen 'wie langsam ist das?' - Kimi K3 auf RTX 6000 Ada (48GB) braucht 292 s/Token.
+- Sehe in letzter Zeit viele dieser 'Führe 1TB-Modelle mit 1GB RAM aus'-Projekte. Die meisten scheinen vibe coded und werden wahrscheinlich nicht gepflegt.
+- Ich liebe es, wie die Rampocalypse die Leute dazu bringt, jede mögliche Performance herauszuquetschen. Hoffentlich führt das auch zu einem Überdenken der Modellarchitektur.
+** Celebrating 45 Years of Kermit with the First New C-Kermit Release in 15 Years :legacy:protocol:open-source:history:
+:PROPERTIES:
+:ID:       49158474
+:URL:      https://changelog.complete.org/archives/44456-celebrating-45-years-of-kermit-with-the-first-new-c-kermit-release-in-15-years-and-working-with-a-decades-old-c-codebase
+:HN_URL:   https://news.ycombinator.com/item?id=49158474
+:POINTS:   73
+:COMMENTS: 25
+:BY:       roryirvine
+:END:
+
+*** TLDR
+C-Kermit 11 is out, the first major release in 15 years. John Goerzen took over the project, added IPv6, unit tests, security fixes, and modern CI while preserving the ability to build on VMS and OS/2. Frank da Cruz was involved with Kermit for 44 years, longer than any other open source founder with their project.
+
+*** Take
+A protocol from 1981 that flew on the ISS and still gets firmware updates delivered to embedded devices. Some software just refuses to die, and honestly? That's beautiful.
+
+*** Comments
+
+**** compiler-guy
+:PROPERTIES:
+:COMMENT_ID: 49158500
+:END:
+Bill Catchings (the undergrad who helped Frank da Cruz with the original spec and coding) still blogs about the 40th anniversary of Kermit.
+
+**** chipotle_coyote
+:PROPERTIES:
+:COMMENT_ID: 49158550
+:END:
+I remember mostly ignoring Kermit back in my BBSing days. Then around 1991, a friend gave me access to his college Unix account and I had to use Kermit.
+
+**** voakbasda
+:PROPERTIES:
+:COMMENT_ID: 49158600
+:END:
+I am a gray beard and still use Kermit regularly for embedded development. It's very handy for automating things over a serial port console.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Kermit诞生45周年：15年来首次C-Kermit新版本发布
+***** TLDR
+C-Kermit 11发布，是15年来首个重大版本。John Goerzen接手项目，添加了IPv6、单元测试、安全修复和现代CI，同时保留了在VMS和OS/2上构建的能力。Frank da Cruz参与Kermit项目44年，比任何其他开源创始人参与自己项目的时间都长。
+***** Take
+一个1981年的协议，上过国际空间站，现在还在给嵌入式设备更新固件。有些软件就是不死，说实话？这很美。
+***** Comments
+- Bill Catchings（帮助Frank da Cruz完成最初规范和编码的本科生）还在博客上写关于Kermit 40周年的文章。
+- 我记得在BBS时代基本忽略了Kermit。然后1991年左右，一个朋友让我用他的大学Unix账户，我不得不用Kermit。
+- 我是个老程序员，现在还经常用Kermit做嵌入式开发。用它通过串口控制台自动化操作很方便。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Kermit誕生45周年：15年ぶりの新C-Kermitリリース
+***** TLDR
+C-Kermit 11がリリース、15年ぶりのメジャーリリース。John Goerzenがプロジェクトを引き継ぎ、IPv6、ユニットテスト、セキュリティ修正、モダンなCIを追加しつつ、VMSやOS/2でビルドできる機能を維持。Frank da Cruzは44年間Kermitに関わり、他のどのオープンソース創設者よりも長い。
+***** Take
+ISSに搭載され、今でも組み込みデバイスにファームウェアアップデートを配信する1981年のプロトコル。死なないソフトウェアがある、正直？それは美しい。
+***** Comments
+- Bill Catchings（Frank da Cruzの最初の仕様とコーディングを手伝った学部生）はまだKermit 40周年についてブログを書いている。
+- BBS時代はKermitをほぼ無視していた記憶がある。1991年頃、友人に大学のUnixアカウントへのアクセスをもらい、Kermitを使わざるを得なかった。
+- 私はベテランで、今でも組み込み開発にKermitを日常的に使っている。シリアルポートコンソールでの自動化にとても便利。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Kermit 탄생 45주년: 15년 만의 첫 C-Kermit 신규 릴리스
+***** TLDR
+C-Kermit 11 출시, 15년 만의 주요 릴리스. John Goerzen이 프로젝트를 인수해 IPv6, 단위 테스트, 보안 수정, 현대적 CI를 추가하면서 VMS와 OS/2에서 빌드하는 기능은 유지. Frank da Cruz는 44년간 Kermit에 관여했으며, 이는 다른 어떤 오픈소스 창시자보다 긴 기간이다.
+***** Take
+ISS에 탑재되어 날았고 여전히 임베디드 기기에 펌웨어 업데이트를 전달하는 1981년 프로토콜. 죽지 않는 소프트웨어가 있다, 솔직히? 아름답다.
+***** Comments
+- Bill Catchings (Frank da Cruz의 초기 스펙과 코딩을 도운 학부생)가 아직도 Kermit 40주년에 대해 블로그를 쓴다.
+- BBS 시절에는 Kermit을 거의 무시했던 기억이 있다. 1991년쯤 친구가 대학 Unix 계정 접근권을 줘서 Kermit을 써야 했다.
+- 나는 베테랑이고 아직도 임베디드 개발에 Kermit을 자주 쓴다. 시리얼 포트 콘솔에서 자동화하기에 매우 편리하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Celebrando 45 años de Kermit con la primera nueva versión de C-Kermit en 15 años
+***** TLDR
+Sale C-Kermit 11, la primera versión importante en 15 años. John Goerzen tomó el proyecto, añadió IPv6, tests unitarios, correcciones de seguridad y CI moderno mientras preservaba la capacidad de compilar en VMS y OS/2. Frank da Cruz estuvo involucrado con Kermit durante 44 años, más que cualquier otro fundador de código abierto con su proyecto.
+***** Take
+Un protocolo de 1981 que voló en la ISS y todavía entrega actualizaciones de firmware a dispositivos embebidos. Algunos software simplemente se niegan a morir, y honestamente? Eso es hermoso.
+***** Comments
+- Bill Catchings (el estudiante que ayudó a Frank da Cruz con la especificación original y la codificación) todavía escribe un blog sobre el 40 aniversario de Kermit.
+- Recuerdo ignorar mayormente Kermit en mis días de BBS. Luego, alrededor de 1991, un amigo me dio acceso a su cuenta Unix universitaria y tuve que usar Kermit.
+- Soy un veterano y todavía uso Kermit regularmente para desarrollo embebido. Es muy útil para automatizar cosas a través de la consola de puerto serie.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+45 Jahre Kermit: Erstes neues C-Kermit-Release seit 15 Jahren
+***** TLDR
+C-Kermit 11 ist erschienen, das erste große Release seit 15 Jahren. John Goerzen übernahm das Projekt, fügte IPv6, Unit-Tests, Sicherheitsfixes und moderne CI hinzu, während die Fähigkeit erhalten blieb, auf VMS und OS/2 zu bauen. Frank da Cruz war 44 Jahre an Kermit beteiligt, länger als jeder andere Open-Source-Gründer an seinem Projekt.
+***** Take
+Ein Protokoll von 1981, das auf der ISS flog und immer noch Firmware-Updates an eingebettete Geräte liefert. Manche Software weigert sich einfach zu sterben, und ehrlich? Das ist schön.
+***** Comments
+- Bill Catchings (der Student, der Frank da Cruz bei der ursprünglichen Spezifikation und Codierung half) bloggt immer noch über das 40-jährige Jubiläum von Kermit.
+- Ich erinnere mich, dass ich Kermit in meinen BBS-Tagen meist ignoriert habe. Dann, um 1991, gab mir ein Freund Zugang zu seinem Uni-Unix-Konto und ich musste Kermit benutzen.
+- Ich bin ein Graubart und benutze Kermit immer noch regelmäßig für Embedded-Entwicklung. Es ist sehr praktisch für die Automatisierung über die serielle Konsole.
+** SearXNG in Rust :rust:search:privacy:open-source:
+:PROPERTIES:
+:ID:       49158141
+:URL:      https://github.com/MikeLuu99/searxng-rust
+:HN_URL:   https://news.ycombinator.com/item?id=49158141
+:POINTS:   33
+:COMMENTS: 16
+:BY:       dluuuu
+:END:
+
+*** TLDR
+A Rust rewrite of SearXNG that fans out queries to DuckDuckGo, Brave, Startpage, and Yahoo concurrently, then deduplicates and ranks results using Reciprocal Rank Fusion. Strips tracking params, normalizes URLs, and returns JSON. The original SearXNG author showed up to plug his new project Hister.
+
+*** Take
+The Rust rewrite industrial complex has reached metasearch engines. At least this one does something useful: it makes pages that appear in multiple engines rank higher, which is either brilliant or just admitting that all search engines return garbage alone.
+
+*** Comments
+
+**** snailmailman
+:PROPERTIES:
+:COMMENT_ID: 49158200
+:END:
+I've always been tempted to set up SearXNG, but all the search engines already make me do captchas every few searches. Wouldn't a meta search engine run into the same issues?
+
+**** asciimoo
+:PROPERTIES:
+:COMMENT_ID: 49158250
+:END:
+Hi everyone, I am the original author of Searx. I'm working on a new search project, Hister, with a similar motivation: reducing our dependence on external search engines.
+
+**** theanonymousone
+:PROPERTIES:
+:COMMENT_ID: 49158300
+:END:
+It's not a metadata search engine, it's 'meta' search engine. Nice signal for lack of dominant AI use.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Rust版SearXNG
+***** TLDR
+SearXNG的Rust重写版，并行向DuckDuckGo、Brave、Startpage和Yahoo发送查询，然后使用倒数排名融合去重和排序结果。去除追踪参数，规范化URL，返回JSON。原版SearXNG作者现身宣传他的新项目Hister。
+***** Take
+Rust重写产业综合体已经触及元搜索引擎。至少这个做了点有用的事：让在多个引擎中出现的页面排名更高，这要么是天才之举，要么就是承认所有搜索引擎单独用都是垃圾。
+***** Comments
+- 我一直想搭建SearXNG，但所有搜索引擎每搜几次就让我做验证码。元搜索引擎不会遇到同样的问题吗？
+- 大家好，我是Searx的原作者。我在做一个新的搜索项目Hister，动机相似：减少我们对外部搜索引擎的依赖。
+- 这不是元数据搜索引擎，是'元'搜索引擎。说明没有大量使用AI的好迹象。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Rust版SearXNG
+***** TLDR
+SearXNGをRustで書き直したもの。DuckDuckGo、Brave、Startpage、Yahooに同時にクエリを送り、Reciprocal Rank Fusionで重複除去とランキングを行う。トラッキングパラメータを除去、URLを正規化、JSONを返す。オリジナルのSearXNG作者が新プロジェクトHisterの宣伝に現れた。
+***** Take
+Rust書き直し産業複合体がメタ検索エンジンに到達した。少なくともこれは有用なことをしている：複数のエンジンに表示されるページのランクを上げる。これは天才的か、すべての検索エンジンは単独ではゴミだと認めているか。
+***** Comments
+- SearXNGをセットアップしたいとずっと思っていたけど、どの検索エンジンも数回検索するたびにキャプチャをさせる。メタ検索エンジンも同じ問題に遭遇しないか？
+- 皆さんこんにちは、私はSearxのオリジナル作者です。同じ動機で新しい検索プロジェクトHisterに取り組んでいます：外部検索エンジンへの依存を減らすこと。
+- これはメタデータ検索エンジンではなく、'メタ'検索エンジンです。AIが支配的に使われていないことの良いシグナル。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Rust로 작성된 SearXNG
+***** TLDR
+SearXNG의 Rust 재작성. DuckDuckGo, Brave, Startpage, Yahoo에 동시에 쿼리를 보내고 Reciprocal Rank Fusion으로 중복 제거 및 순위 매김. 추적 파라미터 제거, URL 정규화, JSON 반환. 원래 SearXNG 저자가 새 프로젝트 Hister 홍보하러 나타남.
+***** Take
+Rust 재작성 산업 복합체가 메타 검색 엔진에 도달했다. 최소한 이건 유용한 일을 한다: 여러 엔진에 나타나는 페이지의 순위를 높인다. 천재적이거나, 아니면 모든 검색 엔진이 혼자서는 쓰레기라는 걸 인정하는 거거나.
+***** Comments
+- 항상 SearXNG 설치하고 싶었는데, 모든 검색 엔진이 몇 번 검색할 때마다 캡차를 시킨다. 메타 검색 엔진도 같은 문제에 부딪히지 않을까?
+- 안녕하세요, 저는 Searx의 원저자입니다. 비슷한 동기로 새로운 검색 프로젝트 Hister를 작업 중입니다: 외부 검색 엔진에 대한 의존도 줄이기.
+- 이건 메타데이터 검색 엔진이 아니라 '메타' 검색 엔진입니다. AI가 지배적으로 사용되지 않았다는 좋은 신호.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+SearXNG en Rust
+***** TLDR
+Una reescritura en Rust de SearXNG que envía consultas a DuckDuckGo, Brave, Startpage y Yahoo concurrentemente, luego deduplica y clasifica resultados usando Reciprocal Rank Fusion. Elimina parámetros de rastreo, normaliza URLs y devuelve JSON. El autor original de SearXNG apareció para promocionar su nuevo proyecto Hister.
+***** Take
+El complejo industrial de reescritura en Rust ha alcanzado los motores de metabúsqueda. Al menos este hace algo útil: hace que las páginas que aparecen en múltiples motores clasifiquen más alto, lo cual es brillante o simplemente admitir que todos los motores de búsqueda por sí solos devuelven basura.
+***** Comments
+- Siempre he tenido la tentación de configurar SearXNG, pero todos los motores de búsqueda ya me hacen hacer captchas cada pocas búsquedas. ¿Un metabuscador no tendría los mismos problemas?
+- Hola a todos, soy el autor original de Searx. Estoy trabajando en un nuevo proyecto de búsqueda, Hister, con una motivación similar: reducir nuestra dependencia de motores de búsqueda externos.
+- No es un motor de búsqueda de metadatos, es un motor de 'meta' búsqueda. Buena señal de falta de uso dominante de IA.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+SearXNG in Rust
+***** TLDR
+Eine Rust-Neuschreibung von SearXNG, die Anfragen gleichzeitig an DuckDuckGo, Brave, Startpage und Yahoo sendet, dann Ergebnisse mit Reciprocal Rank Fusion dedupliziert und rankt. Entfernt Tracking-Parameter, normalisiert URLs und gibt JSON zurück. Der ursprüngliche SearXNG-Autor tauchte auf, um sein neues Projekt Hister zu bewerben.
+***** Take
+Der Rust-Rewrite-Industriekomplex hat Metasuchmaschinen erreicht. Zumindest macht diese etwas Nützliches: Seiten, die in mehreren Suchmaschinen erscheinen, werden höher gerankt. Das ist entweder brillant oder gibt einfach zu, dass alle Suchmaschinen allein Müll liefern.
+***** Comments
+- Ich war immer versucht, SearXNG einzurichten, aber alle Suchmaschinen lassen mich schon alle paar Suchen Captchas lösen. Würde eine Metasuchmaschine nicht auf dieselben Probleme stoßen?
+- Hallo allerseits, ich bin der ursprüngliche Autor von Searx. Ich arbeite an einem neuen Suchprojekt, Hister, mit einer ähnlichen Motivation: unsere Abhängigkeit von externen Suchmaschinen zu reduzieren.
+- Es ist keine Metadaten-Suchmaschine, es ist eine 'Meta'-Suchmaschine. Gutes Zeichen für fehlendes dominantes AI-Einsatz.
