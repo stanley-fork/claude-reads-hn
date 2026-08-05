@@ -1,0 +1,500 @@
+#+TITLE: HN Digest 2026-08-05 06:00:00 UT UTC
+#+DATE: 2026-08-05T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+WebKit leaks your IP, Saudis buy EA, and MCP finally stops overcomplicating things
+
+* Highlights
+- WebKit: Your proxy browser isn't as private as you think
+- EA: $55bn later, The Sims belongs to Saudi Arabia
+- MCP 2.0: Stateless is the new stateful
+
+* Stories
+
+** IP and DNS Leaks in WebKit Affecting Proxy Browsers and iCloud Private Relay :security:privacy:apple:webkit:
+:PROPERTIES:
+:ID:       49176697
+:URL:      https://mysk.blog/2026/08/04/webkit-proxy-icloud-private-relay-ip-leak/
+:HN_URL:   https://news.ycombinator.com/item?id=49176697
+:POINTS:   79
+:COMMENTS: 9
+:BY:       lapcat
+:END:
+
+*** TLDR
+Researchers found three WebKit features that bypass proxy settings and leak your real IP: DNS prefetching, WebAuthn Related Origin Requests, and WebTransport. These affect all iOS proxy browsers (including Tor browsers) and even iCloud Private Relay. VPNs are not affected since they tunnel at the system level.
+
+*** Take
+Apple's privacy theater continues. Your fancy proxy browser is just a suggestion to WebKit, which happily phones home through three separate backdoors. At least VPN users can feel smug for once.
+
+*** Comments
+
+**** rickstanley
+:PROPERTIES:
+:COMMENT_ID: 49176701
+:END:
+When I go to leaks.psylo.app I see only WebAuthn with my real IP and occasionally WebTransport with an incorrect IP. Using Safari 26.5. I'm not sure what I would use WebAuthn for, if ever.
+
+**** walrus01
+:PROPERTIES:
+:COMMENT_ID: 49176705
+:END:
+Correct me if I'm wrong but doesn't Apple disallow any actual 3rd party browser engines? Any browser on iOS that isn't standard Safari is just a skin on top of WebKit. It doesn't exactly inspire confidence that some third party browser will be able to implement things better.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+WebKit中影响代理浏览器和iCloud私人中继的IP和DNS泄漏
+***** TLDR
+研究人员发现三个WebKit功能绑过代理设置并泄漏真实IP：DNS预取、WebAuthn相关源请求和WebTransport。这影响所有iOS代理浏览器(包括Tor浏览器)甚至iCloud私人中继。VPN不受影响,因为它们在系统级别进行隧道传输。
+***** Take
+苹果的隐私戏剧继续上演。你的高级代理浏览器对WebKit来说只是个建议,它很乐意通过三个独立的后门打电话回家。至少VPN用户这次可以得意一下了。
+***** Comments
+- 当我访问leaks.psylo.app时,我只看到WebAuthn显示我的真实IP,偶尔WebTransport显示错误的IP。使用Safari 26.5。我不确定我会用WebAuthn做什么。
+- 如果我没说错的话,苹果不是不允许任何真正的第三方浏览器引擎吗?iOS上任何非标准Safari的浏览器都只是WebKit的皮肤。这并不能让人相信某个第三方浏览器能做得更好。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+プロキシブラウザとiCloudプライベートリレーに影響するWebKitのIPとDNSリーク
+***** TLDR
+研究者がプロキシ設定をバイパスして実際のIPをリークする3つのWebKit機能を発見:DNSプリフェッチ、WebAuthn関連オリジンリクエスト、WebTransport。これらはすべてのiOSプロキシブラウザ(Torブラウザを含む)とiCloudプライベートリレーにも影響。VPNはシステムレベルでトンネルするため影響なし。
+***** Take
+Appleのプライバシー劇場は続く。あなたの高級プロキシブラウザはWebKitにとって単なる提案で、3つの別々のバックドアから喜んで電話をかける。少なくともVPNユーザーは今回は得意になれる。
+***** Comments
+- leaks.psylo.appにアクセスすると、WebAuthnだけが私の実際のIPを表示し、時々WebTransportが誤ったIPを表示します。Safari 26.5使用中。WebAuthnを何に使うかわかりません。
+- 間違っていたら訂正してほしいのですが、Appleはサードパーティのブラウザエンジンを許可していないのでは?iOSでSafari以外のブラウザはすべてWebKitのスキンでしょう。サードパーティブラウザがより良く実装できるとは思えません。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+프록시 브라우저와 iCloud 개인 릴레이에 영향을 미치는 WebKit의 IP 및 DNS 유출
+***** TLDR
+연구원들이 프록시 설정을 우회하고 실제 IP를 유출하는 세 가지 WebKit 기능을 발견: DNS 프리페칭, WebAuthn 관련 오리진 요청, WebTransport. 이는 모든 iOS 프록시 브라우저(Tor 브라우저 포함)와 iCloud 개인 릴레이에도 영향을 미침. VPN은 시스템 수준에서 터널링하므로 영향 없음.
+***** Take
+애플의 프라이버시 극장이 계속된다. 당신의 멋진 프록시 브라우저는 WebKit에게 그저 제안일 뿐이고, WebKit은 세 개의 백도어를 통해 기꺼이 집에 전화한다. 적어도 VPN 사용자들은 이번엔 으쓱할 수 있다.
+***** Comments
+- leaks.psylo.app에 접속하면 WebAuthn만 내 실제 IP를 보여주고 가끔 WebTransport가 잘못된 IP를 보여준다. Safari 26.5 사용 중. WebAuthn을 뭐에 쓸지 모르겠다.
+- 틀렸으면 정정해달라, 애플은 실제 서드파티 브라우저 엔진을 허용하지 않지 않나? iOS에서 표준 Safari가 아닌 모든 브라우저는 그냥 WebKit 위의 스킨이다. 서드파티 브라우저가 더 잘 구현할 수 있다는 자신감이 안 생긴다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Fugas de IP y DNS en WebKit que afectan a navegadores proxy e iCloud Private Relay
+***** TLDR
+Investigadores encontraron tres características de WebKit que evitan la configuración del proxy y filtran tu IP real: prefetch de DNS, solicitudes de origen relacionadas con WebAuthn y WebTransport. Afectan a todos los navegadores proxy de iOS (incluidos los de Tor) e incluso a iCloud Private Relay. Las VPN no se ven afectadas ya que hacen túnel a nivel de sistema.
+***** Take
+El teatro de privacidad de Apple continúa. Tu elegante navegador proxy es solo una sugerencia para WebKit, que felizmente llama a casa a través de tres puertas traseras separadas. Al menos los usuarios de VPN pueden sentirse presumidos por una vez.
+***** Comments
+- Cuando voy a leaks.psylo.app solo veo WebAuthn con mi IP real y ocasionalmente WebTransport con una IP incorrecta. Usando Safari 26.5. No sé para qué usaría WebAuthn.
+- Corrígeme si me equivoco, pero ¿no prohíbe Apple cualquier motor de navegador de terceros real? Cualquier navegador en iOS que no sea Safari estándar es solo una capa sobre WebKit. No inspira exactamente confianza que algún navegador de terceros pueda implementar las cosas mejor.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+IP- und DNS-Lecks in WebKit, die Proxy-Browser und iCloud Private Relay betreffen
+***** TLDR
+Forscher fanden drei WebKit-Funktionen, die Proxy-Einstellungen umgehen und deine echte IP preisgeben: DNS-Prefetching, WebAuthn Related Origin Requests und WebTransport. Diese betreffen alle iOS-Proxy-Browser (einschließlich Tor-Browser) und sogar iCloud Private Relay. VPNs sind nicht betroffen, da sie auf Systemebene tunneln.
+***** Take
+Apples Privatsphäre-Theater geht weiter. Dein schicker Proxy-Browser ist nur ein Vorschlag für WebKit, das fröhlich durch drei separate Hintertüren nach Hause telefoniert. Wenigstens können VPN-Nutzer diesmal angeben.
+***** Comments
+- Wenn ich leaks.psylo.app besuche, sehe ich nur WebAuthn mit meiner echten IP und gelegentlich WebTransport mit einer falschen IP. Benutze Safari 26.5. Ich bin mir nicht sicher, wofür ich WebAuthn jemals nutzen würde.
+- Korrigiert mich, wenn ich falsch liege, aber erlaubt Apple nicht echte Browser-Engines von Drittanbietern? Jeder Browser auf iOS, der nicht Standard-Safari ist, ist nur eine Hülle über WebKit. Es weckt nicht gerade Vertrauen, dass ein Drittanbieter-Browser Dinge besser implementieren könnte.
+** The sale of Electronic Arts has been finalized :gaming:business:acquisition:saudi-arabia:
+:PROPERTIES:
+:ID:       49178702
+:URL:      https://www.bbc.com/news/articles/cjejyl34345o
+:HN_URL:   https://news.ycombinator.com/item?id=49178702
+:POINTS:   42
+:COMMENTS: 8
+:BY:       1659447091
+:END:
+
+*** TLDR
+Saudi Arabia's Public Investment Fund completed its $55bn acquisition of EA, with Jared Kushner's Affinity Partners also involved. The deal is the largest leveraged buyout in history, with EA taking on $20bn in debt from JPMorgan. Concerns about creative freedom for games like The Sims (known for LGBTQ+ inclusivity) have been raised given Saudi Arabia's laws.
+
+*** Take
+End of an era: EA goes from 'worst company' memes to being owned by a sovereign wealth fund that definitely won't meddle with creative decisions. The Sims 5 DLC pack 'Totally Normal Roommates' coming soon.
+
+*** Comments
+
+**** tomkarho
+:PROPERTIES:
+:COMMENT_ID: 49178710
+:END:
+End of an era. Who do we vote as the worst company ever now?
+
+**** krige
+:PROPERTIES:
+:COMMENT_ID: 49178715
+:END:
+Because the Saudis leveraged this buyout via a massive loan from JP Morgan, EA's debt is now 10 times higher than it was when it was a publicly traded company: $2.2b to $22b. Turns out the notion that they wouldn't need humans to make games and they would use AI for most things was a pipe dream and firing staff to be profitable with the huge loan didn't work. Now they are fucked.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+电子艺界(EA)收购案已最终完成
+***** TLDR
+沙特阿拉伯公共投资基金完成了550亿美元对EA的收购,贾里德·库什纳的Affinity Partners也参与其中。这是历史上最大的杠杆收购,EA从摩根大通承担200亿美元债务。鉴于沙特阿拉伯的法律,人们对《模拟人生》(以LGBTQ+包容性著称)等游戏的创作自由表示担忧。
+***** Take
+一个时代的终结:EA从'最差公司'表情包变成被一个绝对不会干预创意决策的主权财富基金所拥有。《模拟人生5》DLC包'完全正常的室友'即将推出。
+***** Comments
+- 一个时代的终结。我们现在投票给谁当有史以来最差的公司?
+- 因为沙特通过摩根大通的大规模贷款进行杠杆收购,EA的债务现在是其作为上市公司时的10倍:从22亿到220亿。事实证明,他们不需要人类来制作游戏、大部分工作用AI完成的想法是白日梦,裁员来偿还巨额贷款也没用。现在他们完蛋了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+エレクトロニック・アーツの売却が完了
+***** TLDR
+サウジアラビアの公共投資基金がEAの550億ドルの買収を完了、ジャレッド・クシュナーのAffinity Partnersも参加。史上最大のレバレッジド・バイアウトで、EAはJPモルガンから200億ドルの負債を引き受けた。サウジアラビアの法律を考えると、LGBTQ+の包括性で知られるThe Simsなどのゲームの創作の自由について懸念が提起されている。
+***** Take
+時代の終わり:EAは「最悪の会社」ミームから、クリエイティブな決定に絶対に干渉しない政府系ファンドに所有されることになった。The Sims 5 DLCパック「まったく普通のルームメイト」近日公開。
+***** Comments
+- 時代の終わり。これからは誰を史上最悪の会社に投票すればいい?
+- サウジがJPモルガンからの巨額ローンでこの買収をレバレッジしたため、EAの負債は上場企業時代の10倍になった:22億ドルから220億ドルへ。ゲーム制作に人間は必要なく、ほとんどをAIで賄えるという考えは夢物語で、巨額ローンで利益を出すための人員削減もうまくいかなかった。今や彼らは終わりだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+일렉트로닉 아츠 매각 완료
+***** TLDR
+사우디아라비아 공공투자기금이 EA의 550억 달러 인수를 완료했으며 재러드 쿠슈너의 Affinity Partners도 참여했다. 역사상 최대 차입매수로 EA는 JP모건에서 200억 달러의 부채를 떠안았다. 사우디아라비아 법률을 고려할 때 LGBTQ+ 포용성으로 유명한 심즈 같은 게임의 창작 자유에 대한 우려가 제기되었다.
+***** Take
+시대의 종말: EA가 '최악의 기업' 밈에서 창의적 결정에 절대 간섭하지 않을 국부펀드 소유가 되었다. 심즈 5 DLC팩 '완전히 평범한 룸메이트' 곧 출시.
+***** Comments
+- 시대의 종말. 이제 누구를 역대 최악의 회사로 투표할까?
+- 사우디가 JP모건의 대규모 대출로 이 인수를 레버리지했기 때문에 EA의 부채는 상장기업 시절의 10배가 되었다: 22억에서 220억 달러로. 게임 제작에 인간이 필요 없고 대부분 AI를 사용할 것이라는 생각은 허황된 꿈이었고 거대한 대출금으로 수익을 내기 위해 직원을 해고하는 것도 효과가 없었다. 이제 그들은 망했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La venta de Electronic Arts ha sido finalizada
+***** TLDR
+El Fondo de Inversión Pública de Arabia Saudita completó su adquisición de $55 mil millones de EA, con la participación de Affinity Partners de Jared Kushner. El acuerdo es la compra apalancada más grande de la historia, con EA asumiendo $20 mil millones en deuda de JPMorgan. Se han planteado preocupaciones sobre la libertad creativa para juegos como The Sims (conocido por su inclusión LGBTQ+) dadas las leyes de Arabia Saudita.
+***** Take
+Fin de una era: EA pasa de los memes de 'peor empresa' a ser propiedad de un fondo soberano que definitivamente no interferirá con las decisiones creativas. El paquete DLC de The Sims 5 'Compañeros de cuarto totalmente normales' próximamente.
+***** Comments
+- Fin de una era. ¿A quién votamos como la peor empresa de todos los tiempos ahora?
+- Debido a que los saudíes apalancaron esta compra mediante un préstamo masivo de JP Morgan, la deuda de EA es ahora 10 veces mayor que cuando era una empresa pública: de $2.2 mil millones a $22 mil millones. Resulta que la idea de que no necesitarían humanos para hacer juegos y usarían IA para casi todo era un sueño imposible y despedir personal para ser rentables con el enorme préstamo no funcionó. Ahora están jodidos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der Verkauf von Electronic Arts wurde abgeschlossen
+***** TLDR
+Saudi-Arabiens Public Investment Fund hat die 55-Milliarden-Dollar-Übernahme von EA abgeschlossen, wobei auch Jared Kushners Affinity Partners beteiligt war. Der Deal ist der größte Leveraged Buyout der Geschichte, wobei EA 20 Milliarden Dollar Schulden von JPMorgan übernimmt. Angesichts der Gesetze Saudi-Arabiens wurden Bedenken hinsichtlich der kreativen Freiheit für Spiele wie The Sims (bekannt für LGBTQ+-Inklusion) geäußert.
+***** Take
+Ende einer Ära: EA geht von 'schlechteste Firma'-Memes zu einer Staatsfonds-Eigentümerschaft, die definitiv nicht in kreative Entscheidungen eingreifen wird. The Sims 5 DLC-Pack 'Völlig normale Mitbewohner' kommt bald.
+***** Comments
+- Ende einer Ära. Wen wählen wir jetzt zur schlechtesten Firma aller Zeiten?
+- Weil die Saudis diesen Buyout über ein massives Darlehen von JP Morgan gehebelt haben, ist EAs Schuld jetzt 10-mal höher als zu Zeiten der Börsennotierung: von 2,2 auf 22 Milliarden Dollar. Es stellte sich heraus, dass die Vorstellung, sie bräuchten keine Menschen mehr für Spiele und würden für das meiste KI nutzen, ein Hirngespinst war, und Mitarbeiter zu entlassen, um mit dem riesigen Kredit profitabel zu sein, hat nicht funktioniert. Jetzt sind sie am Arsch.
+** Stateless MCP has recaptured my interest :ai:mcp:protocols:tooling:
+:PROPERTIES:
+:ID:       49131438
+:URL:      https://simonwillison.net/2026/Jul/31/stateless-mcp/
+:HN_URL:   https://news.ycombinator.com/item?id=49131438
+:POINTS:   56
+:COMMENTS: 28
+:BY:       tosh
+:END:
+
+*** TLDR
+MCP 2.0 introduces stateless HTTP requests, eliminating the need for session management. Previously you needed two requests (initialize + call), now it's a single POST. Simon Willison built three tools this week: mcp-explorer (CLI for probing MCP servers), datasette-mcp (adds MCP endpoint to Datasette), and llm-mcp-client (MCP plugin for his LLM tool). He argues MCP is easier to secure than giving agents arbitrary shell access.
+
+*** Take
+After a year of everyone realizing 'just give the agent curl' was simpler, MCP redemption arc begins. Turns out removing half the protocol complexity was all it took. Who could have predicted that less is more?
+
+*** Comments
+
+**** drdexebtjl
+:PROPERTIES:
+:COMMENT_ID: 49131445
+:END:
+In retrospect, stateful MCP was clearly wrong. This essentially makes MCP just another REST API endpoint, and lets you use the same infrastructure you already have set up for REST APIs (like load balancers, API gateways, progressive rollouts, etc).
+
+**** cush
+:PROPERTIES:
+:COMMENT_ID: 49131452
+:END:
+But is it composable like CLI? The main issue to me with MCP is the entire response ends up in the context window. Whereas a decent harness and agent is usually going to pipe together and filter many tools in one long command without spending all the extra tokens.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+无状态MCP重新引起了我的兴趣
+***** TLDR
+MCP 2.0引入了无状态HTTP请求,消除了会话管理的需求。以前需要两个请求(初始化+调用),现在只需要一个POST。Simon Willison本周构建了三个工具:mcp-explorer(探测MCP服务器的CLI)、datasette-mcp(为Datasette添加MCP端点)和llm-mcp-client(他的LLM工具的MCP插件)。他认为MCP比给代理任意shell访问权限更容易保护安全。
+***** Take
+在大家意识到'直接给代理curl'更简单一年后,MCP的救赎之旅开始了。原来只需要去掉一半的协议复杂性就行了。谁能预料到少即是多?
+***** Comments
+- 回想起来,有状态MCP显然是错误的。这本质上使MCP成为另一个REST API端点,让你可以使用已经为REST API设置好的基础设施(如负载均衡器、API网关、渐进式发布等)。
+- 但它像CLI一样可组合吗?对我来说MCP的主要问题是整个响应最终都在上下文窗口中。而一个好的工具和代理通常会在一个长命令中管道和过滤多个工具,而不会花费所有额外的令牌。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ステートレスMCPが私の興味を再び引いた
+***** TLDR
+MCP 2.0はステートレスHTTPリクエストを導入し、セッション管理の必要性を排除。以前は2つのリクエスト(初期化+呼び出し)が必要だったが、今は単一のPOST。Simon Willisonは今週3つのツールを構築:mcp-explorer(MCPサーバーを調査するCLI)、datasette-mcp(DatasetteにMCPエンドポイントを追加)、llm-mcp-client(彼のLLMツール用MCPプラグイン)。彼はMCPがエージェントに任意のシェルアクセスを与えるより安全だと主張。
+***** Take
+「エージェントにcurlを与えればいい」の方がシンプルだと皆が気づいて1年後、MCPの復活劇が始まった。プロトコルの複雑さを半分にするだけでよかったらしい。少ない方が良いと誰が予想できただろうか？
+***** Comments
+- 振り返れば、ステートフルMCPは明らかに間違いだった。これは本質的にMCPを別のREST APIエンドポイントにし、REST API用にすでに設定している同じインフラ(ロードバランサー、APIゲートウェイ、段階的ロールアウトなど)を使用できるようにする。
+- でもCLIのように組み合わせ可能？私にとってMCPの主な問題は、応答全体がコンテキストウィンドウに入ってしまうこと。一方、まともなハーネスとエージェントは通常、追加のトークンを使わずに1つの長いコマンドで多くのツールをパイプして フィルタリングする。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+무상태 MCP가 다시 내 관심을 끌었다
+***** TLDR
+MCP 2.0은 무상태 HTTP 요청을 도입하여 세션 관리의 필요성을 제거했다. 이전에는 두 개의 요청(초기화+호출)이 필요했지만 이제는 단일 POST로 가능. Simon Willison은 이번 주에 세 가지 도구를 만들었다: mcp-explorer(MCP 서버 탐색용 CLI), datasette-mcp(Datasette에 MCP 엔드포인트 추가), llm-mcp-client(그의 LLM 도구용 MCP 플러그인). 그는 MCP가 에이전트에게 임의의 셸 접근을 주는 것보다 보안하기 쉽다고 주장한다.
+***** Take
+'그냥 에이전트한테 curl 주면 되지'가 더 간단하다고 다들 깨달은 지 1년 후, MCP 구원 서사가 시작됐다. 프로토콜 복잡성을 절반으로 줄이면 됐다. 적은 게 더 많은 것이라고 누가 예측했을까?
+***** Comments
+- 돌이켜보면, 상태유지 MCP는 분명히 틀렸다. 이것은 본질적으로 MCP를 또 다른 REST API 엔드포인트로 만들고, REST API를 위해 이미 설정한 동일한 인프라(로드 밸런서, API 게이트웨이, 점진적 롤아웃 등)를 사용할 수 있게 한다.
+- 근데 CLI처럼 조합 가능한가? 나한테 MCP의 주요 문제는 전체 응답이 결국 컨텍스트 윈도우에 들어간다는 것. 반면 괜찮은 하네스와 에이전트는 보통 추가 토큰을 쓰지 않고 하나의 긴 명령으로 많은 도구를 파이프하고 필터링한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+MCP sin estado ha recapturado mi interés
+***** TLDR
+MCP 2.0 introduce solicitudes HTTP sin estado, eliminando la necesidad de gestión de sesiones. Antes necesitabas dos solicitudes (inicializar + llamar), ahora es un solo POST. Simon Willison construyó tres herramientas esta semana: mcp-explorer (CLI para sondear servidores MCP), datasette-mcp (añade endpoint MCP a Datasette), y llm-mcp-client (plugin MCP para su herramienta LLM). Argumenta que MCP es más fácil de asegurar que dar a los agentes acceso arbitrario al shell.
+***** Take
+Después de un año de que todos se dieran cuenta de que 'simplemente dale curl al agente' era más simple, comienza el arco de redención de MCP. Resulta que eliminar la mitad de la complejidad del protocolo era todo lo que se necesitaba. ¿Quién podría haber predicho que menos es más?
+***** Comments
+- En retrospectiva, MCP con estado estaba claramente mal. Esto esencialmente hace de MCP otro endpoint de API REST, y te permite usar la misma infraestructura que ya tienes configurada para APIs REST (como balanceadores de carga, gateways de API, despliegues progresivos, etc).
+- ¿Pero es componible como CLI? El problema principal para mí con MCP es que toda la respuesta termina en la ventana de contexto. Mientras que un harness y agente decente usualmente va a conectar y filtrar muchas herramientas en un comando largo sin gastar todos los tokens extra.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Stateless MCP hat mein Interesse zurückgewonnen
+***** TLDR
+MCP 2.0 führt zustandslose HTTP-Anfragen ein und eliminiert die Notwendigkeit der Sitzungsverwaltung. Früher brauchte man zwei Anfragen (initialisieren + aufrufen), jetzt ist es ein einziger POST. Simon Willison baute diese Woche drei Tools: mcp-explorer (CLI zum Untersuchen von MCP-Servern), datasette-mcp (fügt MCP-Endpunkt zu Datasette hinzu) und llm-mcp-client (MCP-Plugin für sein LLM-Tool). Er argumentiert, dass MCP einfacher abzusichern ist als Agenten beliebigen Shell-Zugriff zu geben.
+***** Take
+Nachdem alle ein Jahr lang erkannt haben, dass 'gib dem Agenten einfach curl' einfacher war, beginnt MCPs Erlösungsgeschichte. Es stellte sich heraus, dass die Hälfte der Protokollkomplexität zu entfernen alles war, was nötig war. Wer hätte voraussagen können, dass weniger mehr ist?
+***** Comments
+- Im Nachhinein war zustandsbehaftetes MCP eindeutig falsch. Das macht MCP im Wesentlichen zu einem weiteren REST-API-Endpunkt und lässt dich dieselbe Infrastruktur nutzen, die du bereits für REST-APIs eingerichtet hast (wie Load Balancer, API-Gateways, progressive Rollouts usw.).
+- Aber ist es komponierbar wie CLI? Das Hauptproblem für mich bei MCP ist, dass die gesamte Antwort im Kontextfenster landet. Wohingegen ein anständiges Harness und Agent normalerweise viele Tools in einem langen Befehl zusammenpipet und filtert, ohne alle zusätzlichen Tokens auszugeben.
+** Zigbee vs. Matter over Thread: Understanding IoT Protocol Performance in Practice :iot:zigbee:matter:thread:research:
+:PROPERTIES:
+:ID:       49176983
+:URL:      https://arxiv.org/abs/2603.04221
+:HN_URL:   https://news.ycombinator.com/item?id=49176983
+:POINTS:   59
+:COMMENTS: 35
+:BY:       teleforce
+:END:
+
+*** TLDR
+Academic comparison of Zigbee vs Matter over Thread using commercial hardware. Zigbee has lower overhead and recovers routes in 0.25 seconds after node failure, making it better for small static deployments. Matter/Thread scales better with stable throughput across multi-hop scenarios but takes 30 seconds to recover from node drops. Different trade-offs for different use cases.
+
+*** Take
+30 seconds to recover from a node failure? My smart lights will blink more than my router. At least now there's actual data instead of just forum arguments about which protocol your $15 bulb should use.
+
+*** Comments
+
+**** SEJeff
+:PROPERTIES:
+:COMMENT_ID: 49176990
+:END:
+I'm a bit surprised they didn't add Z-Wave into this comparison.
+
+**** jauntywundrkind
+:PROPERTIES:
+:COMMENT_ID: 49177000
+:END:
+A lot of graphs where OpenThread and Zigbee dance around each other, are within 2x of each other. Two huge notables to me: message throughput for OpenThread scales up, Zigbee seems to hit a wall early. The last table was a fright though: it takes half a minute for OpenThread to recover after a node drops whereas Zigbee a quarter second! Wow.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Zigbee vs. Matter over Thread: 理解物联网协议在实践中的性能
+***** TLDR
+使用商用硬件对Zigbee和Matter over Thread进行学术比较。Zigbee开销更低,节点故障后0.25秒恢复路由,更适合小型静态部署。Matter/Thread在多跳场景中扩展性更好、吞吐量稳定,但节点掉线后需要30秒恢复。不同用例有不同的权衡。
+***** Take
+节点故障后30秒才能恢复?我的智能灯闪烁的次数会比路由器还多。至少现在有真实数据了,而不只是论坛上关于你15美元灯泡应该用哪个协议的争论。
+***** Comments
+- 我有点惊讶他们没有把Z-Wave加入这个比较。
+- 很多图表中OpenThread和Zigbee在相互跳舞,都在2倍以内。对我来说有两个重大发现:OpenThread的消息吞吐量会扩展,Zigbee似乎很早就碰到瓶颈了。但最后一个表格让人震惊:OpenThread在节点掉线后需要半分钟才能恢复,而Zigbee只需四分之一秒!哇。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Zigbee vs. Matter over Thread: 実践におけるIoTプロトコル性能の理解
+***** TLDR
+商用ハードウェアを使用したZigbeeとMatter over Threadの学術的比較。Zigbeeはオーバーヘッドが低く、ノード障害後0.25秒でルートを回復し、小規模な静的デプロイメントに適している。Matter/Threadはマルチホップシナリオで安定したスループットでより良くスケールするが、ノードドロップからの回復に30秒かかる。異なるユースケースに異なるトレードオフ。
+***** Take
+ノード障害からの回復に30秒？私のスマートライトはルーターより多く点滅するだろう。少なくとも今は、15ドルの電球がどのプロトコルを使うべきかというフォーラムの議論だけでなく、実際のデータがある。
+***** Comments
+- Z-Waveをこの比較に入れなかったのは少し意外だ。
+- OpenThreadとZigbeeが互いにダンスしている多くのグラフがあり、2倍以内に収まっている。私にとって2つの大きな注目点：OpenThreadのメッセージスループットはスケールアップし、Zigbeeは早い段階で壁にぶつかるようだ。しかし最後のテーブルは恐ろしかった：ノードがドロップした後OpenThreadは回復に半分の分かかるが、Zigbeeは4分の1秒！すごい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Zigbee vs. Matter over Thread: 실제 IoT 프로토콜 성능 이해하기
+***** TLDR
+상용 하드웨어를 사용한 Zigbee와 Matter over Thread의 학술적 비교. Zigbee는 오버헤드가 낮고 노드 장애 후 0.25초 만에 라우트를 복구하여 소규모 정적 배포에 적합. Matter/Thread는 멀티홉 시나리오에서 안정적인 처리량으로 더 잘 확장되지만 노드 드롭에서 복구하는 데 30초 소요. 다른 사용 사례에 다른 트레이드오프.
+***** Take
+노드 장애에서 복구하는 데 30초? 내 스마트 조명이 라우터보다 더 많이 깜빡일 거다. 적어도 이제 15달러짜리 전구가 어떤 프로토콜을 써야 하는지에 대한 포럼 논쟁 대신 실제 데이터가 있다.
+***** Comments
+- Z-Wave를 이 비교에 추가하지 않은 것이 좀 의외다.
+- OpenThread와 Zigbee가 서로 주변에서 춤추는 그래프가 많고, 서로 2배 이내다. 나한테 두 가지 큰 주목점: OpenThread의 메시지 처리량은 확장되고, Zigbee는 일찍 벽에 부딪히는 것 같다. 하지만 마지막 테이블은 무서웠다: 노드가 드롭된 후 OpenThread는 복구에 반 분이 걸리는 반면 Zigbee는 4분의 1초! 와우.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Zigbee vs. Matter over Thread: Entendiendo el rendimiento de protocolos IoT en la práctica
+***** TLDR
+Comparación académica de Zigbee vs Matter over Thread usando hardware comercial. Zigbee tiene menor sobrecarga y recupera rutas en 0.25 segundos después de un fallo de nodo, siendo mejor para despliegues pequeños y estáticos. Matter/Thread escala mejor con rendimiento estable en escenarios multi-hop pero tarda 30 segundos en recuperarse de caídas de nodos. Diferentes compensaciones para diferentes casos de uso.
+***** Take
+¿30 segundos para recuperarse de un fallo de nodo? Mis luces inteligentes parpadearán más que mi router. Al menos ahora hay datos reales en lugar de solo argumentos de foro sobre qué protocolo debería usar tu bombilla de $15.
+***** Comments
+- Me sorprende un poco que no añadieran Z-Wave a esta comparación.
+- Muchos gráficos donde OpenThread y Zigbee bailan alrededor del otro, están dentro de 2x entre sí. Dos grandes destacados para mí: el rendimiento de mensajes de OpenThread escala hacia arriba, Zigbee parece chocar con un muro temprano. Sin embargo, la última tabla fue un susto: OpenThread tarda medio minuto en recuperarse después de que cae un nodo mientras que Zigbee un cuarto de segundo. ¡Guau!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zigbee vs. Matter over Thread: IoT-Protokoll-Performance in der Praxis verstehen
+***** TLDR
+Akademischer Vergleich von Zigbee vs Matter over Thread mit kommerzieller Hardware. Zigbee hat geringeren Overhead und stellt Routen in 0,25 Sekunden nach Knotenausfall wieder her, besser für kleine statische Deployments. Matter/Thread skaliert besser mit stabilem Durchsatz in Multi-Hop-Szenarien, braucht aber 30 Sekunden zur Erholung von Knotenausfällen. Unterschiedliche Trade-offs für unterschiedliche Anwendungsfälle.
+***** Take
+30 Sekunden um sich von einem Knotenausfall zu erholen? Meine Smart-Lights werden öfter blinken als mein Router. Wenigstens gibt es jetzt echte Daten statt nur Forum-Argumente darüber, welches Protokoll deine 15-Dollar-Birne nutzen sollte.
+***** Comments
+- Ich bin etwas überrascht, dass sie Z-Wave nicht in diesen Vergleich aufgenommen haben.
+- Viele Graphen, wo OpenThread und Zigbee umeinander tanzen, sind innerhalb von 2x voneinander. Zwei große Auffälligkeiten für mich: Der Nachrichtendurchsatz von OpenThread skaliert hoch, Zigbee scheint früh an eine Wand zu stoßen. Die letzte Tabelle war allerdings erschreckend: OpenThread braucht eine halbe Minute zur Erholung nachdem ein Knoten ausfällt, während Zigbee eine Viertelsekunde! Wow.
+** DuckDB – Data power tools for your laptop, now in Clojure (2023) :clojure:duckdb:database:data:
+:PROPERTIES:
+:ID:       49175924
+:URL:      https://techascent.com/blog/just-ducking-around.html
+:HN_URL:   https://news.ycombinator.com/item?id=49175924
+:POINTS:   76
+:COMMENTS: 10
+:BY:       sourdecor
+:END:
+
+*** TLDR
+TechAscent's tmducken library brings DuckDB to Clojure via tech.ml.dataset. Demo shows loading 50GB/400M row CSV into 18GB DuckDB file in 2 minutes (with automatic indexing). Queries run in milliseconds, joining 1.4 billion rows takes 2.5 seconds. Supports batched inserts, zero-copy query results, and reduces to arbitrary Clojure functions without loading everything into memory.
+
+*** Take
+Join 1.4 billion rows in 2.5 seconds on your laptop. Meanwhile, your data team is still provisioning that Spark cluster from last quarter's budget request.
+
+*** Comments
+
+**** eterm
+:PROPERTIES:
+:COMMENT_ID: 49175930
+:END:
+DuckDB CLI is a powerhouse, it can load files as diverse as gzipped JSON lines, so you can stuff compressed logs straight into a directory yet still easily query them with SQL when you need to.
+
+**** didibus
+:PROPERTIES:
+:COMMENT_ID: 49175940
+:END:
+Impressive, you can really do a lot on a single node when it comes to big-data queries nowadays. I agree too many jump straight to a Spark cluster or something similar when you can just write a small script on a single node.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+DuckDB - 笔记本电脑的数据处理利器,现已支持Clojure (2023)
+***** TLDR
+TechAscent的tmducken库通过tech.ml.dataset将DuckDB引入Clojure。演示展示了2分钟内将50GB/4亿行CSV加载到18GB DuckDB文件中(自动索引)。查询以毫秒级运行,连接14亿行只需2.5秒。支持批量插入、零拷贝查询结果,并可归约到任意Clojure函数而无需将所有内容加载到内存中。
+***** Take
+在笔记本电脑上2.5秒连接14亿行。与此同时,你的数据团队还在等待上季度预算申请的Spark集群配置。
+***** Comments
+- DuckDB CLI是个强大的工具,它可以加载各种文件,比如gzip压缩的JSON行,所以你可以把压缩的日志直接塞进目录,需要时仍然可以用SQL轻松查询。
+- 令人印象深刻,现在在单节点上真的可以做很多大数据查询。我同意太多人直接跳到Spark集群或类似的东西,而你只需要在单节点上写一个小脚本就行了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+DuckDB - ノートPCのデータパワーツール、Clojureでも利用可能に (2023)
+***** TLDR
+TechAscentのtmduckenライブラリがtech.ml.datasetを通じてDuckDBをClojureに導入。デモでは50GB/4億行のCSVを2分で18GBのDuckDBファイルにロード（自動インデックス付き）。クエリはミリ秒で実行、14億行のジョインは2.5秒。バッチ挿入、ゼロコピークエリ結果をサポートし、メモリに全てをロードせずに任意のClojure関数にリデュース可能。
+***** Take
+ノートPCで14億行を2.5秒でジョイン。一方、あなたのデータチームはまだ前四半期の予算申請のSparkクラスターをプロビジョニング中。
+***** Comments
+- DuckDB CLIは強力で、gzip圧縮されたJSONラインなど多様なファイルをロードできるので、圧縮されたログをディレクトリに直接入れて、必要な時にSQLで簡単にクエリできる。
+- 印象的。今日では単一ノードでビッグデータクエリに関してかなり多くのことができる。多くの人がすぐにSparkクラスターなどに飛びつくが、単一ノードで小さなスクリプトを書くだけでいいのに、という意見に同意する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+DuckDB - 노트북을 위한 데이터 파워 도구, 이제 Clojure에서도 (2023)
+***** TLDR
+TechAscent의 tmducken 라이브러리가 tech.ml.dataset을 통해 DuckDB를 Clojure에 도입. 데모에서 50GB/4억 행 CSV를 2분 만에 18GB DuckDB 파일로 로드(자동 인덱싱 포함). 쿼리는 밀리초 단위로 실행, 14억 행 조인은 2.5초 소요. 배치 삽입, 제로카피 쿼리 결과를 지원하고 메모리에 모든 것을 로드하지 않고 임의의 Clojure 함수로 리듀스 가능.
+***** Take
+노트북에서 14억 행을 2.5초 만에 조인. 그동안 당신의 데이터 팀은 아직도 지난 분기 예산 요청의 Spark 클러스터를 프로비저닝 중.
+***** Comments
+- DuckDB CLI는 강력해서 gzip 압축된 JSON 라인 같은 다양한 파일을 로드할 수 있다. 압축된 로그를 디렉토리에 바로 넣어두고 필요할 때 SQL로 쉽게 쿼리할 수 있다.
+- 인상적이다. 요즘 단일 노드에서 빅데이터 쿼리와 관련해 정말 많은 일을 할 수 있다. 너무 많은 사람들이 단일 노드에서 작은 스크립트만 작성하면 되는데 바로 Spark 클러스터나 비슷한 것으로 뛰어든다는 데 동의한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+DuckDB - Herramientas de datos potentes para tu laptop, ahora en Clojure (2023)
+***** TLDR
+La biblioteca tmducken de TechAscent trae DuckDB a Clojure a través de tech.ml.dataset. La demo muestra cargar 50GB/400M filas de CSV en un archivo DuckDB de 18GB en 2 minutos (con indexación automática). Las consultas se ejecutan en milisegundos, unir 1.4 mil millones de filas toma 2.5 segundos. Soporta inserciones por lotes, resultados de consulta de copia cero, y reduce a funciones Clojure arbitrarias sin cargar todo en memoria.
+***** Take
+Unir 1.4 mil millones de filas en 2.5 segundos en tu laptop. Mientras tanto, tu equipo de datos todavía está aprovisionando ese clúster de Spark de la solicitud de presupuesto del trimestre pasado.
+***** Comments
+- DuckDB CLI es una potencia, puede cargar archivos tan diversos como líneas JSON comprimidas con gzip, así que puedes meter logs comprimidos directamente en un directorio y aún consultarlos fácilmente con SQL cuando lo necesites.
+- Impresionante, realmente puedes hacer mucho en un solo nodo cuando se trata de consultas de big-data hoy en día. Estoy de acuerdo en que demasiados saltan directamente a un clúster de Spark o algo similar cuando puedes simplemente escribir un pequeño script en un solo nodo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+DuckDB - Daten-Power-Tools für deinen Laptop, jetzt in Clojure (2023)
+***** TLDR
+TechAscents tmducken-Bibliothek bringt DuckDB über tech.ml.dataset zu Clojure. Demo zeigt das Laden von 50GB/400M Zeilen CSV in eine 18GB DuckDB-Datei in 2 Minuten (mit automatischer Indizierung). Abfragen laufen in Millisekunden, 1,4 Milliarden Zeilen joinen dauert 2,5 Sekunden. Unterstützt Batch-Inserts, Zero-Copy-Abfrageergebnisse und reduziert auf beliebige Clojure-Funktionen ohne alles in den Speicher zu laden.
+***** Take
+1,4 Milliarden Zeilen in 2,5 Sekunden auf deinem Laptop joinen. Währenddessen provisioniert dein Data-Team immer noch den Spark-Cluster aus dem Budget-Antrag des letzten Quartals.
+***** Comments
+- DuckDB CLI ist ein Kraftpaket, es kann so diverse Dateien wie gzip-komprimierte JSON-Zeilen laden, so dass du komprimierte Logs direkt in ein Verzeichnis packen und sie bei Bedarf trotzdem einfach mit SQL abfragen kannst.
+- Beeindruckend, man kann heute wirklich viel auf einem einzelnen Node machen, wenn es um Big-Data-Abfragen geht. Ich stimme zu, dass zu viele direkt zu einem Spark-Cluster oder ähnlichem springen, wenn man einfach ein kleines Skript auf einem einzelnen Node schreiben könnte.
