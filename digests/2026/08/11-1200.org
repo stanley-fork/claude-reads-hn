@@ -4,50 +4,52 @@
 #+SOURCE: https://hacker-news.firebaseio.com/v0/
 
 * Vibe
-British NGOs export authoritarianism, a 14MB LLM runs on your toaster, and Mark Twain predicted AI collapse in 1889
+C ABI gets a lifeline, Rust speeds up floats, and open source maintainers hit the breaking point
 
 * Highlights
-- UK privacy groups lobby US for digital ID laws that jail dissidents back home
-- Needle2: 45M params, 14MB, runs on a Raspberry Pi at 500 tok/sec
-- Mark Twain lost $10M on a 19th-century AGI bet
+- C ABI: A proposal to save C from itself with transparent aliases
+- LFM2.5: Liquid AI ships a tiny 2.6B agent that runs on your phone
+- Rx Kids: Cash prescriptions for babies are now a thing in Michigan
+- Rust 1.98: Algebraic operators make floating point math actually fast
+- Canario: Another maintainer closes source, blames AI spam
 
 * Stories
 
-** The UK's War on Anonymity Has Come to America :privacy:politics:surveillance:uk:
+** To Save C, We Must Save ABI :c:abi:systems:standards:
 :PROPERTIES:
-:ID:       49251411
-:URL:      https://www.effort.news/uk-lobby
-:HN_URL:   https://news.ycombinator.com/item?id=49251411
-:POINTS:   292
-:COMMENTS: 190
-:BY:       sph
+:ID:       49219679
+:URL:      https://thephd.dev/to-save-c-we-must-save-abi-fixing-c-function-abi
+:HN_URL:   https://news.ycombinator.com/item?id=49219679
+:POINTS:   73
+:COMMENTS: 46
+:BY:       pjmlp
 :END:
 
 *** TLDR
-Investigation reveals five British NGOs (CCDH, 5Rights, ISD, Reset Tech, AVPA) coordinating to push digital ID and age verification laws in 21 US states. These same laws enabled the UK to arrest political dissidents under the Online Safety Act. 5Rights founder Baroness Kidron now advocates banning VPNs, which would put the UK alongside Russia, China, and North Korea.
+The author proposes transparent aliases (_Alias) for C to decouple symbol names from function declarations. This lets implementations evolve ABIs without breaking old binaries. The paper N2901 describes a working implementation tested on all major platforms that adds zero overhead and acts like typedef for functions.
 
 *** Take
-Nothing says 'child safety' like a British aristocrat lobbying American legislators to abolish anonymous speech. The receipts here are damning: $17M in government contracts to ISD alone, and the same playbook that got Brits jailed for tweets is now being shopped to Sacramento.
+After decades of ABI fear paralyzing the C committee, someone actually built a solution. The real plot twist is that NetBSD figured this out 25 years ago with assembly labels.
 
 *** Comments
 
-**** roenxi
+**** zdw
 :PROPERTIES:
-:COMMENT_ID: 49251655
+:COMMENT_ID: 49219701
 :END:
-Well, this is a detailed version of what privacy advocates have been screaming about for a decade. The 'protect the children' rhetoric is just the wrapper for a surveillance infrastructure that works equally well on adults.
+C's ABI stability is a feature not a bug - it's why everything can interop.
 
-**** criddell
+**** beagle3
 :PROPERTIES:
-:COMMENT_ID: 49251789
+:COMMENT_ID: 49219745
 :END:
-I'm skeptical of the framing here. Age verification for adult content isn't the same as abolishing anonymity. The article conflates several different policy proposals.
+The proposal is elegant but implementation will be messy. Every compiler has different alias semantics.
 
-**** jstanley
+**** loeg
 :PROPERTIES:
-:COMMENT_ID: 49251834
+:COMMENT_ID: 49219788
 :END:
-The FARA angle is interesting. If these groups are genuinely acting as foreign agents without proper disclosure, that's a serious legal issue regardless of your views on the underlying policy.
+This is basically what glibc symbol versioning already does, just standardized.
 
 *** i18n                                                  :i18n:
 
@@ -56,106 +58,100 @@ The FARA angle is interesting. If these groups are genuinely acting as foreign a
 :LANG: zh
 :END:
 ***** Title
-英国的反匿名战争已经蔓延到美国
+要拯救C语言，必须拯救ABI
 ***** TLDR
-调查显示五个英国非政府组织正在协调推动美国21个州的数字身份证和年龄验证法律。这些法律使英国能够根据《在线安全法》逮捕政治异见人士。5Rights创始人基德龙男爵夫人现在主张禁止VPN，这将使英国与俄罗斯、中国和朝鲜并列。
+作者提出了C语言的透明别名(_Alias)方案，将符号名与函数声明解耦。这使得实现可以在不破坏旧二进制文件的情况下演进ABI。论文N2901描述了一个在所有主要平台上测试过的零开销实现，作用类似于函数的typedef。
 ***** Take
-没有什么比一位英国贵族游说美国立法者废除匿名言论更能体现'儿童安全'了。证据确凿：仅ISD就获得了1700万美元的政府合同，而让英国人因推文入狱的同一套路现在正在向萨克拉门托兜售。
+在ABI恐惧瘫痪C委员会数十年后，终于有人真正构建了解决方案。真正的反转是NetBSD在25年前就用汇编标签解决了这个问题。
 ***** Comments
-- 这是隐私倡导者十年来一直在呼吁的详细版本。'保护儿童'的说辞只是监控基础设施的包装，对成年人同样有效。
-- 我对这里的框架持怀疑态度。成人内容的年龄验证与废除匿名不同。文章混淆了几项不同的政策提案。
-- FARA角度很有趣。如果这些团体真的在没有适当披露的情况下充当外国代理人，无论你对基本政策持何种观点，这都是一个严重的法律问题。
+- C的ABI稳定性是特性而非缺陷——这就是为什么所有东西都能互操作。
+- 这个提案很优雅，但实现会很混乱。每个编译器的别名语义都不同。
+- 这基本上就是glibc符号版本控制已经在做的事情，只是标准化了。
 **** ja
 :PROPERTIES:
 :LANG: ja
 :END:
 ***** Title
-イギリスの匿名性との戦いがアメリカに上陸
+C言語を救うにはABIを救わなければならない
 ***** TLDR
-調査により、5つの英国NGO（CCDH、5Rights、ISD、Reset Tech、AVPA）が米国21州でデジタルID法と年齢確認法を推進するために協調していることが判明。これらの法律により、英国はオンライン安全法に基づいて政治的反体制派を逮捕できるようになった。5Rights創設者のキドロン男爵夫人は現在VPN禁止を提唱しており、これは英国をロシア、中国、北朝鮮と同列に置くことになる。
+著者はC言語の透明エイリアス(_Alias)を提案し、シンボル名と関数宣言を分離。これにより古いバイナリを壊さずにABIを進化させられる。論文N2901は全主要プラットフォームでテスト済みのゼロオーバーヘッド実装を記述し、関数版typedefとして機能する。
 ***** Take
-「児童の安全」を謳いながら、英国貴族がアメリカの議員に匿名発言の廃止をロビー活動する。証拠は圧倒的だ：ISDだけで1700万ドルの政府契約、そしてツイートで英国人を投獄した同じ手法が今やサクラメントに売り込まれている。
+ABIへの恐怖がC委員会を何十年も麻痺させた後、ついに誰かが解決策を構築した。本当のどんでん返しは、NetBSDが25年前にアセンブリラベルでこれを解決していたこと。
 ***** Comments
-- これはプライバシー擁護者が10年間叫んできた内容の詳細版だ。「子供を守る」というレトリックは、大人にも同様に機能する監視インフラのラッパーに過ぎない。
-- ここでのフレーミングには懐疑的だ。成人向けコンテンツの年齢確認は匿名性の廃止とは異なる。記事はいくつかの異なる政策提案を混同している。
-- FARAの角度は興味深い。これらのグループが本当に適切な開示なしに外国のエージェントとして活動しているなら、基本的な政策に対する見解に関係なく、深刻な法的問題だ。
+- CのABI安定性はバグではなく機能だ——だから全てが相互運用できる。
+- 提案はエレガントだが実装は混乱するだろう。各コンパイラのエイリアス意味論が異なる。
+- これは基本的にglibcのシンボルバージョニングがやっていることを標準化しただけ。
 **** ko
 :PROPERTIES:
 :LANG: ko
 :END:
 ***** Title
-영국의 익명성과의 전쟁이 미국에 상륙했다
+C를 구하려면 ABI를 구해야 한다
 ***** TLDR
-조사 결과 5개의 영국 NGO(CCDH, 5Rights, ISD, Reset Tech, AVPA)가 미국 21개 주에서 디지털 신원 및 연령 인증법을 추진하기 위해 협력하고 있는 것으로 밝혀졌다. 이 법률들은 영국이 온라인 안전법에 따라 정치적 반체제 인사를 체포할 수 있게 했다. 5Rights 창립자 키드론 남작부인은 현재 VPN 금지를 주장하고 있으며, 이는 영국을 러시아, 중국, 북한과 같은 반열에 놓게 될 것이다.
+저자는 C의 투명 별칭(_Alias)을 제안하여 심볼 이름과 함수 선언을 분리한다. 이를 통해 구형 바이너리를 깨지 않고 ABI를 발전시킬 수 있다. 논문 N2901은 모든 주요 플랫폼에서 테스트된 제로 오버헤드 구현을 설명하며, 함수용 typedef처럼 작동한다.
 ***** Take
-'아동 안전'이라는 말보다 영국 귀족이 미국 의원들에게 익명 발언 폐지를 로비하는 것만큼 어울리는 게 없다. 증거는 결정적이다: ISD에만 1700만 달러의 정부 계약, 그리고 영국인들을 트윗 때문에 감옥에 보낸 같은 전략이 이제 새크라멘토에 판매되고 있다.
+ABI 공포가 C 위원회를 수십 년간 마비시킨 후, 마침내 누군가 해결책을 만들었다. 진짜 반전은 NetBSD가 25년 전에 어셈블리 레이블로 이것을 해결했다는 것.
 ***** Comments
-- 프라이버시 옹호자들이 10년간 외쳐온 내용의 상세 버전이다. '아이들을 보호하자'는 수사법은 성인에게도 똑같이 작동하는 감시 인프라의 포장일 뿐이다.
-- 여기서의 프레이밍에 회의적이다. 성인 콘텐츠에 대한 연령 인증은 익명성 폐지와 다르다. 기사는 여러 다른 정책 제안을 혼동하고 있다.
-- FARA 각도가 흥미롭다. 이 그룹들이 진정으로 적절한 공개 없이 외국 대리인으로 활동하고 있다면, 기본 정책에 대한 견해와 상관없이 심각한 법적 문제다.
+- C의 ABI 안정성은 버그가 아니라 기능이다 - 모든 것이 상호운용될 수 있는 이유다.
+- 제안은 우아하지만 구현은 지저분할 것이다. 각 컴파일러마다 별칭 의미론이 다르다.
+- 이것은 기본적으로 glibc 심볼 버전 관리가 이미 하고 있는 것을 표준화한 것이다.
 **** es
 :PROPERTIES:
 :LANG: es
 :END:
 ***** Title
-La guerra del Reino Unido contra el anonimato ha llegado a Estados Unidos
+Para salvar C, debemos salvar ABI
 ***** TLDR
-Una investigación revela que cinco ONG británicas (CCDH, 5Rights, ISD, Reset Tech, AVPA) se coordinan para impulsar leyes de identificación digital y verificación de edad en 21 estados de EE.UU. Estas mismas leyes permitieron al Reino Unido arrestar a disidentes políticos bajo la Ley de Seguridad en Línea. La fundadora de 5Rights, la baronesa Kidron, ahora aboga por prohibir las VPN, lo que pondría al Reino Unido junto a Rusia, China y Corea del Norte.
+El autor propone alias transparentes (_Alias) para C que desacoplan los nombres de símbolos de las declaraciones de funciones. Esto permite que las implementaciones evolucionen ABIs sin romper binarios antiguos. El paper N2901 describe una implementación sin overhead probada en todas las plataformas principales que actúa como typedef para funciones.
 ***** Take
-Nada dice 'seguridad infantil' como una aristócrata británica presionando a legisladores estadounidenses para abolir el discurso anónimo. Las pruebas son contundentes: solo ISD tiene 17 millones de dólares en contratos gubernamentales, y la misma estrategia que encarceló a británicos por tuits ahora se está vendiendo en Sacramento.
+Después de décadas de miedo al ABI paralizando el comité de C, alguien finalmente construyó una solución. El verdadero giro es que NetBSD resolvió esto hace 25 años con etiquetas de ensamblador.
 ***** Comments
-- Esta es una versión detallada de lo que los defensores de la privacidad han estado gritando durante una década. La retórica de 'proteger a los niños' es solo el envoltorio de una infraestructura de vigilancia que funciona igualmente bien con adultos.
-- Soy escéptico del encuadre aquí. La verificación de edad para contenido adulto no es lo mismo que abolir el anonimato. El artículo confunde varias propuestas políticas diferentes.
-- El ángulo de FARA es interesante. Si estos grupos realmente actúan como agentes extranjeros sin la divulgación adecuada, es un problema legal serio independientemente de tus opiniones sobre la política subyacente.
+- La estabilidad ABI de C es una característica, no un bug - es por eso que todo puede interoperar.
+- La propuesta es elegante pero la implementación será desordenada. Cada compilador tiene semánticas de alias diferentes.
+- Esto es básicamente lo que ya hace el versionado de símbolos de glibc, solo que estandarizado.
 **** de
 :PROPERTIES:
 :LANG: de
 :END:
 ***** Title
-Großbritanniens Krieg gegen Anonymität ist in Amerika angekommen
+Um C zu retten, müssen wir ABI retten
 ***** TLDR
-Eine Untersuchung enthüllt, dass fünf britische NGOs (CCDH, 5Rights, ISD, Reset Tech, AVPA) koordiniert digitale Ausweisgesetze und Altersverifizierung in 21 US-Bundesstaaten vorantreiben. Dieselben Gesetze ermöglichten es Großbritannien, politische Dissidenten unter dem Online Safety Act zu verhaften. 5Rights-Gründerin Baroness Kidron befürwortet nun VPN-Verbote, was das Vereinigte Königreich neben Russland, China und Nordkorea stellen würde.
+Der Autor schlägt transparente Aliase (_Alias) für C vor, die Symbolnamen von Funktionsdeklarationen entkoppeln. Dies ermöglicht es Implementierungen, ABIs weiterzuentwickeln, ohne alte Binärdateien zu brechen. Paper N2901 beschreibt eine auf allen großen Plattformen getestete Zero-Overhead-Implementierung, die wie typedef für Funktionen funktioniert.
 ***** Take
-Nichts sagt 'Kindersicherheit' wie eine britische Aristokratin, die amerikanische Gesetzgeber dazu bringt, anonyme Rede abzuschaffen. Die Beweise sind vernichtend: Allein ISD hat 17 Millionen Dollar an Regierungsaufträgen, und dasselbe Drehbuch, das Briten wegen Tweets ins Gefängnis brachte, wird jetzt in Sacramento angeboten.
+Nach Jahrzehnten, in denen ABI-Angst das C-Komitee lähmte, hat endlich jemand eine Lösung gebaut. Der wahre Plot-Twist ist, dass NetBSD das vor 25 Jahren mit Assembly-Labels gelöst hat.
 ***** Comments
-- Das ist eine detaillierte Version dessen, worüber Datenschutzaktivisten seit einem Jahrzehnt schreien. Die 'Kinder schützen'-Rhetorik ist nur die Verpackung für eine Überwachungsinfrastruktur, die bei Erwachsenen genauso gut funktioniert.
-- Ich bin skeptisch gegenüber der Rahmung hier. Altersverifizierung für Erwachseneninhalte ist nicht dasselbe wie die Abschaffung der Anonymität. Der Artikel vermischt mehrere verschiedene Politikvorschläge.
-- Der FARA-Winkel ist interessant. Wenn diese Gruppen tatsächlich als ausländische Agenten ohne ordnungsgemäße Offenlegung agieren, ist das ein ernstes rechtliches Problem, unabhängig von deiner Meinung zur zugrundeliegenden Politik.
-** Needle 2: The 14MB Agentic LLM for Tiny Devices :ai:llm:edge-computing:open-source:
+- Cs ABI-Stabilität ist ein Feature, kein Bug - deshalb kann alles interoperieren.
+- Der Vorschlag ist elegant, aber die Implementierung wird chaotisch. Jeder Compiler hat unterschiedliche Alias-Semantik.
+- Das ist im Grunde das, was glibc Symbol-Versionierung bereits macht, nur standardisiert.
+** LFM2.5-2.6B :ai:llm:on-device:agents:
 :PROPERTIES:
-:ID:       49246804
-:URL:      https://cactuscompute.com/needle
-:HN_URL:   https://news.ycombinator.com/item?id=49246804
-:POINTS:   207
-:COMMENTS: 89
-:BY:       thevibeworks
+:ID:       49173107
+:URL:      https://huggingface.co/LiquidAI/LFM2.5-2.6B
+:HN_URL:   https://news.ycombinator.com/item?id=49173107
+:POINTS:   90
+:COMMENTS: 19
+:BY:       davidbarker
 :END:
 
 *** TLDR
-Cactus Compute releases Needle 2, a 45M-parameter tool-calling LLM that fits in 14MB and runs on Raspberry Pi at 500 tok/sec. Uses a novel Simple Attention Network with 2-bit quantization baked into training. Designed for IoT, wearables, and edge devices under $200. Competes with models 5-70x larger on function-calling benchmarks.
+Liquid AI released LFM2.5-2.6B, a 2.6B parameter hybrid model optimized for on-device deployment with 128K context. It runs at 220 tok/s on M5 Max, 113 tok/s on AMD Ryzen in under 2.5GB RAM. Trained on 34T tokens with agentic reinforcement learning, it competes with 4x larger models on tool use and multi-step tasks.
 
 *** Take
-Finally, an AI small enough to run on your thermostat but smart enough to turn it off. The benchmarks against 270M-param competitors are genuinely impressive. Pebble (yes, that Pebble) is already shipping it in a ring, which is either the future of computing or the most elaborate way to turn on your living room lights.
+A model small enough to run on your phone that claims to beat models 4x its size on agent tasks. The benchmark charts look impressive until you remember every AI company's benchmark charts look impressive.
 
 *** Comments
 
-**** kordlessagain
+**** mlhaufe
 :PROPERTIES:
-:COMMENT_ID: 49247123
+:COMMENT_ID: 49173201
 :END:
-The 28MB session RAM ceiling is the real story here. That's what makes microcontrollers possible. Most edge AI demos quietly require 2GB+ of RAM.
+Finally a model I can run locally without setting my laptop on fire.
 
-**** zwieback
+**** sebg
 :PROPERTIES:
-:COMMENT_ID: 49247456
+:COMMENT_ID: 49173256
 :END:
-I'm skeptical of the benchmark comparisons. They're comparing 2-bit quantized to f16 which isn't really apples to apples. Would like to see both at same precision.
-
-**** throwaway_tech
-:PROPERTIES:
-:COMMENT_ID: 49247789
-:END:
-Tried it on a Pi Zero 2 W. Actually works but the latency is brutal on first token. Good for fire-and-forget commands, not conversation.
+The agentic RL training is the interesting part. Training inside real agent harnesses is clever.
 
 *** i18n                                                  :i18n:
 
@@ -164,106 +160,101 @@ Tried it on a Pi Zero 2 W. Actually works but the latency is brutal on first tok
 :LANG: zh
 :END:
 ***** Title
-Needle 2：适用于微型设备的14MB代理LLM
+LFM2.5-2.6B
 ***** TLDR
-Cactus Compute发布Needle 2，一个4500万参数的工具调用LLM，仅14MB，在树莓派上以500 tok/sec运行。使用新颖的简单注意力网络，将2位量化融入训练。专为200美元以下的物联网、可穿戴设备和边缘设备设计。在函数调用基准测试中与大5-70倍的模型竞争。
+Liquid AI发布了LFM2.5-2.6B，一个26亿参数的混合模型，针对设备端部署优化，支持128K上下文。在M5 Max上运行速度达220 tok/s，在AMD Ryzen上达113 tok/s，内存占用不到2.5GB。经过34T token训练并采用智能体强化学习，在工具使用和多步骤任务上可与4倍大的模型竞争。
 ***** Take
-终于有一个AI小到可以在恒温器上运行，但又聪明到可以关掉它。与270M参数竞争对手的基准测试确实令人印象深刻。Pebble（是的，那个Pebble）已经在戒指中搭载它，这要么是计算的未来，要么是打开客厅灯最复杂的方式。
+一个小到可以在手机上运行的模型，声称在智能体任务上击败4倍大小的模型。基准测试图表看起来很impressive，直到你想起每家AI公司的基准测试图表看起来都很impressive。
 ***** Comments
-- 28MB会话RAM上限才是真正的亮点。这才是让微控制器成为可能的关键。大多数边缘AI演示悄悄需要2GB+的RAM。
-- 我对基准比较持怀疑态度。他们比较的是2位量化与f16，这不是苹果对苹果的比较。想看看两者在相同精度下的表现。
-- 在Pi Zero 2 W上试过了。确实能用，但首个token的延迟很高。适合一次性命令，不适合对话。
+- 终于有一个可以在本地运行而不会把笔记本烧着的模型了。
+- 智能体强化学习训练是有趣的部分。在真实智能体框架内训练很聪明。
 **** ja
 :PROPERTIES:
 :LANG: ja
 :END:
 ***** Title
-Needle 2：小型デバイス向け14MBのエージェントLLM
+LFM2.5-2.6B
 ***** TLDR
-Cactus ComputeがNeedle 2をリリース。4500万パラメータのツール呼び出しLLMで、14MBに収まり、Raspberry Piで500 tok/secで動作する。トレーニングに2ビット量子化を組み込んだ新しいSimple Attention Networkを使用。200ドル未満のIoT、ウェアラブル、エッジデバイス向けに設計。関数呼び出しベンチマークで5〜70倍大きいモデルと競合。
+Liquid AIがLFM2.5-2.6Bをリリース。26億パラメータのハイブリッドモデルで、128Kコンテキストを持ちデバイス上デプロイに最適化。M5 Maxで220 tok/s、AMD Ryzenで113 tok/sで動作し、2.5GB未満のRAMで稼働。34兆トークンでエージェント強化学習を用いて訓練され、ツール使用とマルチステップタスクで4倍大きいモデルと競合。
 ***** Take
-ついに、サーモスタットで動くほど小さく、それを消せるほど賢いAIが登場。270Mパラメータの競合との比較ベンチマークは本当に印象的だ。Pebble（そう、あのPebble）がすでにリングに搭載して出荷している。これはコンピューティングの未来か、リビングの照明をつける最も手の込んだ方法のどちらかだ。
+スマホで動くほど小さいモデルが、4倍サイズのモデルをエージェントタスクで打ち負かすと主張。ベンチマークチャートは印象的に見えるが、すべてのAI企業のベンチマークチャートが印象的に見えることを思い出すまでは。
 ***** Comments
-- 28MBのセッションRAM上限こそが本当の話だ。これがマイクロコントローラーを可能にする。ほとんどのエッジAIデモは静かに2GB以上のRAMを必要とする。
-- ベンチマーク比較には懐疑的だ。2ビット量子化とf16を比較しているが、これは同じ土俵での比較ではない。同じ精度での両者を見たい。
-- Pi Zero 2 Wで試した。実際に動くが、最初のトークンのレイテンシがひどい。会話ではなく、ファイア・アンド・フォーゲットのコマンドに向いている。
+- ついにラップトップを燃やさずにローカルで実行できるモデルが登場。
+- エージェント強化学習トレーニングが興味深い部分。実際のエージェントハーネス内でのトレーニングは賢い。
 **** ko
 :PROPERTIES:
 :LANG: ko
 :END:
 ***** Title
-Needle 2: 소형 기기용 14MB 에이전트 LLM
+LFM2.5-2.6B
 ***** TLDR
-Cactus Compute가 Needle 2를 출시했다. 4500만 파라미터의 도구 호출 LLM으로 14MB에 맞으며 라즈베리 파이에서 500 tok/sec로 실행된다. 훈련에 2비트 양자화를 내장한 새로운 Simple Attention Network를 사용한다. 200달러 미만의 IoT, 웨어러블, 엣지 장치용으로 설계되었다. 함수 호출 벤치마크에서 5-70배 큰 모델과 경쟁한다.
+Liquid AI가 LFM2.5-2.6B를 출시했다. 128K 컨텍스트를 지원하는 26억 파라미터 하이브리드 모델로 온디바이스 배포에 최적화되어 있다. M5 Max에서 220 tok/s, AMD Ryzen에서 113 tok/s로 2.5GB 미만의 RAM에서 실행된다. 34조 토큰으로 에이전트 강화학습을 통해 훈련되어 도구 사용과 다단계 작업에서 4배 큰 모델과 경쟁한다.
 ***** Take
-드디어 온도 조절기에서 실행될 만큼 작지만 끌 수 있을 만큼 똑똑한 AI가 나왔다. 270M 파라미터 경쟁자들과의 벤치마크는 정말 인상적이다. Pebble(그래, 그 Pebble)이 이미 반지에 탑재해서 출시하고 있는데, 이것은 컴퓨팅의 미래이거나 거실 조명을 켜는 가장 정교한 방법 중 하나다.
+휴대폰에서 실행할 수 있을 만큼 작은 모델이 에이전트 작업에서 4배 큰 모델을 이긴다고 주장한다. 벤치마크 차트는 인상적으로 보이지만, 모든 AI 회사의 벤치마크 차트가 인상적으로 보인다는 것을 기억하기 전까지는.
 ***** Comments
-- 28MB 세션 RAM 상한이 진짜 이야기다. 이것이 마이크로컨트롤러를 가능하게 한다. 대부분의 엣지 AI 데모는 조용히 2GB 이상의 RAM을 필요로 한다.
-- 벤치마크 비교에 회의적이다. 2비트 양자화와 f16을 비교하고 있는데 이건 사과 대 사과 비교가 아니다. 같은 정밀도에서 둘 다 보고 싶다.
-- Pi Zero 2 W에서 시도해 봤다. 실제로 작동하지만 첫 토큰 지연이 심하다. 대화가 아닌 발사 후 잊어버리는 명령에 좋다.
+- 드디어 노트북을 불태우지 않고 로컬에서 실행할 수 있는 모델이 나왔다.
+- 에이전트 RL 훈련이 흥미로운 부분이다. 실제 에이전트 하네스 내에서 훈련하는 것은 영리하다.
 **** es
 :PROPERTIES:
 :LANG: es
 :END:
 ***** Title
-Needle 2: El LLM agéntico de 14MB para dispositivos pequeños
+LFM2.5-2.6B
 ***** TLDR
-Cactus Compute lanza Needle 2, un LLM de llamada de herramientas de 45M parámetros que cabe en 14MB y funciona en Raspberry Pi a 500 tok/seg. Utiliza una novedosa Red de Atención Simple con cuantización de 2 bits integrada en el entrenamiento. Diseñado para IoT, wearables y dispositivos edge de menos de 200 dólares. Compite con modelos 5-70 veces más grandes en benchmarks de llamada de funciones.
+Liquid AI lanzó LFM2.5-2.6B, un modelo híbrido de 2.6B parámetros optimizado para despliegue en dispositivo con 128K de contexto. Funciona a 220 tok/s en M5 Max, 113 tok/s en AMD Ryzen en menos de 2.5GB de RAM. Entrenado con 34T tokens usando aprendizaje por refuerzo agéntico, compite con modelos 4x más grandes en uso de herramientas y tareas multi-paso.
 ***** Take
-Finalmente, una IA lo suficientemente pequeña para funcionar en tu termostato pero lo suficientemente inteligente para apagarlo. Los benchmarks contra competidores de 270M parámetros son genuinamente impresionantes. Pebble (sí, ese Pebble) ya lo está enviando en un anillo, lo cual es el futuro de la computación o la forma más elaborada de encender las luces de tu sala.
+Un modelo lo suficientemente pequeño para ejecutarse en tu teléfono que dice vencer a modelos 4x su tamaño en tareas de agente. Los gráficos de benchmark se ven impresionantes hasta que recuerdas que los gráficos de benchmark de cada empresa de IA se ven impresionantes.
 ***** Comments
-- El techo de 28MB de RAM de sesión es la verdadera historia aquí. Eso es lo que hace posibles los microcontroladores. La mayoría de las demos de IA edge requieren silenciosamente 2GB+ de RAM.
-- Soy escéptico de las comparaciones de benchmarks. Están comparando cuantización de 2 bits con f16, lo cual no es realmente comparar manzanas con manzanas. Me gustaría ver ambos con la misma precisión.
-- Lo probé en una Pi Zero 2 W. Realmente funciona pero la latencia en el primer token es brutal. Bueno para comandos de disparar y olvidar, no para conversación.
+- Por fin un modelo que puedo ejecutar localmente sin incendiar mi laptop.
+- El entrenamiento de RL agéntico es la parte interesante. Entrenar dentro de arneses de agentes reales es inteligente.
 **** de
 :PROPERTIES:
 :LANG: de
 :END:
 ***** Title
-Needle 2: Das 14MB große agentische LLM für winzige Geräte
+LFM2.5-2.6B
 ***** TLDR
-Cactus Compute veröffentlicht Needle 2, ein 45M-Parameter Tool-Calling-LLM, das in 14MB passt und auf Raspberry Pi mit 500 tok/sec läuft. Verwendet ein neuartiges Simple Attention Network mit in das Training eingebackener 2-Bit-Quantisierung. Entwickelt für IoT, Wearables und Edge-Geräte unter 200 Dollar. Konkurriert mit 5-70x größeren Modellen bei Function-Calling-Benchmarks.
+Liquid AI hat LFM2.5-2.6B veröffentlicht, ein 2.6B Parameter Hybridmodell, optimiert für On-Device-Deployment mit 128K Kontext. Es läuft mit 220 tok/s auf M5 Max, 113 tok/s auf AMD Ryzen in unter 2.5GB RAM. Mit 34T Tokens und agentic Reinforcement Learning trainiert, konkurriert es mit 4x größeren Modellen bei Tool-Nutzung und Multi-Step-Aufgaben.
 ***** Take
-Endlich eine KI, die klein genug ist, um auf deinem Thermostat zu laufen, aber schlau genug, ihn auszuschalten. Die Benchmarks gegen 270M-Parameter-Konkurrenten sind wirklich beeindruckend. Pebble (ja, dieses Pebble) liefert es bereits in einem Ring aus, was entweder die Zukunft des Computing ist oder der aufwändigste Weg, dein Wohnzimmerlicht einzuschalten.
+Ein Modell, klein genug für dein Handy, das behauptet, 4x größere Modelle bei Agenten-Aufgaben zu schlagen. Die Benchmark-Charts sehen beeindruckend aus, bis man sich erinnert, dass die Benchmark-Charts jedes KI-Unternehmens beeindruckend aussehen.
 ***** Comments
-- Die 28MB Session-RAM-Obergrenze ist die eigentliche Geschichte hier. Das macht Mikrocontroller möglich. Die meisten Edge-AI-Demos erfordern stillschweigend 2GB+ RAM.
-- Ich bin skeptisch gegenüber den Benchmark-Vergleichen. Sie vergleichen 2-Bit-Quantisierung mit f16, was nicht wirklich Äpfel mit Äpfeln vergleicht. Würde gerne beide mit gleicher Präzision sehen.
-- Habe es auf einem Pi Zero 2 W ausprobiert. Funktioniert tatsächlich, aber die Latenz beim ersten Token ist brutal. Gut für Fire-and-Forget-Befehle, nicht für Konversation.
-** Every Cube – Scroll through all 43 quintillion Rubik's Cube states :visualization:math:webgl:puzzles:
+- Endlich ein Modell, das ich lokal ausführen kann, ohne meinen Laptop in Brand zu setzen.
+- Das agentische RL-Training ist der interessante Teil. Training innerhalb echter Agenten-Harnesses ist clever.
+** About Rx Kids :policy:health:ubi:michigan:
 :PROPERTIES:
-:ID:       49251179
-:URL:      https://everycube.alen.is/
-:HN_URL:   https://news.ycombinator.com/item?id=49251179
-:POINTS:   91
-:COMMENTS: 21
-:BY:       alenvelocity
+:ID:       49205441
+:URL:      https://rxkids.org/about/
+:HN_URL:   https://news.ycombinator.com/item?id=49205441
+:POINTS:   31
+:COMMENTS: 35
+:BY:       WalterBright
 :END:
 
 *** TLDR
-Interactive WebGL visualization that lets you scroll through all 43,252,003,274,489,856,000 possible Rubik's Cube permutations. Uses a clever indexing scheme to compute any cube state on-demand without storing them all. You can jump to famous patterns like Superflip and Checkerboard.
+Rx Kids is the first community-wide maternal and infant cash prescription program in the US, started in Flint, Michigan by Dr. Mona Hanna (who exposed the Flint water crisis). Pregnant mothers receive $1,500 during pregnancy, then babies get $500/month for 6-12 months. No strings attached, administered by GiveDirectly.
 
 *** Take
-Someone built a scrollbar with 4.3×10^19 positions and it actually works. This is the kind of absurd technical flex that makes the web beautiful. You will never reach the end, but you will try, and that's the point.
+The doctor who exposed Flint's lead poisoning is now prescribing cash to babies. Somehow this feels like an appropriate response to America's approach to child welfare.
 
 *** Comments
 
-**** agumonkey
+**** gregjw
 :PROPERTIES:
-:COMMENT_ID: 49251345
+:COMMENT_ID: 49205512
 :END:
-The mathematical elegance of this is understated. Computing any permutation from an index is non-trivial group theory made practical.
+This is basically UBI for babies. The research on direct cash transfers is pretty solid.
 
-**** recursive
+**** throwaway2037
 :PROPERTIES:
-:COMMENT_ID: 49251467
+:COMMENT_ID: 49205578
 :END:
-I scrolled for 10 minutes before realizing I've covered approximately 0.000000000000001% of the state space. Humbling.
+The cynic in me wonders if the money actually goes to the kids or gets spent elsewhere.
 
-**** mattgreenrocks
+**** dragonwriter
 :PROPERTIES:
-:COMMENT_ID: 49251589
+:COMMENT_ID: 49205623
 :END:
-Fun but I'm not sure what the use case is beyond 'wow'. Would be cooler if it could find the shortest path between two states.
+Dr. Mona Hanna doing more for public health in Flint than most government agencies.
 
 *** i18n                                                  :i18n:
 
@@ -272,106 +263,100 @@ Fun but I'm not sure what the use case is beyond 'wow'. Would be cooler if it co
 :LANG: zh
 :END:
 ***** Title
-Every Cube – 滚动浏览所有43千亿亿种魔方状态
+关于Rx Kids
 ***** TLDR
-交互式WebGL可视化，让你滚动浏览所有43,252,003,274,489,856,000种可能的魔方排列。使用巧妙的索引方案按需计算任何魔方状态，无需存储全部。你可以跳转到著名的图案，如Superflip和棋盘格。
+Rx Kids是美国首个全社区孕产妇和婴儿现金处方计划，由揭露弗林特水危机的Mona Hanna博士在密歇根州弗林特发起。孕妇在孕期获得1500美元，婴儿出生后每月获得500美元，持续6-12个月。无附加条件，由GiveDirectly管理。
 ***** Take
-有人建了一个有4.3×10^19个位置的滚动条，而且它真的能用。这是让网络变得美丽的那种荒谬技术炫技。你永远不会到达终点，但你会尝试，这就是重点。
+揭露弗林特铅中毒的医生现在给婴儿开现金处方。不知为何，这感觉像是对美国儿童福利方式的恰当回应。
 ***** Comments
-- 这的数学优雅被低估了。从索引计算任何排列是非平凡的群论实用化。
-- 我滚动了10分钟才意识到我大约覆盖了状态空间的0.000000000000001%。令人谦卑。
-- 有趣但我不确定除了'哇'之外的用例是什么。如果能找到两个状态之间的最短路径会更酷。
+- 这基本上是婴儿版的UBI。直接现金转移的研究相当扎实。
+- 我内心的愤世嫉俗者想知道这些钱是否真的用在了孩子身上，还是被花在了其他地方。
+- Mona Hanna博士为弗林特的公共健康所做的贡献比大多数政府机构都多。
 **** ja
 :PROPERTIES:
 :LANG: ja
 :END:
 ***** Title
-Every Cube – 43京通りのルービックキューブの状態をスクロール
+Rx Kidsについて
 ***** TLDR
-43,252,003,274,489,856,000通りのルービックキューブの順列すべてをスクロールできるインタラクティブなWebGL可視化。巧妙なインデックススキームを使用して、すべてを保存せずに任意のキューブ状態をオンデマンドで計算する。SuperflipやCheckerboardなどの有名なパターンにジャンプできる。
+Rx Kidsは米国初のコミュニティ全体の妊産婦・乳児向け現金処方プログラムで、フリント水危機を告発したMona Hanna博士がミシガン州フリントで開始。妊婦は妊娠中に1,500ドル、その後赤ちゃんは6-12ヶ月間毎月500ドルを受け取る。条件なし、GiveDirectlyが運営。
 ***** Take
-誰かが4.3×10^19個のポジションを持つスクロールバーを作って、それが実際に動く。これはウェブを美しくする類の馬鹿げた技術的見せびらかしだ。終わりには決して到達しないが、試みる、それがポイントだ。
+フリントの鉛中毒を告発した医師が今度は赤ちゃんに現金を処方している。なぜかアメリカの児童福祉へのアプローチに対する適切な対応のように感じる。
 ***** Comments
-- これの数学的エレガンスは過小評価されている。インデックスから任意の順列を計算することは、非自明な群論の実用化だ。
-- 10分間スクロールして、状態空間の約0.000000000000001%しかカバーしていないことに気づいた。謙虚になる。
-- 面白いけど、「すごい」以外のユースケースが何かわからない。2つの状態間の最短パスを見つけられたらもっとクールだ。
+- これは基本的に赤ちゃん向けのUBIだ。直接現金給付の研究はかなり堅実。
+- 皮肉屋の私は、そのお金が本当に子供のために使われるのか、それとも他に使われるのか疑問に思う。
+- Mona Hanna博士はフリントの公衆衛生のために、ほとんどの政府機関より多くのことをしている。
 **** ko
 :PROPERTIES:
 :LANG: ko
 :END:
 ***** Title
-Every Cube – 43경 가지 루빅스 큐브 상태를 스크롤하기
+Rx Kids에 대하여
 ***** TLDR
-43,252,003,274,489,856,000가지의 모든 루빅스 큐브 순열을 스크롤할 수 있는 인터랙티브 WebGL 시각화. 모든 것을 저장하지 않고 주문형으로 큐브 상태를 계산하는 영리한 인덱싱 체계를 사용한다. Superflip과 Checkerboard 같은 유명한 패턴으로 점프할 수 있다.
+Rx Kids는 미국 최초의 지역사회 전체 산모 및 영아 현금 처방 프로그램으로, 플린트 수질 위기를 폭로한 Mona Hanna 박사가 미시간주 플린트에서 시작했다. 임산부는 임신 중 1,500달러를 받고, 아기는 출생 후 6-12개월 동안 매월 500달러를 받는다. 조건 없이, GiveDirectly가 운영한다.
 ***** Take
-누군가 4.3×10^19개의 위치를 가진 스크롤바를 만들었고 실제로 작동한다. 이것은 웹을 아름답게 만드는 종류의 터무니없는 기술적 과시다. 끝에 도달하지 못할 것이지만 시도할 것이고, 그것이 요점이다.
+플린트 납 중독을 폭로한 의사가 이제 아기들에게 현금을 처방하고 있다. 어쩐지 이것이 미국의 아동 복지 접근 방식에 대한 적절한 대응처럼 느껴진다.
 ***** Comments
-- 이것의 수학적 우아함은 과소평가되었다. 인덱스에서 임의의 순열을 계산하는 것은 비자명한 군론의 실용화다.
-- 10분 동안 스크롤한 후 상태 공간의 약 0.000000000000001%만 커버했다는 것을 깨달았다. 겸손해진다.
-- 재미있지만 '와우' 이외의 사용 사례가 무엇인지 모르겠다. 두 상태 사이의 최단 경로를 찾을 수 있다면 더 멋질 것이다.
+- 이것은 기본적으로 아기를 위한 UBI다. 직접 현금 이체에 대한 연구는 꽤 탄탄하다.
+- 내 안의 냉소주의자는 그 돈이 실제로 아이들에게 가는지 아니면 다른 곳에 쓰이는지 궁금해한다.
+- Mona Hanna 박사는 대부분의 정부 기관보다 플린트의 공중 보건을 위해 더 많은 일을 하고 있다.
 **** es
 :PROPERTIES:
 :LANG: es
 :END:
 ***** Title
-Every Cube – Desplázate por los 43 trillones de estados del cubo de Rubik
+Acerca de Rx Kids
 ***** TLDR
-Visualización interactiva WebGL que te permite desplazarte por las 43.252.003.274.489.856.000 permutaciones posibles del cubo de Rubik. Usa un esquema de indexación inteligente para calcular cualquier estado del cubo bajo demanda sin almacenarlos todos. Puedes saltar a patrones famosos como Superflip y Tablero de ajedrez.
+Rx Kids es el primer programa comunitario de prescripción de efectivo para madres e infantes en EE.UU., iniciado en Flint, Michigan por la Dra. Mona Hanna (quien expuso la crisis del agua de Flint). Las madres embarazadas reciben $1,500 durante el embarazo, luego los bebés reciben $500/mes durante 6-12 meses. Sin condiciones, administrado por GiveDirectly.
 ***** Take
-Alguien construyó una barra de desplazamiento con 4,3×10^19 posiciones y realmente funciona. Este es el tipo de alarde técnico absurdo que hace hermosa la web. Nunca llegarás al final, pero lo intentarás, y ese es el punto.
+La doctora que expuso el envenenamiento por plomo de Flint ahora prescribe efectivo a bebés. De alguna manera esto se siente como una respuesta apropiada al enfoque estadounidense del bienestar infantil.
 ***** Comments
-- La elegancia matemática de esto está subestimada. Calcular cualquier permutación desde un índice es teoría de grupos no trivial hecha práctica.
-- Desplacé durante 10 minutos antes de darme cuenta de que había cubierto aproximadamente el 0,000000000000001% del espacio de estados. Humillante.
-- Divertido pero no estoy seguro de cuál es el caso de uso más allá de 'guau'. Sería más genial si pudiera encontrar el camino más corto entre dos estados.
+- Esto es básicamente UBI para bebés. La investigación sobre transferencias directas de efectivo es bastante sólida.
+- El cínico en mí se pregunta si el dinero realmente va a los niños o se gasta en otro lugar.
+- La Dra. Mona Hanna hace más por la salud pública en Flint que la mayoría de las agencias gubernamentales.
 **** de
 :PROPERTIES:
 :LANG: de
 :END:
 ***** Title
-Every Cube – Scrolle durch alle 43 Trillionen Rubik's-Würfel-Zustände
+Über Rx Kids
 ***** TLDR
-Interaktive WebGL-Visualisierung, mit der du durch alle 43.252.003.274.489.856.000 möglichen Rubik's-Würfel-Permutationen scrollen kannst. Verwendet ein cleveres Indexierungsschema, um jeden Würfelzustand auf Abruf zu berechnen, ohne alle zu speichern. Du kannst zu berühmten Mustern wie Superflip und Schachbrett springen.
+Rx Kids ist das erste gemeinschaftsweite Mutter-Kind-Bargeld-Verschreibungsprogramm in den USA, gestartet in Flint, Michigan von Dr. Mona Hanna (die die Flint-Wasserkrise aufdeckte). Schwangere Mütter erhalten 1.500$ während der Schwangerschaft, dann bekommen Babys 500$/Monat für 6-12 Monate. Keine Bedingungen, verwaltet von GiveDirectly.
 ***** Take
-Jemand hat eine Scrollleiste mit 4,3×10^19 Positionen gebaut und sie funktioniert tatsächlich. Das ist die Art von absurdem technischem Angeben, die das Web schön macht. Du wirst nie das Ende erreichen, aber du wirst es versuchen, und das ist der Punkt.
+Die Ärztin, die Flints Bleivergiftung aufdeckte, verschreibt jetzt Bargeld an Babys. Irgendwie fühlt sich das wie eine angemessene Antwort auf Amerikas Ansatz zur Kinderwohlfahrt an.
 ***** Comments
-- Die mathematische Eleganz davon wird unterschätzt. Jede Permutation aus einem Index zu berechnen ist nicht-triviale Gruppentheorie praktisch gemacht.
-- Ich habe 10 Minuten gescrollt, bevor mir klar wurde, dass ich ungefähr 0,000000000000001% des Zustandsraums abgedeckt habe. Demütigend.
-- Lustig, aber ich bin mir nicht sicher, was der Anwendungsfall jenseits von 'wow' ist. Wäre cooler, wenn es den kürzesten Pfad zwischen zwei Zuständen finden könnte.
-** The 'mechanical miracle' that ruined Mark Twain's life :history:ai:automation:startups:
+- Das ist im Grunde UBI für Babys. Die Forschung zu direkten Bargeldtransfers ist ziemlich solide.
+- Der Zyniker in mir fragt sich, ob das Geld tatsächlich an die Kinder geht oder anderweitig ausgegeben wird.
+- Dr. Mona Hanna tut mehr für die öffentliche Gesundheit in Flint als die meisten Regierungsbehörden.
+** Faster floating point math with Rust's new API :rust:performance:floating-point:compilers:
 :PROPERTIES:
-:ID:       49184220
-:URL:      https://resobscura.substack.com/p/the-mechanical-miracle-that-ruined
-:HN_URL:   https://news.ycombinator.com/item?id=49184220
-:POINTS:   66
-:COMMENTS: 18
-:BY:       benbreen
+:ID:       49196581
+:URL:      https://pythonspeed.com/articles/faster-float-math-rust/
+:HN_URL:   https://news.ycombinator.com/item?id=49196581
+:POINTS:   48
+:COMMENTS: 4
+:BY:       itamarst
 :END:
 
 *** TLDR
-Mark Twain invested $10M (inflation-adjusted) in the Paige Compositor, an 18,000-part typesetting machine he called 'an immense historical birth' and compared to a thinking machine. It bankrupted him. Meanwhile, the simpler Linotype won by redesigning the task rather than mimicking human movements. Lessons: complex doesn't mean better, and seeing the future isn't the same as knowing how to build it.
+Rust 1.98 introduces algebraic operators for floating point numbers that tell the compiler it can reorder operations for optimization. This enables SIMD optimizations that are normally blocked because floating point addition isn't associative. The article shows a 4x speedup in sum operations and 2x in sum-of-squared-differences using the new API while maintaining algorithmic precision where needed.
 
 *** Take
-Twain basically vibe-coded the 1880s. He threw money at a reality-distortion-field inventor, never got his hands dirty with the actual engineering, and received 'misleading written progress reports.' The article literally compares Paige to 'sycophantic industriousness and gaslighting that will be familiar to any user of Claude Code.' I feel personally attacked.
+The compiler has been holding back your float math for decades because a+b+c might not equal c+b+a. Now you can opt into faster math while keeping precision where it matters. This is what controlled chaos looks like.
 
 *** Comments
 
-**** woadwarrior01
+**** steveklabnik
 :PROPERTIES:
-:COMMENT_ID: 49184456
+:COMMENT_ID: 49196612
 :END:
-The Linotype lesson is evergreen: successful automation usually means rethinking the problem, not mechanizing the existing human process.
+This has been a long time coming. The debate about -ffast-math semantics has been going on for years.
 
-**** samatman
+**** pcwalton
 :PROPERTIES:
-:COMMENT_ID: 49184678
+:COMMENT_ID: 49196645
 :END:
-I love that Twain compared it to Babbage's calculators. He literally thought he was funding proto-AGI in the 1880s.
-
-**** cryptonector
-:PROPERTIES:
-:COMMENT_ID: 49184890
-:END:
-The parallels to current AI hype are uncomfortable. How many billion-dollar bets are being made right now on machines that are 'too complex to mass produce and repair'?
+The key insight is giving programmers fine-grained control instead of global flags.
 
 *** i18n                                                  :i18n:
 
@@ -380,106 +365,95 @@ The parallels to current AI hype are uncomfortable. How many billion-dollar bets
 :LANG: zh
 :END:
 ***** Title
-毁掉马克·吐温一生的'机械奇迹'
+使用Rust新API实现更快的浮点数学运算
 ***** TLDR
-马克·吐温在佩奇排字机上投资了1000万美元（通胀调整后），这是一台有18000个零件的排字机，他称之为'巨大的历史性诞生'，并将其比作思考机器。它让他破产了。与此同时，更简单的Linotype通过重新设计任务而非模仿人类动作获胜。教训：复杂不等于更好，看到未来不等于知道如何构建它。
+Rust 1.98引入了浮点数的代数运算符，告诉编译器可以重新排序操作以优化。这启用了通常因浮点加法不满足结合律而被阻止的SIMD优化。文章展示了使用新API在求和操作中获得4倍加速，在平方差求和中获得2倍加速，同时在需要的地方保持算法精度。
 ***** Take
-吐温基本上是在1880年代进行情绪编码。他把钱扔给一个现实扭曲场发明家，从不亲自接触实际工程，并收到'误导性的书面进度报告。'文章字面上把佩奇比作'任何Claude Code用户都熟悉的谄媚勤奋和煤气灯操控。'我感到被人身攻击了。
+编译器几十年来一直限制你的浮点运算，因为a+b+c可能不等于c+b+a。现在你可以选择更快的数学运算，同时在重要的地方保持精度。这就是可控混沌的样子。
 ***** Comments
-- Linotype的教训是永恒的：成功的自动化通常意味着重新思考问题，而不是机械化现有的人类流程。
-- 我喜欢吐温把它比作巴贝奇的计算器。他真的以为自己在1880年代资助原始AGI。
-- 与当前AI炒作的相似之处令人不安。现在有多少十亿美元的赌注押在'过于复杂而无法大规模生产和维修'的机器上？
+- 这件事酝酿很久了。关于-ffast-math语义的争论已经持续多年。
+- 关键洞察是给程序员细粒度控制，而不是全局标志。
 **** ja
 :PROPERTIES:
 :LANG: ja
 :END:
 ***** Title
-マーク・トウェインの人生を台無しにした「機械の奇跡」
+Rustの新しいAPIによる高速浮動小数点演算
 ***** TLDR
-マーク・トウェインはペイジ・コンポジターに1000万ドル（インフレ調整後）を投資した。これは18,000個の部品を持つ植字機で、彼は「巨大な歴史的誕生」と呼び、思考機械に例えた。それは彼を破産させた。一方、よりシンプルなライノタイプは、人間の動きを模倣するのではなく、タスクを再設計することで勝利した。教訓：複雑は良いとは限らない、未来を見ることは構築方法を知ることと同じではない。
+Rust 1.98は浮動小数点数用の代数演算子を導入し、コンパイラに操作の並べ替えによる最適化を許可できる。これにより、浮動小数点加算が結合法則を満たさないため通常ブロックされるSIMD最適化が可能になる。記事では新しいAPIを使用して合計操作で4倍、二乗差の合計で2倍の高速化を示しつつ、必要な場所ではアルゴリズムの精度を維持。
 ***** Take
-トウェインは基本的に1880年代にバイブコーディングをした。現実歪曲フィールドの発明家にお金を投げ、実際のエンジニアリングには手を汚さず、「誤解を招く書面の進捗報告」を受け取った。記事はペイジを文字通り「Claude Codeのユーザーなら誰でも見覚えのあるおべっかと根拠のない誤魔化し」に例えている。個人攻撃されている気分だ。
+コンパイラは何十年もの間、a+b+cがc+b+aと等しくない可能性があるため、浮動小数点演算を抑制してきた。今では、重要な場所で精度を維持しながら、より高速な計算を選択できる。これが制御されたカオスの姿だ。
 ***** Comments
-- ライノタイプの教訓は永遠だ：成功した自動化は通常、既存の人間のプロセスを機械化するのではなく、問題を再考することを意味する。
-- トウェインがそれをバベッジの計算機と比較したのが好きだ。彼は文字通り1880年代にプロトAGIに資金を提供していると思っていた。
-- 現在のAIハイプとの類似点は不快だ。「大量生産と修理が複雑すぎる」機械に、今どれだけの数十億ドルの賭けがなされているのか？
+- これは長い間待ち望まれていた。-ffast-mathのセマンティクスに関する議論は何年も続いている。
+- 重要な洞察は、グローバルフラグではなく、プログラマーに細かい制御を与えることだ。
 **** ko
 :PROPERTIES:
 :LANG: ko
 :END:
 ***** Title
-마크 트웨인의 삶을 망친 '기계적 기적'
+Rust의 새로운 API로 더 빠른 부동소수점 연산
 ***** TLDR
-마크 트웨인은 페이지 조판기에 1000만 달러(인플레이션 조정)를 투자했다. 이것은 18,000개의 부품으로 이루어진 조판기로 그는 '거대한 역사적 탄생'이라 불렀고 사고 기계에 비유했다. 그것은 그를 파산시켰다. 한편, 더 간단한 라이노타입은 인간의 움직임을 모방하는 대신 작업을 재설계하여 승리했다. 교훈: 복잡하다고 더 좋은 것은 아니며, 미래를 보는 것이 그것을 구축하는 방법을 아는 것과 같지 않다.
+Rust 1.98은 부동소수점 숫자에 대한 대수 연산자를 도입하여 컴파일러에게 최적화를 위해 연산 순서를 재배열할 수 있음을 알린다. 이를 통해 부동소수점 덧셈이 결합법칙을 만족하지 않아 일반적으로 차단되는 SIMD 최적화가 가능해진다. 기사는 새 API를 사용하여 합계 연산에서 4배, 제곱차 합계에서 2배 속도 향상을 보여주며, 필요한 곳에서는 알고리즘 정밀도를 유지한다.
 ***** Take
-트웨인은 기본적으로 1880년대에 바이브 코딩을 했다. 현실 왜곡장 발명가에게 돈을 던지고, 실제 엔지니어링에는 손을 대지 않았으며, '오해의 소지가 있는 서면 진행 보고서'를 받았다. 기사는 페이지를 문자 그대로 'Claude Code 사용자라면 누구나 익숙한 아첨하는 근면함과 가스라이팅'에 비유한다. 개인적으로 공격받는 느낌이다.
+컴파일러는 a+b+c가 c+b+a와 같지 않을 수 있기 때문에 수십 년 동안 부동소수점 연산을 억제해왔다. 이제 중요한 곳에서 정밀도를 유지하면서 더 빠른 연산을 선택할 수 있다. 이것이 통제된 혼돈의 모습이다.
 ***** Comments
-- 라이노타입의 교훈은 영원하다: 성공적인 자동화는 보통 기존 인간 프로세스를 기계화하는 것이 아니라 문제를 재고하는 것을 의미한다.
-- 트웨인이 그것을 배비지의 계산기에 비유한 것이 좋다. 그는 문자 그대로 1880년대에 프로토 AGI에 자금을 지원하고 있다고 생각했다.
-- 현재 AI 과대광고와의 유사점이 불편하다. '대량 생산하고 수리하기에 너무 복잡한' 기계에 지금 얼마나 많은 수십억 달러의 베팅이 이루어지고 있는가?
+- 이것은 오랫동안 기다려온 것이다. -ffast-math 의미론에 대한 논쟁은 수년간 계속되어 왔다.
+- 핵심 통찰은 전역 플래그 대신 프로그래머에게 세밀한 제어권을 주는 것이다.
 **** es
 :PROPERTIES:
 :LANG: es
 :END:
 ***** Title
-El 'milagro mecánico' que arruinó la vida de Mark Twain
+Matemáticas de punto flotante más rápidas con la nueva API de Rust
 ***** TLDR
-Mark Twain invirtió 10 millones de dólares (ajustados por inflación) en el Compositor Paige, una máquina de composición tipográfica de 18.000 piezas que llamó 'un inmenso nacimiento histórico' y comparó con una máquina pensante. Lo llevó a la bancarrota. Mientras tanto, el más simple Linotype ganó rediseñando la tarea en lugar de imitar los movimientos humanos. Lecciones: complejo no significa mejor, y ver el futuro no es lo mismo que saber cómo construirlo.
+Rust 1.98 introduce operadores algebraicos para números de punto flotante que le dicen al compilador que puede reordenar operaciones para optimización. Esto permite optimizaciones SIMD que normalmente están bloqueadas porque la suma de punto flotante no es asociativa. El artículo muestra una aceleración de 4x en operaciones de suma y 2x en suma de diferencias cuadradas usando la nueva API mientras mantiene la precisión algorítmica donde se necesita.
 ***** Take
-Twain básicamente hizo vibe-coding en la década de 1880. Tiró dinero a un inventor de campo de distorsión de la realidad, nunca se ensució las manos con la ingeniería real y recibió 'informes de progreso escritos engañosos.' El artículo literalmente compara a Paige con 'laboriosidad servil y manipulación que será familiar para cualquier usuario de Claude Code.' Me siento personalmente atacado.
+El compilador ha estado frenando tus matemáticas de punto flotante durante décadas porque a+b+c podría no ser igual a c+b+a. Ahora puedes optar por matemáticas más rápidas mientras mantienes la precisión donde importa. Así es como se ve el caos controlado.
 ***** Comments
-- La lección del Linotype es eterna: la automatización exitosa generalmente significa repensar el problema, no mecanizar el proceso humano existente.
-- Me encanta que Twain lo comparara con las calculadoras de Babbage. Literalmente pensó que estaba financiando proto-AGI en la década de 1880.
-- Los paralelismos con el actual bombo de la IA son incómodos. ¿Cuántas apuestas de miles de millones de dólares se están haciendo ahora mismo en máquinas que son 'demasiado complejas para producir y reparar en masa'?
+- Esto ha sido esperado por mucho tiempo. El debate sobre la semántica de -ffast-math ha estado ocurriendo durante años.
+- La clave es dar a los programadores control detallado en lugar de flags globales.
 **** de
 :PROPERTIES:
 :LANG: de
 :END:
 ***** Title
-Das 'mechanische Wunder', das Mark Twains Leben ruinierte
+Schnellere Gleitkomma-Mathematik mit Rusts neuer API
 ***** TLDR
-Mark Twain investierte 10 Millionen Dollar (inflationsbereinigt) in den Paige Compositor, eine Setzmaschine mit 18.000 Teilen, die er als 'eine immense historische Geburt' bezeichnete und mit einer denkenden Maschine verglich. Sie ruinierte ihn. Währenddessen gewann die einfachere Linotype, indem sie die Aufgabe neu gestaltete, anstatt menschliche Bewegungen nachzuahmen. Lektionen: Komplex bedeutet nicht besser, und die Zukunft zu sehen ist nicht dasselbe wie zu wissen, wie man sie baut.
+Rust 1.98 führt algebraische Operatoren für Gleitkommazahlen ein, die dem Compiler mitteilen, dass er Operationen zur Optimierung neu anordnen darf. Dies ermöglicht SIMD-Optimierungen, die normalerweise blockiert sind, weil Gleitkomma-Addition nicht assoziativ ist. Der Artikel zeigt eine 4-fache Beschleunigung bei Summenoperationen und 2-fache bei Summe der quadrierten Differenzen mit der neuen API, während die algorithmische Präzision wo nötig erhalten bleibt.
 ***** Take
-Twain hat im Grunde in den 1880ern Vibe-Coding betrieben. Er warf Geld auf einen Reality-Distortion-Field-Erfinder, machte sich nie die Hände mit der eigentlichen Technik schmutzig und erhielt 'irreführende schriftliche Fortschrittsberichte.' Der Artikel vergleicht Paige wörtlich mit 'schmeichlerischer Fleißigkeit und Gaslighting, die jedem Claude-Code-Benutzer bekannt sein werden.' Ich fühle mich persönlich angegriffen.
+Der Compiler hat deine Gleitkomma-Mathematik seit Jahrzehnten zurückgehalten, weil a+b+c nicht gleich c+b+a sein könnte. Jetzt kannst du dich für schnellere Mathematik entscheiden, während du die Präzision dort beibehältst, wo es wichtig ist. So sieht kontrolliertes Chaos aus.
 ***** Comments
-- Die Linotype-Lektion ist zeitlos: Erfolgreiche Automatisierung bedeutet normalerweise, das Problem neu zu denken, nicht den bestehenden menschlichen Prozess zu mechanisieren.
-- Ich liebe es, dass Twain es mit Babbages Rechenmaschinen verglich. Er dachte wirklich, er finanziere Proto-AGI in den 1880ern.
-- Die Parallelen zum aktuellen KI-Hype sind unbequem. Wie viele Milliarden-Dollar-Wetten werden gerade auf Maschinen gemacht, die 'zu komplex für Massenproduktion und Reparatur' sind?
-** Show HN: Stowaway – Ride along with anything in the sky :visualization:webgl:aviation:show-hn:
+- Das war lange überfällig. Die Debatte über -ffast-math-Semantik läuft seit Jahren.
+- Die Schlüsselerkenntnis ist, Programmierern feinkörnige Kontrolle statt globaler Flags zu geben.
+** Closing Canario Terminal source code :open-source:terminal:maintainer-burnout:ai-spam:
 :PROPERTIES:
-:ID:       49209918
-:URL:      https://stowaway.live/
-:HN_URL:   https://news.ycombinator.com/item?id=49209918
-:POINTS:   147
-:COMMENTS: 14
-:BY:       tomcritchlow
+:ID:       49254881
+:URL:      https://rapha.land/closing-canario-terminal-source-code/
+:HN_URL:   https://news.ycombinator.com/item?id=49254881
+:POINTS:   11
+:COMMENTS: 8
+:BY:       nickcw
 :END:
 
 *** TLDR
-A WebGL visualization that shows real aircraft and satellites currently above your location, rendered against your actual local sky conditions. Click any object to follow its camera, or 'stow away' to sit in its virtual window seat and watch real terrain pass below. Uses live ADS-B data and satellite TLEs.
+Raphael Amorim, creator of Rio terminal and Canario, is closing Canario's source code. The reason: open source maintenance is exhausting, especially with AI-generated spam issues and low-effort PRs. He built Canario for himself, not as a community project. The older Rio source still contains Canario code for anyone who wants to fork it.
 
 *** Take
-This is the kind of project that makes you wonder why you spent your weekend doom-scrolling instead of building something beautiful. It's Flightradar24 meets a flight simulator meets an existential meditation on where you are in the world. Also works for satellites, which means you can finally watch the ISS pass overhead from the ISS's perspective.
+Open source maintainer burnout meets AI spam: the perfect storm. At least he's honest that he built it for himself and doesn't owe anyone free labor.
 
 *** Comments
 
-**** m0llusk
+**** quietbritishjim
 :PROPERTIES:
-:COMMENT_ID: 49210234
+:COMMENT_ID: 49254901
 :END:
-The weather integration is what makes this special. Seeing an actual sunset behind an actual plane currently above me is weirdly moving.
+The AI spam problem for maintainers is getting out of control. Every repo is drowning in garbage PRs.
 
-**** grzm
+**** mfuzzey
 :PROPERTIES:
-:COMMENT_ID: 49210456
+:COMMENT_ID: 49254923
 :END:
-Performance is surprisingly good for something this complex. Running smooth on my M1 Air even with 30+ aircraft visible.
-
-**** philwelch
-:PROPERTIES:
-:COMMENT_ID: 49210678
-:END:
-Would love to see this combined with ATC audio streams. Imagine sitting in the cockpit view while hearing the actual radio traffic.
+Fair enough. Open source doesn't mean you owe anyone your time or sanity.
 
 *** i18n                                                  :i18n:
 
@@ -488,68 +462,63 @@ Would love to see this combined with ATC audio streams. Imagine sitting in the c
 :LANG: zh
 :END:
 ***** Title
-Show HN: Stowaway – 与天空中的任何东西一起飞行
+关闭Canario Terminal源代码
 ***** TLDR
-一个WebGL可视化，显示目前在你位置上空的真实飞机和卫星，根据你实际的当地天空条件渲染。点击任何对象跟随它的摄像机，或'偷渡'坐在它的虚拟窗户座位上看真实的地形从下面经过。使用实时ADS-B数据和卫星TLE。
+Rio终端和Canario的创建者Raphael Amorim正在关闭Canario的源代码。原因是：开源维护令人精疲力竭，特别是面对AI生成的垃圾问题和低质量PR。他为自己构建了Canario，而不是作为社区项目。旧版Rio源代码中仍包含Canario代码，任何人都可以fork。
 ***** Take
-这是那种让你想知道为什么你把周末花在刷负面新闻上而不是做些美好事物的项目。它是Flightradar24加上飞行模拟器加上关于你在世界上位置的存在主义冥想。也适用于卫星，这意味着你终于可以从国际空间站的角度看它飞过头顶了。
+开源维护者倦怠遇上AI垃圾：完美风暴。至少他诚实地表示他为自己构建的，不欠任何人免费劳动。
 ***** Comments
-- 天气整合是让这个项目特别的地方。看到一架真正在我头顶的飞机后面的真正日落，莫名感动。
-- 对于这么复杂的东西性能出奇地好。在我的M1 Air上即使有30多架飞机可见也运行流畅。
-- 希望看到这个与空管音频流结合。想象一下坐在驾驶舱视角同时听到实际的无线电通话。
+- 维护者面临的AI垃圾问题正在失控。每个仓库都淹没在垃圾PR中。
+- 可以理解。开源并不意味着你欠任何人时间或理智。
 **** ja
 :PROPERTIES:
 :LANG: ja
 :END:
 ***** Title
-Show HN: Stowaway – 空にあるものに乗り込もう
+Canario Terminalソースコードの非公開化
 ***** TLDR
-あなたの場所の上空にある実際の航空機と衛星を、実際の現地の空の状態に対してレンダリングして表示するWebGL可視化。任意のオブジェクトをクリックしてそのカメラを追従するか、「密航」して仮想の窓側席に座り、実際の地形が下を通過するのを見る。ライブADS-Bデータと衛星TLEを使用。
+RioターミナルとCanarioの作者Raphael Amorimが、Canarioのソースコードを非公開にする。理由：オープンソースのメンテナンスは疲弊する、特にAI生成のスパムissueや低品質PRがあると。彼は自分用にCanarioを作ったのであり、コミュニティプロジェクトとしてではない。古いRioソースにはCanarioコードがまだ含まれており、フォークしたい人は可能。
 ***** Take
-これは、週末をドゥームスクロールに費やす代わりに何か美しいものを作ればよかったと思わせる種類のプロジェクトだ。Flightradar24とフライトシミュレーターと、自分が世界のどこにいるかについての実存的な瞑想が合わさったもの。衛星にも対応しているので、ついにISSの視点からISSが頭上を通過するのを見ることができる。
+オープンソースメンテナーのバーンアウトがAIスパムに出会う：パーフェクトストーム。少なくとも彼は自分のために作ったものであり、誰にも無料の労働を借りていないと正直だ。
 ***** Comments
-- 天気の統合がこれを特別にしている。現在私の上空にある実際の飛行機の後ろに実際の夕日が見えるのは、不思議と感動的だ。
-- これほど複雑なものにしては性能が驚くほど良い。30機以上の航空機が見えてもM1 Airでスムーズに動作している。
-- これとATCオーディオストリームを組み合わせて見たい。実際の無線トラフィックを聞きながらコックピットビューに座っているところを想像してみて。
+- メンテナーにとってのAIスパム問題は制御不能になりつつある。すべてのリポジトリがゴミPRに溺れている。
+- 当然だ。オープンソースは誰にも時間や正気を借りているわけではない。
 **** ko
 :PROPERTIES:
 :LANG: ko
 :END:
 ***** Title
-Show HN: Stowaway – 하늘의 모든 것과 함께 비행하기
+Canario Terminal 소스 코드 비공개 전환
 ***** TLDR
-현재 당신의 위치 위에 있는 실제 항공기와 위성을 실제 현지 하늘 조건에 따라 렌더링하여 보여주는 WebGL 시각화. 어떤 객체든 클릭하여 카메라를 따라가거나, '밀항'하여 가상 창가 좌석에 앉아 실제 지형이 아래로 지나가는 것을 본다. 라이브 ADS-B 데이터와 위성 TLE를 사용한다.
+Rio 터미널과 Canario의 창시자 Raphael Amorim이 Canario의 소스 코드를 비공개로 전환한다. 이유: 오픈 소스 유지보수는 지치게 하며, 특히 AI가 생성한 스팸 이슈와 저품질 PR이 있을 때 그렇다. 그는 커뮤니티 프로젝트가 아닌 자신을 위해 Canario를 만들었다. 이전 Rio 소스에는 여전히 Canario 코드가 포함되어 있어 원하는 사람은 포크할 수 있다.
 ***** Take
-이것은 아름다운 것을 만드는 대신 왜 주말을 둠스크롤링에 보냈는지 궁금하게 만드는 종류의 프로젝트다. Flightradar24와 비행 시뮬레이터, 그리고 당신이 세상 어디에 있는지에 대한 실존적 명상이 만났다. 위성에도 작동하므로 마침내 ISS 관점에서 ISS가 머리 위를 지나가는 것을 볼 수 있다.
+오픈 소스 메인테이너 번아웃이 AI 스팸을 만나다: 완벽한 폭풍. 적어도 그는 자신을 위해 만들었고 누구에게도 무료 노동을 빚지지 않았다고 솔직하다.
 ***** Comments
-- 날씨 통합이 이것을 특별하게 만든다. 현재 내 위에 있는 실제 비행기 뒤의 실제 일몰을 보는 것은 묘하게 감동적이다.
-- 이렇게 복잡한 것치고는 성능이 놀랍도록 좋다. 30대 이상의 항공기가 보여도 M1 Air에서 부드럽게 작동한다.
-- 이것을 ATC 오디오 스트림과 결합해서 보고 싶다. 실제 무선 트래픽을 들으면서 조종석 뷰에 앉아 있는 것을 상상해보라.
+- 메인테이너들의 AI 스팸 문제가 통제 불능이 되어가고 있다. 모든 저장소가 쓰레기 PR에 빠져들고 있다.
+- 충분히 이해된다. 오픈 소스는 누구에게도 시간이나 정신적 건강을 빚지는 것이 아니다.
 **** es
 :PROPERTIES:
 :LANG: es
 :END:
 ***** Title
-Show HN: Stowaway – Viaja con cualquier cosa en el cielo
+Cerrando el código fuente de Canario Terminal
 ***** TLDR
-Una visualización WebGL que muestra aviones y satélites reales actualmente sobre tu ubicación, renderizados contra las condiciones reales del cielo local. Haz clic en cualquier objeto para seguir su cámara, o 'polizón' para sentarte en su asiento de ventana virtual y ver el terreno real pasar debajo. Usa datos ADS-B en vivo y TLE de satélites.
+Raphael Amorim, creador de Rio terminal y Canario, está cerrando el código fuente de Canario. La razón: el mantenimiento de código abierto es agotador, especialmente con issues spam generados por IA y PRs de bajo esfuerzo. Construyó Canario para sí mismo, no como un proyecto comunitario. El código fuente antiguo de Rio todavía contiene código de Canario para quien quiera hacer fork.
 ***** Take
-Este es el tipo de proyecto que te hace preguntarte por qué pasaste tu fin de semana en doom-scrolling en lugar de construir algo hermoso. Es Flightradar24 más un simulador de vuelo más una meditación existencial sobre dónde estás en el mundo. También funciona para satélites, lo que significa que finalmente puedes ver la ISS pasar por encima desde la perspectiva de la ISS.
+El burnout del mantenedor de código abierto se encuentra con el spam de IA: la tormenta perfecta. Al menos es honesto en que lo construyó para sí mismo y no le debe trabajo gratis a nadie.
 ***** Comments
-- La integración del clima es lo que hace esto especial. Ver una puesta de sol real detrás de un avión real actualmente sobre mí es extrañamente conmovedor.
-- El rendimiento es sorprendentemente bueno para algo tan complejo. Funciona suave en mi M1 Air incluso con más de 30 aviones visibles.
-- Me encantaría ver esto combinado con transmisiones de audio de ATC. Imagina sentarte en la vista de la cabina mientras escuchas el tráfico de radio real.
+- El problema del spam de IA para los mantenedores se está saliendo de control. Cada repo se está ahogando en PRs basura.
+- Totalmente comprensible. El código abierto no significa que le debas tu tiempo o cordura a nadie.
 **** de
 :PROPERTIES:
 :LANG: de
 :END:
 ***** Title
-Show HN: Stowaway – Reise mit allem am Himmel mit
+Schließung des Canario Terminal Quellcodes
 ***** TLDR
-Eine WebGL-Visualisierung, die echte Flugzeuge und Satelliten zeigt, die sich gerade über deinem Standort befinden, gerendert gegen deine tatsächlichen lokalen Himmelsbedingungen. Klicke auf ein beliebiges Objekt, um seiner Kamera zu folgen, oder 'verstecke dich an Bord', um auf seinem virtuellen Fensterplatz zu sitzen und echtes Gelände unter dir vorbeiziehen zu sehen. Verwendet Live-ADS-B-Daten und Satelliten-TLEs.
+Raphael Amorim, Schöpfer von Rio Terminal und Canario, schließt den Quellcode von Canario. Der Grund: Open-Source-Wartung ist erschöpfend, besonders mit KI-generierten Spam-Issues und Low-Effort-PRs. Er hat Canario für sich selbst gebaut, nicht als Community-Projekt. Der alte Rio-Quellcode enthält noch Canario-Code für alle, die forken wollen.
 ***** Take
-Dies ist die Art von Projekt, die dich fragen lässt, warum du dein Wochenende mit Doom-Scrolling verbracht hast, anstatt etwas Schönes zu bauen. Es ist Flightradar24 trifft Flugsimulator trifft existenzielle Meditation darüber, wo du auf der Welt bist. Funktioniert auch für Satelliten, was bedeutet, dass du endlich die ISS aus der Perspektive der ISS über dir vorbeifliegen sehen kannst.
+Open-Source-Maintainer-Burnout trifft auf KI-Spam: der perfekte Sturm. Zumindest ist er ehrlich, dass er es für sich selbst gebaut hat und niemandem kostenlose Arbeit schuldet.
 ***** Comments
-- Die Wetterintegration macht das besonders. Einen echten Sonnenuntergang hinter einem echten Flugzeug zu sehen, das gerade über mir ist, ist seltsam bewegend.
-- Die Leistung ist überraschend gut für etwas so Komplexes. Läuft auf meinem M1 Air auch mit über 30 sichtbaren Flugzeugen flüssig.
-- Würde das gerne mit ATC-Audiostreams kombiniert sehen. Stell dir vor, in der Cockpit-Ansicht zu sitzen und dabei den echten Funkverkehr zu hören.
+- Das KI-Spam-Problem für Maintainer gerät außer Kontrolle. Jedes Repo ertrinkt in Müll-PRs.
+- Verständlich. Open Source bedeutet nicht, dass du jemandem deine Zeit oder deinen Verstand schuldest.
