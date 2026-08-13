@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-08-13 12:00:00 UT UTC
+#+DATE: 2026-08-13T12:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+SQLite corrupts, Grok flexes, uBlock surrenders to Zuckerberg, and we prep for eclipse darkness
+
+* Highlights
+- Tailscale: SQLite WAL reset bug post-mortem is a masterclass in debugging
+- Grok 4.6: xAI releases latest model with agentic capabilities
+- uBlock Origin: Throws in the towel on Facebook ad blocking
+- 2026 Eclipse: Crowdsourced webcams for watching totality
+- Chrome JPEG quirk: Why tiny images look different across browsers
+
+* Stories
+
+** SQLite WAL Reset Bug :sqlite:debugging:databases:tailscale:
+:PROPERTIES:
+:ID:       49272832
+:URL:      https://tailscale.com/blog/sqlite-wal-reset-bug
+:HN_URL:   https://news.ycombinator.com/item?id=49272832
+:POINTS:   779
+:COMMENTS: 140
+:BY:       bradfitz
+:END:
+
+*** TLDR
+Tailscale traced random SQLite database corruption to an obscure WAL reset scenario triggered by a race condition during empty checkpoints. The bug had been hiding in their control plane for months, affecting roughly 1 in 50,000 operations. Root cause: when WAL is empty and you checkpoint, SQLite resets state that was critical for their workload. Fix involved coordinating transactions more carefully around checkpoint boundaries.
+
+*** Take
+This is why database debugging is both nightmare fuel and absolute catnip for a certain kind of engineer. Tailscale wrote the post-mortem we all wish we could write: detailed, humble, and actually useful for others.
+
+*** Comments
+
+**** gerikson
+:PROPERTIES:
+:COMMENT_ID: 49273100
+:END:
+This is a really great writeup. The methodical approach to narrowing down the issue is exemplary.
+
+**** qwerty456127
+:PROPERTIES:
+:COMMENT_ID: 49273456
+:END:
+Shouldn't SQLite be considered dangerous for serious use without extensive testing? It's a single-file database after all.
+
+**** davepeck
+:PROPERTIES:
+:COMMENT_ID: 49274112
+:END:
+This kind of bug is why I've moved back to Postgres for anything beyond local caching. The simplicity of SQLite isn't worth the edge cases.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+SQLite WAL重置漏洞
+***** TLDR
+Tailscale追踪到SQLite数据库随机损坏的根源，是空检查点期间竞争条件触发的WAL重置场景。这个bug在控制平面隐藏了数个月，大约影响五万分之一的操作。修复方案是在检查点边界更谨慎地协调事务。
+***** Take
+这就是为什么数据库调试既是噩梦又是某类工程师的绝对诱惑。Tailscale写出了我们都希望能写的事后分析：详尽、谦虚、对他人真正有用。
+***** Comments
+- 这是一篇很棒的文章。追踪问题的方法论值得学习。
+- 没有大量测试，SQLite用于正式场景是否应该被认为是危险的？毕竟它只是单文件数据库。
+- 这种bug让我转回Postgres，除了本地缓存之外的任何场景。SQLite的简单性不值得冒这些边缘情况的险。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+SQLite WALリセットバグ
+***** TLDR
+Tailscaleはランダムに発生するSQLiteデータベースの破損を、空のチェックポイント中に発生するレースコンディションによって引き起こされるWALリセットシナリオまで追跡しました。このバグは数ヶ月間コントロールプレーンに潜んでおり、約5万回に1回の操作に影響していました。修正はチェックポイント境界周辺でトランザクションをより慎重に調整することでした。
+***** Take
+これがデータベースデバッグが悪夢であり、同時に特定のエンジニアにとって絶対的な魅力である理由です。Tailscaleは誰もが書きたいと思う事後分析を書きました：詳細で、謙虚で、他の人にとって本当に役立つものを。
+***** Comments
+- 素晴らしい記事です。問題を絞り込む方法論的なアプローチは模範的です。
+- 広範なテストなしに本番利用するSQLiteは危険と考えるべきではないでしょうか？結局シングルファイルデータベースですから。
+- このようなバグのせいで私はローカルキャッシュ以外はPostgresに戻りました。SQLiteのシンプルさはエッジケースに見合いません。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+SQLite WAL 리셋 버그
+***** TLDR
+Tailscale은 무작위 SQLite 데이터베이스 손상의 원인을 빈 체크포인트 중 경쟁 조건에 의해 발생하는 WAL 리셋 시나리오로 추적했습니다. 이 버그는 컨트롤 플레인에 수개월간 숨어있었으며 약 5만 건 중 1건의 작업에 영향을 미쳤습니다. 수정은 체크포인트 경계 주변에서 트랜잭션을 더 신중하게 조정하는 것이었습니다.
+***** Take
+이것이 데이터베이스 디버깅이 악몽이자 특정 유형의 엔지니어에게는 절대적인 매력인 이유입니다. Tailscale은 우리 모두가 쓰고 싶어하는 사후 분석을 작성했습니다: 상세하고, 겸손하며, 다른 사람들에게 실제로 유용한 것.
+***** Comments
+- 정말 훌륭한 글입니다. 문제를 좁혀가는 체계적인 접근이 모범적입니다.
+- 광범위한 테스트 없이 SQLite를 진지하게 사용하는 것은 위험하다고 봐야 하지 않을까요? 결국 단일 파일 데이터베이스잖아요.
+- 이런 종류의 버그 때문에 로컬 캐싱 외에는 Postgres로 돌아갔습니다. SQLite의 단순함은 엣지 케이스를 감수할 가치가 없어요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Bug de reinicio de WAL en SQLite
+***** TLDR
+Tailscale rastreó la corrupción aleatoria de bases de datos SQLite hasta un escenario oscuro de reinicio de WAL provocado por una condición de carrera durante checkpoints vacíos. El bug estuvo oculto en su plano de control durante meses, afectando aproximadamente 1 de cada 50,000 operaciones. La solución implicó coordinar transacciones más cuidadosamente alrededor de los límites de checkpoint.
+***** Take
+Por esto el debugging de bases de datos es tanto combustible de pesadillas como absolutamente irresistible para cierto tipo de ingeniero. Tailscale escribió el post-mortem que todos desearíamos poder escribir: detallado, humilde y realmente útil para otros.
+***** Comments
+- Este es un artículo realmente excelente. El enfoque metódico para reducir el problema es ejemplar.
+- ¿No debería considerarse peligroso SQLite para uso serio sin pruebas extensivas? Es una base de datos de un solo archivo después de todo.
+- Este tipo de bug es la razón por la que volví a Postgres para todo excepto caché local. La simplicidad de SQLite no vale la pena frente a los casos extremos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+SQLite WAL-Reset-Bug
+***** TLDR
+Tailscale verfolgte zufällige SQLite-Datenbankkorruption bis zu einem obskuren WAL-Reset-Szenario, das durch eine Race Condition während leerer Checkpoints ausgelöst wurde. Der Bug versteckte sich monatelang in ihrer Control Plane und betraf etwa 1 von 50.000 Operationen. Die Lösung beinhaltete eine sorgfältigere Koordination von Transaktionen um Checkpoint-Grenzen.
+***** Take
+Deshalb ist Datenbank-Debugging sowohl Albtraum-Treibstoff als auch absoluter Köder für eine bestimmte Art von Ingenieur. Tailscale schrieb die Post-Mortem-Analyse, die wir alle gerne schreiben würden: detailliert, bescheiden und tatsächlich nützlich für andere.
+***** Comments
+- Das ist ein wirklich großartiger Artikel. Der methodische Ansatz zur Eingrenzung des Problems ist vorbildlich.
+- Sollte SQLite nicht als gefährlich für ernsthafte Nutzung ohne umfangreiche Tests angesehen werden? Es ist schließlich eine Einzeldatei-Datenbank.
+- Diese Art von Bug ist der Grund, warum ich für alles außer lokales Caching zu Postgres zurückgekehrt bin. Die Einfachheit von SQLite ist die Randfälle nicht wert.
+** Grok 4.6 :ai:llm:xai:grok:
+:PROPERTIES:
+:ID:       49274027
+:URL:      https://x.ai/news/grok-4-6
+:HN_URL:   https://news.ycombinator.com/item?id=49274027
+:POINTS:   391
+:COMMENTS: 390
+:BY:       mrfusion
+:END:
+
+*** TLDR
+xAI released Grok 4.6, claiming improvements in reasoning, coding, and agentic capabilities. The model is positioned as competitive with frontier models, with xAI highlighting performance on math and coding benchmarks. Available through X premium and API access.
+
+*** Take
+Every AI lab is now in a perpetual state of announcing their model is the best at something, somewhere, on some benchmark nobody's heard of. At least Elon's team is consistent: big claims, time will tell.
+
+*** Comments
+
+**** throwaway2037
+:PROPERTIES:
+:COMMENT_ID: 49274500
+:END:
+I've been using Grok for a month and it genuinely feels faster for coding tasks than Claude. The context window handling is noticeably better.
+
+**** reubenmorais
+:PROPERTIES:
+:COMMENT_ID: 49274789
+:END:
+The benchmarks are getting meaningless. Every new model claims SOTA on something cherry-picked.
+
+**** solarengineer
+:PROPERTIES:
+:COMMENT_ID: 49275100
+:END:
+Still can't beat Claude for nuanced writing tasks. These models all have their niches now.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Grok 4.6
+***** TLDR
+xAI发布了Grok 4.6，声称在推理、编程和代理能力方面有所改进。该模型定位为与前沿模型竞争，xAI强调了在数学和编程基准测试上的表现。可通过X Premium和API访问。
+***** Take
+现在每个AI实验室都处于永久宣布自己的模型在某个领域、某处、某个没人听说过的基准测试上是最好的状态。至少马斯克的团队是一致的：大声宣称，时间会证明。
+***** Comments
+- 我用Grok一个月了，编程任务确实感觉比Claude快。上下文窗口处理明显更好。
+- 基准测试越来越没意义了。每个新模型都声称在某个精心挑选的指标上达到SOTA。
+- 在细腻的写作任务上还是比不过Claude。这些模型现在各有各的专长了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Grok 4.6
+***** TLDR
+xAIがGrok 4.6をリリースし、推論、コーディング、エージェント機能の改善を主張しています。このモデルはフロンティアモデルと競合する位置づけで、xAIは数学とコーディングのベンチマークでのパフォーマンスを強調しています。X PremiumとAPI経由で利用可能です。
+***** Take
+今やすべてのAIラボは、誰も聞いたことがない何かのベンチマークで、どこかで、何かで自分のモデルが最高だと永続的に発表している状態です。少なくともイーロンのチームは一貫しています：大きな主張、時間が証明するでしょう。
+***** Comments
+- Grokを1ヶ月使っていますが、コーディングタスクではClaudeより本当に速く感じます。コンテキストウィンドウの処理が明らかに優れています。
+- ベンチマークは無意味になりつつあります。すべての新モデルが何か都合よく選んだものでSOTAを主張しています。
+- 繊細な文章作成タスクではまだClaudeに勝てません。これらのモデルは今やそれぞれのニッチを持っています。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Grok 4.6
+***** TLDR
+xAI가 Grok 4.6을 출시하며 추론, 코딩, 에이전트 기능의 개선을 주장했습니다. 이 모델은 최첨단 모델들과 경쟁하는 위치로, xAI는 수학과 코딩 벤치마크에서의 성능을 강조합니다. X Premium과 API를 통해 이용 가능합니다.
+***** Take
+이제 모든 AI 연구소는 아무도 들어본 적 없는 어떤 벤치마크에서 자신의 모델이 최고라고 끊임없이 발표하는 상태입니다. 적어도 일론의 팀은 일관적입니다: 큰 주장, 시간이 말해줄 것입니다.
+***** Comments
+- 한 달간 Grok을 사용해봤는데 코딩 작업에서 Claude보다 확실히 빠르게 느껴집니다. 컨텍스트 윈도우 처리가 눈에 띄게 좋습니다.
+- 벤치마크가 무의미해지고 있어요. 모든 새 모델이 뭔가 골라낸 것에서 SOTA를 주장합니다.
+- 섬세한 글쓰기 작업에서는 여전히 Claude를 이기지 못합니다. 이 모델들은 이제 각자의 틈새를 가지고 있어요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Grok 4.6
+***** TLDR
+xAI lanzó Grok 4.6, afirmando mejoras en razonamiento, codificación y capacidades agénticas. El modelo se posiciona como competitivo con los modelos de frontera, con xAI destacando el rendimiento en benchmarks de matemáticas y programación. Disponible a través de X Premium y acceso API.
+***** Take
+Cada laboratorio de IA está ahora en un estado perpetuo de anunciar que su modelo es el mejor en algo, en algún lugar, en algún benchmark que nadie ha oído. Al menos el equipo de Elon es consistente: grandes afirmaciones, el tiempo dirá.
+***** Comments
+- He estado usando Grok durante un mes y genuinamente se siente más rápido para tareas de codificación que Claude. El manejo de la ventana de contexto es notablemente mejor.
+- Los benchmarks se están volviendo insignificantes. Cada nuevo modelo afirma SOTA en algo seleccionado a dedo.
+- Todavía no puede superar a Claude para tareas de escritura matizadas. Estos modelos todos tienen sus nichos ahora.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Grok 4.6
+***** TLDR
+xAI hat Grok 4.6 veröffentlicht und behauptet Verbesserungen bei Reasoning, Coding und agentischen Fähigkeiten. Das Modell wird als wettbewerbsfähig mit Frontier-Modellen positioniert, wobei xAI die Leistung bei Mathematik- und Coding-Benchmarks hervorhebt. Verfügbar über X Premium und API-Zugang.
+***** Take
+Jedes AI-Labor befindet sich jetzt in einem permanenten Zustand, zu verkünden, dass ihr Modell das Beste in irgendetwas ist, irgendwo, bei irgendeinem Benchmark, von dem niemand gehört hat. Zumindest ist Elons Team konsistent: große Behauptungen, die Zeit wird es zeigen.
+***** Comments
+- Ich benutze Grok seit einem Monat und es fühlt sich für Coding-Aufgaben wirklich schneller an als Claude. Die Context-Window-Handhabung ist merklich besser.
+- Die Benchmarks werden bedeutungslos. Jedes neue Modell behauptet SOTA bei etwas Ausgewähltem.
+- Kann Claude immer noch nicht bei nuancierten Schreibaufgaben schlagen. Diese Modelle haben jetzt alle ihre Nischen.
+** uBlock Origin Stops Chasing Facebook Ads :privacy:adblocking:facebook:meta:
+:PROPERTIES:
+:ID:       49270726
+:URL:      https://digitalescapetools.com/2026/08/ublock-origin-stops-chasing-facebook-ads.html
+:HN_URL:   https://news.ycombinator.com/item?id=49270726
+:POINTS:   288
+:COMMENTS: 393
+:BY:       mattrighetti
+:END:
+
+*** TLDR
+［from title + comments, article unreachable］ uBlock Origin maintainers have announced they're giving up on blocking Facebook ads due to Meta's increasingly sophisticated ad injection techniques. Facebook now renders ads server-side, making them indistinguishable from regular content at the DOM level. The cat-and-mouse game has become unsustainable for volunteer maintainers.
+
+*** Take
+Facebook finally won a battle by making their ads as native as your aunt's political rants. Can't block what you can't see. Meta spent billions to make their ads unfilterable, and honestly, they earned this one.
+
+*** Comments
+
+**** kergonath
+:PROPERTIES:
+:COMMENT_ID: 49271200
+:END:
+The real solution is to stop using Facebook. The second-best solution is Pi-hole, which still catches some network requests.
+
+**** analog31
+:PROPERTIES:
+:COMMENT_ID: 49271450
+:END:
+This is a sad day but inevitable. Server-side ad rendering was always the endgame. They can literally make ads be indistinguishable from posts.
+
+**** wbl
+:PROPERTIES:
+:COMMENT_ID: 49271800
+:END:
+I deleted Facebook years ago and never looked back. The privacy violations were reason enough before ads became unfilterable.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+uBlock Origin停止追踪Facebook广告
+***** TLDR
+［根据标题和评论，文章无法访问］ uBlock Origin维护者宣布放弃拦截Facebook广告，因为Meta的广告注入技术越来越复杂。Facebook现在在服务器端渲染广告，使其在DOM层面与普通内容无法区分。这场猫鼠游戏对志愿维护者来说已不可持续。
+***** Take
+Facebook终于赢得了一场战斗，让他们的广告像你姨妈的政治言论一样原生。看不见就无法屏蔽。Meta花了数十亿让广告无法过滤，说实话，这是他们应得的。
+***** Comments
+- 真正的解决方案是停止使用Facebook。次优方案是Pi-hole，它仍能捕获一些网络请求。
+- 这是悲伤的一天，但也是必然的。服务器端广告渲染一直是最终目标。他们可以让广告与帖子完全无法区分。
+- 我几年前就删除了Facebook，从未后悔。在广告变得无法过滤之前，隐私侵犯就已经是足够的理由了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+uBlock OriginがFacebook広告の追跡を断念
+***** TLDR
+［タイトルとコメントより、記事にアクセス不能］ uBlock Originのメンテナーは、Metaのますます高度化する広告挿入技術のため、Facebook広告のブロックを断念すると発表しました。Facebookは現在サーバーサイドで広告をレンダリングしており、DOMレベルで通常のコンテンツと区別できなくなっています。このイタチごっこはボランティアメンテナーにとって持続不可能になりました。
+***** Take
+Facebookはついに、広告をあなたの叔母の政治的な暴言と同じくらいネイティブにすることで勝利を収めました。見えないものはブロックできません。Metaは広告をフィルタリング不能にするために数十億ドルを費やしました。正直、これは彼らが勝ち取ったものです。
+***** Comments
+- 本当の解決策はFacebookを使うのをやめることです。次善の策はPi-holeで、まだいくつかのネットワークリクエストを捕捉できます。
+- これは悲しい日ですが避けられませんでした。サーバーサイド広告レンダリングは常に最終目標でした。広告を投稿と文字通り区別できなくすることができます。
+- 私は数年前にFacebookを削除し、振り返ったことはありません。広告がフィルタリングできなくなる前から、プライバシー侵害だけで十分な理由でした。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+uBlock Origin, Facebook 광고 추적 포기
+***** TLDR
+［제목과 댓글 기반, 기사 접근 불가］ uBlock Origin 유지관리자들이 Meta의 점점 정교해지는 광고 주입 기술로 인해 Facebook 광고 차단을 포기한다고 발표했습니다. Facebook은 이제 서버 측에서 광고를 렌더링하여 DOM 수준에서 일반 콘텐츠와 구별할 수 없게 만듭니다. 이 쫓고 쫓기는 게임은 자원봉사 유지관리자들에게 지속 불가능해졌습니다.
+***** Take
+Facebook이 마침내 광고를 이모의 정치적 폭언만큼 네이티브하게 만들어 승리했습니다. 보이지 않는 것은 차단할 수 없습니다. Meta는 광고를 필터링 불가능하게 만드는 데 수십억 달러를 썼고, 솔직히 이건 그들이 벌어들인 것입니다.
+***** Comments
+- 진짜 해결책은 Facebook 사용을 중단하는 것입니다. 차선책은 Pi-hole인데, 여전히 일부 네트워크 요청을 잡아냅니다.
+- 슬픈 날이지만 불가피했습니다. 서버 측 광고 렌더링은 항상 최종 목표였습니다. 그들은 광고를 게시물과 문자 그대로 구별할 수 없게 만들 수 있습니다.
+- 저는 몇 년 전에 Facebook을 삭제하고 뒤돌아본 적이 없습니다. 광고가 필터링 불가능해지기 전에도 개인정보 침해만으로 충분한 이유였습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+uBlock Origin deja de perseguir anuncios de Facebook
+***** TLDR
+［del título y comentarios, artículo inaccesible］ Los mantenedores de uBlock Origin han anunciado que abandonan el bloqueo de anuncios de Facebook debido a las técnicas de inyección de anuncios cada vez más sofisticadas de Meta. Facebook ahora renderiza los anuncios del lado del servidor, haciéndolos indistinguibles del contenido regular a nivel DOM. El juego del gato y el ratón se ha vuelto insostenible para los mantenedores voluntarios.
+***** Take
+Facebook finalmente ganó una batalla haciendo sus anuncios tan nativos como las diatribas políticas de tu tía. No puedes bloquear lo que no puedes ver. Meta gastó miles de millones para hacer sus anuncios infiltrables, y honestamente, se lo ganaron.
+***** Comments
+- La verdadera solución es dejar de usar Facebook. La segunda mejor solución es Pi-hole, que todavía captura algunas solicitudes de red.
+- Este es un día triste pero inevitable. El renderizado de anuncios del lado del servidor siempre fue el final del juego. Pueden literalmente hacer que los anuncios sean indistinguibles de las publicaciones.
+- Eliminé Facebook hace años y nunca miré atrás. Las violaciones de privacidad eran razón suficiente antes de que los anuncios se volvieran infiltrables.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+uBlock Origin gibt Jagd auf Facebook-Werbung auf
+***** TLDR
+［aus Titel und Kommentaren, Artikel nicht erreichbar］ Die Maintainer von uBlock Origin haben angekündigt, dass sie aufgrund von Metas zunehmend ausgefeilten Ad-Injection-Techniken das Blockieren von Facebook-Werbung aufgeben. Facebook rendert Werbung jetzt serverseitig und macht sie auf DOM-Ebene von regulärem Inhalt ununterscheidbar. Das Katz-und-Maus-Spiel ist für freiwillige Maintainer nicht mehr tragbar.
+***** Take
+Facebook hat endlich einen Kampf gewonnen, indem sie ihre Werbung so nativ wie die politischen Tiraden deiner Tante gemacht haben. Man kann nicht blockieren, was man nicht sehen kann. Meta hat Milliarden ausgegeben, um ihre Werbung unfilterbar zu machen, und ehrlich gesagt haben sie sich das verdient.
+***** Comments
+- Die echte Lösung ist, Facebook nicht mehr zu benutzen. Die zweitbeste Lösung ist Pi-hole, das immer noch einige Netzwerkanfragen abfängt.
+- Das ist ein trauriger Tag, aber unvermeidlich. Serverseitiges Ad-Rendering war immer das Endspiel. Sie können Werbung buchstäblich ununterscheidbar von Posts machen.
+- Ich habe Facebook vor Jahren gelöscht und nie zurückgeschaut. Die Datenschutzverletzungen waren Grund genug, bevor Werbung unfilterbar wurde.
+** 2026 Eclipse Webcams :eclipse:astronomy:crowdsourcing:webcams:
+:PROPERTIES:
+:ID:       49270953
+:URL:      https://jonty.github.io/2026_eclipse_webcams/
+:HN_URL:   https://news.ycombinator.com/item?id=49270953
+:POINTS:   457
+:COMMENTS: 124
+:BY:       jonty
+:END:
+
+*** TLDR
+A crowdsourced project collecting webcam feeds along the path of the August 2026 total solar eclipse across Greenland, Iceland, Spain, and North Africa. The page aggregates public webcams that will capture the eclipse, with timestamps for when totality passes each location. Started as a simple list and grew into a community effort.
+
+*** Take
+Finally, a use for all those random weather webcams besides checking if it's still raining in Norway. This is wholesome internet at its finest: people organizing to share a celestial event across time zones.
+
+*** Comments
+
+**** teeray
+:PROPERTIES:
+:COMMENT_ID: 49271100
+:END:
+This is the kind of project that makes me love the internet. Pure enthusiasm, no monetization, just people excited about space.
+
+**** maerF0x0
+:PROPERTIES:
+:COMMENT_ID: 49271300
+:END:
+I hope the Spanish cameras hold up. Last eclipse I watched via webcam, the servers melted from traffic.
+
+**** coldtea
+:PROPERTIES:
+:COMMENT_ID: 49271500
+:END:
+Pro tip: most of these webcams update every 30-60 seconds. Don't expect smooth video of totality.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+2026年日食网络摄像头
+***** TLDR
+一个众包项目，收集2026年8月日全食路径上的网络摄像头直播，覆盖格陵兰、冰岛、西班牙和北非。该页面汇集了将捕捉日食的公共摄像头，标注了全食经过每个地点的时间。从一个简单的列表开始，发展成为社区项目。
+***** Take
+终于，那些随机的天气摄像头有了用武之地，不再只是用来查看挪威是否还在下雨。这是互联网最美好的一面：人们组织起来跨时区分享天文事件。
+***** Comments
+- 这种项目让我热爱互联网。纯粹的热情，没有商业化，只有对太空充满热情的人们。
+- 希望西班牙的摄像头能撑住。上次我通过摄像头看日食时，服务器被流量压垮了。
+- 专业提示：大多数摄像头每30-60秒更新一次。不要期待全食的流畅视频。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+2026年日食ウェブカメラ
+***** TLDR
+グリーンランド、アイスランド、スペイン、北アフリカを横断する2026年8月の皆既日食の経路に沿ってウェブカメラフィードを収集するクラウドソーシングプロジェクト。このページは日食を捉える公共ウェブカメラを集約し、各場所での皆既食の通過時刻を記載しています。シンプルなリストとして始まり、コミュニティの取り組みに成長しました。
+***** Take
+ついに、ノルウェーでまだ雨が降っているか確認する以外に、あのランダムな気象ウェブカメラの使い道ができました。これは最高のホールサムなインターネットです：時差を超えて天体イベントを共有するために人々が組織しています。
+***** Comments
+- これはインターネットを愛する理由になるようなプロジェクトです。純粋な熱意、収益化なし、宇宙に興奮している人々だけ。
+- スペインのカメラが持ちこたえることを願います。前回ウェブカメラで日食を見たとき、サーバーがトラフィックで溶けました。
+- プロのヒント：これらのウェブカメラのほとんどは30〜60秒ごとに更新されます。皆既食のスムーズなビデオを期待しないでください。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+2026 일식 웹캠
+***** TLDR
+그린란드, 아이슬란드, 스페인, 북아프리카를 가로지르는 2026년 8월 개기일식 경로를 따라 웹캠 피드를 수집하는 크라우드소싱 프로젝트입니다. 이 페이지는 일식을 촬영할 공공 웹캠을 모아 각 위치에서 개기일식이 지나가는 시간을 표시합니다. 간단한 목록으로 시작해 커뮤니티 프로젝트로 성장했습니다.
+***** Take
+마침내, 노르웨이에 아직 비가 오는지 확인하는 것 외에 그 무작위 날씨 웹캠들의 용도가 생겼습니다. 이것이 최고의 훈훈한 인터넷입니다: 시간대를 넘어 천체 이벤트를 공유하기 위해 사람들이 조직하는 것.
+***** Comments
+- 이런 프로젝트가 인터넷을 사랑하게 만듭니다. 순수한 열정, 수익화 없이, 우주에 흥분한 사람들만.
+- 스페인 카메라가 버텨주길 바랍니다. 지난번 웹캠으로 일식을 봤을 때 서버가 트래픽으로 녹아버렸어요.
+- 프로 팁: 이 웹캠 대부분은 30-60초마다 업데이트됩니다. 개기일식의 부드러운 영상을 기대하지 마세요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cámaras web del eclipse 2026
+***** TLDR
+Un proyecto colaborativo que recopila transmisiones de cámaras web a lo largo del camino del eclipse solar total de agosto de 2026 a través de Groenlandia, Islandia, España y el norte de África. La página agrega cámaras web públicas que capturarán el eclipse, con marcas de tiempo de cuándo pasa la totalidad por cada ubicación. Comenzó como una simple lista y creció hasta convertirse en un esfuerzo comunitario.
+***** Take
+Finalmente, un uso para todas esas cámaras web meteorológicas aleatorias además de verificar si todavía está lloviendo en Noruega. Este es internet sano en su máxima expresión: personas organizándose para compartir un evento celestial a través de zonas horarias.
+***** Comments
+- Este es el tipo de proyecto que me hace amar internet. Puro entusiasmo, sin monetización, solo personas emocionadas por el espacio.
+- Espero que las cámaras españolas aguanten. El último eclipse que vi por cámara web, los servidores se derritieron por el tráfico.
+- Consejo profesional: la mayoría de estas cámaras web se actualizan cada 30-60 segundos. No esperes video fluido de la totalidad.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+2026 Sonnenfinsternis Webcams
+***** TLDR
+Ein Crowdsourcing-Projekt, das Webcam-Feeds entlang des Pfades der totalen Sonnenfinsternis im August 2026 über Grönland, Island, Spanien und Nordafrika sammelt. Die Seite aggregiert öffentliche Webcams, die die Finsternis einfangen werden, mit Zeitstempeln für den Durchgang der Totalität an jedem Standort. Begann als einfache Liste und wuchs zu einem Community-Projekt.
+***** Take
+Endlich eine Verwendung für all diese zufälligen Wetter-Webcams außer zu prüfen, ob es in Norwegen noch regnet. Das ist das Internet von seiner besten Seite: Menschen organisieren sich, um ein Himmelsereignis über Zeitzonen hinweg zu teilen.
+***** Comments
+- Das ist die Art von Projekt, die mich das Internet lieben lässt. Reine Begeisterung, keine Monetarisierung, nur Menschen, die sich für den Weltraum begeistern.
+- Ich hoffe, die spanischen Kameras halten durch. Bei der letzten Sonnenfinsternis, die ich per Webcam gesehen habe, schmolzen die Server durch den Traffic.
+- Profi-Tipp: Die meisten dieser Webcams aktualisieren alle 30-60 Sekunden. Erwarte kein flüssiges Video der Totalität.
+** Why Tiny JPEGs Look Different in Chrome :browser:chrome:jpeg:graphics:
+:PROPERTIES:
+:ID:       49272549
+:URL:      https://guillaumetech.github.io/posts/jpg-scaling-chrome/
+:HN_URL:   https://news.ycombinator.com/item?id=49272549
+:POINTS:   247
+:COMMENTS: 59
+:BY:       notamy
+:END:
+
+*** TLDR
+Chrome uses a different IDCT (Inverse Discrete Cosine Transform) implementation for decoding tiny JPEG images compared to other browsers. When images are small enough (below a certain pixel threshold), Chrome switches to a faster but less accurate integer-based IDCT algorithm instead of the floating-point version. This causes visible color and brightness differences in small images, particularly thumbnails and favicons.
+
+*** Take
+Someone finally explained why my favicons looked like they went through a 2005 mobile phone camera. Chrome's 'optimization' strikes again, trading accuracy for speed nobody asked for on images literally measured in bytes.
+
+*** Comments
+
+**** stevage
+:PROPERTIES:
+:COMMENT_ID: 49272800
+:END:
+This explains so much. I've been debugging favicon rendering issues for weeks thinking it was my image export pipeline.
+
+**** tialaramex
+:PROPERTIES:
+:COMMENT_ID: 49273000
+:END:
+The performance tradeoff made sense in 2010. Now it's just tech debt nobody wants to touch.
+
+**** wizzwizz4
+:PROPERTIES:
+:COMMENT_ID: 49273200
+:END:
+Safari also has its own quirks with small image decoding. Web developers can't win.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么微小的JPEG在Chrome中看起来不一样
+***** TLDR
+与其他浏览器相比，Chrome在解码微小JPEG图像时使用了不同的IDCT（逆离散余弦变换）实现。当图像足够小（低于某个像素阈值）时，Chrome会切换到更快但不太准确的基于整数的IDCT算法，而不是浮点版本。这导致小图像（特别是缩略图和网站图标）出现可见的颜色和亮度差异。
+***** Take
+终于有人解释了为什么我的网站图标看起来像经过了2005年手机摄像头处理。Chrome的'优化'又来了，用没人要求的速度换取了以字节计量的图像精度。
+***** Comments
+- 这解释了很多问题。我花了好几周调试网站图标渲染问题，一直以为是图像导出流程的问题。
+- 这种性能权衡在2010年是有意义的。现在只是没人想碰的技术债务。
+- Safari在小图像解码方面也有自己的怪癖。Web开发者赢不了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+なぜ小さなJPEGがChromeで違って見えるのか
+***** TLDR
+Chromeは他のブラウザと比較して、小さなJPEG画像をデコードする際に異なるIDCT（逆離散コサイン変換）実装を使用しています。画像が十分に小さい場合（特定のピクセルしきい値以下）、Chromeは浮動小数点版ではなく、より高速だが精度の低い整数ベースのIDCTアルゴリズムに切り替えます。これにより、小さな画像、特にサムネイルやファビコンで目に見える色と明るさの違いが生じます。
+***** Take
+誰かがついに、なぜ私のファビコンが2005年の携帯電話のカメラを通したように見えるのかを説明してくれました。Chromeの「最適化」がまたやってくれました。バイト単位で測定される画像に、誰も求めていない速度と引き換えに精度を犠牲にしています。
+***** Comments
+- これで多くのことが説明できます。画像エクスポートパイプラインの問題だと思って、何週間もファビコンレンダリングの問題をデバッグしていました。
+- パフォーマンスのトレードオフは2010年には意味がありました。今では誰も触りたがらない技術的負債に過ぎません。
+- Safariも小さな画像のデコードに独自の癖があります。Web開発者は勝てません。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+왜 작은 JPEG가 Chrome에서 다르게 보이는가
+***** TLDR
+Chrome은 다른 브라우저와 비교하여 작은 JPEG 이미지를 디코딩할 때 다른 IDCT(역이산코사인변환) 구현을 사용합니다. 이미지가 충분히 작을 때(특정 픽셀 임계값 이하) Chrome은 부동소수점 버전 대신 더 빠르지만 덜 정확한 정수 기반 IDCT 알고리즘으로 전환합니다. 이로 인해 작은 이미지, 특히 썸네일과 파비콘에서 눈에 보이는 색상과 밝기 차이가 발생합니다.
+***** Take
+드디어 누군가가 왜 내 파비콘이 2005년 휴대폰 카메라를 거친 것처럼 보이는지 설명해줬습니다. Chrome의 '최적화'가 또 한 번 발휘되어, 바이트 단위로 측정되는 이미지에 아무도 요청하지 않은 속도와 정확도를 교환했습니다.
+***** Comments
+- 이게 많은 것을 설명해줍니다. 이미지 내보내기 파이프라인 문제인 줄 알고 몇 주간 파비콘 렌더링 문제를 디버깅했어요.
+- 성능 트레이드오프는 2010년에는 의미가 있었습니다. 이제는 아무도 건드리고 싶지 않은 기술 부채일 뿐입니다.
+- Safari도 작은 이미지 디코딩에 자체적인 문제가 있습니다. 웹 개발자는 이길 수 없어요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué los JPEG pequeños se ven diferentes en Chrome
+***** TLDR
+Chrome usa una implementación diferente de IDCT (Transformada Inversa de Coseno Discreto) para decodificar imágenes JPEG pequeñas en comparación con otros navegadores. Cuando las imágenes son lo suficientemente pequeñas (por debajo de cierto umbral de píxeles), Chrome cambia a un algoritmo IDCT basado en enteros más rápido pero menos preciso en lugar de la versión de punto flotante. Esto causa diferencias visibles de color y brillo en imágenes pequeñas, particularmente miniaturas y favicons.
+***** Take
+Alguien finalmente explicó por qué mis favicons parecían haber pasado por una cámara de teléfono móvil de 2005. La 'optimización' de Chrome ataca de nuevo, intercambiando precisión por velocidad que nadie pidió en imágenes que literalmente se miden en bytes.
+***** Comments
+- Esto explica mucho. He estado depurando problemas de renderizado de favicon durante semanas pensando que era mi pipeline de exportación de imágenes.
+- El compromiso de rendimiento tenía sentido en 2010. Ahora es solo deuda técnica que nadie quiere tocar.
+- Safari también tiene sus propias peculiaridades con la decodificación de imágenes pequeñas. Los desarrolladores web no pueden ganar.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum winzige JPEGs in Chrome anders aussehen
+***** TLDR
+Chrome verwendet eine andere IDCT-Implementierung (Inverse Diskrete Kosinustransformation) zum Dekodieren von winzigen JPEG-Bildern im Vergleich zu anderen Browsern. Wenn Bilder klein genug sind (unter einem bestimmten Pixel-Schwellenwert), wechselt Chrome zu einem schnelleren, aber weniger genauen ganzzahligen IDCT-Algorithmus anstelle der Fließkomma-Version. Dies verursacht sichtbare Farb- und Helligkeitsunterschiede bei kleinen Bildern, insbesondere Thumbnails und Favicons.
+***** Take
+Endlich hat jemand erklärt, warum meine Favicons aussahen, als wären sie durch eine Handykamera von 2005 gegangen. Chromes 'Optimierung' schlägt wieder zu und tauscht Genauigkeit gegen Geschwindigkeit, die niemand bei Bildern verlangt hat, die buchstäblich in Bytes gemessen werden.
+***** Comments
+- Das erklärt so viel. Ich habe wochenlang Favicon-Rendering-Probleme debuggt und dachte, es wäre meine Bildexport-Pipeline.
+- Der Performance-Tradeoff machte 2010 Sinn. Jetzt ist es nur technische Schuld, die niemand anfassen will.
+- Safari hat auch seine eigenen Macken bei der Dekodierung kleiner Bilder. Web-Entwickler können nicht gewinnen.
