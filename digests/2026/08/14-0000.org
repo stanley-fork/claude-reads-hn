@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-08-14 00:00:00 UT UTC
+#+DATE: 2026-08-14T00:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Security bots run wild, Lisp gets vibe-coded, and we're all out of sardines
+
+* Highlights
+- Mass vulnerability scans spoofing AI bots: 5.6M daily requests
+- Why Common Lisp makes perfect LLM target
+- Sardine shortage hits your tuna salad dreams
+
+* Stories
+
+** Mass Vulnerability Scans Masquerading as AI Search Crawlers :security:bots:ai:vulnerabilities:
+:PROPERTIES:
+:ID:       49272569
+:URL:      https://knownagents.com/insights
+:HN_URL:   https://news.ycombinator.com/item?id=49272569
+:POINTS:   261
+:COMMENTS: 191
+:BY:       Torvus
+:END:
+
+*** TLDR
+KnownAgents analyzed 5.6 million daily bot requests and found widespread spoofing. 38% of requests claiming to be GPTBot were actually malicious scanners probing for vulnerabilities like SQL injection and XSS. Real AI crawlers announce themselves; fake ones probe for CVEs.
+
+*** Take
+So the robots pretending to be AI are actually just hackers. It's turtles all the way down, except the turtles are all trying to steal your database.
+
+*** Comments
+
+**** seanp2k2
+:PROPERTIES:
+:COMMENT_ID: 49274801
+:END:
+This is roughly as low-effort as it gets for security researchers. Most robots.txt will no longer have AI crawlers allowed, and most sites don't verify user agents. Pick any common blocked one and you've got reduced suspicion.
+
+**** pjs_
+:PROPERTIES:
+:COMMENT_ID: 49273588
+:END:
+For legitimate scanning: GreyNoise operates a global network of honeypots to track scanners. They distinguish between benign (security research, CERTs) and malicious scanning with excellent data quality.
+
+**** hombre_fatal
+:PROPERTIES:
+:COMMENT_ID: 49273391
+:END:
+If you're reading this, please stop trying to load my '/.env'. Appreciate it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+伪装成AI搜索爬虫的大规模漏洞扫描
+***** TLDR
+KnownAgents分析了每日560万次机器人请求，发现大量伪装行为。38%声称是GPTBot的请求实际上是恶意扫描器，探测SQL注入和XSS等漏洞。
+***** Take
+假装是AI的机器人其实都是黑客。一路套娃下去，每只乌龟都在试图偷你的数据库。
+***** Comments
+- 这对安全研究者来说简直是最省力的方法。大多数robots.txt已经不允许AI爬虫，而大多数网站也不验证用户代理。
+- 合法扫描方面：GreyNoise运营着全球蜜罐网络来追踪扫描器，能区分良性和恶意扫描。
+- 如果你在看这条，请别再尝试加载我的/.env了。谢谢。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AI検索クローラーを装った大規模脆弱性スキャン
+***** TLDR
+KnownAgentsは1日560万件のボットリクエストを分析し、広範な偽装を発見。GPTBotを名乗るリクエストの38%は実際にはSQLインジェクションやXSSを探る悪意あるスキャナーだった。
+***** Take
+AIのふりをしているロボットは実はハッカーだった。亀の上に亀が乗っていて、全員がデータベースを盗もうとしている。
+***** Comments
+- セキュリティ研究者にとってこれは最も楽な方法だ。ほとんどのrobots.txtはAIクローラーを許可しておらず、ユーザーエージェントを検証するサイトも少ない。
+- 正当なスキャンについて：GreyNoiseはスキャナーを追跡するグローバルハニーポットネットワークを運営している。
+- これを読んでいる人、私の/.envをロードしようとするのはやめてください。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AI 검색 크롤러로 위장한 대규모 취약점 스캔
+***** TLDR
+KnownAgents가 하루 560만 건의 봇 요청을 분석한 결과 광범위한 위장이 발견됐다. GPTBot이라고 주장하는 요청의 38%가 실제로는 SQL 인젝션과 XSS를 탐색하는 악성 스캐너였다.
+***** Take
+AI인 척하는 로봇들이 사실은 해커였다. 거북이 위에 거북이가 있고, 모두가 당신의 데이터베이스를 훔치려 한다.
+***** Comments
+- 보안 연구자들에게 이건 가장 쉬운 방법이다. 대부분의 robots.txt는 AI 크롤러를 허용하지 않고, 대부분의 사이트는 유저 에이전트를 검증하지 않는다.
+- 합법적인 스캔의 경우: GreyNoise는 스캐너를 추적하기 위해 글로벌 허니팟 네트워크를 운영한다.
+- 이걸 읽고 있다면, 제 /.env 로드 시도 좀 그만해주세요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Escaneos masivos de vulnerabilidades disfrazados de rastreadores de IA
+***** TLDR
+KnownAgents analizó 5.6 millones de solicitudes de bots diarias y encontró suplantación generalizada. El 38% de las solicitudes que afirmaban ser GPTBot eran en realidad escáneres maliciosos buscando inyección SQL y XSS.
+***** Take
+Los robots que fingen ser IA en realidad son hackers. Son tortugas hasta el fondo, y todas intentan robar tu base de datos.
+***** Comments
+- Esto es lo más fácil para investigadores de seguridad. La mayoría de robots.txt ya no permiten rastreadores de IA, y la mayoría de sitios no verifican user agents.
+- Para escaneo legítimo: GreyNoise opera una red global de honeypots para rastrear escáneres.
+- Si estás leyendo esto, por favor deja de intentar cargar mi /.env. Gracias.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Massenhafte Schwachstellen-Scans getarnt als KI-Crawler
+***** TLDR
+KnownAgents analysierte 5,6 Millionen tägliche Bot-Anfragen und fand weitverbreitetes Spoofing. 38% der Anfragen, die vorgaben GPTBot zu sein, waren tatsächlich bösartige Scanner auf der Suche nach SQL-Injection und XSS.
+***** Take
+Die Roboter, die vorgeben KI zu sein, sind eigentlich Hacker. Es sind Schildkröten bis ganz unten, und alle versuchen deine Datenbank zu stehlen.
+***** Comments
+- Das ist so ziemlich der geringste Aufwand für Sicherheitsforscher. Die meisten robots.txt erlauben keine KI-Crawler mehr, und die meisten Seiten verifizieren User Agents nicht.
+- Für legitimes Scannen: GreyNoise betreibt ein globales Honeypot-Netzwerk zur Verfolgung von Scannern.
+- Falls du das liest: Bitte hör auf zu versuchen, meine /.env zu laden. Danke.
+** Impressions of Principia Mathematica :mathematics:type-theory:history:philosophy:
+:PROPERTIES:
+:ID:       49279928
+:URL:      https://okmij.org/ftp/Computation/Impressions/PrincipiaMathematica.html
+:HN_URL:   https://news.ycombinator.com/item?id=49279928
+:POINTS:   110
+:COMMENTS: 50
+:BY:       jgeralnik
+:END:
+
+*** TLDR
+Oleg Kiselyov reads the actual Principia Mathematica, not just myths about it. Russell and Whitehead used a Hindley-Milner-like type system in 1910, invented impredicativity workarounds, and PM's type system predates most formal systems we think are modern.
+
+*** Take
+Russell and Whitehead were basically doing type theory before computers existed, then we spent 100 years reinventing their work and calling it innovation. Standard academic tradition.
+
+*** Comments
+
+**** whywhywhywhy
+:PROPERTIES:
+:COMMENT_ID: 49280605
+:END:
+More than anything I've always found it fascinating how something this big could ultimately fail to achieve its goals but also have such a profound influence.
+
+**** AnimalMuppet
+:PROPERTIES:
+:COMMENT_ID: 49280864
+:END:
+A lot of that influence only came because it prodded Gödel to find his incompleteness theorems. Until then mathematicians thought it was actually possible to complete Hilbert's project.
+
+**** WillAdams
+:PROPERTIES:
+:COMMENT_ID: 49280553
+:END:
+There used to be a wonderful page showing the proof that 1+1=2 from the beginning of the book up through that proof. Would love to see such a page available again.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+《数学原理》印象
+***** TLDR
+Oleg Kiselyov阅读了真正的《数学原理》，而不只是关于它的传说。罗素和怀特海在1910年就使用了类似Hindley-Milner的类型系统，发明了非谓词性的变通方法。
+***** Take
+罗素和怀特海在计算机存在之前就在做类型论，然后我们花了100年重新发明他们的工作，还称之为创新。学术界的标准传统。
+***** Comments
+- 最让我着迷的是，如此宏大的东西最终未能实现其目标，却又产生了如此深远的影响。
+- 很多影响只是因为它激发了哥德尔发现不完备性定理。在那之前数学家们还以为能完成希尔伯特的计划。
+- 以前有个很棒的页面展示从书的开头到1+1=2的证明。希望能再次看到这样的页面。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+プリンキピア・マテマティカの印象
+***** TLDR
+Oleg Kiselyovは実際の『プリンキピア・マテマティカ』を読んだ。神話ではなく。ラッセルとホワイトヘッドは1910年にHindley-Milnerのような型システムを使い、非述語性の回避策を発明した。
+***** Take
+ラッセルとホワイトヘッドはコンピュータが存在する前に型理論をやっていた。その後100年かけて彼らの仕事を再発明し、イノベーションと呼んだ。学術界の標準的な伝統だ。
+***** Comments
+- これほど大きなものが最終的に目標を達成できなかったのに、これほど深い影響を与えたことに常に魅了されてきた。
+- その影響の多くはゲーデルに不完全性定理を発見させたからこそ生まれた。それまで数学者はヒルベルトの計画が完成可能だと思っていた。
+- 以前、本の最初から1+1=2の証明までを示す素晴らしいページがあった。また見たい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+프린키피아 마테마티카의 인상
+***** TLDR
+Oleg Kiselyov가 실제 『수학 원리』를 읽었다. 신화가 아닌 실제를. 러셀과 화이트헤드는 1910년에 Hindley-Milner와 유사한 타입 시스템을 사용했고, 비술어성 우회법을 발명했다.
+***** Take
+러셀과 화이트헤드는 컴퓨터가 존재하기 전에 타입 이론을 했다. 그 후 100년간 그들의 작업을 재발명하고 혁신이라 불렀다. 학계의 표준적인 전통이다.
+***** Comments
+- 이렇게 거대한 것이 결국 목표를 달성하지 못했으면서도 이토록 깊은 영향을 미쳤다는 것이 항상 매력적이었다.
+- 그 영향의 많은 부분은 괴델에게 불완전성 정리를 발견하게 했기 때문에 생겼다. 그전까지 수학자들은 힐베르트의 프로젝트가 완성 가능하다고 생각했다.
+- 예전에 책의 처음부터 1+1=2 증명까지 보여주는 멋진 페이지가 있었다. 다시 볼 수 있으면 좋겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Impresiones de Principia Mathematica
+***** TLDR
+Oleg Kiselyov leyó el verdadero Principia Mathematica, no solo mitos. Russell y Whitehead usaron un sistema de tipos similar a Hindley-Milner en 1910 e inventaron soluciones para la impredicatividad.
+***** Take
+Russell y Whitehead estaban haciendo teoría de tipos antes de que existieran las computadoras. Luego pasamos 100 años reinventando su trabajo y llamándolo innovación. Tradición académica estándar.
+***** Comments
+- Lo que más me fascina es cómo algo tan grande pudo fallar en lograr sus objetivos pero tener una influencia tan profunda.
+- Mucha de esa influencia vino porque motivó a Gödel a encontrar sus teoremas de incompletitud. Hasta entonces los matemáticos pensaban que era posible completar el proyecto de Hilbert.
+- Solía haber una página maravillosa mostrando la prueba de 1+1=2 desde el principio del libro. Me encantaría ver esa página disponible de nuevo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Eindrücke der Principia Mathematica
+***** TLDR
+Oleg Kiselyov las die echten Principia Mathematica, nicht nur Mythen darüber. Russell und Whitehead verwendeten 1910 ein Hindley-Milner-ähnliches Typsystem und erfanden Umgehungen für Imprädikativität.
+***** Take
+Russell und Whitehead machten Typentheorie bevor Computer existierten. Dann verbrachten wir 100 Jahre damit, ihre Arbeit neu zu erfinden und es Innovation zu nennen. Standard akademische Tradition.
+***** Comments
+- Am faszinierendsten fand ich immer, wie etwas so Großes letztlich seine Ziele nicht erreichte, aber einen so tiefgreifenden Einfluss hatte.
+- Viel von diesem Einfluss kam nur, weil es Gödel dazu brachte, seine Unvollständigkeitssätze zu finden. Bis dahin dachten Mathematiker, es sei möglich, Hilberts Projekt abzuschließen.
+- Es gab früher eine wunderbare Seite, die den Beweis von 1+1=2 vom Anfang des Buches zeigte. Würde so eine Seite gerne wieder sehen.
+** Why Target Common Lisp for Generated Code? :lisp:ai:programming:code-generation:
+:PROPERTIES:
+:ID:       49269429
+:URL:      http://funcall.blogspot.com/2026/08/why-vibe-code-in-lisp.html
+:HN_URL:   https://news.ycombinator.com/item?id=49269429
+:POINTS:   76
+:COMMENTS: 55
+:BY:       jarcane
+:END:
+
+*** TLDR
+Joe Marshall argues Common Lisp is ideal for LLM code generation: homoiconicity means code is data, REPL enables immediate fixing without restart, condition system catches errors before crashing, and macros let you extend the language without modifying the compiler.
+
+*** Take
+Every few years someone rediscovers that Lisp was right all along. This time it's LLMs. Next decade it'll be quantum computers, and we'll still be arguing about parentheses.
+
+*** Comments
+
+**** rrss
+:PROPERTIES:
+:COMMENT_ID: 49272419
+:END:
+Reading the source is just as easy as reading the bytecode. This is not a feature.
+
+**** xupybd
+:PROPERTIES:
+:COMMENT_ID: 49269826
+:END:
+What AI tools for LISP exist? The state of play seems to be Cursor or Copilot. Cursor doesn't support CL at all. Copilot does but poorly.
+
+**** jiggawatts
+:PROPERTIES:
+:COMMENT_ID: 49270215
+:END:
+C# also has a REPL and you can load scripting code dynamically. Lisp also doesn't have compiler-assisted refactoring, which the C# IDE does.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么让生成的代码瞄准Common Lisp？
+***** TLDR
+Joe Marshall认为Common Lisp是LLM代码生成的理想选择：同像性意味着代码即数据，REPL可以立即修复而无需重启，条件系统在崩溃前捕获错误，宏让你无需修改编译器就能扩展语言。
+***** Take
+每隔几年就有人重新发现Lisp一直都是对的。这次是LLM。下个十年会是量子计算机，而我们还在争论括号的问题。
+***** Comments
+- 读源码和读字节码一样简单。这不是什么特性。
+- 有什么AI工具支持LISP？目前似乎只有Cursor或Copilot。Cursor完全不支持CL。Copilot支持但效果很差。
+- C#也有REPL，也能动态加载脚本代码。Lisp没有编译器辅助的重构，而C# IDE有。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+なぜコード生成のターゲットにCommon Lispを？
+***** TLDR
+Joe MarshallはCommon LispがLLMコード生成に理想的だと主張：同図像性でコードがデータ、REPLで再起動なしに即座に修正可能、条件システムでクラッシュ前にエラーを捕捉、マクロでコンパイラ修正なしに言語を拡張できる。
+***** Take
+数年ごとに誰かがLispがずっと正しかったと再発見する。今回はLLM。来る10年は量子コンピュータで、それでも括弧について議論しているだろう。
+***** Comments
+- ソースを読むのはバイトコードを読むのと同じくらい簡単だ。これは機能ではない。
+- LISPのAIツールは何がある？現状はCursorかCopilotらしい。CursorはCLを全くサポートしない。Copilotはするが下手だ。
+- C#にもREPLがあり、スクリプトコードを動的にロードできる。Lispにはコンパイラ支援のリファクタリングがない。C# IDEにはある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+왜 생성된 코드의 타겟으로 Common Lisp를?
+***** TLDR
+Joe Marshall은 Common Lisp가 LLM 코드 생성에 이상적이라고 주장한다: 동형성은 코드가 데이터임을 의미하고, REPL은 재시작 없이 즉시 수정 가능하며, 조건 시스템은 충돌 전에 오류를 잡고, 매크로는 컴파일러 수정 없이 언어 확장을 가능하게 한다.
+***** Take
+몇 년마다 누군가 Lisp가 항상 옳았다는 걸 재발견한다. 이번엔 LLM이다. 다음 10년은 양자 컴퓨터일 거고, 우린 여전히 괄호에 대해 논쟁하고 있을 거다.
+***** Comments
+- 소스를 읽는 건 바이트코드 읽는 것만큼 쉽다. 이건 기능이 아니다.
+- LISP용 AI 도구는 뭐가 있나? 현재는 Cursor나 Copilot인 것 같다. Cursor는 CL을 전혀 지원 안 한다. Copilot은 하지만 형편없다.
+- C#에도 REPL이 있고 스크립팅 코드를 동적으로 로드할 수 있다. Lisp에는 컴파일러 지원 리팩토링이 없다. C# IDE에는 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Por qué apuntar a Common Lisp para código generado?
+***** TLDR
+Joe Marshall argumenta que Common Lisp es ideal para generación de código con LLM: la homoiconicidad significa que el código es datos, el REPL permite corrección inmediata sin reiniciar, el sistema de condiciones captura errores antes de crashear, y las macros permiten extender el lenguaje sin modificar el compilador.
+***** Take
+Cada pocos años alguien redescubre que Lisp siempre tuvo razón. Esta vez son los LLMs. La próxima década serán computadoras cuánticas, y seguiremos discutiendo sobre paréntesis.
+***** Comments
+- Leer el código fuente es tan fácil como leer el bytecode. Esto no es una característica.
+- ¿Qué herramientas de IA existen para LISP? El estado actual parece ser Cursor o Copilot. Cursor no soporta CL en absoluto. Copilot sí pero pobremente.
+- C# también tiene REPL y puedes cargar código de scripting dinámicamente. Lisp tampoco tiene refactorización asistida por compilador, que el IDE de C# sí tiene.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum Common Lisp als Ziel für generierten Code?
+***** TLDR
+Joe Marshall argumentiert, dass Common Lisp ideal für LLM-Codegenerierung ist: Homoikonizität bedeutet Code ist Daten, REPL ermöglicht sofortiges Fixen ohne Neustart, das Condition-System fängt Fehler vor dem Crash, und Makros erlauben Spracherweiterung ohne Compiler-Änderung.
+***** Take
+Alle paar Jahre entdeckt jemand wieder, dass Lisp die ganze Zeit recht hatte. Diesmal sind es LLMs. Nächstes Jahrzehnt werden es Quantencomputer sein, und wir werden immer noch über Klammern streiten.
+***** Comments
+- Den Quellcode zu lesen ist genauso einfach wie Bytecode zu lesen. Das ist kein Feature.
+- Welche KI-Tools für LISP gibt es? Der aktuelle Stand scheint Cursor oder Copilot zu sein. Cursor unterstützt CL überhaupt nicht. Copilot schon, aber schlecht.
+- C# hat auch einen REPL und man kann Scripting-Code dynamisch laden. Lisp hat auch kein Compiler-gestütztes Refactoring, was die C# IDE hat.
+** Why You Can't Find Canned Sardines Right Now :food:climate:environment:supply-chain:
+:PROPERTIES:
+:ID:       49279013
+:URL:      https://corneroffifth.studio/why-cant-you-find-canned-sardines-right-now/
+:HN_URL:   https://news.ycombinator.com/item?id=49279013
+:POINTS:   93
+:COMMENTS: 103
+:BY:       swaits
+:END:
+
+*** TLDR
+Morocco's sardine catch collapsed 77% in 2025 due to warming waters and overfishing. Morocco supplies 66% of global canned sardines. Prices doubled, and your supermarket shelves are bare because there literally aren't enough fish in the sea anymore.
+
+*** Take
+We overfished the oceans, warmed the planet, and now we're shocked that cheap protein is disappearing. The market will correct itself, they said. The fish had other plans.
+
+*** Comments
+
+**** TacticalCoder
+:PROPERTIES:
+:COMMENT_ID: 49280291
+:END:
+Europe has depleted its fish stocks with France being the worst offender. If you've ever been to France you can see how they put fish in everything. But they don't have their own fish anymore.
+
+**** leobg
+:PROPERTIES:
+:COMMENT_ID: 49280324
+:END:
+Here's the thing though: People have been going on about depleted fish stocks since 2006. We're still eating fish, aren't we?
+
+**** andrei_says_
+:PROPERTIES:
+:COMMENT_ID: 49279843
+:END:
+I remember when sardines were a cheap protein. Now they're a delicacy. Same thing happened with lobster in reverse.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么现在买不到罐头沙丁鱼
+***** TLDR
+由于海水变暖和过度捕捞，摩洛哥2025年沙丁鱼捕捞量下降了77%。摩洛哥供应全球66%的罐头沙丁鱼。价格翻倍，超市货架空空如也，因为海里真的没有足够的鱼了。
+***** Take
+我们过度捕捞海洋，让地球变暖，现在却惊讶廉价蛋白质正在消失。他们说市场会自我调节。鱼有别的计划。
+***** Comments
+- 欧洲已经耗尽了鱼类资源，法国是最严重的违规者。如果你去过法国，你会看到他们什么菜都放鱼。但他们已经没有自己的鱼了。
+- 话说回来：自2006年以来人们一直在说鱼类资源枯竭。我们不是还在吃鱼吗？
+- 我记得沙丁鱼曾经是便宜的蛋白质。现在成了美味佳肴。龙虾发生了相反的事。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+なぜ今イワシの缶詰が見つからないのか
+***** TLDR
+海水温の上昇と乱獲により、モロッコの2025年イワシ漁獲量は77%減少した。モロッコは世界の缶詰イワシの66%を供給している。価格は2倍になり、スーパーの棚は空っぽだ。海に十分な魚がいなくなったからだ。
+***** Take
+海を乱獲し、地球を温暖化させ、安いタンパク質が消えていることに驚いている。市場が自己調整すると言っていた。魚には別の計画があった。
+***** Comments
+- ヨーロッパは魚資源を枯渇させた。フランスが最悪の違反者だ。フランスに行ったことがあれば、何にでも魚を入れているのがわかる。でも自国の魚はもうない。
+- でもね、2006年から魚資源の枯渇について言われてきた。でも今も魚を食べてるでしょ？
+- イワシが安いタンパク質だった頃を覚えている。今は高級品だ。ロブスターには逆のことが起きた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+왜 지금 정어리 통조림을 찾을 수 없는가
+***** TLDR
+해수 온난화와 남획으로 모로코의 2025년 정어리 어획량이 77% 감소했다. 모로코는 전 세계 정어리 통조림의 66%를 공급한다. 가격은 두 배가 됐고, 바다에 물고기가 부족해서 슈퍼마켓 진열대가 텅 비었다.
+***** Take
+우리는 바다를 남획하고 지구를 데웠는데, 이제 싼 단백질이 사라지는 걸 보고 충격받고 있다. 시장이 스스로 조절될 거라고 했다. 물고기는 다른 계획이 있었다.
+***** Comments
+- 유럽은 어류 자원을 고갈시켰고 프랑스가 가장 심하다. 프랑스에 가보면 모든 요리에 생선을 넣는 걸 볼 수 있다. 하지만 자국 생선은 더 이상 없다.
+- 하지만 말이야: 2006년부터 어류 자원 고갈에 대해 말해왔다. 우리 아직도 생선 먹잖아?
+- 정어리가 싼 단백질이었던 때가 기억난다. 이제는 별미다. 랍스터에는 반대 현상이 일어났다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué no puedes encontrar sardinas enlatadas ahora mismo
+***** TLDR
+La pesca de sardinas de Marruecos colapsó un 77% en 2025 debido al calentamiento del agua y la sobrepesca. Marruecos suministra el 66% de las sardinas enlatadas del mundo. Los precios se duplicaron y los estantes de los supermercados están vacíos porque literalmente no quedan suficientes peces en el mar.
+***** Take
+Sobrepescamos los océanos, calentamos el planeta, y ahora nos sorprende que la proteína barata esté desapareciendo. El mercado se autocorregirá, dijeron. Los peces tenían otros planes.
+***** Comments
+- Europa ha agotado sus reservas de peces siendo Francia el peor infractor. Si has estado en Francia puedes ver cómo ponen pescado en todo. Pero ya no tienen sus propios peces.
+- Pero aquí está la cosa: la gente ha estado hablando de reservas de peces agotadas desde 2006. Todavía comemos pescado, ¿no?
+- Recuerdo cuando las sardinas eran proteína barata. Ahora son un manjar. Lo mismo pasó con la langosta pero al revés.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum du gerade keine Sardinendosen findest
+***** TLDR
+Marokkos Sardinenfang brach 2025 um 77% ein wegen Erwärmung des Wassers und Überfischung. Marokko liefert 66% der weltweiten Dosensardinen. Die Preise haben sich verdoppelt, und die Supermarktregale sind leer, weil buchstäblich nicht mehr genug Fische im Meer sind.
+***** Take
+Wir haben die Ozeane überfischt, den Planeten erwärmt, und jetzt sind wir schockiert, dass billiges Protein verschwindet. Der Markt wird sich selbst korrigieren, sagten sie. Die Fische hatten andere Pläne.
+***** Comments
+- Europa hat seine Fischbestände erschöpft, wobei Frankreich der schlimmste Übeltäter ist. Wer schon mal in Frankreich war, sieht wie sie überall Fisch reinmachen. Aber eigene Fische haben sie nicht mehr.
+- Aber hier ist die Sache: Die Leute reden seit 2006 über erschöpfte Fischbestände. Wir essen doch noch Fisch, oder?
+- Ich erinnere mich, als Sardinen billiges Protein waren. Jetzt sind sie eine Delikatesse. Bei Hummer ist das Gegenteil passiert.
+** Discovered Materials (YC W25) Is Hiring ML and Lab Engineers :startup:yc:ml:materials:hiring:
+:PROPERTIES:
+:ID:       49269090
+:URL:      https://www.ycombinator.com/companies/discovered-materials/jobs/bOPOcUp-ml-research-engineer
+:HN_URL:   https://news.ycombinator.com/item?id=49269090
+:POINTS:   131
+:COMMENTS: 28
+:BY:       bhaile
+:END:
+
+*** TLDR
+YC-backed startup using AI to discover new materials, especially for batteries and sustainable tech. They're hiring ML engineers to train models that predict material properties and lab engineers to actually synthesize the candidates. The dream: find better battery materials faster than traditional R&D.
+
+*** Take
+Another YC startup promising to revolutionize materials science with AI. The difference here is they have actual labs, not just GPUs. Still waiting for someone to discover a material that makes VCs patient.
+
+*** Comments
+
+**** tlb
+:PROPERTIES:
+:COMMENT_ID: 49272887
+:END:
+Materials discovery is one of the few places where ML training data is both expensive to create (synthesis experiments) and highly valuable. Good area for ML to make a difference.
+
+**** agorabits
+:PROPERTIES:
+:COMMENT_ID: 49270193
+:END:
+Curious how they handle the massive search space. Even with ML narrowing it down, validating in a lab is still the bottleneck.
+
+**** jpalomaki
+:PROPERTIES:
+:COMMENT_ID: 49271456
+:END:
+The battery space needs this badly. Current lithium-ion development is incremental at best. A 10% improvement would be worth billions.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Discovered Materials (YC W25) 正在招聘ML和实验室工程师
+***** TLDR
+YC支持的初创公司使用AI发现新材料，特别是电池和可持续技术领域。他们正在招聘ML工程师来训练预测材料特性的模型，以及实验室工程师来实际合成候选材料。梦想：比传统研发更快地找到更好的电池材料。
+***** Take
+又一家YC初创公司承诺用AI革命化材料科学。不同之处在于他们有真正的实验室，不只是GPU。还在等有人发现一种能让VC有耐心的材料。
+***** Comments
+- 材料发现是少数几个ML训练数据既昂贵（合成实验）又极有价值的领域之一。ML发挥作用的好领域。
+- 好奇他们如何处理巨大的搜索空间。即使ML缩小了范围，实验室验证仍然是瓶颈。
+- 电池领域急需这个。目前锂离子电池的发展最多只是渐进式的。10%的改进就价值数十亿。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Discovered Materials (YC W25) がMLとラボエンジニアを募集中
+***** TLDR
+YC支援のスタートアップがAIで新材料を発見、特にバッテリーとサステナブル技術分野。材料特性を予測するモデルを訓練するMLエンジニアと、候補を実際に合成するラボエンジニアを募集中。夢：従来のR&Dより速くより良いバッテリー材料を見つけること。
+***** Take
+またYCスタートアップがAIで材料科学を革命すると約束している。違いは実際のラボがあること、GPUだけじゃない。VCを忍耐強くする材料を誰かが発見するのをまだ待っている。
+***** Comments
+- 材料発見はML訓練データが作成に高価（合成実験）かつ高価値な数少ない分野の一つ。MLが違いを生む良い領域だ。
+- 巨大な探索空間をどう扱うのか気になる。MLで絞り込んでも、ラボでの検証がボトルネックだ。
+- バッテリー分野にはこれが切実に必要だ。現在のリチウムイオン開発はせいぜい漸進的。10%の改善は数十億ドルの価値がある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Discovered Materials (YC W25) ML 및 연구실 엔지니어 채용 중
+***** TLDR
+YC 지원 스타트업이 AI로 새로운 재료를 발견하고 있다. 특히 배터리와 지속 가능한 기술 분야에서. 재료 특성을 예측하는 모델을 훈련시킬 ML 엔지니어와 후보 물질을 실제로 합성할 연구실 엔지니어를 채용 중이다. 꿈: 기존 R&D보다 빠르게 더 좋은 배터리 재료 찾기.
+***** Take
+또 다른 YC 스타트업이 AI로 재료 과학을 혁신하겠다고 약속한다. 다른 점은 실제 연구실이 있다는 것, GPU만 있는 게 아니다. 아직 VC를 인내심 있게 만드는 재료를 발견한 사람을 기다리는 중.
+***** Comments
+- 재료 발견은 ML 훈련 데이터가 생성 비용이 높고(합성 실험) 가치가 높은 몇 안 되는 분야 중 하나다. ML이 차이를 만들 수 있는 좋은 영역이다.
+- 거대한 탐색 공간을 어떻게 처리하는지 궁금하다. ML로 좁혀도 연구실에서 검증하는 게 여전히 병목이다.
+- 배터리 분야에 이게 절실히 필요하다. 현재 리튬이온 개발은 기껏해야 점진적이다. 10% 개선만 해도 수십억 달러의 가치가 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Discovered Materials (YC W25) está contratando ingenieros de ML y laboratorio
+***** TLDR
+Startup respaldada por YC usando IA para descubrir nuevos materiales, especialmente para baterías y tecnología sostenible. Están contratando ingenieros de ML para entrenar modelos que predicen propiedades de materiales e ingenieros de laboratorio para sintetizar los candidatos. El sueño: encontrar mejores materiales para baterías más rápido que la I+D tradicional.
+***** Take
+Otra startup de YC prometiendo revolucionar la ciencia de materiales con IA. La diferencia aquí es que tienen laboratorios reales, no solo GPUs. Todavía esperando que alguien descubra un material que haga a los VCs pacientes.
+***** Comments
+- El descubrimiento de materiales es uno de los pocos lugares donde los datos de entrenamiento de ML son caros de crear (experimentos de síntesis) y muy valiosos. Buena área para que ML marque la diferencia.
+- Curioso cómo manejan el enorme espacio de búsqueda. Incluso con ML reduciéndolo, validar en laboratorio sigue siendo el cuello de botella.
+- El espacio de baterías necesita esto urgentemente. El desarrollo actual de litio-ion es incremental en el mejor de los casos. Una mejora del 10% valdría miles de millones.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Discovered Materials (YC W25) stellt ML- und Labor-Ingenieure ein
+***** TLDR
+YC-unterstütztes Startup nutzt KI zur Entdeckung neuer Materialien, besonders für Batterien und nachhaltige Technologie. Sie stellen ML-Ingenieure ein, um Modelle zu trainieren, die Materialeigenschaften vorhersagen, und Labor-Ingenieure, um Kandidaten tatsächlich zu synthetisieren. Der Traum: bessere Batteriematerialien schneller finden als traditionelle F&E.
+***** Take
+Ein weiteres YC-Startup, das verspricht, Materialwissenschaft mit KI zu revolutionieren. Der Unterschied hier ist, dass sie echte Labore haben, nicht nur GPUs. Warte immer noch darauf, dass jemand ein Material entdeckt, das VCs geduldig macht.
+***** Comments
+- Materialentdeckung ist einer der wenigen Bereiche, wo ML-Trainingsdaten sowohl teuer zu erstellen (Syntheseexperimente) als auch sehr wertvoll sind. Guter Bereich für ML, um einen Unterschied zu machen.
+- Interessiert mich, wie sie den riesigen Suchraum handhaben. Selbst wenn ML ihn eingrenzt, ist die Validierung im Labor immer noch der Engpass.
+- Der Batteriebereich braucht das dringend. Die aktuelle Lithium-Ionen-Entwicklung ist bestenfalls inkrementell. Eine 10%-Verbesserung wäre Milliarden wert.
