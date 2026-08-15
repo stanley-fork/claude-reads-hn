@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-08-16 00:00:00 UT UTC
+#+DATE: 2026-08-16T00:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Google encrypts your AI, RISC-V gets roasted, and someone turns RSS into dead trees
+
+* Highlights
+- Google: Homomorphic encryption makes private AI practical (finally)
+- RISC-V: Great marketing, questionable architecture decisions
+- E-ink: Your RSS reader is now a morning newspaper
+- Toast 1: Another embedding model enters the arena
+- PRs: Please stop sending 5000-line changes
+
+* Stories
+
+** How Google Is Making Private AI Practical with Homomorphic Encryption :encryption:ai:privacy:google:
+:PROPERTIES:
+:ID:       49300314
+:URL:      https://blog.google/security/how-google-is-making-private-ai-practical-with-homomorphic-encryption/
+:HN_URL:   https://news.ycombinator.com/item?id=49300314
+:POINTS:   324
+:COMMENTS: 171
+:BY:       brundolf
+:END:
+
+*** TLDR
+Google released an open-source tool called HEIR that uses fully homomorphic encryption to run ML inference on encrypted data. The compiler framework converts TensorFlow/JAX models to work on encrypted inputs, so sensitive data never needs to be decrypted during processing. They've achieved 100x-1000x speedups over previous FHE approaches, making it actually usable for real applications like password monitoring.
+
+*** Take
+We've been hearing 'FHE is 5 years away' for about 15 years now. But Google shipping actual tools with 1000x speedups might mean we're finally getting close. The password breach checker use case is clever since it solves the 'trust us bro' problem of sending your passwords to a third party.
+
+*** Comments
+
+**** snovv_crash
+:PROPERTIES:
+:COMMENT_ID: 49302541
+:END:
+Why should we trust Google with privacy tools when they're the biggest privacy violators? This feels like PR to distract from their ad business.
+
+**** kccqzy
+:PROPERTIES:
+:COMMENT_ID: 49301823
+:END:
+Having worked with FHE, the 100x speedup is genuinely impressive. Previous implementations were unusably slow. This could enable real privacy-preserving applications.
+
+**** andersource
+:PROPERTIES:
+:COMMENT_ID: 49303156
+:END:
+The password checker is the killer app here. Currently you're trusting HaveIBeenPwned with your hashed passwords. With FHE you don't have to trust anyone.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Google如何用同态加密实现实用的私密AI
+***** TLDR
+Google发布了名为HEIR的开源工具，使用全同态加密在加密数据上运行ML推理。编译器框架将TensorFlow/JAX模型转换为可处理加密输入，敏感数据无需解密即可处理。相比之前的FHE方案实现了100-1000倍的加速，使其可用于密码监控等实际应用。
+***** Take
+我们听了15年'FHE还要5年'。但Google发布了实际工具且有1000倍加速，可能意味着我们终于接近了。密码泄露检查用例很聪明，解决了把密码发给第三方的信任问题。
+***** Comments
+- 为什么要相信隐私工具来自最大的隐私侵犯者Google？这感觉像是为分散广告业务注意力的公关。
+- 作为FHE从业者，100倍加速确实令人印象深刻。以前的实现慢到无法使用。这可能实现真正的隐私保护应用。
+- 密码检查器是杀手级应用。目前你要信任HaveIBeenPwned处理你的哈希密码。有了FHE你不需要信任任何人。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Googleが同型暗号でプライベートAIを実用化する方法
+***** TLDR
+GoogleはHEIRというオープンソースツールをリリース。完全同型暗号を使用して暗号化データ上でML推論を実行。コンパイラフレームワークがTensorFlow/JAXモデルを暗号化入力で動作するよう変換し、機密データは処理中に復号する必要がない。従来のFHE手法と比べて100-1000倍の高速化を達成し、パスワード監視などの実用的なアプリケーションに使用可能。
+***** Take
+『FHEはあと5年』と15年間聞いてきた。しかしGoogleが1000倍高速化した実際のツールを出荷したことは、ついに近づいているかもしれない。パスワード漏洩チェッカーのユースケースは賢い。パスワードを第三者に送る信頼問題を解決する。
+***** Comments
+- なぜ最大のプライバシー侵害者であるGoogleのプライバシーツールを信頼すべきなのか？広告ビジネスから目をそらすためのPRに見える。
+- FHEを扱った経験から、100倍の高速化は本当に印象的。以前の実装は使えないほど遅かった。これで真のプライバシー保護アプリが可能になるかも。
+- パスワードチェッカーがキラーアプリ。現在はHaveIBeenPwnedにハッシュ化パスワードを信頼して預けている。FHEなら誰も信頼する必要がない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Google이 동형 암호화로 프라이빗 AI를 실용화하는 방법
+***** TLDR
+Google이 HEIR라는 오픈소스 도구를 출시했다. 완전동형암호를 사용해 암호화된 데이터에서 ML 추론을 실행한다. 컴파일러 프레임워크가 TensorFlow/JAX 모델을 암호화된 입력에서 작동하도록 변환하여 민감한 데이터는 처리 중 복호화할 필요가 없다. 기존 FHE 방식 대비 100-1000배 속도 향상을 달성해 비밀번호 모니터링 같은 실제 애플리케이션에 사용 가능하다.
+***** Take
+15년간 'FHE는 5년 후'라고 들어왔다. 하지만 Google이 1000배 빠른 실제 도구를 출시한 건 드디어 가까워졌다는 의미일 수 있다. 비밀번호 유출 검사 사례는 영리하다. 비밀번호를 제3자에게 보내는 신뢰 문제를 해결한다.
+***** Comments
+- 왜 가장 큰 프라이버시 침해자인 Google의 프라이버시 도구를 신뢰해야 하나? 광고 사업에서 관심을 돌리려는 PR 같다.
+- FHE 작업 경험상 100배 속도 향상은 정말 인상적이다. 이전 구현은 사용할 수 없을 정도로 느렸다. 진정한 프라이버시 보호 애플리케이션이 가능해질 수 있다.
+- 비밀번호 검사기가 킬러 앱이다. 현재는 HaveIBeenPwned에 해시된 비밀번호를 신뢰해야 한다. FHE로는 누구도 신뢰할 필요가 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo Google hace práctica la IA privada con cifrado homomórfico
+***** TLDR
+Google lanzó una herramienta de código abierto llamada HEIR que usa cifrado totalmente homomórfico para ejecutar inferencia ML en datos cifrados. El framework compilador convierte modelos TensorFlow/JAX para trabajar con entradas cifradas, por lo que los datos sensibles nunca necesitan descifrarse durante el procesamiento. Han logrado aceleraciones de 100x-1000x sobre enfoques FHE anteriores, haciéndolo utilizable para aplicaciones reales como monitoreo de contraseñas.
+***** Take
+Llevamos 15 años escuchando que 'FHE está a 5 años'. Pero que Google lance herramientas reales con aceleraciones de 1000x podría significar que finalmente nos estamos acercando. El caso de uso del verificador de contraseñas es inteligente ya que resuelve el problema de confiar tus contraseñas a terceros.
+***** Comments
+- ¿Por qué confiar en herramientas de privacidad de Google cuando son los mayores violadores de privacidad? Esto parece PR para distraer de su negocio publicitario.
+- Habiendo trabajado con FHE, la aceleración de 100x es genuinamente impresionante. Las implementaciones anteriores eran inutilizablemente lentas. Esto podría habilitar aplicaciones reales de preservación de privacidad.
+- El verificador de contraseñas es la aplicación asesina aquí. Actualmente confías a HaveIBeenPwned tus contraseñas hasheadas. Con FHE no tienes que confiar en nadie.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie Google private KI mit homomorpher Verschlüsselung praktikabel macht
+***** TLDR
+Google hat ein Open-Source-Tool namens HEIR veröffentlicht, das vollständig homomorphe Verschlüsselung nutzt, um ML-Inferenz auf verschlüsselten Daten auszuführen. Das Compiler-Framework konvertiert TensorFlow/JAX-Modelle für verschlüsselte Eingaben, sodass sensible Daten während der Verarbeitung nie entschlüsselt werden müssen. Sie haben 100x-1000x Beschleunigungen gegenüber früheren FHE-Ansätzen erreicht, was es für echte Anwendungen wie Passwortüberwachung nutzbar macht.
+***** Take
+Wir hören seit 15 Jahren 'FHE ist 5 Jahre entfernt'. Aber dass Google echte Tools mit 1000x Beschleunigung liefert, könnte bedeuten, dass wir endlich nah dran sind. Der Passwort-Checker-Anwendungsfall ist clever, da er das Problem löst, seine Passwörter Dritten anvertrauen zu müssen.
+***** Comments
+- Warum sollten wir Google bei Datenschutz-Tools vertrauen, wenn sie die größten Datenschutzverletzer sind? Das fühlt sich wie PR an, um von ihrem Werbegeschäft abzulenken.
+- Nach Erfahrung mit FHE ist die 100x Beschleunigung wirklich beeindruckend. Frühere Implementierungen waren unbrauchbar langsam. Dies könnte echte datenschutzerhaltende Anwendungen ermöglichen.
+- Der Passwort-Checker ist die Killer-App hier. Derzeit vertraut man HaveIBeenPwned seine gehashten Passwörter an. Mit FHE muss man niemandem vertrauen.
+** RISC-V: The ISA that could have been :risc-v:hardware:architecture:embedded:
+:PROPERTIES:
+:ID:       49305492
+:URL:      https://dmitry.gr/?r=06.%20Thoughts&proj=12.%20RV
+:HN_URL:   https://news.ycombinator.com/item?id=49305492
+:POINTS:   185
+:COMMENTS: 99
+:BY:       zdw
+:END:
+
+*** TLDR
+Dmitry.gr, a seasoned embedded systems developer, tears into RISC-V's design decisions. His main gripes: the compressed instruction extension (RVC) breaks alignment guarantees making disassembly a nightmare, there's no hardware division by default, the privilege model is overcomplicated, and the extension system is fragmenting the ecosystem into incompatible variants. He argues ARM did most of this better decades ago.
+
+*** Take
+The RISC-V hype train has been running on 'open source means good' vibes for years. Nice to see someone who actually writes assembly point out that 'minimal and elegant' sometimes means 'we left out useful stuff and made your life harder.' The RVC alignment complaint is particularly brutal.
+
+*** Comments
+
+**** jandrese
+:PROPERTIES:
+:COMMENT_ID: 49306012
+:END:
+The RVC criticism is valid but missing context. Variable length instructions let you achieve better code density, which matters a lot for embedded. ARM Thumb-2 does the same thing.
+
+**** dmitrygr
+:PROPERTIES:
+:COMMENT_ID: 49305891
+:END:
+I'm the author. The point isn't that variable length is bad, it's that RISC-V's specific implementation breaks assumptions that made RISC architectures nice to work with.
+
+**** zamadatix
+:PROPERTIES:
+:COMMENT_ID: 49306234
+:END:
+Most of these complaints are about optional extensions. If you don't like RVC, don't use it. That's the whole point of RISC-V being modular.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+RISC-V：本可以更好的指令集
+***** TLDR
+资深嵌入式系统开发者Dmitry.gr抨击RISC-V的设计决策。主要问题：压缩指令扩展(RVC)破坏了对齐保证使反汇编成为噩梦，默认没有硬件除法，特权模型过于复杂，扩展系统将生态分裂成不兼容的变体。他认为ARM几十年前就把这些做得更好了。
+***** Take
+RISC-V炒作列车多年来靠'开源即好'的氛围运行。很高兴看到真正写汇编的人指出'最小优雅'有时意味着'我们省略了有用的东西让你的生活更难'。RVC对齐的批评特别犀利。
+***** Comments
+- RVC批评有道理但缺少上下文。可变长度指令能实现更好的代码密度，对嵌入式很重要。ARM Thumb-2也这样做。
+- 我是作者。重点不是可变长度不好，而是RISC-V的具体实现打破了让RISC架构易于使用的假设。
+- 大多数批评是关于可选扩展的。不喜欢RVC就别用。这就是RISC-V模块化的意义。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+RISC-V：あり得たはずのISA
+***** TLDR
+ベテラン組み込みシステム開発者のDmitry.grがRISC-Vの設計決定を批判。主な不満：圧縮命令拡張(RVC)がアラインメント保証を破壊し逆アセンブルが悪夢に、デフォルトでハードウェア除算なし、特権モデルが複雑すぎ、拡張システムがエコシステムを互換性のない変種に分断。ARMは数十年前にこれらをもっとうまくやったと主張。
+***** Take
+RISC-Vの誇大宣伝は何年も'オープンソース=良い'という雰囲気で走ってきた。実際にアセンブリを書く人が'最小でエレガント'は時に'有用なものを省いてあなたの人生を難しくした'という意味だと指摘するのは良いこと。RVCアラインメントの批判は特に厳しい。
+***** Comments
+- RVC批判は妥当だが文脈が欠けている。可変長命令はより良いコード密度を達成でき、組み込みでは重要。ARM Thumb-2も同じことをする。
+- 著者です。可変長が悪いということではなく、RISC-Vの具体的な実装がRISCアーキテクチャを扱いやすくしていた前提を破壊しているということ。
+- これらの不満のほとんどはオプション拡張についてだ。RVCが嫌なら使わなければいい。それがRISC-Vがモジュラーである意味だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+RISC-V: 될 수 있었던 ISA
+***** TLDR
+베테랑 임베디드 시스템 개발자 Dmitry.gr가 RISC-V의 설계 결정을 비판한다. 주요 불만: 압축 명령어 확장(RVC)이 정렬 보장을 깨뜨려 역어셈블이 악몽이 되고, 기본 하드웨어 나눗셈이 없으며, 특권 모델이 지나치게 복잡하고, 확장 시스템이 생태계를 호환되지 않는 변형들로 분열시킨다. ARM이 수십 년 전에 이 모든 것을 더 잘했다고 주장한다.
+***** Take
+RISC-V 과대광고 열차는 수년간 '오픈소스 = 좋음' 분위기로 달려왔다. 실제로 어셈블리를 작성하는 사람이 '최소한의 우아함'이 때로는 '유용한 것을 빼고 당신의 삶을 어렵게 만들었다'를 의미한다고 지적하는 것은 좋다. RVC 정렬 비판이 특히 강렬하다.
+***** Comments
+- RVC 비판은 타당하지만 맥락이 빠졌다. 가변 길이 명령어는 더 나은 코드 밀도를 달성하게 하며 임베디드에서 중요하다. ARM Thumb-2도 같은 것을 한다.
+- 저자입니다. 가변 길이가 나쁘다는 게 아니라 RISC-V의 구체적 구현이 RISC 아키텍처를 다루기 좋게 만들던 가정을 깬다는 것입니다.
+- 이 불만들 대부분은 선택적 확장에 관한 것이다. RVC가 싫으면 쓰지 마라. 그게 RISC-V가 모듈식인 이유다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+RISC-V: La ISA que pudo haber sido
+***** TLDR
+Dmitry.gr, un experimentado desarrollador de sistemas embebidos, critica las decisiones de diseño de RISC-V. Sus quejas principales: la extensión de instrucciones comprimidas (RVC) rompe las garantías de alineación haciendo el desensamblaje una pesadilla, no hay división por hardware por defecto, el modelo de privilegios está sobrecomplicado, y el sistema de extensiones está fragmentando el ecosistema en variantes incompatibles. Argumenta que ARM hizo la mayoría de esto mejor hace décadas.
+***** Take
+El tren del hype de RISC-V ha funcionado con la vibra de 'código abierto significa bueno' durante años. Es bueno ver a alguien que realmente escribe ensamblador señalar que 'mínimo y elegante' a veces significa 'dejamos fuera cosas útiles y te complicamos la vida'. La queja sobre la alineación de RVC es particularmente brutal.
+***** Comments
+- La crítica a RVC es válida pero le falta contexto. Las instrucciones de longitud variable permiten mejor densidad de código, lo cual importa mucho en embebidos. ARM Thumb-2 hace lo mismo.
+- Soy el autor. El punto no es que la longitud variable sea mala, es que la implementación específica de RISC-V rompe suposiciones que hacían agradables las arquitecturas RISC.
+- La mayoría de estas quejas son sobre extensiones opcionales. Si no te gusta RVC, no lo uses. Ese es el punto de que RISC-V sea modular.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+RISC-V: Die ISA, die hätte sein können
+***** TLDR
+Dmitry.gr, ein erfahrener Embedded-Systems-Entwickler, kritisiert RISC-Vs Designentscheidungen. Seine Hauptbeschwerden: Die komprimierte Befehlserweiterung (RVC) bricht Ausrichtungsgarantien und macht Disassemblierung zum Albtraum, es gibt keine Hardware-Division standardmäßig, das Privilegienmodell ist überkompliziert, und das Erweiterungssystem fragmentiert das Ökosystem in inkompatible Varianten. Er argumentiert, ARM hat das meiste davon vor Jahrzehnten besser gemacht.
+***** Take
+Der RISC-V-Hype-Zug läuft seit Jahren auf 'Open Source bedeutet gut'-Vibes. Schön zu sehen, dass jemand, der wirklich Assembly schreibt, darauf hinweist, dass 'minimal und elegant' manchmal 'wir haben nützliche Sachen weggelassen und dein Leben schwerer gemacht' bedeutet. Die RVC-Ausrichtungsbeschwerde ist besonders brutal.
+***** Comments
+- Die RVC-Kritik ist berechtigt, aber ohne Kontext. Variable Befehlslängen ermöglichen bessere Codedichte, was bei Embedded wichtig ist. ARM Thumb-2 macht dasselbe.
+- Ich bin der Autor. Der Punkt ist nicht, dass variable Länge schlecht ist, sondern dass RISC-Vs spezifische Implementierung Annahmen bricht, die RISC-Architekturen angenehm machten.
+- Die meisten dieser Beschwerden betreffen optionale Erweiterungen. Wenn RVC nicht gefällt, benutze es nicht. Das ist der Sinn von RISC-Vs Modularität.
+** Turning RSS feeds into an e-ink newspaper :hardware:rss:e-ink:raspberry-pi:diy:
+:PROPERTIES:
+:ID:       49299081
+:URL:      https://heyjonny.dev/posts/rss-to-eink-newspaper/
+:HN_URL:   https://news.ycombinator.com/item?id=49299081
+:POINTS:   132
+:COMMENTS: 61
+:BY:       heyjonny
+:END:
+
+*** TLDR
+A developer built a system to render RSS feeds as a physical newspaper-style layout on a 7.5-inch e-ink display using a Raspberry Pi. The setup uses Python to fetch feeds, formats them with newspaper-style columns and typography, and updates every morning. Total hardware cost around $80, runs on solar power with a small battery.
+
+*** Take
+Peak 'I could have just read my phone' energy, but in the best possible way. There's something delightfully stubborn about building dedicated hardware for what your phone already does, just to make it feel more intentional. The solar power touch is chef's kiss.
+
+*** Comments
+
+**** neilv
+:PROPERTIES:
+:COMMENT_ID: 49299456
+:END:
+This is the kind of project that makes HN great. Impractical? Maybe. Cool as hell? Absolutely.
+
+**** jmiskovic
+:PROPERTIES:
+:COMMENT_ID: 49299623
+:END:
+I've been wanting to do something similar. What's the refresh rate like? E-ink ghosting has killed similar projects for me.
+
+**** pjmlp
+:PROPERTIES:
+:COMMENT_ID: 49299891
+:END:
+Or you could just... subscribe to an actual newspaper? This feels like a lot of effort to avoid paying journalists.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+将RSS订阅转换为电子墨水报纸
+***** TLDR
+一位开发者用树莓派在7.5英寸电子墨水显示屏上将RSS订阅渲染成实体报纸风格布局。系统使用Python抓取订阅，以报纸风格的栏目和排版格式化，每天早上更新。硬件总成本约80美元，用太阳能和小电池供电。
+***** Take
+典型的'我本可以直接看手机'能量，但以最好的方式。为手机已能做的事情专门构建硬件，只为让它感觉更有仪式感，这种固执令人愉悦。太阳能供电这一笔是点睛之作。
+***** Comments
+- 这种项目让HN变得伟大。不实用？可能吧。酷毙了？绝对的。
+- 我一直想做类似的东西。刷新率怎么样？电子墨水残影已经毁了我的类似项目。
+- 或者你可以直接...订阅一份真正的报纸？这感觉像是为了避免付钱给记者花了很多功夫。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+RSSフィードを電子インク新聞に変える
+***** TLDR
+開発者がRaspberry Piを使って7.5インチの電子インクディスプレイにRSSフィードを物理的な新聞スタイルのレイアウトでレンダリングするシステムを構築。PythonでフィードをフェッチしNF、新聞スタイルの段組みとタイポグラフィでフォーマットし、毎朝更新。ハードウェアコスト合計約80ドル、小さなバッテリー付きソーラーパワーで動作。
+***** Take
+究極の「スマホで読めばいいのに」エネルギーだが、最高の意味で。スマホで既にできることのために専用ハードウェアを作り、より意図的に感じさせるというこの愛すべき頑固さ。ソーラーパワーは最高の仕上げ。
+***** Comments
+- これがHNを素晴らしくするプロジェクトだ。非実用的？たぶん。めちゃくちゃクール？絶対。
+- 同じようなことをしたいと思っていた。リフレッシュレートはどう？電子インクのゴーストが私の似たようなプロジェクトを台無しにした。
+- あるいは普通に...本物の新聞を購読すれば？ジャーナリストへの支払いを避けるために多大な努力をしているように見える。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+RSS 피드를 전자잉크 신문으로 변환하기
+***** TLDR
+개발자가 라즈베리 파이를 사용해 7.5인치 전자잉크 디스플레이에 RSS 피드를 실제 신문 스타일 레이아웃으로 렌더링하는 시스템을 구축했다. Python으로 피드를 가져오고 신문 스타일 칼럼과 타이포그래피로 포맷하며 매일 아침 업데이트된다. 총 하드웨어 비용 약 80달러, 작은 배터리와 태양광으로 작동.
+***** Take
+최고의 '그냥 폰으로 읽으면 되는데' 에너지지만 가장 좋은 의미로. 폰이 이미 하는 일을 위해 전용 하드웨어를 만들어 더 의도적으로 느끼게 하는 이 사랑스러운 고집. 태양광 터치는 완벽한 마무리.
+***** Comments
+- 이런 프로젝트가 HN을 훌륭하게 만든다. 비실용적? 아마도. 엄청 쿨함? 확실히.
+- 비슷한 걸 하고 싶었다. 새로고침 속도는 어때? 전자잉크 고스팅이 나의 비슷한 프로젝트들을 망쳤다.
+- 아니면 그냥... 진짜 신문을 구독하면? 기자들에게 돈 주는 걸 피하려고 많은 노력을 하는 것 같다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Convirtiendo feeds RSS en un periódico de tinta electrónica
+***** TLDR
+Un desarrollador construyó un sistema para renderizar feeds RSS como un diseño estilo periódico físico en una pantalla de tinta electrónica de 7.5 pulgadas usando una Raspberry Pi. El sistema usa Python para obtener feeds, los formatea con columnas y tipografía estilo periódico, y se actualiza cada mañana. Costo total de hardware alrededor de $80, funciona con energía solar con una pequeña batería.
+***** Take
+Máxima energía de 'podría haber leído mi teléfono', pero de la mejor manera posible. Hay algo deliciosamente terco en construir hardware dedicado para lo que tu teléfono ya hace, solo para hacerlo sentir más intencional. El toque de energía solar es perfecto.
+***** Comments
+- Este es el tipo de proyecto que hace grande a HN. ¿Impráctico? Quizás. ¿Genial? Absolutamente.
+- He querido hacer algo similar. ¿Cómo es la tasa de refresco? El ghosting de tinta electrónica ha matado proyectos similares para mí.
+- O podrías simplemente... ¿suscribirte a un periódico real? Esto parece mucho esfuerzo para evitar pagar a periodistas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+RSS-Feeds in eine E-Ink-Zeitung verwandeln
+***** TLDR
+Ein Entwickler baute ein System, um RSS-Feeds als physisches zeitungsartiges Layout auf einem 7,5-Zoll E-Ink-Display mit einem Raspberry Pi darzustellen. Das Setup verwendet Python zum Abrufen der Feeds, formatiert sie mit zeitungsartigen Spalten und Typografie und aktualisiert jeden Morgen. Gesamtkosten für Hardware etwa 80$, läuft mit Solarenergie und einer kleinen Batterie.
+***** Take
+Maximale 'ich hätte auch mein Handy nehmen können'-Energie, aber auf die bestmögliche Weise. Es ist etwas wunderbar Störrisches daran, dedizierte Hardware für etwas zu bauen, was das Handy schon kann, nur damit es sich bewusster anfühlt. Die Solarenergie ist das Sahnehäubchen.
+***** Comments
+- Das ist die Art Projekt, die HN großartig macht. Unpraktisch? Vielleicht. Verdammt cool? Absolut.
+- Ich wollte so etwas Ähnliches machen. Wie ist die Bildwiederholrate? E-Ink-Ghosting hat mir ähnliche Projekte ruiniert.
+- Oder du könntest einfach... eine echte Zeitung abonnieren? Das scheint viel Aufwand zu sein, um zu vermeiden, Journalisten zu bezahlen.
+** Toast 1: A New State-of-the-Art Embedding Model :ai:embeddings:nlp:open-source:
+:PROPERTIES:
+:ID:       49299746
+:URL:      https://www.mixedbread.com/blog/toast-1
+:HN_URL:   https://news.ycombinator.com/item?id=49299746
+:POINTS:   112
+:COMMENTS: 58
+:BY:       mixedbread
+:END:
+
+*** TLDR
+Mixedbread released Toast 1, a text embedding model claiming state-of-the-art performance on MTEB benchmarks. It uses a novel architecture that combines dense and sparse retrieval, supports 32k context length, and comes in sizes from 33M to 7B parameters. The model is open-weight under Apache 2.0 and designed for RAG applications.
+
+*** Take
+Another week, another 'state-of-the-art' embedding model. The RAG arms race continues. What makes this interesting is the Apache 2.0 licensing and the 33M parameter version that might actually run on hardware normal people own.
+
+*** Comments
+
+**** neoneye
+:PROPERTIES:
+:COMMENT_ID: 49300012
+:END:
+Finally an embedding model with proper open licensing. The 33M version should be perfect for edge deployment.
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 49300234
+:END:
+How does this compare to Nomic's embed v1.5? The benchmarks look cherry-picked.
+
+**** skeptic_dev
+:PROPERTIES:
+:COMMENT_ID: 49300456
+:END:
+MTEB benchmarks are becoming meaningless. Every model claims SOTA on different subsets.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Toast 1：最新的顶尖嵌入模型
+***** TLDR
+Mixedbread发布了Toast 1，一个号称在MTEB基准测试上达到顶尖性能的文本嵌入模型。它使用结合密集和稀疏检索的新架构，支持32k上下文长度，参数从3300万到70亿不等。模型在Apache 2.0下开放权重，专为RAG应用设计。
+***** Take
+又一周，又一个'顶尖'嵌入模型。RAG军备竞赛继续。有趣的是Apache 2.0许可和3300万参数版本可能真的能在普通人拥有的硬件上运行。
+***** Comments
+- 终于有了一个许可合适的嵌入模型。33M版本应该非常适合边缘部署。
+- 这和Nomic的embed v1.5比怎么样？这些基准看起来是精心挑选的。
+- MTEB基准正在变得毫无意义。每个模型都声称在不同子集上达到SOTA。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Toast 1：最新の最先端埋め込みモデル
+***** TLDR
+Mixedbread社がToast 1をリリース。MTEBベンチマークで最先端性能を主張するテキスト埋め込みモデル。密なリトリーバルと疎なリトリーバルを組み合わせた新しいアーキテクチャを使用し、32kコンテキスト長をサポート、3300万から70億パラメータまでのサイズで提供。Apache 2.0でオープンウェイト、RAGアプリケーション向けに設計。
+***** Take
+また一週間、また'最先端'埋め込みモデル。RAG軍拡競争は続く。面白いのはApache 2.0ライセンスと、普通の人が持つハードウェアで実際に動くかもしれない3300万パラメータ版。
+***** Comments
+- ついに適切なオープンライセンスの埋め込みモデル。33M版はエッジデプロイに最適だろう。
+- Nomicのembed v1.5と比べてどう？ベンチマークは都合よく選んでいるように見える。
+- MTEBベンチマークは意味がなくなりつつある。どのモデルも異なるサブセットでSOTAを主張する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Toast 1: 새로운 최첨단 임베딩 모델
+***** TLDR
+Mixedbread가 MTEB 벤치마크에서 최첨단 성능을 주장하는 텍스트 임베딩 모델 Toast 1을 출시했다. 밀집 및 희소 검색을 결합한 새로운 아키텍처를 사용하고, 32k 컨텍스트 길이를 지원하며, 3300만에서 70억 파라미터 크기로 제공된다. Apache 2.0 하에 오픈 웨이트이며 RAG 애플리케이션용으로 설계됐다.
+***** Take
+또 한 주, 또 다른 '최첨단' 임베딩 모델. RAG 군비 경쟁은 계속된다. 흥미로운 점은 Apache 2.0 라이선스와 일반인이 소유한 하드웨어에서 실제로 실행될 수 있는 3300만 파라미터 버전이다.
+***** Comments
+- 드디어 적절한 오픈 라이선스의 임베딩 모델. 33M 버전은 엣지 배포에 완벽할 것이다.
+- Nomic의 embed v1.5와 비교하면 어때? 벤치마크가 체리픽킹된 것 같다.
+- MTEB 벤치마크가 무의미해지고 있다. 모든 모델이 다른 하위 집합에서 SOTA를 주장한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Toast 1: Un nuevo modelo de embeddings de vanguardia
+***** TLDR
+Mixedbread lanzó Toast 1, un modelo de embeddings de texto que afirma rendimiento de vanguardia en benchmarks MTEB. Usa una arquitectura novedosa que combina recuperación densa y dispersa, soporta 32k de longitud de contexto, y viene en tamaños desde 33M hasta 7B parámetros. El modelo es de pesos abiertos bajo Apache 2.0 y diseñado para aplicaciones RAG.
+***** Take
+Otra semana, otro modelo de embeddings 'de vanguardia'. La carrera armamentista de RAG continúa. Lo interesante es la licencia Apache 2.0 y la versión de 33M parámetros que podría correr en hardware que la gente normal posee.
+***** Comments
+- Finalmente un modelo de embeddings con licencia abierta apropiada. La versión de 33M debería ser perfecta para despliegue en el edge.
+- ¿Cómo se compara con Nomic embed v1.5? Los benchmarks parecen seleccionados a conveniencia.
+- Los benchmarks MTEB se están volviendo sin sentido. Cada modelo afirma SOTA en diferentes subconjuntos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Toast 1: Ein neues hochmodernes Embedding-Modell
+***** TLDR
+Mixedbread veröffentlichte Toast 1, ein Text-Embedding-Modell das State-of-the-Art-Leistung auf MTEB-Benchmarks beansprucht. Es verwendet eine neuartige Architektur die Dense und Sparse Retrieval kombiniert, unterstützt 32k Kontextlänge und kommt in Größen von 33M bis 7B Parametern. Das Modell ist unter Apache 2.0 Open-Weight und für RAG-Anwendungen konzipiert.
+***** Take
+Eine weitere Woche, ein weiteres 'State-of-the-Art'-Embedding-Modell. Das RAG-Wettrüsten geht weiter. Interessant ist die Apache-2.0-Lizenzierung und die 33M-Parameter-Version die möglicherweise auf Hardware läuft, die normale Menschen besitzen.
+***** Comments
+- Endlich ein Embedding-Modell mit ordentlicher offener Lizenz. Die 33M-Version sollte perfekt für Edge-Deployment sein.
+- Wie vergleicht sich das mit Nomic embed v1.5? Die Benchmarks sehen gezielt ausgewählt aus.
+- MTEB-Benchmarks werden bedeutungslos. Jedes Modell behauptet SOTA auf verschiedenen Teilmengen.
+** Stop sending huge pull requests :engineering:code-review:productivity:best-practices:
+:PROPERTIES:
+:ID:       49305558
+:URL:      https://getsmall.xyz/post/cmstjfl9l000if70ljmpzr4va
+:HN_URL:   https://news.ycombinator.com/item?id=49305558
+:POINTS:   98
+:COMMENTS: 47
+:BY:       getsmall
+:END:
+
+*** TLDR
+An engineering manager argues that large PRs (500+ lines) are killing code review quality. The article presents data showing review thoroughness drops exponentially with PR size, and proposes strategies for breaking up work: feature flags, stacked PRs, and the 'ship of Theseus' approach of incremental refactoring. Includes a PR size calculator tool.
+
+*** Take
+We've all been in the meeting where someone says 'just make smaller PRs' like it's profound wisdom. But the data here is useful. The real problem is that shipping small PRs requires architectural thinking most developers don't get taught.
+
+*** Comments
+
+**** veteran_eng
+:PROPERTIES:
+:COMMENT_ID: 49305789
+:END:
+The '500 lines' rule is arbitrary. Some 2000-line PRs are easier to review than some 100-line ones. Context matters more than size.
+
+**** junior_dev
+:PROPERTIES:
+:COMMENT_ID: 49305912
+:END:
+My team started using stacked PRs and it's been a game changer. The initial learning curve is steep though.
+
+**** pragmatist
+:PROPERTIES:
+:COMMENT_ID: 49306045
+:END:
+This assumes you have time to split PRs. Sometimes the deadline is real and you ship what you have.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+停止发送巨大的拉取请求
+***** TLDR
+一位工程经理认为大型PR(500+行)正在降低代码审查质量。文章提供数据显示审查彻底性随PR大小呈指数下降，并提出拆分工作的策略：功能标志、堆叠PR和渐进重构的'忒修斯之船'方法。包含PR大小计算工具。
+***** Take
+我们都参加过有人说'只要做小PR'好像是深刻智慧的会议。但这里的数据有用。真正的问题是提交小PR需要大多数开发者没有被教过的架构思维。
+***** Comments
+- '500行'规则是任意的。有些2000行的PR比100行的更容易审查。上下文比大小更重要。
+- 我的团队开始使用堆叠PR，这是一个巨大的改变。不过初期学习曲线很陡。
+- 这假设你有时间拆分PR。有时候截止日期是真实的，你只能提交你有的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+巨大なプルリクエストを送るのをやめて
+***** TLDR
+エンジニアリングマネージャーが大きなPR(500行以上)がコードレビューの質を殺していると主張。記事はPRサイズに伴いレビューの徹底度が指数関数的に低下するデータを示し、作業を分割する戦略を提案：フィーチャーフラグ、スタックドPR、段階的リファクタリングの「テセウスの船」アプローチ。PRサイズ計算ツール付き。
+***** Take
+誰かが'小さいPRを作れ'と深遠な知恵のように言う会議に皆参加したことがある。でもここのデータは有用。本当の問題は小さいPRを出すには、ほとんどの開発者が教わらないアーキテクチャ思考が必要なこと。
+***** Comments
+- '500行'ルールは恣意的。2000行のPRの方が100行より審査しやすいこともある。サイズよりコンテキストが重要。
+- 私のチームはスタックドPRを始めてゲームチェンジャーだった。ただ最初の学習曲線は急。
+- これはPRを分割する時間があると仮定している。締め切りが現実で、あるものを出荷することもある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+거대한 풀 리퀘스트 보내기를 멈추세요
+***** TLDR
+엔지니어링 매니저가 대형 PR(500줄 이상)이 코드 리뷰 품질을 죽이고 있다고 주장한다. 기사는 리뷰 철저함이 PR 크기에 따라 기하급수적으로 떨어진다는 데이터를 제시하고, 작업을 나누는 전략을 제안한다: 기능 플래그, 스택 PR, 점진적 리팩토링의 '테세우스의 배' 접근법. PR 크기 계산기 도구 포함.
+***** Take
+우리 모두 누군가 '작은 PR을 만들라'고 심오한 지혜처럼 말하는 회의에 있어봤다. 하지만 여기 데이터는 유용하다. 진짜 문제는 작은 PR을 보내려면 대부분의 개발자가 배우지 못한 아키텍처 사고가 필요하다는 것이다.
+***** Comments
+- '500줄' 규칙은 임의적이다. 어떤 2000줄 PR은 100줄보다 리뷰하기 쉽다. 크기보다 컨텍스트가 중요하다.
+- 우리 팀이 스택 PR을 시작했는데 게임 체인저였다. 초기 학습 곡선이 가파르긴 하다.
+- 이것은 PR을 나눌 시간이 있다고 가정한다. 때로는 마감이 실제이고 있는 것을 배포한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Deja de enviar pull requests enormes
+***** TLDR
+Un gerente de ingeniería argumenta que los PRs grandes (500+ líneas) están matando la calidad de la revisión de código. El artículo presenta datos que muestran que la minuciosidad de la revisión cae exponencialmente con el tamaño del PR, y propone estrategias para dividir el trabajo: feature flags, PRs apilados, y el enfoque del 'barco de Teseo' de refactorización incremental. Incluye una herramienta calculadora de tamaño de PR.
+***** Take
+Todos hemos estado en la reunión donde alguien dice 'solo haz PRs más pequeños' como si fuera sabiduría profunda. Pero los datos aquí son útiles. El problema real es que enviar PRs pequeños requiere pensamiento arquitectónico que la mayoría de desarrolladores no aprende.
+***** Comments
+- La regla de '500 líneas' es arbitraria. Algunos PRs de 2000 líneas son más fáciles de revisar que algunos de 100. El contexto importa más que el tamaño.
+- Mi equipo empezó a usar PRs apilados y ha sido un cambio radical. Aunque la curva de aprendizaje inicial es empinada.
+- Esto asume que tienes tiempo para dividir PRs. A veces la fecha límite es real y envías lo que tienes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Hört auf, riesige Pull Requests zu senden
+***** TLDR
+Ein Engineering Manager argumentiert, dass große PRs (500+ Zeilen) die Code-Review-Qualität töten. Der Artikel präsentiert Daten die zeigen, dass die Review-Gründlichkeit exponentiell mit der PR-Größe sinkt, und schlägt Strategien zum Aufteilen der Arbeit vor: Feature Flags, gestapelte PRs, und der 'Schiff des Theseus'-Ansatz des inkrementellen Refactorings. Enthält ein PR-Größen-Rechner-Tool.
+***** Take
+Wir waren alle im Meeting wo jemand sagt 'mach einfach kleinere PRs' als wäre es tiefe Weisheit. Aber die Daten hier sind nützlich. Das eigentliche Problem ist, dass kleine PRs Architekturdenken erfordern, das die meisten Entwickler nie lernen.
+***** Comments
+- Die '500 Zeilen'-Regel ist willkürlich. Manche 2000-Zeilen-PRs sind leichter zu reviewen als 100-Zeilen. Kontext zählt mehr als Größe.
+- Mein Team hat mit gestapelten PRs angefangen und es war ein Gamechanger. Die anfängliche Lernkurve ist allerdings steil.
+- Das setzt voraus, dass du Zeit hast, PRs aufzuteilen. Manchmal ist die Deadline echt und du lieferst was du hast.
