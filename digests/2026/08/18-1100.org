@@ -1,0 +1,500 @@
+#+TITLE: HN Digest 2026-08-18 11:00:00 UT UTC
+#+DATE: 2026-08-18T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+AI writes buggy code, Copilot autofix breaks Snowflake, and only 5 humans have seen the color olo
+
+* Highlights
+- Copilot's autofix introduced a critical injection flaw into Snowflake's CI/CD
+- DuckDB goes client-server with Quack protocol
+- AI;DR: the new TL;DR for AI slop you refuse to read
+
+* Stories
+
+** GitHub Copilot Autofix Introduced Snowflake Jira Breach Vulnerability :security:ai:github:copilot:cicd:
+:PROPERTIES:
+:ID:       49331423
+:URL:      https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug
+:HN_URL:   https://news.ycombinator.com/item?id=49331423
+:POINTS:   349
+:COMMENTS: 137
+:BY:       todsacerdoti
+:END:
+
+*** TLDR
+Wiz's AI security agent found a shell injection vulnerability in Snowflake's GitHub Actions workflow that was introduced by a PR co-authored by GitHub Copilot Autofix. The flaw allowed unauthenticated users to execute arbitrary commands by opening a GitHub issue with a crafted title, exposing Jira credentials. The vulnerable code replaced a safe env + jq pattern with direct string interpolation. Patched same day after disclosure.
+
+*** Take
+AI coding assistant removes security best practice, AI security agent finds the hole 5 days later. We've achieved full circle. The machines are now auditing each other's mistakes.
+
+*** Comments
+
+**** imglorp
+:PROPERTIES:
+:COMMENT_ID: 49332145
+:END:
+Wait, so Copilot flagged its own generated code as 'all clear' while introducing a textbook injection vulnerability? That's... special.
+
+**** tptacek
+:PROPERTIES:
+:COMMENT_ID: 49332387
+:END:
+The real lesson here isn't that AI is bad at security. It's that CI/CD pipelines are a minefield and most teams don't review workflow changes with the same scrutiny as application code.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+GitHub Copilot自动修复引入了Snowflake Jira漏洞
+***** TLDR
+Wiz的AI安全代理在Snowflake的GitHub Actions工作流中发现了一个shell注入漏洞,该漏洞是由GitHub Copilot Autofix共同编写的PR引入的。该漏洞允许未经身份验证的用户通过打开带有精心构造标题的GitHub issue来执行任意命令,从而暴露Jira凭据。漏洞代码用直接字符串插值替换了安全的env + jq模式。披露后当天修复。
+***** Take
+AI编码助手删除了安全最佳实践,5天后AI安全代理发现了漏洞。我们已经完成了闭环。机器们现在正在互相审计对方的错误。
+***** Comments
+- 等等,Copilot把自己生成的代码标记为'全部通过',同时引入了一个教科书级别的注入漏洞?这...真是特别。
+- 这里真正的教训不是AI不擅长安全。而是CI/CD流水线是雷区,大多数团队审查工作流变更时不像审查应用代码那样严格。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GitHub Copilot AutofixがSnowflake Jira侵害の脆弱性を導入
+***** TLDR
+WizのAIセキュリティエージェントが、GitHub Copilot Autofixが共同作成したPRによって導入されたSnowflakeのGitHub Actionsワークフローにシェルインジェクションの脆弱性を発見。この欠陥により、未認証ユーザーが巧妙なタイトルのGitHub issueを開くことで任意のコマンドを実行でき、Jira認証情報が露出。脆弱なコードは安全なenv + jqパターンを直接文字列補間に置き換えていた。報告後同日に修正。
+***** Take
+AIコーディングアシスタントがセキュリティのベストプラクティスを削除し、5日後にAIセキュリティエージェントが穴を発見。完全な循環を達成した。機械たちは今やお互いのミスを監査している。
+***** Comments
+- ちょっと待って、Copilotは教科書通りのインジェクション脆弱性を導入しながら、自分が生成したコードに「問題なし」のフラグを立てた？それは...特別だね。
+- ここでの本当の教訓はAIがセキュリティに弱いということではない。CI/CDパイプラインは地雷原であり、ほとんどのチームはワークフローの変更をアプリケーションコードと同じ精度で審査していないということだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+GitHub Copilot Autofix가 Snowflake Jira 침해 취약점을 도입
+***** TLDR
+Wiz의 AI 보안 에이전트가 GitHub Copilot Autofix가 공동 작성한 PR에 의해 도입된 Snowflake GitHub Actions 워크플로우의 셸 인젝션 취약점을 발견했다. 이 결함으로 인해 인증되지 않은 사용자가 조작된 제목의 GitHub 이슈를 열어 임의의 명령을 실행하고 Jira 자격 증명을 노출시킬 수 있었다. 취약한 코드는 안전한 env + jq 패턴을 직접 문자열 보간으로 대체했다. 공개 당일 패치됨.
+***** Take
+AI 코딩 어시스턴트가 보안 모범 사례를 제거하고, 5일 후 AI 보안 에이전트가 구멍을 발견했다. 완전한 순환을 달성했다. 기계들이 이제 서로의 실수를 감사하고 있다.
+***** Comments
+- 잠깐, Copilot이 교과서적인 인젝션 취약점을 도입하면서 자신이 생성한 코드에 '모두 정상'이라고 표시했다고? 그거... 특별하네.
+- 여기서 진짜 교훈은 AI가 보안에 약하다는 게 아니다. CI/CD 파이프라인이 지뢰밭이고 대부분의 팀이 워크플로우 변경을 애플리케이션 코드만큼 엄격하게 검토하지 않는다는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+GitHub Copilot Autofix introdujo una vulnerabilidad de brecha en Snowflake Jira
+***** TLDR
+El agente de seguridad AI de Wiz encontró una vulnerabilidad de inyección de shell en el flujo de trabajo de GitHub Actions de Snowflake que fue introducida por un PR coautor de GitHub Copilot Autofix. La falla permitía a usuarios no autenticados ejecutar comandos arbitrarios abriendo un issue de GitHub con un título manipulado, exponiendo credenciales de Jira. El código vulnerable reemplazó un patrón seguro env + jq con interpolación directa de strings. Parcheado el mismo día tras la divulgación.
+***** Take
+El asistente de código AI elimina la mejor práctica de seguridad, el agente de seguridad AI encuentra el agujero 5 días después. Hemos logrado el círculo completo. Las máquinas ahora se auditan mutuamente sus errores.
+***** Comments
+- Espera, ¿Copilot marcó su propio código generado como 'todo correcto' mientras introducía una vulnerabilidad de inyección de libro de texto? Eso es... especial.
+- La verdadera lección aquí no es que la IA sea mala en seguridad. Es que los pipelines CI/CD son un campo minado y la mayoría de los equipos no revisan los cambios de flujo de trabajo con el mismo escrutinio que el código de aplicación.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+GitHub Copilot Autofix führte Snowflake Jira-Sicherheitslücke ein
+***** TLDR
+Der AI-Sicherheitsagent von Wiz fand eine Shell-Injection-Schwachstelle in Snowflakes GitHub Actions Workflow, die durch einen von GitHub Copilot Autofix mitautorierten PR eingeführt wurde. Der Fehler ermöglichte es nicht authentifizierten Benutzern, beliebige Befehle auszuführen, indem sie ein GitHub-Issue mit einem manipulierten Titel öffneten und Jira-Anmeldedaten offenlegten. Der verwundbare Code ersetzte ein sicheres env + jq-Muster durch direkte String-Interpolation. Am selben Tag nach der Offenlegung gepatcht.
+***** Take
+AI-Codierassistent entfernt Best Practice für Sicherheit, AI-Sicherheitsagent findet das Loch 5 Tage später. Wir haben den vollständigen Kreis erreicht. Die Maschinen prüfen jetzt gegenseitig ihre Fehler.
+***** Comments
+- Moment, Copilot hat also seinen eigenen generierten Code als 'alles klar' markiert, während es eine Lehrbuch-Injection-Schwachstelle einführte? Das ist... besonders.
+- Die wahre Lektion hier ist nicht, dass AI schlecht in Sicherheit ist. Es ist, dass CI/CD-Pipelines ein Minenfeld sind und die meisten Teams Workflow-Änderungen nicht mit der gleichen Sorgfalt prüfen wie Anwendungscode.
+** A Preview of DuckDB v2.0 :database:duckdb:sql:analytics:
+:PROPERTIES:
+:ID:       49330781
+:URL:      https://duckdb.org/2026/08/17/duckdb-20-highlights
+:HN_URL:   https://news.ycombinator.com/item?id=49330781
+:POINTS:   588
+:COMMENTS: 107
+:BY:       Jeaye
+:END:
+
+*** TLDR
+DuckDB v2.0 introduces client-server mode via the Quack protocol, allowing any DuckDB instance to serve databases over the network. Other highlights: VARIANT type for semi-structured data (JSON on steroids), database triggers, async I/O for dramatically faster network storage access, new SQL features like NEAREST joins for vector search, and DML inside CTEs. The major version bump includes a new storage format and SQL parser.
+
+*** Take
+DuckDB just became the database that does everything except make you coffee. Client-server mode means the 'it's just an embedded database' era is officially over.
+
+*** Comments
+
+**** jfkw
+:PROPERTIES:
+:COMMENT_ID: 49331012
+:END:
+The CONNECT statement routing queries to PostgreSQL is brilliant. Finally a single entry point for heterogeneous data sources.
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 49331234
+:END:
+VARIANT type with automatic shredding is going to make log ingestion so much nicer. No more schema-on-read headaches.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+DuckDB v2.0预览
+***** TLDR
+DuckDB v2.0通过Quack协议引入客户端-服务器模式,允许任何DuckDB实例通过网络提供数据库服务。其他亮点:用于半结构化数据的VARIANT类型(增强版JSON)、数据库触发器、显著提升网络存储访问速度的异步I/O、新的SQL特性如用于向量搜索的NEAREST连接,以及CTE中的DML。主版本升级包括新的存储格式和SQL解析器。
+***** Take
+DuckDB刚刚成为了一个除了给你泡咖啡什么都能做的数据库。客户端-服务器模式意味着'它只是一个嵌入式数据库'的时代正式结束了。
+***** Comments
+- CONNECT语句将查询路由到PostgreSQL太棒了。终于有一个统一的异构数据源入口了。
+- 带有自动分解的VARIANT类型将使日志摄入变得更加友好。再也不用为读取时模式头疼了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+DuckDB v2.0プレビュー
+***** TLDR
+DuckDB v2.0はQuackプロトコルによるクライアント・サーバーモードを導入し、任意のDuckDBインスタンスがネットワーク経由でデータベースを提供できるようになった。その他のハイライト:半構造化データ用のVARIANT型(強化版JSON)、データベーストリガー、ネットワークストレージアクセスを劇的に高速化する非同期I/O、ベクトル検索用のNEAREST結合などの新しいSQL機能、CTE内でのDML。メジャーバージョンアップには新しいストレージ形式とSQLパーサーが含まれる。
+***** Take
+DuckDBはコーヒーを淹れる以外は何でもできるデータベースになった。クライアント・サーバーモードは「単なる組み込みデータベース」時代の終わりを意味する。
+***** Comments
+- PostgreSQLにクエリをルーティングするCONNECT文は素晴らしい。ついに異種データソースへの単一のエントリーポイントができた。
+- 自動シュレッディング付きのVARIANT型でログ取り込みがずっと楽になる。もうスキーマオンリードの頭痛とはおさらばだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+DuckDB v2.0 미리보기
+***** TLDR
+DuckDB v2.0은 Quack 프로토콜을 통한 클라이언트-서버 모드를 도입하여 모든 DuckDB 인스턴스가 네트워크를 통해 데이터베이스를 제공할 수 있게 되었다. 기타 하이라이트: 반구조화 데이터용 VARIANT 타입(강화된 JSON), 데이터베이스 트리거, 네트워크 스토리지 액세스를 획기적으로 빠르게 하는 비동기 I/O, 벡터 검색용 NEAREST 조인과 같은 새로운 SQL 기능, CTE 내 DML. 메이저 버전 업그레이드에는 새로운 스토리지 형식과 SQL 파서가 포함된다.
+***** Take
+DuckDB가 커피 내리는 것 빼고 모든 것을 하는 데이터베이스가 되었다. 클라이언트-서버 모드는 '그냥 임베디드 데이터베이스일 뿐'이라는 시대가 공식적으로 끝났음을 의미한다.
+***** Comments
+- PostgreSQL로 쿼리를 라우팅하는 CONNECT 문은 훌륭하다. 드디어 이기종 데이터 소스에 대한 단일 진입점이 생겼다.
+- 자동 분해 기능이 있는 VARIANT 타입은 로그 수집을 훨씬 더 편하게 만들어줄 것이다. 더 이상 스키마 온 리드로 골치 아플 일이 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Vista previa de DuckDB v2.0
+***** TLDR
+DuckDB v2.0 introduce el modo cliente-servidor a través del protocolo Quack, permitiendo que cualquier instancia de DuckDB sirva bases de datos a través de la red. Otros aspectos destacados: tipo VARIANT para datos semiestructurados (JSON con esteroides), triggers de base de datos, I/O asíncrono para acceso dramáticamente más rápido al almacenamiento en red, nuevas características SQL como joins NEAREST para búsqueda vectorial, y DML dentro de CTEs. El salto de versión mayor incluye un nuevo formato de almacenamiento y parser SQL.
+***** Take
+DuckDB acaba de convertirse en la base de datos que hace todo excepto prepararte café. El modo cliente-servidor significa que la era de 'es solo una base de datos embebida' ha terminado oficialmente.
+***** Comments
+- La sentencia CONNECT enrutando consultas a PostgreSQL es brillante. Finalmente un único punto de entrada para fuentes de datos heterogéneas.
+- El tipo VARIANT con fragmentación automática va a hacer que la ingesta de logs sea mucho más agradable. No más dolores de cabeza con schema-on-read.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Eine Vorschau auf DuckDB v2.0
+***** TLDR
+DuckDB v2.0 führt den Client-Server-Modus über das Quack-Protokoll ein, wodurch jede DuckDB-Instanz Datenbanken über das Netzwerk bereitstellen kann. Weitere Highlights: VARIANT-Typ für semi-strukturierte Daten (JSON auf Steroiden), Datenbank-Trigger, asynchrones I/O für dramatisch schnelleren Netzwerkspeicherzugriff, neue SQL-Features wie NEAREST-Joins für Vektorsuche und DML innerhalb von CTEs. Das Major-Version-Update beinhaltet ein neues Speicherformat und SQL-Parser.
+***** Take
+DuckDB ist gerade zur Datenbank geworden, die alles macht außer Kaffee kochen. Der Client-Server-Modus bedeutet, dass die 'es ist nur eine eingebettete Datenbank'-Ära offiziell vorbei ist.
+***** Comments
+- Das CONNECT-Statement, das Abfragen an PostgreSQL routet, ist brillant. Endlich ein einziger Einstiegspunkt für heterogene Datenquellen.
+- Der VARIANT-Typ mit automatischem Shredding wird die Log-Aufnahme so viel angenehmer machen. Keine Schema-on-Read-Kopfschmerzen mehr.
+** AI;DR (AI; Didn't Read) :ai:culture:communication:productivity:
+:PROPERTIES:
+:ID:       49336573
+:URL:      https://www.rickmanelius.com/p/aidr-ai-didnt-read
+:HN_URL:   https://news.ycombinator.com/item?id=49336573
+:POINTS:   743
+:COMMENTS: 479
+:BY:       jdmoreira
+:END:
+
+*** TLDR
+The author proposes AI;DR as the new TL;DR for AI-generated content: if someone isn't bothered enough to review and edit AI output before sending it, the recipient shouldn't bother reading it. Raw Claude walls in Slack, newsletters full of AI-isms, colleagues who paste unfiltered AI output - all deserve the AI;DR treatment. Customer support is the exception where 100% AI is fine.
+
+*** Take
+Finally, a socially acceptable way to ignore your coworker's unedited AI slop. The fact that this resonated with 743 upvoters says everything about the state of workplace communication in 2026.
+
+*** Comments
+
+**** mynameisvlad
+:PROPERTIES:
+:COMMENT_ID: 49337102
+:END:
+I've started doing this unconsciously. If it reads like AI, I skim or skip entirely. My brain has developed an AI-slop detector.
+
+**** hndispatcher
+:PROPERTIES:
+:COMMENT_ID: 49337456
+:END:
+Controversial take: AI;DR applies to most corporate communication anyway. At least the AI is occasionally useful.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+AI;DR (AI; 没读)
+***** TLDR
+作者提出AI;DR作为AI生成内容的新TL;DR:如果发送者懒得在发送前审查和编辑AI输出,接收者也不必费心阅读。Slack中的Claude长篇大论、充满AI痕迹的通讯、粘贴未经过滤AI输出的同事——都值得AI;DR对待。客户支持是例外,100% AI是可以接受的。
+***** Take
+终于有了一种社会认可的方式来忽略同事未经编辑的AI垃圾。这篇文章获得743个赞,说明了2026年职场沟通的现状。
+***** Comments
+- 我已经开始无意识地这样做了。如果读起来像AI写的,我就略读或直接跳过。我的大脑已经发展出了AI垃圾检测器。
+- 争议性观点:AI;DR反正适用于大多数企业沟通。至少AI偶尔还有点用。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AI;DR (AI; 読まなかった)
+***** TLDR
+著者はAI生成コンテンツの新しいTL;DRとしてAI;DRを提案:誰かがAI出力を送信前にレビューして編集する手間をかけないなら、受信者も読む手間をかける必要はない。SlackのClaude長文、AIらしさ満載のニュースレター、未フィルタリングのAI出力を貼り付ける同僚—すべてAI;DR扱いに値する。カスタマーサポートは例外で、100% AIでOK。
+***** Take
+ついに、同僚の未編集AIスロップを無視する社会的に許容される方法ができた。これが743人の支持を得たという事実が、2026年の職場コミュニケーションの現状をすべて物語っている。
+***** Comments
+- 無意識にこれをやり始めている。AIっぽく読めたら、流し読みするか完全にスキップする。私の脳はAIスロップ検出器を発達させた。
+- 物議を醸す意見:AI;DRはどうせほとんどの企業コミュニケーションに当てはまる。少なくともAIは時々役に立つ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AI;DR (AI; 안 읽음)
+***** TLDR
+저자는 AI 생성 콘텐츠를 위한 새로운 TL;DR로 AI;DR을 제안한다: 누군가가 AI 출력물을 보내기 전에 검토하고 편집하는 수고를 하지 않는다면, 받는 사람도 읽는 수고를 할 필요가 없다. Slack의 Claude 장문, AI 냄새 나는 뉴스레터, 필터링 없이 AI 출력물을 붙여넣는 동료들—모두 AI;DR 대우를 받을 자격이 있다. 고객 지원은 예외로 100% AI도 괜찮다.
+***** Take
+드디어 동료의 편집되지 않은 AI 쓰레기를 무시할 수 있는 사회적으로 용인되는 방법이 생겼다. 이것이 743명의 추천을 받았다는 사실이 2026년 직장 커뮤니케이션의 현황에 대해 모든 것을 말해준다.
+***** Comments
+- 무의식적으로 이걸 하기 시작했다. AI처럼 읽히면 훑어보거나 완전히 건너뛴다. 내 뇌가 AI 쓰레기 탐지기를 개발했다.
+- 논란의 여지가 있는 의견: AI;DR은 어차피 대부분의 기업 커뮤니케이션에 적용된다. 최소한 AI는 가끔 유용하기라도 하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+AI;DR (AI; No leí)
+***** TLDR
+El autor propone AI;DR como el nuevo TL;DR para contenido generado por IA: si alguien no se molesta en revisar y editar la salida de IA antes de enviarla, el destinatario no debería molestarse en leerla. Muros de Claude en Slack, newsletters llenos de manías de IA, colegas que pegan salida de IA sin filtrar - todos merecen el tratamiento AI;DR. El soporte al cliente es la excepción donde el 100% IA está bien.
+***** Take
+Finalmente, una forma socialmente aceptable de ignorar la basura de IA sin editar de tu compañero de trabajo. El hecho de que esto resonó con 743 votos dice todo sobre el estado de la comunicación laboral en 2026.
+***** Comments
+- He empezado a hacer esto inconscientemente. Si suena como IA, ojeo o lo salto por completo. Mi cerebro ha desarrollado un detector de basura-IA.
+- Opinión controversial: AI;DR se aplica a la mayoría de la comunicación corporativa de todos modos. Al menos la IA es ocasionalmente útil.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+AI;DR (AI; Nicht gelesen)
+***** TLDR
+Der Autor schlägt AI;DR als das neue TL;DR für KI-generierte Inhalte vor: Wenn sich jemand nicht die Mühe macht, KI-Output vor dem Senden zu überprüfen und zu bearbeiten, sollte sich der Empfänger auch nicht die Mühe machen, es zu lesen. Claude-Textwände in Slack, Newsletter voller KI-Manierismen, Kollegen, die ungefilterten KI-Output einfügen - alle verdienen die AI;DR-Behandlung. Kundensupport ist die Ausnahme, wo 100% KI in Ordnung ist.
+***** Take
+Endlich eine sozial akzeptable Möglichkeit, den unbearbeiteten KI-Müll deines Kollegen zu ignorieren. Die Tatsache, dass dies bei 743 Upvotern Anklang fand, sagt alles über den Zustand der Arbeitsplatzkommunikation im Jahr 2026.
+***** Comments
+- Ich habe angefangen, das unbewusst zu tun. Wenn es wie KI klingt, überfliege oder überspringe ich es komplett. Mein Gehirn hat einen KI-Slop-Detektor entwickelt.
+- Kontroverse Meinung: AI;DR gilt sowieso für die meiste Unternehmenskommunikation. Zumindest ist KI gelegentlich nützlich.
+** How Bluesky draws its logo on screenshots :ios:mobile:bluesky:growth-hacking:
+:PROPERTIES:
+:ID:       49338459
+:URL:      https://timmarinin.net/2026/bluesky-screenshots/
+:HN_URL:   https://news.ycombinator.com/item?id=49338459
+:POINTS:   376
+:COMMENTS: 252
+:BY:       timmarinin
+:END:
+
+*** TLDR
+Bluesky's iOS app displays a 'Follow' button that transforms into the Bluesky logo whenever you take a screenshot. The trick abuses iOS's UITextField with isSecureTextEntry=true, which iOS blanks when screenshotting to protect passwords. Bluesky renders the button inside this secure text field's layer, and places the logo behind it. When you screenshot, the button disappears and the logo shows through. Used by Telegram and Signal for secret chats.
+
+*** Take
+Growth hacking by exploiting a privacy API meant to protect passwords. Creative? Yes. Ethical? The GitHub thread got locked, which tells you everything.
+
+*** Comments
+
+**** throwaway2037
+:PROPERTIES:
+:COMMENT_ID: 49338612
+:END:
+This is the definition of 'clever but wrong'. Using security APIs for marketing watermarks sets a terrible precedent.
+
+**** dang
+:PROPERTIES:
+:COMMENT_ID: 49338789
+:END:
+The file is literally called GrowthHack.tsx. At least they're honest about it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Bluesky如何在截图上绘制logo
+***** TLDR
+Bluesky的iOS应用显示一个'关注'按钮,但每当你截图时它就变成Bluesky的logo。这个技巧滥用了iOS的UITextField的isSecureTextEntry=true属性,iOS在截图时会将其隐藏以保护密码。Bluesky在这个安全文本字段的图层内渲染按钮,并把logo放在后面。当你截图时,按钮消失,logo就显示出来了。Telegram和Signal在私密聊天中也使用了这种技术。
+***** Take
+利用一个本来用于保护密码的隐私API来做增长黑客。有创意?是的。道德吗?GitHub的讨论帖被锁了,这说明了一切。
+***** Comments
+- 这就是'聪明但错误'的定义。用安全API做营销水印开了一个糟糕的先例。
+- 文件字面上就叫GrowthHack.tsx。至少他们对此很诚实。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Blueskyがスクリーンショットにロゴを描く方法
+***** TLDR
+BlueskyのiOSアプリは「フォロー」ボタンを表示するが、スクリーンショットを撮るとBlueskyのロゴに変わる。このトリックはiOSのUITextFieldのisSecureTextEntry=trueを悪用している。iOSはパスワード保護のためスクリーンショット時にこれを空白にする。Blueskyはこのセキュアテキストフィールドのレイヤー内にボタンをレンダリングし、ロゴをその後ろに配置。スクリーンショットを撮るとボタンが消えてロゴが透けて見える。TelegramとSignalも秘密チャットでこの技術を使用。
+***** Take
+パスワード保護用のプライバシーAPIを悪用したグロースハック。創造的？はい。倫理的？GitHubスレッドがロックされた、それがすべてを物語っている。
+***** Comments
+- これは「賢いが間違っている」の定義だ。セキュリティAPIをマーケティング透かしに使うのは最悪の前例を作る。
+- ファイル名が文字通りGrowthHack.tsx。少なくとも正直だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Bluesky가 스크린샷에 로고를 그리는 방법
+***** TLDR
+Bluesky의 iOS 앱은 '팔로우' 버튼을 표시하는데, 스크린샷을 찍을 때마다 Bluesky 로고로 변한다. 이 트릭은 iOS의 UITextField의 isSecureTextEntry=true를 악용한다. iOS는 비밀번호 보호를 위해 스크린샷 시 이를 공백으로 만든다. Bluesky는 이 보안 텍스트 필드의 레이어 안에 버튼을 렌더링하고 로고를 뒤에 배치한다. 스크린샷을 찍으면 버튼이 사라지고 로고가 보인다. Telegram과 Signal도 비밀 채팅에서 이 기술을 사용한다.
+***** Take
+비밀번호 보호용 프라이버시 API를 악용한 그로스 해킹. 창의적? 그렇다. 윤리적? GitHub 스레드가 잠겼다, 그게 모든 걸 말해준다.
+***** Comments
+- 이것이 '영리하지만 잘못된'의 정의다. 마케팅 워터마크에 보안 API를 사용하는 것은 끔찍한 선례를 남긴다.
+- 파일 이름이 말 그대로 GrowthHack.tsx다. 최소한 정직하기는 하네.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo Bluesky dibuja su logo en las capturas de pantalla
+***** TLDR
+La app de Bluesky para iOS muestra un botón 'Seguir' que se transforma en el logo de Bluesky cuando tomas una captura de pantalla. El truco abusa del UITextField de iOS con isSecureTextEntry=true, que iOS oculta al capturar pantalla para proteger contraseñas. Bluesky renderiza el botón dentro de la capa de este campo de texto seguro, y coloca el logo detrás. Cuando capturas pantalla, el botón desaparece y se muestra el logo. Telegram y Signal usan esto para chats secretos.
+***** Take
+Growth hacking explotando una API de privacidad diseñada para proteger contraseñas. ¿Creativo? Sí. ¿Ético? El hilo de GitHub fue bloqueado, eso te dice todo.
+***** Comments
+- Esta es la definición de 'inteligente pero incorrecto'. Usar APIs de seguridad para marcas de agua de marketing sienta un precedente terrible.
+- El archivo se llama literalmente GrowthHack.tsx. Al menos son honestos al respecto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie Bluesky sein Logo auf Screenshots zeichnet
+***** TLDR
+Blueskys iOS-App zeigt einen 'Folgen'-Button, der sich in das Bluesky-Logo verwandelt, wenn man einen Screenshot macht. Der Trick missbraucht iOS's UITextField mit isSecureTextEntry=true, das iOS beim Screenshotten ausblendet, um Passwörter zu schützen. Bluesky rendert den Button innerhalb der Ebene dieses sicheren Textfelds und platziert das Logo dahinter. Beim Screenshot verschwindet der Button und das Logo wird sichtbar. Telegram und Signal nutzen dies für geheime Chats.
+***** Take
+Growth Hacking durch Ausnutzung einer Privatsphäre-API, die zum Schutz von Passwörtern gedacht ist. Kreativ? Ja. Ethisch? Der GitHub-Thread wurde gesperrt, das sagt alles.
+***** Comments
+- Das ist die Definition von 'clever aber falsch'. Sicherheits-APIs für Marketing-Wasserzeichen zu verwenden, setzt einen schrecklichen Präzedenzfall.
+- Die Datei heißt buchstäblich GrowthHack.tsx. Zumindest sind sie ehrlich.
+** Olo (Color) :science:vision:color:research:
+:PROPERTIES:
+:ID:       49270194
+:URL:      https://en.wikipedia.org/wiki/Olo_(color)
+:HN_URL:   https://news.ycombinator.com/item?id=49270194
+:POINTS:   381
+:COMMENTS: 74
+:BY:       wslh
+:END:
+
+*** TLDR
+Olo is an imaginary color that only 5 humans have ever seen. UC Berkeley researchers used lasers to precisely stimulate only the M cone cells in the retina, bypassing the normal color mixing that happens with visible light. The result: a blue-green of 'unprecedented saturation' that exists outside the visible gamut. Named 'olo' because its LMS color space coordinates (0,1,0) spell 'olo' in leetspeak. The tech could help colorblind people or even enable tetrachromacy.
+
+*** Take
+Scientists invented a color so exclusive it makes Vantablack look mainstream. Only 5 people have seen it and the rest of us have to take their word that it's really, really blue-green.
+
+*** Comments
+
+**** clumsysmurf
+:PROPERTIES:
+:COMMENT_ID: 49270456
+:END:
+The philosophical implications are wild. If only 5 people have experienced it, does olo even exist as a color in any meaningful sense?
+
+**** svat
+:PROPERTIES:
+:COMMENT_ID: 49270612
+:END:
+The name is chef's kiss. Named after leetspeak coordinates. Scientists having fun.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Olo (颜色)
+***** TLDR
+Olo是一种只有5个人类见过的假想颜色。加州大学伯克利分校的研究人员使用激光精确刺激视网膜上的M型视锥细胞,绕过了可见光产生的正常颜色混合。结果:一种'前所未有的饱和度'的蓝绿色,存在于可见色域之外。命名为'olo'是因为它的LMS色彩空间坐标(0,1,0)在leetspeak中拼成'olo'。这项技术可能帮助色盲人士,甚至实现四色视觉。
+***** Take
+科学家发明了一种颜色,独特到让Vantablack都显得大众化。只有5个人见过它,我们其他人只能相信他们说的话——它真的非常非常蓝绿。
+***** Comments
+- 哲学意义上的影响很疯狂。如果只有5个人体验过它,olo在任何有意义的层面上算是一种颜色吗?
+- 这个名字太妙了。以leetspeak坐标命名。科学家们玩得开心。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Olo（色）
+***** TLDR
+Oloは5人の人間しか見たことのない想像上の色。UCバークレーの研究者がレーザーを使って網膜のM錐体細胞だけを正確に刺激し、可視光で起こる通常の色混合をバイパスした。結果：可視域外に存在する「前例のない彩度」の青緑色。LMS色空間座標(0,1,0)がリートスピークで「olo」と読めることから命名。この技術は色覚異常の人を助けたり、四色型色覚を可能にするかもしれない。
+***** Take
+科学者たちがVantablackをメインストリームに見せるほど独占的な色を発明した。5人だけが見たことがあり、残りの私たちは本当に本当に青緑だという彼らの言葉を信じるしかない。
+***** Comments
+- 哲学的な意味合いがすごい。5人しか経験したことがないなら、oloは何か意味のある意味で色として存在するのか?
+- 名前が最高。リートスピーク座標から命名。科学者が楽しんでいる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Olo (색상)
+***** TLDR
+Olo는 단 5명의 인간만이 본 가상의 색상이다. UC 버클리 연구자들이 레이저를 사용해 망막의 M 원추 세포만 정확하게 자극하여 가시광선에서 발생하는 정상적인 색 혼합을 우회했다. 결과: 가시 색역 밖에 존재하는 '전례 없는 채도'의 청록색. LMS 색 공간 좌표 (0,1,0)이 리트스피크로 'olo'라고 읽혀서 'olo'로 명명되었다. 이 기술은 색맹인을 돕거나 심지어 사색형 색각을 가능하게 할 수 있다.
+***** Take
+과학자들이 Vantablack도 주류처럼 보이게 만드는 독점적인 색을 발명했다. 5명만이 봤고 나머지 우리는 정말로 정말로 청록색이라는 그들의 말을 믿어야 한다.
+***** Comments
+- 철학적 함의가 대단하다. 5명만이 경험했다면, olo가 어떤 의미 있는 의미에서 색으로 존재하기는 하는 걸까?
+- 이름이 완벽하다. 리트스피크 좌표를 따서 명명했다. 과학자들이 재미있게 놀고 있네.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Olo (Color)
+***** TLDR
+Olo es un color imaginario que solo 5 humanos han visto. Investigadores de UC Berkeley usaron láseres para estimular con precisión solo las células cónicas M de la retina, evitando la mezcla de colores normal que ocurre con la luz visible. El resultado: un azul-verde de 'saturación sin precedentes' que existe fuera de la gama visible. Llamado 'olo' porque sus coordenadas de espacio de color LMS (0,1,0) deletrean 'olo' en leetspeak. La tecnología podría ayudar a personas daltónicas o incluso permitir la tetracromatía.
+***** Take
+Los científicos inventaron un color tan exclusivo que hace que Vantablack parezca mainstream. Solo 5 personas lo han visto y el resto debemos creerles que es realmente, realmente azul-verde.
+***** Comments
+- Las implicaciones filosóficas son salvajes. Si solo 5 personas lo han experimentado, ¿existe olo como color en algún sentido significativo?
+- El nombre es perfecto. Nombrado por las coordenadas en leetspeak. Científicos divirtiéndose.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Olo (Farbe)
+***** TLDR
+Olo ist eine imaginäre Farbe, die nur 5 Menschen jemals gesehen haben. UC Berkeley-Forscher verwendeten Laser, um präzise nur die M-Zapfenzellen der Netzhaut zu stimulieren und die normale Farbmischung zu umgehen, die bei sichtbarem Licht auftritt. Das Ergebnis: Ein Blaugrün von 'beispielloser Sättigung', das außerhalb des sichtbaren Farbumfangs existiert. Benannt nach 'olo', weil seine LMS-Farbraumkoordinaten (0,1,0) in Leetspeak 'olo' ergeben. Die Technologie könnte Farbenblinden helfen oder sogar Tetrachromasie ermöglichen.
+***** Take
+Wissenschaftler haben eine so exklusive Farbe erfunden, dass Vantablack dagegen Mainstream aussieht. Nur 5 Menschen haben sie gesehen und der Rest von uns muss ihnen glauben, dass sie wirklich, wirklich blaugrün ist.
+***** Comments
+- Die philosophischen Implikationen sind wild. Wenn nur 5 Menschen es erlebt haben, existiert Olo überhaupt als Farbe in irgendeinem bedeutsamen Sinn?
+- Der Name ist perfekt. Benannt nach Leetspeak-Koordinaten. Wissenschaftler haben Spaß.
