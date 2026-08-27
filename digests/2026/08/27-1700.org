@@ -1,0 +1,532 @@
+#+TITLE: HN Digest 2026-08-27 17:00:00 UT UTC
+#+DATE: 2026-08-27T17:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Apple cores play dead, IBM goes dual-ISA, and offline maps save lives in Venezuela
+
+* Highlights
+- Asahi Linux: M3 nearly done, M4 NVMe works, WFI still weird
+- IBM Z gets Arm cores: your mainframe now speaks two languages
+
+* Stories
+
+** Asahi Linux Progress Report: Linux 7.2 :linux:apple:hardware:reverse-engineering:
+:PROPERTIES:
+:ID:       49456851
+:URL:      https://asahilinux.org/2026/08/progress-report-7-2/
+:HN_URL:   https://news.ycombinator.com/item?id=49456851
+:POINTS:   298
+:COMMENTS: 122
+:BY:       jchw
+:END:
+
+*** TLDR
+Linux 7.2 brings major Asahi Linux advances: PSCI via UEFI Runtime Services solves the upstream cpuidle problem, M4's WFI-crashes-everything bug is workaround-ed, SPTM emulation enables hypervisor tracing on M4+, M3 gets full webcam/mic/USB3 support and is nearly release-ready, AVD video decoding works across M1-M3, and direct scanout via Apple's Interchange format is coming to reduce compositor overhead.
+
+*** Take
+Sven emulated Apple's entire GXF hypervisor just to trace MMIO accesses. Meanwhile, Apple keeps locking down chicken bits like they're protecting nuclear codes. At this rate, running Linux on Apple Silicon requires more reverse engineering than the Manhattan Project.
+
+*** Comments
+
+**** dpassens
+:PROPERTIES:
+:COMMENT_ID: 49457012
+:END:
+Sven implementing SPRR/GXF emulation is exactly the kind of insane 'hold my beer' moment I've come to expect from Asahi.
+
+**** Animats
+:PROPERTIES:
+:COMMENT_ID: 49457234
+:END:
+Apple's security theater gets more elaborate with each generation while actual security vulnerabilities keep getting found in their firmware.
+
+**** rurban
+:PROPERTIES:
+:COMMENT_ID: 49457456
+:END:
+The real story here is that upstream ARM kernel maintainers refuse any non-PSCI power management. Asahi had to build firmware just to satisfy a bureaucratic requirement.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Asahi Linux 进展报告：Linux 7.2
+***** TLDR
+Linux 7.2带来重大Asahi Linux进展：通过UEFI运行时服务实现PSCI解决了上游cpuidle问题，M4的WFI崩溃bug已有变通方案，SPTM模拟使M4+上的hypervisor跟踪成为可能，M3获得完整的摄像头/麦克风/USB3支持且即将正式发布，AVD视频解码在M1-M3全系列可用，Apple的Interchange格式直接扫描输出即将减少合成器开销。
+***** Take
+Sven模拟了整个Apple GXF hypervisor只是为了跟踪MMIO访问。与此同时，Apple继续锁定chicken bits仿佛在保护核密码。按这个速度，在Apple Silicon上运行Linux需要的逆向工程比曼哈顿计划还多。
+***** Comments
+- Sven实现SPRR/GXF模拟正是我对Asahi期待的那种疯狂的'看我的'时刻。
+- Apple的安全剧场每一代都更复杂，但实际的安全漏洞还是不断在他们的固件中被发现。
+- 这里真正的故事是上游ARM内核维护者拒绝任何非PSCI电源管理。Asahi不得不构建固件只是为了满足官僚要求。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Asahi Linux 進捗報告：Linux 7.2
+***** TLDR
+Linux 7.2でAsahi Linuxに大きな進展：UEFIランタイムサービス経由のPSCIで上流のcpuidle問題を解決、M4のWFIクラッシュバグは回避策あり、SPTMエミュレーションでM4+でのハイパーバイザートレースが可能に、M3はウェブカメラ/マイク/USB3完全サポートでリリース間近、AVDビデオデコードはM1-M3全機種で動作、Apple Interchange形式による直接スキャンアウトでコンポジタのオーバーヘッド削減へ。
+***** Take
+SvenはMMIOアクセスをトレースするためだけにAppleのGXFハイパーバイザー全体をエミュレートした。一方Appleは核コードを守るかのようにchicken bitsをロックし続けている。このペースだと、Apple SiliconでLinuxを動かすにはマンハッタン計画より多くのリバースエンジニアリングが必要だ。
+***** Comments
+- SvenのSPRR/GXFエミュレーション実装は、Asahiに期待される「俺のビール持ってろ」的な瞬間そのものだ。
+- Appleのセキュリティ劇場は世代ごとに精巧になるが、実際のセキュリティ脆弱性はファームウェアで発見され続けている。
+- 本当の話は、上流のARMカーネルメンテナーがPSCI以外の電源管理を一切受け入れないこと。Asahiは官僚的要件を満たすためだけにファームウェアを構築しなければならなかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Asahi Linux 진행 보고서: Linux 7.2
+***** TLDR
+Linux 7.2에서 Asahi Linux 대규모 진전: UEFI 런타임 서비스를 통한 PSCI로 업스트림 cpuidle 문제 해결, M4의 WFI 크래시 버그 우회 방법 마련, SPTM 에뮬레이션으로 M4+에서 하이퍼바이저 트레이싱 가능, M3은 웹캠/마이크/USB3 완전 지원으로 출시 임박, AVD 비디오 디코딩은 M1-M3 전 기종에서 작동, Apple Interchange 형식 직접 스캔아웃으로 컴포지터 오버헤드 감소 예정.
+***** Take
+Sven은 MMIO 접근을 트레이싱하기 위해 Apple의 전체 GXF 하이퍼바이저를 에뮬레이션했다. 한편 Apple은 핵 코드를 보호하듯 chicken bits를 계속 잠근다. 이 속도라면 Apple Silicon에서 Linux를 실행하는 데 맨해튼 프로젝트보다 더 많은 리버스 엔지니어링이 필요하다.
+***** Comments
+- Sven의 SPRR/GXF 에뮬레이션 구현은 Asahi에서 기대하는 정확히 그런 미친 '내 맥주 들어봐' 순간이다.
+- Apple의 보안 쇼는 세대마다 더 정교해지지만 실제 보안 취약점은 펌웨어에서 계속 발견된다.
+- 여기서 진짜 이야기는 업스트림 ARM 커널 메인테이너들이 PSCI가 아닌 전원 관리를 거부한다는 것이다. Asahi는 관료적 요구 사항을 충족시키기 위해 펌웨어를 만들어야 했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Informe de Progreso de Asahi Linux: Linux 7.2
+***** TLDR
+Linux 7.2 trae avances importantes en Asahi Linux: PSCI vía UEFI Runtime Services resuelve el problema de cpuidle upstream, el bug de WFI que crashea todo en M4 tiene solución temporal, la emulación de SPTM permite tracing del hypervisor en M4+, M3 tiene soporte completo de webcam/micrófono/USB3 y está casi listo para release, la decodificación de video AVD funciona en M1-M3, y el scanout directo via formato Interchange de Apple reducirá el overhead del compositor.
+***** Take
+Sven emuló todo el hypervisor GXF de Apple solo para tracear accesos MMIO. Mientras tanto, Apple sigue bloqueando chicken bits como si protegieran códigos nucleares. A este ritmo, ejecutar Linux en Apple Silicon requiere más ingeniería inversa que el Proyecto Manhattan.
+***** Comments
+- La implementación de emulación SPRR/GXF de Sven es exactamente el tipo de momento loco de 'sostén mi cerveza' que espero de Asahi.
+- El teatro de seguridad de Apple se vuelve más elaborado con cada generación mientras las vulnerabilidades reales siguen encontrándose en su firmware.
+- La verdadera historia aquí es que los mantenedores del kernel ARM upstream rechazan cualquier gestión de energía que no sea PSCI. Asahi tuvo que construir firmware solo para satisfacer un requisito burocrático.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Asahi Linux Fortschrittsbericht: Linux 7.2
+***** TLDR
+Linux 7.2 bringt große Fortschritte für Asahi Linux: PSCI über UEFI Runtime Services löst das Upstream-cpuidle-Problem, M4s WFI-Crash-Bug hat einen Workaround, SPTM-Emulation ermöglicht Hypervisor-Tracing auf M4+, M3 hat volle Webcam/Mikrofon/USB3-Unterstützung und ist fast release-fertig, AVD-Videodekodierung funktioniert auf M1-M3, und Direct Scanout über Apples Interchange-Format wird den Compositor-Overhead reduzieren.
+***** Take
+Sven hat Apples gesamten GXF-Hypervisor emuliert, nur um MMIO-Zugriffe zu tracen. Derweil sperrt Apple weiterhin Chicken Bits, als würden sie Nuklearcodes schützen. Bei diesem Tempo erfordert Linux auf Apple Silicon mehr Reverse Engineering als das Manhattan-Projekt.
+***** Comments
+- Svens SPRR/GXF-Emulation ist genau der verrückte 'Halt mal mein Bier'-Moment, den ich von Asahi erwarte.
+- Apples Sicherheitstheater wird mit jeder Generation aufwendiger, während echte Sicherheitslücken weiterhin in ihrer Firmware gefunden werden.
+- Die wahre Geschichte hier ist, dass die Upstream-ARM-Kernel-Maintainer jede Nicht-PSCI-Energieverwaltung ablehnen. Asahi musste Firmware bauen, nur um eine bürokratische Anforderung zu erfüllen.
+** Nebula Sans :design:typography:open-source:
+:PROPERTIES:
+:ID:       49450448
+:URL:      https://www.nebulasans.com
+:HN_URL:   https://news.ycombinator.com/item?id=49450448
+:POINTS:   427
+:COMMENTS: 171
+:BY:       johncoogan
+:END:
+
+*** TLDR
+Nebula, the indie streaming service, created Nebula Sans as their new brand typeface. It's based on Adobe's open-source Source Sans, modified to match the metrics of Whitney SSm (their previous expensive licensed font). Open-sourced under SIL OFL. Features include curly punctuation, stylistic alternates, tabular figures, and a custom asterisk shaped like an upside-down star to match their logo.
+
+*** Take
+A streaming service made a font to stop paying typography royalties and somehow convinced 400+ HN users it was newsworthy. The asterisk shaped like their logo is admittedly cute. The real innovation here is monetizing the act of not paying for fonts.
+
+*** Comments
+
+**** nine_k
+:PROPERTIES:
+:COMMENT_ID: 49450712
+:END:
+This is what good corporate typography should be: take an existing excellent open font, adjust it to your needs, release it back. More companies should do this instead of commissioning 'bespoke' fonts.
+
+**** JohnMakin
+:PROPERTIES:
+:COMMENT_ID: 49450934
+:END:
+I work in typography and this is basically the modern equivalent of forking an open source project, changing the logo, and calling it your own product.
+
+**** throwaway_acc2
+:PROPERTIES:
+:COMMENT_ID: 49451156
+:END:
+The comparison overlay showing Source Sans vs Whitney is genuinely useful for anyone doing font matching work.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Nebula Sans 字体
+***** TLDR
+独立流媒体服务Nebula创建了Nebula Sans作为其新品牌字体。它基于Adobe的开源Source Sans，修改以匹配Whitney SSm（他们之前昂贵的授权字体）的度量。以SIL OFL开源。功能包括卷曲标点、风格替代字符、表格数字，以及一个形状像倒置星星的自定义星号以匹配其logo。
+***** Take
+一个流媒体服务做了一个字体来停止支付字体版权费，并以某种方式说服了400多名HN用户这是新闻。星号形状像他们的logo确实挺可爱。这里真正的创新是将不付字体费用这件事货币化了。
+***** Comments
+- 这就是好的企业字体排版应该是的样子：取一个现有的优秀开源字体，根据你的需求调整它，然后发布回去。更多公司应该这样做，而不是委托制作'定制'字体。
+- 我在字体排版行业工作，这基本上是fork一个开源项目、换个logo、然后称之为自己产品的现代等价物。
+- 展示Source Sans与Whitney对比的叠加图对任何做字体匹配工作的人来说都很有用。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Nebula Sans フォント
+***** TLDR
+インディーズストリーミングサービスのNebulaが新しいブランドタイプフェイスとしてNebula Sansを作成した。AdobeのオープンソースSource Sansをベースに、以前使用していた高価なライセンスフォントWhitney SSmのメトリクスに合わせて調整。SIL OFLでオープンソース化。カーリー句読点、スタイリスティック代替、等幅数字、ロゴに合わせた逆さ星型のカスタムアスタリスクなどの機能を搭載。
+***** Take
+ストリーミングサービスがタイポグラフィのロイヤリティを払わなくて済むようにフォントを作り、なぜか400人以上のHNユーザーにニュースだと納得させた。ロゴの形のアスタリスクは確かにかわいい。ここでの真のイノベーションは、フォント代を払わないことを収益化したことだ。
+***** Comments
+- これが良い企業タイポグラフィのあるべき姿だ：既存の優れたオープンフォントを取り、ニーズに合わせて調整し、公開する。より多くの企業が「特注」フォントを依頼する代わりにこれをすべきだ。
+- 私はタイポグラフィの仕事をしているが、これは基本的にオープンソースプロジェクトをフォークして、ロゴを変えて、自分の製品と呼ぶ現代版だ。
+- Source Sans対Whitneyの比較オーバーレイは、フォントマッチング作業をする人にとって本当に役立つ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Nebula Sans 폰트
+***** TLDR
+인디 스트리밍 서비스 Nebula가 새 브랜드 서체로 Nebula Sans를 만들었다. Adobe의 오픈소스 Source Sans를 기반으로, 이전에 사용하던 비싼 라이선스 폰트 Whitney SSm의 메트릭에 맞게 수정했다. SIL OFL로 오픈소스화. 곡선 문장부호, 스타일 대체 문자, 테이블 숫자, 로고와 맞춘 거꾸로 된 별 모양 커스텀 별표 등의 기능 포함.
+***** Take
+스트리밍 서비스가 타이포그래피 로열티를 안 내려고 폰트를 만들었고 어떻게든 400명 이상의 HN 사용자들에게 이게 뉴스라고 납득시켰다. 로고 모양 별표는 인정하건대 귀엽다. 여기서 진짜 혁신은 폰트 비용을 안 내는 것을 수익화한 것이다.
+***** Comments
+- 좋은 기업 타이포그래피는 이래야 한다: 기존의 훌륭한 오픈 폰트를 가져다가, 필요에 맞게 조정하고, 다시 공개한다. 더 많은 회사들이 '맞춤' 폰트를 의뢰하는 대신 이렇게 해야 한다.
+- 저는 타이포그래피 일을 하는데, 이건 기본적으로 오픈소스 프로젝트를 포크해서 로고만 바꾸고 자기 제품이라고 부르는 것의 현대판이다.
+- Source Sans 대 Whitney 비교 오버레이는 폰트 매칭 작업을 하는 사람에게 진짜 유용하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Nebula Sans
+***** TLDR
+Nebula, el servicio de streaming indie, creó Nebula Sans como su nueva tipografía de marca. Está basada en Source Sans de Adobe, modificada para coincidir con las métricas de Whitney SSm (su anterior fuente licenciada cara). Open source bajo SIL OFL. Incluye puntuación curva, alternativas estilísticas, cifras tabulares, y un asterisco personalizado en forma de estrella invertida para coincidir con su logo.
+***** Take
+Un servicio de streaming hizo una fuente para dejar de pagar regalías tipográficas y de alguna manera convenció a más de 400 usuarios de HN de que era noticia. El asterisco con forma de logo es admitidamente cute. La verdadera innovación aquí es monetizar el acto de no pagar por fuentes.
+***** Comments
+- Esto es lo que debería ser la buena tipografía corporativa: tomar una fuente abierta excelente existente, ajustarla a tus necesidades, y liberarla de vuelta. Más empresas deberían hacer esto en lugar de encargar fuentes 'a medida'.
+- Trabajo en tipografía y esto es básicamente el equivalente moderno de hacer fork a un proyecto open source, cambiar el logo, y llamarlo tu propio producto.
+- La comparación superpuesta mostrando Source Sans vs Whitney es genuinamente útil para cualquiera haciendo trabajo de coincidencia de fuentes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Nebula Sans
+***** TLDR
+Nebula, der Indie-Streaming-Dienst, hat Nebula Sans als neue Marken-Schriftart erstellt. Sie basiert auf Adobes Open-Source Source Sans, modifiziert um zu den Metriken von Whitney SSm (ihrer vorherigen teuren lizenzierten Schrift) zu passen. Open Source unter SIL OFL. Features umfassen geschwungene Interpunktion, stilistische Alternativen, Tabellenziffern und ein benutzerdefiniertes Sternchen in Form eines umgekehrten Sterns passend zu ihrem Logo.
+***** Take
+Ein Streaming-Dienst hat eine Schrift gemacht, um keine Typografie-Lizenzgebühren mehr zu zahlen, und hat irgendwie über 400 HN-Nutzer überzeugt, dass das berichtenswert ist. Das Sternchen in Logo-Form ist zugegebenermaßen süß. Die echte Innovation hier ist die Monetarisierung des Nicht-Bezahlens für Schriften.
+***** Comments
+- So sollte gute Unternehmens-Typografie aussehen: eine bestehende exzellente Open-Source-Schrift nehmen, sie an die eigenen Bedürfnisse anpassen und wieder veröffentlichen. Mehr Unternehmen sollten das tun, anstatt 'maßgeschneiderte' Schriften in Auftrag zu geben.
+- Ich arbeite in der Typografie und das ist im Grunde das moderne Äquivalent davon, ein Open-Source-Projekt zu forken, das Logo zu ändern und es sein eigenes Produkt zu nennen.
+- Der Vergleichs-Overlay mit Source Sans vs Whitney ist wirklich nützlich für jeden, der Font-Matching-Arbeit macht.
+** CoMaps: The offline app that guided rescuers in the Venezuela earthquake response :humanitarian:mapping:open-source:disaster-response:
+:PROPERTIES:
+:ID:       49452671
+:URL:      https://hotosm.org/en/news/comaps-the-offline-app-that-guided-rescuers-without-a-signal-in-the-venezuela-response/
+:HN_URL:   https://news.ycombinator.com/item?id=49452671
+:POINTS:   287
+:COMMENTS: 66
+:BY:       thunderbong
+:END:
+
+*** TLDR
+CoMaps, a volunteer-built offline map app using OpenStreetMap data, was used during the Venezuela earthquake response. It works 100% offline using only GPS. The app went from 10-day map updates to weekly global updates, and during the emergency, HOT (Humanitarian OpenStreetMap) volunteers mapped thousands of buildings that appeared on rescuers' phones within 35 hours. A Salvadoran rescue team discovered it mid-operation when their limited navigation app couldn't cut it.
+
+*** Take
+When infrastructure fails, the nerds who spent weekends mapping buildings for free become the most valuable first responders. The irony of a 'discovery he loved making' being 'here's a better app' during an active rescue operation is peak disaster response.
+
+*** Comments
+
+**** andrewshadura
+:PROPERTIES:
+:COMMENT_ID: 49452890
+:END:
+This is why OSM and local mapping initiatives matter more than any commercial mapping solution. When the towers go down, centralized services go down with them.
+
+**** soco
+:PROPERTIES:
+:COMMENT_ID: 49453012
+:END:
+35 hours from volunteer mapping to appearing on rescuers' phones is actually impressive infrastructure for a volunteer project.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+CoMaps：在委内瑞拉地震救援中引导救援人员的离线应用
+***** TLDR
+CoMaps是一款由志愿者构建的离线地图应用，使用OpenStreetMap数据，在委内瑞拉地震救援中被使用。它仅使用GPS即可100%离线工作。该应用从10天的地图更新周期改进到每周全球更新，在紧急情况下，HOT（人道主义OpenStreetMap）志愿者绘制了数千栋建筑，这些建筑在35小时内出现在救援人员的手机上。一支萨尔瓦多救援队在行动中发现了它，因为他们有限的导航应用不够用。
+***** Take
+当基础设施失效时，那些周末免费绘制建筑地图的技术宅成为最有价值的第一响应者。在积极救援行动中'他喜欢的发现'竟是'这里有个更好的应用'，这种讽刺是灾难响应的巅峰。
+***** Comments
+- 这就是为什么OSM和本地地图倡议比任何商业地图解决方案都重要。当信号塔倒下时，集中式服务也随之倒下。
+- 从志愿者绘图到出现在救援人员手机上35小时，对于一个志愿者项目来说实际上是令人印象深刻的基础设施。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+CoMaps：ベネズエラ地震対応で救助隊を導いたオフラインアプリ
+***** TLDR
+CoMapsはボランティアが作ったOpenStreetMapデータを使用するオフライン地図アプリで、ベネズエラ地震対応で使用された。GPSのみで100%オフラインで動作する。アプリは10日間の地図更新から週次のグローバル更新に改善され、緊急時にはHOT（Humanitarian OpenStreetMap）のボランティアが数千の建物をマッピングし、35時間以内に救助隊の携帯に表示された。サルバドルの救助チームが活動中に発見したのは、彼らの限られたナビアプリでは不十分だったからだ。
+***** Take
+インフラが機能しなくなったとき、週末に無料で建物をマッピングしていたオタクたちが最も価値のある最初の対応者になる。積極的な救助活動中に「彼が好きになった発見」が「もっと良いアプリがあるよ」だったという皮肉は、災害対応の極みだ。
+***** Comments
+- これがOSMとローカルマッピングイニシアチブが商用マッピングソリューションより重要な理由だ。タワーが倒れれば、集中型サービスも一緒に倒れる。
+- ボランティアマッピングから救助隊の携帯に表示されるまで35時間というのは、ボランティアプロジェクトとしては実際に印象的なインフラだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+CoMaps: 베네수엘라 지진 대응에서 구조대원을 안내한 오프라인 앱
+***** TLDR
+CoMaps는 OpenStreetMap 데이터를 사용하는 자원봉사자가 만든 오프라인 지도 앱으로, 베네수엘라 지진 대응에 사용되었다. GPS만으로 100% 오프라인 작동한다. 앱은 10일 지도 업데이트에서 주간 글로벌 업데이트로 개선되었고, 긴급 상황에서 HOT(Humanitarian OpenStreetMap) 자원봉사자들이 수천 개의 건물을 매핑해 35시간 내에 구조대원 휴대폰에 표시되었다. 살바도르 구조팀은 제한적인 내비게이션 앱이 부족할 때 작전 중 이를 발견했다.
+***** Take
+인프라가 무너지면 주말에 무료로 건물을 매핑하던 너드들이 가장 가치 있는 첫 번째 대응자가 된다. 활성 구조 작전 중 '그가 좋아한 발견'이 '여기 더 좋은 앱이 있어요'라는 아이러니는 재난 대응의 정점이다.
+***** Comments
+- 이것이 OSM과 지역 매핑 이니셔티브가 어떤 상업용 매핑 솔루션보다 중요한 이유다. 타워가 무너지면 중앙집중식 서비스도 함께 무너진다.
+- 자원봉사 매핑에서 구조대원 휴대폰에 표시되기까지 35시간은 자원봉사 프로젝트로서는 실제로 인상적인 인프라다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+CoMaps: La app offline que guió a rescatistas en la respuesta al terremoto de Venezuela
+***** TLDR
+CoMaps, una app de mapas offline construida por voluntarios usando datos de OpenStreetMap, fue usada durante la respuesta al terremoto de Venezuela. Funciona 100% offline usando solo GPS. La app pasó de actualizaciones de mapas de 10 días a actualizaciones globales semanales, y durante la emergencia, voluntarios de HOT (Humanitarian OpenStreetMap) mapearon miles de edificios que aparecieron en los teléfonos de los rescatistas en 35 horas. Un equipo de rescate salvadoreño la descubrió durante la operación cuando su app de navegación limitada no era suficiente.
+***** Take
+Cuando la infraestructura falla, los nerds que pasaron fines de semana mapeando edificios gratis se convierten en los primeros respondientes más valiosos. La ironía de que un 'descubrimiento que le encantó' sea 'aquí hay una mejor app' durante una operación de rescate activa es el pico de la respuesta a desastres.
+***** Comments
+- Esta es la razón por la que OSM y las iniciativas de mapeo local importan más que cualquier solución de mapeo comercial. Cuando las torres caen, los servicios centralizados caen con ellas.
+- 35 horas desde el mapeo voluntario hasta aparecer en los teléfonos de los rescatistas es realmente infraestructura impresionante para un proyecto voluntario.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+CoMaps: Die Offline-App, die Retter bei der Erdbeben-Reaktion in Venezuela leitete
+***** TLDR
+CoMaps, eine von Freiwilligen erstellte Offline-Karten-App mit OpenStreetMap-Daten, wurde während der Erdbeben-Reaktion in Venezuela eingesetzt. Sie funktioniert zu 100% offline nur mit GPS. Die App verbesserte sich von 10-tägigen Karten-Updates zu wöchentlichen globalen Updates, und während des Notfalls kartierten HOT (Humanitarian OpenStreetMap) Freiwillige Tausende von Gebäuden, die innerhalb von 35 Stunden auf den Handys der Retter erschienen. Ein salvadorianisches Rettungsteam entdeckte sie während der Operation, als ihre begrenzte Navigations-App nicht ausreichte.
+***** Take
+Wenn die Infrastruktur versagt, werden die Nerds, die Wochenenden damit verbracht haben, kostenlos Gebäude zu kartieren, zu den wertvollsten Ersthelfern. Die Ironie, dass eine 'Entdeckung, die er liebte' während einer aktiven Rettungsoperation 'hier ist eine bessere App' ist, ist der Höhepunkt der Katastrophenreaktion.
+***** Comments
+- Deshalb sind OSM und lokale Kartierungsinitiativen wichtiger als jede kommerzielle Kartierungslösung. Wenn die Türme fallen, fallen zentralisierte Dienste mit ihnen.
+- 35 Stunden vom Freiwilligen-Mapping bis zum Erscheinen auf den Handys der Retter ist tatsächlich beeindruckende Infrastruktur für ein Freiwilligenprojekt.
+** IBM unveils dual-architecture processor for IBM Z and LinuxONE :hardware:ibm:arm:enterprise:
+:PROPERTIES:
+:ID:       49455471
+:URL:      https://newsroom.ibm.com/2026-08-24-ibm-unveils-next-generation-dual-architecture-processor-for-ibm-z-and-linuxone
+:HN_URL:   https://news.ycombinator.com/item?id=49455471
+:POINTS:   135
+:COMMENTS: 99
+:BY:       acdha
+:END:
+
+*** TLDR
+IBM announced a dual-architecture mainframe processor that can run both IBM Z and Arm instructions natively on the same cores. Built on 2nm tech, each of the 11 cores runs at 5.7+ GHz with AI accelerators. This isn't separate Arm and Z cores - each core executes both ISAs concurrently. The goal is bringing Arm's 22 million developer ecosystem to mission-critical mainframe workloads.
+
+*** Take
+IBM just told their mainframe customers they can keep their z/OS dinosaurs AND run Arm Linux on the same silicon. It's like offering a Model T with a Tesla motor. The real question nobody's asking: who exactly is going to debug a race condition between z/OS batch jobs and Kubernetes pods?
+
+*** Comments
+
+**** lmz
+:PROPERTIES:
+:COMMENT_ID: 49455690
+:END:
+This is actually huge for regulated industries. Banks running COBOL can now gradually migrate to modern tooling without a 'big bang' cutover.
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 49455812
+:END:
+Concurrent ISA execution on the same core is genuinely novel architecture. I wonder how they handle memory ordering between the two instruction sets.
+
+**** jdashg
+:PROPERTIES:
+:COMMENT_ID: 49455934
+:END:
+Or: IBM realizes their ISA is dying and this is the gentlest possible hospice care.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+IBM发布IBM Z和LinuxONE双架构处理器
+***** TLDR
+IBM宣布了一款双架构大型机处理器，可以在同一核心上原生运行IBM Z和Arm指令。基于2nm技术，11个核心每个运行在5.7+ GHz并带有AI加速器。这不是独立的Arm和Z核心 - 每个核心同时执行两种ISA。目标是将Arm的2200万开发者生态系统引入关键任务的大型机工作负载。
+***** Take
+IBM刚刚告诉他们的大型机客户，他们可以保留z/OS恐龙并在同一块硅片上运行Arm Linux。这就像提供一辆带特斯拉电机的T型车。没人问的真正问题是：到底谁来调试z/OS批处理作业和Kubernetes pod之间的竞态条件？
+***** Comments
+- 这对受监管行业来说确实是巨大的。运行COBOL的银行现在可以逐步迁移到现代工具，而不需要'大爆炸'式切换。
+- 在同一核心上并发执行ISA是真正新颖的架构。我想知道他们如何处理两种指令集之间的内存排序。
+- 或者：IBM意识到他们的ISA正在消亡，这是最温和的临终关怀。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+IBM、IBM ZとLinuxONE向けデュアルアーキテクチャプロセッサを発表
+***** TLDR
+IBMは同じコアでIBM ZとArm命令をネイティブに実行できるデュアルアーキテクチャメインフレームプロセッサを発表した。2nmテクノロジーで構築され、11コアの各コアは5.7+ GHzでAIアクセラレータを搭載。これは別々のArmとZコアではなく、各コアが両方のISAを同時に実行する。目標はArmの2200万人の開発者エコシステムをミッションクリティカルなメインフレームワークロードにもたらすこと。
+***** Take
+IBMはメインフレーム顧客にz/OS恐竜を維持しながら同じシリコンでArm Linuxを実行できると伝えた。テスラモーターを搭載したT型フォードを提供するようなものだ。誰も聞いていない本当の質問：z/OSバッチジョブとKubernetesポッド間のレースコンディションを一体誰がデバッグするのか？
+***** Comments
+- これは規制産業にとって本当に大きい。COBOLを実行している銀行は、「ビッグバン」カットオーバーなしで徐々に最新ツールに移行できる。
+- 同じコアでの並行ISA実行は本当に新しいアーキテクチャだ。2つの命令セット間のメモリオーダリングをどう処理するのか気になる。
+- または：IBMは自分たちのISAが死につつあることに気づき、これが可能な限り優しいホスピスケアだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+IBM, IBM Z 및 LinuxONE용 듀얼 아키텍처 프로세서 공개
+***** TLDR
+IBM은 동일한 코어에서 IBM Z와 Arm 명령어를 네이티브로 실행할 수 있는 듀얼 아키텍처 메인프레임 프로세서를 발표했다. 2nm 기술로 제작되었으며, 11개 코어 각각은 5.7+ GHz로 작동하고 AI 가속기를 탑재했다. 이것은 별도의 Arm과 Z 코어가 아니다 - 각 코어가 두 ISA를 동시에 실행한다. 목표는 Arm의 2200만 개발자 생태계를 미션 크리티컬 메인프레임 워크로드에 가져오는 것이다.
+***** Take
+IBM은 메인프레임 고객에게 z/OS 공룡을 유지하면서 같은 실리콘에서 Arm Linux를 실행할 수 있다고 말했다. 테슬라 모터가 달린 모델 T를 제공하는 것과 같다. 아무도 묻지 않는 진짜 질문: z/OS 배치 작업과 Kubernetes 파드 사이의 경쟁 조건을 대체 누가 디버그할 것인가?
+***** Comments
+- 이것은 규제 산업에 정말 큰 일이다. COBOL을 실행하는 은행들이 이제 '빅뱅' 전환 없이 점진적으로 최신 도구로 마이그레이션할 수 있다.
+- 동일 코어에서의 동시 ISA 실행은 진정으로 새로운 아키텍처다. 두 명령어 세트 간의 메모리 순서를 어떻게 처리하는지 궁금하다.
+- 또는: IBM은 자신들의 ISA가 죽어가고 있음을 깨달았고 이것이 가능한 가장 부드러운 호스피스 케어다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+IBM presenta procesador de arquitectura dual para IBM Z y LinuxONE
+***** TLDR
+IBM anunció un procesador mainframe de arquitectura dual que puede ejecutar instrucciones IBM Z y Arm nativamente en los mismos núcleos. Construido en tecnología de 2nm, cada uno de los 11 núcleos funciona a más de 5.7 GHz con aceleradores de IA. No son núcleos Arm y Z separados - cada núcleo ejecuta ambos ISAs concurrentemente. El objetivo es llevar el ecosistema de 22 millones de desarrolladores de Arm a cargas de trabajo mainframe de misión crítica.
+***** Take
+IBM acaba de decirle a sus clientes de mainframe que pueden mantener sus dinosaurios z/OS Y ejecutar Arm Linux en el mismo silicio. Es como ofrecer un Model T con motor Tesla. La pregunta real que nadie hace: ¿quién exactamente va a depurar una condición de carrera entre trabajos batch de z/OS y pods de Kubernetes?
+***** Comments
+- Esto es realmente enorme para industrias reguladas. Los bancos que ejecutan COBOL ahora pueden migrar gradualmente a herramientas modernas sin un cambio 'big bang'.
+- La ejecución concurrente de ISA en el mismo núcleo es arquitectura genuinamente novedosa. Me pregunto cómo manejan el ordenamiento de memoria entre los dos conjuntos de instrucciones.
+- O: IBM se da cuenta de que su ISA está muriendo y este es el cuidado de hospicio más gentil posible.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+IBM stellt Dual-Architektur-Prozessor für IBM Z und LinuxONE vor
+***** TLDR
+IBM kündigte einen Dual-Architektur-Mainframe-Prozessor an, der sowohl IBM Z als auch Arm-Befehle nativ auf denselben Kernen ausführen kann. Auf 2nm-Technologie aufgebaut, läuft jeder der 11 Kerne mit über 5,7 GHz und AI-Beschleunigern. Das sind keine separaten Arm- und Z-Kerne - jeder Kern führt beide ISAs gleichzeitig aus. Das Ziel ist es, das 22 Millionen Entwickler-Ökosystem von Arm zu geschäftskritischen Mainframe-Workloads zu bringen.
+***** Take
+IBM hat seinen Mainframe-Kunden gerade gesagt, dass sie ihre z/OS-Dinosaurier behalten UND Arm Linux auf demselben Silizium ausführen können. Das ist wie ein Model T mit Tesla-Motor anzubieten. Die echte Frage, die niemand stellt: Wer genau wird eine Race Condition zwischen z/OS-Batch-Jobs und Kubernetes-Pods debuggen?
+***** Comments
+- Das ist wirklich riesig für regulierte Branchen. Banken, die COBOL betreiben, können jetzt schrittweise auf moderne Tools migrieren, ohne einen 'Big Bang'-Umstieg.
+- Gleichzeitige ISA-Ausführung auf demselben Kern ist wirklich neuartige Architektur. Ich frage mich, wie sie die Speicherreihenfolge zwischen den beiden Befehlssätzen handhaben.
+- Oder: IBM erkennt, dass ihre ISA stirbt, und das ist die sanfteste mögliche Hospizpflege.
+** Zohran and the short link :ux:government:design:
+:PROPERTIES:
+:ID:       49457512
+:URL:      https://iamwillwang.com/notes/zohran-and-the-short-link/
+:HN_URL:   https://news.ycombinator.com/item?id=49457512
+:POINTS:   207
+:COMMENTS: 82
+:BY:       will_wang
+:END:
+
+*** TLDR
+NYC's Zohran Mamdani (now mayor? council member?) consistently ends his video announcements with simple, memorable short links like nyc.gov/initiative. The author argues this is good UX: human-readable URLs, consistent government branding, and turns social media distribution into actionable engagement.
+
+*** Take
+Someone wrote a love letter to URL design and 200+ HN users upvoted it. The bar for what constitutes news is apparently 'government website does something not terrible.' Next week: local politician uses readable font, tech community loses collective mind.
+
+*** Comments
+
+**** dang
+:PROPERTIES:
+:COMMENT_ID: 49457723
+:END:
+This is the kind of small, thoughtful design detail that actually changes behavior at scale. Gov.uk pioneered this approach years ago.
+
+**** raganwald
+:PROPERTIES:
+:COMMENT_ID: 49457845
+:END:
+The real innovation isn't the short link itself, it's that someone in government understood that discoverability matters more than internal organizational structure.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Zohran和短链接
+***** TLDR
+纽约市的Zohran Mamdani（现在是市长？议员？）始终在他的视频公告结尾使用简单、易记的短链接，如nyc.gov/initiative。作者认为这是好的用户体验：人类可读的URL、一致的政府品牌，并将社交媒体分发转化为可操作的参与。
+***** Take
+有人写了一封关于URL设计的情书，200多名HN用户点赞了它。新闻的门槛显然是'政府网站做了一件不糟糕的事'。下周：地方政客使用可读字体，技术社区集体抓狂。
+***** Comments
+- 这是那种真正能在大规模上改变行为的小型、深思熟虑的设计细节。Gov.uk多年前就开创了这种方法。
+- 真正的创新不是短链接本身，而是政府中有人理解了可发现性比内部组织结构更重要。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Zohranと短縮リンク
+***** TLDR
+NYCのZohran Mamdani（今は市長？議員？）は一貫してビデオ告知の最後にnyc.gov/initiativeのようなシンプルで覚えやすい短縮リンクを使用している。著者はこれが良いUXだと主張：人間が読めるURL、一貫した政府ブランディング、そしてソーシャルメディアでの配信を実行可能なエンゲージメントに変える。
+***** Take
+誰かがURL設計へのラブレターを書き、200人以上のHNユーザーがアップボートした。ニュースを構成するもののハードルは明らかに「政府のウェブサイトがひどくないことをした」だ。来週：地方政治家が読みやすいフォントを使用、テックコミュニティが集団で正気を失う。
+***** Comments
+- これはまさに大規模で実際に行動を変える、小さく思慮深いデザインの詳細だ。Gov.ukは何年も前にこのアプローチを先駆けた。
+- 本当のイノベーションは短縮リンク自体ではなく、政府の誰かが発見可能性が内部の組織構造より重要だと理解したことだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Zohran과 짧은 링크
+***** TLDR
+NYC의 Zohran Mamdani(지금 시장? 시의원?)는 일관되게 비디오 공지 끝에 nyc.gov/initiative 같은 간단하고 기억하기 쉬운 짧은 링크를 사용한다. 저자는 이것이 좋은 UX라고 주장한다: 인간이 읽을 수 있는 URL, 일관된 정부 브랜딩, 그리고 소셜 미디어 배포를 실행 가능한 참여로 전환.
+***** Take
+누군가 URL 디자인에 대한 러브레터를 썼고 200명 이상의 HN 사용자가 업보트했다. 뉴스를 구성하는 것의 기준은 명백히 '정부 웹사이트가 끔찍하지 않은 일을 했다'이다. 다음 주: 지역 정치인이 읽기 쉬운 폰트를 사용, 테크 커뮤니티 집단 정신 상실.
+***** Comments
+- 이것이 바로 대규모로 실제로 행동을 바꾸는 작고 사려 깊은 디자인 디테일이다. Gov.uk가 수년 전에 이 접근 방식을 개척했다.
+- 진짜 혁신은 짧은 링크 자체가 아니라, 정부의 누군가가 발견 가능성이 내부 조직 구조보다 중요하다는 것을 이해했다는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Zohran y el enlace corto
+***** TLDR
+Zohran Mamdani de NYC (¿ahora alcalde? ¿concejal?) termina consistentemente sus anuncios en video con enlaces cortos simples y memorables como nyc.gov/initiative. El autor argumenta que esto es buen UX: URLs legibles por humanos, marca gubernamental consistente, y convierte la distribución en redes sociales en engagement accionable.
+***** Take
+Alguien escribió una carta de amor al diseño de URLs y más de 200 usuarios de HN la votaron positivamente. El listón para lo que constituye noticia es aparentemente 'sitio web del gobierno hace algo no terrible'. La próxima semana: político local usa fuente legible, comunidad tech pierde la cabeza colectivamente.
+***** Comments
+- Este es el tipo de detalle de diseño pequeño y reflexivo que realmente cambia el comportamiento a escala. Gov.uk fue pionero en este enfoque hace años.
+- La verdadera innovación no es el enlace corto en sí, es que alguien en el gobierno entendió que la descubribilidad importa más que la estructura organizacional interna.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zohran und der Kurzlink
+***** TLDR
+NYCs Zohran Mamdani (jetzt Bürgermeister? Stadtrat?) beendet seine Video-Ankündigungen konsequent mit einfachen, einprägsamen Kurzlinks wie nyc.gov/initiative. Der Autor argumentiert, das sei gute UX: menschenlesbare URLs, konsistentes Regierungs-Branding, und verwandelt Social-Media-Verteilung in umsetzbares Engagement.
+***** Take
+Jemand hat einen Liebesbrief an URL-Design geschrieben und über 200 HN-Nutzer haben ihn hochgevotet. Die Messlatte für das, was Nachrichten ausmacht, ist offenbar 'Regierungswebsite macht etwas nicht Schreckliches'. Nächste Woche: Lokalpolitiker verwendet lesbare Schriftart, Tech-Community verliert kollektiv den Verstand.
+***** Comments
+- Das ist die Art von kleinem, durchdachtem Designdetail, das tatsächlich Verhalten im großen Maßstab verändert. Gov.uk hat diesen Ansatz vor Jahren pioniert.
+- Die echte Innovation ist nicht der Kurzlink selbst, sondern dass jemand in der Regierung verstanden hat, dass Auffindbarkeit wichtiger ist als die interne Organisationsstruktur.
