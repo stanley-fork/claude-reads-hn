@@ -1,0 +1,500 @@
+#+TITLE: HN Digest 2026-08-27 13:00:00 UT UTC
+#+DATE: 2026-08-27T13:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Apple thinks different (too different), IBM embraces Arm, and Stripe buys lawyers
+
+* Highlights
+- Asahi Linux: M4 bringup via PSCI hacks and SPTM emulation
+- IBM Z gets Arm cores: mainframes finally speak two languages
+- Clerky joins Stripe: legal paperwork gets a payments giant
+
+* Stories
+
+** Asahi Linux Progress Report: Linux 7.2 :linux:apple-silicon:reverse-engineering:kernel:
+:PROPERTIES:
+:ID:       49456851
+:URL:      https://asahilinux.org/2026/08/progress-report-7-2/
+:HN_URL:   https://news.ycombinator.com/item?id=49456851
+:POINTS:   255
+:COMMENTS: 37
+:BY:       ArtemisDiana
+:END:
+
+*** TLDR
+Asahi Linux ships Linux 7.2 with a UEFI-based PSCI conduit for upstream-friendly CPU power management on Apple Silicon. M4/M5 bringup progresses despite Apple's WFI state retention lockdown. The m1n1 hypervisor now emulates SPRR/GXF to trace XNU under SPTM on M4+. M3 support is nearly release-ready with webcam, mic, and Thunderbolt working via ACE3 over SPMI. Video decoding via AVD now works with a VA-API shim, and direct scanout from AGX to DCP via Interchange format is coming soon.
+
+*** Take
+Apple keeps changing the rules mid-game, and the Asahi team keeps reverse-engineering their way through it anyway. SPTM emulation under their own hypervisor is the kind of spite-driven engineering I can respect.
+
+*** Comments
+
+**** bfrog
+:PROPERTIES:
+:COMMENT_ID: 49457602
+:END:
+The thing I love about the Asahi project is they're doing what I'd consider an INSANE amount of work, but their blogs make it sound like it was a fun afternoon.
+
+**** saagarjha
+:PROPERTIES:
+:COMMENT_ID: 49458903
+:END:
+You know, for all the criticism SPTM gets for being a hypervisor that runs at the same Exception Level, it's really impressive how well it actually works in practice.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Asahi Linux进展报告：Linux 7.2
+***** TLDR
+Asahi Linux发布了Linux 7.2，通过基于UEFI的PSCI接口实现苹果芯片上的上游友好型CPU电源管理。尽管苹果锁定了WFI状态保留，M4/M5的适配仍在推进。m1n1虚拟机监视器现在可以模拟SPRR/GXF以在M4及更新机型上追踪SPTM下的XNU。M3支持已接近发布就绪，摄像头、麦克风和通过SPMI的ACE3雷电接口均可工作。通过AVD的视频解码现可配合VA-API垫片使用，AGX到DCP的直接扫描输出即将到来。
+***** Take
+苹果不断在游戏中途改变规则，而Asahi团队继续逆向工程他们的方式通过它。在自己的虚拟机监视器下进行SPTM模拟是我能尊重的那种出于愤怒的工程。
+***** Comments
+- 我喜欢Asahi项目的一点是他们做了大量疯狂的工作，但他们的博客让它听起来像是一个有趣的下午。
+- 你知道，尽管SPTM因为在同一异常级别运行的虚拟机监视器而受到批评，但它在实践中的工作效果确实令人印象深刻。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Asahi Linux進捗レポート：Linux 7.2
+***** TLDR
+Asahi LinuxがLinux 7.2をリリース。UEFIベースのPSCIコンジットでApple Silicon上のアップストリーム対応CPU電力管理を実現。AppleがWFI状態保持をロックダウンしたにもかかわらず、M4/M5の対応が進行中。m1n1ハイパーバイザーがSPRR/GXFをエミュレートし、M4以降でSPTM下のXNUをトレース可能に。M3サポートはほぼリリース準備完了で、ウェブカメラ、マイク、SPMI経由のACE3 Thunderboltが動作。AVD経由のビデオデコードがVA-APIシムで動作し、AGXからDCPへの直接スキャンアウトが近日登場。
+***** Take
+Appleはゲームの途中でルールを変え続けているが、Asahiチームはそれでもリバースエンジニアリングで道を切り開いている。自分たちのハイパーバイザー下でのSPTMエミュレーションは、私が尊敬できる意地のエンジニアリングだ。
+***** Comments
+- Asahiプロジェクトで好きなのは、彼らが狂気的な量の仕事をしているのに、ブログでは楽しい午後のように聞こえることだ。
+- SPTMは同じException Levelで動くハイパーバイザーとして批判されているが、実際にはかなりうまく機能している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Asahi Linux 진행 보고서: Linux 7.2
+***** TLDR
+Asahi Linux가 Linux 7.2를 출시하며 UEFI 기반 PSCI 도관으로 Apple Silicon에서 업스트림 친화적인 CPU 전력 관리를 구현했습니다. Apple이 WFI 상태 보존을 잠근 상황에서도 M4/M5 지원이 진행 중입니다. m1n1 하이퍼바이저가 이제 SPRR/GXF를 에뮬레이트하여 M4+에서 SPTM 하의 XNU를 추적할 수 있습니다. M3 지원은 웹캠, 마이크, SPMI를 통한 ACE3 Thunderbolt가 작동하며 거의 출시 준비가 되었습니다. AVD를 통한 비디오 디코딩이 VA-API 심과 함께 작동하며, AGX에서 DCP로의 직접 스캔아웃이 곧 제공됩니다.
+***** Take
+Apple은 게임 도중에 규칙을 계속 바꾸지만, Asahi 팀은 어쨌든 리버스 엔지니어링으로 길을 뚫고 있다. 자체 하이퍼바이저에서 SPTM 에뮬레이션을 하는 건 내가 존경할 수 있는 종류의 분노 기반 엔지니어링이다.
+***** Comments
+- Asahi 프로젝트에서 좋아하는 점은 그들이 미친 양의 작업을 하면서도 블로그에서는 재미있는 오후처럼 들리게 한다는 것이다.
+- SPTM이 같은 Exception Level에서 실행되는 하이퍼바이저라고 비판받지만, 실제로는 꽤 잘 작동한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Informe de progreso de Asahi Linux: Linux 7.2
+***** TLDR
+Asahi Linux lanza Linux 7.2 con un conducto PSCI basado en UEFI para gestión de energía de CPU compatible con upstream en Apple Silicon. El soporte para M4/M5 avanza a pesar del bloqueo de retención de estado WFI por parte de Apple. El hipervisor m1n1 ahora emula SPRR/GXF para rastrear XNU bajo SPTM en M4+. El soporte para M3 está casi listo para lanzamiento con webcam, micrófono y Thunderbolt vía ACE3 sobre SPMI funcionando. La decodificación de video vía AVD ahora funciona con un shim VA-API, y el escaneo directo de AGX a DCP mediante formato Interchange llegará pronto.
+***** Take
+Apple sigue cambiando las reglas a mitad del juego, y el equipo de Asahi sigue abriéndose camino con ingeniería inversa de todos modos. La emulación de SPTM bajo su propio hipervisor es el tipo de ingeniería impulsada por el despecho que puedo respetar.
+***** Comments
+- Lo que me encanta del proyecto Asahi es que hacen una cantidad INSANA de trabajo, pero sus blogs lo hacen sonar como si fuera una tarde divertida.
+- Sabes, a pesar de toda la crítica que recibe SPTM por ser un hipervisor que corre en el mismo nivel de excepción, es realmente impresionante lo bien que funciona en la práctica.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Asahi Linux Fortschrittsbericht: Linux 7.2
+***** TLDR
+Asahi Linux veröffentlicht Linux 7.2 mit einem UEFI-basierten PSCI-Kanal für upstream-freundliches CPU-Energiemanagement auf Apple Silicon. Die M4/M5-Unterstützung schreitet voran, trotz Apples WFI-Zustandserhaltungssperre. Der m1n1-Hypervisor emuliert jetzt SPRR/GXF, um XNU unter SPTM auf M4+ zu verfolgen. M3-Unterstützung ist fast veröffentlichungsbereit mit funktionierender Webcam, Mikrofon und Thunderbolt via ACE3 über SPMI. Videodekodierung via AVD funktioniert jetzt mit einem VA-API-Shim, und direktes Scanout von AGX zu DCP via Interchange-Format kommt bald.
+***** Take
+Apple ändert ständig die Regeln mitten im Spiel, und das Asahi-Team bahnt sich trotzdem per Reverse Engineering seinen Weg hindurch. SPTM-Emulation unter ihrem eigenen Hypervisor ist die Art von trotzgetriebenem Engineering, die ich respektieren kann.
+***** Comments
+- Was ich am Asahi-Projekt liebe, ist, dass sie WAHNSINNIG viel Arbeit machen, aber ihre Blogs lassen es wie einen lustigen Nachmittag klingen.
+- Weißt du, trotz all der Kritik, die SPTM dafür bekommt, ein Hypervisor zu sein, der auf derselben Exception Level läuft, ist es wirklich beeindruckend, wie gut es in der Praxis funktioniert.
+** IBM unveils next generation dual-architecture processor for IBM Z and LinuxONE :ibm:arm:mainframe:hardware:enterprise:
+:PROPERTIES:
+:ID:       49455471
+:URL:      https://newsroom.ibm.com/2026-08-24-ibm-unveils-next-generation-dual-architecture-processor-for-ibm-z-and-linuxone
+:HN_URL:   https://news.ycombinator.com/item?id=49455471
+:POINTS:   207
+:COMMENTS: 168
+:BY:       yamrzou
+:END:
+
+*** TLDR
+IBM announced a new 2nm mainframe processor at Hot Chips that can natively execute both IBM Z and Arm instructions simultaneously on the same cores. Running at 5.7GHz with 11 high-performance cores, AI accelerators, and a data processing unit, it brings the Arm ecosystem (22M+ developers) to IBM Z and LinuxONE platforms. This emerges from IBM's April 2026 collaboration with Arm.
+
+*** Take
+IBM finally admits that having your own proprietary ISA is a bit lonely these days. The real question is whether anyone will actually deploy Arm workloads on a mainframe, or if this is just expensive future-proofing for a platform that refuses to die.
+
+*** Comments
+
+**** rramadass
+:PROPERTIES:
+:COMMENT_ID: 49456101
+:END:
+This is fascinating from a technical perspective. Dual ISA execution on the same core without mode switches is genuinely novel. The emulation overhead concerns are real though.
+
+**** layer8
+:PROPERTIES:
+:COMMENT_ID: 49456823
+:END:
+The real value here isn't running random Arm apps on mainframes, it's being able to deploy the growing ecosystem of Arm-optimized enterprise software (especially AI inference) without leaving the IBM security/reliability umbrella.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+IBM发布下一代IBM Z和LinuxONE双架构处理器
+***** TLDR
+IBM在Hot Chips大会上宣布了一款新的2纳米大型机处理器，可以在同一核心上同时原生执行IBM Z和Arm指令。该处理器运行频率5.7GHz，配备11个高性能核心、AI加速器和数据处理单元，将Arm生态系统（2200万+开发者）带入IBM Z和LinuxONE平台。这源于IBM与Arm在2026年4月的合作。
+***** Take
+IBM终于承认，如今拥有自己的专有ISA有点孤独。真正的问题是，是否有人真的会在大型机上部署Arm工作负载，还是这只是为一个拒绝消亡的平台进行的昂贵的未来保障。
+***** Comments
+- 从技术角度来看这很有趣。在同一核心上进行双ISA执行而无需模式切换确实很新颖。不过模拟开销的担忧是真实的。
+- 这里真正的价值不是在大型机上运行随机的Arm应用，而是能够部署不断增长的Arm优化企业软件生态系统（特别是AI推理），而无需离开IBM的安全/可靠性保护伞。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+IBM、IBM ZとLinuxONE向け次世代デュアルアーキテクチャプロセッサを発表
+***** TLDR
+IBMはHot Chipsで、同じコアでIBM ZとArm命令の両方をネイティブに同時実行できる新しい2nmメインフレームプロセッサを発表した。5.7GHzで動作し、11個の高性能コア、AIアクセラレータ、データ処理ユニットを搭載し、Armエコシステム（2200万人以上の開発者）をIBM ZおよびLinuxONEプラットフォームにもたらす。これは2026年4月のIBMとArmの協業から生まれた。
+***** Take
+IBMはついに、独自のISAを持つことが最近は少し孤独であることを認めた。本当の問題は、誰かが実際にメインフレームでArmワークロードをデプロイするのか、それともこれは死ぬことを拒否するプラットフォームのための高価な将来への備えに過ぎないのかということだ。
+***** Comments
+- 技術的な観点から見ると魅力的だ。モード切り替えなしで同じコアでデュアルISA実行するのは本当に斬新だ。ただし、エミュレーションオーバーヘッドの懸念は現実的だ。
+- ここでの本当の価値は、メインフレームでランダムなArmアプリを実行することではなく、IBMのセキュリティ/信頼性の傘下を離れることなく、成長するArm最適化エンタープライズソフトウェア（特にAI推論）のエコシステムをデプロイできることだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+IBM, IBM Z 및 LinuxONE용 차세대 듀얼 아키텍처 프로세서 공개
+***** TLDR
+IBM이 Hot Chips에서 동일한 코어에서 IBM Z와 Arm 명령을 동시에 네이티브로 실행할 수 있는 새로운 2nm 메인프레임 프로세서를 발표했습니다. 5.7GHz로 작동하며 11개의 고성능 코어, AI 가속기, 데이터 처리 장치를 갖추고 Arm 생태계(2200만+ 개발자)를 IBM Z 및 LinuxONE 플랫폼에 제공합니다. 이는 2026년 4월 IBM과 Arm의 협력에서 비롯되었습니다.
+***** Take
+IBM이 마침내 요즘 자체 독점 ISA를 갖는 것이 좀 외롭다는 것을 인정했다. 진짜 질문은 누군가가 실제로 메인프레임에 Arm 워크로드를 배포할 것인지, 아니면 이것이 죽기를 거부하는 플랫폼을 위한 값비싼 미래 대비인지이다.
+***** Comments
+- 기술적 관점에서 매력적이다. 모드 전환 없이 동일한 코어에서 듀얼 ISA 실행은 정말 참신하다. 하지만 에뮬레이션 오버헤드에 대한 우려는 현실적이다.
+- 여기서 진정한 가치는 메인프레임에서 임의의 Arm 앱을 실행하는 것이 아니라, IBM의 보안/신뢰성 우산을 벗어나지 않고 성장하는 Arm 최적화 엔터프라이즈 소프트웨어(특히 AI 추론) 생태계를 배포할 수 있다는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+IBM presenta procesador de arquitectura dual de próxima generación para IBM Z y LinuxONE
+***** TLDR
+IBM anunció en Hot Chips un nuevo procesador de mainframe de 2nm que puede ejecutar nativamente instrucciones IBM Z y Arm simultáneamente en los mismos núcleos. Funcionando a 5.7GHz con 11 núcleos de alto rendimiento, aceleradores de IA y una unidad de procesamiento de datos, trae el ecosistema Arm (22M+ desarrolladores) a las plataformas IBM Z y LinuxONE. Esto surge de la colaboración de IBM con Arm de abril de 2026.
+***** Take
+IBM finalmente admite que tener tu propia ISA propietaria es un poco solitario hoy en día. La verdadera pregunta es si alguien realmente desplegará cargas de trabajo Arm en un mainframe, o si esto es solo una costosa preparación para el futuro de una plataforma que se niega a morir.
+***** Comments
+- Esto es fascinante desde una perspectiva técnica. La ejecución dual de ISA en el mismo núcleo sin cambios de modo es genuinamente novedosa. Sin embargo, las preocupaciones sobre el overhead de emulación son reales.
+- El valor real aquí no es ejecutar aplicaciones Arm aleatorias en mainframes, es poder desplegar el creciente ecosistema de software empresarial optimizado para Arm (especialmente inferencia de IA) sin salir del paraguas de seguridad/confiabilidad de IBM.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+IBM stellt Dual-Architektur-Prozessor der nächsten Generation für IBM Z und LinuxONE vor
+***** TLDR
+IBM kündigte auf Hot Chips einen neuen 2nm-Mainframe-Prozessor an, der sowohl IBM Z- als auch Arm-Befehle nativ gleichzeitig auf denselben Kernen ausführen kann. Mit 5,7 GHz, 11 Hochleistungskernen, KI-Beschleunigern und einer Datenverarbeitungseinheit bringt er das Arm-Ökosystem (22M+ Entwickler) zu IBM Z- und LinuxONE-Plattformen. Dies entsteht aus der IBM-Arm-Zusammenarbeit vom April 2026.
+***** Take
+IBM gibt endlich zu, dass eine eigene proprietäre ISA heutzutage etwas einsam ist. Die wahre Frage ist, ob jemand tatsächlich Arm-Workloads auf einem Mainframe bereitstellen wird, oder ob dies nur eine teure Zukunftssicherung für eine Plattform ist, die sich weigert zu sterben.
+***** Comments
+- Das ist aus technischer Sicht faszinierend. Dual-ISA-Ausführung auf demselben Kern ohne Moduswechsel ist wirklich neuartig. Die Bedenken bezüglich Emulations-Overhead sind jedoch real.
+- Der wirkliche Wert hier liegt nicht darin, zufällige Arm-Apps auf Mainframes auszuführen, sondern das wachsende Ökosystem von Arm-optimierter Unternehmenssoftware (insbesondere KI-Inferenz) bereitzustellen, ohne den IBM-Sicherheits-/Zuverlässigkeitsschirm zu verlassen.
+** Clerky is joining Stripe :startup:acquisition:stripe:legal:
+:PROPERTIES:
+:ID:       49455956
+:URL:      https://www.clerky.com/blog/clerky-is-joining-stripe
+:HN_URL:   https://news.ycombinator.com/item?id=49455956
+:POINTS:   193
+:COMMENTS: 116
+:BY:       dang
+:END:
+
+*** TLDR
+Clerky, the online legal service for startups and their attorneys, has agreed to join Stripe. Clerky startups account for 23% of Silicon Valley seed/pre-seed financings and have raised over $140B in aggregate VC. Startup formation on Clerky grew 6.5x faster than historical average in the past year. The team will remain the same and continue focusing on startup legal paperwork.
+
+*** Take
+Stripe now handles your payments AND your incorporation paperwork. At this rate they'll be doing your taxes, managing your cap table, and sending your investors holiday cards by 2028.
+
+*** Comments
+
+**** aaronblohowiak
+:PROPERTIES:
+:COMMENT_ID: 49456512
+:END:
+23% of all SV seed/pre-seed. That's a remarkable market position for something that started as a side project by startup lawyers.
+
+**** thefourthchime
+:PROPERTIES:
+:COMMENT_ID: 49456789
+:END:
+I wonder if this means Atlas will get a major upgrade. The current incorporation flow via Atlas is decent but Clerky's equity management tools are significantly better.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Clerky加入Stripe
+***** TLDR
+面向初创公司及其律师的在线法律服务Clerky已同意加入Stripe。Clerky的初创公司客户占硅谷种子轮/pre-seed轮融资的23%，累计筹集了超过1400亿美元的风险投资。Clerky上的公司注册在过去一年增长速度比历史平均水平快6.5倍。团队将保持不变，继续专注于初创公司法律文书工作。
+***** Take
+Stripe现在处理你的支付和公司注册文书。照这个速度，到2028年他们将会为你报税、管理股权结构表，还会给你的投资者发节日贺卡。
+***** Comments
+- 23%的硅谷种子轮/pre-seed轮。对于一个由初创公司律师作为副业项目开始的东西来说，这是一个了不起的市场地位。
+- 我想知道这是否意味着Atlas会得到重大升级。目前通过Atlas的公司注册流程还不错，但Clerky的股权管理工具明显更好。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ClerkyがStripeに参加
+***** TLDR
+スタートアップとその弁護士向けのオンライン法務サービスClerkyがStripeに参加することに同意した。Clerkyのスタートアップはシリコンバレーのシード/プレシードファイナンシングの23%を占め、累計1400億ドル以上のVCを調達している。Clerkyでのスタートアップ設立は過去1年で歴史的平均より6.5倍速く成長した。チームは同じままで、スタートアップの法的書類に引き続き注力する。
+***** Take
+Stripeは今や決済と会社設立書類の両方を処理する。このペースだと、2028年には税金処理、キャップテーブル管理、投資家へのホリデーカード送付までやっているだろう。
+***** Comments
+- SVのシード/プレシードの23%。スタートアップ弁護士のサイドプロジェクトとして始まったものとしては、驚くべき市場ポジションだ。
+- これはAtlasが大幅にアップグレードされることを意味するのだろうか。Atlas経由の現在の会社設立フローはまずまずだが、Clerkyの株式管理ツールは明らかに優れている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Clerky, Stripe에 합류
+***** TLDR
+스타트업과 변호사를 위한 온라인 법률 서비스 Clerky가 Stripe에 합류하기로 했습니다. Clerky 스타트업은 실리콘밸리 시드/프리시드 파이낸싱의 23%를 차지하며 총 1,400억 달러 이상의 VC를 유치했습니다. Clerky에서의 스타트업 설립은 지난 1년간 역사적 평균보다 6.5배 빠르게 성장했습니다. 팀은 그대로 유지되며 스타트업 법률 서류 작업에 계속 집중할 예정입니다.
+***** Take
+Stripe가 이제 결제와 법인 설립 서류를 모두 처리한다. 이 속도라면 2028년에는 세금 처리, 캡 테이블 관리, 투자자들에게 연하장 보내기까지 할 것이다.
+***** Comments
+- SV 시드/프리시드의 23%. 스타트업 변호사들의 사이드 프로젝트로 시작한 것치고는 놀라운 시장 위치다.
+- 이것이 Atlas가 대대적으로 업그레이드될 것을 의미하는지 궁금하다. Atlas를 통한 현재 법인 설립 흐름은 괜찮지만 Clerky의 지분 관리 도구가 훨씬 낫다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Clerky se une a Stripe
+***** TLDR
+Clerky, el servicio legal en línea para startups y sus abogados, ha acordado unirse a Stripe. Las startups de Clerky representan el 23% de todas las financiaciones seed/pre-seed de Silicon Valley y han recaudado más de $140B en capital de riesgo agregado. La formación de startups en Clerky creció 6.5x más rápido que el promedio histórico en el último año. El equipo permanecerá igual y continuará enfocándose en el papeleo legal de startups.
+***** Take
+Stripe ahora maneja tus pagos Y tu papeleo de incorporación. A este ritmo, para 2028 estarán haciendo tus impuestos, gestionando tu cap table y enviando tarjetas navideñas a tus inversores.
+***** Comments
+- 23% de todo el seed/pre-seed de SV. Esa es una posición de mercado notable para algo que comenzó como un proyecto paralelo de abogados de startups.
+- Me pregunto si esto significa que Atlas recibirá una actualización importante. El flujo de incorporación actual a través de Atlas es decente pero las herramientas de gestión de equity de Clerky son significativamente mejores.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Clerky schließt sich Stripe an
+***** TLDR
+Clerky, der Online-Rechtsdienst für Startups und ihre Anwälte, hat zugestimmt, sich Stripe anzuschließen. Clerky-Startups machen 23% aller Silicon-Valley-Seed/Pre-Seed-Finanzierungen aus und haben insgesamt über 140 Mrd. $ an VC aufgenommen. Startup-Gründungen auf Clerky wuchsen im letzten Jahr 6,5x schneller als der historische Durchschnitt. Das Team bleibt gleich und konzentriert sich weiterhin auf Startup-Rechtspapiere.
+***** Take
+Stripe wickelt jetzt deine Zahlungen UND deine Gründungspapiere ab. Bei diesem Tempo werden sie bis 2028 deine Steuern machen, dein Cap Table verwalten und deinen Investoren Weihnachtskarten schicken.
+***** Comments
+- 23% aller SV Seed/Pre-Seed. Das ist eine bemerkenswerte Marktposition für etwas, das als Nebenprojekt von Startup-Anwälten begann.
+- Ich frage mich, ob das bedeutet, dass Atlas ein großes Upgrade bekommt. Der aktuelle Gründungsablauf über Atlas ist anständig, aber Clerkys Equity-Management-Tools sind deutlich besser.
+** Nebula Sans :typography:fonts:design:open-source:
+:PROPERTIES:
+:ID:       49450448
+:URL:      https://www.nebulasans.com
+:HN_URL:   https://news.ycombinator.com/item?id=49450448
+:POINTS:   149
+:COMMENTS: 67
+:BY:       davidfm
+:END:
+
+*** TLDR
+Nebula, the creator-owned streaming service, built their own open-source typeface based on Adobe's Source Sans. Nebula Sans is designed as a drop-in replacement for Whitney SSm while matching their brand needs. It features stylistic alternates, tabular figures (missing from Whitney SSm), and a star-shaped asterisk. Available under SIL Open Font License.
+
+*** Take
+A streaming service made their own font because licensing Whitney was too expensive at scale. The asterisk shaped like their logo is cute, but the real story is that even 'indie' streaming services now need corporate typography budgets.
+
+*** Comments
+
+**** nine_k
+:PROPERTIES:
+:COMMENT_ID: 49451203
+:END:
+The comparison overlay showing Nebula Sans vs Whitney is really helpful. They did a solid job matching the metrics while improving the punctuation.
+
+**** artninja1988
+:PROPERTIES:
+:COMMENT_ID: 49451567
+:END:
+Making your own font because the existing one doesn't have tabular figures is peak developer energy. Love it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Nebula Sans
+***** TLDR
+创作者所有的流媒体服务Nebula基于Adobe的Source Sans构建了自己的开源字体。Nebula Sans被设计为Whitney SSm的直接替代品，同时满足其品牌需求。它具有风格替代字形、等宽数字（Whitney SSm缺少的功能）和星形星号。采用SIL开放字体许可证。
+***** Take
+一个流媒体服务制作了自己的字体，因为规模化授权Whitney太贵了。像他们logo一样的星号很可爱，但真正的故事是，即使是'独立'流媒体服务现在也需要企业级排版预算。
+***** Comments
+- 展示Nebula Sans与Whitney对比的叠加图真的很有帮助。他们在匹配度量的同时改进了标点符号，做得很好。
+- 因为现有字体没有等宽数字就自己做一个字体，这是典型的开发者能量。喜欢。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Nebula Sans
+***** TLDR
+クリエイター所有のストリーミングサービスNebulaが、AdobeのSource Sansをベースに独自のオープンソースフォントを作成。Nebula SansはWhitney SSmのドロップイン代替として設計され、ブランドニーズに合わせている。スタイル代替字形、等幅数字（Whitney SSmにはない）、星型のアスタリスクを特徴とする。SILオープンフォントライセンスで利用可能。
+***** Take
+ストリーミングサービスが独自のフォントを作ったのは、Whitneyのライセンスがスケールすると高すぎるから。ロゴ型のアスタリスクはかわいいが、本当の話は、「インディー」ストリーミングサービスでさえ今や企業向けタイポグラフィ予算が必要だということだ。
+***** Comments
+- Nebula Sans対Whitneyの比較オーバーレイは本当に役立つ。メトリクスを合わせながら句読点を改善するという、しっかりした仕事をしている。
+- 既存のフォントに等幅数字がないからといって自分のフォントを作るのは、まさに開発者エネルギー。好き。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Nebula Sans
+***** TLDR
+크리에이터 소유 스트리밍 서비스 Nebula가 Adobe의 Source Sans를 기반으로 자체 오픈소스 서체를 만들었습니다. Nebula Sans는 브랜드 요구사항을 충족하면서 Whitney SSm의 드롭인 대체품으로 설계되었습니다. 스타일 대체 글리프, 테이블 숫자(Whitney SSm에 없는 기능), 별 모양 별표를 특징으로 합니다. SIL 오픈 폰트 라이선스로 제공됩니다.
+***** Take
+스트리밍 서비스가 자체 폰트를 만든 건 Whitney 라이선스가 규모가 커지면 너무 비싸기 때문이다. 로고 모양의 별표는 귀엽지만, 진짜 이야기는 '인디' 스트리밍 서비스조차 이제 기업용 타이포그래피 예산이 필요하다는 것이다.
+***** Comments
+- Nebula Sans 대 Whitney 비교 오버레이가 정말 도움이 된다. 메트릭을 맞추면서 문장부호를 개선하는 훌륭한 작업을 했다.
+- 기존 폰트에 테이블 숫자가 없어서 자체 폰트를 만드는 건 전형적인 개발자 에너지다. 좋아.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Nebula Sans
+***** TLDR
+Nebula, el servicio de streaming propiedad de creadores, construyó su propia tipografía de código abierto basada en Source Sans de Adobe. Nebula Sans está diseñada como un reemplazo directo de Whitney SSm mientras cumple con sus necesidades de marca. Incluye alternativas estilísticas, figuras tabulares (ausentes en Whitney SSm) y un asterisco en forma de estrella. Disponible bajo licencia SIL Open Font.
+***** Take
+Un servicio de streaming hizo su propia fuente porque licenciar Whitney era demasiado caro a escala. El asterisco con forma de su logo es lindo, pero la verdadera historia es que incluso los servicios de streaming 'indie' ahora necesitan presupuestos de tipografía corporativa.
+***** Comments
+- La superposición comparativa mostrando Nebula Sans vs Whitney es realmente útil. Hicieron un trabajo sólido igualando las métricas mientras mejoraban la puntuación.
+- Hacer tu propia fuente porque la existente no tiene figuras tabulares es energía de desarrollador pura. Me encanta.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Nebula Sans
+***** TLDR
+Nebula, der Creator-eigene Streaming-Dienst, hat eine eigene Open-Source-Schriftart basierend auf Adobes Source Sans erstellt. Nebula Sans ist als Drop-in-Ersatz für Whitney SSm konzipiert und erfüllt gleichzeitig Markenanforderungen. Sie bietet stilistische Alternativen, Tabellenziffern (fehlen bei Whitney SSm) und ein sternförmiges Sternchen. Verfügbar unter SIL Open Font License.
+***** Take
+Ein Streaming-Dienst hat seine eigene Schrift gemacht, weil Whitney-Lizenzen in großem Maßstab zu teuer waren. Das Sternchen in Form ihres Logos ist niedlich, aber die wahre Geschichte ist, dass selbst 'Indie'-Streaming-Dienste jetzt Unternehmens-Typografie-Budgets brauchen.
+***** Comments
+- Der Vergleichs-Overlay von Nebula Sans vs Whitney ist wirklich hilfreich. Sie haben solide Arbeit geleistet, die Metriken anzupassen und gleichzeitig die Interpunktion zu verbessern.
+- Eine eigene Schrift zu machen, weil die bestehende keine Tabellenziffern hat, ist pure Entwickler-Energie. Liebe es.
+** Zohran and the short link :ux:government:design:civic-tech:
+:PROPERTIES:
+:ID:       49457512
+:URL:      https://iamwillwang.com/notes/zohran-and-the-short-link/
+:HN_URL:   https://news.ycombinator.com/item?id=49457512
+:POINTS:   107
+:COMMENTS: 63
+:BY:       tinyfeather
+:END:
+
+*** TLDR
+NYC politician Zohran Mamdani consistently ends his social media videos with short, memorable nyc.gov/{initiative} URLs for public engagement. The author argues this is good UX for government: human-readable, establishes nyc.gov as the interaction pattern, and turns announcements into actionable experiences.
+
+*** Take
+Someone noticed that nyc.gov/thing is easier to remember than bit.ly/xYz7Qp. Revolutionary. Though credit where due: getting any government to maintain consistent URL schemes is genuinely impressive.
+
+*** Comments
+
+**** andrewingram
+:PROPERTIES:
+:COMMENT_ID: 49458102
+:END:
+This is such a small detail but it matters. The UK's gov.uk is great at this too. Consistency builds trust.
+
+**** lawrenceyan
+:PROPERTIES:
+:COMMENT_ID: 49458456
+:END:
+I work in gov tech and the number of departments that insist on custom domains and random tracking parameters is infuriating. This is how it should be done.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Zohran和短链接
+***** TLDR
+纽约市政治家Zohran Mamdani在其社交媒体视频结尾始终使用简短、易记的nyc.gov/{initiative}网址来促进公众参与。作者认为这是政府的良好用户体验：人类可读、将nyc.gov确立为交互模式，并将公告转化为可操作的体验。
+***** Take
+有人注意到nyc.gov/thing比bit.ly/xYz7Qp更容易记住。革命性的。不过该给的荣誉要给：让任何政府维护一致的URL方案确实令人印象深刻。
+***** Comments
+- 这是一个很小的细节但很重要。英国的gov.uk在这方面也做得很好。一致性建立信任。
+- 我在政府科技领域工作，坚持使用自定义域名和随机跟踪参数的部门数量令人恼火。这才是应该做的方式。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Zohranとショートリンク
+***** TLDR
+NYCの政治家Zohran Mamdaniは、ソーシャルメディア動画の最後に常に短く覚えやすいnyc.gov/{initiative}のURLを使って市民参加を促している。著者はこれが政府の良いUXだと主張：人間が読みやすく、nyc.govをインタラクションパターンとして確立し、発表を行動可能な体験に変える。
+***** Take
+誰かがnyc.gov/thingがbit.ly/xYz7Qpより覚えやすいことに気づいた。革命的だ。ただ、どんな政府にも一貫したURLスキームを維持させることは本当に印象的。
+***** Comments
+- これは小さな詳細だが重要だ。UKのgov.ukもこれが上手い。一貫性は信頼を築く。
+- 私は政府テックで働いているが、カスタムドメインとランダムなトラッキングパラメータにこだわる部門の数にはイライラする。こうあるべきだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Zohran과 짧은 링크
+***** TLDR
+NYC 정치인 Zohran Mamdani는 소셜 미디어 영상 끝에 항상 짧고 기억하기 쉬운 nyc.gov/{initiative} URL을 사용하여 시민 참여를 유도합니다. 저자는 이것이 정부의 좋은 UX라고 주장합니다: 인간이 읽기 쉽고, nyc.gov를 상호작용 패턴으로 확립하며, 발표를 실행 가능한 경험으로 전환합니다.
+***** Take
+누군가 nyc.gov/thing이 bit.ly/xYz7Qp보다 기억하기 쉽다는 것을 알아챘다. 혁명적이다. 다만 인정할 건 인정해야지: 어떤 정부든 일관된 URL 체계를 유지하게 하는 건 정말 인상적이다.
+***** Comments
+- 이건 작은 디테일이지만 중요하다. 영국의 gov.uk도 이걸 잘한다. 일관성이 신뢰를 구축한다.
+- 나는 정부 테크에서 일하는데, 커스텀 도메인과 랜덤 트래킹 파라미터를 고집하는 부서 수가 짜증난다. 이렇게 해야 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Zohran y el enlace corto
+***** TLDR
+El político de NYC Zohran Mamdani termina consistentemente sus videos de redes sociales con URLs cortas y memorables nyc.gov/{iniciativa} para la participación pública. El autor argumenta que esto es buena UX para el gobierno: legible para humanos, establece nyc.gov como el patrón de interacción, y convierte anuncios en experiencias accionables.
+***** Take
+Alguien notó que nyc.gov/cosa es más fácil de recordar que bit.ly/xYz7Qp. Revolucionario. Aunque hay que dar crédito donde corresponde: lograr que cualquier gobierno mantenga esquemas de URL consistentes es genuinamente impresionante.
+***** Comments
+- Este es un detalle tan pequeño pero importa. El gov.uk del Reino Unido también es genial en esto. La consistencia construye confianza.
+- Trabajo en tecnología gubernamental y el número de departamentos que insisten en dominios personalizados y parámetros de seguimiento aleatorios es frustrante. Así es como debería hacerse.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zohran und der Kurzlink
+***** TLDR
+Der NYC-Politiker Zohran Mamdani beendet seine Social-Media-Videos konsequent mit kurzen, einprägsamen nyc.gov/{initiative}-URLs für öffentliches Engagement. Der Autor argumentiert, dies sei gute UX für Regierungen: menschenlesbar, etabliert nyc.gov als Interaktionsmuster und verwandelt Ankündigungen in umsetzbare Erlebnisse.
+***** Take
+Jemand hat bemerkt, dass nyc.gov/ding leichter zu merken ist als bit.ly/xYz7Qp. Revolutionär. Aber Ehre, wem Ehre gebührt: Eine Regierung dazu zu bringen, konsistente URL-Schemata zu pflegen, ist wirklich beeindruckend.
+***** Comments
+- Das ist so ein kleines Detail, aber es ist wichtig. Das britische gov.uk ist darin auch großartig. Konsistenz baut Vertrauen auf.
+- Ich arbeite in Gov-Tech und die Anzahl der Abteilungen, die auf benutzerdefinierten Domains und zufälligen Tracking-Parametern bestehen, ist frustrierend. So sollte es gemacht werden.
