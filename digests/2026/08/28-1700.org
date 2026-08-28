@@ -1,0 +1,502 @@
+#+TITLE: HN Digest 2026-08-28 17:00:00 UT UTC
+#+DATE: 2026-08-28T17:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Cloudflare saves 100TB, small models get cheap, and a duck learns to walk
+
+* Highlights
+- Cloudflare optimized away 100TB of DNS cache RAM
+- Small AI models finally cost less than a latte
+- Microduck: A $399 biped you can teach new tricks
+- 21 bytes crashes FFmpeg, courtesy of vibecoded fuzzer
+- Claude's vocabulary analyzed across 47K pull requests
+
+* Stories
+
+** How we saved 100TB of memory by optimizing 1.1.1.1's DNS cache :dns:rust:infrastructure:cloudflare:optimization:
+:PROPERTIES:
+:ID:       49468083
+:URL:      https://blog.cloudflare.com/dns-cache-memory-optimization-1111/
+:HN_URL:   https://news.ycombinator.com/item?id=49468083
+:POINTS:   477
+:COMMENTS: 132
+:BY:       jgrahamc
+:END:
+
+*** TLDR
+Cloudflare's Big Pineapple DNS platform stores 250 billion cache entries. Five successive Rust optimizations cut per-entry memory by 56%: replacing Vec with Box<［T］>, merging record sections with offsets, omitting redundant owner names, boxing large enum variants, and storing records in wire format. Insert throughput rose 43%, lookup latency dropped 19%, and they freed ~100TB across their fleet.
+
+*** Take
+The kind of systems post that makes you question every Vec you've ever written. These are the engineering details that separate 'we run DNS' from 'we ARE DNS infrastructure.'
+
+*** Comments
+
+**** vasi
+:PROPERTIES:
+:COMMENT_ID: 49468402
+:END:
+This is a beautiful summary of practical memory optimization techniques. The scratchspace buffer trick alone is worth the read.
+
+**** mholt
+:PROPERTIES:
+:COMMENT_ID: 49468651
+:END:
+I wonder how much of this is applicable to other languages. The Vec vs Box tradeoff is very Rust-specific.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我们如何通过优化1.1.1.1的DNS缓存节省了100TB内存
+***** TLDR
+Cloudflare的Big Pineapple DNS平台存储2500亿条缓存记录。五次Rust优化将每条记录的内存占用降低了56%:用Box<［T］>替换Vec、合并记录段、省略冗余owner名、boxing大型enum变体、以及用wire格式存储记录。插入吞吐量提升43%,查找延迟降低19%,整个集群释放了约100TB内存。
+***** Take
+这种系统文章让你质疑自己写过的每一个Vec。这些工程细节是'我们运行DNS'和'我们就是DNS基础设施'之间的区别。
+***** Comments
+- 这是实用内存优化技术的精彩总结。光是scratchspace buffer技巧就值得一读。
+- 我想知道这些技术有多少适用于其他语言。Vec vs Box的权衡是非常Rust特有的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+1.1.1.1のDNSキャッシュを最適化して100TBのメモリを節約した方法
+***** TLDR
+CloudflareのBig Pineapple DNSプラットフォームは2500億のキャッシュエントリを保存している。5つのRust最適化でエントリあたりのメモリを56%削減:VecをBox<［T］>に置換、レコードセクションをオフセットで統合、冗長なオーナー名を省略、大きなenum variantをbox化、wireフォーマットでレコードを保存。挿入スループットは43%向上、ルックアップレイテンシは19%低下、フリート全体で約100TB解放。
+***** Take
+今まで書いたすべてのVecを疑いたくなるシステム記事。'DNSを運用している'と'DNS基盤そのもの'を分けるのはこういうエンジニアリングの詳細だ。
+***** Comments
+- 実用的なメモリ最適化技術の素晴らしいまとめ。scratchspaceバッファのトリックだけでも読む価値がある。
+- これが他の言語にどれだけ適用できるか気になる。Vec vs BoxのトレードオフはかなりRust固有だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+1.1.1.1 DNS 캐시 최적화로 100TB 메모리를 절약한 방법
+***** TLDR
+Cloudflare의 Big Pineapple DNS 플랫폼은 2500억 개의 캐시 항목을 저장한다. 5번의 Rust 최적화로 항목당 메모리를 56% 줄였다: Vec을 Box<［T］>로 교체, 레코드 섹션을 오프셋으로 병합, 중복 owner 이름 생략, 큰 enum variant boxing, wire 형식으로 레코드 저장. 삽입 처리량 43% 증가, 조회 지연 19% 감소, 전체 플릿에서 약 100TB 해제.
+***** Take
+지금까지 작성한 모든 Vec을 의심하게 만드는 시스템 포스트. 'DNS를 운영한다'와 'DNS 인프라 그 자체'를 구분하는 건 이런 엔지니어링 디테일이다.
+***** Comments
+- 실용적인 메모리 최적화 기술의 훌륭한 요약이다. scratchspace 버퍼 트릭만으로도 읽을 가치가 있다.
+- 이게 다른 언어에 얼마나 적용 가능한지 궁금하다. Vec vs Box 트레이드오프는 매우 Rust 특유의 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo ahorramos 100TB de memoria optimizando el caché DNS de 1.1.1.1
+***** TLDR
+La plataforma DNS Big Pineapple de Cloudflare almacena 250 mil millones de entradas de caché. Cinco optimizaciones sucesivas en Rust redujeron la huella de memoria por entrada en un 56%: reemplazar Vec por Box<［T］>, fusionar secciones de registros con offsets, omitir nombres de propietario redundantes, boxing de variantes enum grandes, y almacenar registros en formato wire. El throughput de inserción aumentó 43%, la latencia de búsqueda bajó 19%, y liberaron ~100TB en su flota.
+***** Take
+El tipo de post de sistemas que te hace cuestionar cada Vec que hayas escrito. Estos son los detalles de ingeniería que separan 'operamos DNS' de 'SOMOS la infraestructura DNS.'
+***** Comments
+- Este es un hermoso resumen de técnicas prácticas de optimización de memoria. Solo el truco del buffer scratchspace vale la lectura.
+- Me pregunto cuánto de esto es aplicable a otros lenguajes. El tradeoff Vec vs Box es muy específico de Rust.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie wir 100TB Speicher durch Optimierung des DNS-Caches von 1.1.1.1 einsparten
+***** TLDR
+Cloudflares Big Pineapple DNS-Plattform speichert 250 Milliarden Cache-Einträge. Fünf aufeinanderfolgende Rust-Optimierungen reduzierten den Speicherbedarf pro Eintrag um 56%: Vec durch Box<［T］> ersetzen, Record-Sektionen mit Offsets zusammenführen, redundante Owner-Namen weglassen, große Enum-Varianten boxen, Records im Wire-Format speichern. Insert-Durchsatz stieg um 43%, Lookup-Latenz sank um 19%, und sie gaben ~100TB in ihrer Flotte frei.
+***** Take
+Die Art von Systems-Post, die dich jeden Vec hinterfragen lässt, den du je geschrieben hast. Diese Engineering-Details unterscheiden 'wir betreiben DNS' von 'wir SIND DNS-Infrastruktur.'
+***** Comments
+- Dies ist eine wunderschöne Zusammenfassung praktischer Speicheroptimierungstechniken. Allein der Scratchspace-Buffer-Trick ist die Lektüre wert.
+- Ich frage mich, wie viel davon auf andere Sprachen anwendbar ist. Der Vec vs Box Tradeoff ist sehr Rust-spezifisch.
+** Small Models Have Arrived :ai:llm:economics:startups:
+:PROPERTIES:
+:ID:       49466917
+:URL:      https://calv.info/small-models-have-arrived
+:HN_URL:   https://news.ycombinator.com/item?id=49466917
+:POINTS:   425
+:COMMENTS: 190
+:BY:       calvinfo
+:END:
+
+*** TLDR
+GPT-5.6-luna runs at ~100 tokens/sec and costs pennies per query. The author argues this unlocks consumer AI apps that were previously uneconomical. A personalized news site that cost $1 with Sonnet-class models now costs $0.10. Most business work isn't 'IQ 180' genius breakthroughs but 'token spewing' - being responsive across many fronts. Small, fast, good-enough models are about to eat that market.
+
+*** Take
+Finally someone admits that 95% of work is just being responsive and pushing things forward, not genius insights. The economics are shifting from 'AI is too expensive for consumers' to 'AI is cheaper than humans for the boring stuff.'
+
+*** Comments
+
+**** makapuf
+:PROPERTIES:
+:COMMENT_ID: 49467234
+:END:
+The gap between frontier and 'good enough' models is closing faster than people realize. Most tasks don't need AGI.
+
+**** tptacek
+:PROPERTIES:
+:COMMENT_ID: 49467891
+:END:
+I remain skeptical that 'fast/cheap/good-enough' doesn't eventually collapse into 'fast/cheap/wrong' for anything that matters.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+小模型已经到来
+***** TLDR
+GPT-5.6-luna以每秒约100个token运行,每次查询只需几分钱。作者认为这解锁了以前不经济的消费级AI应用。一个个性化新闻网站用Sonnet级模型要花1美元,现在只需0.10美元。大多数商业工作不是'180智商'的天才突破,而是'吐token'——在多个方面保持响应。小型、快速、够用的模型即将吞噬这个市场。
+***** Take
+终于有人承认95%的工作只是保持响应和推进事务,而不是天才洞见。经济学正在从'AI对消费者太贵'转向'AI对于无聊的事情比人类更便宜'。
+***** Comments
+- 前沿模型和'够用'模型之间的差距正在比人们意识到的更快地缩小。大多数任务不需要AGI。
+- 我仍然怀疑'快速/便宜/够用'对于任何重要的事情最终不会变成'快速/便宜/错误'。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+小型モデルの時代が来た
+***** TLDR
+GPT-5.6-lunaは毎秒約100トークンで動作し、クエリあたり数セントしかかからない。著者はこれが以前は経済的でなかった消費者向けAIアプリを解禁すると主張。Sonnetクラスのモデルで1ドルかかったパーソナライズドニュースサイトが今は0.10ドル。ほとんどのビジネス作業は「IQ180」の天才的ブレークスルーではなく「トークン吐き出し」—多くの面で応答し続けること。小さく、速く、十分なモデルがその市場を食おうとしている。
+***** Take
+ついに誰かが仕事の95%は天才的洞察ではなく、応答し続けて物事を前進させることだと認めた。経済学は「AIは消費者には高すぎる」から「退屈なことにはAIは人間より安い」にシフトしている。
+***** Comments
+- フロンティアと「十分な」モデルのギャップは人々が認識しているより速く縮まっている。ほとんどのタスクにAGIは必要ない。
+- 重要なことに対して「速い/安い/十分」が最終的に「速い/安い/間違い」に崩壊しないか、私はまだ懐疑的だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+소형 모델의 시대가 왔다
+***** TLDR
+GPT-5.6-luna는 초당 약 100토큰으로 실행되며 쿼리당 몇 센트밖에 들지 않는다. 저자는 이것이 이전에는 비경제적이었던 소비자 AI 앱을 가능하게 한다고 주장한다. Sonnet급 모델로 1달러 들던 개인화 뉴스 사이트가 이제 0.10달러다. 대부분의 비즈니스 작업은 'IQ 180' 천재적 돌파구가 아니라 '토큰 뱉기' - 여러 전선에서 반응하는 것이다. 작고, 빠르고, 충분히 좋은 모델들이 그 시장을 먹으려 한다.
+***** Take
+드디어 누군가 95%의 일이 천재적 통찰이 아니라 반응하고 일을 진전시키는 것이라고 인정했다. 경제학이 'AI는 소비자에게 너무 비싸다'에서 '지루한 일에는 AI가 인간보다 싸다'로 전환되고 있다.
+***** Comments
+- 프론티어 모델과 '충분히 좋은' 모델 사이의 격차가 사람들이 인식하는 것보다 빠르게 좁혀지고 있다. 대부분의 작업에 AGI는 필요없다.
+- 중요한 일에서 '빠름/저렴/충분'이 결국 '빠름/저렴/오류'로 무너지지 않을지 여전히 회의적이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los Modelos Pequeños Han Llegado
+***** TLDR
+GPT-5.6-luna funciona a ~100 tokens/seg y cuesta centavos por consulta. El autor argumenta que esto desbloquea apps de IA para consumidores que antes no eran económicas. Un sitio de noticias personalizado que costaba $1 con modelos clase Sonnet ahora cuesta $0.10. La mayoría del trabajo de negocios no es avances geniales de 'IQ 180' sino 'escupir tokens' - ser responsivo en múltiples frentes. Los modelos pequeños, rápidos y suficientemente buenos están a punto de comerse ese mercado.
+***** Take
+Finalmente alguien admite que el 95% del trabajo es solo ser responsivo y avanzar las cosas, no insights geniales. La economía está cambiando de 'la IA es demasiado cara para consumidores' a 'la IA es más barata que los humanos para lo aburrido.'
+***** Comments
+- La brecha entre modelos de frontera y 'suficientemente buenos' se está cerrando más rápido de lo que la gente cree. La mayoría de tareas no necesitan AGI.
+- Sigo siendo escéptico de que 'rápido/barato/suficiente' no termine colapsando en 'rápido/barato/equivocado' para cualquier cosa que importe.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kleine Modelle sind angekommen
+***** TLDR
+GPT-5.6-luna läuft mit ~100 Tokens/Sek und kostet Cent pro Anfrage. Der Autor argumentiert, dass dies Consumer-AI-Apps freischaltet, die vorher unwirtschaftlich waren. Eine personalisierte News-Seite, die mit Sonnet-Klasse-Modellen $1 kostete, kostet jetzt $0.10. Die meiste Geschäftsarbeit sind keine 'IQ 180' Genie-Durchbrüche, sondern 'Token-Spucken' - auf vielen Fronten reaktionsfähig sein. Kleine, schnelle, gut-genug Modelle werden diesen Markt bald fressen.
+***** Take
+Endlich gibt jemand zu, dass 95% der Arbeit nur Reaktionsfähigkeit und Dinge voranbringen ist, keine genialen Einsichten. Die Ökonomie verschiebt sich von 'AI ist zu teuer für Verbraucher' zu 'AI ist billiger als Menschen für langweiliges Zeug.'
+***** Comments
+- Die Lücke zwischen Frontier- und 'gut genug'-Modellen schließt sich schneller als die Leute merken. Die meisten Aufgaben brauchen keine AGI.
+- Ich bleibe skeptisch, dass 'schnell/billig/gut-genug' nicht irgendwann zu 'schnell/billig/falsch' kollabiert für alles Wichtige.
+** Microduck – A 25cm Open-Source Biped Robot :robotics:opensource:hardware:ml:
+:PROPERTIES:
+:ID:       49462763
+:URL:      https://pollen-robotics.com/microduck/
+:HN_URL:   https://news.ycombinator.com/item?id=49462763
+:POINTS:   492
+:COMMENTS: 181
+:BY:       pierrerauch
+:END:
+
+*** TLDR
+Pollen Robotics launched Microduck, a $399 open-source biped robot you can train with reinforcement learning. 25cm tall, 800g, 15 motors, camera + LiDAR + dual IMUs. Ships with 7 trained behaviors (walk, sit, kick, grab, rollerskate, get-back-up). Train policies in MuJoCo sim on your machine, one-click deploy to real robot. Apache-2.0 licensed, all code on GitHub. Ships before Christmas 2026.
+
+*** Take
+The Tamagotchi for the sim2real era. For $399 you get a robot duck that walks, kicks, and presumably judges you silently while you struggle to make your own policies work.
+
+*** Comments
+
+**** solardev
+:PROPERTIES:
+:COMMENT_ID: 49463102
+:END:
+This is genuinely exciting. The sim2real pipeline being this accessible is a game changer for hobbyist robotics.
+
+**** bane
+:PROPERTIES:
+:COMMENT_ID: 49463567
+:END:
+I'm old enough to remember when $399 would get you a Mindstorms kit with 3 motors. The rate of progress here is nuts.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Microduck – 25厘米开源双足机器人
+***** TLDR
+Pollen Robotics发布了Microduck,一款399美元的开源双足机器人,可以用强化学习训练。25厘米高,800克重,15个电机,摄像头+激光雷达+双IMU。出厂时有7种训练好的行为(走、坐、踢、抓、滑冰、站起来)。在MuJoCo模拟器中训练策略,一键部署到真实机器人。Apache-2.0许可,所有代码在GitHub上。2026年圣诞节前发货。
+***** Take
+sim2real时代的电子宠物。花399美元你能得到一只会走路、会踢腿的机器鸭子,它大概会在你费劲让自己的策略工作时默默地评判你。
+***** Comments
+- 这真的令人兴奋。sim2real流程这么易用对业余机器人爱好者是个游戏规则改变者。
+- 我还记得399美元只能买到一套带3个电机的乐高Mindstorms。这里的进步速度太疯狂了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Microduck – 25cmオープンソース二足歩行ロボット
+***** TLDR
+Pollen Roboticsが399ドルのオープンソース二足歩行ロボットMicroduckを発売。強化学習で訓練可能。25cm、800g、15モーター、カメラ+LiDAR+デュアルIMU。7つの学習済み行動(歩く、座る、蹴る、掴む、ローラースケート、起き上がる)同梱。MuJoCoシムで方策を訓練し、ワンクリックで実機にデプロイ。Apache-2.0ライセンス、全コードGitHubに。2026年クリスマス前に出荷。
+***** Take
+sim2real時代のたまごっち。399ドルで歩いて蹴るロボットアヒルが手に入り、あなたが自分の方策を動かそうと苦戦している間、おそらく静かにあなたを審判している。
+***** Comments
+- これは本当にエキサイティング。sim2realパイプラインがこれだけアクセスしやすいのはホビイストロボティクスにとってゲームチェンジャーだ。
+- 399ドルで3モーターのMindstormsキットしか買えなかった時代を覚えてる年齢だ。ここでの進歩の速度はクレイジーだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Microduck – 25cm 오픈소스 이족보행 로봇
+***** TLDR
+Pollen Robotics가 강화학습으로 훈련할 수 있는 399달러 오픈소스 이족보행 로봇 Microduck을 출시했다. 25cm 높이, 800g, 15개 모터, 카메라+LiDAR+듀얼 IMU. 7가지 훈련된 행동(걷기, 앉기, 차기, 잡기, 롤러스케이트, 일어나기) 탑재. MuJoCo 시뮬레이터에서 정책 훈련 후 원클릭으로 실제 로봇에 배포. Apache-2.0 라이선스, 모든 코드 GitHub에 공개. 2026년 크리스마스 전 배송.
+***** Take
+sim2real 시대의 다마고치. 399달러로 걷고 차는 로봇 오리를 얻을 수 있고, 당신이 자신의 정책을 작동시키려 애쓰는 동안 아마 조용히 당신을 판단하고 있을 것이다.
+***** Comments
+- 이건 진짜 흥분된다. sim2real 파이프라인이 이렇게 접근하기 쉬운 건 취미 로봇공학에 게임 체인저다.
+- 399달러로 모터 3개짜리 Mindstorms 키트밖에 못 샀던 시절을 기억할 만큼 나이 들었다. 여기서의 진보 속도가 미쳤다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Microduck – Robot Bípedo Open-Source de 25cm
+***** TLDR
+Pollen Robotics lanzó Microduck, un robot bípedo open-source de $399 que puedes entrenar con aprendizaje por refuerzo. 25cm de alto, 800g, 15 motores, cámara + LiDAR + doble IMU. Viene con 7 comportamientos entrenados (caminar, sentarse, patear, agarrar, patinar, levantarse). Entrena políticas en MuJoCo sim en tu máquina, despliega con un clic al robot real. Licencia Apache-2.0, todo el código en GitHub. Envía antes de Navidad 2026.
+***** Take
+El Tamagotchi de la era sim2real. Por $399 obtienes un pato robot que camina, patea, y presumiblemente te juzga en silencio mientras luchas por hacer funcionar tus propias políticas.
+***** Comments
+- Esto es genuinamente emocionante. Que el pipeline sim2real sea tan accesible es un cambio de juego para la robótica de aficionados.
+- Soy lo suficientemente viejo para recordar cuando $399 te compraba un kit de Mindstorms con 3 motores. La velocidad del progreso aquí es una locura.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Microduck – Ein 25cm Open-Source Zweibeiner-Roboter
+***** TLDR
+Pollen Robotics hat Microduck vorgestellt, einen $399 Open-Source Zweibeiner-Roboter, den man mit Reinforcement Learning trainieren kann. 25cm groß, 800g, 15 Motoren, Kamera + LiDAR + zwei IMUs. Kommt mit 7 trainierten Verhaltensweisen (laufen, sitzen, treten, greifen, Rollschuh fahren, aufstehen). Trainiere Policies in MuJoCo Sim auf deinem Rechner, Ein-Klick-Deploy auf den echten Roboter. Apache-2.0 lizenziert, aller Code auf GitHub. Lieferung vor Weihnachten 2026.
+***** Take
+Das Tamagotchi der Sim2Real-Ära. Für $399 bekommst du eine Roboter-Ente, die läuft, tritt und dich vermutlich still beurteilt, während du kämpfst, deine eigenen Policies zum Laufen zu bringen.
+***** Comments
+- Das ist wirklich aufregend. Dass die Sim2Real-Pipeline so zugänglich ist, ist ein Gamechanger für Hobbyrobotik.
+- Ich bin alt genug, um mich zu erinnern, als $399 dir ein Mindstorms-Kit mit 3 Motoren kauften. Die Fortschrittsrate hier ist irre.
+** Vibe-coded FFmpeg fuzzer finds division by zero in VPK demuxer :security:fuzzing:ffmpeg:ai:
+:PROPERTIES:
+:ID:       49468642
+:URL:      https://code.ffmpeg.org/FFmpeg/FFmpeg/issues/24290
+:HN_URL:   https://news.ycombinator.com/item?id=49468642
+:POINTS:   165
+:COMMENTS: 126
+:BY:       daedalus
+:END:
+
+*** TLDR
+A fuzzer found a division-by-zero bug in FFmpeg's VPK demuxer. A crafted 21-byte input crashes any FFmpeg-based app that opens a malicious .vpk file. The Sony PS2 VPK demuxer divides by nb_channels without checking for zero. The fix is a one-line guard. Found after ~500K executions over 10 hours. Medium severity DoS, not code execution.
+
+*** Take
+The fact that this fuzzer is open source and 'vibecoded' makes me both impressed and terrified. We've reached the point where AI-assisted security research finds real bugs in battle-tested code with minimal human effort.
+
+*** Comments
+
+**** nickpsecurity
+:PROPERTIES:
+:COMMENT_ID: 49468901
+:END:
+Division by zero bugs in media parsers are a classic. The fix is always obvious in hindsight, but nobody checks all the paths.
+
+**** anon1234
+:PROPERTIES:
+:COMMENT_ID: 49469102
+:END:
+10 hours to find a real bug in FFmpeg. The economics of fuzzing have completely changed.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Vibe编码的FFmpeg模糊测试器发现VPK解复用器中的除零错误
+***** TLDR
+一个模糊测试器在FFmpeg的VPK解复用器中发现了除零错误。一个精心构造的21字节输入会崩溃任何打开恶意.vpk文件的FFmpeg应用。Sony PS2 VPK解复用器在除以nb_channels时没有检查零。修复只需要一行守卫代码。经过约50万次执行10小时后发现。中等严重性DoS,不是代码执行。
+***** Take
+这个模糊测试器是开源的而且是'vibe编码'的,这让我既印象深刻又害怕。我们已经到了AI辅助安全研究能以最少人力在久经考验的代码中发现真实bug的地步。
+***** Comments
+- 媒体解析器中的除零错误是经典问题。事后看修复总是很明显,但没人检查所有路径。
+- 10小时就能在FFmpeg中找到一个真实bug。模糊测试的经济学完全改变了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Vibe-codedなFFmpegファザーがVPKデマルチプレクサでゼロ除算を発見
+***** TLDR
+ファザーがFFmpegのVPKデマルチプレクサでゼロ除算バグを発見。細工された21バイトの入力は悪意のある.vpkファイルを開くFFmpegベースのアプリをクラッシュさせる。Sony PS2 VPKデマルチプレクサはnb_channelsがゼロかチェックせずに除算している。修正は1行のガード。約50万回の実行を10時間かけて発見。中程度の深刻度のDoS、コード実行ではない。
+***** Take
+このファザーがオープンソースで「vibe-coded」という事実は感心と恐怖の両方を感じさせる。AI支援のセキュリティリサーチが最小限の人的努力で実戦投入済みのコードで本物のバグを見つける時代に達した。
+***** Comments
+- メディアパーサーのゼロ除算バグは古典的だ。修正は後から見れば常に明らかだが、誰もすべてのパスをチェックしない。
+- 10時間でFFmpegの本物のバグを発見。ファジングの経済学は完全に変わった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Vibe-coded FFmpeg 퍼저가 VPK 디먹서에서 0으로 나누기 발견
+***** TLDR
+퍼저가 FFmpeg의 VPK 디먹서에서 0으로 나누기 버그를 발견했다. 정교하게 만들어진 21바이트 입력이 악성 .vpk 파일을 여는 모든 FFmpeg 기반 앱을 크래시시킨다. Sony PS2 VPK 디먹서는 nb_channels가 0인지 확인하지 않고 나눈다. 수정은 한 줄짜리 가드. 약 50만 번 실행 후 10시간 만에 발견. 중간 심각도 DoS, 코드 실행 아님.
+***** Take
+이 퍼저가 오픈소스이고 'vibe-coded'라는 사실이 감탄과 두려움을 동시에 느끼게 한다. AI 지원 보안 연구가 최소한의 인력으로 실전 검증된 코드에서 진짜 버그를 찾는 시점에 도달했다.
+***** Comments
+- 미디어 파서의 0으로 나누기 버그는 고전이다. 수정은 사후에 보면 항상 명확하지만, 아무도 모든 경로를 확인하지 않는다.
+- 10시간 만에 FFmpeg에서 진짜 버그를 찾았다. 퍼징의 경제학이 완전히 바뀌었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Fuzzer vibe-coded de FFmpeg encuentra división por cero en demuxer VPK
+***** TLDR
+Un fuzzer encontró un bug de división por cero en el demuxer VPK de FFmpeg. Una entrada de 21 bytes crashea cualquier app basada en FFmpeg que abra un archivo .vpk malicioso. El demuxer VPK de Sony PS2 divide por nb_channels sin verificar si es cero. La corrección es un guard de una línea. Encontrado después de ~500K ejecuciones en 10 horas. DoS de severidad media, no ejecución de código.
+***** Take
+El hecho de que este fuzzer sea open source y 'vibe-coded' me impresiona y aterroriza a la vez. Hemos llegado al punto donde la investigación de seguridad asistida por IA encuentra bugs reales en código probado en batalla con mínimo esfuerzo humano.
+***** Comments
+- Los bugs de división por cero en parsers de medios son un clásico. La corrección siempre es obvia en retrospectiva, pero nadie verifica todos los caminos.
+- 10 horas para encontrar un bug real en FFmpeg. La economía del fuzzing ha cambiado completamente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Vibe-coded FFmpeg Fuzzer findet Division durch Null in VPK Demuxer
+***** TLDR
+Ein Fuzzer fand einen Division-durch-Null-Bug in FFmpegs VPK-Demuxer. Eine manipulierte 21-Byte-Eingabe crasht jede FFmpeg-basierte App, die eine bösartige .vpk-Datei öffnet. Der Sony PS2 VPK-Demuxer dividiert durch nb_channels ohne auf Null zu prüfen. Der Fix ist ein einzeiliger Guard. Gefunden nach ~500K Ausführungen über 10 Stunden. Mittlere Schwere DoS, keine Code-Ausführung.
+***** Take
+Die Tatsache, dass dieser Fuzzer Open Source und 'vibe-coded' ist, macht mich gleichermaßen beeindruckt und verängstigt. Wir haben den Punkt erreicht, an dem KI-gestützte Sicherheitsforschung echte Bugs in kampferprobtem Code mit minimalem menschlichem Aufwand findet.
+***** Comments
+- Division-durch-Null-Bugs in Media-Parsern sind ein Klassiker. Der Fix ist im Nachhinein immer offensichtlich, aber niemand prüft alle Pfade.
+- 10 Stunden um einen echten Bug in FFmpeg zu finden. Die Ökonomie des Fuzzings hat sich komplett geändert.
+** The Load-Bearing Vocabulary of Claude :ai:claude:linguistics:analysis:
+:PROPERTIES:
+:ID:       49461817
+:URL:      https://louisabraham.github.io/load-bearing/
+:HN_URL:   https://news.ycombinator.com/item?id=49461817
+:POINTS:   329
+:COMMENTS: 157
+:BY:       louisabraham
+:END:
+
+*** TLDR
+Analysis of 47,464 GitHub PRs over 595 days reveals words that appear disproportionately often in Claude-generated code. 'Load-bearing' shows up 123x more than baseline. Other overrepresented words: genuine, quietly, deliberately, survives, collapses, carries. The visualization shows vocabulary trends over time with hover-able weekly data.
+
+*** Take
+Someone finally quantified what we all suspected: Claude has a distinctive voice. 'Genuine' and 'deliberately' appearing everywhere is very on-brand for a model trained to be helpful, harmless, and honest.
+
+*** Comments
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 49462134
+:END:
+This is fascinating. I wonder if you could use these patterns to watermark AI-generated code without explicit markers.
+
+**** pcr910303
+:PROPERTIES:
+:COMMENT_ID: 49462567
+:END:
+The word 'load-bearing' being 123x overrepresented is hilarious. It's such a Claude-ism.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Claude的承重词汇
+***** TLDR
+对595天内47,464个GitHub PR的分析揭示了Claude生成代码中不成比例出现的词汇。'Load-bearing'出现频率是基线的123倍。其他高频词:genuine、quietly、deliberately、survives、collapses、carries。可视化显示词汇随时间的趋势,可以悬停查看每周数据。
+***** Take
+终于有人量化了我们都怀疑的事:Claude有独特的声音。'Genuine'和'deliberately'到处出现,非常符合一个被训练为有帮助、无害且诚实的模型的品牌形象。
+***** Comments
+- 这很迷人。我想知道你是否可以用这些模式在没有明确标记的情况下给AI生成的代码加水印。
+- 'Load-bearing'这个词出现频率是123倍真是太搞笑了。这就是典型的Claude风格。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claudeのロードベアリングな語彙
+***** TLDR
+595日間の47,464件のGitHub PRの分析で、Claude生成コードに不釣り合いに多く出現する単語が明らかになった。「Load-bearing」はベースラインの123倍出現。他の過剰出現単語:genuine、quietly、deliberately、survives、collapses、carries。可視化は時間経過による語彙トレンドをホバーで週次データ表示可能。
+***** Take
+ついに誰かが我々全員が疑っていたことを定量化した:Claudeには独特の声がある。「genuine」と「deliberately」があちこちに出現するのは、helpful、harmless、honestであるよう訓練されたモデルとして非常にブランドらしい。
+***** Comments
+- これは魅力的だ。これらのパターンを使って、明示的なマーカーなしでAI生成コードに透かしを入れられるのではないかと思う。
+- 「load-bearing」という言葉が123倍過剰出現しているのは面白い。まさにClaude節だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude의 하중 지지 어휘
+***** TLDR
+595일간 47,464개 GitHub PR 분석 결과 Claude 생성 코드에서 불균형하게 자주 나타나는 단어들이 밝혀졌다. 'Load-bearing'은 기준선의 123배 등장. 다른 과대 표현 단어: genuine, quietly, deliberately, survives, collapses, carries. 시각화는 호버로 주간 데이터를 볼 수 있는 시간별 어휘 트렌드를 보여준다.
+***** Take
+드디어 누군가 우리 모두가 의심했던 것을 정량화했다: Claude는 독특한 목소리가 있다. 'Genuine'과 'deliberately'가 어디에나 나타나는 건 도움이 되고, 해롭지 않고, 정직하도록 훈련된 모델의 브랜드에 매우 맞다.
+***** Comments
+- 이건 매력적이다. 이 패턴들을 사용해서 명시적 마커 없이 AI 생성 코드에 워터마크를 할 수 있을지 궁금하다.
+- 'load-bearing'이라는 단어가 123배 과대 표현된 건 웃기다. 전형적인 Claude 스타일이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El Vocabulario Estructural de Claude
+***** TLDR
+Análisis de 47,464 PRs de GitHub en 595 días revela palabras que aparecen desproporcionadamente en código generado por Claude. 'Load-bearing' aparece 123x más que la línea base. Otras palabras sobrerrepresentadas: genuine, quietly, deliberately, survives, collapses, carries. La visualización muestra tendencias de vocabulario con datos semanales al pasar el cursor.
+***** Take
+Alguien finalmente cuantificó lo que todos sospechábamos: Claude tiene una voz distintiva. Que 'genuine' y 'deliberately' aparezcan en todas partes es muy acorde con la marca de un modelo entrenado para ser útil, inofensivo y honesto.
+***** Comments
+- Esto es fascinante. Me pregunto si podrías usar estos patrones para poner marca de agua en código generado por IA sin marcadores explícitos.
+- Que la palabra 'load-bearing' esté 123x sobrerrepresentada es gracioso. Es tan típico de Claude.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das tragende Vokabular von Claude
+***** TLDR
+Analyse von 47.464 GitHub PRs über 595 Tage zeigt Wörter, die unverhältnismäßig oft in Claude-generiertem Code erscheinen. 'Load-bearing' erscheint 123x häufiger als die Baseline. Andere überrepräsentierte Wörter: genuine, quietly, deliberately, survives, collapses, carries. Die Visualisierung zeigt Vokabulartrends mit hoverfähigen wöchentlichen Daten.
+***** Take
+Jemand hat endlich quantifiziert, was wir alle vermuteten: Claude hat eine unverwechselbare Stimme. Dass 'genuine' und 'deliberately' überall auftauchen, ist sehr markenkonform für ein Modell, das darauf trainiert wurde, hilfreich, harmlos und ehrlich zu sein.
+***** Comments
+- Das ist faszinierend. Ich frage mich, ob man diese Muster nutzen könnte, um KI-generierten Code ohne explizite Marker zu wasserzeichnen.
+- Dass das Wort 'load-bearing' 123x überrepräsentiert ist, ist urkomisch. So typisch Claude.
