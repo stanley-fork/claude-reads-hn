@@ -1,0 +1,555 @@
+#+TITLE: HN Digest 2026-08-29 11:00:00 UT UTC
+#+DATE: 2026-08-29T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Samsung stuffs a CPU in your RAM, Monzo builds a backup bank, and naming things remains the hardest problem in tech
+
+* Highlights
+- Samsung PIM: Your RAM now runs its own MAC operations
+- Monzo Stand-In: Banking disaster recovery that actually worked (once)
+- TurboKV: Fast until the power goes out
+
+* Stories
+
+** Samsung's Processing-in-Memory (PIM) :hardware:memory:ai:samsung:
+:PROPERTIES:
+:ID:       49487341
+:URL:      https://chipsandcheese.com/p/hot-chips-2026-samsungs-processing
+:HN_URL:   https://news.ycombinator.com/item?id=49487341
+:POINTS:   108
+:COMMENTS: 30
+:BY:       ingve
+:END:
+
+*** TLDR
+Samsung is putting MAC units inside LPDDR5X chips so compute happens at the memory bank level, bypassing the bottleneck of moving data to the CPU. Each chip gets 16 PIM blocks with 614 GB/s internal bandwidth vs 76.8 GB/s externally. Clever use of special row addresses means it works with standard memory controllers, but software integration is a nightmare: multitasking breaks it, caches break it, speculative execution breaks it, and you basically need uncacheable memory regions with serialized execution.
+
+*** Take
+They solved the hardware problem elegantly by hijacking DRAM row addresses as MMIO. Then the software requirements arrived: no caching, no speculation, no multithreading, interrupt handling is a nightmare. It's like building a Ferrari that only runs in reverse.
+
+*** Comments
+
+**** londons_explore
+:PROPERTIES:
+:COMMENT_ID: 49487500
+:END:
+Matrix multiplication involves getting every entry of input/output matrices to the same multiplier simultaneously. A lot of data movement needs to happen - the multiply-add is a sideshow compared to energy and silicon for movement.
+
+**** OptionX
+:PROPERTIES:
+:COMMENT_ID: 49487501
+:END:
+So instead of putting more cache on the CPU you just put the CPU on the cache.
+
+**** pragma_x
+:PROPERTIES:
+:COMMENT_ID: 49487502
+:END:
+Moving compute to RAM almost resembles ISA-based extended RAM from the 1980s. Some cards featured a CPU that took over the whole system. This goes to show how cyclic tech can be.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+三星的内存计算(PIM)技术
+***** TLDR
+三星在LPDDR5X芯片内部放入MAC单元，让计算直接在内存bank层面进行，绕过数据移动到CPU的瓶颈。每个芯片有16个PIM块，内部带宽614 GB/s，外部仅76.8 GB/s。巧妙地使用特殊行地址兼容标准内存控制器，但软件集成是噩梦：多任务会搞砸它，缓存会搞砸它，推测执行会搞砸它。
+***** Take
+他们用劫持DRAM行地址作为MMIO优雅地解决了硬件问题。然后软件需求来了：不能缓存，不能推测，不能多线程，中断处理是噩梦。就像造了一辆只能倒着开的法拉利。
+***** Comments
+- 矩阵乘法需要把输入/输出矩阵的每个元素同时送到同一个乘法器。数据移动才是大头——乘加只是配角。
+- 所以不是在CPU上加更多缓存，而是把CPU放到缓存上。
+- 把计算移到RAM几乎让人想起1980年代基于ISA的扩展RAM。有些卡甚至有CPU接管整个系统。技术真是循环往复。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+サムスンのProcessing-in-Memory (PIM)
+***** TLDR
+サムスンはLPDDR5Xチップ内にMAC演算ユニットを配置し、メモリバンクレベルで計算を行うことでCPUへのデータ移動ボトルネックを回避。各チップに16個のPIMブロック、内部帯域幅614 GB/s対外部76.8 GB/s。特殊な行アドレスを使って標準メモリコントローラーと互換性を保つが、ソフトウェア統合は悪夢：マルチタスク不可、キャッシュ不可、投機実行不可。
+***** Take
+DRAMの行アドレスをMMIOとしてハイジャックするエレガントなハードウェア解決策。そしてソフトウェア要件が到着：キャッシュなし、投機なし、マルチスレッドなし、割り込み処理は悪夢。バックでしか走れないフェラーリを作ったようなもの。
+***** Comments
+- 行列乗算は入出力行列の全要素を同時に同じ乗算器に集める必要がある。データ移動こそが本題で、乗加算は脇役。
+- CPUにキャッシュを増やす代わりに、キャッシュにCPUを載せたわけだ。
+- 計算をRAMに移すのは1980年代のISAベース拡張RAMを彷彿とさせる。システム全体を乗っ取るCPU搭載カードもあった。技術は循環する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+삼성의 Processing-in-Memory (PIM)
+***** TLDR
+삼성이 LPDDR5X 칩 내부에 MAC 유닛을 넣어 메모리 뱅크 레벨에서 연산을 수행, CPU로 데이터 이동하는 병목을 우회. 칩당 16개 PIM 블록, 내부 대역폭 614 GB/s 대 외부 76.8 GB/s. 특수 행 주소로 표준 메모리 컨트롤러와 호환되지만 소프트웨어 통합은 악몽: 멀티태스킹, 캐시, 추측 실행 모두 불가.
+***** Take
+DRAM 행 주소를 MMIO로 탈취해 하드웨어 문제를 우아하게 해결했다. 그러자 소프트웨어 요구사항이 도착: 캐시 없음, 추측 없음, 멀티스레딩 없음, 인터럽트 처리는 악몽. 후진으로만 달리는 페라리를 만든 셈.
+***** Comments
+- 행렬 곱셈은 입출력 행렬의 모든 요소를 동시에 같은 곱셈기로 보내야 한다. 데이터 이동이 핵심이고 곱셈-덧셈은 부수적.
+- CPU에 캐시를 더 넣는 대신 캐시에 CPU를 넣은 거네.
+- 연산을 RAM으로 옮기는 건 1980년대 ISA 기반 확장 RAM을 연상시킨다. 시스템 전체를 장악하는 CPU 카드도 있었다. 기술은 순환한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Processing-in-Memory (PIM) de Samsung
+***** TLDR
+Samsung pone unidades MAC dentro de chips LPDDR5X para que el cómputo ocurra a nivel de banco de memoria, evitando el cuello de botella de mover datos a la CPU. Cada chip tiene 16 bloques PIM con 614 GB/s de ancho de banda interno vs 76.8 GB/s externo. Uso inteligente de direcciones de fila especiales para compatibilidad con controladores estándar, pero la integración de software es una pesadilla: multitarea, caché y ejecución especulativa lo rompen.
+***** Take
+Resolvieron elegantemente el problema de hardware secuestrando direcciones de fila DRAM como MMIO. Luego llegaron los requisitos de software: sin caché, sin especulación, sin multihilo, manejo de interrupciones es pesadilla. Es como construir un Ferrari que solo funciona en reversa.
+***** Comments
+- La multiplicación de matrices requiere que cada elemento de entrada/salida llegue al mismo multiplicador simultáneamente. El movimiento de datos es lo principal, la multiplicación-suma es secundario.
+- Entonces en vez de poner más caché en la CPU, pusiste la CPU en el caché.
+- Mover cómputo a la RAM recuerda a la RAM extendida basada en ISA de los 1980s. Algunas tarjetas tenían CPU que tomaban control del sistema. La tecnología es cíclica.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Samsungs Processing-in-Memory (PIM)
+***** TLDR
+Samsung platziert MAC-Einheiten in LPDDR5X-Chips, sodass Berechnungen auf Speicherbank-Ebene stattfinden und der Datentransfer zur CPU umgangen wird. Jeder Chip hat 16 PIM-Blöcke mit 614 GB/s interner Bandbreite gegenüber 76.8 GB/s extern. Clevere Nutzung spezieller Zeilenadressen für Kompatibilität mit Standard-Speichercontrollern, aber Software-Integration ist ein Albtraum: Multitasking, Caching und spekulative Ausführung funktionieren nicht.
+***** Take
+Sie lösten das Hardware-Problem elegant durch Kapern von DRAM-Zeilenadressen als MMIO. Dann kamen die Software-Anforderungen: kein Caching, keine Spekulation, kein Multithreading, Interrupt-Handling ist Albtraum. Wie ein Ferrari bauen, der nur rückwärts fährt.
+***** Comments
+- Matrixmultiplikation erfordert, dass jedes Element der Ein-/Ausgabematrizen gleichzeitig beim selben Multiplizierer ankommt. Datenbewegung ist das Wesentliche - Multiplikation-Addition ist Nebensache.
+- Also statt mehr Cache auf die CPU zu packen, packst du die CPU auf den Cache.
+- Compute in RAM zu verlagern erinnert an ISA-basierte Erweiterungs-RAM der 1980er. Manche Karten hatten CPUs, die das ganze System übernahmen. Technik ist zyklisch.
+** TurboKV: Insanely fast Rust key-value store :rust:database:storage:
+:PROPERTIES:
+:ID:       49486334
+:URL:      https://github.com/kingroryg/turbokv
+:HN_URL:   https://news.ycombinator.com/item?id=49486334
+:POINTS:   107
+:COMMENTS: 43
+:BY:       rgbimbochamp
+:END:
+
+*** TLDR
+A new Rust key-value store claiming extreme speed. The 'durable' mode appends to a WAL without per-write sync, which means it survives process restarts but not power loss. The HN crowd immediately spotted this durability asterisk and started the inevitable RocksDB comparison.
+
+*** Take
+Calling a mode 'durable' when it doesn't survive power loss is the database equivalent of calling a meal 'healthy' because it has lettuce on it. Points for honesty when called out though.
+
+*** Comments
+
+**** dangoodmanUT
+:PROPERTIES:
+:COMMENT_ID: 49486400
+:END:
+So... it's not durable? Durable doesn't mean 'survives a process restart', it means 'durably saved to persistent storage'. This 'durable' mode wouldn't survive power loss.
+
+**** dist-epoch
+:PROPERTIES:
+:COMMENT_ID: 49486401
+:END:
+How does it compare to RocksDB?
+
+**** DarmokTanagra
+:PROPERTIES:
+:COMMENT_ID: 49486402
+:END:
+Off topic, but why is tokio still independent of the rust async runtime? It seems pretty ubiquitous yet not a part of the core rust libs.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+TurboKV：疯狂快速的Rust键值存储
+***** TLDR
+一个声称极速的新Rust键值存储。'持久'模式只是追加到WAL而不进行每次写入同步，意味着能经受进程重启但无法经受断电。HN群众立刻发现了这个持久性的星号，并开始了不可避免的RocksDB比较。
+***** Take
+把一个无法经受断电的模式叫做'持久'，就像因为有生菜就说一顿饭'健康'。被指出后倒是诚实，加分。
+***** Comments
+- 所以...它不是持久的？持久不是指'能经受进程重启'，而是'持久保存到永久存储'。这个'持久'模式无法经受断电。
+- 和RocksDB比怎么样？
+- 跑题了，但为什么tokio还是独立于rust异步运行时？它看起来很普遍但不是核心rust库的一部分。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+TurboKV：超高速Rustキーバリューストア
+***** TLDR
+超高速を謳う新しいRustキーバリューストア。「永続」モードは書き込みごとの同期なしでWALに追記するだけで、プロセス再起動は耐えるが電源喪失には耐えない。HN民はすぐにこの永続性の注釈を見つけ、お決まりのRocksDB比較が始まった。
+***** Take
+電源喪失に耐えないモードを「永続」と呼ぶのは、レタスが入っているから「ヘルシー」と呼ぶようなもの。指摘されたときの正直さにはポイント加算。
+***** Comments
+- えーと...永続じゃないよね？永続とは「プロセス再起動を生き残る」じゃなくて「永続ストレージに確実に保存される」という意味。この「永続」モードは電源喪失に耐えない。
+- RocksDBと比べてどう？
+- 脱線だけど、なぜtokioはまだrustの非同期ランタイムから独立してるの？かなり普及してるのにコアrust libsの一部じゃない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+TurboKV: 미친 듯이 빠른 Rust 키-값 저장소
+***** TLDR
+극한의 속도를 주장하는 새로운 Rust 키-값 저장소. '내구성' 모드는 쓰기별 동기화 없이 WAL에 추가만 해서 프로세스 재시작은 견디지만 정전은 못 견딤. HN 군중이 즉시 이 내구성 별표를 발견하고 불가피한 RocksDB 비교 시작.
+***** Take
+정전을 못 견디는 모드를 '내구성'이라고 부르는 건 상추가 들어있다고 '건강식'이라고 부르는 것과 같다. 지적받았을 때 솔직한 건 점수 추가.
+***** Comments
+- 그래서... 내구성이 아닌 거죠? 내구성은 '프로세스 재시작을 견딘다'가 아니라 '영구 저장소에 확실히 저장된다'는 의미입니다. 이 '내구성' 모드는 정전을 못 견딥니다.
+- RocksDB와 비교하면 어때요?
+- 주제에서 벗어나지만, 왜 tokio는 아직 rust 비동기 런타임과 독립적인가요? 꽤 보편적인데 코어 rust 라이브러리의 일부가 아니네요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+TurboKV: Almacén clave-valor Rust increíblemente rápido
+***** TLDR
+Un nuevo almacén clave-valor en Rust que afirma velocidad extrema. El modo 'durable' solo agrega al WAL sin sincronización por escritura, lo que significa que sobrevive reinicios de proceso pero no cortes de energía. La gente de HN detectó inmediatamente este asterisco de durabilidad y comenzó la inevitable comparación con RocksDB.
+***** Take
+Llamar 'durable' a un modo que no sobrevive cortes de energía es el equivalente en bases de datos de llamar 'saludable' a una comida porque tiene lechuga. Puntos por honestidad cuando se señaló.
+***** Comments
+- Entonces... ¿no es durable? Durable no significa 'sobrevive un reinicio de proceso', significa 'guardado durablemente en almacenamiento persistente'. Este modo 'durable' no sobreviviría un corte de energía.
+- ¿Cómo se compara con RocksDB?
+- Fuera de tema, pero ¿por qué tokio sigue siendo independiente del runtime async de rust? Parece bastante ubicuo pero no es parte de las libs core de rust.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+TurboKV: Wahnsinnig schneller Rust Key-Value-Store
+***** TLDR
+Ein neuer Rust Key-Value-Store der extreme Geschwindigkeit behauptet. Der 'durable' Modus hängt nur an WAL ohne Synchronisation pro Schreibvorgang an, überlebt also Prozess-Neustarts aber keinen Stromausfall. Die HN-Crowd entdeckte sofort diesen Haltbarkeits-Asterisk und begann den unvermeidlichen RocksDB-Vergleich.
+***** Take
+Einen Modus 'durable' zu nennen der keinen Stromausfall überlebt ist das Datenbank-Äquivalent eine Mahlzeit 'gesund' zu nennen weil Salat drauf ist. Punkte für Ehrlichkeit als darauf hingewiesen wurde.
+***** Comments
+- Also... ist es nicht durable? Durable bedeutet nicht 'überlebt Prozess-Neustart', sondern 'dauerhaft auf persistentem Speicher gespeichert'. Dieser 'durable' Modus würde keinen Stromausfall überleben.
+- Wie ist der Vergleich mit RocksDB?
+- Off-topic, aber warum ist tokio immer noch unabhängig von der rust async runtime? Es scheint ziemlich allgegenwärtig aber nicht Teil der core rust libs.
+** StemDeck, a free, open-source and local AI stem separator :audio:ai:opensource:
+:PROPERTIES:
+:ID:       49486081
+:URL:      https://github.com/stemdeckapp/stemdeck
+:HN_URL:   https://news.ycombinator.com/item?id=49486081
+:POINTS:   107
+:COMMENTS: 23
+:BY:       thclpr
+:END:
+
+*** TLDR
+A GUI wrapper around htdemucs, Meta's AI model for separating audio into stems (vocals, drums, bass, etc). Runs locally, free and open source. Not a new model, just a friendlier interface for the existing tech. Audacity's OpenVINO plugins offer similar functionality.
+
+*** Take
+Stream Deck, Steam Deck, Stem Deck. At this rate we'll run out of four-letter words starting with ST by 2028. The HN comment naming it as 'just a wrapper' is peak HN energy, but wrappers that make ML accessible to normal humans deserve credit.
+
+*** Comments
+
+**** ipsum2
+:PROPERTIES:
+:COMMENT_ID: 49486150
+:END:
+This is just a wrapper of htdemucs, if anyone's wondering if it was a new/better model.
+
+**** nubinetwork
+:PROPERTIES:
+:COMMENT_ID: 49486151
+:END:
+Stream deck, Steam deck, Stem deck. We really suck at naming things...
+
+**** tlahtinen
+:PROPERTIES:
+:COMMENT_ID: 49486152
+:END:
+Good use of AI! Audacity can also do this through the OpenVINO plugins and I've been happy with its results.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+StemDeck：免费、开源的本地AI音轨分离器
+***** TLDR
+一个htdemucs的GUI封装器，这是Meta用于分离音频到音轨（人声、鼓、贝斯等）的AI模型。本地运行，免费开源。不是新模型，只是现有技术的更友好界面。Audacity的OpenVINO插件提供类似功能。
+***** Take
+Stream Deck、Steam Deck、Stem Deck。照这个速度，2028年前ST开头的四字母词就用完了。HN评论说它'只是个封装器'是典型HN能量，但让ML对普通人可用的封装器值得认可。
+***** Comments
+- 这只是htdemucs的封装器，如果有人好奇是不是新模型或更好的模型的话。
+- Stream deck、Steam deck、Stem deck。我们起名字真的很烂...
+- AI的好用法！Audacity也能通过OpenVINO插件做到这个，我对效果很满意。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+StemDeck：無料・オープンソースのローカルAIステム分離器
+***** TLDR
+htdemucs（オーディオをボーカル、ドラム、ベースなどのステムに分離するMetaのAIモデル）のGUIラッパー。ローカル実行、無料でオープンソース。新モデルではなく、既存技術のより使いやすいインターフェース。AudacityのOpenVINOプラグインも同様の機能を提供。
+***** Take
+Stream Deck、Steam Deck、Stem Deck。このペースだと2028年までにSTで始まる4文字の言葉が尽きる。HNコメントの「ただのラッパー」発言は典型的HNエネルギーだが、MLを普通の人に使えるようにするラッパーは評価に値する。
+***** Comments
+- 新しい/より良いモデルかと思った人へ、これはただのhtdemucsラッパーです。
+- Stream deck、Steam deck、Stem deck。命名センスがひどい...
+- AIの良い使い方！AudacityでもOpenVINOプラグインでできて、結果に満足してます。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+StemDeck: 무료 오픈소스 로컬 AI 스템 분리기
+***** TLDR
+오디오를 스템(보컬, 드럼, 베이스 등)으로 분리하는 Meta의 AI 모델 htdemucs의 GUI 래퍼. 로컬 실행, 무료 오픈소스. 새 모델이 아니라 기존 기술의 더 친절한 인터페이스. Audacity의 OpenVINO 플러그인도 비슷한 기능 제공.
+***** Take
+Stream Deck, Steam Deck, Stem Deck. 이 속도면 2028년까지 ST로 시작하는 네 글자 단어가 고갈될 것. HN 댓글의 '그냥 래퍼'는 전형적인 HN 에너지지만, ML을 일반인이 접근 가능하게 만드는 래퍼는 인정받을 자격이 있다.
+***** Comments
+- 새로운/더 나은 모델인지 궁금한 분들께, 이건 그냥 htdemucs 래퍼입니다.
+- Stream deck, Steam deck, Stem deck. 우리 정말 이름 짓기 못 하네...
+- AI의 좋은 활용! Audacity에서도 OpenVINO 플러그인으로 할 수 있고 결과에 만족합니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+StemDeck: Separador de stems AI local, gratuito y código abierto
+***** TLDR
+Un envoltorio GUI alrededor de htdemucs, el modelo AI de Meta para separar audio en stems (voces, batería, bajo, etc). Funciona localmente, gratis y código abierto. No es un modelo nuevo, solo una interfaz más amigable para la tecnología existente. Los plugins OpenVINO de Audacity ofrecen funcionalidad similar.
+***** Take
+Stream Deck, Steam Deck, Stem Deck. A este ritmo nos quedaremos sin palabras de cuatro letras que empiecen con ST para 2028. El comentario de HN llamándolo 'solo un wrapper' es pura energía HN, pero los wrappers que hacen ML accesible a humanos normales merecen crédito.
+***** Comments
+- Esto es solo un wrapper de htdemucs, por si alguien se preguntaba si era un modelo nuevo/mejor.
+- Stream deck, Steam deck, Stem deck. Realmente somos malos nombrando cosas...
+- ¡Buen uso de AI! Audacity también puede hacer esto con los plugins OpenVINO y estoy contento con sus resultados.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+StemDeck: Kostenloser, Open-Source lokaler AI-Stem-Separator
+***** TLDR
+Ein GUI-Wrapper um htdemucs, Metas AI-Modell zum Trennen von Audio in Stems (Gesang, Drums, Bass, etc). Läuft lokal, kostenlos und Open Source. Kein neues Modell, nur eine freundlichere Oberfläche für bestehende Technologie. Audacitys OpenVINO-Plugins bieten ähnliche Funktionalität.
+***** Take
+Stream Deck, Steam Deck, Stem Deck. Bei diesem Tempo gehen uns bis 2028 die Vier-Buchstaben-Wörter mit ST aus. Der HN-Kommentar 'nur ein Wrapper' ist Peak-HN-Energie, aber Wrapper die ML für normale Menschen zugänglich machen verdienen Anerkennung.
+***** Comments
+- Das ist nur ein Wrapper für htdemucs, falls sich jemand fragt ob es ein neues/besseres Modell ist.
+- Stream deck, Steam deck, Stem deck. Wir sind echt schlecht im Benennen...
+- Gute Nutzung von AI! Audacity kann das auch über OpenVINO-Plugins und ich bin zufrieden mit den Ergebnissen.
+** Kumander Linux – A Linux Distro with a Windows 7 Desktop :linux:desktop:nostalgia:
+:PROPERTIES:
+:ID:       49486176
+:URL:      https://www.kumander.org/
+:HN_URL:   https://news.ycombinator.com/item?id=49486176
+:POINTS:   58
+:COMMENTS: 31
+:BY:       linuxkernal
+:END:
+
+*** TLDR
+A Linux distro designed for Windows refugees, featuring an XFCE desktop themed to look like Windows 7. Ships with Chrome as default browser, LibreOffice, Kdenlive, Ardour, and VirtualBox so you can run actual Windows when nostalgia isn't enough. Live boot available to try before committing.
+
+*** Take
+Microsoft called Windows 7's Aero 'cheesy' and 'dated' when they killed it. Years later, people are building entire distros to resurrect it. The user never gets the final say on what UI they want, but they sure get revenge via open source.
+
+*** Comments
+
+**** Tiberium
+:PROPERTIES:
+:COMMENT_ID: 49486200
+:END:
+I'm surprised this distro's headline is 'The Windows 7 experience on Linux' even though it's using a vague Windows-style XFCE theme. If someone's interested in a real Windows 7 lookalike, check out AeroThemePlasma - it's extremely close.
+
+**** alexaholic
+:PROPERTIES:
+:COMMENT_ID: 49486201
+:END:
+Anyone remember Xandros? It eventually convinced me that if I wanted to use Linux, I didn't need a Windows UI - I needed to learn to use Linux.
+
+**** chasil
+:PROPERTIES:
+:COMMENT_ID: 49486202
+:END:
+Microsoft has expressed that Aero is 'cheesy' and 'dated' - it was stripped in pursuit of a mobile-friendly UI. All Windows UIs will die, on Microsoft's time, not the user's.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Kumander Linux：Windows 7桌面的Linux发行版
+***** TLDR
+一个为Windows难民设计的Linux发行版，使用类似Windows 7外观的XFCE桌面。默认Chrome浏览器，预装LibreOffice、Kdenlive、Ardour和VirtualBox，怀旧不够时可以运行真正的Windows。提供Live boot试用。
+***** Take
+微软在杀死Aero时称Windows 7的界面'俗气'和'过时'。几年后，人们在构建整个发行版来复活它。用户永远没有UI的最终决定权，但他们确实通过开源复仇了。
+***** Comments
+- 我很惊讶这个发行版的标题是'Linux上的Windows 7体验'，尽管它只是用了一个模糊的Windows风格XFCE主题。如果想要真正的Windows 7外观，看看AeroThemePlasma——非常接近。
+- 有人记得Xandros吗？它最终让我明白，如果我想用Linux，不需要Windows UI——需要学会使用Linux。
+- 微软说Aero'俗气'和'过时'——为了移动友好UI而被剔除。所有Windows UI都会消亡，按微软的时间，不是用户的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Kumander Linux：Windows 7デスクトップのLinuxディストロ
+***** TLDR
+Windows難民向けに設計されたLinuxディストロ。Windows 7風のXFCEデスクトップテーマを採用。Chromeがデフォルトブラウザ、LibreOffice、Kdenlive、Ardour、VirtualBox同梱で懐古だけでは足りない時に本物のWindowsも実行可能。ライブブートで試用可能。
+***** Take
+MicrosoftはAeroを殺した時Windows 7のUIを「安っぽい」「時代遅れ」と呼んだ。数年後、人々はそれを復活させるためにディストロ全体を構築している。ユーザーは欲しいUIの最終決定権を持たないが、オープンソースで確実に復讐している。
+***** Comments
+- このディストロの見出しが『Linux上のWindows 7体験』なのに驚いた。曖昧なWindowsスタイルのXFCEテーマを使ってるだけなのに。本物のWindows 7そっくりに興味あるならAeroThemePlasmaを見て——かなり近い。
+- Xandros覚えてる？最終的にLinuxを使いたいならWindows UIは要らない、Linuxの使い方を学ぶ必要があると確信させられた。
+- MicrosoftはモバイルフレンドリーなUIを追求してAeroを「安っぽい」「時代遅れ」と言った。全てのWindows UIは死ぬ、ユーザーの時間ではなくMicrosoftの時間で。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Kumander Linux: Windows 7 데스크톱의 Linux 배포판
+***** TLDR
+Windows 난민을 위해 설계된 Linux 배포판. Windows 7처럼 보이는 XFCE 데스크톱 테마 사용. Chrome 기본 브라우저, LibreOffice, Kdenlive, Ardour, VirtualBox 탑재로 향수가 부족할 때 실제 Windows 실행 가능. 라이브 부트로 사용해볼 수 있음.
+***** Take
+Microsoft는 Aero를 죽일 때 Windows 7 UI를 '촌스럽고' '구식'이라고 불렀다. 몇 년 후, 사람들은 그것을 부활시키기 위해 전체 배포판을 만들고 있다. 사용자는 원하는 UI에 대한 최종 결정권이 없지만, 오픈소스로 확실히 복수하고 있다.
+***** Comments
+- 이 배포판 헤드라인이 'Linux에서의 Windows 7 경험'인 게 놀랍다. 그냥 애매한 Windows 스타일 XFCE 테마를 쓰고 있는데. 진짜 Windows 7 같은 걸 원한다면 AeroThemePlasma 확인해봐 - 아주 비슷해.
+- Xandros 기억하는 사람? 결국 Linux를 쓰려면 Windows UI가 필요 없다는 걸, Linux 사용법을 배워야 한다는 걸 확신하게 해줬어.
+- Microsoft는 모바일 친화적 UI를 추구하며 Aero가 '촌스럽고' '구식'이라고 했어. 모든 Windows UI는 죽을 거야, 사용자 시간이 아닌 Microsoft 시간에.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Kumander Linux: Una distro Linux con escritorio Windows 7
+***** TLDR
+Una distro Linux diseñada para refugiados de Windows, con un escritorio XFCE temático similar a Windows 7. Viene con Chrome como navegador predeterminado, LibreOffice, Kdenlive, Ardour y VirtualBox para ejecutar Windows real cuando la nostalgia no es suficiente. Arranque en vivo disponible para probar.
+***** Take
+Microsoft llamó al Aero de Windows 7 'cursi' y 'anticuado' cuando lo eliminaron. Años después, la gente construye distros enteras para resucitarlo. El usuario nunca tiene la última palabra sobre qué UI quiere, pero seguro que se venga vía código abierto.
+***** Comments
+- Me sorprende que el titular de esta distro sea 'La experiencia Windows 7 en Linux' aunque usa un tema XFCE vago estilo Windows. Si alguien quiere algo realmente parecido a Windows 7, mira AeroThemePlasma - es extremadamente cercano.
+- ¿Alguien recuerda Xandros? Eventualmente me convenció de que si quería usar Linux, no necesitaba una UI de Windows - necesitaba aprender a usar Linux.
+- Microsoft ha expresado que Aero es 'cursi' y 'anticuado' - fue eliminado en busca de una UI amigable para móviles. Todas las UIs de Windows morirán, en el tiempo de Microsoft, no del usuario.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kumander Linux: Eine Linux-Distro mit Windows 7-Desktop
+***** TLDR
+Eine Linux-Distro für Windows-Flüchtlinge, mit XFCE-Desktop im Windows 7-Look. Chrome als Standard-Browser, LibreOffice, Kdenlive, Ardour und VirtualBox dabei um echtes Windows zu starten wenn Nostalgie nicht reicht. Live-Boot zum Ausprobieren verfügbar.
+***** Take
+Microsoft nannte Windows 7s Aero 'kitschig' und 'veraltet' als sie es beendeten. Jahre später bauen Leute ganze Distros um es wiederzubeleben. Der Nutzer hat nie das letzte Wort welche UI er will, aber er rächt sich definitiv via Open Source.
+***** Comments
+- Ich bin überrascht dass diese Distros Schlagzeile 'Das Windows 7-Erlebnis auf Linux' ist, obwohl sie ein vages Windows-artiges XFCE-Theme nutzt. Wer ein echtes Windows 7-Lookalike will, schau dir AeroThemePlasma an - extrem nah dran.
+- Erinnert sich jemand an Xandros? Es überzeugte mich schließlich, dass ich für Linux keine Windows-UI brauche - ich musste Linux lernen.
+- Microsoft hat gesagt Aero ist 'kitschig' und 'veraltet' - es wurde für mobile-freundliche UI entfernt. Alle Windows-UIs werden sterben, nach Microsofts Zeit, nicht der des Nutzers.
+** Tolerating full cloud outages with Monzo Stand-In :fintech:infrastructure:resilience:
+:PROPERTIES:
+:ID:       49417298
+:URL:      https://monzo.com/blog/tolerating-full-cloud-outages-with-monzo-stand-in
+:HN_URL:   https://news.ycombinator.com/item?id=49417298
+:POINTS:   86
+:COMMENTS: 24
+:BY:       coffeefuel
+:END:
+
+*** TLDR
+Monzo built a backup banking system on GCP that can take over from their main AWS platform during outages. It runs 18 microservices vs 3000 in production, costs 1% of the main platform, and handles core functions like card payments and bank transfers. Data syncs in real-time but is eventually consistent. They used it during a real outage in August 2024 and it worked.
+
+*** Take
+A bank that actually built disaster recovery instead of just putting it in a PowerPoint slide. The 1% cost figure is interesting: traditional DR that mirrors everything would double your bill. Turns out you can survive with 18 services when you really think about what matters.
+
+*** Comments
+
+**** danpalmer
+:PROPERTIES:
+:COMMENT_ID: 49417400
+:END:
+I can't help but think this isn't the best idea. It raises so many questions: How does failover work? Can you safely fail over? How does product think about the stack? Is it funded well enough? How do you scale a system from zero to all traffic instantly?
+
+**** varispeed
+:PROPERTIES:
+:COMMENT_ID: 49417401
+:END:
+Given the US Cloud Act, how is Monzo protecting customers' financial data from being accessed by foreign government without Monzo's knowledge? Everyone does it doesn't excuse it. Also shows lack of faith in British business.
+
+**** sdcfgy
+:PROPERTIES:
+:COMMENT_ID: 49417402
+:END:
+Due to the recent outage where it didn't work properly, this should be renamed Monzo Limp-In.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用Monzo Stand-In容忍完整的云故障
+***** TLDR
+Monzo在GCP上建立了备份银行系统，可以在故障期间接管他们的主AWS平台。运行18个微服务对比生产环境的3000个，成本是主平台的1%，处理卡支付和银行转账等核心功能。数据实时同步但最终一致。他们在2024年8月的真实故障中使用了它，成功了。
+***** Take
+一个真正建立了灾难恢复而不是只放在PPT里的银行。1%成本数字很有趣：镜像一切的传统DR会让账单翻倍。事实证明，当你真正思考什么重要时，18个服务就能生存。
+***** Comments
+- 我忍不住觉得这不是最好的主意。它引发了很多问题：故障转移怎么工作？能安全故障转移吗？产品团队怎么看这个技术栈？资金充足吗？怎么把系统从零瞬间扩展到全流量？
+- 考虑到美国云法案，Monzo如何保护客户的金融数据不被外国政府在Monzo不知情的情况下访问？大家都这样做不能作为借口。也显示对英国企业缺乏信心。
+- 鉴于最近它没能正常工作的故障，这应该改名叫Monzo Limp-In（瘸着进入）。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Monzo Stand-Inで完全なクラウド障害に対応
+***** TLDR
+MonzoはGCPにバックアップ銀行システムを構築し、障害時にメインのAWSプラットフォームを引き継げる。本番の3000に対し18マイクロサービスで稼働、コストはメインプラットフォームの1%、カード決済や銀行振込などの主要機能を処理。データはリアルタイム同期だが結果整合性。2024年8月の実際の障害で使用し、機能した。
+***** Take
+パワポに書くだけでなく実際にDRを構築した銀行。1%コストの数字は興味深い：全てをミラーリングする従来のDRは請求額を倍増させる。本当に重要なものを考えれば18サービスで生き残れることが判明。
+***** Comments
+- これが最善のアイデアとは思えない。多くの疑問が湧く：フェイルオーバーはどう機能する？安全にフェイルオーバーできる？プロダクトチームはこのスタックをどう考えている？十分な資金がある？ゼロから全トラフィックに瞬時にスケールするには？
+- 米国クラウド法を考慮して、Monzoは顧客の金融データをMonzoの知らないうちに外国政府にアクセスされないようどう守っている？皆やってるは言い訳にならない。英国ビジネスへの信頼の欠如も示している。
+- 最近うまく機能しなかった障害を考えると、Monzo Limp-Inに改名すべき。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Monzo Stand-In으로 완전한 클라우드 장애 견디기
+***** TLDR
+Monzo가 GCP에 백업 뱅킹 시스템을 구축해 장애 시 메인 AWS 플랫폼을 대신할 수 있게 함. 프로덕션의 3000개 대비 18개 마이크로서비스 운영, 비용은 메인 플랫폼의 1%, 카드 결제와 은행 송금 같은 핵심 기능 처리. 데이터는 실시간 동기화되지만 최종 일관성. 2024년 8월 실제 장애에서 사용했고 작동함.
+***** Take
+PPT에 넣어두기만 하는 게 아니라 실제로 재해 복구를 구축한 은행. 1% 비용 수치가 흥미롭다: 모든 걸 미러링하는 전통적 DR은 청구서를 두 배로 만든다. 정말 중요한 게 뭔지 생각하면 18개 서비스로 생존할 수 있다는 게 밝혀짐.
+***** Comments
+- 이게 최선의 아이디어인지 모르겠다. 많은 질문이 생긴다: 페일오버는 어떻게 작동해? 안전하게 페일오버할 수 있어? 제품팀은 이 스택을 어떻게 생각해? 충분한 자금이 있어? 시스템을 0에서 전체 트래픽으로 즉시 확장하려면?
+- 미국 클라우드법을 고려하면, Monzo는 고객의 금융 데이터가 Monzo 모르게 외국 정부에 접근되지 않도록 어떻게 보호하나? 다들 하니까는 변명이 안 돼. 영국 비즈니스에 대한 신뢰 부족도 보여줌.
+- 최근 제대로 작동 안 한 장애 때문에 Monzo Limp-In으로 이름을 바꿔야 해.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Tolerando caídas completas de nube con Monzo Stand-In
+***** TLDR
+Monzo construyó un sistema bancario de respaldo en GCP que puede tomar el control de su plataforma principal en AWS durante caídas. Ejecuta 18 microservicios vs 3000 en producción, cuesta 1% de la plataforma principal y maneja funciones core como pagos con tarjeta y transferencias bancarias. Los datos se sincronizan en tiempo real pero con consistencia eventual. Lo usaron durante una caída real en agosto 2024 y funcionó.
+***** Take
+Un banco que realmente construyó recuperación ante desastres en vez de solo ponerlo en una diapositiva de PowerPoint. La cifra del 1% de costo es interesante: DR tradicional que replica todo duplicaría tu factura. Resulta que puedes sobrevivir con 18 servicios cuando realmente piensas en lo que importa.
+***** Comments
+- No puedo evitar pensar que esto no es la mejor idea. Plantea tantas preguntas: ¿Cómo funciona el failover? ¿Se puede hacer failover de forma segura? ¿Cómo piensa producto sobre el stack? ¿Está suficientemente financiado? ¿Cómo escalas un sistema de cero a todo el tráfico instantáneamente?
+- Dado el US Cloud Act, ¿cómo protege Monzo los datos financieros de clientes de ser accedidos por gobierno extranjero sin conocimiento de Monzo? Que todos lo hagan no lo excusa. También muestra falta de fe en negocios británicos.
+- Debido a la reciente caída donde no funcionó bien, debería renombrarse Monzo Limp-In.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Vollständige Cloud-Ausfälle mit Monzo Stand-In tolerieren
+***** TLDR
+Monzo baute ein Backup-Bankensystem auf GCP das bei Ausfällen von der Haupt-AWS-Plattform übernehmen kann. Es betreibt 18 Microservices statt 3000 in Produktion, kostet 1% der Hauptplattform und handhabt Kernfunktionen wie Kartenzahlungen und Überweisungen. Daten synchronisieren sich in Echtzeit aber mit eventueller Konsistenz. Sie nutzten es bei einem echten Ausfall im August 2024 und es funktionierte.
+***** Take
+Eine Bank die tatsächlich Disaster Recovery gebaut hat statt es nur in eine PowerPoint-Folie zu schreiben. Die 1%-Kosten-Zahl ist interessant: traditionelles DR das alles spiegelt würde die Rechnung verdoppeln. Stellt sich raus, man kann mit 18 Services überleben wenn man wirklich darüber nachdenkt was wichtig ist.
+***** Comments
+- Ich kann nicht anders als zu denken dass das nicht die beste Idee ist. Es wirft so viele Fragen auf: Wie funktioniert Failover? Kann man sicher failovern? Wie denkt Product über den Stack? Ist es gut genug finanziert? Wie skaliert man ein System von null auf vollen Traffic sofort?
+- Angesichts des US Cloud Act, wie schützt Monzo Kundendaten vor Zugriff durch ausländische Regierungen ohne Monzos Wissen? Dass es alle machen entschuldigt es nicht. Zeigt auch mangelndes Vertrauen in britisches Business.
+- Wegen des jüngsten Ausfalls wo es nicht richtig funktionierte, sollte es in Monzo Limp-In umbenannt werden.
