@@ -1,0 +1,544 @@
+#+TITLE: HN Digest 2026-08-31 17:00:00 UT UTC
+#+DATE: 2026-08-31T17:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Prefetching autocomplete, Matrox nostalgia, diffusion LMs make a comeback, git tips, and OpenClaw 2.0 accidentally ships
+
+* Highlights
+- P99 0ms autocomplete: Prefetch on keydown, render on keyup
+- Matrox: From 1976 video RAM to server BMCs everywhere
+- Continuous diffusion LMs resurface after 2023 extinction
+
+* Stories
+
+** P99 0 ms⁎ autocomplete for 240M domain names :performance:search:frontend:infrastructure:
+:PROPERTIES:
+:ID:       49505219
+:URL:      https://ruurtjan.com/articles/p99-0ms-autocomplete-for-240-million-domain-names
+:HN_URL:   https://news.ycombinator.com/item?id=49505219
+:POINTS:   60
+:COMMENTS: 27
+:BY:       dbalatero
+:END:
+
+*** TLDR
+Wirewiki achieves sub-keypress autocomplete latency by prefetching suggestions on keydown (when you start pressing a key) and rendering on keyup. The backend uses an in-memory character trie for the top 1M domains plus a memory-mapped block index for 240M CZDS domains. P99 latency is 7ms at the API level, fitting within the ~121ms window of a typical keypress.
+
+*** Take
+The asterisk in the title does a lot of heavy lifting. It's p99 0ms if you redefine 'latency' to mean 'time after keyup' and your server is in Europe. Still, prefetching on keydown is genuinely clever and I'm stealing it.
+
+*** Comments
+
+**** skybrian
+:PROPERTIES:
+:COMMENT_ID: 49505350
+:END:
+This autocomplete suggests domains that don't exist. You can just type garbage and it will suggest something, but then if you go there, there are no records.
+
+**** chrismorgan
+:PROPERTIES:
+:COMMENT_ID: 49505412
+:END:
+Using keyup makes no sense and is inconsistent with user expectations. For triggering actions, you only ever use keydown.
+
+**** oersted
+:PROPERTIES:
+:COMMENT_ID: 49505478
+:END:
+Why not just trigger the fetch on keyDown and show it as soon as the response arrives, as usual? Waiting to display until keyUp just adds more latency if your API is faster.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为2.4亿域名实现P99 0毫秒自动补全
+***** TLDR
+Wirewiki通过在按键按下时预取建议、按键松开时渲染来实现亚按键延迟的自动补全。后端使用内存字符前缀树处理前100万域名，加上内存映射块索引处理2.4亿CZDS域名。API级别P99延迟7毫秒，在典型按键约121毫秒的窗口内。
+***** Take
+标题里的星号承担了很重的任务。只有把'延迟'重新定义为'按键松开后的时间'且服务器在欧洲时才是P99 0毫秒。不过按键按下时预取确实很聪明，我要偷师了。
+***** Comments
+- 这个自动补全会建议不存在的域名。你随便打什么垃圾字符它都会建议，但点进去却没有记录。
+- 用keyup没有意义，和用户预期不一致。触发动作应该用keydown。
+- 为什么不在keyDown时触发请求，响应到了就显示？如果API更快，等到keyUp才显示只会增加延迟。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+2.4億ドメイン名のP99 0msオートコンプリート
+***** TLDR
+Wirewikiはキーダウン時に提案をプリフェッチし、キーアップ時にレンダリングすることでキー押下以下のオートコンプリート遅延を実現。バックエンドは上位100万ドメインにインメモリトライを、2.4億のCZDSドメインにメモリマップドブロックインデックスを使用。API P99遅延は7ms、典型的なキー押下121msのウィンドウ内に収まる。
+***** Take
+タイトルのアスタリスクがかなり重要な働きをしている。「遅延」を「キーアップ後の時間」と再定義し、サーバーがヨーロッパにある場合のみP99 0ms。それでもキーダウンでのプリフェッチは本当に賢い。パクる。
+***** Comments
+- このオートコンプリートは存在しないドメインを提案する。ゴミを打っても何か提案されるが、そこに行ってもレコードがない。
+- keyupを使うのは意味がなく、ユーザーの期待と矛盾する。アクションのトリガーにはkeydownを使うべき。
+- keyDownでフェッチをトリガーしてレスポンスが来たらすぐ表示すればいいのでは？APIが速いならkeyUpまで待つのは遅延を増やすだけ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+2.4억 도메인 이름에 대한 P99 0ms 자동완성
+***** TLDR
+Wirewiki는 키를 누를 때 제안을 미리 가져오고 키를 뗄 때 렌더링하여 키 입력 이하의 자동완성 지연을 달성. 백엔드는 상위 100만 도메인에 인메모리 트라이를, 2.4억 CZDS 도메인에 메모리 매핑 블록 인덱스를 사용. API P99 지연은 7ms로 일반적인 키 입력 약 121ms 윈도우 내에 들어옴.
+***** Take
+제목의 별표가 무거운 짐을 지고 있다. '지연'을 'keyup 이후 시간'으로 재정의하고 서버가 유럽에 있을 때만 P99 0ms다. 그래도 keydown에서 프리페칭은 정말 영리해서 훔쳐가겠다.
+***** Comments
+- 이 자동완성은 존재하지 않는 도메인을 제안한다. 아무 쓰레기나 입력해도 뭔가 제안하지만, 가보면 레코드가 없다.
+- keyup 사용은 말이 안 되고 사용자 기대와 일치하지 않는다. 액션 트리거에는 keydown을 사용해야 한다.
+- keyDown에서 fetch를 트리거하고 응답 오면 바로 보여주면 되지 않나? API가 더 빠르면 keyUp까지 기다리는 건 지연만 늘린다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Autocompletado P99 0ms⁎ para 240M de nombres de dominio
+***** TLDR
+Wirewiki logra latencia de autocompletado inferior a una pulsación de tecla prefetcheando sugerencias en keydown y renderizando en keyup. El backend usa un trie de caracteres en memoria para el top 1M de dominios más un índice de bloques mapeado en memoria para 240M de dominios CZDS. La latencia P99 a nivel de API es 7ms, dentro de la ventana de ~121ms de una pulsación típica.
+***** Take
+El asterisco en el título hace mucho trabajo pesado. Es P99 0ms si redefinís 'latencia' como 'tiempo después del keyup' y tu servidor está en Europa. Aun así, prefetching en keydown es genuinamente ingenioso y lo voy a robar.
+***** Comments
+- Este autocompletado sugiere dominios que no existen. Podés escribir basura y sugerirá algo, pero después vas ahí y no hay registros.
+- Usar keyup no tiene sentido y es inconsistente con las expectativas del usuario. Para disparar acciones, solo usás keydown.
+- ¿Por qué no disparar el fetch en keyDown y mostrarlo apenas llegue la respuesta, como siempre? Esperar a mostrar hasta keyUp solo añade más latencia si tu API es más rápida.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+P99 0ms⁎ Autocomplete für 240M Domainnamen
+***** TLDR
+Wirewiki erreicht Autocomplete-Latenz unter einer Tastendruck-Dauer durch Prefetching bei keydown und Rendering bei keyup. Das Backend nutzt einen In-Memory-Trie für die Top 1M Domains plus einen memory-mapped Block-Index für 240M CZDS-Domains. P99-Latenz auf API-Ebene ist 7ms, innerhalb des ~121ms-Fensters eines typischen Tastendrucks.
+***** Take
+Das Sternchen im Titel leistet schwere Arbeit. Es ist P99 0ms, wenn man 'Latenz' als 'Zeit nach keyup' umdefiniert und der Server in Europa steht. Trotzdem ist Prefetching bei keydown wirklich clever und ich werde es klauen.
+***** Comments
+- Dieses Autocomplete schlägt Domains vor, die nicht existieren. Man kann Müll tippen und es schlägt etwas vor, aber wenn man dort hingeht, gibt es keine Einträge.
+- Keyup zu verwenden macht keinen Sinn und ist inkonsistent mit Benutzererwartungen. Zum Auslösen von Aktionen verwendet man nur keydown.
+- Warum nicht einfach den Fetch bei keyDown auslösen und zeigen, sobald die Antwort kommt, wie üblich? Bis keyUp zu warten fügt nur mehr Latenz hinzu, wenn die API schneller ist.
+** Matrox: Graphics for Professionals :hardware:history:graphics:retrocomputing:
+:PROPERTIES:
+:ID:       49503934
+:URL:      https://www.abortretry.fail/p/matrox
+:HN_URL:   https://news.ycombinator.com/item?id=49503934
+:POINTS:   80
+:COMMENTS: 23
+:BY:       BirAdam
+:END:
+
+*** TLDR
+Deep dive into Matrox history from 1976 founding to present. Started with Video RAM for S-100 bus hobbyists, won NASA Viking ground control contracts, pioneered multi-display setups for Wall Street in 1979, made the first 3D AIB in 1987 (flopped due to no software), dominated 2D quality in the Millennium era, and now their G200 chip lives on in nearly every server BMC.
+
+*** Take
+Matrox went from 'we made Viking mission displays' to 'we're inside every Dell server but nobody knows'. The G200 has been shipping for 27 years. That's not a product lifecycle, that's carbon dating territory.
+
+*** Comments
+
+**** raggi
+:PROPERTIES:
+:COMMENT_ID: 49504012
+:END:
+My friend swapped a much newer and more powerful card for my last Matrox Millennium II. The Matrox utilities had one of the best desktop zoom systems for his wife with sight challenges.
+
+**** kev009
+:PROPERTIES:
+:COMMENT_ID: 49504089
+:END:
+Wow this is a deep dive, most people focus on the PC era. The Ultima/Impression were some of the very first commercial PCI cards.
+
+**** terhechte
+:PROPERTIES:
+:COMMENT_ID: 49504156
+:END:
+In 2004 we needed to drive 16 displays from one computer for digital signage. Matrox's QIP LP PCIe was the industry's first PCIe x16 graphics card.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Matrox：专业显卡的历史
+***** TLDR
+深入探讨Matrox从1976年创立至今的历史。从S-100总线爱好者的视频RAM起步，赢得NASA维京任务地面控制合同，1979年为华尔街首创多显示器设置，1987年制造了第一块3D AIB（因缺乏软件而失败），在Millennium时代主导2D画质，如今其G200芯片存在于几乎每台服务器BMC中。
+***** Take
+Matrox从'我们做过维京任务显示器'变成了'我们在每台戴尔服务器里但没人知道'。G200已经出货27年了。这不是产品生命周期，这是碳定年的范畴了。
+***** Comments
+- 我朋友用一块更新更强大的显卡换走了我最后一块Matrox Millennium II。Matrox的工具有最好的桌面缩放系统，适合他有视力障碍的妻子使用。
+- 这是一篇很深入的文章，大多数人只关注PC时代。Ultima/Impression是最早的商用PCI卡之一。
+- 2004年我们需要用一台电脑驱动16个显示器做数字标牌。Matrox的QIP LP PCIe是业界第一块PCIe x16显卡。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Matrox：プロフェッショナル向けグラフィックスの歴史
+***** TLDR
+1976年の創業から現在までのMatroxの歴史を深掘り。S-100バスホビイスト向けビデオRAMから始まり、NASAバイキングミッションの地上管制契約を獲得、1979年にウォール街向けマルチディスプレイを開拓、1987年に初の3D AIBを製造（ソフトウェア不足で失敗）、Millennium時代に2D画質を支配し、現在G200チップはほぼすべてのサーバーBMCに搭載されている。
+***** Take
+Matroxは「バイキングミッションのディスプレイを作った」から「すべてのDellサーバーに入っているが誰も知らない」になった。G200は27年間出荷されている。これは製品ライフサイクルではなく、炭素年代測定の領域だ。
+***** Comments
+- 友人が私の最後のMatrox Millennium IIを、もっと新しくて強力なカードと交換してくれた。Matroxのユーティリティには、視力に問題がある彼の妻のための最高のデスクトップズームシステムがあった。
+- これはかなり深掘りした記事だ。ほとんどの人はPC時代だけに焦点を当てる。Ultima/Impressionは最初期の商用PCIカードの一つだった。
+- 2004年、デジタルサイネージ用に1台のコンピュータから16台のディスプレイを駆動する必要があった。MatroxのQIP LP PCIeは業界初のPCIe x16グラフィックスカードだった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Matrox: 전문가용 그래픽의 역사
+***** TLDR
+1976년 창립부터 현재까지 Matrox 역사 심층 탐구. S-100 버스 취미인들을 위한 비디오 RAM으로 시작, NASA 바이킹 임무 지상 통제 계약 수주, 1979년 월스트리트용 멀티 디스플레이 선구, 1987년 최초의 3D AIB 제작(소프트웨어 부재로 실패), Millennium 시대에 2D 품질 지배, 현재 G200 칩은 거의 모든 서버 BMC에 탑재.
+***** Take
+Matrox는 '바이킹 임무 디스플레이를 만들었다'에서 '모든 Dell 서버 안에 있지만 아무도 모른다'가 되었다. G200은 27년째 출하 중이다. 이건 제품 수명 주기가 아니라 탄소 연대 측정 영역이다.
+***** Comments
+- 친구가 더 새롭고 강력한 카드로 내 마지막 Matrox Millennium II를 교환해 갔다. Matrox 유틸리티에는 시력 문제가 있는 그의 아내를 위한 최고의 데스크톱 줌 시스템이 있었다.
+- 대부분의 사람들은 PC 시대에만 집중하는데 이건 정말 깊이 있는 글이다. Ultima/Impression은 최초의 상용 PCI 카드 중 하나였다.
+- 2004년에 디지털 사이니지용으로 한 컴퓨터에서 16개 디스플레이를 구동해야 했다. Matrox의 QIP LP PCIe는 업계 최초 PCIe x16 그래픽 카드였다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Matrox: Gráficos para Profesionales
+***** TLDR
+Análisis profundo de la historia de Matrox desde su fundación en 1976 hasta hoy. Empezó con Video RAM para hobbyistas del bus S-100, ganó contratos de control terrestre de la misión Viking de NASA, pionera en configuraciones multi-pantalla para Wall Street en 1979, hizo el primer 3D AIB en 1987 (fracasó por falta de software), dominó la calidad 2D en la era Millennium, y ahora su chip G200 vive en casi todos los BMC de servidores.
+***** Take
+Matrox pasó de 'hicimos los displays de la misión Viking' a 'estamos dentro de cada servidor Dell pero nadie lo sabe'. El G200 lleva 27 años en producción. Eso no es un ciclo de vida de producto, es territorio de datación por carbono.
+***** Comments
+- Mi amigo intercambió una tarjeta mucho más nueva y potente por mi última Matrox Millennium II. Las utilidades de Matrox tenían uno de los mejores sistemas de zoom de escritorio para su esposa con problemas de visión.
+- Vaya, esto es muy profundo, la mayoría se enfoca en la era PC. Las Ultima/Impression fueron de las primeras tarjetas PCI comerciales.
+- En 2004 necesitábamos manejar 16 pantallas desde una computadora para señalización digital. La QIP LP PCIe de Matrox fue la primera tarjeta gráfica PCIe x16 de la industria.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Matrox: Grafik für Profis
+***** TLDR
+Tiefgreifender Blick auf die Matrox-Geschichte von der Gründung 1976 bis heute. Begann mit Video-RAM für S-100-Bus-Hobbyisten, gewann NASA-Viking-Bodenkontrollverträge, war 1979 Pionier bei Multi-Display-Setups für Wall Street, baute 1987 die erste 3D-AIB (scheiterte mangels Software), dominierte 2D-Qualität in der Millennium-Ära, und jetzt lebt ihr G200-Chip in fast jedem Server-BMC.
+***** Take
+Matrox ging von 'wir haben Viking-Missions-Displays gebaut' zu 'wir sind in jedem Dell-Server, aber niemand weiß es'. Der G200 wird seit 27 Jahren ausgeliefert. Das ist kein Produktlebenszyklus, das ist Kohlenstoffdatierungs-Territorium.
+***** Comments
+- Mein Freund tauschte eine viel neuere und leistungsfähigere Karte gegen meine letzte Matrox Millennium II. Die Matrox-Utilities hatten eines der besten Desktop-Zoom-Systeme für seine sehbehinderte Frau.
+- Wow, das ist ein Deep Dive, die meisten fokussieren sich auf die PC-Ära. Die Ultima/Impression waren einige der allerersten kommerziellen PCI-Karten.
+- 2004 mussten wir 16 Displays von einem Computer aus für Digital Signage ansteuern. Matrox' QIP LP PCIe war die erste PCIe x16-Grafikkarte der Industrie.
+** Continuous Diffusion Language Models (CDLM's) :ai:ml:research:diffusion:
+:PROPERTIES:
+:ID:       49502611
+:URL:      https://sander.ai/2026/08/24/continuous-dlms.html
+:HN_URL:   https://news.ycombinator.com/item?id=49502611
+:POINTS:   81
+:COMMENTS: 32
+:BY:       peter_d_sherman
+:END:
+
+*** TLDR
+After going nearly extinct in late 2023 (when discrete diffusion took over), continuous diffusion language models are making a comeback. The author traces the history from 2021 discrete methods through the 2022 continuous explosion to the 2023 extinction event, then explains why CDLMs might actually win: they can represent token-level uncertainty, have a rich sampling toolbox, and recent work shows they scale better than expected.
+
+*** Take
+The 64x training efficiency gap from 2023 scared everyone off, but apparently that was a skill issue. Also, 'self-conditioning' turns out to be secretly essential and breaks all the math but everyone uses it anyway because it works. Classic ML.
+
+*** Comments
+
+**** nullbio
+:PROPERTIES:
+:COMMENT_ID: 49502890
+:END:
+Conspiracy time: The continuous model has fruit. Frontier labs were trying to bury it with discrete distractions, because it is what they're using internally. Momentum wins, in the end.
+
+**** janalsncm
+:PROPERTIES:
+:COMMENT_ID: 49502945
+:END:
+I disagree that autoregression wasn't dominant in 2020. GPT2 was considered too dangerous to release, and I remember scrambling to get on the GPT3 waitlist. Decoders were absolutely dominant for chat.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+连续扩散语言模型（CDLM）
+***** TLDR
+在2023年末几乎灭绝（当时离散扩散占据主导）后，连续扩散语言模型正在卷土重来。作者追溯了从2021年离散方法到2022年连续方法爆发再到2023年灭绝事件的历史，然后解释了为什么CDLM可能最终获胜：它们可以表示token级别的不确定性，有丰富的采样工具箱，最近的研究表明它们的扩展性比预期更好。
+***** Take
+2023年64倍的训练效率差距吓跑了所有人，但显然那是技术问题。另外，'自条件化'原来是秘密的关键，虽然它破坏了所有数学推导，但每个人都在用它，因为它有效。经典ML风格。
+***** Comments
+- 阴谋论时间：连续模型有成果。前沿实验室试图用离散方法转移注意力来掩盖它，因为他们内部就在用。最终，势能获胜。
+- 我不同意自回归在2020年不占主导地位。GPT2被认为太危险不能发布，我记得我急着要加入GPT3等待名单。解码器在聊天领域绝对是主导的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+連続拡散言語モデル（CDLM）
+***** TLDR
+2023年後半にほぼ絶滅した後（離散拡散が主流になった時）、連続拡散言語モデルが復活している。著者は2021年の離散手法から2022年の連続手法の爆発、そして2023年の絶滅イベントまでの歴史を辿り、なぜCDLMが勝つかもしれないかを説明：トークンレベルの不確実性を表現でき、豊富なサンプリングツールボックスがあり、最近の研究ではスケーリングが予想以上に良好であることが示されている。
+***** Take
+2023年の64倍の学習効率ギャップは皆を怖がらせたが、どうやらそれはスキル不足だったようだ。また、「自己条件付け」が密かに不可欠であることが判明し、すべての数学を破壊するが、機能するので皆が使っている。典型的なML。
+***** Comments
+- 陰謀論タイム：連続モデルには成果がある。フロンティアラボは離散の気晴らしでそれを埋めようとしていた。なぜなら内部でそれを使っているから。最終的には勢いが勝つ。
+- 2020年に自己回帰が支配的でなかったというのには同意しない。GPT2は危険すぎてリリースできないとされ、GPT3の待機リストに入ろうと必死だったのを覚えている。チャットではデコーダーが絶対的に支配的だった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+연속 확산 언어 모델(CDLM)
+***** TLDR
+2023년 후반에 거의 멸종한 후(이산 확산이 지배하게 되었을 때), 연속 확산 언어 모델이 부활하고 있다. 저자는 2021년 이산 방법에서 2022년 연속 폭발, 2023년 멸종 사건까지의 역사를 추적하고, 왜 CDLM이 승리할 수 있는지 설명한다: 토큰 수준의 불확실성을 표현할 수 있고, 풍부한 샘플링 도구 상자가 있으며, 최근 연구에서 예상보다 확장성이 좋다는 것이 밝혀졌다.
+***** Take
+2023년의 64배 학습 효율 격차가 모두를 겁먹게 했지만, 분명 그건 실력 문제였다. 또한 '자기 조건화'가 비밀리에 필수적인 것으로 밝혀졌고 모든 수학을 깨뜨리지만 작동하기 때문에 모두가 사용한다. 전형적인 ML.
+***** Comments
+- 음모론 시간: 연속 모델에는 성과가 있다. 프론티어 랩들은 이산으로 주의를 분산시키며 묻으려 했다. 내부에서 그걸 쓰고 있으니까. 결국 모멘텀이 이긴다.
+- 2020년에 자기회귀가 지배적이지 않았다는 데 동의하지 않는다. GPT2는 너무 위험해서 공개할 수 없다고 여겨졌고, GPT3 대기 명단에 들어가려고 안달했던 걸 기억한다. 챗에서 디코더가 절대적으로 지배적이었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Modelos de Lenguaje de Difusión Continua (CDLM)
+***** TLDR
+Tras casi extinguirse a finales de 2023 (cuando la difusión discreta tomó el control), los modelos de lenguaje de difusión continua están volviendo. El autor traza la historia desde los métodos discretos de 2021, pasando por la explosión continua de 2022 hasta el evento de extinción de 2023, y luego explica por qué los CDLM podrían ganar: pueden representar incertidumbre a nivel de token, tienen una rica caja de herramientas de muestreo, y trabajos recientes muestran que escalan mejor de lo esperado.
+***** Take
+La brecha de eficiencia de entrenamiento de 64x en 2023 asustó a todos, pero aparentemente eso era un problema de habilidad. Además, el 'auto-condicionamiento' resulta ser secretamente esencial y rompe toda la matemática pero todos lo usan igual porque funciona. ML clásico.
+***** Comments
+- Hora de la conspiración: El modelo continuo tiene frutos. Los laboratorios de frontera intentaban enterrarlo con distracciones discretas, porque es lo que usan internamente. El momentum gana, al final.
+- No estoy de acuerdo con que la autorregresión no era dominante en 2020. GPT2 se consideraba demasiado peligroso para liberar, y recuerdo la prisa por entrar en la lista de espera de GPT3. Los decoders eran absolutamente dominantes para chat.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kontinuierliche Diffusions-Sprachmodelle (CDLM)
+***** TLDR
+Nach dem Fast-Aussterben Ende 2023 (als diskrete Diffusion übernahm) erleben kontinuierliche Diffusions-Sprachmodelle ein Comeback. Der Autor zeichnet die Geschichte von den diskreten Methoden 2021 über die kontinuierliche Explosion 2022 bis zum Extinktionsereignis 2023 nach und erklärt dann, warum CDLMs gewinnen könnten: Sie können Token-Level-Unsicherheit darstellen, haben eine reiche Sampling-Toolbox, und neuere Arbeiten zeigen, dass sie besser skalieren als erwartet.
+***** Take
+Die 64-fache Trainingseffizienzlücke von 2023 hat alle verschreckt, aber anscheinend war das ein Skill-Problem. Außerdem stellt sich heraus, dass 'Self-Conditioning' heimlich essentiell ist und alle Mathematik bricht, aber jeder benutzt es trotzdem, weil es funktioniert. Klassisches ML.
+***** Comments
+- Verschwörungszeit: Das kontinuierliche Modell trägt Früchte. Frontier-Labs versuchten es mit diskreten Ablenkungen zu begraben, weil sie es intern verwenden. Momentum gewinnt am Ende.
+- Ich stimme nicht zu, dass Autoregression 2020 nicht dominant war. GPT2 galt als zu gefährlich zur Veröffentlichung, und ich erinnere mich, wie ich mich um einen Platz auf der GPT3-Warteliste bemühte. Decoder waren absolut dominant für Chat.
+** Sort branches by last commit date :git:devtools:til:
+:PROPERTIES:
+:ID:       49435285
+:URL:      https://ryangreenberg.com/til/git-branches-by-commit-date/
+:HN_URL:   https://news.ycombinator.com/item?id=49435285
+:POINTS:   112
+:COMMENTS: 40
+:BY:       speckx
+:END:
+
+*** TLDR
+Instead of writing a convoluted bash script to list git branches by recency, just run `git config branch.sort committerdate`. Modern git supports sorting by many fields including authordate, creatordate, and contents:size. Use `-committerdate` (note the minus) to show newest first.
+
+*** Take
+Someone ran a for-loop-and-sed monstrosity daily for years before discovering git had this built in. This is peak developer: automate the wrong thing, never read the docs, share it anyway.
+
+*** Comments
+
+**** asb
+:PROPERTIES:
+:COMMENT_ID: 49504801
+:END:
+Even better is `git config branch.sort -committerdate` (note the `-`). This will sort newest committer date first.
+
+**** amarshall
+:PROPERTIES:
+:COMMENT_ID: 49504860
+:END:
+I rarely care about the date of the commit on the branch, I care about when I last switched to the branch. I wrote my own version to do this nearly 10 years ago.
+
+**** jbranchaud
+:PROPERTIES:
+:COMMENT_ID: 49504923
+:END:
+The best upgrade to these kinds of git branch scripts is piping them to fzf.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+按最后提交日期排序分支
+***** TLDR
+不用写复杂的bash脚本按时间列出git分支了，只需运行`git config branch.sort committerdate`。现代git支持按多个字段排序，包括authordate、creatordate和contents:size。使用`-committerdate`（注意减号）可以最新的排在前面。
+***** Take
+有人每天运行一个for循环加sed的怪物脚本好几年，才发现git内置了这个功能。这是开发者的巅峰：自动化错误的东西，从不看文档，然后分享出去。
+***** Comments
+- 更好的是`git config branch.sort -committerdate`（注意`-`）。这会把最新的提交日期排在最前面。
+- 我很少关心分支上的提交日期，我关心的是我上次切换到这个分支是什么时候。我十年前就写了自己的版本来做这件事。
+- 这类git分支脚本最好的升级就是把它们通过管道传给fzf。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ブランチを最終コミット日でソート
+***** TLDR
+gitブランチを新しい順にリストする複雑なbashスクリプトを書く代わりに、`git config branch.sort committerdate`を実行するだけ。現代のgitはauthordate、creatordate、contents:sizeなど多くのフィールドでソートをサポート。`-committerdate`（マイナスに注意）を使うと新しいものが先に表示される。
+***** Take
+誰かがforループとsedのモンスタースクリプトを何年も毎日実行した後、gitにこれが組み込まれていることを発見した。これは開発者の極み：間違ったものを自動化し、ドキュメントを読まず、とにかく共有する。
+***** Comments
+- さらに良いのは`git config branch.sort -committerdate`（`-`に注意）。これで最新のコミッター日付が最初に表示される。
+- ブランチ上のコミット日付はあまり気にしない。最後にブランチに切り替えたのがいつかを気にする。10年近く前に自分でそれ用のバージョンを書いた。
+- この種のgitブランチスクリプトへの最高のアップグレードは、fzfにパイプすること。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+마지막 커밋 날짜로 브랜치 정렬
+***** TLDR
+git 브랜치를 최신순으로 나열하는 복잡한 bash 스크립트 대신 `git config branch.sort committerdate`를 실행하면 된다. 현대 git은 authordate, creatordate, contents:size 등 여러 필드로 정렬을 지원한다. `-committerdate`(마이너스 주의)를 사용하면 최신이 먼저 나온다.
+***** Take
+누군가 for 루프와 sed 괴물을 매일 몇 년간 돌리다가 git에 이게 내장되어 있다는 걸 발견했다. 이게 바로 개발자의 정점: 잘못된 걸 자동화하고, 문서는 안 읽고, 어쨌든 공유한다.
+***** Comments
+- `git config branch.sort -committerdate`가 더 좋다(`-` 주의). 이렇게 하면 가장 최근 커밋 날짜가 먼저 나온다.
+- 브랜치의 커밋 날짜는 별로 신경 안 쓴다. 마지막으로 브랜치로 전환한 게 언제인지가 중요하다. 거의 10년 전에 이걸 위한 내 버전을 만들었다.
+- 이런 git 브랜치 스크립트의 최고의 업그레이드는 fzf로 파이프하는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ordenar ramas por fecha del último commit
+***** TLDR
+En lugar de escribir un script bash complicado para listar ramas git por antigüedad, solo ejecutá `git config branch.sort committerdate`. Git moderno soporta ordenar por muchos campos incluyendo authordate, creatordate, y contents:size. Usá `-committerdate` (notá el menos) para mostrar los más nuevos primero.
+***** Take
+Alguien corrió una monstruosidad de for-loop-y-sed diariamente por años antes de descubrir que git lo tenía incorporado. Esto es el pico desarrollador: automatizar lo incorrecto, nunca leer la documentación, compartirlo igual.
+***** Comments
+- Aún mejor es `git config branch.sort -committerdate` (notá el `-`). Esto ordenará la fecha de committer más nueva primero.
+- Rara vez me importa la fecha del commit en la rama, me importa cuándo fue la última vez que cambié a la rama. Escribí mi propia versión para hacer esto hace casi 10 años.
+- La mejor mejora a este tipo de scripts de ramas git es pasarlos por fzf.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Branches nach letztem Commit-Datum sortieren
+***** TLDR
+Anstatt ein kompliziertes Bash-Skript zu schreiben, um Git-Branches nach Aktualität zu listen, einfach `git config branch.sort committerdate` ausführen. Modernes Git unterstützt Sortierung nach vielen Feldern einschließlich authordate, creatordate und contents:size. Mit `-committerdate` (Minus beachten) werden die neuesten zuerst angezeigt.
+***** Take
+Jemand hat jahrelang täglich eine For-Loop-und-Sed-Monstrosität ausgeführt, bevor er entdeckte, dass Git das eingebaut hat. Das ist Peak-Entwickler: das Falsche automatisieren, nie die Doku lesen, trotzdem teilen.
+***** Comments
+- Noch besser ist `git config branch.sort -committerdate` (Minus beachten). Das sortiert das neueste Committer-Datum zuerst.
+- Mich interessiert selten das Commit-Datum auf dem Branch, mich interessiert, wann ich zuletzt zum Branch gewechselt bin. Ich habe vor fast 10 Jahren meine eigene Version dafür geschrieben.
+- Das beste Upgrade für solche Git-Branch-Skripte ist, sie durch fzf zu pipen.
+** OpenClaw 2.0, Accidentally :ai:agents:opensource:startups:
+:PROPERTIES:
+:ID:       49505310
+:URL:      https://openclaw.ai/blog/openclaw-2-accidentally
+:HN_URL:   https://news.ycombinator.com/item?id=49505310
+:POINTS:   53
+:COMMENTS: 43
+:BY:       doppp
+:END:
+
+*** TLDR
+OpenClaw shipped its biggest update ever: 16,000 PRs from 933 contributors in 7 weeks. Started as a browser app rebuild but snowballed into version 2.0. New features include reusing existing API keys and subscriptions, multiplayer shared sessions, and the browser becoming a first-class experience. The pitch: an always-on AI assistant you own, that grows from simple automations to team workflows.
+
+*** Take
+The comments reveal the real story: nobody knows what to actually do with these always-on agents. Someone built a fancy server that does things and then asks 'and then what?' The answer is apparently 'watch your kids' school emails.' Peak 2026 AI.
+
+*** Comments
+
+**** blfr
+:PROPERTIES:
+:COMMENT_ID: 49505456
+:END:
+I like the idea but do not have a good use for these semi-autonomous agents. What do people do with them? It sounds great to have an always-on box which does things. And then what?
+
+**** arjie
+:PROPERTIES:
+:COMMENT_ID: 49505512
+:END:
+It was first, but Langchain built tools first. Nowadays, everyone's got a better assistant. It's so easy to write this kind of software it's a waste to pay someone for it.
+
+**** minimaxir
+:PROPERTIES:
+:COMMENT_ID: 49505578
+:END:
+Obligatory question: who is still using OpenClaw? It's been a minor meme about how much discussion about OpenClaw fell off a cliff after March.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+OpenClaw 2.0，意外诞生
+***** TLDR
+OpenClaw发布了有史以来最大的更新：7周内来自933位贡献者的16000个PR。原本只是想重建浏览器应用，结果滚雪球变成了2.0版本。新功能包括复用现有API密钥和订阅、多人共享会话，以及浏览器成为一等公民体验。卖点：一个你拥有的始终在线AI助手，从简单自动化成长为团队工作流。
+***** Take
+评论区揭示了真实故事：没人知道这些始终在线的agent到底能干什么。有人建了一个高级服务器做事情，然后问'然后呢？'答案竟然是'看你孩子的学校邮件'。2026年AI的巅峰。
+***** Comments
+- 我喜欢这个想法，但对这些半自主agent没有好的用途。人们用它们做什么？有一个始终在线做事情的盒子听起来很棒。然后呢？
+- 它是第一个，但Langchain先做了工具。现在每个人都有更好的助手。写这种软件太容易了，花钱买是浪费。
+- 必须问的问题：谁还在用OpenClaw？关于OpenClaw的讨论在三月后断崖式下跌已经成了一个小梗。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+OpenClaw 2.0、偶然に
+***** TLDR
+OpenClawが史上最大のアップデートを出荷：7週間で933人のコントリビューターから16,000のPR。ブラウザアプリの再構築として始まったが、雪だるま式にバージョン2.0になった。新機能には既存のAPIキーとサブスクリプションの再利用、マルチプレイヤー共有セッション、ブラウザがファーストクラスの体験になることが含まれる。売り：シンプルな自動化からチームワークフローに成長する、自分が所有する常時オンのAIアシスタント。
+***** Take
+コメントが本当の話を明かしている：これらの常時オンエージェントで実際に何をすべきか誰も分からない。誰かがファンシーなサーバーを作って物事をやらせ、「それで？」と尋ねる。答えは明らかに「子供の学校のメールを見る」。2026年AIのピーク。
+***** Comments
+- アイデアは好きだが、これらの半自律エージェントに良い用途がない。人々はそれらで何をするの？常に何かをするボックスがあるのは素晴らしく聞こえる。で、その後は？
+- 最初だったが、Langchainが先にツールを作った。今や誰もがより良いアシスタントを持っている。この種のソフトウェアを書くのはとても簡単なので、お金を払うのは無駄だ。
+- 義務的な質問：まだOpenClawを使っている人はいる？3月以降OpenClawについての議論がガクッと減ったことは小さなミームになっている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+OpenClaw 2.0, 우연히
+***** TLDR
+OpenClaw가 역대 최대 업데이트를 출시: 7주 동안 933명의 기여자가 16,000개의 PR. 브라우저 앱 재구축으로 시작했지만 눈덩이처럼 불어나 버전 2.0이 되었다. 새 기능으로는 기존 API 키와 구독 재사용, 멀티플레이어 공유 세션, 브라우저가 일급 경험이 되는 것이 포함된다. 피치: 간단한 자동화에서 팀 워크플로까지 성장하는, 당신이 소유하는 상시 AI 어시스턴트.
+***** Take
+댓글이 진짜 이야기를 드러낸다: 아무도 이 상시 에이전트로 실제로 뭘 해야 하는지 모른다. 누군가 멋진 서버를 만들어서 일을 시키고 '그래서?'라고 묻는다. 답은 분명히 '아이들의 학교 이메일 보기'. 2026년 AI의 정점.
+***** Comments
+- 아이디어는 좋지만 이 반자율 에이전트에 좋은 용도가 없다. 사람들은 이걸로 뭘 하나? 항상 뭔가를 하는 상자가 있는 건 좋아 보인다. 그래서?
+- 처음이긴 했지만 Langchain이 먼저 도구를 만들었다. 요즘은 모두가 더 좋은 어시스턴트를 갖고 있다. 이런 소프트웨어는 너무 쉬워서 돈 주고 사는 건 낭비다.
+- 의무적인 질문: 아직 OpenClaw 쓰는 사람 있어? 3월 이후로 OpenClaw 논의가 급락한 건 작은 밈이 됐다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+OpenClaw 2.0, Accidentalmente
+***** TLDR
+OpenClaw lanzó su mayor actualización: 16.000 PRs de 933 contribuidores en 7 semanas. Empezó como una reconstrucción de la app del navegador pero se convirtió en bola de nieve hasta la versión 2.0. Las nuevas funciones incluyen reutilizar claves API y suscripciones existentes, sesiones compartidas multijugador, y el navegador convirtiéndose en experiencia de primera clase. El pitch: un asistente AI siempre encendido que poseés, que crece desde automatizaciones simples hasta flujos de trabajo de equipo.
+***** Take
+Los comentarios revelan la historia real: nadie sabe qué hacer realmente con estos agentes siempre encendidos. Alguien construyó un servidor fancy que hace cosas y luego pregunta '¿y después qué?' La respuesta aparentemente es 'vigilar los emails de la escuela de tus hijos'. AI de 2026 en su máxima expresión.
+***** Comments
+- Me gusta la idea pero no tengo un buen uso para estos agentes semi-autónomos. ¿Qué hace la gente con ellos? Suena genial tener una caja siempre encendida que hace cosas. ¿Y después qué?
+- Fue primero, pero Langchain construyó herramientas primero. Hoy en día, todos tienen un mejor asistente. Es tan fácil escribir este tipo de software que es un desperdicio pagar por él.
+- Pregunta obligatoria: ¿quién sigue usando OpenClaw? Se ha vuelto un pequeño meme cuánto cayó la discusión sobre OpenClaw después de marzo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+OpenClaw 2.0, Versehentlich
+***** TLDR
+OpenClaw hat sein größtes Update ausgeliefert: 16.000 PRs von 933 Mitwirkenden in 7 Wochen. Begann als Neuaufbau der Browser-App, wurde aber zum Schneeball und Version 2.0. Neue Features umfassen die Wiederverwendung bestehender API-Schlüssel und Abonnements, Multiplayer-Shared-Sessions und der Browser wird zur First-Class-Erfahrung. Der Pitch: ein Always-On-KI-Assistent, der dir gehört, der von einfachen Automatisierungen zu Team-Workflows wächst.
+***** Take
+Die Kommentare enthüllen die wahre Geschichte: niemand weiß, was man mit diesen Always-On-Agenten tatsächlich machen soll. Jemand hat einen schicken Server gebaut, der Dinge tut und fragt dann 'und dann?' Die Antwort ist anscheinend 'die Schul-E-Mails deiner Kinder überwachen'. Peak 2026 KI.
+***** Comments
+- Mir gefällt die Idee, aber ich habe keine gute Verwendung für diese halb-autonomen Agenten. Was machen die Leute damit? Es klingt toll, eine immer eingeschaltete Box zu haben, die Dinge tut. Und dann?
+- Es war das Erste, aber Langchain hat zuerst Tools gebaut. Heutzutage hat jeder einen besseren Assistenten. Es ist so einfach, diese Art von Software zu schreiben, dass es Verschwendung ist, dafür zu bezahlen.
+- Obligatorische Frage: Wer benutzt noch OpenClaw? Es ist zu einem kleinen Meme geworden, wie sehr die Diskussion über OpenClaw nach März abgestürzt ist.
