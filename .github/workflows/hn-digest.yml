@@ -206,7 +206,7 @@ jobs:
       - name: let claude curate
         id: curate
         if: steps.check-digest.outputs.skip != 'true'
-        timeout-minutes: 15
+        timeout-minutes: 25
         uses: anthropics/claude-code-action@v1
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -215,21 +215,28 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           DIGEST_DATE: ${{ steps.slot.outputs.digest_date }}
           DIGEST_PATH: ${{ steps.slot.outputs.digest_path }}
-          # WebFetch summarises with whatever the haiku slot resolves to, and
-          # claude-code-action pins Claude Code 1.0.115, whose bundle hardcodes
-          # exactly one haiku: the retired claude-3-5-haiku-20241022. So all 5
-          # WebFetch calls per edition returned 404 not_found_error, silently --
-          # the curator fell back to `curl r.jina.ai | head -300` and the
-          # edition still landed, so nothing ever went red. This is the only
-          # lever for WebFetch's model; the hn-historian subagent is handled
-          # separately by `model: inherit`.
+          # WebFetch uses the haiku slot rather than the curator's model. Keep
+          # that slot on an available model explicitly; the historian follows
+          # the curator through `model: inherit`.
           ANTHROPIC_DEFAULT_HAIKU_MODEL: claude-haiku-4-5-20251001
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ steps.app-token.outputs.token }}
+          # The action hides the transcript by default, so a timeout is a blank
+          # 15 minutes with no way to see what ran. Logs are public, but every
+          # secret here is registered with Actions and masked.
+          show_full_output: true
+          # Bare `Bash`, on purpose. The old fork mangled `Bash(git:*)` into
+          # `Bash` on the way to the CLI, so for 6.5 months the curator ran
+          # with every shell command allowed and nobody knew. The upstream
+          # action passes scoped rules through intact, which silently denied
+          # steps 5-7 (python3 json2org.py, llms-gen.py, org2html.py); the
+          # first upstream run logged 13 denials and every later one hit the
+          # timeout. This is the permission set the pipeline was actually
+          # built against, stated instead of inherited from a bug.
           claude_args: |
             --model claude-opus-5
-            --allowedTools Bash(git:*),Bash(gh:*),Bash(date:*),Bash(mkdir:*),Bash(curl:*),Read,Write,Edit,WebFetch,mcp__barkme__notify
+            --allowedTools Bash,Read,Write,Edit,WebFetch,mcp__barkme__notify
             --mcp-config '{
               "mcpServers": {
                 "barkme": {
