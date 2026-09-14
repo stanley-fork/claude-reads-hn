@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-09-14 06:05 UTC
+#+DATE: 2026-09-14T06:05:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A 2003 router flood that nobody has learned from, Julia's 67x faster GC, and the coffee plantations East Germany paid for and never tasted
+
+* Highlights
+- 707,147 Netgear routers hardcoded one university's NTP server and flooded it at 250k packets/sec
+- Julia 1.13 cuts a full GC from 35ms to 0.5ms and makes Ctrl-C work
+- East Germany's 1977 fake-coffee crisis built the plantations Vietnam now exports $3B from
+- Ask HN's September thread: 343 comments of agent tooling, voxel engines and Latin audiobooks
+- The case for optimistic sci-fi, and why almost nobody writes it
+
+* Stories
+
+** Flawed routers flood University of Wisconsin internet time server (2003) :networking:ntp:hardware:postmortem:
+:PROPERTIES:
+:ID:       49688391
+:URL:      https://pages.cs.wisc.edu/~plonka/netgear-sntp/
+:HN_URL:   https://news.ycombinator.com/item?id=49688391
+:POINTS:   76
+:COMMENTS: 8
+:BY:       walrus01
+:END:
+
+*** TLDR
+Starting May 14, 2003, UW-Madison's public time server ntp1.cs.wisc.edu took a flood peaking above 250,000 packets/sec and 150 Mbit/sec. The packets were valid SNTP queries, not an attack, and all came from UDP source port 23457, which made them blockable without hurting real traffic. By June, staff traced it to Netgear RP614 and MR814 routers whose firmware had the university's IP address, 128.105.39.11, compiled in, polling once a second until they got an answer. Netgear had built 707,147 affected units by June 30; the server saw over 500,000 unique clients a day, with a worst case around 700,000 packets/sec. Fixes shipped July through September 2003, switching to DNS lookups of time-a.netgear.com and sane polling intervals. UW-Madison kept answering the queries and added anycast.
+
+*** Take
+Twenty-three years later the failure mode is unchanged: a vendor picks one address at build time, ships it in a million boxes, and a third party pays the bandwidth bill. The only reason this one got fixed is that the victim happened to be a network researcher who could read the firmware and get Netgear on the phone.
+
+*** Comments
+
+**** ctippett
+:PROPERTIES:
+:COMMENT_ID: 49688502
+:END:
+The line 'Are incidents such as this a likely side-effect of ubiquitous, low-cost, perhaps even disposable Internet hosts?' is remarkably prescient. The whole write-up is excellent.
+
+**** spindump8930
+:PROPERTIES:
+:COMMENT_ID: 49688611
+:END:
+This is probably being discussed because it's relevant to the modern Tesla version of the same story.
+
+**** rkagerer
+:PROPERTIES:
+:COMMENT_ID: 49688744
+:END:
+The graphs and diagrams here carry more information than their flashier modern counterparts. The old-fashioned look is almost a cue that what you're reading isn't slop.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+有缺陷的路由器淹没威斯康星大学的网络时间服务器（2003）
+***** TLDR
+从 2003 年 5 月 14 日起，威斯康星大学麦迪逊分校的公共时间服务器 ntp1.cs.wisc.edu 遭遇洪水般的流量，峰值超过每秒 25 万个包、150 Mbit/秒。这些包是合法的 SNTP 查询而非攻击，且全部来自 UDP 源端口 23457，因此可以在不影响正常流量的情况下屏蔽。到 6 月，工作人员追查到 Netgear RP614 和 MR814 路由器，其固件中硬编码了该校的 IP 地址 128.105.39.11，并每秒轮询一次直到收到回应。截至 6 月 30 日，Netgear 已生产 707,147 台受影响设备；服务器每天看到超过 50 万个不同客户端，最坏情况约为每秒 70 万个包。修复版本在 2003 年 7 月至 9 月间发布，改为用 DNS 解析 time-a.netgear.com 并采用合理的轮询间隔。学校继续响应这些请求，并部署了任播。
+***** Take
+二十三年过去，故障模式没变：厂商在构建时写死一个地址，装进上百万台设备，账单由第三方付。这次能修好，只是因为受害者恰好是一位能读固件、又能联系上 Netgear 的网络研究者。
+***** Comments
+- “此类事件是否是无处不在、廉价甚至一次性的互联网主机带来的必然副作用？”这句话极具前瞻性。整篇报告都写得很好。
+- 之所以现在被讨论，大概是因为它和当下特斯拉那件同类事情有关。
+- 这里的图表比如今花哨的同类信息量更大。这种老派外观几乎就是一种信号：你看的不是垃圾内容。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+欠陥ルータがウィスコンシン大学のNTPサーバを洪水状態に（2003年）
+***** TLDR
+2003年5月14日以降、ウィスコンシン大学マディソン校の公開時刻サーバntp1.cs.wisc.eduに、ピークで毎秒25万パケット、150Mbpsを超える大量の通信が押し寄せた。パケットは攻撃ではなく正当なSNTPクエリで、すべてUDP送信元ポート23457から来ていたため、正規の通信を損なわずに遮断できた。6月までに担当者はNetgearのRP614とMR814にたどり着いた。ファームウェアに同校のIPアドレス128.105.39.11が埋め込まれ、応答が来るまで毎秒問い合わせていた。6月30日までにNetgearは707,147台を製造しており、サーバは1日に50万を超える固有クライアントを観測、最悪で毎秒70万パケットに達し得た。修正は2003年7月から9月に配布され、time-a.netgear.comのDNS解決と妥当な間隔に改められた。大学は要求に応え続け、エニーキャストを導入した。
+***** Take
+23年経っても失敗の形は同じだ。ベンダーがビルド時に一つのアドレスを決め打ちし、100万台に載せ、帯域の代金は第三者が払う。今回直ったのは、被害者がたまたまファームウェアを読めてNetgearに直接連絡できるネットワーク研究者だったからにすぎない。
+***** Comments
+- 「こうした事故は、安価で使い捨てにも近いインターネット機器が偏在することの必然的な副作用ではないか」という一文は驚くほど先見的だ。報告全体が優れている。
+- いま話題になっているのは、現代版といえるテスラの同種の件と関係があるからだろう。
+- ここの図表は、今どきの派手なものより情報量が多い。古風な見た目そのものが、読んでいるものが中身のない代物ではないという合図になっている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+결함 있는 라우터가 위스콘신대 시간 서버를 마비시킨 사건(2003)
+***** TLDR
+2003년 5월 14일부터 위스콘신대 매디슨의 공개 시간 서버 ntp1.cs.wisc.edu에 초당 25만 패킷, 150Mbps를 넘는 트래픽이 몰렸다. 공격이 아니라 정상적인 SNTP 질의였고 모두 UDP 출발 포트 23457에서 왔기에 정상 트래픽을 해치지 않고 차단할 수 있었다. 6월까지 담당자들은 원인을 Netgear RP614와 MR814로 좁혔다. 펌웨어에 이 대학의 IP 주소 128.105.39.11이 박혀 있었고, 응답을 받을 때까지 1초 간격으로 질의했다. 6월 30일까지 Netgear가 생산한 해당 기기는 707,147대였고, 서버는 하루 50만 개가 넘는 고유 클라이언트를 관측했으며 최악의 경우 초당 70만 패킷에 이를 수 있었다. 수정 펌웨어는 2003년 7월부터 9월 사이에 배포돼 time-a.netgear.com을 DNS로 조회하고 합리적인 주기로 바뀌었다. 대학은 계속 응답하면서 애니캐스트를 도입했다.
+***** Take
+23년이 지나도 실패 방식은 같다. 제조사가 빌드 시점에 주소 하나를 못 박아 백만 대에 실어 보내고, 대역폭 비용은 제3자가 낸다. 이번에 고쳐진 유일한 이유는 피해자가 마침 펌웨어를 읽고 Netgear에 연락할 수 있는 네트워크 연구자였기 때문이다.
+***** Comments
+- '이런 사고는 값싸고 사실상 일회용에 가까운 인터넷 기기가 넘쳐나는 데 따른 필연적 부작용 아닌가'라는 문장이 놀랍도록 앞을 내다봤다. 글 전체가 훌륭하다.
+- 지금 이 글이 회자되는 건 같은 구조의 현대판 테슬라 사례와 맞닿아 있기 때문일 것이다.
+- 여기 실린 그래프와 도표가 요즘의 화려한 것들보다 정보를 더 많이 담는다. 그 옛날 느낌 자체가 지금 읽는 게 허접한 글이 아니라는 신호처럼 느껴진다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Routers defectuosos inundan el servidor de hora de la Universidad de Wisconsin (2003)
+***** TLDR
+Desde el 14 de mayo de 2003, el servidor público de hora ntp1.cs.wisc.edu de UW-Madison recibió una avalancha con picos de más de 250.000 paquetes por segundo y 150 Mbit/s. No era un ataque: eran consultas SNTP válidas, todas desde el puerto UDP de origen 23457, lo que permitió bloquearlas sin dañar el tráfico legítimo. En junio el equipo lo rastreó hasta los routers Netgear RP614 y MR814, cuyo firmware llevaba fija la IP de la universidad, 128.105.39.11, y consultaba cada segundo hasta obtener respuesta. Netgear había fabricado 707.147 unidades afectadas hasta el 30 de junio; el servidor veía más de 500.000 clientes únicos al día, con un peor caso de unos 700.000 paquetes por segundo. Los arreglos llegaron entre julio y septiembre de 2003, pasando a resolver time-a.netgear.com por DNS con intervalos razonables. La universidad siguió respondiendo a las consultas y añadió anycast.
+***** Take
+Veintitrés años después el fallo es idéntico: un fabricante fija una dirección al compilar, la mete en un millón de cajas y un tercero paga el ancho de banda. Esto se arregló solo porque la víctima resultó ser un investigador de redes capaz de leer el firmware y de conseguir que Netgear le atendiera el teléfono.
+***** Comments
+- La frase '¿son estos incidentes un efecto secundario probable de unos equipos de Internet ubicuos, baratos y casi desechables?' resulta asombrosamente premonitoria. Todo el informe es excelente.
+- Probablemente se comenta ahora porque es relevante para la versión moderna del mismo caso con Tesla.
+- Las gráficas y diagramas de aquí transmiten más información que sus equivalentes modernos más vistosos. El aspecto anticuado casi funciona como señal de que lo que lees no es basura.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Fehlerhafte Router überschwemmen den Zeitserver der University of Wisconsin (2003)
+***** TLDR
+Ab dem 14. Mai 2003 traf den öffentlichen Zeitserver ntp1.cs.wisc.edu der UW-Madison eine Flut mit Spitzen von über 250.000 Paketen pro Sekunde und 150 Mbit/s. Es war kein Angriff, sondern gültige SNTP-Anfragen, alle vom UDP-Quellport 23457, was gezieltes Blocken ohne Schaden für echten Verkehr erlaubte. Im Juni führte die Spur zu den Netgear-Routern RP614 und MR814, in deren Firmware die Universitäts-IP 128.105.39.11 fest eingetragen war und die im Sekundentakt anfragten, bis eine Antwort kam. Bis zum 30. Juni hatte Netgear 707.147 betroffene Geräte gebaut; der Server sah täglich über 500.000 verschiedene Clients, im schlimmsten Fall wären rund 700.000 Pakete pro Sekunde möglich gewesen. Die Korrekturen erschienen zwischen Juli und September 2003 und lösten time-a.netgear.com per DNS auf, mit vernünftigen Abfrageintervallen. Die Universität beantwortete die Anfragen weiter und ergänzte Anycast.
+***** Take
+23 Jahre später ist das Fehlermuster unverändert: Ein Hersteller legt zur Bauzeit eine Adresse fest, liefert sie millionenfach aus, und ein Dritter zahlt die Bandbreite. Repariert wurde es nur, weil das Opfer zufällig ein Netzwerkforscher war, der die Firmware lesen und Netgear ans Telefon bekommen konnte.
+***** Comments
+- Der Satz 'Sind solche Vorfälle eine wahrscheinliche Nebenwirkung allgegenwärtiger, billiger, fast wegwerfbarer Internetgeräte?' ist bemerkenswert vorausschauend. Der ganze Bericht ist hervorragend.
+- Das wird gerade diskutiert, weil es zur modernen Tesla-Variante derselben Geschichte passt.
+- Die Grafiken und Diagramme hier transportieren mehr Information als ihre schickeren heutigen Gegenstücke. Die altmodische Optik wirkt fast wie ein Signal, dass man gerade keinen Schrott liest.
+** Julia 1.13 highlights :julia:programming:performance:release:
+:PROPERTIES:
+:ID:       49642645
+:URL:      https://julialang.org/blog/2026/09/julia-1.13-highlights/
+:HN_URL:   https://news.ycombinator.com/item?id=49642645
+:POINTS:   195
+:COMMENTS: 16
+:BY:       eigenspace
+:END:
+
+*** TLDR
+Julia 1.13 is a performance and polish release. Objects in system and package images now skip the GC mark phase, so a full collection in a bare session drops from 35.5ms to 0.53ms, and from 187ms to 68ms with GLMakie loaded. Startup is about 20% faster than 1.12 and precompilation takes roughly 30% less time. Pkg switched downloads from gzip to zstd (239MB instead of 308MB, decompressing in 5.5s instead of 8.8s) and now records registry info in manifests. String hashing moved to RapidhashNano, cutting one benchmark from 8.56µs to 1.74µs. Ctrl-C now reliably reaches user code, @spawn is 1.1-1.6x faster on 16-core Linux and 10-300x faster on Windows, and the REPL gains syntax highlighting and an fzf-style Ctrl-R history search. Most of the big new features slipped to 1.14.
+
+*** Take
+A 67x faster full GC and a Ctrl-C that actually works are worth more to daily Julia users than whatever headline feature got pushed to 1.14. The number to notice is @spawn on Windows: a 300x speedup means threading there was quietly bad for years and almost nobody profiled it.
+
+*** Comments
+
+**** eigenspace
+:PROPERTIES:
+:COMMENT_ID: 49642801
+:END:
+Due to how the release cycle turned out, most major new features got pushed to 1.14. This one is iterative: faster GC, lower startup latency, better interrupt handling, faster package management.
+
+**** zuluonezero
+:PROPERTIES:
+:COMMENT_ID: 49642944
+:END:
+I have worked through about 38 languages over three years, and Julia came out on top as the one that felt right, not for features but for feel.
+
+**** notthemessiah
+:PROPERTIES:
+:COMMENT_ID: 49643077
+:END:
+Two annoyances: interactive programming is split between Pluto and Bonito, and the package ecosystem is tied closely to GitHub with GitLab as the only alternative.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Julia 1.13 亮点
+***** TLDR
+Julia 1.13 是一个专注性能和打磨的版本。系统镜像和包镜像中的对象现在跳过 GC 标记阶段，空会话中一次完整回收从 35.5 毫秒降到 0.53 毫秒，加载 GLMakie 后从 187 毫秒降到 68 毫秒。启动比 1.12 快约 20%，预编译时间减少约 30%。Pkg 的下载从 gzip 改为 zstd（239MB 而非 308MB，解压 5.5 秒而非 8.8 秒），并在 manifest 中记录注册表信息。字符串哈希改用 RapidhashNano，一项基准从 8.56 微秒降到 1.74 微秒。Ctrl-C 现在能可靠地传到用户代码，@spawn 在 16 核 Linux 上快 1.1 到 1.6 倍，在 Windows 上快 10 到 300 倍，REPL 新增语法高亮和 fzf 风格的 Ctrl-R 历史搜索。大部分新特性推迟到了 1.14。
+***** Take
+完整 GC 快 67 倍、Ctrl-C 真的能用，这些对 Julia 日常用户的价值超过任何被推到 1.14 的头条特性。值得注意的数字是 Windows 上的 @spawn：300 倍的提速说明那里的线程支持多年来一直很糟，却几乎没人去做性能分析。
+***** Comments
+- 由于发布周期的安排，大部分重要新特性被推到了 1.14。这个版本是渐进式的：更快的 GC、更低的启动延迟、更好的中断处理、更快的包管理。
+- 三年里我系统地试过大约 38 种语言，最后感觉最对味的是 Julia，不是因为功能，而是因为手感。
+- 两个不爽的地方：交互式编程在 Pluto 和 Bonito 之间分裂，包生态又和 GitHub 绑得很紧，唯一的替代只有 GitLab。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Julia 1.13のハイライト
+***** TLDR
+Julia 1.13は性能と仕上げに寄せたリリースだ。システムイメージとパッケージイメージ内のオブジェクトがGCのマーク段階を飛ばすようになり、素のセッションでのフルコレクションは35.5ミリ秒から0.53ミリ秒に、GLMakieを読み込んだ状態では187ミリ秒から68ミリ秒に短縮された。起動は1.12より約20%速く、プリコンパイルは約30%短くなった。Pkgのダウンロードはgzipからzstdに変わり（308MBが239MB、展開は8.8秒が5.5秒）、レジストリ情報をマニフェストに記録するようになった。文字列ハッシュはRapidhashNanoになり、あるベンチマークは8.56マイクロ秒から1.74マイクロ秒に。Ctrl-Cが確実にユーザーコードへ届くようになり、@spawnは16コアLinuxで1.1〜1.6倍、Windowsでは10〜300倍速くなった。REPLには構文強調とfzf風のCtrl-R履歴検索が入った。主要な新機能の多くは1.14に回された。
+***** Take
+フルGCが67倍速くなり、Ctrl-Cがちゃんと効くことは、1.14に回された目玉機能より日々のJuliaユーザーにとって価値がある。注目すべき数字はWindowsの@spawnで、300倍という改善はWindowsのスレッド処理が何年もひどいままで、ほぼ誰も計測していなかったことを意味する。
+***** Comments
+- リリースサイクルの都合で主要な新機能の多くは1.14に回った。今回は反復的な内容で、GCの高速化、起動遅延の低減、割り込み処理の改善、パッケージ管理の高速化だ。
+- 3年かけて38ほどの言語を試してきたが、機能ではなく感触の面で一番しっくりきたのはJuliaだった。
+- 不満が二つある。対話的なプログラミングがPlutoとBonitoに分裂していることと、パッケージ生態系がGitHubに強く結び付き代替がGitLabしかないことだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Julia 1.13 주요 변경점
+***** TLDR
+Julia 1.13은 성능과 다듬기에 집중한 릴리스다. 시스템 이미지와 패키지 이미지의 객체가 GC 표시 단계를 건너뛰면서, 빈 세션의 전체 수집이 35.5밀리초에서 0.53밀리초로, GLMakie를 올린 상태에서는 187밀리초에서 68밀리초로 줄었다. 시작 시간은 1.12보다 약 20% 빠르고 사전 컴파일 시간은 약 30% 줄었다. Pkg 다운로드는 gzip에서 zstd로 바뀌었고(308MB 대신 239MB, 압축 해제 8.8초 대신 5.5초), 레지스트리 정보를 매니페스트에 기록한다. 문자열 해싱은 RapidhashNano로 바뀌어 한 벤치마크가 8.56마이크로초에서 1.74마이크로초로 떨어졌다. Ctrl-C가 사용자 코드에 안정적으로 전달되고, @spawn은 16코어 리눅스에서 1.1~1.6배, 윈도우에서 10~300배 빨라졌다. REPL에는 구문 강조와 fzf 방식의 Ctrl-R 기록 검색이 추가됐다. 큰 신기능 대부분은 1.14로 미뤄졌다.
+***** Take
+전체 GC가 67배 빨라지고 Ctrl-C가 실제로 동작한다는 점은 1.14로 밀린 어떤 간판 기능보다 일상 사용자에게 값어치가 크다. 눈여겨볼 숫자는 윈도우의 @spawn이다. 300배 개선은 그곳의 스레딩이 수년간 형편없었고 아무도 프로파일링하지 않았다는 뜻이다.
+***** Comments
+- 릴리스 주기 사정으로 주요 신기능 대부분이 1.14로 넘어갔다. 이번 판은 점진적인 개선이다. GC 속도, 시작 지연, 인터럽트 처리, 패키지 관리가 좋아졌다.
+- 3년 동안 약 38개 언어를 살펴봤는데, 기능이 아니라 감각 면에서 가장 맞았던 언어가 Julia였다.
+- 불만이 둘 있다. 대화형 프로그래밍이 Pluto와 Bonito로 갈라져 있고, 패키지 생태계가 GitHub에 밀착돼 대안이 GitLab뿐이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Novedades de Julia 1.13
+***** TLDR
+Julia 1.13 es una versión de rendimiento y pulido. Los objetos de las imágenes del sistema y de paquetes ahora se saltan la fase de marcado del recolector, así que una recolección completa en una sesión limpia baja de 35,5 ms a 0,53 ms, y de 187 ms a 68 ms con GLMakie cargado. El arranque es un 20 % más rápido que en 1.12 y la precompilación tarda un 30 % menos. Pkg cambió las descargas de gzip a zstd (239 MB en lugar de 308 MB, descomprimiendo en 5,5 s en vez de 8,8 s) y ahora guarda información del registro en los manifiestos. El hash de cadenas pasó a RapidhashNano, reduciendo un benchmark de 8,56 µs a 1,74 µs. Ctrl-C llega de forma fiable al código del usuario, @spawn es entre 1,1 y 1,6 veces más rápido en Linux de 16 núcleos y entre 10 y 300 veces en Windows, y el REPL suma resaltado de sintaxis y búsqueda de historial estilo fzf con Ctrl-R. La mayoría de las funciones grandes se aplazaron a 1.14.
+***** Take
+Un recolector completo 67 veces más rápido y un Ctrl-C que funciona valen más para quien usa Julia a diario que cualquier función estrella aplazada a 1.14. El dato a mirar es @spawn en Windows: un 300x significa que allí los hilos llevaban años funcionando mal y casi nadie lo perfiló.
+***** Comments
+- Por cómo salió el ciclo de versiones, la mayoría de funciones nuevas se fue a 1.14. Esta es iterativa: recolector más rápido, menos latencia de arranque, mejor manejo de interrupciones y gestión de paquetes más rápida.
+- He recorrido unos 38 lenguajes en tres años, y Julia quedó primero como el que se sentía bien, no por funciones sino por sensación.
+- Dos molestias: la programación interactiva está partida entre Pluto y Bonito, y el ecosistema de paquetes está muy atado a GitHub, con GitLab como única alternativa.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Neuerungen in Julia 1.13
+***** TLDR
+Julia 1.13 ist ein Release für Tempo und Feinschliff. Objekte aus System- und Paketabbildern überspringen jetzt die Markierungsphase des Garbage Collectors, wodurch eine vollständige Sammlung in einer leeren Sitzung von 35,5 ms auf 0,53 ms fällt und mit geladenem GLMakie von 187 ms auf 68 ms. Der Start ist rund 20 Prozent schneller als bei 1.12, die Vorkompilierung braucht etwa 30 Prozent weniger Zeit. Pkg lädt statt mit gzip nun mit zstd (239 MB statt 308 MB, Entpacken in 5,5 s statt 8,8 s) und hält Registry-Informationen im Manifest fest. Das String-Hashing nutzt RapidhashNano und senkt einen Benchmark von 8,56 µs auf 1,74 µs. Ctrl-C erreicht zuverlässig den Nutzercode, @spawn ist auf 16-Kern-Linux 1,1- bis 1,6-mal schneller und unter Windows 10- bis 300-mal, und die REPL bekommt Syntaxhervorhebung sowie eine fzf-artige Verlaufssuche mit Ctrl-R. Die meisten großen Neuerungen rutschten auf 1.14.
+***** Take
+Ein 67-mal schnellerer vollständiger GC-Lauf und ein Ctrl-C, das funktioniert, sind für den täglichen Julia-Einsatz mehr wert als jedes auf 1.14 verschobene Vorzeigefeature. Die interessante Zahl ist @spawn unter Windows: 300-fach bedeutet, dass Threading dort jahrelang schlecht lief und es kaum jemand gemessen hat.
+***** Comments
+- Wegen des Releasezyklus sind die meisten großen Neuerungen auf 1.14 gerutscht. Dieses Release ist iterativ: schnellerer GC, geringere Startlatenz, besseres Interrupt-Handling, schnellere Paketverwaltung.
+- Ich habe in drei Jahren etwa 38 Sprachen durchgearbeitet, und Julia kam als diejenige heraus, die sich richtig anfühlte, nicht wegen der Features, sondern wegen des Gefühls.
+- Zwei Ärgernisse: Interaktives Programmieren ist zwischen Pluto und Bonito gespalten, und das Paket-Ökosystem hängt eng an GitHub, mit GitLab als einziger Alternative.
+** The GDR and Vietnam: From Fake Coffee to Coffee Empire :history:economics:coffee:vietnam:
+:PROPERTIES:
+:ID:       49649164
+:URL:      https://www.katjahoyer.uk/p/the-gdr-and-vietnam-from-fake-coffee
+:HN_URL:   https://news.ycombinator.com/item?id=49649164
+:POINTS:   54
+:COMMENTS: 18
+:BY:       NaOH
+:END:
+
+*** TLDR
+Katja Hoyer traces how East Germany's coffee crisis created Vietnam's coffee industry. Brazilian harvest failures and the oil crisis quadrupled import costs in 1977, against an annual coffee bill of about 150 million West German marks, so the GDR issued Mischkaffee: 51% coffee, 34% rye and barley, 5% chicory, 5% sugar beet fibre, 5% spelt. Citizens called it Erich's Brew after Honecker. In 1980 East Germany signed a twenty-year deal for half of Vietnam's coffee output in exchange for building the industry: machinery, lorries, roads, settlements and schools for 10,000 workers across 10,000 hectares in Dak Lak province at 600m elevation, including a $20 million hydropower plant. Coffee trees take years to mature. The first real harvest came in 1990, the year the GDR stopped existing. Vietnam is now the second largest producer, exporting 94% of its crop for around $3 billion a year.
+
+*** Take
+This is an unusually clean case of a command economy building something real and collecting none of it. The plantations, the roads and the hydropower were sound investments; the state that paid for them just did not outlast the years a coffee tree needs before it produces.
+
+*** Comments
+
+**** ValentineC
+:PROPERTIES:
+:COMMENT_ID: 49649310
+:END:
+I was just in Hanoi and some of their roasters are incredible value: co-fermented specialty Vietnamese Robusta and Liberica, far cheaper than roasters importing from Colombia.
+
+**** holgerschurig
+:PROPERTIES:
+:COMMENT_ID: 49649455
+:END:
+The Hallstein Doctrine part is familiar, but the claim that it amounted to a solid trade embargo is new to me. It was essentially the same logic as One China politics.
+
+**** rurban
+:PROPERTIES:
+:COMMENT_ID: 49649588
+:END:
+The 1977 coffee dilemma is well known, everyone had a different name for the fake stuff. Even in West Germany the prices made people try it. What I never understood is why both sides forbade cross partnerships.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+民主德国与越南：从假咖啡到咖啡帝国
+***** TLDR
+Katja Hoyer 梳理了东德的咖啡危机如何造就了越南的咖啡产业。1977 年巴西歉收加上石油危机，使进口成本涨了四倍，而东德每年的咖啡开销约为 1.5 亿西德马克，于是政府推出了 Mischkaffee：51% 咖啡、34% 黑麦大麦、5% 菊苣、5% 甜菜纤维、5% 斯佩尔特小麦。民众按昂纳克的名字称它为“埃里希的咖啡”。1980 年，东德签下为期二十年、获取越南一半咖啡产量的协议，代价是替对方建起整个产业：机械、卡车、公路、住宅区和学校，覆盖达乐省海拔 600 米处的一万公顷土地和一万名工人，其中包括一座造价 2000 万美元的水电站。咖啡树要多年才能成熟。第一次真正的收成在 1990 年到来，那年东德不复存在。如今越南是全球第二大咖啡生产国，出口 94% 的产量，年值约 30 亿美元。
+***** Take
+这是计划经济建成了真东西却一点没收获的罕见清晰案例。种植园、公路和水电站都是稳妥的投资；只是出钱的那个国家没能熬过咖啡树结果所需的那些年。
+***** Comments
+- 我刚去过河内，那里有些烘焙商性价比高得离谱：共发酵的精品越南罗布斯塔和利比里卡，比从哥伦比亚进口豆子的烘焙商便宜得多。
+- 哈尔斯坦主义那部分我熟悉，但说它相当于一道严实的贸易禁运，这对我是新说法。其逻辑基本上和“一个中国”政策相同。
+- 1977 年的咖啡困境众所周知，各地对那种假咖啡都有自己的叫法。连西德人也因为价格去试过。我一直不明白的是，为什么双方都禁止跨阵营的合作关系。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+東ドイツとベトナム：偽コーヒーからコーヒー大国へ
+***** TLDR
+Katja Hoyerは、東ドイツのコーヒー危機がベトナムのコーヒー産業を生んだ経緯をたどる。1977年、ブラジルの不作と石油危機で輸入費が4倍になった。年間のコーヒー支出は約1億5000万西ドイツマルクで、政府はMischkaffeeを導入した。コーヒー51%、ライ麦と大麦34%、チコリ5%、てんさい繊維5%、スペルト小麦5%という中身で、市民はホーネッカーにちなんで「エーリッヒのコーヒー」と呼んだ。1980年、東ドイツはベトナムの生産量の半分を20年間受け取る協定を結び、その対価として産業そのものを築いた。ダクラク省の標高600メートルの1万ヘクタールに、機械、トラック、道路、住宅地、1万人の労働者向けの学校を整え、2000万ドルの水力発電所も含まれた。コーヒーの木は実るまでに何年もかかる。最初の本格的な収穫は1990年、東ドイツが消滅した年に訪れた。ベトナムは今や世界第2位の生産国で、生産の94%を輸出し年間およそ30億ドルを得ている。
+***** Take
+計画経済が実体のあるものを築き、その果実をまったく受け取れなかった珍しく明快な事例だ。農園も道路も水力発電所も妥当な投資だった。ただ、それを払った国家がコーヒーの木が実るまでの年数を持ちこたえられなかった。
+***** Comments
+- ちょうどハノイにいたが、現地の焙煎業者は値段に対して品質が驚くほど高い。共発酵のスペシャルティなベトナム産ロブスタやリベリカが、コロンビア産の豆を輸入する業者よりずっと安い。
+- ハルシュタイン原則の話は知っていたが、それが実質的な貿易禁輸に等しかったという点は初耳だ。論理としては「一つの中国」政策とほぼ同じだ。
+- 1977年のコーヒー問題は有名で、偽物にはそれぞれ違う呼び名があった。西ドイツでも値段のせいで試した人がいた。分からないのは、なぜ双方が陣営をまたぐ提携を禁じたのかだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+동독과 베트남: 가짜 커피에서 커피 강국으로
+***** TLDR
+Katja Hoyer는 동독의 커피 위기가 어떻게 베트남 커피 산업을 만들었는지 짚는다. 1977년 브라질 흉작과 석유 위기로 수입 비용이 네 배로 뛰었다. 연간 커피 지출이 약 1억 5천만 서독 마르크였던 동독은 Mischkaffee를 내놓았다. 커피 51%, 호밀과 보리 34%, 치커리 5%, 사탕무 섬유 5%, 스펠트 5%였고 시민들은 호네커의 이름을 따 '에리히의 커피'라고 불렀다. 1980년 동독은 20년간 베트남 생산량의 절반을 받는 대신 산업 자체를 지어주는 협정을 맺었다. 닥락성 해발 600미터의 1만 헥타르에 기계, 트럭, 도로, 주거지, 노동자 1만 명을 위한 학교를 세웠고 2천만 달러짜리 수력발전소도 포함됐다. 커피나무는 수확까지 수년이 걸린다. 첫 본격 수확은 동독이 사라진 해인 1990년에 왔다. 베트남은 지금 세계 2위 생산국으로 생산량의 94%를 수출해 연 30억 달러가량을 번다.
+***** Take
+계획경제가 실제로 무언가를 지어놓고 그 몫을 전혀 가져가지 못한, 보기 드물게 선명한 사례다. 농장도 도로도 수력발전소도 타당한 투자였다. 다만 비용을 댄 국가가 커피나무가 열매를 맺기까지 걸리는 세월을 버티지 못했다.
+***** Comments
+- 얼마 전 하노이에 있었는데 현지 로스터들의 가격 대비 품질이 놀랍다. 공동 발효한 스페셜티 베트남 로부스타와 리베리카가 콜롬비아 원두를 수입하는 로스터보다 훨씬 싸다.
+- 할슈타인 원칙 이야기는 익숙하지만 그것이 사실상 강력한 무역 금수였다는 대목은 처음 듣는다. 논리로 보면 '하나의 중국' 정책과 거의 같다.
+- 1977년 커피 문제는 잘 알려져 있고 가짜 커피에는 지역마다 다른 별명이 있었다. 서독에서도 가격 때문에 맛본 사람이 있었다. 이해가 안 되는 건 왜 양쪽 모두 진영을 넘는 제휴를 금지했느냐는 점이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La RDA y Vietnam: del café falso al imperio cafetero
+***** TLDR
+Katja Hoyer cuenta cómo la crisis del café de Alemania Oriental creó la industria cafetera vietnamita. Las malas cosechas brasileñas y la crisis del petróleo cuadruplicaron el coste de las importaciones en 1977, frente a una factura anual de unos 150 millones de marcos occidentales, así que la RDA sacó el Mischkaffee: 51 % café, 34 % centeno y cebada, 5 % achicoria, 5 % fibra de remolacha y 5 % espelta. La gente lo llamó el brebaje de Erich, por Honecker. En 1980 Alemania Oriental firmó un acuerdo a veinte años por la mitad de la producción vietnamita a cambio de construir la industria: maquinaria, camiones, carreteras, poblados y escuelas para 10.000 trabajadores en 10.000 hectáreas de la provincia de Dak Lak a 600 metros de altitud, incluida una central hidroeléctrica de 20 millones de dólares. Los cafetos tardan años en madurar. La primera cosecha real llegó en 1990, el año en que la RDA dejó de existir. Vietnam es hoy el segundo productor mundial y exporta el 94 % de su cosecha por unos 3.000 millones de dólares anuales.
+***** Take
+Es un caso poco común y muy limpio de una economía planificada que construyó algo real y no recogió nada. Las plantaciones, las carreteras y la hidroeléctrica eran inversiones sensatas; el Estado que las pagó simplemente no sobrevivió a los años que tarda un cafeto en producir.
+***** Comments
+- Acabo de estar en Hanói y algunos tostadores de allí tienen una relación calidad-precio increíble: robusta y liberica vietnamitas de especialidad con co-fermentación, mucho más baratos que quienes importan de Colombia.
+- La parte de la Doctrina Hallstein me resulta conocida, pero que equivaliera a un embargo comercial sólido es nuevo para mí. La lógica era básicamente la de la política de una sola China.
+- El dilema del café de 1977 es de sobra conocido, cada zona tenía su nombre para el sucedáneo. Incluso en Alemania Occidental los precios hicieron que la gente lo probara. Lo que nunca entendí es por qué ambas partes prohibieron las asociaciones cruzadas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die DDR und Vietnam: Vom falschen Kaffee zum Kaffeeimperium
+***** TLDR
+Katja Hoyer zeichnet nach, wie die DDR-Kaffeekrise die vietnamesische Kaffeeindustrie hervorbrachte. Missernten in Brasilien und die Ölkrise vervierfachten 1977 die Importkosten bei einer jährlichen Kaffeerechnung von rund 150 Millionen D-Mark, also führte die DDR den Mischkaffee ein: 51 Prozent Kaffee, 34 Prozent Roggen und Gerste, 5 Prozent Zichorie, 5 Prozent Zuckerrübenfaser, 5 Prozent Dinkel. Im Volksmund hieß er nach Honecker Erichs Krönung. 1980 schloss die DDR einen Zwanzigjahresvertrag über die Hälfte der vietnamesischen Ernte und baute dafür die Industrie auf: Maschinen, Lastwagen, Straßen, Siedlungen und Schulen für 10.000 Arbeiter auf 10.000 Hektar in der Provinz Dak Lak auf 600 Metern Höhe, samt einem Wasserkraftwerk für 20 Millionen Dollar. Kaffeepflanzen brauchen Jahre bis zur Reife. Die erste nennenswerte Ernte kam 1990, im Jahr des Endes der DDR. Vietnam ist heute zweitgrößter Produzent und exportiert 94 Prozent der Ernte für rund 3 Milliarden Dollar jährlich.
+***** Take
+Ein ungewöhnlich klarer Fall einer Planwirtschaft, die etwas Handfestes aufbaute und nichts davon einnahm. Plantagen, Straßen und Wasserkraftwerk waren solide Investitionen; nur überdauerte der Staat, der sie bezahlte, die Jahre bis zum ersten Ertrag einer Kaffeepflanze nicht.
+***** Comments
+- Ich war gerade in Hanoi, und einige Röstereien dort sind preislich unschlagbar: co-fermentierter Specialty-Robusta und Liberica aus Vietnam, viel günstiger als bei Röstereien, die aus Kolumbien importieren.
+- Die Hallstein-Doktrin kenne ich, aber dass sie auf ein handfestes Handelsembargo hinauslief, ist mir neu. Die Logik entsprach im Kern der Ein-China-Politik.
+- Das Kaffeedilemma von 1977 ist bekannt, jeder hatte einen eigenen Namen für den Ersatz. Selbst in Westdeutschland brachten die Preise Leute dazu, ihn zu probieren. Nie verstanden habe ich, warum beide Seiten Partnerschaften über die Blockgrenze hinweg untersagten.
+** Ask HN: What are you working on? (September 2026) :askhn:sideprojects:ai:community:
+:PROPERTIES:
+:ID:       49686380
+:URL:      https://news.ycombinator.com/item?id=49686380
+:HN_URL:   https://news.ycombinator.com/item?id=49686380
+:POINTS:   127
+:COMMENTS: 343
+:BY:       david927
+:END:
+
+*** TLDR
+The monthly thread, 343 comments deep. Agent tooling is the dominant category: SmallDocs, an open source artifact layer that lets coding agents produce charts, diagrams and spreadsheets in one document; Opair, a harness with driver and navigator modes where the navigator gets no write tools at all; Projektor, a self-hosted Jira and wiki on Cloudflare. Games are the second cluster: Bonsai, an SDF voxel engine with its own metaprogramming language heading to Steam; Easel, a language that gives multiplayer games automatic rollback netcode; a deck-building mini-golf roguelite. Elsewhere: bcachefs mixed SSD and HDD tuning, a Latin audiobook with forced alignment, a paid private search engine at 300 monthly accounts, a weight-training app that picks sets off a Pareto frontier, and a Roomba-based stair lift.
+
+*** Take
+The agent-tooling entries share a diagnosis worth noting: three separate people built things whose selling point is giving the model less power, not more. Opair's navigator mode with no write access is the clearest version. That is what a year of watching agents edit files unsupervised does to people.
+
+*** Comments
+
+**** FailMore
+:PROPERTIES:
+:COMMENT_ID: 49686501
+:END:
+I've been building smalldocs.org, a simply styled but functionally deep artifact layer for agents. Charts, diagrams and spreadsheets in one artifact. Open source and free.
+
+**** philbo
+:PROPERTIES:
+:COMMENT_ID: 49686644
+:END:
+A coding harness that works more like pair programming than code review. Driver mode has less autonomy than other harnesses; in navigator mode it has no writable tools at all.
+
+**** animatronix
+:PROPERTIES:
+:COMMENT_ID: 49686788
+:END:
+I'm building a note app for my studies. I don't like Electron apps, so it's Rust and gpui.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Ask HN：你在做什么？（2026 年 9 月）
+***** TLDR
+每月一次的老帖，已有 343 条评论。智能体工具是最大的类别：SmallDocs，一个开源的产物层，让编程智能体在同一个文档里生成图表、示意图和表格；Opair，一个带“驾驶员”和“领航员”两种模式的框架，领航员模式下完全没有写入工具；Projektor，部署在 Cloudflare 上的自托管 Jira 与 wiki。游戏是第二大类：Bonsai，一个自带元编程语言、即将上架 Steam 的 SDF 体素引擎；Easel，一门让多人游戏自动获得回滚网络同步的语言；还有一款卡组构筑式的迷你高尔夫 roguelite。此外还有 bcachefs 的固态与机械硬盘混合调优、带强制对齐的拉丁语有声书、月活 300 个账号的付费私密搜索引擎、用帕累托前沿挑选训练组数的力量训练应用，以及一台基于 Roomba 的爬楼装置。
+***** Take
+那些智能体工具有一个共同判断值得注意：三个不同的人做出的东西，卖点都是让模型权限更小，而不是更大。Opair 那个完全没有写权限的领航员模式最为直白。这就是看了一年智能体无人监管地改文件之后的结果。
+***** Comments
+- 我一直在做 smalldocs.org，一个样式简单但功能扎实的智能体产物层。图表、示意图、表格都能放进同一个产物里。开源且免费。
+- 一个更像结对编程而非代码评审的编程框架。驾驶员模式的自主权比其他框架少；领航员模式下完全没有可写的工具。
+- 我在做一个学习用的笔记应用。我不喜欢 Electron 应用，所以用 Rust 和 gpui 写。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Ask HN: 何を作っていますか？（2026年9月）
+***** TLDR
+毎月恒例のスレッドで、コメントは343件。最も多いのはエージェント向けツールだ。SmallDocsは、コーディングエージェントが図表やダイアグラム、表計算を一つの成果物にまとめられるオープンソースのアーティファクト層。Opairはドライバーとナビゲーターの2モードを持つハーネスで、ナビゲーター時は書き込み系ツールを一切持たない。ProjektorはCloudflare上で動く自前ホストのJiraとwikiだ。次に多いのはゲームで、独自のメタプログラミング言語を備えSteam公開間近のSDFボクセルエンジンBonsai、マルチプレイに自動でロールバックネットコードを与える言語Easel、デッキ構築型のミニゴルフroguelite。ほかにbcachefsのSSDとHDD混在時の調整、強制アラインメント付きのラテン語オーディオブック、月間300アカウントの有料プライベート検索エンジン、パレート境界からセットを選ぶ筋力トレーニングアプリ、Roombaを使った階段昇降装置などがある。
+***** Take
+エージェント関連の投稿には共通する見立てがある。3人が別々に作ったものの売りが、モデルに与える権限を増やすことではなく減らすことだ。書き込みを一切持たないOpairのナビゲーターモードが最も端的だ。1年間、エージェントが無監督でファイルを書き換えるのを見てきた結果である。
+***** Comments
+- smalldocs.orgを作っている。見た目は簡素だが機能は深い、エージェント向けのアーティファクト層だ。図表、ダイアグラム、表計算を一つの成果物にまとめられる。オープンソースで無料。
+- コードレビューよりペアプログラミングに近い動きをするコーディングハーネス。ドライバーモードは他より自律性が低く、ナビゲーターモードでは書き込み可能なツールを一切持たない。
+- 勉強用のノートアプリを作っている。Electron製のアプリが好きではないので、Rustとgpuiで書いている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Ask HN: 요즘 무엇을 만들고 있나요? (2026년 9월)
+***** TLDR
+매달 올라오는 스레드로 댓글이 343개다. 가장 큰 갈래는 에이전트 도구다. SmallDocs는 코딩 에이전트가 차트와 다이어그램, 스프레드시트를 한 문서 안에 만들 수 있게 하는 오픈소스 산출물 계층이다. Opair는 드라이버와 내비게이터 두 모드를 가진 하니스로, 내비게이터 모드에서는 쓰기 도구가 전혀 없다. Projektor는 Cloudflare에서 자체 호스팅하는 Jira 겸 위키다. 두 번째 갈래는 게임이다. 자체 메타프로그래밍 언어를 갖추고 스팀 출시를 앞둔 SDF 복셀 엔진 Bonsai, 멀티플레이 게임에 롤백 넷코드를 자동으로 붙여주는 언어 Easel, 덱빌딩 미니골프 로그라이트가 있다. 그 밖에 bcachefs의 SSD와 HDD 혼합 튜닝, 강제 정렬을 적용한 라틴어 오디오북, 월 300계정 규모의 유료 비공개 검색 엔진, 파레토 경계에서 세트를 고르는 웨이트 트레이닝 앱, 룸바를 이용한 계단 리프트가 있다.
+***** Take
+에이전트 도구 쪽 글들에는 눈여겨볼 공통 진단이 있다. 서로 다른 세 사람이 만든 물건의 핵심이 모델에게 권한을 더 주는 게 아니라 덜 주는 것이다. 쓰기 권한이 아예 없는 Opair의 내비게이터 모드가 가장 분명한 사례다. 에이전트가 감독 없이 파일을 고치는 걸 1년 지켜본 결과다.
+***** Comments
+- smalldocs.org를 만들고 있다. 스타일은 단순하지만 기능은 깊은 에이전트용 산출물 계층이다. 차트, 다이어그램, 스프레드시트를 한 산출물에 담는다. 오픈소스이고 무료다.
+- 코드 리뷰보다 페어 프로그래밍에 가깝게 동작하는 코딩 하니스다. 드라이버 모드는 다른 하니스보다 자율성이 낮고, 내비게이터 모드에서는 쓰기 가능한 도구가 전혀 없다.
+- 공부용 노트 앱을 만들고 있다. Electron 기반 앱을 좋아하지 않아서 Rust와 gpui로 만든다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ask HN: ¿en qué estás trabajando? (septiembre de 2026)
+***** TLDR
+El hilo mensual, con 343 comentarios. La categoría dominante son las herramientas para agentes: SmallDocs, una capa de artefactos de código abierto que permite a los agentes de programación generar gráficas, diagramas y hojas de cálculo en un solo documento; Opair, un entorno con modos conductor y copiloto, donde el copiloto no tiene ninguna herramienta de escritura; Projektor, un Jira y wiki autoalojado en Cloudflare. Los juegos son el segundo grupo: Bonsai, un motor de vóxeles con SDF y lenguaje de metaprogramación propio a punto de salir en Steam; Easel, un lenguaje que da a los juegos multijugador netcode con rollback automático; y un roguelite de minigolf con construcción de mazos. Además: ajustes de bcachefs para mezclas de SSD y disco duro, un audiolibro en latín con alineación forzada, un buscador privado de pago con 300 cuentas mensuales, una app de pesas que elige series según una frontera de Pareto y un salvaescaleras basado en una Roomba.
+***** Take
+Las entradas de herramientas para agentes comparten un diagnóstico que conviene señalar: tres personas distintas construyeron cosas cuyo argumento de venta es dar menos poder al modelo, no más. El modo copiloto de Opair, sin acceso de escritura, es la versión más clara. Eso es lo que deja un año viendo a los agentes editar archivos sin supervisión.
+***** Comments
+- Llevo un tiempo construyendo smalldocs.org, una capa de artefactos para agentes de estilo sencillo pero funcionalmente profunda. Gráficas, diagramas y hojas de cálculo en un mismo artefacto. Abierto y gratuito.
+- Un entorno de programación que se parece más al pair programming que a la revisión de código. El modo conductor tiene menos autonomía que otros; en modo copiloto no tiene ninguna herramienta de escritura.
+- Estoy haciendo una app de notas para mis estudios. No me gustan las apps basadas en Electron, así que la escribo en Rust con gpui.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ask HN: Woran arbeitest du gerade? (September 2026)
+***** TLDR
+Der monatliche Thread mit 343 Kommentaren. Die größte Kategorie sind Werkzeuge für Agenten: SmallDocs, eine quelloffene Artefaktschicht, mit der Coding-Agenten Diagramme, Schaubilder und Tabellen in einem Dokument erzeugen; Opair, ein Harness mit Fahrer- und Navigatormodus, wobei der Navigator gar keine Schreibwerkzeuge hat; Projektor, ein selbst gehostetes Jira und Wiki auf Cloudflare. Zweiter Schwerpunkt sind Spiele: Bonsai, eine SDF-Voxel-Engine mit eigener Metaprogrammiersprache kurz vor dem Steam-Start; Easel, eine Sprache, die Mehrspielerspielen automatisch Rollback-Netcode gibt; ein Deckbuilding-Minigolf-Roguelite. Dazu: bcachefs-Tuning für gemischte SSD- und HDD-Verbünde, ein lateinisches Hörbuch mit Forced Alignment, eine bezahlte private Suchmaschine mit 300 monatlichen Konten, eine Krafttrainings-App, die Sätze über eine Pareto-Front wählt, und ein Treppenlift auf Roomba-Basis.
+***** Take
+Die Agenten-Werkzeuge teilen eine bemerkenswerte Diagnose: Drei verschiedene Leute bauen Dinge, deren Verkaufsargument darin besteht, dem Modell weniger Macht zu geben, nicht mehr. Opairs Navigatormodus ganz ohne Schreibzugriff ist die deutlichste Variante. So wirkt ein Jahr, in dem man Agenten unbeaufsichtigt Dateien ändern sah.
+***** Comments
+- Ich baue smalldocs.org, eine schlicht gestaltete, aber funktional tiefe Artefaktschicht für Agenten. Diagramme, Schaubilder und Tabellen in einem Artefakt. Quelloffen und kostenlos.
+- Ein Coding-Harness, das eher wie Pair Programming funktioniert als wie Code Review. Der Fahrermodus hat weniger Autonomie als andere Harnesses, im Navigatormodus gibt es überhaupt keine schreibenden Werkzeuge.
+- Ich baue eine Notiz-App für mein Studium. Electron-Apps mag ich nicht, also schreibe ich sie in Rust mit gpui.
+** Writing a better reality: The case for optimistic sci-fi :scifi:books:culture:writing:
+:PROPERTIES:
+:ID:       49690279
+:URL:      https://honisoit.com/2022/03/writing-a-better-reality-the-case-for-optimistic-sci-fi/
+:HN_URL:   https://news.ycombinator.com/item?id=49690279
+:POINTS:   44
+:COMMENTS: 21
+:BY:       andsoitis
+:END:
+
+*** TLDR
+A 2022 Honi Soit essay arguing the genre has over-invested in dystopia. It credits the pessimistic canon, from Metropolis through 1984 to Elysium and the Terminator films, with doing real critical work on power and technology, then argues that a diet of only bleak futures limits what readers can imagine building. The author separates technological optimism from technological solutionism, and points to The Martian and Star Trek as optimistic without being utopian. It closes on Le Guin: we need writers who can remember freedom, realists of a larger reality.
+
+*** Take
+The essay is four years old and the comment thread proves its point better than the essay does. Asked for optimistic sci-fi from the last decade, HN produced Becky Chambers and then trailed off, while Iain M Banks, who died in 2013, is still the reference for a future worth living in.
+
+*** Comments
+
+**** wwalker3
+:PROPERTIES:
+:COMMENT_ID: 49690402
+:END:
+Even as a writer of optimistic sci-fi, I struggle to name more than a handful of examples less than ten years old. Becky Chambers is probably the best young author in the genre.
+
+**** throwaway219450
+:PROPERTIES:
+:COMMENT_ID: 49690534
+:END:
+The Culture series is still the civilization I'd pick. The current alignment discussion is relevant: Culture Minds are vastly superior to the humans and their goal is still a healthy, content society.
+
+**** _matthew_
+:PROPERTIES:
+:COMMENT_ID: 49690661
+:END:
+What authors write does become reality to a degree. Writers, Hollywood and other creators are literally designing what the future looks like, so writing optimistically may have an enormous effect on it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+写出更好的现实：为乐观科幻辩护
+***** TLDR
+这是 2022 年 Honi Soit 的一篇文章，认为科幻类型在反乌托邦上投入过多。文章肯定悲观脉络的价值，从《大都会》《1984》到《极乐空间》和《终结者》系列，都对权力与技术做了真正的批评工作；但作者认为只吃阴暗未来这一种食粮，会限制读者对可建造之物的想象。作者区分了技术乐观主义与技术解决主义，并举《火星救援》和《星际迷航》为乐观而非乌托邦的例子。结尾引用勒古恩：我们需要记得自由的作家，需要更大现实的现实主义者。
+***** Take
+这篇文章已有四年，评论区比文章本身更能证明它的论点。当有人要举出近十年的乐观科幻时，HN 说出贝基·钱伯斯之后就接不上了，而 2013 年去世的伊恩·班克斯，至今仍是“值得生活的未来”的参照物。
+***** Comments
+- 就算我自己写乐观科幻，也很难举出几部不到十年的例子。贝基·钱伯斯大概是这一类型中最好的年轻作者。
+- 文明系列仍是我会选择的文明。当下关于对齐的讨论正好相关：文明中的心智远远超越人类，其目标依然是一个健康、满足的社会。
+- 作家写下的东西确实会在一定程度上变成现实。写作者、好莱坞和其他创作者其实是在设计未来的样子，所以乐观地写，可能对未来产生巨大影响。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+より良い現実を書く：楽観的SFの擁護
+***** TLDR
+2022年のHoni Soit掲載のエッセイで、SFはディストピアに偏りすぎていると論じる。『メトロポリス』から『1984年』、『エリジウム』やターミネーター作品に至る悲観的な系譜が、権力と技術への批評として実際に機能してきたことは認めたうえで、暗い未来ばかりを摂取していると、読者が築けると想像できるものの幅が狭まると主張する。著者は技術的楽観主義と技術的ソリューショニズムを区別し、『オデッセイ』や『スター・トレック』をユートピアではない楽観の例として挙げる。結びはル・グウィンの言葉で、自由を思い出せる書き手、より大きな現実のリアリストが必要だという。
+***** Take
+4年前の文章だが、コメント欄のほうが本文より論点をよく証明している。この10年の楽観的SFを挙げよと言われたHNは、ベッキー・チェンバーズを出したあと続かなくなった。2013年に亡くなったイアン・M・バンクスが、いまも生きるに値する未来の基準であり続けている。
+***** Comments
+- 自分が楽観的SFを書いている側でも、10年以内の例を数作以上挙げるのは難しい。この分野で最良の若手はおそらくベッキー・チェンバーズだ。
+- 選ぶならやはりカルチャー・シリーズの文明だ。いまのアラインメント論議とも重なる。カルチャーのマインドは人間より圧倒的に優れているのに、目指すのは健全で満ち足りた社会のままだ。
+- 作家が書くことは、ある程度は現実になる。作家やハリウッド、その他の作り手は文字どおり未来の姿を設計している。だから楽観的に書くことは未来に大きな影響を与え得る。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+더 나은 현실을 쓰기: 낙관적 SF를 위한 변론
+***** TLDR
+2022년 Honi Soit에 실린 글로, SF 장르가 디스토피아에 과도하게 쏠렸다고 주장한다. 『메트로폴리스』에서 『1984』, 『엘리시움』과 터미네이터 시리즈에 이르는 비관적 계보가 권력과 기술에 대한 비평으로 실제 역할을 했음은 인정하되, 어두운 미래만 섭취하면 독자가 무엇을 지을 수 있는지 상상하는 폭이 좁아진다고 본다. 저자는 기술 낙관주의와 기술 해결주의를 구분하고, 『마션』과 『스타트렉』을 유토피아가 아니면서 낙관적인 사례로 든다. 마무리는 르 귄의 말이다. 자유를 기억하는 작가, 더 큰 현실의 리얼리스트가 필요하다는 것이다.
+***** Take
+네 해 전 글인데, 정작 논점을 더 잘 입증하는 쪽은 댓글이다. 지난 10년의 낙관적 SF를 대보라는 물음에 HN은 베키 챔버스를 말한 뒤 말끝이 흐려졌고, 2013년에 세상을 떠난 이언 M 뱅크스가 여전히 살 만한 미래의 기준으로 남아 있다.
+***** Comments
+- 낙관적 SF를 쓰는 사람인 나조차 10년 이내의 사례를 몇 편 넘게 대기 어렵다. 이 장르의 젊은 작가 중에는 베키 챔버스가 가장 낫다.
+- 고르라면 여전히 컬처 시리즈의 문명이다. 지금의 정렬 논의와도 맞닿는다. 컬처의 마인드는 인간보다 압도적으로 뛰어난데도 목표는 건강하고 만족스러운 사회다.
+- 작가가 쓰는 것은 어느 정도 현실이 된다. 작가와 할리우드, 다른 창작자들이 말 그대로 미래의 모습을 설계하고 있으므로, 낙관적으로 쓰는 일은 큰 영향을 줄 수 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Escribir una realidad mejor: el argumento a favor de la ciencia ficción optimista
+***** TLDR
+Un ensayo de 2022 en Honi Soit sostiene que el género ha invertido demasiado en la distopía. Reconoce que el canon pesimista, de Metrópolis a 1984 y de Elysium a las películas de Terminator, ha hecho un trabajo crítico real sobre el poder y la tecnología, pero argumenta que alimentarse solo de futuros sombríos limita lo que los lectores son capaces de imaginar construir. La autoría separa el optimismo tecnológico del solucionismo tecnológico y señala El marciano y Star Trek como ejemplos optimistas sin ser utópicos. Cierra con Le Guin: necesitamos escritores capaces de recordar la libertad, realistas de una realidad más amplia.
+***** Take
+El ensayo tiene cuatro años y el hilo de comentarios demuestra su tesis mejor que el propio texto. Cuando se le pidió ciencia ficción optimista de la última década, HN sacó a Becky Chambers y se quedó sin nombres, mientras que Iain M Banks, muerto en 2013, sigue siendo la referencia de un futuro en el que merezca la pena vivir.
+***** Comments
+- Aunque escribo ciencia ficción optimista, me cuesta nombrar más de un puñado de ejemplos con menos de diez años. Becky Chambers es probablemente la mejor autora joven del género.
+- La serie de la Cultura sigue siendo la civilización que elegiría. El debate actual sobre alineamiento viene al caso: las Mentes de la Cultura son muy superiores a los humanos y su objetivo sigue siendo una sociedad sana y satisfecha.
+- Lo que escriben los autores sí se convierte en realidad hasta cierto punto. Escritores, Hollywood y otros creadores están diseñando literalmente el aspecto del futuro, así que escribir en clave optimista puede influir enormemente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Eine bessere Realität schreiben: Plädoyer für optimistische Science-Fiction
+***** TLDR
+Ein Essay aus dem Jahr 2022 in Honi Soit argumentiert, das Genre habe zu stark auf Dystopie gesetzt. Er erkennt an, dass der pessimistische Kanon von Metropolis über 1984 bis Elysium und die Terminator-Filme echte Kritik an Macht und Technik geleistet hat, hält aber eine Kost aus lauter düsteren Zukünften für eine Begrenzung dessen, was Leserinnen und Leser sich zu bauen vorstellen können. Der Text trennt technologischen Optimismus vom technologischen Solutionismus und nennt Der Marsianer und Star Trek als optimistisch, ohne utopisch zu sein. Am Ende steht Le Guin: Wir brauchen Autorinnen und Autoren, die sich an Freiheit erinnern können, Realisten einer größeren Wirklichkeit.
+***** Take
+Der Essay ist vier Jahre alt, und der Kommentarstrang belegt seine These besser als der Text selbst. Nach optimistischer Science-Fiction aus dem letzten Jahrzehnt gefragt, nannte HN Becky Chambers und verstummte dann, während Iain M Banks, gestorben 2013, weiterhin der Bezugspunkt für eine lebenswerte Zukunft ist.
+***** Comments
+- Selbst als Autor optimistischer Science-Fiction fällt es mir schwer, mehr als eine Handvoll Beispiele aus den letzten zehn Jahren zu nennen. Becky Chambers ist wohl die beste junge Autorin des Genres.
+- Die Kultur-Reihe bleibt die Zivilisation, die ich wählen würde. Die aktuelle Debatte über Alignment passt dazu: Die Minds der Kultur sind den Menschen weit überlegen, und ihr Ziel ist trotzdem eine gesunde, zufriedene Gesellschaft.
+- Was Autorinnen und Autoren schreiben, wird bis zu einem gewissen Grad Wirklichkeit. Schreibende, Hollywood und andere Kreative entwerfen buchstäblich, wie die Zukunft aussieht, deshalb kann optimistisches Schreiben enorme Wirkung haben.
