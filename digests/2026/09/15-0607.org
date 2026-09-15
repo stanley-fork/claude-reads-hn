@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-09-15 06:07 UTC
+#+DATE: 2026-09-15T06:07:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Brazil's whole economy invoices over SOAP 1.2, Ubuntu's Rust rm segfaults and leaves the directory behind, and a 4,400-year-old tomb gets accused of AI writing
+
+* Highlights
+- Every Brazilian invoice goes through SOAP 1.2, now mapped in 29 Postman requests
+- Ubuntu 26.10 ships Rust rm, cp and mv; rm segfaults on a deep directory and leaves it
+- Ten distributed systems papers, five of them Lamport's
+- dbt Charts: dashboards as YAML because agents write JS nobody reviews
+- Saqqara judge's tomb keeps its colour; HN argues over whether the article is AI
+
+* Stories
+
+** Every invoice in Brazil's economy runs on SOAP 1.2. We mapped it all :brazil:soap:government:integration:
+:PROPERTIES:
+:ID:       49679653
+:URL:      https://github.com/stoix-dev/sefaz-webservices-postman
+:HN_URL:   https://news.ycombinator.com/item?id=49679653
+:POINTS:   52
+:COMMENTS: 32
+:BY:       lestx
+:END:
+
+*** TLDR
+Stoix published an MIT-licensed Postman collection for Brazil's mandatory e-invoicing webservices: 29 requests in 5 folders covering four document models, NF-e (55), NFC-e (65), CT-e (57) and MDF-e (58), each with the SOAP 1.2 envelope already assembled and the variables templated. Everything runs over SOAP 1.2 with mutual TLS using e-CNPJ A1 certificates in .pfx form, defaulting to the SVRS authorizer plus the national environment. The submitter's framing: every invoice, truckload and retail receipt in a two-trillion-dollar economy passes through these endpoints, and the documentation is four MOC manuals totalling over 1,000 pages across separate portals, with details written down nowhere. CT-e and MDF-e implement the same distribution service with different parameters; NFC-e also needs CSC tokens and QR codes.
+
+*** Take
+SOAP 1.2 in 2026 is the line that gets the upvotes, and it is the least interesting part. A protocol chosen once for a national tax system becomes load-bearing for the whole economy, and nobody gets to migrate it. The real cost is the 1,000 pages that still don't tell you which parameter CT-e wants and MDF-e omits, plus the industry that grew up selling that knowledge back. Both replies in the thread describe the identical move: roll out the ERP, hire local consultants, consultants say use a middleware provider. A 29-request Postman collection is a small crack in a business built on undocumented behaviour.
+
+*** Comments
+
+**** lestx
+:PROPERTIES:
+:COMMENT_ID: 49679661
+:END:
+Brazil runs the largest mandatory e-invoicing system on Earth. Every invoice, every truckload, every retail receipt in a $2T economy passes through government SOAP 1.2 webservices. In 2026. The documentation is four PDF manuals totaling over 1,000 pages, spread across different portals, with critical details that are simply not written anywhere.
+
+**** mhl47
+:PROPERTIES:
+:COMMENT_ID: 49708304
+:END:
+When we rolled out an ERP in our Brazil subsidiary the whole internal consulting team immediately agreed to leave our brains untouched by this complexity and hire a local consultant team as help. And the local consultant team in turn immediately suggested using a middleware provider.
+
+**** Muromec
+:PROPERTIES:
+:COMMENT_ID: 49708239
+:END:
+This sounds similar to Ukrainian cash registers. Every retail operation goes through a cash register API on the tax agency side, but there it is REST+JSON and a cottage industry of services running it for you. It would not even be that hard if it wasn't sneaking the whole PKI into it.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Toda factura de la economía brasileña pasa por SOAP 1.2. Lo hemos mapeado entero
+***** TLDR
+Stoix publicó con licencia MIT una colección de Postman para los webservices obligatorios de facturación electrónica de Brasil: 29 peticiones en 5 carpetas que cubren cuatro modelos de documento, NF-e (55), NFC-e (65), CT-e (57) y MDF-e (58), cada una con el sobre SOAP 1.2 ya montado y las variables parametrizadas. Todo funciona sobre SOAP 1.2 con TLS mutuo usando certificados e-CNPJ A1 en formato .pfx, por defecto contra el autorizador SVRS y el entorno nacional. El planteamiento del autor: cada factura, cada camión y cada tique de una economía de dos billones de dólares pasa por estos endpoints, y la documentación son cuatro manuales MOC de más de 1.000 páginas repartidos por portales distintos, con detalles que no están escritos en ninguna parte. CT-e y MDF-e implementan el mismo servicio de distribución con parámetros distintos; NFC-e además necesita tokens CSC y códigos QR.
+***** Take
+SOAP 1.2 en 2026 es la frase que se lleva los votos, y es lo menos interesante. Un protocolo elegido una vez para un sistema tributario nacional acaba sosteniendo toda la economía, y ya nadie puede migrarlo. El coste real son las 1.000 páginas que siguen sin decirte qué parámetro pide CT-e y cuál omite MDF-e, más la industria que creció vendiéndote ese conocimiento de vuelta. Las dos respuestas del hilo describen el mismo movimiento: despliegas el ERP, contratas consultores locales, y los consultores te dicen que uses un proveedor de middleware. Una colección de 29 peticiones es una pequeña grieta en un negocio construido sobre comportamiento no documentado.
+***** Comments
+- Brasil tiene el mayor sistema obligatorio de facturación electrónica del mundo. Cada factura, cada camión, cada tique de una economía de 2 billones de dólares pasa por webservices SOAP 1.2 del gobierno. En 2026. La documentación son cuatro manuales en PDF de más de 1.000 páginas, repartidos por distintos portales, con detalles críticos que sencillamente no están escritos en ningún sitio.
+- Cuando desplegamos un ERP en nuestra filial de Brasil, todo el equipo de consultoría interna acordó de inmediato no tocar esa complejidad con la cabeza y contratar a un equipo de consultores locales. Y el equipo local sugirió de inmediato usar un proveedor de middleware.
+- Suena parecido a las cajas registradoras ucranianas. Cada operación minorista pasa por una API de caja en el lado de la agencia tributaria, pero allí es REST+JSON y hay toda una industria artesanal de servicios que lo gestionan por ti. Ni siquiera sería tan difícil si no colaran toda la PKI dentro.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Jede Rechnung in Brasiliens Wirtschaft läuft über SOAP 1.2. Wir haben alles kartiert
+***** TLDR
+Stoix hat unter MIT-Lizenz eine Postman-Collection für Brasiliens verpflichtende E-Invoicing-Webservices veröffentlicht: 29 Requests in 5 Ordnern für vier Dokumentmodelle, NF-e (55), NFC-e (65), CT-e (57) und MDF-e (58), jeweils mit fertig gebautem SOAP-1.2-Envelope und Variablen als Platzhalter. Alles läuft über SOAP 1.2 mit gegenseitigem TLS und e-CNPJ-A1-Zertifikaten im .pfx-Format, standardmäßig gegen den SVRS-Autorisierer und die nationale Umgebung. Die Einordnung des Einreichers: Jede Rechnung, jede Lkw-Ladung und jeder Kassenbon einer Zwei-Billionen-Dollar-Wirtschaft geht durch diese Endpunkte, und die Dokumentation besteht aus vier MOC-Handbüchern mit über 1.000 Seiten auf verschiedenen Portalen, mit Details, die nirgends stehen. CT-e und MDF-e implementieren denselben Distributionsdienst mit unterschiedlichen Parametern; NFC-e braucht zusätzlich CSC-Token und QR-Codes.
+***** Take
+SOAP 1.2 im Jahr 2026 ist die Zeile, die die Upvotes holt, und der uninteressanteste Teil. Ein einmal für ein nationales Steuersystem gewähltes Protokoll trägt am Ende die ganze Wirtschaft, und niemand darf es mehr migrieren. Der eigentliche Preis sind die 1.000 Seiten, die immer noch nicht verraten, welchen Parameter CT-e will und MDF-e weglässt, plus die Branche, die daraus ein Geschäft gemacht hat, dieses Wissen zurückzuverkaufen. Beide Antworten im Thread beschreiben denselben Ablauf: ERP ausrollen, lokale Berater holen, Berater empfehlen einen Middleware-Anbieter. Eine Collection mit 29 Requests ist ein kleiner Riss in einem Geschäft, das auf undokumentiertem Verhalten aufbaut.
+***** Comments
+- Brasilien betreibt das größte verpflichtende E-Invoicing-System der Welt. Jede Rechnung, jede Lkw-Ladung, jeder Kassenbon einer 2-Billionen-Dollar-Wirtschaft geht durch staatliche SOAP-1.2-Webservices. Im Jahr 2026. Die Dokumentation sind vier PDF-Handbücher mit über 1.000 Seiten, verteilt über verschiedene Portale, mit entscheidenden Details, die schlicht nirgends stehen.
+- Als wir in unserer brasilianischen Tochter ein ERP ausgerollt haben, war sich das interne Beratungsteam sofort einig, das eigene Hirn von dieser Komplexität fernzuhalten und ein lokales Beraterteam zu holen. Und das lokale Team schlug sofort vor, einen Middleware-Anbieter zu nutzen.
+- Klingt wie die ukrainischen Registrierkassen. Jeder Verkauf läuft über eine Kassen-API auf Seiten der Steuerbehörde, dort aber mit REST+JSON und einer ganzen Kleinindustrie an Diensten, die das für dich übernehmen. Es wäre nicht mal schwer, wenn sie nicht die komplette PKI mit hineinschmuggeln würden.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+브라질 경제의 모든 청구서가 SOAP 1.2 위에서 돈다. 우리가 전부 매핑했다
+***** TLDR
+Stoix가 브라질의 의무 전자세금계산서 웹서비스를 위한 MIT 라이선스 Postman 컬렉션을 공개했다. 5개 폴더에 29개 요청이 들어 있고, 문서 모델 네 가지, NF-e(55), NFC-e(65), CT-e(57), MDF-e(58)를 다루며 각 요청에 SOAP 1.2 엔벨로프가 이미 조립되어 있고 변수는 템플릿화되어 있다. 전부 SOAP 1.2 위에서 .pfx 형식의 e-CNPJ A1 인증서를 쓰는 상호 TLS로 동작하며, 기본값은 SVRS 승인기관과 전국 환경이다. 제출자의 요지는 이렇다. 2조 달러 규모 경제의 모든 청구서, 모든 화물, 모든 소매 영수증이 이 엔드포인트를 지나가는데, 문서는 서로 다른 포털에 흩어진 1,000쪽이 넘는 MOC 매뉴얼 네 권이고 정작 중요한 내용은 어디에도 적혀 있지 않다. CT-e와 MDF-e는 같은 배포 서비스를 서로 다른 파라미터로 구현하고, NFC-e는 CSC 토큰과 QR 코드까지 필요하다.
+***** Take
+2026년의 SOAP 1.2가 표를 끌어모으는 문구지만, 그게 가장 덜 흥미로운 부분이다. 국가 조세 시스템을 위해 한 번 고른 프로토콜은 경제 전체를 떠받치게 되고, 그러면 아무도 마이그레이션할 수 없다. 진짜 비용은 CT-e가 어떤 파라미터를 요구하고 MDF-e는 무엇을 빼는지 여전히 알려주지 않는 1,000쪽, 그리고 그 지식을 되팔며 자란 산업이다. 스레드의 두 답글이 똑같은 경로를 묘사한다. ERP를 깔고, 현지 컨설턴트를 부르고, 컨설턴트는 미들웨어 업체를 쓰라고 한다. 요청 29개짜리 Postman 컬렉션은 문서화되지 않은 동작 위에 세워진 사업에 난 작은 균열이다.
+***** Comments
+- 브라질은 지구상 최대 규모의 의무 전자세금계산서 시스템을 운영한다. 2조 달러 경제의 모든 청구서, 모든 화물, 모든 소매 영수증이 정부의 SOAP 1.2 웹서비스를 지나간다. 2026년에 말이다. 문서는 서로 다른 포털에 흩어진 1,000쪽이 넘는 PDF 매뉴얼 네 권이고, 결정적인 세부사항은 그냥 어디에도 적혀 있지 않다.
+- 브라질 자회사에 ERP를 도입할 때, 사내 컨설팅 팀 전원이 이 복잡함에 머리를 담그지 말고 현지 컨설팅 팀을 쓰자고 즉시 합의했다. 그리고 그 현지 팀은 즉시 미들웨어 업체를 쓰라고 제안했다.
+- 우크라이나 금전등록기와 비슷하게 들린다. 모든 소매 거래가 세무당국 쪽 등록기 API를 거치는데, 거기는 REST+JSON이고 이를 대행해 주는 영세 서비스 업계가 형성돼 있다. PKI 전체를 끼워 넣지만 않았다면 그렇게 어렵지도 않았을 것이다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ブラジル経済のあらゆる請求書はSOAP 1.2で動いている。全部マッピングした
+***** TLDR
+Stoixがブラジルの義務的な電子インボイスのウェブサービス向けにMITライセンスのPostmanコレクションを公開した。5フォルダに29リクエスト、文書モデル4種、NF-e(55)、NFC-e(65)、CT-e(57)、MDF-e(58)を網羅し、各リクエストにはSOAP 1.2のエンベロープが組み立て済みで変数がテンプレート化されている。すべてSOAP 1.2上で、.pfx形式のe-CNPJ A1証明書による相互TLSで動き、既定はSVRS認可機関と全国環境だ。投稿者の主張はこうだ。2兆ドル規模の経済のあらゆる請求書、あらゆる積荷、あらゆるレシートがこれらのエンドポイントを通るのに、ドキュメントは別々のポータルに散らばった1,000ページ超のMOCマニュアル4冊で、肝心な詳細はどこにも書かれていない。CT-eとMDF-eは同じ配信サービスを異なるパラメータで実装し、NFC-eにはさらにCSCトークンとQRコードが要る。
+***** Take
+2026年のSOAP 1.2という一行が票を集めるが、そこが一番つまらない。国の税制のために一度選ばれたプロトコルは経済全体を支える部品になり、誰も移行できなくなる。本当のコストは、CT-eが何を要求しMDF-eが何を省くのかを今も書いていない1,000ページと、その知識を売り戻すことで育った産業のほうだ。スレッドの2つの返信は同じ流れを語る。ERPを導入し、現地コンサルを雇い、コンサルはミドルウェア業者を使えと言う。29リクエストのPostmanコレクションは、文書化されない挙動の上に建った商売に入った小さな亀裂だ。
+***** Comments
+- ブラジルは地球上で最大の義務的電子インボイス制度を運用している。2兆ドル経済のあらゆる請求書、あらゆる積荷、あらゆるレシートが政府のSOAP 1.2ウェブサービスを通る。2026年にだ。ドキュメントは別々のポータルに散らばった1,000ページ超のPDFマニュアル4冊で、決定的な詳細はどこにも書かれていない。
+- ブラジル子会社にERPを導入したとき、社内コンサルチーム全員が即座に、この複雑さに頭を突っ込まず現地のコンサルチームを雇うことで合意した。そしてその現地チームは即座にミドルウェア業者を使うよう提案してきた。
+- ウクライナのレジに似ている。すべての小売取引が税務当局側のレジAPIを通るが、あちらはREST+JSONで、代行してくれる小規模サービスの業界ができている。PKI一式を紛れ込ませてさえいなければ、そこまで難しくもなかった。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+巴西经济里的每一张发票都跑在 SOAP 1.2 上。我们把它全画出来了
+***** TLDR
+Stoix 发布了一套 MIT 许可的 Postman 集合，覆盖巴西强制电子发票的政府 Web 服务：5 个文件夹共 29 个请求，涵盖 NF-e（55）、NFC-e（65）、CT-e（57）、MDF-e（58）四种单据模型，每个请求都已装配好 SOAP 1.2 信封并把变量模板化。全部走 SOAP 1.2，使用 .pfx 格式的 e-CNPJ A1 证书做双向 TLS，默认指向 SVRS 授权机构和全国环境。提交者的说法是：一个两万亿美元体量的经济体里，每一张发票、每一车货、每一张零售小票都要经过这些端点，而文档是散落在不同门户上、总计超过一千页的四本 MOC 手册，关键细节根本没写。CT-e 和 MDF-e 用不同参数实现同一个分发服务，NFC-e 还额外需要 CSC 令牌和二维码。
+***** Take
+「2026 年还在用 SOAP 1.2」是那句能拿票的话，也是最不值得看的部分。为一国税务系统选定一次的协议，最后会变成整个经济体的承重结构，于是谁也别想迁移。真正的代价是那一千页仍然不告诉你 CT-e 要哪个参数、MDF-e 又省了哪个，以及围绕这份知识长出来的一整个行业。讨论串里的两条回复讲的是同一套动作：上 ERP，请本地顾问，本地顾问让你用中间件服务商。一套 29 个请求的 Postman 集合，是在一门建立于未文档化行为之上的生意上裂开的一道小缝。
+***** Comments
+- 巴西运行着地球上最大的强制电子发票系统。一个两万亿美元经济体的每一张发票、每一车货、每一张零售小票，都要经过政府的 SOAP 1.2 Web 服务。在 2026 年。文档是散落在不同门户上、总计超过一千页的四本 PDF 手册，而关键细节根本哪里都没写。
+- 我们在巴西子公司上 ERP 的时候，整个内部咨询团队立刻一致同意别让自己的脑子碰这套复杂度，直接请本地咨询团队帮忙。而本地咨询团队立刻建议用一家中间件服务商。
+- 这听着像乌克兰的收银机。每笔零售交易都要走税务局那边的收银机 API，不过那边是 REST+JSON，还长出了一整个帮你跑这套流程的小型服务行业。要不是把整套 PKI 也塞进去，其实根本不难。
+** Ubuntu 26.10 completes transition to Rust-based coreutils :linux:rust:ubuntu:coreutils:
+:PROPERTIES:
+:ID:       49696697
+:URL:      https://www.omgubuntu.co.uk/2026/09/ubuntu-2610-rust-coreutils-complete
+:HN_URL:   https://news.ycombinator.com/item?id=49696697
+:POINTS:   138
+:COMMENTS: 113
+:BY:       theanonymousone
+:END:
+
+*** TLDR
+Ubuntu 26.10 (Stonking Stingray, beta later this month, stable October 15) ships the full uutils Rust coreutils set, including cp, mv and rm. Those three were held back in 26.04 LTS over time-of-check to time-of-use flaws in the uutils versions; ls, cat, chmod and du had already switched. Canonical's stated reason is memory safety: Rust catches at compile time what C compilers do not. omgubuntu notes the road here included a date-handling bug in an earlier release.
+
+*** Take
+collinfunk pasted the counterargument straight into the thread: in a ubuntu:26.10 container, uutils rm 0.10.0 segfaults on a 32K-deep directory and the directory is still there afterwards, while GNU rm deletes it. Memory safety is not the same as doing the job, and rm exiting without removing is exactly the failure a shell script cannot detect. The escape hatch, coreutils-from-gnu, conflicts with build-essential since 26.04, so the developers most likely to hit these bugs are the ones who can least easily opt out.
+
+*** Comments
+
+**** collinfunk
+:PROPERTIES:
+:COMMENT_ID: 49697392
+:END:
+I really don't understand why Canonical rushes this. If rm can't remove all possible directory entries, that is a big issue. In ubuntu:26.10, rm (uutils coreutils) 0.10.0 segfaults on a 32K-deep directory and the directory is still there. GNU rm removes it fine.
+
+**** Malakun
+:PROPERTIES:
+:COMMENT_ID: 49698072
+:END:
+You can use coreutils-from-gnu instead of uutils. However since 26.04 build-essential depends on coreutils-from-uutils, it cannot be upgraded while coreutils-from-gnu is installed.
+
+**** hk1337
+:PROPERTIES:
+:COMMENT_ID: 49698384
+:END:
+Was there something wrong with how they are currently written or do they just want the badge that says they converted to Rust?
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ubuntu 26.10 completa la transición a coreutils en Rust
+***** TLDR
+Ubuntu 26.10 (Stonking Stingray, beta este mes, estable el 15 de octubre) incluye el conjunto completo de coreutils en Rust de uutils, con cp, mv y rm. Esos tres se dejaron fuera de 26.04 LTS por fallos de tipo tiempo de comprobación a tiempo de uso en las versiones de uutils; ls, cat, chmod y du ya habían cambiado. La razón declarada por Canonical es la seguridad de memoria: Rust detecta en tiempo de compilación lo que los compiladores de C no. omgubuntu señala que el camino incluyó un error de manejo de fechas en una versión anterior.
+***** Take
+collinfunk pegó el contraargumento directamente en el hilo: en un contenedor ubuntu:26.10, rm de uutils 0.10.0 hace segfault con un directorio anidado 32K niveles y el directorio sigue ahí, mientras que rm de GNU lo borra. La seguridad de memoria no es lo mismo que hacer el trabajo, y un rm que termina sin borrar es justo el fallo que un script de shell no puede detectar. La salida de emergencia, coreutils-from-gnu, choca con build-essential desde 26.04, así que quienes más probabilidades tienen de topar con estos errores son los que menos fácilmente pueden desactivarlo.
+***** Comments
+- No entiendo por qué Canonical corre tanto. Si rm no puede borrar todas las entradas de directorio posibles, eso es un problema serio. En ubuntu:26.10, rm (uutils coreutils) 0.10.0 hace segfault con un directorio de 32K niveles y el directorio sigue ahí. El rm de GNU lo borra sin problema.
+- Puedes usar coreutils-from-gnu en lugar de uutils. Pero desde 26.04 build-essential depende de coreutils-from-uutils, así que no se puede actualizar mientras coreutils-from-gnu esté instalado.
+- ¿Había algo mal en cómo están escritas ahora o solo quieren la medallita de haber migrado a Rust?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ubuntu 26.10 schließt den Wechsel zu Rust-Coreutils ab
+***** TLDR
+Ubuntu 26.10 (Stonking Stingray, Beta noch diesen Monat, stabil am 15. Oktober) liefert den vollständigen Rust-Coreutils-Satz von uutils aus, inklusive cp, mv und rm. Diese drei blieben in 26.04 LTS wegen Time-of-check-to-time-of-use-Lücken in den uutils-Versionen außen vor; ls, cat, chmod und du waren bereits umgestellt. Canonicals erklärter Grund ist Speichersicherheit: Rust fängt zur Compilezeit ab, was C-Compiler nicht abfangen. omgubuntu merkt an, dass unterwegs ein Datumsfehler in einer früheren Version auftrat.
+***** Take
+collinfunk hat das Gegenargument direkt in den Thread kopiert: In einem ubuntu:26.10-Container stürzt uutils rm 0.10.0 bei einem 32K tief verschachtelten Verzeichnis mit Segfault ab, und das Verzeichnis ist danach noch da, während GNU rm es löscht. Speichersicherheit ist nicht dasselbe wie die Aufgabe erledigen, und ein rm, das ohne Löschen zurückkehrt, ist genau der Fehler, den ein Shellskript nicht erkennen kann. Der Notausgang coreutils-from-gnu kollidiert seit 26.04 mit build-essential, also können ausgerechnet die Entwickler, die diese Fehler am ehesten treffen, am schwersten aussteigen.
+***** Comments
+- Ich verstehe nicht, warum Canonical das durchpeitscht. Wenn rm nicht alle möglichen Verzeichniseinträge löschen kann, ist das ein großes Problem. In ubuntu:26.10 stürzt rm (uutils coreutils) 0.10.0 bei einem 32K tiefen Verzeichnis ab, und das Verzeichnis ist noch da. GNU rm löscht es problemlos.
+- Man kann coreutils-from-gnu statt uutils verwenden. Seit 26.04 hängt build-essential aber von coreutils-from-uutils ab und lässt sich nicht aktualisieren, solange coreutils-from-gnu installiert ist.
+- War an der aktuellen Implementierung etwas falsch, oder will man nur das Abzeichen für die Rust-Migration?
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+우분투 26.10, Rust 기반 coreutils 전환 완료
+***** TLDR
+우분투 26.10(Stonking Stingray, 이달 말 베타, 10월 15일 정식)이 cp, mv, rm을 포함한 uutils Rust coreutils 전체를 탑재한다. 이 세 가지는 uutils 버전의 TOCTOU(검사 시점과 사용 시점 사이) 결함 때문에 26.04 LTS에서 빠져 있었고, ls, cat, chmod, du는 이미 교체된 상태였다. 캐노니컬이 내세운 이유는 메모리 안전성이다. Rust는 C 컴파일러가 놓치는 것을 컴파일 시점에 잡아낸다는 것이다. omgubuntu는 그 과정에서 이전 릴리스에 날짜 처리 버그가 있었다고 지적한다.
+***** Take
+collinfunk가 반박을 스레드에 그대로 붙여 넣었다. ubuntu:26.10 컨테이너에서 uutils rm 0.10.0은 3만 2천 단계로 중첩된 디렉터리에서 세그폴트를 내고 디렉터리는 그대로 남지만, GNU rm은 지운다. 메모리 안전성은 일을 제대로 하는 것과 다르고, rm이 지우지 않고 종료하는 것은 셸 스크립트가 감지할 수 없는 바로 그 실패다. 탈출구인 coreutils-from-gnu는 26.04부터 build-essential과 충돌하므로, 이 버그를 가장 먼저 만날 개발자들이 가장 빠져나오기 어렵다.
+***** Comments
+- 캐노니컬이 왜 이렇게 서두르는지 모르겠다. rm이 모든 디렉터리 항목을 지우지 못한다면 큰 문제다. ubuntu:26.10에서 rm(uutils coreutils) 0.10.0은 3만 2천 단계 깊이의 디렉터리에서 세그폴트를 내고 디렉터리는 그대로 남는다. GNU rm은 잘 지운다.
+- uutils 대신 coreutils-from-gnu를 쓸 수 있다. 다만 26.04부터 build-essential이 coreutils-from-uutils에 의존해서, coreutils-from-gnu가 설치된 상태에서는 업그레이드가 안 된다.
+- 지금 작성된 방식에 무슨 문제가 있었나, 아니면 그냥 Rust로 바꿨다는 훈장이 갖고 싶은 건가?
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Ubuntu 26.10、Rust版coreutilsへの移行を完了
+***** TLDR
+Ubuntu 26.10(Stonking Stingray、今月中にベータ、10月15日に安定版)がcp、mv、rmを含むuutilsのRust版coreutils一式を搭載する。この3つはuutils版のTOCTOU(検査時と使用時のずれ)の欠陥のため26.04 LTSでは見送られていた。ls、cat、chmod、duはすでに置き換え済みだ。Canonicalが挙げる理由はメモリ安全性で、Cコンパイラが見逃すものをRustはコンパイル時に捕まえるという主張だ。omgubuntuは、途中の版に日付処理のバグがあったとも書いている。
+***** Take
+collinfunkが反論をそのままスレッドに貼った。ubuntu:26.10のコンテナでuutilsのrm 0.10.0は3万2千段の深い階層でセグフォルトし、ディレクトリはそのまま残る。GNUのrmは削除できる。メモリ安全であることと仕事をこなすことは別で、rmが削除せずに終了するのはシェルスクリプトが検知できない類の失敗だ。逃げ道のcoreutils-from-gnuは26.04以降build-essentialと衝突するため、このバグを踏みやすい開発者ほど降りにくい。
+***** Comments
+- Canonicalがなぜ急ぐのか分からない。rmがあらゆるディレクトリエントリを削除できないなら大問題だ。ubuntu:26.10ではrm(uutils coreutils) 0.10.0が3万2千段の深さでセグフォルトし、ディレクトリは残ったままになる。GNUのrmは問題なく削除する。
+- uutilsの代わりにcoreutils-from-gnuを使える。ただし26.04以降build-essentialがcoreutils-from-uutilsに依存しているため、coreutils-from-gnuを入れたままではアップグレードできない。
+- 今の実装に何か問題があったのか、それともRustに移行したという勲章が欲しいだけなのか。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Ubuntu 26.10 完成向 Rust 版 coreutils 的迁移
+***** TLDR
+Ubuntu 26.10（Stonking Stingray，本月晚些时候进入 beta，10 月 15 日发布正式版）将搭载完整的 uutils Rust coreutils，包括 cp、mv 和 rm。这三个此前因 uutils 版本中的检查时间与使用时间不一致（TOCTOU）缺陷被排除在 26.04 LTS 之外，而 ls、cat、chmod、du 早已完成替换。Canonical 给出的理由是内存安全：Rust 能在编译期发现 C 编译器发现不了的问题。omgubuntu 提到，这一路上还出过一次日期处理的 bug。
+***** Take
+collinfunk 把反证直接贴进了讨论串：在 ubuntu:26.10 容器里，uutils 的 rm 0.10.0 处理三万两千层嵌套目录时段错误崩溃，目录依然留在原地，而 GNU 的 rm 能删掉。内存安全不等于把活干完，而 rm 什么都没删就退出，恰恰是 shell 脚本检测不到的那种失败。逃生通道 coreutils-from-gnu 从 26.04 起与 build-essential 冲突，于是最容易踩到这些 bug 的开发者，恰恰最难退出。
+***** Comments
+- 我真不明白 Canonical 为什么这么赶。如果 rm 无法删除所有可能的目录项，这就是大问题。在 ubuntu:26.10 里，rm（uutils coreutils）0.10.0 在三万两千层深的目录上段错误崩溃，目录还在原地。GNU 的 rm 删得干干净净。
+- 你可以用 coreutils-from-gnu 代替 uutils。但从 26.04 起 build-essential 依赖 coreutils-from-uutils，装着 coreutils-from-gnu 就没法升级它。
+- 是现在的写法有什么问题，还是他们只想要一枚「已迁移到 Rust」的徽章？
+** Distributed Systems Classics (2017) :distributed-systems:papers:cs:lamport:
+:PROPERTIES:
+:ID:       49699158
+:URL:      https://nvartolomei.com/dist-sys-classics/
+:HN_URL:   https://news.ycombinator.com/item?id=49699158
+:POINTS:   267
+:COMMENTS: 60
+:BY:       grep_it
+:END:
+
+*** TLDR
+A reading list Nicolae Vartolomei put up in 2017 and last touched in September 2022: ten papers in chronological order from 1978 to 2014, each entry just authors, year, title and a link. Lamport's Time, Clocks and the Ordering of Events; The Byzantine Generals Problem; Chandy and Lamport on distributed snapshots; the FLP impossibility result; Oki and Liskov's Viewstamped Replication; The Part-Time Parliament; Paxos Made Simple; the Bitcoin paper; the CRDT paper; and Raft. No commentary, no summaries.
+
+*** Take
+Lamport wrote or co-wrote five of the ten, which is the real story on the page: one person supplied most of the vocabulary the field still argues in. The thread then does what these threads always do and doubles the list, and the additions beat the complaints. RFC 677 as the origin of logical clocks, chain replication, Joe Armstrong's Erlang thesis, the MIT 6.824 reading list that gets refreshed every year. Read the page, bookmark the comments.
+
+*** Comments
+
+**** mjb
+:PROPERTIES:
+:COMMENT_ID: 49700698
+:END:
+Not a bad list. Deeper cuts for those looking for something less mainstream: The Maintenance of Duplicate Databases (RFC 677), as far as I know the genesis of logical clocks in distributed systems, and Chain Replication for Supporting High Throughput and Availability.
+
+**** nesarkvechnep
+:PROPERTIES:
+:COMMENT_ID: 49699790
+:END:
+As always, lists like these don't include Joe Armstrong's PhD thesis, Making reliable distributed systems in the presence of software errors.
+
+**** bigcat12345678
+:PROPERTIES:
+:COMMENT_ID: 49700771
+:END:
+I gradually realized that Lamport is more of the godfather of distributed systems than Hinton is to deep learning.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Clásicos de sistemas distribuidos (2017)
+***** TLDR
+Una lista de lectura que Nicolae Vartolomei publicó en 2017 y actualizó por última vez en septiembre de 2022: diez artículos en orden cronológico de 1978 a 2014, cada entrada con solo autores, año, título y enlace. Time, Clocks and the Ordering of Events de Lamport; El problema de los generales bizantinos; Chandy y Lamport sobre instantáneas distribuidas; el resultado de imposibilidad FLP; Viewstamped Replication de Oki y Liskov; The Part-Time Parliament; Paxos Made Simple; el artículo de Bitcoin; el artículo de los CRDT; y Raft. Sin comentarios ni resúmenes.
+***** Take
+Lamport escribió o coescribió cinco de los diez, y esa es la verdadera historia de la página: una sola persona aportó buena parte del vocabulario con el que el campo todavía discute. Luego el hilo hace lo que siempre hacen estos hilos y duplica la lista, y las adiciones superan a las quejas. El RFC 677 como origen de los relojes lógicos, la replicación en cadena, la tesis de Joe Armstrong sobre Erlang, la lista de lectura del MIT 6.824 que se renueva cada año. Lee la página, guarda los comentarios.
+***** Comments
+- No está mal la lista. Piezas más profundas para quien busque algo menos mainstream: The Maintenance of Duplicate Databases (RFC 677), que hasta donde sé es el origen de los relojes lógicos en sistemas distribuidos, y Chain Replication for Supporting High Throughput and Availability.
+- Como siempre, listas como esta no incluyen la tesis doctoral de Joe Armstrong, Making reliable distributed systems in the presence of software errors.
+- Poco a poco me di cuenta de que Lamport es más el padrino de los sistemas distribuidos que Hinton del aprendizaje profundo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Klassiker verteilter Systeme (2017)
+***** TLDR
+Eine Leseliste, die Nicolae Vartolomei 2017 veröffentlichte und zuletzt im September 2022 anfasste: zehn Arbeiten in chronologischer Reihenfolge von 1978 bis 2014, jeder Eintrag nur Autoren, Jahr, Titel und Link. Lamports Time, Clocks and the Ordering of Events; Das Problem der byzantinischen Generäle; Chandy und Lamport über verteilte Snapshots; das FLP-Unmöglichkeitsresultat; Viewstamped Replication von Oki und Liskov; The Part-Time Parliament; Paxos Made Simple; das Bitcoin-Papier; das CRDT-Papier; und Raft. Keine Kommentare, keine Zusammenfassungen.
+***** Take
+Lamport hat fünf der zehn geschrieben oder mitgeschrieben, und das ist die eigentliche Geschichte der Seite: eine Person lieferte einen Großteil des Vokabulars, in dem das Feld bis heute streitet. Dann tut der Thread, was solche Threads immer tun, und verdoppelt die Liste, und die Ergänzungen schlagen die Beschwerden. RFC 677 als Ursprung logischer Uhren, Chain Replication, Joe Armstrongs Erlang-Dissertation, die jährlich aktualisierte Leseliste von MIT 6.824. Seite lesen, Kommentare lesezeichnen.
+***** Comments
+- Keine schlechte Liste. Tiefere Funde für alle, die etwas abseits des Mainstreams suchen: The Maintenance of Duplicate Databases (RFC 677), soweit ich weiß der Ursprung logischer Uhren in verteilten Systemen, und Chain Replication for Supporting High Throughput and Availability.
+- Wie immer fehlt in solchen Listen Joe Armstrongs Dissertation, Making reliable distributed systems in the presence of software errors.
+- Mir wurde nach und nach klar, dass Lamport eher der Pate verteilter Systeme ist als Hinton der des Deep Learning.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+분산 시스템 고전 논문들 (2017)
+***** TLDR
+니콜라에 바르톨로메이가 2017년에 올리고 2022년 9월에 마지막으로 손본 읽기 목록이다. 1978년부터 2014년까지 시간순으로 열 편, 각 항목에는 저자, 연도, 제목, 링크만 있다. 램포트의 Time, Clocks and the Ordering of Events, 비잔틴 장군 문제, 챈디와 램포트의 분산 스냅샷, FLP 불가능성 결과, 오키와 리스코프의 Viewstamped Replication, The Part-Time Parliament, Paxos Made Simple, 비트코인 논문, CRDT 논문, 그리고 Raft. 해설도 요약도 없다.
+***** Take
+열 편 중 다섯 편을 램포트가 쓰거나 공저했다는 것이 이 페이지의 진짜 이야기다. 한 사람이 이 분야가 지금도 논쟁에 쓰는 어휘의 상당 부분을 만들어냈다. 그리고 스레드는 이런 스레드가 늘 그러듯 목록을 두 배로 불린다. 불평보다 추가 목록이 낫다. 논리적 시계의 기원인 RFC 677, 체인 복제, 조 암스트롱의 얼랭 박사 논문, 매년 갱신되는 MIT 6.824 읽기 목록. 페이지는 읽고, 댓글은 북마크해 두자.
+***** Comments
+- 나쁘지 않은 목록이다. 덜 알려진 것을 찾는다면 더 깊은 선택지들: 내가 아는 한 분산 시스템에서 논리적 시계의 기원인 The Maintenance of Duplicate Databases(RFC 677), 그리고 Chain Replication for Supporting High Throughput and Availability.
+- 늘 그렇듯 이런 목록에는 조 암스트롱의 박사 논문 Making reliable distributed systems in the presence of software errors가 빠져 있다.
+- 램포트가 딥러닝에서 힌턴이 차지하는 위치보다 분산 시스템에서 더 대부에 가깝다는 걸 차츰 깨닫게 됐다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+分散システムの古典論文 (2017)
+***** TLDR
+ニコラエ・バルトロメイが2017年に公開し、2022年9月に最後に更新した読書リスト。1978年から2014年まで時系列に10本、各項目は著者、年、タイトル、リンクのみ。ランポートのTime, Clocks and the Ordering of Events、ビザンチン将軍問題、チャンディとランポートの分散スナップショット、FLP不可能性定理、オキとリスコフのViewstamped Replication、The Part-Time Parliament、Paxos Made Simple、ビットコイン論文、CRDT論文、そしてRaft。注釈も要約もない。
+***** Take
+10本のうち5本をランポートが書くか共著している。それがこのページの本当の話だ。一人の人物が、この分野が今も議論に使う語彙の大半を用意した。そしてスレッドはこの種のスレッドの常でリストを倍にする。追加のほうが不満より価値がある。論理時計の起源としてのRFC 677、チェーンレプリケーション、ジョー・アームストロングのErlang博士論文、毎年更新されるMIT 6.824のリーディングリスト。ページを読み、コメントをブックマークしよう。
+***** Comments
+- 悪くないリストだ。もう少し主流でないものを探している人向けの深掘り: 分散システムにおける論理時計の起源だと私が理解しているThe Maintenance of Duplicate Databases (RFC 677)、それにChain Replication for Supporting High Throughput and Availability。
+- いつものことだが、この手のリストにはジョー・アームストロングの博士論文Making reliable distributed systems in the presence of software errorsが入っていない。
+- ランポートは、ヒントンがディープラーニングに対して持つ位置よりも、分散システムのゴッドファーザーに近いと次第に思うようになった。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+分布式系统经典论文 (2017)
+***** TLDR
+Nicolae Vartolomei 于 2017 年放出、2022 年 9 月最后一次更新的阅读清单：按时间顺序从 1978 到 2014 共十篇，每条只有作者、年份、标题和链接。Lamport 的 Time, Clocks and the Ordering of Events；拜占庭将军问题；Chandy 与 Lamport 的分布式快照；FLP 不可能性结论；Oki 与 Liskov 的 Viewstamped Replication；The Part-Time Parliament；Paxos Made Simple；比特币论文；CRDT 论文；以及 Raft。没有评注，没有摘要。
+***** Take
+十篇里有五篇是 Lamport 写的或参与写的，这才是这个页面真正的看点：一个人提供了这个领域至今仍在使用的大部分词汇。随后讨论串做了这类讨论串永远会做的事，把清单扩了一倍，而补充比抱怨更有价值：作为逻辑时钟起源的 RFC 677、链式复制、Joe Armstrong 的 Erlang 博士论文、每年更新的 MIT 6.824 阅读清单。页面读一遍，评论收藏起来。
+***** Comments
+- 清单不错。给想看点非主流内容的人一些更深的选择：据我所知是分布式系统中逻辑时钟起源的 The Maintenance of Duplicate Databases（RFC 677），以及 Chain Replication for Supporting High Throughput and Availability。
+- 一如既往，这类清单里都不会有 Joe Armstrong 的博士论文 Making reliable distributed systems in the presence of software errors。
+- 我慢慢意识到，Lamport 之于分布式系统，比 Hinton 之于深度学习更像教父。
+** Charts built for Chat :data:bi:dbt:ai:
+:PROPERTIES:
+:ID:       49704246
+:URL:      https://dbtcharts.com/blog/charts-built-for-chat/
+:HN_URL:   https://news.ycombinator.com/item?id=49704246
+:POINTS:   183
+:COMMENTS: 59
+:BY:       thingsilearned
+:END:
+
+*** TLDR
+Dave Fowler, who founded Chartio (YC '10, now Atlassian Analytics), launched dbt Charts: an Apache 2.0 YAML dialect for declaring dashboards. Three pieces per file, variables for UI filters, SQL queries wrapped in Jinja, and chart declarations across 16 chart types and more than 1,100 configuration options. The pitch is that agents handle code and Git well but flail inside BI UIs, and that agent-built dashboards otherwise sprawl into HTML, CSS and JS nobody audits. The CLI renders to SVG, HTML, PNG, PDF or the terminal, charts live in Git next to dbt models and break in pull requests, and dbtcharts.com sells the hosted version with access control and permissions.
+
+*** Take
+The problem is real. Agent-generated dashboards are unreviewable blobs, and a spec that fails validation in a pull request beats a chart that quietly reports the wrong number. Two things cut against the pitch. A simple YAML dialect with 1,100+ configuration options is a programming language that has not admitted it yet, which is carterschonwald's complaint in the thread. And ramesh31 is right that models keep getting better at one-shotting from primitives. The argument for a spec was never that the agent needs one. It is that the human reviewing the diff does.
+
+*** Comments
+
+**** mollifier14
+:PROPERTIES:
+:COMMENT_ID: 49704876
+:END:
+A beacon of hope between all the vibe coded JS slop charts and dashboards. It creates artifacts that are readable, maintainable and reproduce the same dashboard deterministically, just with fresh data.
+
+**** ramesh31
+:PROPERTIES:
+:COMMENT_ID: 49705494
+:END:
+Everyone wants to come up with a clever One Spec to Rule Them All for generative UI. My bet is that the bitter lesson still bites. Models will keep getting faster and more error free at one-shot writing things from scratch with primitive libraries.
+
+**** jp_monteiro
+:PROPERTIES:
+:COMMENT_ID: 49708317
+:END:
+dbt/Fivetran announces that they will unbundle BI by bundling it with their ELT solution. Ironic to say the least.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Gráficos hechos para el chat
+***** TLDR
+Dave Fowler, fundador de Chartio (YC '10, hoy Atlassian Analytics), lanzó dbt Charts: un dialecto YAML con licencia Apache 2.0 para declarar dashboards. Tres piezas por archivo: variables para los filtros de la interfaz, consultas SQL envueltas en Jinja y declaraciones de gráficos con 16 tipos y más de 1.100 opciones de configuración. El argumento es que los agentes manejan bien código y Git pero se atascan en las interfaces de BI, y que si no los dashboards generados por agentes se desparraman en HTML, CSS y JS que nadie revisa. La CLI renderiza a SVG, HTML, PNG, PDF o terminal, los gráficos viven en Git junto a los modelos de dbt y fallan en los pull requests, y dbtcharts.com vende la versión alojada con control de acceso y permisos.
+***** Take
+El problema es real. Los dashboards generados por agentes son bloques imposibles de revisar, y una especificación que falla la validación en un pull request es mejor que un gráfico que reporta en silencio el número equivocado. Dos cosas juegan en contra. Un dialecto YAML simple con más de 1.100 opciones de configuración es un lenguaje de programación que aún no lo admite, que es justo la queja de carterschonwald en el hilo. Y ramesh31 tiene razón en que los modelos cada vez son mejores generando de una sola pasada desde primitivas. El argumento a favor de una especificación nunca fue que el agente la necesite, sino que la necesita el humano que revisa el diff.
+***** Comments
+- Un faro de esperanza entre todos los gráficos y dashboards de JS hechos a lo loco. Genera artefactos legibles, mantenibles y que reproducen el mismo dashboard de forma determinista, solo que con datos frescos.
+- Todo el mundo quiere inventar una Especificación Única para gobernar la UI generativa. Mi apuesta es que la lección amarga sigue mordiendo. Los modelos serán cada vez más rápidos y precisos escribiendo cosas desde cero con librerías primitivas.
+- dbt/Fivetran anuncia que va a desagrupar el BI agrupándolo con su solución de ELT. Irónico, por decir poco.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Diagramme, gebaut für den Chat
+***** TLDR
+Dave Fowler, Gründer von Chartio (YC '10, heute Atlassian Analytics), hat dbt Charts veröffentlicht: einen YAML-Dialekt unter Apache 2.0 zum Deklarieren von Dashboards. Drei Bausteine pro Datei: Variablen für UI-Filter, SQL-Abfragen in Jinja verpackt und Chart-Deklarationen mit 16 Diagrammtypen und über 1.100 Konfigurationsoptionen. Das Argument: Agenten kommen mit Code und Git gut zurecht, scheitern aber in BI-Oberflächen, und von Agenten gebaute Dashboards zerfasern sonst in HTML, CSS und JS, das niemand prüft. Die CLI rendert nach SVG, HTML, PNG, PDF oder ins Terminal, Charts liegen in Git neben den dbt-Modellen und brechen in Pull Requests, und dbtcharts.com verkauft die gehostete Variante mit Zugriffskontrolle und Berechtigungen.
+***** Take
+Das Problem ist echt. Von Agenten erzeugte Dashboards sind unprüfbare Klumpen, und eine Spezifikation, die im Pull Request an der Validierung scheitert, ist besser als ein Diagramm, das stillschweigend die falsche Zahl zeigt. Zwei Dinge sprechen dagegen. Ein einfacher YAML-Dialekt mit über 1.100 Konfigurationsoptionen ist eine Programmiersprache, die es nur noch nicht zugegeben hat, genau carterschonwalds Einwand im Thread. Und ramesh31 hat recht, dass Modelle immer besser darin werden, aus Primitiven in einem Durchgang zu schreiben. Das Argument für eine Spezifikation war nie, dass der Agent sie braucht. Der Mensch, der den Diff prüft, braucht sie.
+***** Comments
+- Ein Hoffnungsschimmer zwischen all den zusammengevibten JS-Chart- und Dashboard-Schlamassel. Es entstehen Artefakte, die lesbar und wartbar sind und dasselbe Dashboard deterministisch reproduzieren, nur mit frischen Daten.
+- Alle wollen die eine clevere Spezifikation für generative UI erfinden. Ich wette, die bittere Lektion beißt weiterhin. Modelle werden immer schneller und fehlerfreier darin, Dinge in einem Durchgang mit primitiven Bibliotheken von Grund auf zu schreiben.
+- dbt/Fivetran kündigt an, BI zu entbündeln, indem es BI mit der eigenen ELT-Lösung bündelt. Ironisch, gelinde gesagt.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+채팅을 위해 만들어진 차트
+***** TLDR
+Chartio(YC '10, 현재 Atlassian Analytics)를 창업한 데이브 파울러가 dbt Charts를 내놨다. 대시보드를 선언하는 Apache 2.0 라이선스의 YAML 방언이다. 파일 하나에 세 가지 요소가 들어간다. UI 필터용 변수, Jinja로 감싼 SQL 쿼리, 그리고 16가지 차트 유형과 1,100개가 넘는 설정 옵션을 가진 차트 선언이다. 주장의 핵심은 에이전트가 코드와 Git은 잘 다루지만 BI 화면에서는 헤맨다는 것, 그리고 그대로 두면 에이전트가 만든 대시보드가 아무도 검토하지 않는 HTML, CSS, JS 덩어리로 퍼진다는 것이다. CLI는 SVG, HTML, PNG, PDF 또는 터미널로 렌더링하고, 차트는 dbt 모델 옆 Git에 살면서 풀 리퀘스트에서 깨진다. dbtcharts.com은 접근 제어와 권한이 붙은 호스팅 버전을 판다.
+***** Take
+문제 자체는 진짜다. 에이전트가 만든 대시보드는 검토 불가능한 덩어리이고, 풀 리퀘스트에서 검증에 실패하는 명세가 조용히 틀린 숫자를 보여주는 차트보다 낫다. 다만 두 가지가 걸린다. 설정 옵션이 1,100개가 넘는 단순한 YAML 방언은 아직 스스로 인정하지 않았을 뿐 이미 프로그래밍 언어다. 스레드에서 carterschonwald가 지적한 바로 그 점이다. 그리고 모델이 기본 라이브러리만으로 한 번에 써내는 능력을 계속 키워간다는 ramesh31의 말도 맞다. 명세가 필요한 쪽은 원래 에이전트가 아니었다. diff를 검토하는 사람이다.
+***** Comments
+- 감으로 찍어낸 JS 차트와 대시보드 더미 속의 희망이다. 읽을 수 있고 유지보수 가능한 산출물을 만들며, 같은 대시보드를 결정적으로 재현하되 데이터만 새로 가져온다.
+- 다들 생성형 UI를 위한 하나의 영리한 통합 명세를 만들고 싶어 한다. 내 예상은 쓰라린 교훈이 여전히 유효하다는 것이다. 모델은 원시적인 라이브러리만으로 처음부터 한 번에 써내는 일을 점점 더 빠르고 정확하게 해낼 것이다.
+- dbt/Fivetran이 자사 ELT 솔루션과 묶는 방식으로 BI를 언번들링하겠다고 발표했다. 아이러니하다고밖에.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+チャットのために作られたチャート
+***** TLDR
+Chartio(YC '10、現Atlassian Analytics)の創業者デイブ・ファウラーがdbt Chartsを公開した。ダッシュボードを宣言するApache 2.0のYAML方言だ。1ファイルに3要素、UIフィルタ用の変数、Jinjaで包んだSQLクエリ、そして16種類のチャートと1,100を超える設定項目を持つチャート宣言。主張は、エージェントはコードとGitは得意だがBIのUIでは行き詰まること、そして放っておくとエージェントの作るダッシュボードが誰も監査しないHTML、CSS、JSに散らばることだ。CLIはSVG、HTML、PNG、PDF、端末に出力でき、チャートはdbtモデルの隣でGitに置かれプルリクエストで壊れる。dbtcharts.comはアクセス制御と権限付きのホスティング版を売る。
+***** Take
+問題自体は本物だ。エージェントが生成したダッシュボードはレビュー不能の塊で、プルリクエストで検証に落ちる仕様のほうが、黙って間違った数字を出すチャートよりましだ。ただし二点が引っかかる。設定項目が1,100を超える「シンプルな」YAML方言は、まだ認めていないだけでプログラミング言語だ。スレッドでcarterschonwaldが突いているのはそこだ。そしてモデルが原始的なライブラリだけで一発書きする能力を伸ばし続けるというramesh31の指摘も正しい。仕様が必要なのは元々エージェントではない。差分をレビューする人間だ。
+***** Comments
+- ノリで作られたJSのチャートやダッシュボードの山の中で、これは希望の光だ。読めて保守できる成果物を生み、同じダッシュボードを決定的に再現しつつデータだけ新しくできる。
+- 誰もが生成UIのための賢い統一仕様を作りたがる。私の見立てでは、苦い教訓は今も効いている。モデルは原始的なライブラリだけを使って一発で書き上げる速度と正確さを上げ続けるだろう。
+- dbt/Fivetranが、自社のELTソリューションと抱き合わせることでBIをアンバンドルすると発表した。控えめに言っても皮肉だ。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为对话而生的图表
+***** TLDR
+Chartio（YC '10，现为 Atlassian Analytics）创始人 Dave Fowler 推出了 dbt Charts：一种以 Apache 2.0 许可发布、用来声明仪表盘的 YAML 方言。一个文件里有三部分：作为界面筛选器的变量、用 Jinja 包裹的 SQL 查询，以及涵盖 16 种图表类型、1,100 多个配置项的图表声明。他的论点是，智能体擅长代码和 Git，却在 BI 界面里手足无措；否则智能体生成的仪表盘会散落成没人审阅的 HTML、CSS 和 JS。命令行工具可渲染为 SVG、HTML、PNG、PDF 或终端输出，图表与 dbt 模型并排存放在 Git 中，在 pull request 阶段就会报错；dbtcharts.com 则出售带访问控制和权限管理的托管版。
+***** Take
+问题本身是真的。智能体生成的仪表盘是无法审阅的一坨，而一份在 pull request 里通不过校验的规格，好过一张悄悄给出错误数字的图表。但有两点站不住。一个号称简单、却有 1,100 多个配置项的 YAML 方言，其实已经是一门尚未承认自己身份的编程语言，这正是 carterschonwald 在讨论串里的抱怨。而 ramesh31 说得对，模型用原始库一次写成的能力还在提升。要规格的理由从来不是智能体需要它，而是审阅 diff 的那个人需要。
+***** Comments
+- 在一堆凭感觉糊出来的 JS 图表和仪表盘里，这是一线希望。它产出的是可读、可维护的产物，能确定性地复现同一个仪表盘，只是换上新数据。
+- 人人都想为生成式 UI 搞出一套聪明的「统一规格」。我赌苦涩的教训依然管用：模型会越来越快、越来越少出错地用原始库从零一次性写出来。
+- dbt/Fivetran 宣布要通过把 BI 和自家 ELT 方案捆在一起来「解绑」BI。这至少可以说是讽刺。
+** 4,400-Year-Old Tomb of Egyptian Judge Found at Saqqara with Colors on Walls :archaeology:egypt:history:ai:
+:PROPERTIES:
+:ID:       49675817
+:URL:      https://arkeonews.net/4400-year-old-tomb-of-an-egyptian-judge-found-at-saqqara-with-colors-still-on-the-walls/
+:HN_URL:   https://news.ycombinator.com/item?id=49675817
+:POINTS:   89
+:COMMENTS: 18
+:BY:       arunbahl
+:END:
+
+*** TLDR
+A joint Spanish-Egyptian mission led by Josep Cervelló Autuori of the Autonomous University of Barcelona excavated a mastaba in Saqqara's Mariette Necropolis; Egypt's Ministry of Tourism and Antiquities announced it on 7 September 2026. It holds two funerary chapels. One belongs to Younmin, whose titles include judge, director of the court, and head of the scribes who examined petitions and complaints; the other to his father Ity, who managed agricultural land and offerings and whose chapel has a false door. The reliefs show farming scenes and offering processions and keep much of their original pigment after roughly 4,400 years, late Fifth Dynasty under Djedkare Isesi. Mariette's team knew where the mastaba was in the 1860s, but this is the first full excavation.
+
+*** Take
+A 4,400-year-old complaints department, preserved in colour, and the busiest argument in the thread is whether one paragraph of the article was written by a language model. The flagged tell is the sentence "The distinction is important." What follows is the more interesting part: several commenters admit their own prose has drifted the same way from reading so much of it, one is still scrubbing the word "lever" out of his drafts, and azernik names the actual cost, which is that clear, well-organised writing now draws suspicion on its own. The photographs still show pigment that outlasted four millennia.
+
+*** Comments
+
+**** karmelapple
+:PROPERTIES:
+:COMMENT_ID: 49706441
+:END:
+So glad to see color photographs of the site. One thing I'm not so glad to see is one paragraph that starts with this sentence: "The distinction is important. Archaeological maps..." That "The distinction is important" smells like AI writing, but maybe we all just have to accept that now?
+
+**** azernik
+:PROPERTIES:
+:COMMENT_ID: 49708307
+:END:
+We all have to accept that people will look at perfectly innocuous, clear, well-written prose and assume that AI wrote it.
+
+**** jb1991
+:PROPERTIES:
+:COMMENT_ID: 49708303
+:END:
+If I understand this finding correctly, it now means we have proof that ancient Egypt was not a life in black-and-white.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Hallada en Saqqara la tumba de un juez egipcio de 4.400 años con los colores aún en las paredes
+***** TLDR
+Una misión conjunta hispano-egipcia dirigida por Josep Cervelló Autuori, de la Universidad Autónoma de Barcelona, excavó una mastaba en la necrópolis de Mariette, en Saqqara; el Ministerio de Turismo y Antigüedades de Egipto lo anunció el 7 de septiembre de 2026. Contiene dos capillas funerarias. Una es de Younmin, con títulos como juez, director de la corte y jefe de los escribas que examinaban peticiones y quejas; la otra de su padre Ity, que administraba tierras agrícolas y ofrendas y cuya capilla tiene una falsa puerta. Los relieves muestran escenas agrícolas y procesiones de ofrendas y conservan buena parte de su pigmento original tras unos 4.400 años, finales de la Quinta Dinastía bajo Dyedkara Isesi. El equipo de Mariette sabía dónde estaba la mastaba en la década de 1860, pero esta es la primera excavación completa.
+***** Take
+Un departamento de quejas de 4.400 años, conservado en color, y la discusión más activa del hilo es si un párrafo del artículo lo escribió un modelo de lenguaje. La señal señalada es la frase "La distinción es importante". Lo que viene después es más interesante: varios comentaristas admiten que su propia prosa se ha desplazado igual de tanto leerla, uno sigue borrando la palabra "palanca" de sus borradores, y azernik nombra el coste real, que es que la escritura clara y bien ordenada ya despierta sospechas por sí sola. Las fotografías siguen mostrando pigmento que ha sobrevivido cuatro milenios.
+***** Comments
+- Qué bien ver fotografías en color del sitio. Lo que no me gusta tanto es un párrafo que empieza con esta frase: "La distinción es importante. Los mapas arqueológicos...". Ese "La distinción es importante" huele a escritura de IA, pero quizá ya tengamos que aceptarlo.
+- Todos tenemos que aceptar que la gente va a mirar una prosa perfectamente inocua, clara y bien escrita y asumir que la escribió una IA.
+- Si entiendo bien este hallazgo, ahora tenemos prueba de que el antiguo Egipto no era una vida en blanco y negro.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+4.400 Jahre altes Grab eines ägyptischen Richters in Saqqara gefunden, mit Farben an den Wänden
+***** TLDR
+Eine gemeinsame spanisch-ägyptische Mission unter Leitung von Josep Cervelló Autuori von der Autonomen Universität Barcelona hat in der Mariette-Nekropole in Saqqara eine Mastaba ausgegraben; Ägyptens Ministerium für Tourismus und Altertümer gab es am 7. September 2026 bekannt. Sie enthält zwei Grabkapellen. Eine gehört Younmin, dessen Titel Richter, Leiter des Gerichts und Vorsteher der Schreiber, die Petitionen und Beschwerden prüften, umfassen; die andere seinem Vater Ity, der Ackerland und Opfergaben verwaltete und dessen Kapelle eine Scheintür hat. Die Reliefs zeigen Landwirtschaftsszenen und Opferprozessionen und behalten nach rund 4.400 Jahren viel von ihrem ursprünglichen Pigment, späte Fünfte Dynastie unter Djedkare Isesi. Mariettes Team kannte die Lage der Mastaba schon in den 1860er Jahren, dies ist jedoch die erste vollständige Ausgrabung.
+***** Take
+Eine 4.400 Jahre alte Beschwerdestelle, farbig erhalten, und die lebhafteste Debatte im Thread dreht sich darum, ob ein Absatz des Artikels von einem Sprachmodell stammt. Das monierte Erkennungszeichen ist der Satz "Die Unterscheidung ist wichtig." Interessanter ist, was folgt: Mehrere Kommentierende geben zu, dass ihre eigene Prosa vom vielen Lesen in dieselbe Richtung gerutscht ist, einer streicht bis heute das Wort "Hebel" aus seinen Entwürfen, und azernik benennt den eigentlichen Preis, nämlich dass klare, gut geordnete Texte inzwischen von allein Verdacht erregen. Auf den Fotos ist weiterhin Pigment zu sehen, das vier Jahrtausende überstanden hat.
+***** Comments
+- Schön, Farbfotos der Fundstelle zu sehen. Weniger schön ist ein Absatz, der mit diesem Satz beginnt: "Die Unterscheidung ist wichtig. Archäologische Karten..." Dieses "Die Unterscheidung ist wichtig" riecht nach KI-Text, aber vielleicht müssen wir das jetzt einfach hinnehmen.
+- Wir müssen alle akzeptieren, dass Leute vollkommen harmlose, klare, gut geschriebene Prosa ansehen und annehmen, eine KI habe sie verfasst.
+- Wenn ich diesen Fund richtig verstehe, haben wir jetzt den Beweis, dass das Leben im alten Ägypten nicht in Schwarzweiß stattfand.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+사카라에서 4,400년 된 이집트 판관의 무덤 발견, 벽에 색이 남아 있다
+***** TLDR
+바르셀로나 자치대학교의 조제프 세르베요 아우투오리가 이끄는 스페인-이집트 공동 발굴단이 사카라의 마리에트 네크로폴리스에서 마스타바를 발굴했고, 이집트 관광유물부가 2026년 9월 7일 이를 발표했다. 무덤에는 장례 예배당 두 곳이 있다. 하나는 판관, 법정 책임자, 청원과 고발을 심사하는 서기들의 수장 등의 직함을 지닌 윤민의 것이고, 다른 하나는 농지와 공물을 관리했던 그의 아버지 이티의 것으로 가짜 문이 있다. 부조에는 농경 장면과 공물 행렬이 새겨져 있으며, 약 4,400년이 지난 지금도 원래 안료가 상당 부분 남아 있다. 제5왕조 말 제드카레 이세시 치세다. 마리에트의 발굴대는 1860년대에 이미 이 마스타바의 위치를 알고 있었지만, 본격적인 발굴은 이번이 처음이다.
+***** Take
+4,400년 된 민원 처리 부서가 색을 간직한 채 나왔는데, 스레드에서 가장 활발한 논쟁은 기사의 한 문단을 언어 모델이 썼느냐다. 지목된 단서는 "이 구분은 중요하다"라는 문장이다. 그 뒤가 더 흥미롭다. 여러 댓글이 그런 글을 하도 읽다 보니 자기 문체도 같은 방향으로 흘렀다고 인정하고, 한 명은 아직도 초고에서 특정 단어를 지워내고 있다고 한다. 그리고 azernik이 진짜 비용을 짚는다. 명료하고 잘 정돈된 글이 그 자체로 의심을 부르게 됐다는 것이다. 사진 속 안료는 여전히 사천 년을 견뎌낸 그 색이다.
+***** Comments
+- 현장 컬러 사진을 볼 수 있어서 반갑다. 반갑지 않은 건 이런 문장으로 시작하는 문단이다. "이 구분은 중요하다. 고고학 지도는..." 그 "이 구분은 중요하다"에서 AI 글 냄새가 난다. 하지만 이제는 다들 받아들여야 하는 건지도.
+- 우리 모두 받아들여야 한다. 사람들은 아무 문제 없이 명료하고 잘 쓰인 글을 보고도 AI가 썼다고 단정할 것이다.
+- 이 발견을 제대로 이해한 거라면, 이제 고대 이집트의 삶이 흑백이 아니었다는 증거가 생긴 셈이다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+サッカラで4,400年前のエジプト人裁判官の墓を発見、壁に色が残る
+***** TLDR
+バルセロナ自治大学のジュゼップ・セルベジョ・アウトゥオリが率いるスペイン・エジプト合同調査団が、サッカラのマリエット墓地でマスタバを発掘し、エジプト観光考古省が2026年9月7日に発表した。墓には葬祭礼拝堂が2つある。ひとつは裁判官、法廷の長、請願と苦情を審査する書記たちの長といった称号を持つユンミンのもの、もうひとつは農地と供物を管理した父イティのもので、偽扉がある。レリーフには農耕の場面と供物の行列が刻まれ、約4,400年を経た今も元の顔料が多く残っている。第5王朝末期、ジェドカラー・イセシの治世だ。マリエットの隊は1860年代にこのマスタバの位置を把握していたが、本格的な発掘は今回が初めてだ。
+***** Take
+4,400年前の苦情処理部門が色つきで出てきたのに、スレッドで一番盛り上がっている議論は、記事の一段落を言語モデルが書いたかどうかだ。指摘された手がかりは「この区別は重要だ」という一文。面白いのはその先で、複数のコメントが、そういう文章を読みすぎて自分の文体も同じ方向にずれたと認め、ひとりは今も下書きから特定の単語を消し続けているという。そしてazernikが本当のコストを名指しする。明快でよく整理された文章が、それだけで疑いを招くようになった。写真には四千年を越えた顔料が今も写っている。
+***** Comments
+- 現地のカラー写真が見られるのはうれしい。うれしくないのは、こんな一文で始まる段落だ。「この区別は重要だ。考古学の地図は...」。この「この区別は重要だ」はAIの文章の匂いがする。もっとも、もうそれを受け入れるしかないのかもしれないが。
+- まったく無害で明快でよく書けた文章を見て、AIが書いたと決めつける人が出てくる。それを受け入れるしかない。
+- この発見を正しく理解しているなら、古代エジプトの暮らしが白黒ではなかったという証拠が得られたということだ。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+萨卡拉发现 4400 年前埃及法官墓，墙上仍留有颜色
+***** TLDR
+由巴塞罗那自治大学的 Josep Cervelló Autuori 带队的西班牙与埃及联合考古队，在萨卡拉的马里耶特墓地发掘了一座马斯塔巴，埃及旅游与文物部于 2026 年 9 月 7 日宣布这一发现。墓中有两座祭祀礼拜堂：一座属于 Younmin，他的头衔包括法官、法庭主管，以及审阅请愿与申诉的书吏之长；另一座属于他的父亲 Ity，负责管理农地与供品，堂内有一道假门。浮雕上是农耕场景与献供队列，历经约 4400 年仍保留大量原始颜料，年代为第五王朝晚期、杰德卡拉·伊塞西在位时期。马里耶特的队伍在 1860 年代就知道这座马斯塔巴的位置，但这是第一次完整发掘。
+***** Take
+一个 4400 年前的申诉受理部门，连颜色都留了下来，而讨论串里最热闹的争论却是文章里某一段是不是语言模型写的。被点名的破绽是那句「这个区分很重要」。更有意思的是后面：好几位评论者承认自己读多了这种文字，文风也往同一个方向偏了，有人至今还在草稿里逐个删掉某个词；而 azernik 说出了真正的代价——如今清晰、条理分明的文字本身就会招来怀疑。照片里的颜料，仍然是熬过四千年的那一层。
+***** Comments
+- 很高兴能看到现场的彩色照片。不那么高兴的是有一段以这句话开头：「这个区分很重要。考古地图……」那句「这个区分很重要」闻着就像 AI 写的，不过也许我们现在只能接受了。
+- 我们都得接受这一点：人们会看着一段完全无害、清晰、写得很好的文字，然后断定是 AI 写的。
+- 如果我没理解错这个发现，那现在我们有证据证明，古埃及的生活并不是黑白的。
