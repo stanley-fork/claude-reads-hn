@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-09-16 11:00 UTC
+#+DATE: 2026-09-16T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A reader admits he built software above his own level of understanding, Mozilla says 'private' without saying where the model runs, and Negativland plays the Internet Archive
+
+* Highlights
+- Bearish on LLMs: specifying a task rigorously can cost more engineer time than writing the code
+- Mistral powers Firefox Smart Window, and neither company will say if inference is local
+- 'I built a system above my own level of understanding': a reader's letter to Mark Seemann
+- Do everyone else's job, unless that means rebuilding the platform team's platform
+- Negativland, sued by U2's label in 1991, performs at the Internet Archive tonight
+
+* Stories
+
+** Why I'm still bearish on LLMs after Navier-Stokes :ai:llm:economics:software:
+:PROPERTIES:
+:ID:       49715927
+:URL:      https://dank.systems/posts/2026-09-15-ai-bear.html
+:HN_URL:   https://news.ycombinator.com/item?id=49715927
+:POINTS:   244
+:COMMENTS: 283
+:BY:       jaykru
+:END:
+
+*** TLDR
+Jay Kruer argues that the Navier-Stokes proof is the best case for autonomous LLM work, not a preview of the general case: pure math already has formal specifications, machine-checkable proofs and audited verification frameworks, so the answer can be validated without a human reading it. Everywhere else, he says, the cost lands on specification. Writing a task description precise enough to stop reward hacking takes expert time that often exceeds the cost of just implementing the thing, and he points at hardware, where verification staff can outnumber designers roughly five to one. Human review stays the bottleneck and does not scale with model output, and it catches less than people assume: he cites the XZ backdoor as a sophisticated attack that survived review. His conclusion is that only three kinds of firm can run LLMs unsupervised today, those where a failure is cheap, those with narrow guardrailed tasks, and those already paying for rigorous validation.
+
+*** Take
+The specification-cost argument is the strongest thing in the post and the one the labs never answer. A model that writes code faster does not make it cheaper to say precisely what the code must do, and that is where most of the money in software already goes. The weak link is the opening premise that frontier valuations assume full knowledge-worker replacement. Three of the top comments take that apart, and they are right: the valuations survive on much smaller wins than that.
+
+*** Comments
+
+**** keeda
+:PROPERTIES:
+:COMMENT_ID: 49720632
+:END:
+The premise in the first point is off. Even assuming the labs are valued on producing a drop-in replacement for most knowledge workers, which they are not, the numbers do not work out.
+
+**** carodgers
+:PROPERTIES:
+:COMMENT_ID: 49720191
+:END:
+An April 2026 paper asked frontier models to play chess. When not told which moves were legal, no model identified legal moves at better than an 80% rate. Several asked for more illegal moves than legal ones.
+
+**** randomImmigrant
+:PROPERTIES:
+:COMMENT_ID: 49720100
+:END:
+Bearish on LLMs for automation and bullish on LLM plus human expert in a specific field is about right for current architectures. They also have real trouble with timekeeping and cannot estimate how long anything takes.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Navier-Stokes 之后，我为什么依然看空大模型
+***** TLDR
+Jay Kruer 认为，Navier-Stokes 证明是大模型自主工作的最理想情况，而不是普遍情况的预演：纯数学本来就有形式化规范、可机器验证的证明和经过审计的验证框架，所以结果不需要人去读就能被确认。他说在其他所有领域，成本都落在「把任务说清楚」这一步。要写出精确到足以杜绝 reward hacking 的任务描述，所需的专家时间往往超过直接把东西实现出来的成本；他举了硬件行业为例，验证人员与设计人员的比例可以达到大约五比一。人工审查依然是瓶颈，并且不会随模型产出量扩展，而且它能抓住的问题比人们以为的少：他举了 XZ 后门，那是一次躲过了审查的高水平攻击。他的结论是，今天只有三类公司能让大模型无人监督地运行：出错代价很低的、任务窄且有护栏的、以及本来就在为严格验证付钱的。
+***** Take
+「规范成本」这个论点是全文最有力的部分，也是各家实验室从不回应的部分。模型写代码更快，并不会让「把代码必须做什么说清楚」这件事变便宜，而软件行业的钱本来大部分就花在这里。薄弱环节是开篇那个前提：前沿实验室的估值建立在完全取代知识工作者的叙事上。热门评论里有三条把它拆掉了，而且他们是对的，这些估值靠远小于此的成果就能撑住。
+***** Comments
+- 第一点的前提就不对。就算承认这些实验室的估值建立在「造出可直接替代大多数知识工作者的产品」之上（实际上并不是），数字也对不上。
+- 2026 年 4 月有篇论文让前沿模型下国际象棋。在没有被告知哪些走法合法时，没有一个模型的合法走法识别率超过 80%，有几个模型要求走的非法棋步比合法棋步还多。
+- 对于当前架构来说，看空大模型做自动化、看多「大模型 + 特定领域人类专家」，大致是对的预期。它们在时间概念上也有实打实的问题，根本估不出任何事要花多久。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Navier-Stokesの後も私がLLMに弱気な理由
+***** TLDR
+Jay Kruerは、Navier-Stokesの証明はLLMの自律動作にとって一般的な前触れではなく最良のケースだと主張する。純粋数学にはもともと形式的仕様、機械検証可能な証明、監査済みの検証フレームワークがあり、人間が読まなくても答えを検証できるからだ。それ以外の領域ではコストは仕様策定に落ちるという。reward hackingを防げるほど正確なタスク記述を書くには専門家の時間が要り、それは実装そのもののコストを上回ることが多い。ハードウェア業界では検証担当が設計者のおよそ5倍になることもある。人間によるレビューはボトルネックのままでモデルの出力量に追随せず、しかも思われているほど問題を見つけられない。彼はレビューをすり抜けた高度な攻撃としてXZバックドアを挙げる。結論は、LLMを無監督で回せる企業は今のところ三種類だけというものだ。失敗が安くつく企業、ガードレール付きの狭いタスクを持つ企業、そしてすでに厳密な検証に金を払っている企業である。
+***** Take
+仕様コストの議論は本文で最も強く、各研究所が決して答えない論点だ。コードを速く書けるモデルがあっても、コードが何をすべきかを正確に述べるコストは下がらない。ソフトウェアの金の大半はもともとそこに消えている。弱いのは冒頭の前提、つまりフロンティア企業の評価額が知識労働者の完全な置き換えを前提にしているという部分だ。上位コメントの三つがそれを解体しており、彼らが正しい。評価額はそれよりずっと小さな成果で保たれる。
+***** Comments
+- 最初の論点の前提がずれている。仮に各社が「大半の知識労働者をそのまま置き換える製品」を前提に評価されているとしても（実際は違う）、数字が合わない。
+- 2026年4月の論文でフロンティアモデルにチェスを指させた。合法手を明示しない場合、合法手の特定率が80%を超えたモデルは一つもなく、複数のモデルが合法手より非合法手を多く要求した。
+- 現行アーキテクチャなら、自動化としてのLLMには弱気、特定分野の人間の専門家と組ませるLLMには強気、というのが妥当な見立てだ。時間の把握にも本当に弱く、何にどれだけかかるかを見積もれない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+나비에-스토크스 이후에도 내가 LLM에 비관적인 이유
+***** TLDR
+Jay Kruer는 나비에-스토크스 증명이 LLM 자율 작업의 일반적 예고편이 아니라 최상의 조건이라고 본다. 순수 수학에는 이미 형식적 명세, 기계로 검증 가능한 증명, 감사받은 검증 프레임워크가 있어서 사람이 읽지 않아도 답을 확인할 수 있기 때문이다. 다른 모든 영역에서는 비용이 명세 작성에 쏠린다는 것이 그의 주장이다. reward hacking을 막을 만큼 정밀한 과제 기술서를 쓰려면 전문가의 시간이 들고, 그 비용은 그냥 직접 구현하는 비용을 넘기는 경우가 많다. 하드웨어 업계에서는 검증 인력이 설계 인력의 약 다섯 배에 이르기도 한다. 사람의 리뷰는 여전히 병목이며 모델 출력량에 맞춰 확장되지 않고, 사람들이 생각하는 만큼 많이 잡아내지도 못한다. 그는 리뷰를 통과한 정교한 공격의 예로 XZ 백도어를 든다. 결론은 지금 LLM을 감독 없이 돌릴 수 있는 회사는 세 종류뿐이라는 것이다. 실패 비용이 싼 곳, 가드레일이 있는 좁은 과제를 가진 곳, 그리고 이미 엄격한 검증에 돈을 쓰고 있는 곳.
+***** Take
+명세 비용 논증은 글에서 가장 강한 부분이고 연구소들이 결코 답하지 않는 부분이다. 코드를 더 빨리 쓰는 모델이 있어도 그 코드가 무엇을 해야 하는지 정확히 말하는 비용은 줄지 않는다. 소프트웨어 돈의 대부분은 원래 거기서 나간다. 약한 고리는 첫 전제, 즉 프런티어 기업 가치가 지식노동자 완전 대체 서사에 기대고 있다는 부분이다. 상위 댓글 세 개가 이를 해체했고 그들이 옳다. 그 가치평가는 훨씬 작은 성과로도 유지된다.
+***** Comments
+- 첫 번째 논점의 전제가 어긋났다. 연구소들이 '대다수 지식노동자를 그대로 대체하는 제품'을 기준으로 평가받는다고 쳐도(실제로는 아니다) 숫자가 맞지 않는다.
+- 2026년 4월 논문에서 프런티어 모델들에게 체스를 두게 했다. 어떤 수가 합법인지 알려주지 않으면 합법 수 식별률이 80%를 넘는 모델이 하나도 없었고, 여러 모델이 합법 수보다 불법 수를 더 많이 요청했다.
+- 현재 아키텍처 기준으로는 자동화로서의 LLM에 비관, 특정 분야 인간 전문가와 결합한 LLM에 낙관이 적절한 기대치다. 시간 감각에도 정말 약해서 무엇이 얼마나 걸릴지 추정하지 못한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué sigo siendo pesimista sobre los LLM después de Navier-Stokes
+***** TLDR
+Jay Kruer sostiene que la demostración de Navier-Stokes es el mejor caso posible para el trabajo autónomo de un LLM, no un anticipo del caso general: la matemática pura ya cuenta con especificaciones formales, pruebas verificables por máquina y marcos de verificación auditados, así que la respuesta se valida sin que nadie la lea. En todo lo demás, dice, el coste cae sobre la especificación. Redactar una descripción de tarea lo bastante precisa como para impedir el reward hacking consume tiempo de expertos que suele superar el coste de implementarla directamente, y señala el hardware, donde el personal de verificación puede quintuplicar al de diseño. La revisión humana sigue siendo el cuello de botella, no escala con el volumen que produce el modelo y detecta menos de lo que se cree: cita la puerta trasera de XZ como un ataque sofisticado que sobrevivió a la revisión. Su conclusión es que hoy solo tres tipos de empresa pueden operar LLM sin supervisión: aquellas donde fallar sale barato, las que tienen tareas estrechas con barreras, y las que ya pagan por validación rigurosa.
+***** Take
+El argumento del coste de especificación es lo más fuerte del texto y lo que los laboratorios nunca responden. Un modelo que escribe código más rápido no abarata decir con precisión qué debe hacer ese código, y ahí es donde ya se va la mayor parte del dinero del software. El eslabón débil es la premisa inicial de que las valoraciones asumen la sustitución completa del trabajador del conocimiento. Tres de los comentarios más votados la desmontan y tienen razón: esas valoraciones se sostienen con victorias mucho menores.
+***** Comments
+- La premisa del primer punto está mal. Incluso aceptando que los laboratorios se valoren por producir un reemplazo directo de la mayoría de los trabajadores del conocimiento, cosa que no ocurre, los números no cuadran.
+- Un artículo de abril de 2026 puso a modelos de frontera a jugar al ajedrez. Sin decirles qué jugadas eran legales, ningún modelo identificó jugadas legales por encima del 80%. Varios pidieron más jugadas ilegales que legales.
+- Pesimista sobre los LLM para automatizar y optimista sobre LLM más experto humano en un campo concreto es la expectativa correcta para las arquitecturas actuales. Además tienen problemas reales con el tiempo y no saben estimar cuánto tarda nada.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum ich nach Navier-Stokes weiterhin pessimistisch bei LLMs bin
+***** TLDR
+Jay Kruer argumentiert, der Navier-Stokes-Beweis sei der beste Fall für autonome LLM-Arbeit und kein Vorgeschmack auf den Normalfall: Reine Mathematik hat bereits formale Spezifikationen, maschinell prüfbare Beweise und auditierte Verifikationsframeworks, die Antwort lässt sich also bestätigen, ohne dass ein Mensch sie liest. Überall sonst, sagt er, landen die Kosten bei der Spezifikation. Eine Aufgabenbeschreibung präzise genug zu formulieren, um Reward Hacking zu verhindern, kostet Expertenzeit, die häufig teurer ist als die Umsetzung selbst; er verweist auf die Hardwarebranche, wo Verifikationspersonal Designer etwa fünf zu eins übertreffen kann. Die menschliche Prüfung bleibt der Engpass, skaliert nicht mit der Ausgabemenge des Modells und findet weniger als angenommen: Er nennt die XZ-Backdoor als raffinierten Angriff, der die Reviews überstand. Sein Fazit: Nur drei Arten von Firmen können LLMs heute unbeaufsichtigt betreiben. Solche, bei denen ein Fehler billig ist, solche mit engen, abgesicherten Aufgaben, und solche, die ohnehin schon für strenge Validierung zahlen.
+***** Take
+Das Argument zu den Spezifikationskosten ist das Stärkste am Text und genau das, was die Labore nie beantworten. Ein Modell, das schneller Code schreibt, macht es nicht billiger, präzise zu sagen, was der Code leisten soll, und genau dort verschwindet ohnehin der Großteil des Geldes in der Softwarebranche. Schwach ist die Ausgangsprämisse, die Bewertungen der Frontier-Labore beruhten auf dem vollständigen Ersatz von Wissensarbeitern. Drei der obersten Kommentare zerlegen das, und sie haben recht: Diese Bewertungen halten auch mit weit kleineren Erfolgen.
+***** Comments
+- Die Prämisse des ersten Punkts stimmt nicht. Selbst wenn man annimmt, die Labore würden danach bewertet, einen direkten Ersatz für die meisten Wissensarbeiter zu liefern, was nicht der Fall ist, gehen die Zahlen nicht auf.
+- Eine Arbeit vom April 2026 ließ Frontier-Modelle Schach spielen. Ohne Hinweis darauf, welche Züge legal sind, erkannte kein Modell legale Züge mit mehr als 80 Prozent Trefferquote. Mehrere forderten mehr illegale als legale Züge an.
+- Pessimistisch bei LLMs für Automatisierung und optimistisch bei LLM plus menschlichem Fachexperten ist für die aktuellen Architekturen die richtige Erwartung. Sie haben außerdem echte Probleme mit Zeit und können nicht schätzen, wie lange irgendetwas dauert.
+** Mistral X Mozilla: Private, Multilingual AI Browsing :mozilla:firefox:ai:privacy:
+:PROPERTIES:
+:ID:       49723408
+:URL:      https://mistral.ai/news/mistral-x-mozilla/
+:HN_URL:   https://news.ycombinator.com/item?id=49723408
+:POINTS:   62
+:COMMENTS: 12
+:BY:       vertigoruntime
+:END:
+
+*** TLDR
+Mistral models will power Firefox Smart Window, Mozilla's in-browser assistant that searches across your open tabs, summarizes pages and retrieves something you clicked away from. It is live in France and in North American beta, with the UK and Germany later in 2026. Mozilla's privacy claims are contractual rather than architectural: conversations are not saved on Mozilla's servers by default, and Mistral has agreed to zero data retention. Neither announcement page states whether inference runs on your machine or on a server, and the selling point of regional language fine-tuning points at the server.
+
+*** Take
+Both companies use the word private throughout and neither answers the single question that decides whether it is: where does the model run. Zero data retention is a promise in a contract, not a property of the system. Mozilla is one of the few vendors whose audience understands that difference, which makes the omission a choice rather than an oversight.
+
+*** Comments
+
+**** peri-cl
+:PROPERTIES:
+:COMMENT_ID: 49724318
+:END:
+This is an excellent use case for completely local small-model inference, and instead Mozilla is normalizing uploading your entire browsing history to a cloud. Neither marketing page is candid about which one you are consenting to.
+
+**** RicDan
+:PROPERTIES:
+:COMMENT_ID: 49724206
+:END:
+Sounds great, I will try it. I am curious what business value they get since this appears to be free. For Mistral it is excellent marketing material.
+
+**** sajithdilshan
+:PROPERTIES:
+:COMMENT_ID: 49724349
+:END:
+I honestly do not need AI in my browser and would not let an agent touch my login credentials, cookies or saved payment methods.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Mistral x Mozilla：私密、多语言的 AI 浏览
+***** TLDR
+Mistral 的模型将驱动 Firefox Smart Window，也就是 Mozilla 内置于浏览器的助手，它可以跨你打开的标签页搜索、总结网页、找回你点走的内容。目前在法国上线，北美处于测试阶段，英国和德国将在 2026 年晚些时候推出。Mozilla 的隐私承诺是合同层面的而非架构层面的：对话默认不保存在 Mozilla 的服务器上，Mistral 同意零数据留存。两家的公告页都没有说明推理是在你的设备上运行还是在服务器上运行，而「针对地区语言做微调」这个卖点指向的是服务器。
+***** Take
+两家公司通篇使用「私密」这个词，却都没有回答唯一能决定它是否私密的问题：模型跑在哪里。零数据留存是合同里的一句承诺，不是系统的一项属性。Mozilla 恰恰是少数几家用户听得懂这个区别的厂商，所以这个省略是选择，不是疏忽。
+***** Comments
+- 这本来是完全本地小模型推理的绝佳用例，结果 Mozilla 却在把「上传你的全部浏览历史到云端」变成常态。两家的营销页面都没有坦率说明你同意的到底是哪一种。
+- 听起来不错，我会试试。我很好奇他们从中获得什么商业价值，因为这看起来是免费的。对 Mistral 来说这是极好的营销素材。
+- 说实话我不需要浏览器里的 AI，也不会让一个 agent 碰我的登录凭据、cookie 或已保存的支付方式。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Mistral x Mozilla：プライベートで多言語なAIブラウジング
+***** TLDR
+MistralのモデルがFirefox Smart Windowを動かす。これはMozillaのブラウザ内蔵アシスタントで、開いているタブを横断して検索し、ページを要約し、閉じてしまった情報を引き戻す。フランスで提供中、北米はベータ、英国とドイツは2026年後半の予定。Mozillaのプライバシー主張はアーキテクチャではなく契約に基づく。会話は既定ではMozillaのサーバーに保存されず、Mistralはゼロデータ保持に同意している。推論が端末上で走るのかサーバー上で走るのかは、どちらの告知ページにも書かれておらず、地域言語向けファインチューニングという売り文句はサーバー側を示唆している。
+***** Take
+両社ともprivateという語を全編で使いながら、それがプライベートかどうかを決める唯一の問い、つまりモデルがどこで動くのかには答えていない。ゼロデータ保持は契約上の約束であり、システムの性質ではない。Mozillaはその違いを理解する読者を持つ数少ないベンダーであり、だからこの省略は見落としではなく選択だ。
+***** Comments
+- これは完全にローカルな小型モデル推論の絶好の用途なのに、Mozillaは閲覧履歴全体をクラウドに上げることを当たり前にしようとしている。どちらに同意させられているのか、どちらの広報ページも率直に説明していない。
+- よさそうだ、試してみる。無料に見えるので、彼らがどんな商業的価値を得るのか気になる。Mistralにとっては極上の宣伝材料だろう。
+- 正直、ブラウザにAIは要らないし、ログイン情報やクッキーや保存した決済手段にエージェントを触らせる気はない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Mistral x Mozilla: 프라이빗한 다국어 AI 브라우징
+***** TLDR
+Mistral의 모델이 Firefox Smart Window를 구동한다. 브라우저에 내장된 Mozilla의 어시스턴트로, 열려 있는 탭을 가로질러 검색하고 페이지를 요약하며 지나쳐 버린 내용을 다시 찾아준다. 프랑스에서 서비스 중이고 북미는 베타이며 영국과 독일은 2026년 후반 예정이다. Mozilla의 프라이버시 주장은 구조가 아니라 계약에 기반한다. 대화는 기본적으로 Mozilla 서버에 저장되지 않고 Mistral은 데이터 무보존에 동의했다. 추론이 기기에서 도는지 서버에서 도는지는 어느 발표 페이지에도 없고, 지역 언어 파인튜닝이라는 판매 포인트는 서버 쪽을 가리킨다.
+***** Take
+두 회사 모두 '프라이빗'이라는 단어를 내내 쓰면서, 그것이 실제로 프라이빗인지를 결정하는 단 하나의 질문, 즉 모델이 어디서 도는지에는 답하지 않는다. 데이터 무보존은 계약상의 약속이지 시스템의 속성이 아니다. Mozilla는 그 차이를 아는 사용자층을 가진 몇 안 되는 회사이고, 그래서 이 누락은 실수가 아니라 선택이다.
+***** Comments
+- 완전한 로컬 소형 모델 추론에 딱 맞는 사례인데, 오히려 Mozilla는 브라우징 기록 전체를 클라우드에 올리는 것을 표준으로 만들고 있다. 어느 쪽에 동의하는 것인지 두 마케팅 페이지 모두 솔직하게 설명하지 않는다.
+- 괜찮아 보인다, 써 보겠다. 무료로 보이는데 이들이 무슨 사업적 가치를 얻는지 궁금하다. Mistral에게는 훌륭한 마케팅 재료다.
+- 솔직히 브라우저에 AI는 필요 없고, 에이전트가 내 로그인 정보나 쿠키, 저장된 결제 수단을 건드리게 두지 않겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Mistral x Mozilla: navegación con IA privada y multilingüe
+***** TLDR
+Los modelos de Mistral impulsarán Firefox Smart Window, el asistente integrado de Mozilla que busca entre las pestañas abiertas, resume páginas y recupera algo que cerraste. Está activo en Francia y en beta en Norteamérica, con Reino Unido y Alemania más adelante en 2026. Las garantías de privacidad de Mozilla son contractuales, no arquitectónicas: las conversaciones no se guardan por defecto en sus servidores y Mistral aceptó cero retención de datos. Ninguna de las dos páginas dice si la inferencia corre en tu equipo o en un servidor, y el argumento de venta del ajuste fino por idioma regional apunta al servidor.
+***** Take
+Ambas empresas repiten la palabra privado y ninguna responde a la única pregunta que decide si lo es: dónde corre el modelo. Cero retención de datos es una promesa contractual, no una propiedad del sistema. Mozilla es de los pocos proveedores cuyo público entiende esa diferencia, lo que convierte la omisión en una decisión y no en un descuido.
+***** Comments
+- Este es un caso ideal para inferencia local con modelos pequeños, y en cambio Mozilla está normalizando subir todo tu historial de navegación a una nube. Ninguna de las dos páginas de marketing es franca sobre a cuál de las dos estás consintiendo.
+- Suena bien, lo probaré. Me da curiosidad qué valor comercial obtienen, ya que parece gratis. Para Mistral es excelente material de marketing.
+- Sinceramente no necesito IA en mi navegador y no dejaría que un agente tocara mis credenciales, mis cookies ni mis métodos de pago guardados.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Mistral x Mozilla: privates, mehrsprachiges KI-Browsen
+***** TLDR
+Mistral-Modelle sollen Firefox Smart Window antreiben, Mozillas eingebauten Assistenten, der über offene Tabs hinweg sucht, Seiten zusammenfasst und Dinge zurückholt, die man weggeklickt hat. Verfügbar in Frankreich, in Nordamerika als Beta, Großbritannien und Deutschland folgen später im Jahr 2026. Mozillas Datenschutzzusagen sind vertraglich, nicht architektonisch: Unterhaltungen werden standardmäßig nicht auf Mozillas Servern gespeichert, und Mistral hat Zero Data Retention zugesagt. Keine der beiden Ankündigungsseiten sagt, ob die Inferenz auf dem eigenen Gerät oder auf einem Server läuft, und das Verkaufsargument der regionalen Sprachfeinabstimmung deutet auf den Server.
+***** Take
+Beide Unternehmen benutzen durchgehend das Wort privat und beantworten die eine Frage nicht, die darüber entscheidet: Wo läuft das Modell? Zero Data Retention ist ein Versprechen im Vertrag, keine Eigenschaft des Systems. Mozilla gehört zu den wenigen Anbietern, deren Publikum diesen Unterschied kennt, was die Auslassung zu einer Entscheidung macht und nicht zu einem Versehen.
+***** Comments
+- Das wäre ein hervorragender Fall für vollständig lokale Inferenz mit kleinen Modellen, stattdessen normalisiert Mozilla das Hochladen des gesamten Browserverlaufs in eine Cloud. Keine der Marketingseiten sagt offen, wozu man eigentlich zustimmt.
+- Klingt gut, ich probiere es aus. Mich interessiert, welchen geschäftlichen Nutzen sie ziehen, da es kostenlos wirkt. Für Mistral ist es hervorragendes Werbematerial.
+- Ehrlich gesagt brauche ich keine KI im Browser und würde keinen Agenten an meine Zugangsdaten, Cookies oder gespeicherten Zahlungsmittel lassen.
+** Doing Everyone Else's Job :career:management:engineering:culture:
+:PROPERTIES:
+:ID:       49705944
+:URL:      https://yosefk.com/blog/doing-everyone-elses-job.html
+:HN_URL:   https://news.ycombinator.com/item?id=49705944
+:POINTS:   83
+:COMMENTS: 40
+:BY:       luu
+:END:
+
+*** TLDR
+Yossi Kreinin argues that organizations run on the small share of people who do work outside their job description when the responsible party will not: managing people you have no authority over, sending a patch to the team whose backlog will never reach your problem, integrating your work into someone else's system instead of waiting for them to adopt it. His historical example is Intel writing 32-bit CPU support into Microsoft's compiler. He is equally explicit about the two patterns that look identical and destroy companies: rebuilding in-house what already exists because headcount grew, and letting every department run a parallel copy of the same service. He says he regrets the years he spent declining to look past his own scope.
+
+*** Take
+The caveat is where the essay earns its keep. Doing someone else's job and rebuilding the platform team's platform produce the same commit history and opposite outcomes, and the only reliable difference is whether the other team wanted it. The comments then find the blocker Kreinin skips: at most large companies you cannot fix another team's code because you cannot get read access to it, and the permissions request outlives the bug.
+
+*** Comments
+
+**** dmurray
+:PROPERTIES:
+:COMMENT_ID: 49724096
+:END:
+The thing I hate about my current job is that this is impossible. Everything sits behind multiple layers of permissions, and it takes weeks to get access even for the job I was hired to do.
+
+**** exmadscientist
+:PROPERTIES:
+:COMMENT_ID: 49722448
+:END:
+The other powerful thing is the leverage. Someone needs a favor, you can deliver it. Something is on fire, you know what to do next or at least who to call.
+
+**** RevEng
+:PROPERTIES:
+:COMMENT_ID: 49722871
+:END:
+I disagree on centralization. I am building a central AI platform for a very large company that already has several, each built by a branch that is relatively happy with what it has.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+干别人的活
+***** TLDR
+Yossi Kreinin 认为，组织真正靠的是那一小部分人：当该负责的人不动时，他们去做自己职责范围之外的事。比如管理你并没有管辖权的人；给那个永远排不到你这个问题的团队直接提交补丁；把你的东西集成进别人的系统，而不是等对方来采纳。他举的历史例子是 Intel 把 32 位 CPU 支持写进了微软的编译器。他同样明确地指出了两种看起来一模一样、却会毁掉公司的模式：因为人头变多了就在内部重造已经存在的东西；以及任由每个部门各跑一份相同服务的平行版本。他说自己后悔那些年里拒绝越过自己职责边界去看一眼。
+***** Take
+这篇文章的价值在于那条限制条件。「干别人的活」和「重造平台团队的平台」产生的 commit 记录完全一样，结果却相反，而唯一可靠的区别是对方团队到底想不想要。评论区随后找到了 Kreinin 跳过的那个障碍：在大多数大公司，你修不了别的团队的代码，因为你连读权限都拿不到，而权限申请的存活时间比 bug 还长。
+***** Comments
+- 我现在这份工作最让我讨厌的一点，就是这件事根本做不到。所有东西都压在好几层权限后面，连我被雇来做的本职工作，拿到访问权都要花上几周。
+- 另一个强大之处是杠杆。有人需要帮忙，你能帮上；有东西着火了，你知道下一步该做什么，至少知道该找谁。
+- 关于集中化我不同意。我正在为一家非常大的公司做一个中央 AI 平台，而公司里已经有好几个了，每个都是某个分支自己做的，而且他们对自己手上那套还挺满意。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+他人の仕事を全部やる
+***** TLDR
+Yossi Kreininは、組織を動かしているのは、責任者が動かないときに職務記述書の外の仕事をする少数の人間だと論じる。権限のない相手をまとめること、自分の問題まで永遠に順番が回ってこないチームにパッチを送ること、相手が採用してくれるのを待つ代わりに自分の成果を相手のシステムに組み込むこと。歴史的な例として挙げるのは、Intelが32ビットCPU対応をMicrosoftのコンパイラに書き込んだ件だ。同時に彼は、見た目が同じで会社を壊す二つのパターンも明言する。人員が増えたからという理由で既存のものを社内で作り直すこと、そして各部署が同じサービスの並行版を走らせるのを放置することだ。自分の担当範囲の外を見ようとしなかった年月を後悔しているとも書いている。
+***** Take
+この文章の値打ちは但し書きにある。他人の仕事をやることと、プラットフォームチームのプラットフォームを作り直すことは、同じコミット履歴を生んで正反対の結果になる。確実な違いは相手のチームがそれを望んでいたかどうかだけだ。コメント欄はKreininが飛ばした障害を突く。大企業では他チームのコードを直せない、読み取り権限すら取れないからで、権限申請はバグより長生きする。
+***** Comments
+- 今の職場で嫌なのは、これが不可能だという点だ。すべてが何層もの権限の奥にあり、自分が雇われた仕事のための権限ですら取得に数週間かかる。
+- もう一つの強みはレバレッジだ。誰かが助けを必要とすれば応えられる。何かが燃えていれば、次に何をすべきか、少なくとも誰を呼ぶべきかが分かる。
+- 集中化には反対だ。私は非常に大きな企業で中央AIプラットフォームを作っているが、社内にはすでに複数あり、それぞれ別の部門が作って、その部門はいまの自前のもので十分満足している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+남의 일을 대신 하기
+***** TLDR
+Yossi Kreinin은 조직을 굴러가게 하는 것은 담당자가 움직이지 않을 때 직무기술서 밖의 일을 하는 소수라고 말한다. 권한이 없는 사람들을 이끌기, 내 문제까지 절대 순서가 오지 않을 팀에 패치를 직접 보내기, 상대가 채택해 주기를 기다리는 대신 내 결과물을 남의 시스템에 통합하기 같은 일이다. 역사적 사례로는 Intel이 32비트 CPU 지원을 Microsoft의 컴파일러에 직접 써 넣은 일을 든다. 그는 겉모습이 똑같으면서 회사를 망치는 두 가지 패턴도 분명히 짚는다. 인원이 늘었다는 이유로 이미 있는 것을 사내에서 다시 만드는 것, 그리고 부서마다 같은 서비스의 평행 사본을 돌리게 두는 것이다. 자기 범위 너머를 보지 않으려 했던 시절을 후회한다고도 쓴다.
+***** Take
+이 글의 값어치는 단서 조항에 있다. 남의 일을 해 주는 것과 플랫폼 팀의 플랫폼을 다시 만드는 것은 커밋 기록이 똑같고 결과는 정반대다. 믿을 만한 구분 기준은 상대 팀이 그것을 원했는지 하나뿐이다. 댓글은 Kreinin이 건너뛴 장애물을 짚는다. 대기업에서는 다른 팀 코드를 고칠 수 없는데, 읽기 권한조차 받지 못하기 때문이고, 권한 신청은 버그보다 오래 산다.
+***** Comments
+- 지금 직장에서 가장 싫은 점이 바로 이게 불가능하다는 것이다. 모든 것이 여러 겹의 권한 뒤에 있고, 내가 채용된 업무를 하기 위한 접근 권한조차 몇 주가 걸린다.
+- 또 하나의 강점은 레버리지다. 누가 부탁하면 들어줄 수 있고, 뭔가에 불이 나면 다음에 뭘 해야 할지, 최소한 누구를 불러야 할지는 안다.
+- 중앙집중화에는 동의하지 않는다. 나는 아주 큰 회사에서 중앙 AI 플랫폼을 만들고 있는데, 회사에는 이미 여러 개가 있고 각각 다른 부서가 만들었으며 그 부서들은 자기 것에 꽤 만족하고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Hacer el trabajo de todos los demás
+***** TLDR
+Yossi Kreinin sostiene que las organizaciones se sostienen sobre la pequeña porción de gente que hace trabajo fuera de su descripción de puesto cuando el responsable no lo hace: dirigir a personas sobre las que no tienes autoridad, enviar un parche al equipo cuyo backlog nunca llegará a tu problema, integrar lo tuyo en el sistema ajeno en lugar de esperar a que lo adopten. Su ejemplo histórico es Intel escribiendo el soporte de CPU de 32 bits dentro del compilador de Microsoft. También es explícito sobre los dos patrones que se ven idénticos y destruyen empresas: rehacer en casa lo que ya existe porque creció la plantilla, y dejar que cada departamento opere una copia paralela del mismo servicio. Dice que lamenta los años que pasó negándose a mirar más allá de su ámbito.
+***** Take
+La salvedad es donde el ensayo se gana el sueldo. Hacer el trabajo ajeno y rehacer la plataforma del equipo de plataforma producen el mismo historial de commits y resultados opuestos, y la única diferencia fiable es si el otro equipo lo quería. Los comentarios encuentran el obstáculo que Kreinin se salta: en la mayoría de las empresas grandes no puedes arreglar el código de otro equipo porque no consigues ni acceso de lectura, y la solicitud de permisos sobrevive al fallo.
+***** Comments
+- Lo que odio de mi trabajo actual es que esto es imposible. Todo está detrás de varias capas de permisos, y conseguir acceso lleva semanas incluso para el puesto para el que me contrataron.
+- La otra cosa poderosa es el apalancamiento. Si alguien necesita un favor, puedes dárselo. Si algo se incendia, sabes qué hacer o al menos a quién llamar.
+- No estoy de acuerdo con la centralización. Estoy construyendo una plataforma de IA central para una empresa enorme que ya tiene varias, cada una hecha por una división que está bastante contenta con la suya.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Arbeit aller anderen erledigen
+***** TLDR
+Yossi Kreinin argumentiert, Organisationen leben von dem kleinen Anteil an Leuten, die Arbeit außerhalb ihrer Stellenbeschreibung übernehmen, wenn der Zuständige es nicht tut: Menschen führen, über die man keine Weisungsbefugnis hat, einen Patch an das Team schicken, dessen Backlog das eigene Problem nie erreichen wird, die eigene Arbeit in das System anderer integrieren, statt auf deren Übernahme zu warten. Sein historisches Beispiel ist Intel, das die 32-Bit-CPU-Unterstützung in Microsofts Compiler schrieb. Ebenso deutlich benennt er die beiden Muster, die identisch aussehen und Firmen zerstören: intern nachbauen, was es schon gibt, weil die Belegschaft gewachsen ist, und jede Abteilung eine Parallelversion desselben Dienstes betreiben lassen. Er bereut die Jahre, in denen er sich weigerte, über den eigenen Zuständigkeitsbereich hinauszusehen.
+***** Take
+Die Einschränkung ist der eigentliche Wert des Texts. Die Arbeit eines anderen zu erledigen und die Plattform des Plattformteams nachzubauen erzeugen dieselbe Commit-Historie und gegenteilige Ergebnisse, und der einzige verlässliche Unterschied ist, ob das andere Team es wollte. Die Kommentare finden dann das Hindernis, das Kreinin überspringt: In den meisten Großkonzernen kann man fremden Code nicht reparieren, weil man nicht einmal Leserechte bekommt, und der Berechtigungsantrag überlebt den Fehler.
+***** Comments
+- Was ich an meinem jetzigen Job hasse, ist, dass genau das unmöglich ist. Alles liegt hinter mehreren Berechtigungsebenen, und selbst für die Arbeit, für die ich eingestellt wurde, dauert der Zugang Wochen.
+- Das andere Starke daran ist die Hebelwirkung. Braucht jemand einen Gefallen, kannst du ihn liefern. Brennt etwas, weißt du, was als Nächstes zu tun ist, zumindest wen man anruft.
+- Bei der Zentralisierung widerspreche ich. Ich baue gerade eine zentrale KI-Plattform für einen sehr großen Konzern, der bereits mehrere hat, jede von einem Bereich gebaut, der mit seiner eigenen recht zufrieden ist.
+** Learning Programming in an Age of LLMs :programming:llm:education:career:
+:PROPERTIES:
+:ID:       49723873
+:URL:      https://blog.ploeh.dk/2026/09/16/on-learning-programming-in-an-age-of-llms/
+:HN_URL:   https://news.ycombinator.com/item?id=49723873
+:POINTS:   52
+:COMMENTS: 32
+:BY:       moneroloop2018
+:END:
+
+*** TLDR
+Mark Seemann publishes his answers to a reader with no CS background who built a large TypeScript system with LLM help and is now stuck turning it into a product: each fix surfaces another failure he cannot reason about, and he concludes he built a system above his own level of understanding. Seemann's advice is to learn fundamentals anyway, and to restrict LLM questions to falsifiable ones, such as whether a piece of code is faster, rather than unverifiable ones like what to learn next. His frame is the old rule that you should understand one abstraction layer below where you work and one above, which is exactly what output you cannot check denies you. He is open that reaching that level took him decades and that he does not know whether the current timeline still allows it.
+
+*** Take
+The most useful sentence in the piece is the reader's, not Seemann's: a system above my own level of understanding. That is a precise description of the failure mode, and it is worth more than the advice that follows. Seemann's answer is honest about its own limit, which the thread then presses on: someone who learned this in the 1990s can tell you what competence feels like from the inside, not how to get there from here.
+
+*** Comments
+
+**** japhyr
+:PROPERTIES:
+:COMMENT_ID: 49724240
+:END:
+I wrote Python Crash Course and I received this exact email this week. I was planning a public response too, because a lot of people getting into programming right now are asking variations of the same questions.
+
+**** Trusteando
+:PROPERTIES:
+:COMMENT_ID: 49724189
+:END:
+It would be better to ask someone who is learning right now using LLMs. Someone who learned programming thirty years ago can only give you one side of the coin.
+
+**** duendefm
+:PROPERTIES:
+:COMMENT_ID: 49724345
+:END:
+Working with AI is problematic. It can speed you up and delay you at the same time. For system maintenance across many machines, fast, you cannot rely on a cloud AI.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+在大模型时代学编程
+***** TLDR
+Mark Seemann 公开回复了一位读者。这位读者没有计算机科学背景，借助大模型搭出了一个庞大的 TypeScript 系统，如今卡在把它变成产品这一步：每修好一个问题就冒出另一个他无法推理的故障，他自己的结论是，他造了一个超出自己理解水平的系统。Seemann 的建议是，基础还是要学；并且只向大模型问那些可以被证伪的问题，比如某段代码是不是更快，而不是「我接下来该学什么」这类无法验证的问题。他的框架是那条老规矩：你应该理解你工作层之下的一层和之上的一层，而这恰恰是你无法检验的输出所剥夺的东西。他坦承自己走到那个水平花了几十年，也不知道今天的时间表是否还允许这样。
+***** Take
+全文最有用的一句话出自那位读者，而不是 Seemann：一个超出我自己理解水平的系统。这是对这种失败模式的精确描述，比后面的建议更有价值。Seemann 的回答对自身局限很诚实，而评论区正是在这一点上追问：一个在 1990 年代学会这件事的人，能告诉你「胜任」从内部感觉起来是什么样，却说不出从今天的起点该怎么走到那里。
+***** Comments
+- 《Python 编程：从入门到实践》是我写的，这周我收到了一模一样的邮件。我本来也打算公开回复，因为现在刚入门编程的很多人问的都是同一类问题的变体。
+- 更好的做法是去问一个正在用大模型学习的人。一个三十年前学会编程的人只能给你硬币的一面。
+- 跟 AI 一起工作是有问题的。它能让你更快，同时也能拖慢你。做系统运维时要在很多台机器上快速处理，你没法指望云端 AI。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+LLM時代にプログラミングを学ぶこと
+***** TLDR
+Mark Seemannが、ある読者への回答を公開した。CSの学位を持たないその読者はLLMの助けで大きなTypeScriptシステムを作り上げ、いまそれを製品にする段階で行き詰まっている。一つ直すたびに、自分では筋道を追えない別の不具合が出てくる。本人の結論は、自分の理解水準を超えたシステムを作ってしまった、というものだ。Seemannの助言は、それでも基礎を学べ、そしてLLMには反証可能な問い、たとえばこのコードは速いのかといった問いだけをぶつけ、次に何を学ぶべきかのような検証不能な問いは避けよ、である。彼の枠組みは、自分の作業レイヤーの一つ下と一つ上を理解しておけという古い原則だ。検証できない出力は、まさにそれを奪う。自分がその水準に達するのに数十年かかったこと、そして今の時間軸でそれが許されるのか分からないことも、彼は率直に書いている。
+***** Take
+この記事で最も有用な一文はSeemannではなく読者のものだ。自分の理解水準を超えたシステム。これはこの失敗様式の正確な記述であり、後に続く助言より価値がある。Seemannの回答は自らの限界に誠実で、スレッドはまさにそこを突く。1990年代にこれを身につけた人は、熟達が内側からどう感じられるかは語れても、いまの出発点からそこへどう行くかは語れない。
+***** Comments
+- 私は『Python Crash Course』の著者で、今週まったく同じメールを受け取った。私も公開の回答を書こうと思っていた。いまプログラミングを始める多くの人が、同じ問いの変奏を投げてきているからだ。
+- いまLLMを使って学んでいる人に聞いたほうがいい。三十年前にプログラミングを覚えた人はコインの片面しか示せない。
+- AIと組むのは厄介だ。速くしてくれると同時に遅らせもする。多数のマシンにまたがる保守作業を素早くこなすとき、クラウドのAIには頼れない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+LLM 시대에 프로그래밍을 배운다는 것
+***** TLDR
+Mark Seemann이 한 독자에게 보내는 답을 공개했다. 전산 전공이 아닌 이 독자는 LLM의 도움으로 큰 TypeScript 시스템을 만들었고, 이제 그것을 제품으로 만드는 단계에서 막혔다. 하나를 고치면 스스로 따라갈 수 없는 다른 고장이 나온다. 본인의 결론은 자기 이해 수준을 넘어선 시스템을 만들어 버렸다는 것이다. Seemann의 조언은 그래도 기초를 배우라는 것, 그리고 LLM에는 이 코드가 더 빠른가처럼 반증 가능한 질문만 던지고 다음에 무엇을 배워야 하나 같은 검증 불가능한 질문은 피하라는 것이다. 그의 틀은 자기 작업 계층의 한 단계 아래와 한 단계 위를 이해하라는 오래된 원칙이며, 검증할 수 없는 출력이 빼앗는 것이 정확히 그것이다. 그 수준에 이르는 데 수십 년이 걸렸고 지금의 시간표가 그것을 허락하는지는 모르겠다고 그는 솔직히 적는다.
+***** Take
+이 글에서 가장 쓸모 있는 문장은 Seemann이 아니라 독자의 것이다. 내 이해 수준을 넘어선 시스템. 이 실패 양식에 대한 정확한 서술이고, 뒤따르는 조언보다 값지다. Seemann의 답은 자기 한계에 정직하고, 스레드는 바로 그 지점을 파고든다. 1990년대에 이것을 익힌 사람은 숙련이 안에서 어떤 느낌인지는 말해 줄 수 있어도, 지금 이 출발점에서 거기까지 어떻게 가는지는 말해 주지 못한다.
+***** Comments
+- 내가 『파이썬 크래시 코스』의 저자인데, 이번 주에 똑같은 이메일을 받았다. 나도 공개 답변을 쓸 생각이었다. 지금 프로그래밍에 입문하는 많은 사람이 같은 질문의 변주를 던지고 있기 때문이다.
+- 차라리 지금 LLM으로 배우고 있는 사람에게 묻는 편이 낫다. 삼십 년 전에 프로그래밍을 배운 사람은 동전의 한 면만 보여 줄 수 있다.
+- AI와 일하는 건 까다롭다. 속도를 올려 주는 동시에 늦추기도 한다. 여러 대의 장비를 빠르게 손봐야 하는 시스템 유지보수에서는 클라우드 AI에 기댈 수 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Aprender a programar en la era de los LLM
+***** TLDR
+Mark Seemann publica sus respuestas a un lector sin formación en informática que construyó un sistema grande en TypeScript con ayuda de LLM y ahora está atascado al convertirlo en producto: cada arreglo destapa otro fallo que no sabe razonar, y su propia conclusión es que construyó un sistema por encima de su nivel de comprensión. El consejo de Seemann es aprender los fundamentos igualmente y limitar las preguntas al LLM a las falsables, como si un fragmento de código es más rápido, en lugar de las inverificables como qué estudiar a continuación. Su marco es la vieja regla de entender una capa de abstracción por debajo de donde trabajas y otra por encima, que es justo lo que te niega una salida que no puedes comprobar. Reconoce abiertamente que a él le llevó décadas llegar ahí y que no sabe si el calendario actual lo permite.
+***** Take
+La frase más útil del texto es del lector, no de Seemann: un sistema por encima de mi propio nivel de comprensión. Es una descripción precisa del modo de fallo y vale más que los consejos que vienen después. La respuesta de Seemann es honesta sobre su propio límite, y el hilo aprieta ahí: quien aprendió esto en los noventa puede contarte cómo se siente la competencia desde dentro, no cómo llegar hasta ella desde aquí.
+***** Comments
+- Escribí Python Crash Course y recibí este mismo correo esta semana. También pensaba responder en público, porque mucha gente que empieza a programar ahora hace variaciones de estas mismas preguntas.
+- Sería mejor preguntárselo a alguien que esté aprendiendo ahora mismo con LLM. Quien aprendió a programar hace treinta años solo puede darte una cara de la moneda.
+- Trabajar con IA es problemático. Puede acelerarte y retrasarte a la vez. Para mantenimiento de sistemas en muchas máquinas y con prisa, no puedes depender de una IA en la nube.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Programmieren lernen im Zeitalter der LLMs
+***** TLDR
+Mark Seemann veröffentlicht seine Antworten an einen Leser ohne Informatikhintergrund, der mit LLM-Hilfe ein großes TypeScript-System gebaut hat und nun daran scheitert, ein Produkt daraus zu machen: Jede Korrektur bringt einen weiteren Fehler hervor, den er nicht durchdenken kann, und sein eigenes Fazit lautet, er habe ein System oberhalb seines eigenen Verständnisniveaus gebaut. Seemanns Rat: Lerne trotzdem die Grundlagen und stelle dem LLM nur falsifizierbare Fragen, etwa ob ein Stück Code schneller ist, statt unüberprüfbarer wie der nach dem nächsten Lernschritt. Sein Rahmen ist die alte Regel, eine Abstraktionsebene unter und eine über der eigenen Arbeit zu verstehen, und genau das nimmt einem eine Ausgabe, die man nicht prüfen kann. Er räumt offen ein, dass er dafür Jahrzehnte brauchte und nicht weiß, ob der heutige Zeitplan das noch zulässt.
+***** Take
+Der nützlichste Satz stammt vom Leser, nicht von Seemann: ein System oberhalb meines eigenen Verständnisniveaus. Das ist eine präzise Beschreibung des Fehlermodus und wiegt schwerer als der Rat danach. Seemanns Antwort ist ehrlich über ihre eigene Grenze, und genau dort hakt der Thread nach: Wer das in den Neunzigern gelernt hat, kann beschreiben, wie sich Kompetenz von innen anfühlt, nicht, wie man von hier aus dorthin kommt.
+***** Comments
+- Ich habe Python Crash Course geschrieben und genau diese E-Mail diese Woche bekommen. Ich wollte ebenfalls öffentlich antworten, weil viele, die gerade mit dem Programmieren anfangen, Varianten derselben Fragen stellen.
+- Besser wäre es, jemanden zu fragen, der gerade jetzt mit LLMs lernt. Wer vor dreißig Jahren programmieren gelernt hat, kann nur eine Seite der Medaille zeigen.
+- Die Arbeit mit KI ist heikel. Sie kann dich beschleunigen und gleichzeitig ausbremsen. Bei der Systemwartung über viele Maschinen hinweg, und zwar schnell, kann man sich nicht auf eine Cloud-KI verlassen.
+** Negativland, Culture Jamming, and the Art of Making Something New :music:copyright:internet-archive:culture:
+:PROPERTIES:
+:ID:       49721548
+:URL:      https://blog.archive.org/2026/09/11/negativland-culture-jamming-and-the-art-of-making-something-new/
+:HN_URL:   https://news.ycombinator.com/item?id=49721548
+:POINTS:   86
+:COMMENTS: 21
+:BY:       bananaboy
+:END:
+
+*** TLDR
+The Internet Archive profiles Negativland ahead of a performance at its San Francisco headquarters on September 16. The collective has been building records out of found audio since 1980, more than thirty releases across 46 years. In 1991 U2's label sued them over a track sampling I Still Haven't Found What I'm Looking For; they settled, then turned the case into a book about fair use, Fair Use: The Story Of The Letter U And The Numeral Two. Since 2015 the Archive has hosted more than 4,000 hours of Over the Edge, their weekly radio show running continuously since 1981, free to stream.
+
+*** Take
+The 1991 case is the part worth rereading in 2026. A band was sued into a settlement over a few seconds of borrowed audio, while the current fight over training data involves entire catalogues ingested at once, and the question of who gets sued has not changed direction. The Archive hosting 4,000 hours of the tapes for free while defending itself in its own copyright litigation is the most fitting detail in the post.
+
+*** Comments
+
+**** Lammy
+:PROPERTIES:
+:COMMENT_ID: 49722149
+:END:
+There is a track on Escape From Noise from 1987 that predicts the current housing crisis by comparing how people talk about development to how they talk about prohibitions on owning things.
+
+**** jordanb
+:PROPERTIES:
+:COMMENT_ID: 49722119
+:END:
+I once changed someone's mind about Flock cameras by showing them the More Data music video.
+
+**** cobbzilla
+:PROPERTIES:
+:COMMENT_ID: 49721707
+:END:
+Evolution Control Committee had wild stuff in a similar vein. Totally not on Spotify, so many copyright issues.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Negativland、文化干扰，以及创造新东西这门手艺
+***** TLDR
+互联网档案馆在 9 月 16 日于旧金山总部举办的演出之前，刊文介绍了 Negativland。这个团体从 1980 年起就用捡来的声音素材做唱片，46 年间发行了三十多张作品。1991 年，U2 的唱片公司因为一首采样了《I Still Haven't Found What I'm Looking For》的曲子起诉他们；他们和解了，随后把这场官司写成了一本关于合理使用的书《Fair Use: The Story Of The Letter U And The Numeral Two》。自 2015 年起，档案馆免费托管了超过 4000 小时的《Over the Edge》，那是他们从 1981 年起从未中断的每周电台节目。
+***** Take
+1991 年那场官司才是 2026 年值得重读的部分。一支乐队因为几秒钟借用的声音被告到必须和解，而如今围绕训练数据的争斗涉及的是整批整批被一次性吞下的作品目录，「谁会被告」这个问题的方向至今没变。档案馆一边在自己的版权诉讼里自辩，一边免费托管这 4000 小时录音，是全文最贴切的一个细节。
+***** Comments
+- 1987 年的《Escape From Noise》里有一首曲子预言了如今的住房危机，它把人们谈论开发建设的方式，和人们谈论禁止拥有某些东西的方式做了类比。
+- 我曾经靠给人看《More Data》的音乐录影带，改变了他对 Flock 摄像头的看法。
+- Evolution Control Committee 也做过类似路子的疯狂作品。在 Spotify 上完全找不到，版权问题太多了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Negativland、カルチャー・ジャミング、そして新しいものを作るという技
+***** TLDR
+インターネット・アーカイブが、9月16日にサンフランシスコ本部で行う公演を前にNegativlandを紹介した。この集団は1980年から拾い集めた音でレコードを作り続け、46年で30枚以上を発表している。1991年、U2のレーベルは「I Still Haven't Found What I'm Looking For」をサンプリングした曲をめぐって彼らを提訴した。和解した後、彼らはこの裁判をフェアユースについての本『Fair Use: The Story Of The Letter U And The Numeral Two』にまとめた。2015年以降、アーカイブは彼らが1981年から途切れず続ける週刊ラジオ番組『Over the Edge』を4000時間以上、無料で公開している。
+***** Take
+2026年に読み返す価値があるのは1991年の裁判のほうだ。数秒の借用音でバンドが和解に追い込まれた一方、いま争われている学習データの問題ではカタログ丸ごとが一度に取り込まれており、誰が訴えられるのかという問いの向きは変わっていない。自らの著作権訴訟を戦いながら4000時間のテープを無料で公開しているアーカイブという事実が、この記事で最もふさわしい一点だ。
+***** Comments
+- 1987年の『Escape From Noise』に、いまの住宅危機を予言した曲がある。開発について人々が語る言い方を、何かの所有禁止について語る言い方になぞらえている。
+- 『More Data』のミュージックビデオを見せて、Flockカメラについての相手の考えを変えさせたことがある。
+- Evolution Control Committeeも同系統でとんでもないことをやっていた。Spotifyには全然ない、著作権の問題が多すぎて。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Negativland, 컬처 재밍, 그리고 새로운 것을 만드는 기술
+***** TLDR
+인터넷 아카이브가 9월 16일 샌프란시스코 본부에서 열리는 공연에 앞서 Negativland를 소개했다. 이 집단은 1980년부터 주워 모은 소리로 음반을 만들어 왔고 46년 동안 서른 장 넘게 발표했다. 1991년 U2의 레이블은 'I Still Haven't Found What I'm Looking For'를 샘플링한 곡을 두고 이들을 고소했다. 합의한 뒤 이들은 그 사건을 공정 이용에 관한 책 『Fair Use: The Story Of The Letter U And The Numeral Two』로 펴냈다. 2015년부터 아카이브는 1981년 이래 끊이지 않고 이어진 주간 라디오 프로그램 『Over the Edge』를 4000시간 넘게 무료로 공개하고 있다.
+***** Take
+2026년에 다시 읽을 가치가 있는 대목은 1991년 소송이다. 몇 초 빌려 쓴 소리 때문에 밴드가 합의로 내몰렸는데, 지금 학습 데이터를 둘러싼 싸움에서는 카탈로그 전체가 한 번에 삼켜지고 있고, 누가 고소를 당하는가라는 물음의 방향은 바뀌지 않았다. 자기 저작권 소송을 치르면서도 4000시간의 테이프를 무료로 공개하는 아카이브가 이 글에서 가장 어울리는 대목이다.
+***** Comments
+- 1987년 『Escape From Noise』에 지금의 주택 위기를 예언한 곡이 있다. 사람들이 개발을 이야기하는 방식을 무언가의 소유 금지를 이야기하는 방식에 빗댄다.
+- 『More Data』 뮤직비디오를 보여 줘서 Flock 카메라에 대한 어떤 사람의 생각을 바꾼 적이 있다.
+- Evolution Control Committee도 비슷한 계열로 대단한 걸 만들었다. Spotify에는 전혀 없다, 저작권 문제가 너무 많아서.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Negativland, culture jamming y el arte de hacer algo nuevo
+***** TLDR
+El Internet Archive perfila a Negativland antes de una actuación en su sede de San Francisco el 16 de septiembre. El colectivo lleva construyendo discos con audio encontrado desde 1980, más de treinta lanzamientos en 46 años. En 1991 el sello de U2 los demandó por un tema que sampleaba I Still Haven't Found What I'm Looking For; llegaron a un acuerdo y luego convirtieron el caso en un libro sobre uso legítimo, Fair Use: The Story Of The Letter U And The Numeral Two. Desde 2015 el Archive aloja más de 4.000 horas de Over the Edge, su programa de radio semanal en emisión continua desde 1981, gratis para escuchar.
+***** Take
+El caso de 1991 es lo que vale la pena releer en 2026. A una banda la llevaron a un acuerdo por unos segundos de audio prestado, mientras que la pelea actual por los datos de entrenamiento involucra catálogos enteros engullidos de una vez, y la dirección de quién acaba demandado no ha cambiado. Que el Archive aloje gratis 4.000 horas de esas cintas mientras se defiende en su propio litigio de derechos de autor es el detalle más apropiado del texto.
+***** Comments
+- Hay un tema en Escape From Noise, de 1987, que predice la crisis de vivienda actual comparando cómo habla la gente del desarrollo urbano con cómo habla de prohibir la posesión de ciertas cosas.
+- Una vez le cambié la opinión a alguien sobre las cámaras de Flock enseñándole el videoclip de More Data.
+- Evolution Control Committee hizo cosas salvajes en la misma línea. No están en Spotify en absoluto, demasiados problemas de derechos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Negativland, Culture Jamming und die Kunst, etwas Neues zu machen
+***** TLDR
+Das Internet Archive porträtiert Negativland vor einem Auftritt in seiner Zentrale in San Francisco am 16. September. Das Kollektiv baut seit 1980 Platten aus gefundenem Audiomaterial, mehr als dreißig Veröffentlichungen in 46 Jahren. 1991 verklagte U2s Label die Gruppe wegen eines Stücks, das I Still Haven't Found What I'm Looking For samplete; sie einigten sich außergerichtlich und machten aus dem Fall ein Buch über Fair Use, Fair Use: The Story Of The Letter U And The Numeral Two. Seit 2015 hostet das Archive über 4.000 Stunden von Over the Edge, ihrer seit 1981 ununterbrochen laufenden wöchentlichen Radiosendung, kostenlos zum Anhören.
+***** Take
+Der Fall von 1991 lohnt 2026 die erneute Lektüre. Eine Band wurde wegen weniger Sekunden geliehenen Tons in einen Vergleich geklagt, während im heutigen Streit um Trainingsdaten ganze Kataloge auf einmal einverleibt werden, und die Richtung der Frage, wer verklagt wird, hat sich nicht gedreht. Dass das Archive 4.000 Stunden dieser Bänder kostenlos bereitstellt, während es sich im eigenen Urheberrechtsverfahren verteidigt, ist das passendste Detail des Beitrags.
+***** Comments
+- Auf Escape From Noise von 1987 gibt es ein Stück, das die heutige Wohnungskrise vorwegnimmt, indem es die Redeweise über Bauentwicklung mit der Redeweise über Besitzverbote vergleicht.
+- Ich habe einmal jemandes Meinung über Flock-Kameras geändert, indem ich ihm das Musikvideo zu More Data gezeigt habe.
+- Das Evolution Control Committee hat in derselben Richtung wilde Sachen gemacht. Überhaupt nicht auf Spotify, viel zu viele Urheberrechtsprobleme.
