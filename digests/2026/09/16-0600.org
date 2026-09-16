@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-09-16 06:00 UTC
+#+DATE: 2026-09-16T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Apple signs photos inside the camera sensor, Cloudflare hands out AI-crawler report cards, and a 3dfx Voodoo comes back as FPGA logic
+
+* Highlights
+- Apple Reference Image: signed at the sensor, before the OS ever sees the pixels
+- Cloudflare's 'Accountable' label lets you block AI training and keep search traffic
+- 3dfx Voodoo rebuilt in SystemVerilog: Tomb Raider at 12 FPS, bottlenecked by the CPU
+- A flight simulator where you are the passenger, and the update added legs
+- Open-source flight planning that pilots say models the fuel but not the sky
+
+* Stories
+
+** Apple Reference Image: A New Approach for Verified Photography :apple:security:cryptography:photography:ai:
+:PROPERTIES:
+:ID:       49721322
+:URL:      https://security.apple.com/blog/apple-reference-image/
+:HN_URL:   https://news.ycombinator.com/item?id=49721322
+:POINTS:   134
+:COMMENTS: 73
+:BY:       imwally
+:END:
+
+*** TLDR
+Apple shipped an opt-in camera mode on the iPhone 18 Pro that signs pixel data inside the sensor, before the operating system sees it. The signed digital negative goes to Private Cloud Compute, which verifies the factory binding between that sensor and that device, does the demosaicing and tone mapping itself, scores the result with a neural network, and applies a post-quantum composite signature (MLDSA87-RSA-3072). Two timestamps, a lower bound from a recent heartbeat and an upper bound taken after capture, pin down when the shot happened, and the timestamp service is queried over Oblivious HTTP so it never learns the photographer's IP. C2PA attaches provenance after capture and can be broken anywhere down the editing chain; this chain starts at the hardware and carries no photographer identity.
+
+*** Take
+The sensor-level chain of trust is a genuine improvement on C2PA, and it does nothing about the attack in the top comment: point a verified iPhone at a 4K monitor showing a generated image and you get a valid Reference Image. Apple is certifying that a real camera saw real light, which is a much narrower claim than 'verified photography'. Worth shipping, badly named.
+
+*** Comments
+
+**** tgsovlerkhgsel
+The journalist use case is the PR story. This will be really useful for identity verification and insurance apps, and it can shift things from 'you need a smartphone to live normally' to 'you need an iPhone to live normally'.
+
+**** tristanj
+Apple doesn't address the replay case. Generate an image, display it on a high-resolution monitor, photograph the monitor with an iPhone 18 Pro, and you have a valid Reference Image.
+
+**** phkx
+Combine photos of the same event taken from different angles by different people and you get a second kind of verification that doesn't depend on one vendor.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Apple Reference Image：一种验证照片真实性的新方法
+***** TLDR
+苹果在 iPhone 18 Pro 上推出了一个可选的相机模式：像素数据在传感器内部就被签名，操作系统还没看到它。签名后的数字底片会上传到 Private Cloud Compute，由它验证该传感器与该设备在出厂时绑定的关系，自行完成去马赛克和色调映射，用神经网络给结果打一个置信分，再加上后量子复合签名（MLDSA87-RSA-3072）。两个时间戳（来自最近一次心跳的下界和拍摄后取得的上界）圈定拍摄时刻，时间戳服务通过 Oblivious HTTP 查询，因此永远不知道拍摄者的 IP。C2PA 是在拍摄之后附加来源信息，编辑链上任何一环都可能被攻破；这条信任链从硬件开始，而且不携带拍摄者身份。
+***** Take
+传感器层面的信任链确实比 C2PA 进了一大步，但它对热门评论里提到的攻击毫无办法：拿一台经过验证的 iPhone 去拍一块显示着 AI 生成图像的 4K 显示器，你照样得到一张有效的 Reference Image。苹果证明的是一台真实相机接收过真实的光，这个结论比「验证照片」窄得多。功能值得做，名字起错了。
+***** Comments
+- 记者的使用场景只是公关说辞。这套东西真正有用的地方是身份验证和保险应用，它会把「不用智能手机就没法正常生活」变成「不用 iPhone 就没法正常生活」。
+- 苹果没有处理翻拍问题。生成一张图，放到高分辨率显示器上，用 iPhone 18 Pro 拍下屏幕，你就拿到了一张有效的 Reference Image。
+- 把不同人从不同角度拍摄的同一事件的照片放在一起，就能得到另一种不依赖单一厂商的验证方式。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Apple Reference Image: 写真の真正性を検証する新しい手法
+***** TLDR
+AppleはiPhone 18 Proにオプトイン式のカメラモードを投入した。ピクセルデータはOSが受け取る前に、センサー内部で署名される。署名されたデジタルネガはPrivate Cloud Computeに送られ、そのセンサーとその端末が工場で結び付けられたことを検証し、デモザイクとトーンマッピングを自ら行い、ニューラルネットワークで信頼度スコアを付け、ポスト量子の複合署名（MLDSA87-RSA-3072）を施す。直近のハートビートによる下限と撮影後に取得する上限という2つのタイムスタンプが撮影時刻を挟み込み、タイムスタンプ用のサービスはOblivious HTTP経由で問い合わせるため撮影者のIPを知らない。C2PAは撮影後に来歴情報を付与するので編集チェーンのどこでも破られうるが、こちらは信頼の連鎖がハードウェアから始まり、撮影者の身元を含まない。
+***** Take
+センサーレベルの信頼の連鎖はC2PAより明確に優れている。それでもトップコメントの攻撃には無力だ。生成画像を映した4Kモニターを検証済みiPhoneで撮れば、有効なReference Imageができあがる。Appleが証明しているのは実在のカメラが実在の光を受けたことであり、「検証された写真」という言葉よりずっと狭い主張だ。出す価値はあるが、名前が悪い。
+***** Comments
+- ジャーナリストの用途は広報用の話だ。本当に効くのは本人確認や保険のアプリで、「スマホがないと普通に暮らせない」を「iPhoneがないと普通に暮らせない」に変えうる。
+- Appleは再撮影の問題に触れていない。画像を生成して高解像度モニターに表示し、それをiPhone 18 Proで撮れば、有効なReference Imageになる。
+- 同じ出来事を別々の人が別の角度から撮った写真を突き合わせれば、単一ベンダーに依存しないもう一つの検証手段が得られる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+애플 레퍼런스 이미지: 사진 진위를 검증하는 새로운 접근
+***** TLDR
+애플이 아이폰 18 프로에 선택형 카메라 모드를 내놨다. 픽셀 데이터는 운영체제가 보기도 전에 센서 내부에서 서명된다. 서명된 디지털 네거티브는 프라이빗 클라우드 컴퓨트로 올라가고, 거기서 해당 센서와 해당 기기가 공장에서 묶인 관계를 검증하고 디모자이킹과 톤 매핑을 직접 수행한 뒤 신경망으로 신뢰도 점수를 매기고 포스트 양자 복합 서명(MLDSA87-RSA-3072)을 붙인다. 최근 하트비트에서 온 하한과 촬영 직후의 상한, 두 개의 타임스탬프가 촬영 시각을 좁힌다. 타임스탬프 서비스는 Oblivious HTTP로 호출되므로 촬영자의 IP를 알 수 없다. C2PA는 촬영 이후에 출처 정보를 붙여 편집 사슬 어디서든 깨질 수 있지만, 이 사슬은 하드웨어에서 시작하고 촬영자 신원을 담지 않는다.
+***** Take
+센서 단계의 신뢰 사슬은 C2PA보다 분명히 낫다. 그런데도 최상단 댓글이 지적한 공격은 막지 못한다. 생성 이미지를 띄운 4K 모니터를 검증된 아이폰으로 찍으면 유효한 레퍼런스 이미지가 나온다. 애플이 증명하는 것은 진짜 카메라가 진짜 빛을 받았다는 사실이고, 이는 '검증된 사진'이라는 말보다 훨씬 좁은 주장이다. 낼 만한 기능이지만 이름을 잘못 지었다.
+***** Comments
+- 기자용 사례는 홍보용 이야기다. 진짜 쓸모는 신원 확인과 보험 앱이고, '스마트폰 없으면 정상적으로 못 산다'를 '아이폰 없으면 정상적으로 못 산다'로 바꿔놓을 수 있다.
+- 애플은 재촬영 문제를 다루지 않는다. 이미지를 생성해 고해상도 모니터에 띄우고 아이폰 18 프로로 찍으면 유효한 레퍼런스 이미지가 된다.
+- 같은 사건을 서로 다른 사람이 다른 각도에서 찍은 사진을 모으면, 단일 업체에 의존하지 않는 또 다른 검증이 생긴다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Apple Reference Image: un nuevo enfoque para la fotografía verificada
+***** TLDR
+Apple lanzó un modo de cámara opcional en el iPhone 18 Pro que firma los datos de píxeles dentro del sensor, antes de que el sistema operativo los vea. El negativo digital firmado va a Private Cloud Compute, que verifica el vínculo de fábrica entre ese sensor y ese dispositivo, hace el demosaicing y el mapeo de tonos por su cuenta, puntúa el resultado con una red neuronal y aplica una firma compuesta post-cuántica (MLDSA87-RSA-3072). Dos marcas de tiempo, una cota inferior de un heartbeat reciente y una cota superior tomada tras la captura, acotan el momento de la toma, y el servicio de sellado se consulta por Oblivious HTTP, así que nunca conoce la IP del fotógrafo. C2PA adjunta la procedencia después de la captura y se puede romper en cualquier punto de la cadena de edición; esta cadena empieza en el hardware y no lleva identidad del fotógrafo.
+***** Take
+La cadena de confianza a nivel de sensor mejora de verdad lo que hace C2PA, y no resuelve nada del ataque que señala el comentario más votado: apunta un iPhone verificado a un monitor 4K que muestra una imagen generada y obtienes una Reference Image válida. Apple certifica que una cámara real recibió luz real, una afirmación mucho más estrecha que 'fotografía verificada'. Vale la pena lanzarlo, mal elegido el nombre.
+***** Comments
+- El caso del periodismo es la historia para la prensa. Donde esto servirá de verdad es en verificación de identidad y aplicaciones de seguros, y puede pasar de 'necesitas un smartphone para vivir con normalidad' a 'necesitas un iPhone para vivir con normalidad'.
+- Apple no aborda el caso de la refotografía. Generas una imagen, la muestras en un monitor de alta resolución, la fotografías con un iPhone 18 Pro y ya tienes una Reference Image válida.
+- Si juntas fotos del mismo evento tomadas desde distintos ángulos por distintas personas, consigues otra forma de verificación que no depende de un único fabricante.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Apple Reference Image: ein neuer Ansatz für verifizierte Fotografie
+***** TLDR
+Apple hat auf dem iPhone 18 Pro einen optionalen Kameramodus eingeführt, der Pixeldaten bereits im Sensor signiert, bevor das Betriebssystem sie sieht. Das signierte digitale Negativ geht an Private Cloud Compute, das die im Werk festgelegte Bindung zwischen diesem Sensor und diesem Gerät prüft, Demosaicing und Tone Mapping selbst durchführt, das Ergebnis mit einem neuronalen Netz bewertet und eine post-quantensichere zusammengesetzte Signatur (MLDSA87-RSA-3072) anbringt. Zwei Zeitstempel, eine untere Schranke aus einem kürzlichen Heartbeat und eine obere Schranke nach der Aufnahme, grenzen den Aufnahmezeitpunkt ein; der Zeitstempeldienst wird über Oblivious HTTP angefragt und erfährt die IP des Fotografen nie. C2PA hängt Provenienzdaten erst nach der Aufnahme an und lässt sich an jeder Stelle der Bearbeitungskette brechen; diese Kette beginnt bei der Hardware und enthält keine Identität des Fotografen.
+***** Take
+Die Vertrauenskette auf Sensorebene ist ein echter Fortschritt gegenüber C2PA, und gegen den Angriff im meistbeachteten Kommentar hilft sie nicht: Halte ein verifiziertes iPhone auf einen 4K-Monitor mit einem generierten Bild, und du bekommst ein gültiges Reference Image. Apple bescheinigt, dass eine echte Kamera echtes Licht gesehen hat, und das ist eine deutlich engere Aussage als 'verifizierte Fotografie'. Das Feature lohnt sich, der Name nicht.
+***** Comments
+- Der Journalismus-Fall ist die PR-Geschichte. Richtig nützlich wird das bei Identitätsprüfung und Versicherungs-Apps, und es kann aus 'du brauchst ein Smartphone, um normal zu leben' ein 'du brauchst ein iPhone, um normal zu leben' machen.
+- Apple geht auf das Abfotografieren nicht ein. Bild generieren, auf einem hochauflösenden Monitor anzeigen, mit einem iPhone 18 Pro abfotografieren, fertig ist das gültige Reference Image.
+- Wenn man Fotos desselben Ereignisses aus verschiedenen Blickwinkeln von verschiedenen Leuten zusammenlegt, bekommt man eine zweite Art von Verifikation, die nicht von einem einzelnen Hersteller abhängt.
+** Stay discoverable in search while disallowing AI training :cloudflare:ai:web:scraping:policy:
+:PROPERTIES:
+:ID:       49721435
+:URL:      https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/
+:HN_URL:   https://news.ycombinator.com/item?id=49721435
+:POINTS:   47
+:COMMENTS: 30
+:BY:       djfergus
+:END:
+
+*** TLDR
+Cloudflare added a domain-level 'Disallow AI Training' setting that publishes the preference in robots.txt, blocks training-only crawlers, and still lets search crawlers through. The problem it targets is mixed-use bots: Googlebot, Bingbot and Applebot fetch for both search indexing and model training, so blocking them used to cost you search traffic. Cloudflare calls an operator Accountable if it honours a training opt-out, gives URL-level visibility into what was crawled, and promises that opting out won't hurt search ranking. Apple, Google and Microsoft qualify on those terms. Amazon, Anthropic, Meta and OpenAI qualify because they run separate training crawlers you could already block in robots.txt. Microsoft's domain-level robots.txt support isn't due until early 2027. Compliance gets published on Cloudflare Radar.
+
+*** Take
+The word doing all the work is 'Accountable', and what it means here is that a company wrote down a promise and Cloudflare will publish whether it kept it. For four of the seven vendors the setting grants nothing you couldn't already do with two lines of robots.txt. The product being shipped is Cloudflare's position as the party that gets to keep the scorecard, which is a real position to hold and not the same thing as enforcement.
+
+*** Comments
+
+**** DharmaPolice
+These schemes to categorise data as 'public but not really' are doomed. Even if every AI company respected the terms, nothing stops someone else indexing the data and selling it to them.
+
+**** nirmeetimthebes
+'Accountable' is a fancy word for pinky promise with a label. Nothing stops the data from ending up in a training run once it has already been fetched.
+
+**** 1vuio0pswjnm7
+Cloudflare says it classifies bots by behaviour, but it classifies anyone not running a popular browser with JavaScript as a bot, and it fingerprints web users.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+既不让 AI 训练，又保住搜索曝光
+***** TLDR
+Cloudflare 新增了一个域名级的「禁止 AI 训练」开关：在 robots.txt 里公布这一偏好，拦截纯训练用途的爬虫，同时放行搜索爬虫。它针对的是混合用途机器人：Googlebot、Bingbot 和 Applebot 既抓取用于搜索索引，也抓取用于模型训练，所以以前屏蔽它们就等于放弃搜索流量。Cloudflare 把满足三个条件的运营方称为「可问责」：尊重训练退出机制、提供 URL 级别的抓取可见性、承诺退出训练不影响搜索排名。苹果、谷歌和微软按此标准合格。亚马逊、Anthropic、Meta 和 OpenAI 合格的原因是它们本来就用独立的训练爬虫，你早就能在 robots.txt 里屏蔽。微软对域名级 robots.txt 偏好的支持要到 2027 年初。合规情况会公布在 Cloudflare Radar 上。
+***** Take
+真正承担分量的词是「可问责」，而它在这里的意思是：某家公司写下了一个承诺，Cloudflare 会公布它有没有兑现。七家厂商里有四家，这个开关给你的东西你用两行 robots.txt 早就能做到。真正发布的产品是 Cloudflare 把自己放在了记分员的位置上，这个位置确实有价值，但它不等于执法。
+***** Comments
+- 这类把数据归类为「公开但又不完全公开」的方案注定失败。就算每家 AI 公司都遵守条款，也挡不住别人先把数据索引下来再卖给它们。
+- 「可问责」不过是给「口头保证」贴了个标签。数据一旦被抓走，没什么能阻止它进入训练集。
+- Cloudflare 说它按行为区分机器人，可它把所有没用主流浏览器、没开 JavaScript 的访问者都归为机器人，而且它会对网页用户做指纹识别。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+検索には残しつつ、AI学習だけ拒否する
+***** TLDR
+Cloudflareがドメイン単位の「AI学習を拒否」設定を追加した。robots.txtにその意思を公開し、学習専用クローラーを遮断しつつ、検索クローラーは通す。狙いは混合用途のボットだ。Googlebot、Bingbot、Applebotは検索インデックスにもモデル学習にも取得するため、遮断すると検索流入まで失っていた。Cloudflareは、学習のオプトアウトを尊重し、何を巡回したかをURL単位で可視化し、オプトアウトしても検索順位に影響しないと約束する事業者を「アカウンタブル」と呼ぶ。Apple、Google、Microsoftがこの条件を満たす。Amazon、Anthropic、Meta、OpenAIは学習用クローラーを別に運用しており、もともとrobots.txtで遮断できたため該当する。Microsoftのドメイン単位robots.txt対応は2027年初頭までお預けだ。順守状況はCloudflare Radarで公開される。
+***** Take
+重い意味を背負っている語は「アカウンタブル」で、ここでの意味は、ある企業が約束を書き、それを守ったかどうかをCloudflareが公開する、というだけだ。7社のうち4社については、この設定が与えるものはrobots.txt 2行で前からできていた。実際に出荷されたのは、採点表を持つ立場にCloudflareが立ったという事実であり、それ自体は本物の立場だが、強制執行とは別物だ。
+***** Comments
+- データを「公開だが完全な公開ではない」と分類しようとする仕組みは行き詰まる。仮にすべてのAI企業が条件を守っても、他の誰かがデータをインデックスして売ることは止められない。
+- 「アカウンタブル」は、ラベル付きの口約束を格好よく言い換えただけだ。一度取得されてしまえば、学習に使われるのを止めるものは何もない。
+- Cloudflareは挙動でボットを分類すると言うが、実際には主要ブラウザとJavaScriptを使っていない相手をボット扱いするし、ウェブ利用者のフィンガープリントも取っている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+검색 노출은 유지하면서 AI 학습만 거부하기
+***** TLDR
+클라우드플레어가 도메인 단위 'AI 학습 거부' 설정을 추가했다. robots.txt에 그 의사를 공개하고, 학습 전용 크롤러는 차단하되 검색 크롤러는 통과시킨다. 겨냥한 문제는 혼합 용도 봇이다. 구글봇, 빙봇, 애플봇은 검색 색인과 모델 학습 양쪽을 위해 가져가므로, 차단하면 검색 유입까지 잃었다. 클라우드플레어는 학습 옵트아웃을 지키고, 무엇을 긁어갔는지 URL 단위로 보여주고, 옵트아웃이 검색 순위에 영향을 주지 않겠다고 약속하는 사업자를 '책임 있는' 사업자로 부른다. 애플, 구글, 마이크로소프트가 이 조건을 충족한다. 아마존, 앤트로픽, 메타, 오픈AI는 학습용 크롤러를 따로 운영해 이미 robots.txt로 막을 수 있었기에 해당된다. 마이크로소프트의 도메인 단위 robots.txt 지원은 2027년 초에나 나온다. 준수 현황은 클라우드플레어 레이더에 공개된다.
+***** Take
+무게를 지고 있는 단어는 '책임 있는'이고, 여기서 그 뜻은 어떤 회사가 약속을 적었고 클라우드플레어가 그 약속을 지켰는지 공개하겠다는 것뿐이다. 일곱 업체 중 넷에 대해서는 이 설정이 주는 것이 robots.txt 두 줄로 이미 가능하던 일이다. 실제로 출시된 제품은 점수표를 쥐는 자리에 클라우드플레어가 선다는 사실이며, 그 자리는 실재하지만 집행과는 다르다.
+***** Comments
+- 데이터를 '공개지만 완전히 공개는 아닌' 것으로 분류하려는 시도는 결국 실패한다. 모든 AI 회사가 조건을 지킨다 해도, 다른 누군가가 데이터를 색인해 되파는 것은 막지 못한다.
+- '책임 있는'은 라벨 붙인 새끼손가락 약속의 고급 표현이다. 한 번 긁혀 간 데이터가 학습에 들어가는 것을 막을 방법은 없다.
+- 클라우드플레어는 행동으로 봇을 분류한다고 말하지만, 실제로는 주요 브라우저와 자바스크립트를 쓰지 않는 쪽을 봇으로 분류하고 웹 이용자를 핑거프린팅한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Seguir visible en las búsquedas mientras se prohíbe el entrenamiento de IA
+***** TLDR
+Cloudflare añadió un ajuste por dominio, 'Disallow AI Training', que publica esa preferencia en robots.txt, bloquea los rastreadores dedicados solo a entrenamiento y deja pasar a los de búsqueda. El problema que ataca son los bots de uso mixto: Googlebot, Bingbot y Applebot descargan tanto para indexar como para entrenar modelos, así que bloquearlos costaba tráfico de búsqueda. Cloudflare llama Accountable a un operador si respeta la exclusión del entrenamiento, ofrece visibilidad a nivel de URL de lo rastreado y promete que excluirse no afectará al posicionamiento. Apple, Google y Microsoft cumplen esos términos. Amazon, Anthropic, Meta y OpenAI cumplen porque ya usan rastreadores de entrenamiento separados que podías bloquear en robots.txt. El soporte de Microsoft para preferencias por dominio en robots.txt no llega hasta principios de 2027. El cumplimiento se publica en Cloudflare Radar.
+***** Take
+La palabra que sostiene todo es 'Accountable', y aquí significa que una empresa escribió una promesa y Cloudflare publicará si la cumplió. Para cuatro de los siete proveedores, el ajuste no concede nada que no lograras ya con dos líneas de robots.txt. Lo que en realidad se lanza es la posición de Cloudflare como quien lleva el marcador, que es una posición real y no es lo mismo que hacer cumplir nada.
+***** Comments
+- Estos esquemas para catalogar datos como 'públicos pero no tanto' están condenados. Aunque todas las empresas de IA respetaran los términos, nada impide que otro indexe los datos y se los venda.
+- 'Accountable' es una forma elegante de decir promesa de meñique con etiqueta. Nada impide que los datos acaben en un entrenamiento una vez descargados.
+- Cloudflare dice que clasifica bots por comportamiento, pero clasifica como bot a cualquiera que no use un navegador popular con JavaScript, y hace fingerprinting de los usuarios.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+In der Suche sichtbar bleiben und KI-Training trotzdem untersagen
+***** TLDR
+Cloudflare hat eine Einstellung auf Domain-Ebene ergänzt: 'Disallow AI Training' veröffentlicht diese Präferenz in der robots.txt, blockiert reine Trainings-Crawler und lässt Such-Crawler weiterhin durch. Gemeint sind Bots mit doppeltem Zweck: Googlebot, Bingbot und Applebot holen Inhalte sowohl für den Suchindex als auch fürs Modelltraining, ein Block kostete also Suchtraffic. Cloudflare nennt einen Betreiber Accountable, wenn er ein Trainings-Opt-out respektiert, auf URL-Ebene sichtbar macht, was gecrawlt wurde, und zusagt, dass das Opt-out das Suchranking nicht beeinflusst. Apple, Google und Microsoft erfüllen das. Amazon, Anthropic, Meta und OpenAI erfüllen es, weil sie ohnehin getrennte Trainings-Crawler betreiben, die man in der robots.txt längst blocken konnte. Microsofts Unterstützung für Präferenzen auf Domain-Ebene kommt erst Anfang 2027. Die Einhaltung wird auf Cloudflare Radar veröffentlicht.
+***** Take
+Das Wort, das hier alles trägt, ist 'Accountable', und es bedeutet: Ein Unternehmen hat ein Versprechen aufgeschrieben, und Cloudflare veröffentlicht, ob es eingehalten wurde. Bei vier der sieben Anbieter gewährt die Einstellung nichts, was zwei Zeilen robots.txt nicht schon konnten. Ausgeliefert wird in Wahrheit Cloudflares Position als die Stelle, die den Punktestand führt. Das ist eine reale Position und trotzdem keine Durchsetzung.
+***** Comments
+- Diese Versuche, Daten als 'öffentlich, aber nicht wirklich' einzuordnen, scheitern am Ende. Selbst wenn jede KI-Firma die Bedingungen achtete, hält nichts jemand anderen davon ab, die Daten zu indexieren und weiterzuverkaufen.
+- 'Accountable' ist ein schmuckes Wort für ein Ehrenwort mit Etikett. Sind die Daten erst einmal abgeholt, hält nichts sie aus einem Trainingslauf heraus.
+- Cloudflare sagt, es klassifiziere Bots nach Verhalten, stuft aber jeden ohne verbreiteten Browser mit JavaScript als Bot ein und nimmt Fingerabdrücke von Webnutzern.
+** Recreating Voodoo Graphics and a Late-1990s Gaming PC on an FPGA :fpga:retrocomputing:graphics:hardware:gaming:
+:PROPERTIES:
+:ID:       49719938
+:URL:      https://nand2mario.github.io/posts/2026/zsst-voodoo/
+:HN_URL:   https://news.ycombinator.com/item?id=49719938
+:POINTS:   87
+:COMMENTS: 17
+:BY:       zdw
+:END:
+
+*** TLDR
+nand2mario implemented the 3dfx Voodoo Graphics SST-1 in SystemVerilog as zSST, paired it with his z486 CPU core, and built z486 XL: a complete DOS gaming PC living in FPGA logic on a Xilinx KV260 board. Tomb Raider runs through its original 3dfx renderer out to HDMI at roughly 12 FPS, and the bottleneck is the CPU, not the rasteriser, which does 78.5 million textured pixels per second at 100 MHz. Filtering, mipmapping, depth and alpha tests, fog, blending and dithering all work. Most of the effort went into the memory system rather than the arithmetic: an 8 KiB texture cache with 64-byte lines, a replay queue holding 8 outstanding fetches, a 64-entry reorder buffer and write combining, all to hide roughly 280 ns of DDR latency. The DE10-Nano that MiSTer uses doesn't have the room. Source and SD card images are published.
+
+*** Take
+The headline number is 12 FPS. The interesting number is 280 nanoseconds. A 1996 Voodoo card had its own EDO memory wired directly to the chip, so the rasteriser never waited; rebuilding it on a board where everything shares one DDR controller means the hard part isn't the triangle math, it's reconstructing the memory hierarchy the original got for free from its bill of materials.
+
+*** Comments
+
+**** monster_truck
+I mowed lawns for two summers to save up for a Voodoo 3000 PCI and still didn't have half of what I needed. Basically nothing I had hoped to play worked. Spent an entire summer trying to get Arcanum to run and never did.
+
+**** jumploops
+MiSTer does the same thing for classic computers and consoles: rather than emulating in software, where timing goes wrong, you map the actual device logic onto an FPGA and get an exact replica of the hardware.
+
+**** shoobiedoo
+I wrecked the HDMI out on my MiSTer by unplugging and replugging it a few times while it was on. Could still SSH in, no video. Turns out it doesn't take kindly to that.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用 FPGA 复刻 Voodoo 显卡和一台 1990 年代末的游戏 PC
+***** TLDR
+nand2mario 用 SystemVerilog 实现了 3dfx Voodoo Graphics SST-1，命名为 zSST，再配上他自己的 z486 CPU 核心，做出了 z486 XL：一台完全跑在 Xilinx KV260 开发板 FPGA 逻辑里的 DOS 游戏 PC。《古墓丽影》通过原版 3dfx 渲染路径从 HDMI 输出，帧率约 12 FPS，瓶颈在 CPU 而不是光栅器——后者在 100 MHz 下能做到每秒 7850 万个带纹理像素。纹理过滤、mipmap、深度和 alpha 测试、雾效、混合、抖动都能用。大部分工夫花在内存系统而不是算术流水线上：8 KiB 纹理缓存（64 字节缓存行）、可容纳 8 个未完成取数的重放队列、64 项重排序缓冲、写合并，全都是为了掩盖大约 280 纳秒的 DDR 延迟。MiSTer 用的 DE10-Nano 装不下这套东西。源码和 SD 卡镜像都已放出。
+***** Take
+标题数字是 12 FPS，真正有意思的数字是 280 纳秒。1996 年的 Voodoo 卡有自己的 EDO 显存直接挂在芯片旁边，光栅器根本不用等；把它搬到一块所有模块共用一个 DDR 控制器的板子上，难点就不再是三角形运算，而是重新搭出原版靠元件清单白送的那套内存层次。
+***** Comments
+- 我割了两个夏天的草坪攒钱买 Voodoo 3000 PCI，钱还凑不到一半。结果我想玩的东西基本都跑不起来，整个夏天都在折腾《奥秘》，最后也没成功。
+- MiSTer 对经典电脑和主机做的是同一件事：不是用软件模拟（那样时序容易出错），而是把真实器件的逻辑映射到 FPGA 上，得到硬件的精确复制品。
+- 我的 MiSTer 开着机的时候反复插拔 HDMI，结果把 HDMI 输出弄坏了。还能 SSH 进去，就是没画面。原来它受不了这个。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+FPGAでVoodooグラフィックスと1990年代末のゲーミングPCを再現する
+***** TLDR
+nand2marioが3dfx Voodoo Graphics SST-1をSystemVerilogで実装してzSSTと名付け、自作のz486 CPUコアと組み合わせてz486 XLを作った。Xilinx KV260ボードのFPGAロジック上で完結するDOSゲーミングPCだ。『トゥームレイダー』が本来の3dfxレンダラー経由でHDMIに出力され、およそ12 FPS。ボトルネックはCPUであってラスタライザではない。ラスタライザは100 MHzでテクスチャ付き毎秒7850万ピクセルを出す。フィルタリング、ミップマップ、深度・アルファテスト、フォグ、ブレンド、ディザリングはすべて動く。手間の大半は演算パイプラインではなくメモリシステムに費やされた。64バイトラインの8 KiBテクスチャキャッシュ、未完了フェッチを8件保持するリプレイキュー、64エントリのリオーダーバッファ、ライト結合。いずれもおよそ280 nsのDDRレイテンシを隠すためだ。MiSTerが使うDE10-Nanoには載り切らない。ソースとSDカードイメージは公開済み。
+***** Take
+見出しの数字は12 FPSだが、面白い数字は280ナノ秒のほうだ。1996年のVoodooカードは専用のEDOメモリをチップの隣に直結していたので、ラスタライザは待たされなかった。すべてが1つのDDRコントローラを共有するボードで作り直すとなると、難所は三角形の計算ではなく、当時は部品構成が無料で与えてくれたメモリ階層を組み直すことになる。
+***** Comments
+- Voodoo 3000 PCIを買うために夏休み2回ぶん芝刈りをしたが、それでも必要な額の半分にも届かなかった。しかも遊びたかったものはほぼ動かず、ひと夏かけてArcanumを起動させようとして結局だめだった。
+- MiSTerは往年のPCやゲーム機に対して同じことをやっている。タイミングが狂いがちなソフトウェアエミュレーションではなく、実機のロジックをFPGAに載せてハードウェアの正確な複製を得る。
+- 電源を入れたままHDMIを何度か抜き差ししてMiSTerの映像出力を壊した。SSHは通るのに画は出ない。ああいう扱いには耐えられないらしい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+FPGA로 부두 그래픽스와 1990년대 말 게이밍 PC 되살리기
+***** TLDR
+nand2mario가 3dfx 부두 그래픽스 SST-1을 시스템베릴로그로 구현해 zSST라 이름 붙이고, 자신이 만든 z486 CPU 코어와 묶어 z486 XL을 만들었다. 자일링스 KV260 보드의 FPGA 로직 안에서 돌아가는 완전한 도스 게이밍 PC다. '툼 레이더'가 원래의 3dfx 렌더러를 거쳐 HDMI로 나오며 약 12 FPS를 낸다. 병목은 래스터라이저가 아니라 CPU다. 래스터라이저는 100 MHz에서 초당 7,850만 텍스처 픽셀을 처리한다. 필터링, 밉맵, 깊이·알파 테스트, 안개, 블렌딩, 디더링이 모두 동작한다. 공은 연산 파이프라인이 아니라 메모리 시스템에 들어갔다. 64바이트 라인의 8 KiB 텍스처 캐시, 미완료 페치 8개를 담는 리플레이 큐, 64엔트리 리오더 버퍼, 쓰기 결합까지 모두 약 280 ns의 DDR 지연을 감추기 위한 장치다. MiSTer가 쓰는 DE10-Nano에는 들어갈 자리가 없다. 소스와 SD 카드 이미지는 공개됐다.
+***** Take
+제목에 걸린 숫자는 12 FPS지만, 흥미로운 숫자는 280 나노초다. 1996년의 부두 카드는 전용 EDO 메모리를 칩 옆에 직결해 두어 래스터라이저가 기다릴 일이 없었다. 모든 모듈이 하나의 DDR 컨트롤러를 공유하는 보드에서 이를 다시 만들면, 어려운 부분은 삼각형 연산이 아니라 원본이 부품 구성만으로 공짜로 얻었던 메모리 계층을 다시 짜는 일이 된다.
+***** Comments
+- 부두 3000 PCI를 사려고 두 해 여름 내내 잔디를 깎았는데도 필요한 돈의 절반도 못 모았다. 게다가 하고 싶던 게임은 거의 돌아가지 않았고, 한 여름을 다 써서 '아카넘'을 실행시키려다 끝내 실패했다.
+- MiSTer가 옛 컴퓨터와 콘솔에 하는 일이 바로 이것이다. 타이밍이 어긋나기 쉬운 소프트웨어 에뮬레이션 대신 실제 기기의 로직을 FPGA에 얹어 하드웨어의 정확한 복제본을 얻는다.
+- 전원이 켜진 채로 HDMI를 몇 번 뽑았다 꽂았다가 MiSTer의 영상 출력을 망가뜨렸다. SSH는 되는데 화면이 안 나온다. 그런 대접은 못 견디는 모양이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Recrear las Voodoo Graphics y un PC de juegos de finales de los noventa en una FPGA
+***** TLDR
+nand2mario implementó la 3dfx Voodoo Graphics SST-1 en SystemVerilog con el nombre zSST, la emparejó con su núcleo de CPU z486 y armó el z486 XL: un PC de juegos DOS completo funcionando en lógica FPGA sobre una placa Xilinx KV260. Tomb Raider corre por su renderizador 3dfx original y sale por HDMI a unos 12 FPS, y el cuello de botella es la CPU, no el rasterizador, que hace 78,5 millones de píxeles texturizados por segundo a 100 MHz. Funcionan el filtrado, el mipmapping, las pruebas de profundidad y alfa, la niebla, el blending y el dithering. El grueso del trabajo fue el sistema de memoria y no la aritmética: caché de texturas de 8 KiB con líneas de 64 bytes, cola de reintentos con 8 lecturas pendientes, búfer de reordenación de 64 entradas y combinación de escrituras, todo para ocultar unos 280 ns de latencia DDR. La DE10-Nano que usa MiSTer no tiene sitio para esto. El código y las imágenes de SD están publicados.
+***** Take
+La cifra del titular es 12 FPS. La cifra interesante es 280 nanosegundos. Una Voodoo de 1996 tenía su propia memoria EDO cableada junto al chip, así que el rasterizador nunca esperaba; rehacerla en una placa donde todo comparte un único controlador DDR hace que lo difícil no sea la matemática de triángulos, sino reconstruir la jerarquía de memoria que la original recibía gratis de su lista de componentes.
+***** Comments
+- Corté césped dos veranos para ahorrar y comprarme una Voodoo 3000 PCI y ni así junté la mitad. Encima casi nada de lo que quería jugar funcionaba. Pasé un verano entero intentando que arrancara Arcanum y nunca lo logré.
+- MiSTer hace lo mismo con ordenadores y consolas clásicas: en vez de emular por software, donde los tiempos se descuadran, mapeas la lógica real del aparato sobre una FPGA y obtienes una réplica exacta del hardware.
+- Cargué la salida HDMI de mi MiSTer desenchufándola y enchufándola varias veces con el aparato encendido. Podía entrar por SSH, pero sin vídeo. Resulta que no lo lleva nada bien.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Voodoo Graphics und ein Gaming-PC der späten Neunziger auf einem FPGA
+***** TLDR
+nand2mario hat die 3dfx Voodoo Graphics SST-1 als zSST in SystemVerilog nachgebaut, sie mit seinem z486-CPU-Kern kombiniert und daraus den z486 XL gemacht: ein kompletter DOS-Gaming-PC in FPGA-Logik auf einem Xilinx-KV260-Board. Tomb Raider läuft über seinen originalen 3dfx-Renderer per HDMI mit rund 12 FPS, und der Flaschenhals ist die CPU, nicht der Rasterizer, der bei 100 MHz 78,5 Millionen texturierte Pixel pro Sekunde schafft. Filterung, Mipmapping, Tiefen- und Alphatests, Nebel, Blending und Dithering funktionieren. Der meiste Aufwand steckte nicht in der Arithmetik, sondern im Speichersystem: 8 KiB Texturcache mit 64-Byte-Zeilen, eine Replay-Queue für 8 offene Zugriffe, ein Reorder-Puffer mit 64 Einträgen und Write Combining, alles um rund 280 ns DDR-Latenz zu verbergen. Auf dem DE10-Nano, den MiSTer nutzt, ist dafür kein Platz. Quellcode und SD-Karten-Images sind veröffentlicht.
+***** Take
+Die Zahl in der Überschrift ist 12 FPS. Die interessante Zahl sind 280 Nanosekunden. Eine Voodoo von 1996 hatte eigenen EDO-Speicher direkt neben dem Chip, der Rasterizer musste also nie warten. Baut man das auf einem Board nach, auf dem sich alles einen DDR-Controller teilt, ist nicht die Dreiecksmathematik das Schwierige, sondern der Wiederaufbau jener Speicherhierarchie, die das Original aus seiner Stückliste geschenkt bekam.
+***** Comments
+- Ich habe zwei Sommer lang Rasen gemäht, um mir eine Voodoo 3000 PCI zu sparen, und hatte trotzdem nicht die Hälfte zusammen. Dazu lief fast nichts von dem, was ich spielen wollte. Einen ganzen Sommer habe ich versucht, Arcanum zum Starten zu bringen, ohne Erfolg.
+- MiSTer macht dasselbe für klassische Rechner und Konsolen: Statt in Software zu emulieren, wo das Timing danebengeht, bildet man die tatsächliche Logik des Geräts auf einem FPGA ab und bekommt eine exakte Kopie der Hardware.
+- Ich habe den HDMI-Ausgang meines MiSTer zerschossen, weil ich ihn im laufenden Betrieb mehrmals ab- und wieder angesteckt habe. Per SSH kam ich noch drauf, Bild gab es keines. Das verträgt er offenbar nicht.
+** Show HN: I made a flight simulator, except you're just a passenger :showhn:webdev:aviation:maps:simulation:
+:PROPERTIES:
+:ID:       49693971
+:URL:      https://inflightsimulator.com
+:HN_URL:   https://news.ycombinator.com/item?id=49693971
+:POINTS:   90
+:COMMENTS: 43
+:BY:       rkotcher
+:END:
+
+*** TLDR
+A browser flight simulator where you sit in the cabin instead of the cockpit. Pick a departure and arrival airport anywhere in the world and watch the flight from takeoff to touchdown through the window: Esri satellite imagery for the terrain below, weather, and the sun in its real position for the route and time of day. The most recent release added legs, so you can get up and walk to the lavatory on long hauls. The site is a single-page app, so this is from the Show HN post plus what the loaded page exposes.
+
+*** Take
+Nobody asked for the boring parts of flying to be simulated, which is exactly why this lands. The sharpest feedback in the thread is a bug report about geopolitics: the Seoul to Hong Kong route flies straight over mainland China, which real flights divert around because of airspace restrictions. The terrain is real, the weather is real, the airspace is a great circle.
+
+*** Comments
+
+**** GreyMolecules
+Playing my usual ICN to HKG route. The flight path is too ideal. Because of airspace restrictions in China, almost every real flight has to divert over Taiwan, but this one cuts straight through the mainland.
+
+**** etatester
+Crashed within 10 seconds on iPhone 17 Pro. Love the vibes.
+
+**** tnolet
+Is this visual style Fable or Astra? I see it everywhere now. It's the new black and purple.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN：我做了个飞行模拟器，只不过你是乘客
+***** TLDR
+一个浏览器里的飞行模拟器，你坐在客舱而不是驾驶舱。选好起降机场，就能从窗口看完整趟航程，从起飞到落地：地面用 Esri 卫星影像，有天气，太阳位置按航线和当地时间实时计算。最新一版加入了「腿」，长途航班上你可以起身去洗手间。网站是单页应用，以上内容来自 Show HN 帖子和页面加载出来的部分。
+***** Take
+没人要求模拟坐飞机最无聊的部分，而这正是它成立的原因。帖子里最犀利的反馈是一个关于地缘政治的 bug：首尔到香港的航线直接飞越中国大陆，而真实航班因为空域限制会绕行。地形是真的，天气是真的，空域是一条大圆航线。
+***** Comments
+- 我在玩自己常飞的仁川到香港。航路太理想了。因为中国的空域限制，现实中几乎所有航班都得绕到台湾上空，这个却直接穿过大陆。
+- 在 iPhone 17 Pro 上 10 秒就崩了。氛围感很好。
+- 这个视觉风格是 Fable 还是 Astra？现在到处都能看到。这是新的黑配紫。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: フライトシミュレーターを作った。ただしあなたは乗客だ
+***** TLDR
+コックピットではなく客席に座るブラウザ上のフライトシミュレーター。世界中どこでも出発地と到着地の空港を選べば、離陸から着陸まで窓越しに眺められる。地表はEsriの衛星画像、天候あり、太陽は航路と時刻に応じた実際の位置に置かれる。最新版では「脚」が加わり、長距離便では立ち上がってトイレに行ける。サイトはシングルページアプリのため、以上はShow HNの投稿と読み込まれたページから分かる範囲だ。
+***** Take
+飛行機に乗ることの退屈な部分を再現してくれと頼んだ人はいない。だからこそ刺さる。スレッドで最も鋭い指摘は地政学のバグ報告だ。ソウルから香港の便が中国本土の上空を一直線に飛ぶが、実際の便は空域制限のため迂回する。地形は本物、天候も本物、空域だけが大圏航路のままだ。
+***** Comments
+- いつものICNからHKGで遊んでいる。航路が理想的すぎる。中国の空域制限のせいで実際の便はほぼ台湾上空へ迂回するのに、これは本土をまっすぐ突っ切る。
+- iPhone 17 Proで10秒で落ちた。雰囲気は最高。
+- このビジュアルはFable？それともAstra？最近どこでも見る。新しい黒と紫だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: 비행 시뮬레이터를 만들었다, 다만 당신은 승객이다
+***** TLDR
+조종석이 아니라 객실에 앉는 브라우저 비행 시뮬레이터다. 세계 어디든 출발지와 도착지 공항을 고르면 이륙부터 착륙까지 창밖으로 비행을 지켜볼 수 있다. 지상은 Esri 위성 영상, 날씨가 반영되고, 태양은 항로와 시각에 맞는 실제 위치에 놓인다. 최신 릴리스에는 다리가 추가돼 장거리 비행에서 일어나 화장실에 갈 수 있다. 사이트가 단일 페이지 앱이라, 위 내용은 Show HN 게시글과 로드된 화면에서 확인된 범위다.
+***** Take
+비행에서 가장 지루한 부분을 재현해 달라고 요청한 사람은 없다. 그래서 이게 먹힌다. 스레드에서 가장 날카로운 피드백은 지정학 버그 신고다. 서울에서 홍콩 노선이 중국 본토 위를 곧장 가로지르는데, 실제 항공편은 공역 제한 때문에 우회한다. 지형도 진짜고 날씨도 진짜인데 공역만 대권 항로다.
+***** Comments
+- 늘 타는 인천발 홍콩행으로 해봤다. 항로가 너무 이상적이다. 중국 공역 제한 때문에 실제로는 거의 모든 항공편이 대만 상공으로 우회하는데, 이건 본토를 그대로 관통한다.
+- 아이폰 17 프로에서 10초 만에 죽었다. 분위기는 마음에 든다.
+- 이 비주얼 스타일은 Fable인가 Astra인가? 요즘 어디서나 보인다. 새로운 검정과 보라다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: hice un simulador de vuelo, salvo que eres el pasajero
+***** TLDR
+Un simulador de vuelo en el navegador donde te sientas en la cabina de pasajeros y no en la de mando. Eliges aeropuerto de salida y de llegada en cualquier parte del mundo y ves el vuelo entero por la ventanilla, del despegue al aterrizaje: imágenes de satélite de Esri para el terreno, meteorología y el sol en su posición real según la ruta y la hora. La última versión añadió piernas, así que en los vuelos largos puedes levantarte e ir al lavabo. El sitio es una aplicación de una sola página, así que esto sale del post de Show HN y de lo que la página deja ver al cargar.
+***** Take
+Nadie pidió que se simulara la parte aburrida de volar, y por eso funciona. El comentario más afilado del hilo es un informe de error geopolítico: la ruta Seúl a Hong Kong cruza en línea recta China continental, cuando los vuelos reales la rodean por las restricciones de espacio aéreo. El terreno es real, la meteorología es real, el espacio aéreo es un círculo máximo.
+***** Comments
+- Estoy con mi ruta habitual, ICN a HKG. La trayectoria es demasiado ideal. Por las restricciones de espacio aéreo en China, casi todos los vuelos reales tienen que desviarse sobre Taiwán, pero este atraviesa el continente.
+- Se cerró a los 10 segundos en un iPhone 17 Pro. Me encanta el rollo que tiene.
+- ¿Este estilo visual es Fable o Astra? Lo veo por todas partes. Es el nuevo negro y morado.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Ich habe einen Flugsimulator gebaut, nur bist du der Passagier
+***** TLDR
+Ein Flugsimulator im Browser, in dem man in der Kabine sitzt statt im Cockpit. Start- und Zielflughafen irgendwo auf der Welt wählen und den Flug vom Abheben bis zum Aufsetzen durchs Fenster verfolgen: Satellitenbilder von Esri für das Gelände, Wetter, und die Sonne an der Position, die zu Route und Uhrzeit gehört. Die jüngste Version hat Beine ergänzt, auf Langstrecken kann man also aufstehen und zur Toilette gehen. Die Seite ist eine Single-Page-App, das hier stammt daher aus dem Show-HN-Beitrag und dem, was die geladene Seite preisgibt.
+***** Take
+Niemand hat darum gebeten, die langweiligen Teile des Fliegens zu simulieren, und genau deshalb funktioniert es. Die schärfste Rückmeldung im Thread ist ein geopolitischer Fehlerbericht: Die Strecke Seoul nach Hongkong führt schnurgerade über das chinesische Festland, während echte Flüge wegen Luftraumbeschränkungen ausweichen. Das Gelände ist echt, das Wetter ist echt, der Luftraum ist ein Großkreis.
+***** Comments
+- Ich fliege meine übliche Strecke ICN nach HKG. Die Route ist zu ideal. Wegen der Luftraumbeschränkungen in China muss fast jeder echte Flug über Taiwan ausweichen, dieser hier geht mitten durchs Festland.
+- Auf dem iPhone 17 Pro nach 10 Sekunden abgestürzt. Die Stimmung ist trotzdem großartig.
+- Ist dieser Stil Fable oder Astra? Ich sehe ihn überall. Das ist das neue Schwarz-Violett.
+** Saving Jet Fuel :aviation:python:optimization:data:opensource:
+:PROPERTIES:
+:ID:       49720164
+:URL:      https://tech.marksblogg.com/scikit-decide-openap-optimal-flight-planning.html
+:HN_URL:   https://news.ycombinator.com/item?id=49720164
+:POINTS:   71
+:COMMENTS: 31
+:BY:       marklit
+:END:
+
+*** TLDR
+Mark Litwintschik walks through open-source flight planning: scikit-decide, the planning and RL framework Airbus has been building for six years, running A⁎ over a wind grid, with Junzi Sun's OpenAP aircraft performance models (37 airframes, 427 engines) and his OpenTop trajectory toolkit, fed by NOAA GRIB2 weather. The framing number is a 787-9 burning $68K of fuel on an 8.5-hour Newark to Rome leg. In his A320 comparison, Toulouse to Warsaw burned 5,600 kg in 6,153 seconds while the shorter Toulouse to Berlin burned 5,855 kg in 7,666 seconds: 500 km further, less fuel, 45 minutes quicker, once the winds are in the model. Each weather file is 144 MB, you need 8 GB of space, and solve times ran from 0.28 to 29 seconds on a Ryzen 9 9950X.
+
+*** Take
+The pilots in the thread explain precisely why this isn't a Jeppesen replacement, and their list is specific: no cleared ATC routings, no altitude restrictions, no letter-of-agreement constraints, no other aircraft. Another commenter points out the plotted optimal path zigzags because the search grid is too coarse to be believed. It's a good tutorial on the optimiser and a poor model of the sky, and the post would be stronger if it said so.
+
+*** Comments
+
+**** buildsjets
+This is perfect route planning software if you are the only aircraft in the sky and fuel is your only cost. The commercial products exist because they also consider cleared ATC routings, altitude restrictions charted or agreed by letter, and expected delays from historical congestion.
+
+**** croemer
+The 'optimal' path here looks pathological. How is it optimal to zig zag like this? The grid is clearly too coarse, and that's possibly not the only problem.
+
+**** K0balt
+A close family member flies airliners and routinely has to burn thousands of pounds of fuel on the ramp because dispatch changed the landing weight projection or overfuelled. One such error wastes enough to heat my house for a year.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+省下航空燃油
+***** TLDR
+Mark Litwintschik 演示了一套开源航线规划：scikit-decide（空客做了六年的规划与强化学习框架）在风场网格上跑 A⁎，配合 Junzi Sun 的 OpenAP 飞机性能模型（37 种机型、427 种发动机）和他的 OpenTop 轨迹工具包，数据来自 NOAA 的 GRIB2 气象文件。开篇的数字是一架 787-9 在纽瓦克飞罗马的 8.5 小时航段上烧掉 6.8 万美元燃油。在他的 A320 对比里，图卢兹到华沙烧了 5600 公斤、用时 6153 秒，而更短的图卢兹到柏林烧了 5855 公斤、用时 7666 秒：远了 500 公里，油更省，还快了 45 分钟——前提是模型里算上了风。每个气象文件 144 MB，需要 8 GB 存储空间，求解时间在 Ryzen 9 9950X 上从 0.28 秒到 29 秒不等。
+***** Take
+帖子里的飞行员把「这不能替代 Jeppesen」的原因讲得很具体：没有 ATC 放行航路、没有高度限制、没有协议信函里的约束、没有其他飞机。另一位评论者指出图上那条「最优」路径在来回折线，因为搜索网格粗到不可信。这是一篇讲优化器的好教程，但它对天空的建模很差，文章如果自己把这点讲明会更有说服力。
+***** Comments
+- 如果天上只有你一架飞机、成本里只有燃油，那这确实是完美的航路规划软件。商业产品之所以存在，是因为它们还要考虑 ATC 放行的航路、图上标明或靠协议信函约定的高度限制，以及按历史拥堵推算的预期延误。
+- 这里的「最优」路径看着很病态。这样来回折线怎么会是最优？网格显然太粗了，而且问题可能还不止这一个。
+- 我有位近亲开民航客机，经常因为签派改了着陆重量估算或者加多了油，不得不在停机坪上烧掉好几千磅燃油。一次这样的失误浪费的油够我家取暖一整年。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ジェット燃料を節約する
+***** TLDR
+Mark Litwintschikがオープンソースの飛行計画を一通り実演している。Airbusが6年かけて開発してきた計画・強化学習フレームワークscikit-decideで風のグリッド上をA⁎探索し、Junzi SunのOpenAP性能モデル（機体37種、エンジン427種）とOpenTop軌道ツールキットを組み合わせ、NOAAのGRIB2気象データを与える。導入の数字は、ニューアークからローマへの8.5時間の区間で787-9が6.8万ドル分の燃料を燃やすというもの。A320の比較では、トゥールーズからワルシャワが5,600 kgを6,153秒で、より短いトゥールーズからベルリンが5,855 kgを7,666秒で消費した。500 km遠いのに燃料は少なく、45分早い。風をモデルに入れればの話だ。気象ファイルは1つ144 MB、8 GBの空き容量が必要で、求解時間はRyzen 9 9950Xで0.28秒から29秒だった。
+***** Take
+スレッドのパイロットたちが、これがJeppesenの代わりにならない理由を具体的に挙げている。管制から許可された経路がない、高度制限がない、レター・オブ・アグリーメントによる制約がない、他機がいない。別のコメントは、描かれた「最適」経路がジグザグしているのは探索グリッドが粗すぎるからだと指摘する。最適化ソルバーの入門としては良く、空のモデルとしては貧しい。記事自体がそう書いていれば、もっと強い文章になっただろう。
+***** Comments
+- 空にいるのが自機だけで、コストが燃料だけなら、これは完璧な経路計画ソフトだ。商用製品が存在するのは、管制から許可された経路、図示あるいは合意文書で定められた高度制限、過去の混雑から予測される遅延まで考慮するからだ。
+- ここでの「最適」経路は病的に見える。こんなジグザグがなぜ最適になるのか。グリッドが明らかに粗すぎるし、問題はそれだけではないかもしれない。
+- 近い親族が旅客機を飛ばしているが、ディスパッチが着陸重量の見積もりを変えたり給油しすぎたりして、ランプで数千ポンドの燃料を燃やす羽目になることが珍しくない。その一回の誤りで、私の家を一年暖められるだけの燃料が無駄になる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+제트 연료 아끼기
+***** TLDR
+마크 리트빈치크가 오픈소스 비행 계획을 처음부터 끝까지 보여준다. 에어버스가 6년간 개발해 온 계획·강화학습 프레임워크 scikit-decide로 바람 격자 위에서 A⁎ 탐색을 돌리고, 준지 선의 OpenAP 항공기 성능 모델(기체 37종, 엔진 427종)과 OpenTop 궤적 툴킷을 붙여 NOAA GRIB2 기상 데이터를 먹인다. 도입부 숫자는 787-9가 뉴어크에서 로마까지 8.5시간 구간에 6만 8천 달러어치 연료를 태운다는 것이다. A320 비교에서는 툴루즈에서 바르샤바가 6,153초 동안 5,600 kg을, 더 짧은 툴루즈에서 베를린이 7,666초 동안 5,855 kg을 태웠다. 500 km 더 먼데 연료는 덜 쓰고 45분 빠르다. 바람을 모델에 넣었을 때의 얘기다. 기상 파일은 하나에 144 MB, 저장 공간 8 GB가 필요하고, 라이젠 9 9950X에서 풀이 시간은 0.28초에서 29초까지 걸렸다.
+***** Take
+스레드의 조종사들이 이것이 젭슨의 대체품이 아닌 이유를 구체적으로 짚는다. 관제가 허가한 경로가 없고, 고도 제한이 없고, 협정서에 적힌 제약이 없고, 다른 항공기가 없다. 다른 댓글은 그려진 '최적' 경로가 지그재그인 이유가 탐색 격자가 너무 성기기 때문이라고 지적한다. 최적화 솔버 입문서로는 좋고 하늘의 모델로는 부실하다. 글 자체가 그 점을 밝혔다면 더 설득력 있었을 것이다.
+***** Comments
+- 하늘에 당신 비행기 한 대뿐이고 비용이 연료뿐이라면 완벽한 경로 계획 소프트웨어다. 상용 제품이 존재하는 이유는 관제가 허가한 경로, 차트에 있거나 협정서로 정해진 고도 제한, 과거 혼잡에서 예상되는 지연까지 함께 계산하기 때문이다.
+- 여기 나온 '최적' 경로는 병적으로 보인다. 이렇게 지그재그로 가는 게 어떻게 최적인가. 격자가 명백히 너무 성기고, 문제는 그것만이 아닐 수도 있다.
+- 가까운 친척이 여객기를 모는데, 디스패치가 착륙 중량 예측을 바꾸거나 연료를 과하게 넣어서 램프에서 수천 파운드의 연료를 태워 없애는 일이 드물지 않다. 그런 실수 한 번이면 우리 집을 일 년 난방할 연료가 날아간다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ahorrar combustible de aviación
+***** TLDR
+Mark Litwintschik hace un recorrido por la planificación de vuelos con software libre: scikit-decide, el marco de planificación y aprendizaje por refuerzo que Airbus lleva seis años desarrollando, ejecutando A⁎ sobre una malla de vientos, junto a los modelos de prestaciones OpenAP de Junzi Sun (37 aeronaves, 427 motores) y su herramienta de trayectorias OpenTop, alimentados con datos meteorológicos GRIB2 de la NOAA. La cifra de partida: un 787-9 quema 68.000 dólares de combustible en las 8,5 horas de Newark a Roma. En su comparación con un A320, Toulouse a Varsovia consumió 5.600 kg en 6.153 segundos, mientras que el trayecto más corto a Berlín consumió 5.855 kg en 7.666 segundos: 500 km más lejos, menos combustible y 45 minutos menos, una vez que los vientos entran en el modelo. Cada archivo meteorológico pesa 144 MB, hacen falta 8 GB de espacio y los tiempos de resolución fueron de 0,28 a 29 segundos en un Ryzen 9 9950X.
+***** Take
+Los pilotos del hilo explican con precisión por qué esto no sustituye a Jeppesen, y su lista es concreta: no hay rutas autorizadas por control, ni restricciones de altitud, ni condiciones fijadas por carta de acuerdo, ni otros aviones. Otro comentarista señala que la trayectoria 'óptima' dibujada zigzaguea porque la malla de búsqueda es demasiado gruesa para creérsela. Es un buen tutorial sobre el optimizador y un mal modelo del cielo, y el artículo ganaría si lo dijera.
+***** Comments
+- Este es el software de planificación perfecto si eres la única aeronave en el cielo y el combustible es tu único coste. Los productos comerciales existen porque además contemplan rutas autorizadas por control, restricciones de altitud cartografiadas o acordadas por carta, y retrasos previstos según la congestión histórica.
+- La trayectoria 'óptima' de aquí parece patológica. ¿Cómo va a ser óptimo zigzaguear así? La malla es claramente demasiado gruesa, y posiblemente no sea el único problema.
+- Un familiar cercano pilota aviones de línea y a menudo tiene que quemar miles de libras de combustible en plataforma porque el despacho cambió la previsión de peso al aterrizar o repostó de más. Un solo error de esos desperdicia lo suficiente para calentar mi casa un año.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kerosin sparen
+***** TLDR
+Mark Litwintschik führt durch die Flugplanung mit Open-Source-Werkzeugen: scikit-decide, das Planungs- und RL-Framework, an dem Airbus seit sechs Jahren baut, führt eine A⁎-Suche über ein Windgitter aus, dazu Junzi Suns Leistungsmodelle OpenAP (37 Muster, 427 Triebwerke) und sein Trajektorien-Toolkit OpenTop, gespeist mit GRIB2-Wetterdaten der NOAA. Die Einstiegszahl: Eine 787-9 verbrennt auf den 8,5 Stunden von Newark nach Rom Kerosin für 68.000 Dollar. In seinem A320-Vergleich verbrauchte Toulouse nach Warschau 5.600 kg in 6.153 Sekunden, das kürzere Toulouse nach Berlin dagegen 5.855 kg in 7.666 Sekunden: 500 km weiter, weniger Sprit, 45 Minuten schneller, sobald die Winde im Modell stecken. Jede Wetterdatei ist 144 MB groß, 8 GB Speicher werden gebraucht, und die Lösungszeiten lagen auf einem Ryzen 9 9950X zwischen 0,28 und 29 Sekunden.
+***** Take
+Die Piloten im Thread erklären genau, warum das kein Ersatz für Jeppesen ist, und ihre Liste ist konkret: keine von der Flugsicherung freigegebenen Routen, keine Höhenbeschränkungen, keine per Vereinbarungsschreiben festgelegten Auflagen, keine anderen Flugzeuge. Ein weiterer Kommentator merkt an, dass der eingezeichnete 'optimale' Pfad Zickzack läuft, weil das Suchgitter zu grob ist, um glaubwürdig zu sein. Ein gutes Tutorial über den Optimierer und ein schlechtes Modell des Luftraums. Der Beitrag wäre stärker, wenn er das selbst sagte.
+***** Comments
+- Das ist perfekte Routenplanungssoftware, wenn man das einzige Flugzeug am Himmel ist und Treibstoff die einzige Kostenstelle. Die kommerziellen Produkte gibt es, weil sie zusätzlich freigegebene Routen der Flugsicherung, kartierte oder per Vereinbarung geregelte Höhenbeschränkungen und erwartete Verspätungen aus historischer Auslastung berücksichtigen.
+- Der 'optimale' Pfad hier wirkt pathologisch. Wieso soll ein solcher Zickzack optimal sein? Das Gitter ist offensichtlich zu grob, und das ist womöglich nicht das einzige Problem.
+- Ein naher Verwandter fliegt Verkehrsmaschinen und muss regelmäßig Tausende Pfund Kerosin auf dem Vorfeld verbrennen, weil die Disposition die Landegewichtsprognose geändert oder zu viel getankt hat. Ein einziger solcher Fehler verschwendet genug, um mein Haus ein Jahr lang zu heizen.
