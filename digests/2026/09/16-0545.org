@@ -1,0 +1,504 @@
+#+TITLE: HN Digest 2026-09-16 05:45 UTC
+#+DATE: 2026-09-16T05:45:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+An ex-Apple engineer ships an M4 GPU driver with Codex, Rheinmetall calls a closed SDK open source, and HN takes a knife to its paperbacks
+
+* Highlights
+- OpenGL ES 3.0 conformance on M4 in a month, written by someone banned from Asahi Linux
+- Gemini 3.8 Live: 97 languages, mid-sentence switching, and no published price
+- Capsule puts an HTML app and its data in one SQLite file, then asks you to install a runtime
+- Rheinmetall's soldier-kit protocol: EPL 2.0 interfaces, proprietary EULA runtime
+- Cut the 850-page paperback in half, glue on manila covers, stop apologising
+
+* Stories
+
+** Building a Linux GPU Driver for the M4 Mac Mini in One Month :linux:gpu:apple:mesa:reverse-engineering:
+:PROPERTIES:
+:ID:       49717638
+:URL:      https://codyho.dev/blog/gpu-driver/
+:HN_URL:   https://news.ycombinator.com/item?id=49717638
+:POINTS:   229
+:COMMENTS: 141
+:BY:       ADevWithAnIdea
+:END:
+
+*** TLDR
+Two developers wrote an OpenGL ES 3.0 conformant Mesa driver for the M4 and A18 Pro GPU in roughly a month. Instead of reading disassembly by hand, they captured hardware traces with a custom hypervisor and fed them to Codex running GPT-5.6 Sol and GPT-6 Astra, replaying saved GPU memory state and progressively rebuilding the firmware ABI until nothing captured was needed. It runs Minecraft above 200fps and WebGL in Chrome and Firefox, and they found hardware features Metal never exposed, including 64-bit arithmetic and 128x anisotropy. None of it is upstream: the M1/M2 driver is not upstream either, and the code still needs heavy refactoring.
+
+*** Take
+The driver is real and conformance results are checkable, so the fight in the thread is not about whether it works. It is about provenance. A former Apple GPU engineer feeding traces to a model trained on unknown code is precisely the contribution a kernel maintainer cannot accept on trust, and the Asahi ban was for concealing both facts. Leading with "one month" was the wrong choice when the blocking problem is whether anyone can ever merge it.
+
+*** Comments
+
+**** MoltenMonster
+The author was banned from Asahi Linux for hiding his extensive use of LLMs in another attempted contribution, and for concealing that he is a former Apple engineer with direct contacts to the people working on Apple Silicon.
+
+**** SXX
+Hacking a driver for black box Apple hardware is no different from hacking a $10 LTE modem. That someone who was not previously a driver developer did this in weeks is a wonder, whatever tools were used.
+
+**** thrwy19940314
+All this work is tainted because the poster is ex-Apple. Linux will not take that code when Apple people also contribute to the kernel, and nobody knows whether the training data is similarly tainted.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Construir un controlador de GPU para Linux en el Mac Mini M4 en un mes
+***** TLDR
+Dos desarrolladores escribieron un controlador Mesa conforme a OpenGL ES 3.0 para la GPU del M4 y del A18 Pro en aproximadamente un mes. En lugar de leer desensamblado a mano, capturaron trazas de hardware con un hipervisor propio y se las dieron a Codex con GPT-5.6 Sol y GPT-6 Astra, reproduciendo estados guardados de memoria de la GPU y reconstruyendo poco a poco la ABI del firmware hasta no necesitar nada capturado. Ejecuta Minecraft por encima de 200 fps y WebGL en Chrome y Firefox, y encontraron funciones de hardware que Metal nunca expuso, como aritmética de 64 bits y anisotropía 128x. Nada está en upstream: el controlador M1/M2 tampoco lo está y el código necesita mucha refactorización.
+***** Take
+El controlador es real y los resultados de conformidad se pueden comprobar, así que la discusión no va de si funciona. Va de procedencia. Un antiguo ingeniero de GPU de Apple alimentando trazas a un modelo entrenado con código desconocido es justo la contribución que un mantenedor del kernel no puede aceptar por confianza, y el veto de Asahi fue por ocultar ambas cosas. Abrir con "un mes" fue mala elección cuando el problema que bloquea todo es si alguien podrá fusionarlo algún día.
+***** Comments
+- El autor fue vetado en Asahi Linux por ocultar su uso extensivo de LLM en otra contribución y por ocultar que es antiguo ingeniero de Apple con contactos directos con quienes trabajan en Apple Silicon.
+- Hackear un controlador para hardware opaco de Apple no se diferencia de hackear un módem LTE de 10 dólares. Que alguien sin experiencia previa en controladores lo lograra en semanas es admirable, se usen las herramientas que se usen.
+- Todo este trabajo queda contaminado porque el autor es ex-Apple. Linux no aceptará ese código cuando gente de Apple también contribuye al kernel, y nadie sabe si los datos de entrenamiento están igual de contaminados.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Einen Linux-GPU-Treiber für den M4 Mac Mini in einem Monat bauen
+***** TLDR
+Zwei Entwickler schrieben in etwa einem Monat einen OpenGL-ES-3.0-konformen Mesa-Treiber für die GPU von M4 und A18 Pro. Statt Disassemblate von Hand zu lesen, zeichneten sie Hardware-Traces mit einem eigenen Hypervisor auf und gaben sie an Codex mit GPT-5.6 Sol und GPT-6 Astra, spielten gespeicherte GPU-Speicherzustände erneut ab und bauten die Firmware-ABI schrittweise nach, bis nichts Aufgezeichnetes mehr nötig war. Minecraft läuft mit über 200 fps, WebGL in Chrome und Firefox, und sie fanden Hardwarefunktionen, die Metal nie offenlegte, darunter 64-Bit-Arithmetik und 128x-Anisotropie. Nichts davon ist upstream: Auch der M1/M2-Treiber ist es nicht, und der Code braucht noch viel Refactoring.
+***** Take
+Der Treiber ist echt und die Konformitätsergebnisse sind überprüfbar, es geht im Thread also nicht darum, ob er funktioniert. Es geht um Herkunft. Ein ehemaliger Apple-GPU-Ingenieur, der Traces an ein Modell mit unbekannten Trainingsdaten gibt, ist genau der Beitrag, den ein Kernel-Maintainer nicht auf Vertrauen annehmen kann, und der Asahi-Bann kam für das Verschweigen beider Punkte. Mit "ein Monat" aufzumachen war die falsche Wahl, wenn das eigentliche Problem ist, ob das jemals jemand mergen kann.
+***** Comments
+- Der Autor wurde von Asahi Linux ausgeschlossen, weil er seinen umfangreichen LLM-Einsatz bei einem anderen Beitrag verschwieg und weil er verschwieg, dass er ehemaliger Apple-Ingenieur mit direkten Kontakten zu den Apple-Silicon-Leuten ist.
+- Einen Treiber für undokumentierte Apple-Hardware zu hacken unterscheidet sich nicht vom Hacken eines 10-Dollar-LTE-Modems. Dass jemand ohne vorherige Treibererfahrung das in Wochen schafft, ist bemerkenswert, egal mit welchen Werkzeugen.
+- Die ganze Arbeit ist belastet, weil der Autor Ex-Apple ist. Linux wird diesen Code nicht nehmen, solange auch Apple-Leute zum Kernel beitragen, und niemand weiß, ob die Trainingsdaten ähnlich belastet sind.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+한 달 만에 M4 맥 미니용 리눅스 GPU 드라이버 만들기
+***** TLDR
+개발자 두 명이 약 한 달 만에 M4와 A18 Pro GPU용 OpenGL ES 3.0 적합 Mesa 드라이버를 작성했다. 디스어셈블리를 직접 읽는 대신 자체 하이퍼바이저로 하드웨어 트레이스를 캡처해 GPT-5.6 Sol과 GPT-6 Astra를 쓰는 Codex에 넘겼고, 저장된 GPU 메모리 상태를 재생하면서 캡처 데이터 없이도 동작할 때까지 펌웨어 ABI를 단계적으로 재구성했다. 마인크래프트가 200fps 이상으로 돌아가고 크롬과 파이어폭스에서 WebGL이 동작하며, Metal이 노출하지 않은 64비트 연산과 128배 이방성 필터링 같은 하드웨어 기능도 찾아냈다. 업스트림에 올라간 것은 없다. M1/M2 드라이버도 아직 업스트림이 아니고, 코드에는 대대적인 리팩터링이 필요하다.
+***** Take
+드라이버는 실제로 동작하고 적합성 결과는 검증 가능하다. 그래서 논쟁의 초점은 작동 여부가 아니라 출처다. 애플 GPU 출신 엔지니어가 학습 데이터가 불분명한 모델에 트레이스를 넣어 만든 결과물은 커널 메인테이너가 신뢰만으로 받아들일 수 없는 종류의 기여이고, Asahi 차단도 이 두 사실을 숨긴 탓이었다. 정작 막혀 있는 문제가 누가 이걸 머지할 수 있느냐인데 "한 달"을 앞세운 것은 잘못된 선택이었다.
+***** Comments
+- 저자는 다른 기여에서 LLM을 대규모로 썼다는 사실과 애플 실리콘 담당자들과 직접 연결된 전직 애플 엔지니어라는 사실을 숨겨 Asahi Linux에서 차단됐다.
+- 블랙박스 애플 하드웨어용 드라이버를 해킹하는 건 10달러짜리 LTE 모뎀을 해킹하는 것과 다르지 않다. 드라이버 개발 경험이 없던 사람이 몇 주 만에 해낸 것은 도구가 무엇이든 놀라운 일이다.
+- 저자가 전직 애플 직원이라 작업 전체가 오염됐다. 애플 사람들도 커널에 기여하는 마당에 리눅스가 이 코드를 받을 리 없고, 학습 데이터가 비슷하게 오염됐는지도 아무도 모른다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+M4 Mac Mini向けLinux GPUドライバを1か月で作る
+***** TLDR
+開発者2人が約1か月でM4とA18 Pro向けのOpenGL ES 3.0準拠のMesaドライバを書いた。逆アセンブルを手で読む代わりに、自作ハイパーバイザでハードウェアのトレースを取得し、GPT-5.6 SolとGPT-6 Astraを使うCodexに渡して、保存したGPUメモリ状態を再生しながら、取得データなしで動くまでファームウェアABIを段階的に再構築した。Minecraftが200fps超で動き、ChromeとFirefoxでWebGLが動作し、Metalが公開していなかった64ビット演算や128倍異方性フィルタリングといった機能も見つけた。アップストリームには何も入っていない。M1/M2ドライバも未アップストリームで、コードには大幅なリファクタリングが必要だ。
+***** Take
+ドライバは実在し、準拠テストの結果は検証できる。だから議論は動くかどうかではなく、出所についてだ。元AppleのGPUエンジニアが、学習データ不明のモデルにトレースを与えて作ったものは、カーネルメンテナが信頼だけで受け取れない類の貢献であり、Asahiの追放もこの二点を隠したことが理由だった。実際に詰まっているのは誰がマージできるのかという点なのに、「1か月」を前面に出したのは選択を誤っている。
+***** Comments
+- 著者は別の投稿でLLMの大規模な使用を隠したこと、そしてApple Silicon担当者と直接つながる元Appleエンジニアであることを隠したため、Asahi Linuxから追放された。
+- ブラックボックスのAppleハードウェア向けドライバをハックするのは、10ドルのLTEモデムをハックするのと変わらない。ドライバ開発経験のない人が数週間で成し遂げたのは、道具が何であれ驚くべきことだ。
+- 著者が元Appleである以上、この作業はすべて汚染されている。Appleの人間もカーネルに貢献している中でLinuxがこのコードを取ることはないし、学習データが同様に汚染されているかも誰にも分からない。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+一个月为 M4 Mac Mini 写出 Linux GPU 驱动
+***** TLDR
+两名开发者用大约一个月写出了符合 OpenGL ES 3.0 规范的 Mesa 驱动，支持 M4 和 A18 Pro 的 GPU。他们没有手工读反汇编，而是用自研的虚拟机监控器抓取硬件轨迹，交给运行 GPT-5.6 Sol 和 GPT-6 Astra 的 Codex，通过重放保存的 GPU 内存状态逐步重建固件 ABI，直到不再依赖任何抓取数据。Minecraft 跑到 200fps 以上，Chrome 和 Firefox 里的 WebGL 也能用，他们还发现了 Metal 从未暴露的硬件特性，包括 64 位运算和 128 倍各向异性过滤。目前没有任何代码进入上游：M1/M2 驱动同样没有进上游，而这套代码还需要大量重构。
+***** Take
+驱动是真的，合规测试结果也可以复核，所以争论的焦点不是它能不能用，而是来源。一名前苹果 GPU 工程师把轨迹喂给训练数据不明的模型，这正是内核维护者无法凭信任接收的那类贡献，Asahi 封禁他也正是因为他隐瞒了这两件事。真正卡住的问题是有没有人能合并它，此时把「一个月」放在标题上是选错了重点。
+***** Comments
+- 作者因为在另一次贡献中隐瞒大量使用 LLM，以及隐瞒自己是与苹果芯片团队有直接联系的前苹果工程师，被 Asahi Linux 封禁。
+- 为黑盒的苹果硬件写驱动，和破解一个十美元的 LTE 模块没有本质区别。一个此前没做过驱动的人几周内做出来，不管用什么工具都令人惊叹。
+- 作者是前苹果员工，这份工作因此被污染。苹果的人也在给内核做贡献，Linux 不可能接收这些代码，而且没人知道训练数据是不是同样被污染了。
+** Gemini 3.8 Live and 3.8 Live Extended Thinking :ai:google:gemini:voice:llm:
+:PROPERTIES:
+:ID:       49715947
+:URL:      https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-live-gemini-3-8-live-extended-thinking/
+:HN_URL:   https://news.ycombinator.com/item?id=49715947
+:POINTS:   366
+:COMMENTS: 233
+:BY:       leumon
+:END:
+
+*** TLDR
+Google shipped two speech-to-speech models. Both handle near real-time video alongside the conversation, detect and switch between 97 languages mid-conversation, and run tool calls in the background while still talking, filling the gap with phrases like "let me check that". The Extended Thinking variant reasons and speaks at the same time for multi-step tasks. Google claims first place on Artificial Analysis' Speech to Speech Quality Index at 82.6, 68.6% on the τ-Voice agentic benchmark and 97.7% on Big Bench Audio. It is live now in the Gemini API, AI Studio, Search Live, Gemini Live and Workspace for paid accounts. The post gives no prices.
+
+*** Take
+The benchmark table is the least interesting part. What people in the thread actually report is that it speaks small languages well enough to startle native speakers, which is a capability no index captures. Two things to hold against it: a model pitched on cost efficiency launched with no published price, and the verbal filler while a tool call runs is a latency cover, not reasoning. Also worth noting that the loudest complaint is still context loss between consecutive messages.
+
+*** Comments
+
+**** jeanbza
+My first language is Afrikaans, which is hard to find conversation partners for outside South Africa. Gemini is phenomenal at speaking it, enough to shock my family when they hear it.
+
+**** galkk
+I don't understand the good experiences people are having. It is the only model that sometimes loses context in literally the next message, plus it feeds unasked product links into responses.
+
+**** Havoc
+Very solid release. Copes well with a thick accent, voices are pleasant, latency is low, and I can actually use it on a Workspace account, which most recent releases left in limbo.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Gemini 3.8 Live y 3.8 Live Extended Thinking
+***** TLDR
+Google lanzó dos modelos de voz a voz. Ambos procesan vídeo casi en tiempo real durante la conversación, detectan y cambian entre 97 idiomas a mitad de diálogo y ejecutan llamadas a herramientas en segundo plano sin dejar de hablar, rellenando el hueco con frases como "déjame comprobarlo". La variante Extended Thinking razona y habla a la vez en tareas de varios pasos. Google afirma el primer puesto en el Speech to Speech Quality Index de Artificial Analysis con 82,6, un 68,6% en el benchmark agéntico τ-Voice y un 97,7% en Big Bench Audio. Ya está disponible en la API de Gemini, AI Studio, Search Live, Gemini Live y Workspace para cuentas de pago. El anuncio no da precios.
+***** Take
+La tabla de benchmarks es lo menos interesante. Lo que la gente cuenta en el hilo es que habla idiomas minoritarios lo bastante bien como para sorprender a hablantes nativos, algo que ningún índice recoge. Dos reparos: un modelo vendido por su eficiencia de coste se lanza sin precio publicado, y la muletilla verbal mientras corre una llamada a herramienta es una tapadera de latencia, no razonamiento. Y la queja más repetida sigue siendo la pérdida de contexto entre mensajes consecutivos.
+***** Comments
+- Mi lengua materna es el afrikáans y fuera de Sudáfrica es difícil encontrar con quién practicar. Gemini lo habla de forma extraordinaria, tanto que sorprende a mi familia cuando lo oye.
+- No entiendo las buenas experiencias que cuenta la gente. Es el único modelo que a veces pierde el contexto literalmente en el mensaje siguiente, y además cuela enlaces a productos que nadie pidió.
+- Lanzamiento muy sólido. Aguanta bien un acento marcado, las voces son agradables, la latencia es baja y por fin puedo usarlo con una cuenta Workspace, que en los últimos lanzamientos quedaba en tierra de nadie.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gemini 3.8 Live und 3.8 Live Extended Thinking
+***** TLDR
+Google hat zwei Sprache-zu-Sprache-Modelle veröffentlicht. Beide verarbeiten Video nahezu in Echtzeit während des Gesprächs, erkennen 97 Sprachen und wechseln mitten im Dialog, und führen Tool-Aufrufe im Hintergrund aus, während weitergesprochen wird, überbrückt mit Sätzen wie "ich sehe kurz nach". Die Extended-Thinking-Variante denkt und spricht bei mehrstufigen Aufgaben gleichzeitig. Google beansprucht Platz eins im Speech to Speech Quality Index von Artificial Analysis mit 82,6, 68,6% im agentischen Benchmark τ-Voice und 97,7% bei Big Bench Audio. Verfügbar ab sofort in der Gemini API, AI Studio, Search Live, Gemini Live und Workspace für zahlende Konten. Preise nennt der Beitrag nicht.
+***** Take
+Die Benchmark-Tabelle ist der langweiligste Teil. Was im Thread tatsächlich berichtet wird: Das Modell spricht kleine Sprachen gut genug, um Muttersprachler zu verblüffen, und das erfasst kein Index. Zwei Einwände: Ein Modell, das mit Kosteneffizienz beworben wird, startet ohne veröffentlichten Preis, und die verbale Füllfloskel während eines Tool-Aufrufs kaschiert Latenz, sie ist kein Denken. Die lauteste Beschwerde bleibt zudem der Kontextverlust zwischen aufeinanderfolgenden Nachrichten.
+***** Comments
+- Meine Muttersprache ist Afrikaans, und außerhalb Südafrikas findet man kaum Gesprächspartner. Gemini spricht es phänomenal, so gut, dass meine Familie beim Zuhören verblüfft ist.
+- Ich verstehe die guten Erfahrungen nicht. Es ist das einzige Modell, das manchmal buchstäblich in der nächsten Nachricht den Kontext verliert, und es schiebt ungefragt Produktlinks in die Antworten.
+- Sehr solides Release. Kommt mit starkem Akzent klar, die Stimmen sind angenehm, die Latenz gering, und ich kann es endlich mit einem Workspace-Konto nutzen, das bei den letzten Releases im Niemandsland hing.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Gemini 3.8 Live와 3.8 Live Extended Thinking
+***** TLDR
+구글이 음성 대 음성 모델 두 종을 내놓았다. 둘 다 대화 중 영상을 거의 실시간으로 처리하고, 97개 언어를 감지해 대화 도중에 전환하며, 말을 이어가면서 백그라운드로 도구 호출을 실행하고 그 사이를 "확인해 볼게요" 같은 표현으로 채운다. Extended Thinking 버전은 여러 단계 작업에서 추론과 발화를 동시에 한다. 구글은 Artificial Analysis의 Speech to Speech Quality Index에서 82.6으로 1위, 에이전트 벤치마크 τ-Voice 68.6%, Big Bench Audio 97.7%를 주장한다. Gemini API, AI Studio, Search Live, Gemini Live, 유료 Workspace 계정에서 바로 쓸 수 있다. 가격은 공개하지 않았다.
+***** Take
+벤치마크 표가 가장 덜 중요한 부분이다. 스레드에서 실제로 반복되는 이야기는 소수 언어를 원어민이 놀랄 만큼 잘 구사한다는 것이고, 이건 어떤 지표도 잡아내지 못한다. 걸리는 점은 둘이다. 비용 효율을 내세운 모델이 가격 없이 출시됐다는 것, 그리고 도구 호출 중에 넣는 말버릇은 추론이 아니라 지연 시간을 가리는 장치라는 것. 가장 큰 불만은 여전히 바로 다음 메시지에서 문맥을 잃는 문제다.
+***** Comments
+- 내 모국어는 아프리칸스어인데 남아공 밖에서는 대화 상대를 찾기 어렵다. Gemini는 이 언어를 놀라울 만큼 잘 구사해서, 듣는 가족들이 깜짝 놀랄 정도다.
+- 사람들이 말하는 좋은 경험을 이해할 수 없다. 말 그대로 바로 다음 메시지에서 문맥을 잃는 유일한 모델이고, 묻지도 않은 제품 링크를 응답에 끼워 넣는다.
+- 아주 탄탄한 릴리스다. 강한 억양도 잘 알아듣고 목소리도 듣기 좋고 지연도 짧다. 게다가 최근 릴리스에서 계속 애매하게 방치되던 Workspace 계정으로도 드디어 쓸 수 있다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Gemini 3.8 Live と 3.8 Live Extended Thinking
+***** TLDR
+Googleが音声対音声のモデルを2種類公開した。どちらも会話中の映像をほぼリアルタイムで扱い、97言語を検出して会話の途中で切り替え、話しながらバックグラウンドでツール呼び出しを実行し、その間を「確認しますね」といった言葉で埋める。Extended Thinking版は多段階のタスクで推論と発話を同時に行う。GoogleはArtificial AnalysisのSpeech to Speech Quality Indexで82.6の首位、エージェント指標τ-Voiceで68.6%、Big Bench Audioで97.7%を主張している。Gemini API、AI Studio、Search Live、Gemini Live、有料アカウントのWorkspaceで即日利用可能。価格の記載はない。
+***** Take
+ベンチマーク表が一番どうでもいい部分だ。スレッドで実際に語られているのは、少数言語を母語話者が驚くほど上手に話すという点で、これはどの指標も捉えていない。引っかかる点は二つ。コスト効率を売りにしたモデルが価格非公開で出たこと、そしてツール呼び出し中の相づちは推論ではなく遅延の隠蔽だということ。そして最大の不満は相変わらず、次のメッセージで文脈を失う問題だ。
+***** Comments
+- 母語はアフリカーンス語で、南アフリカの外では会話相手を見つけにくい。Geminiはこの言語を驚くほどうまく話し、家族が聞いて本気で驚くほどだ。
+- みんなの良い体験談が理解できない。文字どおり次のメッセージで文脈を失うことがある唯一のモデルだし、頼んでもいない商品リンクを回答に混ぜてくる。
+- 非常に堅実なリリースだ。強い訛りにも対応し、声は聞き心地がよく、レイテンシも低い。しかも最近のリリースでは宙ぶらりんだったWorkspaceアカウントでようやく使える。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Gemini 3.8 Live 与 3.8 Live Extended Thinking
+***** TLDR
+谷歌发布了两款语音到语音模型。两者都能在对话中近乎实时地处理视频，识别并在对话中途切换 97 种语言，还能一边说话一边在后台执行工具调用，用「我查一下」之类的话填补空档。Extended Thinking 版本在多步任务中边推理边说话。谷歌称其在 Artificial Analysis 的 Speech to Speech Quality Index 上以 82.6 分排第一，τ-Voice 智能体基准 68.6%，Big Bench Audio 97.7%。现已上线 Gemini API、AI Studio、Search Live、Gemini Live 以及付费 Workspace 账户。公告没有给出价格。
+***** Take
+基准表是最无关紧要的部分。帖子里真正被反复提到的是，它说小语种的水平好到能让母语者吃惊，而这一点没有任何指标能反映。有两处值得记住：一个主打成本效率的模型发布时没有公开价格；工具调用期间的口头填充是在掩盖延迟，不是推理。另外最集中的抱怨依然是紧接着的下一条消息就丢失上下文。
+***** Comments
+- 我的母语是南非荷兰语，在南非以外很难找到对话伙伴。Gemini 说得非常出色，家人听到时都吃了一惊。
+- 我不理解大家说的好体验。它是唯一一个会在下一条消息里就丢掉上下文的模型，还会往回答里塞没人要的产品链接。
+- 这个版本很扎实。能应付很重的口音，声音悦耳，延迟也低。而且我终于能用 Workspace 账户了，最近几次发布这类账户一直处于不上不下的状态。
+** Show HN: Capsule – Single-file web apps that save their data into SQLite :showhn:sqlite:rust:tauri:local-first:
+:PROPERTIES:
+:ID:       49712278
+:URL:      https://withcapsule.app/
+:HN_URL:   https://news.ycombinator.com/item?id=49712278
+:POINTS:   313
+:COMMENTS: 125
+:BY:       bashtian
+:END:
+
+*** TLDR
+Capsule packs an HTML app and its data into one SQLite file with a .capsule extension. It is written in Rust with Tauri 2.0. The HTML, assets, PDFs and images are embedded directly in the database; app data goes either to a localStorage-style key/value store or a MongoDB-inspired collections API, and exports to CSV or JSON. Documents get no filesystem access by default and must request network permission. Every record carries a UUID and timestamp so separate copies of a file can be merged later. It is free, runs on macOS 12+, Windows 10+ and Ubuntu/Debian/Fedora, with mobile listed as coming soon, and the author plans to publish the format spec at 1.0.
+
+*** Take
+The pitch and the product point in opposite directions. The problem stated is "saving data required hosting it somewhere", and the top comment answers it in one line: the File System Access API already lets a web page read and write local files, no install needed. What Capsule actually sells is the permission sandbox and the UUID merge story for divergent copies, and neither is in the headline. Requiring users to install a native runtime to open your single portable file is the part that needs the better argument.
+
+*** Comments
+
+**** mg
+With the File System Access API, web pages can already read and write local files just like desktop applications. Try the Chrome Labs text editor, it works nicely on desktop and mobile.
+
+**** rramon
+What is the advantage over plain single HTML files with colocated CSS using the browser's local storage? Those could be saved as PWAs, no?
+
+**** nater5000
+This seems like an idea that works in a specific context being generalized past the point where it makes sense. If the user has to download an application to run these apps, why not just send them the application?
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Capsule, apps web de un solo archivo que guardan sus datos en SQLite
+***** TLDR
+Capsule empaqueta una app HTML y sus datos en un único archivo SQLite con extensión .capsule. Está escrito en Rust con Tauri 2.0. El HTML, los recursos, los PDF y las imágenes van incrustados en la base de datos; los datos de la app se guardan en un almacén clave/valor estilo localStorage o en una API de colecciones inspirada en MongoDB, y se exportan a CSV o JSON. Por defecto los documentos no acceden al sistema de archivos y deben pedir permiso para usar la red. Cada registro lleva un UUID y una marca de tiempo para poder fusionar copias divergentes. Es gratis, funciona en macOS 12+, Windows 10+ y Ubuntu/Debian/Fedora, el móvil está anunciado como próximo y el autor planea publicar la especificación del formato en la 1.0.
+***** Take
+El discurso y el producto apuntan en direcciones opuestas. El problema que plantea es que "guardar datos exigía alojarlos en algún sitio", y el comentario más votado lo responde en una línea: la File System Access API ya permite a una página web leer y escribir archivos locales sin instalar nada. Lo que Capsule vende de verdad es el sandbox de permisos y la fusión por UUID de copias divergentes, y ninguna de las dos cosas aparece en el titular. Obligar a instalar un runtime nativo para abrir tu archivo portable es lo que necesita mejor argumento.
+***** Comments
+- Con la File System Access API las páginas web ya pueden leer y escribir archivos locales igual que una aplicación de escritorio. Prueba el editor de texto de Chrome Labs, funciona bien en escritorio y en móvil.
+- ¿Qué ventaja tiene frente a un simple archivo HTML con el CSS incluido usando el almacenamiento local del navegador? Esos se pueden guardar como PWA, ¿no?
+- Parece una idea que funciona en un contexto concreto y que se generaliza más allá de donde tiene sentido. Si el usuario tiene que descargarse una aplicación para ejecutar estas apps, ¿por qué no enviarle directamente la aplicación?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Capsule, Web-Apps in einer Datei, die ihre Daten in SQLite speichern
+***** TLDR
+Capsule packt eine HTML-App und ihre Daten in eine einzige SQLite-Datei mit der Endung .capsule. Geschrieben ist es in Rust mit Tauri 2.0. HTML, Assets, PDFs und Bilder liegen direkt in der Datenbank; App-Daten landen entweder in einem Key-Value-Store im Stil von localStorage oder in einer von MongoDB inspirierten Collections-API und lassen sich als CSV oder JSON exportieren. Dokumente haben standardmäßig keinen Dateisystemzugriff und müssen Netzwerkzugriff anfragen. Jeder Datensatz trägt UUID und Zeitstempel, damit auseinandergelaufene Kopien später zusammengeführt werden können. Es ist kostenlos, läuft auf macOS 12+, Windows 10+ und Ubuntu/Debian/Fedora, mobil ist angekündigt, und die Formatspezifikation soll zur 1.0 veröffentlicht werden.
+***** Take
+Pitch und Produkt zeigen in entgegengesetzte Richtungen. Das genannte Problem lautet "Daten speichern hieß, sie irgendwo hosten", und der Top-Kommentar beantwortet es in einer Zeile: Die File System Access API erlaubt Webseiten längst, lokale Dateien zu lesen und zu schreiben, ganz ohne Installation. Was Capsule tatsächlich verkauft, sind die Berechtigungs-Sandbox und das UUID-Merging divergierender Kopien, und beides steht nicht in der Überschrift. Dass man eine native Laufzeitumgebung installieren muss, um die eine portable Datei zu öffnen, ist der Punkt, der das bessere Argument braucht.
+***** Comments
+- Mit der File System Access API können Webseiten lokale Dateien längst lesen und schreiben wie Desktop-Anwendungen. Probier den Texteditor von Chrome Labs, er läuft gut auf Desktop und Mobil.
+- Was ist der Vorteil gegenüber einfachen einzelnen HTML-Dateien mit eingebettetem CSS und dem Local Storage des Browsers? Die lassen sich doch als PWA speichern, oder?
+- Das wirkt wie eine Idee, die in einem bestimmten Kontext funktioniert und über den sinnvollen Punkt hinaus verallgemeinert wird. Wenn der Nutzer ohnehin eine Anwendung herunterladen muss, warum schickt man ihm nicht gleich die Anwendung?
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Capsule, 데이터를 SQLite에 저장하는 단일 파일 웹 앱
+***** TLDR
+Capsule은 HTML 앱과 그 데이터를 .capsule 확장자의 SQLite 파일 하나로 묶는다. Rust와 Tauri 2.0으로 작성됐다. HTML, 에셋, PDF, 이미지가 데이터베이스에 직접 들어가고, 앱 데이터는 localStorage 스타일의 키/값 저장소나 MongoDB에서 착안한 컬렉션 API에 저장되며 CSV나 JSON으로 내보낼 수 있다. 문서는 기본적으로 파일 시스템에 접근할 수 없고 네트워크는 권한을 요청해야 한다. 모든 레코드에 UUID와 타임스탬프가 붙어 갈라진 사본들을 나중에 병합할 수 있다. 무료이고 macOS 12+, Windows 10+, Ubuntu/Debian/Fedora에서 동작하며 모바일은 예정, 포맷 명세는 1.0에서 공개할 계획이다.
+***** Take
+홍보 문구와 제품이 서로 반대 방향을 가리킨다. 저자가 내세운 문제는 "데이터를 저장하려면 어딘가에 호스팅해야 했다"인데, 최상위 댓글이 한 줄로 답한다. File System Access API로 웹 페이지는 이미 설치 없이 로컬 파일을 읽고 쓴다. Capsule이 실제로 파는 것은 권한 샌드박스와 갈라진 사본을 UUID로 병합하는 방식인데, 둘 다 제목에 없다. 하나짜리 이식 가능한 파일을 열기 위해 네이티브 런타임을 설치하게 만드는 부분이야말로 더 나은 설명이 필요하다.
+***** Comments
+- File System Access API를 쓰면 웹 페이지도 이미 데스크톱 앱처럼 로컬 파일을 읽고 쓸 수 있다. Chrome Labs의 텍스트 에디터를 써 보라, 데스크톱과 모바일 모두에서 잘 동작한다.
+- CSS를 같이 넣은 평범한 단일 HTML 파일에 브라우저 로컬 스토리지를 쓰는 것과 비교해 무슨 장점이 있나? 그런 건 PWA로 저장할 수도 있지 않나?
+- 특정 맥락에서만 통하는 아이디어를 말이 되는 선을 넘어 일반화한 것 같다. 이 앱들을 실행하려고 사용자가 프로그램을 내려받아야 한다면, 그냥 그 프로그램을 보내주면 되지 않나?
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Capsule、データをSQLiteに保存する単一ファイルのWebアプリ
+***** TLDR
+CapsuleはHTMLアプリとそのデータを拡張子.capsuleのSQLiteファイル1つにまとめる。RustとTauri 2.0で書かれている。HTML、アセット、PDF、画像はデータベースに直接埋め込まれ、アプリのデータはlocalStorage風のキーバリューストアかMongoDB風のコレクションAPIに保存され、CSVやJSONに書き出せる。ドキュメントは既定でファイルシステムにアクセスできず、ネットワークは許可を求める必要がある。各レコードにUUIDとタイムスタンプが付くので、分かれたコピーを後から統合できる。無料で、macOS 12以降、Windows 10以降、Ubuntu/Debian/Fedoraに対応。モバイルは準備中で、フォーマット仕様は1.0で公開する予定だという。
+***** Take
+売り文句と製品が逆を向いている。掲げられた問題は「データを保存するにはどこかにホストする必要がある」だが、トップコメントが一行で答えている。File System Access APIを使えばWebページはインストールなしでローカルファイルを読み書きできる。Capsuleが実際に売っているのは権限サンドボックスと、分岐したコピーをUUIDで統合する仕組みで、どちらも見出しに入っていない。持ち運べる1ファイルを開くためにネイティブのランタイムを入れさせる点こそ、もっと良い説明が要る。
+***** Comments
+- File System Access APIを使えば、Webページはすでにデスクトップアプリのようにローカルファイルを読み書きできる。Chrome Labsのテキストエディタを試してみるといい。デスクトップでもモバイルでもよく動く。
+- CSSを同梱した普通の単一HTMLファイルでブラウザのローカルストレージを使うのと比べて何が有利なのか。あれはPWAとして保存もできるのでは。
+- 特定の文脈で成り立つアイデアを、意味のある範囲を超えて一般化しているように見える。これらのアプリを動かすのにアプリケーションのダウンロードが必要なら、最初からそのアプリケーションを渡せばいいのでは。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN：Capsule，把数据存进 SQLite 的单文件网页应用
+***** TLDR
+Capsule 把一个 HTML 应用和它的数据打包进单个 SQLite 文件，扩展名为 .capsule，用 Rust 和 Tauri 2.0 写成。HTML、静态资源、PDF 和图片直接嵌在数据库里；应用数据存入类似 localStorage 的键值存储或借鉴 MongoDB 的集合 API，可导出为 CSV 或 JSON。文档默认没有文件系统访问权限，联网也要申请。每条记录带 UUID 和时间戳，便于日后合并各自分叉的副本。软件免费，支持 macOS 12+、Windows 10+ 和 Ubuntu/Debian/Fedora，移动端待推出，作者计划在 1.0 版公开文件格式规范。
+***** Take
+宣传和产品指向相反的方向。作者提出的问题是「保存数据必须找地方托管」，而最高票评论一句话就回答了：File System Access API 已经让网页无需安装就能读写本地文件。Capsule 真正卖的是权限沙箱和用 UUID 合并分叉副本的机制，可这两点都不在标题里。为了打开一个「可移植的单文件」而要求用户先装一个原生运行时，才是最需要解释的地方。
+***** Comments
+- 有了 File System Access API，网页早就能像桌面程序一样读写本地文件了。试试 Chrome Labs 的文本编辑器，桌面和移动端都挺好用。
+- 和把 CSS 内联在一起、用浏览器本地存储的普通单个 HTML 文件相比有什么优势？那种文件还能存成 PWA，不是吗？
+- 这像是把一个只在特定场景成立的想法推广过头了。如果用户为了运行这些应用还得先下载一个程序，为什么不直接把那个程序发给他？
+** German Rheinmetall open-sources its Battlesuite connected weapon system protocol :defense:open-source:dds:protocols:embedded:
+:PROPERTIES:
+:ID:       49718928
+:URL:      https://rheinmetall.github.io/onboardapi-documentation/9.10.0/index.html
+:HN_URL:   https://news.ycombinator.com/item?id=49718928
+:POINTS:   174
+:COMMENTS: 53
+:BY:       summarity
+:END:
+
+*** TLDR
+Rheinmetall published documentation for the Onboard API, the data layer of its Battlesuite soldier system. It is middleware for moving sensor data between hardware and software components, built on the Object Management Group's DDS publish-subscribe standard using XTypes and XCDR2 encoding, with a fixed data model meant to keep components interoperable across versions. The core library is proprietary C++ with wrappers for Java, C#/.NET and Python. The licensing is split: interface descriptions are under EPL 2.0, the runtime libraries ship under Rheinmetall's own EULA.
+
+*** Take
+"Open-sources" is doing heavy lifting here. Publishing the IDL under EPL 2.0 while keeping the runtime behind a vendor EULA is the standard way to get an ecosystem without giving up the product, and it is worth naming as such rather than accepting the headline. On the substance, the thread's "why not ROS" is a fair question with a real answer: DDS gives latency and reliability guarantees the ROS ecosystem does not promise, and one commenter points out MIL-STD-3071 made the same choice. Whether that justifies another vendor-specific data model on top of it is a different question.
+
+*** Comments
+
+**** matnosner
+They could just have used ROS...
+
+**** alhirzel
+Reminds me of the Tactical Microgrid Standard, MIL-STD-3071, probably because TMS also uses DDS. I would like to know if any protocol works like DDS but with real-time guarantees and usable on embedded systems with no dynamic allocation.
+
+**** Stitch4223
+"Hi Codex, here is the spec for my battlesuit, build me a Home Assistant plugin that shows groups of sensor data. Read calls only, and treat the API as worse than a cheap toy."
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La alemana Rheinmetall publica el protocolo de su sistema de armas conectado Battlesuite
+***** TLDR
+Rheinmetall publicó la documentación de Onboard API, la capa de datos de su sistema de soldado Battlesuite. Es middleware para mover datos de sensores entre componentes de hardware y software, construido sobre el estándar de publicación y suscripción DDS del Object Management Group con codificación XTypes y XCDR2, y un modelo de datos fijo pensado para mantener la interoperabilidad entre versiones. La biblioteca principal es C++ propietario con envoltorios para Java, C#/.NET y Python. La licencia está dividida: las descripciones de interfaz van bajo EPL 2.0 y las bibliotecas de ejecución bajo el EULA propio de Rheinmetall.
+***** Take
+"Publica en abierto" está haciendo mucho trabajo aquí. Liberar el IDL bajo EPL 2.0 y dejar el runtime tras un EULA del fabricante es la forma habitual de conseguir un ecosistema sin ceder el producto, y conviene llamarlo por su nombre en vez de aceptar el titular. En el fondo, el "por qué no ROS" del hilo es una pregunta justa con respuesta real: DDS ofrece garantías de latencia y fiabilidad que el ecosistema ROS no promete, y un comentarista recuerda que MIL-STD-3071 tomó la misma decisión. Si eso justifica otro modelo de datos propietario encima ya es otra cuestión.
+***** Comments
+- Podrían haber usado ROS sin más...
+- Me recuerda al Tactical Microgrid Standard, MIL-STD-3071, seguramente porque TMS también usa DDS. Me gustaría saber si hay algún protocolo que funcione como DDS pero con garantías de tiempo real y usable en sistemas embebidos sin asignación dinámica.
+- "Hola Codex, aquí tienes la especificación de mi traje de combate, hazme un plugin de Home Assistant que muestre grupos de datos de sensores. Solo llamadas de lectura, y trata la API como si fuera peor que un juguete barato."
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Rheinmetall veröffentlicht das Protokoll seines vernetzten Waffensystems Battlesuite
+***** TLDR
+Rheinmetall hat die Dokumentation der Onboard API veröffentlicht, der Datenschicht seines Soldatensystems Battlesuite. Es handelt sich um Middleware, die Sensordaten zwischen Hardware- und Softwarekomponenten transportiert, aufgebaut auf dem Publish-Subscribe-Standard DDS der Object Management Group mit XTypes und XCDR2-Kodierung und einem festen Datenmodell, das Komponenten über Versionen hinweg interoperabel halten soll. Die Kernbibliothek ist proprietäres C++ mit Wrappern für Java, C#/.NET und Python. Die Lizenzierung ist geteilt: Schnittstellenbeschreibungen stehen unter EPL 2.0, die Laufzeitbibliotheken unter Rheinmetalls eigener EULA.
+***** Take
+"Open Source" leistet hier sehr viel Arbeit. Die IDL unter EPL 2.0 zu veröffentlichen und die Laufzeit hinter einer Hersteller-EULA zu behalten, ist der übliche Weg zu einem Ökosystem, ohne das Produkt herzugeben, und man sollte das so benennen statt die Überschrift zu übernehmen. Inhaltlich ist das "warum nicht ROS" aus dem Thread eine faire Frage mit echter Antwort: DDS gibt Latenz- und Zuverlässigkeitsgarantien, die das ROS-Ökosystem nicht zusagt, und ein Kommentar verweist darauf, dass MIL-STD-3071 dieselbe Wahl traf. Ob das ein weiteres herstellereigenes Datenmodell darüber rechtfertigt, ist eine andere Frage.
+***** Comments
+- Sie hätten einfach ROS nehmen können...
+- Erinnert mich an den Tactical Microgrid Standard, MIL-STD-3071, vermutlich weil TMS ebenfalls DDS nutzt. Mich würde interessieren, ob ein Protokoll wie DDS existiert, aber mit Echtzeitgarantien und nutzbar auf Embedded-Systemen ohne dynamische Speicherverwaltung.
+- "Hallo Codex, hier ist die Spezifikation meines Kampfanzugs, bau mir ein Home-Assistant-Plugin, das Sensordatengruppen anzeigt. Nur lesende Aufrufe, und behandle die API als schlechter als ein billiges Spielzeug."
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+독일 라인메탈, 커넥티드 무기 시스템 Battlesuite의 프로토콜 공개
+***** TLDR
+라인메탈이 자사 병사 시스템 Battlesuite의 데이터 계층인 Onboard API 문서를 공개했다. 하드웨어와 소프트웨어 구성요소 사이에서 센서 데이터를 옮기는 미들웨어로, Object Management Group의 발행/구독 표준 DDS 위에 XTypes와 XCDR2 인코딩을 써서 만들었고, 버전이 바뀌어도 구성요소 간 상호운용성을 유지하도록 데이터 모델을 고정했다. 핵심 라이브러리는 독점 C++이며 Java, C#/.NET, Python 래퍼를 제공한다. 라이선스는 둘로 나뉜다. 인터페이스 정의는 EPL 2.0, 런타임 라이브러리는 라인메탈 자체 EULA다.
+***** Take
+여기서 "오픈소스화"라는 말이 지나치게 많은 일을 하고 있다. IDL은 EPL 2.0으로 풀고 런타임은 벤더 EULA 뒤에 두는 것은 제품을 내주지 않으면서 생태계를 얻는 흔한 방식이고, 제목을 그대로 받아들이기보다 그렇게 부르는 게 맞다. 내용 면에서 스레드의 "왜 ROS가 아닌가"는 정당한 질문이고 답도 있다. DDS는 ROS 생태계가 약속하지 않는 지연과 신뢰성 보장을 제공하며, 한 댓글은 MIL-STD-3071도 같은 선택을 했다고 짚는다. 그 위에 또 하나의 벤더 전용 데이터 모델을 얹을 이유가 되는지는 별개의 문제다.
+***** Comments
+- 그냥 ROS를 쓸 수도 있었을 텐데...
+- Tactical Microgrid Standard, 즉 MIL-STD-3071이 떠오른다. TMS도 DDS를 쓰기 때문일 것이다. DDS처럼 동작하면서 실시간 보장을 제공하고 동적 할당 없는 임베디드 시스템에서도 쓸 수 있는 프로토콜이 있는지 알고 싶다.
+- "Codex야, 내 전투복 사양이 여기 있으니 센서 데이터 그룹을 보여주는 Home Assistant 플러그인을 만들어줘. 읽기 호출만 쓰고, 이 API는 싸구려 장난감보다 못하다고 생각하고 다뤄."
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+独ラインメタル、コネクテッド兵器システムBattlesuiteのプロトコルを公開
+***** TLDR
+ラインメタルが兵士向けシステムBattlesuiteのデータ層であるOnboard APIのドキュメントを公開した。ハードウェアとソフトウェアのコンポーネント間でセンサーデータをやり取りするミドルウェアで、Object Management Groupの発行購読標準DDSの上にXTypesとXCDR2エンコーディングを用い、バージョンをまたいで相互運用性を保つための固定データモデルを備える。中核ライブラリは独自のC++で、Java、C#/.NET、Python向けのラッパーがある。ライセンスは二分されており、インターフェース記述はEPL 2.0、ランタイムライブラリはラインメタル独自のEULAだ。
+***** Take
+「オープンソース化」という言葉がここでは働きすぎている。IDLをEPL 2.0で公開し、ランタイムはベンダーEULAの裏に置くのは、製品を手放さずにエコシステムを得る定番のやり方で、見出しをそのまま受け取るより、そう呼ぶべきだ。中身の話では、スレッドの「なぜROSではないのか」は妥当な問いであり、答えもある。DDSはROSのエコシステムが約束しない遅延と信頼性の保証を与えるし、あるコメントはMIL-STD-3071も同じ選択をしたと指摘している。その上にさらにベンダー固有のデータモデルを重ねる理由になるかは別の問題だ。
+***** Comments
+- 普通にROSを使えばよかったのでは...
+- Tactical Microgrid Standard、つまりMIL-STD-3071を思い出す。TMSもDDSを使っているからだろう。DDSのように動きつつリアルタイム保証があり、動的確保なしの組み込みでも使えるプロトコルがあるのか知りたい。
+- 「Codex、これが私の戦闘スーツの仕様だ。センサーデータをグループ表示するHome Assistantプラグインを作ってくれ。読み取り呼び出しだけ、APIは安物のおもちゃ以下だと思って扱うこと。」
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+德国莱茵金属公开其联网武器系统 Battlesuite 的协议
+***** TLDR
+莱茵金属公开了 Onboard API 的文档，这是其单兵系统 Battlesuite 的数据层。它是在硬件与软件组件之间传输传感器数据的中间件，基于对象管理组织的 DDS 发布订阅标准，采用 XTypes 与 XCDR2 编码，并用固定的数据模型保证组件跨版本互通。核心库是闭源 C++，另有 Java、C#/.NET 和 Python 封装。授权一分为二：接口描述采用 EPL 2.0，运行时库则用莱茵金属自己的 EULA。
+***** Take
+「开源」这个词在这里被用得太重了。把 IDL 以 EPL 2.0 公开、把运行时留在厂商 EULA 之后，是既要生态又不放手产品的常规做法，与其接受标题的说法，不如直接点明。就技术本身而言，帖子里「为什么不用 ROS」是个合理的问题，也有实在的答案：DDS 提供了 ROS 生态并不承诺的延迟与可靠性保证，有评论指出 MIL-STD-3071 也做了同样的选择。至于这是否足以支撑再叠一层厂商专用的数据模型，那是另一个问题。
+***** Comments
+- 他们本可以直接用 ROS 的……
+- 这让我想起 Tactical Microgrid Standard，也就是 MIL-STD-3071，大概是因为 TMS 同样用 DDS。我很想知道有没有哪种协议既像 DDS 那样工作，又能提供实时保证，还能用在没有动态内存分配的嵌入式系统上。
+- 「Codex，这是我战斗服的规格文档，帮我写个 Home Assistant 插件来分组显示传感器数据。只能用读取调用，并且把这个 API 当成比廉价玩具还不靠谱来对待。」
+** Chopping up books when they're physically too big :books:diy:reading:bookbinding:
+:PROPERTIES:
+:ID:       49716953
+:URL:      https://attainablefelicity.mattkirkland.com/20260915/cut-up-your-books.html
+:HN_URL:   https://news.ycombinator.com/item?id=49716953
+:POINTS:   152
+:COMMENTS: 145
+:BY:       matt_kirkland
+:END:
+
+*** TLDR
+Matt Kirkland makes the case for physically cutting oversized books into several smaller volumes, on the grounds that an 850-page paperback like Lonesome Dove is uncomfortable to hold, read in bed or carry. His method: buy your own copy rather than using a library book, pick break points at part or chapter boundaries, crack the spine to expose the glue, slice through it with an X-acto knife, cut covers from manila folders, glue them on, clamp with binder clips while the adhesive dries, and label each section with a marker.
+
+*** Take
+The technique is not new, since binders have cut and rebound books for centuries, but the post is useful because it names the actual obstacle. It is not difficulty, it is the feeling that a book is a sacred object. A mass-market paperback is a cheap item printed in the hundreds of thousands, and treating it as untouchable mostly means you read it less. The one rule that carries the whole ethics of it is the first step: your copy, not the library's.
+
+*** Comments
+
+**** cgearhart
+Twenty years ago I complained my math book was too big. My roommate asked if I was selling it back, and I said no, there was a new edition. Cut it, he said. Books were sacred to me. But he was right. I cut it, and it fixed all my complaints.
+
+**** prydt
+I used to care so much about how pristine my books looked, then realised my favourites from used bookstores are the ones written all over. I now annotate everything in pencil and write my name in them.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cortar los libros cuando son físicamente demasiado grandes
+***** TLDR
+Matt Kirkland defiende cortar físicamente los libros demasiado grandes en varios volúmenes más pequeños, porque un libro de bolsillo de 850 páginas como Lonesome Dove es incómodo de sostener, de leer en la cama y de transportar. Su método: compra tu propio ejemplar en vez de usar uno de la biblioteca, elige los cortes en los límites de parte o capítulo, abre el lomo para exponer la cola, córtala con un cúter X-acto, recorta tapas de carpetas de cartulina, pégalas, sujeta con pinzas mientras seca y rotula cada sección.
+***** Take
+La técnica no es nueva, los encuadernadores llevan siglos cortando y reencuadernando, pero el texto es útil porque nombra el obstáculo real. No es la dificultad, es la sensación de que un libro es un objeto sagrado. Un libro de bolsillo es un objeto barato impreso por cientos de miles, y tratarlo como intocable sobre todo hace que lo leas menos. La regla que sostiene toda la ética del asunto es el primer paso: tu ejemplar, no el de la biblioteca.
+***** Comments
+- Hace veinte años me quejé de que mi libro de matemáticas era demasiado grande. Mi compañero de piso preguntó si lo iba a revender, le dije que no, que había edición nueva. Córtalo, dijo. Para mí los libros eran sagrados. Pero tenía razón. Lo corté y resolvió todas mis quejas.
+- Antes me importaba muchísimo que mis libros estuvieran impecables, hasta que me di cuenta de que mis favoritos de librerías de segunda mano son los que están llenos de anotaciones. Ahora anoto todo a lápiz y escribo mi nombre en ellos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Bücher zerschneiden, wenn sie körperlich zu groß sind
+***** TLDR
+Matt Kirkland plädiert dafür, übergroße Bücher physisch in mehrere kleinere Bände zu zerschneiden, weil ein 850-Seiten-Taschenbuch wie Lonesome Dove unangenehm zu halten, im Bett zu lesen und zu transportieren ist. Seine Methode: Kauf dein eigenes Exemplar statt eins aus der Bibliothek zu nehmen, wähle Trennstellen an Teil- oder Kapitelgrenzen, brich den Rücken auf, um den Leim freizulegen, schneide ihn mit einem X-acto-Messer durch, schneide Umschläge aus Aktendeckeln, klebe sie an, klemme mit Foldback-Klammern bis alles trocken ist, und beschrifte jeden Teil mit einem Marker.
+***** Take
+Die Technik ist nicht neu, Buchbinder schneiden und binden seit Jahrhunderten neu, aber der Beitrag ist nützlich, weil er das eigentliche Hindernis benennt. Es ist nicht die Schwierigkeit, es ist das Gefühl, ein Buch sei ein heiliger Gegenstand. Ein Taschenbuch ist ein billiges, hunderttausendfach gedrucktes Ding, und es für unantastbar zu halten führt vor allem dazu, dass man weniger darin liest. Die Regel, die die ganze Ethik trägt, ist der erste Schritt: dein Exemplar, nicht das der Bibliothek.
+***** Comments
+- Vor zwanzig Jahren klagte ich, mein Mathebuch sei zu groß. Mein Mitbewohner fragte, ob ich es zurückverkaufe, ich sagte nein, es gibt eine neue Auflage. Schneid es durch, sagte er. Bücher waren mir heilig. Aber er hatte recht. Ich schnitt es, und alle meine Klagen waren erledigt.
+- Früher war mir wichtig, dass meine Bücher makellos aussehen, dann merkte ich, dass meine Lieblingsbücher aus Antiquariaten die vollgeschriebenen sind. Jetzt annotiere ich alles mit Bleistift und schreibe meinen Namen hinein.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+물리적으로 너무 큰 책은 잘라 쓰기
+***** TLDR
+매트 커클랜드는 지나치게 두꺼운 책을 여러 권으로 잘라 나누자고 주장한다. 『론섬 도브』처럼 850쪽짜리 문고본은 들고 있기도, 침대에서 읽기도, 들고 다니기도 불편하기 때문이다. 방법은 이렇다. 도서관 책 말고 자기 책을 사고, 부나 장의 경계에서 자를 지점을 고르고, 책등을 꺾어 접착제를 드러낸 뒤 X-acto 칼로 잘라내고, 서류철 판지로 표지를 재단해 붙이고, 접착제가 마를 때까지 집게로 고정한 다음, 각 권에 매직으로 제목을 적는다.
+***** Take
+기법 자체는 새롭지 않다. 제본공은 수백 년 동안 책을 자르고 다시 묶어 왔다. 이 글이 유용한 이유는 진짜 장애물을 짚었기 때문이다. 어려움이 아니라 책이 신성한 물건이라는 감각이다. 대중 문고본은 수십만 부 찍어내는 값싼 물건이고, 손대면 안 되는 물건처럼 다루면 결국 덜 읽게 된다. 이 일의 윤리를 통째로 지탱하는 규칙은 첫 단계다. 도서관 책이 아니라 내 책일 것.
+***** Comments
+- 20년 전 수학 교재가 너무 두껍다고 투덜댔다. 룸메이트가 되팔 거냐고 묻길래 새 판이 나와서 못 판다고 했다. 그럼 잘라, 라고 했다. 내게 책은 신성한 물건이었다. 하지만 그가 옳았다. 잘랐더니 불만이 전부 해결됐다.
+- 예전엔 책이 깨끗한지 몹시 신경 썼는데, 헌책방에서 산 책 중 가장 아끼는 것들이 온통 낙서가 있는 책이라는 걸 깨달았다. 이제는 전부 연필로 메모하고 내 이름도 적어 넣는다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+物理的に大きすぎる本は切ってしまう
+***** TLDR
+マット・カークランドは、大きすぎる本を物理的に複数の小さな巻へ切り分けることを勧める。『ローンサム・ダブ』のような850ページのペーパーバックは、持つのも、ベッドで読むのも、持ち運ぶのも苦痛だからだ。手順はこうだ。図書館の本ではなく自分の本を買う、部や章の境目で切れ目を決める、背を折って接着剤を露出させ、X-actoナイフで切り離す、マニラフォルダーから表紙を切り出して貼る、乾くまでクリップで固定する、最後に各巻にマーカーで題を書く。
+***** Take
+技法自体は新しくない。製本職人は何百年も本を切って綴じ直してきた。それでもこの記事が有用なのは、本当の障害を名指ししているからだ。難しさではなく、本が神聖な物だという感覚である。大衆向けのペーパーバックは何十万部も刷られる安価な品で、触れてはならない物として扱うと結局読む回数が減る。この話の倫理をすべて支えているのは最初の一歩だ。図書館の本ではなく、自分の本でやること。
+***** Comments
+- 20年前、数学の教科書が大きすぎると愚痴った。ルームメイトに売り戻すのかと聞かれ、新版が出たから無理だと答えた。なら切れ、と言われた。私にとって本は神聖なものだった。だが彼は正しかった。切ったら不満はすべて解消した。
+- 以前は本がきれいなままかどうかをひどく気にしていたが、古書店で買ったお気に入りが書き込みだらけの本ばかりだと気づいた。今はすべて鉛筆で書き込み、自分の名前も書いている。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+书太大就把它切开
+***** TLDR
+马特·柯克兰主张把过大的书物理切分成几个小册子，因为像《孤独鸽》这样 850 页的平装本，拿着累、躺着读难受、带出门更麻烦。他的做法是：买自己的书而不要动图书馆的；在卷或章的分界处选切口；把书脊掰开露出胶层，用 X-acto 刀割断；用马尼拉纸文件夹裁出新封面粘上；用长尾夹夹住等胶干；最后用记号笔标上每册的名字。
+***** Take
+这套手法算不上新鲜，装帧师切书重订已有数百年历史，但这篇文章有价值，因为它点出了真正的障碍。障碍不是难度，而是「书是神圣之物」的感觉。大众平装本是印了几十万册的廉价商品，把它当成碰不得的东西，结果多半只是读得更少。真正撑起这件事全部分寸的是第一步：切自己的书，不要切图书馆的。
+***** Comments
+- 二十年前我抱怨数学课本太厚。室友问我是不是要卖二手，我说不卖，新版已经出了。那就切开，他说。书在我心里是神圣的。但他是对的。我切了，所有抱怨都解决了。
+- 我以前非常在意书是不是完好如新，后来发现自己在旧书店淘到的最爱的那几本，全都写满了批注。现在我用铅笔在所有书上做笔记，还写上自己的名字。
