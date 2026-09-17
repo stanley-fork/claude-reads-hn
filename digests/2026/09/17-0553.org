@@ -1,0 +1,502 @@
+#+TITLE: HN Digest 2026-09-17 05:53 UTC
+#+DATE: 2026-09-17T05:53:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Xiaomi livestreams its RL bill, a hobbyist recovers state driver's license signing keys, and Factorio's RNG falls to linear algebra
+
+* Highlights
+- Xiaomi MiMo 2.6: a live training dashboard with the dollar counter left on
+- Driver's license barcodes: signed for years, verifiable by nobody
+- Factorio's taus88 state recovered from 88 single-bit crafting observations
+
+* Stories
+
+** Xiaomi Mimo 2.6 live post-training dashboard :ai:ml:training:opensource:
+:PROPERTIES:
+:ID:       49732270
+:URL:      https://mimo.xiaomi.com/rl/
+:HN_URL:   https://news.ycombinator.com/item?id=49732270
+:POINTS:   364
+:COMMENTS: 90
+:BY:       krackers
+:END:
+
+*** TLDR
+Xiaomi put the reinforcement-learning phase of MiMo v2.6 on a public dashboard that updates while the run is happening. Two models are training: Pro (step 13, 27.6B tokens, 326k samples, DeepSWE v1.1 score 63.72) and Flash (step 16, 37.6B tokens, 401k samples, 60.77). Charts cover critic reward, actor entropy, policy gradient loss, gradient norms, KL divergence, context length and rollout acceptance rate. The data mix is 25 datasets: 67% code, 13% visual, 12% general, 4% cyber, 3% chat. There is also a cumulative cost readout, showing $882,043 for Pro and $392,346 for Flash so far.
+
+*** Take
+The cost counter is the part no other lab publishes. Everyone says RL post-training scales; Xiaomi is showing the meter run past a million dollars across two unfinished runs, which turns the pitch into a budget line you can argue about. The rest of the dashboard is standard wandb material made public, and that is still more than the frontier labs give you.
+
+*** Comments
+
+**** joelwallis
+I been using MiMo-V2.5 to do most of my work as software engineer, and I been VERY happy with ROI. The cost is unbelievably low, and the quality of intelligence I get is equivalent to when I was working with much pricier models.
+
+**** dr_dshiv
+Well, if open source AI is dangerous (for OpenAI/Anthropic IPOs?), this is like watching a time bomb.
+
+**** jstummbillig
+Wow, spending money on training an almost-frontier-model is much more time intensive than I thought it was.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+小米 MiMo 2.6 后训练实时看板
+***** TLDR
+小米把 MiMo v2.6 的强化学习阶段放上了一个训练进行中就实时更新的公开看板。两个模型在训练：Pro（第 13 步，276 亿 token，32.6 万样本，DeepSWE v1.1 得分 63.72）和 Flash（第 16 步，376 亿 token，40.1 万样本，60.77）。图表涵盖 critic 奖励、actor 熵、策略梯度损失、梯度范数、KL 散度、上下文长度和 rollout 接受率。数据配比是 25 个数据集：代码 67%、视觉 13%、通用 12%、网络安全 4%、对话 3%。还有一个累计成本显示：Pro 已花 882,043 美元，Flash 已花 392,346 美元。
+***** Take
+成本计数器是别家实验室都不公布的部分。人人都说 RL 后训练可以扩展，小米直接把两个还没跑完的任务烧掉一百多万美元的表盘亮出来，于是这套说法变成了一条可以争论的预算。看板其余部分只是把常规的 wandb 内容公开，但这已经比前沿实验室给的多了。
+***** Comments
+- 我作为软件工程师，大部分工作都在用 MiMo-V2.5，对投入产出比非常满意。成本低得难以置信，而我得到的智能水平相当于以前用贵得多的模型时的水平。
+- 如果开源 AI 真是危险的（对 OpenAI/Anthropic 的 IPO 而言？），那这就像在看一颗定时炸弹。
+- 没想到，花钱训练一个接近前沿的模型，居然这么耗时间。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Xiaomi MiMo 2.6 のポストトレーニング実況ダッシュボード
+***** TLDR
+XiaomiがMiMo v2.6の強化学習フェーズを、実行中にリアルタイム更新される公開ダッシュボードに載せた。学習中のモデルは2つ。Pro（ステップ13、276億トークン、32.6万サンプル、DeepSWE v1.1スコア63.72）とFlash（ステップ16、376億トークン、40.1万サンプル、60.77）。グラフはcritic報酬、actorエントロピー、方策勾配損失、勾配ノルム、KLダイバージェンス、コンテキスト長、ロールアウト受理率をカバーする。データ構成は25データセットで、コード67%、視覚13%、一般12%、サイバー4%、チャット3%。累計コスト表示もあり、現時点でProが88万2,043ドル、Flashが39万2,346ドル。
+***** Take
+コスト表示は他のどの研究所も公開していない部分だ。RLポストトレーニングはスケールすると誰もが言うが、Xiaomiは未完了の2ランで100万ドル超を回すメーターを見せている。おかげで売り文句が、議論できる予算の行に変わる。残りは通常のwandbの中身を公開しただけだが、それでもフロンティア研究所が出すものより多い。
+***** Comments
+- ソフトウェアエンジニアとしての仕事の大半をMiMo-V2.5でこなしているが、ROIには非常に満足している。コストは信じられないほど安く、得られる知能の質はもっと高価なモデルを使っていた頃と同等だ。
+- オープンソースAIが（OpenAIやAnthropicのIPOにとって？）危険だというなら、これは時限爆弾を眺めているようなものだ。
+- ほぼフロンティア級のモデルの学習に金を使うのが、思っていたよりずっと時間のかかる作業だとは。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+샤오미 MiMo 2.6 사후 학습 실시간 대시보드
+***** TLDR
+샤오미가 MiMo v2.6의 강화학습 단계를 실행 중에 실시간으로 갱신되는 공개 대시보드에 올렸다. 두 모델이 학습 중이다. Pro(13스텝, 276억 토큰, 32.6만 샘플, DeepSWE v1.1 점수 63.72)와 Flash(16스텝, 376억 토큰, 40.1만 샘플, 60.77). 차트는 critic 보상, actor 엔트로피, 정책 경사 손실, 그래디언트 노름, KL 발산, 컨텍스트 길이, 롤아웃 수용률을 다룬다. 데이터 구성은 25개 데이터셋으로 코드 67%, 시각 13%, 일반 12%, 사이버 4%, 채팅 3%다. 누적 비용도 표시되는데 현재까지 Pro는 88만 2,043달러, Flash는 39만 2,346달러다.
+***** Take
+비용 카운터는 다른 어떤 연구소도 공개하지 않는 부분이다. 다들 RL 사후 학습이 확장된다고 말하지만, 샤오미는 아직 끝나지도 않은 두 번의 실행에서 계량기가 100만 달러를 넘기는 모습을 보여준다. 그래서 홍보 문구가 따져볼 수 있는 예산 항목이 된다. 나머지는 흔한 wandb 화면을 공개한 것뿐이지만, 그것만으로도 프런티어 연구소들이 주는 것보다 많다.
+***** Comments
+- 소프트웨어 엔지니어로서 업무 대부분을 MiMo-V2.5로 처리하는데 투자 대비 효과가 아주 만족스럽다. 비용은 믿기 힘들 만큼 낮고, 얻는 지능 수준은 훨씬 비싼 모델을 쓰던 때와 같다.
+- 오픈소스 AI가 (OpenAI나 Anthropic의 IPO에) 위험한 거라면, 이건 시한폭탄을 지켜보는 셈이다.
+- 거의 프런티어급 모델을 학습시키는 데 돈을 쓰는 일이 생각보다 훨씬 시간이 많이 드는 일이었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Panel en vivo del post-entrenamiento de Xiaomi MiMo 2.6
+***** TLDR
+Xiaomi publicó la fase de aprendizaje por refuerzo de MiMo v2.6 en un panel público que se actualiza mientras la ejecución avanza. Hay dos modelos entrenando: Pro (paso 13, 27.600 millones de tokens, 326.000 muestras, puntuación DeepSWE v1.1 de 63,72) y Flash (paso 16, 37.600 millones de tokens, 401.000 muestras, 60,77). Los gráficos cubren recompensa del crítico, entropía del actor, pérdida del gradiente de política, normas del gradiente, divergencia KL, longitud de contexto y tasa de aceptación de rollouts. La mezcla de datos son 25 conjuntos: 67% código, 13% visual, 12% general, 4% ciberseguridad, 3% conversación. También hay un contador de coste acumulado: 882.043 dólares para Pro y 392.346 para Flash hasta ahora.
+***** Take
+El contador de coste es lo que ningún otro laboratorio publica. Todos dicen que el post-entrenamiento con RL escala; Xiaomi enseña el contador pasando del millón de dólares en dos ejecuciones sin terminar, y así el discurso se convierte en una partida presupuestaria discutible. El resto del panel es material habitual de wandb hecho público, y aun así es más de lo que dan los laboratorios de frontera.
+***** Comments
+- Llevo usando MiMo-V2.5 para casi todo mi trabajo como ingeniero de software y estoy MUY contento con el retorno. El coste es increíblemente bajo y la calidad de inteligencia equivale a cuando usaba modelos mucho más caros.
+- Si la IA de código abierto es peligrosa (¿para las salidas a bolsa de OpenAI y Anthropic?), esto es como ver una bomba de relojería.
+- Vaya, gastar dinero en entrenar un modelo casi de frontera lleva mucho más tiempo del que yo pensaba.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Xiaomi MiMo 2.6: Live-Dashboard zum Post-Training
+***** TLDR
+Xiaomi zeigt die Reinforcement-Learning-Phase von MiMo v2.6 auf einem öffentlichen Dashboard, das sich während des laufenden Trainings aktualisiert. Zwei Modelle trainieren: Pro (Schritt 13, 27,6 Mrd. Token, 326.000 Samples, DeepSWE-v1.1-Wert 63,72) und Flash (Schritt 16, 37,6 Mrd. Token, 401.000 Samples, 60,77). Die Diagramme zeigen Critic-Reward, Actor-Entropie, Policy-Gradient-Loss, Gradientennormen, KL-Divergenz, Kontextlänge und Rollout-Akzeptanzrate. Der Datenmix umfasst 25 Datensätze: 67% Code, 13% visuell, 12% allgemein, 4% Cyber, 3% Chat. Dazu kommt eine Anzeige der kumulierten Kosten: bisher 882.043 Dollar für Pro und 392.346 Dollar für Flash.
+***** Take
+Der Kostenzähler ist das, was kein anderes Labor veröffentlicht. Alle sagen, RL-Post-Training skaliere; Xiaomi lässt die Uhr über eine Million Dollar für zwei unfertige Läufe ticken, und damit wird aus der Behauptung ein Budgetposten, über den man streiten kann. Der Rest ist übliches wandb-Material, öffentlich gemacht, und das ist immer noch mehr, als die Frontier-Labore herausgeben.
+***** Comments
+- Ich erledige den Großteil meiner Arbeit als Softwareentwickler mit MiMo-V2.5 und bin mit dem Verhältnis von Kosten und Nutzen SEHR zufrieden. Die Kosten sind unglaublich niedrig, und die Qualität entspricht der, die ich mit deutlich teureren Modellen hatte.
+- Wenn quelloffene KI gefährlich ist (für die Börsengänge von OpenAI und Anthropic?), dann sieht man hier einer Zeitbombe zu.
+- Geld in das Training eines beinahe Frontier-Modells zu stecken, ist offenbar viel zeitaufwendiger, als ich dachte.
+** Keys Not Included: recovering the signing keys for US driver's license barcodes :security:cryptography:privacy:reverse-engineering:
+:PROPERTIES:
+:ID:       49735930
+:URL:      https://ryan.science/blog/keys-not-included
+:HN_URL:   https://news.ycombinator.com/item?id=49735930
+:POINTS:   93
+:COMMENTS: 28
+:BY:       Ryan5453
+:END:
+
+*** TLDR
+The PDF417 barcode on a US driver's license carries a signed data block, but most states never publish the public key, so nobody outside the issuer can verify it. Ryan Fahey used a property of ECDSA: a signature lets you recover a small set of candidate public keys. Gather several real cards from one issuer, recover candidates from each, intersect the sets, and the survivor is the issuer's key. That produced New York's key from 3 cards and Virginia's from 6; North Carolina needs a second sample. The tricky detail he worked out is that the signature field is itself inside the signed payload, zero-filled at signing time and overwritten afterward. A counterfeit with a well-formed but wrongly signed barcode fails the check immediately. California already documents and publishes its keys.
+
+*** Take
+These signatures have been riding along in the barcodes for years doing nothing, because a signature nobody can check is decoration. One person with six licenses and some elliptic-curve math restored more verification capability than the issuing agencies managed. KingMachiavelli's objection is the real ceiling though: without the photo in the signed payload, a valid barcode plus a swapped face still walks through the door.
+
+*** Comments
+
+**** bzmrgonz
+It baffles that people think it's a bad thing to disclose a public key. That's their purpose actually.
+
+**** KingMachiavelli
+All of this is nearly pointless unless the photo itself is in the barcode and also signed. A fake photo plus a valid barcode will pass any current check.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+钥匙不附赠：还原美国驾照条码的签名密钥
+***** TLDR
+美国驾照上的 PDF417 条码里带有一段签过名的数据，但多数州从不公开公钥，于是签发机构之外没人能验证它。Ryan Fahey 利用了 ECDSA 的一个特性：从一个签名可以还原出少量候选公钥。收集同一签发方的多张真卡，各自还原候选集再取交集，剩下的那把就是签发方的密钥。他用 3 张卡拿到了纽约州的密钥，用 6 张拿到了弗吉尼亚州的；北卡罗来纳州还差第二个样本。他摸清的关键细节是签名字段本身也在被签名的数据里，签名时填零，之后再覆写。一张条码格式正确但签名错误的伪造卡会当场验不过。加州早已把自己的密钥写进文档并公开。
+***** Take
+这些签名在条码里躺了很多年却什么也没做，因为没人能验证的签名就是装饰。一个人拿六张驾照加一点椭圆曲线数学，恢复出的验证能力比签发机构做到的还多。不过 KingMachiavelli 的反驳才是真正的上限：只要照片不在被签名的数据里，有效条码配一张换掉的脸照样能过关。
+***** Comments
+- 有人觉得公开公钥是坏事，这让人费解。公钥的用途本来就是被公开。
+- 除非照片本身也进条码并一起签名，否则这一切几乎没有意义。假照片配上有效条码，能通过现在任何一种检查。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+鍵は同梱されず: 米国運転免許証バーコードの署名鍵を復元する
+***** TLDR
+米国の運転免許証にあるPDF417バーコードには署名済みのデータが入っているが、多くの州は公開鍵を公表しないため、発行元以外の誰も検証できない。Ryan FaheyはECDSAの性質を使った。署名からは少数の候補公開鍵を復元できる。同じ発行元の実物カードを複数集め、それぞれから候補を復元して積集合を取れば、残ったものが発行元の鍵になる。これでニューヨーク州の鍵を3枚から、バージニア州の鍵を6枚から得た。ノースカロライナ州はもう1枚必要だ。彼が突き止めた厄介な点は、署名フィールド自体が署名対象データの中にあり、署名時はゼロ埋めで、その後に上書きされることだ。形式は整っていても署名が誤っている偽造バーコードは即座に検証に落ちる。カリフォルニア州はすでに鍵を文書化して公開している。
+***** Take
+これらの署名は何年もバーコードの中で何もせずにいた。誰も検証できない署名は飾りだからだ。免許証6枚と楕円曲線の計算を持った個人が、発行機関以上の検証能力を取り戻した。ただしKingMachiavelliの指摘が実際の上限だ。写真が署名対象に入っていない限り、有効なバーコードと差し替えた顔写真の組み合わせは今も通ってしまう。
+***** Comments
+- 公開鍵を公表するのが悪いことだと思われているのが不可解だ。公開鍵の目的はまさにそれなのに。
+- 写真自体がバーコードに入り、一緒に署名されない限り、この話はほぼ無意味だ。偽の写真と有効なバーコードの組み合わせは、現行のどのチェックも通ってしまう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+키는 미포함: 미국 운전면허증 바코드의 서명 키 복원하기
+***** TLDR
+미국 운전면허증의 PDF417 바코드에는 서명된 데이터 블록이 들어 있지만, 대부분의 주가 공개 키를 공표하지 않아 발급기관 밖에서는 누구도 검증할 수 없다. Ryan Fahey는 ECDSA의 성질을 이용했다. 서명 하나로 소수의 후보 공개 키를 복원할 수 있다는 점이다. 같은 발급기관의 실제 카드 여러 장을 모아 각각에서 후보를 복원하고 교집합을 취하면, 남는 것이 그 기관의 키다. 이렇게 뉴욕주 키는 카드 3장에서, 버지니아주 키는 6장에서 얻었다. 노스캐롤라이나는 샘플이 한 장 더 필요하다. 그가 밝혀낸 까다로운 지점은 서명 필드 자체가 서명 대상 데이터 안에 있고, 서명 시점에는 0으로 채워졌다가 이후 덮어써진다는 것이다. 형식은 멀쩡하지만 서명이 잘못된 위조 바코드는 즉시 검증에 실패한다. 캘리포니아는 이미 자기 키를 문서화해 공개하고 있다.
+***** Take
+이 서명들은 몇 년 동안 바코드 안에서 아무 일도 하지 않고 있었다. 아무도 검증할 수 없는 서명은 장식이기 때문이다. 면허증 여섯 장과 타원곡선 수학을 가진 개인이 발급기관들이 해낸 것보다 많은 검증 능력을 되살렸다. 다만 KingMachiavelli의 지적이 진짜 한계다. 사진이 서명 대상에 들어가지 않는 한, 유효한 바코드에 바꿔치기한 얼굴 사진을 붙이면 여전히 통과한다.
+***** Comments
+- 공개 키를 공개하는 게 나쁜 일이라고 생각한다는 게 당황스럽다. 원래 그러라고 있는 키다.
+- 사진 자체가 바코드에 들어가고 함께 서명되지 않는 한 이 모든 게 거의 무의미하다. 가짜 사진에 유효한 바코드면 지금의 어떤 검사도 통과한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Llaves no incluidas: recuperar las claves de firma de los códigos de barras de las licencias de conducir de EE. UU.
+***** TLDR
+El código PDF417 de una licencia de conducir estadounidense lleva un bloque de datos firmado, pero la mayoría de los estados nunca publica la clave pública, así que nadie fuera del emisor puede verificarlo. Ryan Fahey aprovechó una propiedad de ECDSA: una firma permite recuperar un pequeño conjunto de claves públicas candidatas. Se reúnen varias tarjetas reales del mismo emisor, se recuperan candidatas de cada una, se cruzan los conjuntos y la que sobrevive es la clave del emisor. Así obtuvo la clave de Nueva York con 3 tarjetas y la de Virginia con 6; Carolina del Norte necesita una segunda muestra. El detalle complicado que resolvió es que el propio campo de la firma está dentro de los datos firmados, relleno de ceros al firmar y sobrescrito después. Una falsificación con un código bien formado pero mal firmado falla la verificación al instante. California ya documenta y publica sus claves.
+***** Take
+Estas firmas llevan años viajando en los códigos sin hacer nada, porque una firma que nadie puede comprobar es decoración. Una sola persona con seis licencias y algo de matemática de curvas elípticas restauró más capacidad de verificación que las propias agencias emisoras. La objeción de KingMachiavelli marca el techo real: sin la foto dentro de los datos firmados, un código válido con una cara cambiada sigue pasando.
+***** Comments
+- Desconcierta que se considere malo revelar una clave pública. Ese es justamente su propósito.
+- Todo esto es casi inútil salvo que la foto esté en el código y también firmada. Una foto falsa con un código válido pasa cualquier control actual.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Schlüssel nicht enthalten: die Signaturschlüssel der US-Führerschein-Barcodes rekonstruieren
+***** TLDR
+Der PDF417-Barcode auf einem US-Führerschein enthält einen signierten Datenblock, aber die meisten Bundesstaaten veröffentlichen den öffentlichen Schlüssel nie, sodass niemand außerhalb der Behörde ihn prüfen kann. Ryan Fahey nutzte eine Eigenschaft von ECDSA: Aus einer Signatur lässt sich eine kleine Menge möglicher öffentlicher Schlüssel rekonstruieren. Man sammelt mehrere echte Karten desselben Ausstellers, rekonstruiert aus jeder die Kandidaten und schneidet die Mengen; was übrig bleibt, ist der Schlüssel des Ausstellers. So ergab sich der Schlüssel von New York aus 3 Karten und der von Virginia aus 6; North Carolina braucht eine zweite Probe. Das knifflige Detail: Das Signaturfeld liegt selbst innerhalb der signierten Daten, beim Signieren mit Nullen gefüllt und danach überschrieben. Eine Fälschung mit formal korrektem, aber falsch signiertem Barcode fällt sofort durch. Kalifornien dokumentiert und veröffentlicht seine Schlüssel bereits.
+***** Take
+Diese Signaturen stecken seit Jahren funktionslos in den Barcodes, denn eine Signatur, die niemand prüfen kann, ist Dekoration. Eine einzelne Person mit sechs Führerscheinen und etwas Elliptische-Kurven-Mathematik hat mehr Prüfbarkeit hergestellt als die ausstellenden Behörden. Die Grenze benennt KingMachiavelli: Solange das Foto nicht in den signierten Daten steckt, kommt ein gültiger Barcode mit ausgetauschtem Gesicht weiterhin durch.
+***** Comments
+- Es verblüfft, dass Leute die Veröffentlichung eines öffentlichen Schlüssels für schlecht halten. Genau dafür ist er da.
+- Das alles bringt fast nichts, solange das Foto nicht selbst im Barcode steht und mitsigniert wird. Ein gefälschtes Foto mit gültigem Barcode besteht jede heutige Prüfung.
+** Backups Aren't Simple :backups:storage:sysadmin:infrastructure:
+:PROPERTIES:
+:ID:       49732513
+:URL:      https://filipovski.net/2026/09/16/backups-arent-simple.html
+:HN_URL:   https://news.ycombinator.com/item?id=49732513
+:POINTS:   165
+:COMMENTS: 84
+:BY:       afilipovski
+:END:
+
+*** TLDR
+A walkthrough of why a backup plan does not stay at cron plus rsync. The failure list: one location means one fire, media degrades on its own (magnetic drift, charge leakage in NAND), ransomware and buggy scripts happily propagate deletions into your copies, databases flushing memory to disk need a consistent snapshot rather than a file copy, and cloud stores drop metadata and price small files badly. The escalation runs basic copies to GFS rotation to incremental dedup to 3-2-1 (three copies, two media types, one offsite) with encryption on top. The closing advice is to stop building your own and use Borg or Restic.
+
+*** Take
+The article is a good map of the problem and it still understates the part that matters, which a commenter fixed by quoting a Veritas engineer: the business is restoration, not backup. Everything above the restore test is bookkeeping. If you have not pulled a real file off real media in the last year, you have a backup hobby, not a backup.
+
+*** Comments
+
+**** AdieuToLogic
+A friend of mine used to work at Veritas making enterprise data retention solutions. When I spoke about their product as 'making backups', he corrected me: We are not in the backup business. We are in the restoration business.
+
+**** Helmut10001
+I really like ZFS snapshots with offsite pull-mode sync using sanoid/syncoid. If you separate ephemeral from persistent data, this is 90% of the backup requirements already fulfilled.
+
+**** publlus_enigma
+The telephone pole outside our house was struck by lightning. The current surged through the telephone line into the internal fax modem and fried everything. I did have backups, but only on floppy.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+备份并不简单
+***** TLDR
+一篇讲清楚备份方案为什么停不在 cron 加 rsync 的文章。失败清单包括：只有一个存放地就意味着一场火灾能全毁；介质会自行劣化（磁性漂移、NAND 电荷泄漏）；勒索软件和写错的脚本会把删除操作原样同步到副本里；数据库要把内存刷到磁盘，需要一致性快照而不是拷文件；云存储会丢元数据，对大量小文件的收费也很不划算。方案逐级升高：基础副本、GFS 轮换、增量去重、3-2-1（三份副本、两种介质、一份异地），再加上加密。结论是别自己造，用 Borg 或 Restic。
+***** Take
+文章把问题梳理得不错，但最关键的一点仍然轻描淡写，反倒是评论区一位读者引用 Veritas 工程师的话补上了：这门生意是恢复，不是备份。恢复测试之上的一切都只是记账。如果你过去一年没有从真实介质上真正取回过一个文件，你拥有的是备份爱好，不是备份。
+***** Comments
+- 我一个朋友以前在 Veritas 做企业数据留存方案。我把他们的产品说成“做备份”时，他纠正我：我们做的不是备份生意，是恢复生意。
+- 我很喜欢用 ZFS 快照配合 sanoid/syncoid 做异地拉取式同步。只要把临时数据和持久数据分开，备份需求就已经满足了九成。
+- 我家门外的电线杆被雷直接击中，电流顺着电话线窜进内置传真调制解调器，把周围的东西全烧了。我确实有备份，但只在软盘上。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+バックアップは単純ではない
+***** TLDR
+バックアップ計画がcronとrsyncのままでは済まない理由を順に追った記事。失敗の一覧はこうだ。保管場所が一つなら火事も一度で済む。媒体は放っておいても劣化する（磁性のドリフト、NANDの電荷漏れ）。ランサムウェアやバグのあるスクリプトは削除をそのままコピー側へ伝播させる。メモリをディスクに書き出すデータベースはファイルコピーではなく整合性のあるスナップショットを要する。クラウドストレージはメタデータを落とし、小さなファイルの大量保存では料金が不利になる。対策は基本のコピーからGFSローテーション、増分重複排除、3-2-1（3つのコピー、2種類の媒体、1つは遠隔地）へと上がり、暗号化が乗る。締めの助言は、自作をやめてBorgかResticを使えというもの。
+***** Take
+問題の地図としてはよくできているが、いちばん重要な部分はまだ軽い。それを補ったのはコメント欄で、Veritasの技術者の言葉を引いた一人だ。この商売はバックアップではなく復元だ、と。復元テストより上の話はすべて帳簿付けにすぎない。この1年で実際の媒体から実際のファイルを取り出していないなら、それはバックアップという趣味であってバックアップではない。
+***** Comments
+- 友人が以前Veritasで企業向けデータ保持製品を作っていた。その製品を「バックアップを作るもの」と言ったら訂正された。我々はバックアップ業ではなく復元業だ、と。
+- ZFSスナップショットとsanoid/syncoidによる遠隔地へのプル同期がとても気に入っている。一時的なデータと永続データを分けておけば、それでバックアップ要件の9割は満たせる。
+- 家の外の電柱に雷が直撃し、電流が電話線から内蔵ファックスモデムに流れ込んで周囲を全部焼いた。バックアップはあったが、フロッピーの上だけだった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+백업은 간단하지 않다
+***** TLDR
+백업 계획이 cron과 rsync에서 멈추지 못하는 이유를 훑는 글이다. 실패 목록은 이렇다. 보관 장소가 하나면 화재 한 번으로 끝난다. 매체는 그냥 두어도 열화한다(자기 드리프트, NAND 전하 누설). 랜섬웨어와 잘못 짠 스크립트는 삭제를 그대로 사본까지 퍼뜨린다. 메모리를 디스크로 내리는 데이터베이스는 파일 복사가 아니라 일관된 스냅샷이 필요하다. 클라우드 저장소는 메타데이터를 잃고 작은 파일이 많으면 요금이 불리하다. 대응은 기본 복사에서 GFS 순환, 증분 중복 제거, 3-2-1(사본 3개, 매체 2종, 원격지 1개)로 올라가고 암호화가 얹힌다. 마무리 조언은 직접 만들지 말고 Borg나 Restic을 쓰라는 것이다.
+***** Take
+문제 지도로는 잘 만든 글이지만 정작 중요한 부분은 여전히 가볍게 다룬다. 그걸 채운 건 Veritas 엔지니어의 말을 인용한 댓글이다. 이 일은 백업이 아니라 복구 사업이라는 것. 복구 테스트 위에 쌓인 건 전부 장부 정리다. 지난 1년 안에 실제 매체에서 실제 파일을 꺼내본 적이 없다면, 가진 것은 백업 취미이지 백업이 아니다.
+***** Comments
+- 친구가 예전에 Veritas에서 기업용 데이터 보존 제품을 만들었다. 내가 그 제품을 '백업을 만드는 것'이라고 하자 그가 고쳐줬다. 우리는 백업 사업이 아니라 복구 사업을 한다고.
+- ZFS 스냅샷에 sanoid/syncoid로 원격지 풀 방식 동기화를 붙이는 조합을 아주 좋아한다. 임시 데이터와 영구 데이터만 잘 나눠두면 백업 요구사항의 90%는 이미 충족된다.
+- 집 앞 전신주에 벼락이 직격했다. 전류가 전화선을 타고 내장 팩스 모뎀으로 들어와 주변을 다 태웠다. 백업은 있었지만 플로피에만 있었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Las copias de seguridad no son simples
+***** TLDR
+Un recorrido por las razones de que un plan de copias no se quede en cron más rsync. La lista de fallos: un solo lugar significa un solo incendio, los medios se degradan solos (deriva magnética, fuga de carga en NAND), el ransomware y los scripts con errores propagan los borrados a tus copias, las bases de datos que vuelcan memoria a disco necesitan una instantánea consistente y no una copia de ficheros, y el almacenamiento en la nube pierde metadatos y cobra mal los ficheros pequeños. La escalada va de copias básicas a rotación GFS, deduplicación incremental y 3-2-1 (tres copias, dos tipos de medio, una fuera de sitio), con cifrado encima. El consejo final es dejar de construir lo propio y usar Borg o Restic.
+***** Take
+El artículo es un buen mapa del problema y aun así se queda corto en lo que más importa, que un comentarista corrigió citando a un ingeniero de Veritas: el negocio es la restauración, no la copia. Todo lo que está por encima de la prueba de restauración es contabilidad. Si no has recuperado un fichero real de un medio real en el último año, tienes una afición a las copias, no una copia de seguridad.
+***** Comments
+- Un amigo trabajó en Veritas haciendo soluciones de retención de datos para empresas. Cuando hablé de su producto como 'hacer copias', me corrigió: no estamos en el negocio de las copias, estamos en el de la restauración.
+- Me gustan mucho las instantáneas de ZFS con sincronización remota en modo pull usando sanoid/syncoid. Si separas los datos efímeros de los persistentes, ya tienes cubierto el 90% de los requisitos.
+- Un rayo cayó en el poste telefónico frente a nuestra casa. La corriente entró por la línea hasta el módem de fax interno y frió todo. Sí tenía copias, pero solo en disquetes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Backups sind nicht einfach
+***** TLDR
+Ein Durchgang durch die Gründe, warum ein Backup-Plan nicht bei cron plus rsync bleibt. Die Fehlerliste: Ein Standort heißt ein Brand, Medien altern von selbst (magnetische Drift, Ladungsverlust in NAND), Ransomware und fehlerhafte Skripte tragen Löschungen bereitwillig in die Kopien, Datenbanken, die Speicher auf die Platte schreiben, brauchen einen konsistenten Snapshot statt einer Dateikopie, und Cloud-Speicher verlieren Metadaten und rechnen viele kleine Dateien schlecht ab. Die Eskalation führt von einfachen Kopien über GFS-Rotation und inkrementelle Deduplizierung zu 3-2-1 (drei Kopien, zwei Medientypen, eine außer Haus), mit Verschlüsselung obendrauf. Der Schlussrat: nichts Eigenes bauen, sondern Borg oder Restic nehmen.
+***** Take
+Der Artikel kartiert das Problem gut und unterschätzt trotzdem den entscheidenden Teil, den ein Kommentator mit dem Zitat eines Veritas-Ingenieurs nachliefert: Das Geschäft ist die Wiederherstellung, nicht das Sichern. Alles oberhalb des Restore-Tests ist Buchhaltung. Wer im letzten Jahr keine echte Datei von einem echten Medium zurückgeholt hat, hat ein Backup-Hobby, kein Backup.
+***** Comments
+- Ein Freund hat bei Veritas an Lösungen zur Datenaufbewahrung für Unternehmen gearbeitet. Als ich das Produkt als 'Backups machen' bezeichnete, korrigierte er mich: Wir sind nicht im Backup-Geschäft, wir sind im Wiederherstellungsgeschäft.
+- Ich mag ZFS-Snapshots mit Offsite-Sync im Pull-Modus über sanoid/syncoid sehr. Wenn man flüchtige von dauerhaften Daten trennt, sind damit schon 90 Prozent der Anforderungen erfüllt.
+- Der Telefonmast vor unserem Haus wurde vom Blitz getroffen. Der Strom lief über die Telefonleitung ins interne Faxmodem und hat alles gegrillt. Ich hatte Backups, aber nur auf Disketten.
+** Performance Improvements in .NET 11 :dotnet:performance:compilers:programming:
+:PROPERTIES:
+:ID:       49711424
+:URL:      https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-11/
+:HN_URL:   https://news.ycombinator.com/item?id=49711424
+:POINTS:   240
+:COMMENTS: 42
+:BY:       soheilpro
+:END:
+
+*** TLDR
+Stephen Toub's annual benchmark marathon. The headline is runtime async: the async/await state machine moves out of the C# compiler and into the JIT, so chains that complete synchronously allocate no intermediate tasks and run about 3x faster, exception handling through 30 async frames drops from 51.3μs to 10.7μs, and async-heavy binaries shrink by about 52%. Beyond that: escape analysis now stack-allocates enumerators and nullable boxes (one enumerator benchmark goes 13.874ns to 2.674ns), delegates lose 8 bytes each on 64-bit, generic virtual methods get devirtualized and inlined more often, and bounds-check elimination learned bitwise OR, != comparisons, loop cloning on !=, and coalescing several checks into one. Hundreds of micro-benchmarks, and the post says up front that it is long on purpose.
+
+*** Take
+Runtime async is the real story: C# spent a decade teaching the compiler to rewrite async methods, and .NET 11 hands the job to the JIT because it knows at runtime which calls actually suspend. That is a structural admission, not a tuning pass. The top comment calling this a relic of a pre-AI era misreads it; the post is long because the work is, and that has not changed.
+
+*** Comments
+
+**** tiffanyh
+This post was so refreshing to read, because it reminds me of a time of solid engineering & writing in a pre-AI era. I'm afraid posts like this might become fleeting.
+
+**** lukehoban
+Toub also published another post today on migrating the Copilot coding harness from Node.js to Rust. Another great read.
+
+**** adzm
+Runtime async is certainly an interesting development. Really excited to see how this plays out.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+.NET 11 的性能改进
+***** TLDR
+Stephen Toub 一年一度的基准测试长文。头条是 runtime async：async/await 状态机从 C# 编译器挪到 JIT，于是同步完成的调用链不再分配中间 task，速度约快 3 倍；穿过 30 层 async 帧的异常处理从 51.3 微秒降到 10.7 微秒；async 密集的二进制体积缩小约 52%。此外，逃逸分析现在能把枚举器和可空装箱放到栈上（某个枚举器基准从 13.874 纳秒降到 2.674 纳秒），64 位下每个委托省 8 字节，泛型虚方法更常被去虚化和内联，边界检查消除学会了按位或、!= 比较、基于 != 的循环克隆，以及把多次检查合并成一次。数百个微基准，而且文章开头就说它故意写得很长。
+***** Take
+runtime async 才是真正的看点：C# 花了十年教编译器改写 async 方法，.NET 11 把这活儿交给 JIT，因为只有运行时才知道哪些调用真的会挂起。这是结构性的让步，不是调参。最高赞评论说这是“AI 之前那个时代”的遗物，读偏了；文章长是因为工作量大，这一点并没有变。
+***** Comments
+- 读这篇文章太让人舒服了，它让我想起 AI 之前那个扎实做工程、扎实写作的时代。我担心这样的文章会越来越少。
+- Toub 今天还发了一篇，讲把 Copilot 的编码 harness 从 Node.js 迁到 Rust。也很值得一读。
+- runtime async 确实是个有意思的进展，很期待后续的走向。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+.NET 11 のパフォーマンス改善
+***** TLDR
+Stephen Toub恒例のベンチマーク大作。目玉はruntime asyncだ。async/awaitのステートマシンがC#コンパイラからJITへ移り、同期的に完了する呼び出し連鎖は中間のTaskを確保せず約3倍速くなる。30段のasyncフレームを貫く例外処理は51.3マイクロ秒から10.7マイクロ秒へ。asyncの多いバイナリは約52%小さくなる。ほかにも、エスケープ解析が列挙子やnullableのボックス化をスタックに置けるようになり（ある列挙子のベンチマークは13.874ナノ秒から2.674ナノ秒へ）、64ビットでデリゲート1つあたり8バイト削減、ジェネリック仮想メソッドの脱仮想化とインライン化が増え、境界チェック除去はビットOR、!=比較、!=によるループクローン、複数チェックの統合を覚えた。マイクロベンチマークは数百本、しかも冒頭で「長いのは意図的だ」と断っている。
+***** Take
+本題はruntime asyncだ。C#は10年かけてコンパイラにasyncメソッドの書き換えを教えてきたが、.NET 11はその仕事をJITへ渡す。どの呼び出しが実際に中断するかは実行時にしか分からないからだ。これはチューニングではなく構造的な譲歩である。これを「AI以前の時代」の遺物と呼ぶ人気コメントは読み違えている。記事が長いのは仕事が長いからで、そこは変わっていない。
+***** Comments
+- この記事はとても心地よく読めた。堅実な工学と堅実な文章があったAI以前の時代を思い出させる。こういう記事が減っていくのではと心配だ。
+- Toubは今日もう一本、Copilotのコーディングハーネスを Node.js から Rust へ移行した話も出している。これも良い記事だ。
+- runtime asyncは確かに興味深い進展だ。今後どうなるか楽しみにしている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+.NET 11의 성능 개선
+***** TLDR
+Stephen Toub의 연례 벤치마크 대작이다. 핵심은 runtime async다. async/await 상태 머신이 C# 컴파일러에서 JIT으로 옮겨가면서, 동기적으로 완료되는 호출 사슬은 중간 task를 할당하지 않고 약 3배 빨라진다. 30단계 async 프레임을 통과하는 예외 처리는 51.3마이크로초에서 10.7마이크로초로 줄었고, async가 많은 바이너리는 약 52% 작아진다. 그 밖에 이스케이프 분석이 열거자와 nullable 박싱을 스택에 올리게 됐고(어떤 열거자 벤치마크는 13.874나노초에서 2.674나노초로), 64비트에서 델리게이트마다 8바이트가 줄었으며, 제네릭 가상 메서드의 역가상화와 인라이닝이 늘었고, 경계 검사 제거가 비트 OR, != 비교, != 기반 루프 클로닝, 여러 검사의 병합을 배웠다. 마이크로 벤치마크는 수백 개이고, 글머리에 길게 쓴 것은 의도라고 밝혀둔다.
+***** Take
+진짜 이야기는 runtime async다. C#은 10년 동안 컴파일러에게 async 메서드 재작성을 가르쳤는데, .NET 11은 그 일을 JIT에 넘긴다. 어떤 호출이 실제로 중단되는지는 런타임만 알기 때문이다. 이건 튜닝이 아니라 구조적인 인정이다. 이 글을 'AI 이전 시대'의 유물이라 부른 인기 댓글은 잘못 읽었다. 글이 긴 이유는 작업이 길기 때문이고, 그건 변하지 않았다.
+***** Comments
+- 이 글은 읽기가 참 좋았다. 탄탄한 엔지니어링과 글쓰기가 있던 AI 이전 시대를 떠올리게 한다. 이런 글이 점점 드물어질까 걱정된다.
+- Toub는 오늘 Copilot 코딩 하네스를 Node.js에서 Rust로 옮긴 글도 냈다. 그것도 좋은 글이다.
+- runtime async는 확실히 흥미로운 변화다. 앞으로 어떻게 될지 기대된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Mejoras de rendimiento en .NET 11
+***** TLDR
+El maratón anual de benchmarks de Stephen Toub. El titular es runtime async: la máquina de estados de async/await sale del compilador de C# y pasa al JIT, así que las cadenas que se completan de forma síncrona no reservan tareas intermedias y corren unas 3 veces más rápido, el manejo de excepciones a través de 30 marcos async baja de 51,3μs a 10,7μs, y los binarios con mucho async se reducen alrededor de un 52%. Además: el análisis de escape ya coloca enumeradores y cajas de nullable en la pila (un benchmark pasa de 13,874ns a 2,674ns), cada delegado pierde 8 bytes en 64 bits, los métodos virtuales genéricos se desvirtualizan e insertan más a menudo, y la eliminación de comprobaciones de límites aprendió el OR bit a bit, las comparaciones !=, la clonación de bucles con != y la fusión de varias comprobaciones en una. Cientos de micro-benchmarks, y el propio texto avisa de que es largo a propósito.
+***** Take
+Lo importante es runtime async: C# dedicó una década a enseñar al compilador a reescribir métodos async, y .NET 11 le pasa el trabajo al JIT porque en ejecución sí se sabe qué llamadas se suspenden de verdad. Eso es una concesión estructural, no un ajuste fino. El comentario más votado, que lo trata como reliquia de una era pre-IA, lo lee mal: el texto es largo porque el trabajo lo es, y eso no ha cambiado.
+***** Comments
+- Este artículo dio gusto leerlo, porque recuerda a una época de ingeniería y escritura sólidas anterior a la IA. Me temo que textos así se vuelvan pasajeros.
+- Toub publicó hoy otro artículo sobre migrar el harness de programación de Copilot de Node.js a Rust. También merece la pena.
+- Runtime async es sin duda un desarrollo interesante. Tengo muchas ganas de ver cómo evoluciona.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Performance-Verbesserungen in .NET 11
+***** TLDR
+Stephen Toubs jährlicher Benchmark-Marathon. Die Schlagzeile ist Runtime Async: Die async/await-Zustandsmaschine wandert vom C#-Compiler in den JIT, sodass synchron abschließende Aufrufketten keine Zwischen-Tasks mehr anlegen und etwa dreimal schneller laufen, die Ausnahmebehandlung über 30 async-Frames von 51,3μs auf 10,7μs fällt und async-lastige Binaries um rund 52% schrumpfen. Dazu: Die Escape-Analyse legt Enumeratoren und Nullable-Boxen auf den Stack (ein Enumerator-Benchmark geht von 13,874ns auf 2,674ns), Delegates sparen auf 64 Bit je 8 Byte, generische virtuelle Methoden werden häufiger devirtualisiert und inlined, und die Eliminierung von Bereichsprüfungen beherrscht jetzt bitweises OR, !=-Vergleiche, Loop-Cloning bei != sowie das Zusammenfassen mehrerer Prüfungen. Hunderte Mikro-Benchmarks, und der Text sagt gleich zu Beginn, dass er absichtlich lang ist.
+***** Take
+Die eigentliche Geschichte ist Runtime Async: C# hat ein Jahrzehnt damit verbracht, dem Compiler das Umschreiben von async-Methoden beizubringen, und .NET 11 gibt die Aufgabe an den JIT ab, weil erst zur Laufzeit feststeht, welche Aufrufe tatsächlich pausieren. Das ist ein struktureller Eingriff, keine Feinabstimmung. Der Top-Kommentar, der den Text als Relikt einer Zeit vor der KI liest, liegt daneben: Der Beitrag ist lang, weil die Arbeit lang ist, und daran hat sich nichts geändert.
+***** Comments
+- Dieser Beitrag war erfrischend zu lesen, weil er an eine Zeit solider Technik und solider Texte vor der KI erinnert. Ich fürchte, solche Beiträge werden selten.
+- Toub hat heute noch einen Beitrag veröffentlicht, über die Migration des Copilot-Coding-Harness von Node.js zu Rust. Ebenfalls lesenswert.
+- Runtime Async ist definitiv eine interessante Entwicklung. Ich bin gespannt, wohin das führt.
+** Reversing Factorio's RNG :gaming:reverse-engineering:math:prng:
+:PROPERTIES:
+:ID:       49674451
+:URL:      https://gegell.github.io/posts/factorio-rng/
+:HN_URL:   https://news.ycombinator.com/item?id=49674451
+:POINTS:   176
+:COMMENTS: 22
+:BY:       jheitmann
+:END:
+
+*** TLDR
+Factorio uses taus88, three linear feedback shift registers combined, picked from boost because it was the fastest available. The author decompiled the implementation, expressed the LFSR steps as matrix operations over GF(2), and then recovered the full 96-bit internal state from 88 single-bit observations: each one is whether a repair pack survived recycling. The hard parts were that each craft leaks one bit rather than a 32-bit output, and that other game systems consume RNG calls in between, so the observations are not consecutive. With the state known, they built an in-game machine that predicts upcoming rolls, burns the unwanted ones by recycling scrap, and crafts legendary-quality items on demand.
+
+*** Take
+taus88 dates to 1996 and was never built to resist anyone, so the cryptographic result is not the interesting part. The interesting part is the channel: one bit per craft, with other subsystems stealing draws in between, and it still collapses under linear algebra. And the payoff is a factory whose output is certainty, which is the most Factorio conclusion available.
+
+*** Comments
+
+**** Aardwolf
+'We chose taus88 mainly because it is the fastest from boost's generators.' That's an RNG from 1996. Modern PRNGs are much faster yet better at passing test suites.
+
+**** PennRobotics
+Stardew Valley has two random number seeds. On the Switch you can't easily access the save file AND the RNG differs from PC, so there's a seed cracker that looks at your traveling cart listing.
+
+**** torvin92
+As if Factorio wasn't addictive enough, now we can predict ore patches! My sleep schedule is already ruined.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+逆向 Factorio 的随机数生成器
+***** TLDR
+Factorio 用的是 taus88，由三个线性反馈移位寄存器组合而成，从 boost 里挑它只因为它最快。作者反编译了实现，把 LFSR 的状态转移写成 GF(2) 上的矩阵运算，然后从 88 个单比特观测里还原出完整的 96 位内部状态，每个观测就是一包维修包在回收时是否幸存。难点在于每次制作只泄漏一个比特而非完整的 32 位输出，而且中间还有别的游戏系统在消耗随机数调用，观测并不连续。拿到状态后，作者在游戏里搭了一台机器：预测接下来的掷点，用回收废料烧掉不想要的那些，然后按需产出传奇品质的物品。
+***** Take
+taus88 是 1996 年的东西，本来就没打算抵御谁，所以密码学结论并不是看点。看点在于观测通道：每次制作只有一个比特，中途还有别的子系统偷走调用，结果照样被线性代数拆开。而最终产物是一座制造确定性的工厂，这是最符合 Factorio 气质的结局。
+***** Comments
+- “我们选 taus88 主要是因为它是 boost 里最快的。” 那是 1996 年的随机数生成器。现代 PRNG 既更快，通过测试套件的表现也更好。
+- 《星露谷物语》有两个随机数种子。在 Switch 上你既不容易访问存档，随机数生成器又和 PC 版不同，所以有人做了靠旅行商人货单来反推种子的工具。
+- Factorio 还不够让人上瘾似的，现在连矿脉都能预测了。我的作息本来就已经毁了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Factorioの乱数生成器を解析する
+***** TLDR
+Factorioはtaus88を使う。3つの線形帰還シフトレジスタを組み合わせたもので、boostの中で最速だからという理由で選ばれた。著者は実装を逆コンパイルし、LFSRの遷移をGF(2)上の行列演算として表し、88個の1ビット観測から96ビットの内部状態全体を復元した。各観測は修理パックがリサイクルで残ったかどうかである。難しいのは、1回のクラフトで漏れるのが32ビット出力ではなく1ビットだけであること、そして合間に他のゲームシステムが乱数呼び出しを消費するため観測が連続しないことだ。状態が分かれば話は早く、次の出目を予測し、不要な分はスクラップのリサイクルで消費し、レジェンダリー品質の品を狙って作る機械をゲーム内に組み上げた。
+***** Take
+taus88は1996年のもので、誰かに抗うようには作られていない。だから暗号的な結論は見どころではない。見どころは観測経路のほうだ。1クラフトあたり1ビット、しかも合間に他のサブシステムが乱数を横取りする。それでも線形代数の前に崩れる。そして成果物は確実性を製造する工場であり、Factorioとして最もふさわしい結末だ。
+***** Comments
+- 「taus88を選んだのは主にboostの生成器の中で最速だからだ」。それは1996年の乱数生成器だ。現代のPRNGはもっと速く、テストスイートの通過も優秀なのに。
+- Stardew Valleyには乱数シードが2つある。Switchではセーブファイルに簡単にアクセスできず、しかも乱数生成器がPC版と違うので、行商人の品揃えからシードを割り出すツールがある。
+- Factorioがまだ足りないとでも言うのか、鉱床まで予測できるようになった。私の睡眠習慣はもう壊れている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Factorio의 난수 생성기 역공학
+***** TLDR
+Factorio는 taus88을 쓴다. 선형 되먹임 시프트 레지스터 세 개를 조합한 것으로, boost에서 가장 빠르다는 이유로 채택됐다. 저자는 구현을 역컴파일하고 LFSR 전이를 GF(2) 위의 행렬 연산으로 표현한 뒤, 88개의 1비트 관측으로 96비트 내부 상태 전체를 복원했다. 관측 하나는 수리 팩이 재활용에서 살아남았는지 여부다. 어려운 점은 제작 한 번이 32비트 출력이 아니라 1비트만 흘린다는 것, 그리고 그사이 다른 게임 시스템이 난수 호출을 소비해 관측이 연속적이지 않다는 것이었다. 상태를 알아낸 뒤에는 다음 굴림을 예측하고, 원치 않는 것은 고철 재활용으로 태워버리며, 원할 때 전설 등급 아이템을 만들어내는 기계를 게임 안에 지었다.
+***** Take
+taus88은 1996년 것이고 애초에 누구를 막으려고 만든 게 아니다. 그래서 암호학적 결론은 볼거리가 아니다. 볼거리는 관측 경로다. 제작당 1비트, 그사이 다른 서브시스템이 난수를 가로채는 상황에서도 선형대수 앞에 무너진다. 그리고 결과물은 확실성을 생산하는 공장이니, Factorio다운 결말로는 이보다 나을 수 없다.
+***** Comments
+- 'taus88을 고른 건 주로 boost의 생성기 중 가장 빨라서다.' 그건 1996년 난수 생성기다. 요즘 PRNG는 더 빠르면서 테스트 스위트 통과도 더 낫다.
+- 스타듀 밸리에는 난수 시드가 둘 있다. 스위치에서는 세이브 파일 접근도 어렵고 난수 생성기도 PC와 달라서, 떠돌이 상인 물품 목록을 보고 시드를 역산하는 도구가 있다.
+- Factorio가 충분히 중독적이지 않기라도 한 듯, 이제 광맥까지 예측할 수 있다. 내 수면 습관은 이미 망가졌다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ingeniería inversa del generador aleatorio de Factorio
+***** TLDR
+Factorio usa taus88, la combinación de tres registros de desplazamiento con realimentación lineal, elegido de boost por ser el más rápido. El autor descompiló la implementación, expresó los pasos del LFSR como operaciones matriciales sobre GF(2) y recuperó los 96 bits completos del estado interno a partir de 88 observaciones de un solo bit: cada una es si un paquete de reparación sobrevivió al reciclaje. Lo difícil era que cada fabricación filtra un bit y no una salida de 32 bits, y que otros sistemas del juego consumen llamadas al generador por en medio, así que las observaciones no son consecutivas. Con el estado conocido, construyó dentro del juego una máquina que predice las tiradas siguientes, quema las no deseadas reciclando chatarra y fabrica objetos de calidad legendaria a voluntad.
+***** Take
+taus88 es de 1996 y nunca se diseñó para resistir a nadie, así que el resultado criptográfico no es lo interesante. Lo interesante es el canal: un bit por fabricación, con otros subsistemas robando tiradas en medio, y aun así cae ante el álgebra lineal. Y el premio es una fábrica cuyo producto es la certeza, que es el final más Factorio posible.
+***** Comments
+- 'Elegimos taus88 sobre todo porque es el más rápido de los generadores de boost.' Ese es un generador de 1996. Los PRNG modernos son mucho más rápidos y además pasan mejor las baterías de pruebas.
+- Stardew Valley tiene dos semillas aleatorias. En la Switch no puedes acceder fácilmente al fichero de guardado Y el generador es distinto al de PC, así que existe un descifrador de semillas que mira el inventario del carro ambulante.
+- Como si Factorio no fuera ya bastante adictivo, ahora podemos predecir las vetas de mineral. Mis horas de sueño ya estaban arruinadas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Factorios Zufallsgenerator rückwärts aufgerollt
+***** TLDR
+Factorio nutzt taus88, eine Kombination aus drei rückgekoppelten Schieberegistern, ausgewählt aus boost, weil es der schnellste Generator dort war. Der Autor dekompilierte die Implementierung, formulierte die LFSR-Schritte als Matrixoperationen über GF(2) und rekonstruierte den vollständigen 96-Bit-Zustand aus 88 Ein-Bit-Beobachtungen: jede davon die Frage, ob ein Reparaturpaket das Recycling überstanden hat. Schwierig war, dass jeder Herstellungsvorgang nur ein Bit preisgibt statt einer 32-Bit-Ausgabe und dass andere Spielsysteme dazwischen Zufallsaufrufe verbrauchen, die Beobachtungen also nicht aufeinanderfolgen. Mit bekanntem Zustand baute er eine Maschine im Spiel, die kommende Würfe vorhersagt, unerwünschte durch Recycling von Schrott verbraucht und auf Wunsch Gegenstände in legendärer Qualität herstellt.
+***** Take
+taus88 stammt von 1996 und sollte nie jemandem standhalten, das kryptografische Ergebnis ist also nicht das Spannende. Spannend ist der Kanal: ein Bit pro Herstellung, dazwischen klauen andere Subsysteme Ziehungen, und trotzdem fällt das Ganze der linearen Algebra zum Opfer. Und der Ertrag ist eine Fabrik, deren Produkt Gewissheit ist, was als Factorio-Schluss kaum zu übertreffen ist.
+***** Comments
+- 'Wir haben taus88 vor allem gewählt, weil es der schnellste Generator in boost ist.' Das ist ein Zufallsgenerator von 1996. Moderne PRNGs sind deutlich schneller und bestehen die Testsuiten besser.
+- Stardew Valley hat zwei Zufallsseeds. Auf der Switch kommt man nicht leicht an die Speicherdatei UND der Generator unterscheidet sich vom PC, deshalb gibt es einen Seed-Cracker, der das Angebot des fahrenden Händlers auswertet.
+- Als wäre Factorio nicht süchtig machend genug, können wir jetzt auch noch Erzvorkommen vorhersagen. Mein Schlafrhythmus ist ohnehin ruiniert.
