@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-09-17 11:00 UTC
+#+DATE: 2026-09-17T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Ternary weights get smaller, a 1994 telnet bug gets a CVE, and a 20M-install PHP polyfill gets retired
+
+* Highlights
+- BITCOS squeezes ternary LLM weights to 1.485 bits by exploiting all the zeros
+- GNU inetutils telnetd: 32-year-old overflow, fix still only in git
+- http_build_url: 20M installs, one temporary fix, deprecated at last
+- Servo's donation-funded maintainer reviewed 1,150 PRs in a year
+- Verus proves Rust correct, including the unsafe blocks, in under a second
+
+* Stories
+
+** Breaking the 1.58-bit Barrier for Ternary LLMs :ai:llm:quantization:performance:
+:PROPERTIES:
+:ID:       49732931
+:URL:      https://arxiv.org/abs/2609.16338
+:HN_URL:   https://news.ycombinator.com/item?id=49732931
+:POINTS:   210
+:COMMENTS: 33
+:BY:       matt_d
+:END:
+
+*** TLDR
+Ternary LLMs store weights as -1, 0 or +1, and the standard five-trit packing assumes all three are equally likely, costing 1.625 bits per weight. The authors measured 29 real ternary models and found zeros make up as much as 51.5% of the weights. Their format, BITCOS, stores a dense presence bitmap plus a compacted sign vector, costing 2 minus the zero density in bits per weight: 1.485 bits on the sparsest model, and smaller than five-trit packing on 26 of the 29 models. Decoding is fast enough to use in memory, not just on disk: up to 1.28x faster matrix-vector multiply than production ternary kernels, and 1.18x end-to-end throughput on CPU, 1.27x on GPU across five platforms.
+
+*** Take
+The interesting part is not the 0.14 bits. It is that the compressed layout is the runtime layout, and it still beats the hand-tuned kernels it replaces. Most compression papers stop at the file size and hand the decode cost back to the reader.
+
+*** Comments
+
+**** c7b
+I honestly assumed that's how they already work. I have to admit that I even explained it like that to a friend. Why on earth wouldn't you design it like that from the start?
+
+**** infogulch
+So they get down from 1.58 to 1.48 bits per weight by exploiting the fact that actual weights in practice are 0 51% of the time. Neat. If ternary LLMs work out and are baked into hardware as custom silicon I bet they'll be shockingly efficient.
+
+**** CodesInChaos
+I'm surprised that a variable length encoding like this is usable directly as in memory format and not just as storage/transfer format.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+突破三值 LLM 的 1.58 比特门槛
+***** TLDR
+三值 LLM 把权重存为 -1、0 或 +1，标准的五进制打包假设三者概率相同，每个权重需要 1.625 比特。作者测量了 29 个真实的三值模型，发现零值最多占权重的 51.5%。他们的格式 BITCOS 用一个稠密的存在位图加上一个压缩的符号向量，每权重比特数等于 2 减去零值密度：在最稀疏的模型上是 1.485 比特，在 29 个模型中有 26 个比五进制打包更小。解码足够快，可以直接作为内存格式而不只是磁盘格式：矩阵向量乘法比生产级三值内核最高快 1.28 倍，在五个平台上端到端吞吐量 CPU 提升 1.18 倍、GPU 提升 1.27 倍。
+***** Take
+有意思的不是那 0.14 比特，而是压缩后的布局就是运行时布局，而且还胜过它所取代的手工优化内核。大多数压缩论文只谈文件体积，把解码开销留给读者承担。
+***** Comments
+- 我一直以为它们本来就是这么做的。我甚至还这样给朋友解释过。为什么一开始不这么设计呢？
+- 他们利用实际权重中有 51% 是 0 这一点，把每权重从 1.58 比特降到 1.48 比特。不错。如果三值 LLM 真能成，并且做进定制芯片，我猜效率会高得惊人。
+- 我很意外这种变长编码可以直接当作内存格式使用，而不只是存储或传输格式。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+三値LLMの1.58ビットの壁を破る
+***** TLDR
+三値LLMは重みを-1、0、+1で保存する。標準の5トリットパッキングは3つの値が等確率だと仮定し、重み1個あたり1.625ビットかかる。著者らは実際の三値モデル29個を測定し、ゼロが重みの最大51.5%を占めることを見つけた。彼らのフォーマットBITCOSは密な存在ビットマップと圧縮した符号ベクトルを組み合わせ、重みあたりのビット数は2からゼロ密度を引いた値になる。最も疎なモデルで1.485ビット、29モデル中26で5トリットパッキングより小さい。デコードは十分速く、ディスク上だけでなくメモリ上の形式としても使える。行列ベクトル積は製品版の三値カーネルより最大1.28倍速く、5つのプラットフォームでエンドツーエンドのスループットがCPUで1.18倍、GPUで1.27倍になった。
+***** Take
+重要なのは0.14ビットではない。圧縮したレイアウトがそのまま実行時のレイアウトであり、それが置き換え対象の手動最適化カーネルを上回っている点だ。多くの圧縮論文はファイルサイズで話を終え、デコードのコストは読者に押し付ける。
+***** Comments
+- もともとそう動いているものだと思っていた。友人にもそう説明していたほどだ。なぜ最初からそう設計しなかったのだろう。
+- 実際の重みの51%が0であることを利用して、重みあたり1.58ビットから1.48ビットに下げたわけだ。いいね。三値LLMが定着して専用シリコンに載れば、驚くほど効率的になると思う。
+- この種の可変長エンコーディングが、保存や転送の形式だけでなくメモリ上の形式としてそのまま使えるとは意外だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+삼진 LLM의 1.58비트 장벽 깨기
+***** TLDR
+삼진 LLM은 가중치를 -1, 0, +1로 저장하는데, 표준 5트릿 패킹은 세 값의 확률이 같다고 가정해 가중치당 1.625비트를 쓴다. 저자들은 실제 삼진 모델 29개를 측정해 0이 가중치의 최대 51.5%를 차지한다는 것을 확인했다. 이들의 포맷 BITCOS는 조밀한 존재 비트맵과 압축된 부호 벡터를 함께 쓰며, 가중치당 비트 수는 2에서 0의 밀도를 뺀 값이다. 가장 희소한 모델에서 1.485비트이고, 29개 중 26개에서 5트릿 패킹보다 작다. 디코딩이 충분히 빨라 디스크 포맷뿐 아니라 메모리 포맷으로도 쓸 수 있다. 행렬-벡터 곱은 상용 삼진 커널보다 최대 1.28배 빠르고, 다섯 개 플랫폼에서 종단 처리량이 CPU 1.18배, GPU 1.27배 향상됐다.
+***** Take
+핵심은 0.14비트가 아니다. 압축된 레이아웃이 곧 런타임 레이아웃이고, 그러면서도 대체한 수작업 최적화 커널보다 빠르다는 점이다. 대부분의 압축 논문은 파일 크기에서 이야기를 끝내고 디코딩 비용은 독자에게 떠넘긴다.
+***** Comments
+- 원래 그렇게 동작하는 줄 알았다. 친구에게도 그렇게 설명했을 정도다. 왜 처음부터 그렇게 설계하지 않았을까?
+- 실제 가중치의 51%가 0이라는 점을 이용해 가중치당 1.58비트에서 1.48비트로 낮췄다. 괜찮다. 삼진 LLM이 자리 잡고 전용 실리콘에 들어간다면 효율이 놀라울 것이다.
+- 이런 가변 길이 인코딩을 저장이나 전송 포맷이 아니라 메모리 포맷으로 바로 쓸 수 있다는 게 놀랍다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Romper la barrera de 1,58 bits en los LLM ternarios
+***** TLDR
+Los LLM ternarios guardan los pesos como -1, 0 o +1, y el empaquetado estándar de cinco trits supone que los tres son igual de probables, con un coste de 1,625 bits por peso. Los autores midieron 29 modelos ternarios reales y encontraron que los ceros llegan a ser el 51,5% de los pesos. Su formato, BITCOS, guarda un mapa de bits denso de presencia más un vector de signos compactado, con un coste de 2 menos la densidad de ceros en bits por peso: 1,485 bits en el modelo más disperso, y menor que el empaquetado de cinco trits en 26 de los 29 modelos. La decodificación es lo bastante rápida para usarse en memoria y no solo en disco: hasta 1,28x más rápido que los kernels ternarios de producción en la multiplicación matriz-vector, y 1,18x de rendimiento total en CPU y 1,27x en GPU en cinco plataformas.
+***** Take
+Lo interesante no son los 0,14 bits. Es que el formato comprimido es también el formato en ejecución, y aun así supera a los kernels ajustados a mano que reemplaza. La mayoría de los artículos sobre compresión se detienen en el tamaño del archivo y le dejan el coste de decodificación al lector.
+***** Comments
+- Daba por hecho que ya funcionaban así. Admito que incluso se lo expliqué así a un amigo. ¿Por qué no diseñarlo así desde el principio?
+- Bajan de 1,58 a 1,48 bits por peso aprovechando que en la práctica los pesos son 0 el 51% de las veces. Interesante. Si los LLM ternarios cuajan y llegan al silicio dedicado, apuesto a que serán sorprendentemente eficientes.
+- Me sorprende que una codificación de longitud variable así sirva directamente como formato en memoria y no solo de almacenamiento o transferencia.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die 1,58-Bit-Grenze bei ternären LLMs durchbrochen
+***** TLDR
+Ternäre LLMs speichern Gewichte als -1, 0 oder +1. Das übliche Fünf-Trit-Packen nimmt an, dass alle drei gleich wahrscheinlich sind, und kostet 1,625 Bit pro Gewicht. Die Autoren haben 29 echte ternäre Modelle vermessen und festgestellt, dass Nullen bis zu 51,5% der Gewichte ausmachen. Ihr Format BITCOS speichert eine dichte Präsenz-Bitmap plus einen komprimierten Vorzeichenvektor und kostet 2 minus die Nulldichte an Bit pro Gewicht: 1,485 Bit beim dünnsten Modell und weniger als Fünf-Trit-Packen bei 26 der 29 Modelle. Das Dekodieren ist schnell genug für den Einsatz im Speicher, nicht nur auf der Platte: bis zu 1,28x schnellere Matrix-Vektor-Multiplikation als produktive ternäre Kernel und 1,18x Durchsatz auf CPUs sowie 1,27x auf GPUs über fünf Plattformen.
+***** Take
+Das Interessante sind nicht die 0,14 Bit. Es ist, dass das komprimierte Layout zugleich das Laufzeit-Layout ist und trotzdem die handoptimierten Kernel schlägt, die es ersetzt. Die meisten Kompressionsarbeiten hören bei der Dateigröße auf und überlassen die Dekodierkosten dem Leser.
+***** Comments
+- Ich hatte angenommen, dass sie ohnehin so arbeiten. Ich habe es einem Freund sogar so erklärt. Warum sollte man es nicht von Anfang an so bauen?
+- Sie kommen von 1,58 auf 1,48 Bit pro Gewicht, weil die Gewichte in der Praxis zu 51% null sind. Schick. Wenn sich ternäre LLMs durchsetzen und in eigene Chips wandern, werden sie vermutlich verblüffend effizient.
+- Mich überrascht, dass eine Kodierung variabler Länge direkt als Speicherformat taugt und nicht nur als Ablage- oder Transportformat.
+** My temporary PHP fix from 2014 has nearly 20M installs. Today I'm deprecating it :php:opensource:maintenance:security:
+:PROPERTIES:
+:ID:       49718773
+:URL:      https://jakeasmith.com/blog/http-build-url/
+:HN_URL:   https://news.ycombinator.com/item?id=49718773
+:POINTS:   131
+:COMMENTS: 26
+:BY:       jakeasmith
+:END:
+
+*** TLDR
+In 2014 Jake A. Smith was moving AOL's CMS from PHP 5.2 to 5.3, which dropped the pecl_http extension and with it http_build_url(). Rather than rewrite dozens of call sites, he wrote a 174-line polyfill that only registers itself when the real function is missing. It is now at nearly 20 million Packagist installs and still adds over 400,000 a month, partly through WPML, which runs on 1.5 million-plus WordPress sites, and through Debian and Ubuntu packages. He is deprecating it because it was never meant to last, because a trailing-slash bug strips the letter 'a' from paths, and because an abandoned package with that install count is an attractive supply-chain target. He points users at the PHP League's URI library or PHP 8.5's built-in URI API.
+
+*** Take
+Retiring it is the right call and the security argument is the real one: 20 million installs of unmaintained code is a handover waiting to be exploited. The trailing-slash bug that eats the letter 'a' is the part worth checking your own codebase for today.
+
+*** Comments
+
+**** Sander_Marechal
+There is nothing as permanent as a temporary fix that works.
+
+**** jakeasmith
+Author here. I never imagined a polyfill for http_build_url would gain so much traction. After 12 years, deprecating it feels like the right move, especially given the new options from the community and PHP itself.
+
+**** samayashar
+I used PHP for one of my professional projects and never came across this, maybe because the library was not part of our codebase.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我 2014 年的临时 PHP 补丁有近 2000 万次安装，今天我要弃用它
+***** TLDR
+2014 年，Jake A. Smith 正把 AOL 的 CMS 从 PHP 5.2 迁到 5.3，而 5.3 去掉了 pecl_http 扩展，也就没有了 http_build_url()。与其重写几十处调用，他写了一个 174 行的 polyfill，只在原函数缺失时才注册自己。如今它在 Packagist 上有近 2000 万次安装，每月仍新增超过 40 万次，部分来自运行在 150 多万个 WordPress 站点上的 WPML，以及 Debian 和 Ubuntu 的软件包。他要弃用它，因为它本就不该长期存在，因为一个尾部斜杠的 bug 会把路径里的字母 a 删掉，也因为一个被弃管却有这种安装量的包是供应链攻击的诱人目标。他建议用户改用 PHP League 的 URI 库或 PHP 8.5 内置的 URI API。
+***** Take
+下架是对的，真正站得住的理由是安全：2000 万次安装的无人维护代码，交接之日就是被利用之时。那个会吃掉字母 a 的尾部斜杠 bug，值得你今天就在自己的代码库里查一遍。
+***** Comments
+- 没有什么比一个好用的临时方案更持久。
+- 作者在此。我从没想过一个 http_build_url 的 polyfill 会被用得这么广。12 年后，弃用它是对的，尤其是社区和 PHP 自身都给出了新选择。
+- 我有个专业项目用过 PHP，却从没遇到过它，也许是因为这个库不在我们的代码库里。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+2014年に書いた一時しのぎのPHP修正が2000万近くインストールされた。今日それを非推奨にする
+***** TLDR
+2014年、Jake A. SmithはAOLのCMSをPHP 5.2から5.3へ移行していた。5.3ではpecl_http拡張がなくなり、http_build_url()も使えなくなる。数十か所の呼び出しを書き直す代わりに、彼は元の関数が無いときだけ自分を登録する174行のポリフィルを書いた。今ではPackagistで2000万近いインストール数があり、月に40万以上増え続けている。150万を超えるWordPressサイトで動くWPMLや、DebianとUbuntuのパッケージ経由の分もある。彼が非推奨にする理由は、そもそも一時的なもののはずだったこと、末尾スラッシュのバグがパスから文字aを削ってしまうこと、そしてこのインストール数で放置されたパッケージはサプライチェーン攻撃の格好の的になることだ。移行先としてPHP LeagueのURIライブラリかPHP 8.5の組み込みURI APIを挙げている。
+***** Take
+引退させる判断は正しく、説得力があるのは安全面の理由だ。2000万インストールの未保守コードは、メンテナ交代がそのまま攻撃の入口になる。文字aを飲み込む末尾スラッシュのバグは、今日自分のコードベースで確認する価値がある。
+***** Comments
+- うまく動く一時しのぎほど恒久的なものはない。
+- 著者です。http_build_urlのポリフィルがここまで広まるとは思いませんでした。12年経ち、コミュニティとPHP本体に新しい選択肢がある今、非推奨にするのが正しいと感じます。
+- 仕事のプロジェクトでPHPを使ったことはありますが、これには出会いませんでした。うちのコードベースに入っていなかったからでしょう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+2014년에 만든 임시 PHP 수정이 거의 2천만 번 설치됐다. 오늘 이를 폐기한다
+***** TLDR
+2014년 Jake A. Smith는 AOL의 CMS를 PHP 5.2에서 5.3으로 옮기고 있었다. 5.3은 pecl_http 확장을 없앴고 http_build_url()도 함께 사라졌다. 수십 곳의 호출부를 고치는 대신, 그는 원래 함수가 없을 때만 자신을 등록하는 174줄짜리 폴리필을 작성했다. 지금은 Packagist에서 거의 2천만 건이 설치됐고 매달 40만 건 이상 늘고 있다. 150만 개가 넘는 워드프레스 사이트에서 돌아가는 WPML과 데비안, 우분투 패키지를 통한 유입도 있다. 폐기하는 이유는 애초에 임시였다는 점, 후행 슬래시 버그가 경로에서 문자 a를 지워버린다는 점, 그리고 이만한 설치 수를 가진 방치된 패키지가 공급망 공격의 표적이 된다는 점이다. 그는 PHP League의 URI 라이브러리나 PHP 8.5의 내장 URI API로 옮기라고 권한다.
+***** Take
+폐기는 옳은 선택이고, 진짜 근거는 보안이다. 2천만 번 설치된 유지보수 없는 코드는 관리자 인수인계가 곧 공격 통로가 된다. 문자 a를 먹어버리는 후행 슬래시 버그는 오늘 자기 코드베이스에서 확인해 볼 만하다.
+***** Comments
+- 잘 돌아가는 임시방편만큼 영구적인 것은 없다.
+- 저자입니다. http_build_url 폴리필이 이렇게까지 퍼질 줄은 몰랐습니다. 12년이 지났고 커뮤니티와 PHP 자체가 새 대안을 내놓은 지금, 폐기가 맞다고 봅니다.
+- 업무 프로젝트에서 PHP를 썼지만 이건 본 적이 없습니다. 우리 코드베이스에 없었기 때문이겠죠.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Mi parche temporal de PHP de 2014 tiene casi 20 millones de instalaciones. Hoy lo declaro obsoleto
+***** TLDR
+En 2014, Jake A. Smith migraba el CMS de AOL de PHP 5.2 a 5.3, versión que eliminó la extensión pecl_http y con ella http_build_url(). En lugar de reescribir decenas de llamadas, escribió un polyfill de 174 líneas que solo se registra si la función original no existe. Hoy acumula casi 20 millones de instalaciones en Packagist y sigue sumando más de 400.000 al mes, en parte por WPML, presente en más de 1,5 millones de sitios WordPress, y por los paquetes de Debian y Ubuntu. Lo declara obsoleto porque nunca debió durar tanto, porque un fallo con la barra final borra la letra 'a' de las rutas, y porque un paquete abandonado con esa cantidad de instalaciones es un objetivo atractivo para la cadena de suministro. Recomienda la biblioteca URI de PHP League o la API de URI incorporada en PHP 8.5.
+***** Take
+Retirarlo es lo correcto, y el argumento de seguridad es el de peso: 20 millones de instalaciones de código sin mantenimiento son un traspaso esperando a ser explotado. El fallo de la barra final que se come la letra 'a' es lo que conviene revisar hoy en tu propio código.
+***** Comments
+- No hay nada tan permanente como un arreglo temporal que funciona.
+- Autor aquí. Nunca imaginé que un polyfill de http_build_url tendría tanta difusión. Tras 12 años, declararlo obsoleto me parece lo correcto, sobre todo con las nuevas opciones de la comunidad y del propio PHP.
+- Usé PHP en un proyecto profesional y nunca me topé con esto, quizá porque la biblioteca no estaba en nuestro código.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Mein provisorischer PHP-Fix von 2014 hat fast 20 Mio. Installationen. Heute stelle ich ihn ein
+***** TLDR
+2014 migrierte Jake A. Smith das CMS von AOL von PHP 5.2 auf 5.3, das die Erweiterung pecl_http und damit http_build_url() entfernte. Statt Dutzende Aufrufstellen umzuschreiben, schrieb er ein 174-zeiliges Polyfill, das sich nur registriert, wenn die echte Funktion fehlt. Inzwischen steht es bei fast 20 Millionen Installationen auf Packagist und wächst um über 400.000 pro Monat, unter anderem über WPML, das auf mehr als 1,5 Millionen WordPress-Seiten läuft, sowie über Debian- und Ubuntu-Pakete. Er stellt es ein, weil es nie von Dauer sein sollte, weil ein Fehler mit abschließendem Schrägstrich den Buchstaben 'a' aus Pfaden entfernt, und weil ein verwaistes Paket mit dieser Reichweite ein lohnendes Ziel für Angriffe auf die Lieferkette ist. Er verweist auf die URI-Bibliothek der PHP League oder die eingebaute URI-API von PHP 8.5.
+***** Take
+Die Einstellung ist richtig, und das Sicherheitsargument trägt: 20 Millionen Installationen unbetreuten Codes sind eine Übergabe, die nur auf Missbrauch wartet. Der Fehler mit dem abschließenden Schrägstrich, der den Buchstaben 'a' frisst, gehört heute in der eigenen Codebasis geprüft.
+***** Comments
+- Nichts ist so dauerhaft wie ein Provisorium, das funktioniert.
+- Autor hier. Ich hätte nie gedacht, dass ein Polyfill für http_build_url so weite Verbreitung findet. Nach 12 Jahren fühlt sich die Einstellung richtig an, gerade angesichts der neuen Optionen aus der Community und von PHP selbst.
+- Ich habe PHP in einem beruflichen Projekt genutzt und bin dem nie begegnet, vermutlich weil die Bibliothek nicht in unserer Codebasis war.
+** A 32-year-old bug walks into a Telnet server :security:cve:telnet:linux:
+:PROPERTIES:
+:ID:       49721291
+:URL:      https://labs.watchtowr.com/a-32-year-old-bug-walks-into-a-telnet-server-gnu-inetutils-telnetd-cve-2026-32746/
+:HN_URL:   https://news.ycombinator.com/item?id=49721291
+:POINTS:   64
+:COMMENTS: 27
+:BY:       paimapi
+:END:
+
+*** TLDR
+watchTowr walks through CVE-2026-32746 in GNU inetutils telnetd. The LINEMODE SLC negotiation handler takes a list of three-byte triplets and never checks whether they fit in the fixed-size slcbuf, so an unauthenticated attacker can corrupt roughly 400 bytes of adjacent globals before login. The code dates to 1994. On some systems the overwrite yields an arbitrary-free primitive and memory disclosure; full remote code execution is hard against modern heap hardening. The bug was reported on a public mailing list in March 2026 and inetutils has still not cut a release, so the fix exists in git and, among distributions, mainly in Debian's development branch.
+
+*** Take
+The patch gap is the story, not the overflow. A fix that sits in git for six months while distributions ship the vulnerable build is a release-process failure, and the maintainer who wrote the fix showing up in the thread to object to the tone of the writeup does not close that gap.
+
+*** Comments
+
+**** collinfunk
+As the person who wrote the fix for this issue (and not the original code), I will just mention that I find this paragraph makes the author sound incredibly entitled: 'Shamefully, the inetutils project hasn't actually released a fixed version of their software.' The bug was reported on a public mailing list, which is sadly common nowadays.
+
+**** krautsauer
+Needs a (March 19). I know HN only does this for years, but this being about vulnerabilities...
+
+**** b800h
+'1994' / 'RISC was a distant dream'. Ahem.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+一个 32 岁的 bug 走进了一台 Telnet 服务器
+***** TLDR
+watchTowr 详解了 GNU inetutils telnetd 中的 CVE-2026-32746。LINEMODE SLC 协商处理函数接收一串三字节三元组，却从不检查它们是否装得下固定大小的 slcbuf，于是未认证的攻击者可以在登录前破坏大约 400 字节的相邻全局变量。这段代码写于 1994 年。在某些系统上，这种覆写可以得到任意 free 的原语和内存泄露；受现代堆加固限制，完整的远程代码执行仍然很难。该漏洞于 2026 年 3 月在公开邮件列表上报告，inetutils 至今没有发布新版本，因此修复只存在于 git 中，在发行版里主要是 Debian 的开发分支带上了补丁。
+***** Take
+值得说的是补丁的空档期，而不是这个溢出本身。修复在 git 里放了半年，发行版却还在分发有漏洞的版本，这是发布流程的失败；写了这个修复的维护者跑到讨论帖里抱怨文章语气，并不能填上这个空档。
+***** Comments
+- 作为写了这个修复（而不是原始代码）的人，我只想说这段话让作者显得非常自以为是：“可耻的是，inetutils 项目至今没有发布修复版本。”这个 bug 是在一个公开邮件列表上报告的，遗憾的是如今这很常见。
+- 标题该加上（3 月 19 日）。我知道 HN 只对年份这么做，但这是关于漏洞的……
+- “1994 年”“RISC 还是遥远的梦想”。咳咳。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+32歳のバグがTelnetサーバーに入ってきた
+***** TLDR
+watchTowrがGNU inetutils telnetdのCVE-2026-32746を解説している。LINEMODEのSLCネゴシエーション処理は3バイトの組の並びを受け取るが、それが固定長のslcbufに収まるか検査しない。そのため未認証の攻撃者がログイン前に隣接するグローバル変数を約400バイト破壊できる。このコードは1994年のものだ。環境によっては任意freeのプリミティブとメモリ内容の漏洩につながるが、現代のヒープ保護のもとで完全なリモートコード実行は難しい。バグは2026年3月に公開メーリングリストで報告されたが、inetutilsはいまだにリリースを出しておらず、修正はgit上にあるだけで、ディストリビューションではおおむねDebianの開発ブランチにしか入っていない。
+***** Take
+問題はオーバーフローよりも修正が届かない期間だ。修正が半年gitに置かれたまま、ディストリビューションは脆弱なビルドを配り続けた。これはリリース手順の失敗であり、修正を書いた保守担当がスレッドに現れて記事の語調に抗議しても、その穴は埋まらない。
+***** Comments
+- この問題の修正を書いた人間として（元のコードを書いた人間ではない）言わせてもらうと、この段落は著者をひどく傲慢に見せる。「恥ずべきことに、inetutilsプロジェクトは修正版をリリースしていない」。バグは公開メーリングリストで報告されたもので、残念ながら最近はよくあることだ。
+- （3月19日）と付けるべきだ。HNが年だけに付けるのは知っているが、脆弱性の話なので……
+- 「1994年」「RISCは遠い夢だった」。ええと。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+서른두 살 먹은 버그가 텔넷 서버로 들어왔다
+***** TLDR
+watchTowr가 GNU inetutils telnetd의 CVE-2026-32746을 분석했다. LINEMODE SLC 협상 처리기는 3바이트 묶음의 목록을 받으면서 그것이 고정 크기 slcbuf에 들어가는지 확인하지 않는다. 그래서 인증받지 않은 공격자가 로그인 전에 인접한 전역 변수 약 400바이트를 훼손할 수 있다. 이 코드는 1994년 것이다. 일부 시스템에서는 이 덮어쓰기가 임의 free 원시 연산과 메모리 유출로 이어지지만, 최신 힙 보호 아래에서 완전한 원격 코드 실행은 어렵다. 버그는 2026년 3월 공개 메일링 리스트에 보고됐으나 inetutils는 아직 릴리스를 내지 않았고, 수정은 git에만 있으며 배포판 중에서는 주로 데비안 개발 브랜치에만 반영돼 있다.
+***** Take
+진짜 이야기는 오버플로가 아니라 패치 공백이다. 수정이 여섯 달 동안 git에 머무는 사이 배포판은 취약한 빌드를 계속 내보냈다. 이건 릴리스 절차의 실패이고, 수정을 작성한 관리자가 스레드에 나타나 글의 어조를 문제 삼는다고 그 공백이 메워지지는 않는다.
+***** Comments
+- 이 문제의 수정을 작성한 사람으로서(원래 코드를 쓴 사람은 아니다) 한마디 하자면, 이 문단은 저자를 몹시 오만하게 보이게 한다. '부끄럽게도 inetutils 프로젝트는 수정 버전을 내놓지 않았다.' 이 버그는 공개 메일링 리스트에 보고됐고, 안타깝게도 요즘은 흔한 일이다.
+- (3월 19일)을 붙여야 한다. HN이 연도에만 그렇게 하는 건 알지만, 취약점 이야기라서…
+- '1994년', 'RISC는 먼 꿈이었다'. 흠.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un fallo de 32 años entra en un servidor Telnet
+***** TLDR
+watchTowr detalla la CVE-2026-32746 en el telnetd de GNU inetutils. El manejador de negociación SLC de LINEMODE recibe una lista de tripletes de tres bytes y nunca comprueba si caben en el slcbuf de tamaño fijo, así que un atacante sin autenticar puede corromper unos 400 bytes de variables globales contiguas antes del inicio de sesión. El código es de 1994. En algunos sistemas la sobrescritura da una primitiva de free arbitrario y fuga de memoria; la ejecución remota completa es difícil frente a las protecciones modernas del heap. El fallo se comunicó en una lista de correo pública en marzo de 2026 e inetutils sigue sin publicar una versión, así que el arreglo vive en git y, entre distribuciones, sobre todo en la rama de desarrollo de Debian.
+***** Take
+La noticia es el retraso del parche, no el desbordamiento. Un arreglo que lleva seis meses en git mientras las distribuciones publican la versión vulnerable es un fallo del proceso de publicación, y que el mantenedor que escribió el arreglo aparezca en el hilo a quejarse del tono del artículo no cierra ese hueco.
+***** Comments
+- Como persona que escribió el arreglo de este problema (y no el código original), diré que este párrafo hace que el autor suene tremendamente prepotente: 'Vergonzosamente, el proyecto inetutils no ha publicado una versión corregida'. El fallo se comunicó en una lista de correo pública, algo tristemente habitual hoy.
+- Le falta un (19 de marzo). Sé que HN solo hace esto con los años, pero tratándose de vulnerabilidades...
+- '1994' / 'RISC era un sueño lejano'. Ejem.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein 32 Jahre alter Fehler betritt einen Telnet-Server
+***** TLDR
+watchTowr seziert CVE-2026-32746 im telnetd von GNU inetutils. Der SLC-Aushandlungscode von LINEMODE nimmt eine Liste aus Drei-Byte-Tripeln entgegen und prüft nie, ob sie in den festen slcbuf passen. So kann ein nicht authentifizierter Angreifer vor dem Login rund 400 Byte benachbarter globaler Variablen überschreiben. Der Code stammt von 1994. Auf manchen Systemen liefert das Überschreiben ein beliebiges free und einen Speicherabfluss; vollständige Codeausführung aus der Ferne bleibt gegen moderne Heap-Härtung schwierig. Gemeldet wurde der Fehler im März 2026 auf einer öffentlichen Mailingliste, inetutils hat bis heute keine Version veröffentlicht. Der Fix liegt damit in git und unter den Distributionen vor allem im Entwicklungszweig von Debian.
+***** Take
+Die Geschichte ist die Patch-Lücke, nicht der Überlauf. Ein Fix, der sechs Monate in git liegt, während Distributionen den verwundbaren Build ausliefern, ist ein Fehler im Release-Prozess. Dass der Maintainer, der den Fix geschrieben hat, im Thread den Ton des Artikels rügt, schließt diese Lücke nicht.
+***** Comments
+- Als derjenige, der den Fix für dieses Problem geschrieben hat (nicht den ursprünglichen Code), sage ich nur: Dieser Absatz lässt den Autor unglaublich anmaßend klingen: 'Beschämenderweise hat das inetutils-Projekt keine korrigierte Version veröffentlicht.' Der Fehler wurde auf einer öffentlichen Mailingliste gemeldet, was heute leider üblich ist.
+- Da fehlt ein (19. März). Ich weiß, HN macht das nur bei Jahren, aber bei Sicherheitslücken...
+- '1994' / 'RISC war ein ferner Traum'. Äh.
+** One Year of Sponsored Servo Development :browsers:opensource:rust:funding:
+:PROPERTIES:
+:ID:       49737849
+:URL:      https://servo.org/blog/2026/09/15/one-year-of-sponsorship/
+:HN_URL:   https://news.ycombinator.com/item?id=49737849
+:POINTS:   97
+:COMMENTS: 41
+:BY:       AshleysBrain
+:END:
+
+*** TLDR
+A year ago Servo put long-time maintainer Josh Bowman-Matthews on a part-time contract paid entirely out of OpenCollective and GitHub Sponsors donations, with contributor experience as the job. The retrospective counts the output: 1,150 pull requests reviewed, 8 new maintainers nominated, 114 contributor-friendly issues filed with 92% of them resolved, plus documentation on garbage collection, experimental features, testing diagnostics and the project's AI policy. He also backed a rewrite of the JavaScript engine integration that was causing GC panics, helped stabilise flaky window.open tests, and supported another contributor's grant application for navigation work. The post does not disclose the funding amount or WPT pass-rate movement.
+
+*** Take
+Those are review and mentoring numbers, not feature numbers, and that is the point: one paid reviewer converted into eight new maintainers is the highest-leverage thing a volunteer project can buy. The post would be more persuasive if it published the dollar figure behind the year.
+
+*** Comments
+
+**** flossly
+I really wish a patron would step up and sponsor this project. Not just by money, but also by plugging it in their browser-carrying products. Maybe Huawei or Samsung; they now ship a browser derived from another for-profit company's browser.
+
+**** macic
+The Hurd of browser engines.
+
+**** vyaa
+Congrats on the successful year!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+赞助支持下的 Servo 开发一周年
+***** TLDR
+一年前，Servo 用 OpenCollective 和 GitHub Sponsors 的捐款，把长期维护者 Josh Bowman-Matthews 签成了兼职合同，工作内容就是改善贡献者体验。这份回顾列出了成果：评审 1150 个拉取请求，提名 8 位新维护者，提交 114 个适合新贡献者的 issue 并解决了其中 92%，还写了关于垃圾回收、实验特性、测试诊断和项目 AI 政策的文档。他还支持了一次导致 GC panic 的 JavaScript 引擎集成重写，帮助稳定了不稳定的 window.open 测试，并协助另一位贡献者申请到了导航相关工作的资助。文章没有披露资助金额，也没有给出 WPT 通过率的变化。
+***** Take
+这些是评审和带人的数字，不是功能数字，而这正是重点：一个拿薪水的评审者换来八位新维护者，是志愿项目能买到的最高杠杆。如果文章公布这一年背后的具体金额，说服力会更强。
+***** Comments
+- 真希望有金主能支持这个项目。不只是出钱，还把它用进自家带浏览器的产品里。也许华为或三星；他们现在装的浏览器都源自另一家营利公司的浏览器。
+- 浏览器引擎界的 Hurd。
+- 恭喜这成功的一年！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+スポンサー付きServo開発の1年
+***** TLDR
+1年前、ServoはOpenCollectiveとGitHub Sponsorsの寄付だけを原資に、長年の保守担当Josh Bowman-Matthewsを非常勤契約で雇い、貢献者体験の改善を担当させた。この振り返りは成果を数字で示す。プルリクエスト1,150件のレビュー、新たな保守担当8人の指名、初心者向けissue 114件の起票とその92%の解決、さらにガベージコレクション、実験的機能、テスト診断、プロジェクトのAI方針に関するドキュメント。GCのパニックを起こしていたJavaScriptエンジン統合の書き直しを支え、不安定だったwindow.openのテストの安定化を助け、別の貢献者によるナビゲーション作業の助成申請も後押しした。資金額とWPT合格率の推移は公表されていない。
+***** Take
+並んでいるのは機能の数ではなくレビューと育成の数で、そこが肝心だ。有給のレビュー担当1人が新しい保守担当8人に変わるのは、ボランティア主体のプロジェクトが買える中で最も効率のよいものだ。1年分の金額を出していれば、もっと説得力があった。
+***** Comments
+- 誰かがこのプロジェクトを支援してくれないかと本気で思う。資金だけでなく、自社のブラウザ搭載製品に組み込むかたちでも。ファーウェイかサムスンあたりはどうだろう。今は営利企業のブラウザ派生を載せているのだから。
+- ブラウザエンジン界のHurdだ。
+- よい1年、おめでとう！
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+후원으로 이어온 Servo 개발 1년
+***** TLDR
+1년 전 Servo는 OpenCollective와 GitHub Sponsors 후원금만으로 오랜 관리자 Josh Bowman-Matthews를 시간제 계약으로 고용해 기여자 경험 개선을 맡겼다. 회고는 성과를 숫자로 정리한다. 풀 리퀘스트 1,150건 검토, 새 관리자 8명 지명, 입문자용 이슈 114건 등록과 그중 92% 해결, 그리고 가비지 컬렉션, 실험 기능, 테스트 진단, 프로젝트의 AI 정책에 관한 문서 작성. GC 패닉을 일으키던 자바스크립트 엔진 통합 재작성을 지원했고, 불안정하던 window.open 테스트를 안정화했으며, 다른 기여자의 내비게이션 작업 지원금 신청도 도왔다. 후원 금액과 WPT 통과율 변화는 공개하지 않았다.
+***** Take
+여기 적힌 것은 기능 수치가 아니라 리뷰와 멘토링 수치이고, 그게 핵심이다. 유급 리뷰어 한 명이 새 관리자 여덟 명으로 바뀌는 것은 자원봉사 프로젝트가 살 수 있는 가장 효율 높은 결과다. 1년치 금액을 공개했다면 설득력이 더 컸을 것이다.
+***** Comments
+- 누군가 이 프로젝트를 후원해 주면 좋겠다. 돈만이 아니라 자사 브라우저 탑재 제품에 넣는 방식으로도. 화웨이나 삼성은 어떨까. 지금은 영리 기업 브라우저에서 파생된 것을 싣고 있으니까.
+- 브라우저 엔진계의 Hurd.
+- 성공적인 한 해 축하합니다!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un año de desarrollo patrocinado de Servo
+***** TLDR
+Hace un año Servo contrató a tiempo parcial al veterano mantenedor Josh Bowman-Matthews, pagado íntegramente con donaciones de OpenCollective y GitHub Sponsors, con la experiencia de quienes contribuyen como cometido. El balance da cifras: 1.150 pull requests revisadas, 8 nuevos mantenedores nominados, 114 incidencias aptas para novatos abiertas y un 92% de ellas resueltas, además de documentación sobre recolección de basura, funciones experimentales, diagnóstico de pruebas y la política de IA del proyecto. También respaldó la reescritura de la integración del motor JavaScript que provocaba fallos del recolector, ayudó a estabilizar pruebas inestables de window.open y apoyó la solicitud de una subvención de otro colaborador para trabajo de navegación. El texto no revela el importe ni la evolución de los WPT.
+***** Take
+Son cifras de revisión y mentoría, no de funcionalidades, y ahí está la clave: un revisor pagado que se convierte en ocho nuevos mantenedores es lo más rentable que puede comprar un proyecto voluntario. El texto convencería más si publicara la cifra de dinero detrás del año.
+***** Comments
+- Ojalá algún mecenas apoyara este proyecto. No solo con dinero, también incorporándolo a sus productos con navegador. Quizá Huawei o Samsung; hoy usan un navegador derivado del de otra empresa con ánimo de lucro.
+- El Hurd de los motores de navegador.
+- ¡Enhorabuena por un año exitoso!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein Jahr gesponserte Servo-Entwicklung
+***** TLDR
+Vor einem Jahr stellte Servo den langjährigen Maintainer Josh Bowman-Matthews in Teilzeit an, vollständig finanziert aus Spenden über OpenCollective und GitHub Sponsors, mit der Contributor-Erfahrung als Aufgabe. Der Rückblick nennt Zahlen: 1.150 geprüfte Pull Requests, 8 neu nominierte Maintainer, 114 einsteigerfreundliche Issues angelegt, davon 92% erledigt, dazu Dokumentation zu Garbage Collection, experimentellen Funktionen, Testdiagnose und der KI-Richtlinie des Projekts. Er begleitete außerdem eine Neufassung der JavaScript-Engine-Anbindung, die GC-Abstürze verursachte, half beim Stabilisieren unzuverlässiger window.open-Tests und unterstützte den Förderantrag eines anderen Beitragenden für Navigationsarbeit. Den Finanzierungsbetrag und die Entwicklung der WPT-Quote nennt der Beitrag nicht.
+***** Take
+Das sind Review- und Mentoring-Zahlen, keine Feature-Zahlen, und genau darum geht es: Ein bezahlter Reviewer, aus dem acht neue Maintainer werden, ist das Wirksamste, was ein freiwilliges Projekt kaufen kann. Mit der offengelegten Summe hinter dem Jahr wäre der Beitrag überzeugender.
+***** Comments
+- Ich wünschte, ein Förderer würde dieses Projekt unterstützen. Nicht nur mit Geld, sondern auch durch Einsatz in eigenen Produkten mit Browser. Vielleicht Huawei oder Samsung; sie liefern heute einen Browser aus, der von dem eines anderen gewinnorientierten Unternehmens abstammt.
+- Der Hurd unter den Browser-Engines.
+- Glückwunsch zum erfolgreichen Jahr!
+** Developing provably correct Rust code with Verus :rust:formal-verification:aws:security:
+:PROPERTIES:
+:ID:       49700153
+:URL:      https://www.amazon.science/blog/developing-provably-correct-rust-code-with-verus
+:HN_URL:   https://news.ycombinator.com/item?id=49700153
+:POINTS:   118
+:COMMENTS: 20
+:BY:       Betelbuddy
+:END:
+
+*** TLDR
+Amazon Science describes Verus, an open-source verifier that checks Rust code against formal specifications for all possible inputs rather than sampled ones. Developers annotate functions with requires and ensures clauses written in Rust-like syntax; Verus generates the proof obligations and discharges them with solvers, usually returning in under a second, which is fast enough for interactive work and for letting an LLM iterate on proofs. It handles unsafe blocks and concurrent code, including custom locking schemes with invariants. Amazon used it to prove key primitives of the Nitro Isolation Engine, which enforces VM isolation on EC2. The guarantees rest on Verus itself, the top-level specifications, the Rust standard library and the toolchain. The post gives no line counts, bug counts or proof-to-code ratios.
+
+*** Take
+The sub-second feedback loop matters more than the Nitro name-drop: verification tools fail on adoption when the check takes a coffee break, not when the logic is hard. The missing proof-to-code ratio is the number everyone deciding whether to try this actually needs.
+
+*** Comments
+
+**** sourdecor
+Verus seems to be exactly what I have been looking for. I discovered AllConcur on HN a while back and wanted to port it to Go, but since it used TLA+ and C, it was very confusing to understand how you can trust the implementation unless you can compile TLA+ to C.
+
+**** nottorp
+Would it help with the bugs in the new and improved Ubuntu coreutils?
+
+**** Meneth
+'Beware of bugs in the above code; I have only proved it correct, not tried it.' - Donald Knuth
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用 Verus 开发可证明正确的 Rust 代码
+***** TLDR
+Amazon Science 介绍了 Verus，一个开源验证器，它针对所有可能的输入（而不是抽样输入）检查 Rust 代码是否符合形式化规范。开发者用类 Rust 语法的 requires 和 ensures 子句给函数加注解，Verus 生成证明义务并交给求解器处理，通常一秒内返回，这个速度足以支持交互式开发，也能让大模型反复迭代证明。它支持 unsafe 块和并发代码，包括带不变式的自定义加锁方案。亚马逊用它证明了 Nitro 隔离引擎的关键原语，该引擎负责 EC2 上的虚拟机隔离。这些保证依赖于 Verus 本身、顶层规范、Rust 标准库和工具链。文章没有给出代码行数、发现的 bug 数或证明与代码的比例。
+***** Take
+亚秒级的反馈循环比提到 Nitro 更重要：验证工具推不开，往往不是因为逻辑难，而是因为每次检查都要等上一杯咖啡的时间。缺失的证明与代码比例，恰恰是每个考虑要不要上手的人真正需要的数字。
+***** Comments
+- Verus 看起来正是我一直在找的东西。我之前在 HN 上看到 AllConcur，想把它移植到 Go，但它用的是 TLA+ 和 C，除非能把 TLA+ 编译成 C，否则很难搞清楚怎么信任那个实现。
+- 它能帮上那个焕然一新的 Ubuntu coreutils 里的 bug 吗？
+- “小心上面代码里的 bug；我只证明了它是对的，并没有真的运行过。” —— Donald Knuth
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Verusで証明可能に正しいRustコードを書く
+***** TLDR
+Amazon Scienceがオープンソースの検証器Verusを紹介している。サンプリングした入力ではなく、あり得るすべての入力についてRustコードが形式仕様を満たすかを機械的に検査する。開発者はRust風の構文でrequiresとensuresを関数に注釈し、Verusが証明義務を生成してソルバーに渡す。多くの場合1秒以内に結果が返るため、対話的な開発にも、LLMに証明を反復させるのにも十分速い。unsafeブロックや並行コードも扱え、不変条件を持つ独自のロック方式にも対応する。AmazonはこれをEC2の仮想マシン分離を担うNitro Isolation Engineの主要な基本要素の証明に使った。保証はVerus自身、最上位の仕様、Rust標準ライブラリ、ツールチェーンに依存する。行数、発見したバグ数、証明とコードの比率は示されていない。
+***** Take
+Nitroの名前より、1秒未満のフィードバックループのほうが重要だ。検証ツールが普及しないのは論理が難しいからではなく、検査のたびにコーヒー休憩が挟まるからだ。示されていない証明とコードの比率こそ、導入を検討する人が本当に必要としている数字だ。
+***** Comments
+- Verusはまさに探していたものに見える。以前HNでAllConcurを知り、Goに移植したいと思ったが、TLA+とCを使っていたので、TLA+をCにコンパイルできない限り実装をどう信頼するのか分からず混乱した。
+- 新しくなったUbuntuのcoreutilsのバグにも役立つだろうか。
+- 「上のコードのバグに注意。正しいことを証明しただけで、実行はしていない」ドナルド・クヌース
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Verus로 증명 가능하게 올바른 Rust 코드 작성하기
+***** TLDR
+Amazon Science가 오픈소스 검증기 Verus를 소개한다. 표본 입력이 아니라 가능한 모든 입력에 대해 Rust 코드가 형식 명세를 만족하는지 기계적으로 검사한다. 개발자가 Rust와 비슷한 문법의 requires, ensures 절로 함수에 주석을 달면 Verus가 증명 의무를 만들어 솔버로 해결하며, 대개 1초 안에 결과가 나온다. 대화식 개발에도, LLM이 증명을 반복해 다듬는 데도 충분한 속도다. unsafe 블록과 동시성 코드도 다루고, 불변식을 갖춘 사용자 정의 잠금 방식도 지원한다. 아마존은 EC2의 가상 머신 격리를 담당하는 Nitro Isolation Engine의 핵심 기본 요소를 증명하는 데 이를 썼다. 보장은 Verus 자체, 최상위 명세, Rust 표준 라이브러리, 툴체인에 달려 있다. 코드 줄 수, 발견한 버그 수, 증명 대비 코드 비율은 나오지 않는다.
+***** Take
+Nitro라는 이름보다 1초 미만의 피드백 루프가 더 중요하다. 검증 도구가 채택에 실패하는 이유는 논리가 어려워서가 아니라 검사할 때마다 커피 한 잔을 기다려야 하기 때문이다. 빠져 있는 증명 대비 코드 비율이야말로 도입을 고민하는 사람에게 실제로 필요한 숫자다.
+***** Comments
+- Verus는 내가 찾던 바로 그것 같다. 전에 HN에서 AllConcur를 보고 Go로 옮기고 싶었는데, TLA+와 C를 쓰다 보니 TLA+를 C로 컴파일할 수 없는 한 그 구현을 어떻게 신뢰하는지 이해하기 어려웠다.
+- 새로 바뀐 우분투 coreutils의 버그에도 도움이 될까?
+- '위 코드의 버그에 주의하라. 나는 옳음을 증명했을 뿐 실행해 보지는 않았다.' - 도널드 커누스
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Desarrollar código Rust demostrablemente correcto con Verus
+***** TLDR
+Amazon Science presenta Verus, un verificador de código abierto que comprueba código Rust frente a especificaciones formales para todas las entradas posibles, no para una muestra. Las funciones se anotan con cláusulas requires y ensures en sintaxis parecida a Rust; Verus genera las obligaciones de prueba y las resuelve con solucionadores, normalmente en menos de un segundo, lo bastante rápido para el trabajo interactivo y para que un LLM itere sobre las pruebas. Admite bloques unsafe y código concurrente, incluidos esquemas de bloqueo propios con invariantes. Amazon lo usó para demostrar primitivas clave del Nitro Isolation Engine, que garantiza el aislamiento de máquinas virtuales en EC2. Las garantías dependen del propio Verus, de las especificaciones de alto nivel, de la biblioteca estándar de Rust y de la cadena de herramientas. El texto no da líneas de código, fallos encontrados ni proporción entre prueba y código.
+***** Take
+El ciclo de respuesta por debajo del segundo importa más que la mención a Nitro: las herramientas de verificación fracasan en adopción cuando la comprobación se toma un descanso, no cuando la lógica es difícil. La proporción entre prueba y código que falta es justo el dato que necesita quien esté decidiendo si probarlo.
+***** Comments
+- Verus parece exactamente lo que buscaba. Descubrí AllConcur en HN hace tiempo y quería portarlo a Go, pero como usaba TLA+ y C, me resultaba muy confuso entender cómo confiar en la implementación si no puedes compilar TLA+ a C.
+- ¿Ayudaría con los fallos de los nuevos y mejorados coreutils de Ubuntu?
+- 'Cuidado con los errores del código anterior; solo he demostrado que es correcto, no lo he probado.' - Donald Knuth
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Beweisbar korrekten Rust-Code mit Verus entwickeln
+***** TLDR
+Amazon Science stellt Verus vor, einen quelloffenen Verifizierer, der Rust-Code gegen formale Spezifikationen für alle möglichen Eingaben prüft statt für Stichproben. Entwickler annotieren Funktionen mit requires- und ensures-Klauseln in Rust-ähnlicher Syntax; Verus erzeugt die Beweisverpflichtungen und löst sie mit Solvern, meist in unter einer Sekunde. Das reicht für interaktives Arbeiten und dafür, ein LLM an den Beweisen iterieren zu lassen. Unsafe-Blöcke und nebenläufiger Code werden unterstützt, einschließlich eigener Sperrverfahren mit Invarianten. Amazon hat damit zentrale Primitive der Nitro Isolation Engine bewiesen, die die VM-Isolation auf EC2 durchsetzt. Die Garantien hängen von Verus selbst, den obersten Spezifikationen, der Rust-Standardbibliothek und der Toolchain ab. Zeilenzahlen, gefundene Fehler oder das Verhältnis von Beweis zu Code nennt der Beitrag nicht.
+***** Take
+Die Rückmeldung unter einer Sekunde zählt mehr als der Verweis auf Nitro: Verifikationswerkzeuge scheitern an der Verbreitung, wenn die Prüfung eine Kaffeepause dauert, nicht wenn die Logik schwierig ist. Das fehlende Verhältnis von Beweis zu Code ist genau die Zahl, die jeder braucht, der über einen Versuch nachdenkt.
+***** Comments
+- Verus scheint genau das zu sein, was ich gesucht habe. Ich bin vor einiger Zeit auf HN über AllConcur gestolpert und wollte es nach Go portieren, aber da es TLA+ und C nutzte, war mir unklar, wie man der Implementierung trauen soll, solange man TLA+ nicht nach C kompilieren kann.
+- Würde das bei den Fehlern in den neuen, verbesserten Ubuntu-coreutils helfen?
+- 'Hüte dich vor Fehlern im obigen Code; ich habe ihn nur als korrekt bewiesen, nicht ausprobiert.' - Donald Knuth
