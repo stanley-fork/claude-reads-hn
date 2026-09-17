@@ -1,0 +1,511 @@
+#+TITLE: HN Digest 2026-09-17 06:03 UTC
+#+DATE: 2026-09-17T06:03:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Five states ship signatures nobody can check, Xiaomi streams its RL run live, and cargo ships bolt spinning tubes to the deck
+
+* Highlights
+- Driver's licenses: public keys recovered from the signatures themselves, for New York and Virginia
+- Xiaomi MiMo 2.6: a live post-training dashboard, about $1.2M spent, two thirds source code
+- Runtime async in .NET 11: 47% smaller async assemblies, sync completion 3x faster
+- Over 100 merchant ships now carry wind propulsion, for roughly 6% fuel savings
+
+* Stories
+
+** Keys Not Included: recovering the signing keys for US driver's license barcodes :security:cryptography:reverse-engineering:identity:
+:PROPERTIES:
+:ID:       49735930
+:URL:      https://ryan.science/blog/keys-not-included
+:HN_URL:   https://news.ycombinator.com/item?id=49735930
+:POINTS:   101
+:COMMENTS: 31
+:BY:       Ryan5453
+:END:
+
+*** TLDR
+Canadian Bank Note prints IDs for New York, Virginia, North Carolina, South Carolina and Wisconsin, and signs the PDF417 barcode with ECDSA P-256. It never published the keys, so the signatures were unverifiable. Ryan Fahey used a property of ECDSA: from a signature plus the message it signed, you can recover a small set of candidate public keys. He reconstructed the signed payload (the encoder signs with the signature field zero-filled, then overwrites it), collected cards from each state, and intersected the candidate sets until one key remained. Published: New York (IIN 636001) and Virginia (IIN 636000), from 3 and 6 sample cards. California, whose cards come from IDEMIA, already publishes its keys, documentation and test vectors.
+
+*** Take
+An unpublished public key is not a secret, it is a dead feature. Nobody checking an ID at a counter can verify a signature whose key was never released, so five states have been printing cryptography that did nothing at all until a stranger reverse engineered it for them. California published its keys and lost nothing.
+
+*** Comments
+
+**** KingMachiavelli
+This is nearly pointless unless the photo is in the barcode and signed too. A fake photo with a valid barcode passes every check in use today.
+
+**** bzmrgonz
+It baffles me that people treat disclosing a public key as a bad thing. That is exactly what public keys are for.
+
+**** samsullivan
+Credit belongs to the authors of the Verifiable Credential library, not to the vendor.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+密钥未附带：还原美国驾照条形码的签名密钥
+***** TLDR
+Canadian Bank Note 为纽约、弗吉尼亚、北卡罗来纳、南卡罗来纳和威斯康星五州印制证件，并用 ECDSA P-256 对 PDF417 条形码签名，却从未公布密钥，因此这些签名无法验证。Ryan Fahey 利用了 ECDSA 的一个特性：由签名加上被签名的消息，可以还原出少量候选公钥。他重建了被签名的数据（编码器先把签名字段填零后签名，再覆写签名），收集各州的证件样本，取候选集合的交集直到只剩一个密钥。已公布：纽约（IIN 636001）和弗吉尼亚（IIN 636000），分别基于 3 张和 6 张样本。而由 IDEMIA 供卡的加州早已公开了密钥、文档和测试向量。
+***** Take
+未公布的公钥不是秘密，而是一个失效的功能。柜台前查验证件的人无法验证一个密钥从未发布过的签名，所以这五个州印在证件上的密码学毫无作用，直到一个陌生人替他们逆向出来。加州公布了密钥，什么也没损失。
+***** Comments
+- 除非照片也进入条形码并被签名，否则这几乎没有意义。伪造的照片配上有效条形码能通过今天所有的查验。
+- 让我费解的是，人们竟把公开公钥当成坏事。公钥的用途本来就是公开。
+- 功劳属于 Verifiable Credential 库的作者，而不是供应商。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+鍵は同梱されていない：米国運転免許証バーコードの署名鍵を復元する
+***** TLDR
+Canadian Bank Note はニューヨーク、バージニア、ノースカロライナ、サウスカロライナ、ウィスコンシンの5州向けにIDを製造し、PDF417バーコードをECDSA P-256で署名している。しかし鍵を公開していないため、署名は検証不能だった。Ryan Fahey はECDSAの性質を利用した。署名と署名対象のメッセージがあれば、少数の候補公開鍵を復元できる。彼は署名対象データを再構成し（エンコーダは署名欄をゼロで埋めて署名し、その後上書きする）、各州のカードを集め、候補集合の共通部分を取って鍵を1つに絞った。公開されたのはニューヨーク（IIN 636001）とバージニア（IIN 636000）で、それぞれ3枚と6枚のサンプルによる。IDEMIA製のカードを使うカリフォルニア州は、鍵も文書もテストベクタも既に公開している。
+***** Take
+公開されていない公開鍵は秘密ではなく、機能していない機能だ。窓口でIDを確認する人は、鍵が一度も公開されていない署名を検証できない。つまりこの5州は、見知らぬ他人がリバースエンジニアリングするまで何の役にも立たない暗号を印刷し続けてきた。カリフォルニアは鍵を公開したが、何も失っていない。
+***** Comments
+- 写真自体がバーコードに入って署名されない限り、これはほぼ無意味だ。偽の写真と有効なバーコードの組み合わせは、現行のどのチェックも通過する。
+- 公開鍵を開示することを悪いことだと考える人がいるのが不可解だ。公開鍵とはまさにそのためのものだ。
+- 功績は Verifiable Credential ライブラリの作者にあり、ベンダーではない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+키는 포함되지 않음: 미국 운전면허증 바코드의 서명 키 복원하기
+***** TLDR
+Canadian Bank Note는 뉴욕, 버지니아, 노스캐롤라이나, 사우스캐롤라이나, 위스콘신 5개 주의 신분증을 제작하며 PDF417 바코드를 ECDSA P-256으로 서명한다. 그런데 키를 공개한 적이 없어 서명을 검증할 수 없었다. Ryan Fahey는 ECDSA의 성질을 이용했다. 서명과 서명 대상 메시지가 있으면 소수의 후보 공개키를 복원할 수 있다. 그는 서명 대상 데이터를 재구성하고(인코더는 서명 필드를 0으로 채운 채 서명한 뒤 덮어쓴다), 주별 카드를 모아 후보 집합의 교집합을 취해 키를 하나로 좁혔다. 공개된 것은 뉴욕(IIN 636001)과 버지니아(IIN 636000)로 각각 3장과 6장의 샘플에서 얻었다. IDEMIA가 카드를 공급하는 캘리포니아는 키와 문서, 테스트 벡터를 이미 공개하고 있다.
+***** Take
+공개되지 않은 공개키는 비밀이 아니라 작동하지 않는 기능이다. 창구에서 신분증을 확인하는 사람은 키가 배포된 적 없는 서명을 검증할 수 없다. 즉 이 5개 주는 낯선 사람이 대신 리버스 엔지니어링해 줄 때까지 아무 역할도 하지 않는 암호를 인쇄해 온 것이다. 캘리포니아는 키를 공개했고 잃은 것은 없다.
+***** Comments
+- 사진 자체가 바코드에 들어가 함께 서명되지 않는 한 이건 거의 무의미하다. 가짜 사진에 유효한 바코드를 붙이면 현재 쓰이는 모든 검사를 통과한다.
+- 공개키를 공개하는 것을 나쁜 일로 여기는 사람들이 있다는 게 당혹스럽다. 공개키는 원래 그러라고 있는 것이다.
+- 공은 벤더가 아니라 Verifiable Credential 라이브러리 작성자들에게 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Claves no incluidas: recuperar las claves de firma de los códigos de barras de las licencias de conducir de EE. UU.
+***** TLDR
+Canadian Bank Note fabrica documentos de identidad para Nueva York, Virginia, Carolina del Norte, Carolina del Sur y Wisconsin, y firma el código de barras PDF417 con ECDSA P-256. Nunca publicó las claves, así que las firmas eran imposibles de verificar. Ryan Fahey aprovechó una propiedad de ECDSA: a partir de una firma y del mensaje firmado se puede recuperar un conjunto pequeño de claves públicas candidatas. Reconstruyó los datos firmados (el codificador firma con el campo de firma relleno de ceros y luego lo sobrescribe), reunió tarjetas de cada estado e intersecó los conjuntos de candidatas hasta quedarse con una clave. Publicó las de Nueva York (IIN 636001) y Virginia (IIN 636000), a partir de 3 y 6 tarjetas de muestra. California, cuyas tarjetas produce IDEMIA, ya publica sus claves, documentación y vectores de prueba.
+***** Take
+Una clave pública sin publicar no es un secreto, es una función muerta. Quien revisa un documento en un mostrador no puede verificar una firma cuya clave nunca se difundió, así que cinco estados llevan años imprimiendo criptografía que no servía para nada hasta que un desconocido la sometió a ingeniería inversa por ellos. California publicó sus claves y no perdió nada.
+***** Comments
+- Esto es casi inútil salvo que la foto esté en el código de barras y también firmada. Una foto falsa con un código válido pasa todos los controles actuales.
+- Me desconcierta que haya quien vea la divulgación de una clave pública como algo malo. Para eso existen exactamente las claves públicas.
+- El mérito es de quienes escribieron la biblioteca de Verifiable Credential, no del proveedor.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Schlüssel nicht enthalten: die Signaturschlüssel der Barcodes auf US-Führerscheinen rekonstruieren
+***** TLDR
+Canadian Bank Note stellt Ausweise für New York, Virginia, North Carolina, South Carolina und Wisconsin her und signiert den PDF417-Barcode mit ECDSA P-256. Die Schlüssel wurden nie veröffentlicht, die Signaturen waren also nicht prüfbar. Ryan Fahey nutzte eine Eigenschaft von ECDSA: Aus einer Signatur und der signierten Nachricht lässt sich eine kleine Menge möglicher öffentlicher Schlüssel rekonstruieren. Er rekonstruierte die signierten Daten (der Encoder signiert mit nullgefülltem Signaturfeld und überschreibt es danach), sammelte Karten aus jedem Bundesstaat und schnitt die Kandidatenmengen, bis ein Schlüssel übrig blieb. Veröffentlicht sind New York (IIN 636001) und Virginia (IIN 636000), aus 3 beziehungsweise 6 Musterkarten. Kalifornien, dessen Karten von IDEMIA stammen, veröffentlicht Schlüssel, Dokumentation und Testvektoren längst.
+***** Take
+Ein unveröffentlichter öffentlicher Schlüssel ist kein Geheimnis, sondern eine tote Funktion. Wer am Schalter einen Ausweis prüft, kann eine Signatur nicht verifizieren, deren Schlüssel nie herausgegeben wurde. Fünf Bundesstaaten drucken also Kryptografie, die gar nichts bewirkte, bis ein Fremder sie für sie zurückentwickelt hat. Kalifornien hat seine Schlüssel veröffentlicht und nichts verloren.
+***** Comments
+- Das bringt fast nichts, solange das Foto nicht selbst im Barcode steckt und mitsigniert wird. Ein gefälschtes Foto mit gültigem Barcode besteht jede heute übliche Prüfung.
+- Mich verblüfft, dass Leute die Offenlegung eines öffentlichen Schlüssels für schädlich halten. Genau dafür sind öffentliche Schlüssel da.
+- Die Anerkennung gebührt den Autoren der Verifiable-Credential-Bibliothek, nicht dem Hersteller.
+** Xiaomi Mimo 2.6 live post-training dashboard :ai:llm:open-weights:xiaomi:
+:PROPERTIES:
+:ID:       49732270
+:URL:      https://mimo.xiaomi.com/rl/
+:HN_URL:   https://news.ycombinator.com/item?id=49732270
+:POINTS:   371
+:COMMENTS: 93
+:BY:       krackers
+:END:
+
+*** TLDR
+Xiaomi put the reinforcement learning run for MiMo 2.6 on a public dashboard that updates while training happens: money spent so far (around $1.2M), the data mix (roughly two thirds source code), and DeepSWE benchmark scores climbing in real time. No other major lab publishes a post-training run in progress. The page is a live-updating web app, so there is nothing to read if the socket drops.
+
+*** Take
+Xiaomi is not being generous here, it is being strategic. If you plan to compete on open weights and price, showing the training curve buys attention and costs nothing. If you sell access to a secret, the same page is a liability. The $1.2M is the part worth staring at: that is the post-training bill, and it is small enough to be a rounding error in what US labs report.
+
+*** Comments
+
+**** joelwallis
+I have used MiMo 2.5 for most of my software work. It hits hallucination loops once in a while, but the cost is very low and the quality is close to what I got from Anthropic models.
+
+**** dr_dshiv
+If open source AI is dangerous for the OpenAI and Anthropic IPOs, this is watching a time bomb.
+
+**** electroglyph
+MiMo 2.5 has been a big underperformer since shortly after its release.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+小米 MiMo 2.6 后训练实时看板
+***** TLDR
+小米把 MiMo 2.6 的强化学习训练过程放到了公开看板上，并在训练进行中实时更新：已花费的金额（约 120 万美元）、数据构成（约三分之二为源代码），以及不断攀升的 DeepSWE 基准分数。没有其他主要实验室公开正在进行中的后训练过程。该页面是一个实时更新的网页应用，一旦连接断开就没有内容可看。
+***** Take
+小米这么做不是大方，而是策略。如果你打算靠开放权重和价格竞争，展示训练曲线能换来关注且几乎零成本；如果你卖的是对秘密的访问权，同一个页面就是负债。真正值得盯着看的是那 120 万美元：这是后训练的账单，小到在美国实验室公布的数字里只是个零头。
+***** Comments
+- 我大部分软件工作都用 MiMo 2.5。偶尔会陷入幻觉循环，但成本极低，智能水平接近我此前用 Anthropic 模型时的体验。
+- 如果开源 AI 对 OpenAI 和 Anthropic 的 IPO 是危险的，那这就是在看一枚定时炸弹。
+- MiMo 2.5 从发布后不久就一直表现不佳。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Xiaomi MiMo 2.6 のポストトレーニング・ライブダッシュボード
+***** TLDR
+Xiaomi は MiMo 2.6 の強化学習の実行過程を公開ダッシュボードに載せ、学習中にリアルタイムで更新している。これまでの支出（約120万ドル）、データ構成（約3分の2がソースコード）、上昇していく DeepSWE ベンチマークのスコアが見られる。進行中のポストトレーニングを公開している主要ラボは他にない。ページはライブ更新のWebアプリなので、接続が切れると読むものが何もない。
+***** Take
+Xiaomi は気前がいいのではなく、戦略的だ。オープンウェイトと価格で競うつもりなら、学習曲線を見せることは注目を買い、コストはほぼゼロだ。秘密へのアクセスを売る側にとっては、同じページが負債になる。注目すべきは120万ドルという数字だ。これはポストトレーニングの請求額であり、米国のラボが公表する数字の中では端数程度に小さい。
+***** Comments
+- ソフトウェアの仕事の大半で MiMo 2.5 を使っている。たまに幻覚のループに陥るが、コストは非常に低く、品質は以前 Anthropic のモデルで得ていたものに近い。
+- オープンソースAIが OpenAI や Anthropic のIPOにとって危険なのだとしたら、これは時限爆弾を眺めているようなものだ。
+- MiMo 2.5 はリリース直後からずっと期待外れだった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+샤오미 MiMo 2.6 실시간 포스트트레이닝 대시보드
+***** TLDR
+샤오미가 MiMo 2.6의 강화학습 훈련 과정을 공개 대시보드에 올리고 훈련이 진행되는 동안 실시간으로 갱신하고 있다. 지금까지 쓴 비용(약 120만 달러), 데이터 구성(약 3분의 2가 소스 코드), 올라가는 DeepSWE 벤치마크 점수를 볼 수 있다. 진행 중인 포스트트레이닝을 공개하는 주요 연구소는 달리 없다. 페이지는 실시간 갱신되는 웹 앱이라 연결이 끊기면 볼 내용이 없다.
+***** Take
+샤오미는 너그러운 게 아니라 전략적인 것이다. 오픈 웨이트와 가격으로 경쟁할 생각이라면 훈련 곡선을 보여 주는 일은 관심을 사고 비용은 거의 들지 않는다. 비밀에 대한 접근권을 파는 쪽에게는 같은 페이지가 부채가 된다. 눈여겨볼 숫자는 120만 달러다. 이건 포스트트레이닝 비용이고, 미국 연구소들이 밝히는 수치에 비하면 반올림하면 사라질 정도로 작다.
+***** Comments
+- 소프트웨어 작업 대부분에 MiMo 2.5를 쓰고 있다. 가끔 환각 루프에 빠지긴 하지만 비용이 아주 낮고 품질은 예전에 Anthropic 모델에서 얻던 수준에 가깝다.
+- 오픈소스 AI가 OpenAI와 Anthropic의 IPO에 위험한 것이라면, 이건 시한폭탄을 지켜보는 셈이다.
+- MiMo 2.5는 출시 직후부터 계속 기대에 못 미쳤다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Panel en vivo del post-entrenamiento de Xiaomi MiMo 2.6
+***** TLDR
+Xiaomi publicó el entrenamiento por refuerzo de MiMo 2.6 en un panel público que se actualiza mientras el entrenamiento ocurre: dinero gastado hasta ahora (unos 1,2 millones de dólares), la mezcla de datos (alrededor de dos tercios de código fuente) y las puntuaciones del benchmark DeepSWE subiendo en tiempo real. Ningún otro laboratorio grande publica un post-entrenamiento en curso. La página es una aplicación web que se actualiza en vivo, así que no queda nada que leer si se cae la conexión.
+***** Take
+Xiaomi no está siendo generosa, está siendo estratégica. Si piensas competir con pesos abiertos y precio, mostrar la curva de entrenamiento compra atención y no cuesta nada. Si vendes acceso a un secreto, esa misma página es un pasivo. La cifra que merece atención es el 1,2 millones: es la factura del post-entrenamiento, lo bastante pequeña como para ser un residuo en lo que reportan los laboratorios estadounidenses.
+***** Comments
+- He usado MiMo 2.5 para casi todo mi trabajo de software. De vez en cuando entra en bucles de alucinación, pero el coste es bajísimo y la calidad se acerca a la que obtenía con modelos de Anthropic.
+- Si la IA de código abierto es peligrosa para las salidas a bolsa de OpenAI y Anthropic, esto es ver una bomba de relojería.
+- MiMo 2.5 ha rendido por debajo de lo esperado desde poco después de su lanzamiento.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Xiaomi MiMo 2.6: Live-Dashboard zum Post-Training
+***** TLDR
+Xiaomi stellt den Reinforcement-Learning-Lauf von MiMo 2.6 auf ein öffentliches Dashboard, das sich während des Trainings aktualisiert: bisher ausgegebenes Geld (rund 1,2 Millionen Dollar), die Datenmischung (etwa zwei Drittel Quellcode) und live steigende Werte im DeepSWE-Benchmark. Kein anderes großes Labor veröffentlicht ein laufendes Post-Training. Die Seite ist eine live aktualisierte Web-App, bei abgerissener Verbindung bleibt also nichts zu lesen.
+***** Take
+Xiaomi ist hier nicht großzügig, sondern strategisch. Wer über offene Gewichte und Preis konkurrieren will, kauft mit der Trainingskurve Aufmerksamkeit und zahlt dafür nichts. Wer Zugang zu einem Geheimnis verkauft, für den ist dieselbe Seite eine Last. Interessant sind die 1,2 Millionen Dollar: Das ist die Rechnung fürs Post-Training, klein genug, um in den Zahlen US-amerikanischer Labore als Rundungsrest durchzugehen.
+***** Comments
+- Ich nutze MiMo 2.5 für den Großteil meiner Softwarearbeit. Ab und zu gerät es in Halluzinationsschleifen, aber die Kosten sind sehr niedrig und die Qualität liegt nahe an dem, was ich von Anthropic-Modellen kannte.
+- Wenn Open-Source-KI für die Börsengänge von OpenAI und Anthropic gefährlich ist, schaut man hier einer Zeitbombe zu.
+- MiMo 2.5 bleibt seit kurz nach dem Release deutlich hinter den Erwartungen zurück.
+** Backups Aren't Simple :backups:sysadmin:storage:ops:
+:PROPERTIES:
+:ID:       49732513
+:URL:      https://filipovski.net/2026/09/16/backups-arent-simple.html
+:HN_URL:   https://news.ycombinator.com/item?id=49732513
+:POINTS:   174
+:COMMENTS: 85
+:BY:       afilipovski
+:END:
+
+*** TLDR
+The post starts at "copy the folder somewhere" and keeps adding the thing that breaks it: bit rot in magnetic media and NAND leakage, ransomware that encrypts the backup too, a script that faithfully replicates the deletion you just made, and snapshots taken while a database is mid-write. It works up to 3-2-1 (three copies, two media types, one offsite), grandfather-father-son rotation (daily kept 14 days, weekly 7 weeks, monthly a year), hard-linked incrementals for dedup, and S3 tarballs so file metadata survives. Then it tells you to use Borg or Restic instead of the thing it just built, and to test a restore every six months.
+
+*** Take
+The value here is the failure list, not the architecture. Every item on it is a setup that produced backups on schedule and still lost the data, which is the only category that matters. The post also does the honest thing most homegrown-backup posts avoid: it builds the tool, then concedes Borg and Restic already do it correctly.
+
+*** Comments
+
+**** AdieuToLogic
+A friend at Veritas corrected me when I called their product backups: we are not in the backup business, we are in the restoration business.
+
+**** Helmut10001
+ZFS snapshots with offsite pull-mode sync via sanoid and syncoid covers about 90% of the requirement, provided you separate ephemeral from persistent datasets.
+
+**** publlus_enigma
+Lightning hit the pole outside our house, went down the phone line into the internal fax modem, and fried everything near it. I had backups, but only on floppies.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+备份并不简单
+***** TLDR
+文章从“把文件夹复制到别处”开始，然后不断加入会让它失效的因素：磁介质的位腐烂与 NAND 漏电、连备份一起加密的勒索软件、忠实同步了你刚刚误删操作的脚本、以及在数据库写入过程中拍下的快照。它一路推进到 3-2-1 原则（三份副本、两种介质、一份异地）、祖父-父-子轮转（日备保留 14 天、周备 7 周、月备一年）、用硬链接做增量去重、以及用 S3 上的 tar 包保留文件元数据。最后它建议你别用自己刚搭的这套，改用 Borg 或 Restic，并且每半年真正演练一次恢复。
+***** Take
+这篇的价值在于失效清单，而不是那套架构。清单上的每一项都是备份按时跑完、数据照样丢失的情形，而这才是唯一重要的类别。文章还做了大多数自建备份文章回避的诚实动作：先把工具造出来，再承认 Borg 和 Restic 早就做对了。
+***** Comments
+- 我在 Veritas 工作的朋友纠正过我，当我说他们的产品是做备份时，他说：我们不做备份生意，我们做的是恢复生意。
+- 用 ZFS 快照配合 sanoid/syncoid 的异地拉取式同步，只要把临时数据和持久数据的数据集分开，就已经覆盖了大约 90% 的需求。
+- 闪电击中了我家门外的电线杆，电流顺着电话线进入内置传真调制解调器，把附近的东西全烧了。我有备份，但只在软盘上。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+バックアップは単純ではない
+***** TLDR
+記事は「フォルダをどこかにコピーする」から始まり、それを壊す要素を次々と足していく。磁気媒体のビット腐敗とNANDのリーク、バックアップごと暗号化するランサムウェア、直前の削除を忠実に複製してしまうスクリプト、データベースの書き込み中に取られたスナップショット。そこから3-2-1（3つのコピー、2種類の媒体、1つはオフサイト）、祖父・父・子のローテーション（日次は14日、週次は7週、月次は1年保持）、ハードリンクによる増分重複排除、メタデータを保つためのS3上のtarballへと進む。そして最後に、いま組み立てたものではなくBorgかResticを使えと言い、半年に一度はリストアを試せと勧める。
+***** Take
+価値があるのはアーキテクチャではなく失敗の一覧だ。どの項目も、バックアップは予定どおり動いたのにデータを失った構成であり、重要なのはその類型だけだ。この記事は自作バックアップ記事が避けがちな誠実さも見せる。自分で道具を作った上で、BorgとResticがすでに正しくやっていると認めている。
+***** Comments
+- Veritas にいた友人は、私が彼らの製品を「バックアップを作るもの」と呼んだとき、こう訂正した。我々はバックアップ業ではなく、復元業だ。
+- ZFSスナップショットとsanoid/syncoidによるオフサイトのプル型同期で、要件のおよそ90%は満たせる。一時データと永続データのデータセットを分けておくことが条件だ。
+- 家の前の電柱に落雷し、電流が電話線から内蔵ファックスモデムに入り、周囲の機器を焼いた。バックアップはあったが、フロッピーの中だけだった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+백업은 단순하지 않다
+***** TLDR
+글은 "폴더를 어딘가에 복사한다"에서 시작해 그것을 망가뜨리는 요소를 하나씩 더한다. 자기 매체의 비트 부패와 NAND 누설, 백업까지 암호화하는 랜섬웨어, 방금 한 삭제를 충실히 복제하는 스크립트, 데이터베이스가 쓰는 도중에 찍힌 스냅샷. 그렇게 3-2-1(사본 3개, 매체 2종, 1개는 오프사이트), 조부-부-자 로테이션(일간 14일, 주간 7주, 월간 1년 보관), 하드링크 기반 증분 중복 제거, 메타데이터를 살리기 위한 S3 tarball까지 나아간다. 그리고 마지막에 방금 만든 것 대신 Borg나 Restic을 쓰고, 6개월마다 복원을 실제로 시험하라고 말한다.
+***** Take
+이 글의 가치는 아키텍처가 아니라 실패 목록에 있다. 목록의 모든 항목은 백업이 일정대로 돌았는데도 데이터를 잃은 구성이고, 중요한 건 그 부류뿐이다. 자작 백업 글들이 대개 피하는 정직함도 보여 준다. 직접 도구를 만들어 놓고, Borg와 Restic이 이미 제대로 하고 있다고 인정한다.
+***** Comments
+- Veritas에서 일하던 친구는 내가 그 제품을 백업 만드는 것이라 부르자 이렇게 고쳐 줬다. 우리는 백업 사업이 아니라 복원 사업을 한다.
+- ZFS 스냅샷에 sanoid/syncoid로 오프사이트 풀 방식 동기화를 붙이면 요구사항의 약 90%는 충족된다. 임시 데이터와 영속 데이터의 데이터셋을 분리하는 게 전제다.
+- 집 앞 전봇대에 번개가 떨어져 전화선을 타고 내장 팩스 모뎀으로 들어와 주변 기기를 다 태웠다. 백업은 있었지만 플로피에만 있었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Las copias de seguridad no son simples
+***** TLDR
+El artículo empieza en "copia la carpeta a otro sitio" y va añadiendo lo que lo rompe: degradación de bits en medios magnéticos y fugas en NAND, ransomware que cifra también la copia, un script que replica fielmente el borrado que acabas de hacer, y snapshots tomados mientras una base de datos está escribiendo. Llega hasta 3-2-1 (tres copias, dos tipos de medio, una fuera del sitio), rotación abuelo-padre-hijo (diarias 14 días, semanales 7 semanas, mensuales un año), incrementales con enlaces duros para deduplicar y tarballs en S3 para conservar los metadatos. Y entonces te dice que uses Borg o Restic en lugar de lo que acaba de construir, y que pruebes una restauración cada seis meses.
+***** Take
+Lo valioso aquí es la lista de fallos, no la arquitectura. Cada punto describe una configuración que generó copias puntualmente y aun así perdió los datos, que es la única categoría que importa. El texto hace además lo que casi ningún artículo de backup casero hace: construye la herramienta y luego admite que Borg y Restic ya lo hacen bien.
+***** Comments
+- Un amigo que trabajaba en Veritas me corrigió cuando llamé a su producto copias de seguridad: no estamos en el negocio del respaldo, estamos en el de la restauración.
+- Snapshots de ZFS con sincronización externa en modo pull mediante sanoid y syncoid cubren cerca del 90% del requisito, siempre que separes los datasets efímeros de los persistentes.
+- Un rayo cayó en el poste frente a casa, entró por la línea telefónica hasta el módem de fax interno y frió todo lo que había cerca. Tenía copias, pero solo en disquetes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Backups sind nicht einfach
+***** TLDR
+Der Text beginnt bei "kopiere den Ordner irgendwohin" und ergänzt Schritt für Schritt, was das kaputt macht: Bitfäule auf magnetischen Medien und Leckströme in NAND, Ransomware, die das Backup gleich mitverschlüsselt, ein Skript, das die gerade erfolgte Löschung brav mitspiegelt, und Snapshots mitten in einem Datenbankschreibvorgang. Er arbeitet sich vor zu 3-2-1 (drei Kopien, zwei Medientypen, eine außer Haus), Großvater-Vater-Sohn-Rotation (täglich 14 Tage, wöchentlich 7 Wochen, monatlich ein Jahr), Inkrementellem per Hardlinks zur Deduplizierung und Tarballs in S3, damit Metadaten erhalten bleiben. Und dann rät er, statt des eben Gebauten Borg oder Restic zu nehmen und alle sechs Monate eine Wiederherstellung zu testen.
+***** Take
+Wertvoll ist hier die Fehlerliste, nicht die Architektur. Jeder Punkt beschreibt ein Setup, das pünktlich Backups erzeugte und die Daten trotzdem verlor, und nur diese Kategorie zählt. Der Beitrag leistet sich zudem die Ehrlichkeit, die den meisten Eigenbau-Backup-Texten fehlt: Er baut das Werkzeug und räumt dann ein, dass Borg und Restic es längst richtig machen.
+***** Comments
+- Ein Freund bei Veritas korrigierte mich, als ich ihr Produkt als Backup bezeichnete: Wir sind nicht im Backup-Geschäft, wir sind im Wiederherstellungsgeschäft.
+- ZFS-Snapshots mit Offsite-Sync im Pull-Modus über sanoid und syncoid decken rund 90 Prozent der Anforderungen ab, sofern man flüchtige von persistenten Datasets trennt.
+- Ein Blitz schlug in den Mast vor unserem Haus ein, lief über die Telefonleitung ins interne Faxmodem und grillte alles in der Nähe. Ich hatte Backups, aber nur auf Disketten.
+** Performance Improvements in .NET 11 :dotnet:performance:jit:csharp:
+:PROPERTIES:
+:ID:       49711424
+:URL:      https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-11/
+:HN_URL:   https://news.ycombinator.com/item?id=49711424
+:POINTS:   242
+:COMMENTS: 42
+:BY:       soheilpro
+:END:
+
+*** TLDR
+Stephen Toub's annual benchmark-per-paragraph post. The headline is runtime async: the async state machine transform moves out of the C# compiler and into the runtime and JIT, with no source changes and full behavioral compatibility. Async-heavy assemblies shrink 47% (10,752 bytes to 5,632 in his example), a two-layer async chain completing synchronously goes from 21.2ns to 6.2ns, and exception propagation through 30 layers drops 79%, from 51.3µs to 10.7µs. Below that: escape analysis and interface devirtualization that let the JIT inline through abstractions, delegates 8 bytes smaller on 64-bit CoreCLR, and range analysis that collapses four bounds checks into one guard (2.96ns to 1.83ns).
+
+*** Take
+Runtime async is the rare optimization that makes existing code smaller and faster with nobody editing anything, because moving the state machine into the JIT lets it see which awaits actually complete synchronously at runtime. Note what the top comment latches onto, though: not the JIT work, but relief that someone still publishes a long article with numbers under every claim.
+
+*** Comments
+
+**** tiffanyh
+Refreshing to read. It reminds me of solid engineering and writing from a pre-AI era, and I am afraid posts like this are becoming rare.
+
+**** adzm
+Runtime async is certainly an interesting development. Excited to see how it plays out.
+
+**** lukehoban
+Toub also published a post today on migrating the GitHub Copilot coding harness from Node.js to Rust.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+.NET 11 中的性能改进
+***** TLDR
+Stephen Toub 每年一次、几乎每段都带基准数据的长文。头条是 runtime async：async 状态机的转换从 C# 编译器移入运行时和 JIT，源码无需改动，行为完全兼容。大量使用 async 的程序集体积缩小 47%（文中示例从 10,752 字节降到 5,632），两层 async 调用链在同步完成时从 21.2 纳秒降到 6.2 纳秒，异常穿过 30 层传播的耗时下降 79%，从 51.3 微秒降到 10.7 微秒。此外还有让 JIT 能内联穿透抽象的逃逸分析与接口去虚拟化、64 位 CoreCLR 上委托对象缩小 8 字节，以及把四次边界检查合并为一次守卫的区间分析（2.96 纳秒降到 1.83 纳秒）。
+***** Take
+runtime async 属于少见的那类优化：没有人改一行代码，现有代码就变得更小更快，因为把状态机搬进 JIT 后，它能看到运行时哪些 await 实际是同步完成的。不过值得注意的是热评抓住的重点并不是 JIT 工作本身，而是庆幸还有人在写这种每条结论下面都附着数字的长文章。
+***** Comments
+- 读起来很舒服，让我想起 AI 之前那种扎实的工程与写作。我担心这样的文章会越来越少。
+- runtime async 确实是个有意思的进展，很期待后续发展。
+- Toub 今天还发了一篇关于把 GitHub Copilot 的编码框架从 Node.js 迁移到 Rust 的文章。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+.NET 11 のパフォーマンス改善
+***** TLDR
+Stephen Toub による恒例の、段落ごとにベンチマークが付く長文。目玉は runtime async だ。asyncステートマシンの変換がC#コンパイラから実行時とJITへ移り、ソース変更は不要で挙動も完全互換。async中心のアセンブリは47%小さくなり（例では10,752バイトが5,632バイトへ）、2層のasyncチェーンが同期完了する場合は21.2ナノ秒から6.2ナノ秒に、30層を通る例外の伝播は79%短縮され51.3マイクロ秒から10.7マイクロ秒になった。ほかに、抽象を越えてインライン化できるようにするエスケープ解析とインターフェースの非仮想化、64ビットCoreCLRでデリゲートが8バイト小さくなる改善、4回の境界チェックを1回のガードにまとめる範囲解析（2.96ナノ秒から1.83ナノ秒）がある。
+***** Take
+runtime async は、誰も一行も書き換えずに既存コードが小さく速くなる珍しい最適化だ。ステートマシンをJITへ移したことで、どのawaitが実行時に同期完了するかをJITが見られるようになったからだ。ただし人気コメントが反応しているのはJITの仕事ではなく、主張ごとに数字を添えた長文をいまも書く人がいることへの安堵だという点は見逃せない。
+***** Comments
+- 読んでいて清々しい。AI以前の堅実な工学と文章を思い出す。こういう記事が減っていくのではと不安になる。
+- runtime async は確かに興味深い進展だ。どう展開するか楽しみだ。
+- Toub は今日、GitHub Copilot のコーディングハーネスを Node.js から Rust へ移行した話も公開している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+.NET 11의 성능 개선
+***** TLDR
+Stephen Toub의 연례 글로, 문단마다 벤치마크가 붙는다. 핵심은 runtime async다. async 상태 기계 변환이 C# 컴파일러에서 런타임과 JIT으로 옮겨졌고, 소스 변경 없이 동작 호환성도 그대로다. async가 많은 어셈블리는 47% 작아지고(예시에서 10,752바이트에서 5,632바이트), 두 겹의 async 체인이 동기로 완료될 때 21.2ns에서 6.2ns로, 30겹을 통과하는 예외 전파는 79% 줄어 51.3µs에서 10.7µs가 됐다. 그 아래로는 추상화를 넘어 인라인을 가능하게 하는 이스케이프 분석과 인터페이스 비가상화, 64비트 CoreCLR에서 델리게이트 8바이트 축소, 경계 검사 네 번을 가드 하나로 합치는 범위 분석(2.96ns에서 1.83ns)이 이어진다.
+***** Take
+runtime async는 아무도 코드를 고치지 않았는데 기존 코드가 더 작고 빨라지는 드문 최적화다. 상태 기계를 JIT으로 옮기면서 어떤 await가 실행 시점에 실제로 동기 완료되는지 JIT이 볼 수 있게 됐기 때문이다. 다만 최상위 댓글이 붙잡은 지점은 JIT 작업이 아니라, 주장마다 숫자를 붙인 이런 긴 글을 아직도 쓰는 사람이 있다는 안도였다.
+***** Comments
+- 읽기에 상쾌하다. AI 이전의 견실한 공학과 글쓰기를 떠올리게 한다. 이런 글이 드물어질까 걱정된다.
+- runtime async는 분명 흥미로운 변화다. 어떻게 전개될지 기대된다.
+- Toub은 오늘 GitHub Copilot 코딩 하네스를 Node.js에서 Rust로 옮긴 글도 냈다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Mejoras de rendimiento en .NET 11
+***** TLDR
+El artículo anual de Stephen Toub, con un benchmark por párrafo. Lo grande es runtime async: la transformación de la máquina de estados async sale del compilador de C# y pasa al runtime y al JIT, sin cambios de código fuente y con compatibilidad total de comportamiento. Los ensamblados con mucho async encogen un 47% (de 10.752 a 5.632 bytes en su ejemplo), una cadena async de dos capas que completa de forma síncrona baja de 21,2 ns a 6,2 ns, y la propagación de excepciones a través de 30 capas cae un 79%, de 51,3 µs a 10,7 µs. Debajo: análisis de escape y desvirtualización de interfaces que permiten al JIT hacer inline a través de abstracciones, delegados 8 bytes más pequeños en CoreCLR de 64 bits, y análisis de rangos que convierte cuatro comprobaciones de límites en una sola (2,96 ns a 1,83 ns).
+***** Take
+Runtime async es de esas optimizaciones raras que hacen el código existente más pequeño y más rápido sin que nadie toque nada, porque llevar la máquina de estados al JIT le permite ver qué awaits terminan de forma síncrona en ejecución. Fíjate, eso sí, en lo que engancha al comentario más votado: no el trabajo del JIT, sino el alivio de que alguien siga publicando un artículo largo con números bajo cada afirmación.
+***** Comments
+- Da gusto leerlo. Me recuerda a la ingeniería y la escritura sólidas de la era pre-IA, y temo que estos textos se vuelvan raros.
+- Runtime async es sin duda un desarrollo interesante. Con ganas de ver cómo evoluciona.
+- Toub publicó hoy también un artículo sobre migrar el harness de codificación de GitHub Copilot de Node.js a Rust.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Performance-Verbesserungen in .NET 11
+***** TLDR
+Stephen Toubs jährlicher Beitrag mit einem Benchmark pro Absatz. Die Schlagzeile ist Runtime Async: Die Transformation der async-Zustandsmaschine wandert aus dem C#-Compiler in Runtime und JIT, ohne Quellcodeänderungen und mit voller Verhaltenskompatibilität. Async-lastige Assemblies schrumpfen um 47 Prozent (im Beispiel von 10.752 auf 5.632 Byte), eine zweistufige async-Kette, die synchron abschließt, geht von 21,2 ns auf 6,2 ns, und die Ausnahmeweitergabe durch 30 Ebenen sinkt um 79 Prozent, von 51,3 µs auf 10,7 µs. Darunter: Escape-Analyse und Interface-Devirtualisierung, damit der JIT durch Abstraktionen hindurch inlinen kann, Delegates 8 Byte kleiner auf 64-Bit-CoreCLR, und Bereichsanalyse, die vier Bounds-Checks zu einem Guard zusammenzieht (2,96 ns auf 1,83 ns).
+***** Take
+Runtime Async ist eine der seltenen Optimierungen, die bestehenden Code kleiner und schneller machen, ohne dass jemand etwas ändert: Weil die Zustandsmaschine im JIT liegt, sieht dieser, welche awaits zur Laufzeit tatsächlich synchron abschließen. Bemerkenswert ist aber, woran sich der Top-Kommentar festhält: nicht an der JIT-Arbeit, sondern an der Erleichterung, dass noch jemand einen langen Artikel mit Zahlen unter jeder Behauptung schreibt.
+***** Comments
+- Erfrischend zu lesen. Es erinnert an solide Technik und solides Schreiben aus der Zeit vor der KI, und ich fürchte, solche Beiträge werden selten.
+- Runtime Async ist auf jeden Fall eine interessante Entwicklung. Ich bin gespannt, wie sich das entwickelt.
+- Toub hat heute noch einen Beitrag über die Migration des GitHub-Copilot-Coding-Harness von Node.js nach Rust veröffentlicht.
+** The Return of Sail Power: Cargo Ships Are Turning Back to the Wind :shipping:energy:climate:hardware:
+:PROPERTIES:
+:ID:       49734929
+:URL:      https://gcaptain.com/the-return-of-sail-power-cargo-ships-are-turning-back-to-the-wind/
+:HN_URL:   https://news.ycombinator.com/item?id=49734929
+:POINTS:   61
+:COMMENTS: 23
+:BY:       gumby
+:END:
+
+*** TLDR
+gCaptain counts more than 100 large merchant ships now carrying wind propulsion, over 5 million deadweight tons of capacity. The hardware is not canvas: rotor sails (spinning cylinders using the Magnus effect) from Anemoi and Norsepower, rigid WindWings from BAR Technologies, and bound4blue's suction-based eSAIL. Vale's 400,000 dwt ore carrier Sohar Max got five rotor sails and was expected to cut fuel use by about 6%; retrofits generally land in the single digits to low double digits, with purpose-built ships like the Neoliner Origin doing better. The IMO is still drafting interim safety guidelines, expected later this decade.
+
+*** Take
+About 6% on a retrofit is a line item on the bunker bill, not a return to sail, and the headline oversells what 100 ships out of a world fleet in the tens of thousands means. The number the article never gives is payback period, which is the only thing that decides whether the count keeps climbing or stalls at early adopters.
+
+*** Comments
+
+**** calmbonsai
+No, they are not. Sail power scales sublinearly and wind is not reliable enough for today's supply chains. Shipping gets decarbonized with ammonia combustion, fuel cells, or both.
+
+**** 3eb7988a1663
+If you were confused why the photos show giant tubes instead of canvas, you are not alone. Those are suction sails.
+
+**** walrus01
+The most recent example is the Neoliner Origin, further down the gCaptain page.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+风帆回归：货船重新转向风力
+***** TLDR
+gCaptain 统计目前已有 100 多艘大型商船装配了风力助推装置，总载重超过 500 万吨。这些装置不是帆布：有 Anemoi 和 Norsepower 的转子帆（利用马格努斯效应的旋转圆筒）、BAR Technologies 的刚性 WindWings，以及 bound4blue 基于吸力的 eSAIL。淡水河谷 40 万载重吨的矿砂船 Sohar Max 装了五具转子帆，预期可减少约 6% 的燃料消耗；改装船普遍在个位数到十几个百分点之间，而像 Neoliner Origin 这样的新造船表现更好。国际海事组织仍在起草临时安全指南，预计本世纪二十年代后期出台。
+***** Take
+改装省下约 6% 只是燃油账单上的一个条目，算不上风帆回归；全球商船队有数万艘，100 艘的标题说法明显夸大。文章始终没给出的数字是投资回收期，而这才是决定这个数字继续增长还是止步于早期尝鲜者的唯一因素。
+***** Comments
+- 不，并没有。风帆动力的规模效应是次线性的，风力对今天的供应链来说也不够可靠。航运的脱碳会靠氨燃烧、燃料电池，或者两者兼有。
+- 如果你也困惑为什么照片里是巨大的圆筒而不是帆布，你不是一个人。那些是吸力帆。
+- 最新的例子是 Neoliner Origin，在 gCaptain 那篇文章更靠下的位置。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+帆の復権：貨物船が再び風に頼り始めた
+***** TLDR
+gCaptain によれば、現在100隻を超える大型商船が風力推進装置を搭載しており、合計載貨重量は500万トンを超える。ただし帆布ではない。Anemoi と Norsepower のローターセイル（マグヌス効果を使う回転円筒）、BAR Technologies の硬翼 WindWings、bound4blue の吸引式 eSAIL などだ。Vale の40万載貨重量トンの鉱石船 Sohar Max は5基のローターセイルを装備し、燃料消費を約6%削減できると見込まれた。改装船は一般に数パーセントから十数パーセントで、Neoliner Origin のような専用設計船はそれを上回る。IMO は暫定的な安全ガイドラインをなお策定中で、公表は2020年代後半の見込みだ。
+***** Take
+改装での約6%は燃料費の一項目であって、帆の復権ではない。世界の商船が数万隻ある中で100隻という数字を見出しに使うのは誇張だ。記事が最後まで出さない数字は投資回収期間で、この台数が伸び続けるか初期採用者で止まるかを決めるのはそれだけだ。
+***** Comments
+- いや、そうはなっていない。帆の出力は規模に対して劣線形にしか伸びず、風は今日のサプライチェーンに必要な信頼性を持たない。海運の脱炭素はアンモニア燃焼か燃料電池、あるいはその両方で進む。
+- 写真が帆布ではなく巨大な筒なのはなぜかと戸惑ったのはあなただけではない。あれは吸引式の帆だ。
+- 直近の例は Neoliner Origin で、gCaptain のページの下の方にある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+돛의 귀환: 화물선이 다시 바람으로 돌아가다
+***** TLDR
+gCaptain은 현재 100척이 넘는 대형 상선이 풍력 추진 장치를 달고 있으며 총 재화중량이 500만 톤을 넘는다고 집계한다. 장비는 돛천이 아니다. Anemoi와 Norsepower의 로터 세일(마그누스 효과를 쓰는 회전 실린더), BAR Technologies의 경량 강성 WindWings, bound4blue의 흡입식 eSAIL 등이다. 발레의 40만 재화중량톤급 광석선 Sohar Max는 로터 세일 5기를 달았고 연료 소비를 약 6% 줄일 것으로 예상됐다. 개조선은 대체로 한 자릿수에서 십 몇 퍼센트 수준이고, Neoliner Origin 같은 전용 설계선은 더 낫다. IMO는 아직 잠정 안전 지침을 만드는 중이며 2020년대 후반 공개가 예상된다.
+***** Take
+개조로 얻는 약 6%는 연료비 청구서의 한 항목이지 돛의 귀환은 아니다. 전 세계 상선이 수만 척인데 100척을 제목으로 삼는 건 과장이다. 기사가 끝내 주지 않는 숫자는 투자 회수 기간이고, 이 숫자가 계속 늘지 아니면 초기 도입자에서 멈출지는 그것만이 결정한다.
+***** Comments
+- 아니, 그렇지 않다. 돛의 출력은 규모에 대해 준선형 이하로만 늘고, 바람은 오늘날 공급망이 요구하는 만큼 신뢰할 수 없다. 해운 탈탄소는 암모니아 연소나 연료전지, 혹은 둘 다로 간다.
+- 사진에 돛천이 아니라 거대한 원통이 나와 헷갈렸다면 혼자가 아니다. 그건 흡입식 돛이다.
+- 가장 최근 사례는 Neoliner Origin이고, gCaptain 페이지 아래쪽에 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El regreso de la vela: los buques de carga vuelven al viento
+***** TLDR
+gCaptain cuenta más de 100 grandes buques mercantes con propulsión eólica instalada, más de 5 millones de toneladas de peso muerto. El equipo no es lona: rotores de vela (cilindros giratorios que usan el efecto Magnus) de Anemoi y Norsepower, alas rígidas WindWings de BAR Technologies y el eSAIL de succión de bound4blue. El granelero Sohar Max de Vale, de 400.000 tpm, recibió cinco rotores y se esperaba que redujera el consumo de combustible un 6% aproximadamente; las reconversiones suelen quedar entre un dígito y una docena larga de puntos, y los buques diseñados para ello, como el Neoliner Origin, van mejor. La OMI sigue redactando directrices provisionales de seguridad, previstas para finales de esta década.
+***** Take
+Un 6% en una reconversión es una línea en la factura de combustible, no un regreso a la vela, y el titular exagera lo que significan 100 buques sobre una flota mundial de decenas de miles. La cifra que el artículo nunca da es el periodo de amortización, y es lo único que decidirá si la cuenta sigue subiendo o se queda en los primeros adoptantes.
+***** Comments
+- No, no están volviendo. La propulsión a vela escala de forma sublineal y el viento no es lo bastante fiable para las cadenas de suministro actuales. El transporte marítimo se descarbonizará con combustión de amoníaco, pilas de combustible o ambas.
+- Si te confundió que las fotos muestren tubos gigantes en vez de lona, no eres el único. Son velas de succión.
+- El ejemplo más reciente es el Neoliner Origin, más abajo en la página de gCaptain.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Rückkehr des Segels: Frachtschiffe setzen wieder auf Wind
+***** TLDR
+gCaptain zählt inzwischen mehr als 100 große Handelsschiffe mit Windantrieb, zusammen über 5 Millionen Tonnen Tragfähigkeit. Die Technik ist kein Segeltuch: Rotorsegel (drehende Zylinder, die den Magnus-Effekt nutzen) von Anemoi und Norsepower, starre WindWings von BAR Technologies und das saugbasierte eSAIL von bound4blue. Vales Erzfrachter Sohar Max mit 400.000 tdw bekam fünf Rotorsegel und sollte den Kraftstoffverbrauch um rund 6 Prozent senken; Nachrüstungen liegen meist im einstelligen bis niedrigen zweistelligen Bereich, eigens gebaute Schiffe wie die Neoliner Origin schaffen mehr. Die IMO arbeitet noch an vorläufigen Sicherheitsrichtlinien, erwartet gegen Ende des Jahrzehnts.
+***** Take
+Rund 6 Prozent bei einer Nachrüstung sind ein Posten auf der Bunkerrechnung, keine Rückkehr des Segels, und die Überschrift überzeichnet, was 100 Schiffe bei einer Weltflotte im fünfstelligen Bereich bedeuten. Die Zahl, die der Artikel nie nennt, ist die Amortisationszeit, und nur sie entscheidet, ob die Zahl weiter steigt oder bei den frühen Anwendern stehen bleibt.
+***** Comments
+- Nein, tun sie nicht. Segelantrieb skaliert sublinear, und Wind ist für heutige Lieferketten nicht zuverlässig genug. Dekarbonisiert wird die Schifffahrt über Ammoniakverbrennung, Brennstoffzellen oder beides.
+- Falls dich verwirrt hat, warum auf den Fotos riesige Röhren statt Segeltuch zu sehen sind: Das sind Sogsegel.
+- Das jüngste Beispiel ist die Neoliner Origin, weiter unten auf der gCaptain-Seite.
