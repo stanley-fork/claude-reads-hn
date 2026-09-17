@@ -1,0 +1,503 @@
+#+TITLE: HN Digest 2026-09-17 01:00 UTC
+#+DATE: 2026-09-17T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+AWS says Gulf data hit by drones may be gone, NVIDIA ships Rust kernels, and a 4B model second-guesses the Postgres planner
+
+* Highlights
+- AWS: some data stored only in Bahrain and the UAE cannot be restored
+- NVIDIA's CUDA Rust: one track on stable, one pinned-nightly alpha
+- A $1,200 training run gets 1.81x geomean speedup on the Join Order Benchmark
+- Salt caverns hold 714 million barrels, and every withdrawal dissolves more of the container
+
+* Stories
+
+** AWS says it can't restore some data from mideast facilities struck by Iran :aws:cloud:infrastructure:security:
+:PROPERTIES:
+:ID:       49719249
+:URL:      https://www.wsj.com/world/middle-east/aws-says-it-cant-restore-some-data-from-mideast-facilities-struck-by-iran-ddcb7e5d
+:HN_URL:   https://news.ycombinator.com/item?id=49719249
+:POINTS:   216
+:COMMENTS: 183
+:BY:       berkeleyjunk
+:END:
+
+*** TLDR
+WSJ (paywalled, read through a proxy): AWS has told customers it cannot restore access to some data held in Persian Gulf data centers hit by Iranian drone swarms in spring 2026. Facilities in Bahrain and Abu Dhabi have been mostly offline since the strikes, and damage in Bahrain is spread across multiple sites. This is the first sign that data stored only in those two regions may be permanently gone. The article gives no customer count, data volume, or compensation terms.
+
+*** Take
+Single-region storage has always carried this failure mode, but for many of these customers it was not a choice: UAE and Bahrain residency rules forbid keeping the copy that would have survived. The uncomfortable part is that compliance law and durability were pointing in opposite directions, and nobody priced that.
+
+*** Comments
+
+**** cmiles8
+An AWS leader was asked on CBS what would happen if someone blew up one of these unmarked data centers, and answered that it is so redundant you probably would not notice.
+
+**** rishikeshs
+This is data residency. My health-sector client is required to store data only in the UAE. AWS would not give me new instances there, so I went to Azure.
+
+**** weinzierl
+me-south-1 (Bahrain) has been down since 2026-04, all three AZs, with az2 out since 2026-03-01.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+AWS 称无法恢复被伊朗袭击的中东数据中心中的部分数据
+***** TLDR
+《华尔街日报》（付费墙，经代理阅读）：AWS 已告知客户，无法恢复 2026 年春季遭伊朗无人机群袭击的波斯湾数据中心中的部分数据。巴林和阿布扎比的设施自袭击以来基本处于离线状态，巴林多个站点受损。这是首个迹象表明，仅存储在这两个区域的数据可能永久丢失。文章未给出受影响客户数量、数据量或赔偿条款。
+***** Take
+单区域存储一直存在这种失效模式，但对许多客户而言这并非选择：阿联酋和巴林的数据驻留规定禁止保留那份本可幸存的副本。令人不安的是，合规法律与数据持久性指向了相反的方向，而没有人为此定价。
+***** Comments
+- 一位 AWS 高管在 CBS 被问及如果有人炸毁其中一座无标识数据中心会怎样，他回答说冗余度高到你可能都不会察觉。
+- 这是数据驻留要求。我在医疗领域的客户被要求只能把数据存在阿联酋。AWS 在那里不给我新实例，所以我改用了 Azure。
+- me-south-1（巴林）自 2026 年 4 月起宕机，三个可用区全部中断，其中 az2 自 2026 年 3 月 1 日起就已中断。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AWS、イランの攻撃を受けた中東施設の一部データを復旧できないと表明
+***** TLDR
+WSJ（有料記事、プロキシ経由で閲覧）：AWSは、2026年春にイランのドローン群の攻撃を受けたペルシャ湾岸のデータセンターにある一部の顧客データについて、アクセスを復旧できないと顧客に伝えた。バーレーンとアブダビの施設は攻撃以降ほぼ停止しており、バーレーンでは複数拠点に被害が及んでいる。この2リージョンにのみ保存されたデータが永久に失われた可能性を示す最初の兆候となる。影響を受けた顧客数、データ量、補償条件は記事に記載がない。
+***** Take
+単一リージョン保存には常にこの故障モードがあったが、多くの顧客にとってそれは選択ではなかった。UAEとバーレーンのデータ所在地規制が、生き残ったはずのコピーを持つことを禁じていたからだ。厄介なのは、コンプライアンス法と耐久性が正反対を向いていて、誰もそのコストを見積もっていなかったことだ。
+***** Comments
+- AWSの幹部がCBSで、無標識のデータセンターの一つを爆破したらどうなるかと問われ、冗長性が高いので気づきもしないだろうと答えていた。
+- これはデータ所在地規制の話だ。医療分野の顧客はUAE国内にしかデータを保存できない。AWSは新規インスタンスを出してくれず、Azureに移った。
+- me-south-1（バーレーン）は2026年4月から停止中で、3つのAZすべてがダウン。az2は2026年3月1日から落ちている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AWS, 이란 공격받은 중동 시설의 일부 데이터 복구 불가 밝혀
+***** TLDR
+WSJ(유료 기사, 프록시로 열람): AWS가 2026년 봄 이란 드론 편대의 공격을 받은 페르시아만 데이터센터의 일부 고객 데이터에 대해 접근을 복구할 수 없다고 고객들에게 통보했다. 바레인과 아부다비 시설은 공격 이후 대부분 오프라인 상태이며, 바레인은 여러 거점이 피해를 입었다. 이 두 리전에만 저장된 데이터가 영구히 사라졌을 수 있다는 첫 신호다. 기사에는 영향받은 고객 수, 데이터 규모, 보상 조건이 나오지 않는다.
+***** Take
+단일 리전 저장은 늘 이런 실패 양상을 안고 있었지만, 상당수 고객에게는 선택의 문제가 아니었다. UAE와 바레인의 데이터 소재지 규정이 살아남았을 사본을 두는 것 자체를 금지했기 때문이다. 불편한 지점은 컴플라이언스 법규와 내구성이 정반대를 가리켰는데 아무도 그 비용을 계산하지 않았다는 것이다.
+***** Comments
+- AWS 임원이 CBS에서 표식 없는 데이터센터 하나를 폭파하면 어떻게 되냐는 질문에, 중복도가 높아 아마 눈치도 못 챌 거라고 답했다.
+- 데이터 소재지 규정 문제다. 의료 분야 고객사는 UAE 안에만 데이터를 저장해야 한다. AWS가 그곳 신규 인스턴스를 안 줘서 Azure로 갔다.
+- me-south-1(바레인)은 2026년 4월부터 다운이고 AZ 세 개가 모두 중단, az2는 2026년 3월 1일부터 죽어 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+AWS dice que no puede restaurar algunos datos de sus instalaciones en Oriente Medio atacadas por Irán
+***** TLDR
+WSJ (de pago, leído mediante proxy): AWS ha comunicado a sus clientes que no puede restaurar el acceso a parte de los datos alojados en centros de datos del Golfo Pérsico alcanzados por enjambres de drones iraníes en la primavera de 2026. Las instalaciones de Baréin y Abu Dabi llevan desde entonces mayormente fuera de servicio, y los daños en Baréin afectan a varias sedes. Es la primera señal de que los datos almacenados solo en esas dos regiones pueden haberse perdido para siempre. El artículo no da cifras de clientes, volumen de datos ni compensaciones.
+***** Take
+El almacenamiento en una sola región siempre tuvo este modo de fallo, pero para muchos de estos clientes no era una elección: las normas de residencia de datos de los Emiratos y Baréin prohibían tener la copia que habría sobrevivido. Lo incómodo es que el cumplimiento normativo y la durabilidad apuntaban en direcciones opuestas y nadie puso precio a eso.
+***** Comments
+- A un directivo de AWS le preguntaron en la CBS qué pasaría si alguien volara uno de esos centros de datos sin identificar, y respondió que la redundancia es tal que probablemente ni te enterarías.
+- Esto es residencia de datos. A mi cliente del sector sanitario le exigen almacenar los datos solo en los Emiratos. AWS no me daba instancias nuevas allí, así que me fui a Azure.
+- me-south-1 (Baréin) lleva caída desde abril de 2026, con las tres zonas de disponibilidad fuera de servicio y az2 desde el 1 de marzo de 2026.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+AWS kann Daten aus den von Iran getroffenen Rechenzentren im Nahen Osten teils nicht wiederherstellen
+***** TLDR
+WSJ (Bezahlschranke, über Proxy gelesen): AWS hat Kunden mitgeteilt, dass sich der Zugriff auf einen Teil der Daten in den Rechenzentren am Persischen Golf nicht wiederherstellen lässt, die im Frühjahr 2026 von iranischen Drohnenschwärmen getroffen wurden. Die Anlagen in Bahrain und Abu Dhabi sind seitdem weitgehend offline, in Bahrain sind mehrere Standorte beschädigt. Es ist das erste Anzeichen dafür, dass ausschließlich in diesen beiden Regionen gespeicherte Daten dauerhaft verloren sind. Zahlen zu betroffenen Kunden, Datenmengen oder Entschädigungen nennt der Artikel nicht.
+***** Take
+Speicherung in einer einzigen Region hatte immer diesen Fehlermodus, aber für viele dieser Kunden war es keine Wahl: Die Datenresidenzvorgaben der Emirate und Bahrains verbieten genau die Kopie, die überlebt hätte. Unangenehm ist, dass Compliance und Datenhaltbarkeit in entgegengesetzte Richtungen zeigten und niemand das eingepreist hat.
+***** Comments
+- Ein AWS-Manager wurde bei CBS gefragt, was passiert, wenn jemand eines dieser unbeschrifteten Rechenzentren sprengt, und antwortete, die Redundanz sei so hoch, dass man es vermutlich gar nicht merken würde.
+- Das ist Datenresidenz. Mein Kunde im Gesundheitsbereich darf Daten nur in den Emiraten speichern. AWS gab mir dort keine neuen Instanzen, also bin ich zu Azure gegangen.
+- me-south-1 (Bahrain) ist seit April 2026 ausgefallen, alle drei AZs sind down, az2 schon seit dem 1. März 2026.
+** Small programming tricks :programming:shell:git:productivity:
+:PROPERTIES:
+:ID:       49729000
+:URL:      https://will-keleher.com/posts/small-programming-tricks-matter/
+:HN_URL:   https://news.ycombinator.com/item?id=49729000
+:POINTS:   386
+:COMMENTS: 180
+:BY:       signa11
+:END:
+
+*** TLDR
+Will Keleher argues that a lot of engineering speed comes from small transferable tricks that need no theory behind them, and that the payoff is highest when they spread across a team. His list: fzf or atuin for shell history, per-directory history, SELECT without a FROM clause for quick tests, EXPLAIN ANALYZE, the \b word boundary in regex, Math.floor(Math.log10(v)) to bucket metrics, Array.flatMap and Object.entries and Promise.withResolvers, a persistent https.Agent in Node to cut connection latency, git log -S (the pickaxe) and git checkout -, shopt -s globstar for ⁎⁎/⁎.md, ripgrep over grep, and zsh compinit.
+
+*** Take
+The list is solid, but the thread found the sharper point: knowing a trick and having the reflex are different skills. Plenty of people have known Ctrl+R for a decade and still hit the up arrow forty times. The tricks that stick are the ones someone sits next to you and uses.
+
+*** Comments
+
+**** phforms
+You have to build the habit. I knew Ctrl+r since I learned the command line, even set up fzf, and still used the arrow keys for years because the shortcut never came to mind.
+
+**** kccqzy
+Watching AI work teaches a lot of these. Approve every command manually and read them. I found Opus using perf in ways I did not know were possible.
+
+**** ozim
+These are not programming tricks, they are command line and SQL tricks. What is mind boggling is how many useful actions normal people never learn.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+编程小技巧
+***** TLDR
+Will Keleher 认为，工程效率的很大一部分来自无需理论背景、可直接传授的小技巧，而当它们在团队内扩散时收益最大。他的清单包括：用 fzf 或 atuin 管理 shell 历史、按目录划分的历史记录、不带 FROM 的 SELECT 用于快速测试、EXPLAIN ANALYZE、正则中的 \b 词边界、用 Math.floor(Math.log10(v)) 对指标分桶、Array.flatMap 与 Object.entries 与 Promise.withResolvers、在 Node 中用持久化 https.Agent 降低连接延迟、git log -S（pickaxe）与 git checkout -、用 shopt -s globstar 支持 ⁎⁎/⁎.md、用 ripgrep 替代 grep，以及 zsh 的 compinit。
+***** Take
+清单本身不错，但评论区提出了更关键的一点：知道一个技巧和形成肌肉记忆是两回事。很多人知道 Ctrl+R 已经十年了，仍然按四十次上箭头。真正能留下来的技巧，是有人坐在你旁边实际用给你看的那些。
+***** Comments
+- 你得养成习惯。我从学命令行起就知道 Ctrl+r，甚至配好了 fzf，却还是用了好多年方向键，因为那个快捷键从来没在脑子里冒出来。
+- 看 AI 干活能学到很多这类东西。手动逐条批准命令并认真读。我就见过 Opus 用我不知道还能这么用的 perf 用法。
+- 这些不是编程技巧，而是命令行和 SQL 技巧。真正让人震惊的是，有多少实用操作普通人一辈子都没学过。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+小さなプログラミングの小技
+***** TLDR
+Will Kelehernは、エンジニアリングの速さの多くは理論的背景を必要としない小さな伝達可能な小技から来ており、チーム内に広がったときに最も効くと論じる。挙げているのは、シェル履歴のfzfやatuin、ディレクトリ別履歴、FROM句なしのSELECTによる簡易テスト、EXPLAIN ANALYZE、正規表現の\b単語境界、Math.floor(Math.log10(v))によるメトリクスのバケット化、Array.flatMapやObject.entriesやPromise.withResolvers、Nodeで接続遅延を減らす永続https.Agent、git log -S（pickaxe）とgit checkout -、⁎⁎/⁎.mdのためのshopt -s globstar、grepの代わりのripgrep、zshのcompinit。
+***** Take
+リスト自体は堅実だが、スレッドはより鋭い点を突いた。小技を知っていることと、反射的に使えることは別の技能だ。Ctrl+Rを10年知っていながら上矢印を40回押す人は珍しくない。身につく小技は、誰かが隣で実際に使って見せたものだ。
+***** Comments
+- 習慣にしないと駄目だ。コマンドラインを覚えた頃からCtrl+rは知っていたしfzfも設定したのに、ショートカットが頭に浮かばず何年も矢印キーを使っていた。
+- AIの作業を見ると、この手の小技をかなり学べる。コマンドを一つずつ手動承認して読むといい。Opusが自分の知らないperfの使い方をしているのを見た。
+- これらはプログラミングの小技ではなく、コマンドラインとSQLの小技だ。驚くのは、有用な操作がいかに普通の人に知られていないかだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+작은 프로그래밍 요령들
+***** TLDR
+Will Keleher는 엔지니어링 속도의 상당 부분이 이론적 배경 없이도 전수 가능한 작은 요령에서 나오며, 팀 안에 퍼질 때 효과가 가장 크다고 주장한다. 그의 목록은 셸 히스토리용 fzf나 atuin, 디렉터리별 히스토리, 빠른 테스트를 위한 FROM 없는 SELECT, EXPLAIN ANALYZE, 정규식의 \b 단어 경계, Math.floor(Math.log10(v))로 메트릭 버킷 나누기, Array.flatMap과 Object.entries와 Promise.withResolvers, Node에서 연결 지연을 줄이는 지속 https.Agent, git log -S(픽액스)와 git checkout -, ⁎⁎/⁎.md를 위한 shopt -s globstar, grep 대신 ripgrep, zsh의 compinit이다.
+***** Take
+목록은 괜찮지만 댓글이 더 날카로운 지점을 짚었다. 요령을 아는 것과 반사적으로 쓰는 것은 다른 능력이다. Ctrl+R을 10년째 알면서도 위 화살표를 마흔 번 누르는 사람이 수두룩하다. 몸에 남는 요령은 누군가 옆에 앉아 실제로 쓰는 걸 보여준 것들이다.
+***** Comments
+- 습관이 돼야 한다. 커맨드라인을 배울 때부터 Ctrl+r을 알았고 fzf까지 설정해 뒀는데도, 단축키가 떠오르지 않아 몇 년간 화살표 키를 썼다.
+- AI가 일하는 걸 보면 이런 걸 많이 배운다. 명령을 하나씩 수동 승인하면서 읽어 보라. Opus가 내가 모르던 방식으로 perf를 쓰는 걸 봤다.
+- 이건 프로그래밍 요령이 아니라 커맨드라인과 SQL 요령이다. 놀라운 건 평범한 사람들이 유용한 동작을 얼마나 모르고 사는가다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Pequeños trucos de programación
+***** TLDR
+Will Keleher sostiene que buena parte de la velocidad de un ingeniero viene de pequeños trucos transferibles que no requieren teoría detrás, y que rinden más cuando se propagan por el equipo. Su lista: fzf o atuin para el historial del shell, historial por directorio, SELECT sin cláusula FROM para pruebas rápidas, EXPLAIN ANALYZE, el límite de palabra \b en expresiones regulares, Math.floor(Math.log10(v)) para agrupar métricas, Array.flatMap, Object.entries y Promise.withResolvers, un https.Agent persistente en Node para recortar latencia de conexión, git log -S (el pickaxe) y git checkout -, shopt -s globstar para ⁎⁎/⁎.md, ripgrep en vez de grep, y compinit en zsh.
+***** Take
+La lista está bien, pero el hilo dio con lo importante: saber un truco y tener el reflejo son habilidades distintas. Mucha gente conoce Ctrl+R desde hace diez años y sigue pulsando la flecha arriba cuarenta veces. Los trucos que se quedan son los que alguien usa sentado a tu lado.
+***** Comments
+- Hay que crear el hábito. Conocía Ctrl+r desde que aprendí la línea de comandos, incluso configuré fzf, y aun así usé las flechas durante años porque el atajo nunca me venía a la cabeza.
+- Ver trabajar a la IA enseña muchos de estos trucos. Aprueba cada comando a mano y léelos. Vi a Opus usar perf de maneras que no sabía que fueran posibles.
+- Estos no son trucos de programación, son trucos de línea de comandos y SQL. Lo asombroso es cuántas acciones útiles desconoce la gente normal.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kleine Programmiertricks
+***** TLDR
+Will Keleher argumentiert, dass ein Großteil der Arbeitsgeschwindigkeit aus kleinen, weitergebbaren Tricks stammt, die keine Theorie brauchen, und dass sie sich am meisten auszahlen, wenn sie sich im Team verbreiten. Seine Liste: fzf oder atuin für die Shell-History, History pro Verzeichnis, SELECT ohne FROM für schnelle Tests, EXPLAIN ANALYZE, die Wortgrenze \b in Regex, Math.floor(Math.log10(v)) zum Bucketing von Metriken, Array.flatMap, Object.entries und Promise.withResolvers, ein persistenter https.Agent in Node gegen Verbindungslatenz, git log -S (die Pickaxe) und git checkout -, shopt -s globstar für ⁎⁎/⁎.md, ripgrep statt grep und compinit in zsh.
+***** Take
+Die Liste ist brauchbar, aber der Thread traf den wichtigeren Punkt: einen Trick zu kennen und ihn im Reflex zu haben, sind zwei Fähigkeiten. Viele kennen Strg+R seit zehn Jahren und drücken trotzdem vierzigmal die Pfeiltaste. Hängen bleiben die Tricks, die jemand neben einem tatsächlich benutzt.
+***** Comments
+- Man muss die Gewohnheit aufbauen. Ich kannte Strg+r, seit ich die Kommandozeile gelernt habe, hatte sogar fzf eingerichtet, und benutzte trotzdem jahrelang die Pfeiltasten, weil mir das Kürzel nie einfiel.
+- Der KI bei der Arbeit zuzusehen bringt einem viel davon bei. Jeden Befehl manuell freigeben und lesen. Ich habe Opus perf auf Arten benutzen sehen, die ich nicht für möglich hielt.
+- Das sind keine Programmiertricks, sondern Kommandozeilen- und SQL-Tricks. Erstaunlich ist, wie viele nützliche Handgriffe normale Leute nie lernen.
+** Training a 4B model to produce 81% faster query plans than Postgres :postgres:ai:databases:reinforcement-learning:
+:PROPERTIES:
+:ID:       49731285
+:URL:      https://rohanbansal.com/qorl
+:HN_URL:   https://news.ycombinator.com/item?id=49731285
+:POINTS:   381
+:COMMENTS: 80
+:BY:       polyphilz
+:END:
+
+*** TLDR
+Rohan Bansal fine-tuned a 4B Qwen distill with LoRA (21.2M trainable parameters) to emit Postgres planner hints. First SFT on 420 trajectories distilled from GPT-6 Astra to learn the harness format, then agentic RL with an anchored GRPO variant, 1,200 optimizer updates and eight rollouts per query, rewarded by measured runtime against the default plan. Trained on the Cardinality Estimation Benchmark and evaluated on the Join Order Benchmark (113 IMDb queries, 33 templates): 44.7% latency reduction and a 1.81x geometric mean speedup when picking the best of several rollouts. About 95 hours on two rented H100s, roughly $1,200 total. The author notes it was trained only on IMDb and targets repeated analytic queries.
+
+*** Take
+The headline number is best-of-N hint search with a learned prior, measured on an 8GB dataset that fits in RAM with warm cache and read-only SELECTs. That is a real result for repeated analytic queries and a genuinely cheap experiment. It is not evidence that the planner is beaten on your OLTP box, especially since the test schema had no indexes past the primary keys.
+
+*** Comments
+
+**** refibrillator
+81% faster on an 8 GB dataset that fits entirely in memory, with shared_buffers constrained, queries warmed before measuring, and read-only SELECTs. I would be cautious about overfitting.
+
+**** sgarland
+There were no indices other than the PK on any table and no additional statistics. Nearly every time I have seen someone resort to hints, it is because the stats are wrong.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+训练一个 4B 模型，生成比 Postgres 快 81% 的查询计划
+***** TLDR
+Rohan Bansal 用 LoRA（2120 万可训练参数）微调了一个 4B 的 Qwen 蒸馏模型，让它输出 Postgres 计划器提示。先用从 GPT-6 Astra 蒸馏的 420 条轨迹做监督微调以学会 harness 格式，再用带 anchored 变体的 GRPO 做智能体强化学习，共 1200 次优化器更新、每条查询 8 次 rollout，奖励来自与默认计划对比的实测运行时间。训练集为 Cardinality Estimation Benchmark，在 Join Order Benchmark（113 条 IMDb 查询、33 个模板）上评测：在多次 rollout 中取最优时，延迟降低 44.7%，几何平均加速 1.81 倍。租用两块 H100 跑了约 95 小时，总成本约 1200 美元。作者注明只在 IMDb 上训练，目标是重复执行的分析型查询。
+***** Take
+标题里的数字是带学习先验的 best-of-N 提示搜索，测试环境是一个能完全放进内存的 8GB 数据集、预热缓存、只读 SELECT。对重复执行的分析型查询来说这是实打实的结果，而且实验成本确实低。但这并不能证明它在你的 OLTP 机器上能打赢计划器，尤其是测试库除主键外没有任何索引。
+***** Comments
+- 所谓快 81%，是在一个完全放得进内存的 8GB 数据集上，shared_buffers 被限制、查询预热之后、而且全是只读 SELECT。我对过拟合持谨慎态度。
+- 所有表除主键外没有任何索引，也没有额外统计信息。我见过的绝大多数人被迫使用 hint 的情况，都是因为统计信息不对。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Postgresより81%速いクエリプランを出す4Bモデルを訓練する
+***** TLDR
+Rohan BansalはLoRA（学習可能パラメータ2120万）で4BのQwen蒸留モデルを微調整し、Postgresのプランナヒントを出力させた。まずGPT-6 Astraから蒸留した420軌跡でSFTを行いハーネスの形式を学ばせ、次にanchored版GRPOでエージェント的RLを実施。最適化ステップ1,200回、クエリごとに8ロールアウト、報酬はデフォルトプランとの実測実行時間の比較。学習はCardinality Estimation Benchmark、評価はJoin Order Benchmark（IMDbの113クエリ、33テンプレート）で、複数ロールアウトの最良を選ぶと遅延44.7%削減、幾何平均1.81倍の高速化。借りたH100 2枚で約95時間、総額およそ1,200ドル。著者はIMDbのみで学習しており、繰り返し実行される分析クエリが対象だと明記している。
+***** Take
+見出しの数字は、学習済みの事前分布を持つbest-of-Nのヒント探索であり、測定はメモリに収まる8GBデータセット、キャッシュ温間、読み取り専用SELECTという条件だ。繰り返し実行される分析クエリには本物の成果で、実験費用も本当に安い。ただし自分のOLTP環境でプランナに勝てる証拠にはならない。テストスキーマには主キー以外のインデックスが一切ないからだ。
+***** Comments
+- 81%高速というのは、完全にメモリに収まる8GBのデータセットで、shared_buffersを絞り、計測前にクエリを温め、読み取り専用SELECTだけの話だ。過学習には慎重でありたい。
+- どのテーブルにも主キー以外のインデックスがなく、追加の統計情報もない。ヒントに頼る場面のほとんどは、統計が間違っているのが原因だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Postgres보다 81% 빠른 쿼리 플랜을 내놓는 4B 모델 훈련하기
+***** TLDR
+Rohan Bansal은 LoRA(학습 가능 파라미터 2,120만 개)로 4B Qwen 디스틸 모델을 미세조정해 Postgres 플래너 힌트를 생성하게 했다. 먼저 GPT-6 Astra에서 증류한 420개 궤적으로 SFT를 돌려 하네스 형식을 익히게 하고, 이어 anchored 변형 GRPO로 에이전트 RL을 수행했다. 옵티마이저 업데이트 1,200회, 쿼리당 롤아웃 8회, 보상은 기본 플랜 대비 실측 실행 시간이다. 학습은 Cardinality Estimation Benchmark, 평가는 Join Order Benchmark(IMDb 쿼리 113개, 템플릿 33개)에서 진행했고, 여러 롤아웃 중 최선을 고르면 지연 44.7% 감소, 기하평균 1.81배 가속을 보고했다. 대여한 H100 두 장으로 약 95시간, 총 1,200달러 정도. 저자는 IMDb로만 학습했으며 반복 실행되는 분석 쿼리를 겨냥한다고 밝힌다.
+***** Take
+제목의 숫자는 학습된 사전분포를 가진 best-of-N 힌트 탐색이고, 측정 환경은 메모리에 다 들어가는 8GB 데이터셋, 예열된 캐시, 읽기 전용 SELECT다. 반복 실행되는 분석 쿼리에는 진짜 성과이고 실험 비용도 정말 저렴하다. 다만 당신의 OLTP 서버에서 플래너를 이긴다는 증거는 아니다. 테스트 스키마에 기본키 말고는 인덱스가 하나도 없었다.
+***** Comments
+- 81% 빠르다는 건 메모리에 통째로 들어가는 8GB 데이터셋에서 shared_buffers를 제한하고, 측정 전에 쿼리를 예열하고, 읽기 전용 SELECT만 돌린 결과다. 과적합을 경계해야 한다.
+- 어느 테이블에도 기본키 외 인덱스가 없고 추가 통계도 없다. 누군가 힌트에 기대는 경우는 거의 항상 통계가 틀렸기 때문이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Entrenar un modelo de 4B para producir planes de consulta un 81% más rápidos que Postgres
+***** TLDR
+Rohan Bansal ajustó con LoRA (21,2 millones de parámetros entrenables) un modelo Qwen destilado de 4B para que emita hints del planificador de Postgres. Primero SFT sobre 420 trayectorias destiladas de GPT-6 Astra para aprender el formato del harness, y después RL agéntico con una variante anclada de GRPO: 1.200 actualizaciones del optimizador y ocho rollouts por consulta, con recompensa según el tiempo de ejecución medido frente al plan por defecto. Entrenado con el Cardinality Estimation Benchmark y evaluado en el Join Order Benchmark (113 consultas de IMDb, 33 plantillas): 44,7% menos latencia y una aceleración media geométrica de 1,81x eligiendo el mejor de varios rollouts. Unas 95 horas en dos H100 alquiladas, alrededor de 1.200 dólares en total. El autor señala que solo entrenó con IMDb y que apunta a consultas analíticas repetidas.
+***** Take
+La cifra del titular es una búsqueda de hints best-of-N con un prior aprendido, medida sobre un conjunto de 8 GB que cabe en RAM, con caché caliente y SELECT de solo lectura. Es un resultado real para consultas analíticas repetidas y un experimento genuinamente barato. No demuestra que el planificador quede batido en tu servidor OLTP, sobre todo porque el esquema de prueba no tenía más índices que las claves primarias.
+***** Comments
+- Un 81% más rápido sobre un conjunto de 8 GB que cabe entero en memoria, con shared_buffers limitado, consultas precalentadas antes de medir y solo SELECT de lectura. Yo tendría cuidado con el sobreajuste.
+- No había más índices que la clave primaria en ninguna tabla, ni estadísticas adicionales. Casi siempre que alguien recurre a hints es porque las estadísticas están mal.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein 4B-Modell trainieren, das 81% schnellere Query-Pläne liefert als Postgres
+***** TLDR
+Rohan Bansal hat ein destilliertes 4B-Qwen-Modell per LoRA (21,2 Millionen trainierbare Parameter) darauf feinjustiert, Hints für den Postgres-Planer auszugeben. Zuerst SFT auf 420 von GPT-6 Astra destillierten Trajektorien, um das Harness-Format zu lernen, danach agentisches RL mit einer verankerten GRPO-Variante: 1.200 Optimizer-Updates, acht Rollouts pro Query, Belohnung über die gemessene Laufzeit gegenüber dem Standardplan. Trainiert auf dem Cardinality Estimation Benchmark, evaluiert auf dem Join Order Benchmark (113 IMDb-Queries, 33 Templates): 44,7% weniger Latenz und 1,81x geometrischer Mittelwert an Beschleunigung, wenn man den besten aus mehreren Rollouts nimmt. Rund 95 Stunden auf zwei gemieteten H100, insgesamt etwa 1.200 Dollar. Der Autor merkt an, dass nur auf IMDb trainiert wurde und wiederholte analytische Queries das Ziel sind.
+***** Take
+Die Schlagzeilenzahl ist eine Best-of-N-Hint-Suche mit gelerntem Prior, gemessen an einem 8-GB-Datensatz, der in den RAM passt, mit warmem Cache und nur lesenden SELECTs. Für wiederholte analytische Queries ist das ein echtes Ergebnis und ein wirklich billiges Experiment. Ein Beleg dafür, dass der Planer auf der eigenen OLTP-Maschine geschlagen wird, ist es nicht, zumal das Testschema außer Primärschlüsseln keine Indizes hatte.
+***** Comments
+- 81% schneller auf einem 8-GB-Datensatz, der komplett in den Speicher passt, mit begrenzten shared_buffers, vor der Messung aufgewärmten Queries und nur lesenden SELECTs. Bei Overfitting wäre ich vorsichtig.
+- Außer dem Primärschlüssel gab es auf keiner Tabelle Indizes und keine zusätzlichen Statistiken. Fast immer, wenn jemand zu Hints greift, stimmen die Statistiken nicht.
+** Nvidia announces native GPU programming in Rust :rust:nvidia:gpu:cuda:
+:PROPERTIES:
+:ID:       49724881
+:URL:      https://developer.nvidia.com/blog/introducing-cuda-rust-two-tracks-for-writing-gpu-kernels/
+:HN_URL:   https://news.ycombinator.com/item?id=49724881
+:POINTS:   212
+:COMMENTS: 72
+:BY:       nonmaskable
+:END:
+
+*** TLDR
+NVIDIA published two ways to write CUDA kernels in Rust. cuda-oxide is a rustc codegen backend that routes kernels through MIR, the Pliron IR framework and LLVM to PTX; it is early alpha, Linux only, and needs CUDA 12.x plus a pinned nightly from 2026-04-03. cutile-rs is the tile-level model where you describe what one tile of data does and the compiler maps threads; it builds on stable Rust 1.89+ with CUDA 13.3, is on crates.io, and is already used by HuggingFace's Grout and mistral.rs. Both push safety to compile time, cuda-oxide with DisjointSlice and launch contracts, cutile-rs with tensor partitioning and ownership. Both need compute capability 8.0+, and NVIDIA says APIs will change.
+
+*** Take
+The tile track is the part that matters: stable toolchain, published crate, real users. cuda-oxide is a pinned-nightly alpha, which reads as NVIDIA hedging on whether the SIMT path is worth maintaining. And the lock-in complaint still stands, because a memory-safe kernel is still a kernel that only runs on NVIDIA hardware.
+
+*** Comments
+
+**** dllu
+Since NVIDIA owns HuggingFace now and HuggingFace has the excellent Candle crate for inference in Rust, this looks like a good step toward native Rust kernels.
+
+**** jacobgorm
+Once you let CUDA into your C++ codebase it is very hard to remove, and you end up tied to one vendor or in ifdef hell. Write kernels in separate files and launch them manually, like Metal.
+
+**** claiir
+"The launch is checked rather than trusted." Even NVIDIA is shipping fully LLM-written blog posts now.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+英伟达宣布支持用 Rust 原生编写 GPU 程序
+***** TLDR
+英伟达发布了两条用 Rust 编写 CUDA kernel 的路径。cuda-oxide 是一个 rustc 代码生成后端，把 kernel 经由 MIR、Pliron IR 框架和 LLVM 编译到 PTX；目前是早期 alpha，仅支持 Linux，需要 CUDA 12.x 以及固定在 2026-04-03 的 nightly 工具链。cutile-rs 采用 tile 级模型，你描述一块数据要做什么，由编译器决定线程映射；它基于稳定版 Rust 1.89+ 和 CUDA 13.3，已发布到 crates.io，并被 HuggingFace 的 Grout 和 mistral.rs 使用。两者都把安全检查放到编译期：cuda-oxide 用 DisjointSlice 和 launch contract，cutile-rs 用张量分区和所有权。两者都要求计算能力 8.0 以上，英伟达也说明 API 还会变动。
+***** Take
+真正有分量的是 tile 那条线：稳定工具链、已发布的 crate、真实用户。cuda-oxide 是锁定 nightly 的 alpha，看起来是英伟达在观望 SIMT 路线值不值得长期维护。而厂商锁定的抱怨依然成立，因为内存安全的 kernel 仍然是只能在英伟达硬件上跑的 kernel。
+***** Comments
+- 既然英伟达现在拥有 HuggingFace，而 HuggingFace 有很出色的 Rust 推理库 Candle，这看起来是迈向原生 Rust kernel 的一大步。
+- 一旦让 CUDA 进入你的 C++ 代码库，就很难再剥离，最后要么绑死在单一厂商，要么陷入 ifdef 地狱。应该把 kernel 写在单独文件里手动启动，就像 Metal 那样。
+- “启动是被检查的，而不是被信任的。”连英伟达现在都在发完全由大模型写的博客了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+NVIDIA、RustによるネイティブGPUプログラミングを発表
+***** TLDR
+NVIDIAがRustでCUDAカーネルを書く2つの方法を公開した。cuda-oxideはrustcのコード生成バックエンドで、カーネルをMIR、Pliron IRフレームワーク、LLVMを通してPTXへ落とす。早期アルファでLinux限定、CUDA 12.x以降と2026-04-03固定のnightlyが必要。cutile-rsはタイル単位のモデルで、データ1タイルの処理を書けばコンパイラがスレッド割り当てを決める。安定版Rust 1.89以降とCUDA 13.3で動き、crates.ioで公開され、HuggingFaceのGroutとmistral.rsで既に使われている。どちらも安全性をコンパイル時に寄せており、cuda-oxideはDisjointSliceと起動契約、cutile-rsはテンソル分割と所有権を使う。どちらもcompute capability 8.0以上が必要で、APIは変わるとNVIDIAは明言している。
+***** Take
+重要なのはタイル側だ。安定ツールチェーン、公開済みクレート、実ユーザーがそろっている。cuda-oxideはnightly固定のアルファで、SIMT路線を維持する価値があるかNVIDIAが様子見しているように読める。そしてロックインの指摘は依然有効だ。メモリ安全なカーネルも、NVIDIAのハードでしか動かないカーネルには変わりない。
+***** Comments
+- NVIDIAは今やHuggingFaceを所有していて、HuggingFaceにはRust推論の優秀なクレートCandleがある。ネイティブRustカーネルへの良い一歩に見える。
+- CUDAを一度C++コードベースに入れると剥がすのは極めて難しく、単一ベンダー依存かifdef地獄、たぶんその両方になる。Metalのようにカーネルは別ファイルに書いて手動で起動すべきだ。
+- 「起動は信頼ではなく検査される」。NVIDIAまで完全にLLMが書いた記事を出すようになったか。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+엔비디아, Rust로 GPU를 네이티브 프로그래밍하는 방식 발표
+***** TLDR
+엔비디아가 Rust로 CUDA 커널을 작성하는 두 가지 경로를 공개했다. cuda-oxide는 rustc 코드 생성 백엔드로 커널을 MIR, Pliron IR 프레임워크, LLVM을 거쳐 PTX로 내린다. 초기 알파이고 리눅스 전용이며 CUDA 12.x 이상과 2026-04-03로 고정된 nightly가 필요하다. cutile-rs는 타일 단위 모델로, 데이터 한 타일이 할 일을 쓰면 컴파일러가 스레드 매핑을 정한다. 안정 버전 Rust 1.89 이상과 CUDA 13.3에서 동작하고 crates.io에 올라가 있으며 HuggingFace의 Grout과 mistral.rs가 이미 쓰고 있다. 둘 다 안전성 검사를 컴파일 타임으로 옮겼는데, cuda-oxide는 DisjointSlice와 실행 계약, cutile-rs는 텐서 분할과 소유권을 쓴다. 둘 다 compute capability 8.0 이상이 필요하고 API는 바뀔 수 있다고 엔비디아가 밝혔다.
+***** Take
+의미 있는 쪽은 타일 트랙이다. 안정 툴체인, 공개된 크레이트, 실제 사용자가 있다. cuda-oxide는 nightly 고정 알파라서, SIMT 경로를 계속 유지할 가치가 있는지 엔비디아가 저울질하는 것처럼 읽힌다. 그리고 종속 문제 지적은 여전히 유효하다. 메모리 안전한 커널도 결국 엔비디아 하드웨어에서만 도는 커널이다.
+***** Comments
+- 이제 엔비디아가 HuggingFace를 소유하고 있고 HuggingFace에는 Rust 추론용으로 훌륭한 Candle 크레이트가 있으니, 네이티브 Rust 커널로 가는 좋은 단계로 보인다.
+- CUDA를 C++ 코드베이스에 한 번 들이면 걷어내기가 대단히 어렵고, 결국 단일 벤더 종속이나 ifdef 지옥, 아마 둘 다가 된다. Metal처럼 커널은 별도 파일에 쓰고 수동으로 실행하는 게 낫다.
+- "실행은 신뢰가 아니라 검증된다." 엔비디아마저 통째로 LLM이 쓴 블로그를 내보내는군.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Nvidia anuncia programación nativa de GPU en Rust
+***** TLDR
+NVIDIA publicó dos formas de escribir kernels CUDA en Rust. cuda-oxide es un backend de generación de código de rustc que lleva los kernels por MIR, el framework Pliron IR y LLVM hasta PTX; está en alfa temprana, solo Linux, y requiere CUDA 12.x y una nightly fijada al 2026-04-03. cutile-rs es el modelo por tiles: describes qué hace un tile de datos y el compilador decide el mapeo de hilos; funciona con Rust estable 1.89+ y CUDA 13.3, está en crates.io y ya lo usan Grout de HuggingFace y mistral.rs. Ambos llevan la seguridad al tiempo de compilación, cuda-oxide con DisjointSlice y contratos de lanzamiento, cutile-rs con particionado de tensores y ownership. Los dos exigen capacidad de cómputo 8.0+ y NVIDIA avisa de que las API cambiarán.
+***** Take
+Lo que importa es la vía de tiles: toolchain estable, crate publicada, usuarios reales. cuda-oxide es una alfa atada a una nightly concreta, que se lee como NVIDIA cubriéndose sobre si vale la pena mantener la vía SIMT. Y la queja del vendor lock-in sigue en pie, porque un kernel seguro en memoria sigue siendo un kernel que solo corre en hardware NVIDIA.
+***** Comments
+- Como NVIDIA ahora es dueña de HuggingFace y HuggingFace tiene la excelente crate Candle para inferencia en Rust, esto parece un buen paso hacia kernels nativos en Rust.
+- Una vez que dejas entrar CUDA en tu base de código C++ es muy difícil sacarlo, y acabas atado a un solo proveedor o en un infierno de ifdefs. Escribe los kernels en archivos aparte y lánzalos a mano, como en Metal.
+- "El lanzamiento se comprueba en lugar de confiarse." Hasta NVIDIA publica ya artículos escritos enteros por un LLM.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Nvidia kündigt native GPU-Programmierung in Rust an
+***** TLDR
+NVIDIA hat zwei Wege veröffentlicht, CUDA-Kernel in Rust zu schreiben. cuda-oxide ist ein rustc-Codegen-Backend, das Kernel über MIR, das Pliron-IR-Framework und LLVM nach PTX bringt; frühe Alpha, nur Linux, braucht CUDA 12.x und eine auf den 2026-04-03 festgenagelte Nightly. cutile-rs ist das Tile-Modell: man beschreibt, was ein Datentile tut, und der Compiler bestimmt das Thread-Mapping. Es läuft mit stabilem Rust 1.89+ und CUDA 13.3, liegt auf crates.io und wird bereits von HuggingFaces Grout und mistral.rs genutzt. Beide verlagern Sicherheit in die Compile-Zeit, cuda-oxide mit DisjointSlice und Launch-Contracts, cutile-rs mit Tensor-Partitionierung und Ownership. Beide setzen Compute Capability 8.0+ voraus, und NVIDIA sagt, die APIs werden sich ändern.
+***** Take
+Relevant ist der Tile-Zweig: stabile Toolchain, veröffentlichte Crate, echte Nutzer. cuda-oxide ist eine an eine Nightly genagelte Alpha, was sich liest, als halte sich NVIDIA offen, ob der SIMT-Pfad Pflege wert ist. Und der Lock-in-Einwand bleibt gültig, denn ein speichersicherer Kernel ist immer noch ein Kernel, der nur auf NVIDIA-Hardware läuft.
+***** Comments
+- Da NVIDIA jetzt HuggingFace besitzt und HuggingFace mit Candle eine hervorragende Crate für Inferenz in Rust hat, wirkt das wie ein guter Schritt zu nativen Rust-Kerneln.
+- Hat man CUDA einmal in die C++-Codebasis gelassen, bekommt man es kaum wieder heraus, und man landet bei einem einzigen Anbieter oder in der ifdef-Hölle. Kernel gehören in eigene Dateien und werden manuell gestartet, wie bei Metal.
+- "Der Launch wird geprüft statt vertraut." Sogar NVIDIA veröffentlicht inzwischen komplett von einem LLM geschriebene Blogposts.
+** The engineering behind the US Strategic Petroleum Reserve :energy:engineering:infrastructure:geology:
+:PROPERTIES:
+:ID:       49719596
+:URL:      https://johnjwang.com/post/2026/09/15/engineering-behind-us-strategic-petroleum-reserve
+:HN_URL:   https://news.ycombinator.com/item?id=49719596
+:POINTS:   85
+:COMMENTS: 25
+:BY:       johnjwang
+:END:
+
+*** TLDR
+John Wang walks through how the Strategic Petroleum Reserve physically works. Sixty caverns across four sites in Texas and Louisiana were dissolved out of salt domes by pumping in fresh water and removing the brine, each holding roughly 10 million barrels for 714 million barrels of authorized capacity. Withdrawal uses buoyancy: pump water into the bottom and the oil floats out the top. Salt is the container because it is nearly impermeable, does not react with petroleum, and creeps under pressure so fractures close themselves. Capital cost is about $3.50 per barrel against $15 to $18 for aboveground tanks. The catch is that each fresh-water cycle dissolves more salt and enlarges the caverns, so repeated withdrawals wear out both the caverns and the surface pumps and pipelines.
+
+*** Take
+This is 1970s engineering that beats anything you would design today on cost per barrel, and the reason is that the storage medium seals and repairs itself. The limit is that the withdrawal mechanism consumes the container, so drawdowns are not free even when the oil is paid for. A reserve you can only empty a limited number of times is a different strategic asset than a tank.
+
+*** Comments
+
+**** anigbrowl
+The rock salt has extremely low permeability and does not react with petroleum, and under pressure it slowly deforms and closes small fractures, so the salt itself contains the oil without a steel liner.
+
+**** kulahan
+Why not pump the original brine back in to move the oil? Would that not avoid eroding the storage cavern?
+
+**** LPisGood
+The reserve needs something like 100 to 150 million barrels just to maintain operational pressure, so it can never be drawn down anywhere near zero.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+美国战略石油储备背后的工程
+***** TLDR
+John Wang 讲解了战略石油储备在物理上如何运作。德州和路易斯安那四个站点共 60 个洞穴，是向盐丘中注入淡水溶解、再抽出卤水形成的，每个约可容纳 1000 万桶，核定总容量 7.14 亿桶。取油靠浮力：从底部注水，石油就从顶部被顶出。之所以用盐层做容器，是因为它几乎不透水、不与石油反应，且在压力下会缓慢变形，自行闭合裂缝。每桶资本成本约 3.5 美元，而地上储罐为 15 到 18 美元。代价是每次注入淡水都会再溶解一部分盐、让洞穴变大，因此反复取油会同时消耗洞穴和地面的泵与管道。
+***** Take
+这是 1970 年代的工程，在每桶成本上胜过今天任何设计，原因在于储存介质能自我密封、自我修复。局限在于取油机制会消耗容器本身，所以即便石油已经付过钱，动用储备也不是零成本。一个只能清空有限次数的储备，与一个储罐是性质不同的战略资产。
+***** Comments
+- 岩盐的渗透率极低，也不与石油发生反应，而且在压力下会缓慢形变、闭合细小裂缝，所以不需要钢制内衬，盐层本身就能封住石油。
+- 为什么不把原来的卤水泵回去来顶出石油？那样不就能避免侵蚀储存洞穴了吗？
+- 这个储备光是维持运行压力就需要大约 1 到 1.5 亿桶，所以永远不可能接近抽空。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+米国戦略石油備蓄を支えるエンジニアリング
+***** TLDR
+John Wangが戦略石油備蓄の物理的な仕組みを解説する。テキサスとルイジアナの4拠点にある60の空洞は、岩塩ドームに真水を注入して溶かし、生じた塩水を抜き出して作られたもので、1つあたり約1,000万バレル、認可容量は合計7億1,400万バレル。取り出しは浮力を使う。底から水を注げば油が上から押し出される。岩塩が容器になるのは、透過性がほぼゼロで石油と反応せず、圧力下でゆっくり変形して亀裂を自ら塞ぐからだ。資本コストは1バレルあたり約3.5ドルで、地上タンクの15〜18ドルより大幅に安い。難点は、真水を使うたびに塩がさらに溶けて空洞が広がることで、繰り返し取り出せば空洞も地上のポンプや配管も傷んでいく。
+***** Take
+1970年代の工学が、バレル当たりコストで今日のどんな設計にも勝っている。理由は貯蔵媒体が自ら密封し自ら修復するからだ。限界は、取り出しの仕組みが容器そのものを消費する点で、油の代金を払っていても放出はただではない。有限回しか空にできない備蓄は、タンクとは別種の戦略資産だ。
+***** Comments
+- 岩塩は透過性が極めて低く石油と反応せず、圧力下でゆっくり変形して小さな亀裂を閉じる。だから鋼鉄のライナーなしに塩自体が油を封じ込められる。
+- 元の塩水を戻して油を押し出せばいいのでは。それなら貯蔵空洞を侵食せずに済むのでは。
+- この備蓄は運用圧力を保つだけで1億〜1.5億バレル必要だと聞いた。つまりゼロ近くまで引き出すことは決してできない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+미국 전략비축유를 떠받치는 엔지니어링
+***** TLDR
+John Wang이 전략비축유가 물리적으로 어떻게 작동하는지 설명한다. 텍사스와 루이지애나 네 곳에 있는 60개 공동은 암염돔에 민물을 주입해 녹이고 생긴 염수를 빼내 만든 것으로, 하나당 약 1,000만 배럴, 인가 용량은 합계 7억 1,400만 배럴이다. 인출은 부력을 쓴다. 바닥으로 물을 밀어 넣으면 기름이 위로 떠밀려 나온다. 암염이 용기가 되는 이유는 투과성이 거의 없고 석유와 반응하지 않으며, 압력을 받으면 천천히 변형돼 균열을 스스로 닫기 때문이다. 자본비용은 배럴당 약 3.5달러로 지상 탱크의 15~18달러보다 훨씬 싸다. 문제는 민물을 쓸 때마다 암염이 더 녹아 공동이 커진다는 점이라, 반복 인출은 공동과 지상 펌프·배관을 함께 소모시킨다.
+***** Take
+1970년대 공학이 배럴당 비용에서 오늘날 어떤 설계보다 낫다. 저장 매질이 스스로 밀봉하고 스스로 복구하기 때문이다. 한계는 인출 방식이 용기를 갉아먹는다는 것이라, 기름값을 이미 치렀더라도 방출은 공짜가 아니다. 제한된 횟수만 비울 수 있는 비축은 탱크와는 성격이 다른 전략 자산이다.
+***** Comments
+- 암염은 투과성이 극히 낮고 석유와 반응하지 않으며, 압력을 받으면 천천히 변형돼 작은 균열을 닫는다. 그래서 강철 라이너 없이 암염 자체가 기름을 가둔다.
+- 원래 염수를 다시 밀어 넣어 기름을 밀어내면 안 되나? 그러면 저장 공동이 깎이는 걸 막을 수 있지 않나?
+- 이 비축은 운용 압력을 유지하는 데만 1억~1억 5천만 배럴이 필요하다. 즉 0 근처까지는 절대 뽑아낼 수 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La ingeniería detrás de la Reserva Estratégica de Petróleo de EE. UU.
+***** TLDR
+John Wang explica cómo funciona físicamente la Reserva Estratégica de Petróleo. Sesenta cavernas repartidas en cuatro emplazamientos de Texas y Luisiana se disolvieron dentro de domos de sal inyectando agua dulce y extrayendo la salmuera; cada una almacena unos 10 millones de barriles, hasta una capacidad autorizada de 714 millones. La extracción usa la flotabilidad: se bombea agua por abajo y el petróleo sale por arriba. La sal sirve de recipiente porque es casi impermeable, no reacciona con el petróleo y bajo presión fluye lentamente cerrando las fracturas. El coste de capital ronda los 3,50 dólares por barril frente a 15 o 18 de los tanques en superficie. El inconveniente es que cada ciclo de agua dulce disuelve más sal y agranda las cavernas, de modo que las extracciones repetidas desgastan tanto las cavernas como las bombas y tuberías de superficie.
+***** Take
+Es ingeniería de los años setenta que gana en coste por barril a cualquier diseño actual, y el motivo es que el medio de almacenamiento se sella y se repara solo. El límite es que el mecanismo de extracción consume el recipiente, así que vaciar reservas no sale gratis aunque el petróleo ya esté pagado. Una reserva que solo puede vaciarse un número limitado de veces es un activo estratégico distinto de un tanque.
+***** Comments
+- La sal gema tiene una permeabilidad bajísima y no reacciona con el petróleo, y bajo presión se deforma despacio y cierra las fracturas pequeñas, así que la propia sal contiene el crudo sin revestimiento de acero.
+- ¿Por qué no bombear de vuelta la salmuera original para mover el petróleo? ¿No evitaría eso erosionar la caverna de almacenamiento?
+- La reserva necesita entre 100 y 150 millones de barriles solo para mantener la presión operativa, así que nunca puede vaciarse ni de lejos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Technik hinter der US-Strategischen Ölreserve
+***** TLDR
+John Wang erklärt, wie die Strategische Ölreserve physisch funktioniert. Sechzig Kavernen an vier Standorten in Texas und Louisiana wurden aus Salzstöcken gelöst, indem Süßwasser eingepresst und die Sole abgepumpt wurde; jede fasst rund 10 Millionen Barrel, zusammen 714 Millionen Barrel genehmigte Kapazität. Die Entnahme nutzt Auftrieb: Wasser unten hineinpumpen, Öl oben herausdrücken. Salz taugt als Behälter, weil es praktisch undurchlässig ist, nicht mit Erdöl reagiert und unter Druck langsam kriecht, sodass sich Risse von selbst schließen. Die Kapitalkosten liegen bei etwa 3,50 Dollar pro Barrel gegenüber 15 bis 18 Dollar für oberirdische Tanks. Der Haken: Jeder Süßwasserzyklus löst weiteres Salz und vergrößert die Kavernen, wiederholte Entnahmen verschleißen also Kavernen wie auch Pumpen und Rohrleitungen an der Oberfläche.
+***** Take
+Das ist Technik aus den 1970ern, die bei den Kosten pro Barrel jeden heutigen Entwurf schlägt, und zwar weil das Speichermedium sich selbst abdichtet und selbst repariert. Die Grenze ist, dass der Entnahmemechanismus den Behälter aufbraucht, Abgaben sind also nicht umsonst, auch wenn das Öl längst bezahlt ist. Eine Reserve, die sich nur begrenzt oft leeren lässt, ist ein anderes strategisches Gut als ein Tank.
+***** Comments
+- Steinsalz hat eine extrem niedrige Permeabilität und reagiert nicht mit Erdöl, und unter Druck verformt es sich langsam und schließt kleine Risse. Das Salz selbst hält das Öl also ohne Stahlauskleidung.
+- Warum nicht die ursprüngliche Sole zurückpumpen, um das Öl zu verdrängen? Würde das nicht die Erosion der Speicherkaverne vermeiden?
+- Die Reserve braucht etwa 100 bis 150 Millionen Barrel allein für den Betriebsdruck, sie lässt sich also nie auch nur annähernd leerfahren.
