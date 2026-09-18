@@ -1,0 +1,546 @@
+#+TITLE: HN Digest 2026-09-18 06:00 UTC
+#+DATE: 2026-09-18T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A GPS card thinks it is 2006 and takes down Telstra, Qwen undercuts Gemini on audio, and Diplodocus turns up in Spain
+
+* Highlights
+- Telstra: one maintenance-returned GPS receiver declared the year 2006 and the whole timing hierarchy agreed
+- Qwen3.8-Omni-Flash: 3.35 diarization error vs Gemini's 88.1, and no open weights
+- Thomas Ptacek: use the LLM as a copyeditor, never take a word it suggests
+- Fourteen tail vertebrae in Teruel put Diplodocus on the wrong continent
+- Pre-Greek: 1,106 words with no Indo-European etymology, and a field that no longer believes the premise
+
+* Stories
+
+** Telstra outage: The night a network decided the year was 2006 :networking:ntp:outage:telstra:infrastructure:
+:PROPERTIES:
+:ID:       49748957
+:URL:      https://www.netnod.se/blog/telstra-outage-night-network-decided-year-was-2006
+:HN_URL:   https://news.ycombinator.com/item?id=49748957
+:POINTS:   37
+:COMMENTS: 13
+:BY:       TMWNN
+:END:
+
+*** TLDR
+On 8 July 2026 a GPS receiver in Melbourne came back from maintenance with firmware old enough to hit a week-number rollover, so it believed the year was 2006. It advertised itself as stratum 1, the top rank in the NTP hierarchy, and every client below it accepted the date. NTP's outlier detection should have voted it down, but Melbourne's backup stratum 2 server had been decommissioned years earlier, so nothing independent disagreed. The bad timestamp propagated, downstream servers echoed it back as confirmation, and voice, SMS, emergency calling, trains, payment terminals, ticketing and EV chargers went down. Telstra's TAP report concluded the protocol worked and the architecture did not: five years of topology changes and skipped firmware updates had quietly removed every source of disagreement.
+
+*** Take
+The interesting failure is not the rollover bug, it is that someone deleted the only server whose job was to disagree. Redundancy that exists to contradict a peer looks like idle duplication on a cost review, right up to the morning it is the only thing standing between you and a nationwide outage. Telstra spent five years making the network tidier and each individual change was defensible.
+
+*** Comments
+
+**** rcaught
+:PROPERTIES:
+:COMMENT_ID: 49749010
+:END:
+Each decision solved the problem in front of it. Nobody was asked to look at the sum of all actions. That is the perfect description of Telstra as a company.
+
+**** scriptsmith
+:PROPERTIES:
+:COMMENT_ID: 49749060
+:END:
+Lots of bloviating AI-prose in this writeup. Read Telstra's own report instead, it is public.
+
+**** _kb
+:PROPERTIES:
+:COMMENT_ID: 49749110
+:END:
+Direct link to the analysis report rather than the blog rewrite of it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Telstra 故障：网络认定那一年是 2006 年的夜晚
+***** TLDR
+2026 年 7 月 8 日，墨尔本一台维护后重新上线的 GPS 接收机因固件过旧触发周数翻转，认定当前年份为 2006 年。它把自己宣告为 stratum 1，即 NTP 层级中的最高等级，下游所有客户端都接受了这个日期。NTP 的异常值检测本应否决它，但墨尔本的备用 stratum 2 服务器几年前已被下线，没有任何独立来源提出异议。错误时间戳扩散开来，下游服务器又把它当作确认回传，导致语音、短信、紧急呼叫、列车、支付终端、票务系统和电动车充电桩全部瘫痪。Telstra 的 TAP 报告结论是：协议正常工作，架构没有。五年的拓扑调整和固件疏于更新，悄悄消除了所有可能提出异议的来源。
+***** Take
+真正值得注意的故障不是周数翻转的 bug，而是有人删掉了唯一一台职责就是提出异议的服务器。为反驳同伴而存在的冗余，在成本评审里看起来就是闲置的重复，直到它成为你和全国性故障之间唯一的屏障。Telstra 花了五年把网络整理得更整洁，而每一次单独的改动都说得过去。
+***** Comments
+- 每个决定都解决了眼前的问题，没有人被要求审视所有行动的总和。这是对 Telstra 这家公司最精准的描述。
+- 这篇文章里充斥着浮夸的 AI 腔调。去看 Telstra 自己发布的报告吧，那是公开的。
+- 直接给出分析报告的链接，而不是这篇博客的改写版。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Telstra障害：ネットワークが2006年だと判断した夜
+***** TLDR
+2026年7月8日、メンテナンスから復帰したメルボルンのGPS受信機が、週番号ロールオーバーを起こすほど古いファームウェアのため、年を2006年だと認識した。この機器はNTP階層の最上位であるstratum 1を名乗り、配下のすべてのクライアントがその日付を受け入れた。NTPの外れ値検出が本来は棄却するはずだったが、メルボルンのバックアップstratum 2サーバーは数年前に廃止されており、異議を唱える独立した情報源が存在しなかった。誤ったタイムスタンプが伝播し、下流のサーバーがそれを確認として返したことで、音声通話、SMS、緊急通報、鉄道、決済端末、発券システム、EV充電器が停止した。TelstraのTAP報告書の結論は、プロトコルは機能し、アーキテクチャは機能しなかった、というものだ。5年間のトポロジ変更とファームウェア更新の放置が、異議を唱える情報源をすべて静かに取り除いていた。
+***** Take
+注目すべき失敗はロールオーバーのバグではなく、異議を唱えることだけが役目だったサーバーを誰かが消したことだ。同僚の主張に反論するために存在する冗長性は、コスト見直しでは遊休の重複にしか見えない。全国規模の障害を食い止める唯一の存在になる朝までは。Telstraは5年かけてネットワークを整理し、個々の変更はいずれも筋が通っていた。
+***** Comments
+- それぞれの判断は目の前の問題を解決した。全体の総和を見るよう求められた者は誰もいなかった。Telstraという会社の完璧な描写だ。
+- この記事は大げさなAI調の文章ばかりだ。公開されているTelstra自身の報告書を読んだほうがいい。
+- ブログの書き直し版ではなく、分析報告書への直接リンク。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Telstra 장애: 네트워크가 2006년이라고 판단한 밤
+***** TLDR
+2026년 7월 8일, 유지보수를 마치고 복귀한 멜버른의 GPS 수신기가 주 번호 롤오버를 일으킬 만큼 오래된 펌웨어 탓에 연도를 2006년으로 인식했다. 이 장비는 NTP 계층의 최상위인 stratum 1을 자처했고, 아래의 모든 클라이언트가 그 날짜를 받아들였다. NTP의 이상치 탐지가 이를 걸러냈어야 했지만 멜버른의 예비 stratum 2 서버는 몇 년 전에 폐기되어, 반박할 독립 소스가 없었다. 잘못된 타임스탬프가 퍼지고 하위 서버들이 이를 확인으로 되돌려주면서 음성 통화, 문자, 긴급 통화, 열차, 결제 단말, 발권 시스템, 전기차 충전기가 멈췄다. Telstra의 TAP 보고서는 프로토콜은 작동했고 아키텍처는 작동하지 않았다고 결론지었다. 5년간의 토폴로지 변경과 방치된 펌웨어가 반박할 수 있는 모든 소스를 조용히 제거한 것이다.
+***** Take
+주목할 실패는 롤오버 버그가 아니라, 반박하는 것이 유일한 역할이던 서버를 누군가 지웠다는 점이다. 동료의 주장을 반박하려고 존재하는 이중화는 비용 검토에서는 놀고 있는 중복으로 보인다. 전국 규모 장애를 막는 유일한 장치가 되는 아침이 오기 전까지는. Telstra는 5년에 걸쳐 네트워크를 정돈했고, 개별 변경은 모두 나름의 근거가 있었다.
+***** Comments
+- 각 결정은 눈앞의 문제를 해결했다. 모든 행동의 총합을 보라는 요구를 받은 사람은 없었다. Telstra라는 회사에 대한 완벽한 묘사다.
+- 이 글은 과장된 AI 문체투성이다. 공개된 Telstra 자체 보고서를 읽는 게 낫다.
+- 블로그 재작성본이 아니라 분석 보고서 직접 링크.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Caída de Telstra: la noche en que la red decidió que el año era 2006
+***** TLDR
+El 8 de julio de 2026 un receptor GPS de Melbourne volvió de mantenimiento con un firmware lo bastante antiguo como para sufrir el desbordamiento del número de semana, y creyó que el año era 2006. Se anunció como stratum 1, el rango más alto de la jerarquía NTP, y todos los clientes por debajo aceptaron esa fecha. La detección de valores atípicos de NTP debería haberlo descartado, pero el servidor stratum 2 de respaldo de Melbourne se había dado de baja años antes, así que nada independiente lo contradijo. La marca de tiempo errónea se propagó, los servidores inferiores la devolvieron como confirmación y cayeron la voz, los SMS, las llamadas de emergencia, los trenes, los terminales de pago, la venta de billetes y los cargadores de coches eléctricos. El informe TAP de Telstra concluyó que el protocolo funcionó y la arquitectura no: cinco años de cambios de topología y actualizaciones de firmware omitidas habían eliminado en silencio toda fuente capaz de discrepar.
+***** Take
+El fallo interesante no es el error de desbordamiento, sino que alguien borró el único servidor cuyo trabajo era discrepar. La redundancia que existe para contradecir a un par parece duplicación ociosa en una revisión de costes, hasta la mañana en que es lo único que te separa de una caída nacional. Telstra pasó cinco años ordenando la red y cada cambio individual era defendible.
+***** Comments
+- Cada decisión resolvió el problema que tenía delante. A nadie se le pidió mirar la suma de todas las acciones. Es la descripción perfecta de Telstra como empresa.
+- El texto está lleno de prosa hinchada de IA. Lee mejor el informe propio de Telstra, es público.
+- Enlace directo al informe de análisis, no a la reescritura del blog.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Telstra-Ausfall: Die Nacht, in der ein Netz beschloss, es sei 2006
+***** TLDR
+Am 8. Juli 2026 kam ein GPS-Empfänger in Melbourne aus der Wartung zurück, mit einer Firmware alt genug für einen Wochennummern-Überlauf, und hielt das Jahr für 2006. Er meldete sich als Stratum 1, die höchste Stufe der NTP-Hierarchie, und alle Clients darunter übernahmen das Datum. Die Ausreißererkennung von NTP hätte ihn überstimmen müssen, doch der Backup-Stratum-2-Server in Melbourne war Jahre zuvor abgeschaltet worden, sodass keine unabhängige Quelle widersprach. Der falsche Zeitstempel breitete sich aus, nachgelagerte Server spiegelten ihn als Bestätigung zurück, und Telefonie, SMS, Notrufe, Züge, Zahlungsterminals, Ticketsysteme und E-Auto-Ladesäulen fielen aus. Telstras TAP-Bericht kam zu dem Schluss: Das Protokoll funktionierte, die Architektur nicht. Fünf Jahre Topologieänderungen und ausgelassene Firmware-Updates hatten jede widersprechende Quelle still entfernt.
+***** Take
+Der interessante Fehler ist nicht der Überlauf-Bug, sondern dass jemand den einzigen Server gelöscht hat, dessen Aufgabe das Widersprechen war. Redundanz, die existiert, um einem Peer zu widersprechen, sieht in der Kostenprüfung nach untätiger Dopplung aus, bis zu dem Morgen, an dem sie das Einzige zwischen dir und einem landesweiten Ausfall ist. Telstra hat fünf Jahre lang das Netz aufgeräumt, und jede einzelne Änderung war vertretbar.
+***** Comments
+- Jede Entscheidung löste das Problem, das gerade vor ihr lag. Niemand wurde gebeten, die Summe aller Handlungen anzusehen. Das beschreibt Telstra als Unternehmen perfekt.
+- Der Text besteht größtenteils aus aufgeblasener KI-Prosa. Lies lieber Telstras eigenen Bericht, der ist öffentlich.
+- Direktlink zum Analysebericht statt zur Blog-Nacherzählung.
+** Qwen 3.8 Omni Flash :ai:llm:qwen:alibaba:multimodal:
+:PROPERTIES:
+:ID:       49747925
+:URL:      https://qwen.ai/blog?id=qwen3.8-omni-flash
+:HN_URL:   https://news.ycombinator.com/item?id=49747925
+:POINTS:   136
+:COMMENTS: 31
+:BY:       jjcm
+:END:
+
+*** TLDR
+Alibaba released Qwen3.8-Omni-Flash, a natively omnimodal model taking text, image, audio and video with a 1M-token context and up to an hour of continuous audio-visual input. It claims 71.0 vs Gemini 3.8 Flash's 58.9 on WildClawBench-MM while losing OmniVideoBench 63.4 to 65.2, and its headline number is speaker diarization error of 3.35 against Gemini's 88.1. The realtime variant reports 591-981ms time to first token and 0.154 real-time factor for audio generation. Per-hour API pricing is down 98% for audio and 93% for audio-visual versus Qwen3.5. No parameter count, no training details, and despite the Qwen brand this one is closed: API only through Alibaba's platform, no weights.
+
+*** Take
+The diarization gap of 3.35 against 88.1 is too large to be a straight capability comparison. A number like that usually means the two models were measured under different output formats or Gemini was run in a mode it was not built for, and the blog gives you nothing to check it against. The credible part is the pricing: an order-of-magnitude cut on audio hours is a real product decision, and it is aimed squarely at the one modality Gemini was winning on. Worth noting that the lab with the open-weights reputation shipped this one closed.
+
+*** Comments
+
+**** _ache_
+:PROPERTIES:
+:COMMENT_ID: 49748010
+:END:
+If performance is comparable, look at the price. Gemini is 1.5 in and 9.0 out per million; Qwen 3.8 is 0.15 and 0.47. That is a massive cost reduction.
+
+**** syntaxing
+:PROPERTIES:
+:COMMENT_ID: 49748060
+:END:
+Audio and multilingual were Gemini's selling point for a lot of people. If this matches or exceeds 3.8 Flash there, that is a real shift. The new harness they mention 404s though.
+
+**** andy_ppp
+:PROPERTIES:
+:COMMENT_ID: 49748110
+:END:
+Why can China build models and Europe cannot? The algorithms are not that complicated. Is it energy cost, data legality, capital, or just optimism?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Qwen 3.8 Omni Flash
+***** TLDR
+阿里巴巴发布 Qwen3.8-Omni-Flash，这是一款原生全模态模型，支持文本、图像、音频和视频输入，上下文窗口 100 万 token，可处理长达一小时的连续音视频输入。官方称其在 WildClawBench-MM 上得分 71.0，高于 Gemini 3.8 Flash 的 58.9；在 OmniVideoBench 上以 63.4 落后于 65.2。最抢眼的数字是说话人分离错误率 3.35，而 Gemini 为 88.1。实时版本首 token 延迟为 591 至 981 毫秒，音频生成实时因子 0.154。相比 Qwen3.5，每小时 API 定价音频下降 98%，音视频下降 93%。没有公布参数量和训练细节，而且尽管挂着 Qwen 的品牌，这一款是闭源的：仅通过阿里平台提供 API，不发布权重。
+***** Take
+3.35 对 88.1 的分离错误率差距太大，不像是一次直接的能力对比。这种数字通常意味着两个模型在不同的输出格式下被测量，或者 Gemini 被放在了它并非为之设计的模式里，而博客没有提供任何可供核对的材料。可信的部分是定价：音频时长成本降低一个数量级是实打实的产品决策，而且正好瞄准了 Gemini 此前领先的那一个模态。值得注意的是，这家以开源权重著称的实验室，这次交付的是闭源模型。
+***** Comments
+- 如果性能相当，就看价格。Gemini 每百万 token 输入 1.5、输出 9.0；Qwen 3.8 是 0.15 和 0.47。这是巨大的成本下降。
+- 音频和多语言一直是很多人选择 Gemini 的理由。如果这款在那方面追平甚至超过 3.8 Flash，那就是真正的转变。不过他们提到的新框架链接是 404。
+- 为什么中国能做出模型而欧洲不能？算法并没有那么复杂。是能源成本、数据合法性、资本，还是仅仅缺少乐观精神？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Qwen 3.8 Omni Flash
+***** TLDR
+AlibabaがQwen3.8-Omni-Flashを公開した。テキスト、画像、音声、動画を扱うネイティブなオムニモーダルモデルで、コンテキストは100万トークン、最大1時間の連続した音声・映像入力に対応する。WildClawBench-MMではGemini 3.8 Flashの58.9に対し71.0、OmniVideoBenchでは63.4対65.2で負けると主張する。目玉の数字は話者分離の誤り率3.35で、Geminiは88.1とされる。リアルタイム版は最初のトークンまで591〜981ミリ秒、音声生成のリアルタイム係数0.154。Qwen3.5と比べて時間あたりのAPI価格は音声で98%、音声・映像で93%下がった。パラメータ数も学習の詳細も非公開で、Qwenの名を冠しながら今回はクローズド。Alibabaのプラットフォーム経由のAPIのみで、重みの公開はない。
+***** Take
+3.35対88.1という分離誤り率の差は、素直な性能比較としては大きすぎる。この種の数字は通常、両モデルが異なる出力形式で測定されたか、Geminiが想定外のモードで動かされたことを意味するが、ブログには検証の手がかりが何もない。信じられるのは価格のほうだ。音声の時間単価を一桁下げるのは明確な製品判断であり、Geminiが唯一優位だったモダリティを正面から狙っている。オープンウェイトで知られる研究所が、今回はクローズドで出した点は記しておきたい。
+***** Comments
+- 性能が同等なら価格を見ればいい。Geminiは100万トークンあたり入力1.5、出力9.0。Qwen 3.8は0.15と0.47。大幅なコスト削減だ。
+- 音声と多言語は多くの人にとってGeminiを選ぶ理由だった。そこで3.8 Flashに並ぶか上回るなら本当の転換点だ。ただし彼らが言及している新しいハーネスのリンクは404になる。
+- なぜ中国はモデルを作れて欧州は作れないのか。アルゴリズムはそこまで複雑ではない。エネルギーコストか、データの合法性か、資本か、それとも楽観の欠如か。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Qwen 3.8 Omni Flash
+***** TLDR
+알리바바가 Qwen3.8-Omni-Flash를 공개했다. 텍스트, 이미지, 오디오, 비디오를 받는 네이티브 옴니모달 모델로 컨텍스트는 100만 토큰, 최대 1시간의 연속 오디오·비디오 입력을 처리한다. WildClawBench-MM에서 Gemini 3.8 Flash의 58.9 대비 71.0을 기록했고, OmniVideoBench에서는 63.4 대 65.2로 뒤진다고 밝혔다. 간판 수치는 화자 분리 오류율 3.35이며 Gemini는 88.1로 제시됐다. 실시간 버전은 첫 토큰까지 591~981밀리초, 오디오 생성 실시간 계수 0.154다. Qwen3.5 대비 시간당 API 가격은 오디오에서 98%, 오디오·비디오에서 93% 내려갔다. 파라미터 수와 학습 세부 정보는 없고, Qwen 브랜드임에도 이번 모델은 비공개다. 알리바바 플랫폼 API로만 제공되며 가중치 공개는 없다.
+***** Take
+3.35 대 88.1이라는 분리 오류율 격차는 정직한 성능 비교로 보기에 너무 크다. 이런 숫자는 보통 두 모델이 서로 다른 출력 형식으로 측정됐거나 Gemini가 설계되지 않은 모드로 돌아갔다는 뜻인데, 블로그는 검증할 근거를 전혀 주지 않는다. 믿을 만한 쪽은 가격이다. 오디오 시간당 비용을 한 자릿수 낮춘 것은 분명한 제품 결정이고, Gemini가 앞서던 바로 그 모달리티를 정면으로 겨눈다. 오픈 웨이트로 알려진 연구소가 이번엔 비공개로 내놓았다는 점은 짚어둘 만하다.
+***** Comments
+- 성능이 비슷하다면 가격을 보라. Gemini는 100만 토큰당 입력 1.5, 출력 9.0이고 Qwen 3.8은 0.15와 0.47이다. 엄청난 비용 절감이다.
+- 오디오와 다국어는 많은 사람에게 Gemini를 고르는 이유였다. 거기서 3.8 Flash를 따라잡거나 넘는다면 진짜 변화다. 다만 언급된 새 하니스 링크는 404다.
+- 왜 중국은 모델을 만드는데 유럽은 못 하나. 알고리즘이 그렇게 복잡하지도 않다. 에너지 비용인가, 데이터 합법성인가, 자본인가, 아니면 낙관의 부재인가.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Qwen 3.8 Omni Flash
+***** TLDR
+Alibaba lanzó Qwen3.8-Omni-Flash, un modelo omnimodal nativo que acepta texto, imagen, audio y vídeo, con contexto de 1M de tokens y hasta una hora de entrada audiovisual continua. Afirma 71.0 frente al 58.9 de Gemini 3.8 Flash en WildClawBench-MM, y pierde OmniVideoBench 63.4 a 65.2. Su cifra estrella es un error de diarización de 3.35 contra el 88.1 de Gemini. La variante en tiempo real reporta 591-981 ms hasta el primer token y un factor de tiempo real de 0.154 en generación de audio. El precio de API por hora baja un 98% en audio y un 93% en audiovisual respecto a Qwen3.5. No hay recuento de parámetros ni detalles de entrenamiento y, pese a la marca Qwen, este modelo es cerrado: solo API en la plataforma de Alibaba, sin pesos.
+***** Take
+La brecha de diarización de 3.35 contra 88.1 es demasiado grande para ser una comparación limpia de capacidad. Una cifra así suele significar que los dos modelos se midieron con formatos de salida distintos o que Gemini se ejecutó en un modo para el que no está diseñado, y el blog no da nada con qué verificarlo. Lo creíble es el precio: recortar un orden de magnitud la hora de audio es una decisión de producto real, y apunta justo a la única modalidad donde Gemini iba ganando. Conviene anotar que el laboratorio con fama de pesos abiertos entregó este cerrado.
+***** Comments
+- Si el rendimiento es comparable, mira el precio. Gemini cuesta 1.5 de entrada y 9.0 de salida por millón; Qwen 3.8, 0.15 y 0.47. Es una reducción de coste enorme.
+- El audio y lo multilingüe eran el argumento de venta de Gemini para mucha gente. Si esto iguala o supera a 3.8 Flash ahí, es un cambio real. Aunque el enlace al nuevo arnés que mencionan da 404.
+- ¿Por qué China puede construir modelos y Europa no? Los algoritmos no son tan complicados. ¿Es el coste de la energía, la legalidad de los datos, el capital o el optimismo?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Qwen 3.8 Omni Flash
+***** TLDR
+Alibaba hat Qwen3.8-Omni-Flash veröffentlicht, ein nativ omnimodales Modell für Text, Bild, Audio und Video mit 1M-Token-Kontext und bis zu einer Stunde durchgehender audiovisueller Eingabe. Es beansprucht 71.0 gegenüber 58.9 von Gemini 3.8 Flash auf WildClawBench-MM und verliert OmniVideoBench mit 63.4 zu 65.2. Die Schlagzeilenzahl ist eine Diarisierungs-Fehlerrate von 3.35 gegen Geminis 88.1. Die Echtzeitvariante meldet 591-981 ms bis zum ersten Token und einen Echtzeitfaktor von 0.154 bei der Audioerzeugung. Der API-Stundenpreis sinkt gegenüber Qwen3.5 um 98% bei Audio und 93% bei Audio-Video. Keine Parameterzahl, keine Trainingsdetails, und trotz des Qwen-Namens ist dieses Modell geschlossen: nur API über Alibabas Plattform, keine Gewichte.
+***** Take
+Der Diarisierungsabstand von 3.35 zu 88.1 ist zu groß für einen sauberen Fähigkeitsvergleich. Eine solche Zahl bedeutet meist, dass beide Modelle mit unterschiedlichen Ausgabeformaten gemessen wurden oder Gemini in einem Modus lief, für den es nicht gebaut ist, und der Blog liefert nichts zum Nachprüfen. Glaubwürdig ist der Preis: eine Größenordnung weniger pro Audiostunde ist eine echte Produktentscheidung und zielt genau auf die eine Modalität, in der Gemini vorne lag. Bemerkenswert: Das Labor mit dem Ruf für offene Gewichte hat dieses Modell geschlossen ausgeliefert.
+***** Comments
+- Wenn die Leistung vergleichbar ist, schau auf den Preis. Gemini kostet 1.5 rein und 9.0 raus pro Million; Qwen 3.8 kostet 0.15 und 0.47. Das ist eine massive Kostensenkung.
+- Audio und Mehrsprachigkeit waren für viele das Verkaufsargument von Gemini. Wenn das hier 3.8 Flash dort erreicht oder übertrifft, ist das eine echte Verschiebung. Der Link zum neuen Harness läuft allerdings ins 404.
+- Warum kann China Modelle bauen und Europa nicht? Die Algorithmen sind nicht so kompliziert. Liegt es an Energiekosten, Datenrecht, Kapital oder schlicht am Optimismus?
+** How to Write with an LLM :writing:llm:ai:craft:
+:PROPERTIES:
+:ID:       49747070
+:URL:      https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/
+:HN_URL:   https://news.ycombinator.com/item?id=49747070
+:POINTS:   88
+:COMMENTS: 64
+:BY:       joeriddles
+:END:
+
+*** TLDR
+Thomas Ptacek argues you should use an LLM as a copyeditor, not a ghostwriter. Two hard rules: never take a word the model suggests, because frontier models are good enough at pleasing phrases that your prose turns into a string of magazine headlines, and reject the model's encouragement, because praise on a first draft makes you double down on first-draft instincts instead of rewriting. The workflow is: write the draft, run passes that ask the model to name specific mechanical problems such as passive voice, filler and misplaced paragraphs, rewrite those sections yourself, then hand the original and the revision to a fresh model instance with no context and ask which is better. He credits Williams' Style: Lessons in Clarity and Grace for making copyediting mechanical enough to treat like programming.
+
+*** Take
+The rule that does the work is the one about encouragement, not the one about words. A model that tells you the draft is strong removes the discomfort that makes you rewrite, and that is a bigger loss than any borrowed phrase. The fresh-instance A/B comparison is the one genuinely new trick here: it strips the sycophancy that comes from the model having watched you write the thing.
+
+*** Comments
+
+**** thombles
+:PROPERTIES:
+:COMMENT_ID: 49747200
+:END:
+Even if you want no style advice, 'check this post for factual accuracy' keeps you from looking like an idiot. It complains about hyperbole, which I ignore, but it has caught real errors.
+
+**** S-E-P
+:PROPERTIES:
+:COMMENT_ID: 49747260
+:END:
+I now scan everything I read for signs of AI, and that makes reading less enjoyable and a bit stressful. If you cannot spend the time to write it, why should anyone read it?
+
+**** Yashjain413
+:PROPERTIES:
+:COMMENT_ID: 49747320
+:END:
+I have been doing the exact opposite: rough draft in, cleaned-up version out. Did not realize they are better at finding mistakes than at rewriting.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+如何用大模型写作
+***** TLDR
+Thomas Ptacek 认为，应该把大模型当作文字编辑，而不是代笔。两条硬规则：绝不采用模型建议的词，因为前沿模型太擅长写出讨喜的措辞，你的文章会变成一串杂志标题；拒绝模型的鼓励，因为对初稿的赞美会让你在初稿的直觉上加码，而不是重写。工作流程是：写出草稿，让模型逐轮指出具体的机械性问题，比如被动语态、赘词和段落位置不当，自己动手重写这些部分，然后把原稿和修改稿交给一个没有上下文的全新模型实例，问它哪一版更好。他把功劳归于 Williams 的《Style: Lessons in Clarity and Grace》，这本书让文字编辑变得足够机械，可以当作编程来对待。
+***** Take
+真正起作用的是关于鼓励的那条规则，而不是关于用词的那条。一个告诉你初稿很棒的模型，抹掉了促使你重写的那份不适感，这个损失比借来的措辞大得多。全新实例的 A/B 对比是这里唯一真正新颖的技巧：它剥掉了模型因为看着你写完全文而产生的迎合。
+***** Comments
+- 就算你完全不想要文风建议，让它「检查这篇文章的事实准确性」也能避免出丑。它总抱怨夸张表述，这我会忽略，但它确实抓出过真实错误。
+- 我现在读任何东西都在扫描 AI 的痕迹，这让阅读变得不那么愉快，甚至有点紧张。如果你都不愿意花时间写，别人凭什么要读？
+- 我一直在做完全相反的事：丢进粗稿，拿出润色版。没意识到它们找错误的能力其实强过改写。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+LLMを使った書き方
+***** TLDR
+Thomas Ptacekは、LLMはゴーストライターではなくコピーエディターとして使うべきだと論じる。厳格な二つのルール。モデルが提案した語は絶対に採らないこと。最先端モデルは心地よい言い回しが上手すぎて、文章が雑誌の見出しの連なりになってしまうからだ。そしてモデルの励ましを拒むこと。初稿を褒められると、書き直す代わりに初稿の直感を強化してしまう。手順はこうだ。草稿を書き、受動態や冗語、段落の位置といった具体的な機械的問題をモデルに指摘させ、その箇所を自分で書き直し、原稿と改稿を文脈のない新しいモデルのインスタンスに渡してどちらが良いか尋ねる。彼はWilliamsの『Style: Lessons in Clarity and Grace』を挙げ、この本がコピーエディットをプログラミングのように機械的な作業に変えたと述べている。
+***** Take
+効いているのは語彙のルールではなく、励ましを拒むほうのルールだ。草稿を良いと言うモデルは、書き直す気にさせる居心地の悪さを取り去ってしまう。借り物の言い回しよりこちらの損失のほうが大きい。文脈のない新しいインスタンスでA/B比較する手法は、ここで唯一本当に新しい。書き上がるまでを見てきたモデルに生じる追従を取り除ける。
+***** Comments
+- 文体の助言が要らなくても、「この記事の事実確認をして」と頼むだけで恥をかかずに済む。誇張だと文句を言ってくるのは無視するが、実際の誤りを見つけたこともある。
+- 今は何を読んでもAIの痕跡を探してしまい、読書が楽しくなくなり少し疲れる。書く時間を惜しむなら、なぜ人が読む必要がある。
+- 自分は正反対をやっていた。粗い草稿を入れて整った文章を出す。書き直しより誤りの発見のほうが得意だとは気づかなかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+LLM으로 글 쓰는 법
+***** TLDR
+Thomas Ptacek은 LLM을 대필가가 아니라 교열자로 써야 한다고 주장한다. 두 가지 원칙이 있다. 모델이 제안한 단어는 절대 쓰지 말 것. 최신 모델은 듣기 좋은 표현을 너무 잘 만들어서, 글이 잡지 헤드라인의 나열로 변한다. 그리고 모델의 격려를 거부할 것. 초고를 칭찬받으면 다시 쓰는 대신 초고의 본능을 더 밀어붙이게 된다. 절차는 이렇다. 초고를 쓰고, 수동태·군더더기·문단 배치 같은 구체적인 기계적 문제를 짚어달라고 여러 차례 돌리고, 해당 부분을 직접 고쳐 쓴 뒤, 원고와 수정본을 맥락 없는 새 모델 인스턴스에 넘겨 어느 쪽이 나은지 묻는다. 그는 Williams의 『Style: Lessons in Clarity and Grace』가 교열을 프로그래밍처럼 기계적인 작업으로 만들어줬다고 밝힌다.
+***** Take
+실제로 효과를 내는 건 단어에 관한 원칙이 아니라 격려에 관한 원칙이다. 초고가 훌륭하다고 말해주는 모델은 다시 쓰게 만드는 불편함을 없애버린다. 빌려 온 표현보다 이쪽 손실이 크다. 맥락 없는 새 인스턴스로 A/B를 비교하는 방법이 여기서 유일하게 진짜 새로운 수법이다. 글이 만들어지는 과정을 지켜본 모델 특유의 아부를 걷어낸다.
+***** Comments
+- 문체 조언이 전혀 필요 없어도 '이 글의 사실관계를 확인해줘'는 망신을 막아준다. 과장이라고 잔소리하는 건 무시하지만, 실제 오류를 잡아낸 적이 있다.
+- 이제 무엇을 읽든 AI 흔적을 찾게 되고, 그래서 독서가 덜 즐겁고 조금 피곤하다. 쓸 시간도 들이지 않는다면 왜 남이 읽어야 하나.
+- 나는 정반대로 하고 있었다. 거친 초고를 넣고 다듬어진 글을 받았다. 다시 쓰기보다 오류 찾기를 더 잘한다는 걸 몰랐다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo escribir con un LLM
+***** TLDR
+Thomas Ptacek sostiene que el LLM debe usarse como corrector de estilo, no como escritor fantasma. Dos reglas duras: nunca aceptes una palabra que sugiera el modelo, porque los modelos punteros son tan buenos con los giros agradables que tu prosa acaba siendo una sarta de titulares de revista; y rechaza el ánimo del modelo, porque el elogio a un primer borrador te hace redoblar los impulsos del primer borrador en lugar de reescribir. El flujo es: escribe el borrador, pide pasadas que señalen problemas mecánicos concretos como voz pasiva, relleno y párrafos mal colocados, reescribe tú esas partes, y entrega original y revisión a una instancia nueva sin contexto para que diga cuál es mejor. Acredita Style: Lessons in Clarity and Grace de Williams por volver la corrección lo bastante mecánica como para tratarla como programación.
+***** Take
+La regla que hace el trabajo es la del ánimo, no la de las palabras. Un modelo que te dice que el borrador está bien elimina la incomodidad que te empuja a reescribir, y esa pérdida pesa más que cualquier frase prestada. La comparación A/B con una instancia nueva es el único truco realmente nuevo aquí: quita la adulación que surge de que el modelo te haya visto escribirlo.
+***** Comments
+- Aunque no quieras consejos de estilo, pedir 'revisa la exactitud de los datos de este texto' evita quedar en ridículo. Se queja de la hipérbole, cosa que ignoro, pero ha cazado errores reales.
+- Ahora reviso todo lo que leo buscando rastros de IA, y eso hace la lectura menos disfrutable y algo estresante. Si no puedes dedicar tiempo a escribirlo, ¿por qué debería leerlo alguien?
+- Yo hacía exactamente lo contrario: entra borrador tosco, sale versión pulida. No había caído en que son mejores encontrando errores que reescribiendo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie man mit einem LLM schreibt
+***** TLDR
+Thomas Ptacek argumentiert, man solle ein LLM als Lektor nutzen, nicht als Ghostwriter. Zwei harte Regeln: Übernimm nie ein Wort, das das Modell vorschlägt, denn Spitzenmodelle sind so gut in gefälligen Wendungen, dass die eigene Prosa zu einer Kette von Magazin-Schlagzeilen wird. Und lehne das Lob des Modells ab, denn Zuspruch zum ersten Entwurf lässt dich die Instinkte des ersten Entwurfs verstärken statt neu zu schreiben. Der Ablauf: Entwurf schreiben, Durchgänge laufen lassen, die konkrete mechanische Probleme benennen, etwa Passivkonstruktionen, Füllwörter und falsch platzierte Absätze, diese Stellen selbst umschreiben, dann Original und Überarbeitung einer frischen Modellinstanz ohne Kontext vorlegen und fragen, welche besser ist. Er nennt Williams' Style: Lessons in Clarity and Grace als das Buch, das Lektorieren mechanisch genug macht, um es wie Programmieren zu behandeln.
+***** Take
+Die Regel, die wirkt, ist die zum Lob, nicht die zu den Wörtern. Ein Modell, das den Entwurf gut findet, nimmt dir das Unbehagen, das dich zum Umschreiben bringt, und das wiegt schwerer als jede geliehene Wendung. Der A/B-Vergleich mit einer frischen Instanz ist der einzige wirklich neue Kniff hier: Er entfernt die Gefälligkeit, die entsteht, wenn das Modell beim Schreiben zugesehen hat.
+***** Comments
+- Selbst ohne Stilberatung bewahrt dich 'prüfe diesen Text auf sachliche Richtigkeit' davor, dumm dazustehen. Es meckert über Übertreibungen, was ich ignoriere, aber es hat echte Fehler gefunden.
+- Ich scanne inzwischen alles Gelesene nach KI-Spuren, und das macht Lesen weniger angenehm und etwas anstrengend. Wenn du dir keine Zeit zum Schreiben nimmst, warum sollte es jemand lesen?
+- Ich habe genau das Gegenteil gemacht: grober Entwurf rein, aufgeräumte Fassung raus. Mir war nicht klar, dass sie im Fehlerfinden besser sind als im Umschreiben.
+** Diplodocus, Long Thought Exclusively American, Turns Up in Spain :paleontology:science:dinosaurs:spain:
+:PROPERTIES:
+:ID:       49710447
+:URL:      https://www.sci.news/paleontology/spanish-diplodocus-15064.html
+:HN_URL:   https://news.ycombinator.com/item?id=49710447
+:POINTS:   53
+:COMMENTS: 33
+:BY:       embedding-shape
+:END:
+
+*** TLDR
+A team led by Sergio Sánchez Fenollosa and Alberto Cobos of the Fundación Dinópolis excavated fourteen well-preserved tail vertebrae and several chevron bones at the La Tejería site near El Castellar in Teruel, Spain. The animal was roughly 25 metres long and lived about 150 million years ago in the Late Jurassic, and the bones place it as a close relative of Diplodocus hallorum. Until now Diplodocus was known only from North America's Morrison Formation. The authors read the Spanish specimen as evidence of dispersal and faunal exchange across the proto-Atlantic, most likely over land connections exposed when the young North Atlantic periodically receded.
+
+*** Take
+Fourteen caudal vertebrae is a thin basis for a genus assignment, and diplodocid tail bones are not the most diagnostic part of the skeleton, so expect the identification to be argued over. The land-bridge conclusion is the sturdier half: the Late Jurassic proto-Atlantic was narrow and intermittently crossable, and Iberia keeps producing sauropods that look American. The absence of Diplodocus in Europe was always more likely a sampling gap than a real boundary.
+
+*** Comments
+
+**** seanhunter
+:PROPERTIES:
+:COMMENT_ID: 49710520
+:END:
+How do we know it wasn't an American diplodocus on a gap year trip to Europe?
+
+**** hackyhacky
+:PROPERTIES:
+:COMMENT_ID: 49710580
+:END:
+Another example of quality American production moving overseas. Globalization will be the end of us.
+
+**** notorandit
+:PROPERTIES:
+:COMMENT_ID: 49710640
+:END:
+Spain has been renamed the Spanish Peninsula of America, so the Diplodocus remains exclusively American.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+一直被认为仅存于美洲的梁龙，在西班牙现身
+***** TLDR
+由 Dinópolis 基金会的 Sergio Sánchez Fenollosa 和 Alberto Cobos 带领的团队，在西班牙特鲁埃尔省 El Castellar 附近的 La Tejería 遗址挖出了十四节保存完好的尾椎骨和数块人字骨。这只动物体长约 25 米，生活在约 1.5 亿年前的晚侏罗世，骨骼显示它是 Diplodocus hallorum 的近亲。此前梁龙只在北美的莫里逊组被发现。作者认为这具西班牙标本是跨越原始大西洋的扩散与动物群交流的证据，最可能通过年轻的北大西洋周期性退缩时露出的陆地连接完成迁移。
+***** Take
+用十四节尾椎骨来确定属级归属是相当单薄的依据，而梁龙类的尾骨也不是骨骼中最具鉴别力的部分，所以这个鉴定必然会引发争论。陆桥的结论则更站得住脚：晚侏罗世的原始大西洋很窄，间歇性可以跨越，而伊比利亚不断出土看起来像美洲种的蜥脚类。欧洲此前没有梁龙，一直更可能是采样空白，而不是真实的分布边界。
+***** Comments
+- 我们怎么知道它不是一只来欧洲过间隔年的美洲梁龙？
+- 又一个优质美国产能外迁的例子。全球化终将毁掉我们。
+- 西班牙已经改名叫美洲西班牙半岛了，所以梁龙依然是美洲独有的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+アメリカ大陸限定と長く考えられてきたディプロドクスがスペインで発見
+***** TLDR
+ディノポリス財団のSergio Sánchez FenollosaとAlberto Cobosが率いるチームが、スペイン・テルエル県エル・カステリャール近くのラ・テヘリア遺跡で、保存状態の良い尾椎14個と複数の血道弓を発掘した。体長は約25メートル、およそ1億5000万年前の後期ジュラ紀に生息し、骨からDiplodocus hallorumの近縁と判断された。これまでディプロドクスは北米のモリソン層からしか知られていなかった。著者らはこのスペインの標本を、原大西洋を越えた分散と動物相交流の証拠と読み、若い北大西洋が周期的に後退した際に現れた陸のつながりを渡った可能性が高いとしている。
+***** Take
+尾椎14個で属を決めるのは根拠として薄く、ディプロドクス類の尾の骨は骨格の中でも判別力が高い部位ではないため、同定は議論を呼ぶだろう。陸橋という結論のほうが堅い。後期ジュラ紀の原大西洋は狭く断続的に渡れたし、イベリア半島はアメリカ的に見える竜脚類を出し続けている。ヨーロッパにディプロドクスがいなかったことは、実際の分布境界というよりサンプリングの空白である可能性が以前から高かった。
+***** Comments
+- ヨーロッパにギャップイヤー旅行に来ていたアメリカのディプロドクスでないと、どうして分かる？
+- 質の高いアメリカの生産がまた海外に移った例だ。グローバル化が我々を滅ぼす。
+- スペインはアメリカ・スペイン半島に改名されたので、ディプロドクスは引き続きアメリカ限定だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+아메리카에만 있다고 여겨지던 디플로도쿠스가 스페인에서 발견
+***** TLDR
+디노폴리스 재단의 Sergio Sánchez Fenollosa와 Alberto Cobos가 이끄는 연구진이 스페인 테루엘주 엘 카스테야르 인근 라 테헤리아 유적에서 보존 상태가 좋은 꼬리 척추뼈 14개와 여러 개의 혈관궁을 발굴했다. 몸길이는 약 25미터, 약 1억 5천만 년 전 후기 쥐라기에 살았으며 뼈로 볼 때 Diplodocus hallorum의 근연종으로 판단된다. 지금까지 디플로도쿠스는 북미 모리슨층에서만 알려져 있었다. 저자들은 이 스페인 표본을 원대서양을 가로지른 분산과 동물상 교류의 증거로 해석하며, 젊은 북대서양이 주기적으로 물러났을 때 드러난 육지 연결을 건넜을 가능성이 높다고 본다.
+***** Take
+꼬리 척추뼈 14개로 속을 판정하는 것은 근거가 얇고, 디플로도쿠스류의 꼬리뼈는 골격에서 가장 진단력이 높은 부위도 아니다. 동정은 논쟁이 될 것이다. 더 단단한 쪽은 육교 결론이다. 후기 쥐라기의 원대서양은 좁고 간헐적으로 건널 수 있었고, 이베리아는 아메리카 계통처럼 보이는 용각류를 계속 내놓고 있다. 유럽에 디플로도쿠스가 없었던 것은 실제 분포 경계라기보다 표본의 공백이었을 가능성이 원래 더 컸다.
+***** Comments
+- 유럽으로 갭이어 여행을 온 아메리카 디플로도쿠스가 아니라는 걸 어떻게 알죠?
+- 양질의 미국 생산이 해외로 옮겨간 또 하나의 사례다. 세계화가 우리를 끝장낼 것이다.
+- 스페인은 아메리카 스페인반도로 개명됐으니 디플로도쿠스는 여전히 아메리카 전용이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El Diplodocus, considerado exclusivamente americano, aparece en España
+***** TLDR
+Un equipo dirigido por Sergio Sánchez Fenollosa y Alberto Cobos, de la Fundación Dinópolis, excavó catorce vértebras caudales bien conservadas y varios arcos hemales en el yacimiento de La Tejería, cerca de El Castellar, en Teruel. El animal medía unos 25 metros y vivió hace unos 150 millones de años, en el Jurásico Superior, y los huesos lo sitúan como pariente cercano de Diplodocus hallorum. Hasta ahora el Diplodocus solo se conocía en la Formación Morrison de Norteamérica. Los autores leen el ejemplar español como prueba de dispersión e intercambio faunístico a través del proto-Atlántico, probablemente por conexiones terrestres que quedaban expuestas cuando el joven Atlántico Norte retrocedía de forma periódica.
+***** Take
+Catorce vértebras caudales son una base delgada para asignar género, y los huesos de la cola de los diplodócidos no son la parte más diagnóstica del esqueleto, así que la identificación se discutirá. La conclusión del puente terrestre es la mitad más sólida: el proto-Atlántico del Jurásico Superior era estrecho y cruzable a ratos, e Iberia no deja de producir saurópodos con aspecto americano. La ausencia de Diplodocus en Europa siempre fue más probable como hueco de muestreo que como frontera real.
+***** Comments
+- ¿Cómo sabemos que no era un diplodocus americano de año sabático por Europa?
+- Otro ejemplo de producción americana de calidad que se va al extranjero. La globalización acabará con nosotros.
+- España pasó a llamarse Península Española de América, así que el Diplodocus sigue siendo exclusivamente americano.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Diplodocus, lange für rein amerikanisch gehalten, taucht in Spanien auf
+***** TLDR
+Ein Team um Sergio Sánchez Fenollosa und Alberto Cobos von der Fundación Dinópolis hat an der Fundstelle La Tejería bei El Castellar in Teruel, Spanien, vierzehn gut erhaltene Schwanzwirbel und mehrere Hämalbögen ausgegraben. Das Tier war rund 25 Meter lang, lebte vor etwa 150 Millionen Jahren im Oberjura, und die Knochen weisen es als nahen Verwandten von Diplodocus hallorum aus. Bislang war Diplodocus nur aus der nordamerikanischen Morrison-Formation bekannt. Die Autoren deuten das spanische Exemplar als Beleg für Ausbreitung und Faunenaustausch über den Proto-Atlantik, vermutlich über Landverbindungen, die freilagen, wenn sich der junge Nordatlantik zeitweise zurückzog.
+***** Take
+Vierzehn Schwanzwirbel sind eine dünne Grundlage für eine Gattungszuordnung, und Schwanzknochen von Diplodociden gehören nicht zu den aussagekräftigsten Skelettteilen, die Bestimmung wird also umstritten sein. Solider ist der Schluss auf Landbrücken: Der Proto-Atlantik des Oberjura war schmal und zeitweise passierbar, und Iberien liefert weiter Sauropoden, die amerikanisch aussehen. Das Fehlen von Diplodocus in Europa war ohnehin eher eine Lücke in der Probennahme als eine echte Grenze.
+***** Comments
+- Woher wissen wir, dass es nicht ein amerikanischer Diplodocus im Auslandsjahr in Europa war?
+- Noch ein Beispiel dafür, dass hochwertige amerikanische Produktion ins Ausland abwandert. Die Globalisierung wird unser Ende sein.
+- Spanien heißt jetzt Spanische Halbinsel Amerikas, also bleibt der Diplodocus exklusiv amerikanisch.
+** Pre-Greek: The lost language hidden within Ancient Greek :linguistics:history:greek:archaeology:
+:PROPERTIES:
+:ID:       49749771
+:URL:      https://linguisticdiscovery.com/posts/pre-greek/
+:HN_URL:   https://news.ycombinator.com/item?id=49749771
+:POINTS:   34
+:COMMENTS: 8
+:BY:       axiologist
+:END:
+
+*** TLDR
+Roughly a thousand Ancient Greek words have no Proto-Indo-European etymology, and the article presents them as borrowings from whatever was spoken in the Aegean before Greek speakers arrived. The evidence is threefold: vocabulary clustered in flora, fauna and place names such as ἐλαία (olive), λαβύρινθος (labyrinth) and Ἀθῆναι (Athens); sound sequences like /dn/ and /ps/ that no Indo-European sound law produces; and recurring suffixes, -nth in Corinth and hyacinth, -ss in Knossos, -mn in Lemnos. Variation like Odysseus against Ulysses suggests Greek speakers were approximating sounds their own phonology did not have. The article's source is Robert Beekes' etymological dictionary, which tags 1,106 words as Pre-Greek, and it concedes the main objection: Beekes treats every non-Greek word as belonging to one substrate language.
+
+*** Take
+The suffix clusters are the real evidence and they survive the critique. The single-language framing does not. Beekes' method produces a substrate by definition, because anything he cannot derive from Indo-European becomes Pre-Greek, and the Aegean in the second millennium BC plainly held more than one non-Greek language. What the data supports is that Greek borrowed heavily from neighbours it could not fully pronounce. Which neighbours, and how many, is the part nobody can currently answer.
+
+*** Comments
+
+**** TFNA
+:PROPERTIES:
+:COMMENT_ID: 49749850
+:END:
+No Indo-Europeanist working today believes in a single Pre-Greek language. That was Beekes' fixed idea over a decade ago and the work is very flawed. Inside the field 'Pre-Greek!' is close to a running joke.
+
+**** kleton
+:PROPERTIES:
+:COMMENT_ID: 49749900
+:END:
+The claim that PIE has no reconstructable word for 'sea' is wrong. It is mori, and it shows up in marine, muir, morje and more.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+前希腊语：藏在古希腊语中的失落语言
+***** TLDR
+大约一千个古希腊语词汇没有原始印欧语词源，文章把它们视为从希腊语使用者到来之前爱琴海地区所讲语言中借来的词。证据有三方面：词汇集中在植物、动物和地名上，例如 ἐλαία（橄榄）、λαβύρινθος（迷宫）和 Ἀθῆναι（雅典）；像 /dn/ 和 /ps/ 这样任何印欧语音变规律都无法产生的音组；以及反复出现的后缀，科林斯和风信子中的 -nth、克诺索斯中的 -ss、利姆诺斯中的 -mn。Odysseus 与 Ulysses 这样的变体说明希腊语使用者在近似模仿自己音系中没有的音。文章的来源是 Robert Beekes 的词源词典，其中把 1106 个词标为前希腊语，文章也承认主要的反对意见：Beekes 把所有非希腊语词都归入同一种底层语言。
+***** Take
+后缀成组出现才是真正的证据，而且经得起批评。单一语言的框架经不起。Beekes 的方法按定义就会造出一个底层语：凡是他无法从印欧语推导的词，都成了前希腊语。而公元前二千纪的爱琴海显然不止一种非希腊语言。数据支持的结论是，希腊语大量借用了它无法完整发音的邻近语言的词。至于是哪些邻居、有多少个，目前没人能回答。
+***** Comments
+- 今天没有任何一位印欧语学者相信存在单一的前希腊语。那是 Beekes 十多年前的执念，研究本身漏洞很多。在这个领域里，「前希腊语！」几乎成了一个梗。
+- 说原始印欧语没有可重构的「海」一词是错的。那个词是 mori，它出现在 marine、muir、morje 等词中。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+前ギリシア語：古代ギリシア語に隠れた失われた言語
+***** TLDR
+古代ギリシア語の約1000語には印欧祖語の語源がなく、記事はそれらを、ギリシア語話者が到来する前のエーゲ海で話されていた言語からの借用と位置づける。根拠は三つある。植物、動物、地名に集中する語彙、たとえばἐλαία（オリーブ）、λαβύρινθος（迷宮）、Ἀθῆναι（アテナイ）。印欧語のいかなる音法則でも生じない/dn/や/ps/といった音連続。そしてコリントスやヒヤシンスの-nth、クノッソスの-ss、レムノスの-mnといった反復する接尾辞。OdysseusとUlyssesのような揺れは、自分たちの音韻にない音を近似していたことを示す。典拠はRobert Beekesの語源辞典で、1,106語を前ギリシア語と分類する。記事は主要な批判も認めている。Beekesは非ギリシア語の語をすべて一つの基層言語に属するものとして扱っている。
+***** Take
+本当の証拠は接尾辞のまとまりで、これは批判に耐える。単一言語という枠組みは耐えない。Beekesの手法は定義上、基層言語を生み出す。印欧語から導けないものはすべて前ギリシア語になるからだ。紀元前2千年紀のエーゲ海に非ギリシア語が一つしかなかったはずがない。データが支えるのは、ギリシア語が完全には発音できない隣人から大量に借用したという点だけだ。その隣人が誰で何言語あったのかは、現時点で誰も答えられない。
+***** Comments
+- 今日働いている印欧語学者で、単一の前ギリシア語を信じている者はいない。それは10年以上前のBeekesの固定観念で、研究には大きな欠陥がある。この分野で「前ギリシア語！」はほとんど内輪のジョークだ。
+- 印欧祖語に「海」の再建可能な語がないという主張は誤りだ。moriであり、marine、muir、morjeなどに現れている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+선그리스어: 고대 그리스어 속에 숨은 잃어버린 언어
+***** TLDR
+고대 그리스어 약 1000개 단어에는 인도유럽조어 어원이 없으며, 글은 이를 그리스어 화자가 도착하기 전 에게해에서 쓰이던 언어에서 빌려온 것으로 본다. 근거는 세 가지다. 식물, 동물, 지명에 몰린 어휘로 ἐλαία(올리브), λαβύρινθος(미궁), Ἀθῆναι(아테네) 같은 것들. 어떤 인도유럽어 음운법칙으로도 나올 수 없는 /dn/, /ps/ 같은 음 연쇄. 그리고 코린토스와 히아신스의 -nth, 크노소스의 -ss, 렘노스의 -mn처럼 반복되는 접미사. Odysseus와 Ulysses 같은 변이는 자기 음운에 없는 소리를 근사해 발음했음을 시사한다. 출처는 Robert Beekes의 어원사전으로 1,106개 단어를 선그리스어로 분류한다. 글은 주된 반론도 인정한다. Beekes는 비그리스어 단어를 전부 하나의 기층 언어에 속한 것으로 취급한다.
+***** Take
+진짜 증거는 접미사 뭉치이고 이건 비판을 견딘다. 단일 언어라는 틀은 견디지 못한다. Beekes의 방법은 정의상 기층 언어를 만들어낸다. 인도유럽어에서 끌어낼 수 없는 것은 모두 선그리스어가 되기 때문이다. 기원전 2천년기 에게해에 비그리스어가 하나뿐이었을 리 없다. 자료가 뒷받침하는 것은 그리스어가 온전히 발음하지 못한 이웃들에게서 많이 빌려왔다는 사실뿐이다. 그 이웃이 누구였고 몇이었는지는 현재 아무도 답할 수 없다.
+***** Comments
+- 오늘날 활동하는 인도유럽어학자 중 단일 선그리스어를 믿는 사람은 없다. 그건 10여 년 전 Beekes의 고정관념이었고 연구에 결함이 많다. 이 분야에서 '선그리스어!'는 거의 농담이 됐다.
+- 인도유럽조어에 '바다'를 뜻하는 재구 가능한 단어가 없다는 주장은 틀렸다. mori이며 marine, muir, morje 등에 남아 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Pregriego: la lengua perdida escondida dentro del griego antiguo
+***** TLDR
+Unas mil palabras del griego antiguo carecen de etimología protoindoeuropea, y el artículo las presenta como préstamos de lo que se hablara en el Egeo antes de la llegada de los hablantes de griego. La evidencia es triple: vocabulario concentrado en flora, fauna y topónimos como ἐλαία (olivo), λαβύρινθος (laberinto) y Ἀθῆναι (Atenas); secuencias de sonidos como /dn/ y /ps/ que ninguna ley fonética indoeuropea produce; y sufijos recurrentes, -nth en Corinto y jacinto, -ss en Cnosos, -mn en Lemnos. Variantes como Odysseus frente a Ulises sugieren que los hablantes de griego aproximaban sonidos ajenos a su fonología. La fuente es el diccionario etimológico de Robert Beekes, que etiqueta 1.106 palabras como pregriegas, y el artículo admite la objeción principal: Beekes trata toda palabra no griega como parte de una única lengua de sustrato.
+***** Take
+Los grupos de sufijos son la evidencia real y resisten la crítica. El marco de lengua única no. El método de Beekes produce un sustrato por definición, porque todo lo que no logra derivar del indoeuropeo pasa a ser pregriego, y en el Egeo del segundo milenio a.C. había claramente más de una lengua no griega. Lo que los datos sostienen es que el griego tomó mucho prestado de vecinos que no podía pronunciar del todo. Qué vecinos y cuántos es la parte que nadie puede responder hoy.
+***** Comments
+- Ningún indoeuropeísta en activo cree hoy en una única lengua pregriega. Fue la idea fija de Beekes hace más de una década y el trabajo tiene fallos graves. Dentro del campo, '¡pregriego!' es casi un chiste recurrente.
+- La afirmación de que el PIE no tiene palabra reconstruible para 'mar' es falsa. Es mori, y aparece en marine, muir, morje y más.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Vorgriechisch: Die verlorene Sprache im Altgriechischen
+***** TLDR
+Rund tausend altgriechische Wörter haben keine urindogermanische Etymologie, und der Artikel deutet sie als Entlehnungen aus dem, was in der Ägäis gesprochen wurde, bevor die Griechischsprecher kamen. Die Belege sind dreifach: Wortschatz gebündelt in Flora, Fauna und Ortsnamen wie ἐλαία (Olive), λαβύρινθος (Labyrinth) und Ἀθῆναι (Athen); Lautfolgen wie /dn/ und /ps/, die kein indogermanisches Lautgesetz hervorbringt; und wiederkehrende Suffixe, -nth in Korinth und Hyazinthe, -ss in Knossos, -mn in Lemnos. Varianten wie Odysseus gegenüber Ulysses deuten darauf hin, dass Griechischsprecher Laute annäherten, die ihre eigene Phonologie nicht kannte. Quelle ist Robert Beekes' etymologisches Wörterbuch, das 1.106 Wörter als vorgriechisch markiert, und der Artikel räumt den Haupteinwand ein: Beekes behandelt jedes nichtgriechische Wort als Teil einer einzigen Substratsprache.
+***** Take
+Die Suffixgruppen sind der eigentliche Beleg und halten der Kritik stand. Der Rahmen einer einzigen Sprache tut das nicht. Beekes' Methode erzeugt ein Substrat per Definition, denn alles, was er nicht aus dem Indogermanischen ableiten kann, wird vorgriechisch, und in der Ägäis des zweiten Jahrtausends v. Chr. gab es offenkundig mehr als eine nichtgriechische Sprache. Die Daten stützen, dass Griechisch stark von Nachbarn entlehnte, die es nicht vollständig aussprechen konnte. Welche Nachbarn und wie viele, kann derzeit niemand beantworten.
+***** Comments
+- Kein heute arbeitender Indogermanist glaubt an eine einzige vorgriechische Sprache. Das war Beekes' fixe Idee vor über einem Jahrzehnt, und die Arbeit ist stark fehlerhaft. Im Fach ist 'Vorgriechisch!' fast ein Running Gag.
+- Die Behauptung, das Urindogermanische habe kein rekonstruierbares Wort für 'Meer', ist falsch. Es ist mori und steckt in marine, muir, morje und weiteren.
