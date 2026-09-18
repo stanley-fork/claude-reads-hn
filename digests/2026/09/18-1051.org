@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-09-18 10:51 UTC
+#+DATE: 2026-09-18T10:51:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+jemalloc ships its first release in four years, FEX explains why x86 games crawl on ARM, and a Microsoft memo calls AI scraping the largest theft of labor in human history
+
+* Highlights
+- jemalloc 5.4.0: 160+ commits after Meta walked away
+- FEX: emulating x86 memory ordering on ARM costs up to 816x
+- Unredacted NYT filings: Microsoft's own director called it theft
+- $6,500 for RCE plus an SSO hole into OpenAI's monorepo
+- OpenJev: run the constrained-decision trick in your browser
+
+* Stories
+
+** Jemalloc 5.4.0 :c:memory:opensource:performance:
+:PROPERTIES:
+:ID:       49750152
+:URL:      https://github.com/jemalloc/jemalloc/releases/tag/5.4.0
+:HN_URL:   https://news.ycombinator.com/item?id=49750152
+:POINTS:   164
+:COMMENTS: 47
+:BY:       gkfasdfasdf
+:END:
+
+*** TLDR
+First tagged jemalloc release since 2022, with 160+ commits aimed mostly at paying down technical debt. New: pinned memory allocations via EXTENT_ALLOC_FLAG_PINNED for non-reclaimable mappings such as HugeTLB pages, per-CPU arena selection restored through thread.arena, and a compile-time --enable-cxx-infallible-new. Breaking: seven legacy tcache controls removed, including lg_tcache_nslots_mul and tcache_gc_delay_bytes, with fill and retention targets now adapting per bin to observed demand. Fixes include preserving errno across deallocation and page purging, TSD lifecycle edge cases, and a possible deadlock on arena reset.
+
+*** Take
+Jason Evans left, Meta stopped caring, and the 2025 postmortem read like an obituary. A release with 160 commits and seven removed knobs is not nostalgia, it is someone doing the unglamorous cleanup work a corporate owner never funds. The release notes still do not name Evans anywhere, which is the one piece of debt nobody paid down.
+
+*** Comments
+
+**** vocx2tx
+:PROPERTIES:
+:COMMENT_ID: 49750698
+:END:
+For some context on why this release is notable: Jemalloc Postmortem
+
+**** ksec
+:PROPERTIES:
+:COMMENT_ID: 49751456
+:END:
+Why doesn't the homepage or the GitHub repo mention Jason Evans once? There wasn't a release since 2022 and now we have this. Something changed. I just wish we had a little context.
+
+**** albertgoeswoof
+:PROPERTIES:
+:COMMENT_ID: 49752019
+:END:
+I switched to jemalloc on a sidekiq queue and memory dropped from 8GiB to under 1GiB. There's a slow memory leak somewhere in my code but with jemalloc it no longer actually matters.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+jemalloc 5.4.0
+***** TLDR
+jemalloc 自 2022 年以来的首个正式版本，包含 160 多个提交，主要用于偿还技术债。新增：通过 EXTENT_ALLOC_FLAG_PINNED 支持固定内存分配（用于 HugeTLB 等不可回收映射）、经由 thread.arena 恢复按 CPU 选择 arena，以及编译期选项 --enable-cxx-infallible-new。破坏性变更：移除了七个遗留 tcache 控制项，包括 lg_tcache_nslots_mul 和 tcache_gc_delay_bytes，填充与保留目标现在按 bin 根据实际需求自适应。修复包括在释放内存和清理页面时保留 errno、TSD 生命周期边界情况，以及 arena 重置时可能的死锁。
+***** Take
+Jason Evans 离开了，Meta 不再关心，2025 年的那篇复盘读起来像讣告。160 个提交、删掉七个旋钮的版本不是怀旧，而是有人在做企业东家从不出钱资助的枯燥清理工作。发布说明里始终没有提到 Evans 的名字，这是唯一没人偿还的债。
+***** Comments
+- 补充一点这个版本为何值得注意的背景：jemalloc 复盘。
+- 为什么主页和 GitHub 仓库一次都没提到 Jason Evans？2022 年之后就没有发布，现在突然有了。肯定有什么变化。真希望能给点背景说明。
+- 我在一个 sidekiq 队列上换成 jemalloc，内存从 8GiB 降到 1GiB 以下。我的代码里还有个缓慢的内存泄漏，但有了 jemalloc 它已经无关紧要了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+jemalloc 5.4.0
+***** TLDR
+2022年以来初のjemallocタグ付きリリースで、160以上のコミットの大半は技術的負債の返済に充てられた。新機能はEXTENT_ALLOC_FLAG_PINNEDによる固定メモリ割り当て（HugeTLBなど回収不可マッピング向け）、thread.arena経由のCPU単位アリーナ選択の復活、コンパイル時オプション--enable-cxx-infallible-new。破壊的変更としてlg_tcache_nslots_mulやtcache_gc_delay_bytesを含む7つの旧tcache設定を削除し、充填・保持のターゲットはbinごとに実需要へ適応するようになった。修正には解放・ページパージ時のerrno保持、TSDライフサイクルの境界条件、アリーナリセット時のデッドロック回避が含まれる。
+***** Take
+Jason Evansは去り、Metaは関心を失い、2025年のポストモーテムは訃報のように読めた。160コミットとつまみ7個の削除は懐古ではなく、企業のオーナーが決して資金を出さない地味な後始末を誰かがやったということだ。リリースノートは今もEvansの名前に一切触れていない。それだけが返済されなかった負債だ。
+***** Comments
+- このリリースがなぜ注目に値するかの背景として、jemallocのポストモーテムを。
+- なぜ公式サイトもGitHubリポジトリもJason Evansに一度も言及しないのか。2022年以降リリースがなく、今これが出た。何かが変わったはずだ。少しは経緯を知りたい。
+- sidekiqのキューでjemallocに切り替えたらメモリが8GiBから1GiB以下に落ちた。コードのどこかに遅いメモリリークがあるが、jemallocのおかげでもう問題にならない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+jemalloc 5.4.0
+***** TLDR
+2022년 이후 처음 나온 jemalloc 정식 릴리스로, 160개가 넘는 커밋 대부분이 기술 부채 정리에 쓰였다. 새 기능은 EXTENT_ALLOC_FLAG_PINNED를 통한 고정 메모리 할당(HugeTLB 같은 회수 불가 매핑용), thread.arena를 통한 CPU별 아레나 선택 복원, 컴파일 타임 옵션 --enable-cxx-infallible-new이다. 호환성을 깨는 변경으로 lg_tcache_nslots_mul과 tcache_gc_delay_bytes를 포함한 레거시 tcache 설정 7개가 제거됐고, 채우기와 보존 목표는 이제 bin별 실제 수요에 맞춰 조정된다. 해제와 페이지 퍼지 과정에서 errno 보존, TSD 생명주기 경계 조건, 아레나 리셋 시 교착 상태 가능성도 고쳐졌다.
+***** Take
+Jason Evans는 떠났고 Meta는 관심을 끊었으며 2025년 포스트모템은 부고처럼 읽혔다. 커밋 160개와 설정 7개 제거는 향수가 아니라, 기업 소유주가 결코 돈을 대지 않는 지루한 정리 작업을 누군가 했다는 뜻이다. 릴리스 노트는 여전히 Evans의 이름을 어디에도 적지 않았는데, 그것만은 아무도 갚지 않은 빚이다.
+***** Comments
+- 이 릴리스가 왜 주목할 만한지에 대한 배경으로 jemalloc 포스트모템을 참고하라.
+- 왜 홈페이지도 GitHub 저장소도 Jason Evans를 한 번도 언급하지 않는가? 2022년 이후 릴리스가 없다가 지금 이게 나왔다. 뭔가 바뀐 것이다. 맥락을 조금이라도 알고 싶다.
+- sidekiq 큐에서 jemalloc으로 바꿨더니 메모리가 8GiB에서 1GiB 아래로 떨어졌다. 내 코드 어딘가에 느린 메모리 누수가 있지만 jemalloc 덕분에 더 이상 문제가 되지 않는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+jemalloc 5.4.0
+***** TLDR
+Primera versión etiquetada de jemalloc desde 2022, con más de 160 commits dedicados sobre todo a saldar deuda técnica. Novedades: memoria fijada mediante EXTENT_ALLOC_FLAG_PINNED para mapeos no recuperables como HugeTLB, selección de arena por CPU restaurada a través de thread.arena y la opción de compilación --enable-cxx-infallible-new. Cambios incompatibles: se eliminan siete controles heredados de tcache, entre ellos lg_tcache_nslots_mul y tcache_gc_delay_bytes, y los objetivos de llenado y retención se adaptan ahora por bin a la demanda observada. Entre las correcciones: se preserva errno al liberar memoria y purgar páginas, casos límite del ciclo de vida de TSD y un posible interbloqueo al reiniciar una arena.
+***** Take
+Jason Evans se fue, Meta dejó de interesarse y el análisis de 2025 se leía como un obituario. Una versión con 160 commits y siete parámetros eliminados no es nostalgia: es alguien haciendo la limpieza ingrata que ningún dueño corporativo financia. Las notas siguen sin nombrar a Evans en ningún sitio, y esa es la única deuda que nadie saldó.
+***** Comments
+- Contexto sobre por qué esta versión es notable: el análisis post mortem de jemalloc.
+- ¿Por qué ni la web ni el repositorio de GitHub mencionan una sola vez a Jason Evans? No hubo versiones desde 2022 y ahora aparece esta. Algo cambió. Ojalá dieran un poco de contexto.
+- Cambié a jemalloc en una cola de sidekiq y la memoria bajó de 8 GiB a menos de 1 GiB. Hay una fuga lenta en mi código, pero con jemalloc ya da igual.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+jemalloc 5.4.0
+***** TLDR
+Erstes getaggtes jemalloc-Release seit 2022, mit über 160 Commits, die vor allem technische Schulden abbauen. Neu: fixierter Speicher über EXTENT_ALLOC_FLAG_PINNED für nicht zurückgewinnbare Mappings wie HugeTLB, die Auswahl der Arena pro CPU über thread.arena ist zurück, dazu die Compile-Zeit-Option --enable-cxx-infallible-new. Bruch: sieben alte tcache-Regler entfallen, darunter lg_tcache_nslots_mul und tcache_gc_delay_bytes; Füll- und Haltewerte passen sich nun pro Bin an die beobachtete Nachfrage an. Korrigiert wurden unter anderem das Erhalten von errno beim Freigeben und Purgen von Seiten, Randfälle im TSD-Lebenszyklus und ein möglicher Deadlock beim Zurücksetzen einer Arena.
+***** Take
+Jason Evans ging, Meta verlor das Interesse, und die Aufarbeitung von 2025 las sich wie ein Nachruf. Ein Release mit 160 Commits und sieben entfernten Stellschrauben ist keine Nostalgie, sondern jemand, der die undankbare Aufräumarbeit erledigt, die kein Konzern bezahlt. Die Release Notes nennen Evans nirgends, und das ist die eine Schuld, die niemand beglichen hat.
+***** Comments
+- Zum Hintergrund, warum dieses Release bemerkenswert ist: die jemalloc-Aufarbeitung.
+- Warum erwähnen weder die Homepage noch das GitHub-Repo Jason Evans auch nur einmal? Seit 2022 gab es kein Release, und jetzt das hier. Irgendetwas hat sich geändert. Ein bisschen Kontext wäre schön.
+- Ich bin bei einer Sidekiq-Queue auf jemalloc umgestiegen, der Speicherverbrauch fiel von 8 GiB auf unter 1 GiB. In meinem Code steckt ein langsames Speicherleck, aber mit jemalloc spielt es keine Rolle mehr.
+** The scourge of x86 emulation :arm:x86:emulation:performance:
+:PROPERTIES:
+:ID:       49750094
+:URL:      https://fex-emu.com/Scourge-of-emulation/
+:HN_URL:   https://news.ycombinator.com/item?id=49750094
+:POINTS:   159
+:COMMENTS: 28
+:BY:       dagmx
+:END:
+
+*** TLDR
+FEX, the x86-to-ARM translator that Valve sponsors for the Steam Frame, walks through why emulating x86's Total Store Ordering on ARM's weak memory model is so expensive. Every x86 load and store has to become an ARM acquire/release, instructions never designed for that volume. Unaligned accesses fault on ARM, so FEX backpatches them with barriers, costing up to 50% on some platforms. Atomics that straddle a cacheline become split-locks handled through a kernel signal handler at roughly 660ns versus 1.44ns for the aligned path. Worst of all, store-release on write-combine memory runs 816x slower than native, dropping some games below 1 FPS. The fixes are all in hardware: a TSO toggle like Apple's, wider LRCPC variants, 128-bit CASP, full-cacheline atomics.
+
+*** Take
+Apple added a TSO mode to the M1 six years ago because Rosetta needed it, and this article is a 6,000-word account of what everyone else pays for not doing that. FEX has to bounce into a kernel signal handler to fake one x86 instruction. The engineering is impressive and it should not have to exist.
+
+*** Comments
+
+**** dagmx
+:PROPERTIES:
+:COMMENT_ID: 49750760
+:END:
+FEX is a translation framework for x86 to ARM much like Apple's Rosetta 2 and Microsoft's Prism. Valve sponsor development as it's also how the new Steam Frame supports x86 games.
+
+**** modeless
+:PROPERTIES:
+:COMMENT_ID: 49751138
+:END:
+Apple solved this problem six years ago by simply adding an x86-compatible memory ordering mode to their chip when x86 emulation became important. Yet another way Apple's chips lead the industry.
+
+**** pdw
+:PROPERTIES:
+:COMMENT_ID: 49751784
+:END:
+The intro repeats the assertion that ARM's relaxed model allows significant hardware optimizations, but I've seen compelling arguments that a relaxed model doesn't necessarily have much benefit.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+x86 模拟之苦
+***** TLDR
+FEX 是 Valve 为 Steam Frame 赞助的 x86 转 ARM 翻译框架，这篇文章解释了在 ARM 的弱内存模型上模拟 x86 全存储定序（TSO）为何代价高昂。每条 x86 的加载和存储都必须变成 ARM 的 acquire/release 指令，而这些指令从未为如此高的使用频率设计。非对齐访问在 ARM 上会触发异常，FEX 只能用内存屏障回填补丁，在某些平台上损失高达 50% 性能。跨缓存行的原子操作变成 split-lock，需要通过内核信号处理器处理，约 660 纳秒，而对齐路径只需 1.44 纳秒。最糟的是写合并内存上的 store-release 比原生慢 816 倍，让某些游戏掉到 1 FPS 以下。解法全在硬件：像苹果那样的 TSO 开关、更宽的 LRCPC 变体、128 位 CASP、整缓存行原子操作。
+***** Take
+苹果六年前就为 M1 加了 TSO 模式，因为 Rosetta 需要它，而这篇六千字的文章就是其他人不这么做所付出的代价清单。FEX 得跳进内核信号处理器才能伪造一条 x86 指令。工程水平令人敬佩，但它本不该存在。
+***** Comments
+- FEX 是 x86 到 ARM 的翻译框架，类似苹果的 Rosetta 2 和微软的 Prism。Valve 赞助其开发，因为新的 Steam Frame 也靠它运行 x86 游戏。
+- 苹果六年前就解决了这个问题，在 x86 模拟变得重要时直接给芯片加了一个兼容 x86 的内存定序模式。这又是苹果芯片领先业界的一处体现。
+- 开头重复了那个说法，即 ARM 的宽松模型允许大量硬件优化，但我见过很有说服力的论证，认为宽松模型未必有多少好处。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+x86エミュレーションという災厄
+***** TLDR
+ValveがSteam Frame向けに支援するx86からARMへの変換フレームワークFEXが、ARMの弱いメモリモデル上でx86のTotal Store Orderingを模倣するコストを解説した。x86のロードとストアはすべてARMのacquire/releaseに変換せざるを得ず、これらの命令はそんな多用を想定していない。非アラインアクセスはARMでフォルトするためFEXはバリアで後付けパッチを当てるが、プラットフォームによっては最大50%の性能低下になる。キャッシュラインをまたぐアトミック操作はsplit-lockとなりカーネルのシグナルハンドラ経由で約660ns、アライン済みなら1.44nsで済む。最悪なのはwrite-combineメモリ上のstore-releaseで、ネイティブの816倍遅く、一部のゲームは1FPSを下回る。解決策はすべてハードウェア側にある。AppleのようなTSO切り替え、拡張されたLRCPC、128ビットCASP、キャッシュライン全体のアトミック対応だ。
+***** Take
+AppleはRosettaに必要だったから6年前にM1へTSOモードを入れた。この6000語の記事は、そうしなかった側が払っている代償の記録だ。FEXはx86命令1つを再現するためにカーネルのシグナルハンドラへ飛ぶ。技術は見事だが、そもそも存在すべきではない仕事だ。
+***** Comments
+- FEXはAppleのRosetta 2やMicrosoftのPrismと同様のx86からARMへの変換フレームワークだ。新しいSteam Frameがx86ゲームを動かす仕組みでもあり、Valveが開発を支援している。
+- Appleは6年前、x86エミュレーションが重要になった時点でチップにx86互換のメモリ順序モードを追加してこの問題を解決した。Appleのチップが業界をリードしている点がまた一つ。
+- 冒頭ではARMの緩いモデルが大きなハードウェア最適化を可能にすると繰り返しているが、緩いモデルに必ずしも大きな利点はないという説得力ある議論も見たことがある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+x86 에뮬레이션이라는 재앙
+***** TLDR
+Valve가 Steam Frame을 위해 후원하는 x86-ARM 변환 프레임워크 FEX가 ARM의 느슨한 메모리 모델에서 x86의 Total Store Ordering을 흉내 내는 비용을 설명했다. 모든 x86 로드와 스토어를 ARM의 acquire/release로 바꿔야 하는데, 이 명령들은 그런 빈도로 쓰이도록 설계된 적이 없다. 정렬되지 않은 접근은 ARM에서 폴트를 일으켜 FEX가 배리어로 사후 패치하는데, 일부 플랫폼에서는 최대 50% 손해다. 캐시라인을 걸친 원자 연산은 split-lock이 되어 커널 시그널 핸들러를 거치며 약 660ns가 걸리고, 정렬된 경로는 1.44ns면 된다. 최악은 write-combine 메모리의 store-release로 네이티브보다 816배 느려 일부 게임은 1FPS 아래로 떨어진다. 해법은 모두 하드웨어에 있다. 애플 방식의 TSO 전환, 확장된 LRCPC, 128비트 CASP, 캐시라인 전체 원자 연산이다.
+***** Take
+애플은 Rosetta에 필요했기 때문에 6년 전 M1에 TSO 모드를 넣었고, 이 6천 단어짜리 글은 그렇게 하지 않은 쪽이 치르는 비용의 기록이다. FEX는 x86 명령 하나를 흉내 내려고 커널 시그널 핸들러까지 들어간다. 기술은 훌륭하지만 애초에 필요하지 않았어야 할 일이다.
+***** Comments
+- FEX는 애플의 Rosetta 2, 마이크로소프트의 Prism과 비슷한 x86-ARM 변환 프레임워크다. 새 Steam Frame이 x86 게임을 돌리는 방식이기도 해서 Valve가 개발을 후원한다.
+- 애플은 x86 에뮬레이션이 중요해지자 6년 전에 칩에 x86 호환 메모리 순서 모드를 추가해 이 문제를 풀었다. 애플 칩이 업계를 앞서는 또 하나의 사례다.
+- 도입부는 ARM의 느슨한 모델이 큰 하드웨어 최적화를 가능하게 한다는 주장을 되풀이하지만, 느슨한 모델에 반드시 큰 이점이 있는 건 아니라는 설득력 있는 반론도 봤다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La plaga de la emulación de x86
+***** TLDR
+FEX, el traductor de x86 a ARM que Valve patrocina para la Steam Frame, explica por qué emular el Total Store Ordering de x86 sobre el modelo de memoria relajado de ARM sale tan caro. Cada carga y almacenamiento de x86 se convierte en un acquire/release de ARM, instrucciones que nunca se diseñaron para ese volumen. Los accesos no alineados provocan fallos en ARM, así que FEX los parchea con barreras, con un coste de hasta el 50% en algunas plataformas. Los atómicos que cruzan una línea de caché se vuelven split-locks gestionados por un manejador de señales del kernel: unos 660 ns frente a 1,44 ns del camino alineado. Lo peor es el store-release sobre memoria write-combine, 816 veces más lento que el nativo, que deja algunos juegos por debajo de 1 FPS. Las soluciones están todas en el hardware: un interruptor de TSO como el de Apple, variantes LRCPC más amplias, CASP de 128 bits y atómicos de línea de caché completa.
+***** Take
+Apple añadió un modo TSO al M1 hace seis años porque Rosetta lo necesitaba, y este artículo de 6.000 palabras es el recuento de lo que pagan los demás por no haberlo hecho. FEX tiene que saltar a un manejador de señales del kernel para simular una sola instrucción x86. La ingeniería es admirable y no debería haber hecho falta.
+***** Comments
+- FEX es un marco de traducción de x86 a ARM parecido a Rosetta 2 de Apple y a Prism de Microsoft. Valve financia su desarrollo porque también es como la nueva Steam Frame ejecuta juegos de x86.
+- Apple resolvió esto hace seis años añadiendo sin más un modo de ordenación de memoria compatible con x86 a su chip cuando la emulación de x86 se volvió importante. Otra forma en que los chips de Apple van por delante.
+- La introducción repite que el modelo relajado de ARM permite grandes optimizaciones de hardware, pero he visto argumentos convincentes de que un modelo relajado no aporta necesariamente tanto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Plage der x86-Emulation
+***** TLDR
+FEX, der von Valve für die Steam Frame finanzierte x86-nach-ARM-Übersetzer, erklärt, warum die Emulation von x86 Total Store Ordering auf ARMs schwachem Speichermodell so teuer ist. Jeder x86-Load und -Store muss zu einem ARM-Acquire/Release werden, Befehle, die nie für diese Häufigkeit gedacht waren. Nicht ausgerichtete Zugriffe lösen auf ARM Faults aus, also patcht FEX sie nachträglich mit Barrieren, was auf manchen Plattformen bis zu 50% kostet. Atomare Operationen über eine Cacheline hinweg werden zu Split-Locks, die über einen Kernel-Signal-Handler laufen: rund 660 ns statt 1,44 ns auf dem ausgerichteten Pfad. Am schlimmsten ist Store-Release auf Write-Combine-Speicher, 816-mal langsamer als nativ, was manche Spiele unter 1 FPS drückt. Die Lösungen liegen alle in der Hardware: ein TSO-Schalter wie bei Apple, breitere LRCPC-Varianten, 128-Bit-CASP, atomare Operationen über die ganze Cacheline.
+***** Take
+Apple hat dem M1 vor sechs Jahren einen TSO-Modus spendiert, weil Rosetta ihn brauchte, und dieser 6.000-Wörter-Artikel ist die Abrechnung dessen, was alle anderen dafür zahlen, dass sie es nicht taten. FEX muss in einen Kernel-Signal-Handler springen, um eine einzige x86-Instruktion nachzubilden. Die Arbeit ist beeindruckend, und sie hätte nie nötig sein dürfen.
+***** Comments
+- FEX ist ein Übersetzungsframework von x86 nach ARM, ähnlich Apples Rosetta 2 und Microsofts Prism. Valve fördert die Entwicklung, weil die neue Steam Frame damit x86-Spiele ausführt.
+- Apple hat das Problem vor sechs Jahren gelöst, indem es dem Chip einfach einen x86-kompatiblen Speicherordnungsmodus hinzufügte, als x86-Emulation wichtig wurde. Wieder ein Punkt, in dem Apples Chips vorneweg gehen.
+- Die Einleitung wiederholt, dass ARMs entspanntes Modell große Hardwareoptimierungen erlaubt, aber ich habe überzeugende Argumente gesehen, dass ein entspanntes Modell nicht unbedingt viel bringt.
+** Microsoft exec called AI scraping 'the largest theft of labor in human history' :ai:copyright:legal:microsoft:
+:PROPERTIES:
+:ID:       49752056
+:URL:      https://techcrunch.com/2026/09/17/microsoft-exec-called-ai-scraping-the-largest-theft-of-labor-in-human-history-new-unredacted-filings-reveal/
+:HN_URL:   https://news.ycombinator.com/item?id=49752056
+:POINTS:   73
+:COMMENTS: 27
+:BY:       pluc
+:END:
+
+*** TLDR
+Newly unredacted filings in the New York Times copyright suit against OpenAI and Microsoft quote internal statements the companies had kept sealed. Brent Hecht, Microsoft's director of Applied Science, wrote in a January 2023 memo that the data acquisition was 'an astonishing theft of unprecedented proportions' and 'the largest theft of labor in human history.' Satya Nadella testified that paywalled content should be licensed by anyone using it for training or grounding, and said he would have demanded OpenAI retrain its models had he known about the paywall scraping. OpenAI's Nick Turley wrote that publishers face an 'existential threat' from products that are 'largely substitutive.' Greg Brockman answered 'ah nice' when a researcher mentioned a hack to get around the NYT paywall. The filings put 91,692 copies of works from the NYT, Daily News and CIR in the training sets, and over 2 million nytimes.com documents in the Common Crawl data.
+
+*** Take
+The interesting part is not the quotable line, it is that Nadella's deposition and Hecht's memo contradict the public position both companies argued in court for three years. Discovery is where the internal view and the legal filing get stapled together, and the 'ah nice' is going to be read aloud.
+
+*** Comments
+
+**** jacquesm
+:PROPERTIES:
+:COMMENT_ID: 49752242
+:END:
+It's the robbery of all of our culture to sell it back to us at a mark-up. So many people whose life's work got appropriated without consideration, compensation or consent.
+
+**** Neil44
+:PROPERTIES:
+:COMMENT_ID: 49752375
+:END:
+I partly agree, but the original has not gone anywhere. You're free to accumulate knowledge the old way just as before. So maybe it's not theft of knowledge we should be angry about, it's something else harder to define.
+
+**** sajithdilshan
+:PROPERTIES:
+:COMMENT_ID: 49752405
+:END:
+If someone asked what is 'the largest theft of labor in human history' I would have thought slavery.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+微软高管称 AI 抓取是「人类历史上最大规模的劳动盗窃」
+***** TLDR
+《纽约时报》起诉 OpenAI 和微软的版权案中，新解封的文件引用了两家公司此前密封的内部言论。微软应用科学总监 Brent Hecht 在 2023 年 1 月的备忘录中写道，这次数据获取是「规模空前的惊人盗窃」和「人类历史上最大规模的劳动盗窃」。萨提亚·纳德拉作证称，付费墙内容应当由任何用于训练或知识接地的人付费授权，并表示若当时知道抓取了付费墙内容，他会要求 OpenAI 重新训练模型。OpenAI 的 Nick Turley 写道，出版商面临「生存威胁」，因为这些产品「在很大程度上是替代性的」。当一名研究员提到绕过《纽约时报》付费墙的手法时，Greg Brockman 回了句「不错」。文件显示训练集中含有《纽约时报》《每日新闻》和调查报道中心作品的 91,692 份副本，Common Crawl 数据中有超过 200 万份来自 nytimes.com 的文档。
+***** Take
+值得注意的不是那句金句，而是纳德拉的证词和 Hecht 的备忘录与两家公司三年来在法庭上的公开立场相矛盾。证据开示正是内部看法与法律陈述被钉在一起的环节，那句「不错」会被当庭念出来。
+***** Comments
+- 这是把我们所有人的文化抢走，再加价卖回给我们。那么多人毕生的成果在没有商量、没有补偿、没有同意的情况下被占用。
+- 我部分同意，但原作并没有消失。你依然可以按老办法积累知识。所以也许我们该愤怒的不是知识被偷，而是某种更难定义的东西。
+- 如果有人问什么是「人类历史上最大规模的劳动盗窃」，我会以为答案是奴隶制。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+マイクロソフト幹部、AIのスクレイピングを「人類史上最大の労働の窃盗」と呼ぶ
+***** TLDR
+ニューヨーク・タイムズがOpenAIとマイクロソフトを訴えた著作権訴訟で、黒塗りが解除された書面から両社が伏せていた社内発言が明らかになった。マイクロソフトの応用科学ディレクター、Brent Hechtは2023年1月のメモで、このデータ取得を「前例のない規模の驚くべき窃盗」「人類史上最大の労働の窃盗」と記した。サティア・ナデラは、ペイウォール内のコンテンツは訓練やグラウンディングに使う者がライセンスすべきだと証言し、ペイウォールのスクレイピングを知っていればOpenAIにモデルの再訓練を求めただろうと述べた。OpenAIのNick Turleyは、出版社は「大部分が代替的」な製品による「存亡の脅威」に直面していると書いた。研究者がNYTのペイウォール回避の手口に触れた際、Greg Brockmanは「いいね」と返した。書面によれば訓練データにはNYT、Daily News、CIRの著作物が91,692件含まれ、Common Crawlにはnytimes.comの文書が200万件超あった。
+***** Take
+重要なのは引用しやすい一文ではなく、ナデラの証言とHechtのメモが、両社が3年間法廷で主張してきた公式見解と食い違っている点だ。ディスカバリーとは社内の本音と法的主張が突き合わされる場であり、あの「いいね」は法廷で読み上げられることになる。
+***** Comments
+- これは我々全員の文化を奪い、上乗せ価格で売り戻す行為だ。多くの人の生涯の仕事が、相談も補償も同意もなく流用された。
+- 一部は同意するが、原作が消えたわけではない。これまで通り昔のやり方で知識を積むことはできる。だから怒るべきは知識の窃盗ではなく、もっと定義しにくい何かかもしれない。
+- 「人類史上最大の労働の窃盗」と聞かれたら、私は奴隷制だと答えたと思う。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+마이크로소프트 임원, AI 스크래핑을 '인류 역사상 최대의 노동 절도'라 불렀다
+***** TLDR
+뉴욕타임스가 OpenAI와 마이크로소프트를 상대로 낸 저작권 소송에서 새로 공개된 문서가 두 회사가 봉인해 뒀던 내부 발언을 인용했다. 마이크로소프트 응용과학 디렉터 Brent Hecht는 2023년 1월 메모에서 이 데이터 수집을 '전례 없는 규모의 놀라운 절도'이자 '인류 역사상 최대의 노동 절도'라고 썼다. 사티아 나델라는 유료 콘텐츠는 훈련이나 그라운딩에 쓰려는 누구든 라이선스를 받아야 한다고 증언했고, 유료 장벽 스크래핑을 알았다면 OpenAI에 모델 재훈련을 요구했을 것이라고 말했다. OpenAI의 Nick Turley는 출판사들이 '상당 부분 대체적인' 제품 때문에 '실존적 위협'에 직면했다고 썼다. 한 연구자가 NYT 유료 장벽 우회 방법을 언급하자 Greg Brockman은 '좋네'라고 답했다. 문서에 따르면 훈련 데이터에는 NYT, Daily News, CIR 저작물 사본이 91,692건, Common Crawl에는 nytimes.com 문서가 200만 건 넘게 들어 있었다.
+***** Take
+핵심은 인용하기 좋은 한 줄이 아니라, 나델라의 증언과 Hecht의 메모가 두 회사가 3년간 법정에서 펴온 공식 입장과 어긋난다는 점이다. 증거개시란 내부의 진짜 인식과 법적 주장이 나란히 붙는 자리이고, 그 '좋네'는 법정에서 낭독될 것이다.
+***** Comments
+- 우리 모두의 문화를 빼앗아 웃돈을 붙여 되파는 짓이다. 수많은 사람의 평생 작업이 상의도, 보상도, 동의도 없이 전용됐다.
+- 일부는 동의하지만 원본이 사라진 건 아니다. 예전 방식대로 지식을 쌓는 건 여전히 자유다. 그러니 화낼 대상은 지식 절도가 아니라 더 정의하기 어려운 무언가일지 모른다.
+- 누가 '인류 역사상 최대의 노동 절도'가 뭐냐고 물었다면 나는 노예제라고 답했을 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un directivo de Microsoft llamó al scraping de IA 'el mayor robo de trabajo de la historia'
+***** TLDR
+Documentos recién desclasificados en la demanda por derechos de autor del New York Times contra OpenAI y Microsoft citan declaraciones internas que ambas empresas habían mantenido selladas. Brent Hecht, director de Ciencia Aplicada de Microsoft, escribió en un memorando de enero de 2023 que la obtención de datos era 'un robo asombroso de proporciones sin precedentes' y 'el mayor robo de trabajo de la historia de la humanidad'. Satya Nadella declaró que el contenido de pago debería licenciarlo cualquiera que lo use para entrenar o fundamentar modelos, y dijo que habría exigido a OpenAI reentrenar sus modelos de haber sabido del scraping tras el muro de pago. Nick Turley, de OpenAI, escribió que los editores afrontan una 'amenaza existencial' de productos 'en gran medida sustitutivos'. Cuando un investigador mencionó un truco para saltarse el muro de pago del NYT, Greg Brockman respondió 'ah, qué bien'. Los documentos sitúan 91.692 copias de obras del NYT, Daily News y CIR en los conjuntos de entrenamiento, y más de 2 millones de documentos de nytimes.com en los datos de Common Crawl.
+***** Take
+Lo interesante no es la frase citable, sino que la declaración de Nadella y el memorando de Hecht contradicen la posición pública que ambas empresas defendieron en los tribunales durante tres años. La fase de prueba es donde la visión interna y el escrito legal se grapan, y ese 'ah, qué bien' se va a leer en voz alta.
+***** Comments
+- Es el robo de toda nuestra cultura para revendérnosla con recargo. Tanta gente cuyo trabajo de toda una vida fue apropiado sin consulta, compensación ni consentimiento.
+- Coincido en parte, pero el original no ha desaparecido. Puedes seguir acumulando conocimiento como siempre. Quizá lo que debería enfadarnos no es el robo de conocimiento, sino algo más difícil de definir.
+- Si alguien me preguntara cuál es 'el mayor robo de trabajo de la historia', yo habría pensado en la esclavitud.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Microsoft-Manager nannte KI-Scraping 'den größten Diebstahl von Arbeit der Menschheitsgeschichte'
+***** TLDR
+Neu entschwärzte Unterlagen im Urheberrechtsprozess der New York Times gegen OpenAI und Microsoft zitieren interne Aussagen, die beide Unternehmen unter Verschluss gehalten hatten. Brent Hecht, Director of Applied Science bei Microsoft, schrieb in einem Memo vom Januar 2023, die Datenbeschaffung sei 'ein erstaunlicher Diebstahl von beispiellosem Ausmaß' und 'der größte Diebstahl von Arbeit der Menschheitsgeschichte'. Satya Nadella sagte aus, kostenpflichtige Inhalte sollten von jedem lizenziert werden, der sie zum Training oder Grounding nutzt, und er hätte von OpenAI ein Neutraining verlangt, wenn er vom Scraping hinter der Bezahlschranke gewusst hätte. OpenAIs Nick Turley schrieb, Verlage stünden vor einer 'existenziellen Bedrohung' durch Produkte, die 'weitgehend substitutiv' seien. Als ein Forscher einen Trick zum Umgehen der NYT-Bezahlschranke erwähnte, antwortete Greg Brockman 'ah nice'. Laut den Unterlagen enthielten die Trainingsdaten 91.692 Kopien von Werken der NYT, der Daily News und des CIR, und die Common-Crawl-Daten über 2 Millionen Dokumente von nytimes.com.
+***** Take
+Interessant ist nicht der zitierfähige Satz, sondern dass Nadellas Aussage und Hechts Memo der öffentlichen Position widersprechen, die beide Firmen drei Jahre lang vor Gericht vertreten haben. In der Beweisaufnahme werden interne Sicht und Schriftsatz nebeneinandergelegt, und das 'ah nice' wird laut vorgelesen werden.
+***** Comments
+- Das ist der Raub unserer gesamten Kultur, um sie uns mit Aufschlag zurückzuverkaufen. So viele Menschen, deren Lebenswerk ohne Rücksprache, Vergütung oder Einwilligung vereinnahmt wurde.
+- Teilweise stimme ich zu, aber das Original ist nicht verschwunden. Man kann Wissen weiterhin auf die alte Art sammeln. Vielleicht ist es also nicht der Diebstahl von Wissen, der uns ärgern sollte, sondern etwas schwerer Fassbares.
+- Hätte mich jemand gefragt, was 'der größte Diebstahl von Arbeit der Menschheitsgeschichte' ist, hätte ich an die Sklaverei gedacht.
+** A heap overflow and SSO misconfiguration to compromise OpenAI internal repos :security:openai:vulnerability:opensource:
+:PROPERTIES:
+:ID:       49749656
+:URL:      https://www.hacktron.ai/blog/hacking-openai
+:HN_URL:   https://news.ycombinator.com/item?id=49749656
+:POINTS:   364
+:COMMENTS: 155
+:BY:       Handy-Man
+:END:
+
+*** TLDR
+Hacktron chained two bugs into OpenAI's internal monorepo. First, a heap buffer overflow in libheif 1.19.7 and 1.19.8 as shipped in Debian 12 and 13: the upstream fix landed the year before but was not labelled a security fix and got no CVE, so it was never backported. Discourse hands HEIC/HEIF uploads to ImageMagick because FastImage cannot read them, and ImageMagick calls the vulnerable libheif parser, giving RCE on community.openai.com. Second, an SSO misconfiguration meant a compromised forum account escalated to the user's ChatGPT and Codex accounts, so any first-party or third-party service behind OpenAI SSO was exposed. Employee Codex instances were connected to GitHub; rather than read source, the researchers had a pull request opened in the internal monorepo as proof. Reported July 25, 2026 and fixed the same day. On September 1 OpenAI paid $6,500, noting Discourse testing was out of program scope.
+
+*** Take
+A bug fixed upstream without a CVE is a bug that stays in Debian stable, and this chain starts there rather than at anything OpenAI built. What OpenAI did build is an SSO that treats a forum login as a Codex login. The $6,500 is the part people will argue about, but the cheaper lesson is not to run ImageMagick unsandboxed on user uploads in 2026.
+
+*** Comments
+
+**** rvz
+:PROPERTIES:
+:COMMENT_ID: 49749976
+:END:
+$6,500 for this is beyond pathetic for a near $1.2T company that just got themselves breached with a complete potential source code leak. This is like getting close to breaching google3.
+
+**** oefrha
+:PROPERTIES:
+:COMMENT_ID: 49750117
+:END:
+Unsandboxed ImageMagick is known for being a security nightmare even back when PHP ruled the world. Difference is it's easier than ever to turn vulnerabilities into full compromises.
+
+**** sergiotapia
+:PROPERTIES:
+:COMMENT_ID: 49750153
+:END:
+They used a heif payload to get server access but never describe the SSO flaw they used to actually get repo access, the juicy part. Also shocking that OpenAI uses GitHub.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用堆溢出加 SSO 配置错误攻入 OpenAI 内部仓库
+***** TLDR
+Hacktron 把两个漏洞串成一条链，打进了 OpenAI 的内部单体仓库。第一个是 Debian 12 和 13 所带的 libheif 1.19.7 与 1.19.8 中的堆缓冲区溢出：上游前一年就修了，但提交没有标为安全修复，也没有分配 CVE，因此从未被回移植。Discourse 因为 FastImage 读不了 HEIC/HEIF，把这类上传交给 ImageMagick 处理，而 ImageMagick 会调用有漏洞的 libheif 解析器，于是在 community.openai.com 上拿到了远程代码执行。第二个是 SSO 配置错误，被攻破的论坛账号可以升级到该用户的 ChatGPT 和 Codex 账号，任何走 OpenAI SSO 的第一方或第三方服务都暴露在外。员工的 Codex 实例连着 GitHub，研究者没有去读源码，而是在内部单体仓库中开了一个 pull request 作为证明。2026 年 7 月 25 日上报，当天修复。9 月 1 日 OpenAI 支付了 6,500 美元，并指出对 Discourse 的测试不在项目范围内。
+***** Take
+上游修了却没有 CVE 的漏洞，就会一直留在 Debian stable 里，这条链的起点不在 OpenAI 自己写的任何代码。OpenAI 自己造的那部分，是一套把论坛登录当成 Codex 登录的 SSO。6,500 美元会是大家争论的焦点，但更便宜的教训是：2026 年了，别再让 ImageMagick 不加沙箱地处理用户上传的文件。
+***** Comments
+- 对一家市值接近 1.2 万亿美元、刚被打穿、可能整套源码外泄的公司来说，6,500 美元低得可怜。这相当于差点攻破 google3。
+- 不加沙箱的 ImageMagick 早在 PHP 称霸的年代就以安全噩梦著称。区别在于如今把漏洞变成完全攻陷比以往任何时候都容易。
+- 他们用 heif 载荷拿到了服务器权限，却从没讲清楚用来真正拿到仓库权限的 SSO 缺陷，而那才是最有意思的部分。另外 OpenAI 居然用 GitHub，挺意外的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ヒープオーバーフローとSSO設定ミスでOpenAIの内部リポジトリへ
+***** TLDR
+Hacktronが2つのバグを連鎖させ、OpenAIの内部モノレポに到達した。1つ目はDebian 12と13が同梱するlibheif 1.19.7と1.19.8のヒープバッファオーバーフロー。上流では前年に修正済みだったがセキュリティ修正と記載されずCVEも付かなかったため、バックポートされなかった。DiscourseはFastImageがHEIC/HEIFを読めないためImageMagickに処理を委ね、ImageMagickが脆弱なlibheifパーサを呼ぶため、community.openai.comでRCEが成立した。2つ目はSSOの設定ミスで、乗っ取ったフォーラムアカウントからそのユーザーのChatGPTとCodexアカウントへ昇格できた。OpenAI SSOを使うファーストパーティ・サードパーティのサービスがすべて露出していたことになる。従業員のCodexインスタンスはGitHubと接続されており、研究者はソースを読む代わりに内部モノレポでプルリクエストを1本開いて証拠とした。2026年7月25日に報告され同日修正。9月1日にOpenAIは6,500ドルを支払い、Discourseへのテストはプログラム範囲外だと付記した。
+***** Take
+CVEなしで上流修正されたバグはDebian stableに残り続ける。この連鎖の起点はOpenAIが書いたコードではない。OpenAIが作ったのは、フォーラムのログインをCodexのログインとして扱うSSOのほうだ。6,500ドルは議論の的になるだろうが、より安上がりな教訓は、2026年にもなってユーザーのアップロードをサンドボックスなしのImageMagickに渡すなということだ。
+***** Comments
+- 時価総額1.2兆ドル近い企業が侵入され、ソースコード全体が漏れかねなかったのに6,500ドルは情けなさすぎる。google3への侵入に近づいたようなものだ。
+- サンドボックスなしのImageMagickは、PHP全盛の頃からセキュリティの悪夢として知られていた。違うのは、脆弱性を完全な侵害に変えるのがかつてないほど簡単になったことだ。
+- heifのペイロードでサーバーを取ったのは書いてあるが、実際にリポジトリへ到達したSSOの欠陥という一番面白い部分は説明していない。あとOpenAIがGitHubを使っているのも意外だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+힙 오버플로와 SSO 설정 오류로 OpenAI 내부 저장소까지
+***** TLDR
+Hacktron이 버그 두 개를 엮어 OpenAI의 내부 모노레포에 도달했다. 첫째는 데비안 12와 13에 포함된 libheif 1.19.7과 1.19.8의 힙 버퍼 오버플로다. 상류에서는 한 해 전에 고쳐졌지만 보안 수정으로 표시되지 않아 CVE가 붙지 않았고 백포트도 되지 않았다. Discourse는 FastImage가 HEIC/HEIF를 읽지 못해 ImageMagick에 처리를 넘기고, ImageMagick이 취약한 libheif 파서를 호출하면서 community.openai.com에서 원격 코드 실행이 가능해졌다. 둘째는 SSO 설정 오류로, 장악한 포럼 계정이 해당 사용자의 ChatGPT와 Codex 계정으로 승격됐다. OpenAI SSO를 쓰는 모든 자사·외부 서비스가 노출된 셈이다. 직원들의 Codex 인스턴스는 GitHub에 연결돼 있었고, 연구자들은 소스를 읽는 대신 내부 모노레포에 풀 리퀘스트 하나를 열어 증거로 삼았다. 2026년 7월 25일 신고돼 같은 날 수정됐다. 9월 1일 OpenAI는 6,500달러를 지급하면서 Discourse 테스트는 프로그램 범위 밖이라고 밝혔다.
+***** Take
+CVE 없이 상류에서만 고쳐진 버그는 데비안 stable에 그대로 남는다. 이 연쇄의 출발점은 OpenAI가 만든 무언가가 아니다. OpenAI가 만든 쪽은 포럼 로그인을 Codex 로그인으로 취급하는 SSO다. 6,500달러는 논쟁거리가 되겠지만, 더 값싼 교훈은 2026년에 사용자 업로드를 샌드박스 없는 ImageMagick에 넘기지 말라는 것이다.
+***** Comments
+- 시가총액 1.2조 달러에 가까운 회사가 뚫려 전체 소스코드가 샐 뻔했는데 6,500달러는 너무 한심하다. google3를 거의 뚫은 것과 비슷한 일이다.
+- 샌드박스 없는 ImageMagick은 PHP 전성기 때부터 보안 악몽으로 유명했다. 달라진 건 취약점을 완전한 장악으로 바꾸기가 그 어느 때보다 쉬워졌다는 점이다.
+- heif 페이로드로 서버를 잡은 건 썼지만, 실제로 저장소 접근을 얻은 SSO 결함이라는 가장 흥미로운 부분은 설명하지 않았다. OpenAI가 GitHub를 쓴다는 것도 놀랍다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un desbordamiento de heap y un SSO mal configurado para llegar a los repos internos de OpenAI
+***** TLDR
+Hacktron encadenó dos fallos hasta el monorepo interno de OpenAI. El primero, un desbordamiento de búfer de heap en libheif 1.19.7 y 1.19.8 tal como se distribuyen en Debian 12 y 13: el arreglo original llegó el año anterior, pero no se etiquetó como corrección de seguridad ni recibió CVE, así que nunca se retroportó. Discourse delega las subidas HEIC/HEIF a ImageMagick porque FastImage no las lee, e ImageMagick llama al analizador vulnerable de libheif, lo que da ejecución remota de código en community.openai.com. El segundo, un SSO mal configurado: una cuenta comprometida del foro escalaba a las cuentas de ChatGPT y Codex del usuario, de modo que cualquier servicio propio o de terceros tras el SSO de OpenAI quedaba expuesto. Las instancias de Codex de los empleados estaban conectadas a GitHub; en lugar de leer código, los investigadores hicieron que se abriera un pull request en el monorepo interno como prueba. Se informó el 25 de julio de 2026 y se corrigió el mismo día. El 1 de septiembre OpenAI pagó 6.500 dólares, señalando que probar Discourse quedaba fuera del alcance del programa.
+***** Take
+Un fallo corregido río arriba sin CVE es un fallo que se queda en Debian stable, y esta cadena empieza ahí, no en nada que construyera OpenAI. Lo que sí construyó OpenAI es un SSO que trata un inicio de sesión del foro como uno de Codex. Los 6.500 dólares serán lo discutido, pero la lección más barata es no ejecutar ImageMagick sin sandbox sobre archivos subidos por usuarios en 2026.
+***** Comments
+- 6.500 dólares por esto es penoso para una empresa de casi 1,2 billones que acaba de sufrir una brecha con una posible filtración completa del código fuente. Es como estar cerca de entrar en google3.
+- ImageMagick sin sandbox ya era famoso como pesadilla de seguridad cuando PHP dominaba el mundo. La diferencia es que hoy es más fácil que nunca convertir vulnerabilidades en compromisos totales.
+- Usaron una carga heif para acceder al servidor, pero nunca describen el fallo de SSO con el que llegaron al repositorio, que es lo jugoso. También sorprende que OpenAI use GitHub.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Heap-Overflow und SSO-Fehlkonfiguration bis in OpenAIs interne Repos
+***** TLDR
+Hacktron verkettete zwei Fehler bis in OpenAIs internes Monorepo. Erstens ein Heap-Buffer-Overflow in libheif 1.19.7 und 1.19.8, wie sie in Debian 12 und 13 ausgeliefert werden: Der Fix kam ein Jahr zuvor stromaufwärts, wurde aber nicht als Sicherheitsfix gekennzeichnet und bekam keine CVE, also wurde er nie zurückportiert. Discourse gibt HEIC/HEIF-Uploads an ImageMagick weiter, weil FastImage sie nicht lesen kann, und ImageMagick ruft den verwundbaren libheif-Parser auf, was Remote Code Execution auf community.openai.com ergibt. Zweitens eine SSO-Fehlkonfiguration: Ein übernommenes Forenkonto ließ sich zu den ChatGPT- und Codex-Konten des Nutzers eskalieren, womit jeder Dienst hinter OpenAIs SSO offenlag. Die Codex-Instanzen von Mitarbeitenden waren mit GitHub verbunden; statt Quellcode zu lesen, ließen die Forscher als Beleg einen Pull Request im internen Monorepo öffnen. Gemeldet am 25. Juli 2026, am selben Tag behoben. Am 1. September zahlte OpenAI 6.500 Dollar und merkte an, Tests an Discourse lägen außerhalb des Programmumfangs.
+***** Take
+Ein stromaufwärts ohne CVE behobener Fehler bleibt in Debian stable, und diese Kette beginnt dort, nicht bei etwas, das OpenAI gebaut hat. Gebaut hat OpenAI dagegen ein SSO, das einen Forum-Login wie einen Codex-Login behandelt. Über die 6.500 Dollar wird man streiten, die billigere Lehre lautet: 2026 kein ImageMagick ohne Sandbox auf Nutzer-Uploads loslassen.
+***** Comments
+- 6.500 Dollar dafür ist erbärmlich für ein Unternehmen mit fast 1,2 Billionen Bewertung, das gerade kompromittiert wurde und dessen kompletter Quellcode hätte abfließen können. Das ist, als käme man google3 nahe.
+- ImageMagick ohne Sandbox galt schon zu PHP-Zeiten als Sicherheitsalbtraum. Der Unterschied ist, dass es heute leichter denn je ist, Schwachstellen in vollständige Übernahmen zu verwandeln.
+- Sie holten sich mit einer HEIF-Payload Serverzugriff, beschreiben aber nie den SSO-Fehler, über den sie tatsächlich ins Repo kamen, also den spannenden Teil. Überraschend auch, dass OpenAI GitHub nutzt.
+** OpenJev :ai:llm:browser:benchmarks:
+:PROPERTIES:
+:ID:       49752041
+:URL:      https://openjev.com/
+:HN_URL:   https://news.ycombinator.com/item?id=49752041
+:POINTS:   85
+:COMMENTS: 38
+:BY:       ilreb
+:END:
+
+*** TLDR
+A browser page that reproduces the interface pattern of TypeSafe's closed Jev service using open models, with no backend and no waitlist. It loads quantized GGUF weights into the browser cache via wllama and runs the same decision two ways: read the option logits directly and normalize across only the allowed choices, or have the model write its probabilities out as JSON token by token. On the same 102-row subset, Qwen3 0.6B scores 44.0%, MiniCPM5 2B 68.6% and Qwen3.5 4B 81.3% on the authored set, against 88.3% for hosted Jev. The project states plainly that it does not reproduce Jev's undisclosed model.
+
+*** Take
+The useful thing here is the A/B, not the models: constrained readout against generated JSON, on your own GPU, with your own timings. That is a measurement most people asserting things about structured output have never actually run. The name is doing work it has not earned, and the AI-built landing page is getting more comments than the benchmark.
+
+*** Comments
+
+**** tecleandor
+:PROPERTIES:
+:COMMENT_ID: 49752261
+:END:
+This has no relation with the Jev team, right? It's emulating Jev behavior with a regular small LLM. With the smallest model it takes half a second to two seconds on my M2 Max, so it's not super fast. I don't think it's proper to have Jev in the name.
+
+**** ares623
+:PROPERTIES:
+:COMMENT_ID: 49752346
+:END:
+I gave it a choice of 'Foo' and 'Bar' and it scored 'Foo' at 98 percent. Why not 0 percent for both?
+
+**** airza
+:PROPERTIES:
+:COMMENT_ID: 49752349
+:END:
+I really hate the way that LLMs design websites.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+OpenJev
+***** TLDR
+一个网页，用开放模型复现 TypeSafe 闭源 Jev 服务的接口模式，没有后端也没有等待名单。它通过 wllama 把量化的 GGUF 权重加载进浏览器缓存，并用两种方式跑同一个决策：直接读取选项的 logits 并只在允许的选项间归一化，或者让模型逐个 token 把概率写成 JSON。在同一个 102 行子集上，Qwen3 0.6B 得分 44.0%，MiniCPM5 2B 为 68.6%，Qwen3.5 4B 为 81.3%，而托管版 Jev 为 88.3%。项目明确说明它并未复现 Jev 未公开的模型。
+***** Take
+这里有用的是那个对照实验，而不是模型本身：受限读取对比生成 JSON，跑在你自己的 GPU 上，用你自己的计时数据。大多数对结构化输出高谈阔论的人从没真做过这个测量。这个名字配不上它承载的分量，而且那个 AI 生成的落地页得到的评论比基准测试还多。
+***** Comments
+- 这跟 Jev 团队没有关系吧？它只是用普通的小模型模仿 Jev 的行为。用最小的模型在我的 M2 Max 上要半秒到两秒，所以并不算快。我觉得名字里带 Jev 并不合适。
+- 我给了它「Foo」和「Bar」两个选项，它给「Foo」打了 98%。为什么不是两个都给 0%？
+- 我真的很讨厌大模型设计网站的方式。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+OpenJev
+***** TLDR
+TypeSafeのクローズドなJevサービスのインターフェースを、オープンモデルで再現するブラウザページ。バックエンドも順番待ちリストもない。wllama経由で量子化GGUFの重みをブラウザのキャッシュに読み込み、同じ判断を2通りで実行する。選択肢のロジットを直接読んで許可された選択肢の範囲だけで正規化する方法と、モデルに確率をJSONとしてトークン単位で書かせる方法だ。同じ102行のサブセットでQwen3 0.6Bが44.0%、MiniCPM5 2Bが68.6%、Qwen3.5 4Bが81.3%、ホスト版Jevは88.3%だった。プロジェクトはJevの非公開モデルを再現するものではないと明記している。
+***** Take
+ここで役に立つのはモデルではなく比較そのものだ。制約付きの読み出し対JSON生成を、自分のGPUで、自分の計測値で回せる。構造化出力について語る人の多くが、実際にはこの測定をしたことがない。名前は実績に見合っておらず、AIが作ったランディングページのほうがベンチマークより多くのコメントを集めている。
+***** Comments
+- これはJevチームとは無関係だよね？普通の小さなLLMでJevの挙動を真似ているだけだ。最小モデルでも私のM2 Maxで0.5秒から2秒かかるので、特に速くもない。名前にJevを入れるのは適切ではないと思う。
+- 「Foo」と「Bar」の2択を与えたら「Foo」に98%が付いた。なぜ両方0%ではないのか。
+- LLMがウェブサイトをデザインするあのやり方が本当に嫌いだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+OpenJev
+***** TLDR
+TypeSafe의 비공개 Jev 서비스가 쓰는 인터페이스 방식을 공개 모델로 재현한 브라우저 페이지로, 백엔드도 대기자 명단도 없다. wllama를 통해 양자화된 GGUF 가중치를 브라우저 캐시에 올리고 같은 판단을 두 가지 방식으로 돌린다. 선택지의 로짓을 직접 읽어 허용된 선택지 사이에서만 정규화하거나, 모델이 확률을 JSON으로 토큰 단위로 쓰게 하는 방식이다. 동일한 102행 부분집합에서 Qwen3 0.6B는 44.0%, MiniCPM5 2B는 68.6%, Qwen3.5 4B는 81.3%를 기록했고 호스팅 Jev는 88.3%였다. 프로젝트는 Jev의 비공개 모델을 재현한 것이 아니라고 분명히 밝힌다.
+***** Take
+여기서 쓸모 있는 건 모델이 아니라 그 대조 실험이다. 제약된 읽기와 생성된 JSON을, 자기 GPU에서, 자기 측정치로 비교할 수 있다. 구조화 출력에 대해 단언하는 사람들 대부분이 실제로는 해본 적 없는 측정이다. 이름은 감당할 자격이 없고, AI가 만든 랜딩 페이지가 벤치마크보다 더 많은 댓글을 받고 있다.
+***** Comments
+- 이건 Jev 팀과는 무관하죠? 그냥 평범한 소형 LLM으로 Jev의 동작을 흉내 내는 겁니다. 가장 작은 모델도 제 M2 Max에서 0.5초에서 2초가 걸리니 아주 빠르지도 않고요. 이름에 Jev를 넣는 건 적절하지 않다고 봅니다.
+- 'Foo'와 'Bar' 두 선택지를 줬더니 'Foo'에 98퍼센트를 매겼다. 왜 둘 다 0퍼센트가 아닌가?
+- LLM이 웹사이트를 디자인하는 방식이 정말 싫다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+OpenJev
+***** TLDR
+Una página que reproduce el patrón de interfaz del servicio cerrado Jev, de TypeSafe, usando modelos abiertos, sin backend ni lista de espera. Carga pesos GGUF cuantizados en la caché del navegador mediante wllama y ejecuta la misma decisión de dos formas: leer directamente los logits de las opciones y normalizar solo entre las permitidas, o hacer que el modelo escriba sus probabilidades como JSON token a token. Sobre el mismo subconjunto de 102 filas, Qwen3 0.6B obtiene 44,0%, MiniCPM5 2B 68,6% y Qwen3.5 4B 81,3% en el conjunto original, frente al 88,3% del Jev alojado. El proyecto aclara que no reproduce el modelo no divulgado de Jev.
+***** Take
+Lo útil aquí es la comparación, no los modelos: lectura restringida frente a JSON generado, en tu propia GPU y con tus propios tiempos. Es una medición que la mayoría de quienes afirman cosas sobre la salida estructurada nunca ha hecho. El nombre se apropia de un prestigio que no ha ganado, y la página de aterrizaje hecha con IA está recibiendo más comentarios que el propio benchmark.
+***** Comments
+- Esto no tiene relación con el equipo de Jev, ¿verdad? Está emulando el comportamiento de Jev con un LLM pequeño normal. Con el modelo más pequeño tarda entre medio segundo y dos en mi M2 Max, así que tampoco es rapidísimo. No me parece apropiado llevar Jev en el nombre.
+- Le di a elegir entre 'Foo' y 'Bar' y puntuó 'Foo' con un 98 por ciento. ¿Por qué no un 0 por ciento en ambos?
+- Detesto de verdad la forma en que los LLM diseñan sitios web.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+OpenJev
+***** TLDR
+Eine Browserseite, die das Interface-Muster von TypeSafes geschlossenem Jev-Dienst mit offenen Modellen nachbaut, ohne Backend und ohne Warteliste. Sie lädt quantisierte GGUF-Gewichte über wllama in den Browser-Cache und führt dieselbe Entscheidung auf zwei Wegen aus: die Logits der Optionen direkt auslesen und nur über die erlaubten Auswahlmöglichkeiten normalisieren, oder das Modell seine Wahrscheinlichkeiten Token für Token als JSON schreiben lassen. Auf derselben Teilmenge von 102 Zeilen erreicht Qwen3 0.6B 44,0%, MiniCPM5 2B 68,6% und Qwen3.5 4B 81,3%, gegenüber 88,3% für das gehostete Jev. Das Projekt stellt klar, dass es Jevs nicht offengelegtes Modell nicht nachbildet.
+***** Take
+Nützlich ist hier der Vergleich, nicht die Modelle: eingeschränktes Auslesen gegen generiertes JSON, auf der eigenen GPU, mit eigenen Messwerten. Diese Messung haben die meisten, die über strukturierte Ausgaben Behauptungen aufstellen, nie selbst durchgeführt. Der Name beansprucht mehr, als er verdient hat, und die per KI gebaute Landingpage bekommt mehr Kommentare als der Benchmark.
+***** Comments
+- Das hat nichts mit dem Jev-Team zu tun, oder? Es ahmt Jevs Verhalten mit einem gewöhnlichen kleinen LLM nach. Mit dem kleinsten Modell dauert es auf meinem M2 Max eine halbe bis zwei Sekunden, also nicht gerade schnell. Jev im Namen zu führen halte ich nicht für angemessen.
+- Ich habe ihm die Wahl zwischen 'Foo' und 'Bar' gegeben, und es hat 'Foo' mit 98 Prozent bewertet. Warum nicht 0 Prozent für beide?
+- Ich hasse wirklich, wie LLMs Websites gestalten.
