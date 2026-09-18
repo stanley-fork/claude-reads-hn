@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-09-18 05:38 UTC
+#+DATE: 2026-09-18T05:38:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Claude pops OpenAI's forum for $6,500, a 27B model shrinks to 5.9GB, and Waymo starts a three-year queue in Singapore
+
+* Highlights
+- Hacktron chained a libheif overflow into RCE on OpenAI's Discourse, then into employee ChatGPT accounts
+- Bonsai 2 27B: 1.76 bits per weight, 5.9GB, 98.2% of the original benchmark score
+- Waymo maps Singapore now, wants LTA approval in 2027, rides in 2028
+- The wax motor: melting paraffin makes 4000N and locks your washing machine door
+- Flet 1.0 ships after four years, and HN asks who is running it in production
+
+* Stories
+
+** Hacking OpenAI :security:ai:openai:exploit:
+:PROPERTIES:
+:ID:       49749656
+:URL:      https://www.hacktron.ai/blog/hacking-openai
+:HN_URL:   https://news.ycombinator.com/item?id=49749656
+:POINTS:   177
+:COMMENTS: 49
+:BY:       Handy-Man
+:END:
+
+*** TLDR
+Hacktron found a heap buffer overflow in libheif 1.19.7/1.19.8, reachable because Discourse shells out to ImageMagick to convert HEIC uploads. Claude Opus 4.8 spotted the unpatched flaw in the Discourse Docker image; Opus 5 wrote a working ARM64 exploit in about three hours, then they ported it to x86-64 against jemalloc. On July 25 an autonomous agent loop got RCE on Discourse Cloud, and an SSO misconfiguration turned forum access into access to OpenAI employee ChatGPT and Codex accounts, demonstrated by opening a PR in OpenAI's internal monorepo. OpenAI confirmed a fix 14 hours after the report and paid $6,500 for the SSO finding; Discourse shipped sandboxing and advisory GHSA-vhm9-85gw-x335 three days later. The whole two-month project cost under $3,000 in tokens.
+
+*** Take
+The upstream libheif commit fixed a memory-corruption bug without saying it was security-critical, so Debian never backported it and every downstream image pipeline kept shipping it. That is the actual failure here. The agent loop only made the window between 'patch exists' and 'someone weaponizes it' short enough to matter.
+
+*** Comments
+
+**** btown
+:PROPERTIES:
+:COMMENT_ID: 49749900
+:END:
+Opus refused to write the exploit against a remote instance, so they proxied their own Discourse through a URL that made it look like a CTF target. By 10:00 a.m. the agent had RCE.
+
+**** nikcub
+:PROPERTIES:
+:COMMENT_ID: 49749950
+:END:
+The libheif bug was bounds checking on image overlays. HEIF supports rotation, cropping, alpha, thumbnails and a pile of other features a web forum handling screenshots never needs. Much larger attack surface than anyone signed up for.
+
+**** oefrha
+:PROPERTIES:
+:COMMENT_ID: 49750000
+:END:
+Unsandboxed ImageMagick was a known security nightmare back when PHP ruled the world. The difference now is how easy it is to turn a vulnerability into a full compromise.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+入侵 OpenAI
+***** TLDR
+Hacktron 在 libheif 1.19.7/1.19.8 中发现了堆缓冲区溢出，触发路径是 Discourse 调用 ImageMagick 转换 HEIC 上传文件。Claude Opus 4.8 在 Discourse 的 Docker 镜像中发现了这个未修补的漏洞，Opus 5 用大约三小时写出了可用的 ARM64 利用代码，随后移植到针对 jemalloc 的 x86-64。7 月 25 日，一个自主智能体循环在 Discourse Cloud 上拿到了 RCE，而一处 SSO 配置错误让论坛访问权变成了 OpenAI 员工的 ChatGPT 和 Codex 账号访问权，他们在 OpenAI 内部单体仓库里开了一个 PR 作为证明。OpenAI 在收到报告 14 小时后确认修复，并为 SSO 问题支付了 6500 美元；Discourse 三天后加上沙箱并发布了 GHSA-vhm9-85gw-x335 公告。整个为期两个月的项目 token 成本不到 3000 美元。
+***** Take
+libheif 上游那次提交修复了内存破坏问题，却没有标明属于安全修复，于是 Debian 从未回移，所有下游图像处理链路继续带着漏洞发版。这才是真正的失败点。智能体循环只是把「补丁已存在」到「有人武器化」之间的窗口缩短到了要命的程度。
+***** Comments
+- Opus 拒绝为远程实例编写利用代码，于是他们把自己的 Discourse 通过一个看起来像 CTF 靶场的地址做了代理。到上午十点，智能体已经拿到了 RCE。
+- libheif 的漏洞出在图像叠加层的边界检查上。HEIF 支持旋转、裁剪、透明通道、缩略图等一堆功能，而一个处理截图的网络论坛根本不需要这些。攻击面比谁预想的都大得多。
+- 在 PHP 统治的年代，未沙箱化的 ImageMagick 就已经是出了名的安全噩梦。今天的区别只是把一个漏洞变成完全控制变得太容易了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+OpenAIをハッキングする
+***** TLDR
+Hacktronはlibheif 1.19.7/1.19.8のヒープバッファオーバーフローを発見した。DiscourseがHEICアップロードの変換にImageMagickを呼び出すため到達可能だった。Claude Opus 4.8がDiscourseのDockerイメージ内で未修正の欠陥を見つけ、Opus 5が約3時間でARM64向けの動くエクスプロイトを書き、jemalloc構成のx86-64へ移植した。7月25日、自律エージェントのループがDiscourse CloudでRCEを獲得し、SSOの設定ミスによりフォーラムへのアクセスがOpenAI従業員のChatGPTおよびCodexアカウントへのアクセスに発展した。証拠としてOpenAIの社内モノレポにPRを作成している。OpenAIは報告から14時間後に修正を確認し、SSOの発見に対して6,500ドルを支払った。Discourseは3日後にサンドボックス化とGHSA-vhm9-85gw-x335の勧告を公開した。2か月のプロジェクト全体のトークン費用は3,000ドル未満だった。
+***** Take
+libheifの上流コミットはメモリ破壊のバグを直したが、セキュリティ上重要だと明記しなかった。そのためDebianはバックポートせず、下流の画像処理系は欠陥を抱えたまま出荷され続けた。本当の失敗はそこにある。エージェントのループは「パッチが存在する」から「誰かが武器化する」までの時間を致命的なほど短くしただけだ。
+***** Comments
+- Opusはリモートのインスタンスへのエクスプロイト作成を拒否したため、自前のDiscourseをCTFの標的に見えるURL経由でプロキシした。午前10時にはエージェントがRCEを取っていた。
+- libheifのバグは画像オーバーレイの境界チェックだった。HEIFは回転、切り抜き、アルファチャンネル、サムネイルなど、スクリーンショットを扱う掲示板には不要な機能を大量に持つ。想定よりはるかに広い攻撃面だ。
+- サンドボックス化されていないImageMagickは、PHP全盛の頃から悪名高いセキュリティの悪夢だった。今の違いは、脆弱性を完全な侵害に変えるのが容易すぎることだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+OpenAI 해킹하기
+***** TLDR
+Hacktron이 libheif 1.19.7/1.19.8에서 힙 버퍼 오버플로를 찾아냈다. Discourse가 HEIC 업로드를 변환하려고 ImageMagick을 호출하기 때문에 도달 가능한 취약점이었다. Claude Opus 4.8이 Discourse 도커 이미지에서 미수정 결함을 발견했고, Opus 5가 약 3시간 만에 동작하는 ARM64 익스플로잇을 작성한 뒤 jemalloc 환경의 x86-64로 포팅했다. 7월 25일 자율 에이전트 루프가 Discourse Cloud에서 RCE를 획득했고, SSO 설정 오류로 포럼 접근 권한이 OpenAI 직원의 ChatGPT와 Codex 계정 접근으로 이어졌다. 이를 OpenAI 내부 모노레포에 PR을 올려 증명했다. OpenAI는 신고 14시간 뒤 수정을 확인하고 SSO 건에 6,500달러를 지급했으며, Discourse는 사흘 뒤 샌드박스를 적용하고 GHSA-vhm9-85gw-x335 권고를 공개했다. 두 달짜리 프로젝트 전체의 토큰 비용은 3,000달러 미만이었다.
+***** Take
+libheif 업스트림 커밋은 메모리 손상 버그를 고쳤지만 보안상 중요하다고 표시하지 않았다. 그래서 데비안은 백포트하지 않았고, 하류의 모든 이미지 처리 파이프라인이 결함을 그대로 안고 배포됐다. 진짜 실패는 여기다. 에이전트 루프는 '패치 존재'와 '누군가의 무기화' 사이 간격을 치명적일 만큼 좁혔을 뿐이다.
+***** Comments
+- Opus는 원격 인스턴스를 겨냥한 익스플로잇 작성을 거부했고, 그래서 자기네 Discourse를 CTF 표적처럼 보이는 URL로 프록시했다. 오전 10시에는 에이전트가 RCE를 잡았다.
+- libheif 버그는 이미지 오버레이의 경계 검사였다. HEIF는 회전, 자르기, 알파 채널, 썸네일 등 스크린샷을 다루는 웹 포럼에는 전혀 필요 없는 기능을 잔뜩 지원한다. 누구도 예상 못 한 넓은 공격 표면이다.
+- 샌드박스 없는 ImageMagick은 PHP 전성기부터 악명 높은 보안 악몽이었다. 지금 달라진 점은 취약점을 완전한 장악으로 바꾸기가 너무 쉬워졌다는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Hackeando OpenAI
+***** TLDR
+Hacktron encontró un desbordamiento de búfer en el heap de libheif 1.19.7/1.19.8, alcanzable porque Discourse invoca ImageMagick para convertir las subidas HEIC. Claude Opus 4.8 detectó el fallo sin parchear en la imagen Docker de Discourse; Opus 5 escribió un exploit funcional para ARM64 en unas tres horas y luego lo portaron a x86-64 contra jemalloc. El 25 de julio un bucle autónomo de agente logró RCE en Discourse Cloud, y una mala configuración de SSO convirtió el acceso al foro en acceso a cuentas de ChatGPT y Codex de empleados de OpenAI, demostrado abriendo un PR en el monorepo interno de OpenAI. OpenAI confirmó la corrección 14 horas después del reporte y pagó 6.500 dólares por el hallazgo de SSO; Discourse añadió aislamiento y publicó el aviso GHSA-vhm9-85gw-x335 tres días más tarde. Los dos meses de proyecto costaron menos de 3.000 dólares en tokens.
+***** Take
+El commit original de libheif arregló un fallo de corrupción de memoria sin indicar que era crítico para la seguridad, así que Debian nunca lo retroportó y todas las tuberías de imágenes aguas abajo siguieron distribuyéndolo. Ese es el fallo real. El bucle de agentes solo acortó hasta lo insoportable la ventana entre que existe el parche y que alguien lo convierte en arma.
+***** Comments
+- Opus se negó a escribir el exploit contra una instancia remota, así que redirigieron su propio Discourse por una URL que parecía un objetivo de CTF. A las 10 de la mañana el agente ya tenía RCE.
+- El fallo de libheif estaba en la comprobación de límites de las superposiciones de imagen. HEIF admite rotación, recorte, canal alfa, miniaturas y un montón de funciones que un foro web que recibe capturas de pantalla no necesita. Una superficie de ataque mucho mayor de lo que nadie aceptó.
+- ImageMagick sin aislamiento ya era una pesadilla de seguridad conocida cuando PHP dominaba la web. La diferencia hoy es lo fácil que resulta convertir una vulnerabilidad en un compromiso total.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+OpenAI hacken
+***** TLDR
+Hacktron fand einen Heap-Buffer-Overflow in libheif 1.19.7/1.19.8, erreichbar weil Discourse ImageMagick aufruft, um HEIC-Uploads zu konvertieren. Claude Opus 4.8 entdeckte die ungepatchte Lücke im Docker-Image von Discourse, Opus 5 schrieb in etwa drei Stunden einen funktionierenden ARM64-Exploit, der dann auf x86-64 mit jemalloc portiert wurde. Am 25. Juli erreichte eine autonome Agentenschleife RCE auf Discourse Cloud, und eine SSO-Fehlkonfiguration machte aus dem Forumszugang Zugriff auf ChatGPT- und Codex-Konten von OpenAI-Mitarbeitern, belegt durch einen Pull Request im internen Monorepo von OpenAI. OpenAI bestätigte den Fix 14 Stunden nach der Meldung und zahlte 6.500 Dollar für den SSO-Fund; Discourse ergänzte Sandboxing und veröffentlichte drei Tage später das Advisory GHSA-vhm9-85gw-x335. Das zweimonatige Projekt kostete unter 3.000 Dollar an Tokens.
+***** Take
+Der Upstream-Commit in libheif behob einen Speicherfehler, ohne ihn als sicherheitskritisch zu kennzeichnen. Deshalb hat Debian ihn nie zurückportiert, und sämtliche nachgelagerten Bildpipelines lieferten die Lücke weiter aus. Das ist das eigentliche Versagen. Die Agentenschleife hat nur das Fenster zwischen 'Patch existiert' und 'jemand macht eine Waffe daraus' gefährlich kurz gemacht.
+***** Comments
+- Opus weigerte sich, den Exploit gegen eine entfernte Instanz zu schreiben, also leiteten sie ihr eigenes Discourse über eine URL um, die wie ein CTF-Ziel aussah. Um 10 Uhr hatte der Agent RCE.
+- Der libheif-Fehler lag in der Bereichsprüfung von Bildüberlagerungen. HEIF unterstützt Drehung, Zuschnitt, Alphakanal, Thumbnails und einen Haufen Funktionen, die ein Webforum mit Screenshots nie braucht. Eine viel größere Angriffsfläche, als irgendwer bestellt hat.
+- Ungesandboxtes ImageMagick war schon zu PHP-Zeiten ein bekannter Sicherheitsalptraum. Der Unterschied heute ist, wie leicht sich eine Schwachstelle in eine vollständige Übernahme verwandeln lässt.
+** Bonsai 2 27B: Near-Lossless Compression in a 9x Smaller Footprint :ai:quantization:llm:open-weights:
+:PROPERTIES:
+:ID:       49746618
+:URL:      https://prismml.com/news/bonsai-2-27b
+:HN_URL:   https://news.ycombinator.com/item?id=49746618
+:POINTS:   332
+:COMMENTS: 108
+:BY:       JonSchneider
+:END:
+
+*** TLDR
+Prism ML compressed Qwen3.8 27B to ternary weights (-1, 0, +1) with FP16 group-wise scaling, landing at 1.76 effective bits per weight. The result is 5.9GB with a 262K context window, versus roughly nine times that at full precision. Prism reports 83.9 against 85.4 on its aggregate benchmark, so 98.2% retention, with coding at 81.58 vs 82.17 and vision at 78.59 vs 81.64. Vision and agentic tasks take the largest hits at 2-3 points. The GGUFs need Prism's own llama.cpp fork to run.
+
+*** Take
+The number that matters is not 98.2%, it is 5.9GB, because that is what decides whether the model fits on hardware you already own. Note also that the vision drop is three times the coding drop, and aggregate scores are exactly where that kind of unevenness hides.
+
+*** Comments
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 49746800
+:END:
+If you want to try the GGUFs, be aware you need Prism's llama.cpp fork to get them to work.
+
+**** miffy900
+:PROPERTIES:
+:COMMENT_ID: 49746850
+:END:
+Stop saying N times smaller. It is one ninth the size. You do not get a smaller quantity by multiplying by a number greater than 1.0. Say the original is 9x bigger.
+
+**** Aurornis
+:PROPERTIES:
+:COMMENT_ID: 49746900
+:END:
+These are small enough to run entirely in the browser. It is amazing they work as well as they do, but use one for any longer task and it falls apart spectacularly and in interesting ways.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Bonsai 2 27B：体积缩到九分之一的近乎无损压缩
+***** TLDR
+Prism ML 把 Qwen3.8 27B 压成了三值权重（-1、0、+1）加 FP16 分组缩放，实际每权重 1.76 位。成品 5.9GB，上下文窗口 262K，约为全精度版本的九分之一。Prism 给出的综合基准是 83.9 对 85.4，即保留 98.2%；编程为 81.58 对 82.17，视觉为 78.59 对 81.64。视觉和智能体任务掉得最多，约 2 到 3 分。GGUF 需要 Prism 自己的 llama.cpp 分支才能跑。
+***** Take
+真正重要的数字不是 98.2%，而是 5.9GB，因为它决定这个模型能不能装进你手头已有的硬件。另外注意，视觉的跌幅是编程的三倍，而综合分数恰恰最擅长掩盖这种不均衡。
+***** Comments
+- 想试这些 GGUF 的注意，必须用 Prism 的 llama.cpp 分支才能跑起来。
+- 别再说「小 N 倍」了。它是原来的九分之一。用一个大于 1.0 的数去乘，是不会得到更小的量的。要说原模型大 9 倍。
+- 这些小到可以完全在浏览器里跑。它们表现这么好确实惊人，但只要任务一长，就会以各种有趣的方式彻底崩掉。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Bonsai 2 27B: 9分の1のサイズでほぼ無損失の圧縮
+***** TLDR
+Prism MLはQwen3.8 27Bを三値重み（-1、0、+1）とFP16のグループ単位スケーリングで圧縮し、実効1.76ビット/重みに収めた。結果は5.9GBで262Kのコンテキストウィンドウ、フル精度版のおよそ9分の1だ。Prismの総合ベンチマークは85.4に対して83.9、つまり98.2%の維持率で、コーディングは82.17に対して81.58、ビジョンは81.64に対して78.59。ビジョンとエージェント系のタスクで2〜3ポイントと最も落ち込む。GGUFの実行にはPrism独自のllama.cppフォークが必要だ。
+***** Take
+重要な数字は98.2%ではなく5.9GBだ。手元にあるハードウェアに載るかどうかを決めるのはそちらだからだ。さらにビジョンの低下はコーディングの3倍あり、総合スコアはまさにその種のばらつきを覆い隠す場所である。
+***** Comments
+- GGUFを試すなら、Prismのllama.cppフォークがないと動かない点に注意。
+- N倍小さいという言い方はやめてほしい。9分の1のサイズだ。1.0より大きい数を掛けて量が小さくなることはない。元のモデルが9倍大きいと言えばいい。
+- ブラウザ内で丸ごと動くくらい小さい。これだけ動くのは驚きだが、長めのタスクに使うと派手に、しかも興味深い形で崩壊する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Bonsai 2 27B: 9분의 1 크기로 거의 무손실 압축
+***** TLDR
+Prism ML이 Qwen3.8 27B를 삼진 가중치(-1, 0, +1)와 FP16 그룹 단위 스케일링으로 압축해 가중치당 실효 1.76비트로 줄였다. 결과물은 5.9GB에 262K 컨텍스트 창으로, 전정밀도 버전의 약 9분의 1이다. Prism이 제시한 종합 벤치마크는 85.4 대비 83.9로 98.2% 유지, 코딩은 82.17 대비 81.58, 비전은 81.64 대비 78.59다. 비전과 에이전트 작업이 2~3점으로 가장 크게 떨어진다. GGUF를 돌리려면 Prism 자체 llama.cpp 포크가 필요하다.
+***** Take
+중요한 숫자는 98.2%가 아니라 5.9GB다. 이미 가진 하드웨어에 올라가는지를 결정하는 건 그쪽이기 때문이다. 그리고 비전 하락 폭이 코딩의 세 배라는 점도 눈여겨보자. 종합 점수는 바로 그런 불균형을 숨기기 좋은 자리다.
+***** Comments
+- GGUF를 써보려면 Prism의 llama.cpp 포크가 있어야 돌아간다는 점을 알아두자.
+- N배 더 작다는 표현은 그만하자. 원래의 9분의 1 크기다. 1.0보다 큰 수를 곱해서 양이 줄어들지는 않는다. 원본이 9배 크다고 하면 된다.
+- 브라우저 안에서 통째로 돌릴 만큼 작다. 이 정도로 작동한다는 게 놀랍긴 하지만, 조금만 긴 작업을 맡기면 화려하고 흥미로운 방식으로 무너진다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Bonsai 2 27B: compresión casi sin pérdidas en una novena parte del espacio
+***** TLDR
+Prism ML comprimió Qwen3.8 27B a pesos ternarios (-1, 0, +1) con escalado FP16 por grupos, quedando en 1,76 bits efectivos por peso. El resultado ocupa 5,9 GB con una ventana de contexto de 262K, frente a unas nueve veces eso en precisión completa. Prism reporta 83,9 sobre 85,4 en su referencia agregada, es decir 98,2% de retención, con programación en 81,58 frente a 82,17 y visión en 78,59 frente a 81,64. Visión y tareas agénticas son las que más pierden, entre 2 y 3 puntos. Los GGUF requieren el fork propio de llama.cpp de Prism.
+***** Take
+La cifra que importa no es el 98,2%, sino los 5,9 GB, porque eso decide si el modelo cabe en el hardware que ya tienes. Y conviene notar que la caída en visión triplica la de programación: las puntuaciones agregadas son justo donde ese desnivel se esconde.
+***** Comments
+- Si quieres probar los GGUF, ten en cuenta que necesitas el fork de llama.cpp de Prism para que funcionen.
+- Dejad de decir N veces más pequeño. Es una novena parte del tamaño. No se obtiene una cantidad menor multiplicando por un número mayor que 1,0. Decid que el original es 9 veces más grande.
+- Son lo bastante pequeños como para ejecutarse enteros en el navegador. Asombra que funcionen tan bien, pero úsalo en una tarea larga y se desmorona de forma espectacular y curiosa.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Bonsai 2 27B: nahezu verlustfreie Kompression auf ein Neuntel der Größe
+***** TLDR
+Prism ML hat Qwen3.8 27B auf ternäre Gewichte (-1, 0, +1) mit gruppenweiser FP16-Skalierung komprimiert und landet bei effektiv 1,76 Bit pro Gewicht. Heraus kommen 5,9 GB bei 262K Kontextfenster, gegenüber etwa dem Neunfachen in voller Präzision. Prism nennt 83,9 gegenüber 85,4 im aggregierten Benchmark, also 98,2% Erhalt, mit Coding bei 81,58 statt 82,17 und Vision bei 78,59 statt 81,64. Vision und agentische Aufgaben verlieren mit 2 bis 3 Punkten am meisten. Die GGUFs laufen nur mit Prisms eigenem llama.cpp-Fork.
+***** Take
+Die entscheidende Zahl ist nicht 98,2%, sondern 5,9 GB, denn die bestimmt, ob das Modell auf Hardware passt, die man schon besitzt. Außerdem ist der Vision-Einbruch dreimal so groß wie der beim Coding, und aggregierte Werte sind genau der Ort, an dem sich solche Unterschiede verstecken.
+***** Comments
+- Wer die GGUFs ausprobieren will, braucht Prisms llama.cpp-Fork, sonst laufen sie nicht.
+- Hört auf, N-mal kleiner zu sagen. Es ist ein Neuntel der Größe. Man bekommt keine kleinere Menge, indem man mit einer Zahl größer als 1,0 multipliziert. Sagt lieber, das Original ist 9-mal größer.
+- Die sind klein genug, um komplett im Browser zu laufen. Erstaunlich, wie gut sie funktionieren, aber bei längeren Aufgaben brechen sie spektakulär und auf interessante Weise zusammen.
+** Waymo in Singapore :waymo:self-driving:singapore:transport:
+:PROPERTIES:
+:ID:       49749981
+:URL:      https://waymo.com/waymo-in-singapore/
+:HN_URL:   https://news.ycombinator.com/item?id=49749981
+:POINTS:   59
+:COMMENTS: 25
+:BY:       ramanan
+:END:
+
+*** TLDR
+Waymo is bringing its ride-hailing service to Singapore, starting now with human-driven mapping and validation across every region of the island, 24/7. It plans to seek Land Transport Authority approval for autonomous driving in 2027 and open commercial service in 2028. The fleet starts with all-electric Jaguar I-PACE vehicles running the fifth-generation Waymo Driver, with expansion planned later. Waymo says it is working with the Ministry of Transport and the LTA on approvals. The page gives no detail on right-hand-drive adaptation.
+
+*** Take
+Two years of mapping before a single driverless ride is the real announcement, and it is a reasonable trade in a city where a Certificate of Entitlement alone costs six figures and the state controls how many cars exist. Waymo is not competing with car ownership here; it is applying to become part of a transport system that already decides who gets to drive.
+
+*** Comments
+
+**** shell0x
+:PROPERTIES:
+:COMMENT_ID: 49750100
+:END:
+A basic commuter car costs over S$180,000 because of the 10-year COE quota licence, which alone runs past S$100,000, plus registration taxes up to 320% of base value. Singapore is small and cabs are cheap; I never needed a car.
+
+**** rottencupcakes
+:PROPERTIES:
+:COMMENT_ID: 49750150
+:END:
+Singapore has the potential to be the first country to eliminate private ownership of vehicles.
+
+**** orsenthil
+:PROPERTIES:
+:COMMENT_ID: 49750200
+:END:
+Singapore is a controlled economy with a large workforce of taxi drivers and part-time Grab drivers. My guess is they will co-exist, because the government will not jeopardise those livelihoods.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Waymo 进入新加坡
+***** TLDR
+Waymo 要把叫车服务带到新加坡，现阶段先由人类驾驶员全天候跑遍全岛各区做测绘与验证。公司计划 2027 年向陆路交通管理局申请自动驾驶许可，2028 年开放商业运营。车队先投入搭载第五代 Waymo Driver 的纯电动捷豹 I-PACE，之后再扩充。Waymo 表示正与交通部和陆交局推进审批。页面未说明右舵适配的细节。
+***** Take
+真正的新闻是：在第一次无人驾驶载客之前要先测绘两年。在一个仅拥车证就要六位数、由国家决定路上能有多少辆车的城市里，这笔交易算合理。Waymo 在这里不是在跟私家车竞争，而是在申请加入一个早已规定谁能开车的交通体系。
+***** Comments
+- 一辆普通通勤车要花 18 万新元以上，因为十年期的拥车证配额光本身就超过 10 万新元，再加上最高达车价 320% 的注册税。新加坡很小，出租车也便宜，我从来不需要车。
+- 新加坡有可能成为第一个取消私人拥车的国家。
+- 新加坡是受管控的经济体，有大量出租车司机和 Grab 兼职司机。我猜两者会并存，因为政府不会拿这些人的生计去冒险。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Waymo、シンガポールへ
+***** TLDR
+Waymoが配車サービスをシンガポールに持ち込む。まずは人間が運転して島内の全地域を24時間体制でマッピングし検証する段階だ。2027年に陸上交通庁（LTA）へ自動運転の認可を申請し、2028年に商業サービスを開始する計画。車両は第5世代Waymo Driverを搭載した電気自動車ジャガーI-PACEから始め、後に拡大する。運輸省とLTAと認可について協議中だという。右ハンドルへの適応についての記載はない。
+***** Take
+本当の見どころは、無人運行の初回乗車までに2年間の地図作りがあることだ。取得権証（COE）だけで6桁かかり、走る車の総数を国家が決める都市では妥当な取引と言える。Waymoはここでマイカー所有と競っているのではなく、誰が運転できるかを既に決めている交通システムへの参加を申請している。
+***** Comments
+- 10年間のCOE割当ライセンスだけで10万シンガポールドルを超え、登録税は基本価格の最大320%になるため、普通の通勤車が18万シンガポールドル以上する。ただシンガポールは狭くタクシーも安いので、車が必要だと感じたことはない。
+- シンガポールは自家用車の私有を廃止する最初の国になる可能性がある。
+- シンガポールは管理された経済で、タクシー運転手やGrabの副業ドライバーが大勢いる。政府が彼らの生計を危険にさらすとは思えないので、共存するだろう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+웨이모, 싱가포르 진출
+***** TLDR
+웨이모가 승차 호출 서비스를 싱가포르에 들여온다. 지금은 사람이 직접 운전하며 섬 전역을 24시간 매핑하고 검증하는 단계다. 2027년 육상교통청(LTA)에 자율주행 승인을 신청하고 2028년 상업 서비스를 시작할 계획이다. 차량은 5세대 웨이모 드라이버를 탑재한 전기차 재규어 I-PACE로 시작해 이후 확대한다. 교통부와 LTA와 승인 절차를 협의 중이라고 밝혔다. 우핸들 적응에 대한 설명은 없다.
+***** Take
+진짜 뉴스는 무인 주행 첫 탑승까지 2년간 지도를 만든다는 대목이다. 차량 보유 증서(COE)만 해도 여섯 자리 금액이고 국가가 도로 위 차량 수를 정하는 도시라면 합리적인 거래다. 웨이모는 여기서 자가용 소유와 경쟁하는 게 아니라, 누가 운전할 수 있는지를 이미 정해 둔 교통 체계에 편입을 신청하고 있다.
+***** Comments
+- 10년짜리 COE 쿼터 면허만 10만 싱가포르달러가 넘고 등록세는 기본가의 최대 320%라, 평범한 통근 차가 18만 싱가포르달러를 넘는다. 싱가포르는 좁고 택시도 싸서 차가 필요했던 적이 없다.
+- 싱가포르는 자가용 사유를 없애는 첫 국가가 될 잠재력이 있다.
+- 싱가포르는 통제된 경제이고 택시 기사와 그랩 파트타임 기사가 많다. 정부가 그들의 생계를 위협하지는 않을 테니 공존하리라 본다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Waymo en Singapur
+***** TLDR
+Waymo llevará su servicio de transporte a Singapur, empezando ahora con conducción humana para mapear y validar todas las regiones de la isla, las 24 horas. Planea pedir autorización a la Autoridad de Transporte Terrestre (LTA) para conducción autónoma en 2027 y abrir el servicio comercial en 2028. La flota arranca con Jaguar I-PACE totalmente eléctricos con el Waymo Driver de quinta generación, y se ampliará después. Waymo dice estar trabajando con el Ministerio de Transporte y la LTA para los permisos. La página no da detalles sobre la adaptación al volante a la derecha.
+***** Take
+El verdadero anuncio son los dos años de mapeo antes del primer viaje sin conductor, y es un trato razonable en una ciudad donde solo el Certificado de Derecho de Circulación cuesta seis cifras y el Estado decide cuántos coches existen. Waymo no compite aquí con la propiedad del automóvil: solicita entrar en un sistema de transporte que ya decide quién puede conducir.
+***** Comments
+- Un coche corriente cuesta más de 180.000 dólares singapurenses por la licencia de cuota COE de 10 años, que ya pasa de 100.000, más impuestos de matriculación de hasta el 320% del valor base. Singapur es pequeño y los taxis son baratos; nunca necesité coche.
+- Singapur tiene el potencial de ser el primer país en eliminar la propiedad privada de vehículos.
+- Singapur es una economía controlada con una gran plantilla de taxistas y conductores de Grab a tiempo parcial. Supongo que convivirán, porque el gobierno no pondrá en riesgo esos medios de vida.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Waymo in Singapur
+***** TLDR
+Waymo bringt seinen Fahrdienst nach Singapur und beginnt jetzt mit von Menschen gefahrener Kartierung und Validierung in allen Regionen der Insel, rund um die Uhr. Für 2027 ist der Antrag auf Genehmigung des autonomen Fahrens bei der Land Transport Authority geplant, der kommerzielle Betrieb soll 2028 starten. Die Flotte beginnt mit vollelektrischen Jaguar I-PACE mit dem Waymo Driver der fünften Generation, später soll erweitert werden. Waymo arbeitet nach eigenen Angaben mit dem Verkehrsministerium und der LTA an den Genehmigungen. Zur Anpassung an Rechtslenker steht nichts auf der Seite.
+***** Take
+Die eigentliche Nachricht sind zwei Jahre Kartierung vor der ersten fahrerlosen Fahrt, und das ist ein vernünftiger Handel in einer Stadt, in der allein das Certificate of Entitlement sechsstellig kostet und der Staat festlegt, wie viele Autos es gibt. Waymo konkurriert hier nicht mit dem Autobesitz, sondern bewirbt sich um Aufnahme in ein Verkehrssystem, das ohnehin bestimmt, wer fahren darf.
+***** Comments
+- Ein einfacher Pendlerwagen kostet über 180.000 Singapur-Dollar, weil die zehnjährige COE-Quotenlizenz allein über 100.000 liegt, dazu Zulassungssteuern von bis zu 320% des Grundwerts. Singapur ist klein und Taxis sind billig, ich habe nie ein Auto gebraucht.
+- Singapur könnte das erste Land werden, das den privaten Fahrzeugbesitz abschafft.
+- Singapur ist eine gelenkte Wirtschaft mit vielen Taxifahrern und Grab-Teilzeitfahrern. Ich vermute, beides wird nebeneinander bestehen, weil die Regierung diese Existenzen nicht gefährdet.
+** Wax motor :hardware:engineering:actuators:appliances:
+:PROPERTIES:
+:ID:       49726007
+:URL:      https://en.wikipedia.org/wiki/Wax_motor
+:HN_URL:   https://news.ycombinator.com/item?id=49726007
+:POINTS:   313
+:COMMENTS: 59
+:BY:       mhb
+:END:
+
+*** TLDR
+A wax motor is a linear actuator that turns heat into motion using the phase change of wax, which expands 5-20% in volume as it melts. Enclosed wax pushes a plunger out when heated by an electric element, sunlight, combustion or just ambient temperature, and a spring or weight providing 20-30% of the operating force pulls it back when the wax cools. It produces roughly 4000N, moves gently rather than instantly, and behaves as a resistive load. You find them in washing machine door locks, dishwasher detergent dispensers, thermostatic mixing valves, hydronic zone valves, self-opening greenhouse vents, aerospace fluid controls and paraffin MEMS microactuators.
+
+*** Take
+The design is close to unbeatable for the jobs it holds: no motor, no gearbox, no control loop, and the passive version needs no power at all because the thing it measures is also the thing that moves it. A greenhouse vent that opens itself when it is warm is a sensor, controller and actuator in one sealed cylinder of paraffin.
+
+*** Comments
+
+**** limaoscarjuliet
+:PROPERTIES:
+:COMMENT_ID: 49726200
+:END:
+The Wikipedia page has an error: it labels an actuator as a thermostatic radiator valve. Those are two different things. A thermostat opens and closes based on surrounding temperature; the actuator responds to a heating element being energised.
+
+**** cbdumas
+:PROPERTIES:
+:COMMENT_ID: 49726250
+:END:
+Surprised the page does not mention the automotive thermostat, which uses the same principle to control coolant flow between the engine block and the radiator.
+
+**** palmotea
+:PROPERTIES:
+:COMMENT_ID: 49726300
+:END:
+If you want to see one in action, there is a video showing the full cycle.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+石蜡马达
+***** TLDR
+石蜡马达是一种把热转换成运动的线性执行器，原理是蜡的相变：熔化时体积膨胀 5% 到 20%。封装的蜡在被电热元件、阳光、燃烧或单纯的环境温度加热时推出柱塞，蜡冷却后再由提供工作力 20% 到 30% 的弹簧或配重把柱塞拉回。它能产生约 4000 牛顿的力，动作平缓而非瞬时，表现为阻性负载。常见于洗衣机门锁、洗碗机洗涤剂投放盒、恒温混水阀、水暖分区阀、自动开启的温室通风窗、航空流体控制以及石蜡 MEMS 微执行器。
+***** Take
+在它承担的这些活儿上，这种设计几乎无可替代：没有电机、没有齿轮箱、没有控制回路，被动版本甚至完全不需要供电，因为它测量的东西同时也是驱动它的东西。一扇天热就自己打开的温室通风窗，把传感器、控制器和执行器全装进了一个密封的石蜡筒里。
+***** Comments
+- 维基页面有个错误：它把一个执行器标成了恒温散热器阀。这是两样东西。恒温阀根据环境温度开合，而执行器是靠加热元件通电来动作的。
+- 意外的是页面没提汽车节温器，它用同样的原理控制冷却液在缸体和散热器之间的流动。
+- 想看它实际工作的话，有个视频完整拍了整个循环。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ワックスモーター
+***** TLDR
+ワックスモーターは、ワックスの相変化を利用して熱を運動に変える直動アクチュエータだ。ワックスは融解時に体積が5〜20%膨張する。密閉されたワックスは電熱素子、太陽光、燃焼、あるいは単なる外気温で加熱されるとプランジャを押し出し、冷えて収縮すると作動力の20〜30%を受け持つばねや錘が引き戻す。発生力はおよそ4000Nで、瞬時ではなく穏やかに動き、誘導性ではなく抵抗性の負荷として振る舞う。洗濯機のドアロック、食洗機の洗剤投入口、サーモスタット混合弁、温水暖房のゾーンバルブ、自動開閉する温室の換気窓、航空宇宙の流体制御、パラフィンMEMSマイクロアクチュエータなどで使われている。
+***** Take
+この設計は担当する仕事に対してほぼ無敵だ。モーターも減速機も制御ループもなく、受動型に至っては電源すら要らない。測っている対象が、そのまま動かす力になっているからだ。暖かくなると自分で開く温室の換気窓は、センサーと制御器とアクチュエータを一本の密封パラフィン筒に収めている。
+***** Comments
+- Wikipediaのページには誤りがある。アクチュエータをサーモスタット式ラジエーターバルブと表記しているが、これは別物だ。サーモスタットは周囲の温度で開閉し、アクチュエータは加熱素子への通電で動く。
+- 同じ原理でエンジンブロックとラジエーター間の冷却水流量を制御する自動車用サーモスタットに触れていないのは意外だ。
+- 動いているところを見たいなら、一連の動作を収めた動画がある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+왁스 모터
+***** TLDR
+왁스 모터는 왁스의 상변화를 이용해 열을 운동으로 바꾸는 직선 구동기다. 왁스는 녹으면서 부피가 5~20% 팽창한다. 밀폐된 왁스가 전열 소자, 햇빛, 연소, 혹은 그냥 주변 온도로 가열되면 플런저를 밀어내고, 식으면 작동력의 20~30%를 담당하는 스프링이나 추가 플런저를 되돌린다. 약 4000N의 힘을 내고 순간적이 아니라 부드럽게 움직이며 유도성이 아닌 저항성 부하로 작동한다. 세탁기 도어 잠금, 식기세척기 세제 투입구, 온도 조절 혼합 밸브, 온수 난방 구역 밸브, 자동으로 열리는 온실 환기창, 항공우주 유체 제어, 파라핀 MEMS 마이크로 구동기에 쓰인다.
+***** Take
+이 설계는 맡은 일에 관한 한 거의 무적이다. 모터도, 기어박스도, 제어 루프도 없고 수동형은 전원조차 필요 없다. 측정하는 대상이 곧 움직이게 하는 힘이기 때문이다. 따뜻해지면 스스로 열리는 온실 환기창은 센서와 제어기와 구동기를 파라핀 실린더 하나에 밀봉해 넣은 것이다.
+***** Comments
+- 위키백과 페이지에 오류가 있다. 구동기를 온도 조절식 라디에이터 밸브라고 표기했는데 둘은 다른 물건이다. 서모스탯은 주변 온도에 따라 여닫히고, 구동기는 발열 소자에 전원이 들어가면 움직인다.
+- 같은 원리로 엔진 블록과 라디에이터 사이 냉각수 흐름을 조절하는 자동차 서모스탯을 언급하지 않은 게 의외다.
+- 실제로 움직이는 걸 보고 싶다면 전체 동작을 담은 영상이 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Motor de cera
+***** TLDR
+Un motor de cera es un actuador lineal que convierte calor en movimiento aprovechando el cambio de fase de la cera, que se expande entre un 5% y un 20% al fundirse. La cera encerrada empuja un émbolo al calentarse con una resistencia eléctrica, el sol, combustión o simplemente la temperatura ambiente, y un muelle o contrapeso que aporta el 20-30% de la fuerza de trabajo lo retrae cuando la cera se enfría. Genera unos 4000 N, se mueve de forma suave y no instantánea, y se comporta como carga resistiva. Aparece en cierres de puertas de lavadoras, dosificadores de detergente de lavavajillas, válvulas mezcladoras termostáticas, válvulas de zona de calefacción hidrónica, ventanas de invernadero que se abren solas, control de fluidos aeroespaciales y microactuadores MEMS de parafina.
+***** Take
+El diseño es casi imbatible para las tareas que ocupa: sin motor, sin caja reductora, sin lazo de control, y la versión pasiva no necesita energía alguna porque lo que mide es también lo que la mueve. Una ventana de invernadero que se abre sola con el calor reúne sensor, controlador y actuador en un cilindro sellado de parafina.
+***** Comments
+- La página de Wikipedia tiene un error: etiqueta un actuador como válvula termostática de radiador. Son dos cosas distintas. Un termostato abre y cierra según la temperatura ambiente; el actuador responde a que se energice una resistencia.
+- Me sorprende que la página no mencione el termostato del automóvil, que usa el mismo principio para controlar el paso de refrigerante entre el bloque motor y el radiador.
+- Si quieres ver uno funcionando, hay un vídeo que muestra el ciclo completo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wachsmotor
+***** TLDR
+Ein Wachsmotor ist ein Linearantrieb, der Wärme über den Phasenwechsel von Wachs in Bewegung umsetzt; beim Schmelzen dehnt sich das Wachs um 5 bis 20% im Volumen aus. Das eingeschlossene Wachs drückt einen Stößel heraus, sobald es von einem Heizelement, Sonnenlicht, Verbrennung oder schlicht der Umgebungstemperatur erwärmt wird. Kühlt es ab, zieht eine Feder oder ein Gewicht mit 20 bis 30% der Betriebskraft den Stößel zurück. Er liefert rund 4000 N, bewegt sich sanft statt schlagartig und verhält sich als ohmsche Last. Zu finden ist er in Türverriegelungen von Waschmaschinen, Spülmaschinen-Dosierklappen, thermostatischen Mischventilen, Zonenventilen von Warmwasserheizungen, selbstöffnenden Gewächshausfenstern, Fluidsteuerungen in der Luftfahrt und Paraffin-MEMS-Mikroaktoren.
+***** Take
+Für die Aufgaben, die er übernimmt, ist das Prinzip kaum zu schlagen: kein Motor, kein Getriebe, kein Regelkreis, und die passive Variante braucht überhaupt keinen Strom, weil das Gemessene zugleich das Antreibende ist. Ein Gewächshausfenster, das sich bei Wärme selbst öffnet, vereint Sensor, Regler und Aktor in einem versiegelten Paraffinzylinder.
+***** Comments
+- Die Wikipedia-Seite hat einen Fehler: Sie bezeichnet einen Aktor als thermostatisches Heizkörperventil. Das sind zwei verschiedene Dinge. Ein Thermostat öffnet und schließt nach Umgebungstemperatur, der Aktor reagiert darauf, dass ein Heizelement bestromt wird.
+- Überraschend, dass die Seite den Kfz-Thermostat nicht erwähnt, der nach demselben Prinzip den Kühlmittelfluss zwischen Motorblock und Kühler steuert.
+- Wer einen in Aktion sehen will: Es gibt ein Video, das den kompletten Zyklus zeigt.
+** Flet 1.0 – Build cross-platform apps in Python :python:flutter:gui:cross-platform:
+:PROPERTIES:
+:ID:       49746290
+:URL:      https://flet.dev/
+:HN_URL:   https://news.ycombinator.com/item?id=49746290
+:POINTS:   86
+:COMMENTS: 40
+:BY:       absqueued
+:END:
+
+*** TLDR
+Flet hit 1.0 on September 15 after more than four years of development. It wraps Flutter so you can write web, desktop and mobile apps in Python, with 150+ controls, the ability to wrap Flutter packages as extensions, and `flet build` for packaging to the App Store, Google Play and desktop targets. Web apps can either run Python in the browser via Pyodide and WebAssembly or run server-side with live UI updates. The project reports 16,700 GitHub stars, 9 million PyPI downloads and 100 contributors, and the 1.0 announcement is mostly about stability, docs and tests rather than new features. Flet Studio, a browser IDE, and an MCP server for AI coding assistants ship alongside.
+
+*** Take
+Framing 1.0 around reliability, docs and tests is the right call, since the thing that kills Python-over-Flutter wrappers is not missing widgets but the edge case where you need Flutter behaviour the binding does not expose. The extension mechanism for wrapping Flutter packages is the part worth evaluating, because that is the escape hatch that decides whether you get stuck.
+
+*** Comments
+
+**** ChrisChou
+:PROPERTIES:
+:COMMENT_ID: 49746400
+:END:
+I will not spend time on this kind of UI framework until I see it used in mature, large-scale applications. Complex software hits obscure edge cases, and you do not want to discover the framework itself blocks you after months of work.
+
+**** bnchrch
+:PROPERTIES:
+:COMMENT_ID: 49746450
+:END:
+Python needs to be in fewer places, not more. It is inefficient by nature and leads you toward poor abstractions and subtle bugs. It deserves the love it gets as an approachable language and a lot more criticism otherwise.
+
+**** pietz
+:PROPERTIES:
+:COMMENT_ID: 49746500
+:END:
+Using a to-do list app as the first example to advertise a new app framework is absolutely wild in Q3 2026.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Flet 1.0：用 Python 构建跨平台应用
+***** TLDR
+Flet 于 9 月 15 日发布 1.0，距项目启动已超过四年。它封装 Flutter，让你用 Python 写 Web、桌面和移动应用，提供 150 多个控件、把 Flutter 包封装成扩展的能力，以及用于打包到 App Store、Google Play 和桌面平台的 `flet build`。Web 应用既可以通过 Pyodide 和 WebAssembly 在浏览器里跑 Python，也可以放在服务端实时更新界面。项目称有 16700 个 GitHub star、900 万次 PyPI 下载和 100 位贡献者，1.0 公告主要谈稳定性、文档和测试，而非新功能。同期还推出了浏览器 IDE「Flet Studio」和面向 AI 编程助手的 MCP 服务器。
+***** Take
+把 1.0 的重点放在可靠性、文档和测试上是对的，因为杀死「Python 套 Flutter」这类项目的从来不是控件不够，而是你需要某个绑定没暴露出来的 Flutter 行为的那一刻。真正值得评估的是封装 Flutter 包的扩展机制，那是决定你会不会卡死的逃生口。
+***** Comments
+- 在看到这类 UI 框架被用在成熟的大型应用里之前，我不会在它上面花时间。复杂软件总会撞上冷门边界情况，你不会想在投入几个月之后才发现框架本身把路堵死了。
+- Python 该出现在更少的地方，而不是更多。它天生低效，还会把人引向糟糕的抽象和隐蔽的 bug。作为一门易上手的语言它值得被喜爱，但其余方面值得挨更多骂。
+- 2026 年第三季度还拿待办清单应用当新框架的头号示例，实在离谱。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Flet 1.0: Pythonでクロスプラットフォームアプリを作る
+***** TLDR
+Fletが4年以上の開発を経て9月15日に1.0へ到達した。Flutterをラップし、Pythonでウェブ、デスクトップ、モバイルのアプリを書ける。150以上のコントロール、Flutterパッケージを拡張として取り込む仕組み、App StoreやGoogle Play、デスクトップ向けにパッケージングする`flet build`を備える。ウェブアプリはPyodideとWebAssemblyでブラウザ内Python実行にも、サーバー側でUIをリアルタイム更新する方式にも対応する。GitHubスター16,700、PyPIダウンロード900万、コントリビューター100人を公表しており、1.0の発表は新機能より安定性、ドキュメント、テストが中心だ。ブラウザIDEのFlet Studioと、AIコーディング支援向けMCPサーバーも同時に提供される。
+***** Take
+1.0を信頼性とドキュメントとテストで語るのは正しい判断だ。Python製Flutterラッパーを殺すのはウィジェット不足ではなく、バインディングが露出していないFlutterの挙動が必要になる瞬間だからだ。評価すべきはFlutterパッケージをラップする拡張機構で、それが行き詰まるかどうかを決める非常口になる。
+***** Comments
+- この種のUIフレームワークは、成熟した大規模アプリで使われているのを見るまで時間を割かない。複雑なソフトは必ず変わった境界条件にぶつかるし、何か月も作った後でフレームワーク自体が障害だと気づきたくはない。
+- Pythonはもっと多くの場所ではなく、もっと少ない場所にいるべきだ。本質的に非効率で、貧弱な抽象と見つけにくいバグへ導く。とっつきやすい言語として愛されるのは当然だが、それ以外の点ではもっと批判されていい。
+- 2026年第3四半期に、新しいアプリフレームワークの最初の例がToDoリストというのはさすがに無茶だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Flet 1.0: 파이썬으로 크로스플랫폼 앱 만들기
+***** TLDR
+Flet이 4년 넘는 개발 끝에 9월 15일 1.0에 도달했다. Flutter를 감싸서 파이썬으로 웹, 데스크톱, 모바일 앱을 작성할 수 있게 하며, 150개가 넘는 컨트롤과 Flutter 패키지를 확장으로 감싸는 기능, App Store와 구글 플레이, 데스크톱용 패키징을 처리하는 `flet build`를 제공한다. 웹 앱은 Pyodide와 WebAssembly로 브라우저에서 파이썬을 돌리거나, 서버 쪽에서 UI를 실시간 갱신하는 방식 중 고를 수 있다. 프로젝트는 깃허브 스타 16,700개, PyPI 다운로드 900만 회, 기여자 100명을 밝혔고, 1.0 발표는 새 기능보다 안정성과 문서, 테스트에 초점을 맞췄다. 브라우저 IDE인 Flet Studio와 AI 코딩 도구용 MCP 서버도 함께 나왔다.
+***** Take
+1.0을 신뢰성과 문서, 테스트로 설명한 건 옳은 선택이다. 파이썬으로 Flutter를 감싸는 프로젝트를 죽이는 건 위젯 부족이 아니라, 바인딩이 노출하지 않은 Flutter 동작이 필요해지는 순간이기 때문이다. 평가할 가치가 있는 부분은 Flutter 패키지를 감싸는 확장 메커니즘이다. 막히느냐 마느냐를 결정하는 비상구가 거기다.
+***** Comments
+- 이런 UI 프레임워크는 성숙한 대규모 애플리케이션에서 쓰이는 걸 보기 전까지 시간을 들이지 않는다. 복잡한 소프트웨어는 반드시 희한한 예외 상황을 만나고, 몇 달을 들인 뒤에야 프레임워크 자체가 막는다는 걸 알고 싶지는 않다.
+- 파이썬은 더 많은 곳이 아니라 더 적은 곳에 있어야 한다. 태생적으로 비효율적이고 빈약한 추상과 미묘한 버그로 이끈다. 접근하기 쉬운 언어로서 받는 애정은 마땅하지만, 그 외에는 훨씬 더 많은 비판을 받아야 한다.
+- 2026년 3분기에 새 앱 프레임워크의 첫 예제가 할 일 목록 앱이라니 정말 대단하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Flet 1.0: crear aplicaciones multiplataforma en Python
+***** TLDR
+Flet llegó a 1.0 el 15 de septiembre tras más de cuatro años de desarrollo. Envuelve Flutter para que escribas aplicaciones web, de escritorio y móviles en Python, con más de 150 controles, la posibilidad de envolver paquetes de Flutter como extensiones y `flet build` para empaquetar hacia la App Store, Google Play y escritorio. Las aplicaciones web pueden ejecutar Python en el navegador con Pyodide y WebAssembly o correr en el servidor con actualizaciones de interfaz en vivo. El proyecto declara 16.700 estrellas en GitHub, 9 millones de descargas en PyPI y 100 colaboradores, y el anuncio de 1.0 trata sobre todo de estabilidad, documentación y pruebas más que de funciones nuevas. Llegan además Flet Studio, un IDE en el navegador, y un servidor MCP para asistentes de programación con IA.
+***** Take
+Presentar el 1.0 en torno a fiabilidad, documentación y pruebas es acertado, porque lo que mata a los envoltorios de Flutter en Python no son los widgets que faltan sino el caso límite en que necesitas un comportamiento de Flutter que el binding no expone. El mecanismo de extensiones para envolver paquetes de Flutter es la parte que merece evaluación: es la salida de emergencia que decide si te quedas atascado.
+***** Comments
+- No dedicaré tiempo a este tipo de framework de interfaz hasta verlo en aplicaciones maduras y de gran escala. El software complejo choca con casos límite oscuros y no quieres descubrir tras meses de trabajo que el propio framework te bloquea.
+- Python debería estar en menos sitios, no en más. Es ineficiente por naturaleza y te empuja hacia malas abstracciones y errores sutiles. Merece el cariño que recibe como lenguaje accesible y bastantes más críticas en lo demás.
+- Usar una aplicación de lista de tareas como primer ejemplo para anunciar un framework nuevo es absolutamente disparatado en el tercer trimestre de 2026.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Flet 1.0: plattformübergreifende Apps in Python bauen
+***** TLDR
+Flet hat am 15. September nach mehr als vier Jahren Entwicklung die 1.0 erreicht. Es kapselt Flutter, sodass sich Web-, Desktop- und Mobil-Apps in Python schreiben lassen, mit über 150 Controls, der Möglichkeit, Flutter-Pakete als Erweiterungen einzubinden, und `flet build` zum Paketieren für App Store, Google Play und Desktop. Web-Apps können Python per Pyodide und WebAssembly im Browser ausführen oder serverseitig laufen und die Oberfläche live aktualisieren. Das Projekt nennt 16.700 GitHub-Sterne, 9 Millionen PyPI-Downloads und 100 Mitwirkende; die 1.0-Ankündigung dreht sich vor allem um Stabilität, Dokumentation und Tests statt um neue Funktionen. Dazu kommen Flet Studio, eine IDE im Browser, und ein MCP-Server für KI-Programmierassistenten.
+***** Take
+Die 1.0 über Zuverlässigkeit, Dokumentation und Tests zu erzählen, ist richtig, denn was Python-über-Flutter-Wrapper umbringt, sind nicht fehlende Widgets, sondern der Randfall, in dem man ein Flutter-Verhalten braucht, das die Bindung nicht freigibt. Bewertenswert ist der Erweiterungsmechanismus für Flutter-Pakete, denn er ist der Notausgang, der entscheidet, ob man stecken bleibt.
+***** Comments
+- Für solche UI-Frameworks nehme ich mir keine Zeit, bis ich sie in ausgereiften, großen Anwendungen sehe. Komplexe Software trifft auf obskure Randfälle, und man will nicht nach Monaten feststellen, dass einen das Framework selbst blockiert.
+- Python sollte an weniger Stellen sein, nicht an mehr. Es ist von Natur aus ineffizient und führt zu schlechten Abstraktionen und subtilen Fehlern. Als zugängliche Sprache verdient es die Zuneigung, ansonsten deutlich mehr Kritik.
+- Eine To-do-Listen-App als erstes Beispiel für ein neues App-Framework zu nehmen, ist im dritten Quartal 2026 schon bemerkenswert.
