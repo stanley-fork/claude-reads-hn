@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-09-18 01:00 UTC
+#+DATE: 2026-09-18T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Fujitsu bonds 2nm onto 5nm, OpenAI ships a legal model that fails half its benchmark, and HN finds the hole in proof-checked AI code
+
+* Highlights
+- MONAKA: 144 Arm cores, a 2nm core die hybrid-bonded to a 5nm cache die, built at TSMC
+- Astra for Law: 54% correct on the legal research bench, up from 38.7%
+- Bend makes the AI prove your invariants, and nothing stops it from editing them
+- Hister: the Searx author gives up on metasearch and indexes only what you read
+- The US has more self-storage facilities than Starbucks and McDonald's combined
+
+* Stories
+
+** Fujitsu launches made-in-Japan next-generation CPU FUJITSU-MONAKA :hardware:cpu:arm:hpc:japan:
+:PROPERTIES:
+:ID:       49715813
+:URL:      https://global.fujitsu/en-global/pr/news/2026/09/14-02
+:HN_URL:   https://news.ycombinator.com/item?id=49715813
+:POINTS:   501
+:COMMENTS: 191
+:BY:       my123
+:END:
+
+*** TLDR
+MONAKA is a 144-core Arm v9.3-A server CPU with 256-bit SVE2, built as a 3D stack: a 2nm core die hybrid-bonded on top of a 5nm SRAM and I/O die, which Fujitsu says cuts total silicon area by 30% versus a monolithic chip. Twelve channels of DDR5-8000, two SKUs (500W liquid-cooled at 2.9GHz, 350W air-cooled at 2.1GHz), per-core DVFS, and a claimed 50%+ TCO reduction. It is the processor for FugakuNext. Samples now, shipments in 2027, with a 1.4nm Monaka-X and NVLink Fusion penciled in for 2029. ［Fujitsu's own page blocks automated fetching; specs here come from Fujitsu's technical decks as covered in the linked IEDM writeups.］
+
+*** Take
+"Made in Japan" is carrying weight it cannot support when both dies come off TSMC lines. The part worth paying attention to is the packaging bet: move the last-level cache down onto a cheaper 5nm die and you stop paying 2nm prices for SRAM that has basically stopped shrinking anyway. That is a bet everyone will have to make eventually, and Fujitsu is making it first in a product you can order.
+
+*** Comments
+
+**** irusensei
+:PROPERTIES:
+:COMMENT_ID: 49716201
+:END:
+If you want to skip all the PR talk: "combined with SVE2 vector operations and software optimization" means it's ARMv9.
+
+**** a11r
+:PROPERTIES:
+:COMMENT_ID: 49716045
+:END:
+Back in 2008 Fujitsu had one of the best performing 10Gbps switches. We were building 40Gbps packet sniffers at Google and needed switches that could mirror traffic across ports at line rate. Fujitsu was way ahead of the pack. I always wondered what held them back from building a meaningful networking business in the US.
+
+**** jaen
+:PROPERTIES:
+:COMMENT_ID: 49716133
+:END:
+More detailed presentations about the Monaka CPU are in Fujitsu's 2023 and 2026 technical decks. FugakuNEXT is the supercomputer it will power.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+富士通推出日本自研下一代 CPU FUJITSU-MONAKA
+***** TLDR
+MONAKA 是一颗 144 核的 Arm v9.3-A 服务器 CPU，支持 256 位 SVE2，采用 3D 堆叠：2nm 计算晶粒通过混合键合叠在 5nm 的 SRAM 与 I/O 晶粒之上，富士通称这比单片设计减少 30% 的总硅面积。12 通道 DDR5-8000，两个型号（500W 水冷 2.9GHz，350W 风冷 2.1GHz），支持单核 DVFS，宣称总拥有成本降低 50% 以上。它是 FugakuNext 的处理器。现已送样，2027 年出货，1.4nm 的 Monaka-X 与 NVLink Fusion 计划在 2029 年推出。［富士通官网屏蔽自动抓取，此处规格来自评论中链接的 IEDM 报道所引用的富士通技术资料。］
+***** Take
+既然两颗晶粒都出自台积电产线，"日本制造"这个说法就撑不住了。真正值得关注的是封装上的赌注：把末级缓存挪到更便宜的 5nm 晶粒上，就不必再为几乎停止微缩的 SRAM 付 2nm 的价钱。这一步所有人迟早都要走，而富士通是第一个把它做进可订购产品里的。
+***** Comments
+- 想跳过公关辞令的话："结合 SVE2 向量运算与软件优化"就是说它是 ARMv9。
+- 2008 年富士通有当时性能最好的 10Gbps 交换机之一。我们在 Google 做 40Gbps 抓包设备，需要能线速镜像端口流量的交换机，富士通遥遥领先。我一直好奇是什么让他们没能在美国做起像样的网络业务。
+- 关于 Monaka CPU 更详细的资料在富士通 2023 和 2026 年的技术演示里。FugakuNEXT 就是它要驱动的超级计算机。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+富士通、国産次世代CPU「FUJITSU-MONAKA」を発表
+***** TLDR
+MONAKAは256ビットSVE2に対応した144コアのArm v9.3-Aサーバー向けCPUで、3Dスタック構成を取る。2nmのコアダイを5nmのSRAM/I/Oダイの上にハイブリッドボンディングし、モノリシック設計に比べシリコン面積を30%削減したと富士通は説明している。DDR5-8000を12チャネル、SKUは2種類（500W水冷2.9GHz、350W空冷2.1GHz）、コアごとのDVFSに対応し、TCOを50%以上削減できるとする。FugakuNext向けのプロセッサで、サンプル出荷は開始済み、製品出荷は2027年。1.4nmのMonaka-XとNVLink Fusion対応は2029年を予定。［富士通の公式ページは自動取得をブロックしているため、仕様はコメント欄で共有されたIEDM関連記事が引く富士通の技術資料による。］
+***** Take
+両方のダイがTSMCのラインから出てくる以上、「国産」という言葉は実態を支えきれない。注目すべきは実装面の賭けだ。ラストレベルキャッシュを安価な5nmダイに移せば、すでに微細化が止まりつつあるSRAMに2nmの価格を払わずに済む。いずれ全社が迫られる選択であり、富士通はそれを最初に製品として出した。
+***** Comments
+- PR文を飛ばしたい人へ。「SVE2ベクトル演算とソフトウェア最適化の組み合わせ」とはARMv9のことだ。
+- 2008年、富士通は当時最高クラスの10Gbpsスイッチを持っていた。Googleで40Gbpsのパケットスニファを作っていて、ポート間をラインレートでミラーできるスイッチが必要だったが、富士通は頭一つ抜けていた。なぜ米国でまともなネットワーク事業を築けなかったのか、ずっと不思議だった。
+- Monaka CPUの詳しい資料は富士通の2023年と2026年の技術プレゼンにある。FugakuNEXTがこれを搭載するスーパーコンピュータだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+후지쯔, 일본산 차세대 CPU FUJITSU-MONAKA 공개
+***** TLDR
+MONAKA는 256비트 SVE2를 지원하는 144코어 Arm v9.3-A 서버 CPU로, 3D 적층 구조를 택했다. 2nm 코어 다이를 5nm SRAM/IO 다이 위에 하이브리드 본딩했고, 후지쯔는 이 방식이 모놀리식 대비 전체 실리콘 면적을 30% 줄인다고 밝혔다. DDR5-8000 12채널, 두 가지 SKU(500W 수랭 2.9GHz, 350W 공랭 2.1GHz), 코어별 DVFS를 지원하며 총소유비용을 50% 이상 낮춘다고 주장한다. FugakuNext에 쓰일 프로세서로 샘플은 이미 배포됐고 출하는 2027년, 1.4nm Monaka-X와 NVLink Fusion은 2029년 예정이다. ［후지쯔 공식 페이지가 자동 수집을 차단해, 사양은 댓글에 링크된 IEDM 기사들이 인용한 후지쯔 기술 자료에서 가져왔다.］
+***** Take
+두 다이 모두 TSMC 라인에서 나오는 이상 '일본산'이라는 표현은 버티기 어렵다. 눈여겨볼 대목은 패키징 쪽 베팅이다. 라스트 레벨 캐시를 더 싼 5nm 다이로 내리면, 이미 미세화가 멈춰가는 SRAM에 2nm 가격을 치를 필요가 없어진다. 언젠가 모두가 해야 할 선택이고, 후지쯔가 주문 가능한 제품으로 먼저 내놨다.
+***** Comments
+- 홍보 문구를 건너뛰고 싶다면: 'SVE2 벡터 연산과 소프트웨어 최적화의 결합'은 곧 ARMv9이라는 뜻이다.
+- 2008년 후지쯔는 당시 최고 성능의 10Gbps 스위치를 갖고 있었다. 구글에서 40Gbps 패킷 스니퍼를 만들며 포트 간 라인레이트 미러링이 되는 스위치가 필요했는데 후지쯔가 압도적이었다. 왜 미국에서 제대로 된 네트워크 사업을 키우지 못했는지 늘 궁금했다.
+- Monaka CPU에 대한 더 자세한 자료는 후지쯔의 2023년과 2026년 기술 발표에 있다. FugakuNEXT가 이 칩을 쓰는 슈퍼컴퓨터다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Fujitsu lanza FUJITSU-MONAKA, su CPU de nueva generación fabricada en Japón
+***** TLDR
+MONAKA es una CPU de servidor Arm v9.3-A de 144 núcleos con SVE2 de 256 bits, construida como una pila 3D: un die de cómputo de 2nm unido por hybrid bonding sobre un die de SRAM y E/S de 5nm, lo que según Fujitsu reduce un 30% el área total de silicio frente a un diseño monolítico. Doce canales de DDR5-8000, dos SKU (500W con refrigeración líquida a 2,9GHz y 350W por aire a 2,1GHz), DVFS por núcleo y una reducción de TCO superior al 50%. Es el procesador de FugakuNext: muestras ya disponibles, envíos en 2027, y un Monaka-X de 1,4nm con NVLink Fusion previsto para 2029. ［La página de Fujitsu bloquea la descarga automática; las cifras proceden de los materiales técnicos de Fujitsu citados en los artículos de IEDM enlazados en los comentarios.］
+***** Take
+"Fabricada en Japón" no aguanta el peso que se le pide cuando ambos dies salen de líneas de TSMC. Lo interesante es la apuesta de empaquetado: si bajas la caché de último nivel a un die de 5nm más barato, dejas de pagar precio de 2nm por SRAM que ya casi no escala. Es una decisión que todos tendrán que tomar, y Fujitsu la ha metido primero en un producto que se puede encargar.
+***** Comments
+- Si quieres saltarte la retórica de prensa: "combinado con operaciones vectoriales SVE2 y optimización de software" significa que es ARMv9.
+- En 2008 Fujitsu tenía uno de los switches de 10Gbps con mejor rendimiento. Construíamos sniffers de 40Gbps en Google y necesitábamos switches capaces de replicar tráfico entre puertos a velocidad de línea. Fujitsu iba muy por delante. Siempre me pregunté qué les impidió montar un negocio de redes serio en Estados Unidos.
+- Hay presentaciones más detalladas del Monaka en los materiales técnicos de Fujitsu de 2023 y 2026. FugakuNEXT es el supercomputador que lo llevará.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Fujitsu bringt in Japan entwickelte Next-Gen-CPU FUJITSU-MONAKA
+***** TLDR
+MONAKA ist eine Server-CPU mit 144 Kernen auf Arm v9.3-A und 256-Bit-SVE2, aufgebaut als 3D-Stapel: ein 2nm-Core-Die wird per Hybrid Bonding auf einen 5nm-Die mit SRAM und I/O gesetzt, was laut Fujitsu 30% weniger Siliziumfläche als ein monolithischer Chip braucht. Zwölf Kanäle DDR5-8000, zwei SKUs (500W wassergekühlt mit 2,9GHz, 350W luftgekühlt mit 2,1GHz), DVFS pro Kern und über 50% niedrigere Gesamtkosten. Es ist der Prozessor für FugakuNext: Samples laufen, Auslieferung 2027, ein Monaka-X in 1,4nm mit NVLink Fusion ist für 2029 geplant. ［Fujitsus eigene Seite blockiert automatisiertes Abrufen; die Daten stammen aus Fujitsus technischen Unterlagen, zitiert in den verlinkten IEDM-Berichten.］
+***** Take
+"Made in Japan" trägt nicht, wenn beide Dies von TSMC-Linien kommen. Interessant ist die Packaging-Wette: Verlagert man den Last-Level-Cache auf einen billigeren 5nm-Die, zahlt man keinen 2nm-Preis mehr für SRAM, das ohnehin kaum noch schrumpft. Diese Entscheidung steht allen bevor, und Fujitsu packt sie als Erster in ein bestellbares Produkt.
+***** Comments
+- Wer das PR-Gerede überspringen will: "kombiniert mit SVE2-Vektoroperationen und Software-Optimierung" heißt ARMv9.
+- 2008 hatte Fujitsu einen der leistungsfähigsten 10-Gbit/s-Switches. Wir bauten bei Google 40-Gbit/s-Paket-Sniffer und brauchten Switches, die Traffic bei Line Rate über Ports spiegeln konnten. Fujitsu war der Konkurrenz weit voraus. Ich habe mich immer gefragt, was sie daran gehindert hat, in den USA ein ernstzunehmendes Netzwerkgeschäft aufzubauen.
+- Ausführlichere Präsentationen zur Monaka-CPU stecken in Fujitsus technischen Unterlagen von 2023 und 2026. FugakuNEXT ist der Supercomputer, der sie einsetzen wird.
+** Astra for Law :ai:law:openai:llm:
+:PROPERTIES:
+:ID:       49745940
+:URL:      https://openai.com/index/astra-for-law/
+:HN_URL:   https://news.ycombinator.com/item?id=49745940
+:POINTS:   279
+:COMMENTS: 311
+:BY:       vertigoruntime
+:END:
+
+*** TLDR
+OpenAI wired GPT-6 Astra to a legal search index over US case law, statutes, regulations and court rules, plus tooling for contract analysis, deal diligence, IPO prep and redlining. On the Vals AI Legal Research Bench it passes 54.0% of questions against 38.7% for the same model with ordinary web search, and finds 24% more cited cases. Harvey and Legora are API launch partners; Sullivan & Cromwell, Ropes & Gray and Cooley are the named firms, with 26 ecosystem plugins including iManage, Intapp and Thomson Reuters. Rolling out through Trusted Access in ChatGPT and Codex, with an API model called gpt-6-astra-law to follow.
+
+*** Take
+The headline number is 54%, which also means close to half the answers still fail the correctness check. That is a genuinely useful research assistant and a legally dangerous substitute for the person who signs the filing. The practising lawyers in the thread land on the same point from the other direction: the value was never in producing a draft, it was in knowing which of the draft's clauses are nonsense, and that job survives this launch intact.
+
+*** Comments
+
+**** DannyBee
+:PROPERTIES:
+:COMMENT_ID: 49746210
+:END:
+Lawyer here. Most comments don't seem to realize that different areas of law have very different economic models, and don't even say which one they think will be affected or why. It is highly unlikely LLMs will have any meaningful effect on high value personal injury work, for example.
+
+**** halamadrid
+:PROPERTIES:
+:COMMENT_ID: 49746388
+:END:
+I tried drafting a contract myself with AI, but after several edits I wasn't sure it was correct. Sending it to an actual lawyer came back with so many corrections. One big thing was excessive protective clauses that made no sense in reality.
+
+**** ivraatiems
+:PROPERTIES:
+:COMMENT_ID: 49746055
+:END:
+I know someone in benefits and healthcare law whose junior staff take documents from healthcare plans, pull certain kinds of data out, and import it into an internal system. That is the workflow this would actually hit.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Astra for Law：OpenAI 的法律模型
+***** TLDR
+OpenAI 把 GPT-6 Astra 接上了覆盖美国判例法、成文法、法规和法院规则的法律检索索引，并附带合同分析、交易尽调、IPO 准备和红线批注工具。在 Vals AI 法律检索基准上，它的正确率为 54.0%，而同一模型配普通网页搜索为 38.7%，引用的相关判例多出 24%。API 首发伙伴是 Harvey 和 Legora，落地律所包括 Sullivan & Cromwell、Ropes & Gray 和 Cooley，另有 26 个生态插件，含 iManage、Intapp 和 Thomson Reuters。目前通过 ChatGPT 和 Codex 的 Trusted Access 分发，API 模型 gpt-6-astra-law 稍后推出。
+***** Take
+标题数字是 54%，换个说法就是仍有近一半答案通不过正确性检查。这是个真正好用的研究助手，但拿来替代在文件上签字的人则是法律风险。帖子里的执业律师从另一头得出了同样的结论：价值从来不在于写出草稿，而在于认出草稿里哪些条款是胡说，这份工作在这次发布之后原封不动。
+***** Comments
+- 我是律师。多数评论似乎没意识到不同法律领域的经济模式差别极大，甚至都没说清自己指的是哪一块、为什么会受影响。比如高价值人身伤害案件，大语言模型几乎不可能产生实质影响。
+- 我自己用 AI 起草过合同，改了好几轮还是不确定对不对。交给真律师后被改得面目全非。其中一个大问题是塞了一堆现实中根本讲不通的过度保护条款。
+- 我认识做福利和医疗法的人，他们的初级员工要从医疗保险计划的文件里提取特定数据，再录入内部系统。这才是这东西真正会冲击的工作流。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Astra for Law
+***** TLDR
+OpenAIはGPT-6 Astraを、米国の判例法・制定法・規則・裁判所規則を対象とする法務検索インデックスに接続し、契約分析、デューデリジェンス、IPO準備、レッドライン作業のツールを付けた。Vals AI法務リサーチベンチでの正答率は54.0%で、同じモデルに通常のウェブ検索を組み合わせた場合の38.7%を上回り、引用判例は24%多く見つけたという。APIのローンチパートナーはHarveyとLegora、導入法律事務所はSullivan & Cromwell、Ropes & Gray、Cooley。iManage、Intapp、Thomson Reutersなど26のプラグインも用意される。まずChatGPTとCodexのTrusted Access経由で提供し、API版のgpt-6-astra-lawは後日公開。
+***** Take
+54%という数字は、裏返せば半分近い回答がいまだに正確性チェックを通らないということだ。リサーチ助手としては本当に役立つが、書面に署名する人間の代わりにするには法的に危うい。スレッドの実務弁護士は反対側から同じ結論に達している。価値はドラフトを書くことではなく、そのドラフトのどの条項が的外れかを見抜くことにあり、その仕事は今回の発表で何も減っていない。
+***** Comments
+- 弁護士です。多くのコメントは、法分野ごとに経済モデルがまったく違うことを理解していないし、どの分野がなぜ影響を受けるのかも書いていない。たとえば高額の人身傷害案件にLLMが実質的な影響を与える可能性は極めて低い。
+- AIで契約書を自分で起草してみたが、何度も直しても正しいのか確信が持てなかった。実際の弁護士に送ったら大量に修正された。特に大きかったのは、現実には意味をなさない過剰な保護条項だ。
+- 給付と医療の法務にいる知人の事務所では、若手が医療プランの書類から特定のデータを抜き出して社内システムに入力している。これが実際に影響を受ける作業だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Astra for Law
+***** TLDR
+OpenAI가 GPT-6 Astra를 미국 판례법·성문법·규정·법원 규칙을 다루는 법률 검색 인덱스에 연결하고, 계약 분석·실사·IPO 준비·레드라이닝 도구를 붙였다. Vals AI 법률 리서치 벤치에서 정답률 54.0%로, 같은 모델에 일반 웹 검색을 붙였을 때의 38.7%보다 높고 인용 판례도 24% 더 찾아냈다. API 출시 파트너는 Harvey와 Legora, 도입 로펌은 Sullivan & Cromwell, Ropes & Gray, Cooley이며 iManage·Intapp·Thomson Reuters 등 26개 플러그인이 함께 제공된다. 우선 ChatGPT와 Codex의 Trusted Access로 배포하고, API 모델 gpt-6-astra-law는 추후 공개한다.
+***** Take
+54%라는 숫자는 뒤집으면 절반 가까운 답변이 여전히 정확성 검사를 통과하지 못한다는 뜻이다. 리서치 보조로는 확실히 쓸모 있지만, 서면에 서명하는 사람을 대신하기에는 법적으로 위험하다. 스레드의 현직 변호사들은 반대편에서 같은 결론에 닿는다. 가치는 초안을 만드는 데 있던 적이 없고 그 초안의 어느 조항이 말이 안 되는지 알아보는 데 있었으며, 그 일은 이번 발표로 전혀 줄지 않았다.
+***** Comments
+- 변호사입니다. 대부분의 댓글은 법 분야마다 경제 모델이 완전히 다르다는 걸 모르고, 어느 분야가 왜 영향을 받는지도 말하지 않습니다. 예컨대 고액 인신사고 사건에 LLM이 실질적 영향을 줄 가능성은 매우 낮습니다.
+- AI로 직접 계약서를 써봤는데 여러 번 고쳐도 맞는지 확신이 안 섰습니다. 실제 변호사에게 보냈더니 수정이 엄청났고, 특히 현실에서 말이 안 되는 과도한 보호 조항이 문제였습니다.
+- 복지·의료법 쪽에서 일하는 지인의 사무실에서는 주니어들이 보험 플랜 문서에서 특정 데이터를 뽑아 내부 시스템에 입력합니다. 실제로 타격을 받을 작업은 그쪽입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Astra for Law
+***** TLDR
+OpenAI ha conectado GPT-6 Astra a un índice de búsqueda jurídica sobre jurisprudencia, leyes, reglamentos y normas procesales de Estados Unidos, con herramientas para análisis de contratos, due diligence, preparación de salidas a bolsa y redlining. En el Vals AI Legal Research Bench acierta el 54,0% de las preguntas frente al 38,7% del mismo modelo con búsqueda web normal, y encuentra un 24% más de casos citados. Harvey y Legora son socios de lanzamiento de la API; los despachos citados son Sullivan & Cromwell, Ropes & Gray y Cooley, con 26 plugins del ecosistema entre ellos iManage, Intapp y Thomson Reuters. Se despliega vía Trusted Access en ChatGPT y Codex, y más adelante como modelo de API gpt-6-astra-law.
+***** Take
+El titular es 54%, lo que también significa que casi la mitad de las respuestas siguen sin pasar la comprobación de corrección. Es un asistente de investigación realmente útil y un sustituto jurídicamente peligroso de quien firma el escrito. Los abogados en ejercicio del hilo llegan al mismo punto por el otro lado: el valor nunca estuvo en producir un borrador, sino en saber qué cláusulas del borrador no tienen sentido, y ese trabajo sale intacto de este lanzamiento.
+***** Comments
+- Abogado aquí. La mayoría de los comentarios no ve que distintas ramas del derecho tienen modelos económicos muy distintos, y ni siquiera dicen a cuál se refieren ni por qué. Es muy improbable que los LLM tengan efecto real en los casos de daños personales de alto valor, por ejemplo.
+- Intenté redactar yo mismo un contrato con IA, pero tras varias revisiones no sabía si era correcto. Al enviarlo a un abogado de verdad volvió con muchísimas correcciones. Lo más llamativo eran cláusulas de protección excesivas que en la práctica no tenían sentido.
+- Conozco a alguien en derecho de prestaciones y sanidad cuyo equipo junior extrae ciertos datos de documentos de planes médicos y los carga en un sistema interno. Ese es el flujo de trabajo al que esto afectaría de verdad.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Astra for Law
+***** TLDR
+OpenAI hat GPT-6 Astra an einen juristischen Suchindex über US-Rechtsprechung, Gesetze, Verordnungen und Verfahrensregeln angebunden, dazu Werkzeuge für Vertragsanalyse, Due Diligence, IPO-Vorbereitung und Redlining. Im Vals AI Legal Research Bench besteht das Modell 54,0% der Fragen gegenüber 38,7% für dasselbe Modell mit gewöhnlicher Websuche und findet 24% mehr zitierte Fälle. Harvey und Legora sind API-Startpartner; genannte Kanzleien sind Sullivan & Cromwell, Ropes & Gray und Cooley, dazu 26 Plugins von Anbietern wie iManage, Intapp und Thomson Reuters. Ausgerollt wird über Trusted Access in ChatGPT und Codex, ein API-Modell gpt-6-astra-law folgt.
+***** Take
+Die Schlagzeile lautet 54%, was zugleich heißt: Fast die Hälfte der Antworten fällt weiterhin durch die Korrektheitsprüfung. Das ist ein wirklich nützlicher Rechercheassistent und ein juristisch gefährlicher Ersatz für die Person, die den Schriftsatz unterschreibt. Die praktizierenden Anwälte im Thread kommen von der anderen Seite zum selben Schluss: Der Wert lag nie im Erstellen eines Entwurfs, sondern im Erkennen, welche Klauseln darin Unsinn sind, und diese Arbeit übersteht den Launch unverändert.
+***** Comments
+- Anwalt hier. Den meisten Kommentaren ist nicht klar, dass verschiedene Rechtsgebiete völlig unterschiedliche Geschäftsmodelle haben, und sie sagen nicht einmal, welches sie meinen und warum. Bei hochwertigen Personenschadensfällen etwa werden LLMs höchstwahrscheinlich keinen nennenswerten Effekt haben.
+- Ich habe versucht, selbst einen Vertrag mit KI zu entwerfen, war aber nach mehreren Überarbeitungen unsicher, ob er stimmt. Vom echten Anwalt kam er mit sehr vielen Korrekturen zurück. Besonders auffällig waren übertriebene Schutzklauseln, die in der Praxis keinen Sinn ergaben.
+- Ich kenne jemanden im Sozial- und Gesundheitsrecht, dessen Junioren Daten aus Unterlagen von Krankenversicherungen herausziehen und in ein internes System einpflegen. Das ist der Arbeitsablauf, den das hier tatsächlich trifft.
+** Bend – A language that blocks AI mistakes via proof, on CPU and GPU :programming-languages:formal-verification:ai:gpu:
+:PROPERTIES:
+:ID:       49746163
+:URL:      https://bend-lang.com/
+:HN_URL:   https://news.ycombinator.com/item?id=49746163
+:POINTS:   253
+:COMMENTS: 133
+:BY:       nicolas-siplis
+:END:
+
+*** TLDR
+Bend is a new language built on the HVM parallel runtime, with Python-like syntax and an affine dependent type theory called BendTT that acts as both type checker and proof checker. The same binary runs near C speed on one core or fans out across cores and GPUs without hand-written kernels. Its pitch for AI-written code is two files: LAWS.bend holds invariants a human declares, PROOF.bend holds machine-generated proofs that the code satisfies them, so the compiler rejects anything that violates a law. The author says it is still early and to expect bugs.
+
+*** Take
+The mechanism is real and the escape hatch is obvious: nothing in the design stops a model from editing LAWS.bend when the proof gets hard, and commenters found that within hours. Freeze the laws and you are back to a human writing a precise specification, which was always the expensive part of formal methods. Bend does not remove that cost, it relocates it, and that is still worth something as long as nobody sells it as removal.
+
+*** Comments
+
+**** RomanKornev
+:PROPERTIES:
+:COMMENT_ID: 49746501
+:END:
+I like the law idea, but what I've found is that they just modify the law itself to fit the new feature they're working on, which defeats the point. So some laws need to be frozen, but not all, otherwise you can't add anything. The judgement is still on the human, and we're back to meatbags being the bottleneck.
+
+**** LightMachine
+:PROPERTIES:
+:COMMENT_ID: 49746188
+:END:
+Hi, I'm the author. Feel free to ask any question, but I'd be highly appreciative if you could be a bit civilized this time. I've worked on this for a year, nearly 16h/day, 7 days a week.
+
+**** svachalek
+:PROPERTIES:
+:COMMENT_ID: 49746422
+:END:
+I tried porting a little meeting-fixer cron job I vibe coded, and it seemed a natural fit since it's essentially satisfying invariants in my calendar. It basically succeeded, but Claude had complaints: the base library ships one arithmetic law and no order theory, so about 60 of PROOF.bend's 163 lines are cmp_refl, and_false, and_comm, le_max_l.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Bend：用证明阻止 AI 出错的语言，可跑在 CPU 和 GPU 上
+***** TLDR
+Bend 是一门建在 HVM 并行运行时之上的新语言，语法接近 Python，类型系统是一套名为 BendTT 的仿射依赖类型理论，同时充当类型检查器和证明检查器。同一份二进制既可在单核上跑出接近 C 的速度，也能自动铺开到多核和 GPU，不需要手写内核。它面向 AI 写代码的卖点是两个文件：LAWS.bend 由人声明不变量，PROOF.bend 存放机器生成的证明，编译器会拒绝任何违反法则的代码。作者说项目仍在早期，预计会有 bug。
+***** Take
+机制是真的，漏洞也很明显：设计上没有任何东西阻止模型在证明变难时直接去改 LAWS.bend，评论区几个小时内就发现了这点。把法则冻住，你就回到了由人来写精确规格说明，而这从来都是形式化方法里最贵的一环。Bend 没有消掉这份成本，只是把它挪了位置，只要别把挪动说成消除，这仍然有价值。
+***** Comments
+- 我喜欢法则这个想法，但我发现实际情况是他们会直接改法则本身去迁就正在做的新功能，那就失去了意义。所以有些法则必须冻结，但又不能全冻，否则什么都加不了。判断权还是在人手上，于是我们又回到了人肉是瓶颈。
+- 作者在此。欢迎提任何问题，但这次希望大家能客气一点。我做这个做了一年，几乎每天 16 小时，一周七天。
+- 我试着把一个随手写的会议整理 cron 任务移植过去，感觉挺合适，因为它本质上就是在满足日历里的不变量。基本成功了，但 Claude 有意见：基础库只带了一条算术法则，没有序理论，所以 PROOF.bend 的 163 行里有大约 60 行是 cmp_refl、and_false、and_comm、le_max_l 这类东西。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Bend — 証明でAIのミスを止める言語、CPUとGPUで動く
+***** TLDR
+Bendは並列ランタイムHVMの上に作られた新しい言語で、Pythonに近い構文と、型検査器と証明検査器を兼ねるアフィン依存型理論BendTTを持つ。同じバイナリが1コアでC並みの速度で走り、カーネルを手書きせずに複数コアやGPUへ展開される。AIによるコード生成に対する売りは2つのファイルだ。LAWS.bendに人間が不変条件を宣言し、PROOF.bendに機械が生成した証明を置き、法則に反するコードはコンパイラが弾く。作者はまだ初期段階でバグは想定してほしいと述べている。
+***** Take
+仕組み自体は本物だが、抜け穴もはっきりしている。証明が難しくなったときにモデルがLAWS.bendを書き換えるのを止めるものは設計上どこにもなく、コメント欄は数時間でそれを指摘した。法則を凍結すれば、結局は人間が正確な仕様を書く話に戻る。形式手法で高くついてきたのは常にそこだ。Bendはそのコストを消したのではなく移しただけで、消したと売らない限りは十分な価値がある。
+***** Comments
+- 法則という発想は好きだが、実際に見てきたのは、取り組んでいる新機能に合わせて法則そのものを書き換えてしまうパターンで、それでは意味がない。つまり一部の法則は凍結が必要だが、全部を凍結すると何も追加できない。判断は結局人間側に残り、人間がボトルネックという話に戻る。
+- 作者です。質問は何でもどうぞ。ただ今回は少し礼儀をもって話してもらえるとありがたい。1年間、ほぼ毎日16時間、週7日でこれに取り組んできた。
+- 軽い気持ちで書いた会議調整のcronジョブを移植してみた。カレンダー上の不変条件を満たすだけなので相性は良さそうだった。おおむね成功したが、Claudeからは苦情が出た。基本ライブラリには算術の法則が1つあるだけで順序理論がなく、PROOF.bendの163行のうち60行ほどがcmp_reflやand_false、and_comm、le_max_lで埋まる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Bend — 증명으로 AI의 실수를 막는 언어, CPU와 GPU에서 실행
+***** TLDR
+Bend는 병렬 런타임 HVM 위에 만든 새 언어로, 파이썬에 가까운 문법과 타입 검사기이자 증명 검사기 역할을 하는 아핀 의존 타입 이론 BendTT를 갖는다. 같은 바이너리가 단일 코어에서 C에 근접한 속도로 돌고, 커널을 직접 쓰지 않아도 여러 코어와 GPU로 퍼진다. AI 코드 작성에 대한 제안은 파일 두 개다. LAWS.bend에 사람이 불변식을 선언하고 PROOF.bend에 기계가 만든 증명을 두면, 법칙을 어기는 코드는 컴파일러가 거부한다. 저자는 아직 초기 단계이며 버그를 예상하라고 말한다.
+***** Take
+메커니즘은 진짜지만 빠져나갈 구멍도 분명하다. 증명이 어려워질 때 모델이 LAWS.bend를 고치는 것을 막는 장치가 설계에 없고, 댓글은 몇 시간 만에 그 점을 짚었다. 법칙을 얼리면 결국 사람이 정확한 명세를 쓰는 일로 돌아가는데, 형식적 방법에서 늘 비쌌던 부분이 바로 거기다. Bend는 그 비용을 없앤 게 아니라 옮겼고, 없앴다고 팔지만 않는다면 그것만으로도 의미가 있다.
+***** Comments
+- 법칙이라는 아이디어는 좋지만, 실제로 본 건 지금 작업 중인 기능에 맞춰 법칙 자체를 고쳐버리는 패턴이고 그러면 의미가 없다. 그래서 일부 법칙은 동결해야 하지만 전부는 안 된다. 그러면 아무것도 추가할 수 없으니까. 판단은 여전히 사람 몫이고, 결국 사람이 병목이라는 이야기로 돌아온다.
+- 저자입니다. 무엇이든 물어보세요. 다만 이번에는 조금만 예의를 갖춰 주시면 고맙겠습니다. 1년 동안 거의 매일 16시간, 주 7일 이걸 만들었습니다.
+- 대충 짜둔 회의 정리 cron 작업을 옮겨봤습니다. 캘린더의 불변식을 만족시키는 일이라 잘 맞을 것 같았고 대체로 성공했지만 Claude가 불평했습니다. 기본 라이브러리에 산술 법칙이 하나뿐이고 순서 이론이 없어서 PROOF.bend 163줄 중 60줄쯤이 cmp_refl, and_false, and_comm, le_max_l로 채워집니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Bend, un lenguaje que bloquea los errores de la IA mediante pruebas, en CPU y GPU
+***** TLDR
+Bend es un lenguaje nuevo construido sobre el runtime paralelo HVM, con sintaxis parecida a Python y una teoría de tipos dependientes afines llamada BendTT que funciona a la vez como verificador de tipos y de pruebas. El mismo binario corre a velocidad cercana a C en un núcleo o se reparte entre varios núcleos y GPU sin escribir kernels a mano. Su propuesta para el código escrito por IA son dos ficheros: LAWS.bend, donde una persona declara las invariantes, y PROOF.bend, con las pruebas generadas por la máquina de que el código las cumple, de modo que el compilador rechaza lo que viole una ley. El autor avisa de que es temprano y habrá errores.
+***** Take
+El mecanismo es real y la escapatoria es evidente: nada en el diseño impide que un modelo edite LAWS.bend cuando la prueba se complica, y los comentarios lo detectaron en horas. Si congelas las leyes, vuelves a tener a una persona escribiendo una especificación precisa, que siempre fue la parte cara de los métodos formales. Bend no elimina ese coste, lo traslada, y eso sigue valiendo mientras nadie lo venda como eliminación.
+***** Comments
+- Me gusta la idea de las leyes, pero lo que he visto es que acaban modificando la propia ley para encajar la función nueva en la que trabajan, y eso anula el sentido. Así que algunas leyes hay que congelarlas, pero no todas, o no puedes añadir nada. El criterio sigue estando en la persona, y volvemos a que el cuello de botella somos nosotros.
+- Hola, soy el autor. Preguntad lo que queráis, pero agradecería mucho un poco de civismo esta vez. He trabajado en esto un año, casi 16 horas al día, 7 días a la semana.
+- Intenté portar un pequeño cron de arreglo de reuniones que había escrito a lo loco; parecía encajar porque en el fondo es satisfacer invariantes de mi calendario. Funcionó en general, pero Claude tenía quejas: la biblioteca base trae una sola ley aritmética y ninguna teoría del orden, así que unas 60 de las 163 líneas de PROOF.bend son cmp_refl, and_false, and_comm, le_max_l.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Bend – eine Sprache, die KI-Fehler per Beweis blockiert, auf CPU und GPU
+***** TLDR
+Bend ist eine neue Sprache auf Basis der parallelen Laufzeitumgebung HVM, mit Python-ähnlicher Syntax und einer affinen abhängigen Typtheorie namens BendTT, die zugleich Typ- und Beweisprüfer ist. Dasselbe Binary läuft auf einem Kern nahe an C-Geschwindigkeit oder verteilt sich über Kerne und GPUs, ohne dass man Kernel von Hand schreibt. Der Vorschlag für KI-geschriebenen Code besteht aus zwei Dateien: In LAWS.bend erklärt ein Mensch die Invarianten, in PROOF.bend liegen maschinell erzeugte Beweise, dass der Code sie erfüllt, und der Compiler lehnt alles ab, was ein Gesetz verletzt. Der Autor betont, das Projekt sei früh, Fehler seien zu erwarten.
+***** Take
+Der Mechanismus ist echt, die Hintertür offensichtlich: Nichts im Entwurf hindert ein Modell daran, LAWS.bend zu ändern, wenn der Beweis schwierig wird, und die Kommentare hatten das binnen Stunden. Friert man die Gesetze ein, schreibt wieder ein Mensch eine präzise Spezifikation, und genau das war bei formalen Methoden immer der teure Teil. Bend beseitigt diese Kosten nicht, es verschiebt sie, und das ist weiterhin etwas wert, solange es niemand als Beseitigung verkauft.
+***** Comments
+- Die Idee mit den Gesetzen gefällt mir, aber ich habe erlebt, dass einfach das Gesetz selbst an das neue Feature angepasst wird, was den Sinn zerstört. Also müssen manche Gesetze eingefroren werden, aber nicht alle, sonst kann man nichts mehr hinzufügen. Die Bewertung bleibt beim Menschen, und schon sind wir wieder der Flaschenhals.
+- Hallo, ich bin der Autor. Fragt gern alles, aber ich wäre sehr dankbar, wenn es diesmal etwas gesitteter zuginge. Ich habe ein Jahr daran gearbeitet, fast 16 Stunden täglich, sieben Tage die Woche.
+- Ich habe einen kleinen Cronjob zum Aufräumen von Meetings portiert, den ich schnell zusammengebaut hatte; es wirkte passend, weil es im Kern darum geht, Invarianten in meinem Kalender zu erfüllen. Es klappte weitgehend, aber Claude hatte Einwände: Die Basisbibliothek bringt genau ein arithmetisches Gesetz und keine Ordnungstheorie mit, also bestehen etwa 60 der 163 Zeilen von PROOF.bend aus cmp_refl, and_false, and_comm, le_max_l.
+** Hister: A private search engine for the pages you visit and the files you keep :search:privacy:selfhosted:golang:
+:PROPERTIES:
+:ID:       49743097
+:URL:      https://github.com/asciimoo/hister
+:HN_URL:   https://news.ycombinator.com/item?id=49743097
+:POINTS:   438
+:COMMENTS: 131
+:BY:       bookofjoe
+:END:
+
+*** TLDR
+asciimoo, who started the Searx metasearch project, released Hister: a single Go binary that builds a private index from the pages you visit (via a Firefox/Chrome extension), your browser history, bookmarks, local directories and crawled sites. You query it from a web UI, the terminal, or an LLM over MCP. Full-text search supports field filters, phrases, wildcards, negation, aliases and result priorities; semantic search is optional and needs you to point it at your own embeddings endpoint. AGPLv3, runs on Linux, macOS and Windows, available as a binary, Homebrew, Docker or Nix. Documents and index stay on the machine you run it on.
+
+*** Take
+Searx tried to fix search by federating other people's indexes and ran into the ceiling of what metasearch can do when the upstream engines decide to make life difficult. Indexing only what you already read is the smaller problem, and the one where you actually own the inputs. The requests in the thread are all about filtering rather than retrieval, which is the honest signal: once you index every tab, the hard part becomes deciding which tabs were ever worth indexing.
+
+*** Comments
+
+**** asciimoo
+:PROPERTIES:
+:COMMENT_ID: 49743180
+:END:
+Author here. My first free software search project was Searx, a privacy respecting metasearch engine, but because of the limitations of the metasearch concept I decided to take a different approach. Hister builds a personal index from pages you visit, bookmarks, browser history, local files and crawled websites.
+
+**** rao-v
+:PROPERTIES:
+:COMMENT_ID: 49743640
+:END:
+I'd love an extension setting to only send tabs that were visible for roughly 4+ seconds. I open and quick-view a lot of pages and close them, which is a strong signal that I don't care about that specific page.
+
+**** taude
+:PROPERTIES:
+:COMMENT_ID: 49743512
+:END:
+I built something similar to hoard knowledge from pages I've visited, with a Karpathy-style LLM wiki on top. It's on GitHub, but I don't think anyone should use my implementation.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Hister：为你浏览过的网页和本地文件建的私有搜索引擎
+***** TLDR
+Searx 元搜索项目的发起者 asciimoo 发布了 Hister：一个 Go 语言的单文件二进制，能把你访问过的网页（通过 Firefox/Chrome 扩展）、浏览器历史、书签、本地目录和抓取的站点建成私有索引。可以用网页界面、终端，或者通过 MCP 让大模型来查询。全文检索支持字段过滤、短语、通配符、取反、别名和结果优先级；语义搜索是可选项，需要你自己配置 embeddings 接口。AGPLv3 许可，支持 Linux、macOS 和 Windows，提供二进制、Homebrew、Docker 和 Nix 安装。文档和索引都留在你自己运行它的机器上。
+***** Take
+Searx 试图靠聚合别人的索引来修好搜索，最终撞上了元搜索的天花板，因为上游引擎随时可以让你难受。只索引你已经读过的东西是个更小的问题，也是唯一一个输入真正归你所有的问题。帖子里的需求几乎都是关于过滤而不是检索，这个信号很实在：一旦把每个标签页都索引进去，难的就变成了判断哪些标签页当初值得索引。
+***** Comments
+- 作者在此。我的第一个自由软件搜索项目是 Searx，一个尊重隐私的元搜索引擎，但受限于元搜索这个概念本身，我决定换一条路。Hister 会从你访问的页面、书签、浏览器历史、本地文件和抓取的网站建立个人索引。
+- 希望扩展能加个设置，只上报停留大约 4 秒以上的标签页。我经常打开一堆页面扫一眼就关掉，这本身就是我不在乎那个页面的强信号。
+- 我也做过类似的东西，把浏览过的页面里的知识囤起来，上面套了个 Karpathy 风格的 LLM wiki。代码在 GitHub 上，但我不觉得有谁该用我这个实现。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Hister — 訪れたページと手元のファイルのためのプライベート検索エンジン
+***** TLDR
+メタ検索プロジェクトSearxを立ち上げたasciimooがHisterを公開した。Go製の単一バイナリで、Firefox/Chrome拡張経由で訪れたページ、ブラウザ履歴、ブックマーク、ローカルディレクトリ、クロールしたサイトから個人用の索引を作る。検索はWeb UI、ターミナル、あるいはMCP経由でLLMから行える。全文検索はフィールド指定、フレーズ、ワイルドカード、否定、エイリアス、優先度に対応し、セマンティック検索は任意で自前の埋め込みエンドポイントを指定する必要がある。ライセンスはAGPLv3、Linux・macOS・Windowsで動作し、バイナリ、Homebrew、Docker、Nixで導入できる。文書と索引は自分が動かすマシンに留まる。
+***** Take
+Searxは他人の索引を束ねることで検索を直そうとし、上流のエンジンが意地悪をした時点でメタ検索の限界にぶつかった。すでに読んだものだけを索引化するのはより小さい問題であり、入力を本当に自分が所有している唯一の問題でもある。スレッドの要望が検索精度ではなくフィルタリングに集中しているのは正直な兆候だ。すべてのタブを索引に入れた瞬間、難しいのはどのタブが索引に値したかを決めることになる。
+***** Comments
+- 作者です。最初のフリーソフトウェア検索プロジェクトはプライバシーを尊重するメタ検索エンジンSearxでしたが、メタ検索という考え方の限界から別のアプローチを取ることにしました。Histerは訪れたページ、ブックマーク、履歴、ローカルファイル、クロールしたサイトから個人用の索引を作ります。
+- 4秒ほど以上表示されたタブだけを送る設定が拡張にあると嬉しい。自分は大量のページを開いてざっと見て閉じるので、それは「このページはどうでもいい」という強い信号になる。
+- 訪れたページから知識を溜め込む似たものを作り、上にKarpathy風のLLM wikiを載せました。GitHubに置いてありますが、私の実装を誰かが使うべきだとは思いません。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Hister — 방문한 페이지와 보관 중인 파일을 위한 개인 검색 엔진
+***** TLDR
+메타검색 프로젝트 Searx를 시작한 asciimoo가 Hister를 공개했다. Go로 만든 단일 바이너리로, 파이어폭스/크롬 확장으로 수집한 방문 페이지, 브라우저 기록, 북마크, 로컬 디렉터리, 크롤링한 사이트에서 개인 색인을 만든다. 웹 UI, 터미널, 또는 MCP를 통해 LLM에서 질의할 수 있다. 전문 검색은 필드 필터, 구문, 와일드카드, 부정, 별칭, 결과 우선순위를 지원하고 의미 검색은 선택 사항으로 직접 임베딩 엔드포인트를 지정해야 한다. AGPLv3이며 리눅스·macOS·윈도우에서 바이너리, Homebrew, Docker, Nix로 설치할 수 있다. 문서와 색인은 직접 돌리는 컴퓨터에 남는다.
+***** Take
+Searx는 남의 색인을 묶어 검색을 고치려다, 상류 엔진이 마음만 먹으면 힘들게 만들 수 있다는 메타검색의 한계에 부딪혔다. 이미 읽은 것만 색인하는 일은 더 작은 문제이고, 입력을 진짜로 내가 소유한 유일한 문제이기도 하다. 스레드의 요구가 검색이 아니라 필터링에 몰려 있다는 게 솔직한 신호다. 모든 탭을 색인에 넣는 순간, 어려운 일은 어느 탭이 색인할 가치가 있었는지 정하는 쪽으로 옮겨간다.
+***** Comments
+- 저자입니다. 첫 자유 소프트웨어 검색 프로젝트는 프라이버시를 존중하는 메타검색 엔진 Searx였지만, 메타검색이라는 개념의 한계 때문에 다른 접근을 택했습니다. Hister는 방문한 페이지, 북마크, 브라우저 기록, 로컬 파일, 크롤링한 사이트에서 개인 색인을 만듭니다.
+- 대략 4초 이상 보인 탭만 보내는 확장 설정이 있으면 좋겠습니다. 저는 페이지를 잔뜩 열어 훑고 닫는데, 그 자체가 그 페이지에 관심이 없다는 강한 신호거든요.
+- 방문한 페이지에서 지식을 모아두는 비슷한 걸 만들고 위에 Karpathy 스타일 LLM 위키를 올렸습니다. GitHub에 있지만 제 구현을 누가 써야 한다고는 생각하지 않습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Hister: un buscador privado para las páginas que visitas y los archivos que guardas
+***** TLDR
+asciimoo, que puso en marcha el metabuscador Searx, ha publicado Hister: un único binario en Go que construye un índice privado a partir de las páginas que visitas (con una extensión para Firefox y Chrome), tu historial, marcadores, directorios locales y sitios rastreados. Se consulta desde una interfaz web, la terminal o un LLM a través de MCP. La búsqueda de texto completo admite filtros por campo, frases, comodines, negación, alias y prioridades; la búsqueda semántica es opcional y requiere que apuntes a tu propio endpoint de embeddings. AGPLv3, funciona en Linux, macOS y Windows, con binario, Homebrew, Docker o Nix. Los documentos y el índice se quedan en la máquina donde lo ejecutas.
+***** Take
+Searx intentó arreglar la búsqueda federando los índices de otros y chocó con el techo del metabuscador en cuanto los motores de origen deciden complicarte la vida. Indexar solo lo que ya has leído es el problema pequeño, y el único donde las entradas son realmente tuyas. Las peticiones del hilo van todas sobre filtrado y no sobre recuperación, que es la señal honesta: una vez que indexas cada pestaña, lo difícil pasa a ser decidir qué pestañas merecían índice.
+***** Comments
+- Soy el autor. Mi primer proyecto libre de búsqueda fue Searx, un metabuscador respetuoso con la privacidad, pero por las limitaciones del propio concepto decidí tomar otro camino. Hister construye un índice personal a partir de las páginas que visitas, marcadores, historial, archivos locales y sitios rastreados.
+- Me encantaría un ajuste en la extensión para enviar solo pestañas visibles durante unos 4 segundos o más. Abro y ojeo muchísimas páginas y las cierro, y eso ya indica con fuerza que esa página no me importa.
+- Construí algo parecido para acumular conocimiento de las páginas que visito, con una wiki LLM al estilo Karpathy encima. Está en GitHub, pero no creo que nadie deba usar mi implementación.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Hister: eine private Suchmaschine für besuchte Seiten und eigene Dateien
+***** TLDR
+asciimoo, der das Metasuch-Projekt Searx gestartet hat, veröffentlicht Hister: ein einzelnes Go-Binary, das einen privaten Index aus besuchten Seiten (per Firefox-/Chrome-Erweiterung), Browserverlauf, Lesezeichen, lokalen Verzeichnissen und gecrawlten Websites aufbaut. Abfragen laufen über eine Weboberfläche, das Terminal oder ein LLM via MCP. Die Volltextsuche unterstützt Feldfilter, Phrasen, Wildcards, Negation, Aliase und Ergebnisprioritäten; semantische Suche ist optional und verlangt einen eigenen Embeddings-Endpunkt. AGPLv3, läuft unter Linux, macOS und Windows, erhältlich als Binary, über Homebrew, Docker oder Nix. Dokumente und Index bleiben auf der Maschine, auf der es läuft.
+***** Take
+Searx wollte die Suche reparieren, indem es fremde Indizes zusammenführt, und stieß an die Grenze der Metasuche, sobald die vorgelagerten Engines einem das Leben schwer machen. Nur das zu indizieren, was man ohnehin gelesen hat, ist das kleinere Problem und das einzige, bei dem einem die Eingaben wirklich gehören. Die Wünsche im Thread drehen sich durchweg um Filtern statt um Finden, und das ist das ehrliche Signal: Sobald jeder Tab im Index landet, besteht die Arbeit darin zu entscheiden, welche Tabs den Index je verdient hatten.
+***** Comments
+- Autor hier. Mein erstes freies Suchprojekt war Searx, eine datenschutzfreundliche Metasuchmaschine, aber wegen der Grenzen des Metasuch-Konzepts habe ich einen anderen Weg gewählt. Hister baut einen persönlichen Index aus besuchten Seiten, Lesezeichen, Browserverlauf, lokalen Dateien und gecrawlten Websites.
+- Ich hätte gern eine Einstellung in der Erweiterung, die nur Tabs schickt, die etwa vier Sekunden oder länger sichtbar waren. Ich öffne sehr viele Seiten, überfliege sie und schließe sie wieder, und das ist ein starkes Signal, dass mir diese Seite egal ist.
+- Ich habe etwas Ähnliches gebaut, um Wissen aus besuchten Seiten zu horten, mit einem LLM-Wiki im Karpathy-Stil obendrauf. Es liegt auf GitHub, aber ich finde nicht, dass irgendjemand meine Implementierung benutzen sollte.
+** The American Religion of Self-Storage Facilities :culture:real-estate:economics:
+:PROPERTIES:
+:ID:       49740260
+:URL:      https://www.newyorker.com/magazine/2026/09/21/the-american-religion-of-self-storage-facilities
+:HN_URL:   https://news.ycombinator.com/item?id=49740260
+:POINTS:   186
+:COMMENTS: 325
+:BY:       pseudolus
+:END:
+
+*** TLDR
+David Owen's New Yorker piece on self-storage: the US holds roughly 90% of the world's capacity, takes in over $40 billion a year, and has more facilities than Starbucks, McDonald's, Walmart, Home Depot, Domino's, Dunkin' and Costco combined. The industry runs on the four D's, death, displacement, divorce and downsizing, plus autopay, which makes cancelling harder than continuing to pay. Owen visits a man who rented a Queens unit for years and forgot what was in it, an operator with 145 units and no software, a young owner running facilities by AI from Barcelona, and million-dollar car condos with wet bars and racing simulators. Storage Wars pushed auction attendance from a handful of bidders to 150.
+
+*** Take
+The top comment is better than the article and inverts it: the question is not why people rent units, it is why so many get built. Self-storage is close to an ideal cash-flow asset, cheap to build, nearly free to maintain, no tenants to evict, and prices that ratchet up on a card nobody checks. The piece reads the buildings as a confession about American consumption, when they are mostly the output of a spreadsheet that works.
+
+*** Comments
+
+**** epochbtc
+:PROPERTIES:
+:COMMENT_ID: 49740512
+:END:
+This article takes the consumer's view: why do so many people pay to store items they almost never use? The interesting part is why there is so much supply. The answer is cash flow. Self-storage is almost the perfect solution for someone with a good size but not enormous bucket of money they want to put to work.
+
+**** dcdc123
+:PROPERTIES:
+:COMMENT_ID: 49740688
+:END:
+I live in a small downtown condo. I don't have room for a lot of extra stuff, but I have hobbies like camping and watersports. I keep all of that in a storage unit and access it fairly often. I also keep the boxes for my electronics, a 77-inch OLED is impossible to move safely without the original box.
+
+**** rootbear
+:PROPERTIES:
+:COMMENT_ID: 49740801
+:END:
+I have a unit and I'm trying to clear it out. I'm tired of the monthly fees that keep going up. I got it when I had to clear out my late sister's house and wanted time to go through things and decide what to keep.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+自助仓储：一种美式信仰
+***** TLDR
+David Owen 在《纽约客》写自助仓储：美国占了全球约 90% 的仓储容量，年收入超过 400 亿美元，设施数量超过星巴克、麦当劳、沃尔玛、家得宝、达美乐、Dunkin' 和 Costco 的总和。这个行业靠四个 D 运转：死亡、搬迁、离婚、缩减住房，再加上自动扣款，让取消比继续付钱更麻烦。文中有租了皇后区一个仓位多年却忘了里面装什么的人，有 145 个仓位且完全不用软件的经营者，有在巴塞罗那靠 AI 远程管理设施的年轻业主，还有带吧台和赛车模拟器、售价过百万美元的"汽车公寓"。《Storage Wars》播出后，拍卖到场竞标者从几个人涨到 150 人。
+***** Take
+最高赞评论比文章本身更好，而且把问题倒了过来：真正该问的不是人们为什么租仓位，而是为什么建了这么多。自助仓储近乎完美的现金流资产：建造便宜、维护几乎为零、没有需要驱逐的租客，价格还能在一张没人核对的信用卡上一路往上调。文章把这些建筑读成美国消费主义的自白，但它们主要是一张算得通的报表的产物。
+***** Comments
+- 这篇文章站在消费者视角问：为什么那么多人花钱存自己几乎不用的东西。真正有意思的是供给为什么这么多。答案是现金流。对于手里有一笔不算巨大但规模可观、想找地方投出去的钱来说，自助仓储几乎是完美方案。
+- 我住市中心的小公寓，放不下多余的东西，但我有露营、水上运动这些爱好。这些装备都放在仓储单元里，我去得挺勤。我还留着电子产品的包装箱，77 寸 OLED 没有原箱根本没法安全搬运。
+- 我有一个仓位，正在清空。月租一直涨，我受够了。当初租是因为要清理我已故姐姐的房子，想留点时间慢慢看、决定留下什么。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+アメリカにおけるセルフストレージという信仰
+***** TLDR
+デイヴィッド・オーウェンによるニューヨーカー誌のセルフストレージ論。米国は世界の収納容量のおよそ90%を占め、年間売上は400億ドルを超え、施設数はスターバックス、マクドナルド、ウォルマート、ホームデポ、ドミノ、ダンキン、コストコの合計より多い。業界を回すのは4つのD、すなわち死・転居・離婚・住み替えによる縮小で、そこに自動引き落としが加わり、解約は払い続けるより面倒になる。記事にはクイーンズの倉庫を何年も借りて中身を忘れた男性、145室をソフトウェアなしで運営する事業者、バルセロナからAIで施設を回す若い所有者、バーとレーシングシミュレーターを備えた100万ドル超の「カーコンドー」が登場する。『Storage Wars』の放送後、競売の参加者は数人から150人に増えた。
+***** Take
+最上位のコメントは記事より優れており、問いを裏返している。問うべきは人がなぜ倉庫を借りるかではなく、なぜこれほど建つのかだ。セルフストレージはほぼ理想的なキャッシュフロー資産である。建設は安く、維持はほぼ不要、立ち退かせる借家人もおらず、誰も見ていないカードの上で価格を上げ続けられる。記事はこれらの建物をアメリカの消費に対する告白として読むが、実態は成立する収支計算の産物だ。
+***** Comments
+- この記事は消費者の視点で、なぜ人はほとんど使わない物の保管に金を払うのかと問う。面白いのはなぜ供給がこれほど多いかだ。答えはキャッシュフロー。巨額ではないがそれなりの資金を運用したい人にとって、セルフストレージはほぼ完璧な解になる。
+- 都心の小さなコンドミニアムに住んでいて余分な物を置く場所はないが、キャンプやウォータースポーツが趣味だ。それらは全部ストレージに置いていて、かなり頻繁に出し入れする。家電の箱も取ってある。77インチの有機ELは元箱なしに安全に運ぶのは無理だ。
+- 倉庫を借りていて、いま片付けているところだ。上がり続ける月額に疲れた。亡くなった姉の家を片付ける必要があり、中身を見て何を残すか決める時間がほしくて借りた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+미국의 셀프스토리지라는 종교
+***** TLDR
+데이비드 오언이 뉴요커에 쓴 셀프스토리지 이야기. 미국은 전 세계 보관 용량의 약 90%를 차지하고 연 매출은 400억 달러가 넘으며, 시설 수는 스타벅스·맥도날드·월마트·홈디포·도미노·던킨·코스트코를 다 합친 것보다 많다. 이 산업은 죽음, 이사, 이혼, 주거 축소라는 네 개의 D와 자동이체로 돌아간다. 해지가 계속 내는 것보다 번거롭기 때문이다. 기사에는 퀸스의 창고를 몇 년 빌려놓고 내용물을 잊은 남자, 소프트웨어 없이 145개 유닛을 운영하는 사업자, 바르셀로나에서 AI로 시설을 관리하는 젊은 소유주, 바와 레이싱 시뮬레이터를 갖춘 100만 달러짜리 '카 콘도'가 나온다. 〈Storage Wars〉 방영 이후 경매 참가자는 몇 명에서 150명으로 늘었다.
+***** Take
+최상단 댓글이 기사보다 낫고, 질문을 뒤집는다. 물어야 할 것은 사람들이 왜 창고를 빌리는가가 아니라 왜 이렇게 많이 지어지는가다. 셀프스토리지는 거의 이상적인 현금흐름 자산이다. 짓는 비용이 싸고 유지가 거의 필요 없으며 내보낼 세입자도 없고, 아무도 확인하지 않는 카드 위에서 가격을 계속 올릴 수 있다. 기사는 이 건물들을 미국식 소비에 대한 고백으로 읽지만, 실제로는 계산이 맞아떨어지는 스프레드시트의 결과물이다.
+***** Comments
+- 이 기사는 소비자 시각에서 왜 거의 쓰지도 않는 물건을 돈 내고 보관하느냐고 묻는다. 정작 흥미로운 건 공급이 왜 이렇게 많은가다. 답은 현금흐름이다. 엄청나지는 않아도 제법 되는 돈을 굴리려는 사람에게 셀프스토리지는 거의 완벽한 해법이다.
+- 도심의 작은 콘도에 살아서 여분의 물건 둘 자리가 없지만 캠핑과 수상 스포츠 같은 취미가 있다. 그 장비를 전부 창고에 두고 꽤 자주 꺼내 쓴다. 가전 포장 상자도 보관하는데, 77인치 OLED는 원래 상자 없이는 안전하게 옮길 수가 없다.
+- 유닛을 하나 갖고 있고 지금 비우는 중이다. 계속 오르는 월세가 지긋지긋하다. 세상을 떠난 누나의 집을 정리해야 했을 때, 물건을 살펴보고 무엇을 남길지 정할 시간이 필요해서 빌렸다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La religión estadounidense de los trasteros de alquiler
+***** TLDR
+El texto de David Owen en The New Yorker sobre el self-storage: Estados Unidos concentra cerca del 90% de la capacidad mundial, factura más de 40.000 millones de dólares al año y tiene más instalaciones que Starbucks, McDonald's, Walmart, Home Depot, Domino's, Dunkin' y Costco juntos. El sector vive de las cuatro D (muerte, mudanza, divorcio y reducción de vivienda) y del cargo automático, que hace más incómodo cancelar que seguir pagando. Aparecen un hombre que alquiló un trastero en Queens durante años y olvidó qué guardaba, un operador con 145 unidades y ningún software, un propietario joven que gestiona instalaciones con IA desde Barcelona y "car condos" de más de un millón con barra y simulador de carreras. Tras Storage Wars, las subastas pasaron de unos pocos pujadores a 150.
+***** Take
+El comentario más votado es mejor que el artículo y le da la vuelta: la pregunta no es por qué la gente alquila trasteros, sino por qué se construyen tantos. El self-storage es casi el activo perfecto de flujo de caja: barato de levantar, casi sin mantenimiento, sin inquilinos a los que desahuciar y con precios que suben sobre una tarjeta que nadie revisa. El texto lee esos edificios como una confesión sobre el consumo estadounidense, cuando son sobre todo el resultado de una hoja de cálculo que cuadra.
+***** Comments
+- El artículo adopta la mirada del consumidor: por qué tanta gente paga por guardar cosas que casi no usa. Lo interesante es por qué hay tanta oferta. La respuesta es el flujo de caja. Para quien tiene una cantidad de dinero considerable pero no enorme y quiere ponerla a trabajar, el self-storage es casi la solución perfecta.
+- Vivo en un apartamento pequeño en el centro. No tengo sitio para cosas de más, pero tengo aficiones como acampar y deportes acuáticos. Guardo todo eso en un trastero y lo uso con bastante frecuencia. También guardo las cajas de los aparatos: un OLED de 77 pulgadas es imposible de mover con seguridad sin su caja original.
+- Tengo un trastero y estoy intentando vaciarlo. Estoy harto de las cuotas mensuales que no dejan de subir. Lo alquilé cuando tuve que vaciar la casa de mi hermana, que había fallecido, y quería tiempo para revisar las cosas y decidir qué conservar.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die amerikanische Religion der Selfstorage-Anlagen
+***** TLDR
+David Owens Text im New Yorker über Selfstorage: Die USA stellen rund 90% der weltweiten Lagerkapazität, setzen jährlich über 40 Milliarden Dollar um und haben mehr Anlagen als Starbucks, McDonald's, Walmart, Home Depot, Domino's, Dunkin' und Costco zusammen. Die Branche lebt von den vier D (Tod, Umzug, Scheidung, Verkleinerung) und vom automatischen Karteneinzug, der das Kündigen mühsamer macht als das Weiterzahlen. Owen besucht einen Mann, der jahrelang eine Box in Queens mietete und vergaß, was darin lag, einen Betreiber mit 145 Einheiten und ohne jede Software, einen jungen Eigentümer, der Anlagen per KI aus Barcelona steuert, und Car Condos für über eine Million Dollar mit Bar und Rennsimulator. Nach Storage Wars stieg die Zahl der Bieter bei Auktionen von einer Handvoll auf 150.
+***** Take
+Der Topkommentar ist besser als der Artikel und dreht die Frage um: Nicht warum Menschen Boxen mieten, sondern warum so viele gebaut werden. Selfstorage ist nahezu der ideale Cashflow-Wert: billig zu errichten, praktisch wartungsfrei, keine Mieter, die man räumen müsste, und Preise, die sich auf einer Karte erhöhen lassen, die niemand kontrolliert. Der Text liest diese Gebäude als Geständnis über amerikanischen Konsum, dabei sind sie vor allem das Ergebnis einer Rechnung, die aufgeht.
+***** Comments
+- Der Artikel nimmt die Sicht der Kundschaft ein: Warum zahlen so viele Menschen dafür, Dinge zu lagern, die sie kaum nutzen? Spannend ist, warum es so viel Angebot gibt. Die Antwort ist Cashflow. Für jemanden mit einem ordentlichen, aber nicht riesigen Geldbetrag, der arbeiten soll, ist Selfstorage nahezu die perfekte Lösung.
+- Ich wohne in einer kleinen Innenstadtwohnung. Für zusätzliche Dinge ist kein Platz, aber ich campe und mache Wassersport. Das alles liegt in einer Lagerbox, auf die ich recht häufig zugreife. Ich hebe auch die Kartons meiner Elektronik auf, einen 77-Zoll-OLED bekommt man ohne Originalkarton nicht sicher transportiert.
+- Ich habe eine Box und versuche gerade, sie zu leeren. Die monatlichen Gebühren steigen ständig, das nervt. Gemietet habe ich sie, als ich das Haus meiner verstorbenen Schwester räumen musste und Zeit brauchte, die Sachen durchzusehen und zu entscheiden, was ich behalte.
