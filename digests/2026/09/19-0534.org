@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-09-19 05:34 UTC
+#+DATE: 2026-09-19T05:34:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A laser opens the RP2350, OpenAI credits its own models for Jalapeño, and someone is selling onion futures anyway
+
+* Highlights
+- RP2350: $250k of lab gear, one laser pulse, secure debug on
+- Jalapeño: 20 months, under 100 people, and a kernel tuned from 0.31% to 88.94%
+- Needle 3: a 29MB model that does tool calls and nothing else
+- Xcode 27.1: the iPhone Duo simulator lands a month before the hardware
+- Onion futures, sold privately to dodge a 1958 statute
+
+* Stories
+
+** Photon-Emission-Guided Laser Fault Injection Enables RP2350 Secure Debug :security:hardware:rp2350:reverse-engineering:
+:PROPERTIES:
+:ID:       49757050
+:URL:      https://donjon.ledger.com/blog/rp2350-secure-debug-laser-fault-injection/
+:HN_URL:   https://news.ycombinator.com/item?id=49757050
+:POINTS:   172
+:COMMENTS: 61
+:BY:       synack
+:END:
+
+*** TLDR
+Ledger's Donjon team used photon-emission microscopy on a backside-decapped RP2350 to locate the DEBUGEN register, then fired a 980nm laser to set the PROC1 and PROC1_SECURE bits and turn on secure debug. With debug open they triggered a rescue reset through the always-accessible RP-AP port so firmware never ran, and read a 128-bit secret out of OTP before the runtime lock could be applied. The lab setup cost about $250,000. Raspberry Pi was notified on 2026-07-28 and took part in disclosure.
+
+*** Take
+The $250k figure is doing a lot of work in the writeup, and the hardware people in the thread immediately knocked it down to $10k-$25k for someone who already knows what to aim at. That is the number that matters, because the RP2350 enclave is being sold as a cheap alternative to a hardware security key. Decap-and-laser is not a threat model for a stolen phone, but it is well inside reach for anyone who wants one specific device's secret.
+
+*** Comments
+
+**** BitBangingBytes
+The $250k in lab gear is useful when initially discovering and documenting attacks like this. Definitely doable in a home lab for under $25k, likely under $10k. I replicated the BAM BAM attack with a $50 PicoEMP instead of a $5,000 ChipShouter.
+
+**** byb
+The RP2350's secure enclave made it particularly attractive as a Yubikey alternative. There will always be an arms race between safe-crackers and safe-builders.
+
+**** jacquesm
+Reminiscent of when we first found out that if you opened up DRAM chips you could use them for imaging. The scale at which this is done is extremely impressive.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+光发射引导的激光故障注入打开了 RP2350 的安全调试
+***** TLDR
+Ledger 的 Donjon 团队对背面开盖的 RP2350 使用光发射显微技术定位 DEBUGEN 寄存器，再用 980nm 激光置位 PROC1 和 PROC1_SECURE 两个比特，打开安全调试。调试打开后，他们通过始终可访问的 RP-AP 端口触发救援复位，使固件不再运行，并在运行时锁生效之前从 OTP 中读出了一个 128 位密钥。实验室设备成本约 25 万美元。树莓派方面于 2026 年 7 月 28 日收到通知并参与了披露过程。
+***** Take
+25 万美元这个数字在文章里承担了不少说服工作，而帖子里的硬件工程师马上把它压到了 1 万到 2.5 万美元，前提是你已经知道该打哪里。这个数字才是关键，因为 RP2350 的安全区正被当作硬件安全密钥的廉价替代品来卖。开盖加激光不是手机被偷时要担心的威胁模型，但对于想拿到某一台特定设备密钥的人来说，完全够得着。
+***** Comments
+- 25 万美元的实验室设备在最初发现和记录这类攻击时是有用的。在家里的实验室里 2.5 万美元以内肯定做得到，很可能 1 万以内就够。我复现 BAM BAM 攻击时用的是 50 美元的 PicoEMP，而不是 5000 美元的 ChipShouter。
+- RP2350 的安全区让它特别适合当 Yubikey 的替代品。开保险柜的和造保险柜的之间永远是一场军备竞赛。
+- 这让我想起当年发现把 DRAM 芯片开盖之后可以拿来成像。这次做到的精度非常惊人。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+光子放射を手がかりにしたレーザーフォールト注入でRP2350のセキュアデバッグが開く
+***** TLDR
+LedgerのDonjonチームは、裏面を開封したRP2350に光子放射顕微鏡を使ってDEBUGENレジスタの位置を特定し、980nmレーザーでPROC1とPROC1_SECUREのビットを立ててセキュアデバッグを有効にした。デバッグが開いた状態で、常時アクセス可能なRP-APポートからレスキューリセットをかけてファームウェアを実行させず、ランタイムロックがかかる前にOTPから128ビットの秘密を読み出した。実験装置の費用は約25万ドル。Raspberry Piには2026年7月28日に通知され、開示プロセスに参加している。
+***** Take
+記事の中で25万ドルという数字はかなりの役割を果たしているが、スレッドのハードウェア技術者たちは、狙う場所が分かっている者なら1万から2万5千ドルで足りるとすぐに指摘した。重要なのはそちらの数字だ。RP2350のセキュアエンクレーブはハードウェアセキュリティキーの安価な代替として売られているからだ。開封してレーザーを撃つ手法は盗まれたスマホの脅威モデルではないが、特定の1台の秘密をどうしても取りたい相手には十分手の届く範囲にある。
+***** Comments
+- 25万ドルの実験装置は、この種の攻撃を最初に発見して文書化する段階では有用だ。自宅のラボなら2万5千ドル以下、おそらく1万ドル以下でも確実にできる。私はBAM BAM攻撃の再現に5000ドルのChipShouterではなく50ドルのPicoEMPを使った。
+- RP2350のセキュアエンクレーブは、Yubikeyの代替として特に魅力的だった。金庫破りと金庫職人の軍拡競争は終わらない。
+- DRAMチップを開封すると撮像素子として使えると分かった当時を思い出す。これをこの精度でやっているのは実に見事だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+광자 방출로 위치를 잡은 레이저 폴트 주입이 RP2350 보안 디버그를 연다
+***** TLDR
+Ledger의 Donjon 팀은 후면을 개봉한 RP2350에 광자 방출 현미경을 써서 DEBUGEN 레지스터 위치를 찾아낸 뒤, 980nm 레이저로 PROC1과 PROC1_SECURE 비트를 세워 보안 디버그를 켰다. 디버그가 열린 상태에서 항상 접근 가능한 RP-AP 포트로 레스큐 리셋을 걸어 펌웨어가 실행되지 않게 한 다음, 런타임 잠금이 걸리기 전에 OTP에서 128비트 비밀값을 읽어냈다. 장비 비용은 약 25만 달러. 라즈베리파이는 2026년 7월 28일에 통보받고 공개 과정에 참여했다.
+***** Take
+25만 달러라는 숫자가 글에서 많은 역할을 하지만, 스레드의 하드웨어 엔지니어들은 어디를 노릴지 아는 사람이라면 1만~2만 5천 달러면 된다고 곧바로 짚었다. 중요한 건 그쪽 숫자다. RP2350 보안 엔클레이브가 하드웨어 보안 키의 저렴한 대안으로 팔리고 있기 때문이다. 개봉 후 레이저를 쏘는 방식은 도난당한 휴대폰의 위협 모델은 아니지만, 특정 기기 하나의 비밀값을 꼭 원하는 상대에게는 충분히 손이 닿는 범위다.
+***** Comments
+- 25만 달러짜리 장비는 이런 공격을 처음 발견하고 문서화할 때 쓸모가 있다. 홈랩에서는 2만 5천 달러 이하, 아마 1만 달러 이하로도 충분히 된다. 나는 BAM BAM 공격을 재현할 때 5천 달러짜리 ChipShouter 대신 50달러짜리 PicoEMP를 썼다.
+- RP2350의 보안 엔클레이브는 Yubikey 대안으로 특히 매력적이었다. 금고를 따는 쪽과 만드는 쪽의 군비 경쟁은 끝나지 않는다.
+- DRAM 칩을 열면 이미지 센서로 쓸 수 있다는 걸 처음 알았던 때가 떠오른다. 이 정도 규모로 해낸 건 정말 인상적이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Inyección de fallos por láser guiada por emisión de fotones abre la depuración segura del RP2350
+***** TLDR
+El equipo Donjon de Ledger usó microscopía de emisión de fotones sobre un RP2350 destapado por la cara posterior para localizar el registro DEBUGEN, y luego disparó un láser de 980 nm para poner los bits PROC1 y PROC1_SECURE y activar la depuración segura. Con la depuración abierta forzaron un rescue reset por el puerto RP-AP, siempre accesible, de modo que el firmware nunca llegó a ejecutarse, y leyeron un secreto de 128 bits de la memoria OTP antes de que se aplicara el bloqueo en tiempo de ejecución. El equipo de laboratorio cuesta unos 250.000 dólares. Raspberry Pi fue notificada el 28 de julio de 2026 y participó en la divulgación.
+***** Take
+La cifra de 250.000 dólares carga con mucho peso en el artículo, y los ingenieros de hardware del hilo la bajaron de inmediato a entre 10.000 y 25.000 para quien ya sabe dónde apuntar. Ese es el número que importa, porque el enclave del RP2350 se vende como alternativa barata a una llave de seguridad por hardware. Destapar y disparar un láser no es el modelo de amenaza de un móvil robado, pero está al alcance de cualquiera que quiera el secreto de un dispositivo concreto.
+***** Comments
+- Los 250.000 dólares en equipo de laboratorio sirven para descubrir y documentar este tipo de ataques por primera vez. En un laboratorio casero se puede hacer por menos de 25.000, probablemente por menos de 10.000. Yo repliqué el ataque BAM BAM con un PicoEMP de 50 dólares en lugar de un ChipShouter de 5.000.
+- El enclave seguro del RP2350 lo hacía especialmente atractivo como alternativa a una Yubikey. Siempre habrá una carrera armamentística entre quienes abren cajas fuertes y quienes las fabrican.
+- Me recuerda a cuando descubrimos que abriendo los chips de DRAM se podían usar para captar imágenes. La escala a la que se hace esto es impresionante.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Photonenemissionsgestützte Laser-Fehlerinjektion öffnet das Secure Debug des RP2350
+***** TLDR
+Ledgers Donjon-Team lokalisierte per Photonenemissionsmikroskopie an einem rückseitig geöffneten RP2350 das DEBUGEN-Register und setzte dann mit einem 980-nm-Laser die Bits PROC1 und PROC1_SECURE, um Secure Debug einzuschalten. Mit offenem Debug lösten sie über den stets erreichbaren RP-AP-Port einen Rescue Reset aus, sodass die Firmware nie lief, und lasen ein 128-Bit-Geheimnis aus dem OTP-Speicher, bevor die Laufzeitsperre greifen konnte. Die Laborausrüstung kostet rund 250.000 Dollar. Raspberry Pi wurde am 28. Juli 2026 informiert und war an der Offenlegung beteiligt.
+***** Take
+Die Zahl von 250.000 Dollar trägt im Text viel Gewicht, und die Hardwareleute im Thread drückten sie sofort auf 10.000 bis 25.000 für jemanden, der weiß, wohin er zielen muss. Diese Zahl zählt, denn der RP2350-Enclave wird als günstige Alternative zum Hardware-Sicherheitsschlüssel verkauft. Öffnen und Lasern ist kein Bedrohungsmodell für ein gestohlenes Handy, liegt aber klar in Reichweite für jeden, der das Geheimnis genau eines Geräts will.
+***** Comments
+- Die 250.000 Dollar Laborausrüstung sind nützlich, um solche Angriffe überhaupt erst zu finden und zu dokumentieren. Im Heimlabor geht das sicher für unter 25.000, wahrscheinlich für unter 10.000. Ich habe den BAM-BAM-Angriff mit einem PicoEMP für 50 Dollar statt eines ChipShouter für 5.000 nachgebaut.
+- Der Secure Enclave des RP2350 machte ihn besonders attraktiv als Yubikey-Alternative. Zwischen Safeknackern und Safebauern wird es immer ein Wettrüsten geben.
+- Erinnert mich daran, als wir herausfanden, dass man geöffnete DRAM-Chips zur Bildaufnahme verwenden kann. Der Maßstab, in dem das hier gemacht wird, ist beeindruckend.
+** How OpenAI used its own LLMs to design its Jalapeño chip :ai:chips:openai:hardware:
+:PROPERTIES:
+:ID:       49761432
+:URL:      https://spectrum.ieee.org/llms-for-chip-design
+:HN_URL:   https://news.ycombinator.com/item?id=49761432
+:POINTS:   94
+:COMMENTS: 71
+:BY:       maxall4
+:END:
+
+*** TLDR
+IEEE Spectrum reports that OpenAI built Jalapeño in under 20 months with a team averaging fewer than 100 people, and nine months from first RTL to tape-out. Models wrote high-level synthesis code in DSLX and C++ on top of Google's open-source XLS, AI-guided physical optimization cut matrix-multiply unit area by about 10% against human baselines, and after first silicon arrived in May internal models took a DeepSeek multi-head latent attention kernel from 0.31% to 88.94% of theoretical peak in roughly 40 hours. Broadcom did physical design from the gates onward, and OpenAI's Richard Ho says frontier accelerators still cannot be built by AI alone.
+
+*** Take
+The kernel result is the real one, and it is the least surprising: tuning a matmul kernel is a search over a huge space of scheduling choices, and search is exactly what these models do well. The design claim is thinner. Broadcom owned the backend, and the front end ran through XLS, which deliberately makes hardware look like software before a model ever sees it. The thread's suspicion is fair about the framing and unfair about the outcome.
+
+*** Comments
+
+**** pama
+Having worked with people doing bringup of specialized chips, I am awed at how the world has changed. Performance climbed from 0.31 percent of the theoretical ceiling to 88.94 percent in roughly 40 hours.
+
+**** program_whiz
+With a few handy tips and tricks from Apple insiders. But sure, I guess the LLMs helped too.
+
+**** muchdoubt
+OpenAI is hyping their models to get chip developers to use their products and learn from the IP. There is nothing in the article saying the AI did anything creative.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+OpenAI 如何用自家大模型设计 Jalapeño 芯片
+***** TLDR
+IEEE Spectrum 报道，OpenAI 用不到 20 个月、平均不足 100 人的团队做出了 Jalapeño，从首版 RTL 到流片只用了九个月。模型在 Google 开源的 XLS 之上用 DSLX 和 C++ 写高层次综合代码，AI 引导的物理优化让矩阵乘法单元面积比人工基线缩小约 10%，五月拿到首批硅片后，内部模型在大约 40 小时内把 DeepSeek 的多头潜在注意力内核从理论峰值的 0.31% 推到 88.94%。从门级往后的物理设计由博通完成，OpenAI 的 Richard Ho 表示前沿加速器仍然无法只靠 AI 造出来。
+***** Take
+内核那个结果才是真结果，也是最不令人意外的：调优矩阵乘法内核本质上是在巨大的调度空间里搜索，而搜索正是这些模型擅长的事。芯片设计那部分说服力要弱得多。后端在博通手里，前端走的是 XLS，而 XLS 本来就是先把硬件变成类似软件的形态再交给模型。帖子里的怀疑针对叙事方式是合理的，针对结果则不公平。
+***** Comments
+- 我和做专用芯片调试上电的人共事过，对世界的变化感到震撼。性能在大约 40 小时内从理论上限的 0.31% 升到了 88.94%。
+- 外加几位苹果内部人士提供的窍门。不过行吧，我想大模型也帮上忙了。
+- OpenAI 就是在吹捧自家模型，好让芯片开发者用他们的产品，再从这些 IP 里学东西。文章里没有一处说明 AI 做出了什么有创造性的东西。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+OpenAIはいかに自社LLMでJalapeñoチップを設計したか
+***** TLDR
+IEEE Spectrumによれば、OpenAIは平均100人未満のチームで20か月足らずでJalapeñoを作り上げ、最初のRTLからテープアウトまでは9か月だった。モデルはGoogleのオープンソースXLSの上でDSLXとC++による高位合成コードを書き、AI主導の物理最適化は行列積ユニットの面積を人間のベースラインより約10%削減した。5月に初期シリコンが届いた後、社内モデルはDeepSeekのマルチヘッド潜在アテンションのカーネルを約40時間で理論ピークの0.31%から88.94%まで引き上げた。ゲート以降の物理設計はBroadcomが担当し、OpenAIのRichard Hoは最先端アクセラレータはまだAIだけでは作れないと述べている。
+***** Take
+本物の成果はカーネルの方で、しかもこれが一番意外性がない。行列積カーネルのチューニングは膨大なスケジューリング空間の探索であり、探索はこのモデルが得意とするものだ。設計の主張はもっと薄い。バックエンドはBroadcomが持ち、フロントエンドはXLSを通っている。XLSはモデルが触れる前にハードウェアをソフトウェアらしく見せるためのものだ。スレッドの疑いは語り口に対しては妥当で、成果に対しては不当だ。
+***** Comments
+- 専用チップの立ち上げをやっている人たちと仕事をしてきた身として、世界の変わりように驚いている。性能が約40時間で理論上限の0.31%から88.94%まで上がった。
+- アップルの内部関係者からのちょっとしたコツ付きでね。まあLLMも役に立ったんだろう。
+- OpenAIはチップ開発者に自社製品を使わせてそのIPから学ぶために、モデルを持ち上げているだけだ。記事のどこにもAIが創造的なことをしたとは書かれていない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+OpenAI는 자사 LLM으로 Jalapeño 칩을 어떻게 설계했나
+***** TLDR
+IEEE Spectrum에 따르면 OpenAI는 평균 100명이 안 되는 팀으로 20개월이 채 안 되어 Jalapeño를 만들었고, 첫 RTL에서 테이프아웃까지는 9개월이 걸렸다. 모델은 구글의 오픈소스 XLS 위에서 DSLX와 C++로 고수준 합성 코드를 작성했고, AI가 주도한 물리 최적화는 행렬곱 유닛 면적을 사람 기준 대비 약 10% 줄였다. 5월에 첫 실리콘을 받은 뒤 내부 모델은 DeepSeek의 멀티헤드 잠재 어텐션 커널을 약 40시간 만에 이론 최대치의 0.31%에서 88.94%까지 끌어올렸다. 게이트 이후 물리 설계는 브로드컴이 맡았고, OpenAI의 Richard Ho는 최전선 가속기는 아직 AI만으로 만들 수 없다고 말한다.
+***** Take
+진짜 성과는 커널 쪽이고, 동시에 가장 놀랍지 않은 부분이다. 행렬곱 커널 튜닝은 거대한 스케줄링 공간에 대한 탐색이고, 탐색이야말로 이 모델들이 잘하는 일이다. 설계 주장은 훨씬 얇다. 백엔드는 브로드컴이 가져갔고 프런트엔드는 XLS를 거쳤는데, XLS는 애초에 모델이 보기 전에 하드웨어를 소프트웨어처럼 보이게 만드는 도구다. 스레드의 의심은 서술 방식에 대해서는 타당하고 결과에 대해서는 부당하다.
+***** Comments
+- 특수 칩 브링업을 하는 사람들과 일해 본 입장에서 세상이 이렇게 바뀐 게 놀랍다. 성능이 약 40시간 만에 이론 한계의 0.31%에서 88.94%로 올라갔다.
+- 애플 내부 인사들의 요령 몇 가지를 곁들여서 말이지. 뭐 LLM도 도움이 됐겠지.
+- OpenAI는 칩 개발자들이 자사 제품을 쓰게 해서 그 IP에서 배우려고 모델을 띄우는 것이다. 기사 어디에도 AI가 창의적인 일을 했다는 내용은 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo OpenAI usó sus propios LLM para diseñar su chip Jalapeño
+***** TLDR
+IEEE Spectrum cuenta que OpenAI construyó Jalapeño en menos de 20 meses con un equipo de menos de 100 personas de media, y nueve meses entre el primer RTL y el tape-out. Los modelos escribieron código de síntesis de alto nivel en DSLX y C++ sobre XLS, la herramienta de código abierto de Google; la optimización física guiada por IA redujo alrededor de un 10% el área de las unidades de multiplicación de matrices frente a la referencia humana, y tras recibir el primer silicio en mayo los modelos internos llevaron un kernel de atención latente multicabeza de DeepSeek del 0,31% al 88,94% del pico teórico en unas 40 horas. Broadcom se encargó del diseño físico a partir de las puertas lógicas, y Richard Ho, de OpenAI, afirma que los aceleradores de frontera todavía no se pueden construir solo con IA.
+***** Take
+El resultado del kernel es el real y también el menos sorprendente: ajustar un kernel de multiplicación de matrices es buscar dentro de un espacio enorme de decisiones de planificación, y buscar es justo lo que estos modelos hacen bien. La afirmación sobre el diseño es más endeble. Broadcom llevó el backend y el frontend pasó por XLS, que existe precisamente para que el hardware se parezca a software antes de que un modelo lo toque. La sospecha del hilo es justa con el relato e injusta con el resultado.
+***** Comments
+- He trabajado con gente que hace el bringup de chips especializados y me asombra cómo ha cambiado el mundo. El rendimiento pasó del 0,31% del techo teórico al 88,94% en unas 40 horas.
+- Con unos cuantos trucos de gente que venía de Apple. Pero vale, supongo que los LLM también ayudaron.
+- OpenAI está promocionando sus modelos para que los diseñadores de chips usen sus productos y así aprender de esa propiedad intelectual. En el artículo no hay nada que diga que la IA hiciera algo creativo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie OpenAI mit eigenen LLMs den Jalapeño-Chip entworfen hat
+***** TLDR
+IEEE Spectrum berichtet, dass OpenAI Jalapeño in weniger als 20 Monaten mit einem Team von im Schnitt unter 100 Personen gebaut hat, davon neun Monate vom ersten RTL bis zum Tape-out. Modelle schrieben High-Level-Synthesecode in DSLX und C++ auf Basis von Googles Open-Source-Werkzeug XLS, KI-geführte physikalische Optimierung verkleinerte die Matrixmultiplikationseinheiten um rund 10% gegenüber menschlichen Vergleichswerten, und nach dem ersten Silizium im Mai brachten interne Modelle einen Multi-Head-Latent-Attention-Kernel von DeepSeek in etwa 40 Stunden von 0,31% auf 88,94% des theoretischen Maximums. Das physikalische Design ab Gatterebene übernahm Broadcom, und OpenAIs Richard Ho sagt, Spitzenbeschleuniger ließen sich weiterhin nicht allein von KI bauen.
+***** Take
+Das Kernel-Ergebnis ist das eigentliche und zugleich das am wenigsten überraschende: Das Tuning eines Matmul-Kernels ist eine Suche über einen riesigen Raum von Scheduling-Entscheidungen, und Suchen können diese Modelle gut. Die Design-Behauptung ist dünner. Broadcom hatte das Backend, und das Frontend lief über XLS, das Hardware bewusst wie Software aussehen lässt, bevor ein Modell sie überhaupt sieht. Die Skepsis im Thread trifft die Darstellung zu Recht und das Ergebnis zu Unrecht.
+***** Comments
+- Ich habe mit Leuten gearbeitet, die das Bringup spezialisierter Chips machen, und staune, wie sehr sich die Welt verändert hat. Die Leistung stieg in rund 40 Stunden von 0,31 Prozent der theoretischen Obergrenze auf 88,94 Prozent.
+- Mit ein paar praktischen Tipps von Apple-Insidern. Aber gut, die LLMs haben wohl auch geholfen.
+- OpenAI hypt seine Modelle, damit Chipentwickler ihre Produkte nutzen und man aus deren IP lernen kann. Im Artikel steht nirgends, dass die KI etwas Kreatives geleistet hätte.
+** Show HN: Cactus Needle 3 – 8-29MB automation models can match DeepSeek V4 Flash :ai:edge:on-device:show-hn:
+:PROPERTIES:
+:ID:       49748553
+:URL:      https://cactuscompute.com/needle
+:HN_URL:   https://news.ycombinator.com/item?id=49748553
+:POINTS:   187
+:COMMENTS: 82
+:BY:       HenryNdubuaku
+:END:
+
+*** TLDR
+Cactus released Needle 3: 25 to 121 million parameter models quantized to 2-bit and shipped as 8-29MB binaries that do tool calls, structured JSON extraction and embeddings, and deliberately do not chat. One set of weights contains a ladder where every depth from 2 to 20 layers is a deployable sub-model. The dense FFN is replaced with Walsh-Hadamard-initialized Monarch factor pairs, giving O(d√d) parameters and compute instead of O(d²). On a Raspberry Pi 5 it decodes up to 4k tokens/sec. On the Mobile Actions benchmark the 20-layer 2-bit binary scores 86.0, against 82.4 for LFM2.5 1.2B and 76.0 for Qwen3.5 0.8B.
+
+*** Take
+The demo in the thread is the most honest part of the pitch. Someone typed "I need a wee" and got music, because "wee" matched a genre. "It's cold" turned the lights down. Direct commands land, indirect intent does not, which is exactly what a 29MB model should be expected to do. That is still worth shipping if you keep the toolset narrow and stop selling the natural-language layer as general. The low confidence scores on the wrong answers suggest a threshold would fix half of it.
+
+*** Comments
+
+**** IanCal
+"I need a wee" tries to play music because "wee" is a genre. "I'm going to the toilet" says it'll turn on the toilet, and I'm not totally sure what that entails.
+
+**** gs17
+"Turn all the lights on/off" and "it's too dark in the bathroom" worked for me, but anything less direct didn't. The confidence on the bad responses was pretty low, so a threshold might be worth adding.
+
+**** raybb
+I edit OpenStreetMap and it is tedious from a phone, making sure a phone number is typed exactly right and picking the right field from a long list. This looks like a fit.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN: Cactus Needle 3 — 8-29MB 的自动化模型可以对标 DeepSeek V4 Flash
+***** TLDR
+Cactus 发布了 Needle 3：2500 万到 1.21 亿参数、量化到 2 比特、打包成 8-29MB 二进制文件的模型，专做工具调用、结构化 JSON 抽取和向量嵌入，刻意不做聊天。一套权重里含有一个阶梯，从 2 层到 20 层的每个深度都是可部署的子模型。稠密 FFN 被换成以 Walsh-Hadamard 初始化的 Monarch 因子对，参数量和计算量从 O(d²) 降到 O(d√d)。在树莓派 5 上解码速度最高可达每秒 4000 个 token。在 Mobile Actions 基准上，20 层的 2 比特二进制得分 86.0，LFM2.5 1.2B 为 82.4，Qwen3.5 0.8B 为 76.0。
+***** Take
+帖子里的演示是整套说辞中最诚实的部分。有人输入“我要尿尿”，结果开始放音乐，因为 wee 匹配上了一个音乐流派；说“很冷”会把灯调暗。直接命令能接住，间接意图接不住，而这正是一个 29MB 模型应有的表现。只要把工具集收窄，别把自然语言那层当成通用能力来卖，它依然值得发布。错误回答的置信度都很低，说明加个阈值就能解决一半问题。
+***** Comments
+- 我输入“我要尿尿”，它试图放音乐，因为 wee 是一个音乐流派。输入“我要去上厕所”，它说要把马桶打开，我不太确定那意味着什么。
+- “把所有灯打开/关掉”和“浴室太暗了”对我都管用，但再间接一点就不行了。错误回答的置信度相当低，所以加个阈值也许值得考虑。
+- 我在编辑 OpenStreetMap，用手机操作很烦，既要确认电话号码一个字不差，又要从长长的字段列表里挑对项。这个看起来正合适。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Cactus Needle 3 — 8〜29MBの自動化モデルがDeepSeek V4 Flashに並ぶ
+***** TLDR
+CactusがNeedle 3を公開した。2500万から1億2100万パラメータを2ビット量子化し、8〜29MBのバイナリとして配布されるモデルで、ツール呼び出し、構造化JSON抽出、埋め込みを担い、チャットは意図的にやらない。ひとつの重みの中に2層から20層までの各深さがそのままデプロイ可能なサブモデルになるラダー構造がある。密なFFNはWalsh-Hadamardで初期化したMonarch因子ペアに置き換えられ、パラメータ数と計算量はO(d²)ではなくO(d√d)になる。Raspberry Pi 5で最大毎秒4kトークンをデコードする。Mobile Actionsベンチマークでは20層の2ビットバイナリが86.0で、LFM2.5 1.2Bの82.4、Qwen3.5 0.8Bの76.0を上回る。
+***** Take
+スレッドのデモこそが売り文句の中で一番正直な部分だ。ある人が「おしっこがしたい」と入力したら音楽が流れた。weeが音楽ジャンルに一致したからだ。「寒い」と言えば照明が暗くなる。直接的な命令は通り、間接的な意図は通らない。29MBのモデルに期待すべき挙動はまさにそれだ。ツールセットを狭く保ち、自然言語層を汎用だと売り込むのをやめるなら、それでも出す価値はある。誤答時の確信度が低いということは、しきい値を入れれば半分は解決するということだ。
+***** Comments
+- 「おしっこがしたい」と入れると、weeが音楽ジャンルだからと音楽を再生しようとする。「トイレに行く」と言うとトイレをオンにすると返してくるが、それが何を意味するのかよく分からない。
+- 「照明を全部つけて/消して」と「浴室が暗すぎる」は通ったが、それより間接的な言い方は駄目だった。誤答時の確信度はかなり低かったので、しきい値を入れる価値はありそうだ。
+- OpenStreetMapを編集しているが、スマホからは面倒だ。電話番号を一字も間違えずに入力し、長い一覧から正しい項目を選ぶ必要がある。これは合いそうだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Cactus Needle 3 — 8~29MB 자동화 모델이 DeepSeek V4 Flash에 맞선다
+***** TLDR
+Cactus가 Needle 3를 공개했다. 2500만~1억 2100만 파라미터를 2비트로 양자화해 8~29MB 바이너리로 배포하며, 도구 호출과 구조화된 JSON 추출, 임베딩을 하고 채팅은 의도적으로 하지 않는다. 하나의 가중치 안에 2층부터 20층까지 각 깊이가 곧바로 배포 가능한 서브모델이 되는 사다리 구조가 들어 있다. 밀집 FFN은 Walsh-Hadamard로 초기화한 Monarch 인자쌍으로 대체되어 파라미터와 연산량이 O(d²) 대신 O(d√d)가 된다. 라즈베리파이 5에서 초당 최대 4천 토큰을 디코딩한다. Mobile Actions 벤치마크에서 20층 2비트 바이너리는 86.0점으로 LFM2.5 1.2B의 82.4, Qwen3.5 0.8B의 76.0을 앞선다.
+***** Take
+스레드의 데모가 이 홍보에서 가장 정직한 부분이다. 누군가 "오줌 마려워"라고 입력하자 음악이 재생됐다. wee가 음악 장르와 맞았기 때문이다. "춥다"고 하면 조명을 낮췄다. 직접적인 명령은 통하고 간접적인 의도는 통하지 않는다. 29MB 모델에 기대할 만한 동작이 정확히 그것이다. 도구 목록을 좁게 유지하고 자연어 계층을 범용인 것처럼 팔지만 않는다면 충분히 내놓을 만하다. 오답의 확신도가 낮다는 건 임계값 하나로 절반은 해결된다는 뜻이다.
+***** Comments
+- "오줌 마려워"라고 하니 wee가 장르라서 음악을 틀려고 한다. "화장실 간다"고 하니 변기를 켜겠다고 하는데, 그게 무슨 뜻인지 잘 모르겠다.
+- "불 전부 켜/꺼"와 "욕실이 너무 어두워"는 됐지만 조금이라도 간접적이면 안 됐다. 틀린 응답의 확신도가 꽤 낮았으니 임계값을 두는 게 좋겠다.
+- OpenStreetMap을 편집하는데 휴대폰으로는 번거롭다. 전화번호를 정확히 입력했는지 확인하고 긴 목록에서 맞는 필드를 골라야 한다. 여기에 잘 맞을 것 같다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Cactus Needle 3, modelos de automatización de 8-29 MB que igualan a DeepSeek V4 Flash
+***** TLDR
+Cactus publicó Needle 3: modelos de 25 a 121 millones de parámetros cuantizados a 2 bits y distribuidos como binarios de 8 a 29 MB que hacen llamadas a herramientas, extracción de JSON estructurado y embeddings, y que a propósito no conversan. Un solo juego de pesos contiene una escalera en la que cada profundidad, de 2 a 20 capas, es un submodelo desplegable. El FFN denso se sustituye por pares de factores Monarch inicializados con Walsh-Hadamard, lo que da O(d√d) parámetros y cómputo en lugar de O(d²). En una Raspberry Pi 5 decodifica hasta 4.000 tokens por segundo. En el benchmark Mobile Actions el binario de 20 capas a 2 bits saca 86,0 frente a 82,4 de LFM2.5 1.2B y 76,0 de Qwen3.5 0.8B.
+***** Take
+La demo del hilo es la parte más honesta de la propuesta. Alguien escribió que necesitaba ir al baño y el sistema puso música, porque "wee" coincidía con un género. Decir que hacía frío bajó las luces. Las órdenes directas funcionan, la intención indirecta no, que es justo lo que cabe esperar de un modelo de 29 MB. Aun así merece la pena si el conjunto de herramientas se mantiene estrecho y se deja de vender la capa de lenguaje natural como algo general. La baja confianza en las respuestas erróneas indica que un umbral arreglaría la mitad del problema.
+***** Comments
+- "Necesito hacer pis" intenta poner música porque "wee" es un género. "Voy al baño" responde que va a encender el váter, y no tengo claro qué implica eso.
+- "Enciende/apaga todas las luces" y "hay poca luz en el baño" me funcionaron, pero cualquier cosa menos directa no. La confianza en las respuestas malas era bastante baja, así que añadir un umbral podría merecer la pena.
+- Edito OpenStreetMap y desde el móvil es tedioso: asegurarme de escribir el teléfono exacto y elegir el campo correcto de una lista larga. Esto parece encajar.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Cactus Needle 3 – Automatisierungsmodelle von 8 bis 29 MB auf Augenhöhe mit DeepSeek V4 Flash
+***** TLDR
+Cactus hat Needle 3 veröffentlicht: Modelle mit 25 bis 121 Millionen Parametern, auf 2 Bit quantisiert und als 8 bis 29 MB große Binaries ausgeliefert, die Tool-Aufrufe, strukturierte JSON-Extraktion und Embeddings leisten und bewusst nicht chatten. Ein einziger Satz Gewichte enthält eine Leiter, in der jede Tiefe von 2 bis 20 Schichten ein einsatzfähiges Teilmodell ist. Das dichte FFN wird durch Walsh-Hadamard-initialisierte Monarch-Faktorpaare ersetzt, was O(d√d) statt O(d²) an Parametern und Rechenaufwand bedeutet. Auf einem Raspberry Pi 5 decodiert es bis zu 4.000 Token pro Sekunde. Im Mobile-Actions-Benchmark erreicht das 20-Schichten-Binary in 2 Bit 86,0 gegenüber 82,4 bei LFM2.5 1.2B und 76,0 bei Qwen3.5 0.8B.
+***** Take
+Die Demo im Thread ist der ehrlichste Teil des Pitches. Jemand tippte, er müsse aufs Klo, und bekam Musik, weil "wee" zu einem Genre passte. "Mir ist kalt" dimmte das Licht. Direkte Befehle kommen an, indirekte Absichten nicht, und genau das sollte man von einem 29-MB-Modell erwarten. Es lohnt sich trotzdem, wenn man das Toolset eng hält und aufhört, die Sprachschicht als allgemein zu verkaufen. Die niedrige Konfidenz bei falschen Antworten legt nahe, dass ein Schwellwert die Hälfte davon beheben würde.
+***** Comments
+- "Ich muss mal" versucht Musik abzuspielen, weil "wee" ein Genre ist. "Ich gehe aufs Klo" antwortet, es schalte die Toilette ein, und ich bin mir nicht sicher, was das bedeutet.
+- "Alle Lichter an/aus" und "im Bad ist es zu dunkel" haben bei mir funktioniert, alles weniger Direkte nicht. Die Konfidenz bei den falschen Antworten war ziemlich niedrig, ein Schwellwert wäre also sinnvoll.
+- Ich pflege OpenStreetMap, und vom Handy aus ist das mühsam: die Telefonnummer exakt eintippen und aus einer langen Liste das richtige Feld finden. Das sieht passend aus.
+** Xcode 27.1 Beta Release Notes :apple:xcode:ios:mobile:
+:PROPERTIES:
+:ID:       49758419
+:URL:      https://developer.apple.com/documentation/xcode-release-notes/xcode-27_1-release-notes
+:HN_URL:   https://news.ycombinator.com/item?id=49758419
+:POINTS:   134
+:COMMENTS: 75
+:BY:       CameronBanga
+:END:
+
+*** TLDR
+Xcode 27.1 beta ships Swift 6.4 and SDKs for iOS 27.1, iPadOS 27, tvOS 27, watchOS 27, macOS 27 and visionOS 27, and requires macOS Tahoe 26.6 or later. The canvas overrides picker gains a Display group for previewing on a device's alternative display. The iPhone Duo details sit in the known-issues list: StandBy is unavailable in the Duo Simulator runtime and app extension debugging there is limited. Mac Catalyst builds targeting iOS 27.1 fail to compile, with #if !targetEnvironment(macCatalyst) offered as the workaround.
+
+*** Take
+A month between the simulator and customers holding the hardware means the Duo launches with a lot of apps laid out for one screen. Apple bundling a uikit-app-modernization skill alongside it is the more interesting admission: the company has decided this adaptation work is mechanical enough to hand to an agent, and big enough that developers were not going to finish it by hand in four weeks.
+
+*** Comments
+
+**** yreg
+Finally. So we have a little over a month between getting the simulator and first customers running our apps in Duo. I expect most apps will look rather broken on release, but it will be smoothed out eventually.
+
+**** Austin_Conlon
+Apple also bundles a /uikit-app-modernization skill which should help with adapting layouts to iPhone Duo.
+
+**** ar_lan
+This is my main hesitation with picking up the Duo on first release. The chance that the apps I use are not well optimized for this new form factor is pretty high.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Xcode 27.1 Beta 发行说明
+***** TLDR
+Xcode 27.1 beta 带来 Swift 6.4，以及 iOS 27.1、iPadOS 27、tvOS 27、watchOS 27、macOS 27 和 visionOS 27 的 SDK，要求 macOS Tahoe 26.6 或更高版本。画布覆盖选择器新增了 Display 分组，可以在设备的另一块屏幕上预览内容。iPhone Duo 的细节藏在已知问题列表里：Duo 模拟器运行时不支持 StandBy，应用扩展调试也受限。面向 iOS 27.1 的 Mac Catalyst 构建会编译失败，苹果给出的绕行方案是 #if !targetEnvironment(macCatalyst)。
+***** Take
+从模拟器发布到用户拿到硬件只有一个月，这意味着 Duo 上市时会有大量按单屏布局的应用。更值得注意的是苹果同时附带了一个 uikit-app-modernization 技能：这等于承认这类适配工作机械到可以交给智能体，同时量大到开发者不可能在四周内手工做完。
+***** Comments
+- 总算来了。从拿到模拟器到第一批用户在 Duo 上跑我们的应用，只有一个多月。我估计大多数应用发布时看上去会比较糟，不过之后会慢慢理顺。
+- 苹果还附带了一个 /uikit-app-modernization 技能，应该能帮上把布局适配到 iPhone Duo 的忙。
+- 这正是我对首发就买 Duo 的主要顾虑。我常用的那些应用没有针对这种新形态优化好的可能性相当高。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Xcode 27.1 ベータのリリースノート
+***** TLDR
+Xcode 27.1 betaはSwift 6.4と、iOS 27.1、iPadOS 27、tvOS 27、watchOS 27、macOS 27、visionOS 27のSDKを同梱し、動作にはmacOS Tahoe 26.6以降が必要になる。キャンバスのオーバーライド選択に Display グループが加わり、デバイスのもう一方のディスプレイでプレビューできる。iPhone Duo関連の情報は既知の問題一覧にある。Duoシミュレータのランタイムでは StandBy が使えず、App Extensionのデバッグも制限される。iOS 27.1をターゲットにしたMac Catalystビルドはコンパイルに失敗し、回避策として #if !targetEnvironment(macCatalyst) が案内されている。
+***** Take
+シミュレータの公開から利用者が実機を手にするまで1か月しかないということは、Duoの発売時点で1画面向けレイアウトのアプリが大量に並ぶということだ。より興味深いのは、Appleが uikit-app-modernization スキルを同梱したことだ。この対応作業はエージェントに任せられる程度に機械的で、しかも開発者が4週間で手作業では終えられない規模だと会社が判断したことを意味する。
+***** Comments
+- ようやくだ。シミュレータが手に入ってから最初の利用者がDuoでアプリを動かすまで1か月と少ししかない。発売時点ではほとんどのアプリがかなり崩れて見えるだろうが、いずれ整っていくはずだ。
+- Appleは /uikit-app-modernization スキルも同梱している。iPhone Duo向けのレイアウト調整に役立つはずだ。
+- そこが発売初日にDuoを買うのをためらう一番の理由だ。自分が使っているアプリがこの新しい形状に最適化されていない可能性はかなり高い。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Xcode 27.1 베타 릴리스 노트
+***** TLDR
+Xcode 27.1 베타는 Swift 6.4와 iOS 27.1, iPadOS 27, tvOS 27, watchOS 27, macOS 27, visionOS 27용 SDK를 포함하며 macOS Tahoe 26.6 이상을 요구한다. 캔버스 오버라이드 선택기에 Display 그룹이 추가되어 기기의 보조 디스플레이에서 미리보기를 할 수 있다. iPhone Duo 관련 내용은 알려진 문제 목록에 있다. Duo 시뮬레이터 런타임에서는 StandBy를 쓸 수 없고 앱 익스텐션 디버깅도 제한된다. iOS 27.1을 대상으로 하는 Mac Catalyst 빌드는 컴파일에 실패하며, 애플은 #if !targetEnvironment(macCatalyst)를 우회책으로 안내한다.
+***** Take
+시뮬레이터 공개부터 고객이 실물을 손에 쥐기까지 한 달이라는 건, Duo가 한 화면 기준으로 잡힌 레이아웃의 앱들과 함께 출시된다는 뜻이다. 더 흥미로운 건 애플이 uikit-app-modernization 스킬을 함께 넣었다는 점이다. 이 적응 작업이 에이전트에게 맡길 만큼 기계적이고, 동시에 개발자가 4주 안에 손으로 끝낼 수 없을 만큼 크다고 회사가 판단했다는 뜻이다.
+***** Comments
+- 드디어. 시뮬레이터를 받고 첫 고객이 Duo에서 우리 앱을 돌리기까지 한 달 남짓이다. 출시 시점에는 대부분의 앱이 꽤 깨져 보일 텐데, 결국은 정리될 것이다.
+- 애플은 /uikit-app-modernization 스킬도 함께 제공한다. iPhone Duo용 레이아웃 적응에 도움이 될 것이다.
+- 그래서 첫 출시에 Duo를 사는 게 망설여진다. 내가 쓰는 앱들이 이 새 폼팩터에 잘 최적화되어 있지 않을 가능성이 꽤 높다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Notas de la versión de Xcode 27.1 beta
+***** TLDR
+Xcode 27.1 beta incluye Swift 6.4 y los SDK de iOS 27.1, iPadOS 27, tvOS 27, watchOS 27, macOS 27 y visionOS 27, y requiere macOS Tahoe 26.6 o posterior. El selector de overrides del lienzo suma un grupo Display para previsualizar en la pantalla alternativa de un dispositivo. Los detalles del iPhone Duo están en la lista de problemas conocidos: StandBy no está disponible en el runtime del simulador del Duo y la depuración de extensiones allí es limitada. Las compilaciones de Mac Catalyst que apuntan a iOS 27.1 fallan, y la solución propuesta es #if !targetEnvironment(macCatalyst).
+***** Take
+Un mes entre el simulador y el hardware en manos de los clientes significa que el Duo se lanzará con muchas apps maquetadas para una sola pantalla. Lo más revelador es que Apple incluya además una skill de modernización de apps UIKit: la empresa ha decidido que este trabajo de adaptación es lo bastante mecánico como para delegarlo en un agente y lo bastante grande como para que nadie lo termine a mano en cuatro semanas.
+***** Comments
+- Por fin. Tenemos poco más de un mes entre recibir el simulador y los primeros clientes usando nuestras apps en el Duo. Espero que la mayoría se vean bastante rotas en el lanzamiento, aunque se irá puliendo.
+- Apple también incluye una skill /uikit-app-modernization que debería ayudar a adaptar los diseños al iPhone Duo.
+- Esa es mi principal duda para comprar el Duo en el lanzamiento. Hay bastantes probabilidades de que las apps que uso no estén bien optimizadas para este formato.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Release Notes zu Xcode 27.1 Beta
+***** TLDR
+Xcode 27.1 Beta bringt Swift 6.4 sowie die SDKs für iOS 27.1, iPadOS 27, tvOS 27, watchOS 27, macOS 27 und visionOS 27 und setzt macOS Tahoe 26.6 oder neuer voraus. Der Overrides-Picker der Canvas erhält eine Display-Gruppe, um Inhalte auf dem zweiten Bildschirm eines Geräts vorzuschauen. Die iPhone-Duo-Details stehen in der Liste bekannter Probleme: StandBy fehlt in der Duo-Simulator-Runtime, und das Debuggen von App-Extensions ist dort eingeschränkt. Mac-Catalyst-Builds mit Ziel iOS 27.1 lassen sich nicht kompilieren; als Workaround nennt Apple #if !targetEnvironment(macCatalyst).
+***** Take
+Ein Monat zwischen Simulator und Hardware in Kundenhand heißt, dass das Duo mit vielen Apps startet, die für einen Bildschirm gebaut sind. Aufschlussreicher ist, dass Apple gleich eine uikit-app-modernization-Skill mitliefert: Das Unternehmen hält diese Anpassungsarbeit für mechanisch genug, um sie einem Agenten zu übergeben, und für groß genug, dass Entwickler sie in vier Wochen nicht von Hand schaffen.
+***** Comments
+- Endlich. Wir haben also gut einen Monat zwischen dem Simulator und den ersten Kunden, die unsere Apps auf dem Duo starten. Ich erwarte, dass die meisten Apps zum Start ziemlich kaputt aussehen, aber das wird sich einspielen.
+- Apple liefert außerdem eine /uikit-app-modernization-Skill mit, die beim Anpassen der Layouts an das iPhone Duo helfen dürfte.
+- Das ist mein größtes Zögern beim Kauf des Duo zum Start. Die Wahrscheinlichkeit, dass die Apps, die ich nutze, für diesen neuen Formfaktor nicht gut optimiert sind, ist ziemlich hoch.
+** San Francisco Onion Futures Company :finance:regulation:law:humor:
+:PROPERTIES:
+:ID:       49763296
+:URL:      https://onionfutures.com/
+:HN_URL:   https://news.ycombinator.com/item?id=49763296
+:POINTS:   76
+:COMMENTS: 26
+:BY:       z-mach9
+:END:
+
+*** TLDR
+The San Francisco Onion Futures Company sells private, transferable contracts for physical delivery of yellow onions, currently for delivery months from October 2026 through March 2027 at $3.52 to $9.39 per onion, repriced daily by an undisclosed algorithm. Delivery is arranged in the first week of the contract month in San Francisco, Toronto, Seattle and Chicago. The legal argument in the FAQ: 7 U.S. Code § 13-1 bans onion futures traded on or subject to the rules of any board of trade, and the company says it is not one, because it sells privately to individuals and operates no exchange or secondary market.
+
+*** Take
+The ban exists because in 1955 two traders cornered the Chicago onion market so thoroughly that a bag of onions ended up worth less than the bag. Congress responded by outlawing futures on one vegetable, and the statute has sat there since. The loophole reading looks sound and is completely untested, but the contracts are the argument, not the business: a student group is handing out onions to make the case that a 68-year-old single-crop ban is arbitrary. They have a point.
+
+*** Comments
+
+**** mimorigasaka
+The people behind this are a real if silly student organization at UChicago and Northwestern campaigning for the legalization of onion futures trading. Sometimes they will aggressively hand out free onions to passersby on campus.
+
+**** cwal37
+The Onion Futures Act also banned box office receipt futures. A fun thing is to go on FRED and graph onion prices against, say, corn, to see the difference in volatility.
+
+**** Barbing
+From the FAQ: is this legal? Yes, to the best of our knowledge. The company is not a board of trade, defined as an organized exchange or other trading facility.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+旧金山洋葱期货公司
+***** TLDR
+旧金山洋葱期货公司出售可转让的私人合约，约定实物交割黄洋葱，目前覆盖 2026 年 10 月至 2027 年 3 月的交割月，每颗洋葱 3.52 至 9.39 美元，价格由一套未公开的算法每日重算。交割安排在合约月的第一周，地点为旧金山、多伦多、西雅图和芝加哥。FAQ 里的法律论证是：美国法典第 7 编第 13-1 条禁止在任何交易所或受其规则约束的场所交易洋葱期货，而该公司称自己不是交易所，因为它只向个人私下出售，不运营任何交易所或二级市场。
+***** Take
+这条禁令的由来是 1955 年两名交易员把芝加哥的洋葱市场垄断到一袋洋葱还不如装它的袋子值钱。国会的回应是禁掉一种蔬菜的期货，这条法律从此一直摆在那里。这套钻空子的解读看上去站得住脚，但完全没有经过检验；而且这些合约本身就是论据，不是生意：一个学生组织在发洋葱，想说明一条针对单一作物、已有 68 年历史的禁令很武断。这话有道理。
+***** Comments
+- 做这件事的人是芝加哥大学和西北大学一个真实存在、虽然有点无厘头的学生组织，他们在为洋葱期货交易的合法化奔走。有时候他们会在校园里挺强势地给路人发免费洋葱。
+- 《洋葱期货法》还顺带禁掉了票房收入期货。有个好玩的做法是上 FRED，把洋葱价格和比如玉米价格画在一起，看看波动率的差别。
+- FAQ 里写着：这合法吗？据我们所知是合法的。公司不属于“交易所”，而法律把交易所定义为有组织的交易场所或其他交易设施。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+サンフランシスコ玉ねぎ先物会社
+***** TLDR
+サンフランシスコ玉ねぎ先物会社は、黄玉ねぎの現物引き渡しを約する譲渡可能な私的契約を販売している。現在の対象は2026年10月から2027年3月までの受け渡し月で、価格は玉ねぎ1個あたり3.52ドルから9.39ドル、非公開のアルゴリズムで毎日再計算される。引き渡しは契約月の第1週に、サンフランシスコ、トロント、シアトル、シカゴで手配される。FAQでの法的主張はこうだ。合衆国法典第7編13条の1は、取引所において、またはその規則に従って行われる玉ねぎ先物取引を禁じているが、同社は個人に私的に販売するだけで取引所も流通市場も運営していないため、取引所には当たらない。
+***** Take
+この禁止は、1955年に2人のトレーダーがシカゴの玉ねぎ市場を買い占め、玉ねぎ1袋が袋そのものより安くなったことに由来する。議会は野菜1種類の先物を違法化するという形で応じ、その条文は以来そのまま残っている。抜け道の解釈はもっともらしく見えるが、まったく検証されていない。そしてこの契約は商売ではなく主張そのものだ。学生団体が玉ねぎを配りながら、単一作物を狙った68年前の禁止は恣意的だと訴えている。その指摘には理がある。
+***** Comments
+- これをやっているのはシカゴ大学とノースウェスタン大学にある、ふざけてはいるが実在する学生団体で、玉ねぎ先物取引の合法化を訴えている。ときどきキャンパスで通行人にかなり強引に無料の玉ねぎを配っている。
+- 玉ねぎ先物法は興行収入の先物も禁止した。FREDで玉ねぎ価格をたとえばトウモロコシと並べてグラフにし、変動率の違いを見るのは面白い。
+- FAQより。これは合法か。我々の知る限り合法だ。同社は、組織された取引所その他の取引施設と定義される board of trade には当たらない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+샌프란시스코 양파 선물 회사
+***** TLDR
+샌프란시스코 양파 선물 회사는 노란 양파의 현물 인도를 약속하는 양도 가능한 사적 계약을 판다. 현재 인도월은 2026년 10월부터 2027년 3월까지이고 양파 한 개당 3.52~9.39달러이며, 가격은 공개되지 않은 알고리즘으로 매일 다시 계산된다. 인도는 계약월 첫째 주에 샌프란시스코, 토론토, 시애틀, 시카고에서 이뤄진다. FAQ의 법적 논거는 이렇다. 미국 법전 7편 13-1조는 거래소에서 또는 그 규칙에 따라 이뤄지는 양파 선물 거래를 금지하는데, 이 회사는 개인에게 사적으로 팔 뿐 거래소도 유통시장도 운영하지 않으므로 거래소가 아니라는 것이다.
+***** Take
+이 금지는 1955년에 두 트레이더가 시카고 양파 시장을 사재기해 양파 한 자루가 자루 값보다 싸지게 만든 데서 비롯됐다. 의회는 채소 한 종류의 선물을 불법화하는 것으로 답했고, 그 조문은 이후 그대로 남아 있다. 이 빈틈 해석은 그럴듯해 보이지만 한 번도 시험된 적이 없다. 그리고 이 계약은 사업이 아니라 주장 그 자체다. 학생 단체가 양파를 나눠주며 단일 작물을 겨냥한 68년 된 금지가 자의적이라고 말하고 있다. 일리가 있다.
+***** Comments
+- 이걸 하는 사람들은 시카고대와 노스웨스턴대의 실재하는, 다소 엉뚱한 학생 단체로 양파 선물 거래 합법화를 주장한다. 가끔 캠퍼스에서 지나가는 사람들에게 공짜 양파를 꽤 적극적으로 나눠준다.
+- 양파 선물법은 박스오피스 수입 선물도 금지했다. FRED에서 양파 가격을 옥수수 같은 것과 함께 그려 변동성 차이를 보는 게 재미있다.
+- FAQ에서: 이게 합법인가? 우리가 아는 한 그렇다. 이 회사는 조직된 거래소나 기타 거래 시설로 정의되는 board of trade가 아니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+San Francisco Onion Futures Company
+***** TLDR
+La San Francisco Onion Futures Company vende contratos privados y transferibles para la entrega física de cebollas amarillas, con meses de entrega de octubre de 2026 a marzo de 2027 y precios de 3,52 a 9,39 dólares por cebolla, recalculados a diario con un algoritmo no revelado. La entrega se organiza en la primera semana del mes del contrato en San Francisco, Toronto, Seattle y Chicago. El argumento legal de su FAQ: el título 7 del Código de EE. UU., sección 13-1, prohíbe los futuros de cebolla negociados en una bolsa de comercio o sujetos a sus reglas, y la empresa sostiene que no lo es, porque vende en privado a particulares y no opera ninguna bolsa ni mercado secundario.
+***** Take
+La prohibición existe porque en 1955 dos operadores acapararon el mercado de cebollas de Chicago hasta el punto de que un saco de cebollas valía menos que el saco. El Congreso respondió ilegalizando los futuros de una sola hortaliza, y la ley sigue ahí. La lectura del resquicio parece sólida y no se ha puesto a prueba nunca, pero los contratos son el argumento, no el negocio: un grupo de estudiantes reparte cebollas para sostener que una prohibición de 68 años sobre un único cultivo es arbitraria. Tienen razón en eso.
+***** Comments
+- Detrás de esto hay una organización estudiantil real, aunque algo absurda, de UChicago y Northwestern que hace campaña por legalizar los futuros de cebolla. A veces reparten cebollas gratis de forma bastante insistente por el campus.
+- La Onion Futures Act también prohibió los futuros sobre la recaudación de taquilla. Es entretenido entrar en FRED y graficar el precio de la cebolla junto al del maíz para ver la diferencia de volatilidad.
+- De la FAQ: ¿esto es legal? Sí, hasta donde sabemos. La empresa no es una bolsa de comercio, definida como un mercado organizado u otra instalación de negociación.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+San Francisco Onion Futures Company
+***** TLDR
+Die San Francisco Onion Futures Company verkauft private, übertragbare Verträge über die physische Lieferung gelber Zwiebeln, derzeit für Liefermonate von Oktober 2026 bis März 2027 zu 3,52 bis 9,39 Dollar pro Zwiebel, täglich per nicht offengelegtem Algorithmus neu bepreist. Die Lieferung wird in der ersten Woche des Vertragsmonats in San Francisco, Toronto, Seattle und Chicago arrangiert. Das rechtliche Argument aus der FAQ: 7 U.S. Code § 13-1 verbietet Zwiebel-Futures, die an einer Warenbörse oder nach deren Regeln gehandelt werden, und das Unternehmen sei keine solche, da es privat an Einzelpersonen verkauft und weder Börse noch Sekundärmarkt betreibt.
+***** Take
+Das Verbot gibt es, weil zwei Händler 1955 den Chicagoer Zwiebelmarkt so gründlich leerkauften, dass ein Sack Zwiebeln am Ende weniger wert war als der Sack. Der Kongress verbot daraufhin Futures auf ein einziges Gemüse, und das Gesetz steht seitdem unverändert da. Die Auslegung der Lücke wirkt tragfähig und ist völlig ungetestet, aber die Verträge sind das Argument, nicht das Geschäft: Eine Studentengruppe verteilt Zwiebeln, um zu zeigen, dass ein 68 Jahre altes Verbot für genau eine Feldfrucht willkürlich ist. Damit haben sie recht.
+***** Comments
+- Dahinter steckt eine reale, wenn auch alberne Studentenorganisation von UChicago und Northwestern, die für die Legalisierung des Zwiebel-Futures-Handels wirbt. Manchmal verteilen sie auf dem Campus recht offensiv kostenlose Zwiebeln.
+- Der Onion Futures Act verbot auch Futures auf Kinokasseneinnahmen. Ganz unterhaltsam: bei FRED den Zwiebelpreis gegen etwa Mais plotten und den Unterschied in der Volatilität ansehen.
+- Aus der FAQ: Ist das legal? Ja, nach bestem Wissen. Das Unternehmen ist kein board of trade, definiert als organisierte Börse oder sonstige Handelseinrichtung.
