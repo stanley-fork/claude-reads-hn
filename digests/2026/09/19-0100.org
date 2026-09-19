@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-09-19 01:00 UTC
+#+DATE: 2026-09-19T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Google ships Pixel-only Android APIs, C++26 puts a syscall in your empty loop, and Claude Code finally reads AGENTS.md
+
+* Highlights
+- Android 17 QPR1: new developer APIs, no AOSP drop until December
+- C++26 fixes while(true); by inserting std::this_thread::yield()
+- Claude Code reads AGENTS.md when there is no CLAUDE.md
+- Cloudflare relaunches a five-year-old tunnel product for 'the agent era'
+- Leopardus tilcayo: first new cat species in a century, identified by genome
+
+* Stories
+
+** Android 17 is the first since 3.x to add new APIs without releasing to the AOSP :android:google:opensource:mobile:
+:PROPERTIES:
+:ID:       49758736
+:URL:      https://grapheneos.social/@GrapheneOS/117282080803799576
+:HN_URL:   https://news.ycombinator.com/item?id=49758736
+:POINTS:   491
+:COMMENTS: 230
+:BY:       theanonymousone
+:END:
+
+*** TLDR
+GrapheneOS reports that Android 17 QPR1 is the first release since Honeycomb (3.x) to add new developer APIs without a matching Android Open Source Project drop. The APIs are Pixel-only and reach AOSP and other OEMs in QPR2 in December 2026. GrapheneOS says it finished porting its code before the September 15 release but does not have permission to publish it yet.
+
+*** Take
+QPR1 and QPR3 have been Pixel-exclusive since Android 16, so this is the next step in a pattern rather than a surprise. The effect is a three-month head start for Pixel apps over every other OEM and over GrapheneOS, and a platform that ships source on a delay is a different product from one that ships source.
+
+*** Comments
+
+**** wps
+The amount of roadblocks Google is putting up for GrapheneOS is just ridiculous. Google simply regrets android being open source.
+
+**** bri3d
+Google drops real Android source updates to OEMs and the public every half, but ships four Pixel updates including documentation and SDKs. Now they added new APIs in a Pixel-only update.
+
+**** publlus_enigma
+I went through similar challenges with Google making it impossibly hard for BlackBerry to provide an Android runtime on BBOS10. I trust Google exactly zero to do the right thing by any open source project it stewards.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Android 17 是 3.x 以来第一个新增 API 却不向 AOSP 发布的版本
+***** TLDR
+GrapheneOS 指出，Android 17 QPR1 是自 Honeycomb（3.x）以来第一个新增开发者 API 却没有同步向 Android 开源项目（AOSP）发布的版本。这些 API 仅限 Pixel 使用，要到 2026 年 12 月的 QPR2 才会进入 AOSP 和其他 OEM。GrapheneOS 表示自己在 9 月 15 日发布前就已完成移植，但还没有获得发布许可。
+***** Take
+自 Android 16 起，QPR1 和 QPR3 就已是 Pixel 独占，所以这是既有模式的下一步，而不是意外。结果是 Pixel 上的应用比其他所有 OEM 和 GrapheneOS 早三个月拿到新 API；延迟发布源码的平台，和真正开源的平台是两种不同的产品。
+***** Comments
+- Google 给 GrapheneOS 设置的障碍多到荒谬。Google 只是后悔把 Android 做成了开源项目。
+- Google 每半年才向 OEM 和公众发布真正的 Android 源码更新，但一年推四次 Pixel 更新，还带文档和 SDK。现在他们把新 API 放进了 Pixel 独占的更新里。
+- 我在 BlackBerry 做 BBOS10 的 Android 运行时时，就遇过 Google 类似的极限刁难。对 Google 能否善待它所主导的任何开源项目，我的信任是零。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Android 17、3.x以来初めて新APIをAOSPに公開せず追加
+***** TLDR
+GrapheneOSによれば、Android 17 QPR1はHoneycomb（3.x）以来初めて、Android Open Source Projectへの公開を伴わずに開発者向け新APIを追加したリリースだ。これらのAPIはPixel限定で、AOSPと他のOEMに届くのは2026年12月のQPR2。GrapheneOSは9月15日のリリース前に移植を終えていたが、公開の許可がまだ得られていないという。
+***** Take
+QPR1とQPR3はAndroid 16以降Pixel専用なので、これは驚きではなくパターンの次の一歩だ。結果としてPixel向けアプリは他の全OEMとGrapheneOSより3か月先行する。ソースを遅れて出すプラットフォームは、オープンソースのプラットフォームとは別の製品だ。
+***** Comments
+- GoogleがGrapheneOSの前に置く障害の数はばかげている。GoogleはAndroidをオープンソースにしたことを単に後悔しているのだ。
+- Googleは本物のAndroidソース更新を半年ごとにしかOEMと一般に出さないが、Pixel更新は年4回、ドキュメントとSDK付きで出す。今回はPixel限定の更新に新APIを入れた。
+- BlackBerryのBBOS10でAndroidランタイムを提供しようとしたとき、Googleの同じような妨害を経験した。Googleが自ら管理するオープンソースに正しく振る舞うという信頼はゼロだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+안드로이드 17, 3.x 이후 처음으로 AOSP 공개 없이 새 API 추가
+***** TLDR
+GrapheneOS는 안드로이드 17 QPR1이 허니콤(3.x) 이후 처음으로 AOSP 공개 없이 개발자용 새 API를 추가한 릴리스라고 밝혔다. 해당 API는 픽셀 전용이며, AOSP와 다른 OEM에는 2026년 12월 QPR2에서 제공된다. GrapheneOS는 9월 15일 릴리스 전에 이미 포팅을 마쳤지만 아직 공개 허가를 받지 못했다고 한다.
+***** Take
+QPR1과 QPR3는 안드로이드 16부터 픽셀 전용이었으므로 이는 놀라운 일이 아니라 기존 패턴의 다음 단계다. 결과적으로 픽셀 앱은 다른 모든 OEM과 GrapheneOS보다 3개월 앞서간다. 소스를 늦게 내놓는 플랫폼은 오픈소스 플랫폼과 다른 제품이다.
+***** Comments
+- 구글이 GrapheneOS 앞에 세우는 장벽의 양이 터무니없다. 구글은 그저 안드로이드를 오픈소스로 만든 것을 후회하고 있다.
+- 구글은 진짜 안드로이드 소스 업데이트를 반년마다 OEM과 대중에 내놓지만, 픽셀 업데이트는 문서와 SDK까지 포함해 연 4회 배포한다. 이번에는 픽셀 전용 업데이트에 새 API를 넣었다.
+- 블랙베리에서 BBOS10용 안드로이드 런타임을 만들 때 구글의 비슷한 방해를 겪었다. 구글이 자신이 관리하는 오픈소스 프로젝트를 제대로 대할 것이라는 신뢰는 전혀 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Android 17 es el primero desde 3.x en añadir nuevas APIs sin publicarlas en AOSP
+***** TLDR
+GrapheneOS informa que Android 17 QPR1 es la primera versión desde Honeycomb (3.x) que añade nuevas APIs para desarrolladores sin una publicación equivalente en el Android Open Source Project. Las APIs son exclusivas de Pixel y llegarán a AOSP y a otros fabricantes con QPR2 en diciembre de 2026. GrapheneOS dice que terminó de portar su código antes del lanzamiento del 15 de septiembre, pero que todavía no tiene permiso para publicarlo.
+***** Take
+QPR1 y QPR3 son exclusivos de Pixel desde Android 16, así que esto es el siguiente paso de un patrón, no una sorpresa. El efecto es una ventaja de tres meses para las apps de Pixel sobre el resto de fabricantes y sobre GrapheneOS, y una plataforma que publica el código con retraso es un producto distinto de una que lo publica.
+***** Comments
+- La cantidad de obstáculos que Google pone a GrapheneOS es ridícula. Google simplemente se arrepiente de que Android sea código abierto.
+- Google publica las actualizaciones reales del código de Android para fabricantes y para el público cada medio año, pero lanza cuatro actualizaciones de Pixel con documentación y SDK. Ahora ha añadido nuevas APIs en una actualización exclusiva de Pixel.
+- Pasé por dificultades parecidas cuando Google hizo casi imposible que BlackBerry ofreciera un entorno Android en BBOS10. No confío en absoluto en que Google haga lo correcto con ningún proyecto de código abierto que dirige.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Android 17 ist das erste seit 3.x, das neue APIs ohne AOSP-Veröffentlichung hinzufügt
+***** TLDR
+GrapheneOS berichtet, dass Android 17 QPR1 das erste Release seit Honeycomb (3.x) ist, das neue Entwickler-APIs ohne zugehörige Veröffentlichung im Android Open Source Project hinzufügt. Die APIs sind Pixel-exklusiv und erreichen AOSP und andere Hersteller erst mit QPR2 im Dezember 2026. GrapheneOS sagt, die Portierung sei vor dem Release am 15. September fertig gewesen, eine Freigabe zur Veröffentlichung fehle aber noch.
+***** Take
+QPR1 und QPR3 sind seit Android 16 Pixel-exklusiv, das hier ist also der nächste Schritt eines Musters und keine Überraschung. Im Ergebnis haben Pixel-Apps drei Monate Vorsprung vor allen anderen Herstellern und vor GrapheneOS, und eine Plattform, die Quellcode verzögert liefert, ist ein anderes Produkt als eine, die ihn liefert.
+***** Comments
+- Die Menge an Hürden, die Google GrapheneOS in den Weg legt, ist absurd. Google bedauert einfach, dass Android Open Source ist.
+- Google gibt echte Android-Quellcode-Updates nur halbjährlich an OEMs und die Öffentlichkeit, liefert aber vier Pixel-Updates samt Dokumentation und SDKs. Jetzt kamen neue APIs in einem Pixel-exklusiven Update.
+- Ich habe Ähnliches erlebt, als Google es BlackBerry fast unmöglich machte, eine Android-Laufzeitumgebung auf BBOS10 anzubieten. Mein Vertrauen, dass Google mit einem von ihm geführten Open-Source-Projekt richtig umgeht, ist null.
+** Cloudflare Quick Tunnels :cloudflare:networking:devtools:tunnels:
+:PROPERTIES:
+:ID:       49754785
+:URL:      https://try.cloudflare.com/
+:HN_URL:   https://news.ycombinator.com/item?id=49754785
+:POINTS:   552
+:COMMENTS: 241
+:BY:       jcbhmr
+:END:
+
+*** TLDR
+A new landing page for Cloudflare Quick Tunnels: run `cloudflared tunnel --url http://localhost:8000` and get an ephemeral public HTTPS URL for a local server with no account, no DNS setup, and no inbound ports. The page pitches roughly three-second setup, 335+ edge cities, JSON output for agent integration, and tunnels that die with the process. Commenters point to an archive.org snapshot from 2021 showing the same product, anonymous quick tunnels included.
+
+*** Take
+The tool is genuinely useful and this is a landing page, not a launch. noname120's archive.org link is the actual story: a five-year-old feature repositioned 'for the agent era' took 552 points on the front page. The macOS `cloudflared service install` bug adamfeldman cites has been open since 2021, which says more about Cloudflare's investment here than the new copy does.
+
+*** Comments
+
+**** noname120
+Cloudflare Quick Tunnels have existed for more than 5 years, including the anonymous quick tunnels. I pasted the URL into archive.org, see for yourself. Is a new landing page for a 5-year-old product really worthy of the front page?
+
+**** TIPSIO
+My wife and I have a shared bot system for mini apps. We have Tailscale on our phones and can instantly and privately see them without deployment via our secure VPN.
+
+**** adamfeldman
+Cloudflare doesn't really seem to care about their tunnel product. 'cloudflared service install broken on macOS' has been open since 2021.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Cloudflare Quick Tunnels
+***** TLDR
+Cloudflare Quick Tunnels 上线了新的落地页：运行 `cloudflared tunnel --url http://localhost:8000`，就能为本地服务拿到一个临时的公网 HTTPS 地址，不需要账号、不需要配置 DNS、不需要开放入站端口。页面宣传约三秒完成设置、335 个以上边缘城市、便于 agent 集成的 JSON 输出，以及随进程结束而消失的隧道。评论区拿出 2021 年的 archive.org 快照，证明同样的产品（包括匿名快速隧道）当时就存在。
+***** Take
+这个工具确实好用，但这次是换落地页，不是发布新产品。noname120 的 archive.org 链接才是真正的新闻：一个五年前的功能被重新包装成「为 agent 时代而生」，就拿下了 552 分。adamfeldman 提到的 macOS 上 `cloudflared service install` 的 bug 从 2021 年挂到现在，这比新文案更能说明 Cloudflare 在这块投入了多少。
+***** Comments
+- Cloudflare Quick Tunnels 已经存在五年多了，包括匿名快速隧道。我把这个链接贴进 archive.org，你自己看。一个五年前产品的新落地页真的值得上首页吗？
+- 我和太太共用一套机器人系统来做小应用。手机上装了 Tailscale，通过我们自己的安全 VPN 就能立刻私密地访问，不用部署。
+- Cloudflare 似乎并不太在意自己的隧道产品。「cloudflared service install 在 macOS 上失效」这个问题从 2021 年开到现在。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Cloudflare Quick Tunnels
+***** TLDR
+Cloudflare Quick Tunnelsの新しいランディングページ。`cloudflared tunnel --url http://localhost:8000`を実行すれば、アカウントもDNS設定も受信ポートも不要で、ローカルサーバーに一時的な公開HTTPS URLが得られる。ページは約3秒のセットアップ、335都市以上のエッジ、エージェント連携向けJSON出力、プロセス終了とともに消えるトンネルを謳う。コメント欄は2021年のarchive.orgスナップショットを示し、匿名クイックトンネルを含め同じ製品が当時から存在したと指摘する。
+***** Take
+ツール自体は本当に便利だが、今回はランディングページの更新で、新製品の発表ではない。noname120のarchive.orgリンクが本題だ。5年前の機能が「エージェント時代向け」に再配置されただけで552ポイントを取った。adamfeldmanが挙げるmacOSの`cloudflared service install`のバグは2021年から未解決で、新しい宣伝文よりもCloudflareの本気度を物語っている。
+***** Comments
+- Cloudflare Quick Tunnelsは匿名クイックトンネルを含めて5年以上前から存在する。URLをarchive.orgに貼ってみれば分かる。5年前の製品の新しいランディングページが本当にフロントページに値するのか？
+- 妻と共有のボットシステムでミニアプリを作っている。スマホにTailscaleを入れていて、デプロイなしで安全なVPN経由で即座に非公開のまま見られる。
+- Cloudflareは自社のトンネル製品をあまり気にかけていないようだ。「macOSでcloudflared service installが壊れている」は2021年から開いたままだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Cloudflare Quick Tunnels
+***** TLDR
+Cloudflare Quick Tunnels의 새 랜딩 페이지다. `cloudflared tunnel --url http://localhost:8000`을 실행하면 계정, DNS 설정, 인바운드 포트 개방 없이 로컬 서버용 임시 공개 HTTPS URL이 생긴다. 페이지는 약 3초 설정, 335개 이상 엣지 도시, 에이전트 연동용 JSON 출력, 프로세스 종료와 함께 사라지는 터널을 내세운다. 댓글에서는 2021년 archive.org 스냅샷을 근거로, 익명 퀵 터널까지 포함해 같은 제품이 이미 존재했다고 지적한다.
+***** Take
+도구 자체는 정말 쓸모 있지만 이번 건 랜딩 페이지 교체이고 신제품 출시가 아니다. noname120의 archive.org 링크가 본질이다. 5년 된 기능이 '에이전트 시대용'으로 재포장되어 552점을 받았다. adamfeldman이 언급한 macOS `cloudflared service install` 버그는 2021년부터 열려 있고, 새 홍보 문구보다 클라우드플레어의 투자 수준을 더 잘 보여준다.
+***** Comments
+- Cloudflare Quick Tunnels는 익명 퀵 터널까지 포함해 5년 넘게 존재했다. URL을 archive.org에 붙여보면 알 수 있다. 5년 된 제품의 새 랜딩 페이지가 정말 첫 페이지에 올라갈 만한가?
+- 아내와 함께 미니 앱을 만드는 공용 봇 시스템을 쓴다. 휴대폰에 Tailscale을 깔아두면 배포 없이 안전한 VPN으로 즉시 비공개로 볼 수 있다.
+- 클라우드플레어는 자사 터널 제품에 별로 신경 쓰지 않는 듯하다. 'macOS에서 cloudflared service install이 깨졌다'는 이슈가 2021년부터 열려 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cloudflare Quick Tunnels
+***** TLDR
+Una nueva página de presentación para Cloudflare Quick Tunnels: ejecuta `cloudflared tunnel --url http://localhost:8000` y obtienes una URL pública HTTPS temporal para un servidor local, sin cuenta, sin configurar DNS y sin abrir puertos de entrada. La página promete unos tres segundos de configuración, más de 335 ciudades en el borde, salida en JSON para integrar agentes y túneles que mueren con el proceso. Los comentarios señalan una captura de archive.org de 2021 con el mismo producto, túneles anónimos incluidos.
+***** Take
+La herramienta es realmente útil, pero esto es una página de presentación, no un lanzamiento. El enlace a archive.org de noname120 es la noticia real: una función de cinco años reposicionada «para la era de los agentes» consiguió 552 puntos en portada. El error de `cloudflared service install` en macOS que cita adamfeldman está abierto desde 2021, y eso dice más sobre la inversión de Cloudflare aquí que el texto nuevo.
+***** Comments
+- Cloudflare Quick Tunnels existe desde hace más de 5 años, incluidos los túneles anónimos. Pegué la URL en archive.org, compruébalo tú mismo. ¿De verdad una página nueva para un producto de cinco años merece la portada?
+- Mi esposa y yo tenemos un sistema de bots compartido para mini aplicaciones. Llevamos Tailscale en el móvil y podemos verlas al instante y en privado por nuestra VPN segura, sin despliegue.
+- A Cloudflare no parece importarle mucho su producto de túneles. «cloudflared service install roto en macOS» sigue abierto desde 2021.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Cloudflare Quick Tunnels
+***** TLDR
+Eine neue Landingpage für Cloudflare Quick Tunnels: `cloudflared tunnel --url http://localhost:8000` ausführen und man erhält eine kurzlebige öffentliche HTTPS-URL für einen lokalen Server, ohne Konto, ohne DNS-Einrichtung und ohne offene eingehende Ports. Die Seite verspricht rund drei Sekunden Einrichtung, über 335 Edge-Standorte, JSON-Ausgabe für Agent-Integration und Tunnel, die mit dem Prozess enden. Kommentare verweisen auf einen archive.org-Schnappschuss von 2021 mit demselben Produkt, anonyme Quick Tunnels inklusive.
+***** Take
+Das Werkzeug ist wirklich nützlich, aber das hier ist eine Landingpage, kein Launch. Der archive.org-Link von noname120 ist die eigentliche Nachricht: ein fünf Jahre altes Feature, neu als «für das Agent-Zeitalter» positioniert, holte 552 Punkte auf der Startseite. Der von adamfeldman genannte macOS-Fehler bei `cloudflared service install` ist seit 2021 offen und sagt mehr über Cloudflares Einsatz hier als der neue Text.
+***** Comments
+- Cloudflare Quick Tunnels gibt es seit über 5 Jahren, inklusive der anonymen Quick Tunnels. Ich habe die URL in archive.org eingefügt, sieh selbst. Ist eine neue Landingpage für ein fünf Jahre altes Produkt wirklich die Startseite wert?
+- Meine Frau und ich haben ein gemeinsames Bot-System für Mini-Apps. Wir haben Tailscale auf den Handys und können sie sofort und privat über unser sicheres VPN sehen, ohne Deployment.
+- Cloudflare scheint sich um sein Tunnel-Produkt kaum zu kümmern. «cloudflared service install auf macOS defekt» ist seit 2021 offen.
+** Claude Code now reads AGENTS.md if there is no Claude.md :ai:devtools:claude:agents:
+:PROPERTIES:
+:ID:       49760187
+:URL:      https://code.claude.com/docs/en/changelog
+:HN_URL:   https://news.ycombinator.com/item?id=49760187
+:POINTS:   489
+:COMMENTS: 180
+:BY:       datadrivenangel
+:END:
+
+*** TLDR
+Claude Code 2.1.277, released September 18, reads AGENTS.md in projects that have no CLAUDE.md. The behavior can be changed under 'Project instructions' in /config, and it is not yet available on Bedrock, Vertex, or Foundry. The same release adds gateway proxy options, a waiting indicator for background tasks, and fixes to the Write, Edit, and Read tools.
+
+*** Take
+Everyone was already symlinking CLAUDE.md to AGENTS.md, so this ratifies the workaround rather than settling on a standard. The fallback-only design is the detail worth noting: CLAUDE.md still wins when both files exist, so nothing forces a project to converge. And as clutter55561 points out, instruction files are only half the problem; skills in .agents/skills are still not picked up.
+
+*** Comments
+
+**** stillpointlab
+I had Claude Fable set up a new project and it created, unprompted, an AGENTS.md file and a CLAUDE.md symlink to AGENTS.md. I didn't have that symlink in any other project.
+
+**** rukuu001
+I once asked Claude Code to 'follow the instructions in this directory' when there was only an AGENTS.md there. In the manner of someone finding a dead mouse, it said it could find no instructions but perhaps it should check this AGENTS.md file.
+
+**** clutter55561
+Don't get too excited, Claude Code still won't detect skills in .agents/skills.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Claude Code 现在会在没有 CLAUDE.md 时读取 AGENTS.md
+***** TLDR
+9 月 18 日发布的 Claude Code 2.1.277，会在项目没有 CLAUDE.md 时读取 AGENTS.md。该行为可在 /config 的「Project instructions」中修改，目前还不支持 Bedrock、Vertex 和 Foundry。同一版本还加入了网关代理选项、后台任务的等待提示，并修复了 Write、Edit 和 Read 工具的一些问题。
+***** Take
+大家早就在把 CLAUDE.md 做成 AGENTS.md 的软链接，所以这是承认既有的绕路做法，而不是确立标准。值得注意的是它只作为兜底：两个文件同时存在时仍以 CLAUDE.md 为准，因此没有任何力量推动项目统一。而正如 clutter55561 所说，指令文件只是一半问题，.agents/skills 里的 skills 依然读不到。
+***** Comments
+- 我让 Claude Fable 新建一个项目，它没被要求就创建了 AGENTS.md，还把 CLAUDE.md 做成指向它的软链接。我其他项目里都没有这个软链接。
+- 有一次目录里只有 AGENTS.md，我故意让 Claude Code「按这个目录里的指令做」。它像捡到一只死老鼠般举着说：找不到任何指令，不过也许该看看这个 AGENTS.md 文件。
+- 别太激动，Claude Code 还是识别不了 .agents/skills 里的 skills。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claude Code、CLAUDE.mdがなければAGENTS.mdを読むようになった
+***** TLDR
+9月18日公開のClaude Code 2.1.277は、CLAUDE.mdがないプロジェクトでAGENTS.mdを読む。挙動は/configの「Project instructions」で変更でき、Bedrock、Vertex、Foundryではまだ利用できない。同リリースではゲートウェイプロキシのオプション、バックグラウンドタスクの待機表示、Write・Edit・Readツールの修正も入った。
+***** Take
+皆すでにCLAUDE.mdをAGENTS.mdへのシンボリックリンクにしていたので、これは標準を決めたのではなく回避策を公認したものだ。注目点はフォールバック限定という設計にある。両方あるときは依然CLAUDE.mdが優先されるので、プロジェクトを統一へ向かわせる力は働かない。そしてclutter55561の指摘どおり、指示ファイルは問題の半分で、.agents/skills内のスキルはまだ認識されない。
+***** Comments
+- Claude Fableに新規プロジェクトを作らせたら、指示していないのにAGENTS.mdを作り、CLAUDE.mdをそこへのシンボリックリンクにした。他のプロジェクトにそんなリンクは置いていない。
+- AGENTS.mdしかないディレクトリで、わざとClaude Codeに「このディレクトリの指示に従って」と頼んだことがある。死んだネズミを見つけた人のような態度で、指示は見つからないがこのAGENTS.mdを見るべきかもしれないと言われた。
+- あまり喜ばないでほしい。Claude Codeは今も.agents/skillsのスキルを検出しない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude Code, CLAUDE.md가 없으면 AGENTS.md를 읽는다
+***** TLDR
+9월 18일 배포된 Claude Code 2.1.277은 CLAUDE.md가 없는 프로젝트에서 AGENTS.md를 읽는다. 이 동작은 /config의 'Project instructions'에서 바꿀 수 있고, Bedrock, Vertex, Foundry에서는 아직 지원되지 않는다. 같은 릴리스에는 게이트웨이 프록시 옵션, 백그라운드 작업 대기 표시, Write·Edit·Read 도구 수정도 포함됐다.
+***** Take
+이미 모두가 CLAUDE.md를 AGENTS.md로 심볼릭 링크하고 있었으니, 이는 표준을 정한 것이 아니라 우회책을 공식화한 것이다. 눈여겨볼 점은 대체용으로만 동작한다는 설계다. 두 파일이 모두 있으면 여전히 CLAUDE.md가 이기므로 프로젝트를 한쪽으로 모으는 압력이 없다. clutter55561의 지적처럼 지시 파일은 문제의 절반이고, .agents/skills의 스킬은 아직 인식되지 않는다.
+***** Comments
+- Claude Fable에 새 프로젝트를 만들게 했더니 요청도 없이 AGENTS.md를 만들고 CLAUDE.md를 그 파일로 심볼릭 링크했다. 다른 프로젝트엔 그런 링크가 없었다.
+- AGENTS.md만 있는 디렉터리에서 일부러 Claude Code에게 '이 디렉터리의 지시를 따르라'고 했다. 죽은 쥐를 집어 든 사람처럼, 지시를 찾을 수 없지만 이 AGENTS.md를 확인해봐야 할지도 모른다고 답했다.
+- 너무 기뻐하지 말자. Claude Code는 여전히 .agents/skills의 스킬을 감지하지 못한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Claude Code ya lee AGENTS.md si no hay CLAUDE.md
+***** TLDR
+Claude Code 2.1.277, publicado el 18 de septiembre, lee AGENTS.md en proyectos que no tienen CLAUDE.md. El comportamiento se puede cambiar en «Project instructions» dentro de /config, y aún no está disponible en Bedrock, Vertex ni Foundry. La misma versión añade opciones de proxy de pasarela, un indicador de espera para tareas en segundo plano y correcciones en las herramientas Write, Edit y Read.
+***** Take
+Todo el mundo ya enlazaba CLAUDE.md a AGENTS.md, así que esto ratifica el atajo en lugar de fijar un estándar. El detalle importante es que solo funciona como respaldo: si existen los dos archivos, CLAUDE.md sigue ganando, así que nada empuja a los proyectos a converger. Y como señala clutter55561, los archivos de instrucciones son la mitad del problema; las skills en .agents/skills siguen sin detectarse.
+***** Comments
+- Le pedí a Claude Fable que montara un proyecto nuevo y creó, sin que se lo pidiera, un AGENTS.md y un enlace simbólico de CLAUDE.md hacia él. No tenía ese enlace en ningún otro proyecto.
+- Una vez le pedí a Claude Code que «siguiera las instrucciones de este directorio» cuando allí solo había un AGENTS.md. Con el aire de alguien que encuentra un ratón muerto, dijo que no hallaba instrucciones, pero que quizá debería mirar ese AGENTS.md.
+- No os emocionéis: Claude Code todavía no detecta las skills en .agents/skills.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Claude Code liest jetzt AGENTS.md, wenn keine CLAUDE.md existiert
+***** TLDR
+Claude Code 2.1.277, veröffentlicht am 18. September, liest AGENTS.md in Projekten ohne CLAUDE.md. Das Verhalten lässt sich unter «Project instructions» in /config ändern und ist auf Bedrock, Vertex und Foundry noch nicht verfügbar. Dieselbe Version bringt Gateway-Proxy-Optionen, eine Wartenanzeige für Hintergrundaufgaben und Korrekturen an den Werkzeugen Write, Edit und Read.
+***** Take
+Alle haben CLAUDE.md schon auf AGENTS.md verlinkt, das hier bestätigt also den Umweg und legt keinen Standard fest. Wichtig ist das Detail, dass es nur als Rückfallebene greift: Existieren beide Dateien, gewinnt weiterhin CLAUDE.md, es gibt also keinen Druck zur Vereinheitlichung. Und wie clutter55561 anmerkt, sind Instruktionsdateien nur die Hälfte des Problems; Skills in .agents/skills werden weiterhin nicht erkannt.
+***** Comments
+- Ich ließ Claude Fable ein neues Projekt aufsetzen, und es erstellte unaufgefordert eine AGENTS.md und einen CLAUDE.md-Symlink darauf. In keinem anderen Projekt hatte ich diesen Symlink.
+- Ich bat Claude Code einmal, «den Anweisungen in diesem Verzeichnis zu folgen», wo nur eine AGENTS.md lag. Mit der Haltung von jemandem, der eine tote Maus findet, sagte es, es finde keine Anweisungen, sollte aber vielleicht diese AGENTS.md prüfen.
+- Nicht zu früh freuen: Claude Code erkennt Skills in .agents/skills weiterhin nicht.
+** C++26: Trivial infinite loops are no longer undefined behaviour :cpp:compilers:standards:programming:
+:PROPERTIES:
+:ID:       49746406
+:URL:      https://www.sandordargo.com/blog/2026/09/16/cpp26-trivial-infinite-loops
+:HN_URL:   https://news.ycombinator.com/item?id=49746406
+:POINTS:   146
+:COMMENTS: 193
+:BY:       ibobev
+:END:
+
+*** TLDR
+Proposal P2809R3 makes trivial infinite loops well-defined in C++26. Under the old forward-progress guarantee a loop that did no I/O, no volatile access and no synchronisation was undefined behaviour, so compilers were free to delete `while (true);` outright, while C11 had protected constant-expression loops all along. A loop now qualifies only if its body is literally empty and its controlling expression is a constant expression that evaluates to true, and the compiler replaces the qualifying loop with a call to std::this_thread::yield().
+
+*** Take
+The UB needed fixing and the chosen fix is worse than the bug. JoshTriplett's objection stands: a loop containing no library calls at all now gets a system call inserted into it, which is a surprise waiting to happen on bare metal. The narrow conditions make it stranger, since omoikane's godbolt shows `while(true);` is defined while `while(true){continue;}` stays undefined. C solved this by simply not deleting the loop.
+
+*** Comments
+
+**** JoshTriplett
+An infinite loop, with no library calls whatsoever, gets a system call inserted. That's a horrible surprise waiting to happen. An infinite loop should compile to an infinite loop, nothing more.
+
+**** wahern
+That's the epitome of the hidden code downside that Linus and many others dislike about C++. For constructors and destructors it's somewhat unavoidable, though Rust does better at limiting it.
+
+**** omoikane
+I tried -std=c++26 and 'while(true);' gave me an infinite loop as promised, but 'while(true){continue;}' restores the undefined behavior.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+C++26：平凡无限循环不再是未定义行为
+***** TLDR
+提案 P2809R3 让平凡无限循环在 C++26 中成为有定义行为。按旧的前进保证，不做 I/O、不访问 volatile、也不做同步的循环属于未定义行为，编译器可以直接删掉 `while (true);`，而 C11 一直保护常量表达式循环。现在只有循环体字面为空、且控制表达式是求值为真的常量表达式时才算符合条件，编译器会把这样的循环替换成调用 std::this_thread::yield()。
+***** Take
+这个未定义行为确实该修，但选的修法比 bug 更糟。JoshTriplett 的反对成立：一个完全不含库调用的循环，现在被塞进了一个系统调用，在裸机环境上这是个等着爆的意外。狭窄的条件让事情更奇怪——omoikane 的 godbolt 显示 `while(true);` 有定义，而 `while(true){continue;}` 仍是未定义。C 的做法就是不删这个循环。
+***** Comments
+- 一个完全没有任何库调用的无限循环，现在被插入了一个系统调用。这是个等着出事的糟糕意外。无限循环就该编译成无限循环，不多不少。
+- 这正是 Linus 和许多人讨厌 C++ 的那种隐藏代码。构造函数和析构函数里多少难以避免，不过 Rust 在限制这一点上做得更好。
+- 我试了 -std=c++26，「while(true);」确实如承诺给出无限循环，但「while(true){continue;}」又回到了未定义行为。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+C++26：自明な無限ループはもう未定義動作ではない
+***** TLDR
+提案P2809R3により、自明な無限ループはC++26で定義済み動作になった。旧来の前進保証では、I/Oもvolatileアクセスも同期も行わないループは未定義動作で、コンパイラは`while (true);`をまるごと削除できた。一方C11は当初から定数式ループを保護していた。今回条件を満たすのは、本体が文字どおり空で、制御式が真に評価される定数式の場合だけで、コンパイラは該当ループをstd::this_thread::yield()の呼び出しに置き換える。
+***** Take
+未定義動作は直すべきだったが、選ばれた直し方はバグより悪い。JoshTriplettの反論は正しい。ライブラリ呼び出しを一切含まないループにシステムコールが挿入されるのは、ベアメタルでいつか爆発する仕掛けだ。条件が狭いことで話はさらに奇妙になる。omoikaneのgodboltでは`while(true);`は定義済みなのに`while(true){continue;}`は未定義のままだ。Cは単にループを削除しないことで解決していた。
+***** Comments
+- ライブラリ呼び出しが一切ない無限ループにシステムコールが挿入される。いつか事故になるひどい驚きだ。無限ループは無限ループにコンパイルされるべきで、それ以上は不要だ。
+- これこそLinusや多くの人がC++で嫌う隠れたコードの典型だ。コンストラクタとデストラクタではある程度避けられないが、Rustはその抑制がうまい。
+- -std=c++26を試したら「while(true);」は約束どおり無限ループになったが、「while(true){continue;}」では未定義動作が戻ってきた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+C++26: 자명한 무한 루프는 더 이상 미정의 동작이 아니다
+***** TLDR
+제안 P2809R3에 따라 자명한 무한 루프가 C++26에서 정의된 동작이 됐다. 기존 전진 보장 아래에서는 I/O도, volatile 접근도, 동기화도 하지 않는 루프가 미정의 동작이어서 컴파일러가 `while (true);`를 통째로 지울 수 있었다. 반면 C11은 처음부터 상수식 루프를 보호했다. 이제 조건을 만족하려면 본문이 문자 그대로 비어 있고 제어식이 참으로 평가되는 상수식이어야 하며, 컴파일러는 해당 루프를 std::this_thread::yield() 호출로 바꾼다.
+***** Take
+미정의 동작은 고쳐야 했지만 선택된 해법이 버그보다 나쁘다. JoshTriplett의 반박이 옳다. 라이브러리 호출이 전혀 없는 루프에 시스템 콜이 삽입되는 건 베어메탈에서 언젠가 터질 함정이다. 조건이 좁아 더 이상하다. omoikane의 godbolt를 보면 `while(true);`는 정의되지만 `while(true){continue;}`는 여전히 미정의다. C는 그냥 루프를 지우지 않음으로써 이를 해결했다.
+***** Comments
+- 라이브러리 호출이 전혀 없는 무한 루프에 시스템 콜이 삽입된다. 언젠가 사고로 이어질 끔찍한 의외성이다. 무한 루프는 무한 루프로 컴파일되어야 하고 그 이상은 필요 없다.
+- 리누스와 많은 이들이 C++에서 싫어하는 숨은 코드의 전형이다. 생성자와 소멸자에서는 어느 정도 피하기 어렵지만, 러스트는 이를 더 잘 제한한다.
+- -std=c++26으로 시험해보니 'while(true);'는 약속대로 무한 루프가 됐지만, 'while(true){continue;}'는 미정의 동작이 돌아왔다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+C++26: los bucles infinitos triviales ya no son comportamiento indefinido
+***** TLDR
+La propuesta P2809R3 hace que los bucles infinitos triviales queden definidos en C++26. Con la antigua garantía de progreso, un bucle que no hacía E/S, ni accedía a volatile, ni sincronizaba era comportamiento indefinido, así que los compiladores podían eliminar `while (true);` por completo, mientras C11 protegía los bucles con expresión constante desde el principio. Ahora un bucle solo califica si su cuerpo está literalmente vacío y su expresión de control es constante y evalúa a verdadero, y el compilador sustituye ese bucle por una llamada a std::this_thread::yield().
+***** Take
+El comportamiento indefinido había que arreglarlo, y el arreglo elegido es peor que el fallo. La objeción de JoshTriplett se sostiene: un bucle sin ninguna llamada a biblioteca recibe ahora una llamada al sistema, lo que es una sorpresa esperando a ocurrir en bare metal. Las condiciones estrechas lo hacen más raro: el godbolt de omoikane muestra que `while(true);` está definido mientras `while(true){continue;}` sigue indefinido. C lo resolvió simplemente no borrando el bucle.
+***** Comments
+- Un bucle infinito sin ninguna llamada a biblioteca recibe una llamada al sistema insertada. Es una sorpresa horrible esperando a ocurrir. Un bucle infinito debería compilarse como un bucle infinito, nada más.
+- Eso es el epítome del código oculto que Linus y muchos otros detestan de C++. En constructores y destructores es algo inevitable, aunque Rust lo limita mejor.
+- Probé -std=c++26 y «while(true);» dio un bucle infinito como prometía, pero «while(true){continue;}» devuelve el comportamiento indefinido.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+C++26: Triviale Endlosschleifen sind kein undefiniertes Verhalten mehr
+***** TLDR
+Vorschlag P2809R3 macht triviale Endlosschleifen in C++26 wohldefiniert. Unter der alten Fortschrittsgarantie war eine Schleife ohne I/O, ohne volatile-Zugriff und ohne Synchronisation undefiniertes Verhalten, Compiler durften `while (true);` also komplett entfernen, während C11 Schleifen mit Konstantenausdruck von Anfang an schützte. Eine Schleife qualifiziert sich jetzt nur, wenn ihr Rumpf buchstäblich leer ist und ihr Steuerausdruck ein konstanter Ausdruck ist, der zu wahr auswertet; der Compiler ersetzt die Schleife dann durch einen Aufruf von std::this_thread::yield().
+***** Take
+Das undefinierte Verhalten musste weg, und die gewählte Lösung ist schlimmer als der Fehler. JoshTripletts Einwand hält: In eine Schleife ganz ohne Bibliotheksaufrufe wird nun ein Systemaufruf eingefügt, auf Bare Metal eine Überraschung mit Ansage. Die engen Bedingungen machen es seltsamer: omoikanes Godbolt zeigt, dass `while(true);` definiert ist, `while(true){continue;}` aber undefiniert bleibt. C hat das gelöst, indem es die Schleife einfach nicht löscht.
+***** Comments
+- Eine Endlosschleife ohne jeden Bibliotheksaufruf bekommt einen Systemaufruf eingefügt. Das ist eine schlimme Überraschung mit Ansage. Eine Endlosschleife sollte zu einer Endlosschleife kompilieren, nicht mehr.
+- Das ist der Inbegriff des versteckten Codes, den Linus und viele andere an C++ ablehnen. Bei Konstruktoren und Destruktoren ist das kaum vermeidbar, Rust begrenzt es aber besser.
+- Ich habe -std=c++26 probiert, und «while(true);» ergab wie versprochen eine Endlosschleife, aber «while(true){continue;}» bringt das undefinierte Verhalten zurück.
+** The first new cat species discovered in 100 years :science:biology:genetics:conservation:
+:PROPERTIES:
+:ID:       49744704
+:URL:      https://www.nationalgeographic.com/animals/article/meet-the-first-new-cat-species-discovered-in-100-years
+:HN_URL:   https://news.ycombinator.com/item?id=49744704
+:POINTS:   160
+:COMMENTS: 51
+:BY:       ohjeez
+:END:
+
+*** TLDR
+Researchers have described Leopardus tilcayo, the first new cat species named in roughly a century, from the Yungas forest on the eastern slope of the Bolivian Andes. A local man found an orphaned kitten near a forest road in 2017 and brought it to the Senda Verde sanctuary, where biologist Paola Nogales-Ascarrunz photographed it assuming it was a known species. Genome comparison across 38 individuals, with co-lead authors Eduardo Eizirik and Jonas Lescroart, later showed it diverged from other tiger cats about 1.4 million years ago. The cat weighs around five pounds and its conservation status has not been assessed.
+
+*** Take
+The nine years between the photograph and the paper is the part worth sitting with. Nothing visible about the animal gave it away; whole-genome comparison did, which means cheap sequencing will keep splitting apart species we thought we had counted. The unglamorous consequence is that a cat nobody knew existed has no population estimate and no conservation status, and that assessment is the work that still has to happen.
+
+*** Comments
+
+**** autoexec
+It's Leopardus tilcayo, aka 'tilcayo tiger cat', and it's very cute. Wikipedia doesn't have a page dedicated to it yet.
+
+**** krige
+Positively tiny. Really makes you wonder what else is still out there. Also an amusing disjoint between it being called 'tiger' cat but having leopard spots.
+
+**** hatthew
+I'm curious if the locals knew it was distinct from other similar species, or if tilcayo is their name for a broader set of visually similar species.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+一百年来发现的第一个新猫科物种
+***** TLDR
+研究者描述了 Leopardus tilcayo，这是约一个世纪以来命名的第一个新猫科物种，来自玻利维亚安第斯山脉东坡的永加斯森林。2017 年，一位当地人在林间道路旁发现一只失去母亲的幼崽并送到 Senda Verde 保护区，生物学家 Paola Nogales-Ascarrunz 为它拍了照，当时以为是已知物种。后来与共同第一作者 Eduardo Eizirik 和 Jonas Lescroart 一起对 38 只个体做全基因组比较，显示它约在 140 万年前与其他虎猫分化。这种猫约五磅重，保护状况尚未评估。
+***** Take
+从拍照到论文之间的九年才是值得停下来想的地方。这种动物外观上没有任何破绽，是全基因组比较揭示了差异，这意味着廉价测序会继续把我们以为已经数清的物种拆开。不那么好看的后果是：一种此前无人知晓的猫没有种群估算，也没有保护等级，而这项评估正是接下来必须做的工作。
+***** Comments
+- 它叫 Leopardus tilcayo，也叫「tilcayo 虎猫」，非常可爱。维基百科还没有专门的条目。
+- 真的很小。让人不禁想还有什么没被发现。另外它叫「虎」猫却长着豹纹，这点挺好笑。
+- 我很好奇当地人是否知道它和其他相似物种不同，还是 tilcayo 只是他们对一批外观相似物种的统称。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+100年ぶりに発見された新しいネコ科の種
+***** TLDR
+研究者らが、およそ1世紀ぶりに命名された新しいネコ科の種Leopardus tilcayoを、ボリビア・アンデス東斜面のユンガス森林から報告した。2017年に地元の男性が林道近くで親を失った子猫を見つけ、Senda Verde保護区に持ち込み、生物学者Paola Nogales-Ascarrunzが既知の種だと思って撮影した。その後、共同筆頭著者のEduardo EizirikとJonas Lescroartとともに38個体の全ゲノムを比較し、約140万年前に他のタイガーキャットから分岐したことが判明した。体重は約5ポンドで、保全状況は未評価だ。
+***** Take
+写真から論文までの9年間が考えどころだ。見た目には手がかりがなく、全ゲノム比較が違いを示した。つまり安価なシーケンシングは、数え終えたつもりの種を今後も分割していく。地味な帰結として、誰も知らなかったこのネコには個体数推定も保全ランクもない。その評価こそ、これから必要な仕事だ。
+***** Comments
+- Leopardus tilcayo、通称「ティルカヨ・タイガーキャット」で、とても可愛い。Wikipediaにはまだ専用のページがない。
+- 本当に小さい。他に何が残っているのかと考えさせられる。「タイガー」キャットと呼ばれるのにヒョウのような斑点という食い違いも面白い。
+- 地元の人がこれを他の似た種と区別していたのか、それともティルカヨが見た目の似た複数種をまとめた呼び名なのかが気になる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+100년 만에 발견된 새로운 고양이과 종
+***** TLDR
+연구자들이 볼리비아 안데스 동쪽 사면의 융가스 숲에서 약 한 세기 만에 명명된 새 고양이과 종 Leopardus tilcayo를 기술했다. 2017년 한 현지 주민이 임도 근처에서 어미를 잃은 새끼를 발견해 센다 베르데 보호소로 데려왔고, 생물학자 파올라 노갈레스아스카룬스는 알려진 종이라고 생각하며 사진을 찍었다. 이후 공동 제1저자 에두아르도 에이지리크, 요나스 레스크로아르트와 함께 38개체의 전장 유전체를 비교해 약 140만 년 전 다른 타이거캣에서 갈라졌음을 확인했다. 몸무게는 약 5파운드이고 보전 상태는 아직 평가되지 않았다.
+***** Take
+사진과 논문 사이의 9년이 짚어볼 대목이다. 겉모습에는 단서가 없었고 전장 유전체 비교가 차이를 드러냈다. 값싼 시퀀싱이 우리가 다 세었다고 여긴 종들을 계속 쪼갤 것이라는 뜻이다. 화려하지 않은 결론은, 아무도 몰랐던 이 고양이에게 개체수 추정치도 보전 등급도 없다는 것이고, 그 평가가 앞으로 해야 할 일이다.
+***** Comments
+- Leopardus tilcayo, 별칭 '틸카요 타이거캣'이고 아주 귀엽다. 위키백과에는 아직 전용 문서가 없다.
+- 정말 작다. 또 무엇이 남아 있을지 궁금해진다. '타이거' 캣이라 불리면서 표범 무늬를 가진 점도 재미있다.
+- 현지 사람들이 이 종을 비슷한 다른 종과 구별했는지, 아니면 틸카요가 겉모습이 닮은 여러 종을 뭉뚱그린 이름인지 궁금하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La primera especie de felino descubierta en 100 años
+***** TLDR
+Los investigadores han descrito Leopardus tilcayo, la primera especie de felino nombrada en aproximadamente un siglo, en el bosque de Yungas de la vertiente oriental de los Andes bolivianos. En 2017 un hombre de la zona encontró una cría huérfana junto a un camino forestal y la llevó al santuario Senda Verde, donde la bióloga Paola Nogales-Ascarrunz la fotografió creyendo que era una especie conocida. Más tarde, la comparación de genomas de 38 individuos, con Eduardo Eizirik y Jonas Lescroart como coautores principales, mostró que se separó de otros gatos tigre hace unos 1,4 millones de años. El animal pesa unos dos kilos y su estado de conservación no se ha evaluado.
+***** Take
+Lo que merece atención son los nueve años entre la fotografía y el artículo. Nada visible en el animal lo delataba; lo hizo la comparación de genomas completos, lo que significa que la secuenciación barata seguirá dividiendo especies que creíamos contadas. La consecuencia menos lucida es que un felino cuya existencia nadie conocía no tiene estimación de población ni categoría de conservación, y esa evaluación es el trabajo que queda por hacer.
+***** Comments
+- Es Leopardus tilcayo, el «gato tigre tilcayo», y es muy bonito. Wikipedia todavía no tiene una página dedicada.
+- Realmente diminuto. Da que pensar en qué más habrá por ahí. También resulta curioso que lo llamen gato «tigre» cuando tiene manchas de leopardo.
+- Me pregunto si los habitantes de la zona sabían que era distinto de otras especies parecidas, o si tilcayo es su nombre para un conjunto más amplio de especies visualmente similares.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die erste neu entdeckte Katzenart seit 100 Jahren
+***** TLDR
+Forschende haben Leopardus tilcayo beschrieben, die erste seit etwa einem Jahrhundert benannte Katzenart, aus dem Yungas-Wald am Osthang der bolivianischen Anden. 2017 fand ein Anwohner ein verwaistes Jungtier an einem Waldweg und brachte es in das Schutzzentrum Senda Verde, wo die Biologin Paola Nogales-Ascarrunz es fotografierte und für eine bekannte Art hielt. Ein späterer Genomvergleich über 38 Individuen, mit Eduardo Eizirik und Jonas Lescroart als Co-Erstautoren, zeigte eine Abspaltung von anderen Tigerkatzen vor rund 1,4 Millionen Jahren. Das Tier wiegt etwa zweieinhalb Kilo, sein Schutzstatus ist nicht bewertet.
+***** Take
+Bemerkenswert sind die neun Jahre zwischen Foto und Veröffentlichung. Äußerlich verriet das Tier nichts; der Genomvergleich tat es, und billige Sequenzierung wird weiter Arten aufspalten, die wir für gezählt hielten. Die unglamouröse Folge: Eine Katze, von deren Existenz niemand wusste, hat keine Bestandsschätzung und keinen Schutzstatus, und genau diese Bewertung steht noch aus.
+***** Comments
+- Es ist Leopardus tilcayo, die «Tilcayo-Tigerkatze», und sie ist sehr süß. Wikipedia hat noch keine eigene Seite dazu.
+- Wirklich winzig. Man fragt sich, was da noch alles draußen ist. Amüsant auch, dass sie «Tiger»-Katze heißt, aber Leopardenflecken hat.
+- Mich interessiert, ob die Menschen vor Ort sie von ähnlichen Arten unterschieden haben oder ob Tilcayo ihr Name für eine ganze Gruppe optisch ähnlicher Arten ist.
