@@ -1,0 +1,546 @@
+#+TITLE: HN Digest 2026-09-19 06:00 UTC
+#+DATE: 2026-09-19T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Cloudflare buys back 100TB of RAM with a variance formula, an LLM claims a better 8051 compiler than SDCC, and a year-old paper lets models skip text entirely
+
+* Highlights
+- Cloudflare: two bytes per struct and 90% fewer hashes, 100TB recovered
+- SDCC 4.6.0 ships, and a commenter says an LLM beat it in 90 minutes
+- Science Is Open Software: the code is the easy half, the data isn't
+- Rust Glancer on why a language server must answer from broken code
+- Cache-to-Cache: models pass KV-caches instead of text, 2.5x faster
+
+* Stories
+
+** Saving another 100TB of RAM :infrastructure:rust:performance:cloudflare:
+:PROPERTIES:
+:ID:       49758580
+:URL:      https://blog.cloudflare.com/saving-100-tb-of-ram-with-math/
+:HN_URL:   https://news.ycombinator.com/item?id=49758580
+:POINTS:   304
+:COMMENTS: 59
+:BY:       f311a
+:END:
+
+*** TLDR
+Cloudflare's Pingora Backend Router keeps consistent-hashing rings for every combination of features and server weights, reaching 6GB in some instances. Two changes fixed it. The Point struct went from 8 bytes to 6 by storing the server index as u16 instead of u32, cutting 25%. Then an analysis of the coefficient of variation showed the last 90,000 hashes per server bought only a 0.7% reduction in load-balancing error, so they cut hashes per server by 90%. Old and new rings ran side by side during a staged per-datacenter rollout to avoid cache invalidation and a spike in origin traffic. Total recovered: 100TB of RAM globally.
+
+*** Take
+The struct packing is the trick everyone will copy, but the 90% hash cut is the one that needed proof. They plotted the error curve before touching production, which is why this was a rollout instead of an incident report.
+
+*** Comments
+
+**** zer0x4d
+:PROPERTIES:
+:COMMENT_ID: 49758901
+:END:
+Happy to see this series. Developers got creative when RAM was scarce; once it was abundant most gave up on optimization and focused on shipping.
+
+**** vlovich123
+:PROPERTIES:
+:COMMENT_ID: 49759012
+:END:
+I would get rid of consistent hashing and ketama entirely for a system that saves an additional 600TiB: pick the server partition from the first N bits of the key hash, then use precomputed high-quality hashes.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+再省下 100TB 内存
+***** TLDR
+Cloudflare 的 Pingora Backend Router 为每种功能组合和服务器权重都维护一致性哈希环，部分实例占用高达 6GB。两项改动解决了问题：Point 结构体把服务器索引从 u32 改为 u16，从 8 字节降到 6 字节，减少 25%；随后对变异系数的分析显示，每台服务器最后的 90,000 个哈希只带来 0.7% 的负载均衡误差改善，于是把每台服务器的哈希数量削减了 90%。分阶段按数据中心灰度期间新旧哈希环并行运行，以避免缓存失效和回源流量激增。全球共回收 100TB 内存。
+***** Take
+结构体压缩是人人都会照抄的技巧，但真正需要论证的是那 90% 的哈希削减。他们在动生产环境之前先画出了误差曲线，所以这是一篇灰度记录而不是一篇事故报告。
+***** Comments
+- 很高兴看到这个系列。内存紧张的年代开发者很有创造力；资源充裕之后，大多数人就放弃优化、只顾发布了。
+- 我会彻底抛弃一致性哈希和 ketama，换成一套还能再省 600TiB 的方案：用键哈希的前 N 位选服务器分区，再使用预先计算好的高质量哈希。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+さらに100TBのRAMを節約する
+***** TLDR
+CloudflareのPingora Backend Routerは機能の組み合わせとサーバー重みごとに一貫性ハッシュリングを保持しており、一部のインスタンスで6GBに達していた。対策は2つ。Point構造体はサーバーインデックスをu32からu16にして8バイトから6バイトになり、25%削減。さらに変動係数の分析から、サーバーあたり最後の90,000ハッシュは負荷分散誤差を0.7%しか減らしていないと判明し、サーバーあたりのハッシュ数を90%削減した。データセンター単位の段階的展開では新旧のリングを並行稼働させ、キャッシュ無効化とオリジンへのトラフィック急増を回避。全世界で100TBのRAMを回収した。
+***** Take
+構造体のパッキングは誰もが真似する小技だが、証明が必要だったのは90%のハッシュ削減のほうだ。本番に手を入れる前に誤差曲線を描いたからこそ、これは障害報告ではなく展開記録になった。
+***** Comments
+- このシリーズは嬉しい。RAMが乏しかった頃の開発者は工夫していたが、潤沢になってから多くは最適化をやめて出荷だけを重視するようになった。
+- 一貫性ハッシュとketamaは捨てて、さらに600TiB節約できる方式にする。キーハッシュの先頭Nビットでサーバーパーティションを選び、事前計算した高品質ハッシュを使えばいい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+RAM 100TB를 또 절약하기
+***** TLDR
+Cloudflare의 Pingora Backend Router는 기능 조합과 서버 가중치마다 일관된 해싱 링을 유지해 일부 인스턴스에서 6GB까지 사용했다. 해결책은 두 가지다. Point 구조체의 서버 인덱스를 u32에서 u16으로 바꿔 8바이트에서 6바이트로 줄여 25%를 절감했다. 이어 변동계수 분석에서 서버당 마지막 90,000개의 해시가 부하 분산 오차를 0.7%밖에 줄이지 못한다는 점이 드러나 서버당 해시 수를 90% 줄였다. 데이터센터별 단계적 배포 동안 기존 링과 새 링을 나란히 운용해 캐시 무효화와 오리진 트래픽 급증을 피했다. 전 세계에서 100TB의 RAM을 회수했다.
+***** Take
+구조체 패킹은 누구나 따라 할 기법이지만 증명이 필요했던 쪽은 90% 해시 감축이다. 운영 환경을 건드리기 전에 오차 곡선을 그렸기에 이 글은 장애 보고서가 아니라 배포 기록이 됐다.
+***** Comments
+- 이 시리즈가 반갑다. RAM이 부족하던 시절 개발자들은 창의적이었지만, 자원이 풍족해지자 대부분 최적화를 포기하고 출시에만 집중했다.
+- 일관된 해싱과 ketama를 아예 버리고 600TiB를 더 아끼는 방식을 쓰겠다. 키 해시의 앞 N비트로 서버 파티션을 고르고 미리 계산한 고품질 해시를 쓰면 된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ahorrar otros 100 TB de RAM
+***** TLDR
+El Pingora Backend Router de Cloudflare mantiene anillos de hashing consistente para cada combinación de funciones y pesos de servidor, llegando a 6 GB en algunas instancias. Dos cambios lo resolvieron. La estructura Point pasó de 8 a 6 bytes al guardar el índice del servidor como u16 en lugar de u32, un 25% menos. Después, un análisis del coeficiente de variación mostró que los últimos 90.000 hashes por servidor solo reducían el error de balanceo un 0,7%, así que recortaron los hashes por servidor en un 90%. Los anillos viejo y nuevo funcionaron en paralelo durante un despliegue escalonado por centro de datos para evitar la invalidación de caché y un pico de tráfico al origen. Total recuperado: 100 TB de RAM a nivel global.
+***** Take
+El empaquetado de la estructura es el truco que todos copiarán, pero el recorte del 90% de los hashes era el que necesitaba demostración. Trazaron la curva de error antes de tocar producción, y por eso esto es un despliegue y no un informe de incidente.
+***** Comments
+- Me alegra ver esta serie. Cuando la RAM era escasa los desarrolladores eran creativos; al volverse abundante la mayoría abandonó la optimización y se centró en publicar.
+- Yo eliminaría el hashing consistente y ketama por un sistema que ahorra otros 600 TiB: elegir la partición de servidor con los primeros N bits del hash de la clave y usar hashes de alta calidad precalculados.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Weitere 100 TB RAM eingespart
+***** TLDR
+Cloudflares Pingora Backend Router hält konsistente Hash-Ringe für jede Kombination aus Features und Servergewichten vor und kam in manchen Instanzen auf 6 GB. Zwei Änderungen lösten das. Die Point-Struktur schrumpfte von 8 auf 6 Byte, weil der Serverindex als u16 statt u32 gespeichert wird, also 25% weniger. Danach zeigte eine Analyse des Variationskoeffizienten, dass die letzten 90.000 Hashes pro Server den Lastverteilungsfehler nur um 0,7% senken, also kürzten sie die Hashes pro Server um 90%. Alter und neuer Ring liefen während eines gestaffelten Rollouts pro Rechenzentrum parallel, um Cache-Invalidierung und einen Traffic-Ausschlag zum Origin zu vermeiden. Insgesamt weltweit 100 TB RAM zurückgewonnen.
+***** Take
+Das Struct-Packing ist der Kniff, den alle kopieren werden, aber begründet werden musste die 90-prozentige Hash-Kürzung. Sie haben die Fehlerkurve gezeichnet, bevor sie die Produktion angefasst haben, und deshalb ist das ein Rollout und kein Incident-Bericht.
+***** Comments
+- Schön, diese Serie zu sehen. Als RAM knapp war, wurden Entwickler kreativ; seit er im Überfluss da ist, haben die meisten das Optimieren aufgegeben und konzentrieren sich aufs Ausliefern.
+- Ich würde konsistentes Hashing und ketama ganz streichen zugunsten eines Systems, das weitere 600 TiB spart: die Serverpartition über die ersten N Bits des Schlüssel-Hashes wählen und vorberechnete hochwertige Hashes nutzen.
+** SDCC – Small Device C Compiler :embedded:compilers:c:retrocomputing:
+:PROPERTIES:
+:ID:       49762744
+:URL:      https://sdcc.sourceforge.net/
+:HN_URL:   https://news.ycombinator.com/item?id=49762744
+:POINTS:   44
+:COMMENTS: 11
+:BY:       lioeters
+:END:
+
+*** TLDR
+SDCC is a GPL-licensed retargetable optimizing C compiler suite for 8-bit microcontrollers, maintained on SourceForge since 1999 after Sandeep Dutta started it. Targets include the Intel MCS51 family, Z80, Z180, eZ80 and SM83, STM8, MOS 6502 and WDC 65C02, Freescale HC08 and S08, Padauk and the Rabbit series. It tracks real C standards up to C23. Version 4.6.0 landed 2026-06-22 with C2y features (_Countof, octal literals, if-declarations), an experimental f8l port and better z80 code generation.
+
+*** Take
+The thread's actual story is Jyaif's claim that an LLM wrote an 8051 compiler in about 90 minutes producing 60% of SDCC's code size, then passed SDCC's test suite a few quota refreshes later. Note which half of that is doing the work: without decades of SDCC conformance tests to run against, nobody could check the claim at all.
+
+*** Comments
+
+**** Jyaif
+:PROPERTIES:
+:COMMENT_ID: 49762801
+:END:
+Just yesterday I asked an LLM to generate a C compiler for the 8051 because SDCC's output was not optimized. Within 1.5 hours it compiled my project at 60% of SDCC's size, and later passed the SDCC test suite.
+
+**** dmitrygr
+:PROPERTIES:
+:COMMENT_ID: 49762855
+:END:
+SDCC has the best OSS 8051 compiler. It is buggy as hell, but it is free. Sometimes that is good enough.
+
+**** blackfawn
+:PROPERTIES:
+:COMMENT_ID: 49762877
+:END:
+I wish it had support for some of the 8-bit PIC chips like the PIC10 and PIC12. Maybe one day.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+SDCC：小型设备 C 编译器
+***** TLDR
+SDCC 是一套采用 GPL 许可、可重定向的优化型 C 编译器，面向 8 位单片机，由 Sandeep Dutta 发起，1999 年起在 SourceForge 上维护。支持的目标包括 Intel MCS51 系列、Z80、Z180、eZ80 和 SM83、STM8、MOS 6502 与 WDC 65C02、飞思卡尔 HC08 和 S08、Padauk 以及 Rabbit 系列，并跟进到 C23 标准。4.6.0 版本于 2026 年 6 月 22 日发布，加入了 C2y 特性（_Countof、八进制字面量、if 声明）、实验性 f8l 移植和更好的 z80 代码生成。
+***** Take
+这个帖子真正的故事是 Jyaif 的说法：他让 LLM 在大约 90 分钟内写出一个 8051 编译器，产出的代码体积只有 SDCC 的 60%，几轮额度刷新之后还通过了 SDCC 的测试套件。注意其中真正起作用的是哪一半：如果没有 SDCC 几十年积累的一致性测试可以跑，这个说法根本无从验证。
+***** Comments
+- 就在昨天，因为 SDCC 的输出不够优化，我让 LLM 生成了一个 8051 的 C 编译器。1.5 小时内它编译我的项目，体积只有 SDCC 的 60%，后来还通过了 SDCC 的测试套件。
+- SDCC 拥有最好的开源 8051 编译器。它 bug 多得要命，但它免费。有时候这就够了。
+- 希望它能支持 PIC10、PIC12 这类 8 位 PIC 芯片。也许某一天吧。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+SDCC – Small Device C Compiler
+***** TLDR
+SDCCは8ビットマイコン向けのGPLライセンスのリターゲッタブルな最適化Cコンパイラ群で、Sandeep Duttaが始め、1999年からSourceForgeで保守されている。対象はIntel MCS51系、Z80、Z180、eZ80、SM83、STM8、MOS 6502とWDC 65C02、Freescale HC08とS08、Padauk、Rabbitシリーズなど。C23までの規格に追従している。バージョン4.6.0は2026年6月22日にリリースされ、C2y機能（_Countof、8進リテラル、if宣言）、実験的なf8lポート、z80コード生成の改善が入った。
+***** Take
+このスレッドの本題はJyaifの主張だ。LLMに約90分で8051向けコンパイラを書かせたらSDCCの60%のコードサイズになり、数回のクォータ回復を挟んでSDCCのテストスイートも通ったという。効いているのがどちら側かに注目したい。数十年分のSDCC適合テストが走らせられなければ、この主張は検証すらできない。
+***** Comments
+- ちょうど昨日、SDCCの出力が最適化されていなかったのでLLMに8051用Cコンパイラを生成させた。1.5時間でSDCCの60%のサイズで自分のプロジェクトをコンパイルし、後にSDCCのテストスイートも通った。
+- SDCCは最高のOSS 8051コンパイラだ。バグだらけだが無料だ。それで十分なときもある。
+- PIC10やPIC12のような8ビットPICにも対応してほしい。いつの日か。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+SDCC – 소형 기기용 C 컴파일러
+***** TLDR
+SDCC는 8비트 마이크로컨트롤러를 위한 GPL 라이선스의 리타게터블 최적화 C 컴파일러 모음으로, Sandeep Dutta가 시작해 1999년부터 SourceForge에서 유지되고 있다. 지원 대상은 Intel MCS51 계열, Z80, Z180, eZ80, SM83, STM8, MOS 6502와 WDC 65C02, Freescale HC08과 S08, Padauk, Rabbit 시리즈 등이며 C23까지의 표준을 따라간다. 4.6.0 버전은 2026년 6월 22일에 나왔고 C2y 기능(_Countof, 8진 리터럴, if 선언), 실험적 f8l 포팅, 개선된 z80 코드 생성이 들어갔다.
+***** Take
+이 스레드의 진짜 이야기는 Jyaif의 주장이다. LLM에게 약 90분 만에 8051 컴파일러를 짜게 했더니 SDCC의 60% 코드 크기를 냈고, 할당량이 몇 번 회복된 뒤에는 SDCC 테스트 스위트도 통과했다는 것이다. 어느 쪽이 실제로 일을 하고 있는지 보라. 수십 년 쌓인 SDCC 적합성 테스트가 없었다면 이 주장은 확인조차 불가능하다.
+***** Comments
+- 바로 어제 SDCC 출력이 최적화되지 않아서 LLM에게 8051용 C 컴파일러를 만들게 했다. 1.5시간 만에 SDCC의 60% 크기로 내 프로젝트를 컴파일했고 나중에 SDCC 테스트 스위트도 통과했다.
+- SDCC는 최고의 오픈소스 8051 컴파일러다. 버그투성이지만 무료다. 그것으로 충분할 때도 있다.
+- PIC10, PIC12 같은 8비트 PIC 칩도 지원했으면 좋겠다. 언젠가는.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+SDCC, el compilador de C para dispositivos pequeños
+***** TLDR
+SDCC es un conjunto de compiladores de C optimizadores y reorientables con licencia GPL para microcontroladores de 8 bits, mantenido en SourceForge desde 1999 tras ser iniciado por Sandeep Dutta. Entre sus objetivos están la familia Intel MCS51, Z80, Z180, eZ80 y SM83, STM8, MOS 6502 y WDC 65C02, Freescale HC08 y S08, Padauk y la serie Rabbit. Sigue los estándares de C hasta C23. La versión 4.6.0 salió el 22 de junio de 2026 con funciones de C2y (_Countof, literales octales, declaraciones en if), un port experimental de f8l y mejor generación de código para z80.
+***** Take
+La verdadera historia del hilo es la afirmación de Jyaif: un LLM escribió un compilador para el 8051 en unos 90 minutos con un 60% del tamaño de código de SDCC y, unas recargas de cuota después, pasó la suite de pruebas de SDCC. Fíjate en qué mitad hace el trabajo: sin décadas de pruebas de conformidad de SDCC contra las que ejecutarlo, nadie podría verificar nada.
+***** Comments
+- Justo ayer le pedí a un LLM que generara un compilador de C para el 8051 porque la salida de SDCC no estaba optimizada. En 1,5 horas compilaba mi proyecto con el 60% del tamaño de SDCC y más tarde pasó su suite de pruebas.
+- SDCC tiene el mejor compilador de 8051 de código abierto. Tiene muchísimos fallos, pero es gratis. A veces con eso basta.
+- Ojalá tuviera soporte para algunos PIC de 8 bits como el PIC10 y el PIC12. Quizá algún día.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+SDCC – Small Device C Compiler
+***** TLDR
+SDCC ist eine GPL-lizenzierte, retargetierbare und optimierende C-Compiler-Suite für 8-Bit-Mikrocontroller, die Sandeep Dutta gestartet hat und die seit 1999 auf SourceForge gepflegt wird. Zu den Zielen gehören die Intel-MCS51-Familie, Z80, Z180, eZ80 und SM83, STM8, MOS 6502 und WDC 65C02, Freescale HC08 und S08, Padauk sowie die Rabbit-Serie. Die Suite folgt den C-Standards bis C23. Version 4.6.0 erschien am 22. Juni 2026 mit C2y-Funktionen (_Countof, Oktalliterale, if-Deklarationen), einem experimentellen f8l-Port und besserer z80-Codegenerierung.
+***** Take
+Die eigentliche Geschichte des Threads ist Jyaifs Behauptung: Ein LLM schrieb in rund 90 Minuten einen 8051-Compiler mit 60% der Codegröße von SDCC und bestand ein paar Kontingent-Auffrischungen später die Testsuite von SDCC. Man achte darauf, welche Hälfte hier die Arbeit leistet: Ohne jahrzehntelang gewachsene SDCC-Konformitätstests ließe sich die Behauptung gar nicht prüfen.
+***** Comments
+- Erst gestern habe ich ein LLM einen C-Compiler für den 8051 erzeugen lassen, weil die Ausgabe von SDCC nicht optimiert war. Binnen 1,5 Stunden kompilierte er mein Projekt mit 60% der SDCC-Größe und bestand später dessen Testsuite.
+- SDCC hat den besten quelloffenen 8051-Compiler. Er ist voller Fehler, aber kostenlos. Manchmal reicht das.
+- Ich wünschte, es gäbe Unterstützung für einige 8-Bit-PICs wie PIC10 und PIC12. Vielleicht eines Tages.
+** Science Is Open Software :science:open-source:academia:reproducibility:
+:PROPERTIES:
+:ID:       49762687
+:URL:      https://jepedersen.dk/blog/202505_research/
+:HN_URL:   https://news.ycombinator.com/item?id=49762687
+:POINTS:   50
+:COMMENTS: 21
+:BY:       jegp
+:END:
+
+*** TLDR
+Jens Egholm Pedersen argues that because software now sits under nearly every result, computational research is not science unless the code is open and runnable. He leans on Kenneth Craik's idea of inner models: a paper only contributes if a reader can take the idea, adapt it and re-run it. He cites retractions caused by software bugs, then proposes publishing code from day one, pinning environments (he recommends NixOS) so the code still runs years later, building on existing tools instead of reinventing them, and having universities count software in promotion decisions.
+
+*** Take
+The code half is closer to solved than the post admits: JOSS exists, containers exist, some journals already require artifacts. The commenters land on the part he skips. Open code over data nobody can obtain reproduces nothing, and data is exactly what researchers have the strongest career incentive to sit on.
+
+*** Comments
+
+**** willtemperley
+:PROPERTIES:
+:COMMENT_ID: 49762903
+:END:
+Another problem with reproducibility is the openness of the underlying data. Many academics are terrified of giving away the golden goose, and the software is often useless without the data.
+
+**** D-Machine
+:PROPERTIES:
+:COMMENT_ID: 49762845
+:END:
+The current academic incentives are all wrong: low-quality research is rewarded and results in publications, while high-quality research takes time.
+
+**** flopsamjetsam
+:PROPERTIES:
+:COMMENT_ID: 49762888
+:END:
+At least some journals already have click-and-run reproducibility as a standard.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+科学就是开源软件
+***** TLDR
+Jens Egholm Pedersen 认为，既然如今几乎每一项结果背后都有软件，那么计算类研究若代码不开放、不可运行，就算不上科学。他借用 Kenneth Craik 的“内部模型”概念：一篇论文只有在读者能够拿走其想法、加以改造并重新运行时才算有贡献。他列举了由软件缺陷导致的撤稿，随后提出：从第一天起就公开代码；固定运行环境（他推荐 NixOS），让代码多年后仍能运行；在已有工具上构建而不是重新发明；以及让高校在晋升评审中计入软件贡献。
+***** Take
+代码这一半比文章承认的更接近解决：JOSS 已经存在，容器已经存在，一些期刊已经要求提交产物。评论区指出了他跳过的那一半。如果数据谁也拿不到，开源代码复现不了任何东西，而数据恰恰是研究者在职业上最有动机攥在手里的东西。
+***** Comments
+- 可复现性的另一个问题是底层数据是否开放。很多学者害怕交出下金蛋的鹅，而软件没有数据往往毫无用处。
+- 当前的学术激励完全错位：低质量研究得到奖励并变成论文，而高质量研究需要时间。
+- 至少已经有一些期刊把点击即运行的可复现性作为标准。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+科学とはオープンソースソフトウェアである
+***** TLDR
+Jens Egholm Pedersenは、いまやほぼすべての結果の下にソフトウェアがある以上、コードが公開され実行可能でなければ計算科学は科学ではないと論じる。彼はKenneth Craikの「内的モデル」を引き、読者がそのアイデアを取り込み、改変し、再実行できて初めて論文は貢献になると言う。ソフトウェアのバグによる撤回例を挙げたうえで、初日からコードを公開すること、環境を固定して（NixOSを推奨）何年後でも動くようにすること、車輪の再発明をせず既存ツールの上に築くこと、大学が昇進審査でソフトウェアを評価することを提案する。
+***** Take
+コードの側は記事が認めるより解決に近い。JOSSはあるし、コンテナもあるし、成果物を要求する雑誌もすでにある。コメント欄が突くのは彼が飛ばした側だ。誰も入手できないデータの上でコードだけ公開しても何も再現できないし、データこそ研究者が最も抱え込む動機を持つものだ。
+***** Comments
+- 再現性のもう一つの問題は、元データが公開されているかどうかだ。多くの研究者は金の卵を産むガチョウを手放すのを恐れるし、データがなければソフトウェアは役に立たないことが多い。
+- いまの学術的インセンティブは完全に狂っている。質の低い研究が報われて論文になり、質の高い研究には時間がかかる。
+- 少なくとも一部の雑誌は、クリックして実行できる再現性をすでに標準にしている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+과학은 오픈소스 소프트웨어다
+***** TLDR
+Jens Egholm Pedersen은 이제 거의 모든 결과 밑에 소프트웨어가 깔려 있는 만큼, 코드가 공개되고 실행 가능하지 않으면 계산 연구는 과학이 아니라고 주장한다. 그는 Kenneth Craik의 내적 모델 개념을 빌려, 독자가 아이디어를 가져가 변형하고 다시 실행할 수 있어야 논문이 기여가 된다고 말한다. 소프트웨어 버그로 인한 철회 사례를 든 뒤 첫날부터 코드를 공개할 것, 환경을 고정해(NixOS를 추천) 몇 년 뒤에도 실행되게 할 것, 바퀴를 다시 만들지 말고 기존 도구 위에 쌓을 것, 대학이 승진 심사에서 소프트웨어를 인정할 것을 제안한다.
+***** Take
+코드 쪽은 글이 인정하는 것보다 해결에 가깝다. JOSS가 있고 컨테이너가 있으며 산출물을 요구하는 학술지도 이미 있다. 댓글은 그가 건너뛴 쪽을 짚는다. 아무도 구할 수 없는 데이터 위의 공개 코드는 아무것도 재현하지 못하고, 데이터야말로 연구자가 움켜쥘 유인이 가장 큰 자산이다.
+***** Comments
+- 재현성의 또 다른 문제는 기반 데이터의 공개 여부다. 많은 연구자가 황금알을 낳는 거위를 내주기를 두려워하고, 데이터 없는 소프트웨어는 대개 쓸모가 없다.
+- 지금의 학계 인센티브는 완전히 잘못됐다. 낮은 품질의 연구가 보상받아 논문이 되고, 좋은 연구에는 시간이 걸린다.
+- 적어도 일부 학술지는 클릭해서 실행하는 재현성을 이미 표준으로 삼고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La ciencia es software abierto
+***** TLDR
+Jens Egholm Pedersen sostiene que, dado que hoy hay software debajo de casi todo resultado, la investigación computacional no es ciencia si el código no es abierto y ejecutable. Se apoya en la idea de los modelos internos de Kenneth Craik: un artículo solo aporta si el lector puede tomar la idea, adaptarla y volver a ejecutarla. Cita retractaciones causadas por errores de software y propone publicar el código desde el primer día, fijar los entornos (recomienda NixOS) para que el código siga funcionando años después, construir sobre herramientas existentes en vez de reinventarlas, y que las universidades cuenten el software en las decisiones de promoción.
+***** Take
+La mitad del código está más resuelta de lo que admite el texto: existe JOSS, existen los contenedores y algunas revistas ya exigen artefactos. Los comentarios apuntan a la mitad que omite. Código abierto sobre datos que nadie puede obtener no reproduce nada, y los datos son justo lo que los investigadores tienen más incentivo profesional en retener.
+***** Comments
+- Otro problema de la reproducibilidad es la apertura de los datos subyacentes. Muchos académicos temen regalar la gallina de los huevos de oro, y el software suele ser inútil sin los datos.
+- Los incentivos académicos actuales están mal: la investigación de baja calidad se premia y acaba en publicaciones, mientras que la de alta calidad lleva tiempo.
+- Al menos algunas revistas ya tienen la reproducibilidad de un clic como estándar.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wissenschaft ist offene Software
+***** TLDR
+Jens Egholm Pedersen argumentiert, dass rechnergestützte Forschung keine Wissenschaft ist, solange der Code nicht offen und ausführbar ist, denn unter fast jedem Ergebnis steckt heute Software. Er stützt sich auf Kenneth Craiks Konzept innerer Modelle: Ein Aufsatz trägt nur bei, wenn Lesende die Idee übernehmen, anpassen und erneut ausführen können. Er nennt Rücknahmen, die auf Softwarefehler zurückgingen, und schlägt vor, Code vom ersten Tag an zu veröffentlichen, Umgebungen festzuschreiben (er empfiehlt NixOS), damit der Code auch Jahre später läuft, auf vorhandenen Werkzeugen aufzubauen statt sie neu zu erfinden, und Software in Berufungsentscheidungen anzurechnen.
+***** Take
+Die Code-Hälfte ist weiter gelöst, als der Text zugibt: JOSS gibt es, Container gibt es, manche Journals verlangen Artefakte bereits. Die Kommentare treffen den Teil, den er auslässt. Offener Code über Daten, an die niemand herankommt, reproduziert nichts, und genau Daten zurückzuhalten ist für Forschende der stärkste Karriereanreiz.
+***** Comments
+- Ein weiteres Problem der Reproduzierbarkeit ist die Offenheit der zugrunde liegenden Daten. Viele Akademiker fürchten, die Gans zu verschenken, die goldene Eier legt, und ohne Daten ist die Software oft nutzlos.
+- Die akademischen Anreize sind völlig falsch: Forschung geringer Qualität wird belohnt und führt zu Publikationen, während gute Forschung Zeit braucht.
+- Zumindest einige Journals haben Reproduzierbarkeit per Klick bereits als Standard.
+** Why building a Rust LSP is hard :rust:lsp:tooling:compilers:
+:PROPERTIES:
+:ID:       49734131
+:URL:      https://rust-glancer.github.io/blog/why-lsp-is-hard/
+:HN_URL:   https://news.ycombinator.com/item?id=49734131
+:POINTS:   37
+:COMMENTS: 18
+:BY:       agluszak
+:END:
+
+*** TLDR
+A post from Rust Glancer, an experimental Rust language server. The core difficulty: a compiler can fail, a language server has to produce useful answers from code that is incomplete and wrong. The concrete list includes deciding how much to index before answering initialization (full indexing costs 10 to 100+ seconds), a virtual file system that races both editor edits and on-disk changes, cancelling in-flight queries when state moves under them, protocol details leaking upward as UTF-16 offsets and line-ending detection, workspace discovery with no correct answer, and figuring out which symbol a cursor is on when the surrounding code does not parse.
+
+*** Take
+Most of that list is not Rust-specific and the commenters say so immediately. What Rust adds is the price of a partial parse: with heavy type inference and macros, half a file buys you far less to answer with than in a language that makes you write the types out.
+
+*** Comments
+
+**** Panzerschrek
+:PROPERTIES:
+:COMMENT_ID: 49734288
+:END:
+A lot of this applies not only to Rust but to almost any language. It is obvious that requests should be handled asynchronously and that UTF-16 conversions are needed, but it is actually not so hard.
+
+**** klodolph
+:PROPERTIES:
+:COMMENT_ID: 49734355
+:END:
+The particulars of Rust make this harder. There is tension between concision and useful redundancy, and Rust went to the concise side, which makes the tooling more painful.
+
+**** mitxela
+:PROPERTIES:
+:COMMENT_ID: 49734311
+:END:
+Using a JSON TCP connection for what on Windows would be direct COM function calls always felt a bit gross.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么做一个 Rust LSP 很难
+***** TLDR
+这篇文章来自实验性 Rust 语言服务器项目 Rust Glancer。核心难点在于：编译器可以直接失败，而语言服务器必须从残缺且错误的代码中给出有用的答案。文中列出的具体问题包括：回应初始化请求前要索引多少（完整索引需要 10 到 100 秒以上）；虚拟文件系统同时要和编辑器改动与磁盘改动赛跑；状态变化时取消进行中的查询；协议细节以 UTF-16 偏移量和换行符检测的形式向上渗透；没有正确答案的工作区发现；以及在周围代码根本无法解析时判断光标落在哪个符号上。
+***** Take
+这份清单大部分并非 Rust 独有，评论区立刻就指出了这一点。Rust 额外增加的是局部解析的代价：在大量类型推导和宏的加持下，半个文件能提供的信息远少于那些强制写出类型的语言。
+***** Comments
+- 其中很多内容不只适用于 Rust，几乎对任何语言都成立。请求应当异步处理、需要 UTF-16 转换，这些都显而易见，但其实并没有那么难。
+- Rust 的特性让这件事更难。简洁与有用的冗余之间存在张力，而 Rust 选择了简洁一侧，这让工具链更痛苦。
+- 在 Windows 上本可以是 COM 直接函数调用的东西，却要用 JSON over TCP，总觉得有点难受。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Rust向けLSPを作るのがなぜ難しいのか
+***** TLDR
+実験的なRust言語サーバーRust Glancerからの記事。核心はこうだ。コンパイラは失敗すればいいが、言語サーバーは不完全で誤ったコードから有用な答えを返さねばならない。具体的な項目は、初期化に応答する前にどこまで索引するか（完全な索引には10秒から100秒以上かかる）、エディタの編集とディスク上の変更の両方と競合する仮想ファイルシステム、状態が変わったときの実行中クエリのキャンセル、UTF-16オフセットや改行コード判定として漏れてくるプロトコルの詳細、正解のないワークスペース探索、そして周囲のコードがパースできないときにカーソル位置のシンボルを特定すること。
+***** Take
+この一覧の大半はRust固有ではなく、コメント欄もすぐそう指摘している。Rustが上乗せするのは部分パースの代価だ。型推論とマクロが効いている分、半分のファイルから得られる手がかりは、型を書かせる言語よりずっと少ない。
+***** Comments
+- 多くはRustに限らずほぼどの言語にも当てはまる。リクエストを非同期で扱うべきこともUTF-16変換が必要なことも自明で、実際そこまで難しくはない。
+- Rustの性質がこれを難しくしている。簡潔さと有用な冗長性の間には緊張があり、Rustは簡潔さ側に寄ったのでツールがつらくなる。
+- WindowsならCOMの直接呼び出しで済むものにJSONのTCP接続を使うのは、いつも少し気持ち悪かった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Rust LSP를 만들기가 어려운 이유
+***** TLDR
+실험적 Rust 언어 서버인 Rust Glancer에서 나온 글이다. 핵심 난점은 컴파일러는 실패하면 그만이지만 언어 서버는 불완전하고 잘못된 코드에서도 쓸모 있는 답을 내야 한다는 것이다. 구체적으로는 초기화에 응답하기 전에 얼마나 색인할지(전체 색인은 10초에서 100초 이상), 편집기 수정과 디스크 변경 양쪽과 경쟁하는 가상 파일 시스템, 상태가 바뀔 때 진행 중인 질의 취소, UTF-16 오프셋과 줄바꿈 감지로 새어 나오는 프로토콜 세부사항, 정답이 없는 워크스페이스 탐색, 그리고 주변 코드가 파싱되지 않을 때 커서가 어떤 심볼 위에 있는지 알아내는 문제가 꼽힌다.
+***** Take
+목록의 대부분은 Rust에 국한되지 않고 댓글도 바로 그 점을 지적한다. Rust가 더하는 것은 부분 파싱의 비용이다. 무거운 타입 추론과 매크로 탓에, 타입을 직접 쓰게 하는 언어보다 파일 절반에서 건질 수 있는 단서가 훨씬 적다.
+***** Comments
+- 상당수는 Rust만이 아니라 거의 모든 언어에 해당한다. 요청을 비동기로 처리해야 하고 UTF-16 변환이 필요하다는 건 당연하며, 사실 그렇게 어렵지도 않다.
+- Rust의 특성이 이걸 더 어렵게 만든다. 간결함과 유용한 중복 사이에 긴장이 있는데 Rust는 간결함 쪽으로 갔고, 그래서 도구가 더 고통스럽다.
+- 윈도우라면 COM 직접 함수 호출이면 될 것을 JSON TCP 연결로 처리하는 건 늘 좀 거북했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué es difícil construir un LSP para Rust
+***** TLDR
+Un texto de Rust Glancer, un servidor de lenguaje experimental para Rust. La dificultad central: un compilador puede fallar, pero un servidor de lenguaje tiene que dar respuestas útiles sobre código incompleto y erróneo. La lista concreta incluye decidir cuánto indexar antes de responder a la inicialización (indexar todo cuesta de 10 a más de 100 segundos), un sistema de archivos virtual que compite con las ediciones del editor y con los cambios en disco, cancelar consultas en vuelo cuando cambia el estado, detalles del protocolo que se filtran hacia arriba como desplazamientos UTF-16 y detección de fin de línea, el descubrimiento de espacios de trabajo sin respuesta correcta, y averiguar sobre qué símbolo está el cursor cuando el código de alrededor no se analiza.
+***** Take
+La mayor parte de esa lista no es específica de Rust y los comentaristas lo dicen enseguida. Lo que añade Rust es el precio de un análisis parcial: con inferencia de tipos pesada y macros, medio archivo te da mucho menos material que en un lenguaje que te obliga a escribir los tipos.
+***** Comments
+- Mucho de esto se aplica no solo a Rust sino a casi cualquier lenguaje. Es obvio que las peticiones deben tratarse de forma asíncrona y que hacen falta conversiones UTF-16, pero en realidad no es tan difícil.
+- Las particularidades de Rust lo complican. Hay tensión entre concisión y redundancia útil, y Rust se fue al lado conciso, lo que hace más dolorosas las herramientas.
+- Usar una conexión TCP con JSON para lo que en Windows serían llamadas COM directas siempre me pareció un poco desagradable.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum ein Rust-LSP schwer zu bauen ist
+***** TLDR
+Ein Beitrag von Rust Glancer, einem experimentellen Rust-Sprachserver. Der Kern: Ein Compiler darf scheitern, ein Sprachserver muss aus unvollständigem und falschem Code nützliche Antworten liefern. Konkret genannt werden die Entscheidung, wie viel vor der Antwort auf die Initialisierung indexiert wird (vollständiges Indexieren kostet 10 bis über 100 Sekunden), ein virtuelles Dateisystem, das sowohl mit Editor-Änderungen als auch mit Änderungen auf der Platte konkurriert, das Abbrechen laufender Abfragen bei Zustandswechseln, durchschlagende Protokolldetails wie UTF-16-Offsets und Zeilenenden-Erkennung, Workspace-Erkennung ohne richtige Antwort, und die Frage, auf welchem Symbol der Cursor steht, wenn der umgebende Code nicht parst.
+***** Take
+Das meiste davon ist nicht Rust-spezifisch, und die Kommentare sagen das sofort. Was Rust hinzufügt, ist der Preis eines Teil-Parses: Mit starker Typinferenz und Makros liefert ein halbes File deutlich weniger Anhaltspunkte als in einer Sprache, die einen die Typen hinschreiben lässt.
+***** Comments
+- Vieles davon gilt nicht nur für Rust, sondern für fast jede Sprache. Dass Anfragen asynchron behandelt werden müssen und UTF-16-Konvertierungen nötig sind, ist offensichtlich, aber eigentlich nicht so schwer.
+- Rusts Eigenheiten machen es schwerer. Es gibt eine Spannung zwischen Knappheit und nützlicher Redundanz, und Rust ging zur knappen Seite, was das Tooling schmerzhafter macht.
+- Eine JSON-TCP-Verbindung für das zu nutzen, was unter Windows direkte COM-Aufrufe wären, fühlte sich immer etwas eklig an.
+** Cache-to-Cache: Direct Semantic Communication Between LLMs (2025) :ai:llm:research:performance:
+:PROPERTIES:
+:ID:       49758615
+:URL:      https://arxiv.org/abs/2510.03215
+:HN_URL:   https://news.ycombinator.com/item?id=49758615
+:POINTS:   78
+:COMMENTS: 12
+:BY:       rochansinha
+:END:
+
+*** TLDR
+An ICLR'26 paper. Instead of one model writing text for another to read, Cache-to-Cache trains a network to project and fuse the source model's KV-cache into the target model's, with a learnable gate deciding which target layers benefit. Reported numbers: 6.4 to 14.2% higher average accuracy than the individual models, roughly 3.1 to 5.4% over text-based passing, and 2.5x lower latency, since nothing has to be generated token by token. Posted with a 2025 tag because the preprint is a year old.
+
+*** Take
+The accuracy delta is not the interesting number, the 2.5x is. Text between agents is a serialization tax charged on every hop of every pipeline. The likely reason this is still not in production is that the projector is trained for a specific source and target pair, so it needs retraining the moment either model is updated.
+
+*** Comments
+
+**** ACCount39
+:PROPERTIES:
+:COMMENT_ID: 49758744
+:END:
+The concept is fascinating and I am yet to see it show up in any production models. If multiple models can use cache representations like this, their KV-cache representations must be somewhat compatible.
+
+**** gavinray
+:PROPERTIES:
+:COMMENT_ID: 49758790
+:END:
+A few months ago I asked why semantic representation rather than text was not used, since natural language seems quite a lossy representation for semantic concepts.
+
+**** foota
+:PROPERTIES:
+:COMMENT_ID: 49758822
+:END:
+In the same way that text is lossy, it seems like an image embedding would be too. Why don't multimodal models learn to interpret images directly?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Cache-to-Cache：大模型之间的直接语义通信（2025）
+***** TLDR
+一篇 ICLR'26 论文。与其让一个模型写出文本供另一个模型阅读，Cache-to-Cache 训练一个网络把源模型的 KV 缓存投影并融合进目标模型的缓存，并用一个可学习的门控决定哪些目标层受益。论文报告的数字是：平均准确率比单个模型高 6.4% 到 14.2%，比基于文本的传递高约 3.1% 到 5.4%，延迟降低 2.5 倍，因为不必逐 token 生成。标题带 2025 是因为这份预印本已经一年了。
+***** Take
+值得关注的不是准确率差值，而是那 2.5 倍。智能体之间的文本是一种序列化税，管线的每一跳都要交。它至今没有进入生产，很可能是因为投影网络是针对特定的源模型和目标模型配对训练的，任何一方更新就得重新训练。
+***** Comments
+- 这个概念很迷人，但我还没见它出现在任何生产模型里。如果多个模型能这样使用缓存表示，那它们的 KV 缓存表示之间必然存在某种兼容性。
+- 几个月前我就问过，为什么不用语义表示而要用文本，毕竟自然语言对语义概念来说是相当有损的表示。
+- 既然文本是有损的，图像嵌入看起来同样有损。为什么多模态模型不直接学着解释图像？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Cache-to-Cache: LLM同士の直接的な意味伝達（2025）
+***** TLDR
+ICLR'26の論文。あるモデルが別のモデル向けにテキストを書く代わりに、Cache-to-Cacheはソースモデルのキャッシュを目標モデルのKVキャッシュへ射影・融合するネットワークを学習させ、どの層が恩恵を受けるかを学習可能なゲートが決める。報告値は、個々のモデルより平均精度が6.4〜14.2%高く、テキスト経由の伝達より約3.1〜5.4%高く、トークン単位の生成が不要なぶん遅延は2.5倍速い。プレプリントが1年前のものなので2025と付いている。
+***** Take
+面白い数字は精度差ではなく2.5倍のほうだ。エージェント間のテキストは、パイプラインのすべてのホップで課される直列化の税金である。いまだ本番投入されていない理由はおそらく、射影器が特定のソースと目標のペア向けに学習されており、どちらかが更新された瞬間に再学習が要ることだ。
+***** Comments
+- 概念は魅力的だが、実運用のモデルで見たことはまだない。複数のモデルがこうしてキャッシュ表現を使えるなら、各モデルのKVキャッシュ表現はある程度互換なはずだ。
+- 数か月前に、自然言語は意味概念の表現としてかなり損失が大きいのに、なぜテキストではなく意味表現を使わないのかと尋ねた。
+- テキストが損失を伴うのと同様に、画像埋め込みもそうだろう。なぜマルチモーダルモデルは画像を直接解釈するように学ばないのか。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Cache-to-Cache: LLM 간 직접 의미 통신 (2025)
+***** TLDR
+ICLR'26 논문이다. 한 모델이 다른 모델이 읽을 텍스트를 쓰는 대신, Cache-to-Cache는 소스 모델의 KV 캐시를 대상 모델의 캐시로 투영하고 융합하는 네트워크를 학습시키며, 학습 가능한 게이트가 어느 층이 이득을 볼지 고른다. 보고된 수치는 개별 모델보다 평균 정확도 6.4~14.2% 상승, 텍스트 기반 전달 대비 약 3.1~5.4% 상승, 토큰 단위 생성이 필요 없어 지연은 2.5배 감소다. 프리프린트가 1년 전 것이라 2025가 붙었다.
+***** Take
+흥미로운 숫자는 정확도 차이가 아니라 2.5배다. 에이전트 사이의 텍스트는 파이프라인의 모든 구간마다 물리는 직렬화 세금이다. 아직 상용에 들어가지 않은 이유는 아마도 투영기가 특정 소스와 대상 쌍에 맞춰 학습돼, 둘 중 하나만 갱신돼도 다시 학습해야 하기 때문일 것이다.
+***** Comments
+- 개념은 매혹적인데 실제 서비스 모델에서는 아직 못 봤다. 여러 모델이 이렇게 캐시 표현을 쓸 수 있다면 그 KV 캐시 표현들은 어느 정도 호환된다는 뜻이다.
+- 몇 달 전에 자연어는 의미 개념의 표현으로 꽤 손실이 큰데 왜 텍스트 대신 의미 표현을 쓰지 않느냐고 물었다.
+- 텍스트가 손실적이듯 이미지 임베딩도 그럴 것이다. 멀티모달 모델은 왜 이미지를 직접 해석하도록 배우지 않을까?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cache-to-Cache: comunicación semántica directa entre LLM (2025)
+***** TLDR
+Un artículo de ICLR'26. En lugar de que un modelo escriba texto para que otro lo lea, Cache-to-Cache entrena una red que proyecta y fusiona la caché KV del modelo origen en la del modelo destino, con una compuerta aprendible que decide qué capas del destino se benefician. Cifras reportadas: entre 6,4 y 14,2% más de precisión media que los modelos individuales, alrededor de 3,1 a 5,4% por encima del paso vía texto, y 2,5 veces menos latencia, ya que no hay que generar token a token. Lleva la etiqueta 2025 porque el preprint tiene un año.
+***** Take
+El dato interesante no es la diferencia de precisión, sino el 2,5x. El texto entre agentes es un impuesto de serialización que se paga en cada salto de cada tubería. La razón probable de que esto siga fuera de producción es que el proyector se entrena para un par concreto de modelo origen y destino, así que hay que reentrenarlo en cuanto uno de los dos se actualiza.
+***** Comments
+- El concepto es fascinante y todavía no lo he visto aparecer en ningún modelo en producción. Si varios modelos pueden usar así las representaciones de caché, sus representaciones KV deben ser algo compatibles.
+- Hace unos meses pregunté por qué no se usaba representación semántica en lugar de texto, ya que el lenguaje natural parece bastante lossy para los conceptos semánticos.
+- Igual que el texto pierde información, parece que una incrustación de imagen también. ¿Por qué los modelos multimodales no aprenden a interpretar las imágenes directamente?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Cache-to-Cache: direkte semantische Kommunikation zwischen LLMs (2025)
+***** TLDR
+Ein Paper von der ICLR'26. Statt dass ein Modell Text für ein anderes schreibt, trainiert Cache-to-Cache ein Netz, das den KV-Cache des Quellmodells in den des Zielmodells projiziert und einfügt, wobei ein lernbares Gate entscheidet, welche Zielschichten profitieren. Berichtete Zahlen: 6,4 bis 14,2% höhere durchschnittliche Genauigkeit als die Einzelmodelle, etwa 3,1 bis 5,4% über der Textweitergabe und 2,5-fach geringere Latenz, weil nichts Token für Token erzeugt werden muss. Der Vermerk 2025 steht dort, weil der Preprint ein Jahr alt ist.
+***** Take
+Die interessante Zahl ist nicht der Genauigkeitsgewinn, sondern der Faktor 2,5. Text zwischen Agenten ist eine Serialisierungssteuer, die bei jedem Sprung jeder Pipeline anfällt. Dass es weiterhin nicht in Produktion ist, liegt vermutlich daran, dass der Projektor für ein bestimmtes Paar aus Quell- und Zielmodell trainiert wird und neu trainiert werden muss, sobald eines von beiden aktualisiert wird.
+***** Comments
+- Das Konzept ist faszinierend, und ich habe es noch in keinem Produktionsmodell gesehen. Wenn mehrere Modelle Cache-Repräsentationen so nutzen können, müssen ihre KV-Cache-Repräsentationen einigermaßen kompatibel sein.
+- Vor ein paar Monaten habe ich gefragt, warum nicht semantische Repräsentation statt Text genutzt wird, da natürliche Sprache für semantische Konzepte ziemlich verlustbehaftet wirkt.
+- So wie Text verlustbehaftet ist, dürfte es ein Bild-Embedding auch sein. Warum lernen multimodale Modelle nicht, Bilder direkt zu interpretieren?
