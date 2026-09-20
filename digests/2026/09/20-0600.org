@@ -1,0 +1,496 @@
+#+TITLE: HN Digest 2026-09-20 06:00 UTC
+#+DATE: 2026-09-20T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+An 896-bit RSA number falls to scavenged GPUs, TMLR asks authors to explain their own papers, and a filesystem benchmark measures what nobody measures
+
+* Highlights
+- RSA-896 factored with 30 GPU-years of idle capacity over 10 days
+- Zig from Rust: allocators bring back the four bugs Drop deleted
+- ext4 and XFS did not notice their data was corrupted
+- Seven authors met their editor; three could not answer basic questions
+- Deodands: juries priced the object that killed you, until railways
+
+* Stories
+
+** RSA-896 :cryptography:gpu:rsa:ai:
+:PROPERTIES:
+:ID:       49771966
+:URL:      https://saweis.net/posts/rsa-896.html
+:HN_URL:   https://news.ycombinator.com/item?id=49771966
+:POINTS:   90
+:COMMENTS: 24
+:BY:       madars
+:END:
+
+*** TLDR
+Stephen Weis factored RSA-896, an 896-bit RSA challenge number, on September 19, 2026, and published both prime factors. Per his thread, he had Claude port CADO-NFS to run on GPUs and then orchestrate a fleet on scavenged idle capacity: about 30 GPU-years of work, peaking at 2,048 GPUs, over 10 days. The largest RSA challenge number factored before this was RSA-250, at 829 bits, in 2020.
+
+*** Take
+The number field sieve did not get faster. Idle GPU capacity got cheap enough that one person could spend 30 GPU-years on a puzzle. 896-bit RSA was already dead; the news is the scavenging, where a data center's leftovers now buy a record that used to need a funded consortium.
+
+*** Comments
+
+**** madars
+I had Claude port CADO-NFS to run on GPUs. Then it orchestrated a fleet to run on scavenged idle capacity. It ran with a max of 2048 GPUs for about 30 GPU-years over 10 days.
+
+**** tristanj
+If you've already paid for and reserved a whole cluster of GPUs, any idle capacity is capacity you've already paid for. Using it is effectively free. Though it would make more financial sense to mine crypto.
+
+**** someguydave
+Kinda bearish for the data center rollouts if the spare compute can be used to solve math puzzles instead of training LLMs.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+RSA-896
+***** TLDR
+Stephen Weis 于 2026 年 9 月 19 日分解了 896 位的 RSA 挑战数 RSA-896，并公布了两个素因子。据他自述，他让 Claude 把 CADO-NFS 移植到 GPU 上运行，再调度一个集群使用闲置算力：约 30 GPU-年的计算量，峰值 2048 块 GPU，历时 10 天。此前被分解的最大 RSA 挑战数是 2020 年的 829 位 RSA-250。
+***** Take
+数域筛法并没有变快，是闲置 GPU 算力便宜到一个人就能花掉 30 GPU-年去解谜题。896 位 RSA 早已不安全，真正的新闻是「捡剩余算力」这件事：数据中心的边角料如今就能买下一个过去需要有经费的联合团队才能拿到的纪录。
+***** Comments
+- 我让 Claude 把 CADO-NFS 移植到 GPU 上跑，然后由它调度集群使用闲置算力，峰值 2048 块 GPU，10 天内完成约 30 GPU-年的计算。
+- 如果你已经买下并预留了整个 GPU 集群，闲置算力本来就是付过钱的，用掉等于免费。不过从财务上说，拿去挖矿更划算。
+- 如果多余算力可以拿来解数学题而不是训练大模型，这对数据中心的扩张来说是个看空信号。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+RSA-896
+***** TLDR
+Stephen Weisが2026年9月19日に896ビットのRSAチャレンジ数RSA-896を素因数分解し、2つの素因数を公開した。本人の説明によれば、ClaudeにCADO-NFSをGPU向けに移植させ、遊休計算資源を使うクラスタを編成させた。ピーク時2048基のGPUで10日間、約30GPU年の計算量。これまでに分解された最大のRSAチャレンジ数は2020年の829ビットのRSA-250だった。
+***** Take
+数体ふるい法が速くなったのではない。遊休GPUが安くなり、個人が30GPU年をパズルに費やせるようになっただけだ。896ビットRSAはとうに終わっていた。ニュースは「余り物の計算資源」の方で、データセンターの残り物が、かつては資金のある共同研究が必要だった記録を買えるようになった。
+***** Comments
+- ClaudeにCADO-NFSをGPU向けに移植させ、遊休計算資源で動くクラスタを編成させた。最大2048基のGPUで10日間、約30GPU年の計算だ。
+- クラスタ全体をすでに購入・予約しているなら、遊休分は支払い済みの容量だ。使うのは実質無料。ただし財務的には暗号資産の採掘の方が理にかなう。
+- 余剰計算資源がLLMの学習ではなく数学パズルに回せるなら、データセンター増設にとっては弱気材料だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+RSA-896
+***** TLDR
+Stephen Weis가 2026년 9월 19일 896비트 RSA 챌린지 수 RSA-896을 소인수분해하고 두 소수를 공개했다. 본인 설명에 따르면 Claude에게 CADO-NFS를 GPU용으로 포팅하게 한 뒤 유휴 자원을 쓰는 클러스터를 운영하게 했다. 최대 2048개 GPU로 10일간, 약 30 GPU-년 분량의 계산이었다. 이전까지 분해된 가장 큰 RSA 챌린지 수는 2020년의 829비트 RSA-250이었다.
+***** Take
+수체 체법이 빨라진 게 아니다. 유휴 GPU가 싸져서 한 사람이 퍼즐에 30 GPU-년을 쓸 수 있게 된 것이다. 896비트 RSA는 이미 죽어 있었고, 새로운 소식은 남는 자원을 주워 쓴다는 점이다. 데이터센터의 자투리로 예전에는 연구비 받는 공동 연구팀이 필요했던 기록을 살 수 있게 됐다.
+***** Comments
+- Claude에게 CADO-NFS를 GPU용으로 포팅하게 한 뒤, 유휴 자원 위에서 클러스터를 돌리게 했다. 최대 2048개 GPU로 10일간 약 30 GPU-년의 계산이었다.
+- 이미 클러스터 전체를 사서 예약해 뒀다면 유휴 용량은 이미 돈을 낸 용량이다. 쓰는 건 사실상 공짜다. 다만 재무적으로는 채굴이 더 합리적이다.
+- 남는 연산 자원을 LLM 학습 대신 수학 퍼즐에 쓸 수 있다면, 데이터센터 증설 전망에는 부정적인 신호다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+RSA-896
+***** TLDR
+Stephen Weis factorizó RSA-896, un número de desafío RSA de 896 bits, el 19 de septiembre de 2026, y publicó ambos factores primos. Según su relato, hizo que Claude portara CADO-NFS a GPU y luego orquestara una flota sobre capacidad ociosa: unos 30 años-GPU de cómputo, con un máximo de 2.048 GPU, durante 10 días. El mayor número de desafío RSA factorizado hasta ahora era RSA-250, de 829 bits, en 2020.
+***** Take
+La criba del cuerpo de números no se volvió más rápida. La capacidad ociosa de GPU se abarató lo bastante como para que una sola persona gaste 30 años-GPU en un acertijo. RSA de 896 bits ya estaba muerto; la noticia es el aprovechamiento de sobras: los restos de un centro de datos compran hoy un récord que antes exigía un consorcio financiado.
+***** Comments
+- Hice que Claude portara CADO-NFS a GPU. Luego orquestó una flota sobre capacidad ociosa: un máximo de 2.048 GPU durante 10 días, unos 30 años-GPU.
+- Si ya pagaste y reservaste un clúster entero de GPU, la capacidad ociosa ya está pagada. Usarla es gratis en la práctica. Aunque financieramente tendría más sentido minar cripto.
+- Es más bien bajista para el despliegue de centros de datos si el cómputo sobrante puede usarse para resolver acertijos matemáticos en vez de entrenar modelos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+RSA-896
+***** TLDR
+Stephen Weis hat am 19. September 2026 RSA-896 faktorisiert, eine 896-Bit-RSA-Challenge-Zahl, und beide Primfaktoren veröffentlicht. Nach eigener Darstellung ließ er Claude CADO-NFS auf GPUs portieren und anschließend eine Flotte auf ungenutzter Kapazität orchestrieren: rund 30 GPU-Jahre Rechenzeit, im Maximum 2.048 GPUs, über 10 Tage. Die größte bislang faktorisierte RSA-Challenge-Zahl war RSA-250 mit 829 Bit im Jahr 2020.
+***** Take
+Das Zahlkörpersieb ist nicht schneller geworden. Ungenutzte GPU-Kapazität ist billig genug geworden, dass eine einzelne Person 30 GPU-Jahre in ein Rätsel steckt. 896-Bit-RSA war längst tot; die Nachricht ist das Aufsammeln der Reste: Was in einem Rechenzentrum übrig bleibt, kauft heute einen Rekord, für den früher ein finanziertes Konsortium nötig war.
+***** Comments
+- Ich ließ Claude CADO-NFS auf GPUs portieren. Danach hat es eine Flotte auf ungenutzter Kapazität orchestriert: maximal 2048 GPUs, rund 30 GPU-Jahre in 10 Tagen.
+- Wenn man einen ganzen GPU-Cluster bereits bezahlt und reserviert hat, ist ungenutzte Kapazität bereits bezahlte Kapazität. Sie zu nutzen kostet faktisch nichts. Finanziell wäre Krypto-Mining allerdings sinnvoller.
+- Eher schlecht für den Ausbau von Rechenzentren, wenn übrige Rechenleistung für Mathe-Rätsel statt für LLM-Training taugt.
+** What Zig felt like, coming from Rust :zig:rust:programming-languages:memory-safety:
+:PROPERTIES:
+:ID:       49766637
+:URL:      https://besok.github.io/posts/what-zig-felt-like-coming-from-rust/
+:HN_URL:   https://news.ycombinator.com/item?id=49766637
+:POINTS:   196
+:COMMENTS: 231
+:BY:       ksec
+:END:
+
+*** TLDR
+A Rust developer rewrote a project in Zig and wrote down the differences. He liked build.zig, the flat file layout, and tagged unions, which covered what he used Rust's match for. Allocators were the main friction, and he lists four failure modes: forgotten deinit calls, skipped cleanup on error paths, double frees from unclear ownership, and orphaned allocations when an operation fails partway. He also found Zig's mutation-heavy style less readable than the Rust equivalent, and hit ecosystem gaps, including regex without the Unicode support RFC 9535 needs. His verdict: a real candidate to succeed C, still young, syntax unfinished in places.
+
+*** Take
+The post is honest about the trade most Zig writeups skip: you get back the four memory bugs Drop had deleted, and the name for that is control. Fine as a C successor pitch. Less fine is a conclusion calling the language blazingly fast when the body of the piece is a list of leak modes.
+
+*** Comments
+
+**** Panzerschrek
+Rust: Drop runs automatically at scope end, so this specific bug simply doesn't exist. That's why having no auto-destructors is a dead-end. This is the greatest mistake of such languages like C or Odin.
+
+**** computerfriend
+Zig has a language server and the majority of LSP features are supported, so the claim about only syntax highlighting and basic autocompletion is out of date.
+
+**** Syzygies
+While Zig is a great debugging compiler, it's not yet stable enough to be the best target language for archival purposes.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+从 Rust 转到 Zig 是什么感觉
+***** TLDR
+一位 Rust 开发者用 Zig 重写了一个项目并记录了差异。他喜欢 build.zig、扁平的文件结构，以及能覆盖 Rust match 用法的带标签联合。主要摩擦来自分配器，他列出四种失败模式：忘记调用 deinit、错误路径上漏掉清理、所有权不清导致重复释放，以及操作中途失败留下的孤儿分配。他还觉得 Zig 偏重修改的风格比 Rust 版本更难读，并遇到生态缺口，比如正则库缺少 RFC 9535 所需的 Unicode 支持。结论：确实有望接替 C，但仍年轻，语法有些地方未完成。
+***** Take
+这篇文章诚实地写出了多数 Zig 文章回避的取舍：Drop 已经消灭的四类内存 bug 又回来了，而这被称作「控制力」。作为 C 的接班人理由说得通。不太说得通的是，正文列满了泄漏模式，结论却说这门语言「快得惊人」。
+***** Comments
+- Rust 里 Drop 在作用域结束时自动运行，所以这个 bug 根本不存在。没有自动析构就是死路一条，这是 C 或 Odin 这类语言最大的错误。
+- Zig 有语言服务器，而且大部分 LSP 功能都支持，所以「只有语法高亮和基础补全」的说法已经过时了。
+- Zig 作为调试友好的编译器很不错，但还不够稳定，不适合作为存档用途的目标语言。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Rustから来てZigはどう感じたか
+***** TLDR
+Rust開発者がプロジェクトをZigで書き直し、違いを記録した。build.zig、フラットなファイル構成、Rustのmatchの用途を賄えるタグ付き共用体は気に入ったという。最大の摩擦はアロケータで、4つの失敗パターンを挙げている。deinitの呼び忘れ、エラーパスでの後始末漏れ、所有権が曖昧なことによる二重解放、処理が途中で失敗したときの孤立した確保だ。Zigの変更中心のスタイルはRust版より読みにくく、RFC 9535に必要なUnicode対応を欠く正規表現など、エコシステムの穴にも当たった。結論はCの後継候補になりうるが、まだ若く構文も未完成な部分があるというもの。
+***** Take
+多くのZig紹介記事が飛ばすトレードオフを正直に書いている。Dropが消していた4種類のメモリバグが戻ってきて、それを「制御」と呼ぶわけだ。Cの後継という主張としては筋が通る。ただ本文がリークの列挙で埋まっているのに、結論が「猛烈に速い」なのは苦しい。
+***** Comments
+- Rustではスコープ終了時にDropが自動で走るので、このバグはそもそも存在しない。自動デストラクタがないのは行き止まりで、CやOdinのような言語の最大の誤りだ。
+- Zigには言語サーバーがあり、LSP機能の大半が対応済みだ。構文強調と基本補完しかないという記述はもう古い。
+- Zigはデバッグ用コンパイラとしては優秀だが、アーカイブ目的の移植先としてはまだ安定性が足りない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Rust에서 넘어와 느낀 Zig
+***** TLDR
+한 Rust 개발자가 프로젝트를 Zig로 다시 쓰고 차이를 정리했다. build.zig, 평평한 파일 구조, Rust의 match 용도를 대신하는 태그 유니온이 마음에 들었다고 한다. 가장 큰 마찰은 할당자였고 네 가지 실패 양상을 꼽았다. deinit 호출 누락, 오류 경로에서 정리 생략, 소유권이 모호해 생기는 이중 해제, 작업이 중간에 실패했을 때 남는 고아 할당이다. 변경 중심인 Zig 스타일이 Rust 쪽보다 읽기 어려웠고, RFC 9535에 필요한 유니코드 지원이 없는 정규식 등 생태계 공백도 만났다. 결론은 C의 후계 후보는 되지만 아직 어리고 문법이 덜 다듬어졌다는 것이다.
+***** Take
+대부분의 Zig 글이 건너뛰는 거래를 솔직하게 적었다. Drop이 없애 준 네 가지 메모리 버그가 돌아오고, 그걸 제어라고 부른다. C 후계자 주장으로는 말이 된다. 다만 본문이 누수 목록으로 채워져 있는데 결론이 '엄청나게 빠르다'인 건 무리가 있다.
+***** Comments
+- Rust에서는 스코프가 끝날 때 Drop이 자동으로 실행되므로 이 버그는 애초에 존재하지 않는다. 자동 소멸자가 없는 건 막다른 길이고 C나 Odin 같은 언어의 가장 큰 실수다.
+- Zig에는 언어 서버가 있고 LSP 기능 대부분이 지원된다. 문법 강조와 기본 자동완성뿐이라는 말은 이미 낡았다.
+- Zig는 디버깅용 컴파일러로는 훌륭하지만, 아카이브 목적의 이식 대상으로 삼기에는 아직 안정성이 부족하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo se sintió Zig viniendo de Rust
+***** TLDR
+Un desarrollador de Rust reescribió un proyecto en Zig y anotó las diferencias. Le gustaron build.zig, la estructura plana de archivos y las uniones etiquetadas, que cubrían lo que usaba de match en Rust. La mayor fricción fueron los asignadores, y enumera cuatro fallos: llamadas a deinit olvidadas, limpieza omitida en rutas de error, dobles liberaciones por propiedad poco clara y asignaciones huérfanas cuando una operación falla a medias. También encontró el estilo mutable de Zig menos legible que el equivalente en Rust, y topó con huecos del ecosistema, como una regex sin el soporte Unicode que exige RFC 9535. Su veredicto: candidato real a suceder a C, todavía joven, con sintaxis sin terminar en partes.
+***** Take
+El texto es honesto sobre el canje que casi ningún artículo sobre Zig menciona: recuperas los cuatro errores de memoria que Drop había eliminado, y a eso se le llama control. Como argumento de sucesor de C, vale. Menos convincente es cerrar con que el lenguaje es vertiginosamente rápido cuando el cuerpo del texto es una lista de fugas.
+***** Comments
+- En Rust, Drop se ejecuta automáticamente al final del ámbito, así que ese error simplemente no existe. Por eso no tener destructores automáticos es un callejón sin salida: es el mayor error de lenguajes como C u Odin.
+- Zig tiene servidor de lenguaje y la mayoría de funciones LSP están soportadas, así que lo de solo resaltado de sintaxis y autocompletado básico ya no es cierto.
+- Zig es un gran compilador para depurar, pero todavía no es lo bastante estable para ser el mejor lenguaje destino con fines de archivo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie sich Zig anfühlte, kommend von Rust
+***** TLDR
+Ein Rust-Entwickler hat ein Projekt in Zig neu geschrieben und die Unterschiede notiert. Gefallen haben ihm build.zig, die flache Dateistruktur und Tagged Unions, die abdeckten, wofür er in Rust match nutzte. Die größte Reibung verursachten Allocators; er nennt vier Fehlerbilder: vergessene deinit-Aufrufe, ausgelassene Aufräumarbeit auf Fehlerpfaden, doppelte Freigaben bei unklarem Eigentum und verwaiste Allokationen, wenn eine Operation auf halbem Weg scheitert. Zigs mutationslastiger Stil war für ihn schlechter lesbar als das Rust-Pendant, dazu kamen Lücken im Ökosystem, etwa Regex ohne die Unicode-Unterstützung, die RFC 9535 verlangt. Sein Fazit: ernsthafter Kandidat als C-Nachfolger, noch jung, Syntax stellenweise unfertig.
+***** Take
+Der Text benennt ehrlich den Tausch, den die meisten Zig-Berichte auslassen: Man bekommt die vier Speicherfehler zurück, die Drop beseitigt hatte, und nennt das Kontrolle. Als Argument für einen C-Nachfolger trägt das. Weniger trägt ein Fazit über rasende Geschwindigkeit, wenn der Hauptteil eine Liste von Leck-Varianten ist.
+***** Comments
+- In Rust läuft Drop automatisch am Ende des Gültigkeitsbereichs, dieser Fehler existiert also gar nicht. Deshalb ist der Verzicht auf automatische Destruktoren eine Sackgasse und der größte Fehler von Sprachen wie C oder Odin.
+- Zig hat einen Language Server, und die meisten LSP-Funktionen werden unterstützt. Die Aussage über bloßes Syntax-Highlighting und einfache Autovervollständigung ist veraltet.
+- Zig ist ein guter Compiler zum Debuggen, aber noch nicht stabil genug, um die beste Zielsprache für Archivzwecke zu sein.
+** Btrfs/ZFS/bcachefs under workloads classic benchmarks skip :filesystems:benchmarks:bcachefs:zfs:
+:PROPERTIES:
+:ID:       49768833
+:URL:      https://bartosz.fenski.pl/modern-fs-benchmark/
+:HN_URL:   https://news.ycombinator.com/item?id=49768833
+:POINTS:   104
+:COMMENTS: 83
+:BY:       farlight
+:END:
+
+*** TLDR
+Bartosz Fenski benchmarked ext4, XFS, ZFS, Btrfs and bcachefs, plus md RAID and LVM layers, on workloads standard suites leave out: snapshot aging curves, fsync latency while streaming writes saturate the device, creating and deleting 100k-file directories, writes at 95% and 99% full, and corruption deliberately injected into one member of a mirror. Bcachefs led sequential write at 359 MiB/s and random write IOPS; bcachefs and XFS had the lowest p99 fsync latency; ZFS, Btrfs and bcachefs detected and recovered the injected corruption, while ext4 and XFS did not. Everything ran on loop devices on GitHub Actions VMs, which the author says makes the numbers usable as ratios and shapes, not absolute throughput.
+
+*** Take
+The workload list is the contribution. Snapshot aging and fsync-under-load are exactly where these filesystems hurt real users, and almost nobody measures them. The substrate is the problem, and the top commenter says so: shared ephemeral storage cannot support 'bcachefs wins sequential write'. It can support 'ext4 did not notice its data was corrupted', which is the result worth reading anyway.
+
+*** Comments
+
+**** fenio
+The author of the benchmark here. I'm pretty clear that a GH runner based benchmark is far from perfect due to noisy neighbours, so every test first runs a calibration to reject completely unreliable VMs. I'm fully aware this can limit but not fix the issue.
+
+**** Farmadupe
+If you're not using baremetal for such tests, it's likely that the results are simply not comparable at all. What if another tenant is also using the disk?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+在经典基准测试跳过的负载下比较 Btrfs/ZFS/bcachefs
+***** TLDR
+Bartosz Fenski 测试了 ext4、XFS、ZFS、Btrfs 和 bcachefs，以及 md RAID 和 LVM 分层，负载都是常规测试套件不覆盖的：快照老化曲线、在流式写入压满设备时的 fsync 延迟、十万文件目录的创建与删除、磁盘 95% 和 99% 满时的写入，以及向镜像中的一块设备故意注入损坏。bcachefs 在顺序写（359 MiB/s）和随机写 IOPS 上领先；bcachefs 与 XFS 的 p99 fsync 延迟最低；ZFS、Btrfs 和 bcachefs 能检测并修复注入的损坏，ext4 和 XFS 不能。全部测试跑在 GitHub Actions 虚拟机的 loop 设备上，作者说这些数字只能当作比值和趋势，不能当作绝对吞吐。
+***** Take
+真正的贡献是这份负载清单。快照老化和高负载下的 fsync 恰恰是这些文件系统让用户难受的地方，而几乎没人去测。问题出在测试环境，热评也这么说：共享的临时存储撑不起「bcachefs 顺序写更快」这种结论，但撑得起「ext4 根本没发现自己的数据被损坏了」，而这本来就是更值得看的结果。
+***** Comments
+- 我是这份基准测试的作者。我很清楚基于 GitHub runner 的测试因为邻居干扰远非完美，所以每个测试都先跑一次校准，剔除完全不可靠的虚拟机。我也清楚这只能缓解而不能解决问题。
+- 如果不用裸机做这类测试，结果很可能根本没有可比性。万一同一台机器上还有别的租户在用磁盘呢？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+定番ベンチマークが飛ばす負荷でのBtrfs/ZFS/bcachefs
+***** TLDR
+Bartosz Fenskiがext4、XFS、ZFS、Btrfs、bcachefsに加えmd RAIDとLVMの構成を、標準的なスイートが扱わない負荷で測定した。スナップショットの経年劣化曲線、ストリーミング書き込みでデバイスを飽和させた状態でのfsync遅延、10万ファイルのディレクトリ作成と削除、使用率95%と99%での書き込み、ミラーの片方に意図的に注入した破損である。bcachefsはシーケンシャル書き込み359 MiB/sとランダム書き込みIOPSで首位、p99のfsync遅延はbcachefsとXFSが最小。注入した破損はZFS、Btrfs、bcachefsが検出・修復し、ext4とXFSはできなかった。すべてGitHub ActionsのVM上のloopデバイスで実行されており、著者は数値を絶対スループットではなく比率と傾向として読むよう述べている。
+***** Take
+価値があるのは負荷の選び方だ。スナップショットの経年劣化と高負荷時のfsyncは、これらのファイルシステムが実際に利用者を苦しめる場所なのに、ほとんど誰も測らない。問題は実行基盤で、上位コメントもそう指摘している。共有の一時ストレージでは「bcachefsがシーケンシャル書き込みで勝つ」は支えられない。しかし「ext4は自分のデータが壊れたことに気づかなかった」は支えられる。そしてそれこそ読む価値のある結果だ。
+***** Comments
+- ベンチマークの著者です。GitHub runner上の計測がノイジーネイバーのせいで完璧からほど遠いことは承知しており、各テストはまずキャリブレーションを走らせて、まったく信用できないVMを除外しています。それで問題が限定できても解決はしないことも分かっています。
+- こうしたテストでベアメタルを使わないなら、結果はそもそも比較可能ではない可能性が高い。同じディスクを別のテナントが使っていたらどうする？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+고전 벤치마크가 건너뛰는 부하에서의 Btrfs/ZFS/bcachefs
+***** TLDR
+Bartosz Fenski가 ext4, XFS, ZFS, Btrfs, bcachefs와 md RAID·LVM 계층을 표준 스위트가 다루지 않는 부하로 측정했다. 스냅샷 노후화 곡선, 스트리밍 쓰기로 장치를 포화시킨 상태의 fsync 지연, 10만 파일 디렉터리 생성과 삭제, 사용률 95%와 99%에서의 쓰기, 미러 한쪽에 일부러 주입한 손상이다. bcachefs가 순차 쓰기 359 MiB/s와 랜덤 쓰기 IOPS에서 앞섰고, p99 fsync 지연은 bcachefs와 XFS가 가장 낮았다. 주입한 손상은 ZFS, Btrfs, bcachefs가 탐지·복구했고 ext4와 XFS는 하지 못했다. 전부 GitHub Actions VM의 loop 장치에서 돌렸기 때문에, 저자는 수치를 절대 처리량이 아니라 비율과 경향으로 읽으라고 말한다.
+***** Take
+가치는 부하 목록에 있다. 스냅샷 노후화와 부하 중 fsync는 이 파일시스템들이 실제 사용자를 괴롭히는 지점인데 거의 아무도 재지 않는다. 문제는 실행 환경이고 상위 댓글도 그 점을 짚는다. 공유되는 임시 스토리지로는 'bcachefs가 순차 쓰기에서 이긴다'를 받칠 수 없다. 대신 'ext4는 자기 데이터가 손상된 걸 알아채지 못했다'는 받칠 수 있고, 어차피 그쪽이 읽을 만한 결과다.
+***** Comments
+- 벤치마크 작성자입니다. GitHub runner 기반 측정이 이웃 부하 때문에 완벽과 거리가 멀다는 점은 분명히 알고 있어서, 모든 테스트는 먼저 보정을 돌려 전혀 신뢰할 수 없는 VM을 걸러냅니다. 이것이 문제를 줄일 뿐 해결하지는 못한다는 것도 압니다.
+- 이런 테스트에 베어메탈을 쓰지 않으면 결과는 애초에 비교 불가능할 가능성이 높다. 같은 디스크를 다른 테넌트가 쓰고 있으면 어떻게 하나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Btrfs/ZFS/bcachefs bajo cargas que los benchmarks clásicos omiten
+***** TLDR
+Bartosz Fenski midió ext4, XFS, ZFS, Btrfs y bcachefs, además de capas de md RAID y LVM, con cargas que las suites estándar dejan fuera: curvas de envejecimiento de snapshots, latencia de fsync mientras escrituras en streaming saturan el dispositivo, creación y borrado de directorios de 100.000 archivos, escrituras al 95% y 99% de capacidad, y corrupción inyectada a propósito en un miembro de un espejo. Bcachefs lideró la escritura secuencial con 359 MiB/s y las IOPS de escritura aleatoria; bcachefs y XFS tuvieron la menor latencia p99 de fsync; ZFS, Btrfs y bcachefs detectaron y repararon la corrupción inyectada, ext4 y XFS no. Todo corrió sobre dispositivos loop en máquinas de GitHub Actions, algo que el autor señala: los números sirven como proporciones y formas, no como rendimiento absoluto.
+***** Take
+La aportación es la lista de cargas. El envejecimiento de snapshots y el fsync bajo carga son justo donde estos sistemas de archivos hacen daño de verdad, y casi nadie los mide. El problema es el sustrato, y el comentario más votado lo dice: un almacenamiento efímero compartido no sostiene 'bcachefs gana en escritura secuencial'. Sí sostiene 'ext4 no se enteró de que sus datos estaban corruptos', que es el resultado que vale la pena leer.
+***** Comments
+- Autor del benchmark. Tengo claro que medir sobre runners de GitHub está lejos de ser perfecto por los vecinos ruidosos, así que cada prueba ejecuta primero una calibración para descartar máquinas del todo poco fiables. Sé que eso limita el problema, no lo arregla.
+- Si no usas bare metal para estas pruebas, es probable que los resultados no sean comparables en absoluto. ¿Y si otro inquilino está usando el mismo disco?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Btrfs/ZFS/bcachefs unter Lasten, die klassische Benchmarks auslassen
+***** TLDR
+Bartosz Fenski hat ext4, XFS, ZFS, Btrfs und bcachefs samt md-RAID- und LVM-Schichten unter Lasten gemessen, die Standard-Suiten weglassen: Alterungskurven bei Snapshots, fsync-Latenz während Streaming-Schreibzugriffe das Gerät auslasten, Anlegen und Löschen von Verzeichnissen mit 100.000 Dateien, Schreibzugriffe bei 95 und 99 Prozent Füllstand sowie absichtlich in ein Spiegelmitglied eingespielte Korruption. Bcachefs führte beim sequenziellen Schreiben mit 359 MiB/s und bei Random-Write-IOPS; bcachefs und XFS hatten die niedrigste p99-fsync-Latenz. ZFS, Btrfs und bcachefs erkannten und reparierten die eingespielte Korruption, ext4 und XFS nicht. Alles lief auf Loop-Devices in GitHub-Actions-VMs, weshalb der Autor die Zahlen als Verhältnisse und Muster verstanden wissen will, nicht als absoluten Durchsatz.
+***** Take
+Der Beitrag liegt in der Auswahl der Lasten. Snapshot-Alterung und fsync unter Last sind genau die Stellen, an denen diese Dateisysteme Nutzer treffen, und fast niemand misst sie. Das Problem ist der Unterbau, und der meistbeachtete Kommentar sagt es: Geteilter flüchtiger Speicher trägt kein 'bcachefs gewinnt beim sequenziellen Schreiben'. Er trägt 'ext4 hat nicht bemerkt, dass seine Daten beschädigt waren', und das ist ohnehin das lesenswerte Ergebnis.
+***** Comments
+- Autor des Benchmarks hier. Mir ist klar, dass Messungen auf GitHub-Runnern wegen lauter Nachbarn weit von perfekt entfernt sind, deshalb läuft vor jedem Test eine Kalibrierung, die völlig unzuverlässige VMs aussortiert. Mir ist ebenso klar, dass das die Sache begrenzt, aber nicht löst.
+- Wenn man für solche Tests kein Bare Metal nutzt, sind die Ergebnisse vermutlich überhaupt nicht vergleichbar. Was, wenn ein anderer Mandant dieselbe Platte benutzt?
+** Asking authors about their own papers :academia:peer-review:ai:research:
+:PROPERTIES:
+:ID:       49734467
+:URL:      https://medium.com/@TmlrOrg/asking-authors-about-their-own-papers-3d2e04e5dee0
+:HN_URL:   https://news.ycombinator.com/item?id=49734467
+:POINTS:   129
+:COMMENTS: 72
+:BY:       stefanpie
+:END:
+
+*** TLDR
+TMLR editor-in-chief Nihar Shah contacted the authors of 10 papers headed for desk rejection and offered a 30-minute meeting to discuss the work before deciding. One withdrew, one declined for scheduling reasons, one did not show. Of the seven who met, three could not answer basic questions about their own paper, three could discuss the high-level idea but not the technical details, and one answered everything but had a major error surfaced during the meeting. Two authors who could not answer live emailed written answers afterward; Pangram classified both emails as 100% AI. One author's account of their method described a p-hacking workflow.
+
+*** Take
+Seven meetings is not a study, but the failure mode is specific enough to act on: people submitting work they cannot describe out loud. A short call catches that in a way no detector does, and it scales badly on purpose. Submitting is free and reviewing is expensive, and an oral defense is one of the few mechanisms that puts cost back on the side generating the volume.
+
+*** Comments
+
+**** fn-mote
+Running the same experiment with accepted papers is a good control. I would keep a private blacklist of the authors who wasted several hours of a reviewer's time to prove they were not legitimate.
+
+**** greenflag
+The value of a research paper is rarely the specific knowledge it adds but the process of researching, especially training graduate students. AI papers shortcut this entirely. Academia has a lot to answer for by making papers the currency of success.
+
+**** c7b
+That sounds like an interesting idea for peer review in general, to include an interview between referees and authors. If it saves one round of rebuttals, it needn't even consume a lot more of everyone's time.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+当面问作者他们自己的论文
+***** TLDR
+TMLR 主编 Nihar Shah 联系了 10 篇原本要被直接拒稿的论文作者，提出在做出最终决定前开一次 30 分钟的会谈。结果一人撤稿，一人因时间冲突谢绝，一人爽约。在参加会谈的 7 人中，3 人答不出关于自己论文的基本问题，3 人能谈大致想法但说不清技术细节，1 人全部答上但会上被指出一个重大错误。两位当场答不出的作者事后用邮件补上了答案，Pangram 判定这两封邮件「100% 由 AI 生成」。还有一位作者对自己方法的描述，实际上是一整套 p-hacking 流程。
+***** Take
+7 次会谈算不上研究，但暴露的问题足够具体，可以据此行动：有人在投递自己讲不出口的工作。一次短会能识别出这点，任何检测器都做不到，而且它天然难以规模化，这恰恰是重点。投稿免费、审稿昂贵，口头答辩是少数能把成本推回给产量一方的机制。
+***** Comments
+- 用已录用的论文做同样的实验会是个不错的对照组。我会私下记一份名单，把那些浪费审稿人好几个小时来自证不靠谱的作者记下来。
+- 一篇论文的价值很少在于它新增的具体知识，而在于研究过程本身，尤其是对研究生的训练。AI 论文完全绕过了这一段。学术界把论文当作成功的通货，也难辞其咎。
+- 把审稿人和作者之间的面谈引入同行评审，总体上是个有意思的想法。如果能省掉一轮答辩往返，其实也不会多花多少时间。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+著者に自分の論文について尋ねる
+***** TLDR
+TMLR編集長のNihar Shahが、デスクリジェクト予定の論文10本の著者に連絡し、最終判断の前に30分の面談を提案した。1人が取り下げ、1人が日程の都合で辞退、1人が無断欠席。面談した7人のうち3人は自分の論文の基本的な質問に答えられず、3人は大枠は話せても技術的詳細に答えられず、1人はすべて答えたが面談中に重大な誤りが判明した。その場で答えられなかった2人は後日メールで回答を送ってきたが、Pangramはどちらのメールも「100% AI」と判定した。ある著者の手法説明は、そのままp-hackingの手順になっていた。
+***** Take
+7件の面談は研究とは呼べないが、見えた失敗の形は十分具体的で対処できる。自分で説明できない成果物を投稿する人がいる、ということだ。短い通話はそれを検出器にはできない形で見抜くし、規模化しにくいのは意図どおりだ。投稿は無料で査読は高くつく。口頭試問は、量を生む側にコストを戻せる数少ない仕組みの一つだ。
+***** Comments
+- 採択された論文で同じ実験をすれば良い対照になる。査読者の数時間を無駄にして自分が正当でないと証明した著者は、個人的なブラックリストに載せておきたい。
+- 研究論文の価値は追加される個別の知識ではなく、研究する過程、とりわけ大学院生の訓練にあることが多い。AI論文はそこを丸ごと飛ばす。論文を成功の通貨にしてきたアカデミアにも責任がある。
+- 査読者と著者の面談を査読一般に取り入れるのは面白い案だ。反論のやり取りが一往復減るなら、全体の時間はそれほど増えない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+저자에게 자기 논문에 대해 물어보기
+***** TLDR
+TMLR 편집장 Nihar Shah가 데스크 리젝 예정이던 논문 10편의 저자에게 연락해, 최종 결정 전에 30분 면담을 제안했다. 한 명은 철회했고, 한 명은 일정 문제로 거절했으며, 한 명은 나타나지 않았다. 면담한 일곱 명 중 세 명은 자기 논문의 기본적인 질문에 답하지 못했고, 세 명은 큰 틀은 말했지만 기술적 세부는 설명하지 못했으며, 한 명은 모두 답했지만 면담 중 중대한 오류가 드러났다. 현장에서 답하지 못한 두 명은 이후 이메일로 답변을 보냈는데, Pangram은 두 통 모두 '100% AI'로 분류했다. 한 저자의 방법 설명은 그대로 p-해킹 절차였다.
+***** Take
+면담 일곱 건은 연구라 할 수 없지만 드러난 실패 양상은 충분히 구체적이다. 자기가 말로 설명하지 못하는 결과물을 투고하는 사람들이 있다는 것이다. 짧은 통화는 어떤 탐지기도 못 하는 방식으로 그것을 잡아내고, 확장이 어려운 건 의도된 바다. 투고는 공짜고 심사는 비싸다. 구술 심사는 물량을 만드는 쪽에 비용을 되돌리는 몇 안 되는 장치다.
+***** Comments
+- 채택된 논문으로 같은 실험을 하면 좋은 대조군이 된다. 심사자의 몇 시간을 낭비해 스스로 정당하지 않음을 증명한 저자는 개인적인 블랙리스트에 올려 두겠다.
+- 논문의 가치는 추가되는 구체적 지식보다 연구 과정, 특히 대학원생 훈련에 있는 경우가 많다. AI 논문은 그 과정을 통째로 건너뛴다. 논문을 성공의 통화로 만든 학계도 책임이 있다.
+- 심사자와 저자의 면담을 동료 심사 전반에 넣는 건 흥미로운 발상이다. 반박 왕복을 한 번만 줄여도 전체 시간이 크게 늘지는 않는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Preguntar a los autores sobre sus propios artículos
+***** TLDR
+El editor jefe de TMLR, Nihar Shah, contactó a los autores de 10 artículos destinados al rechazo directo y les ofreció una reunión de 30 minutos antes de decidir. Uno retiró el trabajo, uno declinó por agenda y uno no se presentó. De los siete que asistieron, tres no supieron responder preguntas básicas sobre su propio artículo, tres pudieron hablar de la idea general pero no de los detalles técnicos, y uno respondió a todo pero se le detectó un error grave durante la reunión. Dos de los que no supieron responder en vivo enviaron respuestas por correo después; Pangram clasificó ambos correos como 100% IA. La descripción del método de un autor equivalía a un procedimiento completo de p-hacking.
+***** Take
+Siete reuniones no son un estudio, pero el fallo detectado es lo bastante concreto para actuar: hay gente enviando trabajos que no sabe explicar en voz alta. Una llamada corta detecta eso como no lo hace ningún detector, y escala mal a propósito. Enviar es gratis y revisar es caro; una defensa oral es de los pocos mecanismos que devuelven el coste al lado que genera el volumen.
+***** Comments
+- Repetir el experimento con artículos aceptados sería un buen control. Yo mantendría una lista negra privada de los autores que hicieron perder varias horas a un revisor para demostrar que no eran legítimos.
+- El valor de un artículo rara vez es el conocimiento concreto que añade, sino el proceso de investigar, sobre todo la formación de estudiantes de doctorado. Los artículos hechos con IA se saltan eso por completo. La academia tiene mucho que responder por haber hecho de los artículos la moneda del éxito.
+- Suena a una idea interesante para la revisión por pares en general: incluir una entrevista entre revisores y autores. Si ahorra una ronda de réplicas, ni siquiera consumiría mucho más tiempo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Autoren nach ihren eigenen Arbeiten fragen
+***** TLDR
+TMLR-Chefredakteur Nihar Shah kontaktierte die Autoren von 10 Arbeiten, die vor der direkten Ablehnung standen, und bot vor der Entscheidung ein 30-minütiges Gespräch an. Einer zog zurück, einer sagte aus Termingründen ab, einer erschien nicht. Von den sieben Teilnehmenden konnten drei grundlegende Fragen zur eigenen Arbeit nicht beantworten, drei konnten die Idee grob darstellen, aber nicht die technischen Details, und einer beantwortete alles, wobei im Gespräch ein schwerer Fehler auffiel. Zwei, die live nicht antworten konnten, schickten später schriftliche Antworten per E-Mail; Pangram stufte beide Mails als zu 100 Prozent KI-generiert ein. Die Methodenbeschreibung eines Autors war faktisch eine Anleitung zum p-Hacking.
+***** Take
+Sieben Gespräche sind keine Studie, aber das Fehlerbild ist konkret genug zum Handeln: Menschen reichen Arbeiten ein, die sie nicht mündlich erklären können. Ein kurzes Gespräch erkennt das, wie es kein Detektor kann, und es skaliert absichtlich schlecht. Einreichen ist kostenlos, Begutachten teuer; eine mündliche Verteidigung ist einer der wenigen Mechanismen, die Kosten dorthin zurückgeben, wo die Menge entsteht.
+***** Comments
+- Dasselbe Experiment mit angenommenen Arbeiten wäre eine gute Kontrolle. Ich würde eine private Sperrliste jener Autoren führen, die einem Gutachter mehrere Stunden gekostet haben, nur um zu belegen, dass sie nicht seriös sind.
+- Der Wert einer Arbeit liegt selten im konkreten Wissenszuwachs, sondern im Forschungsprozess, besonders in der Ausbildung von Promovierenden. KI-Arbeiten überspringen das vollständig. Die Wissenschaft trägt Mitschuld, weil sie Publikationen zur Währung des Erfolgs gemacht hat.
+- Das klingt nach einer interessanten Idee für die Begutachtung allgemein: ein Gespräch zwischen Gutachtern und Autoren. Spart es eine Runde Erwiderungen, kostet es unterm Strich kaum mehr Zeit.
+** Deodands put a price on objects that caused death :history:law:liability:railways:
+:PROPERTIES:
+:ID:       49731996
+:URL:      https://daily.jstor.org/how-the-railways-killed-a-medieval-law/
+:HN_URL:   https://news.ycombinator.com/item?id=49731996
+:POINTS:   70
+:COMMENTS: 28
+:BY:       samizdis
+:END:
+
+*** TLDR
+JSTOR Daily on deodands, a feature of English law for centuries: any moveable object that directly caused a person's death was forfeit, with its value set by a jury. It might be a cart wheel, or the whole cart with horses and cargo, or the ladder someone fell from. The money was nominally for charitable use but usually reached the bereaved family through the coroner. When trains started killing people, juries set values against the railway companies' wealth, and Parliament abolished deodands in 1846 rather than let those assessments stand, leaving relatives of railway victims with no compensation at all.
+
+*** Take
+A jury naming a price for the object that killed someone is a liability system with its accounting done in public, and it ran for centuries on that basis. What ended it was not that it was medieval. It was that juries started sending the bill to the richest companies in the country, and Parliament sided with the companies.
+
+*** Comments
+
+**** A_D_E_P_T
+A deodand was any inanimate object directly linked to a human fatality, from a runaway cart to a falling branch, and it was usually condemned and destroyed, or surrendered to the King and then sold. The law was on the books for hundreds of years in England.
+
+**** zrobotics
+The opening anecdote about the floor collapse immediately reminded me of the Erfurt latrine disaster. If you aren't already familiar, count yourself as one of today's lucky 10k.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Deodand：给致人死亡的物件定价
+***** TLDR
+JSTOR Daily 介绍了英格兰法律中延续数百年的 deodand 制度：任何直接导致人死亡的可移动物件都要被没收，价值由陪审团裁定。可能是一个车轮，也可能是整辆马车连同马匹和货物，或者是某人摔下来的那把梯子。这笔钱名义上用于慈善，实际上通常经验尸官之手交给死者家属。等到火车开始致人死亡，陪审团按铁路公司的财力来定价，议会于 1846 年干脆废除了 deodand，而不是让这些裁定生效，结果铁路事故遇难者家属一分钱补偿也拿不到。
+***** Take
+由陪审团为致人死亡的物件定价，这是一套把账目摆在公开场合算的责任制度，并且靠这套逻辑运行了几百年。终结它的并不是它「中世纪」，而是陪审团开始把账单寄给全国最有钱的公司，而议会站在了公司那一边。
+***** Comments
+- deodand 指任何与人员死亡直接相关的无生命物件，从失控的马车到掉落的树枝，通常会被判没收销毁，或者上缴国王后变卖。这条法律在英格兰的法典上存在了数百年。
+- 开头那段地板坍塌的轶事让我立刻想起埃尔福特茅厕灾难。如果你还没听说过，恭喜你成为今天幸运的一万人之一。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+デオダンド：死をもたらした物に値段をつける
+***** TLDR
+JSTOR Dailyがデオダンドを取り上げている。数百年にわたり英国法に存在した制度で、人の死を直接もたらした動産は没収され、その価値は陪審が決めた。車輪一つのこともあれば、馬と積荷を含む荷車全体、あるいは人が落ちた梯子のこともあった。金銭は名目上は慈善用だが、実際には検死官を通じて遺族に渡るのが通例だった。鉄道が人を死なせるようになると、陪審は鉄道会社の資力を踏まえて高い評価額をつけ始め、議会は1846年、その評価を認める代わりにデオダンド自体を廃止した。結果として鉄道事故の遺族は補償をまったく受けられなくなった。
+***** Take
+人を死なせた物の値段を陪審が公開の場で決める。これは会計を公然と行う責任制度であり、その仕組みで数百年動いてきた。終わらせたのは「中世的だから」ではない。陪審が国内で最も裕福な企業に請求書を回し始め、議会が企業の側に立ったからだ。
+***** Comments
+- デオダンドとは人の死に直接結びついた無生物のことで、暴走した荷車から落ちた枝まで含まれ、たいていは没収・破棄されるか、国王に引き渡されて売却された。この法はイングランドで何百年も法典に載っていた。
+- 冒頭の床崩落の逸話で、すぐエアフルトの便所落下事故を思い出した。未見なら、今日の幸運な1万人の一人だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+데오단드: 사람을 죽인 물건에 값을 매기다
+***** TLDR
+JSTOR Daily가 영국법에 수백 년간 존재했던 데오단드를 다룬다. 사람의 죽음을 직접 초래한 동산은 몰수됐고, 그 가치는 배심이 정했다. 수레바퀴 하나일 수도, 말과 화물을 포함한 수레 전체일 수도, 누군가 떨어진 사다리일 수도 있었다. 그 돈은 명목상 자선용이었지만 대개 검시관을 거쳐 유족에게 갔다. 기차가 사람을 죽이기 시작하자 배심은 철도회사의 재력을 기준으로 값을 매겼고, 의회는 1846년 그 평가를 인정하는 대신 데오단드 자체를 폐지했다. 그 결과 철도 사고 유족은 아무 보상도 받지 못하게 됐다.
+***** Take
+사람을 죽인 물건의 값을 배심이 공개적으로 매기는 것은 회계를 공개된 자리에서 하는 책임 제도이고, 그 방식으로 수백 년을 굴러갔다. 끝낸 것은 그것이 중세적이어서가 아니다. 배심이 나라에서 가장 부유한 회사들에 청구서를 보내기 시작했고, 의회가 회사 편에 섰기 때문이다.
+***** Comments
+- 데오단드는 사람의 죽음과 직접 연결된 무생물 전부를 말한다. 통제를 잃은 수레부터 떨어진 나뭇가지까지 해당했고, 보통 몰수해 파기하거나 국왕에게 넘긴 뒤 매각했다. 이 법은 잉글랜드 법전에 수백 년간 남아 있었다.
+- 첫머리의 바닥 붕괴 일화를 보자마자 에르푸르트 변소 참사가 떠올랐다. 모른다면 오늘의 행운의 1만 명 중 하나다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los deodands ponían precio a los objetos que causaban una muerte
+***** TLDR
+JSTOR Daily repasa los deodands, una figura del derecho inglés durante siglos: cualquier objeto mueble que causara directamente la muerte de una persona quedaba confiscado, y su valor lo fijaba un jurado. Podía ser la rueda de un carro, el carro entero con caballos y carga, o la escalera desde la que alguien cayó. El dinero era nominalmente para fines benéficos, pero solía llegar a la familia del fallecido a través del forense. Cuando los trenes empezaron a matar gente, los jurados fijaron valores acordes con la riqueza de las compañías ferroviarias, y el Parlamento abolió los deodands en 1846 en lugar de permitir esas tasaciones, dejando a los familiares de las víctimas ferroviarias sin compensación alguna.
+***** Take
+Un jurado poniendo precio al objeto que mató a alguien es un sistema de responsabilidad con la contabilidad hecha en público, y funcionó así durante siglos. Lo que lo acabó no fue que fuera medieval. Fue que los jurados empezaron a mandar la factura a las empresas más ricas del país, y el Parlamento se puso del lado de las empresas.
+***** Comments
+- Un deodand era cualquier objeto inanimado ligado directamente a una muerte, desde un carro desbocado hasta una rama caída, y solía ser condenado y destruido, o entregado al rey y vendido. La ley estuvo vigente en Inglaterra durante cientos de años.
+- La anécdota inicial del hundimiento del suelo me recordó de inmediato al desastre de la letrina de Erfurt. Si no lo conoces, considérate uno de los 10.000 afortunados de hoy.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Deodands bepreisten Gegenstände, die den Tod verursacht hatten
+***** TLDR
+JSTOR Daily über Deodands, jahrhundertelang Teil des englischen Rechts: Jeder bewegliche Gegenstand, der unmittelbar den Tod eines Menschen verursacht hatte, verfiel, und seinen Wert bestimmte eine Jury. Das konnte ein Wagenrad sein, der ganze Karren samt Pferden und Ladung oder die Leiter, von der jemand gestürzt war. Das Geld war nominell für wohltätige Zwecke bestimmt, erreichte über den Coroner aber meist die Hinterbliebenen. Als Züge Menschen töteten, setzten Jurys die Werte am Vermögen der Eisenbahngesellschaften an, und das Parlament schaffte Deodands 1846 ab, statt diese Bewertungen gelten zu lassen. Angehörige von Eisenbahnopfern gingen danach völlig leer aus.
+***** Take
+Eine Jury, die den Preis für den Gegenstand festsetzt, der jemanden getötet hat, ist ein Haftungssystem mit öffentlich geführter Buchhaltung, und es funktionierte auf dieser Grundlage jahrhundertelang. Beendet wurde es nicht, weil es mittelalterlich war, sondern weil Jurys anfingen, die Rechnung an die reichsten Unternehmen des Landes zu schicken, und das Parlament sich auf deren Seite stellte.
+***** Comments
+- Ein Deodand war jeder leblose Gegenstand, der unmittelbar mit einem Todesfall verbunden war, vom durchgegangenen Karren bis zum herabfallenden Ast. Meist wurde er verurteilt und zerstört oder der Krone übergeben und verkauft. Das Gesetz stand in England jahrhundertelang in den Büchern.
+- Die einleitende Anekdote über den Einsturz des Fußbodens erinnerte mich sofort an das Erfurter Latrinenunglück. Wer es noch nicht kennt, gehört heute zu den glücklichen 10.000.
