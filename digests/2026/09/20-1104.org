@@ -1,0 +1,488 @@
+#+TITLE: HN Digest 2026-09-20 11:04 UTC
+#+DATE: 2026-09-20T11:04:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Microsoft's agents rewrite the Copilot runtime in Rust for $120K, an 80,000-year-old arrowhead is tested by shooting a carcass, and a Spanish DXer pulls in North Carolina FM
+
+* Highlights
+- Copilot runtime: 430k lines of TypeScript became 800k lines of Rust, plus dozens of regressions
+- The shell is 20% syntax and 80% toolbox: fzf, xargs, duckdb, ast-grep, gh
+- Obi-Rakhmat micropoints look like arrow heads 25,000 years before the next known ones
+- Circles, Sines and Signals is still the clearest introduction to the DFT anyone has built
+- Double-hop E-skip carried 4,000 miles of Carolina FM into Caceres, caught on an SDR recording
+
+* Stories
+
+** Microsoft agentically ports Copilot runtime to Rust for $120K :ai:rust:microsoft:typescript:
+:PROPERTIES:
+:ID:       49773998
+:URL:      https://www.theregister.com/devops/2026/09/18/microsoft-agentically-ports-copilot-runtime-to-rust/5297549
+:HN_URL:   https://news.ycombinator.com/item?id=49773998
+:POINTS:   19
+:COMMENTS: 12
+:BY:       pjmlp
+:END:
+
+*** TLDR
+Microsoft moved the GitHub Copilot runtime from TypeScript to Rust using coding agents for most of the conversion: 430,000 lines of TypeScript became 800,000 lines of Rust, shipped module by module across 135 releases over 14.5 weeks at roughly 1.3 port pull requests a day. The stated cost is $120,000 in tokens plus about three weeks of developer time, using several models including GPT-5.6 Sol and Claude Opus 4.8. A benchmark of 1,000 one-turn session lifecycles went from 7.55 per second to 120, a 15.9x speedup, with memory for a 10-client agent batch dropping from 1,383 MB to 126 MB. The project hit dozens of regressions in code that compiled cleanly. Microsoft distinguished engineer Stephen Toub said the work looked less like AI spewing code and more like iterative investigation.
+
+*** Take
+The $120,000 is the least interesting number here. The useful ones are 800,000 lines of Rust that no human wrote and dozens of regressions in code the compiler accepted. Rust's guarantees are about memory, not about whether a port preserved behaviour, and a 15.9x benchmark tells you nothing about the semantics that quietly changed. Toub's framing, that this was iterative investigation rather than generation, is the honest part of the writeup and the part least likely to survive into anyone else's slide deck.
+
+*** Comments
+
+**** dmix
+Agents converted 430,000 lines of TypeScript into 800,000 lines of production Rust. The +400k new lines were probably code comments the agents added to everything.
+
+**** tecoholic
+One of the thorniest conversions was session.ts, over 30,000 lines of TypeScript that touched all aspects of the runtime. This can't be real. A single file with 30K lines? How much RAM does an editor need to load that with a full symbol tree?
+
+**** Rexxar
+They don't have to tell us they are vibe coding everything. There are now ridiculous vibe coded localisations in VS2026, task manager stopped reporting CPU usage correctly, file explorer shows the loading icon forever on some directories.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+微软用智能体把 Copilot 运行时移植到 Rust，花了 12 万美元
+***** TLDR
+微软把 GitHub Copilot 运行时从 TypeScript 迁移到 Rust，大部分转换由编码智能体完成：43 万行 TypeScript 变成 80 万行 Rust，按模块分批交付，14.5 周内发布 135 次，平均每天约 1.3 个移植 PR。官方说法是 12 万美元的 token 成本加上约三周的人力，使用了包括 GPT-5.6 Sol 和 Claude Opus 4.8 在内的多个模型。1000 次单轮会话生命周期的基准从每秒 7.55 次提升到 120 次，快了 15.9 倍；10 个客户端的智能体批处理内存从 1383 MB 降到 126 MB。项目过程中出现了数十个回归，而这些代码都能正常编译。微软杰出工程师 Stephen Toub 表示，这项工作与其说是 AI 疯狂吐代码，不如说是反复的排查与验证。
+***** Take
+12 万美元是这里最不值得关注的数字。真正值得看的是：80 万行没有人类写过的 Rust，以及数十个出现在编译器放行的代码里的回归。Rust 的保证是关于内存的，不是关于移植有没有保住原有行为；15.9 倍的基准结果也说明不了哪些语义在过程中悄悄变了。Toub 把它描述为反复排查而非代码生成，这是整篇报道里最诚实的部分，也是最不可能被别人抄进 PPT 的部分。
+***** Comments
+- 智能体把 43 万行 TypeScript 转成了 80 万行生产 Rust。多出来的 40 万行大概是智能体给所有东西都加的注释。
+- 最棘手的转换之一是 session.ts，3 万多行 TypeScript，牵扯到运行时的方方面面。这不可能是真的吧？单个文件 3 万行？编辑器要多少内存才能把完整符号树加载进来？
+- 他们不用特地告诉我们在全面 vibe coding。VS2026 里出现了荒唐的本地化，任务管理器的 CPU 占用不再正确刷新，资源管理器在某些目录上的加载图标转个没完。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+MicrosoftがCopilotランタイムをエージェントでRustへ移植、費用12万ドル
+***** TLDR
+MicrosoftがGitHub Copilotのランタイムを、変換作業の大半をコーディングエージェントに任せてTypeScriptからRustへ移行した。43万行のTypeScriptが80万行のRustになり、モジュール単位で14.5週間に135回リリース、1日あたり約1.3件の移植プルリクエストというペースだった。公表されているコストはトークン代12万ドルと開発者約3週間分の工数で、GPT-5.6 SolやClaude Opus 4.8を含む複数のモデルを使い分けた。1,000回の単一ターンのセッションライフサイクルを測るベンチマークは毎秒7.55回から120回へと15.9倍になり、10クライアントのエージェント処理のメモリは1,383 MBから126 MBに下がった。一方で、問題なくコンパイルされたコードに数十件のリグレッションが出た。MicrosoftのDistinguished EngineerであるStephen Toubは、この作業はAIがコードを吐き出すというより反復的な調査に近かったと述べている。
+***** Take
+12万ドルはここで最も面白くない数字だ。見るべきは、人間が一行も書いていない80万行のRustと、コンパイラが通したコードに出た数十件のリグレッションのほうだ。Rustが保証するのはメモリであって、移植で振る舞いが保たれたかどうかではない。15.9倍というベンチマークは、どのセマンティクスが静かに変わったかを何も教えてくれない。生成ではなく反復的な調査だったというToubの表現がこの記事で最も誠実な部分であり、他社のスライドに最も残りにくい部分でもある。
+***** Comments
+- エージェントが43万行のTypeScriptを80万行の本番Rustに変換した。増えた40万行はエージェントが全部に付けたコメントだろう。
+- 最も厄介だった変換のひとつがsession.tsで、ランタイム全体に関わる3万行超のTypeScriptだったという。本当なのか。単一ファイルで3万行？完全なシンボルツリーを読み込むのにエディタは何GB必要なんだ。
+- 全部vibe codingでやっていると、わざわざ言われなくても分かる。VS2026にはひどいローカライズが入り、タスクマネージャーはCPU使用率を正しく更新しなくなり、エクスプローラーは一部のディレクトリで読み込みアイコンが回り続ける。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+마이크로소프트, 에이전트로 Copilot 런타임을 Rust로 이식, 비용 12만 달러
+***** TLDR
+마이크로소프트가 변환 작업 대부분을 코딩 에이전트에 맡겨 GitHub Copilot 런타임을 TypeScript에서 Rust로 옮겼다. 43만 줄의 TypeScript가 80만 줄의 Rust가 됐고, 모듈 단위로 14.5주 동안 135번 배포됐으며 하루 평균 1.3건의 이식 풀 리퀘스트 속도였다. 공개된 비용은 토큰 12만 달러와 개발자 약 3주 분량의 시간이며, GPT-5.6 Sol과 Claude Opus 4.8 등 여러 모델을 용도에 따라 나눠 썼다. 1,000회 단일 턴 세션 라이프사이클 벤치마크는 초당 7.55회에서 120회로 15.9배 빨라졌고, 클라이언트 10개 에이전트 배치의 메모리는 1,383 MB에서 126 MB로 줄었다. 다만 정상적으로 컴파일된 코드에서 수십 건의 회귀가 발생했다. 마이크로소프트 수석 엔지니어 Stephen Toub은 이 작업이 AI가 코드를 쏟아내는 것보다 반복적인 조사에 가까웠다고 말했다.
+***** Take
+12만 달러는 여기서 가장 재미없는 숫자다. 눈여겨볼 건 사람이 쓰지 않은 80만 줄의 Rust, 그리고 컴파일러가 통과시킨 코드에서 나온 수십 건의 회귀다. Rust가 보장하는 건 메모리이지 이식 과정에서 동작이 보존됐는지가 아니며, 15.9배라는 벤치마크는 어떤 의미론이 조용히 바뀌었는지 아무것도 알려주지 않는다. 생성이 아니라 반복적 조사였다는 Toub의 표현이 이 글에서 가장 정직한 대목이고, 남의 발표 자료에 가장 남지 않을 대목이기도 하다.
+***** Comments
+- 에이전트가 43만 줄의 TypeScript를 80만 줄의 프로덕션 Rust로 바꿨다. 늘어난 40만 줄은 에이전트가 전부에 달아놓은 주석일 것이다.
+- 가장 까다로운 변환 중 하나가 런타임 전반에 걸친 3만 줄짜리 session.ts였다고 한다. 이게 진짜일 리가. 단일 파일 3만 줄? 전체 심볼 트리를 올리려면 에디터에 램이 얼마나 필요한가.
+- 전부 vibe coding으로 한다고 굳이 말해줄 필요도 없다. VS2026에는 어이없는 현지화가 들어갔고, 작업 관리자는 CPU 사용률을 제대로 갱신하지 않으며, 탐색기는 일부 디렉터리에서 로딩 아이콘이 끝없이 돈다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Microsoft porta el runtime de Copilot a Rust con agentes por 120.000 dólares
+***** TLDR
+Microsoft migró el runtime de GitHub Copilot de TypeScript a Rust dejando la mayor parte de la conversión en manos de agentes de código: 430.000 líneas de TypeScript se convirtieron en 800.000 de Rust, entregadas módulo a módulo en 135 lanzamientos a lo largo de 14,5 semanas, a un ritmo de unas 1,3 pull requests de porte al día. El coste declarado es de 120.000 dólares en tokens más unas tres semanas de trabajo de desarrollo, usando varios modelos entre ellos GPT-5.6 Sol y Claude Opus 4.8. Un benchmark de 1.000 ciclos de sesión de un turno pasó de 7,55 por segundo a 120, una mejora de 15,9x, y la memoria de un lote de agentes con 10 clientes bajó de 1.383 MB a 126 MB. El proyecto acumuló decenas de regresiones en código que compilaba sin problemas. Stephen Toub, ingeniero distinguido de Microsoft, dijo que el trabajo se pareció menos a una IA escupiendo código y más a una investigación iterativa.
+***** Take
+Los 120.000 dólares son la cifra menos interesante. Las que importan son 800.000 líneas de Rust que no escribió ningún humano y decenas de regresiones en código que el compilador aceptó. Las garantías de Rust son sobre memoria, no sobre si el porte conservó el comportamiento, y un benchmark 15,9x no dice nada sobre qué semántica cambió por el camino. El encuadre de Toub, que esto fue investigación iterativa y no generación, es la parte honesta del artículo y la que menos probabilidades tiene de sobrevivir en la presentación de otro.
+***** Comments
+- Los agentes convirtieron 430.000 líneas de TypeScript en 800.000 líneas de Rust de producción. Las 400.000 líneas nuevas serán los comentarios que los agentes le pusieron a todo.
+- Una de las conversiones más espinosas fue session.ts, más de 30.000 líneas de TypeScript que tocaban todo el runtime. Esto no puede ser real. ¿Un solo archivo con 30.000 líneas? ¿Cuánta RAM necesita un editor para cargar eso con el árbol de símbolos completo?
+- No hace falta que nos cuenten que lo están haciendo todo a base de vibe coding. Hay localizaciones ridículas en VS2026, el administrador de tareas dejó de actualizar bien el uso de CPU, el explorador se queda con el icono de carga para siempre en algunas carpetas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Microsoft portiert Copilot-Runtime mit Agenten für 120.000 Dollar nach Rust
+***** TLDR
+Microsoft hat die Runtime von GitHub Copilot von TypeScript nach Rust überführt und den Großteil der Umstellung Coding-Agenten überlassen: Aus 430.000 Zeilen TypeScript wurden 800.000 Zeilen Rust, ausgeliefert Modul für Modul in 135 Releases über 14,5 Wochen, bei rund 1,3 Portierungs-Pull-Requests pro Tag. Angegeben werden 120.000 Dollar an Tokenkosten plus etwa drei Wochen Entwicklerzeit, verteilt auf mehrere Modelle, darunter GPT-5.6 Sol und Claude Opus 4.8. Ein Benchmark über 1.000 Session-Lebenszyklen stieg von 7,55 auf 120 pro Sekunde, ein Faktor 15,9, und der Speicherbedarf eines Agenten-Batches mit 10 Clients fiel von 1.383 MB auf 126 MB. Dabei traten Dutzende Regressionen in Code auf, der sauber kompilierte. Stephen Toub, Distinguished Engineer bei Microsoft, sagte, die Arbeit habe weniger nach KI ausgesehen, die Code ausspuckt, und mehr nach iterativer Untersuchung.
+***** Take
+Die 120.000 Dollar sind hier die uninteressanteste Zahl. Wichtig sind 800.000 Zeilen Rust, die kein Mensch geschrieben hat, und Dutzende Regressionen in Code, den der Compiler durchgewunken hat. Rusts Garantien betreffen Speicher, nicht die Frage, ob die Portierung das Verhalten erhalten hat, und ein Faktor von 15,9 sagt nichts darüber, welche Semantik unterwegs still gekippt ist. Toubs Einordnung, das sei iterative Untersuchung und keine Generierung gewesen, ist der ehrlichste Teil des Berichts und derjenige, der es am wenigsten in fremde Folien schaffen wird.
+***** Comments
+- Agenten haben 430.000 Zeilen TypeScript in 800.000 Zeilen Produktions-Rust verwandelt. Die zusätzlichen 400.000 Zeilen dürften Kommentare sein, die die Agenten an alles drangeschrieben haben.
+- Eine der heikelsten Umstellungen war session.ts, über 30.000 Zeilen TypeScript, die die gesamte Runtime berührten. Das kann nicht echt sein. Eine einzelne Datei mit 30.000 Zeilen? Wie viel RAM braucht ein Editor, um das mit vollem Symbolbaum zu laden?
+- Sie müssen uns nicht extra sagen, dass sie alles per Vibe Coding machen. In VS2026 gibt es absurde Lokalisierungen, der Task-Manager aktualisiert die CPU-Auslastung nicht mehr korrekt, der Explorer dreht bei manchen Verzeichnissen ewig das Ladesymbol.
+** Telling a Computer to Do Things :shell:bash:tooling:programming:
+:PROPERTIES:
+:ID:       49772662
+:URL:      https://will-keleher.com/posts/telling-your-computer-to-do-things/
+:HN_URL:   https://news.ycombinator.com/item?id=49772662
+:POINTS:   36
+:COMMENTS: 16
+:BY:       vismit2000
+:END:
+
+*** TLDR
+Will Keleher argues that the shell is underrated for the specific job of gluing existing programs together, and that competence with it is mostly not about syntax: his formulation is that the shell is 20% syntax and 80% having a good toolbox. He runs through the tools he thinks carry that weight, including fzf for interactive fuzzy selection, xargs for parallelism, rsync for transfers, sed -i and ast-grep for bulk rewrites, duckdb for running SQL over CSV and JSON files, and gh for GitHub automation. The worked example is a loop that reruns a test until it fails, `while pnpm exec mocha ./pathToFile.test.ts; do true; done`, set against the equivalent in Node. He concedes the limit: once you need real data types and real logic, use a real language.
+
+*** Take
+The toolbox framing is right and the list is the part worth keeping, especially duckdb over local CSV, which quietly replaces a lot of one-off pandas scripts. The argument skips the actual reason people reach for Python instead, and it is not syntax or tooling: in a shell pipeline, error handling is opt-in. The retry loop in the post is fine precisely because failure is the exit condition. Most scripts are not like that, and `set -euo pipefail` is a patch over a default that should have been the other way round.
+
+*** Comments
+
+**** Sharlin
+There is, of course, a programming language designed to do shelly things as succinctly as a shell script: Perl.
+
+**** necovek
+Why do people not use their main languages for basic file and command management? The answer is the same as why Python remains hugely popular despite its shortcomings: batteries included. Shell languages include so many neat and concise ways to execute commands and deal with their input, output and exit codes.
+
+**** carra
+I was sure this article would be about how we tell computers to do things now, writing prompts to an AI in plain English. I was wrong. Interesting nonetheless.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+让计算机做事
+***** TLDR
+Will Keleher 认为，在「把已有程序粘起来」这件具体的事情上，shell 被低估了，而熟练与否基本上不取决于语法：他的说法是 shell 是 20% 语法加 80% 的好工具箱。他列举了他认为撑起这部分的工具：交互式模糊选择用 fzf，并行用 xargs，传输用 rsync，批量改写用 sed -i 和 ast-grep，对 CSV 和 JSON 直接跑 SQL 用 duckdb，GitHub 自动化用 gh。文中的示例是一个反复运行测试直到失败的循环 `while pnpm exec mocha ./pathToFile.test.ts; do true; done`，与 Node 的等价写法对比。他也承认边界：一旦需要真正的数据类型和逻辑，就该换一门正经语言。
+***** Take
+工具箱这个说法是对的，那份清单是最值得留下的部分，尤其是用 duckdb 直接查本地 CSV，它悄悄取代了大量一次性的 pandas 脚本。文章绕开了人们转向 Python 的真正原因，而那既不是语法也不是工具：在 shell 管道里，错误处理是可选项。文中的重试循环之所以成立，恰恰因为「失败」就是退出条件。多数脚本不是这样，而 `set -euo pipefail` 只是给一个本该反过来的默认行为打补丁。
+***** Comments
+- 当然，确实存在一门被设计来像 shell 脚本一样简洁地做 shell 事情的语言：Perl。
+- 为什么人们不用自己的主力语言来做基本的文件和命令管理？答案和 Python 尽管有诸多缺点却依然流行是一样的：自带电池。shell 提供了大量简洁的方式来执行命令、处理它们的输入输出和退出码。
+- 我本来很确定这篇文章讲的是我们如今怎么让计算机做事，也就是用自然语言给 AI 写提示词。我猜错了，不过内容依然有意思。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+コンピュータに仕事をさせる
+***** TLDR
+Will Keleherは、既存のプログラムをつなぎ合わせるという用途に限ればシェルは過小評価されており、その習熟度はほとんど構文の問題ではないと論じる。彼の言い方では、シェルは構文20%、良い道具箱80%だ。その重みを担う道具として、対話的な絞り込みのfzf、並列化のxargs、転送のrsync、一括置換のsed -iとast-grep、CSVやJSONに直接SQLを投げるduckdb、GitHub自動化のghを挙げる。例として、テストが失敗するまで繰り返す `while pnpm exec mocha ./pathToFile.test.ts; do true; done` をNodeでの等価な書き方と比べている。限界も認めており、本格的なデータ型とロジックが必要になったらまともな言語を使えという立場だ。
+***** Take
+道具箱という捉え方は正しく、あのリストこそ残す価値がある。特にローカルCSVに対するduckdbは、使い捨てのpandasスクリプトを静かに置き換えている。ただし記事は、人々がPythonに手を伸ばす本当の理由を素通りしている。それは構文でも道具でもなく、シェルのパイプラインではエラー処理がオプトインだという点だ。記事のリトライループが成立するのは、まさに失敗が終了条件だからにすぎない。大半のスクリプトはそうではなく、`set -euo pipefail` は本来逆であるべきだった既定値への当て木でしかない。
+***** Comments
+- もちろん、シェルスクリプト並みに簡潔にシェル的なことをやるために設計された言語はある。Perlだ。
+- なぜ人は基本的なファイル操作やコマンド管理を主力言語でやらないのか。答えは、Pythonが多くの欠点にもかかわらず人気を保っている理由と同じだ。電池が同梱されている。シェルにはコマンドを実行し、その入出力と終了コードを扱う簡潔な手段が山ほどある。
+- この記事は、今どきのコンピュータへの指示、つまり自然言語でAIにプロンプトを書く話だと思い込んでいた。違った。それでも面白い。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+컴퓨터에게 일을 시키기
+***** TLDR
+Will Keleher는 기존 프로그램을 이어 붙이는 용도에 한해 셸이 과소평가돼 있으며, 숙련도는 대체로 문법의 문제가 아니라고 주장한다. 그의 표현으로 셸은 문법 20%, 좋은 도구함 80%다. 그 무게를 감당하는 도구로 대화형 퍼지 선택의 fzf, 병렬 처리의 xargs, 전송의 rsync, 일괄 치환의 sed -i와 ast-grep, CSV와 JSON에 바로 SQL을 던지는 duckdb, GitHub 자동화의 gh를 든다. 예시는 테스트가 실패할 때까지 반복하는 `while pnpm exec mocha ./pathToFile.test.ts; do true; done` 이며, Node로 쓴 같은 동작과 비교한다. 한계도 인정한다. 제대로 된 자료형과 로직이 필요해지면 제대로 된 언어를 쓰라는 것이다.
+***** Take
+도구함이라는 관점은 옳고, 그 목록이 남길 만한 부분이다. 특히 로컬 CSV에 duckdb를 쓰는 건 일회용 pandas 스크립트를 조용히 대체하고 있다. 다만 글은 사람들이 Python으로 가는 진짜 이유를 비껴간다. 문법도 도구도 아니고, 셸 파이프라인에서는 오류 처리가 선택 사항이라는 점이다. 글의 재시도 루프가 잘 작동하는 건 실패가 곧 종료 조건이기 때문이다. 대부분의 스크립트는 그렇지 않고, `set -euo pipefail` 은 애초에 반대였어야 할 기본값에 덧댄 땜질이다.
+***** Comments
+- 물론 셸 스크립트만큼 간결하게 셸다운 일을 하도록 설계된 언어가 있긴 하다. Perl이다.
+- 왜 사람들은 기본적인 파일과 명령 관리를 주력 언어로 하지 않을까? 답은 Python이 여러 단점에도 여전히 인기 있는 이유와 같다. 배터리가 포함돼 있어서다. 셸에는 명령을 실행하고 그 입출력과 종료 코드를 다루는 간결한 방법이 정말 많다.
+- 이 글이 요즘 우리가 컴퓨터에 일을 시키는 방식, 그러니까 AI에 자연어로 프롬프트를 쓰는 이야기일 거라 확신했다. 틀렸다. 그래도 흥미로웠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Decirle a un ordenador que haga cosas
+***** TLDR
+Will Keleher defiende que la shell está infravalorada para el trabajo concreto de pegar programas existentes, y que manejarla bien no va casi nada de sintaxis: su formulación es que la shell es 20% sintaxis y 80% tener una buena caja de herramientas. Repasa las herramientas que cargan ese peso: fzf para selección difusa interactiva, xargs para paralelizar, rsync para transferencias, sed -i y ast-grep para reescrituras masivas, duckdb para lanzar SQL sobre ficheros CSV y JSON, y gh para automatizar GitHub. El ejemplo trabajado es un bucle que repite un test hasta que falla, `while pnpm exec mocha ./pathToFile.test.ts; do true; done`, frente al equivalente en Node. Admite el límite: en cuanto necesitas tipos de datos y lógica de verdad, usa un lenguaje de verdad.
+***** Take
+El enfoque de la caja de herramientas es correcto y la lista es lo que merece la pena guardar, sobre todo duckdb sobre CSV locales, que está sustituyendo en silencio un montón de scripts de pandas de usar y tirar. El artículo se salta la razón real por la que la gente acaba en Python, y no es la sintaxis ni las herramientas: en una tubería de shell, el manejo de errores es opcional. El bucle de reintento del post funciona precisamente porque el fallo es la condición de salida. La mayoría de los scripts no son así, y `set -euo pipefail` es un parche sobre un valor por defecto que debería haber sido el contrario.
+***** Comments
+- Existe, claro, un lenguaje diseñado para hacer cosas de shell con la misma concisión que un script de shell: Perl.
+- ¿Por qué la gente no usa su lenguaje principal para gestionar archivos y comandos básicos? La respuesta es la misma que explica por qué Python sigue siendo enormemente popular pese a sus carencias: viene con pilas incluidas. Las shells traen muchísimas formas concisas de ejecutar comandos y tratar su entrada, su salida y sus códigos de salida.
+- Estaba seguro de que el artículo iba de cómo le decimos ahora a los ordenadores que hagan cosas, escribiendo prompts a una IA en lenguaje natural. Me equivoqué. Interesante igualmente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Einem Computer sagen, was er tun soll
+***** TLDR
+Will Keleher argumentiert, die Shell sei für die konkrete Aufgabe, vorhandene Programme zusammenzukleben, unterschätzt, und Können darin sei kaum eine Frage der Syntax: Seine Formel lautet, die Shell bestehe zu 20% aus Syntax und zu 80% aus einem guten Werkzeugkasten. Er geht die Werkzeuge durch, die diese Last tragen: fzf für interaktive unscharfe Auswahl, xargs für Parallelität, rsync für Übertragungen, sed -i und ast-grep für Massenänderungen, duckdb für SQL direkt auf CSV- und JSON-Dateien und gh für GitHub-Automatisierung. Das durchgerechnete Beispiel ist eine Schleife, die einen Test wiederholt, bis er fehlschlägt, `while pnpm exec mocha ./pathToFile.test.ts; do true; done`, gegenübergestellt der Node-Variante. Die Grenze räumt er ein: Sobald echte Datentypen und echte Logik nötig werden, nimm eine echte Sprache.
+***** Take
+Die Werkzeugkasten-Perspektive stimmt, und die Liste ist der Teil, den man behalten sollte, vor allem duckdb auf lokalen CSVs, das still und leise eine Menge einmaliger pandas-Skripte ersetzt. Der Text übergeht den eigentlichen Grund, aus dem Leute doch zu Python greifen, und der ist weder Syntax noch Werkzeug: In einer Shell-Pipeline ist Fehlerbehandlung Opt-in. Die Retry-Schleife im Beitrag funktioniert genau deshalb, weil der Fehlschlag die Abbruchbedingung ist. Die meisten Skripte sind nicht so gebaut, und `set -euo pipefail` ist ein Pflaster auf einem Standardverhalten, das andersherum hätte sein müssen.
+***** Comments
+- Es gibt natürlich eine Programmiersprache, die dafür gemacht ist, Shell-Dinge so knapp zu erledigen wie ein Shell-Skript: Perl.
+- Warum nutzen Leute nicht ihre Hauptsprache für einfache Datei- und Kommandoverwaltung? Die Antwort ist dieselbe wie dafür, dass Python trotz bekannter Schwächen enorm beliebt bleibt: Batterien inklusive. Shells bringen unzählige knappe Wege mit, Kommandos auszuführen und deren Ein- und Ausgabe sowie Exit-Codes zu behandeln.
+- Ich war sicher, der Artikel ginge darum, wie wir Computern heute sagen, was sie tun sollen, also Prompts in natürlicher Sprache an eine KI. Falsch gedacht. Trotzdem interessant.
+** Arrow heads at Obi-Rakhmat (Uzbekistan) 80K years ago? :archaeology:anthropology:research:paleolithic:
+:PROPERTIES:
+:ID:       49756319
+:URL:      https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0328390
+:HN_URL:   https://news.ycombinator.com/item?id=49756319
+:POINTS:   21
+:COMMENTS: 8
+:BY:       bookofjoe
+:END:
+
+*** TLDR
+Plisson and colleagues, writing in PLOS ONE, examined 20 projectile armatures from Obi-Rakhmat, a rock shelter in the Tian Shan mountains of northeastern Uzbekistan whose deepest layers date to roughly 80,000 years ago. Alongside large retouched points of 25 to 35 grams, they found micropoints weighing 1 to 4.5 grams with an average width of 18.2 mm. To test what those could have been, the team hafted 12 replica micropoints to 8 mm wooden shafts with bitumen and charcoal and shot them from a 36-pound laminated bow into an ungulate carcass, then compared the resulting impact fractures and microscopic linear impact traces with the archaeological pieces. They conclude the micropoints are arrow heads rather than dart or spear tips. Nearly identical micropoints turn up at Mandrin cave in France 25,000 years later, associated with Homo sapiens.
+
+*** Take
+The experimental half is the solid half: shooting replicas into a carcass to build a reference set of impact traces is the right way to argue about weapons you cannot see. The inference to a bow is the weak link, and the question mark in the title is doing real work. Small light points are consistent with arrows, but nothing here is a bow, and the Mandrin comparison sits 25,000 years away, which is a long time to hold a technology in a gap with no preserved examples in between.
+
+*** Comments
+
+**** dr_dshiv
+Short story: stones were used to make arrow-heads, blades on sticks too small for spears, 25k years earlier than expected.
+
+**** khalic
+Shot with a modern laminated bow, 36 lbs, at a complete uneviscerated carcass of a small ungulate hung in anatomical position, to document impact breakage and microscopic linear impact traces. They were thorough.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+8 万年前乌兹别克斯坦 Obi-Rakhmat 遗址的箭头？
+***** TLDR
+Plisson 等人在《PLOS ONE》发表研究，分析了 Obi-Rakhmat 岩棚出土的 20 件投射器尖端。该遗址位于乌兹别克斯坦东北部天山山区，最深地层约距今 8 万年。除了 25 到 35 克的大型修理尖状器外，他们还发现了重 1 到 4.5 克、平均宽度 18.2 毫米的微型尖状器。为检验这些东西的用途，团队用沥青和木炭把 12 件复制微尖固定在直径 8 毫米的木箭杆上，用一张 36 磅的层压弓射入有蹄类动物尸体，再把产生的冲击断口和显微线性冲击痕迹与出土标本对照。他们的结论是：这些微尖是箭头，而非标枪或矛头。几乎相同的微尖在 2.5 万年后的法国 Mandrin 洞穴出现，与智人相关联。
+***** Take
+实验那一半是扎实的：用复制品射入尸体来建立冲击痕迹参照库，正是讨论看不见的武器的正确方法。从微尖推到弓则是薄弱环节，标题里那个问号是有分量的。又小又轻的尖端与箭一致，但这里没有任何一张弓，而 Mandrin 的对照相隔 2.5 万年，中间没有任何保存下来的实例，这段空白实在太长。
+***** Comments
+- 简单说：石器被用来做箭头，也就是装在杆上、对矛来说太小的刃片，比原先预期早了 2.5 万年。
+- 用一张现代 36 磅层压弓，射向按解剖姿势悬挂、未去内脏的小型有蹄类完整尸体，以记录冲击破损和显微线性冲击痕迹。他们做得很彻底。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+8万年前のウズベキスタン、オビ・ラフマト遺跡の矢尻か？
+***** TLDR
+Plissonらは PLOS ONE で、ウズベキスタン北東部・天山山脈の岩陰遺跡オビ・ラフマトから出土した20点の投射用尖頭器を分析した。最深層は約8万年前にさかのぼる。25〜35グラムの大型の二次加工尖頭器に加え、重さ1〜4.5グラム、平均幅18.2ミリの微小尖頭器が見つかった。用途を検証するため、研究チームは複製した微小尖頭器12点をビチューメンと木炭で直径8ミリの木製矢柄に装着し、36ポンドの積層弓で有蹄類の死体に射込み、生じた衝撃剥離と顕微鏡的線状衝撃痕を出土資料と比較した。結論は、これらが投槍や槍ではなく矢尻だというものだ。ほぼ同じ微小尖頭器は2万5千年後のフランス・マンドラン洞窟にホモ・サピエンスと結びついて現れる。
+***** Take
+実験の側は堅実だ。複製を死体に射込んで衝撃痕の参照資料を作るのは、現物が残らない武器を論じる正しいやり方である。弱いのは弓への推論で、タイトルの疑問符はきちんと仕事をしている。小さく軽い尖頭器は矢と整合的だが、ここに弓そのものは一つもない。マンドランとの比較は2万5千年も離れており、その間に保存例が一つもない空白を一つの技術でつなぐには長すぎる。
+***** Comments
+- 要するに、石が矢尻、つまり槍には小さすぎる柄付きの刃として使われていた。それが予想より2万5千年早かったということだ。
+- 36ポンドの現代的な積層弓で、解剖学的な姿勢で吊るした内臓を抜いていない小型有蹄類の完全な死体に射込み、衝撃破損と顕微鏡的線状衝撃痕を記録した。徹底している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+8만 년 전 우즈베키스탄 오비라흐마트의 화살촉인가?
+***** TLDR
+Plisson 연구진은 PLOS ONE에 우즈베키스탄 북동부 톈산 산맥의 바위 그늘 유적 오비라흐마트에서 나온 투사용 첨두기 20점을 분석해 실었다. 가장 깊은 층은 약 8만 년 전으로 연대가 매겨진다. 25~35그램의 대형 잔손질 첨두기와 함께, 무게 1~4.5그램에 평균 너비 18.2mm인 미세 첨두기가 발견됐다. 용도를 검증하기 위해 연구진은 복제 미세 첨두기 12점을 역청과 숯으로 지름 8mm 나무 화살대에 결합해 36파운드 적층 활로 유제류 사체에 쏘고, 생긴 충격 파손과 현미경적 선형 충격흔을 출토품과 비교했다. 결론은 이것들이 투창이나 창이 아니라 화살촉이라는 것이다. 거의 같은 미세 첨두기가 2만 5천 년 뒤 프랑스 망드랭 동굴에서 호모 사피엔스와 함께 나타난다.
+***** Take
+실험 쪽 절반은 단단하다. 복제품을 사체에 쏘아 충격흔 기준 자료를 만드는 건 남지 않는 무기를 논하는 올바른 방식이다. 약한 고리는 활로의 추론이고, 제목의 물음표는 제 몫을 하고 있다. 작고 가벼운 첨두기는 화살과 부합하지만 여기에 활은 하나도 없다. 망드랭 비교는 2만 5천 년이나 떨어져 있고 그 사이 보존된 사례가 없으니, 하나의 기술로 잇기에는 너무 긴 공백이다.
+***** Comments
+- 요약하면, 돌이 화살촉, 즉 창으로 쓰기엔 너무 작은 자루 달린 날로 쓰였고 그 시점이 예상보다 2만 5천 년 앞선다는 것이다.
+- 36파운드 현대 적층 활로, 해부학적 자세로 매달아 둔 내장을 제거하지 않은 소형 유제류의 온전한 사체에 쏘아 충격 파손과 현미경적 선형 충격흔을 기록했다. 철저했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Puntas de flecha en Obi-Rakhmat (Uzbekistán) hace 80.000 años?
+***** TLDR
+Plisson y sus colegas, en PLOS ONE, analizaron 20 armaduras de proyectil de Obi-Rakhmat, un abrigo rocoso en las montañas Tian Shan del noreste de Uzbekistán cuyas capas más profundas se datan en unos 80.000 años. Junto a puntas retocadas grandes de 25 a 35 gramos, hallaron micropuntas de 1 a 4,5 gramos con una anchura media de 18,2 mm. Para comprobar qué podían ser, el equipo enmangó 12 micropuntas replicadas en astiles de madera de 8 mm con betún y carbón y las disparó con un arco laminado de 36 libras contra el cadáver de un ungulado, y luego comparó las fracturas de impacto y las trazas lineales microscópicas resultantes con las piezas arqueológicas. Concluyen que las micropuntas son puntas de flecha y no de dardo o lanza. Micropuntas casi idénticas aparecen en la cueva de Mandrin, en Francia, 25.000 años después, asociadas a Homo sapiens.
+***** Take
+La mitad experimental es la sólida: disparar réplicas contra un cadáver para construir un repertorio de trazas de impacto es la forma correcta de discutir sobre armas que no se conservan. El eslabón débil es la inferencia del arco, y el signo de interrogación del título está trabajando de verdad. Unas puntas pequeñas y ligeras encajan con flechas, pero aquí no hay ningún arco, y la comparación con Mandrin queda a 25.000 años, un hueco muy largo para sostener una tecnología sin un solo ejemplar conservado por el medio.
+***** Comments
+- Resumiendo: se usaron piedras para hacer puntas de flecha, hojas montadas en palos demasiado pequeñas para lanzas, 25.000 años antes de lo esperado.
+- Disparadas con un arco laminado moderno de 36 libras contra el cadáver completo y sin eviscerar de un pequeño ungulado colgado en posición anatómica, para documentar las roturas de impacto y las trazas lineales microscópicas. Fueron minuciosos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Pfeilspitzen in Obi-Rakhmat (Usbekistan) vor 80.000 Jahren?
+***** TLDR
+Plisson und Kollegen untersuchten in PLOS ONE 20 Projektilspitzen aus Obi-Rakhmat, einem Felsdach im Tian Shan im Nordosten Usbekistans, dessen tiefste Schichten auf etwa 80.000 Jahre datiert werden. Neben großen retuschierten Spitzen von 25 bis 35 Gramm fanden sie Mikrospitzen von 1 bis 4,5 Gramm mit einer mittleren Breite von 18,2 mm. Um deren Funktion zu prüfen, schäftete das Team 12 nachgebaute Mikrospitzen mit Bitumen und Holzkohle auf 8 mm starke Holzschäfte, schoss sie mit einem 36-Pfund-Laminatbogen in den Kadaver eines Huftiers und verglich die entstandenen Aufschlagbrüche und mikroskopischen linearen Aufschlagspuren mit den Fundstücken. Ihr Schluss: Die Mikrospitzen sind Pfeilspitzen, keine Speer- oder Wurfspießspitzen. Nahezu identische Mikrospitzen tauchen 25.000 Jahre später in der Grotte Mandrin in Frankreich auf, verbunden mit Homo sapiens.
+***** Take
+Die experimentelle Hälfte ist die belastbare: Nachbauten in einen Kadaver zu schießen, um einen Referenzbestand an Aufschlagspuren zu gewinnen, ist der richtige Weg, um über Waffen zu streiten, die nicht erhalten sind. Schwach ist der Schluss auf den Bogen, und das Fragezeichen im Titel leistet echte Arbeit. Kleine leichte Spitzen passen zu Pfeilen, aber ein Bogen findet sich hier nicht, und der Vergleich mit Mandrin liegt 25.000 Jahre entfernt, eine lange Lücke für eine Technologie ohne ein einziges erhaltenes Zwischenstück.
+***** Comments
+- Kurz gesagt: Steine wurden zu Pfeilspitzen verarbeitet, also zu Klingen auf Schäften, die für Speere zu klein sind, und zwar 25.000 Jahre früher als erwartet.
+- Mit einem modernen Laminatbogen von 36 Pfund auf den vollständigen, nicht ausgenommenen Kadaver eines kleinen Huftiers geschossen, in anatomischer Position aufgehängt, um Aufschlagbrüche und mikroskopische lineare Aufschlagspuren zu dokumentieren. Sie waren gründlich.
+** Seeing Circles, Sines, and Signals :dsp:math:visualization:education:
+:PROPERTIES:
+:ID:       49757929
+:URL:      https://jackschaedler.github.io/circles-sines-signals/index.html
+:HN_URL:   https://news.ycombinator.com/item?id=49757929
+:POINTS:   17
+:COMMENTS: 4
+:BY:       akkartik
+:END:
+
+*** TLDR
+Jack Schaedler's Circles, Sines, and Signals is a roughly 30-page interactive introduction to the discrete Fourier transform and basic digital signal processing, built so that the concepts arrive as animations, sound and manipulable diagrams rather than as equations. The visualisations are all D3.js, and the design follows Bret Victor's arguments about constraining interactivity so it teaches rather than distracts. Schaedler is explicit about what it is not: he calls it pop-science that chooses simplicity over completeness and engagement over rigour, and points readers at Richard Lyons' Understanding Digital Signal Processing for the real treatment.
+
+*** Take
+The reason this keeps coming back to the front page is that it still works. It loads, the animations run, nothing depends on a service that shut down, and the author told you upfront where the simplifications are, which is more than most explainers do. Ten years of interactive-explainer enthusiasm has produced very little that is both this careful about scope and still online.
+
+*** Comments
+
+**** srean
+Imagine a civilization that discovers complex numbers before naturals, with naturals showing up to count the turns. If hexagons can claim to be bestagons, complex numbers have a legit claim at best numbers.
+
+**** gus_massa
+In Figure 1, I expect the smallest circle to draw the figure.
+
+**** mrmagoo17
+Reminded me of this crazy good video game with no assets, because the graphics, sounds and music are all built out of sin functions.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+看见圆、正弦与信号
+***** TLDR
+Jack Schaedler 的《Circles, Sines, and Signals》是一份约 30 页的交互式入门材料，讲离散傅里叶变换和数字信号处理基础，设计上让概念以动画、声音和可操作的图示出现，而不是以公式出现。所有可视化都用 D3.js 实现，交互的克制程度参考了 Bret Victor 关于「交互应当用于教学而非分散注意力」的论述。Schaedler 对它的定位说得很清楚：这是科普，选择了简洁而非完整、趣味而非严谨，并建议读者去读 Richard Lyons 的《Understanding Digital Signal Processing》获取严格处理。
+***** Take
+它反复回到首页的原因很简单：它还能用。页面能打开，动画能跑，不依赖任何已经关停的服务，而且作者一开始就告诉你简化在哪里，这一点比大多数讲解材料都强。十年交互式讲解的热潮，真正既把范围交代清楚、又还留在线上的东西并不多。
+***** Comments
+- 设想一个先发现复数、后来才用自然数来数圈数的文明。如果六边形能自称最棒的形状，复数完全有资格自称最棒的数。
+- 在图 1 里，我以为画出图形的应该是最小的那个圆。
+- 让我想起那个没有任何素材文件的神作游戏，画面、音效和音乐全部由正弦函数生成。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+円と正弦と信号を見る
+***** TLDR
+Jack Schaedlerの『Circles, Sines, and Signals』は、離散フーリエ変換とデジタル信号処理の基礎を扱う約30ページの対話型入門だ。概念が数式ではなくアニメーション、音、操作できる図として現れるように作られている。可視化はすべてD3.jsで、対話性を絞り込んで注意をそらさず教えるという、Bret Victorの議論に沿った設計になっている。Schaedlerは位置づけを明言している。これは簡潔さを完全性より、楽しさを厳密さより優先したポップサイエンスであり、厳密な扱いを求める読者にはRichard Lyonsの『Understanding Digital Signal Processing』を勧めている。
+***** Take
+これが何度もトップページに戻ってくる理由は単純で、今も動くからだ。ページが開き、アニメーションが走り、終了したサービスに依存しておらず、著者は最初にどこを簡略化したかを述べている。ここまで範囲について誠実で、なおかつ今もオンラインにある対話型解説は、この十年の流行の中でもごくわずかだ。
+***** Comments
+- 自然数より先に複素数を発見し、自然数は回転の数を数えるために後から現れた文明を想像してみてほしい。六角形が最強の形を名乗れるなら、複素数にも最強の数を名乗る資格がある。
+- 図1では、図形を描くのは一番小さい円だと思っていた。
+- アセットを一切持たず、グラフィックも音もBGMもすべてsin関数から作られている、あのとんでもなく良いゲームを思い出した。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+원과 사인과 신호를 보다
+***** TLDR
+Jack Schaedler의 『Circles, Sines, and Signals』는 이산 푸리에 변환과 디지털 신호 처리 기초를 다루는 약 30쪽 분량의 대화형 입문서다. 개념이 수식이 아니라 애니메이션, 소리, 직접 조작할 수 있는 도해로 도착하도록 만들어졌다. 시각화는 전부 D3.js로 구현했고, 상호작용을 절제해 주의를 흩뜨리지 않고 가르치게 한다는 Bret Victor의 논의를 따른다. Schaedler는 성격을 분명히 밝힌다. 완전성보다 단순함을, 엄밀함보다 재미를 택한 대중 과학이며, 엄밀한 논의를 원하면 Richard Lyons의 『Understanding Digital Signal Processing』을 보라고 안내한다.
+***** Take
+이것이 계속 첫 페이지로 돌아오는 이유는 단순하다. 여전히 작동하기 때문이다. 페이지가 열리고 애니메이션이 돌고 문 닫은 서비스에 의존하지 않으며, 저자가 처음부터 어디를 단순화했는지 밝혀 둔다. 대부분의 해설물보다 나은 점이다. 지난 십 년의 대화형 해설 붐에서 범위에 이만큼 정직하면서 아직 온라인에 남아 있는 것은 많지 않다.
+***** Comments
+- 자연수보다 복소수를 먼저 발견하고, 회전 수를 세려고 자연수가 나중에 등장한 문명을 상상해 보라. 육각형이 최고의 도형을 자처할 수 있다면 복소수도 최고의 수를 자처할 자격이 있다.
+- 그림 1에서는 가장 작은 원이 도형을 그릴 거라고 생각했다.
+- 에셋이 하나도 없는, 그래픽과 소리와 음악이 전부 사인 함수로 만들어진 그 굉장한 게임이 떠올랐다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ver círculos, senos y señales
+***** TLDR
+Circles, Sines, and Signals, de Jack Schaedler, es una introducción interactiva de unas 30 páginas a la transformada discreta de Fourier y al procesamiento digital de señales, construida para que los conceptos lleguen como animaciones, sonido y diagramas manipulables en vez de como ecuaciones. Todas las visualizaciones están hechas con D3.js y el diseño sigue los argumentos de Bret Victor sobre limitar la interactividad para que enseñe en lugar de distraer. Schaedler dice con claridad lo que no es: lo llama divulgación que elige la simplicidad sobre la completitud y la diversión sobre el rigor, y remite a Understanding Digital Signal Processing, de Richard Lyons, para el tratamiento serio.
+***** Take
+La razón de que esto vuelva una y otra vez a la portada es que sigue funcionando. Carga, las animaciones corren, no depende de ningún servicio que haya cerrado y el autor te dice de entrada dónde están las simplificaciones, que es más de lo que hacen casi todos los explicadores. Diez años de entusiasmo con los artículos interactivos han dejado muy poco que sea a la vez así de honesto sobre su alcance y siga en línea.
+***** Comments
+- Imagina una civilización que descubre los números complejos antes que los naturales, y donde los naturales aparecen para contar las vueltas. Si los hexágonos pueden reclamar ser la mejor figura, los complejos tienen argumentos legítimos para ser los mejores números.
+- En la Figura 1, esperaba que fuera el círculo más pequeño el que dibujara la figura.
+- Me recordó a ese juego tan bueno que no tiene ningún asset, porque los gráficos, los sonidos y la música están construidos a partir de funciones seno.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kreise, Sinus und Signale sehen
+***** TLDR
+Circles, Sines, and Signals von Jack Schaedler ist eine rund 30 Seiten umfassende interaktive Einführung in die diskrete Fouriertransformation und die Grundlagen der digitalen Signalverarbeitung, gebaut so, dass die Konzepte als Animationen, Klang und veränderbare Diagramme ankommen statt als Gleichungen. Die Visualisierungen sind durchgehend D3.js, und das Design folgt Bret Victors Argumenten, Interaktivität so zu begrenzen, dass sie lehrt statt abzulenken. Schaedler sagt klar, was es nicht ist: Er nennt es Populärwissenschaft, die Einfachheit über Vollständigkeit und Vergnügen über Strenge stellt, und verweist für die ernsthafte Behandlung auf Richard Lyons' Understanding Digital Signal Processing.
+***** Take
+Der Grund, warum das immer wieder auf die Startseite zurückkommt, ist schlicht: Es funktioniert noch. Die Seite lädt, die Animationen laufen, nichts hängt an einem eingestellten Dienst, und der Autor sagt vorab, wo vereinfacht wurde, was die wenigsten Erklärstücke tun. Zehn Jahre Begeisterung für interaktive Erklärungen haben sehr wenig hervorgebracht, das zugleich so ehrlich über seinen Umfang ist und noch online steht.
+***** Comments
+- Man stelle sich eine Zivilisation vor, die komplexe Zahlen vor den natürlichen entdeckt, und bei der die natürlichen erst auftauchen, um Umdrehungen zu zählen. Wenn Sechsecke beanspruchen dürfen, die beste Form zu sein, haben komplexe Zahlen einen guten Anspruch auf die besten Zahlen.
+- In Abbildung 1 hätte ich erwartet, dass der kleinste Kreis die Figur zeichnet.
+- Erinnert mich an dieses wahnsinnig gute Spiel ganz ohne Assets, bei dem Grafik, Klänge und Musik komplett aus Sinusfunktionen gebaut sind.
+** When the FM Band Goes Transatlantic :radio:propagation:sdr:dx:
+:PROPERTIES:
+:ID:       49759853
+:URL:      https://www.radioworld.com/tech-and-gear/nicks-signal-spot/when-the-fm-band-goes-transatlantic
+:HN_URL:   https://news.ycombinator.com/item?id=49759853
+:POINTS:   21
+:COMMENTS: 1
+:BY:       austinallegro
+:END:
+
+*** TLDR
+On 19 July 2026, Mauricio Molano, a retired broadcast engineer and lifelong DXer in Aldea del Cano in Caceres, Spain, received FM broadcasts from the Carolinas at distances around 4,000 miles: 88.1 WRJA in Sumter SC at 4,004 miles, 92.1 WMNC in Morganton NC at 4,015, 92.3 WQSL in Jacksonville NC at 3,841, and 93.3 WWWZ in Summerville SC at 4,019. The path is attributed to double-hop sporadic E, bouncing from the Carolinas via Newfoundland to Spain. His setup was a four-element Yagi and an SDRplay RSPduo. He was watching the World Cup final at the time and simply recorded a 7 MHz slice of spectrum, then went through it afterwards, identifying signals visually in the waterfall. A Cumulus Media engineer later matched one reception to the exact timestamp in the station's log.
+
+*** Take
+Double-hop sporadic E across the Atlantic is not new physics; catching it while doing something else is what changed. Recording 7 MHz of raw spectrum and searching it later turns DXing from a sitting-at-the-radio activity into a review task, and the part that makes this a record rather than a story is the station engineer confirming the timestamp against their own log. That is the step most propagation claims skip.
+
+*** Comments
+
+**** BlackRabbit1
+That's huge. Ham radio operators are still waiting for a full direct transatlantic QSO on 2m/144MHz. Beacon stations are on both sides and they've been blasting with a lot of power for quite a while now, but that's far from the kilowatt powers radio stations are using.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+当调频广播跨越大西洋
+***** TLDR
+2026 年 7 月 19 日，退休广播工程师、终身 DX 爱好者 Mauricio Molano 在西班牙卡塞雷斯省的 Aldea del Cano 接收到来自美国卡罗来纳州的调频广播，距离约 4000 英里：南卡罗来纳州萨姆特的 88.1 WRJA，4004 英里；北卡罗来纳州摩根顿的 92.1 WMNC，4015 英里；北卡罗来纳州杰克逊维尔的 92.3 WQSL，3841 英里；南卡罗来纳州萨默维尔的 93.3 WWWZ，4019 英里。传播路径被归因于双跳偶发 E 层，从卡罗来纳经纽芬兰反射到西班牙。他的设备是一副四单元八木天线和一台 SDRplay RSPduo。当时他正在看世界杯决赛，只是录下了 7 MHz 的频谱切片，事后再回放，在瀑布图上用眼睛找信号。后来 Cumulus Media 的一位工程师核对了电台日志，确认了其中一次接收的确切时间戳。
+***** Take
+跨大西洋的双跳偶发 E 传播不是什么新物理，变的是你可以一边做别的事一边把它逮住。录下 7 MHz 原始频谱、事后再检索，把 DX 从「守在收音机前」变成了一项回放审阅的工作；而让这件事成为一份记录而非一则故事的，是电台工程师拿自家日志核对时间戳这一步。多数传播声称恰恰跳过了这一步。
+***** Comments
+- 这很了不起。业余无线电爱好者至今还在等 2 米波段 144MHz 上一次完整的双向跨大西洋通联。两岸都架了信标台，也已经用大功率发射了相当长时间，但那和广播电台用的千瓦级功率还差得远。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+FM帯が大西洋を越えるとき
+***** TLDR
+2026年7月19日、スペイン・カセレス県アルデア・デル・カノに住む退職した放送技術者で生涯のDXerであるMauricio Molanoが、約4,000マイル離れたカロライナのFM局を受信した。サウスカロライナ州サムターの88.1 WRJAが4,004マイル、ノースカロライナ州モーガントンの92.1 WMNCが4,015マイル、ノースカロライナ州ジャクソンビルの92.3 WQSLが3,841マイル、サウスカロライナ州サマービルの93.3 WWWZが4,019マイル。経路はダブルホップのスポラディックE層によるもので、カロライナからニューファンドランドを経てスペインに届いたとされる。装備は4エレメントの八木アンテナとSDRplay RSPduo。彼はワールドカップ決勝を観ながら7 MHz分のスペクトラムをただ録音しておき、後から見返してウォーターフォール上で視覚的に信号を特定した。後日、Cumulus Mediaの技術者が局のログと照合し、受信の一つを正確なタイムスタンプで確認した。
+***** Take
+大西洋を越えるダブルホップのスポラディックEは新しい物理ではない。変わったのは、別のことをしながらそれを捕まえられる点だ。7 MHzの生スペクトラムを録音して後から探す方式は、DXを「無線機の前に座る活動」から「見返す作業」に変えた。そしてこれを逸話ではなく記録にしているのは、局の技術者が自局のログでタイムスタンプを確認した一手だ。多くの伝播報告はその一歩を省いている。
+***** Comments
+- これはすごい。アマチュア無線家は2m帯144MHzでの完全な双方向の大西洋横断交信をいまだに待っている。両岸にビーコン局があり、かなり前から大電力で送信しているが、放送局が使うキロワット級の電力には遠く及ばない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+FM 대역이 대서양을 건널 때
+***** TLDR
+2026년 7월 19일, 스페인 카세레스주 알데아 델 카노에 사는 은퇴한 방송 엔지니어이자 평생 DX 애호가인 Mauricio Molano가 약 4,000마일 떨어진 캐롤라이나의 FM 방송을 수신했다. 사우스캐롤라이나 섬터의 88.1 WRJA가 4,004마일, 노스캐롤라이나 모건턴의 92.1 WMNC가 4,015마일, 노스캐롤라이나 잭슨빌의 92.3 WQSL이 3,841마일, 사우스캐롤라이나 서머빌의 93.3 WWWZ가 4,019마일이다. 경로는 더블 홉 스포래딕 E층으로, 캐롤라이나에서 뉴펀들랜드를 거쳐 스페인까지 반사된 것으로 본다. 장비는 4소자 야기 안테나와 SDRplay RSPduo였다. 그는 당시 월드컵 결승을 보면서 7 MHz 폭의 스펙트럼을 녹음해 두었다가 나중에 되돌려 보며 워터폴에서 신호를 눈으로 식별했다. 이후 Cumulus Media의 엔지니어가 방송국 로그와 대조해 수신 중 하나의 정확한 타임스탬프를 확인했다.
+***** Take
+대서양을 건너는 더블 홉 스포래딕 E는 새로운 물리가 아니다. 달라진 건 다른 일을 하면서도 그걸 잡을 수 있다는 점이다. 7 MHz 원시 스펙트럼을 녹음해 두고 나중에 뒤지는 방식은 DX를 무전기 앞에 앉아 있는 활동에서 되돌려 보는 작업으로 바꿨다. 그리고 이걸 일화가 아니라 기록으로 만드는 건 방송국 엔지니어가 자기 로그로 타임스탬프를 확인해 준 단계다. 대부분의 전파 주장은 바로 그 단계를 건너뛴다.
+***** Comments
+- 대단한 일이다. 아마추어 무선가들은 2m 대역 144MHz에서 완전한 양방향 대서양 횡단 교신을 아직도 기다리고 있다. 양쪽에 비콘국이 있고 꽤 오래 큰 출력으로 송신해 왔지만, 방송국이 쓰는 킬로와트급 출력에는 한참 못 미친다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cuando la banda de FM cruza el Atlántico
+***** TLDR
+El 19 de julio de 2026, Mauricio Molano, ingeniero de radiodifusión jubilado y DXer de toda la vida afincado en Aldea del Cano (Cáceres), recibió emisoras de FM de las Carolinas a unas 4.000 millas: 88.1 WRJA de Sumter (Carolina del Sur) a 4.004 millas, 92.1 WMNC de Morganton (Carolina del Norte) a 4.015, 92.3 WQSL de Jacksonville (Carolina del Norte) a 3.841 y 93.3 WWWZ de Summerville (Carolina del Sur) a 4.019. La ruta se atribuye a esporádica E de doble salto, rebotando desde las Carolinas vía Terranova hasta España. Su equipo era una Yagi de cuatro elementos y un SDRplay RSPduo. Estaba viendo la final del Mundial y se limitó a grabar una porción de 7 MHz de espectro para repasarla después, identificando las señales visualmente en la cascada. Más tarde, un ingeniero de Cumulus Media confirmó una de las recepciones cotejando la marca de tiempo exacta con el registro de la emisora.
+***** Take
+La esporádica E de doble salto sobre el Atlántico no es física nueva; lo que ha cambiado es poder cazarla mientras haces otra cosa. Grabar 7 MHz de espectro en bruto y buscarlo después convierte el DX de una actividad sentado ante el receptor en una tarea de revisión, y lo que hace de esto un registro y no una anécdota es que el ingeniero de la emisora verificó la marca de tiempo contra su propio log. Ese es el paso que se saltan casi todas las afirmaciones sobre propagación.
+***** Comments
+- Es enorme. Los radioaficionados siguen esperando un QSO transatlántico directo y completo en 2m/144MHz. Hay balizas a ambos lados emitiendo con mucha potencia desde hace bastante, pero eso queda muy lejos de los kilovatios que usan las emisoras de radio.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wenn das UKW-Band den Atlantik überquert
+***** TLDR
+Am 19. Juli 2026 empfing Mauricio Molano, pensionierter Rundfunktechniker und lebenslanger DXer aus Aldea del Cano in der Provinz Cáceres, UKW-Sender aus den Carolinas über rund 4.000 Meilen: 88.1 WRJA aus Sumter (South Carolina) über 4.004 Meilen, 92.1 WMNC aus Morganton (North Carolina) über 4.015, 92.3 WQSL aus Jacksonville (North Carolina) über 3.841 und 93.3 WWWZ aus Summerville (South Carolina) über 4.019. Der Weg wird sporadischem E mit Doppelsprung zugeschrieben, von den Carolinas über Neufundland nach Spanien. Seine Ausrüstung: eine Vier-Element-Yagi und ein SDRplay RSPduo. Er sah gerade das WM-Finale, zeichnete schlicht einen 7 MHz breiten Spektrumsausschnitt auf und ging ihn später durch, wobei er die Signale im Wasserfall optisch identifizierte. Ein Techniker von Cumulus Media bestätigte später einen Empfang, indem er den exakten Zeitstempel mit dem Sendeprotokoll abglich.
+***** Take
+Sporadisches E mit Doppelsprung über den Atlantik ist keine neue Physik; neu ist, dass man es nebenbei einfangen kann. 7 MHz rohes Spektrum aufzuzeichnen und später zu durchsuchen macht aus DXing statt einer Tätigkeit am Empfänger eine Auswertungsaufgabe. Und was daraus einen Nachweis statt einer Anekdote macht, ist der Sendetechniker, der den Zeitstempel gegen das eigene Protokoll geprüft hat. Genau diesen Schritt lassen die meisten Ausbreitungsmeldungen aus.
+***** Comments
+- Das ist gewaltig. Funkamateure warten immer noch auf eine vollständige direkte transatlantische Verbindung auf 2m/144MHz. Auf beiden Seiten stehen Bakensender, die seit geraumer Zeit mit viel Leistung senden, aber das ist weit entfernt von den Kilowatt, mit denen Rundfunkstationen arbeiten.
