@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-09-21 11:00 UTC
+#+DATE: 2026-09-21T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Tim Schafer's puzzle bible surfaces, Amiga Unix boots on a 68060, and two projects take aim at Jev
+
+* Highlights
+- Kev: open decision models on Qwen3.5, Apache-2.0
+- Grim Fandango: 72 scanned pages of Tim Schafer's puzzle design
+- Amiga Unix revived, and the thread fights about the README
+- Jev-Leftpad: padStart() with an API bill
+- Disney+ ad-free comes with an exceptions list
+
+* Stories
+
+** Kev: Tiny Jev-like family of decision models built on top of Qwen3.5 :ai:llm:open-source:classification:
+:PROPERTIES:
+:ID:       49783999
+:URL:      https://github.com/jaredpalmer/kev/tree/main
+:HN_URL:   https://news.ycombinator.com/item?id=49783999
+:POINTS:   125
+:COMMENTS: 56
+:BY:       tosh
+:END:
+
+*** TLDR
+Kev is three models at 0.8B, 4B and 9B, LoRA fine-tunes of Qwen3.5 bases that answer structured questions about a text input: yes/no, multiple choice and rating questions, several per request, each question answered in isolation. Training was about 10,000 public examples plus 2,576 generated from policy rules, rank-16 LoRA, cross-entropy loss. Apache-2.0, runs locally. The README points at support ticket routing, escalation detection and sentiment, and says a short fine-tune on a few hundred labelled examples helps more than any prompt change.
+
+*** Take
+The useful claim here is not that Kev matches Jev, because it does not: benchmarks posted in the thread show only marginal gains over the plain Qwen base. It is that most of this work was always classification, and the industry spent two years paying frontier-model prices per ticket to do it. A 4B model you can fine-tune on 300 labelled rows is the boring correct answer.
+
+*** Comments
+
+**** hbarka
+If Jev is fundamentally trained using RLCD while you're building on a Qwen model that was trained using RLHF, how can the resulting model be considered Jev-like?
+
+**** monkeydust
+Bit of a Jev explosion going on. Is it because it's taking us back to a simpler time we understand better? Classification models have been around for a while.
+
+**** nullbio
+A great use case for these will be enforcing styling rules for frontend development, so you can ditch the style guides and never hit drift or duplication issues.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Kev：基于 Qwen3.5 构建的类 Jev 小型决策模型家族
+***** TLDR
+Kev 是三个模型，分别为 0.8B、4B 和 9B，都是在 Qwen3.5 基座上做的 LoRA 微调，用来回答关于输入文本的结构化问题：是非题、多选题和评分题，一次请求可问多个，每个问题独立作答。训练数据约为 1 万条公开样本，外加 2576 条由策略规则生成的样本，采用 rank-16 的 LoRA 和交叉熵损失。Apache-2.0 许可，可本地运行。README 指向的场景是工单分流、升级检测和情感判断，并称用几百条标注样本做一次短微调，比改任何提示词都管用。
+***** Take
+这里有价值的说法不是 Kev 追平了 Jev，因为它并没有：帖子里贴出的基准测试显示，它相对原始 Qwen 基座只有微弱提升。有价值的是，这类活儿本来就是分类，而业界却花了两年时间，按前沿模型的价格逐条处理工单。一个能用 300 行标注数据微调的 4B 模型，才是那个平淡但正确的答案。
+***** Comments
+- 如果 Jev 本质上是用 RLCD 训练的，而你是在用 RLHF 训练的 Qwen 模型上构建，那得到的模型凭什么算类 Jev？
+- 现在有点 Jev 爆发的意思。是不是因为它把我们带回了那个我们更能理解的简单年代？分类模型已经存在很久了。
+- 这类模型的一个好用场是给前端强制执行样式规则，这样就能扔掉样式指南，也不会再出现漂移或重复的问题。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Kev: Qwen3.5の上に構築されたJev風の小型決定モデル群
+***** TLDR
+Kevは0.8B、4B、9Bの3モデルで、いずれもQwen3.5ベースのLoRAファインチューン。入力テキストに対する構造化された質問、つまりYes/No、多肢選択、評価の各形式に答え、1回のリクエストで複数の質問を扱い、質問ごとに独立して回答する。学習データは公開データ約1万件に加え、ポリシー規則から生成した2,576件。rank-16のLoRAと交差エントロピー損失を使用。Apache-2.0でローカル実行が可能。READMEはサポートチケットの振り分け、エスカレーション検知、感情判定を用途として挙げ、数百件のラベル付きデータで短くファインチューンする方が、どんなプロンプト変更よりも効くと述べている。
+***** Take
+ここで意味があるのはKevがJevに並んだという主張ではない。実際には並んでいない。スレッドに貼られたベンチマークでは、素のQwenベースに対してわずかな改善しか出ていない。意味があるのは、この作業がもともと分類だったという点だ。それなのに業界は2年かけて、チケット1件ごとにフロンティアモデルの価格を払ってきた。300件のラベル付きデータでファインチューンできる4Bモデルこそ、地味だが正しい答えだ。
+***** Comments
+- JevがRLCDで訓練されているのに、RLHFで訓練されたQwenの上に構築しているなら、その結果をJev風と呼べる根拠は何なのか。
+- ちょっとしたJevブームが起きている。もっと理解しやすかった単純な時代に戻れるからだろうか。分類モデル自体はずっと前からある。
+- この種のモデルの良い使い道は、フロントエンドのスタイル規則を強制することだ。スタイルガイドを捨てられるし、ぶれや重複の問題も起きなくなる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Kev: Qwen3.5 위에 만든 Jev 스타일 소형 결정 모델 제품군
+***** TLDR
+Kev는 0.8B, 4B, 9B 세 모델로, 모두 Qwen3.5 베이스를 LoRA로 미세조정한 것이다. 입력 텍스트에 대한 구조화된 질문, 즉 예/아니오, 객관식, 점수 매기기에 답하며 한 요청에 여러 질문을 담을 수 있고 질문마다 독립적으로 답한다. 학습 데이터는 공개 예제 약 1만 건에 정책 규칙에서 생성한 2,576건을 더했고, rank-16 LoRA와 교차 엔트로피 손실을 썼다. Apache-2.0이며 로컬에서 돌아간다. README는 지원 티켓 분류, 에스컬레이션 감지, 감성 판별을 용도로 들면서 라벨링된 수백 건으로 짧게 미세조정하는 편이 어떤 프롬프트 수정보다 낫다고 말한다.
+***** Take
+여기서 쓸모 있는 주장은 Kev가 Jev를 따라잡았다는 것이 아니다. 따라잡지 못했다. 스레드에 올라온 벤치마크는 순정 Qwen 베이스 대비 개선이 미미하다고 말한다. 쓸모 있는 지점은 이 일이 원래 분류였다는 사실이다. 그런데 업계는 2년 동안 티켓 하나마다 프런티어 모델 가격을 치렀다. 라벨 300건으로 미세조정할 수 있는 4B 모델이 심심하지만 옳은 답이다.
+***** Comments
+- Jev가 근본적으로 RLCD로 훈련됐는데 당신은 RLHF로 훈련된 Qwen 위에 쌓고 있다면, 그 결과물을 Jev 스타일이라 부를 근거가 무엇인가.
+- Jev가 쏟아지고 있다. 우리가 더 잘 이해하던 단순한 시절로 돌아가서 그런 걸까. 분류 모델은 예전부터 있었다.
+- 이런 모델의 좋은 용도는 프런트엔드 스타일 규칙을 강제하는 것이다. 스타일 가이드를 버릴 수 있고 드리프트나 중복 문제도 없어진다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Kev: familia de modelos de decisión tipo Jev construida sobre Qwen3.5
+***** TLDR
+Kev son tres modelos de 0.8B, 4B y 9B, todos ajustes LoRA sobre bases Qwen3.5, que responden preguntas estructuradas sobre un texto de entrada: sí/no, opción múltiple y valoraciones, varias por petición y cada una resuelta de forma aislada. El entrenamiento usó unos 10.000 ejemplos públicos más 2.576 generados a partir de reglas de política, con LoRA de rango 16 y pérdida de entropía cruzada. Licencia Apache-2.0 y ejecución local. El README apunta a clasificación de tickets de soporte, detección de escalados y análisis de sentimiento, y sostiene que un ajuste corto con unos cientos de ejemplos etiquetados sirve más que cualquier cambio de prompt.
+***** Take
+Lo valioso aquí no es que Kev iguale a Jev, porque no lo hace: los benchmarks del hilo muestran mejoras marginales sobre la base Qwen sin tocar. Lo valioso es que este trabajo siempre fue clasificación, y la industria pasó dos años pagando precios de modelo frontera por cada ticket. Un modelo de 4B que puedes ajustar con 300 filas etiquetadas es la respuesta aburrida y correcta.
+***** Comments
+- Si Jev se entrena con RLCD y tú construyes sobre un modelo Qwen entrenado con RLHF, ¿en qué sentido el resultado es tipo Jev?
+- Hay una explosión de cosas tipo Jev. ¿Será porque nos devuelve a una época más simple que entendíamos mejor? Los modelos de clasificación llevan años entre nosotros.
+- Un buen uso será imponer reglas de estilo en el frontend, así puedes tirar las guías de estilo y no sufrir deriva ni duplicación.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kev: kleine Familie von Jev-artigen Entscheidungsmodellen auf Basis von Qwen3.5
+***** TLDR
+Kev besteht aus drei Modellen mit 0,8B, 4B und 9B Parametern, allesamt LoRA-Feintunings auf Qwen3.5-Basismodellen. Sie beantworten strukturierte Fragen zu einem Eingabetext: Ja/Nein, Mehrfachauswahl und Bewertungen, mehrere pro Anfrage, jede Frage isoliert. Trainiert wurde mit rund 10.000 öffentlichen Beispielen plus 2.576 aus Policy-Regeln erzeugten, mit LoRA Rang 16 und Cross-Entropy-Loss. Apache-2.0, läuft lokal. Die README nennt Ticket-Routing, Eskalationserkennung und Sentiment als Einsatzfelder und sagt, ein kurzes Feintuning auf ein paar hundert gelabelten Beispielen bringe mehr als jede Prompt-Änderung.
+***** Take
+Wertvoll ist hier nicht die Behauptung, Kev ziehe mit Jev gleich, denn das tut es nicht: die im Thread geposteten Benchmarks zeigen nur geringe Gewinne gegenüber der blanken Qwen-Basis. Wertvoll ist, dass diese Arbeit immer Klassifikation war und die Branche zwei Jahre lang Frontier-Modell-Preise pro Ticket bezahlt hat. Ein 4B-Modell, das man mit 300 gelabelten Zeilen feintunen kann, ist die langweilige richtige Antwort.
+***** Comments
+- Wenn Jev grundsätzlich mit RLCD trainiert wird, du aber auf einem mit RLHF trainierten Qwen-Modell aufbaust, wieso soll das Ergebnis dann Jev-artig sein?
+- Es gibt gerade eine Jev-Explosion. Liegt es daran, dass es uns in eine einfachere Zeit zurückbringt, die wir besser verstanden haben? Klassifikationsmodelle gibt es schon lange.
+- Ein guter Einsatz wäre das Durchsetzen von Styling-Regeln im Frontend, dann kann man die Styleguides wegwerfen und hat keine Drift- oder Duplikatsprobleme mehr.
+** Grim Fandango Puzzle Document (1996) ［pdf］ :gamedev:history:adventure-games:design:
+:PROPERTIES:
+:ID:       49783495
+:URL:      http://gameshelf.jmac.org/2008/11/13/GrimPuzzleDoc_small.pdf
+:HN_URL:   https://news.ycombinator.com/item?id=49783495
+:POINTS:   207
+:COMMENTS: 44
+:BY:       kelseyfrog
+:END:
+
+*** TLDR
+A 72-page scan of Tim Schafer's internal puzzle design document for Grim Fandango, dated 1996 and posted on Jason McIntosh's Gameshelf blog in 2008, around the game's tenth anniversary. It is a design document, not a walkthrough: puzzle chains, items and intended solutions, written in the same register as the game, with jokes, drawings and asides between the specs, including a box labelled for restricting your fallen tears of joy. The PDF is pure image data with no text layer, so the description here comes from the HN thread rather than machine-readable text.
+
+*** Take
+What makes this worth the download is the register. Internal specs from 1996 were usually dry because nobody outside the team would read them, and Schafer wrote his like the finished game anyway. The thread splits between people who love Grim Fandango's world and people who still resent its puzzles, which is the exact split a puzzle document creates. Both camps are reading the file that decided it.
+
+*** Comments
+
+**** fredrikholm
+I found Grim Fandango in a pile of discounted games as a tween. There was a cool skeleton in a suit on the front cover, so I bought it based on that. Few games have grabbed my attention as Grim Fandango did.
+
+**** polytely
+Tim Schafer is someone whose writing I really admire. Double Fine documented the entire seven year development cycle of Psychonauts 2 in a 32 episode series, one of the best documentaries ever made.
+
+**** damethos
+Nostalgia activated. I now have to play Grim Fandango! Loved that game!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+《冥界狂想曲》谜题设计文档（1996）［pdf］
+***** TLDR
+这是 Tim Schafer 为《冥界狂想曲》所写的内部谜题设计文档的 72 页扫描件，落款 1996 年，2008 年前后由 Jason McIntosh 发布在 Gameshelf 博客上，当时正值游戏发行十周年。它是设计文档而非攻略：包含谜题链条、道具和预设解法，行文语气和游戏本身一致，规格之间夹着笑话、涂鸦和插话，其中还有一个方框，写着请把你喜极而泣的眼泪限制在此框内。该 PDF 全是图像，没有文字层，所以这里的描述来自 HN 讨论串，而不是可机读文本。
+***** Take
+值得下载的地方在于语气。1996 年的内部规格文档通常干巴巴，因为团队之外没人会看，而 Schafer 照样把它写得像成品游戏。讨论串分成两派，一派爱这个世界观，一派至今怨恨它的谜题，而这正是一份谜题文档会制造出的分歧。两派读的都是当年拍板的那个文件。
+***** Comments
+- 十来岁时我在一堆打折游戏里翻到了《冥界狂想曲》。封面上有个穿西装的骷髅，很酷，我就凭这个买了。很少有游戏能像它那样抓住我。
+- Tim Schafer 的写作我是真的欣赏。Double Fine 把《脑航员 2》长达七年的开发全过程拍成了 32 集纪录片，是我看过最好的纪录片之一。
+- 怀旧值拉满。我现在非得再玩一遍《冥界狂想曲》不可了！太爱这游戏了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Grim Fandango パズル設計ドキュメント（1996）［pdf］
+***** TLDR
+Tim Schaferが書いたGrim Fandango用の社内パズル設計ドキュメント、72ページ分のスキャン。日付は1996年で、ゲーム発売10周年にあたる2008年ごろにJason McIntoshのGameshelfブログで公開された。攻略記事ではなく設計書であり、パズルの連鎖、アイテム、意図された解法が並ぶ。文体はゲーム本編と同じ調子で、仕様の合間に冗談や落書き、脱線が挟まる。うれし涙はこの枠の中に収めてください、と書かれた囲みまである。PDFは画像のみでテキストレイヤーがないため、ここでの説明は機械可読なテキストではなくHNのスレッドに基づく。
+***** Take
+ダウンロードする価値があるのは、その文体だ。1996年の社内仕様書は普通は無味乾燥だった。チームの外の誰も読まないからだ。それでもSchaferは完成したゲームと同じ調子で書いた。スレッドはこの世界観を愛する側と、今なおパズルを恨んでいる側に割れている。パズル設計書とはまさにその分裂を生む文書であり、どちらの側も当時それを決めたファイルを読んでいる。
+***** Comments
+- 10代のころ、値下げ品の山の中でGrim Fandangoを見つけた。スーツを着たかっこいい骸骨が表紙にあったので、それだけで買った。あれほど心を掴まれたゲームは数えるほどしかない。
+- Tim Schaferの文章は本当に尊敬している。Double FineはPsychonauts 2の7年に及ぶ開発全体を32話のシリーズとして記録していて、最高のドキュメンタリーのひとつだ。
+- 郷愁が発動した。Grim Fandangoをまたやるしかない。大好きなゲームだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+그림 판당고 퍼즐 설계 문서 (1996) ［pdf］
+***** TLDR
+팀 셰이퍼가 그림 판당고를 위해 쓴 내부 퍼즐 설계 문서를 72쪽 분량으로 스캔한 것이다. 문서 날짜는 1996년이고, 게임 출시 10주년 무렵인 2008년에 제이슨 매킨토시의 Gameshelf 블로그에 올라왔다. 공략집이 아니라 설계서로, 퍼즐 연쇄와 아이템과 의도된 해법이 담겨 있으며 문체는 게임 본편과 같다. 사양 사이사이에 농담과 낙서와 딴소리가 섞여 있고, 기쁨의 눈물은 이 상자 안에만 흘려 달라고 적힌 칸까지 있다. PDF는 텍스트 레이어 없이 이미지만으로 되어 있어, 여기 설명은 기계가 읽은 본문이 아니라 HN 스레드에서 나왔다.
+***** Take
+내려받을 만한 이유는 문체다. 1996년의 내부 사양서는 대개 건조했다. 팀 밖의 누구도 읽지 않으니까. 그런데도 셰이퍼는 완성된 게임과 같은 어조로 썼다. 스레드는 이 세계관을 사랑하는 쪽과 그 퍼즐을 여전히 원망하는 쪽으로 갈린다. 퍼즐 설계 문서란 바로 그 분열을 만들어내는 문서이고, 양쪽 모두 당시 그것을 결정한 파일을 읽고 있다.
+***** Comments
+- 십대 때 할인 게임 더미에서 그림 판당고를 발견했다. 표지에 정장 입은 멋진 해골이 있어서 그것만 보고 샀다. 그만큼 나를 사로잡은 게임은 몇 없다.
+- 팀 셰이퍼의 글은 정말 존경한다. 더블 파인은 사이코너츠 2의 7년짜리 개발 과정 전체를 32부작으로 기록했는데, 내가 본 최고의 다큐멘터리 중 하나다.
+- 향수 발동. 이제 그림 판당고를 다시 해야겠다. 정말 좋아했던 게임이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Documento de diseño de puzles de Grim Fandango (1996) ［pdf］
+***** TLDR
+Un escaneo de 72 páginas del documento interno de diseño de puzles que Tim Schafer escribió para Grim Fandango, fechado en 1996 y publicado en el blog Gameshelf de Jason McIntosh en 2008, cerca del décimo aniversario del juego. Es un documento de diseño, no una guía: cadenas de puzles, objetos y soluciones previstas, escrito con el mismo tono que el juego, con chistes, dibujos y digresiones entre las especificaciones, incluida una casilla que pide limitar ahí tus lágrimas de alegría. El PDF es solo imagen, sin capa de texto, así que esta descripción viene del hilo de HN y no de texto legible por máquina.
+***** Take
+Lo que justifica la descarga es el tono. Las especificaciones internas de 1996 solían ser áridas porque nadie fuera del equipo las leería, y Schafer escribió la suya como si fuera el juego terminado. El hilo se parte entre quienes aman el mundo de Grim Fandango y quienes todavía detestan sus puzles, que es exactamente la división que crea un documento de puzles. Ambos bandos están leyendo el archivo que la decidió.
+***** Comments
+- Encontré Grim Fandango en un montón de juegos rebajados siendo preadolescente. En la portada había un esqueleto con traje, muy chulo, y lo compré por eso. Pocos juegos me han atrapado tanto.
+- Admiro de verdad la escritura de Tim Schafer. Double Fine documentó los siete años de desarrollo de Psychonauts 2 en una serie de 32 episodios, uno de los mejores documentales que existen.
+- Nostalgia activada. Ahora tengo que jugar Grim Fandango otra vez. Me encantaba ese juego.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Grim Fandango Puzzle-Designdokument (1996) ［pdf］
+***** TLDR
+Ein 72-seitiger Scan von Tim Schafers internem Puzzle-Designdokument für Grim Fandango, datiert auf 1996 und 2008 im Gameshelf-Blog von Jason McIntosh veröffentlicht, rund um den zehnten Geburtstag des Spiels. Es ist ein Designdokument, keine Komplettlösung: Rätselketten, Gegenstände und vorgesehene Lösungen, geschrieben im Tonfall des Spiels selbst, mit Witzen, Zeichnungen und Abschweifungen zwischen den Spezifikationen, inklusive eines Kastens, in dem man seine Freudentränen bitte sammeln möge. Das PDF besteht nur aus Bilddaten ohne Textebene, die Beschreibung hier stammt daher aus dem HN-Thread und nicht aus maschinenlesbarem Text.
+***** Take
+Den Download wert ist der Tonfall. Interne Spezifikationen von 1996 waren meist trocken, weil sie außerhalb des Teams niemand lesen würde, und Schafer schrieb seine trotzdem wie das fertige Spiel. Der Thread spaltet sich in Leute, die die Welt von Grim Fandango lieben, und Leute, die den Rätseln bis heute nachtragen. Genau diese Spaltung erzeugt ein Puzzle-Dokument, und beide Lager lesen gerade die Datei, in der sie entschieden wurde.
+***** Comments
+- Ich fand Grim Fandango als Halbwüchsiger in einem Stapel reduzierter Spiele. Auf dem Cover war ein cooles Skelett im Anzug, und danach habe ich gekauft. Wenige Spiele haben mich so gefesselt.
+- Tim Schafers Schreibe bewundere ich wirklich. Double Fine hat den kompletten siebenjährigen Entwicklungszyklus von Psychonauts 2 in 32 Folgen dokumentiert, eine der besten Dokumentationen überhaupt.
+- Nostalgie aktiviert. Jetzt muss ich Grim Fandango wieder spielen. Ich habe dieses Spiel geliebt.
+** Amiga Unix, Again :retrocomputing:unix:amiga:ai:
+:PROPERTIES:
+:ID:       49781436
+:URL:      https://amigaux.org/
+:HN_URL:   https://news.ycombinator.com/item?id=49781436
+:POINTS:   108
+:COMMENTS: 37
+:BY:       doener
+:END:
+
+*** TLDR
+Three developers, asokero, isoriano1968 and jusii, are reviving Amiga Unix, Commodore's System V Release 4 port that shipped for the A2500UX and A3000UX in 1990 to 1992 and was then abandoned. Working today: kernel support for 68040 and 68060, native drivers for Z3660 accelerators and A4091/A4092 SCSI cards, floppy and CD install media, a package manager called apkg with GNU and BSD tools, the OpenLook desktop, and Quake as a benchmark. RTG graphics, X11R6.3, Mesa and CD filesystem support are in progress, a native modern GCC is planned. The site says the team uses generative AI to reverse-engineer code whose source was never released, with human verification on real hardware.
+
+*** Take
+The thread spent its energy on the README's AI prose and skipped the part that is actually hard, which is SCSI and accelerator drivers for a dead SVR4 port verified on real 68060 hardware. breput's objection is the sharper one: NetBSD 11 still supports Amiga, so nobody needs this as a working Unix. That makes it preservation, which is a perfectly good reason. The site would be stronger if it said so in three plain sentences instead of a generated pitch.
+
+*** Comments
+
+**** jchw
+My eternal advice to anyone doing heavily LLM assisted projects is to do them a bit less LLM assisted. I know reading this page that this text is mostly LLM-generated, and that leaves little hope that much else of the project isn't.
+
+**** breput
+I ran NetBSD 0.8 on my Amiga 500. Other than just 'we can' and historic interest, I can't imagine why anyone would choose to run System Vr4 over 4.4BSD, especially since the latest NetBSD 11 release still fully supports Amiga.
+
+**** steve1977
+This project might run into some trademark issues.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Amiga Unix，再启动
+***** TLDR
+三位开发者 asokero、isoriano1968 和 jusii 正在复活 Amiga Unix，即 Commodore 为 A2500UX 和 A3000UX 移植的 System V Release 4，该系统 1990 至 1992 年间发行后就被放弃。目前已可用：68040 和 68060 的内核支持、Z3660 加速卡与 A4091/A4092 SCSI 卡的原生驱动、软盘和光盘安装介质、名为 apkg 的包管理器及一批 GNU/BSD 工具、OpenLook 桌面，以及用作基准测试的 Quake。RTG 图形、X11R6.3、Mesa 和光盘文件系统支持正在开发，原生的现代 GCC 在计划中。站点称团队借助生成式 AI 逆向那些从未公开源码的部分，并由人工在真实硬件上验证。
+***** Take
+讨论串把力气花在 README 的 AI 文风上，反而跳过了真正难的部分：为一个早已停摆的 SVR4 移植写 SCSI 和加速卡驱动，并在真实的 68060 硬件上验证。breput 的反对更锋利：NetBSD 11 仍然支持 Amiga，所以没人需要把它当可用的 Unix。那这就是保存工作，而这本身就是充分的理由。站点如果用三句平实的话把这点说出来，会比一段生成的推销文案更有说服力。
+***** Comments
+- 对所有重度依赖 LLM 的项目，我永恒的建议是少依赖一点。我读这个页面就知道这些文字大半是 LLM 生成的，这让人很难指望项目的其他部分不是。
+- 我在自己的 Amiga 500 上跑过 NetBSD 0.8。除了“我们能做到”和历史兴趣之外，我想不出谁会选择 System Vr4 而不是 4.4BSD，何况最新的 NetBSD 11 依然完整支持 Amiga。
+- 这个项目可能会碰上商标问题。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Amiga Unix、再び
+***** TLDR
+asokero、isoriano1968、jusiiの3人がAmiga Unixの復活に取り組んでいる。CommodoreがA2500UXとA3000UX向けに移植したSystem V Release 4で、1990年から92年に出荷された後に放棄されたものだ。現時点で動くのは、68040と68060向けのカーネル対応、Z3660アクセラレータとA4091/A4092 SCSIカードのネイティブドライバ、フロッピーとCDのインストールメディア、apkgというパッケージマネージャとGNU/BSDツール群、OpenLookデスクトップ、そしてベンチマーク用のQuake。RTGグラフィックス、X11R6.3、Mesa、CDファイルシステム対応は開発中で、ネイティブな現代GCCは計画段階にある。サイトによれば、ソースが公開されなかった部分は生成AIでリバースエンジニアリングし、実機で人間が検証しているという。
+***** Take
+スレッドはREADMEのAIっぽい文章に力を使い、本当に難しい部分を飛ばした。死んだSVR4移植のためにSCSIとアクセラレータのドライバを書き、実機の68060で検証することだ。breputの指摘の方が鋭い。NetBSD 11は今もAmigaをサポートしているので、実用のUnixとしてこれを必要とする人はいない。つまりこれは保存であり、それは立派な理由だ。生成された売り込み文ではなく、平易な3文でそう書いた方がサイトは強くなる。
+***** Comments
+- LLMに強く依存したプロジェクトに対する私の変わらない助言は、依存を少し減らせということだ。このページを読めば文章の大半がLLM生成だと分かるし、それだとプロジェクトの他の部分も違うとは期待しにくい。
+- 自分のAmiga 500でNetBSD 0.8を動かしていた。できるからという理由と歴史的関心を除けば、4.4BSDではなくSystem Vr4を選ぶ理由が思いつかない。最新のNetBSD 11は今もAmigaを完全にサポートしている。
+- このプロジェクトは商標の問題にぶつかるかもしれない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+어게인, 아미가 유닉스
+***** TLDR
+개발자 세 명, asokero와 isoriano1968과 jusii가 아미가 유닉스를 되살리고 있다. 커모도어가 A2500UX와 A3000UX용으로 이식한 System V Release 4로, 1990년부터 92년까지 출하된 뒤 버려진 물건이다. 현재 동작하는 것은 68040과 68060 커널 지원, Z3660 가속기와 A4091/A4092 SCSI 카드용 네이티브 드라이버, 플로피와 CD 설치 미디어, apkg라는 패키지 관리자와 GNU/BSD 도구들, OpenLook 데스크톱, 그리고 벤치마크용 퀘이크다. RTG 그래픽과 X11R6.3, Mesa, CD 파일시스템 지원은 개발 중이고 네이티브 최신 GCC는 계획 단계다. 사이트는 소스가 공개되지 않은 부분을 생성형 AI로 역공학하고 실제 하드웨어에서 사람이 검증한다고 밝힌다.
+***** Take
+스레드는 README의 AI 문체에 힘을 쏟느라 정작 어려운 부분을 건너뛰었다. 죽은 SVR4 이식본을 위해 SCSI와 가속기 드라이버를 쓰고 실제 68060 하드웨어에서 검증하는 일이다. breput의 반론이 더 날카롭다. NetBSD 11이 여전히 아미가를 지원하므로 이걸 쓸 만한 유닉스로 필요로 하는 사람은 없다. 그러면 이건 보존 작업이고, 그것만으로도 충분한 이유다. 사이트가 생성된 홍보문 대신 평범한 세 문장으로 그렇게 말했다면 더 설득력 있었을 것이다.
+***** Comments
+- LLM에 크게 기댄 프로젝트를 하는 사람들에게 늘 하는 조언은 조금 덜 기대라는 것이다. 이 페이지를 읽으면 글 대부분이 LLM 생성물임을 알 수 있고, 그러면 나머지도 다르리라 기대하기 어렵다.
+- 내 아미가 500에서 NetBSD 0.8을 돌렸다. 할 수 있으니까와 역사적 관심을 빼면 4.4BSD 대신 System Vr4를 고를 이유가 떠오르지 않는다. 최신 NetBSD 11도 아미가를 완전히 지원한다.
+- 이 프로젝트는 상표 문제에 부딪힐 수도 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Amiga Unix, otra vez
+***** TLDR
+Tres desarrolladores, asokero, isoriano1968 y jusii, están resucitando Amiga Unix, el port de System V Release 4 que Commodore lanzó para las A2500UX y A3000UX entre 1990 y 1992 y luego abandonó. Ya funcionan: soporte de kernel para 68040 y 68060, controladores nativos para aceleradoras Z3660 y tarjetas SCSI A4091/A4092, medios de instalación en disquete y CD, un gestor de paquetes llamado apkg con herramientas GNU y BSD, el escritorio OpenLook y Quake como banco de pruebas. Están en desarrollo gráficos RTG, X11R6.3, Mesa y el sistema de ficheros de CD, y se planea un GCC moderno nativo. El sitio dice que el equipo usa IA generativa para hacer ingeniería inversa del código cuyo fuente nunca se publicó, con verificación humana en hardware real.
+***** Take
+El hilo gastó su energía en la prosa generada del README y se saltó lo verdaderamente difícil: controladores SCSI y de aceleradora para un port de SVR4 muerto, verificados en hardware 68060 real. La objeción de breput es más afilada: NetBSD 11 sigue soportando Amiga, así que nadie necesita esto como Unix de trabajo. Eso lo convierte en preservación, que es una razón perfectamente válida. El sitio ganaría si lo dijera en tres frases llanas en lugar de un argumentario generado.
+***** Comments
+- Mi consejo eterno para quien haga proyectos muy asistidos por LLM es que los haga algo menos asistidos. Leyendo esta página sé que el texto es sobre todo generado, y eso deja poca esperanza de que el resto del proyecto no lo sea.
+- Ejecuté NetBSD 0.8 en mi Amiga 500. Más allá del 'porque podemos' y del interés histórico, no imagino por qué alguien elegiría System Vr4 sobre 4.4BSD, sobre todo cuando NetBSD 11 sigue soportando Amiga por completo.
+- Este proyecto podría toparse con problemas de marca registrada.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Amiga Unix, noch einmal
+***** TLDR
+Drei Entwickler, asokero, isoriano1968 und jusii, erwecken Amiga Unix wieder, Commodores System-V-Release-4-Portierung für A2500UX und A3000UX, die zwischen 1990 und 1992 erschien und danach aufgegeben wurde. Bereits lauffähig: Kernel-Unterstützung für 68040 und 68060, native Treiber für Z3660-Beschleuniger und A4091/A4092-SCSI-Karten, Installationsmedien auf Diskette und CD, ein Paketmanager namens apkg mit GNU- und BSD-Werkzeugen, der OpenLook-Desktop und Quake als Benchmark. RTG-Grafik, X11R6.3, Mesa und CD-Dateisystem sind in Arbeit, ein nativer moderner GCC ist geplant. Laut Website nutzt das Team generative KI, um nie veröffentlichten Quellcode zu rekonstruieren, mit menschlicher Prüfung auf echter Hardware.
+***** Take
+Der Thread verbrauchte seine Energie an der KI-Prosa der README und übersprang den wirklich schwierigen Teil: SCSI- und Beschleunigertreiber für eine tote SVR4-Portierung, geprüft auf echter 68060-Hardware. breputs Einwand sitzt besser: NetBSD 11 unterstützt Amiga weiterhin, also braucht niemand das hier als Arbeits-Unix. Damit ist es Bewahrung, und das ist ein völlig guter Grund. Die Seite wäre stärker, wenn sie das in drei schlichten Sätzen sagen würde statt in einem generierten Pitch.
+***** Comments
+- Mein ewiger Rat an alle mit stark LLM-gestützten Projekten: macht sie etwas weniger LLM-gestützt. Beim Lesen dieser Seite weiß ich, dass der Text größtenteils generiert ist, und dann bleibt wenig Hoffnung, dass der Rest des Projekts anders ist.
+- Ich habe NetBSD 0.8 auf meinem Amiga 500 betrieben. Außer 'weil wir es können' und historischem Interesse sehe ich keinen Grund, System Vr4 statt 4.4BSD zu wählen, zumal das aktuelle NetBSD 11 Amiga weiterhin vollständig unterstützt.
+- Dieses Projekt könnte in Markenrechtsprobleme laufen.
+** Jev-Leftpad :ai:javascript:satire:open-source:
+:PROPERTIES:
+:ID:       49784706
+:URL:      https://github.com/f/jev-leftpad
+:HN_URL:   https://news.ycombinator.com/item?id=49784706
+:POINTS:   66
+:COMMENTS: 33
+:BY:       fka
+:END:
+
+*** TLDR
+An npm package that left-pads a string by calling TypeSafe AI's Jev model. Each pad becomes a multiple-choice request with options space_0 through space_10, and the model picks how many spaces to add. Padding beyond ten spaces is therefore unsupported. The README says the quiet part out loud: yes, padStart() does this in one line, no, it does not need a model call, and please do not use this in production or anything important.
+
+*** Take
+The joke lands because the setup is real. Teams are routing string work, enum picks and boolean checks through model APIs right now, and the only difference from this package is that they do not admit the padding is a classification problem with eleven labels. fwlr found the best detail: the tests mock Jev, which is exactly what every production integration does too.
+
+*** Comments
+
+**** sethaurus
+While this is obviously a smart and useful idea, it misses one of the core features of Jev: its confidence scores. Partial confidence could easily be mapped to fractional spaces, using unicode characters like U+2009 THIN SPACE.
+
+**** fwlr
+The tests mock Jev. 10/10 no notes
+
+**** networked
+AI skeptics in shambles. For GOFAI, see the Proven Leftpad notebook on SWI-Prolog.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Jev-Leftpad
+***** TLDR
+一个 npm 包，通过调用 TypeSafe AI 的 Jev 模型来给字符串左侧补空格。每次补位都变成一次多选请求，选项从 space_0 到 space_10，由模型决定加几个空格。因此超过十个空格的补位它做不了。README 直接把心里话说了出来：是的，padStart() 一行就能搞定；不，这事不需要调用模型；请不要把它用在生产环境或任何要紧的地方。
+***** Take
+这个玩笑之所以成立，是因为前提是真的。现在就有团队把字符串处理、枚举选择和布尔判断都接到模型 API 上，与这个包唯一的区别是他们不承认补空格是一个只有十一个标签的分类问题。fwlr 找到了最妙的细节：它的测试把 Jev mock 掉了，而每一个生产环境的集成其实也是这么做的。
+***** Comments
+- 这显然是个聪明又实用的想法，但它漏掉了 Jev 的一项核心特性：置信度分数。部分置信度完全可以映射成小数级空格，用 U+2009 细空格这类 unicode 字符来表示。
+- 它的测试把 Jev mock 掉了。满分，无可挑剔。
+- AI 怀疑论者碎了一地。想看老派符号 AI 的，去看 SWI-Prolog 上那份 Proven Leftpad 笔记本。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Jev-Leftpad
+***** TLDR
+TypeSafe AIのJevモデルを呼び出して文字列を左詰めパディングするnpmパッケージ。パディングのたびにspace_0からspace_10までの選択肢を持つ多肢選択リクエストになり、モデルが何個スペースを足すかを選ぶ。そのため10個を超えるパディングはできない。READMEは本音を正直に書いている。padStart()なら1行で済む、モデル呼び出しは要らない、本番や重要な場所では使わないでほしい、と。
+***** Take
+この冗談が効くのは、前提が本物だからだ。実際に今、文字列処理や列挙値の選択、真偽判定をモデルAPIに流している現場がある。このパッケージとの違いは、パディングがラベル11個の分類問題だと認めていない点だけだ。fwlrが最良の細部を見つけた。テストはJevをモックしている。本番の統合もまさに同じことをしている。
+***** Comments
+- 明らかに賢くて有用なアイデアだが、Jevの中核機能である信頼度スコアを見落としている。部分的な信頼度はU+2009のTHIN SPACEのようなunicode文字を使って小数のスペースに写せるはずだ。
+- テストはJevをモックしている。10点満点、文句なし。
+- AI懐疑派は崩壊。古典的AIについてはSWI-PrologのProven Leftpadノートブックを見てほしい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Jev-Leftpad
+***** TLDR
+TypeSafe AI의 Jev 모델을 호출해 문자열 왼쪽을 채우는 npm 패키지다. 채울 때마다 space_0부터 space_10까지 선택지를 주는 객관식 요청이 되고, 모델이 공백을 몇 개 넣을지 고른다. 그래서 열 칸을 넘는 패딩은 지원하지 않는다. README는 할 말을 다 한다. 그렇다, padStart()면 한 줄이다. 아니다, 모델 호출은 필요 없다. 그리고 운영 환경이나 중요한 곳에는 쓰지 말아 달라.
+***** Take
+이 농담이 먹히는 건 전제가 진짜이기 때문이다. 지금도 문자열 처리와 열거값 선택과 불리언 판정을 모델 API로 보내는 팀들이 있다. 이 패키지와 다른 점은 패딩이 라벨 열한 개짜리 분류 문제라는 걸 인정하지 않는다는 것뿐이다. fwlr이 최고의 디테일을 짚었다. 테스트가 Jev를 목으로 대체한다. 실제 운영 통합들도 똑같이 한다.
+***** Comments
+- 분명 똑똑하고 쓸모 있는 아이디어지만 Jev의 핵심 기능인 신뢰도 점수를 놓쳤다. 부분 신뢰도는 U+2009 THIN SPACE 같은 유니코드 문자로 소수 단위 공백에 대응시킬 수 있다.
+- 테스트가 Jev를 목으로 대체한다. 10점 만점, 더할 말 없음.
+- AI 회의론자들 무너졌다. 고전 기호 AI가 궁금하면 SWI-Prolog의 Proven Leftpad 노트북을 보라.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Jev-Leftpad
+***** TLDR
+Un paquete de npm que rellena una cadena por la izquierda llamando al modelo Jev de TypeSafe AI. Cada relleno se convierte en una pregunta de opción múltiple con alternativas de space_0 a space_10, y el modelo elige cuántos espacios añadir. Por eso no soporta rellenos de más de diez espacios. El README lo dice sin rodeos: sí, padStart() hace esto en una línea; no, no hace falta una llamada al modelo; y por favor no lo uses en producción ni en nada importante.
+***** Take
+La broma funciona porque el punto de partida es real. Hay equipos enrutando manipulación de cadenas, elecciones de enums y comprobaciones booleanas a través de APIs de modelos, y la única diferencia con este paquete es que no admiten que rellenar espacios es un problema de clasificación con once etiquetas. fwlr encontró el mejor detalle: los tests simulan a Jev, que es justo lo que hace también cualquier integración en producción.
+***** Comments
+- Es una idea claramente ingeniosa y útil, pero se pierde una función central de Jev: sus puntuaciones de confianza. La confianza parcial podría mapearse a espacios fraccionarios usando caracteres unicode como U+2009 ESPACIO FINO.
+- Los tests simulan a Jev. 10 sobre 10, sin comentarios.
+- Los escépticos de la IA hechos polvo. Para IA clásica, mirad el cuaderno Proven Leftpad en SWI-Prolog.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Jev-Leftpad
+***** TLDR
+Ein npm-Paket, das eine Zeichenkette links auffüllt, indem es das Jev-Modell von TypeSafe AI aufruft. Jede Auffüllung wird zu einer Multiple-Choice-Anfrage mit den Optionen space_0 bis space_10, und das Modell wählt die Zahl der Leerzeichen. Mehr als zehn Leerzeichen sind deshalb nicht möglich. Die README spricht es offen aus: ja, padStart() erledigt das in einer Zeile, nein, ein Modellaufruf ist dafür nicht nötig, und bitte nicht in Produktion oder irgendetwas Wichtigem einsetzen.
+***** Take
+Der Witz funktioniert, weil die Ausgangslage echt ist. Teams leiten gerade Stringarbeit, Enum-Auswahl und boolesche Prüfungen durch Modell-APIs, und der einzige Unterschied zu diesem Paket ist, dass sie nicht zugeben, dass Auffüllen ein Klassifikationsproblem mit elf Labels ist. fwlr hat das beste Detail gefunden: die Tests mocken Jev, genau wie es jede produktive Integration ebenfalls tut.
+***** Comments
+- Das ist offensichtlich eine schlaue und nützliche Idee, aber sie übersieht eine Kernfunktion von Jev: die Konfidenzwerte. Teilkonfidenz ließe sich leicht auf gebrochene Leerzeichen abbilden, etwa mit Unicode-Zeichen wie U+2009 SCHMALES LEERZEICHEN.
+- Die Tests mocken Jev. 10/10, nichts hinzuzufügen.
+- KI-Skeptiker am Boden. Für klassische KI siehe das Proven-Leftpad-Notebook auf SWI-Prolog.
+** Disney+: New user agreement allows ads before movies in all subscriptions :streaming:consumer-rights:advertising:disney:
+:PROPERTIES:
+:ID:       49784336
+:URL:      https://consumerrights.wiki/w/Disney%2B_ad_policy_change
+:HN_URL:   https://news.ycombinator.com/item?id=49784336
+:POINTS:   25
+:COMMENTS: 11
+:BY:       DeepLogin
+:END:
+
+*** TLDR
+A consumerrights.wiki page on section 2(k) of the Disney+ subscriber agreement, which states that tiers described as 'no ads' or 'ad-free' are generally free of commercial interruptions, with certain exceptions that may change from time to time. The listed exceptions are content whose streaming rights require ads, live and linear programming and special events, promotional messages about Disney bundles, and branded content and sponsorships. The terms took effect on 27 January 2025 and apply to existing ad-free subscribers, who are bound unless they cancel. The wiki page carries its own banner saying it reads as original research and needs sourcing.
+
+*** Take
+Two things are true. semiquaver is right that the substance is mostly live sports licensing plus Disney advertising Disney to itself, and the title oversells it against terms that are 20 months old. The clause still worth keeping is the framing one: ad-free is 'generally' free of interruptions, 'with certain exceptions that may change from time to time'. No cap, no notice requirement, and you accept the next version by not cancelling. That is the part a paying subscriber cannot check.
+
+*** Comments
+
+**** semiquaver
+Did anyone actually read the linked wiki in full? It's basically saying that if there are embedded ads in certain live content we carry you may see them even on an ad-free plan because we don't have an alternative.
+
+**** lordleft
+Something I really dislike about modern consumer products is that companies simply don't care if their decisions leave their customers embittered and feeling negatively about their decisions.
+
+**** jamesnorden
+They're turning streaming into regular TV again, absolute nonsense.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Disney+：新用户协议允许在所有订阅档位的影片前插播广告
+***** TLDR
+consumerrights.wiki 的一个页面，针对 Disney+ 用户协议第 2(k) 条。该条款称，标注为“无广告”的档位通常没有广告插播，但存在若干例外，且例外可能随时变化。列出的例外包括：流媒体版权要求插播广告的内容、直播与线性编排节目及特别活动、关于迪士尼套餐的推广信息，以及品牌内容与赞助。条款于 2025 年 1 月 27 日生效，并适用于已有的无广告订阅用户，除非取消订阅，否则视为接受。该 wiki 页面自己挂着提示横幅，称内容偏向原创研究、需要补充来源。
+***** Take
+两件事同时成立。semiquaver 说得对，实质内容大多是直播体育的版权限制，加上迪士尼向自己的用户推销迪士尼，标题相对这份已有 20 个月的条款夸大了。真正值得留意的仍是那句定调的表述：无广告档位“通常”没有插播，“存在若干例外，且例外可能随时变化”。没有上限，没有通知义务，你不取消就等于接受下一个版本。这才是付费用户无从核查的部分。
+***** Comments
+- 有人完整读过那个 wiki 吗？它基本上是在说：我们提供的某些直播内容里嵌了广告，因为没有替代方案，所以即使你买的是无广告档位也可能看到。
+- 现代消费产品里我很反感的一点是，公司根本不在乎自己的决定是否让客户心生怨气、印象变差。
+- 他们又把流媒体变回普通电视了，荒唐透顶。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Disney+: 新しい利用規約は全プランで映画前の広告を認める
+***** TLDR
+Disney+利用規約の第2(k)条を扱うconsumerrights.wikiのページ。同条は、広告なしと説明されるプランは一般に広告による中断がないとしつつ、一定の例外があり、その例外は随時変わりうると述べている。挙げられている例外は、配信権の都合で広告が必要なコンテンツ、ライブおよび編成番組と特別イベント、ディズニーのバンドルに関する告知、ブランドコンテンツとスポンサー枠。規約は2025年1月27日に発効し、既存の広告なしプラン契約者にも適用され、解約しない限り拘束される。このwikiページ自体に、独自研究に見えるので出典が必要だという警告バナーが付いている。
+***** Take
+二つのことが同時に正しい。semiquaverの指摘どおり、中身の大半はライブスポーツのライセンスと、ディズニーがディズニーを宣伝する話であり、20か月前の規約に対して見出しは大げさだ。それでも押さえるべきは枠組みの文言だ。広告なしプランは「一般に」中断がなく、「一定の例外があり、それは随時変わりうる」。上限も通知義務もなく、解約しなければ次の版に同意したことになる。有料契約者が検証できないのはまさにそこだ。
+***** Comments
+- あのwikiを最後まで読んだ人はいるのか。要するに、うちが配信する一部のライブ番組には広告が埋め込まれていて代替手段がないので、広告なしプランでも表示されることがある、と言っているだけだ。
+- 現代の消費者向け製品で本当に嫌なのは、自社の判断が顧客を不快にさせても企業が気にしないことだ。
+- ストリーミングをまた普通のテレビに戻している。まったくばかげている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+디즈니+: 새 이용약관이 모든 구독 등급에서 영화 전 광고를 허용한다
+***** TLDR
+디즈니+ 이용약관 2(k)조를 다룬 consumerrights.wiki 문서다. 해당 조항은 광고 없음으로 표시된 등급이 일반적으로 광고 중단이 없다고 하면서, 일정한 예외가 있고 그 예외는 수시로 바뀔 수 있다고 적는다. 열거된 예외는 스트리밍 권리상 광고가 필요한 콘텐츠, 라이브와 편성 방송 및 특별 행사, 디즈니 번들 홍보 메시지, 브랜드 콘텐츠와 협찬이다. 약관은 2025년 1월 27일에 발효됐고 기존 광고 없음 구독자에게도 적용되며, 해지하지 않으면 구속된다. 이 위키 문서에는 자체 독자 연구로 보이니 출처가 필요하다는 경고 배너가 붙어 있다.
+***** Take
+두 가지가 동시에 참이다. semiquaver 말대로 내용의 대부분은 라이브 스포츠 라이선스와 디즈니가 디즈니를 광고하는 일이고, 20개월 된 약관을 두고 제목이 과장한 것도 맞다. 그래도 남겨둘 문장은 틀을 정하는 쪽이다. 광고 없음 등급은 '일반적으로' 중단이 없고 '일정한 예외가 있으며 그 예외는 수시로 바뀔 수 있다'. 상한도 없고 고지 의무도 없으며, 해지하지 않으면 다음 판본에 동의한 것이 된다. 돈 내는 구독자가 확인할 수 없는 부분이 바로 그것이다.
+***** Comments
+- 그 위키를 끝까지 읽은 사람이 있나. 요지는 우리가 제공하는 일부 라이브 콘텐츠에 광고가 박혀 있고 대안이 없어서 광고 없음 요금제에서도 보일 수 있다는 말이다.
+- 요즘 소비자 제품에서 정말 싫은 점은, 자기 결정이 고객을 씁쓸하게 만들어도 기업이 전혀 개의치 않는다는 것이다.
+- 스트리밍을 다시 일반 TV로 되돌리고 있다. 말도 안 된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Disney+: el nuevo acuerdo de usuario permite anuncios antes de las películas en todas las suscripciones
+***** TLDR
+Una página de consumerrights.wiki sobre la sección 2(k) del acuerdo de suscripción de Disney+, que dice que los planes descritos como 'sin anuncios' están en general libres de interrupciones comerciales, con ciertas excepciones que pueden cambiar de vez en cuando. Las excepciones enumeradas son contenidos cuyos derechos de emisión exigen anuncios, programación en directo y lineal y eventos especiales, mensajes promocionales sobre los paquetes de Disney, y contenido de marca y patrocinios. Los términos entraron en vigor el 27 de enero de 2025 y se aplican a los suscriptores sin anuncios ya existentes, que quedan vinculados salvo que cancelen. La propia página lleva un aviso de que parece investigación original y necesita fuentes.
+***** Take
+Dos cosas son ciertas a la vez. semiquaver acierta en que el fondo son sobre todo licencias de deporte en directo y Disney anunciándose a sí misma, y el titular exagera frente a unos términos que tienen 20 meses. La cláusula que sí conviene guardar es la que marca el marco: sin anuncios significa 'en general' sin interrupciones, 'con ciertas excepciones que pueden cambiar de vez en cuando'. Sin límite, sin obligación de avisar, y aceptas la siguiente versión por no cancelar. Esa es la parte que un suscriptor de pago no puede verificar.
+***** Comments
+- ¿Alguien ha leído el wiki entero? Básicamente dice que si hay anuncios incrustados en ciertos contenidos en directo que emitimos, puede que los veas incluso en un plan sin anuncios porque no tenemos alternativa.
+- Algo que detesto de los productos de consumo actuales es que a las empresas sencillamente les da igual que sus decisiones dejen a sus clientes resentidos.
+- Están convirtiendo el streaming otra vez en televisión normal, es un disparate.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Disney+: Neue Nutzungsbedingungen erlauben Werbung vor Filmen in allen Abos
+***** TLDR
+Eine Seite auf consumerrights.wiki zu Abschnitt 2(k) der Disney+-Abobedingungen. Dort heißt es, als werbefrei bezeichnete Stufen seien generell frei von Werbeunterbrechungen, mit bestimmten Ausnahmen, die sich von Zeit zu Zeit ändern können. Genannt werden Inhalte, deren Streamingrechte Werbung erfordern, Live- und lineare Programme sowie Sonderereignisse, Hinweise auf Disney-Bundles sowie Markeninhalte und Sponsoring. Die Bedingungen gelten seit dem 27. Januar 2025 und erfassen auch bestehende werbefreie Abonnenten, die daran gebunden sind, sofern sie nicht kündigen. Die Wiki-Seite trägt selbst einen Hinweis, sie wirke wie eigene Recherche und brauche Belege.
+***** Take
+Zwei Dinge stimmen gleichzeitig. semiquaver hat recht, dass es der Sache nach vor allem um Lizenzen für Livesport geht und darum, dass Disney für Disney wirbt, und die Überschrift übertreibt bei Bedingungen, die 20 Monate alt sind. Die Klausel, die man sich merken sollte, ist die rahmensetzende: werbefrei heißt 'generell' ohne Unterbrechungen, 'mit bestimmten Ausnahmen, die sich von Zeit zu Zeit ändern können'. Keine Obergrenze, keine Hinweispflicht, und wer nicht kündigt, akzeptiert die nächste Fassung. Genau das kann ein zahlender Abonnent nicht überprüfen.
+***** Comments
+- Hat das Wiki überhaupt jemand ganz gelesen? Im Kern steht da, dass bei bestimmten Live-Inhalten eingebettete Werbung auch im werbefreien Tarif zu sehen sein kann, weil es keine Alternative gibt.
+- Was ich an modernen Konsumprodukten wirklich nicht mag: Unternehmen ist es schlicht egal, ob ihre Entscheidungen Kunden verbittert zurücklassen.
+- Sie machen aus Streaming wieder normales Fernsehen, absoluter Unsinn.
