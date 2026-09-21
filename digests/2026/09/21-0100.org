@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-09-21 01:00 UTC
+#+DATE: 2026-09-21T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+OpenAI ships an adtech pixel, Warren moves to ban private equity from owning doctors, Samsung doubles HBM4, Sherline shuts its lathes off, and model weights go on BitTorrent
+
+* Highlights
+- ChatGPT sets a cross-site __obi cookie and reads it back from Chewy, Wayfair and Coursera
+- Stop Corporate Takeovers of Physicians Act: the treble-damages private right of action is the teeth
+- Samsung's HBM4 family goes from 40% to 80% of output, and glass carrier orders jump 2.5x
+- Sherline ends US production on October 31 after 30 years of a nearly unchanged catalogue
+- Pirate Face torrents Hugging Face weights with web seeds and SHA-256 checksums, Apache-2.0 and MIT only
+
+* Stories
+
+** ChatGPT now knows what you do on other websites via ad collector :privacy:adtech:openai:tracking:
+:PROPERTIES:
+:ID:       49776729
+:URL:      https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/
+:HN_URL:   https://news.ycombinator.com/item?id=49776729
+:POINTS:   571
+:COMMENTS: 308
+:BY:       lmbbuchodi
+:END:
+
+*** TLDR
+OpenAI has deployed a cross-site tracking pixel. ChatGPT mints a signed JWT binding a random identifier called obi to your account and sends it to bzr.openai.com, which sets an __obi cookie scoped to .openai.com with SameSite=none, Secure and a one-year Max-Age. Advertiser sites embed OpenAI's measurement pixel, served from bzrcdn.openai.com, which transmits __obi back on every visit. The author observed it live on 12 or more commercial sites including Chewy, Wayfair and Coursera, carrying hashed email, phone and names, unhashed country, region, city and postal code, and full page origins and paths, including pages about medical conditions, debt solutions and litigation forms. Identity fields are scraped from forms, page text and tag-manager data layers. OpenAI support acknowledged a September 14 inquiry but did not say whether users who decline marketing consent still receive the cookie.
+
+*** Take
+The mechanism is the same pixel-and-third-party-cookie stack ad networks have run for fifteen years. Nothing here is novel engineering. What is new is the input side. A search engine sees what you typed; ChatGPT sees what you typed plus every piece of context you volunteered around it, and joining that to a retail browsing profile is a product decision, not an accident of the web platform. The unanswered consent question is the part worth pressing on: if declining marketing consent does not stop the cookie being set, the consent UI is decoration.
+
+*** Comments
+
+**** jhhh
+Part of the reason I stopped using Facebook is that it was creepy how it showed me ads for things I had searched for on other sites. I even keep Facebook in its own container and it still knew the exact clothing brands and trips I was looking at.
+
+**** thih9
+I am once again happy that the EU is fighting practices like these via legislation. Some outcomes can be annoying, but the net result is still positive for consumers and their data privacy.
+
+**** mavsman
+This quote sums it up: the mechanism is standard adtech, what has no precedent is running it on an AI chat product. I have known about this mechanism for a long time and I still feel icky re-reading the details.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ChatGPT 通过广告采集器掌握你在其他网站上的行为
+***** TLDR
+OpenAI 部署了跨站追踪像素。ChatGPT 生成一个签名 JWT，把名为 obi 的随机标识符绑定到你的账号，发送到 bzr.openai.com，后者种下作用域为 .openai.com 的 __obi cookie，带 SameSite=none、Secure 和一年的 Max-Age。广告主网站嵌入 OpenAI 的测量像素（由 bzrcdn.openai.com 提供），每次访问都会把 __obi 回传给 OpenAI。作者在 Chewy、Wayfair、Coursera 等 12 个以上商业网站上实地观察到这一行为，传输内容包括哈希后的邮箱、电话和姓名，未加密的国家、地区、城市和邮编，以及完整的页面来源和路径，其中包含涉及疾病、债务方案和诉讼表单的页面。身份字段来自表单、页面文本和标签管理器的数据层。OpenAI 客服确认收到 9 月 14 日的询问，但没有回答拒绝营销授权的用户是否仍会被种下该 cookie。
+***** Take
+这套机制就是广告网络用了十五年的像素加第三方 cookie，技术上毫无新意。新的是输入端。搜索引擎只看到你输入的查询，ChatGPT 看到的是你输入的内容加上你主动交代的全部上下文，把它和零售浏览画像拼起来是产品决策，不是网页平台的意外。真正该追问的是那个没被回答的授权问题：如果拒绝营销授权也照样种 cookie，那个同意界面就只是装饰。
+***** Comments
+- 我不再用 Facebook，部分原因是它会展示我在别的网站搜过的东西，实在瘆人。我甚至把 Facebook 放在独立容器里，它照样知道我看过哪些服装品牌和旅行。
+- 我再次庆幸欧盟在用立法对抗这类做法。有些结果确实烦人，但对消费者和他们的数据隐私来说，净效果仍然是正面的。
+- 这句话总结得很到位：机制是标准广告技术，前所未见的是把它跑在 AI 聊天产品上。我早就知道这套机制，重读细节时还是觉得不舒服。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ChatGPTが広告コレクター経由で他サイトでの行動を把握
+***** TLDR
+OpenAIがクロスサイト追跡ピクセルを導入した。ChatGPTはobiという乱数IDをアカウントに紐づけた署名付きJWTを生成しbzr.openai.comへ送信、そこで.openai.comスコープの__obi Cookieが SameSite=none、Secure、有効期間1年で設定される。広告主サイトはbzrcdn.openai.comから配信されるOpenAIの計測ピクセルを埋め込み、訪問のたびに__obiがOpenAIへ送り返される。著者はChewy、Wayfair、Courseraを含む12以上の商用サイトで実際に確認しており、ハッシュ化されたメール・電話番号・氏名、平文の国・地域・都市・郵便番号、そして病名や債務整理、訴訟フォームを含むページのオリジンとパスが送られていた。属性情報はフォーム、ページ本文、タグマネージャのデータレイヤーから収集される。OpenAIサポートは9月14日の問い合わせを受領したが、マーケティング同意を拒否したユーザーにもCookieが設定されるのかには答えなかった。
+***** Take
+仕組み自体は広告ネットワークが15年使ってきたピクセルとサードパーティCookieそのもので、技術的な新規性はない。新しいのは入力側だ。検索エンジンが見るのは入力したクエリだけだが、ChatGPTは入力内容に加えて、その周辺で自ら差し出した文脈まで見ている。それを小売の閲覧プロファイルと結合するのはウェブの事故ではなく製品判断だ。追及すべきは答えのない同意の論点で、同意を拒否してもCookieが設定されるなら、その同意画面は飾りにすぎない。
+***** Comments
+- Facebookをやめた理由のひとつは、他サイトで検索した商品の広告が出てくる不気味さだった。専用コンテナに隔離してもなお、見ていた服のブランドや旅行先を把握していた。
+- EUがこうした慣行に立法で対抗していることを改めてありがたく思う。面倒な副作用はあるが、消費者とデータプライバシーにとって差し引きではプラスだ。
+- この一文に尽きる。仕組みは標準的な広告技術で、前例がないのはそれをAIチャット製品で動かしている点だ。前から知っていた仕組みだが、細部を読み直すとやはり気持ち悪い。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ChatGPT, 광고 수집기를 통해 다른 사이트에서의 행동까지 파악
+***** TLDR
+OpenAI가 크로스사이트 추적 픽셀을 배포했다. ChatGPT는 obi라는 난수 식별자를 계정에 묶은 서명 JWT를 만들어 bzr.openai.com으로 보내고, 여기서 .openai.com 스코프의 __obi 쿠키가 SameSite=none, Secure, 만료 1년으로 설정된다. 광고주 사이트는 bzrcdn.openai.com에서 제공되는 OpenAI 측정 픽셀을 넣고, 방문할 때마다 __obi가 OpenAI로 되돌아간다. 저자는 Chewy, Wayfair, Coursera를 포함한 12곳 이상의 상업 사이트에서 이를 직접 확인했으며, 해시된 이메일·전화번호·이름, 암호화되지 않은 국가·지역·도시·우편번호, 그리고 질병, 채무 해결, 소송 양식이 포함된 페이지의 출처와 경로가 전송됐다. 신원 정보는 폼, 페이지 텍스트, 태그 매니저 데이터 레이어에서 긁어온다. OpenAI 고객지원은 9월 14일 문의를 접수했다고만 밝혔고, 마케팅 동의를 거부한 사용자에게도 쿠키가 설정되는지에는 답하지 않았다.
+***** Take
+메커니즘은 광고 네트워크가 15년간 써온 픽셀과 서드파티 쿠키 그대로이고 기술적으로 새로운 것은 없다. 새로운 것은 입력이다. 검색 엔진은 당신이 입력한 질의만 보지만 ChatGPT는 입력한 내용에 더해 그 주변에서 스스로 털어놓은 맥락까지 본다. 그것을 소매 브라우징 프로파일과 결합하는 것은 웹 플랫폼의 사고가 아니라 제품 결정이다. 파고들 지점은 답변이 없는 동의 문제다. 마케팅 동의를 거부해도 쿠키가 설정된다면 그 동의 화면은 장식일 뿐이다.
+***** Comments
+- 페이스북을 끊은 이유 중 하나는 다른 사이트에서 검색한 물건 광고가 뜨는 게 소름 돋았기 때문이다. 별도 컨테이너에 격리해도 내가 본 의류 브랜드와 여행지를 알고 있었다.
+- EU가 이런 관행을 입법으로 막고 있다는 점이 다시 한번 반갑다. 불편한 결과도 있지만 소비자와 데이터 프라이버시 관점에서 순효과는 여전히 긍정적이다.
+- 이 문장이 전부다. 메커니즘은 표준 광고 기술이고, 전례가 없는 것은 그것을 AI 챗 제품에서 돌린다는 점이다. 오래전부터 알던 방식인데도 세부를 다시 읽으면 불쾌하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ChatGPT ya sabe qué haces en otros sitios web mediante un recolector publicitario
+***** TLDR
+OpenAI ha desplegado un píxel de rastreo entre sitios. ChatGPT genera un JWT firmado que vincula un identificador aleatorio llamado obi a tu cuenta y lo envía a bzr.openai.com, que instala una cookie __obi con ámbito .openai.com, SameSite=none, Secure y un Max-Age de un año. Los sitios de anunciantes incrustan el píxel de medición de OpenAI, servido desde bzrcdn.openai.com, que devuelve __obi en cada visita. El autor lo observó en más de 12 sitios comerciales, entre ellos Chewy, Wayfair y Coursera, transmitiendo correo, teléfono y nombres en forma de hash, país, región, ciudad y código postal sin cifrar, y los orígenes y rutas completas de las páginas, incluidas páginas sobre enfermedades, soluciones de deuda y formularios de litigios. Los datos de identidad se extraen de formularios, del texto de la página y de las capas de datos del gestor de etiquetas. El soporte de OpenAI acusó recibo de una consulta del 14 de septiembre pero no respondió si los usuarios que rechazan el consentimiento de marketing reciben igualmente la cookie.
+***** Take
+El mecanismo es el mismo conjunto de píxel y cookie de terceros que las redes publicitarias llevan quince años usando. No hay ninguna novedad técnica. Lo nuevo está en la entrada. Un buscador ve lo que escribiste; ChatGPT ve lo que escribiste más todo el contexto que ofreciste alrededor, y unir eso a un perfil de navegación comercial es una decisión de producto, no un accidente de la web. Lo que conviene exigir es la respuesta que falta sobre el consentimiento: si rechazarlo no impide que se instale la cookie, la pantalla de consentimiento es decorativa.
+***** Comments
+- Dejé Facebook en parte porque resultaba inquietante que me mostrara anuncios de cosas que había buscado en otros sitios. Incluso con Facebook en su propio contenedor, seguía sabiendo qué marcas de ropa y qué viajes estaba mirando.
+- Me alegro una vez más de que la UE combata estas prácticas por vía legislativa. Algunos efectos son molestos, pero el balance sigue siendo positivo para los consumidores y su privacidad.
+- Esta frase lo resume: el mecanismo es publicidad estándar, lo que no tiene precedente es ejecutarlo sobre un producto de chat con IA. Conozco el mecanismo desde hace tiempo y releer los detalles sigue dándome mala espina.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ChatGPT weiß über einen Werbe-Collector, was du auf anderen Websites tust
+***** TLDR
+OpenAI hat ein seitenübergreifendes Tracking-Pixel ausgerollt. ChatGPT erzeugt ein signiertes JWT, das eine Zufallskennung namens obi an das Konto bindet, und schickt es an bzr.openai.com, das ein __obi-Cookie mit Scope .openai.com, SameSite=none, Secure und einem Jahr Max-Age setzt. Werbetreibende Websites binden das über bzrcdn.openai.com ausgelieferte Messpixel ein, das __obi bei jedem Besuch zurücksendet. Der Autor beobachtete das auf mehr als zwölf kommerziellen Seiten, darunter Chewy, Wayfair und Coursera, übertragen wurden gehashte E-Mail, Telefonnummer und Namen, unverschlüsselt Land, Region, Stadt und Postleitzahl sowie vollständige Seitenherkunft und Pfade, einschließlich Seiten zu Krankheiten, Schuldenregulierung und Klageformularen. Identitätsfelder werden aus Formularen, Seitentext und Tag-Manager-Datenschichten abgegriffen. Der Support von OpenAI bestätigte eine Anfrage vom 14. September, beantwortete aber nicht, ob Nutzer ohne Marketing-Einwilligung das Cookie trotzdem erhalten.
+***** Take
+Der Mechanismus ist genau der Pixel-plus-Drittanbieter-Cookie-Stack, den Werbenetzwerke seit fünfzehn Jahren betreiben. Technisch ist daran nichts neu. Neu ist die Eingabeseite. Eine Suchmaschine sieht, was man eingetippt hat; ChatGPT sieht das plus den gesamten Kontext, den man freiwillig dazugeliefert hat, und dessen Verknüpfung mit einem Shopping-Profil ist eine Produktentscheidung, kein Unfall der Webplattform. Nachhaken sollte man bei der offenen Einwilligungsfrage: Wird das Cookie auch dann gesetzt, wenn die Marketing-Einwilligung verweigert wird, ist die Einwilligungsoberfläche reine Dekoration.
+***** Comments
+- Ich habe Facebook unter anderem deshalb aufgegeben, weil es unheimlich war, Werbung für Dinge zu sehen, die ich auf anderen Seiten gesucht hatte. Selbst mit Facebook in einem eigenen Container wusste es, welche Kleidungsmarken und Reisen ich angesehen hatte.
+- Ich bin wieder einmal froh, dass die EU solche Praktiken gesetzlich bekämpft. Manche Folgen nerven, unterm Strich ist das Ergebnis für Verbraucher und ihren Datenschutz aber positiv.
+- Dieses Zitat bringt es auf den Punkt: Der Mechanismus ist Standard-Adtech, beispiellos ist, ihn auf einem KI-Chatprodukt laufen zu lassen. Ich kenne den Mechanismus seit Langem, und die Details zu lesen fühlt sich trotzdem unangenehm an.
+** Samsung is expected to more than double output of its HBM4 and HBM4E DRAM :semiconductors:memory:samsung:ai-hardware:
+:PROPERTIES:
+:ID:       49778029
+:URL:      https://en.sedaily.com/finance/2026/09/20/samsung-to-double-hbm4-output-next-year-sources-say
+:HN_URL:   https://news.ycombinator.com/item?id=49778029
+:POINTS:   337
+:COMMENTS: 217
+:BY:       giuliomagnifico
+:END:
+
+*** TLDR
+Seoul Economic Daily reports, citing unnamed sources, that Samsung will more than double HBM4-family output next year. Industry HBM production is projected to grow roughly 40% to about 250,000 wafers a month in 2027, up from around 180,000 this year, with the HBM4 family rising from about 40% of output today to roughly 80%, as HBM4E mass production ramps. Both sixth-generation HBM4 and seventh-generation HBM4E target 12-layer and higher stacks. Samsung began mass-production HBM4 shipments in February 2026 and supplied 12-layer HBM4E samples to Nvidia in May. Demand for glass carriers, the material used in wafer thinning, is expected to rise 2.5x to 50,000 sheets a month from 20,000. The report gives no pricing, qualification results or comparison against SK Hynix and Micron.
+
+*** Take
+The wafer count is the headline number and the glass carrier number is the real one. Wafer thinning is the step that gates 12-high and 16-high stacks, and ordering 2.5x the carriers is a harder commitment than announcing a capacity target to a newspaper's unnamed sources. The thread found the more consequential corollary on its own: if HBM supply, not lithography, is what actually caps Chinese accelerator production, then DRAM stacking and packaging capacity has become export-control-relevant in the same way EUV machines already are, and nothing about that is priced into these numbers.
+
+*** Comments
+
+**** HarHarVeryFunny
+The real bottleneck for Chinese production of AI accelerators is reportedly HBM production, not processors or ASML equipment. Lacking EUV hurts and pushing DUV that hard gives abysmal yields, but you can compensate by running more wafers or making smaller chips.
+
+**** y1n0
+I have often wondered about die thinning. Looking at SD and microSD cards it was clear there had to be a thinning step, and it seemed amazing that such a complex step could be economically viable. It is not a step I see discussed much.
+
+**** fooker
+What is the main blocker, other than the current inflated cost, for using HBM instead of DRAM as the primary memory for consumer electronics?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+三星预计将 HBM4 与 HBM4E DRAM 产量提高一倍以上
+***** TLDR
+《首尔经济日报》援引未具名消息源报道，三星明年将把 HBM4 系列产量提高一倍以上。业界 HBM 产量预计增长约 40%，从今年的每月约 18 万片晶圆增至 2027 年的约 25 万片，HBM4 系列占比将从目前约 40% 升至约 80%，因为 HBM4E 量产正在爬坡。第六代 HBM4 和第七代 HBM4E 都瞄准 12 层及以上堆叠。三星已于 2026 年 2 月开始 HBM4 量产出货，并在 5 月向英伟达提供 12 层 HBM4E 样品。用于晶圆减薄的玻璃载板需求预计增长 2.5 倍，从每月 2 万片增至 5 万片。报道未给出价格、认证结果，也未与 SK 海力士和美光做比较。
+***** Take
+晶圆数量是标题数字，玻璃载板数量才是真正的信号。晶圆减薄是卡住 12 层和 16 层堆叠的工序，订下 2.5 倍的载板比向报纸的匿名消息源宣布产能目标要硬得多。讨论区自己找到了更重要的推论：如果真正限制中国加速器产量的是 HBM 供应而不是光刻，那么 DRAM 堆叠与封装产能就已经和 EUV 设备一样成了出口管制的对象，而这些数字里完全没有反映这一点。
+***** Comments
+- 据说中国 AI 加速器生产的真正瓶颈是 HBM 产能，而不是处理器或 ASML 设备。缺少 EUV 确实伤害很大，把 DUV 逼到极限良率惨不忍睹，但可以靠多跑晶圆或做更小的芯片来弥补。
+- 我一直很好奇晶圆减薄。看 SD 卡和 microSD 卡就知道必然有减薄工序，这么复杂的步骤居然能在经济上成立，让我很惊讶。这道工序平时很少被讨论。
+- 除了目前虚高的成本之外，消费电子用 HBM 取代 DRAM 作主存的主要障碍究竟是什么？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+サムスン、HBM4とHBM4E DRAMの生産量を倍以上に増やす見通し
+***** TLDR
+ソウル経済日報が匿名筋の話として、サムスンが来年HBM4系列の生産量を倍以上に引き上げると報じた。業界全体のHBM生産は約40%増え、今年の月産約18万枚から2027年には約25万枚のウエハーになる見込みで、HBM4E量産の立ち上がりに伴いHBM4系列の比率は現在の約40%から約80%へ上がる。第6世代HBM4も第7世代HBM4Eも12層以上の積層が対象だ。サムスンは2026年2月にHBM4の量産出荷を開始し、5月には12層HBM4Eのサンプルをエヌビディアに供給した。ウエハー薄化に使うガラスキャリアの需要は月2万枚から5万枚へ2.5倍になる見込み。価格、認定結果、SKハイニックスやマイクロンとの比較は報じられていない。
+***** Take
+見出しになるのはウエハー枚数だが、本当の指標はガラスキャリアの数だ。ウエハー薄化は12段・16段積層の律速工程であり、キャリアを2.5倍発注することは、匿名筋を通じて新聞に能力目標を語るよりはるかに重い約束だ。スレッドはより重要な帰結を自力で見つけている。中国製アクセラレータの生産を実際に縛っているのが露光ではなくHBM供給なら、DRAMの積層・パッケージング能力はすでにEUV装置と同じ意味で輸出管理の対象であり、この数字にはそれが一切織り込まれていない。
+***** Comments
+- 中国のAIアクセラレータ生産の真のボトルネックは、プロセッサでもASML装置でもなくHBM生産だという話を読んだ。EUVがないのは確かに痛く、DUVを無理に使えば歩留まりは悲惨だが、ウエハーを多く流すかダイを小さくすれば補える。
+- ダイの薄化はずっと気になっていた。SDカードやmicroSDを見れば薄化工程があるのは明らかで、これほど複雑な工程が経済的に成立するのは驚きだ。あまり議論されない工程でもある。
+- 現状の割高なコストを別にすると、民生機器でDRAMの代わりにHBMを主記憶に使う際の主な障害は何なのだろう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+삼성, HBM4·HBM4E D램 생산량 두 배 이상 확대 전망
+***** TLDR
+서울경제신문이 익명의 소식통을 인용해 삼성이 내년 HBM4 계열 생산량을 두 배 이상 늘린다고 보도했다. 업계 HBM 생산은 약 40% 늘어 올해 월 18만 장 수준에서 2027년 약 25만 장 웨이퍼가 될 전망이며, HBM4E 양산이 본격화하면서 HBM4 계열 비중은 현재 약 40%에서 약 80%로 높아진다. 6세대 HBM4와 7세대 HBM4E 모두 12단 이상 적층을 겨냥한다. 삼성은 2026년 2월 HBM4 양산 출하를 시작했고 5월에는 12단 HBM4E 샘플을 엔비디아에 공급했다. 웨이퍼 박형화에 쓰이는 유리 캐리어 수요는 월 2만 장에서 5만 장으로 2.5배 늘어날 것으로 예상된다. 가격, 퀄 결과, SK하이닉스·마이크론과의 비교는 없다.
+***** Take
+웨이퍼 수량이 헤드라인 숫자라면 유리 캐리어 수량이 진짜 숫자다. 웨이퍼 박형화는 12단·16단 적층을 가로막는 공정이고, 캐리어를 2.5배 주문하는 것은 익명 소식통을 통해 신문에 생산능력 목표를 밝히는 것보다 훨씬 무거운 약속이다. 스레드는 더 중요한 함의를 스스로 찾아냈다. 중국 가속기 생산을 실제로 제약하는 것이 노광이 아니라 HBM 공급이라면, D램 적층과 패키징 능력은 이미 EUV 장비와 같은 의미의 수출 통제 대상이며 이 숫자들에는 그것이 전혀 반영돼 있지 않다.
+***** Comments
+- 중국 AI 가속기 생산의 진짜 병목은 프로세서나 ASML 장비가 아니라 HBM 생산이라고 한다. EUV가 없는 것은 분명 타격이고 DUV를 무리하게 밀면 수율이 처참하지만, 웨이퍼를 더 돌리거나 다이를 작게 만들어 보완할 수 있다.
+- 다이 박형화가 늘 궁금했다. SD카드와 마이크로SD를 보면 박형화 공정이 있을 수밖에 없는데, 그렇게 복잡한 공정이 경제성이 있다는 게 놀라웠다. 평소 잘 논의되지 않는 공정이다.
+- 지금의 부풀려진 비용을 빼면, 소비자 기기에서 D램 대신 HBM을 주메모리로 쓰는 데 가장 큰 걸림돌은 무엇인가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Se espera que Samsung más que duplique la producción de sus DRAM HBM4 y HBM4E
+***** TLDR
+Seoul Economic Daily informa, citando fuentes no identificadas, que Samsung más que duplicará la producción de la familia HBM4 el año que viene. Se prevé que la producción del sector crezca alrededor de un 40% hasta unas 250.000 obleas mensuales en 2027, frente a unas 180.000 este año, y que la familia HBM4 pase de cerca del 40% de la producción actual a en torno al 80% a medida que se acelera la fabricación en serie de HBM4E. Tanto el HBM4 de sexta generación como el HBM4E de séptima apuntan a apilados de 12 capas o más. Samsung inició los envíos de producción en serie de HBM4 en febrero de 2026 y entregó muestras de HBM4E de 12 capas a Nvidia en mayo. La demanda de portadores de vidrio, material clave en el adelgazamiento de obleas, subiría 2,5 veces hasta 50.000 láminas al mes desde 20.000. No hay datos de precios, resultados de cualificación ni comparación con SK Hynix y Micron.
+***** Take
+El recuento de obleas es la cifra del titular; la de portadores de vidrio es la que importa. El adelgazamiento de obleas es el paso que limita los apilados de 12 y 16 capas, y encargar 2,5 veces más portadores es un compromiso mucho más firme que anunciar un objetivo de capacidad a las fuentes anónimas de un periódico. El hilo dio con el corolario más relevante por su cuenta: si lo que realmente limita la producción china de aceleradores es el suministro de HBM y no la litografía, entonces la capacidad de apilado y encapsulado de DRAM ya es material de control de exportaciones igual que las máquinas EUV, y nada de eso está reflejado en estas cifras.
+***** Comments
+- Al parecer el verdadero cuello de botella para la producción china de aceleradores de IA es la fabricación de HBM, no los procesadores ni los equipos de ASML. No tener EUV duele y forzar tanto el DUV da rendimientos pésimos, pero se compensa procesando más obleas o haciendo chips más pequeños.
+- Siempre me he preguntado por el adelgazamiento de obleas. Viendo las tarjetas SD y microSD estaba claro que tenía que haber un paso de adelgazado, y me resultaba asombroso que algo tan complejo fuera viable económicamente. Es un paso del que apenas se habla.
+- Aparte del coste inflado actual, ¿cuál es el principal impedimento para usar HBM en vez de DRAM como memoria principal en electrónica de consumo?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Samsung dürfte die Produktion seiner HBM4- und HBM4E-DRAMs mehr als verdoppeln
+***** TLDR
+Seoul Economic Daily berichtet unter Berufung auf ungenannte Quellen, dass Samsung die Ausbringung der HBM4-Familie im kommenden Jahr mehr als verdoppeln wird. Die HBM-Produktion der Branche soll um rund 40% auf etwa 250.000 Wafer pro Monat im Jahr 2027 wachsen, nach rund 180.000 in diesem Jahr, wobei der Anteil der HBM4-Familie von etwa 40% auf rund 80% steigt, während die HBM4E-Serienfertigung hochläuft. Sowohl HBM4 der sechsten als auch HBM4E der siebten Generation zielen auf Stapel mit zwölf und mehr Lagen. Samsung begann im Februar 2026 mit Serienlieferungen von HBM4 und lieferte im Mai 12-Lagen-HBM4E-Muster an Nvidia. Die Nachfrage nach Glasträgern, dem Material für das Waferdünnen, soll sich auf 50.000 Blatt pro Monat von 20.000 mehr als verdoppeln. Preise, Qualifizierungsergebnisse oder ein Vergleich mit SK Hynix und Micron fehlen.
+***** Take
+Die Waferzahl ist die Schlagzeile, die Glasträgerzahl die eigentliche Information. Das Waferdünnen ist der Schritt, der 12- und 16-Lagen-Stapel begrenzt, und 2,5-mal so viele Träger zu bestellen ist eine deutlich härtere Festlegung als ein Kapazitätsziel gegenüber den anonymen Quellen einer Zeitung. Der Thread fand die wichtigere Folgerung von selbst: Wenn tatsächlich die HBM-Versorgung und nicht die Lithografie die chinesische Beschleunigerproduktion deckelt, dann ist DRAM-Stapel- und Packaging-Kapazität längst exportkontrollrelevant wie EUV-Maschinen, und davon steckt in diesen Zahlen nichts.
+***** Comments
+- Der eigentliche Engpass für die chinesische Produktion von KI-Beschleunigern soll die HBM-Fertigung sein, nicht Prozessoren oder ASML-Anlagen. Fehlendes EUV tut weh, und DUV so hart zu treiben liefert miserable Ausbeuten, aber man kann mit mehr Wafern oder kleineren Chips gegensteuern.
+- Über das Dünnen der Dies habe ich mich oft gewundert. An SD- und microSD-Karten war klar, dass es einen Dünnungsschritt geben muss, und dass ein so komplexer Schritt wirtschaftlich tragfähig ist, fand ich erstaunlich. Darüber wird selten gesprochen.
+- Was ist außer den derzeit überhöhten Kosten das Haupthindernis, in Consumer-Elektronik HBM statt DRAM als Hauptspeicher zu verwenden?
+** Bill to Ban Private Equity from Owning Medical Practices :healthcare:policy:private-equity:regulation:
+:PROPERTIES:
+:ID:       49780630
+:URL:      https://truthout.org/articles/warren-introduces-bill-to-ban-private-equity-from-owning-medical-practices/
+:HN_URL:   https://news.ycombinator.com/item?id=49780630
+:POINTS:   185
+:COMMENTS: 121
+:BY:       paimapi
+:END:
+
+*** TLDR
+Senator Elizabeth Warren has introduced the Stop Corporate Takeovers of Physicians Act, backed by twelve other members of the Senate and House. It would bar for-profit entities, including private equity funds and insurers, from owning medical practices, and would also block management services organizations from controlling them. Enforcement runs through three channels: the FTC, state attorneys general, and physicians themselves via private lawsuits carrying treble damages. The article cites 82% of physicians now employed by corporate entities, up from 62% in 2019, and private equity investment in healthcare rising from $5 billion in 2000 to $104 billion in 2024, plus research linking private equity ownership to worse patient outcomes and higher costs. It points to Oregon's 2026 law, which physicians in Eugene used to stop a corporate takeover.
+
+*** Take
+The ownership ban is the headline and the private right of action with treble damages is the mechanism. Most states already have corporate practice of medicine doctrines, and the management services organization was invented precisely to route around them: the PE fund owns the MSO, the MSO owns everything except the medical license, and a physician figurehead signs the charts. A ban written against owners gets re-papered within a quarter. Letting doctors sue their own MSO for triple damages is expensive to design around, which is also why this bill's hardest sell in Congress is not healthcare policy but handing a professional class a new litigation weapon.
+
+*** Comments
+
+**** elliotto
+Australia is on its way down this path after Brookfield and Healthscope held a private hospital hostage against the government, with performance degraded to the point that a child died. Hopefully we keep burning off the rot.
+
+**** NegativeK
+Can someone steelman private equity, please? I am honestly looking for the upsides for non-investors when PE moves into an industry like medicine and buys up businesses that traditionally are not large chains. I already hear the downsides from someone whose work is directly affected.
+
+**** djfobbz
+They will still manage to figure out some loophole to do it anyway. PE really is cancer to most industries.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+参议员提出法案，禁止私募股权持有医疗执业机构
+***** TLDR
+参议员伊丽莎白·沃伦提出《阻止医生被企业接管法案》，获得参众两院另外十二名议员支持。法案将禁止包括私募股权基金和保险公司在内的营利性实体拥有医疗执业机构，同时禁止管理服务组织（MSO）对其实施控制。执法通过三条路径：联邦贸易委员会、各州总检察长，以及医生本人提起可获三倍赔偿的私人诉讼。文章引用的数据包括：目前 82% 的医生受雇于企业实体，2019 年这一比例为 62%；私募股权在医疗领域的投资从 2000 年的 50 亿美元增至 2024 年的 1040 亿美元；并有研究显示私募股权持股与更差的患者结果和更高成本相关。文章还提到俄勒冈州 2026 年的法律，尤金市的医生依据该法阻止了一起企业收购。
+***** Take
+所有权禁令是标题，三倍赔偿的私人诉权才是真正的机制。多数州本来就有「企业不得从事医疗」的原则，而管理服务组织正是为绕开它而发明的：私募基金持有 MSO，MSO 掌控除医师执照之外的一切，由挂名医生在病历上签字。只针对所有者的禁令，一个季度内就能靠重新起草文件规避掉。让医生起诉自己的 MSO 并索取三倍赔偿，才是难以绕开的设计。这也意味着该法案在国会最难推销的部分不是医疗政策，而是把一件新的诉讼武器交到一个职业群体手里。
+***** Comments
+- 澳大利亚正在走上同一条路，Brookfield 和 Healthscope 拿一家私立医院要挟政府，服务水平恶化到有孩子因此死亡。希望我们继续把这些腐烂的部分烧掉。
+- 谁能认真替私募股权辩护一次？当私募进入医疗这类行业、收购传统上并非连锁的机构时，对非投资者究竟有什么好处？坏处我已经从直接受影响的人那里听够了。
+- 他们照样会找到漏洞去做。私募股权对大多数行业来说就是癌症。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+プライベートエクイティによる医療機関保有を禁じる法案
+***** TLDR
+エリザベス・ウォーレン上院議員が「医師の企業買収阻止法案」を提出し、上下両院の他の12名が支持している。プライベートエクイティ(PE)ファンドや保険会社を含む営利企業が医療機関を保有することを禁じ、マネジメント・サービス組織(MSO)による支配も封じる内容だ。執行はFTC、州司法長官、そして医師自身による3倍賠償付きの私訴の3経路。記事は、企業に雇用される医師が2019年の62%から現在82%に増えたこと、医療分野へのPE投資が2000年の50億ドルから2024年の1040億ドルに拡大したこと、PE保有が患者の転帰悪化とコスト増に結びつくとする研究を挙げる。オレゴン州の2026年法を根拠にユージーンの医師たちが企業買収を阻止した事例にも触れている。
+***** Take
+見出しは所有禁止だが、効くのは3倍賠償付きの私的訴権のほうだ。多くの州には既に「企業による医業の禁止」法理があり、MSOはまさにそれを迂回するために発明された。PEがMSOを保有し、MSOが医師免許以外のすべてを握り、名義上の医師がカルテに署名する。所有者だけを名指しした禁止は、四半期のうちに書類を組み替えられて終わる。医師が自分のMSOを3倍賠償で訴えられる仕組みは迂回コストが高い。だからこの法案の議会での最大の難所は医療政策ではなく、ある専門職層に新しい訴訟の武器を渡すことそのものだ。
+***** Comments
+- オーストラリアも同じ道を進んでいる。BrookfieldとHealthscopeが私立病院を人質に政府と交渉し、質の低下で子どもが亡くなった。この腐敗を焼き払う流れが続いてほしい。
+- 誰かプライベートエクイティを本気で擁護してみてくれないか。PEが医療のような業界に入り、もともとチェーンではない事業者を買収するとき、投資家以外にどんな利点があるのか。欠点なら直接影響を受けている人から山ほど聞いている。
+- どうせ抜け穴を見つけてやるだろう。PEは大半の業界にとって癌だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+사모펀드의 의료기관 소유를 금지하는 법안
+***** TLDR
+엘리자베스 워런 상원의원이 상하원 의원 12명의 지지를 받아 '의사 기업 인수 저지법'을 발의했다. 사모펀드와 보험사를 포함한 영리 법인의 의료기관 소유를 금지하고, 경영서비스조직(MSO)이 이를 지배하는 것도 막는다. 집행 경로는 세 가지로 FTC, 주 법무장관, 그리고 3배 배상이 따르는 의사 개인의 민사 소송이다. 기사는 기업에 고용된 의사가 2019년 62%에서 현재 82%로 늘었고, 의료 분야 사모펀드 투자가 2000년 50억 달러에서 2024년 1040억 달러로 커졌으며, 사모펀드 소유가 더 나쁜 환자 결과와 더 높은 비용에 연관된다는 연구를 인용한다. 유진의 의사들이 오리건주 2026년 법을 활용해 기업 인수를 막은 사례도 소개한다.
+***** Take
+소유 금지는 헤드라인이고 3배 배상이 붙은 사적 소권이 실제 장치다. 대부분의 주에는 이미 '기업의 의료행위 금지' 법리가 있고, MSO는 바로 그것을 우회하려고 만들어졌다. 사모펀드가 MSO를 소유하고 MSO가 의사 면허를 제외한 모든 것을 쥐며 명목상의 의사가 차트에 서명한다. 소유자만 겨냥한 금지는 한 분기 안에 서류를 다시 꾸며 무력화된다. 의사가 자기 MSO를 3배 배상으로 제소할 수 있게 하는 쪽이 우회 비용이 높다. 그래서 이 법안이 의회에서 가장 팔기 어려운 부분은 의료 정책이 아니라, 한 전문직 집단에 새로운 소송 무기를 쥐여주는 일이다.
+***** Comments
+- 호주도 같은 길을 가고 있다. Brookfield와 Healthscope가 사립병원을 볼모로 정부와 대치했고, 수준이 떨어져 아이가 사망하는 일까지 있었다. 이 썩은 부분을 계속 걷어내면 좋겠다.
+- 누가 사모펀드를 진지하게 변호해줄 수 있나? 사모펀드가 의료 같은 산업에 들어와 원래 대형 체인이 아니던 사업체들을 사들일 때, 투자자가 아닌 사람들에게는 어떤 이점이 있나. 단점은 직접 영향을 받는 사람에게 충분히 듣고 있다.
+- 어차피 빠져나갈 구멍을 찾아낼 것이다. 사모펀드는 대부분의 산업에 암이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Proyecto de ley para prohibir que el capital privado sea dueño de consultas médicas
+***** TLDR
+La senadora Elizabeth Warren ha presentado la Stop Corporate Takeovers of Physicians Act, respaldada por otros doce miembros del Senado y la Cámara. Prohibiría que entidades con ánimo de lucro, incluidos fondos de capital privado y aseguradoras, sean propietarias de consultas médicas, y también impediría que las organizaciones de servicios de gestión (MSO) las controlen. La aplicación se articula por tres vías: la FTC, los fiscales generales estatales y los propios médicos mediante demandas privadas con daños triplicados. El artículo cita que el 82% de los médicos trabaja hoy para entidades corporativas, frente al 62% en 2019, y que la inversión del capital privado en sanidad pasó de 5.000 millones de dólares en 2000 a 104.000 millones en 2024, además de estudios que vinculan esa propiedad con peores resultados y mayores costes. Menciona la ley de Oregón de 2026, con la que médicos de Eugene frenaron una adquisición corporativa.
+***** Take
+La prohibición de propiedad es el titular; el mecanismo real es la acción privada con daños triplicados. La mayoría de estados ya tienen doctrinas de prohibición del ejercicio corporativo de la medicina, y la MSO se inventó justamente para esquivarlas: el fondo posee la MSO, la MSO controla todo salvo la licencia médica, y un médico figurativo firma las historias clínicas. Una prohibición redactada contra los propietarios se vuelve a documentar en un trimestre. Permitir que los médicos demanden a su propia MSO por el triple es caro de sortear, y por eso lo más difícil de vender en el Congreso no es la política sanitaria sino entregar a un colectivo profesional una nueva arma judicial.
+***** Comments
+- Australia va por ese camino después de que Brookfield y Healthscope mantuvieran secuestrado un hospital privado frente al gobierno, con un deterioro tal que murió un niño. Ojalá sigamos quemando la podredumbre.
+- ¿Alguien puede defender en serio al capital privado? Busco honestamente las ventajas para quienes no son inversores cuando el capital privado entra en un sector como la medicina y compra negocios que tradicionalmente no son grandes cadenas. Los inconvenientes ya los escucho de alguien directamente afectado.
+- Encontrarán igualmente algún resquicio para hacerlo. El capital privado es un cáncer para la mayoría de los sectores.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gesetzentwurf soll Private Equity den Besitz von Arztpraxen verbieten
+***** TLDR
+Senatorin Elizabeth Warren hat den Stop Corporate Takeovers of Physicians Act eingebracht, unterstützt von zwölf weiteren Mitgliedern aus Senat und Repräsentantenhaus. Er würde gewinnorientierten Unternehmen, einschließlich Private-Equity-Fonds und Versicherern, den Besitz von Arztpraxen verbieten und auch Management-Service-Organisationen (MSO) die Kontrolle über sie untersagen. Die Durchsetzung läuft über drei Wege: die FTC, die Generalstaatsanwälte der Bundesstaaten und die Ärzte selbst über Privatklagen mit dreifachem Schadensersatz. Der Artikel nennt 82% der Ärzte, die heute bei Unternehmen angestellt sind, gegenüber 62% im Jahr 2019, und einen Anstieg der Private-Equity-Investitionen im Gesundheitswesen von 5 Milliarden Dollar im Jahr 2000 auf 104 Milliarden 2024, dazu Studien, die solche Eigentümerstrukturen mit schlechteren Behandlungsergebnissen und höheren Kosten verbinden. Erwähnt wird Oregons Gesetz von 2026, mit dem Ärzte in Eugene eine Übernahme stoppten.
+***** Take
+Das Eigentumsverbot ist die Schlagzeile, der eigentliche Hebel ist das Klagerecht mit dreifachem Schadensersatz. Die meisten Bundesstaaten kennen bereits das Verbot der korporativen Ausübung der Medizin, und die MSO wurde genau zu dessen Umgehung erfunden: Der Fonds hält die MSO, die MSO kontrolliert alles außer der Approbation, und ein vorgeschobener Arzt unterschreibt die Akten. Ein Verbot, das sich gegen Eigentümer richtet, ist binnen eines Quartals neu verpapert. Ärzten zu erlauben, ihre eigene MSO auf das Dreifache zu verklagen, lässt sich nur teuer umgehen. Genau deshalb ist der schwierigste Teil im Kongress nicht Gesundheitspolitik, sondern einem Berufsstand eine neue Klagewaffe in die Hand zu geben.
+***** Comments
+- Australien geht denselben Weg, nachdem Brookfield und Healthscope ein Privatkrankenhaus gegen die Regierung als Geisel genommen hatten und die Leistung so weit abfiel, dass ein Kind starb. Hoffentlich brennen wir diese Fäulnis weiter aus.
+- Kann jemand Private Equity ernsthaft verteidigen? Ich suche aufrichtig die Vorteile für Nicht-Investoren, wenn Private Equity in eine Branche wie die Medizin geht und Betriebe kauft, die traditionell keine großen Ketten sind. Die Nachteile höre ich bereits von jemandem, dessen Arbeit direkt betroffen ist.
+- Sie werden trotzdem ein Schlupfloch finden. Private Equity ist für die meisten Branchen ein Krebsgeschwür.
+** Sherline Tools Is Going Out of Business :manufacturing:hardware:machining:business:
+:PROPERTIES:
+:ID:       49776627
+:URL:      https://toolguyd.com/sherline-tools-shutting-down-usa-production/
+:HN_URL:   https://news.ycombinator.com/item?id=49776627
+:POINTS:   175
+:COMMENTS: 118
+:BY:       tliltocatl
+:END:
+
+*** TLDR
+Sherline Products, the US maker of miniature precision lathes, mills, micro-machining accessories and small CNC machines, is winding down manufacturing. Production ends on October 31, 2026 and the company closes by the end of the year. Sherline says it will keep an online presence, supply replacement parts as inventory permits, honor warranty obligations and preserve its technical and educational material in an archive. The stated reasons are COVID, rising manufacturing and operating costs, and significant changes in consumer purchasing habits, which management says made it increasingly difficult for a small American manufacturer to hold its workforce and production levels. An owner later put it more plainly: small growth across several product categories was not generating enough profit. The current owners took over in 2017 and had invested in new products and modernized systems.
+
+*** Take
+The framing in the announcement blames cheap imports and changed habits, but the more specific version is in the thread: a catalogue that barely moved in 30 years met a hobby market that migrated to 3D printers and benchtop routers. A tiny, genuinely accurate lathe was a remarkable thing to own in 1995. Today the same bench space holds a machine that needs no tooling knowledge, no feeds and speeds, and no chip management, and it makes parts that are good enough for most of what hobbyists were using a Sherline for. The customers left before the costs did.
+
+*** Comments
+
+**** Ccecil
+Sad news. First Openbuilds, now this. Not a surprise to me though, since I work in the CNC industry and on the Smoothieware project, and most people are not working with hardware the way they were a few years ago.
+
+**** morio
+I own a lathe and mill from them, both converted to CNC. Sadly their products have changed little in 30+ years. Their precision parts have a use in some applications, but it is vastly overshadowed by the cheap parts available from Asia, including India now.
+
+**** abakker
+To me this is a question of value for money. Sherline products were always interesting, but nowhere near competitive as machines. With controllers like Masso and Acorn available, converting a Grizzly or Precision Matthews mill is a better deal.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Sherline Tools 即将结业
+***** TLDR
+美国微型精密车床、铣床、微加工配件和小型 CNC 机床制造商 Sherline Products 正在结束生产。生产将于 2026 年 10 月 31 日停止，公司在年底前关闭。Sherline 表示会保留网站，在库存允许的范围内继续供应备件，履行保修义务，并把技术与教育资料存档保留。官方给出的原因是新冠疫情、制造与运营成本上升，以及消费者购买习惯的显著变化，管理层称这让一家美国小型制造商越来越难以维持所需的员工和产量。一位所有者后来说得更直白：几个产品线的小幅增长带不来足够的利润。现任所有者 2017 年接手，此后投入过新产品并对系统做了现代化改造。
+***** Take
+公告里的说法把责任归给廉价进口和习惯变化，讨论区给出了更具体的版本：一份三十年几乎没变的产品目录，撞上了一个已经迁移到 3D 打印机和台式雕刻机的爱好者市场。1995 年，一台又小又真正精准的车床是了不起的东西。今天同样的桌面空间可以放一台不需要刀具知识、不需要算进给和转速、也不用处理铁屑的机器，而它做出的零件对爱好者过去用 Sherline 干的大部分活来说已经够好了。客户先走，成本才跟上。
+***** Comments
+- 坏消息。先是 Openbuilds，现在轮到它。不过对我来说并不意外，我在 CNC 行业工作，也参与 Smoothieware 项目，大多数人已经不像几年前那样动手做硬件了。
+- 我有他们的一台车床和一台铣床，都改成了 CNC。可惜他们的产品三十多年几乎没变。他们的精密部件在某些应用上有价值，但被亚洲（现在还包括印度）的廉价零件远远盖过了。
+- 在我看来这是性价比问题。Sherline 的产品一直很有意思，但作为机床从不具备竞争力。有 Masso、Acorn 这样的控制器，把 Grizzly 或 Precision Matthews 的铣床改造一下更划算。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Sherline Toolsが廃業へ
+***** TLDR
+小型精密旋盤・フライス盤、微細加工用アクセサリ、小型CNC機を作る米Sherline Productsが製造を終える。生産は2026年10月31日で終了し、年内に会社を閉じる。Sherlineはウェブ上の窓口を残し、在庫が続く限り交換部品を供給し、保証義務を履行し、技術資料や教育資料をアーカイブとして残すとしている。理由として挙げられたのは、コロナ禍、製造・運営コストの上昇、消費者の購買行動の大きな変化で、経営側は小規模な米国メーカーが必要な人員と生産量を維持するのが難しくなったと説明する。オーナーの一人は後により率直に、複数の製品カテゴリの小さな成長では十分な利益が出なかったと述べた。現オーナーは2017年に引き継ぎ、新製品への投資やシステムの刷新を行っていた。
+***** Take
+発表文は安価な輸入品と購買行動の変化のせいにしているが、より具体的な説明はスレッドのほうにある。30年ほとんど変わらないカタログが、3Dプリンタと卓上ルーターへ移った趣味市場とぶつかったのだ。1995年なら、小さくて本当に精度の出る旋盤を持つこと自体が非凡だった。いま同じ作業台には、工具の知識も送り・回転数の計算も切粉処理も要らない機械が載り、趣味人がSherlineでやっていたことの大半には十分な部品を作れる。コストより先に顧客が去った。
+***** Comments
+- 残念な知らせだ。まずOpenbuilds、次はこれか。とはいえCNC業界で働き、Smoothiewareプロジェクトにも関わっている身としては驚きではない。数年前のようにハードを触る人は減っている。
+- ここの旋盤とフライス盤を持っていて、両方CNC化した。残念ながら製品は30年以上ほとんど変わっていない。精密部品として価値がある用途もあるが、アジア（いまやインドも）の安価な部品に大きく押されている。
+- これは価格に見合う価値の話だと思う。Sherlineの製品は常に興味深かったが、機械としては競争力がなかった。MassoやAcornのようなコントローラがあるいま、GrizzlyやPrecision Matthewsのフライス盤を改造したほうがいい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Sherline Tools 폐업
+***** TLDR
+소형 정밀 선반과 밀링, 미세가공 액세서리, 소형 CNC 장비를 만들어온 미국의 Sherline Products가 제조를 접는다. 생산은 2026년 10월 31일에 끝나고 회사는 연말까지 문을 닫는다. Sherline은 웹 창구를 유지하고 재고가 허용하는 범위에서 교체 부품을 공급하며 보증 의무를 이행하고 기술·교육 자료를 아카이브로 보존하겠다고 밝혔다. 제시된 이유는 코로나, 제조·운영 비용 상승, 소비자 구매 습관의 큰 변화이며, 경영진은 소규모 미국 제조사가 필요한 인력과 생산량을 유지하기 어려워졌다고 설명했다. 한 소유주는 이후 더 직설적으로, 여러 제품군의 작은 성장으로는 충분한 수익이 나지 않았다고 말했다. 현 소유주는 2017년에 회사를 인수해 신제품과 시스템 현대화에 투자해왔다.
+***** Take
+공지문은 값싼 수입품과 바뀐 소비 습관을 탓하지만, 더 구체적인 설명은 스레드에 있다. 30년 동안 거의 바뀌지 않은 카탈로그가 3D 프린터와 벤치탑 라우터로 옮겨간 취미 시장과 만난 것이다. 1995년에는 작고 실제로 정밀한 선반을 갖는 일 자체가 대단했다. 오늘날 같은 작업대 위에는 공구 지식도, 이송·회전수 계산도, 칩 처리도 필요 없는 기계가 놓이고, 취미가들이 Sherline으로 하던 일의 대부분에는 충분한 부품을 만들어낸다. 비용보다 고객이 먼저 떠났다.
+***** Comments
+- 안타까운 소식이다. Openbuilds에 이어 이번엔 여기다. 그래도 놀랍지는 않다. CNC 업계에서 일하고 Smoothieware 프로젝트에도 참여하는데, 몇 년 전처럼 하드웨어를 직접 다루는 사람이 줄었다.
+- 여기 선반과 밀링을 갖고 있고 둘 다 CNC로 개조했다. 아쉽게도 제품이 30년 넘게 거의 그대로다. 정밀 부품이 쓰이는 분야가 있긴 하지만, 이제 인도까지 포함한 아시아의 값싼 부품에 크게 밀린다.
+- 내가 보기엔 가격 대비 가치의 문제다. Sherline 제품은 늘 흥미로웠지만 기계로서는 경쟁력이 없었다. Masso나 Acorn 같은 컨트롤러가 있는 지금은 Grizzly나 Precision Matthews 밀링을 개조하는 편이 낫다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Sherline Tools cierra el negocio
+***** TLDR
+Sherline Products, el fabricante estadounidense de tornos y fresadoras de precisión en miniatura, accesorios de micromecanizado y pequeñas máquinas CNC, cierra su producción. La fabricación termina el 31 de octubre de 2026 y la empresa cerrará antes de fin de año. Sherline dice que mantendrá presencia en la web, suministrará repuestos mientras haya existencias, cumplirá las garantías y conservará su material técnico y educativo en un archivo. Las razones expuestas son la COVID, el aumento de los costes de fabricación y operación y cambios importantes en los hábitos de compra, que según la dirección hicieron cada vez más difícil para un pequeño fabricante estadounidense sostener su plantilla y sus niveles de producción. Un propietario lo dijo después con más claridad: el pequeño crecimiento en varias categorías de producto no generaba beneficio suficiente. Los dueños actuales tomaron el control en 2017 e invirtieron en nuevos productos y en modernizar sistemas.
+***** Take
+El comunicado culpa a las importaciones baratas y a los hábitos cambiantes, pero la versión más precisa está en el hilo: un catálogo casi inmóvil durante 30 años se encontró con un mercado aficionado que se mudó a las impresoras 3D y a las fresadoras de sobremesa. Tener un torno diminuto y realmente preciso era algo notable en 1995. Hoy ese mismo espacio en el banco lo ocupa una máquina que no exige conocer herramientas, ni calcular avances y velocidades, ni gestionar viruta, y que fabrica piezas suficientemente buenas para casi todo lo que los aficionados hacían con una Sherline. Los clientes se fueron antes que los costes.
+***** Comments
+- Mala noticia. Primero Openbuilds y ahora esto. No me sorprende: trabajo en la industria CNC y en el proyecto Smoothieware, y la mayoría de la gente ya no trastea con hardware como hace unos años.
+- Tengo un torno y una fresadora suyos, ambos convertidos a CNC. Por desgracia sus productos han cambiado poco en más de 30 años. Sus piezas de precisión sirven para algunas aplicaciones, pero quedan muy eclipsadas por las piezas baratas de Asia, ahora también de India.
+- Para mí es una cuestión de relación calidad-precio. Los productos de Sherline siempre fueron interesantes, pero nunca competitivos como máquinas. Con controladores como Masso y Acorn, convertir una fresadora Grizzly o Precision Matthews sale mejor.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Sherline Tools stellt den Betrieb ein
+***** TLDR
+Sherline Products, der US-Hersteller von Miniatur-Präzisionsdrehmaschinen, Fräsen, Mikrobearbeitungszubehör und kleinen CNC-Maschinen, fährt die Fertigung herunter. Die Produktion endet am 31. Oktober 2026, das Unternehmen schließt bis zum Jahresende. Sherline will weiterhin online erreichbar bleiben, Ersatzteile liefern solange der Bestand reicht, Garantieverpflichtungen erfüllen und technische wie pädagogische Unterlagen in einem Archiv sichern. Als Gründe werden COVID, steigende Fertigungs- und Betriebskosten sowie deutlich veränderte Kaufgewohnheiten genannt, die es einem kleinen amerikanischen Hersteller laut Geschäftsführung zunehmend erschwerten, Belegschaft und Produktionsniveau zu halten. Ein Eigentümer formulierte es später deutlicher: Das geringe Wachstum über mehrere Produktkategorien brachte nicht genug Gewinn. Die heutigen Eigentümer übernahmen 2017 und hatten in neue Produkte und modernisierte Systeme investiert.
+***** Take
+Die Ankündigung schiebt es auf billige Importe und veränderte Gewohnheiten, die genauere Fassung steht im Thread: Ein Katalog, der sich in 30 Jahren kaum bewegt hat, traf auf einen Hobbymarkt, der zu 3D-Druckern und Tischfräsen abgewandert ist. Eine winzige, wirklich präzise Drehmaschine zu besitzen war 1995 bemerkenswert. Heute steht auf derselben Werkbank eine Maschine, die kein Werkzeugwissen, keine Schnittwertberechnung und kein Spänemanagement verlangt und Teile liefert, die für das meiste reichen, wofür Hobbyisten eine Sherline benutzt haben. Die Kunden gingen vor den Kosten.
+***** Comments
+- Traurige Nachricht. Erst Openbuilds, jetzt das. Für mich keine Überraschung: Ich arbeite in der CNC-Branche und am Smoothieware-Projekt, und die meisten Leute basteln nicht mehr so an Hardware wie noch vor ein paar Jahren.
+- Ich habe eine Drehmaschine und eine Fräse von ihnen, beide auf CNC umgebaut. Leider haben sich ihre Produkte in über 30 Jahren kaum verändert. Ihre Präzisionsteile haben in manchen Anwendungen ihren Platz, werden aber von billigen Teilen aus Asien, inzwischen auch aus Indien, weit überschattet.
+- Für mich ist das eine Frage von Preis und Leistung. Sherline-Produkte waren immer interessant, als Maschinen aber nie konkurrenzfähig. Mit Steuerungen wie Masso und Acorn lohnt sich der Umbau einer Grizzly- oder Precision-Matthews-Fräse mehr.
+** Pirate Face Rescues LLM Models from Deletion :ai:bittorrent:open-weights:preservation:
+:PROPERTIES:
+:ID:       49776699
+:URL:      https://pirateface.co/
+:HN_URL:   https://news.ycombinator.com/item?id=49776699
+:POINTS:   424
+:COMMENTS: 132
+:BY:       skepticalgenius
+:END:
+
+*** TLDR
+Pirate Face turns Hugging Face model repositories into BitTorrent magnet links with web seeds that point back at Hugging Face. While a model is still hosted there, downloads pull from Hugging Face directly; if it is removed, the swarm takes over and the entry is marked Rescued. Every file carries Hugging Face's official SHA-256 checksum so clients can verify they got the real weights. The site limits mirroring to Apache-2.0 and MIT licensed models plus what it calls an approved Kimi-K3 exception, does not identify its operator, and does not document any model it has actually rescued so far, showing trending mirrored models instead.
+
+*** Take
+The checksum plumbing is the good engineering here, and the license restriction is the tell: despite the name, this wants to be a legal mirror rather than a piracy site. Two gaps stand out. The Rescued list is empty, so this is an insurance policy nobody has claimed on yet, and the project has no answer for the part Hugging Face was actually providing. A 700GB torrent needs seeders with 700GB of disk and the bandwidth to serve it, and web seeds pointing at Hugging Face mean the swarm is healthiest exactly when it is least needed. Preservation is a storage bill, not a protocol choice.
+
+*** Comments
+
+**** phoyd
+Torrents should really be the preferred method for distributing AI model weights. Why rely on a single point of failure like Hugging Face? BitTorrent was made for exactly this.
+
+**** mococa
+Steam and Blizzard used to deliver games over the torrent protocol before CDNs became cheaper. When StarCraft 2 launched, the installer had a complete graphical visualization of seeders and leechers.
+
+**** wren6991
+On the uncensored-model angle, there is little reason to distribute abliterated weights at all. Instead of orthogonalising the weights that write back to the residual stream, you can orthogonalise the activations themselves at runtime. It is equivalent and computationally cheap, so just distribute the refusal vectors.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Pirate Face 把面临删除的 LLM 模型抢救下来
+***** TLDR
+Pirate Face 把 Hugging Face 上的模型仓库转成带 web seed 的 BitTorrent 磁力链接，web seed 指回 Hugging Face。模型还在 Hugging Face 上时，下载直接从那里拉取；一旦被删除，做种群体接管，条目会被标记为「已抢救」。每个文件都带有 Hugging Face 官方的 SHA-256 校验和，客户端可以验证拿到的是真正的权重。该站把镜像范围限定在 Apache-2.0 和 MIT 许可的模型，外加它所称的「已批准的 Kimi-K3 例外」，没有公开运营者身份，目前也没有记录任何真正被抢救过的模型，展示的是当前热门的镜像模型。
+***** Take
+校验和这套管道是这里真正扎实的工程，许可限制则暴露了定位：名字虽叫海盗，它想做的是合法镜像而不是盗版站。两个缺口很明显。「已抢救」列表是空的，所以这更像一份还没人理赔过的保险；而且项目回避了 Hugging Face 实际在提供的东西。一个 700GB 的种子需要有 700GB 硬盘和相应带宽的做种者，而 web seed 指向 Hugging Face 意味着种群最健康的时候恰恰是最不需要它的时候。保存是一笔存储账单，不是一个协议选择。
+***** Comments
+- 种子本来就应该是分发 AI 模型权重的首选方式。为什么要依赖 Hugging Face 这样的单点故障？BitTorrent 就是为这个场景造的。
+- 在 CDN 变便宜之前，Steam 和暴雪都用种子协议分发游戏。《星际争霸 2》发布时，安装器有一个完整的做种者和下载者图形化展示。
+- 关于无审查模型这一点，其实根本没必要分发去限制后的权重。与其正交化写回残差流的权重，不如在运行时直接正交化激活值，两者等价而且计算开销很低，分发拒绝向量就够了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Pirate Face、削除されるLLMモデルを救出
+***** TLDR
+Pirate FaceはHugging Faceのモデルリポジトリを、Hugging Faceを指すウェブシード付きのBitTorrentマグネットリンクに変換する。モデルがまだHugging Faceにある間はそこから直接ダウンロードされ、削除されるとスウォームが引き継ぎ、そのエントリは「Rescued」と表示される。各ファイルにはHugging Face公式のSHA-256チェックサムが付き、クライアントは本物の重みを受け取ったか検証できる。ミラー対象はApache-2.0とMITライセンスのモデル、それに「承認済みのKimi-K3例外」と称するものに限られ、運営者は明かされておらず、実際に救出した具体的なモデルの記録もなく、いまミラーされている人気モデルが並ぶだけだ。
+***** Take
+チェックサム周りの実装がここでの良い工学で、ライセンス制限が性格を物語っている。名前に反して、これは海賊版サイトではなく合法なミラーであろうとしている。穴は二つ。Rescuedのリストが空である以上、これはまだ誰も請求していない保険であり、さらにHugging Faceが実際に提供していた部分に答えがない。700GBのトレントには700GBのディスクとそれを配れる帯域を持つシーダーが必要で、ウェブシードがHugging Faceを指す以上、スウォームが最も健全なのは最も必要とされない時だ。保存はプロトコルの選択ではなくストレージの請求書である。
+***** Comments
+- AIモデルの重みの配布にはトレントこそ本来ふさわしい。Hugging Faceのような単一障害点に依存する理由がどこにある。BitTorrentはまさにこのために作られた。
+- CDNが安くなる前は、SteamもBlizzardもトレントでゲームを配信していた。StarCraft 2のローンチ時、インストーラにはシーダーとリーチャーの図示が備わっていた。
+- 無検閲モデルの論点について言えば、アブリタレートした重みを配る意味はほとんどない。残差ストリームへ書き戻す重みを直交化する代わりに、実行時に活性そのものを直交化すればよい。等価で計算も軽いのだから、拒否ベクトルを配ればいい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Pirate Face, 삭제되는 LLM 모델을 구조하다
+***** TLDR
+Pirate Face는 Hugging Face의 모델 저장소를 Hugging Face를 가리키는 웹 시드가 달린 비트토렌트 마그넷 링크로 바꾼다. 모델이 아직 Hugging Face에 있으면 다운로드는 거기서 직접 이뤄지고, 삭제되면 스웜이 넘겨받으며 항목은 Rescued로 표시된다. 모든 파일에는 Hugging Face 공식 SHA-256 체크섬이 붙어 클라이언트가 진짜 가중치를 받았는지 검증할 수 있다. 미러링 대상은 Apache-2.0과 MIT 라이선스 모델, 그리고 사이트가 '승인된 Kimi-K3 예외'라고 부르는 것으로 제한되며, 운영자는 공개되지 않았고 실제로 구조한 모델에 대한 기록도 없이 현재 미러 중인 인기 모델만 보여준다.
+***** Take
+체크섬 배관이 여기서 잘 만든 부분이고, 라이선스 제한이 성격을 드러낸다. 이름과 달리 이것은 해적 사이트가 아니라 합법 미러가 되려 한다. 구멍은 둘이다. Rescued 목록이 비어 있으니 아직 아무도 청구하지 않은 보험이고, Hugging Face가 실제로 제공하던 부분에 대한 답이 없다. 700GB짜리 토렌트에는 700GB 디스크와 그것을 뿌릴 대역폭을 가진 시더가 필요하고, 웹 시드가 Hugging Face를 가리키는 한 스웜이 가장 건강한 때는 가장 필요 없는 때다. 보존은 프로토콜 선택이 아니라 스토리지 청구서다.
+***** Comments
+- AI 모델 가중치 배포에는 토렌트가 마땅히 우선되어야 한다. Hugging Face 같은 단일 실패 지점에 왜 의존하나. 비트토렌트는 바로 이런 용도로 만들어졌다.
+- CDN이 싸지기 전에는 스팀과 블리자드도 토렌트 프로토콜로 게임을 배포했다. 스타크래프트 2 출시 때 설치 프로그램에는 시더와 리처를 보여주는 그래픽 화면이 있었다.
+- 무검열 모델 얘기를 하자면, 어블리터레이트된 가중치를 배포할 이유가 거의 없다. 잔차 스트림에 다시 쓰는 가중치를 직교화하는 대신 런타임에 활성값 자체를 직교화하면 된다. 등가이면서 계산도 싸니 거부 벡터만 배포하면 충분하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Pirate Face rescata modelos LLM antes de que los borren
+***** TLDR
+Pirate Face convierte repositorios de modelos de Hugging Face en enlaces magnet de BitTorrent con web seeds que apuntan de vuelta a Hugging Face. Mientras el modelo siga alojado allí, la descarga se sirve directamente desde Hugging Face; si se elimina, toma el relevo el enjambre y la entrada se marca como Rescatada. Cada archivo lleva la suma SHA-256 oficial de Hugging Face para que los clientes verifiquen que han recibido los pesos auténticos. El sitio limita la réplica a modelos con licencia Apache-2.0 y MIT, más lo que llama una excepción aprobada para Kimi-K3, no identifica a su operador y no documenta ningún modelo que haya rescatado realmente, mostrando en su lugar los modelos replicados de moda.
+***** Take
+La parte bien hecha es la verificación por suma de comprobación, y la restricción de licencias lo delata: pese al nombre, esto aspira a ser una réplica legal y no un sitio de piratería. Hay dos huecos. La lista de Rescatados está vacía, así que es una póliza de seguro que nadie ha reclamado todavía, y el proyecto no responde a lo que Hugging Face aportaba de verdad. Un torrent de 700 GB necesita sembradores con 700 GB de disco y ancho de banda para servirlo, y con web seeds apuntando a Hugging Face el enjambre está más sano justo cuando menos falta hace. La preservación es una factura de almacenamiento, no una elección de protocolo.
+***** Comments
+- Los torrents deberían ser el método preferido para distribuir pesos de modelos de IA. ¿Por qué depender de un punto único de fallo como Hugging Face? BitTorrent se hizo exactamente para esto.
+- Steam y Blizzard distribuían juegos por torrent antes de que las CDN fueran más baratas. Cuando salió StarCraft 2, el instalador mostraba gráficamente los sembradores y los pares.
+- Sobre el asunto de los modelos sin censura, no hay mucha razón para distribuir pesos ablacionados. En lugar de ortogonalizar los pesos que escriben en el flujo residual, se pueden ortogonalizar las activaciones en tiempo de ejecución. Es equivalente y barato, así que basta con distribuir los vectores de rechazo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Pirate Face rettet LLM-Modelle vor der Löschung
+***** TLDR
+Pirate Face verwandelt Modell-Repositories von Hugging Face in BitTorrent-Magnet-Links mit Web-Seeds, die auf Hugging Face zurückverweisen. Solange ein Modell dort liegt, kommt der Download direkt von Hugging Face; wird es entfernt, übernimmt der Schwarm und der Eintrag wird als Rescued markiert. Jede Datei trägt die offizielle SHA-256-Prüfsumme von Hugging Face, damit Clients prüfen können, dass sie die echten Gewichte erhalten haben. Gespiegelt wird nur, was unter Apache-2.0 oder MIT steht, dazu eine als genehmigt bezeichnete Kimi-K3-Ausnahme. Der Betreiber wird nicht genannt, und es ist bislang kein tatsächlich gerettetes Modell dokumentiert, stattdessen erscheinen die gerade beliebten gespiegelten Modelle.
+***** Take
+Die Prüfsummen-Infrastruktur ist hier die saubere Ingenieursarbeit, und die Lizenzbeschränkung verrät die Absicht: Trotz des Namens will das ein legaler Spiegel sein, keine Piraterieseite. Zwei Lücken fallen auf. Die Rescued-Liste ist leer, das ist also eine Versicherung, die noch niemand in Anspruch genommen hat, und das Projekt hat keine Antwort auf das, was Hugging Face tatsächlich geliefert hat. Ein 700-GB-Torrent braucht Seeder mit 700 GB Platte und der Bandbreite, das auszuliefern, und weil die Web-Seeds auf Hugging Face zeigen, ist der Schwarm genau dann am gesündesten, wenn er am wenigsten gebraucht wird. Bewahrung ist eine Speicherrechnung, keine Protokollentscheidung.
+***** Comments
+- Torrents sollten die bevorzugte Methode sein, um KI-Modellgewichte zu verteilen. Warum sich auf einen Single Point of Failure wie Hugging Face verlassen? BitTorrent wurde genau dafür gemacht.
+- Steam und Blizzard lieferten Spiele früher über das Torrent-Protokoll aus, bevor CDNs billiger wurden. Zum Start von StarCraft 2 zeigte der Installer Seeder und Leecher grafisch an.
+- Zum Thema unzensierte Modelle: Es gibt kaum einen Grund, abliterierte Gewichte zu verteilen. Statt die Gewichte zu orthogonalisieren, die in den Residual Stream zurückschreiben, kann man die Aktivierungen zur Laufzeit orthogonalisieren. Das ist äquivalent und rechnerisch billig, also verteilt einfach die Refusal-Vektoren.
