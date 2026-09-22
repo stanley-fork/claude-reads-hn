@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-09-22 05:56 UTC
+#+DATE: 2026-09-22T05:56:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Xiaomi ships a trillion-parameter MIT model, Mars Sample Return dies, and Bryan Cantrill says Sun was killed by not answering the phone
+
+* Highlights
+- MiMo v2.6: Xiaomi releases a 1.02T-parameter MoE under MIT, with the training dashboard public
+- Mars Sample Return is dead: $11B and a 2040 return date were the cause of death
+- What Sun got wrong: Cantrill says the fatal flaw was boredom with running a business
+- Colin Breck on why AI-written docs are unreadable: the context never ships with the text
+- Spymarks: renaming invisible watermarks to say what they actually do
+
+* Stories
+
+** MiMo v2.6 :ai:llm:open-source:china:
+:PROPERTIES:
+:ID:       49792730
+:URL:      https://mimo.xiaomi.com/mimo-v2-6
+:HN_URL:   https://news.ycombinator.com/item?id=49792730
+:POINTS:   737
+:COMMENTS: 336
+:BY:       volf_
+:END:
+
+*** TLDR
+Xiaomi released MiMo v2.6 in two sizes: Flash at 309B total / 15B active parameters and Pro at 1.02T total / 42B active. It is a sparse MoE with 70 layers mixing sliding-window and global attention, a 1M-token context, and native image, video and audio encoders (681M vision, 308M audio tokenizer). Training used GRPO on very large batches with an agentic grader, running coding, general agents, visual recognition and cybersecurity in one RL job rather than separate per-domain passes. Reported scores include 71.9% on DeepSWE, 53.1% on AutomationBench, 72.3% on visual coding, 94.0% on CyberGym. Weights are MIT-licensed, and Xiaomi published a live dashboard of the RL run while it was training.
+
+*** Take
+The interesting release here is the dashboard, not the benchmark table. Publishing reward curves during the run is a claim you cannot walk back later, and no US lab does it. MIT weights on a trillion-parameter model make the pricing argument for everyone else considerably harder.
+
+*** Comments
+
+**** rao-v
+:PROPERTIES:
+:COMMENT_ID: 49792998
+:END:
+I really like how transparent they've been about the training of this model. The realtime dashboard they shared during training was an incredible learning and teaching tool.
+
+**** MangoCoffee
+:PROPERTIES:
+:COMMENT_ID: 49793866
+:END:
+Maybe this is why Dario wants to slow down AI development. They are afraid of a Chinese good-enough LLM killing their margin.
+
+**** toephu2
+:PROPERTIES:
+:COMMENT_ID: 49794188
+:END:
+LLMs are a commodity. Even the frontier ones. OpenAI and Anthropic have no moat.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+MiMo v2.6
+***** TLDR
+小米发布 MiMo v2.6，分两个规格：Flash 为 3090 亿总参数/150 亿激活参数，Pro 为 1.02 万亿总参数/420 亿激活参数。稀疏 MoE 架构，70 层，混合滑动窗口注意力与全局注意力，100 万 token 上下文，原生支持图像、视频和音频编码器（视觉 6.81 亿参数，音频分词器 3.08 亿）。训练采用超大批量 GRPO 加智能体评分器，把编程、通用智能体、视觉识别和网络安全放进同一次强化学习任务，而非分领域分别训练。公布成绩包括 DeepSWE 71.9%、AutomationBench 53.1%、视觉编程 72.3%、CyberGym 94.0%。权重采用 MIT 许可，训练期间小米还公开了强化学习过程的实时看板。
+***** Take
+这次发布真正值得关注的是那块看板，而不是跑分表。训练过程中公开奖励曲线是事后无法撤回的承诺，美国实验室没有一家这么做。一个万亿参数模型配 MIT 许可，让其他所有人的定价理由都更难讲了。
+***** Comments
+- 我很欣赏他们在模型训练上的透明度。训练期间分享的实时看板是极好的学习和教学工具。
+- 也许这就是 Dario 想放慢 AI 发展的原因。他们害怕一个够用的中国模型吃掉自己的利润。
+- 大模型就是大宗商品，前沿模型也一样。OpenAI 和 Anthropic 没有护城河。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+MiMo v2.6
+***** TLDR
+XiaomiがMiMo v2.6を2サイズで公開。Flashは総パラメータ3090億/アクティブ150億、Proは総1.02兆/アクティブ420億。70層のスパースMoEでスライディングウィンドウ注意と全体注意を併用し、コンテキストは100万トークン、画像・動画・音声のエンコーダを内蔵（視覚6.81億、音声トークナイザ3.08億）。学習は超大バッチのGRPOとエージェント採点器を用い、コーディング・汎用エージェント・視覚認識・セキュリティを領域別ではなく単一のRL実行にまとめた。公表スコアはDeepSWE 71.9%、AutomationBench 53.1%、ビジュアルコーディング72.3%、CyberGym 94.0%。重みはMITライセンスで、学習中のRLダッシュボードも公開された。
+***** Take
+注目すべきはベンチマーク表ではなくダッシュボードだ。学習中に報酬曲線を公開するのは後から撤回できない主張であり、米国のラボはどこもやっていない。1兆パラメータ級モデルのMITライセンス公開は、他社の価格の言い分を一段と難しくする。
+***** Comments
+- このモデルの学習についての透明性が気に入っている。学習中に共有されたリアルタイムのダッシュボードは学習・教育の教材として素晴らしかった。
+- Darioが AI 開発を減速させたい理由はこれかもしれない。中国の「十分に良い」モデルに利益率を奪われるのを恐れている。
+- LLMはコモディティだ。フロンティアモデルでさえそうだ。OpenAIにもAnthropicにも堀はない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+MiMo v2.6
+***** TLDR
+샤오미가 MiMo v2.6을 두 가지 크기로 공개했다. Flash는 총 3090억/활성 150억 파라미터, Pro는 총 1.02조/활성 420억 파라미터다. 70개 층의 희소 MoE 구조로 슬라이딩 윈도 어텐션과 전역 어텐션을 섞어 쓰고, 컨텍스트는 100만 토큰이며 이미지·영상·음성 인코더를 내장했다(비전 6억 8100만, 오디오 토크나이저 3억 800만). 학습은 초대형 배치 GRPO와 에이전트 채점기를 사용해 코딩, 범용 에이전트, 시각 인식, 보안을 도메인별로 나누지 않고 하나의 RL 실행으로 묶었다. 공개 점수는 DeepSWE 71.9%, AutomationBench 53.1%, 비주얼 코딩 72.3%, CyberGym 94.0%다. 가중치는 MIT 라이선스이며, 학습 중 RL 대시보드도 실시간으로 공개했다.
+***** Take
+이번 공개에서 중요한 것은 벤치마크 표가 아니라 대시보드다. 학습 중에 보상 곡선을 공개하는 것은 나중에 되돌릴 수 없는 주장이고, 미국 연구소 중에는 아무도 하지 않는다. 1조 파라미터 모델의 MIT 라이선스 공개는 다른 모든 곳의 가격 설명을 훨씬 어렵게 만든다.
+***** Comments
+- 이 모델 학습 과정의 투명성이 마음에 든다. 학습 중 공유한 실시간 대시보드는 훌륭한 학습·교육 자료였다.
+- Dario가 AI 개발 속도를 늦추려는 이유가 이것일지도 모른다. 충분히 좋은 중국 모델이 마진을 갉아먹는 것을 두려워하는 것이다.
+- LLM은 범용 상품이다. 프런티어 모델도 마찬가지다. OpenAI와 Anthropic에는 해자가 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+MiMo v2.6
+***** TLDR
+Xiaomi publicó MiMo v2.6 en dos tamaños: Flash con 309.000 millones de parámetros totales y 15.000 millones activos, y Pro con 1,02 billones totales y 42.000 millones activos. Es un MoE disperso de 70 capas que combina atención de ventana deslizante y atención global, con contexto de 1 millón de tokens y codificadores nativos de imagen, vídeo y audio (681M visión, 308M tokenizador de audio). El entrenamiento usó GRPO con lotes muy grandes y un evaluador agéntico, ejecutando programación, agentes generales, reconocimiento visual y ciberseguridad en una sola tanda de RL en lugar de pasadas separadas por dominio. Las cifras publicadas incluyen 71,9% en DeepSWE, 53,1% en AutomationBench, 72,3% en programación visual y 94,0% en CyberGym. Los pesos tienen licencia MIT y Xiaomi publicó un panel en vivo del entrenamiento mientras ocurría.
+***** Take
+Lo interesante de este lanzamiento es el panel, no la tabla de benchmarks. Publicar las curvas de recompensa durante el entrenamiento es una afirmación que después no se puede retirar, y ningún laboratorio estadounidense lo hace. Pesos MIT en un modelo de un billón de parámetros complican bastante el argumento de precios de todos los demás.
+***** Comments
+- Me gusta lo transparentes que han sido sobre el entrenamiento de este modelo. El panel en tiempo real que compartieron fue una herramienta increíble para aprender y enseñar.
+- Quizá por esto Dario quiere frenar el desarrollo de la IA. Temen que un modelo chino lo bastante bueno acabe con su margen.
+- Los LLM son una materia prima. Incluso los de frontera. OpenAI y Anthropic no tienen foso defensivo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+MiMo v2.6
+***** TLDR
+Xiaomi hat MiMo v2.6 in zwei Größen veröffentlicht: Flash mit 309 Mrd. Gesamt- und 15 Mrd. aktiven Parametern, Pro mit 1,02 Bio. Gesamt- und 42 Mrd. aktiven Parametern. Es ist ein spärliches MoE mit 70 Schichten, das Sliding-Window- und globale Attention mischt, 1 Mio. Token Kontext bietet und Bild-, Video- und Audio-Encoder mitbringt (681M Vision, 308M Audio-Tokenizer). Trainiert wurde mit GRPO auf sehr großen Batches und einem agentischen Bewerter, wobei Programmierung, allgemeine Agenten, visuelle Erkennung und Cybersicherheit in einem einzigen RL-Lauf statt in getrennten Durchgängen liefen. Genannte Werte: 71,9% DeepSWE, 53,1% AutomationBench, 72,3% visuelles Programmieren, 94,0% CyberGym. Die Gewichte stehen unter MIT-Lizenz, und Xiaomi veröffentlichte während des Trainings ein Live-Dashboard des RL-Laufs.
+***** Take
+Das Bemerkenswerte an dieser Veröffentlichung ist das Dashboard, nicht die Benchmark-Tabelle. Belohnungskurven während des Laufs zu veröffentlichen ist eine Aussage, die man später nicht zurücknehmen kann, und kein US-Labor tut das. MIT-Gewichte für ein Modell mit einer Billion Parametern machen die Preisargumentation aller anderen deutlich schwieriger.
+***** Comments
+- Mir gefällt, wie transparent sie beim Training dieses Modells waren. Das Echtzeit-Dashboard war ein großartiges Lern- und Lehrwerkzeug.
+- Vielleicht will Dario deshalb die KI-Entwicklung verlangsamen. Sie fürchten, dass ein gut genuges chinesisches Modell ihre Marge zerstört.
+- LLMs sind Massenware. Selbst die Frontier-Modelle. OpenAI und Anthropic haben keinen Burggraben.
+** NASA's Mars Sample Return mission is dead :space:nasa:science:budget:
+:PROPERTIES:
+:ID:       49791939
+:URL:      https://www.science.org/content/article/nasa-s-mars-sample-return-mission-dead
+:HN_URL:   https://news.ycombinator.com/item?id=49791939
+:POINTS:   360
+:COMMENTS: 286
+:BY:       Muhammad523
+:END:
+
+*** TLDR
+［Science.org blocked both direct fetch and the Jina proxy with a bot check; this is from the headline plus the HN thread, where several commenters cite the program's own figures.］ Mars Sample Return, the mission to retrieve the rock cores Perseverance has been drilling and caching since 2021, is cancelled. The numbers commenters keep returning to: a cost that grew to roughly $11 billion, a sample return date that had slipped to 2040, and a payload of about 1.1 pounds of rock, against 842 pounds brought back by Apollo. The architecture was built around the Ariane 64 rather than newer heavy-lift vehicles. Perseverance keeps collecting and caching samples; there is now no funded plan to go get them. China's Tianwen-3 is targeting a Mars sample return around 2028.
+
+*** Take
+A mission designed to finish in 2040 was already a bet that nothing in the launch market would change for sixteen years. The tubes on the Martian surface are not wasted, but they are now inventory waiting on a customer, and the most likely customer is China.
+
+*** Comments
+
+**** angelgonzales
+:PROPERTIES:
+:COMMENT_ID: 49793726
+:END:
+Leadership increased the cost of the program and would not bring samples back until 2040, and designed around legacy rockets like Ariane 64 instead of working with industry.
+
+**** Balgair
+:PROPERTIES:
+:COMMENT_ID: 49795953
+:END:
+We're not putting humans on Mars anytime soon. Landing is the easy part. MSR was partly a mission to see how hard it really is to get anything back into space.
+
+**** jumploops
+:PROPERTIES:
+:COMMENT_ID: 49792455
+:END:
+I worked on a very small part of the ExoMars rover. It was supposed to launch in 2018, now 2028. The state of the world isn't great for space exploration, but I'm hopeful this mission gets revived.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+NASA 的火星样本返回任务已终止
+***** TLDR
+［Science.org 对直接抓取和 Jina 代理都做了机器人拦截，本条基于标题加 HN 讨论，多位评论者引用了项目自身的数据。］ 火星样本返回任务被取消，该任务原计划取回毅力号自 2021 年起钻取并封存的岩芯。评论中反复出现的数字是：成本涨到约 110 亿美元，样本返回时间推迟到 2040 年，取回量约 1.1 磅岩石，而阿波罗计划带回了 842 磅。任务架构围绕阿丽亚娜 64 而非新型重型运载火箭设计。毅力号仍在继续采集和封存样本，但已没有拿到资金的取回计划。中国的天问三号目标是 2028 年前后实现火星取样返回。
+***** Take
+一个计划 2040 年完成的任务，本身就是在赌未来十六年发射市场毫无变化。留在火星表面的样本管并没有浪费，但现在它们成了等待买家的库存，而最可能的买家是中国。
+***** Comments
+- 管理层把项目成本推高，样本要到 2040 年才能带回，还围绕阿丽亚娜 64 这样的老旧火箭设计，而不是与产业界合作。
+- 我们短期内不会把人送上火星。着陆是最容易的部分。MSR 有一部分目的就是看看把任何东西送回太空到底有多难。
+- 我参与过 ExoMars 火星车的一小部分工作。它原定 2018 年发射，现在推到 2028 年。当前的世界形势对太空探索不利，但我仍希望这个任务能被重启。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+NASAの火星サンプルリターン計画は終了
+***** TLDR
+［Science.orgは直接取得もJinaプロキシもボット判定で弾いたため、本項は見出しとHNの議論に基づく。複数のコメントが計画自身の数字を引用している。］ 2021年からPerseveranceが採取・保管してきた岩石コアを回収する火星サンプルリターン計画が中止された。議論で繰り返される数字は、総費用が約110億ドルまで膨らんだこと、サンプル帰還が2040年まで後退したこと、回収量が約1.1ポンドで、アポロの842ポンドと比べて極端に少ないことだ。設計は新型大型ロケットではなくAriane 64を前提としていた。Perseveranceは採取と保管を続けるが、回収する予算付きの計画はもう存在しない。中国の天問3号は2028年頃の火星サンプルリターンを目指している。
+***** Take
+2040年完了を前提にした計画は、打ち上げ市場が16年間変わらないという賭けだった。火星表面のサンプル管は無駄ではないが、いまや買い手を待つ在庫であり、最有力の買い手は中国だ。
+***** Comments
+- 経営陣が費用を押し上げ、サンプル帰還は2040年まで先送り、しかも産業界と組まずAriane 64のような旧式ロケット前提で設計した。
+- 当面、人類を火星に送ることはない。着陸ははるかに簡単な部分だ。MSRは、何かを宇宙に持ち帰ることが実際どれほど難しいかを確かめる任務でもあった。
+- ExoMarsローバーのごく一部に関わった。2018年打ち上げ予定が今は2028年。今の世界情勢は宇宙探査に厳しいが、この計画が復活することを願っている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+NASA의 화성 샘플 회수 임무가 끝났다
+***** TLDR
+［Science.org가 직접 요청과 Jina 프록시를 모두 봇 검사로 차단해, 이 요약은 제목과 HN 토론을 근거로 한다. 여러 댓글이 프로그램 자체 수치를 인용한다.］ 퍼서비어런스가 2021년부터 시추해 보관해 온 암석 코어를 회수하려던 화성 샘플 회수 임무가 취소됐다. 토론에서 반복되는 숫자는 약 110억 달러까지 불어난 비용, 2040년으로 밀린 샘플 귀환 시점, 아폴로의 842파운드에 견줘 약 1.1파운드에 불과한 회수량이다. 설계는 신형 대형 발사체가 아니라 아리안 64를 전제로 했다. 퍼서비어런스는 계속 시료를 채취해 보관하지만, 이를 가지러 갈 예산이 붙은 계획은 이제 없다. 중국 톈원 3호는 2028년 무렵 화성 샘플 회수를 목표로 한다.
+***** Take
+2040년 완료를 전제한 임무는 발사 시장이 16년 동안 그대로일 것이라는 도박이었다. 화성 표면의 시료관이 낭비된 것은 아니지만, 이제는 구매자를 기다리는 재고이고 가장 유력한 구매자는 중국이다.
+***** Comments
+- 경영진이 비용을 올렸고 샘플은 2040년에야 가져오겠다고 했으며, 업계와 협력하는 대신 아리안 64 같은 구형 로켓에 맞춰 설계했다.
+- 당분간 인간을 화성에 보내지 못한다. 착륙은 훨씬 쉬운 부분이다. MSR은 무언가를 우주로 되돌려 보내는 게 실제로 얼마나 어려운지 확인하는 임무이기도 했다.
+- ExoMars 로버의 아주 작은 부분에 참여했다. 2018년 발사 예정이었는데 지금은 2028년이다. 지금 세계 상황은 우주 탐사에 좋지 않지만 이 임무가 부활하길 바란다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La misión Mars Sample Return de la NASA está muerta
+***** TLDR
+［Science.org bloqueó tanto la descarga directa como el proxy de Jina con una verificación antibots; esto proviene del titular y del hilo de HN, donde varios comentaristas citan las cifras del propio programa.］ Mars Sample Return, la misión para recuperar los testigos de roca que Perseverance lleva perforando y almacenando desde 2021, queda cancelada. Las cifras que se repiten: un coste que creció hasta unos 11.000 millones de dólares, una fecha de retorno que se había desplazado a 2040 y una carga de unas 1,1 libras de roca, frente a las 842 libras que trajo el programa Apolo. La arquitectura se diseñó en torno al Ariane 64 y no a los nuevos lanzadores pesados. Perseverance sigue recogiendo y almacenando muestras; ya no hay ningún plan financiado para ir a buscarlas. El Tianwen-3 chino apunta a un retorno de muestras marcianas hacia 2028.
+***** Take
+Una misión diseñada para terminar en 2040 ya era una apuesta a que nada cambiaría en el mercado de lanzamientos durante dieciséis años. Los tubos en la superficie marciana no son un desperdicio, pero ahora son inventario esperando comprador, y el comprador más probable es China.
+***** Comments
+- La dirección incrementó el coste del programa, no traería muestras hasta 2040 y diseñó en torno a cohetes heredados como el Ariane 64 en lugar de trabajar con la industria.
+- No vamos a poner humanos en Marte pronto. Aterrizar es la parte fácil. MSR era en parte una misión para ver lo difícil que es sacar cualquier cosa de vuelta al espacio.
+- Trabajé en una parte muy pequeña del rover ExoMars. Iba a lanzarse en 2018 y ahora es 2028. El estado del mundo no es bueno para la exploración espacial, pero espero que esta misión se reactive.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Mars-Sample-Return-Mission der NASA ist tot
+***** TLDR
+［Science.org blockierte sowohl den direkten Abruf als auch den Jina-Proxy mit einer Bot-Prüfung; Grundlage sind daher die Überschrift und der HN-Thread, in dem mehrere Kommentatoren die Zahlen des Programms zitieren.］ Mars Sample Return, die Mission zur Bergung der Gesteinskerne, die Perseverance seit 2021 bohrt und einlagert, ist gestrichen. Die wiederkehrenden Zahlen: Kosten von rund 11 Milliarden Dollar, ein auf 2040 verschobener Rückkehrtermin und eine Nutzlast von etwa 1,1 Pfund Gestein gegenüber 842 Pfund aus dem Apollo-Programm. Die Architektur war auf die Ariane 64 ausgelegt statt auf neuere Schwerlastraketen. Perseverance sammelt und lagert weiter Proben; einen finanzierten Plan, sie zu holen, gibt es nicht mehr. Chinas Tianwen-3 peilt eine Mars-Probenrückführung um 2028 an.
+***** Take
+Eine Mission mit Abschluss im Jahr 2040 war schon die Wette, dass sich am Startmarkt sechzehn Jahre lang nichts ändert. Die Röhren auf der Marsoberfläche sind nicht verschwendet, aber sie sind jetzt Bestand, der auf einen Abnehmer wartet, und der wahrscheinlichste Abnehmer ist China.
+***** Comments
+- Die Führung trieb die Programmkosten hoch, wollte Proben erst 2040 zurückbringen und plante um Altraketen wie die Ariane 64 herum, statt mit der Industrie zu arbeiten.
+- Wir bringen so bald keine Menschen zum Mars. Die Landung ist der einfache Teil. MSR war auch eine Mission, um zu sehen, wie schwer es wirklich ist, überhaupt etwas zurück ins All zu bekommen.
+- Ich habe an einem sehr kleinen Teil des ExoMars-Rovers gearbeitet. Start war für 2018 geplant, jetzt 2028. Die Weltlage ist schlecht für Raumfahrt, aber ich hoffe, die Mission wird wiederbelebt.
+** What Sun got wrong :history:hardware:business:solaris:
+:PROPERTIES:
+:ID:       49787436
+:URL:      https://bcantrill.dtrace.org/2026/09/20/what-sun-got-wrong/
+:HN_URL:   https://news.ycombinator.com/item?id=49787436
+:POINTS:   553
+:COMMENTS: 318
+:BY:       chmaynard
+:END:
+
+*** TLDR
+Bryan Cantrill argues Sun Microsystems was not killed by picking the wrong technology or the wrong strategy. It was killed by becoming bored with the mechanics of running a business. His central story: a startup running its infrastructure on OpenSolaris, exactly the customer Sun's open-source bet was supposed to produce, tried to buy Sun hardware and could not get anyone at Sun to pick up the phone. When Sun did respond, it pitched the wrong products. Dell's account executive did 95% of the work and won the deal. That rep, Steve, was later hired by the startup and eventually co-founded Oxide with Cantrill. Cantrill's conclusion: a company bored with the mechanics of its own business cannot succeed, however good the strategy looks on paper.
+
+*** Take
+The strongest version of this argument is in the HN thread, where a former employee describes sales commissions calculated with no profitability requirement, so the sales org was rewarded for closing deals that lost money. That is not boredom, that is a compensation plan pointed at the company's own throat. Cantrill's story about the unanswered phone is the symptom; the comp plan is the mechanism.
+
+*** Comments
+
+**** Twirrim
+:PROPERTIES:
+:COMMENT_ID: 49790451
+:END:
+Sales commission was calculated with no requirement for the contract to be profitable. Sales folks were literally selling the company into bankruptcy.
+
+**** cryptonector
+:PROPERTIES:
+:COMMENT_ID: 49793037
+:END:
+Cancelling, if briefly, Solaris on x86 in 2002 killed Solaris in the minds of many who didn't want to be locked into SPARC.
+
+**** coreyh14444
+:PROPERTIES:
+:COMMENT_ID: 49788512
+:END:
+Buying from Sun meant a live sales meeting and endless quote revisions. The rails and power cords for an Alpha cost more than a shipped Dell server.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Sun 错在哪里
+***** TLDR
+Bryan Cantrill 认为，杀死 Sun 的不是选错技术或战略，而是它对经营一家公司的日常机制失去了兴趣。他的核心故事是：一家用 OpenSolaris 跑基础设施的创业公司，正是 Sun 开源押注理应换来的客户，想买 Sun 的硬件，却找不到任何人接电话。等 Sun 回应时，推销的还是错误的产品。戴尔的客户经理做了 95% 的工作，拿下了这单。那位销售 Steve 后来被这家创业公司雇用，并最终与 Cantrill 共同创办了 Oxide。Cantrill 的结论是：一家对自身业务机制感到厌倦的公司不可能成功，无论战略在纸面上多漂亮。
+***** Take
+这个论点最有力的版本其实在 HN 讨论里：一位前员工说，销售提成的计算根本不要求合同盈利，于是销售组织因为签下亏钱的单子而获得奖励。那不是厌倦，那是一套对准公司自己喉咙的薪酬方案。Cantrill 那个没人接电话的故事是症状，薪酬方案才是病因。
+***** Comments
+- 销售提成的计算根本不要求合同盈利。销售人员实际上是在把公司卖到破产。
+- 2002 年短暂取消 x86 版 Solaris，让很多不愿被 SPARC 锁定的人从心里放弃了 Solaris。
+- 从 Sun 采购意味着现场销售会议和没完没了的报价修改。一台 Alpha 的导轨和电源线比一台包邮的戴尔服务器还贵。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Sunは何を間違えたか
+***** TLDR
+Bryan Cantrillは、Sun Microsystemsを滅ぼしたのは技術や戦略の選択ミスではなく、事業を回すという実務そのものに飽きたことだと論じる。中心となる逸話はこうだ。OpenSolarisで自社インフラを動かすスタートアップ、つまりSunのオープンソース戦略が生むはずだった理想の顧客が、Sunのハードウェアを買おうとしたが、誰も電話に出なかった。ようやく反応したときには見当違いの製品を売り込んだ。Dellの営業担当が作業の95%を引き受け、案件を獲得した。その営業Steveは後にそのスタートアップに採用され、最終的にCantrillとOxideを共同創業する。結論は、自社の事業の実務に飽きた会社は、戦略が紙の上でどれほど優れていても成功できない、というものだ。
+***** Take
+この主張の最も強い形はHNのスレッドにある。元社員によれば、営業のコミッションは契約が黒字であることを要件にせず計算されていた。つまり赤字案件を取ることに報酬が出ていた。それは飽きではなく、自社の喉元に向けた報酬制度だ。電話に出なかった話は症状で、報酬制度が原因である。
+***** Comments
+- 営業のコミッションは契約が黒字であることを条件にしていなかった。営業は文字どおり会社を倒産に売り込んでいた。
+- 2002年に一時的とはいえx86版Solarisを打ち切ったことで、SPARCに縛られたくない層の中でSolarisは終わった。
+- Sunから買うには対面の商談と延々と続く見積もり修正が必要だった。Alphaのレールと電源ケーブルだけで、配送込みのDellサーバーより高くついた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Sun이 무엇을 잘못했나
+***** TLDR
+브라이언 캔트릴은 썬마이크로시스템즈를 죽인 것이 잘못된 기술이나 전략이 아니라, 사업을 굴리는 실무 자체에 지겨워진 태도였다고 주장한다. 핵심 일화는 이렇다. OpenSolaris로 인프라를 돌리던 스타트업, 즉 썬의 오픈소스 베팅이 만들어냈어야 할 바로 그 고객이 썬 하드웨어를 사려 했지만 아무도 전화를 받지 않았다. 썬이 응답했을 때는 엉뚱한 제품을 제안했다. 델의 담당 영업이 일의 95%를 처리하고 거래를 따냈다. 그 영업사원 스티브는 나중에 그 스타트업에 채용됐고 결국 캔트릴과 함께 Oxide를 공동 창업했다. 결론은, 자기 사업의 실무에 지겨워진 회사는 전략이 종이 위에서 아무리 훌륭해도 성공할 수 없다는 것이다.
+***** Take
+이 주장의 가장 강한 판본은 HN 스레드에 있다. 한 전직 직원은 영업 커미션이 계약의 수익성을 요건으로 삼지 않고 계산됐다고 말한다. 적자 거래를 따내는 데 보상을 준 셈이다. 그것은 지겨움이 아니라 회사 목에 겨눈 보상 제도다. 전화를 받지 않았다는 이야기는 증상이고, 보상 제도가 원인이다.
+***** Comments
+- 영업 커미션은 계약이 수익성을 내야 한다는 요건 없이 계산됐다. 영업 조직은 말 그대로 회사를 파산으로 팔아넘기고 있었다.
+- 2002년에 잠깐이나마 x86용 솔라리스를 취소한 일은, SPARC에 묶이기 싫었던 많은 사람의 머릿속에서 솔라리스를 끝장냈다.
+- 썬에서 사려면 대면 영업 미팅과 끝없는 견적 수정이 필요했다. 알파 서버의 레일과 전원 코드 값이 배송 포함 델 서버보다 비쌌다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Qué hizo mal Sun
+***** TLDR
+Bryan Cantrill sostiene que a Sun Microsystems no la mató elegir la tecnología o la estrategia equivocadas, sino aburrirse de la mecánica de llevar un negocio. Su relato central: una startup que operaba su infraestructura sobre OpenSolaris, justo el cliente que la apuesta open source de Sun debía producir, intentó comprar hardware de Sun y no consiguió que nadie contestara el teléfono. Cuando Sun respondió, ofreció los productos equivocados. El comercial de Dell hizo el 95% del trabajo y se llevó el contrato. Ese comercial, Steve, fue después contratado por la startup y acabó cofundando Oxide con Cantrill. La conclusión: una empresa aburrida de la mecánica de su propio negocio no puede triunfar, por buena que parezca la estrategia sobre el papel.
+***** Take
+La versión más fuerte de este argumento está en el hilo de HN, donde un exempleado describe comisiones de ventas calculadas sin exigir que el contrato fuera rentable, de modo que el equipo comercial cobraba por cerrar operaciones que perdían dinero. Eso no es aburrimiento, es un plan de retribución apuntando al cuello de la propia empresa. El teléfono que nadie contesta es el síntoma; el plan de comisiones es el mecanismo.
+***** Comments
+- La comisión de ventas se calculaba sin exigir que el contrato fuera rentable. Los comerciales estaban literalmente vendiendo la empresa hacia la quiebra.
+- Cancelar, aunque fuera brevemente, Solaris sobre x86 en 2002 mató a Solaris en la mente de muchos que no querían quedar atados a SPARC.
+- Comprar a Sun implicaba una reunión comercial presencial y revisiones de presupuesto interminables. Los raíles y cables de un Alpha costaban más que un servidor Dell entregado.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Was Sun falsch gemacht hat
+***** TLDR
+Bryan Cantrill argumentiert, Sun Microsystems sei nicht an der falschen Technologie oder Strategie gescheitert, sondern daran, dass die Firma die Mechanik des Geschäftsbetriebs langweilig fand. Seine zentrale Geschichte: Ein Startup, das seine Infrastruktur auf OpenSolaris betrieb, also genau der Kunde, den Suns Open-Source-Wette hervorbringen sollte, wollte Sun-Hardware kaufen und erreichte niemanden am Telefon. Als Sun reagierte, bot es die falschen Produkte an. Der Dell-Vertriebler erledigte 95% der Arbeit und gewann den Auftrag. Dieser Vertriebler, Steve, wurde später vom Startup eingestellt und gründete schließlich mit Cantrill Oxide. Sein Fazit: Ein Unternehmen, dem die Mechanik des eigenen Geschäfts langweilig geworden ist, kann nicht erfolgreich sein, wie gut die Strategie auf dem Papier auch aussieht.
+***** Take
+Die stärkste Fassung dieses Arguments steht im HN-Thread: Ein früherer Mitarbeiter beschreibt Vertriebsprovisionen, die ohne jede Profitabilitätsanforderung berechnet wurden, sodass der Vertrieb fürs Abschließen defizitärer Geschäfte belohnt wurde. Das ist keine Langeweile, das ist ein Vergütungsplan, der auf die eigene Kehle zielt. Das unbeantwortete Telefon ist das Symptom, der Provisionsplan ist der Mechanismus.
+***** Comments
+- Die Vertriebsprovision wurde ohne Anforderung an die Profitabilität des Vertrags berechnet. Die Vertriebsleute haben die Firma buchstäblich in die Insolvenz verkauft.
+- Solaris auf x86 2002 auch nur kurz einzustellen, hat Solaris in den Köpfen vieler erledigt, die sich nicht an SPARC binden wollten.
+- Bei Sun zu kaufen hieß: Vor-Ort-Verkaufstermin und endlose Angebotsrevisionen. Schienen und Netzkabel für einen Alpha kosteten mehr als ein gelieferter Dell-Server.
+** I don't want to read what you didn't write :ai:writing:culture:engineering:
+:PROPERTIES:
+:ID:       49794330
+:URL:      https://blog.colinbreck.com/i-dont-want-to-read-what-you-didnt-write/
+:HN_URL:   https://news.ycombinator.com/item?id=49794330
+:POINTS:   503
+:COMMENTS: 180
+:BY:       mooreds
+:END:
+
+*** TLDR
+Colin Breck's complaint is specific: the person who writes the prompt holds the constraints and source material, so the generated text reads as useful to them, while the reader gets prose stripped of that context and has to read exhaustively to recover any of it. His examples are design documents written after the software already worked, pull requests heavy on mechanical detail and silent on why the approach was chosen, and someone summarizing his own comments back at him as a reply. He also describes an AI-polished personal message about a sensitive subject that read as impersonal. He is not against the tools: he details using AI for citation management, verification, grammar and technical diagrams on an academic paper, where the thinking was still his.
+
+*** Take
+The line worth keeping is the one about asymmetry. The generated document is cheap to produce and expensive to read, and the cost lands on someone who did not choose to pay it. Every team that now requires an AI summary on every PR has quietly moved work from the author to every reviewer, and has not measured it.
+
+*** Comments
+
+**** hatthew
+:PROPERTIES:
+:COMMENT_ID: 49794483
+:END:
+If you have 1000 bits of semantic information to transfer, you can't give 300 bits to an LLM and have it fill in the remaining 700. It doesn't know what those 700 bits are.
+
+**** zmmmmm
+:PROPERTIES:
+:COMMENT_ID: 49794912
+:END:
+I push back on pull requests because there is too much description now. A 20 line change gets pages of generated rationalisation. People are indignant: you're rejecting my change because there is too much documentation?
+
+**** blandcoffee
+:PROPERTIES:
+:COMMENT_ID: 49795104
+:END:
+I commend the author on publishing, but the first sentence of the first paragraph is exactly what they lament.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我不想读你没写的东西
+***** TLDR
+Colin Breck 的抱怨很具体：写提示词的人掌握着约束条件和原始材料，所以生成的文本在他自己看来有用，而读者拿到的是剥离了这些上下文的文字，必须逐字苦读才能还原一点点。他举的例子包括：软件已经跑通之后才补写的设计文档；充满机械细节却对为什么选这条路只字不提的 PR；以及有人把他自己的评论总结一遍再回复给他。他还讲到一条被 AI 润色过的私人消息，谈的是敏感话题，读起来却毫无人味。他并不反对这些工具：他详细说明了在写学术论文时用 AI 做引用管理、事实核对、语法检查和技术图表，而思考仍然是他自己的。
+***** Take
+值得记住的是那个不对称：生成一份文档很便宜，读它很贵，而这笔代价落在没有选择付账的人身上。现在每个要求 PR 都带 AI 摘要的团队，实际上都把工作从作者转移给了每一位评审者，而且从没量化过。
+***** Comments
+- 如果你有 1000 比特语义信息要传达，你不能只给大模型 300 比特，让它补上剩下的 700 比特。它根本不知道那 700 比特是什么。
+- 我现在因为描述太多而打回 PR。20 行的改动配上好几页生成的辩解。有人很不服气：你因为文档太多就拒绝我的改动？
+- 我赞赏作者把文章发出来，但第一段的第一句话正是他所批评的那种东西。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+あなたが書いていないものを読みたくない
+***** TLDR
+Colin Breckの不満は具体的だ。プロンプトを書いた人間は制約も元資料も持っているので生成文が有用に見えるが、読者はその文脈を剥ぎ取られた文章を受け取り、わずかな情報を回収するために隅々まで読まされる。例として挙げるのは、ソフトウェアが既に動いた後で書かれた設計文書、機械的な詳細ばかりでなぜその方式を選んだかを語らないプルリクエスト、そして自分のコメントを要約し返されただけの返信だ。さらに、デリケートな話題についてAIで整えられた個人的なメッセージが、まったく人間味なく読めた経験も語る。ツール自体には反対していない。学術論文では引用管理、事実確認、文法、技術図の作成にAIを使ったと詳述しており、そこでは思考は自分のものだった。
+***** Take
+残すべきは非対称性の指摘だ。生成された文書は作るのが安く読むのが高い。そしてその代価を払うのは、払うと決めていない側だ。すべてのPRにAI要約を義務づけたチームは、作業を書き手からレビュアー全員へ静かに移し、しかも計測していない。
+***** Comments
+- 1000ビットの意味情報を伝えたいなら、300ビットだけLLMに渡して残り700ビットを埋めさせることはできない。その700ビットが何かをLLMは知らない。
+- 今は説明が多すぎるという理由でプルリクエストを差し戻している。20行の変更に何ページもの生成された正当化がつく。皆憤慨する。文書が多すぎるから却下するのかと。
+- 著者が公開したことは評価するが、最初の段落の一文目こそ、まさに彼が嘆いているものだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+당신이 쓰지 않은 글은 읽고 싶지 않다
+***** TLDR
+콜린 브렉의 불만은 구체적이다. 프롬프트를 쓴 사람은 제약 조건과 원자료를 쥐고 있어서 생성된 글이 유용해 보이지만, 독자는 그 맥락이 걷힌 문장을 받아 들고 조금이라도 복원하려면 전부 꼼꼼히 읽어야 한다. 그가 드는 사례는 소프트웨어가 이미 돌아간 뒤에 쓰인 설계 문서, 기계적인 세부는 가득한데 왜 그 방식을 택했는지는 침묵하는 풀 리퀘스트, 그리고 자기 댓글을 요약해 답변이라고 돌려준 사람이다. 민감한 주제를 다룬 개인적인 메시지가 AI로 다듬어진 뒤 아무 온기 없이 읽혔던 경험도 이야기한다. 그는 도구 자체에 반대하지 않는다. 학술 논문에서 인용 관리, 검증, 문법, 기술 도표에 AI를 썼다고 상세히 밝히며, 거기서 사고는 여전히 그의 것이었다.
+***** Take
+남길 만한 지점은 비대칭이다. 생성된 문서는 만들기는 싸고 읽기는 비싸며, 그 비용은 지불하겠다고 선택한 적 없는 사람에게 떨어진다. 이제 모든 PR에 AI 요약을 요구하는 팀은 작업을 작성자에게서 모든 리뷰어에게로 조용히 옮겼고, 그 양을 측정한 적이 없다.
+***** Comments
+- 전달할 의미 정보가 1000비트라면, LLM에 300비트만 주고 나머지 700비트를 채우게 할 수는 없다. 그 700비트가 뭔지 모르기 때문이다.
+- 요즘은 설명이 너무 많아서 풀 리퀘스트를 돌려보낸다. 20줄짜리 변경에 생성된 정당화가 몇 쪽씩 붙는다. 다들 분개한다. 문서가 많아서 거절하는 거냐고.
+- 저자가 글을 공개한 것은 훌륭하지만, 첫 문단의 첫 문장이 바로 그가 한탄하는 그것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+No quiero leer lo que no escribiste
+***** TLDR
+La queja de Colin Breck es concreta: quien escribe el prompt tiene las restricciones y el material de origen, así que el texto generado le parece útil, mientras el lector recibe una prosa despojada de ese contexto y debe leerlo todo para recuperar algo. Sus ejemplos son documentos de diseño escritos cuando el software ya funcionaba, pull requests cargados de detalle mecánico y mudos sobre por qué se eligió ese enfoque, y alguien que le resumió sus propios comentarios como respuesta. También describe un mensaje personal sobre un tema delicado, pulido con IA, que resultó impersonal. No está en contra de las herramientas: detalla haber usado IA para gestión de citas, verificación, gramática y diagramas técnicos en un artículo académico, donde el pensamiento seguía siendo suyo.
+***** Take
+La idea que vale la pena conservar es la asimetría. El documento generado es barato de producir y caro de leer, y el coste recae en alguien que no eligió pagarlo. Todo equipo que ahora exige un resumen de IA en cada PR ha trasladado trabajo del autor a cada revisor, y no lo ha medido.
+***** Comments
+- Si tienes 1000 bits de información semántica que transferir, no puedes darle 300 bits a un LLM y que rellene los otros 700. No sabe cuáles son esos 700 bits.
+- Rechazo pull requests porque ahora hay demasiada descripción. Un cambio de 20 líneas trae páginas de justificación generada. La gente se indigna: ¿rechazas mi cambio por exceso de documentación?
+- Aplaudo que el autor publique, pero la primera frase del primer párrafo es exactamente lo que lamenta.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ich will nicht lesen, was du nicht geschrieben hast
+***** TLDR
+Colin Brecks Einwand ist konkret: Wer den Prompt schreibt, hat die Randbedingungen und das Ausgangsmaterial, deshalb wirkt der generierte Text für ihn nützlich, während die Leserschaft Prosa ohne diesen Kontext bekommt und alles durcharbeiten muss, um irgendetwas davon zurückzugewinnen. Seine Beispiele: Designdokumente, die erst entstanden, als die Software längst lief, Pull Requests voller mechanischer Details und ohne ein Wort zur Begründung des Ansatzes, und jemand, der ihm seine eigenen Kommentare als Antwort zusammenfasste. Er schildert außerdem eine mit KI geglättete persönliche Nachricht zu einem heiklen Thema, die unpersönlich wirkte. Gegen die Werkzeuge ist er nicht: Für eine wissenschaftliche Arbeit nutzte er KI für Zitatverwaltung, Überprüfung, Grammatik und technische Diagramme, während das Denken seines blieb.
+***** Take
+Festhalten sollte man die Asymmetrie. Das generierte Dokument ist billig zu erzeugen und teuer zu lesen, und die Kosten trägt jemand, der sich nicht dafür entschieden hat. Jedes Team, das jetzt eine KI-Zusammenfassung für jeden PR verlangt, hat Arbeit vom Autor auf alle Reviewer verschoben und nie gemessen, wie viel.
+***** Comments
+- Wenn du 1000 Bit semantische Information übertragen willst, kannst du einem LLM nicht 300 Bit geben und die restlichen 700 füllen lassen. Es weiß nicht, welche 700 das sind.
+- Ich weise Pull Requests zurück, weil es inzwischen zu viel Beschreibung gibt. Eine 20-Zeilen-Änderung bringt seitenweise generierte Rechtfertigung. Die Leute sind empört: Du lehnst meine Änderung wegen zu viel Dokumentation ab?
+- Ich erkenne an, dass der Autor veröffentlicht, aber der erste Satz des ersten Absatzes ist genau das, was er beklagt.
+** Spymarks, Not Watermarks :privacy:security:ai:steganography:
+:PROPERTIES:
+:ID:       49794615
+:URL:      https://brand.io/article/spymarks/
+:HN_URL:   https://news.ycombinator.com/item?id=49794615
+:POINTS:   280
+:COMMENTS: 67
+:BY:       possibilistic
+:END:
+
+*** TLDR
+The article proposes a vocabulary change rather than a technical fix. A watermark is a visible mark that asserts authenticity or ownership; a spymark is a hidden signal that makes a file traceable without the creator's knowledge or consent. It names Google SynthID, which embeds imperceptible signals in image, audio, text and video, with SynthID-Image reported to carry a 136-bit payload in a 512x512 image, enough for a 64-bit database identifier plus error correction. It also cites OpenAI's work in the same area, the open-source audiowmark (128-bit payloads in audio since 2018), and printer tracking dots from the 1980s as the precedent. The proposal: call these systems spymarks so that non-technical readers hear the privacy question immediately.
+
+*** Take
+A 136-bit payload in a thumbnail-sized image is the whole argument. That is not provenance, that is a serial number, and a serial number only means something if someone keeps the table that maps it to a person. The renaming campaign is the weakest part of the piece: the pushback in the thread is that 'invisible watermark' already says the thing, and coining a scarier word is not the same as getting anyone to publish their lookup table.
+
+*** Comments
+
+**** xp84
+:PROPERTIES:
+:COMMENT_ID: 49795239
+:END:
+These will be very popular for intercepting images on their way to a display. Ad attribution can be vastly improved when the ad and every step in the funnel are spymarked and reported on by virtue of hitting your screen.
+
+**** Retro_Dev
+:PROPERTIES:
+:COMMENT_ID: 49796270
+:END:
+Spymarks just seem like another word for steganography. One way to prevent it is to assert that all our content is byte-for-byte identical with the last known trusted stage.
+
+**** pavo-etc
+:PROPERTIES:
+:COMMENT_ID: 49794870
+:END:
+I'm not convinced spymark is better than just invisible watermarks. Spymark sounds designed to be very negative.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+是间谍标记，不是水印
+***** TLDR
+这篇文章提出的是换个说法，而不是技术方案。水印是可见的标记，用来声明真实性或所有权；间谍标记则是隐藏信号，让文件在创作者不知情、未同意的情况下可被追踪。文章点名 Google SynthID，它把人眼不可察的信号嵌入图像、音频、文本和视频，据称 SynthID-Image 能在 512x512 的图像里携带 136 比特载荷，足够放下 64 比特数据库标识符再加纠错。文章还提到 OpenAI 在同一方向的工作、开源的 audiowmark（2018 年起可在音频中嵌入 128 比特载荷），以及 1980 年代打印机追踪点这一先例。主张是：把这类系统叫作间谍标记，让非技术读者一听就想到隐私问题。
+***** Take
+缩略图大小的图像里塞进 136 比特，这本身就是全部论据。那不是溯源，那是序列号，而序列号只有在有人保存着它到具体个人的对照表时才有意义。文章最弱的部分恰恰是改名运动：讨论区的反驳是，“不可见水印”这个词已经说清楚了，造一个更吓人的词，并不等于让谁公开自己的对照表。
+***** Comments
+- 这类技术会在图像送往显示器的途中被大量截取利用。当广告和漏斗的每一步都被打上间谍标记，并凭借显示在你屏幕上而被回报，广告归因就能大幅改善。
+- 间谍标记不过是隐写术的另一种说法。防范办法之一是确保我们的内容与最后一个可信环节逐字节一致。
+- 我不觉得间谍标记比直接说不可见水印更好。间谍标记听起来就是刻意做得很负面。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ウォーターマークではなくスパイマーク
+***** TLDR
+この記事が提案するのは技術的対策ではなく語彙の変更だ。ウォーターマークは真正性や所有権を主張する可視の印であり、スパイマークは制作者の認識も同意もなくファイルを追跡可能にする隠し信号である。記事はGoogle SynthIDを名指しする。画像・音声・テキスト・動画に知覚できない信号を埋め込み、SynthID-Imageは512x512の画像に136ビットのペイロードを載せられるとされる。64ビットのデータベース識別子に誤り訂正を加えるのに十分な量だ。さらにOpenAIの同種の取り組み、オープンソースのaudiowmark（2018年から音声に128ビット）、そして1980年代のプリンター追跡ドットを先例として挙げる。提案は、こうした仕組みをスパイマークと呼び、技術者でない読者にも即座にプライバシーの問題だと伝えることだ。
+***** Take
+サムネイル大の画像に136ビット、これだけで議論は尽きている。これは来歴ではなくシリアル番号であり、シリアル番号は誰かがそれと個人を結ぶ対応表を保持して初めて意味を持つ。記事の最も弱い部分は改名運動だ。スレッドの反論はこうだ。「不可視ウォーターマーク」で既に意味は通じており、より怖い言葉を作ることは、誰かに対応表を公開させることとは別物だ。
+***** Comments
+- これはディスプレイに届く途中の画像を捕捉する用途で非常に人気が出るだろう。広告とファネルの各段階すべてにスパイマークが入り、画面に表示されたことで報告されるなら、広告のアトリビューションは大幅に改善される。
+- スパイマークはステガノグラフィの別名にすぎない。防ぐ方法の一つは、自分のコンテンツが最後に信頼できる段階とバイト単位で一致していると確認することだ。
+- スパイマークが単なる不可視ウォーターマークより良いとは思わない。わざと否定的に響くよう作られた言葉に聞こえる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+워터마크가 아니라 스파이마크
+***** TLDR
+이 글이 제안하는 것은 기술적 해법이 아니라 용어 교체다. 워터마크는 진위나 소유권을 주장하는 눈에 보이는 표식이고, 스파이마크는 제작자가 알지도 동의하지도 않은 채 파일을 추적 가능하게 만드는 숨은 신호다. 글은 구글 SynthID를 지목한다. 이미지, 오디오, 텍스트, 영상에 지각할 수 없는 신호를 심으며, SynthID-Image는 512x512 이미지에 136비트 페이로드를 담을 수 있다고 알려져 있다. 64비트 데이터베이스 식별자에 오류 정정을 더하기 충분한 양이다. OpenAI의 유사한 작업, 2018년부터 오디오에 128비트를 넣어 온 오픈소스 audiowmark, 그리고 1980년대 프린터 추적 점도 선례로 든다. 제안은 이런 시스템을 스파이마크라 불러 비전문가도 곧바로 프라이버시 문제를 떠올리게 하자는 것이다.
+***** Take
+썸네일 크기 이미지에 136비트라는 사실 자체가 논증 전부다. 그것은 출처 증명이 아니라 일련번호이고, 일련번호는 누군가 그것을 사람과 연결하는 대조표를 보관해야만 의미가 생긴다. 글에서 가장 약한 부분은 이름 바꾸기 운동이다. 스레드의 반론은, '비가시 워터마크'라는 말이 이미 그 뜻을 담고 있고, 더 무서운 단어를 만드는 일이 누군가에게 대조표를 공개하게 만드는 일과는 다르다는 것이다.
+***** Comments
+- 이런 기술은 화면으로 가는 도중의 이미지를 가로채는 용도로 아주 인기를 끌 것이다. 광고와 퍼널의 모든 단계에 스파이마크가 찍히고 화면에 뜬 것만으로 보고된다면 광고 기여도 측정이 크게 개선된다.
+- 스파이마크는 스테가노그래피의 다른 이름일 뿐이다. 막는 방법 하나는 우리 콘텐츠가 마지막으로 신뢰한 단계와 바이트 단위로 동일하다고 확인하는 것이다.
+- 스파이마크가 그냥 비가시 워터마크보다 낫다고 생각하지 않는다. 일부러 아주 부정적으로 들리게 만든 말 같다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Spymarks, no marcas de agua
+***** TLDR
+El artículo propone un cambio de vocabulario, no una solución técnica. Una marca de agua es una marca visible que afirma autenticidad o propiedad; un spymark es una señal oculta que hace rastreable un archivo sin conocimiento ni consentimiento de su creador. Señala a Google SynthID, que incrusta señales imperceptibles en imagen, audio, texto y vídeo, con SynthID-Image capaz de llevar una carga de 136 bits en una imagen de 512x512, suficiente para un identificador de base de datos de 64 bits más corrección de errores. También cita el trabajo de OpenAI en la misma línea, el audiowmark de código abierto (cargas de 128 bits en audio desde 2018) y los puntos de rastreo de impresoras de los años ochenta como precedente. La propuesta: llamarlos spymarks para que el lector no técnico oiga de inmediato la cuestión de privacidad.
+***** Take
+Una carga de 136 bits en una imagen del tamaño de una miniatura es todo el argumento. Eso no es procedencia, es un número de serie, y un número de serie solo significa algo si alguien conserva la tabla que lo asocia a una persona. La parte más floja del texto es la campaña de renombrado: en el hilo responden que 'marca de agua invisible' ya dice lo que hay, y acuñar una palabra más amenazante no equivale a que nadie publique su tabla de correspondencias.
+***** Comments
+- Serán muy populares para interceptar imágenes camino de la pantalla. La atribución publicitaria mejora mucho cuando el anuncio y cada paso del embudo llevan spymark y se reportan por el mero hecho de llegar a tu pantalla.
+- Los spymarks parecen otra palabra para esteganografía. Una forma de evitarlo es afirmar que nuestro contenido es idéntico byte a byte a la última etapa de confianza conocida.
+- No me convence que spymark sea mejor que decir marcas de agua invisibles. Spymark suena diseñado para sonar muy negativo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Spymarks statt Wasserzeichen
+***** TLDR
+Der Artikel schlägt eine Änderung des Vokabulars vor, keine technische Lösung. Ein Wasserzeichen ist eine sichtbare Markierung, die Echtheit oder Eigentum behauptet; ein Spymark ist ein verstecktes Signal, das eine Datei ohne Wissen und Zustimmung des Urhebers rückverfolgbar macht. Genannt wird Google SynthID, das nicht wahrnehmbare Signale in Bild, Audio, Text und Video einbettet; SynthID-Image soll in einem 512x512-Bild 136 Bit Nutzlast unterbringen, genug für eine 64-Bit-Datenbankkennung plus Fehlerkorrektur. Ebenfalls zitiert werden OpenAIs Arbeiten in dieselbe Richtung, das quelloffene audiowmark (seit 2018 128-Bit-Nutzlasten in Audio) und Drucker-Tracking-Punkte aus den 1980ern als Präzedenzfall. Der Vorschlag: diese Systeme Spymarks nennen, damit auch nichttechnische Leser sofort die Datenschutzfrage hören.
+***** Take
+136 Bit Nutzlast in einem Bild von Thumbnail-Größe sind das ganze Argument. Das ist keine Herkunftsangabe, das ist eine Seriennummer, und eine Seriennummer bedeutet nur etwas, wenn jemand die Tabelle führt, die sie einer Person zuordnet. Der schwächste Teil ist die Umbenennungskampagne: Im Thread heißt es, 'unsichtbares Wasserzeichen' sage die Sache bereits, und ein gruseligeres Wort zu prägen bewegt niemanden dazu, seine Zuordnungstabelle offenzulegen.
+***** Comments
+- Die werden sehr beliebt, um Bilder auf dem Weg zum Display abzugreifen. Werbe-Attribution lässt sich enorm verbessern, wenn Anzeige und jeder Schritt im Funnel gespymarkt sind und allein durchs Erscheinen auf dem Bildschirm gemeldet werden.
+- Spymarks sind nur ein anderes Wort für Steganografie. Ein Gegenmittel ist, sicherzustellen, dass unsere Inhalte Byte für Byte identisch mit der letzten vertrauenswürdigen Stufe sind.
+- Ich bin nicht überzeugt, dass Spymark besser ist als einfach unsichtbare Wasserzeichen. Spymark klingt bewusst sehr negativ.
