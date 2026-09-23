@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-09-23 11:00 UTC
+#+DATE: 2026-09-23T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A parody rebuilds Jev in 25 lines, Pew finds no clean way to remove fake poll respondents, and one tool turns up 944 data-only exploits in nginx
+
+* Highlights
+- Jev in 25 lines: logits, softmax, none of the calibration
+- Opus 5.5: index 58 at $5.98 per task, about half of Opus 5
+- Pew: voter-file matching made poll data worse, not better
+- Einstein: 944 confirmed exploit primitives in nginx alone
+- npunlock: custom C on Intel's undocumented SHAVE cores
+
+* Stories
+
+** Jev in 25 Lines of Python :llm:python:classification:local-inference:
+:PROPERTIES:
+:ID:       49812769
+:URL:      https://www.nobodywho.ai/posts/jev-in-25-lines/
+:HN_URL:   https://news.ycombinator.com/item?id=49812769
+:POINTS:   198
+:COMMENTS: 66
+:BY:       bashbjorn
+:END:
+
+*** TLDR
+NobodyWho reimplements the core of Jev as a 25-line script: load Qwen3-0.6B through llama-cpp-python, send a prompt listing the choices, pull the raw logits for the next token and softmax them into probabilities. Their demo scores an email at 0.885 phishing, 0.084 spam, 0.031 legitimate. The post is openly a parody and admits it skips Jev's RLCD training, which is what the real system claims its calibration from.
+
+*** Take
+The 25 lines reproduce the shape of Jev and none of the calibration, which is the part that is hard. The comments hit that weak point from two directions: sigmoid10 notes a chat-tuned model wants to write prose, so the choice tokens compete with whatever else it planned to say, and antirez points out that putting the options before the email lets masked attention work on the right task from the first token. Both are describing scaffolding the 25 lines do not have.
+
+*** Comments
+
+**** sigmoid10
+Going directly for the logprobs is always icky when you use a chat model as base, because they are trained to write prose as output. So your choice tokens and their probabilities might get diluted in whatever else it wanted to say.
+
+**** antirez
+Because of masked attention, if you put the options before the body, the transformer already knows what it needs to look for and can use more tokens to address that specific task.
+
+**** K0IN
+Most chat models want to answer with a human-readable message, so I think their logprobs are not as meaningful.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用 25 行 Python 实现 Jev
+***** TLDR
+NobodyWho 用 25 行脚本重现了 Jev 的核心：通过 llama-cpp-python 加载 Qwen3-0.6B，发送一个列出选项的提示词，取出下一个 token 的原始 logits，再用 softmax 转成概率。演示中一封邮件得分为钓鱼 0.885、垃圾邮件 0.084、正常 0.031。文章明说这是戏仿，并承认跳过了 Jev 的 RLCD 训练，而真实系统的校准正是来自那部分。
+***** Take
+这 25 行复现了 Jev 的形状，却没有复现校准，而校准才是难点。评论从两个方向指出了这个弱点：sigmoid10 指出聊天模型被训练成要写散文，选项 token 的概率会被它本来想说的话稀释；antirez 指出把选项放在邮件正文之前，掩码注意力从第一个 token 起就知道该关注什么。两人描述的都是这 25 行没有的脚手架。
+***** Comments
+- 用聊天模型作为基座时直接取 logprobs 总是别扭，因为它们被训练成输出散文。你的选项 token 及其概率会被它本来想说的内容稀释。
+- 由于掩码注意力，如果把选项放在正文之前，transformer 就已经知道该找什么，可以用更多 token 来处理这个特定任务。
+- 大多数聊天模型都想用人类可读的方式回答，所以我认为它们的 logprobs 意义没那么大。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Python 25行で作るJev
+***** TLDR
+NobodyWhoがJevの中核を25行のスクリプトで再実装した。llama-cpp-python経由でQwen3-0.6Bを読み込み、選択肢を並べたプロンプトを送り、次トークンの生のlogitsを取り出してsoftmaxで確率に変換する。デモではメールをフィッシング0.885、スパム0.084、正常0.031と判定した。記事はパロディだと明言し、実システムが較正の根拠とするRLCD学習は省いていると認めている。
+***** Take
+25行が再現しているのはJevの形だけで、難しい部分である較正は再現されていない。コメントは二方向からその弱点を突く。sigmoid10はチャット調整済みモデルは散文を書きたがるため、選択肢トークンが他の出力候補と競合すると指摘する。antirezは選択肢を本文の前に置けばマスク注意が最初のトークンから正しいタスクに働くと言う。どちらもこの25行にはない足場の話だ。
+***** Comments
+- チャットモデルをベースにしてlogprobsを直接取るのは常に気持ち悪い。散文を出力するよう訓練されているので、選択肢トークンとその確率が本来書きたかった内容に薄められてしまう。
+- マスク注意のため、選択肢を本文の前に置けばtransformerは何を探すべきか既に分かっていて、その特定のタスクにより多くのトークンを使える。
+- ほとんどのチャットモデルは人間が読める文章で答えたがるので、logprobsはそれほど意味がないと思う。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+파이썬 25줄로 만든 Jev
+***** TLDR
+NobodyWho가 Jev의 핵심을 25줄 스크립트로 재구현했다. llama-cpp-python으로 Qwen3-0.6B를 불러오고, 선택지를 나열한 프롬프트를 보낸 뒤, 다음 토큰의 원시 logits를 꺼내 softmax로 확률로 바꾼다. 데모에서 이메일은 피싱 0.885, 스팸 0.084, 정상 0.031로 나왔다. 글은 패러디임을 분명히 밝히며, 실제 시스템이 보정의 근거로 내세우는 RLCD 학습은 생략했다고 인정한다.
+***** Take
+25줄은 Jev의 형태만 재현했을 뿐 어려운 부분인 보정은 재현하지 못했다. 댓글은 그 약점을 두 방향에서 짚는다. sigmoid10은 채팅용으로 튜닝된 모델은 산문을 쓰려 하므로 선택지 토큰이 다른 출력 후보와 경쟁한다고 지적한다. antirez는 선택지를 본문 앞에 두면 마스크드 어텐션이 첫 토큰부터 올바른 작업에 쓰인다고 말한다. 둘 다 이 25줄에 없는 구조물 이야기다.
+***** Comments
+- 채팅 모델을 베이스로 쓰면서 logprobs를 바로 가져오는 건 늘 찜찜하다. 산문을 출력하도록 훈련돼 있어서 선택지 토큰과 그 확률이 원래 쓰려던 내용에 희석된다.
+- 마스크드 어텐션 때문에, 선택지를 본문 앞에 두면 트랜스포머는 무엇을 찾아야 할지 이미 알고 그 작업에 더 많은 토큰을 쓸 수 있다.
+- 대부분의 채팅 모델은 사람이 읽을 수 있는 문장으로 답하려 하므로 logprobs가 그만큼 의미 있지는 않다고 본다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Jev en 25 líneas de Python
+***** TLDR
+NobodyWho reimplementa el núcleo de Jev en un script de 25 líneas: carga Qwen3-0.6B con llama-cpp-python, envía un prompt con las opciones, extrae los logits crudos del siguiente token y los pasa por softmax para obtener probabilidades. Su demo puntúa un correo con 0,885 de phishing, 0,084 de spam y 0,031 de legítimo. El texto se declara parodia y admite que omite el entrenamiento RLCD de Jev, del que el sistema real dice obtener su calibración.
+***** Take
+Las 25 líneas reproducen la forma de Jev y nada de la calibración, que es la parte difícil. Los comentarios atacan ese punto débil desde dos lados: sigmoid10 señala que un modelo ajustado para chat quiere escribir prosa, así que los tokens de opción compiten con lo que pensaba decir, y antirez apunta que poner las opciones antes del correo permite que la atención enmascarada trabaje en la tarea correcta desde el primer token. Ambos describen andamiaje que estas 25 líneas no tienen.
+***** Comments
+- Ir directo a los logprobs siempre incomoda cuando usas un modelo de chat como base, porque está entrenado para producir prosa. Tus tokens de opción y sus probabilidades se diluyen en lo que el modelo quería decir.
+- Por la atención enmascarada, si pones las opciones antes del cuerpo, el transformer ya sabe qué buscar y puede usar más tokens para esa tarea concreta.
+- La mayoría de modelos de chat quieren responder con un mensaje legible para humanos, así que creo que sus logprobs no son tan significativos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Jev in 25 Zeilen Python
+***** TLDR
+NobodyWho baut den Kern von Jev in einem 25-Zeilen-Skript nach: Qwen3-0.6B über llama-cpp-python laden, einen Prompt mit den Auswahlmöglichkeiten schicken, die rohen Logits des nächsten Tokens auslesen und per Softmax in Wahrscheinlichkeiten umrechnen. Die Demo bewertet eine E-Mail mit 0,885 Phishing, 0,084 Spam, 0,031 legitim. Der Beitrag nennt sich ausdrücklich Parodie und räumt ein, dass er Jevs RLCD-Training auslässt, aus dem das echte System seine Kalibrierung ableitet.
+***** Take
+Die 25 Zeilen reproduzieren die Form von Jev und nichts von der Kalibrierung, also genau den schwierigen Teil. Die Kommentare treffen diese Schwachstelle aus zwei Richtungen: sigmoid10 merkt an, dass ein chat-getuntes Modell Prosa schreiben will, sodass die Auswahl-Tokens mit dem konkurrieren, was es sonst sagen wollte, und antirez weist darauf hin, dass die Optionen vor der E-Mail der maskierten Attention ab dem ersten Token die richtige Aufgabe geben. Beide beschreiben Gerüst, das diese 25 Zeilen nicht haben.
+***** Comments
+- Direkt an die Logprobs zu gehen ist heikel, wenn ein Chat-Modell die Basis ist, denn es ist auf Prosa trainiert. Die Auswahl-Tokens und ihre Wahrscheinlichkeiten verwässern sich in dem, was es sonst sagen wollte.
+- Wegen der maskierten Attention weiß der Transformer schon, wonach er suchen muss, wenn die Optionen vor dem Text stehen, und kann mehr Tokens für diese Aufgabe einsetzen.
+- Die meisten Chat-Modelle wollen mit einer für Menschen lesbaren Nachricht antworten, deshalb halte ich ihre Logprobs für weniger aussagekräftig.
+** Claude Opus 5.5 Intelligence, Performance and Price Analysis (Max) :ai:benchmarks:pricing:anthropic:
+:PROPERTIES:
+:ID:       49804316
+:URL:      https://artificialanalysis.ai/models/claude-opus-5-5
+:HN_URL:   https://news.ycombinator.com/item?id=49804316
+:POINTS:   295
+:COMMENTS: 94
+:BY:       theanonymousone
+:END:
+
+*** TLDR
+Artificial Analysis benchmarked Claude Opus 5.5 at the max reasoning setting: Intelligence Index 58, first of 212 models tracked, against a median of 25. Pricing is $4 per million input tokens and $20 output with a 95% cache discount, and the full index run averaged $5.98 per task. The model emitted 260M output tokens during evaluation against a median of 88M, so a good share of that cost is verbosity rather than the per-token rate. Separate pages cover the xhigh and the default medium settings.
+
+*** Take
+The number that moves anything is $5.98 per task, roughly half what Opus 5 cost at comparable effort. That is the first real price step down in this tier, and it matters more than another point of index. breckenedge raises what nobody checks: these runs happen once at launch and are never repeated, and their own internal evaluation showed Sol drifting down to Luna's level weeks later. A leaderboard measured only during release week is a launch announcement with error bars.
+
+*** Comments
+
+**** hglaser
+Half the cost per task compared to Opus 5, comparing high effort to high effort. That's just really nice.
+
+**** breckenedge
+Do these evaluations get rerun a few weeks after launch? I started doing that for our internal dataset and found Sol's performance had regressed to be equal to Luna's.
+
+**** simonw
+This is the page for the max reasoning setting. I've failed twice to get the pelican SVG to work with max.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Claude Opus 5.5 智能、性能与价格分析（Max）
+***** TLDR
+Artificial Analysis 在 max 推理档位下测试了 Claude Opus 5.5：智能指数 58，在追踪的 212 个模型中排第一，中位数为 25。价格为每百万输入 token 4 美元、输出 20 美元，缓存折扣 95%，整套指数测试平均每项任务花费 5.98 美元。评测期间该模型输出了 2.6 亿 token，而中位数为 8800 万，因此成本中有相当一部分来自啰嗦而非单价。xhigh 和默认的 medium 档位另有独立页面。
+***** Take
+真正有意义的数字是每任务 5.98 美元，约为同等投入下 Opus 5 的一半。这是该档位第一次真正降价，比再多一分指数更重要。breckenedge 提出了没人核查的问题：这些测试只在发布时跑一次，从不重跑，而他们自己的内部评测显示 Sol 几周后回落到 Luna 的水平。只在发布周测量的排行榜，不过是带误差棒的发布公告。
+***** Comments
+- 在同为高投入的条件下，每任务成本是 Opus 5 的一半。这真的很不错。
+- 这些评测会在发布几周后重跑吗？我在自己的内部数据集上开始这么做，发现 Sol 的表现已经退化到和 Luna 一样。
+- 这是 max 推理档位的页面。我两次都没能让 max 画出那只鹈鹕 SVG。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claude Opus 5.5 の知能・性能・価格分析（Max）
+***** TLDR
+Artificial Analysisが最大推論設定でClaude Opus 5.5を計測した。Intelligence Indexは58で、追跡する212モデル中1位、中央値は25。価格は100万入力トークン4ドル、出力20ドル、キャッシュ割引95%で、インデックス全体の実行は1タスク平均5.98ドルだった。評価中の出力は2億6000万トークン、中央値8800万に対して多く、コストの相当部分は単価ではなく冗長さに由来する。xhighと既定のmedium設定は別ページにある。
+***** Take
+意味のある数字は1タスク5.98ドル、同等の労力でOpus 5のおよそ半分という点だ。この価格帯で初めての実質的な値下げであり、指数が1点上がることより重要だ。breckenedgeは誰も確認しない点を突く。これらの計測は発売時に一度走るきりで再実行されず、自社の内部評価ではSolが数週間後にLunaと同水準まで落ちていたという。発売週にしか測らないリーダーボードは、誤差棒つきの発表資料でしかない。
+***** Comments
+- 高負荷同士の比較で、タスクあたりのコストがOpus 5の半分。これは本当にありがたい。
+- これらの評価は発売から数週間後に再実行されるのか？社内データセットで試したところ、Solの性能はLunaと同等まで後退していた。
+- これはmax推論設定のページだ。maxではペリカンのSVGを2回試して2回とも失敗している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude Opus 5.5 지능·성능·가격 분석 (Max)
+***** TLDR
+Artificial Analysis가 최대 추론 설정으로 Claude Opus 5.5를 측정했다. Intelligence Index 58로 추적 중인 212개 모델 중 1위이며 중앙값은 25다. 가격은 100만 입력 토큰당 4달러, 출력 20달러, 캐시 할인 95%이고 전체 인덱스 실행은 과제당 평균 5.98달러였다. 평가 중 출력 토큰은 2억 6천만 개로 중앙값 8800만 개를 크게 넘어, 비용의 상당 부분은 단가가 아니라 장황함에서 나온다. xhigh와 기본값인 medium 설정은 별도 페이지에 있다.
+***** Take
+의미 있는 숫자는 과제당 5.98달러로, 비슷한 노력 기준 Opus 5의 약 절반이다. 이 등급에서 처음 나온 실질적인 가격 인하이며 지수 1점보다 중요하다. breckenedge는 아무도 확인하지 않는 지점을 짚는다. 이 측정은 출시 때 한 번 돌고 다시 돌지 않는데, 자체 내부 평가에서는 Sol이 몇 주 뒤 Luna 수준으로 떨어졌다는 것이다. 출시 주에만 측정한 리더보드는 오차 막대가 붙은 출시 공지일 뿐이다.
+***** Comments
+- 높은 노력끼리 비교했을 때 과제당 비용이 Opus 5의 절반이다. 정말 반갑다.
+- 이 평가들은 출시 몇 주 뒤에 다시 돌리나? 내부 데이터셋으로 해봤더니 Sol의 성능이 Luna와 같은 수준으로 퇴보해 있었다.
+- 이건 max 추론 설정 페이지다. max로는 펠리컨 SVG를 두 번 시도해서 두 번 다 실패했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Análisis de inteligencia, rendimiento y precio de Claude Opus 5.5 (Max)
+***** TLDR
+Artificial Analysis midió Claude Opus 5.5 en el ajuste de razonamiento máximo: índice de inteligencia 58, primero entre 212 modelos seguidos, frente a una mediana de 25. El precio es de 4 dólares por millón de tokens de entrada y 20 de salida, con un 95% de descuento por caché, y la ejecución completa del índice costó 5,98 dólares por tarea de media. El modelo emitió 260 millones de tokens de salida durante la evaluación frente a una mediana de 88 millones, así que buena parte del coste viene de la verbosidad y no de la tarifa por token. Los ajustes xhigh y medium tienen páginas aparte.
+***** Take
+La cifra que cambia algo es 5,98 dólares por tarea, más o menos la mitad de lo que costaba Opus 5 con un esfuerzo comparable. Es la primera bajada real de precio en este escalón y pesa más que otro punto de índice. breckenedge plantea lo que nadie comprueba: estas mediciones se hacen una vez en el lanzamiento y no se repiten, y su evaluación interna vio a Sol caer al nivel de Luna semanas después. Una tabla medida solo en la semana de lanzamiento es una nota de prensa con barras de error.
+***** Comments
+- La mitad de coste por tarea frente a Opus 5, comparando esfuerzo alto con esfuerzo alto. Eso está muy bien.
+- ¿Se repiten estas evaluaciones unas semanas después del lanzamiento? Empecé a hacerlo con nuestro conjunto interno y vi que el rendimiento de Sol había caído hasta igualar al de Luna.
+- Esta es la página del ajuste de razonamiento máximo. He fallado dos veces al intentar que genere el SVG del pelícano con max.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Claude Opus 5.5: Analyse von Intelligenz, Leistung und Preis (Max)
+***** TLDR
+Artificial Analysis hat Claude Opus 5.5 in der höchsten Reasoning-Stufe vermessen: Intelligence Index 58, Platz eins von 212 erfassten Modellen, bei einem Median von 25. Der Preis liegt bei 4 Dollar je Million Eingabe-Tokens und 20 Dollar für die Ausgabe mit 95% Cache-Rabatt, der komplette Index-Durchlauf kostete im Schnitt 5,98 Dollar pro Aufgabe. Während der Auswertung erzeugte das Modell 260 Millionen Ausgabe-Tokens gegenüber einem Median von 88 Millionen, ein großer Teil der Kosten kommt also aus Weitschweifigkeit statt aus dem Token-Preis. Für xhigh und das voreingestellte medium gibt es eigene Seiten.
+***** Take
+Die Zahl, die etwas bewegt, ist 5,98 Dollar pro Aufgabe, etwa die Hälfte dessen, was Opus 5 bei vergleichbarem Aufwand kostete. Das ist der erste echte Preisschritt nach unten in dieser Klasse und wiegt schwerer als ein weiterer Indexpunkt. breckenedge spricht an, was niemand prüft: Diese Läufe finden einmal zum Start statt und werden nie wiederholt, und die eigene interne Auswertung zeigte Sol Wochen später auf Lunas Niveau. Eine Rangliste, die nur in der Startwoche gemessen wird, ist eine Pressemitteilung mit Fehlerbalken.
+***** Comments
+- Halbe Kosten pro Aufgabe im Vergleich zu Opus 5, jeweils bei hohem Aufwand. Das ist wirklich gut.
+- Werden diese Auswertungen ein paar Wochen nach dem Start wiederholt? Ich habe damit für unseren internen Datensatz angefangen und festgestellt, dass Sols Leistung auf das Niveau von Luna zurückgefallen war.
+- Das ist die Seite für die maximale Reasoning-Stufe. Ich habe es zweimal nicht geschafft, das Pelikan-SVG mit max zu erzeugen.
+** No Easy Fix for Bogus Respondents in Online Opt-In Polls :polling:statistics:research:fraud:
+:PROPERTIES:
+:ID:       49795337
+:URL:      https://www.pewresearch.org/methods/2026/08/27/no-easy-fix-for-bogus-respondents-in-online-opt-in-polls/
+:HN_URL:   https://news.ycombinator.com/item?id=49795337
+:POINTS:   37
+:COMMENTS: 16
+:BY:       luu
+:END:
+
+*** TLDR
+Pew surveyed 11,114 US adults through opt-in panels in November 2024 and tested three ways to strip out fake respondents. Trap questions, such as claiming to have visited the International Space Station or used a social network that does not exist, caught 18%. CloudResearch's automated prescreening flagged 48%. Voter-file matching rejected 64% and made the data worse: yea-saying rose from 7% to 9% and response-order bias doubled from +7 to +14 points, because valid respondents who decline to hand over a name and address answer more carefully than those who comply. All three screens moved the election estimate toward Harris, from a tie to between +3 and +7.
+
+*** Take
+The useful result here is the negative one. Voter-file matching is the screen that looks most rigorous and it degraded every quality metric, since refusing to give a survey your home address marks a careful respondent rather than a fake one. The Harris shift will be the only number anyone quotes, and it is the least transferable finding in the study: it says what these particular fakes claimed in one election, not what they will claim in the next.
+
+*** Comments
+
+**** noduerme
+The bit about 10% of respondents claiming they had visited the International Space Station was funny. It means the respondents were either deranged or confused.
+
+**** Ellis_dev
+The lure of a few bucks for minimal effort always attracts fraud. Our own survey data is consistently tainted by bots and click-farmers.
+
+**** 0points
+I thought this was proved beyond doubt when 4chan users spoofed the 2009 Time person of the year poll to spell out a message with the winners' initials.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+在线自选式民调中的虚假受访者没有简单解法
+***** TLDR
+皮尤在 2024 年 11 月通过自选式样本库调查了 11,114 名美国成年人，测试了三种剔除虚假受访者的方法。陷阱题（比如声称去过国际空间站，或用过一个并不存在的社交网络）抓出 18%。CloudResearch 的自动预筛标记了 48%。选民名册比对剔除了 64%，却让数据变得更差：一味说“是”的比例从 7% 升到 9%，选项顺序偏差从 +7 个百分点翻倍到 +14，因为那些不愿交出姓名住址的真实受访者，答题反而比配合的人更认真。三种筛法都把选举估计推向哈里斯，从平手变成领先 3 到 7 个百分点。
+***** Take
+这项研究真正有用的是那个否定结果。选民名册比对看上去最严谨，却让每一项质量指标都变差，因为拒绝向一份问卷提供家庭住址，标记的是认真的受访者而不是造假者。哈里斯那个偏移会是唯一被引用的数字，也是研究中最不可迁移的发现：它说明的是这批造假者在某一次选举中声称了什么，而不是下一次会声称什么。
+***** Comments
+- 10% 的受访者声称自己去过国际空间站，这一段很有意思。这说明这些受访者要么神志不清，要么搞混了。
+- 花小钱换低投入的诱惑总会招来欺诈。我们自己的调查数据一直被机器人和点击农场污染。
+- 我还以为 2009 年 4chan 用户操纵《时代》年度人物投票、用获胜者首字母拼出一句话时，这件事就已经被彻底证明了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+オンライン任意参加調査の偽回答者に簡単な解決策はない
+***** TLDR
+Pewは2024年11月、任意参加パネル経由で米国成人11,114人を調査し、偽回答者を除く三つの手法を検証した。国際宇宙ステーションに行ったことがある、存在しないSNSを使っているといった罠の設問は18%を捕らえた。CloudResearchの自動事前審査は48%を弾いた。有権者名簿との照合は64%を除外したが、データはむしろ悪化した。何にでも「はい」と答える割合は7%から9%に上がり、選択肢の順序による偏りは+7から+14ポイントへ倍増した。氏名と住所の提供を断る正当な回答者のほうが、応じる人より丁寧に答えるからだ。三手法とも選挙推計をハリス寄りに動かし、互角から+3〜+7へ変えた。
+***** Take
+この研究で役に立つのは否定的な結果のほうだ。有権者名簿との照合は最も厳密に見える手法でありながら、品質指標をすべて悪化させた。調査に自宅住所を渡さないことは、偽物ではなく慎重な回答者の印だからだ。ハリスへの振れ幅だけが引用されるだろうが、それは研究中で最も一般化しにくい知見だ。ある選挙でこの偽回答者たちが何を主張したかを示すだけで、次に何を主張するかは示さない。
+***** Comments
+- 回答者の10%が国際宇宙ステーションに行ったと主張したくだりは面白い。錯乱しているか混同しているかのどちらかということだ。
+- わずかな報酬と最小限の労力という誘いは常に不正を呼ぶ。私たちの調査データもボットとクリックファームに汚染され続けている。
+- 2009年に4chanのユーザーがTime誌の今年の人の投票を操作し、受賞者の頭文字でメッセージを綴ったときに、この件は決着したと思っていた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+온라인 자발적 참여 여론조사의 허위 응답자에는 쉬운 해법이 없다
+***** TLDR
+퓨 리서치는 2024년 11월 자발적 참여 패널을 통해 미국 성인 11,114명을 조사하고 허위 응답자를 걸러내는 세 가지 방법을 시험했다. 국제우주정거장에 가봤다거나 존재하지 않는 소셜 네트워크를 썼다고 답하게 하는 함정 문항은 18%를 잡아냈다. CloudResearch의 자동 사전 심사는 48%를 표시했다. 유권자 명부 대조는 64%를 걸러냈지만 데이터는 오히려 나빠졌다. 무조건 '예'라고 답하는 비율이 7%에서 9%로 올랐고 보기 순서에 따른 편향은 +7에서 +14포인트로 두 배가 됐다. 이름과 주소 제공을 거부하는 정상 응답자가 응하는 쪽보다 더 성실하게 답하기 때문이다. 세 방법 모두 선거 추정치를 해리스 쪽으로 옮겨 동률에서 +3~+7로 바꿨다.
+***** Take
+이 연구에서 쓸모 있는 것은 부정적 결과다. 유권자 명부 대조는 가장 엄밀해 보이는 방식인데도 모든 품질 지표를 나쁘게 만들었다. 설문에 집 주소를 넘기지 않는 것은 가짜의 표시가 아니라 신중한 응답자의 표시이기 때문이다. 해리스 쪽 이동만 인용되겠지만 그것은 연구에서 가장 일반화하기 어려운 결과다. 한 선거에서 이 허위 응답자들이 무엇을 주장했는지를 말할 뿐, 다음에 무엇을 주장할지는 말해주지 않는다.
+***** Comments
+- 응답자의 10%가 국제우주정거장에 가봤다고 답했다는 대목이 재미있다. 그 응답자들이 제정신이 아니거나 헷갈렸다는 뜻이다.
+- 적은 돈에 최소한의 노력이라는 유혹은 늘 사기를 부른다. 우리 설문 데이터도 봇과 클릭 농장에 계속 오염된다.
+- 2009년 4chan 사용자들이 타임지 올해의 인물 투표를 조작해 수상자 이니셜로 메시지를 만들었을 때 이미 증명된 줄 알았다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+No hay solución sencilla para los encuestados falsos en sondeos en línea de participación voluntaria
+***** TLDR
+Pew encuestó a 11.114 adultos estadounidenses mediante paneles de participación voluntaria en noviembre de 2024 y probó tres formas de eliminar encuestados falsos. Las preguntas trampa, como afirmar haber visitado la Estación Espacial Internacional o usado una red social inexistente, cazaron al 18%. El prefiltrado automático de CloudResearch marcó al 48%. El cruce con el censo electoral descartó al 64% y empeoró los datos: el sesgo de responder siempre que sí subió del 7% al 9% y el efecto del orden de respuesta se duplicó de +7 a +14 puntos, porque los encuestados válidos que se niegan a dar nombre y dirección responden con más cuidado que los que acceden. Los tres filtros movieron la estimación electoral hacia Harris, de un empate a entre +3 y +7.
+***** Take
+El resultado útil es el negativo. El cruce con el censo electoral es el filtro que parece más riguroso y degradó todas las métricas de calidad, porque negarse a dar tu dirección a una encuesta señala a un encuestado cuidadoso, no a uno falso. El desplazamiento hacia Harris será la única cifra que se cite y es el hallazgo menos transferible del estudio: dice lo que afirmaron estos falsos concretos en una elección, no lo que afirmarán en la siguiente.
+***** Comments
+- Lo del 10% de encuestados que decían haber visitado la Estación Espacial Internacional tiene gracia. Significa que esos encuestados estaban trastornados o confundidos.
+- El señuelo de unos pocos dólares por mínimo esfuerzo siempre atrae al fraude. Nuestros propios datos de encuestas están contaminados sin falta por bots y granjas de clics.
+- Pensaba que esto había quedado demostrado cuando los usuarios de 4chan manipularon la encuesta de persona del año de Time en 2009 para deletrear un mensaje con las iniciales de los ganadores.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Keine einfache Lösung für gefälschte Teilnehmer in Online-Opt-in-Umfragen
+***** TLDR
+Pew befragte im November 2024 über Opt-in-Panels 11.114 Erwachsene in den USA und testete drei Wege, gefälschte Teilnehmer auszusortieren. Fangfragen, etwa die Behauptung, die Internationale Raumstation besucht oder ein nicht existierendes soziales Netzwerk genutzt zu haben, erwischten 18%. Die automatische Vorprüfung von CloudResearch markierte 48%. Der Abgleich mit Wählerverzeichnissen verwarf 64% und verschlechterte die Daten: Das Ja-Sagen stieg von 7% auf 9% und der Reihenfolgeeffekt verdoppelte sich von +7 auf +14 Punkte, denn gültige Teilnehmer, die Name und Adresse verweigern, antworten sorgfältiger als jene, die sie herausgeben. Alle drei Filter verschoben die Wahlprognose Richtung Harris, von einem Gleichstand auf +3 bis +7.
+***** Take
+Das brauchbare Ergebnis ist das negative. Der Abgleich mit Wählerverzeichnissen wirkt am gründlichsten und verschlechterte jede Qualitätskennzahl, denn wer einer Umfrage seine Wohnadresse verweigert, ist ein sorgfältiger Teilnehmer und kein Fake. Die Verschiebung zu Harris wird die einzige zitierte Zahl sein und ist der am wenigsten übertragbare Befund der Studie: Er sagt, was diese bestimmten Fälschungen bei einer Wahl behaupteten, nicht was sie bei der nächsten behaupten werden.
+***** Comments
+- Die Stelle, an der 10% der Befragten angaben, die Internationale Raumstation besucht zu haben, war komisch. Sie heißt, dass diese Befragten entweder verwirrt oder wirr waren.
+- Der Reiz von ein paar Dollar für minimalen Aufwand zieht immer Betrug an. Unsere eigenen Umfragedaten sind durchgehend von Bots und Klickfarmen verunreinigt.
+- Ich dachte, das sei spätestens bewiesen gewesen, als 4chan-Nutzer 2009 die Time-Wahl zur Person des Jahres manipulierten, um mit den Initialen der Gewinner eine Nachricht zu bilden.
+** Data-only attacks are easier than you think (2024) :security:exploits:memory-safety:research:
+:PROPERTIES:
+:ID:       49811429
+:URL:      https://www.usenix.org/publications/loginonline/data-only-attacks-are-easier-you-think
+:HN_URL:   https://news.ycombinator.com/item?id=49811429
+:POINTS:   54
+:COMMENTS: 22
+:BY:       segfaultbuserr
+:END:
+
+*** TLDR
+Brian Johannesmeyer, Herbert Bos, Cristiano Giuffrida and Asia Slowinska of VUSec argue the standard dismissal of data-only attacks, which corrupt program data without touching control flow, is wrong. Their tool Einstein uses dynamic taint analysis to find attacker-controlled data flowing unchanged into syscall arguments, then confirms which of those are exploitable. Across httpd, nginx, lighttpd, postgres and redis, 82 to 98% of tainted syscalls had exploitable identity flows. nginx alone produced 944 confirmed exploits, including one code execution, 17 write-what-where and 41 send-what-where primitives. Their conclusion is that comprehensive defenses stay impractical while practical ones leave this surface open.
+
+*** Take
+A decade of hardening went into control flow, and Einstein's nginx count says the data path was never seriously contested. gumby's objection that fuzzing already covers this misses the division of labor: fuzzing finds the memory bug, Einstein enumerates what you can steer once you have one. mgaldys4 is right that business-logic abuse is the harder and more lucrative class, but that argument does not shrink 944 confirmed primitives in a single server.
+
+*** Comments
+
+**** gumby
+I thought the whole point of fuzzing was an example of finding data-only attacks.
+
+**** mgaldys4
+Data-only attacks are low-hanging fruit. The real threat is risk buried in business logic. Take e-commerce refund abuse: bug hunters would not even call it a risk, yet fraud rings have arbitraged millions off it.
+
+**** probably_wrong
+If the attacker still needs to overflow a buffer the traditional way to overwrite that variable, why is this a data-only attack?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+纯数据攻击比你想的更容易（2024）
+***** TLDR
+VUSec 的 Brian Johannesmeyer、Herbert Bos、Cristiano Giuffrida 和 Asia Slowinska 认为，业界对纯数据攻击（只破坏程序数据、不改控制流）不切实际的判断是错的。他们的工具 Einstein 用动态污点分析找出攻击者可控的数据原样流入系统调用参数的路径，再确认其中哪些可被利用。在 httpd、nginx、lighttpd、postgres 和 redis 上，被污染的系统调用中有 82% 到 98% 存在可利用的恒等流。仅 nginx 一个就产出 944 个确认可用的利用，包括 1 个代码执行、17 个任意写和 41 个任意发送原语。他们的结论是：全面防御仍不切实际，而实用的防御把这一面留着敞开。
+***** Take
+十年的加固投在了控制流上，而 Einstein 在 nginx 上的数字说明数据路径从未被真正争夺过。gumby 认为模糊测试已经覆盖了这块，这漏掉了分工：模糊测试找到内存漏洞，Einstein 枚举的是拿到漏洞之后你能操纵什么。mgaldys4 说业务逻辑滥用是更难也更赚钱的一类，这没错，但这个论点不会让单个服务器里 944 个确认原语变少。
+***** Comments
+- 我原以为模糊测试本身就是寻找纯数据攻击的一个例子。
+- 纯数据攻击属于低垂的果实。真正的威胁藏在业务逻辑里。比如电商退款滥用：漏洞猎人根本不会把它算作风险，但欺诈团伙靠它套利了数百万。
+- 如果攻击者仍然要用传统方式溢出缓冲区才能改写那个变量，这为什么算纯数据攻击？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+データのみの攻撃は思うより簡単だ（2024）
+***** TLDR
+VUSecのBrian Johannesmeyer、Herbert Bos、Cristiano Giuffrida、Asia Slowinskaは、制御フローに触れずプログラムのデータだけを壊すデータのみの攻撃を非現実的とみなす通説は誤りだと論じる。ツールEinsteinは動的テイント解析で、攻撃者が制御できるデータがそのままシステムコール引数へ流れる経路を見つけ、そのうちどれが悪用可能かを確認する。httpd、nginx、lighttpd、postgres、redisでは、汚染されたシステムコールの82〜98%に悪用可能な恒等フローがあった。nginxだけで944件の確認済みエクスプロイトが得られ、コード実行1件、任意アドレス書き込み17件、任意送信41件のプリミティブを含む。結論は、包括的な防御は依然非現実的で、実用的な防御はこの面を開けたままにしているというものだ。
+***** Take
+十年分の堅牢化は制御フローに注がれ、Einsteinのnginxの件数はデータ経路が本気で争われてこなかったことを示す。ファジングが既に扱っているというgumbyの反論は分業を見落としている。ファジングはメモリバグを見つけ、Einsteinは手に入れた後で何を操作できるかを列挙する。業務ロジックの悪用のほうが難しく儲かる類だというmgaldys4の指摘は正しいが、その議論で一つのサーバに944件の確認済みプリミティブがあるという事実は減らない。
+***** Comments
+- ファジングの要点自体がデータのみの攻撃を見つける例だと思っていた。
+- データのみの攻撃は取りやすい果実だ。本当の脅威は業務ロジックに埋もれている。EC の返金乱用を見るといい。バグハンターはリスクとすら呼ばないが、詐欺集団はそこで数百万を抜いている。
+- その変数を上書きするのに結局は従来どおりバッファをあふれさせる必要があるなら、なぜこれがデータのみの攻撃なのか。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+데이터 전용 공격은 생각보다 쉽다 (2024)
+***** TLDR
+VUSec의 Brian Johannesmeyer, Herbert Bos, Cristiano Giuffrida, Asia Slowinska는 제어 흐름을 건드리지 않고 프로그램 데이터만 손상시키는 데이터 전용 공격이 비현실적이라는 통념이 틀렸다고 주장한다. 이들의 도구 Einstein은 동적 테인트 분석으로 공격자가 제어하는 데이터가 그대로 시스템 호출 인자로 흘러드는 경로를 찾고, 그중 무엇이 악용 가능한지 확인한다. httpd, nginx, lighttpd, postgres, redis에서 오염된 시스템 호출의 82~98%에 악용 가능한 항등 흐름이 있었다. nginx 하나에서만 944건의 확인된 익스플로잇이 나왔고 코드 실행 1건, 임의 주소 쓰기 17건, 임의 전송 41건의 프리미티브가 포함된다. 결론은 포괄적 방어는 여전히 비현실적이고 실용적 방어는 이 표면을 열어둔다는 것이다.
+***** Take
+10년치 방어 강화는 제어 흐름에 들어갔고, Einstein의 nginx 수치는 데이터 경로가 진지하게 다퉈진 적이 없음을 말한다. 퍼징이 이미 이걸 한다는 gumby의 반론은 역할 분담을 놓쳤다. 퍼징은 메모리 버그를 찾고, Einstein은 그 버그를 손에 넣은 뒤 무엇을 조종할 수 있는지 열거한다. 비즈니스 로직 악용이 더 어렵고 돈이 된다는 mgaldys4의 지적은 맞지만, 그 논지가 서버 하나에서 나온 944건의 확인된 프리미티브를 줄여주지는 않는다.
+***** Comments
+- 퍼징의 요점 자체가 데이터 전용 공격을 찾는 사례라고 생각했다.
+- 데이터 전용 공격은 손쉬운 먹잇감이다. 진짜 위협은 비즈니스 로직에 묻혀 있다. 전자상거래 환불 악용을 보라. 버그 헌터는 위험이라 부르지도 않지만 사기 조직은 그것으로 수백만을 빼갔다.
+- 그 변수를 덮어쓰려면 결국 전통적인 방식으로 버퍼를 넘치게 해야 한다면, 이게 왜 데이터 전용 공격인가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los ataques solo de datos son más fáciles de lo que crees (2024)
+***** TLDR
+Brian Johannesmeyer, Herbert Bos, Cristiano Giuffrida y Asia Slowinska, de VUSec, sostienen que es erróneo descartar los ataques solo de datos, que corrompen los datos del programa sin tocar el flujo de control. Su herramienta Einstein usa análisis dinámico de contaminación para encontrar datos controlados por el atacante que llegan sin cambios a argumentos de llamadas al sistema, y luego confirma cuáles son explotables. En httpd, nginx, lighttpd, postgres y redis, entre el 82% y el 98% de las llamadas contaminadas tenían flujos de identidad explotables. Solo nginx produjo 944 exploits confirmados, incluidos uno de ejecución de código, 17 primitivas de escritura arbitraria y 41 de envío arbitrario. Su conclusión es que las defensas completas siguen siendo impracticables mientras las practicables dejan esta superficie abierta.
+***** Take
+Una década de endurecimiento fue al flujo de control, y la cifra de Einstein en nginx dice que el camino de los datos nunca se disputó en serio. La objeción de gumby de que el fuzzing ya cubre esto pasa por alto el reparto de tareas: el fuzzing encuentra el fallo de memoria, Einstein enumera qué puedes dirigir una vez que lo tienes. mgaldys4 acierta en que el abuso de la lógica de negocio es la clase más difícil y más lucrativa, pero ese argumento no reduce 944 primitivas confirmadas en un solo servidor.
+***** Comments
+- Pensaba que el sentido mismo del fuzzing era un ejemplo de encontrar ataques solo de datos.
+- Los ataques solo de datos son fruta madura. La amenaza real está enterrada en la lógica de negocio. Mira el abuso de reembolsos en comercio electrónico: los cazadores de bugs ni lo llamarían riesgo, y las redes de fraude han sacado millones de ahí.
+- Si el atacante todavía necesita desbordar un búfer a la manera tradicional para sobrescribir esa variable, ¿por qué es un ataque solo de datos?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Data-only-Angriffe sind einfacher, als man denkt (2024)
+***** TLDR
+Brian Johannesmeyer, Herbert Bos, Cristiano Giuffrida und Asia Slowinska von VUSec halten die übliche Abwertung von Data-only-Angriffen, die Programmdaten verfälschen, ohne den Kontrollfluss anzurühren, für falsch. Ihr Werkzeug Einstein findet per dynamischer Taint-Analyse vom Angreifer kontrollierte Daten, die unverändert in Syscall-Argumente fließen, und bestätigt anschließend, welche davon ausnutzbar sind. Über httpd, nginx, lighttpd, postgres und redis hinweg hatten 82 bis 98% der markierten Syscalls ausnutzbare Identitätsflüsse. Allein nginx lieferte 944 bestätigte Exploits, darunter eine Codeausführung, 17 Write-what-where- und 41 Send-what-where-Primitive. Ihr Fazit: Umfassende Abwehr bleibt unpraktikabel, während die praktikable diese Fläche offen lässt.
+***** Take
+Ein Jahrzehnt Härtung floss in den Kontrollfluss, und Einsteins nginx-Zahl sagt, dass der Datenpfad nie ernsthaft umkämpft war. gumbys Einwand, Fuzzing decke das bereits ab, übersieht die Arbeitsteilung: Fuzzing findet den Speicherfehler, Einstein zählt auf, was man damit steuern kann, sobald man ihn hat. mgaldys4 hat recht, dass Missbrauch der Geschäftslogik die schwierigere und lukrativere Klasse ist, aber dieses Argument verkleinert 944 bestätigte Primitive in einem einzigen Server nicht.
+***** Comments
+- Ich dachte, der ganze Sinn von Fuzzing sei ein Beispiel dafür, Data-only-Angriffe zu finden.
+- Data-only-Angriffe sind die leicht erreichbaren Früchte. Die echte Gefahr steckt in der Geschäftslogik. Nimm Rückerstattungsmissbrauch im E-Commerce: Bug-Hunter würden es nicht einmal Risiko nennen, und Betrugsringe haben damit Millionen abgeschöpft.
+- Wenn der Angreifer immer noch auf klassische Weise einen Puffer überlaufen lassen muss, um diese Variable zu überschreiben, warum ist das dann ein Data-only-Angriff?
+** Show HN: Npunlock – Run custom C kernels for Intel NPUs :hardware:intel:npu:reverse-engineering:
+:PROPERTIES:
+:ID:       49800513
+:URL:      https://github.com/hsfzxjy/npunlock
+:HN_URL:   https://news.ycombinator.com/item?id=49800513
+:POINTS:   29
+:COMMENTS: 7
+:BY:       hsfzxjy
+:END:
+
+*** TLDR
+Intel's NPUs contain programmable SHAVE cores, but the public stack only exposes graph-level programming. npunlock rebuilds the missing path: write a C function, compile it with Intel's MoviTools toolchain into ACT-SHAVE machine code, and embed it in an NPU graph driven from a Python API that handles tensor addressing. The key reverse-engineering result is that one native graph can execute independent FP32-unary and FP16-binary custom branches. It requires Windows x64, a Meteor Lake chip with NPU3720, and MoviTools extracted separately since it is not redistributable. Static shapes only, with Linux and newer NPU generations untested. Examples include FP32 and FP16 GELU kernels checked against NumPy.
+
+*** Take
+Windows only, one chip generation, static shapes, and you have to source the toolchain yourself, so the set of people who can run this today is tiny. It is still the most substantive public writeup of the SHAVE cores Intel ships in every recent laptop and documents to nobody. ur-whale answering the Windows requirement with one dismissive word is judging a reverse-engineering notebook as though it shipped as a product.
+
+*** Comments
+
+**** ur-whale
+Requirements: Windows x64. plonk.
+
+**** Gigachad
+What is this useful for?
+
+**** hsfzxjy
+Author here. Feel free to ask any questions.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN：Npunlock，在 Intel NPU 上运行自定义 C 内核
+***** TLDR
+Intel 的 NPU 里有可编程的 SHAVE 核心，但公开的软件栈只暴露图级编程。npunlock 补回了缺失的那条路径：写一个 C 函数，用 Intel 的 MoviTools 工具链编译成 ACT-SHAVE 机器码，再嵌入 NPU 计算图，由负责张量寻址的 Python API 驱动。逆向的关键发现是：一个原生图可以同时执行独立的 FP32 一元分支和 FP16 二元分支。要求 Windows x64、带 NPU3720 的 Meteor Lake 芯片，以及自行提取的 MoviTools（不可再分发）。仅支持静态形状，Linux 和更新代 NPU 未测试。示例包含对照 NumPy 校验的 FP32 与 FP16 GELU 内核。
+***** Take
+只支持 Windows、只支持一代芯片、只支持静态形状，工具链还得自己去找，所以今天能跑起来的人少之又少。但它仍是关于 SHAVE 核心最有分量的公开技术记录，而 Intel 把这些核心装进了每一台近期笔记本，却不给任何文档。ur-whale 用一个词打发掉 Windows 要求，是把一份逆向笔记当成上市产品来评判。
+***** Comments
+- 要求：Windows x64。屏蔽了。
+- 这东西有什么用？
+- 作者在此。有任何问题欢迎提问。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Npunlock、Intel NPUで自作Cカーネルを動かす
+***** TLDR
+IntelのNPUにはプログラム可能なSHAVEコアが入っているが、公開スタックはグラフ単位の記述しか露出していない。npunlockはその欠けた経路を再構築する。C関数を書き、IntelのMoviToolsツールチェインでACT-SHAVE機械語にコンパイルし、テンソルのアドレス計算を担うPython APIから駆動するNPUグラフに埋め込む。リバースエンジニアリングの要点は、一つのネイティブグラフがFP32単項とFP16二項の独立した分岐を同時に実行できると分かったことだ。要件はWindows x64、NPU3720搭載のMeteor Lakeチップ、そして再配布できないため各自で展開するMoviTools。静的形状のみで、Linuxや新しい世代のNPUは未検証。例としてNumPyと突き合わせたFP32およびFP16のGELUカーネルが含まれる。
+***** Take
+Windows限定、一世代のチップのみ、静的形状のみ、ツールチェインも自分で調達となると、今日これを動かせる人はごく少ない。それでも、Intelが最近のノートPC全機種に載せながら一切文書化していないSHAVEコアについて、公開されたものとしては最も中身のある記録だ。Windows要件を一語で切り捨てたur-whaleは、リバースエンジニアリングの記録を製品のように採点している。
+***** Comments
+- 要件：Windows x64。却下。
+- これは何の役に立つのか？
+- 作者です。何でも質問してください。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Npunlock, 인텔 NPU에서 커스텀 C 커널 실행하기
+***** TLDR
+인텔의 NPU에는 프로그래밍 가능한 SHAVE 코어가 들어 있지만 공개 스택은 그래프 수준 프로그래밍만 노출한다. npunlock은 빠진 경로를 다시 만든다. C 함수를 작성해 인텔의 MoviTools 툴체인으로 ACT-SHAVE 기계어로 컴파일하고, 텐서 주소 지정을 처리하는 파이썬 API가 구동하는 NPU 그래프에 삽입한다. 리버스 엔지니어링의 핵심 결과는 하나의 네이티브 그래프가 독립적인 FP32 단항 분기와 FP16 이항 분기를 함께 실행할 수 있다는 발견이다. 요구 사항은 Windows x64, NPU3720이 탑재된 메테오레이크 칩, 그리고 재배포가 불가능해 직접 추출해야 하는 MoviTools다. 정적 형상만 지원하며 리눅스와 최신 NPU 세대는 검증되지 않았다. 예제로 NumPy와 대조한 FP32 및 FP16 GELU 커널이 있다.
+***** Take
+윈도우 전용, 칩 한 세대, 정적 형상, 툴체인도 직접 구해야 하니 오늘 이걸 돌릴 수 있는 사람은 아주 적다. 그럼에도 인텔이 최근 노트북마다 넣으면서 문서는 전혀 내놓지 않는 SHAVE 코어에 대해 공개된 가장 알찬 기록이다. 윈도우 요구 사항을 한 단어로 일축한 ur-whale은 리버스 엔지니어링 기록을 출시된 제품처럼 평가하고 있다.
+***** Comments
+- 요구 사항: Windows x64. 거르겠다.
+- 이건 어디에 쓰는 건가?
+- 저자입니다. 무엇이든 물어보세요.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Npunlock, ejecuta kernels de C propios en NPU de Intel
+***** TLDR
+Las NPU de Intel contienen núcleos SHAVE programables, pero la pila pública solo expone programación a nivel de grafo. npunlock reconstruye ese camino ausente: escribes una función en C, la compilas con la cadena de herramientas MoviTools de Intel a código máquina ACT-SHAVE y la insertas en un grafo de NPU gobernado por una API de Python que resuelve el direccionamiento de tensores. El hallazgo clave de la ingeniería inversa es que un mismo grafo nativo puede ejecutar ramas propias independientes, una unaria FP32 y otra binaria FP16. Requiere Windows x64, un chip Meteor Lake con NPU3720 y MoviTools extraído aparte, porque no es redistribuible. Solo formas estáticas, sin probar en Linux ni en generaciones más nuevas. Los ejemplos incluyen kernels GELU en FP32 y FP16 contrastados con NumPy.
+***** Take
+Solo Windows, una generación de chip, formas estáticas y hay que conseguir uno mismo la cadena de herramientas, así que hoy son poquísimos quienes pueden ejecutarlo. Aun así es el escrito público con más sustancia sobre los núcleos SHAVE que Intel mete en cada portátil reciente y no documenta para nadie. ur-whale despachando el requisito de Windows con una sola palabra juzga un cuaderno de ingeniería inversa como si fuera un producto lanzado al mercado.
+***** Comments
+- Requisitos: Windows x64. Descartado.
+- ¿Para qué sirve esto?
+- Autor aquí. Preguntad lo que queráis.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Npunlock, eigene C-Kernel auf Intel-NPUs ausführen
+***** TLDR
+Intels NPUs enthalten programmierbare SHAVE-Kerne, doch der öffentliche Stack bietet nur Programmierung auf Graphebene. npunlock baut den fehlenden Weg nach: Man schreibt eine C-Funktion, übersetzt sie mit Intels MoviTools-Toolchain in ACT-SHAVE-Maschinencode und bettet sie in einen NPU-Graphen ein, den eine Python-API mit der Tensor-Adressierung ansteuert. Das zentrale Reverse-Engineering-Ergebnis: Ein nativer Graph kann unabhängige FP32-unäre und FP16-binäre eigene Zweige gleichzeitig ausführen. Vorausgesetzt werden Windows x64, ein Meteor-Lake-Chip mit NPU3720 und separat entpacktes MoviTools, das nicht weitergegeben werden darf. Nur statische Formen, Linux und neuere NPU-Generationen sind ungetestet. Beispiele sind GELU-Kernel in FP32 und FP16, gegen NumPy geprüft.
+***** Take
+Nur Windows, eine Chipgeneration, statische Formen, und die Toolchain muss man selbst beschaffen, also ist der Kreis derer, die das heute ausführen können, winzig. Trotzdem ist es die substanziellste öffentliche Aufzeichnung zu den SHAVE-Kernen, die Intel in jedes neuere Notebook einbaut und für niemanden dokumentiert. ur-whale, der die Windows-Anforderung mit einem einzigen abweisenden Wort erledigt, bewertet ein Reverse-Engineering-Protokoll, als wäre es ein fertiges Produkt.
+***** Comments
+- Voraussetzungen: Windows x64. Abgehakt.
+- Wofür ist das gut?
+- Autor hier. Fragt einfach.
