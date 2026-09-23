@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-09-23 06:00 UTC
+#+DATE: 2026-09-23T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+WordPress hands out RCE back to 4.7, China owns open weights, and an agent harness beats Codex by not waiting around
+
+* Highlights
+- WordPress: unauthenticated path traversal, patched back to 4.7
+- Open weights: GLM-5.3 and Kimi K3 on top, US labs a tier down
+- Unreal Agent: async tool calls cut 40% off Codex cost
+- OpenAI vs Jev: is a classification model a moat?
+- ReBarUEFI: Resizable BAR on boards that never shipped it
+
+* Stories
+
+** WordPress: Unauthenticated path traversal leading to conditional RCE :security:wordpress:php:rce:
+:PROPERTIES:
+:ID:       49803959
+:URL:      https://github.com/WordPress/wordpress-develop/security/advisories/GHSA-7hp8-65ch-5whp
+:HN_URL:   https://news.ycombinator.com/item?id=49803959
+:POINTS:   178
+:COMMENTS: 92
+:BY:       vntok
+:END:
+
+*** TLDR
+A flaw in get_page_template() lets an unauthenticated request make WordPress include any readable .php file outside the theme directory. Two conditions turn it into RCE: the active theme needs a top-level directory starting with page- (Twenty Twelve, Twenty Fourteen, Neve, Hestia and Sydney all qualify), and a usable PHP file must exist on disk, with pearcmd.php the classic one when register_argc_argv is on (the default in the official PHP Docker images). CVSS 9.2, reported by Robert Ressl, present since 4.7.0 and patched in 7.1.2 plus backports to every branch back to 4.7.
+
+*** Take
+The bug is nine years old and the pearcmd.php half of it has been a known Docker footgun for years. The interesting number is in the thread: about a third of installs are still on pre-7 branches, which is why WordPress backported this to 4.7 instead of telling people to upgrade.
+
+*** Comments
+
+**** zelphirkalt
+:PROPERTIES:
+:COMMENT_ID: 49804101
+:END:
+This is why every reachable web server gets spammed with /something/something.php?somearg=someval. WP has to be among the most exploited software in web history.
+
+**** cyphar
+:PROPERTIES:
+:COMMENT_ID: 49804233
+:END:
+This bug pathology is common everywhere. Almost no language standard library gives you the right abstractions for scoped paths instead of global ones, so these keep happening.
+
+**** beezle
+:PROPERTIES:
+:COMMENT_ID: 49804477
+:END:
+The fix was backported to all branches back to 4.7 as a courtesy. About 1/3 of installs are not on the recent 7 branch.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+WordPress：未授权路径遍历导致有条件的远程代码执行
+***** TLDR
+get_page_template() 的缺陷让未经身份验证的请求可以让 WordPress 加载主题目录之外任意可读的 .php 文件。要变成 RCE 需要两个条件：当前主题有以 page- 开头的顶层目录（Twenty Twelve、Twenty Fourteen、Neve、Hestia、Sydney 都符合），以及磁盘上存在可用的 PHP 文件，最经典的是在 register_argc_argv 开启时的 pearcmd.php（官方 PHP Docker 镜像默认开启）。CVSS 9.2，由 Robert Ressl 报告，自 4.7.0 起就存在，已在 7.1.2 修复并回溯到 4.7 之后的每个分支。
+***** Take
+这个漏洞已经存在九年，pearcmd.php 那半边作为 Docker 陷阱也被人说了很多年。讨论里真正值得注意的数字是：约三分之一的安装仍停留在 7 之前的分支，这就是 WordPress 宁可回溯修复到 4.7 也不让用户升级的原因。
+***** Comments
+- 这就是为什么每台能访问到的 Web 服务器都会被 /something/something.php?somearg=someval 刷屏。WP 大概是网络史上被利用最多的软件之一。
+- 这类缺陷到处都是。几乎没有哪个语言的标准库提供了作用域路径而非全局路径的正确抽象，所以这种问题会一直出现。
+- 这次修复出于好意回溯到了 4.7 之前的所有分支。大约三分之一的安装并不在最新的 7 分支上。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+WordPress: 認証不要のパストラバーサルが条件付きRCEに
+***** TLDR
+get_page_template() の欠陥により、認証なしのリクエストでテーマディレクトリ外の任意の読み取り可能な .php ファイルを読み込ませられる。RCEになる条件は2つ。有効なテーマに page- で始まるトップレベルディレクトリがあること（Twenty Twelve、Twenty Fourteen、Neve、Hestia、Sydneyが該当）、そしてディスク上に使えるPHPファイルがあること。定番は register_argc_argv が有効な場合の pearcmd.php で、公式PHP Dockerイメージではこれが既定で有効。CVSS 9.2、報告者はRobert Ressl、4.7.0から存在し、7.1.2で修正されたうえ4.7までの全ブランチにバックポートされた。
+***** Take
+この不具合は9年前から存在し、pearcmd.php 側もDockerの落とし穴として何年も指摘されてきた。注目すべき数字はスレッドにある。インストールの約3分の1がまだ7より前のブランチで、だからWordPressはアップグレードを促す代わりに4.7までバックポートした。
+***** Comments
+- 到達可能なWebサーバーが /something/something.php?somearg=someval で埋め尽くされる理由がこれだ。WPはウェブ史上もっとも悪用されたソフトの一つだろう。
+- この種の不具合はどこにでもある。グローバルなパスではなくスコープ付きパスを扱う正しい抽象を提供する標準ライブラリはほぼ皆無で、だから繰り返される。
+- 修正は好意として4.7までの全ブランチにバックポートされた。インストールの約3分の1は最新の7系ではない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+WordPress: 인증 없는 경로 탐색이 조건부 RCE로
+***** TLDR
+get_page_template()의 결함으로 인증되지 않은 요청이 테마 디렉터리 밖의 읽기 가능한 임의 .php 파일을 포함시킬 수 있다. RCE가 되려면 두 조건이 필요하다. 활성 테마에 page-로 시작하는 최상위 디렉터리가 있어야 하고(Twenty Twelve, Twenty Fourteen, Neve, Hestia, Sydney가 해당), 디스크에 쓸 만한 PHP 파일이 있어야 한다. 대표적인 것이 register_argc_argv가 켜져 있을 때의 pearcmd.php이며, 공식 PHP 도커 이미지에서는 기본값이다. CVSS 9.2, 보고자는 Robert Ressl, 4.7.0부터 존재했고 7.1.2에서 수정된 뒤 4.7까지 모든 브랜치에 백포트됐다.
+***** Take
+이 버그는 9년 됐고 pearcmd.php 쪽은 도커 함정으로 수년간 알려져 있었다. 주목할 숫자는 스레드에 있다. 설치본의 약 3분의 1이 아직 7 이전 브랜치라서, WordPress는 업그레이드를 요구하는 대신 4.7까지 백포트했다.
+***** Comments
+- 접근 가능한 모든 웹 서버가 /something/something.php?somearg=someval로 도배되는 이유다. WP는 웹 역사상 가장 많이 악용된 소프트웨어 축에 든다.
+- 이런 유형의 버그는 어디에나 있다. 전역 경로가 아닌 범위가 제한된 경로를 다루는 올바른 추상을 제공하는 표준 라이브러리가 거의 없으니 계속 반복된다.
+- 수정은 호의 차원에서 4.7까지 모든 브랜치에 백포트됐다. 설치본의 약 3분의 1은 최신 7 브랜치가 아니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+WordPress: recorrido de rutas sin autenticación que lleva a RCE condicional
+***** TLDR
+Un fallo en get_page_template() permite que una petición sin autenticar haga que WordPress incluya cualquier archivo .php legible fuera del directorio del tema. Para llegar a RCE hacen falta dos condiciones: que el tema activo tenga un directorio de primer nivel que empiece por page- (Twenty Twelve, Twenty Fourteen, Neve, Hestia y Sydney cumplen), y que exista un archivo PHP aprovechable en disco, siendo pearcmd.php el clásico cuando register_argc_argv está activo, el valor por defecto en las imágenes oficiales de PHP para Docker. CVSS 9.2, reportado por Robert Ressl, presente desde 4.7.0 y corregido en 7.1.2 con backports a todas las ramas hasta 4.7.
+***** Take
+El fallo tiene nueve años y la parte de pearcmd.php lleva años siendo un problema conocido en Docker. El dato interesante está en el hilo: cerca de un tercio de las instalaciones sigue en ramas anteriores a la 7, por eso WordPress hizo backport hasta 4.7 en vez de pedir que actualicen.
+***** Comments
+- Por esto todo servidor web accesible recibe spam de /something/something.php?somearg=someval. WP está entre el software más explotado de la historia de la web.
+- Este patrón de error está por todas partes. Casi ninguna biblioteca estándar ofrece las abstracciones correctas para rutas con ámbito en lugar de rutas globales, así que se repite.
+- El parche se retroportó por cortesía a todas las ramas hasta la 4.7. Alrededor de un tercio de las instalaciones no está en la rama 7.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+WordPress: Path Traversal ohne Authentifizierung führt zu bedingtem RCE
+***** TLDR
+Ein Fehler in get_page_template() erlaubt es einer nicht authentifizierten Anfrage, WordPress eine beliebige lesbare .php-Datei außerhalb des Theme-Verzeichnisses einbinden zu lassen. Für RCE braucht es zwei Bedingungen: Das aktive Theme muss ein Verzeichnis der obersten Ebene haben, das mit page- beginnt (Twenty Twelve, Twenty Fourteen, Neve, Hestia und Sydney erfüllen das), und es muss eine nutzbare PHP-Datei auf der Platte liegen. Der Klassiker ist pearcmd.php bei aktiviertem register_argc_argv, dem Standard in den offiziellen PHP-Docker-Images. CVSS 9.2, gemeldet von Robert Ressl, seit 4.7.0 vorhanden, behoben in 7.1.2 samt Backports bis 4.7.
+***** Take
+Der Bug ist neun Jahre alt, und die pearcmd.php-Hälfte ist seit Jahren als Docker-Falle bekannt. Die interessante Zahl steht im Thread: Rund ein Drittel der Installationen läuft noch auf Zweigen vor 7, deshalb der Backport bis 4.7 statt eines Upgrade-Aufrufs.
+***** Comments
+- Deshalb wird jeder erreichbare Webserver mit /something/something.php?somearg=someval zugespammt. WP gehört zur meistausgenutzten Software der Webgeschichte.
+- Dieses Fehlermuster gibt es überall. Kaum eine Standardbibliothek bietet die richtigen Abstraktionen für begrenzte statt globale Pfade, also wiederholt es sich.
+- Der Fix wurde als Entgegenkommen bis 4.7 zurückportiert. Etwa ein Drittel der Installationen läuft nicht auf dem aktuellen 7er-Zweig.
+** The current balance of power in open models :ai:open-source:china:llm:
+:PROPERTIES:
+:ID:       49808816
+:URL:      https://www.interconnects.ai/p/the-current-balance-of-power-in-open
+:HN_URL:   https://news.ycombinator.com/item?id=49808816
+:POINTS:   69
+:COMMENTS: 20
+:BY:       gmays
+:END:
+
+*** TLDR
+Nathan Lambert's tally of who leads open-weight models: China, and not narrowly. Z.ai's GLM-5.3 (45), Moonshot's Kimi K3 (44) and GLM-5.3-Flash (42) hold the top of the Artificial Analysis index, while the best American open models, Thinking Machines' Inkling (26) and Nvidia's Nemotron 3 Ultra (23), sit a tier below alongside gpt-oss and Gemma 4. Chinese models account for 3.2B of Hugging Face downloads against 1.6B, over 80% of OpenRouter open-model usage, and 40% of arXiv mentions versus 30%. Lambert dates the crossover to about 18 months ago and argues distillation does not explain it: the Chinese labs ship faster, pick narrower targets and now buy their own training data.
+
+*** Take
+The download and OpenRouter numbers are the ones that matter, because they measure what people actually deploy rather than what scores well. American labs treated open weights as a marketing channel, the Chinese labs treated it as distribution, and distribution compounds.
+
+*** Comments
+
+**** Zaraif13
+:PROPERTIES:
+:COMMENT_ID: 49809022
+:END:
+For big enterprises to really adopt AI they need open models. I spent two days building supply chain agents over bank statements and supplier IDs. That data is not going to a hosted API.
+
+**** silverFork
+:PROPERTIES:
+:COMMENT_ID: 49809188
+:END:
+They are a few months behind and the world still uses their models. Users suspect the Americans will pull the rug. A few months behind beats being locked out.
+
+**** tamaker
+:PROPERTIES:
+:COMMENT_ID: 49809341
+:END:
+Important work, and good that it is being shared both with US leadership and with the community.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+开放模型当前的力量格局
+***** TLDR
+Nathan Lambert 盘点了开放权重模型的领先者：中国，而且差距不小。Z.ai 的 GLM-5.3（45 分）、月之暗面的 Kimi K3（44 分）和 GLM-5.3-Flash（42 分）占据 Artificial Analysis 指数榜首，而美国最好的开放模型 Thinking Machines 的 Inkling（26 分）和英伟达的 Nemotron 3 Ultra（23 分）与 gpt-oss、Gemma 4 一起落在下一档。中国模型的 Hugging Face 下载量为 32 亿次，对比 16 亿次；在 OpenRouter 的开放模型使用中占比超过 80%；arXiv 提及率 40% 对 30%。Lambert 认为交叉点大约发生在 18 个月前，且蒸馏无法解释这一切：中国实验室发布更快、目标更聚焦，如今也在自购训练数据。
+***** Take
+真正重要的是下载量和 OpenRouter 的数字，因为它们衡量的是人们实际部署了什么，而不是什么跑分好看。美国实验室把开放权重当成营销渠道，中国实验室把它当成分发渠道，而分发会复利增长。
+***** Comments
+- 大企业要真正采用 AI 就需要开放模型。我花了两天为供应链搭建智能体，处理银行对账单和供应商 ID。这些数据不会送去托管 API。
+- 他们落后几个月，而全世界还在用他们的模型。用户担心美国人会突然抽走梯子。落后几个月胜过被彻底挡在门外。
+- 很重要的工作，也很高兴它同时分享给了美国领导层和社区。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+オープンモデルにおける現在の力関係
+***** TLDR
+Nathan Lambertによるオープンウェイトモデルの勢力図。首位は中国で、しかも僅差ではない。Z.aiのGLM-5.3（45）、MoonshotのKimi K3（44）、GLM-5.3-Flash（42）がArtificial Analysis指数の上位を占め、米国最良のオープンモデルであるThinking MachinesのInkling（26）とNvidiaのNemotron 3 Ultra（23）はgpt-ossやGemma 4と並んで一段下にいる。Hugging Faceのダウンロードは中国勢32億に対し米国勢16億、OpenRouterのオープンモデル利用の8割超、arXiv言及率は40%対30%。Lambertは交差点を約18か月前とし、蒸留では説明できないと論じる。中国のラボはリリースが速く、狙いを絞り、今では独自の学習データに投資している。
+***** Take
+重要なのはダウンロード数とOpenRouterの数字だ。ベンチマークの見栄えではなく、実際に何が使われているかを測っているからだ。米国のラボはオープンウェイトをマーケティング手段として扱い、中国のラボは流通手段として扱った。そして流通は複利で効く。
+***** Comments
+- 大企業が本気でAIを導入するにはオープンモデルが要る。2日かけて銀行明細や取引先IDを扱うサプライチェーン用エージェントを作った。あのデータを外部APIに送る気はない。
+- 数か月遅れているのに世界は彼らのモデルを使う。米国側がはしごを外すと疑われているからだ。数か月遅れは締め出されるよりましだ。
+- 重要な仕事で、米国の指導層とコミュニティの両方に共有されているのが良い。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+오픈 모델의 현재 세력 구도
+***** TLDR
+Nathan Lambert가 정리한 오픈 웨이트 모델 판도: 중국이 선두이며 격차도 작지 않다. Z.ai의 GLM-5.3(45), Moonshot의 Kimi K3(44), GLM-5.3-Flash(42)가 Artificial Analysis 지수 상위를 차지하고, 미국 최고의 오픈 모델인 Thinking Machines의 Inkling(26)과 Nvidia의 Nemotron 3 Ultra(23)는 gpt-oss, Gemma 4와 함께 한 단계 아래에 있다. 허깅페이스 다운로드는 중국 32억 대 미국 16억, OpenRouter 오픈 모델 사용량의 80% 이상, arXiv 언급은 40% 대 30%다. Lambert는 역전 시점을 약 18개월 전으로 보며 증류로는 설명되지 않는다고 말한다. 중국 연구소들은 더 빨리 출시하고 목표를 좁게 잡으며 이제는 자체 학습 데이터에 투자한다.
+***** Take
+중요한 건 다운로드와 OpenRouter 숫자다. 벤치마크 점수가 아니라 실제로 무엇이 배포되는지를 측정하기 때문이다. 미국 연구소는 오픈 웨이트를 마케팅 채널로 다뤘고 중국 연구소는 유통 채널로 다뤘다. 유통은 복리로 쌓인다.
+***** Comments
+- 대기업이 AI를 제대로 도입하려면 오픈 모델이 필요하다. 이틀간 은행 명세서와 공급업체 ID를 다루는 공급망 에이전트를 만들었다. 그 데이터를 호스팅 API로 보낼 생각은 없다.
+- 몇 달 뒤처졌는데도 세계는 그들의 모델을 쓴다. 미국 쪽이 갑자기 발을 뺄 거라고 의심하기 때문이다. 몇 달 뒤처지는 게 아예 막히는 것보다 낫다.
+- 중요한 작업이고, 미국 지도층과 커뮤니티 양쪽에 공유되는 점이 좋다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El equilibrio de poder actual en los modelos abiertos
+***** TLDR
+El recuento de Nathan Lambert sobre quién lidera los modelos de pesos abiertos: China, y no por poco. GLM-5.3 de Z.ai (45), Kimi K3 de Moonshot (44) y GLM-5.3-Flash (42) encabezan el índice de Artificial Analysis, mientras que los mejores modelos abiertos estadounidenses, Inkling de Thinking Machines (26) y Nemotron 3 Ultra de Nvidia (23), quedan un escalón por debajo junto a gpt-oss y Gemma 4. Los modelos chinos suman 3.200 millones de descargas en Hugging Face frente a 1.600 millones, más del 80% del uso de modelos abiertos en OpenRouter y el 40% de las menciones en arXiv frente al 30%. Lambert sitúa el cruce hace unos 18 meses y sostiene que la destilación no lo explica: los laboratorios chinos publican más rápido, eligen objetivos más estrechos y ahora compran sus propios datos de entrenamiento.
+***** Take
+Las cifras que importan son las descargas y OpenRouter, porque miden lo que la gente despliega de verdad y no lo que puntúa bien. Los laboratorios estadounidenses trataron los pesos abiertos como un canal de marketing y los chinos como un canal de distribución, y la distribución se acumula.
+***** Comments
+- Para que las grandes empresas adopten IA de verdad necesitan modelos abiertos. Pasé dos días construyendo agentes de cadena de suministro con extractos bancarios e IDs de proveedores. Esos datos no van a una API alojada.
+- Van unos meses por detrás y el mundo sigue usando sus modelos. Los usuarios sospechan que los estadounidenses les quitarán la alfombra. Unos meses de retraso es mejor que quedarse fuera.
+- Trabajo importante, y está bien que se comparta tanto con el liderazgo estadounidense como con la comunidad.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das aktuelle Kräfteverhältnis bei offenen Modellen
+***** TLDR
+Nathan Lamberts Bilanz, wer bei Open-Weight-Modellen führt: China, und zwar deutlich. Z.ais GLM-5.3 (45), Moonshots Kimi K3 (44) und GLM-5.3-Flash (42) stehen an der Spitze des Artificial-Analysis-Index, während die besten amerikanischen offenen Modelle, Inkling von Thinking Machines (26) und Nvidias Nemotron 3 Ultra (23), eine Stufe darunter neben gpt-oss und Gemma 4 liegen. Chinesische Modelle kommen auf 3,2 Milliarden Hugging-Face-Downloads gegenüber 1,6 Milliarden, über 80% der Open-Model-Nutzung auf OpenRouter und 40% der arXiv-Erwähnungen gegenüber 30%. Lambert datiert den Wechsel auf vor rund 18 Monaten und argumentiert, Distillation erkläre das nicht: Die chinesischen Labore liefern schneller, wählen engere Ziele und kaufen inzwischen eigene Trainingsdaten.
+***** Take
+Die Downloads und die OpenRouter-Zahlen sind die entscheidenden, weil sie messen, was tatsächlich eingesetzt wird, und nicht, was gut abschneidet. Amerikanische Labore behandelten offene Gewichte als Marketingkanal, die chinesischen als Vertriebskanal, und Vertrieb verzinst sich.
+***** Comments
+- Damit große Unternehmen KI wirklich einsetzen, brauchen sie offene Modelle. Ich habe zwei Tage lang Lieferketten-Agenten über Kontoauszüge und Lieferanten-IDs gebaut. Diese Daten gehen nicht an eine gehostete API.
+- Sie sind ein paar Monate hinten und die Welt nutzt trotzdem ihre Modelle. Die Nutzer rechnen damit, dass die Amerikaner den Stecker ziehen. Ein paar Monate Rückstand schlägt Ausgesperrtsein.
+- Wichtige Arbeit, und gut, dass sie sowohl mit der US-Führung als auch mit der Community geteilt wird.
+** Unreal Agent :ai:agents:golang:open-source:
+:PROPERTIES:
+:ID:       49805748
+:URL:      https://unreallabs.ai/blog/unreal-agent/
+:HN_URL:   https://news.ycombinator.com/item?id=49805748
+:POINTS:   154
+:COMMENTS: 94
+:BY:       trollied
+:END:
+
+*** TLDR
+Unreal Labs released an open-source agent harness in Go, model-agnostic, built around asynchronous tool calls. Instead of blocking until a tool returns, it logs the call as in-progress, keeps the model working, and appends the result to the session log when it lands. Running on GPT-6 Astra they report up to 40% lower cost than Codex on Terminal-Bench 4.0, SWE-Atlas, DeepSWE 1.1 and ALE-CLI, at equal or better pass rates, mostly by spending fewer input tokens and fewer model turns. Ships as a library, a runner binary and Harbor-compatible benchmark tooling.
+
+*** Take
+The savings come from the harness, not the model, which is the useful part of this release. The benchmark chart is doing some work though: the top commenter noticed it runs their harness on Astra xhigh against Codex on Astra max, which is not the same reasoning budget.
+
+*** Comments
+
+**** tekacs
+:PROPERTIES:
+:COMMENT_ID: 49805901
+:END:
+The headline graph is bizarre. They compare their harness on Astra xhigh against Codex on Astra max. Also OpenAI just added async tool calling to their own harness.
+
+**** dvt
+:PROPERTIES:
+:COMMENT_ID: 49806043
+:END:
+This space is very untapped. Fractal tool discovery, where an agent drills deeper into a taxonomy to find the tool it needs, helps a lot when you would otherwise pollute context with a zillion tools.
+
+**** tapoxi
+:PROPERTIES:
+:COMMENT_ID: 49806255
+:END:
+Sounds like a trademark issue when Epic ships a wildly popular Unreal Engine.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Unreal Agent
+***** TLDR
+Unreal Labs 发布了一个用 Go 写的开源智能体框架，与模型无关，核心是异步工具调用。它不会阻塞等待工具返回，而是把调用记为进行中，让模型继续工作，结果到达后再追加到会话日志。在 GPT-6 Astra 上，他们称在 Terminal-Bench 4.0、SWE-Atlas、DeepSWE 1.1 和 ALE-CLI 上比 Codex 成本最多低 40%，通过率相当或更好，主要靠更少的输入 token 和更少的模型轮次。发布形式包括库、运行器二进制和兼容 Harbor 的基准测试工具。
+***** Take
+节省来自框架而不是模型，这才是这次发布有价值的地方。不过那张基准图有点取巧：热门评论指出他们用的是 Astra xhigh 跑自家框架，对比 Codex 跑 Astra max，这两者的推理预算并不相同。
+***** Comments
+- 标题那张图很奇怪。他们用 Astra xhigh 跑自家框架，去比 Codex 跑 Astra max。而且 OpenAI 刚刚也给自家框架加上了异步工具调用。
+- 这个方向远未被充分开发。分形式工具发现，让智能体在分类体系里逐层深入找到需要的工具，对避免上下文被上千个工具污染很有帮助。
+- Epic 有个无比流行的 Unreal Engine，这名字听起来像是商标麻烦。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Unreal Agent
+***** TLDR
+Unreal LabsがGo製のオープンソースなエージェントハーネスを公開した。モデル非依存で、非同期ツール呼び出しを軸に設計されている。ツールの戻りを待って止まるのではなく、呼び出しを進行中として記録しモデルを動かし続け、結果が返ったらセッションログに追記する。GPT-6 Astra上で、Terminal-Bench 4.0、SWE-Atlas、DeepSWE 1.1、ALE-CLIにおいてCodex比で最大40%低コスト、合格率は同等以上と報告。主因は入力トークンとモデルのターン数の削減だ。ライブラリ、実行バイナリ、Harbor互換のベンチマークツールとして提供される。
+***** Take
+削減はモデルではなくハーネスから来ている。そこがこのリリースの有用な部分だ。ただしベンチマークの図には細工がある。上位コメントが指摘したとおり、自社ハーネスはAstra xhigh、CodexはAstra maxで走っており、推論予算が同じではない。
+***** Comments
+- 見出しのグラフが奇妙だ。自社ハーネスはAstra xhigh、CodexはAstra maxで比較している。しかもOpenAIは自前のハーネスに非同期ツール呼び出しを追加したばかりだ。
+- この領域はまだほとんど手つかずだ。分類体系を掘り下げて必要なツールを見つけるフラクタルなツール探索は、無数のツールでコンテキストを汚さずに済む。
+- Epicが大人気のUnreal Engineを出している以上、商標で揉めそうだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Unreal Agent
+***** TLDR
+Unreal Labs가 Go로 만든 오픈소스 에이전트 하네스를 공개했다. 모델 비종속이며 비동기 도구 호출이 핵심이다. 도구 반환을 기다리며 멈추는 대신 호출을 진행 중으로 기록하고 모델을 계속 돌린 뒤, 결과가 도착하면 세션 로그에 덧붙인다. GPT-6 Astra에서 Terminal-Bench 4.0, SWE-Atlas, DeepSWE 1.1, ALE-CLI 기준 Codex 대비 최대 40% 낮은 비용에 통과율은 동등하거나 더 낫다고 보고했다. 주된 이유는 입력 토큰과 모델 턴 수의 감소다. 라이브러리, 실행 바이너리, Harbor 호환 벤치마크 도구로 제공된다.
+***** Take
+절감이 모델이 아니라 하네스에서 나온다는 점이 이 릴리스의 쓸모다. 다만 벤치마크 그래프에는 손이 갔다. 상위 댓글이 짚었듯 자사 하네스는 Astra xhigh, Codex는 Astra max로 돌렸는데 추론 예산이 같지 않다.
+***** Comments
+- 대표 그래프가 이상하다. 자사 하네스는 Astra xhigh, Codex는 Astra max로 비교한다. 게다가 OpenAI도 방금 자체 하네스에 비동기 도구 호출을 추가했다.
+- 이 분야는 아직 손대지 않은 여지가 크다. 분류 체계를 파고들어 필요한 도구를 찾는 프랙탈 도구 탐색은 수천 개 도구로 컨텍스트를 오염시키지 않게 해준다.
+- Epic이 엄청나게 인기 있는 Unreal Engine을 내는 상황이라 상표 문제가 날 것 같다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Unreal Agent
+***** TLDR
+Unreal Labs publicó un arnés de agentes de código abierto escrito en Go, agnóstico del modelo y construido alrededor de llamadas a herramientas asíncronas. En lugar de bloquearse hasta que la herramienta responde, registra la llamada como en curso, mantiene al modelo trabajando y añade el resultado al registro de sesión cuando llega. Sobre GPT-6 Astra informan hasta un 40% menos de coste que Codex en Terminal-Bench 4.0, SWE-Atlas, DeepSWE 1.1 y ALE-CLI, con tasas de acierto iguales o mejores, sobre todo por gastar menos tokens de entrada y menos turnos de modelo. Se entrega como biblioteca, binario ejecutable y herramientas de benchmark compatibles con Harbor.
+***** Take
+El ahorro viene del arnés y no del modelo, que es la parte útil de este lanzamiento. Aunque el gráfico de benchmarks hace trampa: el comentario más votado nota que ejecutan su arnés con Astra xhigh frente a Codex con Astra max, que no es el mismo presupuesto de razonamiento.
+***** Comments
+- El gráfico principal es raro. Comparan su arnés con Astra xhigh contra Codex con Astra max. Además OpenAI acaba de añadir llamadas asíncronas a su propio arnés.
+- Este espacio está muy poco explotado. El descubrimiento fractal de herramientas, donde el agente profundiza en una taxonomía hasta hallar la que necesita, ayuda cuando si no contaminarías el contexto con mil herramientas.
+- Suena a problema de marca registrada con Epic sacando el popularísimo Unreal Engine.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Unreal Agent
+***** TLDR
+Unreal Labs hat ein quelloffenes Agenten-Harness in Go veröffentlicht, modellagnostisch und um asynchrone Tool-Aufrufe herum gebaut. Statt bis zur Rückgabe eines Tools zu blockieren, wird der Aufruf als laufend protokolliert, das Modell arbeitet weiter, und das Ergebnis wird dem Sitzungsprotokoll angehängt, sobald es eintrifft. Auf GPT-6 Astra berichten sie von bis zu 40% geringeren Kosten als Codex bei Terminal-Bench 4.0, SWE-Atlas, DeepSWE 1.1 und ALE-CLI, bei gleichen oder besseren Erfolgsquoten, vor allem durch weniger Eingabetokens und weniger Modellzüge. Ausgeliefert wird es als Bibliothek, Runner-Binary und Harbor-kompatibles Benchmark-Werkzeug.
+***** Take
+Die Einsparung kommt vom Harness und nicht vom Modell, und das ist der nützliche Teil dieser Veröffentlichung. Das Benchmark-Diagramm trickst allerdings: Der meistbeachtete Kommentar bemerkt, dass ihr Harness auf Astra xhigh gegen Codex auf Astra max läuft, was nicht dasselbe Reasoning-Budget ist.
+***** Comments
+- Die Kurve im Aufmacher ist seltsam. Sie vergleichen ihr Harness auf Astra xhigh mit Codex auf Astra max. Außerdem hat OpenAI gerade asynchrone Tool-Aufrufe in das eigene Harness eingebaut.
+- Dieses Feld ist kaum erschlossen. Fraktale Tool-Suche, bei der ein Agent sich durch eine Taxonomie zum passenden Werkzeug vorarbeitet, hilft sehr, wenn man sonst den Kontext mit tausend Tools zumüllt.
+- Klingt nach Markenärger, wo Epic die extrem populäre Unreal Engine vertreibt.
+** OpenAI is well positioned to fast-follow Jev :ai:startup:openai:llm:
+:PROPERTIES:
+:ID:       49802161
+:URL:      https://arcturus-labs.com/blog/2026/09/21/will-openai-eat-jevs-lunch/
+:HN_URL:   https://news.ycombinator.com/item?id=49802161
+:POINTS:   279
+:COMMENTS: 201
+:BY:       JohnBerryman
+:END:
+
+*** TLDR
+Jev is TypeSafe's model that returns calibrated probabilities instead of text: true/false, multiple choice, or a numeric score, fast and cheap. The post argues OpenAI can copy it quickly, because their models have effectively been classifiers for years every time they decide whether to call a tool, they just were never trained for general classification. If Jev is a normal architecture plus specialized training data and RL, OpenAI has the resources to reproduce it and could fold classification into the base model. The conclusion hedges: TypeSafe survives only if that training pipeline is a real moat.
+
+*** Take
+The post never establishes that a tool-call decision is the same problem as calibrated scoring, which is the whole question. Commenters point out every lab already runs internal classifiers and chooses not to sell them, so the argument proves an OpenAI classification product is possible, not that it is coming.
+
+*** Comments
+
+**** orbital-decay
+:PROPERTIES:
+:COMMENT_ID: 49802390
+:END:
+Every major AI shop already has a pile of in-house classifiers for safeguards, data prep and analysis. Putting them on a public API often makes no business sense.
+
+**** andy12_
+:PROPERTIES:
+:COMMENT_ID: 49802544
+:END:
+Unlikely. OpenAI is all in on RL reasoning and Jev-like models are the opposite, built to not reason at all so they stay fast. Add reasoning and you lose the price and speed.
+
+**** prodigycorp
+:PROPERTIES:
+:COMMENT_ID: 49802711
+:END:
+Moat discussion is the lowest form of discussion. I do not care whether Jev has a moat, I care whether the interface works.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+OpenAI 有足够条件快速跟进 Jev
+***** TLDR
+Jev 是 TypeSafe 的模型，返回的不是文本而是经过校准的概率：真假判断、多选，或一个数值分数，速度快且便宜。文章认为 OpenAI 可以很快复制它，因为他们的模型多年来每次决定是否调用工具时实际上都在做分类，只是从未针对通用分类进行训练。如果 Jev 只是常规架构加上专门的训练数据和强化学习，OpenAI 有资源复现，并可能把分类能力直接并入基础模型。结论留有余地：只有当那条训练流水线构成真正的护城河时，TypeSafe 才能存活。
+***** Take
+文章始终没有论证「决定是否调用工具」和「校准打分」是同一个问题，而这恰恰是关键。评论指出各家实验室早就有内部分类器却选择不对外销售，所以这个论证只说明 OpenAI 做分类产品是可能的，并不说明它就会到来。
+***** Comments
+- 每家大型 AI 公司都已经有一堆内部分类器，用于安全防护、数据准备和分析。把它们放到公开 API 上往往没有商业意义。
+- 不太可能。OpenAI 全押在强化学习推理上，而 Jev 这类模型正相反，刻意不做推理以保持快速。加上推理，你就失去了价格和速度优势。
+- 讨论护城河是最低级的讨论。我不在乎 Jev 有没有护城河，我在乎这个接口好不好用。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+OpenAIはJevに素早く追随できる立場にある
+***** TLDR
+JevはTypeSafeのモデルで、テキストではなく較正済みの確率を返す。真偽判定、多肢選択、数値スコアを高速かつ安価に返す。この記事は、OpenAIならすぐ模倣できると主張する。彼らのモデルはツールを呼ぶかどうかを判断するたびに事実上の分類器として働いてきたが、汎用分類向けに訓練されたことがなかっただけだ、というわけだ。Jevが通常のアーキテクチャに専用の訓練データとRLを足したものなら、OpenAIには再現する資源があり、分類機能を基盤モデルに組み込むこともできる。結論は含みを残す。あの訓練パイプラインが本当の堀であるときだけTypeSafeは生き残る。
+***** Take
+ツール呼び出しの判断と較正付きスコアリングが同じ問題だという点を記事は一度も示していない。そこが争点そのものだ。コメント欄は、各ラボがすでに内部分類器を持ちながら売らない選択をしていると指摘する。つまりこの論は、OpenAIの分類製品が可能だと示すだけで、来ると示してはいない。
+***** Comments
+- 大手AI企業はどこも、安全対策やデータ準備、分析用の社内分類器を山ほど抱えている。それを公開APIに載せるのは商売として割に合わないことが多い。
+- 考えにくい。OpenAIはRLによる推論に全振りしており、Jev系はその逆で、速さのためにあえて推論しない設計だ。推論を足せば価格と速度の利点が消える。
+- 堀の話は議論として最低の部類だ。Jevに堀があるかではなく、インターフェースが使えるかどうかが知りたい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+OpenAI는 Jev를 빠르게 따라잡을 위치에 있다
+***** TLDR
+Jev는 TypeSafe의 모델로 텍스트 대신 보정된 확률을 반환한다. 참/거짓, 객관식, 또는 숫자 점수를 빠르고 싸게 내놓는다. 글은 OpenAI가 이를 금방 복제할 수 있다고 주장한다. 그들의 모델은 도구를 호출할지 판단할 때마다 사실상 분류기로 작동해왔고, 다만 범용 분류용으로 훈련된 적이 없었을 뿐이라는 것이다. Jev가 평범한 아키텍처에 전용 학습 데이터와 RL을 더한 것이라면 OpenAI에는 재현할 자원이 있고, 분류 기능을 기반 모델에 통합할 수도 있다. 결론은 여지를 남긴다. 그 학습 파이프라인이 진짜 해자일 때만 TypeSafe가 살아남는다.
+***** Take
+도구 호출 판단과 보정된 점수 산출이 같은 문제라는 것을 글은 끝내 입증하지 않는데, 그게 바로 쟁점이다. 댓글들은 모든 연구소가 이미 내부 분류기를 갖고도 팔지 않기로 택했다고 지적한다. 결국 이 논증은 OpenAI 분류 제품이 가능하다는 것만 보일 뿐, 온다는 것은 보이지 못한다.
+***** Comments
+- 대형 AI 업체는 이미 안전장치, 데이터 준비, 분석용 사내 분류기를 잔뜩 갖고 있다. 그걸 공개 API로 내는 건 사업적으로 말이 안 되는 경우가 많다.
+- 가능성이 낮다. OpenAI는 RL 추론에 올인했고 Jev류는 정반대로 빠르기 위해 아예 추론하지 않게 만들어졌다. 추론을 얹으면 가격과 속도 이점이 사라진다.
+- 해자 논쟁은 가장 수준 낮은 논의다. Jev에 해자가 있는지가 아니라 인터페이스가 쓸 만한지가 궁금하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+OpenAI está bien posicionada para copiar rápido a Jev
+***** TLDR
+Jev es el modelo de TypeSafe que devuelve probabilidades calibradas en vez de texto: verdadero/falso, opción múltiple o una puntuación numérica, rápido y barato. El artículo sostiene que OpenAI puede copiarlo pronto, porque sus modelos llevan años funcionando como clasificadores cada vez que deciden si llamar a una herramienta, solo que nunca los entrenaron para clasificación general. Si Jev es una arquitectura normal más datos de entrenamiento especializados y RL, OpenAI tiene recursos para reproducirlo e incluso integrar la clasificación en el modelo base. La conclusión se cubre: TypeSafe sobrevive solo si ese proceso de entrenamiento es un foso real.
+***** Take
+El texto nunca demuestra que decidir una llamada a herramienta sea el mismo problema que puntuar de forma calibrada, que es justo la cuestión. Los comentarios señalan que todos los laboratorios ya tienen clasificadores internos y eligen no venderlos, así que el argumento prueba que un producto de clasificación de OpenAI es posible, no que vaya a llegar.
+***** Comments
+- Toda empresa grande de IA ya tiene un montón de clasificadores internos para salvaguardas, preparación de datos y análisis. Ponerlos en una API pública casi nunca tiene sentido comercial.
+- Poco probable. OpenAI ha apostado todo al razonamiento con RL y los modelos tipo Jev son lo contrario, hechos para no razonar y mantenerse rápidos. Si añades razonamiento pierdes precio y velocidad.
+- Hablar de fosos es la forma más pobre de discusión. No me importa si Jev tiene foso, me importa si la interfaz funciona.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+OpenAI ist gut aufgestellt, um Jev schnell nachzuziehen
+***** TLDR
+Jev ist TypeSafes Modell, das kalibrierte Wahrscheinlichkeiten statt Text zurückgibt: wahr/falsch, Mehrfachauswahl oder einen Zahlenwert, schnell und günstig. Der Beitrag argumentiert, OpenAI könne das rasch kopieren, weil ihre Modelle seit Jahren faktisch Klassifikatoren sind, sobald sie entscheiden, ob ein Tool aufgerufen wird. Sie wurden nur nie für allgemeine Klassifikation trainiert. Wenn Jev eine normale Architektur plus spezialisierte Trainingsdaten und RL ist, hat OpenAI die Mittel zur Reproduktion und könnte Klassifikation ins Basismodell einbauen. Das Fazit bleibt vage: TypeSafe überlebt nur, wenn diese Trainingspipeline ein echter Burggraben ist.
+***** Take
+Der Text belegt nie, dass eine Tool-Aufruf-Entscheidung dasselbe Problem ist wie kalibriertes Bewerten, und genau darum geht es. Kommentare weisen darauf hin, dass jedes Labor längst interne Klassifikatoren betreibt und sie bewusst nicht verkauft. Das Argument zeigt also, dass ein OpenAI-Klassifikationsprodukt möglich wäre, nicht dass es kommt.
+***** Comments
+- Jedes große KI-Haus hat längst einen Stapel interner Klassifikatoren für Schutzmechanismen, Datenaufbereitung und Analyse. Die auf eine öffentliche API zu legen, ergibt geschäftlich oft keinen Sinn.
+- Unwahrscheinlich. OpenAI setzt voll auf RL-Reasoning, und Jev-artige Modelle sind das Gegenteil: gebaut, um gar nicht zu denken und schnell zu bleiben. Mit Reasoning verlierst du Preis und Tempo.
+- Burggraben-Debatten sind die niedrigste Form der Diskussion. Mich interessiert nicht, ob Jev einen Graben hat, sondern ob die Schnittstelle taugt.
+** ReBarUEFI: Resizable BAR for almost any UEFI system :hardware:uefi:gpu:firmware:
+:PROPERTIES:
+:ID:       49781862
+:URL:      https://github.com/xCuri0/ReBarUEFI
+:HN_URL:   https://news.ycombinator.com/item?id=49781862
+:POINTS:   110
+:COMMENTS: 36
+:BY:       nateb2022
+:END:
+
+*** TLDR
+A UEFI DXE driver that adds Resizable BAR to machines whose firmware never shipped it. The module is injected into the firmware's DXE volume and replaces PreprocessController at boot, checking for ReBAR capability and applying a size stored in NVRAM before PCI enumeration allocates it. It works down to PCIe Gen2 boards and needs 4G Decoding on and CSM off, with an optional firmware patch to lift the vendor's 64-bit BAR limit. Picking a size the board cannot handle means no boot until you clear CMOS, sometimes by pulling the battery.
+
+*** Take
+Resizable BAR is worth roughly 5 to 15% in games and is close to mandatory for Intel Arc cards, which is why people flash their motherboards over it. The real story is that a working PCIe feature stayed locked behind firmware nobody was going to update.
+
+*** Comments
+
+**** zir_blazer
+:PROPERTIES:
+:COMMENT_ID: 49782044
+:END:
+This kind of BIOS modding is why I got into Coreboot, so extending firmware capabilities does not require proprietary tools. Similar mods added NVMe boot to old firmwares.
+
+**** abrookewood
+:PROPERTIES:
+:COMMENT_ID: 49782201
+:END:
+Resizable BAR removes the traditional 256MB memory window so the CPU can address the whole VRAM at once, worth roughly 5 to 15% in games.
+
+**** bigwheels
+:PROPERTIES:
+:COMMENT_ID: 49782388
+:END:
+What does this actually do? I read the README and I am still unclear on the use case. Posting on the assumption others want the context too.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ReBarUEFI：为几乎任何 UEFI 系统启用可调整大小的 BAR
+***** TLDR
+这是一个 UEFI DXE 驱动，为固件从未提供该功能的机器加上 Resizable BAR。模块被注入固件的 DXE 卷，在启动时替换 PreprocessController，检查 ReBAR 能力并应用存在 NVRAM 中的大小，随后由 PCI 枚举完成分配。它甚至能在 PCIe Gen2 主板上工作，需要开启 4G Decoding 并关闭 CSM，还有一个可选的固件补丁用于解除厂商的 64 位 BAR 限制。如果选了主板撑不住的大小，就会无法开机，只能清 CMOS，有时得拔电池。
+***** Take
+Resizable BAR 在游戏里大约值 5% 到 15%，对 Intel Arc 显卡几乎是必需，这就是有人愿意刷主板固件的原因。真正值得注意的是：一个能用的 PCIe 特性被锁在了没人会再更新的固件后面。
+***** Comments
+- 正是这类 BIOS 改机让我开始关注 Coreboot，这样扩展固件能力就不必依赖专有工具。类似的改动还给老固件加上了 NVMe 启动。
+- Resizable BAR 移除了传统的 256MB 内存窗口，让 CPU 能一次性寻址整个显存，在游戏中大约值 5% 到 15%。
+- 这东西到底做什么？我读了 README 还是没搞懂用途。发出来是想着别人可能也需要这点背景。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ReBarUEFI: ほぼあらゆるUEFIシステムでResizable BARを有効にする
+***** TLDR
+ファームウェアがResizable BARを備えていないマシンにその機能を追加するUEFI DXEドライバ。モジュールをファームウェアのDXEボリュームに注入し、起動時にPreprocessControllerを差し替えて、ReBAR対応を確認しNVRAMに保存されたサイズを適用する。その後のPCI列挙で割り当てが行われる。PCIe Gen2のボードでも動作し、4G Decodingを有効、CSMを無効にする必要がある。ベンダーの64ビットBAR制限を外す任意のファームウェアパッチもある。ボードが扱えないサイズを選ぶと起動しなくなり、CMOSクリア、場合によっては電池を抜く必要がある。
+***** Take
+Resizable BARはゲームでおよそ5〜15%の差になり、Intel Arcカードではほぼ必須だ。だから人はマザーボードを書き換える。本当の論点は、動作する PCIe の機能が、誰も更新しないファームウェアの内側に閉じ込められていたことだ。
+***** Comments
+- この手のBIOS改造がきっかけでCoreboot に興味を持った。独自ツールなしでファームウェアの機能を拡張できる。似た改造で古いファームウェアにNVMeブートを足した例もある。
+- Resizable BARは従来の256MBの窓を取り払い、CPUがVRAM全体を一度に扱えるようにする。ゲームでおよそ5〜15%の効果だ。
+- これは結局何をするものなのか。READMEを読んだがまだ用途がつかめない。同じ人がいると思って書いておく。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ReBarUEFI: 거의 모든 UEFI 시스템에서 Resizable BAR 사용하기
+***** TLDR
+펌웨어가 Resizable BAR를 지원하지 않는 기기에 그 기능을 더해주는 UEFI DXE 드라이버다. 모듈을 펌웨어의 DXE 볼륨에 주입해 부팅 시 PreprocessController를 대체하고, ReBAR 지원 여부를 확인한 뒤 NVRAM에 저장된 크기를 적용한다. 이후 PCI 열거 과정에서 할당이 이뤄진다. PCIe Gen2 보드에서도 동작하며 4G Decoding을 켜고 CSM을 꺼야 한다. 제조사의 64비트 BAR 제한을 푸는 선택적 펌웨어 패치도 있다. 보드가 감당 못 할 크기를 고르면 부팅이 안 되고, CMOS를 지우거나 때로는 배터리를 빼야 한다.
+***** Take
+Resizable BAR는 게임에서 대략 5~15% 값어치가 있고 인텔 Arc 카드에는 사실상 필수다. 그래서 사람들이 메인보드를 플래싱한다. 진짜 핵심은 멀쩡히 작동하는 PCIe 기능이 아무도 갱신하지 않을 펌웨어 뒤에 잠겨 있었다는 점이다.
+***** Comments
+- 이런 BIOS 개조 때문에 Coreboot에 관심을 갖게 됐다. 독점 도구 없이도 펌웨어 기능을 확장할 수 있으니까. 비슷한 개조로 옛 펌웨어에 NVMe 부팅을 더하기도 했다.
+- Resizable BAR는 기존 256MB 창을 없애 CPU가 VRAM 전체를 한 번에 접근하게 한다. 게임에서 대략 5~15% 정도다.
+- 이게 대체 뭘 하는 건가. README를 읽어도 쓰임새가 잘 안 잡힌다. 다른 사람들도 이 맥락이 필요할 것 같아 남긴다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ReBarUEFI: Resizable BAR para casi cualquier sistema UEFI
+***** TLDR
+Un controlador DXE de UEFI que añade Resizable BAR a equipos cuyo firmware nunca lo incluyó. El módulo se inyecta en el volumen DXE del firmware y sustituye PreprocessController en el arranque, comprueba la capacidad ReBAR y aplica un tamaño guardado en NVRAM antes de que la enumeración PCI lo asigne. Funciona incluso en placas PCIe Gen2 y requiere 4G Decoding activado y CSM desactivado, con un parche opcional de firmware para quitar el límite de BAR de 64 bits del fabricante. Elegir un tamaño que la placa no soporta deja el equipo sin arrancar hasta borrar la CMOS, a veces quitando la pila.
+***** Take
+Resizable BAR vale entre un 5 y un 15% en juegos y es casi obligatorio para las tarjetas Intel Arc, por eso hay gente reflasheando su placa base. Lo llamativo es que una función de PCIe que funciona quedara encerrada tras un firmware que nadie iba a actualizar.
+***** Comments
+- Este tipo de modding de BIOS me llevó a Coreboot, para ampliar las capacidades del firmware sin herramientas propietarias. Mods parecidos añadieron arranque NVMe a firmwares antiguos.
+- Resizable BAR elimina la ventana tradicional de 256MB para que la CPU direccione toda la VRAM de una vez, lo que vale entre un 5 y un 15% en juegos.
+- ¿Qué hace esto exactamente? Leí el README y sigo sin ver el caso de uso. Lo pregunto asumiendo que a otros les servirá el contexto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ReBarUEFI: Resizable BAR für fast jedes UEFI-System
+***** TLDR
+Ein UEFI-DXE-Treiber, der Rechnern Resizable BAR verschafft, deren Firmware es nie mitbrachte. Das Modul wird in das DXE-Volume der Firmware injiziert und ersetzt beim Start PreprocessController, prüft die ReBAR-Fähigkeit und wendet eine in NVRAM gespeicherte Größe an, bevor die PCI-Enumeration sie zuteilt. Es läuft bis hinunter zu PCIe-Gen2-Boards und braucht aktiviertes 4G Decoding und deaktiviertes CSM, dazu optional einen Firmware-Patch, der das 64-Bit-BAR-Limit des Herstellers aufhebt. Wer eine Größe wählt, die das Board nicht verkraftet, bootet nicht mehr, bis die CMOS gelöscht ist, manchmal durch Ziehen der Batterie.
+***** Take
+Resizable BAR bringt in Spielen etwa 5 bis 15% und ist für Intel-Arc-Karten faktisch Pflicht, deshalb flashen Leute dafür ihr Mainboard. Bemerkenswert ist, dass eine funktionierende PCIe-Funktion hinter Firmware eingesperrt blieb, die ohnehin niemand mehr aktualisiert hätte.
+***** Comments
+- Solches BIOS-Modding hat mich zu Coreboot gebracht, damit sich Firmware-Fähigkeiten ohne proprietäre Werkzeuge erweitern lassen. Ähnliche Mods brachten alten Firmwares NVMe-Boot bei.
+- Resizable BAR entfernt das übliche 256-MB-Fenster, sodass die CPU den gesamten VRAM auf einmal adressieren kann, in Spielen etwa 5 bis 15% wert.
+- Was macht das eigentlich? Ich habe die README gelesen und verstehe den Anwendungsfall immer noch nicht. Ich frage in der Annahme, dass andere den Kontext auch brauchen.
