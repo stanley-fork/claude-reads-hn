@@ -1,0 +1,504 @@
+#+TITLE: HN Digest 2026-09-26 11:11 UTC
+#+DATE: 2026-09-26T11:11:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A Jev-like decision API in one function and 1 logprob, the Apple Cards postmortem, and a lutetium clock good to 19 decimal places
+
+* Highlights
+- One token, logprobs, normalise: that is the whole decision-model trick
+- Apple Cards: 1850s letterpress, cotton Crane stock, launch orders fit in a shoebox
+- safenotsafe.dev parses your Postgres migration in the browser and never uploads it
+- Lutetium ion clock: 1e-19 uncertainty, two builds agreeing to 5.7e-19
+- Drawing a llama with 500 rotating circles, and why circles work at all
+
+* Stories
+
+** A single function Jev-like wrapper for LLMs, including vision models :ai:llm:vision:python:
+:PROPERTIES:
+:ID:       49853175
+:URL:      http://allanrbo.blogspot.com/2026/09/a-jev-like-wrapper-for-llms-including.html
+:HN_URL:   https://news.ycombinator.com/item?id=49853175
+:POINTS:   88
+:COMMENTS: 22
+:BY:       allanrbo
+:END:
+
+*** TLDR
+allanrbo reimplements the Jev decision-model interface in one Python function. The trick is to format the question as lettered multiple choice, call the model with max_completion_tokens set to 1 and logprobs enabled, then normalise the probabilities across the option letters and return a choice, a boolean probability, or an ordinal score. Two backends: llama.cpp locally, tested with Gemma 4 12B QAT on an RTX 3090, and OpenAI's API with gpt-6-luna. He extends the Jev request format with an attachments field carrying base64 JPEGs, which gets the same interface working on vision models. Throughput is about 1 frame per second locally at three questions per frame, and 0.2 FPS through OpenAI, which he attributes to opening a separate connection per question. He notes dedicated computer vision models are far more efficient and says he prefers the flexibility of asking in text.
+
+*** Take
+This is the most useful thing published about decision models this week, because it shows the mechanism. One token, logprobs, normalise over the option letters. A decision-model API is a constrained-decoding convention, not a model architecture, and anything that exposes token probabilities can serve one. The FPS numbers are also honestly reported: 1 FPS on a 3090 is not real-time vision, and he says so instead of burying it.
+
+*** Comments
+
+**** CROON_tv
+What I'd want to see next to accuracy is tail latency. In a real-time use, deciding when a spoken sentence is finished, a general LLM with the same prompt was slower and more hesitant for us than Jev, even though both cost about the same.
+
+**** prathje
+I would love to use it for images as well. Then again, is using grammar-based decoding with a JSON response not the same thing? Is Jev just that with nice caching? Because then I have been using that already.
+
+**** TeMPOraL
+This is how we get some of the most magical Star Trek technology that eludes us to this day, such as automatic doors. They work much better than real-life ones, because they seem to be doing something like this: if within 10 meters of the door, ask whether the person intends to pass through or is just walking by.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用单个函数实现的 Jev 式 LLM 包装器，支持视觉模型
+***** TLDR
+allanrbo 用一个 Python 函数重新实现了 Jev 的决策模型接口。诀窍是把问题格式化成带字母选项的多选题，调用模型时把 max_completion_tokens 设为 1 并开启 logprobs，然后在各选项字母之间归一化概率，返回一个选项、一个布尔概率或一个序数分值。支持两个后端：本地的 llama.cpp（在 RTX 3090 上用 Gemma 4 12B QAT 测试）和 OpenAI 的 API（用 gpt-6-luna）。他给 Jev 的请求格式加了一个 attachments 字段来携带 base64 JPEG，于是同一个接口也能用在视觉模型上。本地吞吐约每秒 1 帧、每帧 3 个问题，走 OpenAI 是 0.2 FPS，他归因于每个问题都新开一条连接。他指出专用计算机视觉模型效率高得多，但自己更看重用文本提问的灵活性。
+***** Take
+这是本周关于决策模型最有用的一篇，因为它把机制讲清楚了：一个 token、logprobs、在选项字母上归一化。决策模型 API 是一种受约束解码的约定，不是一种模型架构，任何暴露 token 概率的模型都能提供这种服务。FPS 数字也报得很诚实：3090 上 1 FPS 不是实时视觉，他直说了，没有藏起来。
+***** Comments
+- 除了准确率，我更想看到尾部延迟。在实时场景里判断一句话有没有说完，用同样的提示词，通用 LLM 对我们来说比 Jev 更慢也更犹豫，尽管两者成本差不多。
+- 我也很想把它用在图像上。不过话说回来，用基于语法的解码配 JSON 响应不是一回事吗？Jev 是不是就是那个再加上好用的缓存？如果是，那我早就在用了。
+- 这就是我们通往至今仍难以实现的《星际迷航》式魔法技术的方式，比如自动门。它们比现实中的门好用得多，因为它们似乎在做这样的事：如果人在门 10 米内，就判断这个人是想穿过去还是只是路过。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+単一関数によるJev風のLLMラッパー、ビジョンモデル対応
+***** TLDR
+allanrboがJevの判断モデルインターフェースをPythonの1関数で再実装した。仕組みは、質問を英字付きの多肢選択として整形し、max_completion_tokensを1、logprobsを有効にしてモデルを呼び、選択肢の英字間で確率を正規化して、選択・真偽確率・順序スコアのいずれかを返すというもの。バックエンドは2つ、ローカルのllama.cpp（RTX 3090でGemma 4 12B QATをテスト）とOpenAI API（gpt-6-luna）。Jevのリクエスト形式にbase64 JPEGを載せるattachmentsフィールドを追加し、同じインターフェースをビジョンモデルで動かしている。スループットはローカルで1フレームあたり3問として毎秒約1フレーム、OpenAI経由では0.2 FPSで、質問ごとに別接続を張るためだと説明している。専用のコンピュータビジョンモデルのほうが効率は高いと認めつつ、テキストで問えることの柔軟性を選ぶという。
+***** Take
+今週の判断モデル関連で最も有用な記事だ。仕組みを見せているからだ。1トークン、logprobs、選択肢の英字上で正規化。判断モデルAPIはモデルアーキテクチャではなく制約付きデコーディングの取り決めであり、トークン確率を公開するものなら何でも提供できる。FPSの数字も正直に出ている。3090で1 FPSはリアルタイムのビジョンではないと、隠さずに書いている。
+***** Comments
+- 精度と並んで見たいのはテールレイテンシだ。話し終わったかを判定するリアルタイム用途では、同じプロンプトでも汎用LLMはJevより遅く、迷いも多かった。コストはほぼ同じなのに。
+- 画像でも使ってみたい。とはいえ、文法ベースのデコーディングとJSON応答を使うのと同じことではないのか。Jevは単にそれに良いキャッシュを足したものなのか。だとしたら私はすでに使っている。
+- これが、今なお実現できていない魔法のようなスタートレック技術、たとえば自動ドアに至る道だ。現実のドアよりずっとうまく動くのは、こういうことをしているように見えるからだ。ドアの10メートル以内にいるなら、その人が通り抜けたいのか単に通り過ぎるだけなのかを判断する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+함수 하나로 만든 Jev 방식 LLM 래퍼, 비전 모델까지
+***** TLDR
+allanrbo가 Jev의 결정 모델 인터페이스를 파이썬 함수 하나로 다시 구현했다. 요령은 질문을 알파벳이 붙은 객관식으로 만들고, max_completion_tokens를 1로 두고 logprobs를 켠 채 모델을 호출한 뒤, 선택지 알파벳 사이에서 확률을 정규화해 선택지나 참거짓 확률, 또는 순서 점수를 돌려주는 것이다. 백엔드는 두 개로, 로컬 llama.cpp(RTX 3090에서 Gemma 4 12B QAT로 시험)와 OpenAI API(gpt-6-luna)다. Jev 요청 형식에 base64 JPEG를 담는 attachments 필드를 추가해 같은 인터페이스를 비전 모델에서도 돌린다. 처리량은 로컬에서 프레임당 질문 3개로 초당 약 1프레임, OpenAI를 거치면 0.2 FPS이며 질문마다 별도 연결을 열기 때문이라고 설명한다. 전용 컴퓨터 비전 모델이 훨씬 효율적이라는 점은 인정하면서도 텍스트로 물을 수 있는 유연성을 택한다고 밝힌다.
+***** Take
+이번 주 결정 모델에 관해 나온 글 중 가장 유용하다. 작동 원리를 보여주기 때문이다. 토큰 하나, logprobs, 선택지 알파벳에 대한 정규화. 결정 모델 API는 모델 구조가 아니라 제약 디코딩 관례이고, 토큰 확률을 노출하는 무엇이든 그 역할을 할 수 있다. FPS 수치도 정직하게 적혀 있다. 3090에서 1 FPS는 실시간 비전이 아니고, 그는 그 사실을 묻지 않고 말한다.
+***** Comments
+- 정확도와 함께 보고 싶은 것은 테일 레이턴시다. 말이 끝났는지 판단하는 실시간 용도에서는 같은 프롬프트로도 범용 LLM이 Jev보다 느리고 더 망설였다. 비용은 거의 같은데도.
+- 이미지에도 써보고 싶다. 그런데 문법 기반 디코딩에 JSON 응답을 쓰는 것과 같은 게 아닌가? Jev는 거기에 괜찮은 캐싱을 더한 것인가? 그렇다면 나는 이미 쓰고 있었다.
+- 이것이 아직 우리 손에 없는 마법 같은 스타트렉 기술, 예컨대 자동문에 이르는 길이다. 현실의 문보다 훨씬 잘 작동하는 이유는 이런 일을 하는 것처럼 보이기 때문이다. 문에서 10미터 안에 있다면 그 사람이 지나갈 뜻인지 그냥 지나가는 중인지 판단한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un envoltorio estilo Jev para LLMs en una sola función, con modelos de visión incluidos
+***** TLDR
+allanrbo reimplementa la interfaz de modelos de decisión de Jev en una sola función de Python. El truco consiste en formatear la pregunta como opción múltiple con letras, llamar al modelo con max_completion_tokens en 1 y logprobs activado, y luego normalizar las probabilidades entre las letras de las opciones para devolver una elección, una probabilidad booleana o una puntuación ordinal. Hay dos backends: llama.cpp en local, probado con Gemma 4 12B QAT en una RTX 3090, y la API de OpenAI con gpt-6-luna. Amplía el formato de petición de Jev con un campo attachments que lleva JPEG en base64, lo que hace funcionar la misma interfaz con modelos de visión. El rendimiento es de unos 1 fotograma por segundo en local con tres preguntas por fotograma, y 0,2 FPS a través de OpenAI, cosa que atribuye a abrir una conexión distinta por pregunta. Señala que los modelos dedicados de visión por computador son mucho más eficientes y dice que prefiere la flexibilidad de preguntar en texto.
+***** Take
+Es lo más útil que se ha publicado esta semana sobre modelos de decisión, porque muestra el mecanismo: un token, logprobs, normalizar sobre las letras de las opciones. Una API de modelo de decisión es una convención de decodificación restringida, no una arquitectura, y cualquier cosa que exponga probabilidades de token puede ofrecerla. Las cifras de FPS también están reportadas con honestidad: 1 FPS en una 3090 no es visión en tiempo real, y lo dice en lugar de esconderlo.
+***** Comments
+- Junto a la precisión, lo que querría ver es la latencia de cola. En un uso en tiempo real, decidir cuándo ha terminado una frase hablada, un LLM general con el mismo prompt nos resultó más lento y más dudoso que Jev, aunque ambos costaban parecido.
+- Me encantaría usarlo también con imágenes. Aunque, ¿usar decodificación basada en gramática con una respuesta JSON no es lo mismo? ¿Jev es solo eso con buen cacheo? Porque entonces ya lo estaba usando.
+- Así es como conseguimos algunas de las tecnologías más mágicas de Star Trek que aún se nos escapan, como las puertas automáticas. Funcionan mucho mejor que las reales porque parecen hacer algo así: si estás a menos de 10 metros de la puerta, decide si la persona pretende pasar o solo va de paso.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein Jev-artiger LLM-Wrapper in einer einzigen Funktion, auch für Vision-Modelle
+***** TLDR
+allanrbo setzt die Entscheidungsmodell-Schnittstelle von Jev in einer einzigen Python-Funktion neu um. Der Trick: Die Frage wird als Multiple Choice mit Buchstaben formatiert, das Modell mit max_completion_tokens auf 1 und aktivierten logprobs aufgerufen, dann werden die Wahrscheinlichkeiten über die Optionsbuchstaben normalisiert und eine Auswahl, eine boolesche Wahrscheinlichkeit oder ein Ordinalwert zurückgegeben. Zwei Backends: llama.cpp lokal, getestet mit Gemma 4 12B QAT auf einer RTX 3090, und OpenAIs API mit gpt-6-luna. Er erweitert Jevs Anfrageformat um ein attachments-Feld mit base64-JPEGs, womit dieselbe Schnittstelle auch mit Vision-Modellen läuft. Der Durchsatz liegt lokal bei etwa 1 Bild pro Sekunde bei drei Fragen pro Bild und bei 0,2 FPS über OpenAI, was er darauf zurückführt, dass pro Frage eine eigene Verbindung geöffnet wird. Er räumt ein, dass spezialisierte Computer-Vision-Modelle deutlich effizienter sind, zieht aber die Flexibilität vor, in Text zu fragen.
+***** Take
+Das ist das Nützlichste, was diese Woche zu Entscheidungsmodellen erschienen ist, weil es den Mechanismus zeigt: ein Token, logprobs, Normalisierung über die Optionsbuchstaben. Eine Entscheidungsmodell-API ist eine Konvention für eingeschränktes Decoding, keine Modellarchitektur, und alles, was Token-Wahrscheinlichkeiten offenlegt, kann sie bedienen. Auch die FPS-Zahlen sind ehrlich berichtet: 1 FPS auf einer 3090 ist keine Echtzeit-Vision, und er schreibt das hin statt es zu verstecken.
+***** Comments
+- Neben der Genauigkeit würde ich die Tail-Latenz sehen wollen. Im Echtzeiteinsatz, beim Entscheiden, wann ein gesprochener Satz zu Ende ist, war ein allgemeines LLM mit demselben Prompt bei uns langsamer und zögerlicher als Jev, obwohl beide etwa gleich viel kosteten.
+- Ich würde es gern auch für Bilder nutzen. Andererseits: Ist grammatikbasiertes Decoding mit JSON-Antwort nicht dasselbe? Ist Jev nur das mit gutem Caching? Dann habe ich es längst benutzt.
+- So kommen wir an einige der magischsten Star-Trek-Technologien, die uns bis heute entgehen, etwa automatische Türen. Sie funktionieren viel besser als echte, weil sie offenbar etwa Folgendes tun: Wenn jemand im Umkreis von 10 Metern ist, entscheide, ob die Person hindurchgehen will oder nur vorbeiläuft.
+** Fifteen years later, the Apple Cards origin story :apple:hardware:history:manufacturing:
+:PROPERTIES:
+:ID:       49854693
+:URL:      https://lexontech.org/fifteen-years-later-the-apple-cards-origin-story
+:HN_URL:   https://news.ycombinator.com/item?id=49854693
+:POINTS:   47
+:COMMENTS: 2
+:BY:       ksec
+:END:
+
+*** TLDR
+Lex Friedman got the production side of Apple's Cards app from someone who ran the print programme at Apple's fulfilment partner. Steve Jobs conceived it on a walk after dinner in 2011, wanting to send a thank-you card from his iPhone right then; the project was codenamed Speed Racer and shipped in October 2011, one day before Jobs died. The printing was the hard part: heavily debossed letterpress on 100% cotton Crane paper, produced with a New York shop running restored 1850s Heidelberg presses, and three passes to make ink stick to cotton, a pre-treatment coating, the letterpress shell, then the digital photo imprint. Apple also demanded invisible UV-readable barcodes on envelopes, custom heart stamps and USPS tracking, and treated a mis-shipment as an emergency. The partner's staff slept in conference rooms before launch. Actual launch orders, in the source's words, could fit in a shoebox. Apple killed Cards in September 2013.
+
+*** Take
+The shoebox is the whole story. Apple specified restored 1850s presses, three-pass printing on cotton stock and invisible UV barcodes for a product that almost nobody bought, then discontinued it two years later. The interesting document here is not the Jobs anecdote, it is the record of what Apple's refusal to compromise costs a supplier who is not in a position to say no. The partner absorbed the tooling, the international capacity and the sleepless launch; Apple absorbed a footnote.
+
+*** Comments
+
+**** cgio
+Pretty sure that, even though the source name is changed, the article has enough detail to identify them.
+
+**** makeitdouble
+Like many Apple products it was a really neat service, but was a PITA to deal with internationally. This and the photo prints service were the two that really made me ignore the pompous advertisements during the keynotes.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+十五年后，苹果 Cards 应用的起源故事
+***** TLDR
+Lex Friedman 从苹果履约合作方负责印刷项目的人那里拿到了 Cards 应用的生产端故事。2011 年史蒂夫·乔布斯在一次饭后散步时想到这个点子，希望当场就能用 iPhone 寄出一张感谢卡；项目代号 Speed Racer，2011 年 10 月发布，就在乔布斯去世的前一天。难的是印刷：在 100% 棉质 Crane 纸上做深压凸版印刷，由纽约一家用修复过的 1850 年代海德堡印刷机的作坊承担，并且要三道工序才能让墨水附着在棉纸上：先做预处理涂层，再印凸版外壳，最后数字印上你的照片。苹果还要求信封上有不可见的紫外可读条码、定制心形邮票和美国邮政跟踪，把发错货当成紧急事件处理。合作方的员工在发布前睡在会议室里。而按这位消息人士的说法，实际的发布日订单“装得进一个鞋盒”。苹果在 2013 年 9 月关掉了 Cards。
+***** Take
+鞋盒就是全部故事。苹果为一个几乎没人买的产品指定了修复过的 1850 年代印刷机、棉纸三道印刷工序和不可见紫外条码，然后两年后把它关掉。这里真正有价值的文献不是乔布斯的轶事，而是一份记录：苹果不肯让步的代价，落在了一个没有立场说不的供应商身上。合作方承担了工装、国际产能和不眠的发布；苹果承担了一个脚注。
+***** Comments
+- 我很确定，尽管消息来源的名字改过了，文章里的细节已经足够把他们认出来。
+- 和很多苹果产品一样，这是个很精致的服务，但在国际上用起来非常麻烦。这个和照片打印服务，是让我彻底无视发布会上那些自夸广告的两个原因。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+15年後に明かされるApple Cardsの誕生秘話
+***** TLDR
+Lex FriedmanがAppleのCardsアプリの製造側の話を、Appleのフルフィルメント委託先で印刷プログラムを率いていた人物から得た。スティーブ・ジョブズは2011年、夕食後の散歩中にこれを思いつき、その場でiPhoneから礼状を送りたいと考えた。コードネームはSpeed Racer、2011年10月に出荷され、その翌日にジョブズが亡くなった。難所は印刷だった。100%コットンのCrane紙に深い凹みのある活版印刷で、修復された1850年代のハイデルベルク印刷機を動かすニューヨークの工房が担当し、コットンにインクを定着させるには3工程が必要だった。前処理のコーティング、活版の外枠、最後に写真のデジタル印刷である。Appleは封筒に不可視の紫外線読み取りバーコード、専用のハート型切手、USPSの追跡も要求し、誤配送を緊急事態として扱った。委託先の社員は発売前に会議室で寝ていた。だが実際の発売時の注文は、情報源の言葉では「靴箱に収まる」量だった。Appleは2013年9月にCardsを終了した。
+***** Take
+靴箱がこの話の全てだ。Appleは、ほとんど誰も買わない製品のために修復された1850年代の印刷機、コットン紙への3工程印刷、不可視の紫外線バーコードを指定し、2年後に打ち切った。ここで価値ある記録はジョブズの逸話ではなく、Appleが妥協を拒む代償を、断る立場にない供給業者が負うという事実の記録だ。委託先は治具、国際的な生産能力、眠れない発売日を引き受けた。Appleが引き受けたのは脚注だった。
+***** Comments
+- 情報源の名前は変えてあるが、記事には本人を特定できるだけの詳細が十分あると思う。
+- 多くのApple製品と同じく、とても洒落たサービスだったが国際的に扱うのは面倒だった。これと写真プリントのサービスが、基調講演の大げさな宣伝を無視するようになった二大要因だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+15년 만에 나온 애플 Cards의 탄생 이야기
+***** TLDR
+Lex Friedman이 애플 Cards 앱의 제조 쪽 이야기를 애플 물류 협력사에서 인쇄 프로그램을 이끌던 사람에게서 들었다. 스티브 잡스는 2011년 저녁 식사 후 산책 중에 아이디어를 떠올렸고, 그 자리에서 아이폰으로 감사 카드를 보내고 싶어 했다. 코드명은 Speed Racer였고 2011년 10월에 출시됐으며, 그 다음 날 잡스가 사망했다. 어려운 부분은 인쇄였다. 100% 면 Crane 용지에 깊게 눌린 활판 인쇄로, 복원된 1850년대 하이델베르크 인쇄기를 돌리는 뉴욕 공방이 맡았고, 면에 잉크를 붙이려면 세 번의 공정이 필요했다. 전처리 코팅, 활판 껍데기, 마지막으로 사진의 디지털 인쇄다. 애플은 봉투에 보이지 않는 자외선 판독 바코드, 맞춤 하트 우표, USPS 추적까지 요구하고 오배송을 비상사태로 취급했다. 협력사 직원들은 출시 전에 회의실에서 잤다. 그런데 실제 출시 주문은 제보자의 표현대로 신발 상자에 들어갈 정도였다. 애플은 2013년 9월 Cards를 종료했다.
+***** Take
+신발 상자가 이야기의 전부다. 애플은 거의 아무도 사지 않는 제품을 위해 복원된 1850년대 인쇄기, 면 용지 3회 인쇄, 보이지 않는 자외선 바코드를 지정하고는 2년 뒤에 접었다. 여기서 가치 있는 기록은 잡스 일화가 아니라, 애플이 타협하지 않는 비용을 거절할 처지가 못 되는 공급업체가 떠안는다는 사실의 기록이다. 협력사는 설비와 국제 생산능력, 잠 못 자는 출시일을 떠안았고 애플이 떠안은 것은 각주였다.
+***** Comments
+- 제보자 이름은 바꿨지만 기사에 본인을 특정할 만한 세부 사항이 충분히 있다고 확신한다.
+- 많은 애플 제품처럼 정말 깔끔한 서비스였지만 국제적으로 쓰기는 무척 번거로웠다. 이것과 사진 인쇄 서비스가 기조연설의 거창한 광고를 무시하게 만든 두 가지였다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Quince años después, el origen de la app Cards de Apple
+***** TLDR
+Lex Friedman consiguió la parte industrial de la app Cards de Apple gracias a quien dirigió el programa de impresión en el socio de producción de Apple. Steve Jobs concibió la idea en un paseo después de cenar en 2011: quería poder enviar en ese momento una tarjeta de agradecimiento desde su iPhone. El proyecto se llamó Speed Racer en clave y salió en octubre de 2011, un día antes de la muerte de Jobs. Lo difícil era la impresión: tipografía muy hundida sobre papel Crane 100% algodón, producida con un taller de Nueva York que usa prensas Heidelberg de los años 1850 restauradas, y tres pasadas para que la tinta agarrara en el algodón: un pretratamiento de recubrimiento, la capa tipográfica y por último la impresión digital de la foto. Apple exigió además códigos de barras invisibles legibles con luz UV en los sobres, sellos con corazones a medida y seguimiento del USPS, y trataba un envío erróneo como una emergencia. El personal del socio durmió en salas de reuniones antes del lanzamiento. Los pedidos reales del lanzamiento, según la fuente, cabían en una caja de zapatos. Apple cerró Cards en septiembre de 2013.
+***** Take
+La caja de zapatos es toda la historia. Apple especificó prensas de 1850 restauradas, impresión en tres pasadas sobre algodón y códigos UV invisibles para un producto que casi nadie compró, y lo retiró dos años más tarde. El documento interesante no es la anécdota de Jobs, sino el registro de lo que cuesta la negativa de Apple a ceder cuando el que la asume es un proveedor sin capacidad de decir no. El socio absorbió el utillaje, la capacidad internacional y el lanzamiento sin dormir; Apple absorbió una nota al pie.
+***** Comments
+- Estoy bastante seguro de que, aunque se cambió el nombre de la fuente, el artículo tiene suficientes detalles para identificarla.
+- Como muchos productos de Apple, era un servicio muy bonito, pero un fastidio de gestionar a nivel internacional. Esto y el servicio de impresión de fotos fueron las dos cosas que me hicieron ignorar los anuncios pomposos de las keynotes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Fünfzehn Jahre später: die Entstehungsgeschichte von Apple Cards
+***** TLDR
+Lex Friedman bekam die Produktionsseite von Apples Cards-App von jemandem, der beim Fulfillment-Partner das Druckprogramm leitete. Steve Jobs kam 2011 bei einem Spaziergang nach dem Abendessen auf die Idee: Er wollte sofort vom iPhone aus eine Dankeskarte schicken. Das Projekt trug den Codenamen Speed Racer und erschien im Oktober 2011, einen Tag vor Jobs' Tod. Der schwierige Teil war der Druck: tief geprägter Buchdruck auf Crane-Papier aus 100 Prozent Baumwolle, hergestellt mit einer New Yorker Werkstatt, die restaurierte Heidelberg-Pressen aus den 1850ern betreibt, und drei Durchgänge, damit die Tinte auf Baumwolle hält: eine Vorbehandlungsschicht, die Buchdruckhülle, zuletzt der digitale Aufdruck des Fotos. Apple verlangte zudem unsichtbare, per UV lesbare Barcodes auf den Umschlägen, eigene Herzmarken und USPS-Tracking und behandelte eine Fehlsendung als Notfall. Die Mitarbeiter des Partners schliefen vor dem Start in Konferenzräumen. Die tatsächlichen Bestellungen zum Start passten laut Quelle in einen Schuhkarton. Apple stellte Cards im September 2013 ein.
+***** Take
+Der Schuhkarton ist die ganze Geschichte. Apple schrieb restaurierte Pressen von 1850, Dreifachdruck auf Baumwollpapier und unsichtbare UV-Barcodes für ein Produkt vor, das fast niemand kaufte, und stellte es zwei Jahre später ein. Interessant ist hier nicht die Jobs-Anekdote, sondern das Protokoll darüber, was Apples Kompromisslosigkeit einen Lieferanten kostet, der nicht in der Position ist, Nein zu sagen. Der Partner trug Werkzeuge, internationale Kapazität und den schlaflosen Start; Apple trug eine Fußnote.
+***** Comments
+- Ich bin recht sicher, dass der Artikel genug Details enthält, um die Quelle zu identifizieren, auch wenn ihr Name geändert wurde.
+- Wie viele Apple-Produkte war es ein wirklich schöner Service, international aber eine Qual. Das und der Fotodruck-Service waren die zwei Dinge, die mich die aufgeblasene Werbung in den Keynotes ignorieren ließen.
+** Is your Postgres migration safe or not safe? :postgres:databases:devtools:wasm:
+:PROPERTIES:
+:ID:       49854161
+:URL:      https://safenotsafe.dev/
+:HN_URL:   https://news.ycombinator.com/item?id=49854161
+:POINTS:   37
+:COMMENTS: 10
+:BY:       vira28
+:END:
+
+*** TLDR
+A browser tool that tells you whether a Postgres migration will take a blocking lock or rewrite the table. You paste DDL, pick a row-count bucket for the target table (under 50k, 50k to 5M, over 5M), and it reports the risk and suggests the safer form, such as adding a constraint NOT VALID and validating separately. The parsing is libpg_query 17 compiled to WASM and run in a web worker, so, in the site's words, your SQL never leaves the browser: no API route, no logs, no account. The author, vira28, ran Cloudflare's Postgres platform team from 2019 to 2023 supporting 170-plus product teams, and says schema migration review was a constant request that published best practices and CI checks never fully solved.
+
+*** Take
+Refusing to have a server is the design decision that makes this usable. Every SQL analysis service dies on the same objection, which is that nobody wants to paste production DDL into someone else's logs, and compiling the real Postgres parser to WASM removes the objection instead of arguing with it. Asking for the row-count bucket is the other good call. ALTER TABLE is either fine or an outage depending entirely on that number, and a tool that does not ask is guessing.
+
+*** Comments
+
+**** vira28
+Author here. I led the Postgres platform team (2019-23) at Cloudflare and we were supporting 170+ growing product teams. One of the constant asks is schema migration review. We published a lot of best practices and added CI checks, however it was still hard to catch.
+
+**** rohansx
+Really like the browser-only approach here. Catching the obvious migration risks locally before they ever reach CI feels super useful.
+
+**** jokull
+Very cool. I wrote a Go library for this.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+你的 Postgres 迁移安全还是不安全？
+***** TLDR
+一个浏览器里的工具，判断某条 Postgres 迁移会不会加阻塞锁或重写表。你粘贴 DDL，为目标表选一个行数区间（5 万以下、5 万到 500 万、500 万以上），它给出风险等级并建议更安全的写法，比如先加 NOT VALID 约束再单独验证。解析用的是编译成 WASM 并跑在 web worker 里的 libpg_query 17，所以用站点自己的话说，你的 SQL 从不离开浏览器：没有 API 路由，没有日志，不用注册账号。作者 vira28 在 2019 到 2023 年负责 Cloudflare 的 Postgres 平台团队，支撑 170 多个产品团队，他说模式迁移评审是长期不断的需求，发布最佳实践和加 CI 检查都没能真正解决。
+***** Take
+不要服务端，这个设计决定让它真正可用。所有 SQL 分析服务都死在同一个反对意见上：没人愿意把生产环境的 DDL 粘贴进别人的日志里。把真正的 Postgres 解析器编译成 WASM，是直接消除这个反对意见，而不是和它争辩。要求填行数区间是另一个正确选择。ALTER TABLE 是没事还是事故，完全取决于那个数字，不问的工具就是在猜。
+***** Comments
+- 作者本人。我在 2019 到 2023 年负责 Cloudflare 的 Postgres 平台团队，支撑 170 多个快速成长的产品团队。长期不断的需求之一就是模式迁移评审。我们发布了大量最佳实践，也加了 CI 检查，但还是很难抓住问题。
+- 很喜欢这里只在浏览器里跑的做法。在迁移风险还没进 CI 之前就在本地抓出明显问题，感觉非常有用。
+- 很棒。我为这件事写过一个 Go 库。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+あなたのPostgresマイグレーションは安全か、そうでないか
+***** TLDR
+Postgresのマイグレーションがブロッキングロックを取るか、テーブルを書き換えるかを判定するブラウザ内ツール。DDLを貼り付け、対象テーブルの行数レンジ（5万未満、5万〜500万、500万超）を選ぶと、リスクと、より安全な書き方を示す。たとえば制約をNOT VALIDで追加し、検証は別に行うといった具合だ。解析はWASMにコンパイルしたlibpg_query 17をweb workerで動かしており、サイトの言葉では、あなたのSQLはブラウザから出ない。APIルートなし、ログなし、アカウントなしだ。作者のvira28は2019年から2023年までCloudflareのPostgresプラットフォームチームを率い、170を超えるプロダクトチームを支えていた。スキーマ移行のレビューは絶え間ない要望であり、ベストプラクティスの公開やCIチェックの追加でも完全には解決できなかったという。
+***** Take
+サーバーを持たないという設計判断が、これを実用にしている。SQL解析サービスはどれも同じ反論で死ぬ。本番のDDLを他人のログに貼りたい人はいないという反論だ。本物のPostgresパーサをWASMにコンパイルすることは、その反論に議論で応じるのではなく消し去る。行数レンジを尋ねるのももう一つの正しい判断だ。ALTER TABLEが平気か障害かはその数字だけで決まり、尋ねないツールは推測しているだけだ。
+***** Comments
+- 作者です。2019年から2023年までCloudflareのPostgresプラットフォームチームを率い、170を超える成長中のプロダクトチームを支えていました。絶えず来る依頼の一つがスキーマ移行のレビューです。ベストプラクティスを多数公開し、CIチェックも追加しましたが、それでも捕まえるのは難しかった。
+- ブラウザだけで完結する方式がとても良い。移行のリスクがCIに届く前にローカルで明白なものを捕まえられるのは、かなり有用に思える。
+- とても良い。これ向けのGoライブラリを書いたことがある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+당신의 Postgres 마이그레이션은 안전한가, 아닌가?
+***** TLDR
+Postgres 마이그레이션이 블로킹 락을 잡을지, 테이블을 다시 쓸지 알려주는 브라우저 도구다. DDL을 붙여넣고 대상 테이블의 행 수 구간(5만 미만, 5만~500만, 500만 초과)을 고르면 위험도를 알려주고 더 안전한 형태를 제안한다. 예컨대 제약을 NOT VALID로 추가하고 검증은 따로 하라는 식이다. 파싱은 WASM으로 컴파일한 libpg_query 17을 웹 워커에서 돌리므로, 사이트 표현대로 당신의 SQL은 브라우저를 떠나지 않는다. API 경로도, 로그도, 계정도 없다. 작성자 vira28은 2019년부터 2023년까지 Cloudflare의 Postgres 플랫폼 팀을 이끌며 170개 이상의 제품 팀을 지원했고, 스키마 마이그레이션 검토가 끊이지 않는 요청이었으며 모범 사례 공개와 CI 검사로도 완전히 해결되지 않았다고 말한다.
+***** Take
+서버를 두지 않겠다는 설계 결정이 이 도구를 쓸 수 있게 만든다. 모든 SQL 분석 서비스는 같은 반론에서 죽는다. 운영 DDL을 남의 로그에 붙여넣고 싶은 사람은 없다는 반론이다. 진짜 Postgres 파서를 WASM으로 컴파일하는 것은 그 반론과 논쟁하는 대신 제거한다. 행 수 구간을 묻는 것도 또 하나의 좋은 판단이다. ALTER TABLE이 무사할지 장애가 될지는 오직 그 숫자에 달려 있고, 묻지 않는 도구는 추측하는 것이다.
+***** Comments
+- 작성자입니다. 2019년부터 2023년까지 Cloudflare에서 Postgres 플랫폼 팀을 이끌며 성장하는 170개 이상의 제품 팀을 지원했습니다. 끊이지 않는 요청 중 하나가 스키마 마이그레이션 검토였습니다. 모범 사례를 많이 공개하고 CI 검사도 추가했지만 여전히 잡아내기 어려웠습니다.
+- 브라우저에서만 도는 방식이 정말 마음에 든다. 마이그레이션 위험을 CI에 닿기 전에 로컬에서 잡아내는 건 꽤 유용할 것 같다.
+- 아주 좋다. 이걸 위한 Go 라이브러리를 쓴 적이 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Tu migración de Postgres es segura o no?
+***** TLDR
+Una herramienta en el navegador que te dice si una migración de Postgres tomará un bloqueo que detiene el tráfico o reescribirá la tabla. Pegas el DDL, eliges un rango de número de filas para la tabla afectada (menos de 50k, de 50k a 5M, más de 5M) y te informa del riesgo y sugiere la forma más segura, por ejemplo añadir una restricción NOT VALID y validarla aparte. El análisis usa libpg_query 17 compilado a WASM y ejecutado en un web worker, así que, en palabras del propio sitio, tu SQL nunca sale del navegador: sin ruta de API, sin registros, sin cuenta. El autor, vira28, dirigió el equipo de plataforma Postgres de Cloudflare entre 2019 y 2023 dando soporte a más de 170 equipos de producto, y cuenta que la revisión de migraciones de esquema era una petición constante que ni las buenas prácticas publicadas ni los chequeos en CI resolvieron del todo.
+***** Take
+Negarse a tener servidor es la decisión de diseño que hace esto utilizable. Todo servicio de análisis de SQL muere con la misma objeción: nadie quiere pegar DDL de producción en los registros de otra empresa, y compilar el parser real de Postgres a WASM elimina la objeción en lugar de discutirla. Pedir el rango de filas es el otro acierto. ALTER TABLE es inocuo o una caída dependiendo únicamente de ese número, y una herramienta que no lo pregunta está adivinando.
+***** Comments
+- Autor aquí. Dirigí el equipo de plataforma Postgres (2019-23) en Cloudflare y dábamos soporte a más de 170 equipos de producto en crecimiento. Una de las peticiones constantes es la revisión de migraciones de esquema. Publicamos muchas buenas prácticas y añadimos chequeos en CI, pero seguía siendo difícil detectarlas.
+- Me gusta mucho el enfoque de solo navegador. Detectar los riesgos obvios de migración en local antes de que lleguen a CI parece muy útil.
+- Muy bueno. Yo escribí una biblioteca en Go para esto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ist deine Postgres-Migration sicher oder nicht?
+***** TLDR
+Ein Browser-Werkzeug, das sagt, ob eine Postgres-Migration eine blockierende Sperre nimmt oder die Tabelle neu schreibt. Man fügt DDL ein, wählt eine Zeilenzahl-Klasse für die betroffene Tabelle (unter 50k, 50k bis 5M, über 5M), und es nennt das Risiko und die sicherere Variante, etwa eine Constraint mit NOT VALID hinzuzufügen und separat zu validieren. Geparst wird mit libpg_query 17, nach WASM kompiliert und in einem Web Worker ausgeführt; nach Angabe der Seite verlässt dein SQL also nie den Browser: keine API-Route, keine Logs, kein Konto. Der Autor vira28 leitete von 2019 bis 2023 Cloudflares Postgres-Plattformteam und betreute über 170 Produktteams. Die Prüfung von Schemamigrationen sei eine ständige Anfrage gewesen, die veröffentlichte Best Practices und CI-Checks nie vollständig gelöst hätten.
+***** Take
+Auf einen Server zu verzichten ist die Entscheidung, die das hier brauchbar macht. Jeder SQL-Analysedienst stirbt am selben Einwand: Niemand will produktives DDL in die Logs einer anderen Firma einfügen. Den echten Postgres-Parser nach WASM zu kompilieren beseitigt den Einwand, anstatt mit ihm zu diskutieren. Nach der Zeilenzahl zu fragen ist der zweite gute Griff. Ob ALTER TABLE harmlos oder ein Ausfall ist, hängt allein an dieser Zahl, und ein Werkzeug, das nicht fragt, rät.
+***** Comments
+- Autor hier. Ich habe von 2019 bis 2023 das Postgres-Plattformteam bei Cloudflare geleitet und wir haben über 170 wachsende Produktteams betreut. Eine der ständigen Anfragen ist die Prüfung von Schemamigrationen. Wir haben viele Best Practices veröffentlicht und CI-Checks ergänzt, trotzdem blieb es schwer, das abzufangen.
+- Der reine Browser-Ansatz gefällt mir sehr. Die offensichtlichen Migrationsrisiken lokal abzufangen, bevor sie überhaupt die CI erreichen, wirkt ausgesprochen nützlich.
+- Sehr schön. Ich habe dafür eine Go-Bibliothek geschrieben.
+** Fourier Analysis: Drawing Llamas with Circles :math:fourier:visualization:typescript:
+:PROPERTIES:
+:ID:       49829472
+:URL:      https://adekau.github.io/posts/2020/llamas.html
+:HN_URL:   https://news.ycombinator.com/item?id=49829472
+:POINTS:   44
+:COMMENTS: 5
+:BY:       cebert
+:END:
+
+*** TLDR
+A walkthrough of drawing an arbitrary outline with nothing but rotating circles chained tip to tail. The post samples an SVG path at even intervals, runs a discrete Fourier transform over the points as complex numbers, and reads each coefficient as a circle with a frequency, a radius and a starting phase. It also explains why rotation falls out of the maths: differentiate position e^(it) and you get i times e^(it), a velocity perpendicular to position, which is exactly circular motion. An animation sweeps from 1 to 500 modes and shows that most of the shape arrives in the low frequencies. Code is TypeScript for the O(N squared) DFT and p5.js for the drawing.
+
+*** Take
+The perpendicular-velocity derivation is what separates this from the dozens of epicycle animations on YouTube. Most of them show that circles can trace a shape; this one shows why a complex exponential is a rotation in the first place, which is the part that makes the DFT stop feeling arbitrary. The 1-to-500 sweep is also the clearest picture of lossy compression you will see today: the llama is recognisable in a few dozen coefficients, and everything after that is edges.
+
+*** Comments
+
+**** phqb
+Shameless plug: I made this tool years ago (predates AI) that draws arbitrary images using Fourier circles.
+
+**** polotics
+I have a bit of a hard time liking this sentence in an otherwise lovely article: the velocity is the same as the position but imaginary instead of real.
+
+**** TheLegend14
+Well atoms are circles and llamas are made of atoms so real llamas are also made of circles, I mean spheres, similar thing anyway.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+傅里叶分析：用圆圈画羊驼
+***** TLDR
+一篇讲解如何只用首尾相连的旋转圆圈画出任意轮廓的文章。作者在 SVG 路径上等间隔取样，把这些点当作复数做离散傅里叶变换，再把每个系数读成一个圆：有频率、有半径、有起始相位。文章还解释了旋转为什么是数学的自然结果：对位置 e^(it) 求导得到 i 乘 e^(it)，也就是一个垂直于位置的速度，而这正是圆周运动。一段动画从 1 个模式扫到 500 个，显示形状的大部分都来自低频。代码是用 TypeScript 写的 O(N 平方) DFT 加 p5.js 绘图。
+***** Take
+垂直速度那段推导，是这篇文章区别于 YouTube 上几十个本轮动画的地方。那些动画只是展示圆圈能画出形状，这篇讲的是复指数为什么本身就是一次旋转，而这正是让离散傅里叶变换不再显得随意的关键。从 1 扫到 500 的动画也是今天你能看到的最清晰的有损压缩图示：几十个系数就能认出那只羊驼，之后加的都是边缘细节。
+***** Comments
+- 自我推销一下：我多年前（在 AI 之前）做过一个工具，用傅里叶圆圈画任意图像。
+- 在一篇整体很可爱的文章里，有一句话我有点不喜欢：速度和位置相同，只是虚的而不是实的。
+- 原子是圆的，羊驼由原子组成，所以真羊驼也是由圆组成的，我是说球，差不多一个意思吧。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+フーリエ解析：円でラマを描く
+***** TLDR
+回転する円を先端から末端へつないでいくだけで任意の輪郭を描く手順の解説。SVGのパスを等間隔でサンプリングし、それらの点を複素数として離散フーリエ変換にかけ、各係数を周波数・半径・初期位相を持つ円として読む。回転が数学から自然に出てくる理由も説明する。位置e^(it)を微分するとi倍のe^(it)になり、位置に垂直な速度が得られる。これがまさに円運動だ。アニメーションはモード1から500まで動き、形の大部分が低周波で決まることを示す。コードはO(Nの2乗)のDFTをTypeScriptで、描画をp5.jsで書いている。
+***** Take
+速度が位置に垂直だという導出が、この記事をYouTubeにある数十本の周転円アニメーションから分けている。多くは円で形が描けることを見せるだけだが、この記事は複素指数関数がそもそもなぜ回転なのかを示す。そこが離散フーリエ変換を恣意的に感じさせなくする部分だ。1から500へのスイープも、今日見られる最も明快な非可逆圧縮の図解だ。ラマは数十個の係数で見分けがつき、それ以降に加わるのは輪郭の細部だけだ。
+***** Comments
+- 宣伝失礼：私は何年も前（AI以前）に、フーリエの円で任意の画像を描くツールを作った。
+- 全体としては素敵な記事なのに、この一文だけはどうも好きになれない。速度は位置と同じで、ただ実数でなく虚数だ、という文だ。
+- 原子は円で、ラマは原子でできているから、本物のラマも円でできている。円というか球だけど、まあ似たようなものだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+푸리에 해석: 원으로 라마 그리기
+***** TLDR
+회전하는 원을 끝과 끝으로 이어서 임의의 윤곽을 그리는 방법을 설명하는 글이다. SVG 경로를 일정 간격으로 표본화하고, 그 점들을 복소수로 보아 이산 푸리에 변환을 돌린 뒤, 각 계수를 주파수와 반지름과 시작 위상을 가진 원으로 읽는다. 회전이 수학에서 자연히 따라 나오는 이유도 설명한다. 위치 e^(it)를 미분하면 i 곱하기 e^(it)가 되어 위치에 수직인 속도가 나오고, 그것이 바로 원운동이다. 애니메이션은 모드 1에서 500까지 훑으며 형태의 대부분이 저주파에서 온다는 것을 보여준다. 코드는 O(N 제곱) DFT를 타입스크립트로, 그리기는 p5.js로 되어 있다.
+***** Take
+속도가 위치에 수직이라는 유도가 이 글을 유튜브에 널린 수십 개의 주전원 애니메이션과 구분한다. 대부분은 원으로 형태를 그릴 수 있다는 것만 보여주지만, 이 글은 복소 지수함수가 애초에 왜 회전인지를 보여준다. 그 부분이 이산 푸리에 변환을 임의적으로 느껴지지 않게 만든다. 1에서 500까지의 스윕도 오늘 볼 수 있는 가장 명료한 손실 압축 그림이다. 라마는 수십 개의 계수만으로 알아볼 수 있고, 그 뒤에 더해지는 것은 가장자리다.
+***** Comments
+- 자기 홍보 한 번: 몇 년 전(AI 이전)에 푸리에 원으로 임의의 이미지를 그리는 도구를 만들었다.
+- 전반적으로는 사랑스러운 글인데 이 문장만은 좀 마음에 들지 않는다. 속도는 위치와 같은데 실수가 아니라 허수일 뿐이라는 문장이다.
+- 원자는 원이고 라마는 원자로 되어 있으니 실제 라마도 원으로 되어 있다. 원이라기보다 구지만, 비슷한 거 아닌가.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Análisis de Fourier: dibujar llamas con círculos
+***** TLDR
+Un recorrido por cómo dibujar un contorno cualquiera solo con círculos giratorios encadenados punta con cola. El post muestrea un trazado SVG a intervalos regulares, aplica una transformada discreta de Fourier a los puntos tratados como números complejos y lee cada coeficiente como un círculo con su frecuencia, su radio y su fase inicial. También explica por qué la rotación sale de las matemáticas: si derivas la posición e^(it) obtienes i por e^(it), una velocidad perpendicular a la posición, que es exactamente el movimiento circular. Una animación recorre de 1 a 500 modos y muestra que la mayor parte de la forma llega con las frecuencias bajas. El código es TypeScript para la DFT de orden N al cuadrado y p5.js para el dibujo.
+***** Take
+La deducción de la velocidad perpendicular es lo que separa esto de las decenas de animaciones de epiciclos que hay en YouTube. La mayoría muestran que los círculos pueden trazar una forma; esta muestra por qué una exponencial compleja es una rotación en primer lugar, que es la parte que hace que la DFT deje de parecer arbitraria. El barrido de 1 a 500 es además la imagen más clara de compresión con pérdida que verás hoy: la llama se reconoce con unas pocas decenas de coeficientes, y todo lo que viene después son bordes.
+***** Comments
+- Autopromoción: hace años hice una herramienta (anterior a la IA) que dibuja imágenes arbitrarias con círculos de Fourier.
+- Me cuesta un poco tragar esta frase en un artículo por lo demás encantador: la velocidad es igual que la posición pero imaginaria en vez de real.
+- Bueno, los átomos son círculos y las llamas están hechas de átomos, así que las llamas reales también están hechas de círculos, digo esferas, viene a ser lo mismo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Fourier-Analyse: Lamas mit Kreisen zeichnen
+***** TLDR
+Eine Anleitung, wie man eine beliebige Kontur allein mit rotierenden Kreisen zeichnet, aneinandergehängt von Spitze zu Ende. Der Beitrag tastet einen SVG-Pfad in gleichen Abständen ab, rechnet eine diskrete Fourier-Transformation über die Punkte als komplexe Zahlen und liest jeden Koeffizienten als Kreis mit Frequenz, Radius und Startphase. Er erklärt auch, warum die Rotation aus der Mathematik folgt: Leitet man die Position e^(it) ab, erhält man i mal e^(it), eine Geschwindigkeit senkrecht zur Position, und genau das ist Kreisbewegung. Eine Animation fährt von 1 bis 500 Moden und zeigt, dass der größte Teil der Form in den tiefen Frequenzen entsteht. Der Code ist TypeScript für die DFT in O(N Quadrat) und p5.js für die Darstellung.
+***** Take
+Die Herleitung der senkrechten Geschwindigkeit unterscheidet diesen Beitrag von den Dutzenden Epizykel-Animationen auf YouTube. Die meisten zeigen, dass Kreise eine Form nachfahren können; dieser zeigt, warum eine komplexe Exponentialfunktion überhaupt eine Drehung ist, und genau das nimmt der DFT das Willkürliche. Der Durchlauf von 1 bis 500 ist außerdem das klarste Bild verlustbehafteter Kompression, das man heute sehen wird: Das Lama ist nach wenigen Dutzend Koeffizienten erkennbar, alles danach sind Kanten.
+***** Comments
+- Eigenwerbung: Ich habe vor Jahren (vor der KI-Zeit) ein Werkzeug gebaut, das beliebige Bilder mit Fourier-Kreisen zeichnet.
+- In einem ansonsten reizenden Artikel mag ich diesen Satz nicht recht: Die Geschwindigkeit ist dieselbe wie die Position, nur imaginär statt reell.
+- Atome sind ja Kreise und Lamas bestehen aus Atomen, also bestehen echte Lamas auch aus Kreisen, beziehungsweise Kugeln, kommt ungefähr aufs Gleiche.
+** Scientists build most accurate atomic clock :physics:metrology:quantum:science:
+:PROPERTIES:
+:ID:       49824846
+:URL:      https://phys.org/news/2026-09-scientists-world-accurate-atomic-clock.html
+:HN_URL:   https://news.ycombinator.com/item?id=49824846
+:POINTS:   18
+:COMMENTS: 6
+:BY:       wglb
+:END:
+
+*** TLDR
+A team at the National University of Singapore's Centre for Quantum Technologies built an optical clock on lutetium ions (176Lu+) and measured its frequency to 19 decimal places, with an uncertainty of 1 part in 10^19, which they report as the lowest for any optical atomic clock so far. It beats previous records held by ytterbium, strontium and aluminium designs. Two independently built lutetium clocks compared over 200 hours agreed to within 5.7 parts in 10^19, which the group calls the most precise clock comparison ever made. Lutetium's advantage is that the clock transition barely responds to temperature or magnetic field: team leader Murray Barrett says it would stay stable moving from the hottest recorded spot in Death Valley to the coldest on the Antarctic plateau. Uses cited are fundamental physics tests, tracking gravitational variation across the Earth, and eventually redefining the second, expected in 2030 or later.
+
+*** Take
+The two-clock comparison is the stronger result, not the single-clock record. Agreement to 5.7 parts in 10^19 between independently built devices is evidence that the error budget is honest, which no solo measurement can establish. Lutetium's appeal is boring in the best way: if the transition ignores temperature and magnetic field, the clock needs less heroic shielding, and that is what eventually gets these out of one lab and into a box you can move. The redefinition of the second is still a 2030-or-later question.
+
+*** Comments
+
+**** onion2k
+My back of an envelope maths suggests it's accurate to about 1 second every 300 billion years.
+
+**** chicken-stew
+I've often wondered if a hobby-class atomic clock can be built with a less accurate gas that is easy to excite and measure in a feedback loop, simply because it comes in a handy package. Neon, nitrogen or mercury vapour, say, without having to melt glass or handle bottles of pressurised gas.
+
+**** nevitablentropy
+As long as we don't go building a glass clock.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+科学家造出最精确的原子钟
+***** TLDR
+新加坡国立大学量子技术中心的团队用镥离子（176Lu+）造了一台光钟，把它的频率测到了小数点后 19 位，不确定度为 10^19 分之一，他们称这是迄今所有光原子钟里最低的。它超过了此前由镱、锶和铝方案保持的记录。两台独立建造的镥钟在 200 小时里比对，吻合到 10^19 分之 5.7，该团队称这是有史以来最精确的时钟比对。镥的优势在于其钟跃迁几乎不受温度和磁场影响：团队负责人 Murray Barrett 说，从死亡谷记录到的最热地点搬到南极高原最冷的地方，它依然稳定。文中提到的用途包括基础物理检验、追踪地球各处的重力变化，以及最终重新定义秒，预计在 2030 年或更晚。
+***** Take
+更有力的结果是双钟比对，而不是单钟记录。两台独立建造的设备吻合到 10^19 分之 5.7，说明误差预算是诚实的，而单次测量无法证明这一点。镥的吸引力平淡得恰到好处：如果跃迁不理会温度和磁场，钟就不需要极端的屏蔽，而这正是让这类装置最终走出单个实验室、装进可以搬动的箱子的条件。重新定义秒仍然是 2030 年或更晚的问题。
+***** Comments
+- 我信封背面算了一下，大概是每 3000 亿年差 1 秒。
+- 我一直在想，能不能用一种精度较低但容易激发、容易在反馈回路里测量的气体做个业余级原子钟，理由仅仅是它有现成好用的包装。比如氖、氮或汞蒸气，不用熔玻璃，也不用折腾高压气瓶。
+- 只要我们别去造一个玻璃钟就行。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+科学者が最も正確な原子時計を製作
+***** TLDR
+シンガポール国立大学の量子技術センターのチームが、ルテチウムイオン（176Lu+）を用いた光時計を作り、その周波数を小数点以下19桁まで測定した。不確かさは10の19乗分の1で、これまでの光原子時計で最も低い値だと報告している。イッテルビウム、ストロンチウム、アルミニウムによる従来の記録を上回る。独立に製作した2台のルテチウム時計を200時間比較したところ、10の19乗分の5.7の範囲で一致し、チームはこれを史上最も精密な時計比較と呼ぶ。ルテチウムの利点は、時計遷移が温度や磁場にほとんど反応しないことだ。チームを率いるMurray Barrettは、デスバレーで記録された最も暑い場所から南極高原の最も寒い場所へ移っても安定を保つだろうと述べる。挙げられている用途は基礎物理の検証、地球各地の重力変化の追跡、そして最終的な秒の再定義で、これは2030年以降が見込まれている。
+***** Take
+より強い結果は単独記録ではなく2台の比較だ。独立に作られた装置同士が10の19乗分の5.7で一致することは、誤差の見積もりが正直だという証拠であり、単独測定ではそれを示せない。ルテチウムの魅力は、最良の意味で退屈だ。遷移が温度と磁場を無視するなら、時計に大掛かりな遮蔽は要らない。それが最終的にこの種の装置を1つの研究室から持ち運べる箱へ移す条件になる。秒の再定義は依然として2030年以降の話だ。
+***** Comments
+- 封筒の裏の計算では、3000億年に1秒くらいの精度になりそうだ。
+- 精度は劣るが励起と測定がフィードバックループで容易な気体を使って、扱いやすい形で手に入るという理由だけで趣味レベルの原子時計が作れないものかとよく考える。ネオン、窒素、水銀蒸気など、ガラスを溶かしたり高圧ガスのボンベを扱ったりせずに。
+- ガラスの時計を作り始めないかぎりは。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+과학자들이 가장 정확한 원자시계를 만들었다
+***** TLDR
+싱가포르국립대 양자기술센터 연구팀이 루테튬 이온(176Lu+)을 쓴 광시계를 만들어 그 주파수를 소수점 19자리까지 측정했다. 불확도는 10의 19제곱분의 1로, 지금까지 나온 광원자시계 중 가장 낮은 값이라고 보고한다. 이터븀, 스트론튬, 알루미늄 방식이 갖고 있던 기존 기록을 넘어섰다. 독립적으로 제작한 두 대의 루테튬 시계를 200시간 비교한 결과 10의 19제곱분의 5.7 이내로 일치했고, 연구팀은 이를 역사상 가장 정밀한 시계 비교라고 부른다. 루테튬의 강점은 시계 전이가 온도나 자기장에 거의 반응하지 않는다는 점이다. 연구팀을 이끄는 Murray Barrett는 데스밸리에서 기록된 가장 더운 곳에서 남극 고원의 가장 추운 곳으로 옮겨도 안정할 것이라고 말한다. 언급된 용도는 기초물리 검증, 지구 곳곳의 중력 변화 추적, 그리고 결국은 초의 재정의이며 이는 2030년 이후로 예상된다.
+***** Take
+더 강한 결과는 단일 시계 기록이 아니라 두 시계의 비교다. 독립적으로 만든 장치끼리 10의 19제곱분의 5.7로 일치한다는 것은 오차 예산이 정직하다는 증거이고, 단독 측정으로는 그것을 세울 수 없다. 루테튬의 매력은 가장 좋은 의미로 지루하다. 전이가 온도와 자기장을 무시한다면 시계에 영웅적인 차폐가 필요 없고, 그것이 결국 이런 장치를 한 실험실에서 옮길 수 있는 상자로 빼내는 조건이다. 초의 재정의는 여전히 2030년 이후의 문제다.
+***** Comments
+- 봉투 뒷면 계산으로는 3000억 년에 1초 정도 오차인 것 같다.
+- 정확도는 떨어지지만 피드백 루프에서 들뜨게 하고 측정하기 쉬운 기체로, 단지 편리한 형태로 구할 수 있다는 이유만으로 취미 수준의 원자시계를 만들 수 있을지 종종 생각해왔다. 유리를 녹이거나 고압 가스통을 다루지 않고 네온이나 질소, 수은 증기 같은 걸로.
+- 유리 시계를 만들기 시작하지만 않으면 된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Científicos construyen el reloj atómico más preciso
+***** TLDR
+Un equipo del Centre for Quantum Technologies de la Universidad Nacional de Singapur construyó un reloj óptico basado en iones de lutecio (176Lu+) y midió su frecuencia con 19 decimales, con una incertidumbre de 1 parte en 10^19, la más baja registrada hasta ahora para un reloj atómico óptico según sus autores. Supera los récords anteriores de diseños con iterbio, estroncio y aluminio. Dos relojes de lutecio construidos de forma independiente y comparados durante 200 horas coincidieron en 5,7 partes en 10^19, lo que el grupo llama la comparación de relojes más precisa jamás realizada. La ventaja del lutecio es que su transición de reloj apenas responde a la temperatura ni al campo magnético: el responsable del equipo, Murray Barrett, dice que se mantendría estable al pasar del punto más caluroso registrado en el Valle de la Muerte al más frío de la meseta antártica. Los usos citados son pruebas de física fundamental, seguimiento de la variación gravitatoria en la Tierra y, con el tiempo, redefinir el segundo, algo previsto para 2030 o después.
+***** Take
+La comparación entre dos relojes es el resultado fuerte, no el récord de uno solo. Que dos aparatos construidos de forma independiente coincidan en 5,7 partes en 10^19 es prueba de que el presupuesto de error es honesto, y eso no lo puede establecer ninguna medición aislada. El atractivo del lutecio es aburrido en el mejor sentido: si la transición ignora la temperatura y el campo magnético, el reloj necesita menos blindaje heroico, y eso es lo que acaba sacando estos aparatos de un laboratorio y metiéndolos en una caja transportable. La redefinición del segundo sigue siendo una cuestión de 2030 o más adelante.
+***** Comments
+- Mis cálculos al dorso de un sobre sugieren que tiene una precisión de un segundo cada 300.000 millones de años.
+- Me he preguntado muchas veces si se puede construir un reloj atómico de nivel aficionado con un gas menos preciso pero fácil de excitar y medir en un lazo de realimentación, solo porque viene en un formato manejable. Neón, nitrógeno o vapor de mercurio, por ejemplo, sin tener que fundir vidrio ni manipular botellas de gas a presión.
+- Con tal de que no nos pongamos a construir un reloj de vidrio.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Forscher bauen die genaueste Atomuhr
+***** TLDR
+Ein Team am Centre for Quantum Technologies der National University of Singapore baute eine optische Uhr auf Lutetium-Ionen (176Lu+) und vermaß ihre Frequenz auf 19 Dezimalstellen, mit einer Unsicherheit von 1 Teil in 10^19, nach eigener Angabe der niedrigste Wert für eine optische Atomuhr bisher. Damit übertrifft sie die bisherigen Rekorde von Ytterbium-, Strontium- und Aluminium-Bauweisen. Zwei unabhängig gebaute Lutetium-Uhren stimmten über 200 Stunden hinweg auf 5,7 Teile in 10^19 überein, was die Gruppe als den präzisesten Uhrenvergleich aller Zeiten bezeichnet. Der Vorteil von Lutetium: Der Uhrenübergang reagiert kaum auf Temperatur oder Magnetfeld. Teamleiter Murray Barrett sagt, die Uhr bliebe stabil, wenn man sie von der heißesten gemessenen Stelle im Death Valley zur kältesten auf dem antarktischen Plateau brächte. Genannte Anwendungen sind Tests der fundamentalen Physik, das Verfolgen von Gravitationsunterschieden auf der Erde und irgendwann die Neudefinition der Sekunde, erwartet 2030 oder später.
+***** Take
+Das stärkere Ergebnis ist der Vergleich zweier Uhren, nicht der Einzelrekord. Dass unabhängig gebaute Geräte auf 5,7 Teile in 10^19 übereinstimmen, belegt, dass das Fehlerbudget ehrlich ist, und das kann keine einzelne Messung zeigen. Der Reiz von Lutetium ist im besten Sinne langweilig: Wenn der Übergang Temperatur und Magnetfeld ignoriert, braucht die Uhr weniger heroische Abschirmung, und genau das holt solche Geräte am Ende aus dem einen Labor in eine transportable Kiste. Die Neudefinition der Sekunde bleibt eine Frage für 2030 oder später.
+***** Comments
+- Meine Überschlagsrechnung legt nahe, dass sie auf etwa 1 Sekunde in 300 Milliarden Jahren genau ist.
+- Ich habe mich oft gefragt, ob man eine Atomuhr für Hobbyzwecke mit einem ungenaueren Gas bauen kann, das sich leicht anregen und in einer Rückkopplung messen lässt, einfach weil es handlich verpackt zu haben ist. Neon, Stickstoff oder Quecksilberdampf etwa, ohne Glas schmelzen oder Druckgasflaschen hantieren zu müssen.
+- Solange wir keine Uhr aus Glas bauen.
