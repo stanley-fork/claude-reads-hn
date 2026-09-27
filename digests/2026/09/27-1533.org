@@ -1,0 +1,504 @@
+#+TITLE: HN Digest 2026-09-27 15:33 UTC
+#+DATE: 2026-09-27T15:33:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Neovim eats a decade of undo history, ten tells of an AI-built UI, and 2,912 reclaimed flipdots run a fluid simulation
+
+* Highlights
+- Neovim deleted an undo file it could not parse, then said persistent undo was never a promise
+- Ten tells of a slop UI: purple gradients, glassmorphism, and the word 'Elevate'
+- The chat template decides whether a model says 'I'm just an AI' or 'I feel'
+- 2,912 reclaimed flipdots run a FLIP fluid sim at 40fps for under £500
+- TLA+ went viral; the gap between your spec and your code did not close
+
+* Stories
+
+** "They had no concept of a duty of care to their users." :vim:neovim:opensource:software-quality:
+:PROPERTIES:
+:ID:       49867067
+:URL:      https://unsung.aresluna.org/they-had-no-concept-of-a-duty-of-care-to-their-users/
+:HN_URL:   https://news.ycombinator.com/item?id=49867067
+:POINTS:   77
+:COMMENTS: 35
+:BY:       jandeboevrie
+:END:
+
+*** TLDR
+David Chisnall moved from vim to Neovim and lost years of persistent undo history. The fork had changed the undo file format; Neovim did not recognize the old file, deleted it, and wrote a new one vim could not read. When he reported it, maintainers said persistent undo is unstable and should not be relied on. Marcin Wichary uses the episode to restate Jef Raskin's first law, that a computer shall not harm your work or through inaction allow your work to come to harm, and argues the format change was a forgivable bug while the response to it was the real failure.
+
+*** Take
+Bumping a file format is defensible. Deleting a file you cannot parse is not, because reading the header and refusing to touch it was available the whole time. The feature is also named persistent, which is a promise stated in the name.
+
+*** Comments
+
+**** recursivedoubts
+They are open source developers, giving away free software as a gift. There is no duty here. We can ask nicely, or offer to help implement it.
+
+**** gavinhoward
+As a Neovim user, this stopped me dead. There was a time when I could not undo something, and it was after a Neovim upgrade. I may have suffered the same thing and not realized it.
+
+**** natbennett
+I was also a very early user of Neovim. The way I remember it being positioned was "Vim, but with breaking changes."
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+"他们完全没有对用户尽责的概念。"
+***** TLDR
+David Chisnall 从 vim 迁移到 Neovim，丢失了多年的持久撤销历史。该分支改了撤销文件格式，Neovim 无法识别旧文件，于是删除它并写入一个 vim 读不了的新文件。他报告后，维护者称持久撤销并不稳定，不该依赖。Marcin Wichary 借此重申 Jef Raskin 的第一定律：计算机不得损害你的工作，也不得因不作为而使其受损。他认为改格式是可以原谅的 bug，真正的失败在于事后的态度。
+***** Take
+升级文件格式站得住脚，删掉一个自己解析不了的文件则不然，因为读一下文件头然后拒绝改动这条路一直摆在那里。而且这个功能就叫"持久"，名字本身就是承诺。
+***** Comments
+- 他们是开源开发者，无偿赠出软件。这里没有义务。我们可以好好请求，或者主动帮忙实现。
+- 作为 Neovim 用户，这篇让我停住了。曾经有一次我撤销不了，就发生在升级 Neovim 之后。也许我遭遇过同样的事却没意识到。
+- 我也是很早的 Neovim 用户。我记得它当初的定位就是"Vim，但带破坏性变更"。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+「彼らにはユーザーへの注意義務という概念がなかった」
+***** TLDR
+David Chisnall が vim から Neovim に移行し、数年分の永続アンドゥ履歴を失った。フォーク側がアンドゥファイルの形式を変えており、Neovim は旧ファイルを認識できずに削除し、vim では読めない新ファイルを書いた。報告すると、メンテナは永続アンドゥは不安定であり依存すべきでないと答えた。Marcin Wichary はこれを機に Jef Raskin の第一法則、コンピュータはあなたの作業を害してはならず、不作為によって害されるのを許してもならない、を再提示し、形式変更は許せるバグだが本当の失敗はその後の対応だと論じる。
+***** Take
+ファイル形式の更新は擁護できる。解析できないファイルを削除するのは擁護できない。ヘッダを読んで触らずに諦める道は最初からあった。しかもこの機能の名は「永続」で、名前自体が約束になっている。
+***** Comments
+- 彼らはオープンソース開発者で、ソフトを無償で贈っている。義務はない。丁寧に頼むか、実装を手伝うことはできる。
+- Neovim ユーザーとして、これを読んで固まった。アンドゥできなくなった時期があり、それは Neovim のアップグレード直後だった。同じことが起きていたのに気づかなかったのかもしれない。
+- 私も初期の Neovim ユーザーだ。当時の位置づけは「Vim、ただし破壊的変更あり」だったと記憶している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+"그들에게는 사용자에 대한 책임이라는 개념이 없었다."
+***** TLDR
+David Chisnall이 vim에서 Neovim으로 옮긴 뒤 수년치 영속 undo 기록을 잃었다. 포크가 undo 파일 형식을 바꿨고, Neovim은 옛 파일을 인식하지 못해 삭제한 다음 vim이 읽을 수 없는 새 파일을 썼다. 그가 문제를 알리자 메인테이너들은 영속 undo는 불안정하니 의존하지 말라고 답했다. Marcin Wichary는 이 사건으로 Jef Raskin의 제1법칙, 컴퓨터는 당신의 작업을 해쳐서는 안 되고 방치로 해를 입게 해서도 안 된다를 다시 꺼내며, 형식 변경은 용서할 수 있는 버그지만 진짜 실패는 그 뒤의 대응이라고 말한다.
+***** Take
+파일 형식을 올리는 건 변호할 수 있다. 해석하지 못하는 파일을 지우는 건 변호할 수 없다. 헤더만 읽고 손대지 않는 선택은 처음부터 있었다. 게다가 기능 이름이 '영속'이다. 이름 자체가 약속이다.
+***** Comments
+- 그들은 오픈소스 개발자이고 소프트웨어를 선물로 내준다. 여기에 의무는 없다. 정중히 부탁하거나 직접 구현을 도울 수는 있다.
+- Neovim 사용자로서 이 글에 멈춰 섰다. undo가 안 되던 시기가 있었고 그게 Neovim 업그레이드 직후였다. 같은 일을 겪고도 몰랐을 수 있다.
+- 나도 아주 초기 Neovim 사용자였다. 당시 포지셔닝은 "Vim, 그러나 파괴적 변경 포함"으로 기억한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+"No tenían ningún concepto del deber de cuidado hacia sus usuarios."
+***** TLDR
+David Chisnall pasó de vim a Neovim y perdió años de historial de undo persistente. El fork había cambiado el formato del archivo de undo; Neovim no reconoció el archivo antiguo, lo borró y escribió uno nuevo que vim no podía leer. Cuando lo reportó, los mantenedores dijeron que el undo persistente es inestable y no hay que confiar en él. Marcin Wichary retoma la primera ley de Jef Raskin, que una computadora no dañará tu trabajo ni permitirá por inacción que sufra daño, y sostiene que el cambio de formato era un bug perdonable mientras la respuesta fue el fallo real.
+***** Take
+Subir la versión de un formato se puede defender. Borrar un archivo que no sabes interpretar no, porque leer la cabecera y no tocar nada estuvo disponible todo el tiempo. Además la función se llama persistente, y eso es una promesa dicha en el nombre.
+***** Comments
+- Son desarrolladores de código abierto que regalan software. Aquí no hay deber alguno. Podemos pedirlo con respeto, o ofrecernos a implementarlo.
+- Como usuario de Neovim, esto me dejó helado. Hubo un momento en que no pude deshacer algo, justo después de una actualización de Neovim. Puede que me pasara lo mismo sin darme cuenta.
+- Yo también fui usuario muy temprano de Neovim. Lo recuerdo presentado como "Vim, pero con cambios que rompen cosas".
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+"Sie hatten kein Konzept von einer Fürsorgepflicht gegenüber ihren Nutzern."
+***** TLDR
+David Chisnall wechselte von vim zu Neovim und verlor Jahre an persistenter Undo-Historie. Der Fork hatte das Format der Undo-Datei geändert; Neovim erkannte die alte Datei nicht, löschte sie und schrieb eine neue, die vim nicht lesen konnte. Als er das meldete, hieß es von den Maintainern, persistentes Undo sei instabil und man solle sich nicht darauf verlassen. Marcin Wichary erinnert an Jef Raskins erstes Gesetz, dass ein Computer die Arbeit des Nutzers nicht beschädigen und auch durch Untätigkeit keinen Schaden zulassen darf, und hält die Formatänderung für einen verzeihlichen Bug, während die Reaktion darauf das eigentliche Versagen war.
+***** Take
+Ein Format weiterzuentwickeln ist vertretbar. Eine Datei zu löschen, die man nicht parsen kann, nicht. Den Header zu lesen und dann die Finger davon zu lassen, war die ganze Zeit möglich. Außerdem heißt die Funktion persistent, und das ist ein Versprechen im Namen.
+***** Comments
+- Sie sind Open-Source-Entwickler und verschenken Software. Hier gibt es keine Pflicht. Wir können höflich fragen oder anbieten, es selbst umzusetzen.
+- Als Neovim-Nutzer hat mich das getroffen. Es gab eine Zeit, in der ich etwas nicht rückgängig machen konnte, direkt nach einem Neovim-Upgrade. Vielleicht ist mir dasselbe passiert, ohne dass ich es merkte.
+- Ich war auch sehr früher Neovim-Nutzer. In meiner Erinnerung war die Positionierung "Vim, aber mit Breaking Changes".
+** 10 Tells of a Slop UI :design:ai:ui:web:
+:PROPERTIES:
+:ID:       49867038
+:URL:      https://hereticpleb.vercel.app/blog/10-tells-of-slop
+:HN_URL:   https://news.ycombinator.com/item?id=49867038
+:POINTS:   104
+:COMMENTS: 66
+:BY:       theanonymousone
+:END:
+
+*** TLDR
+A list of ten visual signatures of an AI-generated interface: gradients on everything with purple as the house favorite, clashing palettes that ignore the 70-30-10 rule, pulsing badges marking features that are always on, rounded cards for every block of content, emoji as decoration, misaligned SVGs and ASCII art, default Inter and JetBrains Mono plus stray '//' near anything technical, filler lines like 'Built with Hugo. Written from Neovim', glassmorphism as the default surface, and taglines assembled from 'Elevate', 'Seamless' and 'Next-Generation'. The author's position is that vibe-coded UI can be good, but almost nobody pushes past the model's first suggestion.
+
+*** Take
+The list is accurate, and that is the problem with it: every item is a default, so the tells identify who stopped iterating rather than what built the page. czhu12 in the thread says it took hours of fighting those defaults out of one landing page. That is the cost nobody puts in the estimate.
+
+*** Comments
+
+**** docheinestages
+I just can't fathom how a multi-billion dollar company like Cloudflare could forego their design standards. They seem to have updated their landing page, but it's still very sloppy.
+
+**** czhu12
+At least some of these are just lack of caring. I vibe coded a landing page recently and fought off a lot of the defaults the LLM came up with after a few hours of iteration.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+AI 味界面的 10 个破绽
+***** TLDR
+一篇文章列出 AI 生成界面的十个视觉特征：到处是渐变，紫色尤其受宠；配色互相打架，无视 70-30-10 原则；给本来就一直开着的功能加脉动徽章；每一块内容都塞进圆角卡片；emoji 当装饰用；SVG 和 ASCII 图对不齐；字体只用默认的 Inter 和 JetBrains Mono，还在技术词旁边随手加 '//'；写上"Built with Hugo. Written from Neovim"这类无用填充；毛玻璃当默认材质；标语由 Elevate、Seamless、Next-Generation 拼成。作者认为 vibe coding 出来的界面可以做得好，只是几乎没人愿意越过模型给出的第一版。
+***** Take
+这份清单是准的，而这正是它的问题：每一项都是默认值，所以这些破绽指认的是谁停止了迭代，而不是谁生成了页面。帖子里 czhu12 说光把这些默认值从一个落地页里赶出去就花了几小时。这正是没人写进工期里的成本。
+***** Comments
+- 我实在无法理解，Cloudflare 这种市值几十亿的公司怎么会放弃自己的设计规范。他们好像更新过落地页，但还是很糙。
+- 其中有些纯粹是不上心。我最近 vibe coding 做了个落地页，迭代几小时才把大模型给的那堆默认值赶走。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+スロップUIを見分ける10の兆候
+***** TLDR
+AI が生成したインターフェースの視覚的特徴を十個挙げた記事。どこにでもグラデーション、とくに紫が好まれる。70-30-10 の原則を無視した衝突する配色。常時オンの機能にわざわざ点滅バッジ。あらゆるコンテンツを角丸カードに入れる。装飾としての絵文字。ずれた SVG や ASCII アート。デフォルトの Inter と JetBrains Mono、そして技術用語のそばに置かれる '//'。「Built with Hugo. Written from Neovim」のような無意味な埋め草。既定の質感としてのグラスモーフィズム。Elevate、Seamless、Next-Generation を組み合わせたキャッチコピー。著者の立場は、vibe coding の UI も良くできるが、モデルの最初の提案から先へ進む人がほとんどいないというもの。
+***** Take
+リストは正確で、そこが問題でもある。どの項目もデフォルトなので、この兆候が指すのは何が作ったかではなく誰が反復をやめたかだ。スレッドの czhu12 は、ランディングページ一枚からそのデフォルトを追い出すのに数時間かかったと書いている。見積もりに入らないコストがそれだ。
+***** Comments
+- Cloudflare のような数十億ドル企業が自社のデザイン基準を捨てられるのが理解できない。ランディングページは更新したようだが、それでも雑だ。
+- いくつかは単に気にしていないだけ。最近ランディングページを vibe coding したが、LLM が出してくるデフォルトを数時間かけて追い払った。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+슬롭 UI를 알아보는 10가지 신호
+***** TLDR
+AI가 만든 인터페이스의 시각적 특징 열 가지를 정리한 글. 모든 곳에 그라디언트, 특히 보라색. 70-30-10 원칙을 무시한 충돌하는 색 조합. 항상 켜져 있는 기능에 굳이 붙는 점멸 배지. 모든 콘텐츠를 담는 둥근 카드. 장식용 이모지. 어긋난 SVG와 ASCII 아트. 기본값인 Inter와 JetBrains Mono, 그리고 기술 용어 옆에 끼어드는 '//'. 'Built with Hugo. Written from Neovim' 같은 쓸모 없는 채움 문구. 기본 재질이 된 글래스모피즘. Elevate, Seamless, Next-Generation을 조합한 태그라인. 저자의 입장은 vibe coding UI도 잘 만들 수 있지만 모델의 첫 제안에서 더 나아가는 사람이 거의 없다는 것이다.
+***** Take
+목록은 정확하고, 그게 문제다. 항목 전부가 기본값이라서 이 신호들이 지목하는 건 무엇이 페이지를 만들었는지가 아니라 누가 반복을 멈췄는지다. 스레드의 czhu12는 랜딩 페이지 하나에서 그 기본값들을 몰아내는 데 몇 시간이 걸렸다고 한다. 견적서에 아무도 넣지 않는 비용이 그것이다.
+***** Comments
+- Cloudflare 같은 수십억 달러 기업이 자기 디자인 기준을 버릴 수 있다는 게 이해가 안 된다. 랜딩 페이지를 갱신한 듯하지만 여전히 엉성하다.
+- 일부는 그냥 신경을 안 쓴 것이다. 최근 랜딩 페이지를 vibe coding으로 만들었는데, LLM이 내놓은 기본값들을 몇 시간 동안 걷어내야 했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+10 señales de una interfaz hecha con slop
+***** TLDR
+Una lista de diez marcas visuales de una interfaz generada por IA: degradados en todo, con el morado como favorito; paletas que chocan e ignoran la regla 70-30-10; insignias que palpitan para funciones que siempre están activas; tarjetas redondeadas para cada bloque de contenido; emoji como decoración; SVG y ASCII mal alineados; las tipografías por defecto Inter y JetBrains Mono más un '//' suelto junto a cualquier término técnico; texto de relleno tipo 'Built with Hugo. Written from Neovim'; glassmorphism como superficie por defecto; y eslóganes armados con 'Elevate', 'Seamless' y 'Next-Generation'. El autor sostiene que una UI hecha con vibe coding puede quedar bien, pero casi nadie pasa de la primera propuesta del modelo.
+***** Take
+La lista es certera, y ahí está su problema: cada punto es un valor por defecto, así que las señales identifican a quien dejó de iterar, no a lo que construyó la página. czhu12 cuenta en el hilo que le llevó horas sacar esos defaults de una sola landing. Ese es el coste que nadie mete en el presupuesto.
+***** Comments
+- No entiendo cómo una empresa multimillonaria como Cloudflare puede abandonar sus estándares de diseño. Parece que actualizaron la landing, pero sigue siendo descuidada.
+- Algunas de estas cosas son simple falta de interés. Hace poco hice una landing con vibe coding y peleé durante horas contra los defaults que proponía el LLM.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+10 Anzeichen einer Slop-UI
+***** TLDR
+Eine Liste mit zehn optischen Merkmalen einer KI-generierten Oberfläche: Gradienten auf allem, Lila besonders gern; kollidierende Paletten, die die 70-30-10-Regel ignorieren; pulsierende Badges für Funktionen, die immer aktiv sind; abgerundete Karten für jeden Inhaltsblock; Emoji als Dekoration; schlecht ausgerichtete SVGs und ASCII-Art; die Standardschriften Inter und JetBrains Mono plus ein verirrtes '//' neben allem Technischen; Füllzeilen wie 'Built with Hugo. Written from Neovim'; Glassmorphism als Standardoberfläche; und Slogans aus 'Elevate', 'Seamless' und 'Next-Generation'. Der Autor meint, vibe-codete UI könne gut sein, nur geht fast niemand über den ersten Vorschlag des Modells hinaus.
+***** Take
+Die Liste trifft zu, und genau das ist ihr Problem: jeder Punkt ist ein Default, also benennen die Anzeichen, wer aufgehört hat zu iterieren, nicht was die Seite gebaut hat. czhu12 schreibt im Thread, er habe Stunden gebraucht, um diese Defaults aus einer einzigen Landingpage herauszuwerfen. Das sind die Kosten, die niemand einplant.
+***** Comments
+- Ich begreife nicht, wie ein Milliardenkonzern wie Cloudflare seine eigenen Designstandards fallen lassen kann. Die Landingpage wurde offenbar aktualisiert, ist aber weiter schlampig.
+- Ein Teil davon ist einfach Gleichgültigkeit. Ich habe kürzlich eine Landingpage vibe-codet und die Defaults des LLM erst nach Stunden Iteration losbekommen.
+** "As a Language Model": Chat Template Switches LLM Self-Referential Voice :ai:llm:research:interpretability:
+:PROPERTIES:
+:ID:       49865343
+:URL:      https://arxiv.org/abs/2609.25021
+:HN_URL:   https://news.ycombinator.com/item?id=49865343
+:POINTS:   81
+:COMMENTS: 85
+:BY:       yu3zhou4
+:END:
+
+*** TLDR
+The paper tests eight open-weight instruct models up to 9B parameters and finds the chat template alone flips how a model talks about itself. Apply the template and disclaimers like 'I'm just an AI' go up while experiential phrasing goes down; remove it and the pattern reverses, with 'I feel' appearing more often. In three of the models they isolate a single direction in the activations that controls this behavior and steer it in both directions. Their conclusion is that what a model says about itself reflects a deployment choice rather than a property of the model, so research on AI self-knowledge has to control for the template.
+
+*** Take
+The measurement is worth having and the framing oversells it. LiamPowell in the thread puts the objection well: the chat template is the part of the input that most resembles RLHF training data, so it summoning trained disclaimer voice is the expected result, not a mystery. The steering direction is the useful artifact here; the philosophy is a bonus.
+
+*** Comments
+
+**** Izmaki
+"As a Language Model..." is one of the sentence openings I hate most, and the reason I support free, local models. I don't need to read that it cannot give medical advice.
+
+**** LiamPowell
+> yet what drives them is not well understood. Presumably the fact that they're heavily trained to reply in this way? That part sticks out as a really odd claim.
+
+**** skybrian
+It seems obvious given that they can play multiple characters, but it's good to have confirmation. I do wonder to what extent these personas might become stable entities.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+"作为一个语言模型"：对话模板会切换大模型的自我指称口吻
+***** TLDR
+论文测试了八个参数量至 9B 的开源指令模型，发现仅仅是对话模板就能翻转模型谈论自身的方式。套上模板，"我只是一个 AI"这类免责声明变多，体验性表述变少；去掉模板，结果反转，"我感觉"出现得更频繁。在其中三个模型里，作者定位到激活空间中控制这一行为的单一方向，并双向操纵它。结论是：模型对自身的陈述反映的是部署选择，而不是模型本身的属性，因此研究 AI 自我认知必须控制模板这一变量。
+***** Take
+这个测量值得做，但论文的叙述把它说大了。帖子里 LiamPowell 的反驳很到位：对话模板恰恰是输入中最像 RLHF 训练数据的部分，它召唤出训练好的免责口吻是预期结果，不是谜团。真正有用的产出是那个操纵方向，哲学部分算附赠。
+***** Comments
+- "作为一个语言模型……"是我最讨厌的开头之一，也是我支持自由、本地模型的原因。我不需要读它不能提供医疗建议这种话。
+- 「然而其驱动因素尚不清楚」——大概是因为它们被大量训练成这样回答吧？这句话看着特别怪。
+- 既然它们能扮演多个角色，这结论看起来是显然的，但有实证是好事。我倒好奇这些人格会不会变成稳定的实体。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+「私は言語モデルなので」: チャットテンプレートがLLMの自己言及の声を切り替える
+***** TLDR
+論文は 9B パラメータまでのオープンウェイト instruct モデル八つを検証し、チャットテンプレートだけでモデルの自己言及の仕方が反転することを示した。テンプレートを適用すると「私はただの AI です」といった免責が増え、体験的な表現が減る。外すと逆になり、「私は感じる」が増える。うち三モデルでは、この挙動を制御する活性化空間の単一方向を特定し、双方向に操作した。結論は、モデルが自分について語る内容はモデルの性質ではなく運用側の選択を反映するので、AI の自己知識を扱う研究はテンプレートを統制すべきだというもの。
+***** Take
+測定自体は価値があり、語り方は誇張気味だ。スレッドの LiamPowell の指摘が正しい。チャットテンプレートは入力のうち RLHF 学習データに最も似た部分なので、訓練済みの免責口調を呼び出すのは予想どおりで謎ではない。有用な成果は操作方向のベクトルで、哲学はおまけだ。
+***** Comments
+- 「私は言語モデルなので……」は最も嫌いな文頭のひとつで、自由でローカルなモデルを支持する理由でもある。医療助言ができないという説明を読む必要はない。
+- 「しかしその駆動要因はよく分かっていない」。そう答えるよう大量に訓練されているからでは？ この部分だけ妙に浮いて見える。
+- 複数のキャラクターを演じられるのだから自明に思えるが、確認が取れたのは良い。ただ、こうしたペルソナが安定した実体になりうるのかは気になる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+"저는 언어 모델이라서": 채팅 템플릿이 LLM의 자기 지칭 목소리를 바꾼다
+***** TLDR
+논문은 9B 파라미터 이하의 오픈웨이트 instruct 모델 여덟 개를 실험해, 채팅 템플릿만으로 모델이 자신을 말하는 방식이 뒤집힌다는 것을 보였다. 템플릿을 적용하면 '저는 그저 AI입니다' 같은 면책이 늘고 경험적 표현이 줄어든다. 제거하면 반대가 되어 '느낀다'가 더 자주 나온다. 세 모델에서는 이 행동을 제어하는 활성값의 단일 방향을 찾아 양방향으로 조작했다. 결론은 모델이 스스로에 대해 하는 말은 모델의 속성이 아니라 배포 선택을 반영하므로, AI 자기 인식 연구는 템플릿을 통제해야 한다는 것이다.
+***** Take
+측정은 가치가 있고 서술은 과장되어 있다. 스레드의 LiamPowell 반론이 정확하다. 채팅 템플릿은 입력에서 RLHF 학습 데이터와 가장 닮은 부분이라, 학습된 면책 어조를 불러내는 건 예상된 결과이지 수수께끼가 아니다. 쓸 만한 산출물은 조작 방향 벡터이고 철학은 덤이다.
+***** Comments
+- "저는 언어 모델이라서..."는 내가 가장 싫어하는 문장 시작 중 하나이고, 자유롭고 로컬한 모델을 지지하는 이유다. 의료 조언을 못 한다는 말을 읽을 필요는 없다.
+- 「그런데 무엇이 이를 일으키는지는 잘 알려지지 않았다」. 그렇게 답하도록 강하게 학습됐기 때문 아닌가? 이 대목이 유독 이상하다.
+- 여러 캐릭터를 연기할 수 있으니 당연해 보이지만 확인된 건 좋다. 다만 이런 페르소나가 안정된 실체가 될 수 있는지는 궁금하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+"Como modelo de lenguaje": la plantilla de chat cambia la voz con que un LLM habla de sí mismo
+***** TLDR
+El artículo prueba ocho modelos instruct de pesos abiertos de hasta 9B parámetros y encuentra que la plantilla de chat, por sí sola, invierte cómo el modelo habla de sí mismo. Con la plantilla aplicada aumentan los descargos tipo 'solo soy una IA' y baja el lenguaje experiencial; al quitarla el patrón se invierte y aparece más el 'siento'. En tres de los modelos aíslan una única dirección en las activaciones que controla ese comportamiento y la manipulan en ambos sentidos. Su conclusión: lo que un modelo dice de sí mismo refleja una decisión de despliegue y no una propiedad del modelo, así que la investigación sobre autoconocimiento de la IA debe controlar la plantilla.
+***** Take
+La medición vale y el encuadre la infla. LiamPowell lo plantea bien en el hilo: la plantilla de chat es la parte de la entrada que más se parece a los datos de RLHF, así que evocar la voz de descargo entrenada es el resultado esperable, no un misterio. El artefacto útil es la dirección de steering; la filosofía viene de regalo.
+***** Comments
+- "Como modelo de lenguaje..." es uno de los inicios de frase que más odio, y la razón por la que apoyo los modelos libres y locales. No necesito leer que no puede dar consejo médico.
+- > pero no se entiende bien qué lo provoca. ¿Presumiblemente el hecho de que están entrenados intensamente para responder así? Esa parte suena rarísima.
+- Parece obvio dado que pueden interpretar varios personajes, pero está bien tener confirmación. Me pregunto hasta qué punto esas personas podrían volverse entidades estables.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+"Als Sprachmodell": Das Chat-Template schaltet die Selbstbezugsstimme von LLMs um
+***** TLDR
+Das Paper testet acht Open-Weight-Instruct-Modelle bis 9B Parameter und zeigt, dass allein das Chat-Template umdreht, wie ein Modell über sich spricht. Mit Template steigen Haftungsfloskeln wie 'ich bin nur eine KI' und die erlebnisbezogene Sprache sinkt; ohne Template kehrt sich das Muster um und 'ich fühle' kommt häufiger. In drei Modellen isolieren die Autoren eine einzige Richtung in den Aktivierungen, die dieses Verhalten steuert, und steuern sie in beide Richtungen. Ihr Schluss: Was ein Modell über sich sagt, spiegelt eine Deployment-Entscheidung und keine Eigenschaft des Modells, also muss Forschung zum Selbstwissen von KI das Template kontrollieren.
+***** Take
+Die Messung ist brauchbar, die Rahmung übertreibt. LiamPowell bringt den Einwand im Thread auf den Punkt: Das Chat-Template ist der Teil der Eingabe, der den RLHF-Trainingsdaten am meisten gleicht, also ist die antrainierte Disclaimer-Stimme das erwartbare Ergebnis und kein Rätsel. Das nützliche Ergebnis ist die Steuerrichtung, die Philosophie ist Beigabe.
+***** Comments
+- "Als Sprachmodell..." ist einer der Satzanfänge, die ich am meisten hasse, und der Grund, warum ich freie, lokale Modelle unterstütze. Ich muss nicht lesen, dass es keine medizinische Beratung geben kann.
+- > doch was sie antreibt, ist nicht gut verstanden. Vermutlich der Umstand, dass sie massiv darauf trainiert wurden, so zu antworten? Diese Stelle fällt als sehr seltsame Behauptung auf.
+- Scheint offensichtlich, da sie mehrere Rollen spielen können, aber Bestätigung ist gut. Ich frage mich, inwieweit diese Personas zu stabilen Entitäten werden könnten.
+** Flip Fluid on Flip Dots :hardware:electronics:art:diy:
+:PROPERTIES:
+:ID:       49854219
+:URL:      https://mitxela.com/projects/flipflip
+:HN_URL:   https://news.ycombinator.com/item?id=49854219
+:POINTS:   248
+:COMMENTS: 16
+:BY:       blutack
+:END:
+
+*** TLDR
+mitxela drove 2,912 reclaimed Hanover flipdots from the 1990s and 2000s as a single 52x56 display running a FLIP fluid simulation at about 40fps, joystick-controlled, built for EMF2026. The original panels refreshed in roughly a second, so he cut the old driver circuitry off with a dremel and soldered custom boards on the back: shift registers plus a series-capacitor scheme using H-bridge motor driver chips, wired single-ended to get 8 dots per shift register instead of 4. Around half a farad of capacitance in total keeps the voltage from sagging when every dot flips at once. Roughly 3,000 solder joints, about £0.17 per dot, under £500 all in, and it ran four days at the festival without failing.
+
+*** Take
+The interesting engineering is not the fluid sim, it is using motor driver ICs single-ended to double the dots per shift register and dragging the cost per dot low enough that 2,912 of them becomes a hobby budget. The other half of why it survived four days is that he was repairing dead coils on site by rewinding magnet wire with tweezers.
+
+*** Comments
+
+**** userbinator
+The dots are so delicate, with tiny magnet wires and soft plastic that can melt. Put a hot air gun on the back of the board and they'll either drop out or do so with a small poke of the pins.
+
+**** steventhedev
+I'm always amazed by the precision work this guy does. My only nit with this article was he didn't link the Eurovision entry.
+
+**** aiiotnoodle
+He mentions Breakfast Studio and I happened to watch a video of one of their panels on an unrelated YouTube channel. It's really cool to see.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+在翻转点阵上跑 FLIP 流体
+***** TLDR
+mitxela 把 2912 个回收来的 1990、2000 年代 Hanover 翻牌点阵驱动成一块 52x56 的显示屏，跑 FLIP 流体模拟，约 40fps，用摇杆控制，为 EMF2026 而做。原面板刷新一次要一秒左右，于是他用电磨切掉旧驱动电路，在背面焊上自制电路板：移位寄存器加上用 H 桥电机驱动芯片实现的串联电容方案，单端接法让每个移位寄存器带 8 个点而不是 4 个。总共约半法拉的电容量，保证所有点同时翻转时电压不塌。约 3000 个焊点，每个点约 0.17 英镑，总花费不到 500 英镑，在展会上连续四天无故障运行。
+***** Take
+有意思的工程不在流体模拟，而在把电机驱动芯片按单端方式用，让每个移位寄存器带的点数翻倍，并把单点成本压到 2912 个点也只是业余预算的水平。它能撑过四天的另一半原因是：他在现场用镊子重绕漆包线修坏掉的线圈。
+***** Comments
+- 这些点非常脆弱，细如发丝的漆包线和会熔化的软塑料。把热风枪对着板子背面吹，它们要么自己掉下来，要么轻轻一顶引脚就下来了。
+- 这人的精细活儿每次都让我惊叹。我唯一想挑的刺是文章没链接那个 Eurovision 的作品。
+- 他提到了 Breakfast Studio，我刚好在一个不相关的 YouTube 频道上看过他们面板的视频。看着真带劲。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+フリップドットでFLIP流体シミュレーション
+***** TLDR
+mitxela は 1990〜2000 年代の Hanover 製フリップドットを回収し、2912 個を 52x56 の一枚の表示装置として駆動して FLIP 流体シミュレーションを約 40fps で走らせた。ジョイスティック操作で、EMF2026 向けの作品。元の基板は書き換えに一秒ほどかかるため、旧ドライバ回路をリューターで切除し、裏面に自作基板を実装した。シフトレジスタと、H ブリッジのモータドライバ IC を使った直列コンデンサ方式の組み合わせで、シングルエンド配線によりシフトレジスタ一個あたり 4 ドットではなく 8 ドットを駆動する。全体で約 0.5 ファラドの容量が、全ドット同時反転時の電圧降下を防ぐ。はんだ付け約 3000 箇所、1 ドットあたり約 0.17 ポンド、総額 500 ポンド未満で、会期四日間を無故障で走り切った。
+***** Take
+面白い工学は流体シミュレーションではなく、モータドライバ IC をシングルエンドで使ってシフトレジスタあたりのドット数を倍にし、1 ドットの単価を 2912 個でも趣味の予算に収まるところまで下げた点だ。四日もったもう半分の理由は、現場でピンセットを使いマグネットワイヤを巻き直して壊れたコイルを直していたことにある。
+***** Comments
+- ドットは非常に繊細で、細いマグネットワイヤと溶ける軟質プラスチックでできている。基板の裏からヒートガンを当てれば、自然に落ちるかピンを軽く押すだけで外れる。
+- この人の精密な作業にはいつも驚かされる。唯一の不満は、記事に Eurovision の作品へのリンクがなかったこと。
+- Breakfast Studio に触れているが、たまたま無関係な YouTube チャンネルで彼らのパネルの映像を見た。実に格好いい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+플립닷 위에서 돌리는 FLIP 유체 시뮬레이션
+***** TLDR
+mitxela는 1990~2000년대 Hanover 플립닷 2,912개를 회수해 52x56 단일 디스플레이로 구동하고, FLIP 유체 시뮬레이션을 약 40fps로 돌렸다. 조이스틱으로 조작하며 EMF2026을 위해 만들었다. 원래 패널은 갱신에 1초쯤 걸려서, 전동 그라인더로 옛 드라이버 회로를 잘라내고 뒷면에 직접 만든 보드를 붙였다. 시프트 레지스터에 H 브리지 모터 드라이버 칩을 쓴 직렬 커패시터 방식을 결합하고, 단일 종단 배선으로 시프트 레지스터 하나가 4개가 아니라 8개의 닷을 구동한다. 전체 약 0.5패럿의 용량이 모든 닷이 동시에 뒤집힐 때 전압 강하를 막는다. 납땜 약 3,000군데, 닷 하나당 약 0.17파운드, 총 500파운드 미만으로 축제 나흘 동안 고장 없이 돌았다.
+***** Take
+흥미로운 공학은 유체 시뮬레이션이 아니라, 모터 드라이버 IC를 단일 종단으로 써서 시프트 레지스터당 닷 수를 두 배로 늘리고 닷 단가를 2,912개도 취미 예산에 들어오는 수준까지 끌어내린 부분이다. 나흘을 버틴 나머지 절반의 이유는 현장에서 핀셋으로 마그넷 와이어를 다시 감아 죽은 코일을 고쳤다는 데 있다.
+***** Comments
+- 닷은 아주 섬세하다. 가느다란 마그넷 와이어와 녹을 수 있는 연질 플라스틱이다. 보드 뒷면에 열풍기를 대면 저절로 떨어지거나 핀을 살짝 밀면 빠진다.
+- 이 사람의 정밀 작업은 매번 놀랍다. 이 글에서 아쉬운 점은 Eurovision 출품작 링크가 없다는 것뿐이다.
+- Breakfast Studio를 언급했는데, 마침 무관한 유튜브 채널에서 그들의 패널 영상을 봤다. 정말 멋지다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Simulación de fluidos FLIP sobre flipdots
+***** TLDR
+mitxela puso a funcionar 2.912 flipdots Hanover recuperados de los años noventa y dos mil como una única pantalla de 52x56 corriendo una simulación de fluidos FLIP a unos 40fps, con joystick, para el EMF2026. Los paneles originales tardaban cerca de un segundo en refrescar, así que cortó la electrónica vieja con una dremel y soldó placas propias en la parte trasera: registros de desplazamiento más un esquema de condensador en serie con chips controladores de motor en puente H, cableados en modo asimétrico para llevar 8 puntos por registro en lugar de 4. Medio faradio de capacidad en total evita que caiga la tensión cuando todos los puntos giran a la vez. Unas 3.000 soldaduras, alrededor de 0,17 libras por punto, menos de 500 libras en total, y aguantó cuatro días de festival sin fallar.
+***** Take
+La ingeniería interesante no es la simulación de fluidos, es usar chips controladores de motor en modo asimétrico para duplicar los puntos por registro y bajar el coste por punto hasta que 2.912 entran en un presupuesto de aficionado. La otra mitad de por qué sobrevivió cuatro días es que reparaba bobinas muertas allí mismo, rebobinando hilo esmaltado con pinzas.
+***** Comments
+- Los puntos son delicadísimos, con hilos esmaltados finos y plástico blando que se derrite. Aplica una pistola de aire caliente por detrás de la placa y saldrán solos o con un leve empujón en los pines.
+- Siempre me asombra el trabajo de precisión de este tipo. Mi única queja con el artículo es que no enlazó la entrada de Eurovisión.
+- Menciona a Breakfast Studio y justo había visto un vídeo de uno de sus paneles en un canal de YouTube sin relación. Es muy chulo verlo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+FLIP-Fluidsimulation auf Flipdots
+***** TLDR
+mitxela hat 2.912 ausgebaute Hanover-Flipdots aus den 1990ern und 2000ern als ein einziges 52x56-Display betrieben, darauf eine FLIP-Fluidsimulation mit etwa 40fps, per Joystick gesteuert, gebaut für die EMF2026. Die Originalpanels brauchten rund eine Sekunde pro Bildaufbau, also trennte er die alte Treiberelektronik mit einem Dremel ab und lötete eigene Platinen auf die Rückseite: Schieberegister plus ein Serienkondensator-Verfahren mit H-Brücken-Motortreiber-ICs, asymmetrisch verdrahtet, um 8 statt 4 Dots pro Schieberegister zu treiben. Insgesamt etwa ein halbes Farad Kapazität verhindert Spannungseinbrüche, wenn alle Dots gleichzeitig kippen. Rund 3.000 Lötstellen, etwa 0,17 Pfund pro Dot, unter 500 Pfund gesamt, und es lief vier Festivaltage ohne Ausfall.
+***** Take
+Das interessante Engineering ist nicht die Fluidsimulation, sondern Motortreiber-ICs asymmetrisch zu nutzen, um die Dots pro Schieberegister zu verdoppeln, und den Preis pro Dot so weit zu drücken, dass 2.912 Stück ins Hobbybudget passen. Die andere Hälfte der Erklärung für vier Tage Betrieb: Er hat defekte Spulen vor Ort repariert und Kupferlackdraht mit der Pinzette neu gewickelt.
+***** Comments
+- Die Dots sind extrem empfindlich, dünner Kupferlackdraht und weicher Kunststoff, der schmelzen kann. Heißluft von der Platinenrückseite, dann fallen sie heraus oder lösen sich mit einem kleinen Schubs an den Pins.
+- Die Präzisionsarbeit dieses Typen erstaunt mich jedes Mal. Mein einziger Kritikpunkt am Artikel: Er hat den Eurovision-Beitrag nicht verlinkt.
+- Er erwähnt Breakfast Studio, und ich hatte zufällig auf einem völlig anderen YouTube-Kanal ein Video eines ihrer Panels gesehen. Sieht großartig aus.
+** The internet discovers TLA+. Now what? :formal-methods:tla-plus:rust:ai:
+:PROPERTIES:
+:ID:       49863600
+:URL:      https://reasonable.io/blog/tla-tutorial/
+:HN_URL:   https://news.ycombinator.com/item?id=49863600
+:POINTS:   75
+:COMMENTS: 36
+:BY:       matt_d
+:END:
+
+*** TLDR
+Reasonable AI's blog responds to Boris Cherny's tweet about using Claude Opus 5.5 to model parts of the Claude Agent SDK in TLA+ and Lean, which drew roughly a million views and sent a lot of engineers toward formal methods for the first time. Their argument: TLA+ describes possible behaviors and the properties those behaviors should satisfy, but it checks a model rather than your implementation, so the spec-to-code gap remains. They pitch their own pipeline, agents translating TLA+ specs into machine-checked Verus proofs that sit next to Rust code, and report building 16,459 real-world spec and property pairs that yielded over 3,000 machine-checked safety and liveness proofs. The post ends with hiring and partnership solicitations.
+
+*** Take
+Naming the gap is the honest part of the post: a green model checker tells you your abstraction holds, not your code. pron's objection in the thread is the sharper one. If an agent writes the spec, writes the proof, and you read neither, you have relocated your trust rather than earned any. lopatin's counterexample is the strongest case for the other side: pointing a model with TLA+ at unfamiliar failover logic found a real catastrophic bug.
+
+*** Comments
+
+**** pron
+I love TLA+ to describe systems precisely and reason about them. But this whole industry around connecting these languages to AI, to the point of hiding the reasoning from people, confuses me.
+
+**** lopatin
+Experts were optimizing our clustering and failover logic by adding more state. Despite not being an expert there, I found and prevented a catastrophic bug by pointing Opus armed with TLA+ at the problem.
+
+**** stevefan1999
+I indirectly use TLA+ through Quint. I added instructions that before implementing any feature, model it in Quint and make sure there's no counterexample. Takes much longer, but it works.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+互联网发现了 TLA+。然后呢？
+***** TLDR
+Reasonable AI 的博客回应了 Boris Cherny 的一条推文：他用 Claude Opus 5.5 把 Claude Agent SDK 的部分逻辑建模成 TLA+ 和 Lean，那条推文约有一百万浏览量，把大量工程师第一次推向形式化方法。他们的论点是：TLA+ 描述可能的行为以及这些行为应满足的性质，但它检查的是模型而不是你的实现，规格到代码之间的鸿沟依然存在。他们推销自家流水线：让 agent 把 TLA+ 规格翻译成可机器检验的 Verus 证明，与 Rust 代码放在一起；并称构建了 16459 组真实世界的规格与性质配对，产出三千多个机器检验过的安全性与活性证明。文末是招聘和合作招募。
+***** Take
+指出这道鸿沟是这篇博客里诚实的部分：模型检查器全绿只说明你的抽象成立，不代表你的代码成立。帖子里 pron 的反驳更锋利：如果 agent 写规格、agent 写证明，而你两样都不读，那你只是把信任换了个地方寄放，并没有挣到它。lopatin 提供了另一边最有力的案例：让配上 TLA+ 的模型去看自己不熟的故障切换逻辑，真找出了一个灾难级 bug。
+***** Comments
+- 我喜欢用 TLA+ 精确描述系统并推理它。但围绕把这些语言接到 AI 上、以至于把推理过程藏起来不给人看的这整个行业，让我困惑。
+- 专家们在给我们的集群和故障切换逻辑加状态做优化。我不是这块的专家，但让配上 TLA+ 的 Opus 去看这个问题，我找出并阻止了一个灾难级 bug。
+- 我通过 Quint 间接用 TLA+。我加了指令：实现任何功能前先用 Quint 建模，确认没有反例。耗时长很多，但确实有用。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+インターネットがTLA+を発見した。それで？
+***** TLDR
+Reasonable AI のブログが、Boris Cherny のツイートに応じた記事。彼は Claude Opus 5.5 を使って Claude Agent SDK の一部を TLA+ と Lean でモデル化し、その投稿は約 100 万ビューを集め、多くのエンジニアを初めて形式手法へ向かわせた。彼らの主張は、TLA+ は起こりうる振る舞いとそれが満たすべき性質を記述するが、検査するのはモデルであって実装ではないため、仕様と実装の隔たりは残るというもの。自社のパイプラインを売り込み、agent が TLA+ 仕様を機械検証可能な Verus の証明へ翻訳し Rust コードの隣に置く仕組みを示す。実世界の仕様と性質の組 16,459 件から 3,000 件超の機械検証済み安全性・活性証明を得たと報告し、最後は採用と提携の呼びかけで終わる。
+***** Take
+隔たりを名指しした点が誠実だ。モデル検査が全部通っても、保証されるのは抽象であってコードではない。スレッドの pron の指摘のほうが鋭い。agent が仕様を書き、証明も書き、どちらも人が読まないなら、信頼を獲得したのではなく預け先を変えただけだ。反対側の最強の事例は lopatin のもので、TLA+ を持たせたモデルを不慣れなフェイルオーバー論理に向けて、実際に致命的なバグを見つけている。
+***** Comments
+- TLA+ でシステムを正確に記述し推論するのは好きだ。ただ、これらの言語を AI につなぎ、推論を人から隠すところまで行く業界全体には困惑する。
+- 専門家たちが状態を追加してクラスタとフェイルオーバーの論理を最適化していた。その分野の専門家ではないが、TLA+ を持たせた Opus を向けて致命的なバグを見つけ、防いだ。
+- Quint 経由で間接的に TLA+ を使っている。機能を実装する前に Quint でモデル化し反例がないことを確認する、という指示を追加した。時間はかかるが機能する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+인터넷이 TLA+를 발견했다. 그래서 뭘 할까?
+***** TLDR
+Reasonable AI 블로그가 Boris Cherny의 트윗에 답한 글이다. 그는 Claude Opus 5.5로 Claude Agent SDK의 일부를 TLA+와 Lean으로 모델링했고, 그 글은 약 100만 조회를 얻어 많은 엔지니어를 처음으로 형식 기법 쪽으로 끌어당겼다. 이들의 논지는 TLA+가 가능한 동작과 그 동작이 만족해야 할 성질을 기술하지만, 검사 대상은 모델이지 구현이 아니어서 명세와 코드 사이의 간극은 남는다는 것이다. 그러면서 자사 파이프라인을 내세운다. 에이전트가 TLA+ 명세를 기계 검증 가능한 Verus 증명으로 번역해 Rust 코드 옆에 두는 방식이고, 실제 명세와 성질 짝 16,459건으로 기계 검증된 안전성·활성 증명 3,000건 이상을 만들었다고 보고한다. 글은 채용과 협업 제안으로 끝난다.
+***** Take
+간극을 명시한 대목이 이 글의 정직한 부분이다. 모델 검사기가 전부 통과해도 보장되는 건 추상이지 코드가 아니다. 스레드의 pron의 반론이 더 날카롭다. 에이전트가 명세를 쓰고 증명도 쓰는데 사람이 둘 다 읽지 않는다면, 신뢰를 얻은 게 아니라 맡기는 곳을 옮긴 것이다. 반대편의 가장 강한 사례는 lopatin이다. TLA+를 쥔 모델을 익숙하지 않은 페일오버 로직에 겨눠 실제로 치명적인 버그를 찾아냈다.
+***** Comments
+- TLA+로 시스템을 정확하고 간결하게 기술하고 추론하는 걸 좋아한다. 그러나 이런 언어를 AI에 붙이고 심지어 추론 과정을 사람에게서 감추는 산업 전체는 혼란스럽다.
+- 전문가들이 상태를 더 추가해 클러스터와 페일오버 로직을 최적화하고 있었다. 그 분야 전문가가 아니었지만 TLA+를 갖춘 Opus를 그 문제에 겨눠 치명적인 버그를 찾아 막았다.
+- Quint를 통해 TLA+를 간접적으로 쓴다. 기능을 구현하기 전에 Quint로 모델링하고 반례가 없는지 확인하라는 지침을 넣었다. 훨씬 오래 걸리지만 효과가 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Internet descubre TLA+. ¿Y ahora qué?
+***** TLDR
+El blog de Reasonable AI responde al tuit de Boris Cherny sobre usar Claude Opus 5.5 para modelar partes del Claude Agent SDK en TLA+ y Lean, que alcanzó cerca de un millón de visualizaciones y empujó a muchos ingenieros hacia los métodos formales por primera vez. Su argumento: TLA+ describe los comportamientos posibles y las propiedades que deberían cumplir, pero verifica un modelo y no tu implementación, así que la brecha entre especificación y código sigue ahí. Venden su propia tubería, con agentes que traducen especificaciones TLA+ a pruebas Verus verificadas por máquina junto al código Rust, y dicen haber construido 16.459 pares reales de especificación y propiedad que dieron más de 3.000 pruebas comprobadas de seguridad y viveza. El texto cierra con ofertas de empleo y de colaboración.
+***** Take
+Nombrar la brecha es la parte honesta del texto: un verificador de modelos en verde dice que tu abstracción se sostiene, no que tu código lo haga. La objeción de pron en el hilo es más filosa. Si un agente escribe la especificación, escribe la prueba y tú no lees ninguna de las dos, has trasladado tu confianza en lugar de ganarla. El contraejemplo de lopatin es el mejor argumento del otro lado: apuntar un modelo con TLA+ a una lógica de failover ajena encontró un fallo catastrófico real.
+***** Comments
+- Me encanta TLA+ para describir sistemas con precisión y razonar sobre ellos. Pero toda esta industria de conectar estos lenguajes a la IA, hasta el punto de ocultar el razonamiento a las personas, me desconcierta.
+- Unos expertos optimizaban nuestra lógica de clustering y failover añadiendo más estado. Sin ser experto en esa área, encontré y evité un fallo catastrófico apuntando a Opus armado con TLA+ al problema.
+- Uso TLA+ indirectamente a través de Quint. Añadí instrucciones de modelar cualquier función en Quint antes de implementarla y comprobar que no hay contraejemplos. Tarda mucho más, pero funciona.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das Internet entdeckt TLA+. Und jetzt?
+***** TLDR
+Der Blog von Reasonable AI antwortet auf Boris Chernys Tweet, in dem er mit Claude Opus 5.5 Teile des Claude Agent SDK in TLA+ und Lean modelliert hat; der Beitrag kam auf rund eine Million Views und brachte viele Entwickler erstmals zu formalen Methoden. Ihr Argument: TLA+ beschreibt mögliche Verhaltensweisen und die Eigenschaften, die sie erfüllen sollen, prüft aber ein Modell und nicht die Implementierung, also bleibt die Lücke zwischen Spezifikation und Code. Sie bewerben ihre eigene Pipeline, in der Agenten TLA+-Spezifikationen in maschinengeprüfte Verus-Beweise übersetzen, die neben dem Rust-Code stehen, und berichten von 16.459 realen Spezifikations- und Eigenschaftspaaren, aus denen über 3.000 maschinengeprüfte Safety- und Liveness-Beweise entstanden. Am Ende folgen Stellen- und Partnerschaftsangebote.
+***** Take
+Die Lücke zu benennen, ist der ehrliche Teil des Beitrags: Ein grüner Model Checker sagt, dass deine Abstraktion hält, nicht dein Code. Der Einwand von pron im Thread ist der schärfere. Wenn ein Agent die Spezifikation schreibt, den Beweis schreibt und du keins von beidem liest, hast du dein Vertrauen nur verlagert, nicht verdient. Das stärkste Gegenbeispiel liefert lopatin: Ein Modell mit TLA+ auf fremde Failover-Logik gerichtet fand einen echten katastrophalen Bug.
+***** Comments
+- Ich mag TLA+, um Systeme präzise zu beschreiben und über sie nachzudenken. Aber diese ganze Industrie, die solche Sprachen an KI anschließt, bis hin zum Verstecken der Begründung vor Menschen, verwirrt mich.
+- Experten optimierten unsere Clustering- und Failover-Logik durch mehr Zustand. Obwohl ich dort kein Experte bin, habe ich einen katastrophalen Bug gefunden und verhindert, indem ich Opus mit TLA+ auf das Problem richtete.
+- Ich nutze TLA+ indirekt über Quint. Ich habe die Anweisung ergänzt, jedes Feature vor der Implementierung in Quint zu modellieren und sicherzustellen, dass es kein Gegenbeispiel gibt. Dauert viel länger, funktioniert aber.
