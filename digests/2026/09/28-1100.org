@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-09-28 11:00 UTC
+#+DATE: 2026-09-28T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Opus 5.5 ships a prompting manual, Rust's SIMD story finally grows up, and HN argues about which way the moon points
+
+* Highlights
+- Opus 5.5: thinking is always on, and asking for the reasoning is now a refusal category
+- SIMD in Rust 2026: fearless_simd hits 1.0, std::simd still stuck on nightly
+- Malleable software: Ink & Switch wants you to edit your tools, HN says most people won't
+- Nissan e-POWER gen 3: a 5-in-1 module and two engines that only make electricity
+- Lunar terminator paradox: the lit side points up after sunset, and the thread cannot agree why
+
+* Stories
+
+** Prompting Claude Opus 5.5 :ai:llm:prompting:anthropic:
+:PROPERTIES:
+:ID:       49874728
+:URL:      https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5
+:HN_URL:   https://news.ycombinator.com/item?id=49874728
+:POINTS:   110
+:COMMENTS: 101
+:BY:       Michelangelo11
+:END:
+
+*** TLDR
+Anthropic's prompting guide for Opus 5.5. Thinking is always on and can no longer be disabled, and the default effort drops to medium, where Anthropic says it matches or beats Opus 5 at high on coding and knowledge work. The guide is mostly about harness behavior: unattended agents that stop early after a text-only turn, progress updates that now arrive as thinking blocks instead of text blocks so clients rendering only text look silent, elapsed-time budgets that make multi-agent teams finish sooner, and wrapping pasted user text in tagged blocks to resist injection. A new reasoning_extraction refusal category declines prompts that push the model to reproduce its internal reasoning in the response.
+
+*** Take
+The line that matters is not a prompting tip. Shipping a refusal category for 'write out your reasoning' is a product decision about who gets to see the model think, and the guide states it as calmly as a cache-invalidation note. The rest reads as a list of behaviors Anthropic chose to document rather than train out.
+
+*** Comments
+
+**** bluegatty
+This is a failure of the AI foundries; if we have to use totally different prompting techniques for every model, this won't work.
+
+**** skeledrew
+All that keeps jumping out at me is how they've set it to refuse giving users thinking tokens. I'll be moving even more of my primary workload to Chinese providers.
+
+**** idiocrat
+Refusal: Opus 5.5's safeguards flagged this session. This is my own code, my test and dev environment.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Prompting de Claude Opus 5.5
+***** TLDR
+La guía de prompting de Anthropic para Opus 5.5. El razonamiento está siempre activo y ya no se puede desactivar, y el esfuerzo por defecto baja a medium, donde Anthropic afirma que iguala o supera a Opus 5 en high en programación y trabajo de conocimiento. La guía trata sobre todo del harness: agentes desatendidos que se detienen antes de tiempo tras un turno sin llamada a herramienta, actualizaciones de progreso que ahora llegan como bloques de thinking en vez de bloques de texto, presupuestos de tiempo que hacen que los equipos multiagente terminen antes, y etiquetar el texto pegado por el usuario para resistir inyecciones. Una nueva categoría de rechazo, reasoning_extraction, deniega los prompts que empujan al modelo a reproducir su razonamiento interno.
+***** Take
+Lo importante no es un consejo de prompting. Incluir una categoría de rechazo para 'escribe tu razonamiento' es una decisión de producto sobre quién puede ver pensar al modelo, y la guía lo cuenta con la misma calma que una nota sobre invalidación de caché. El resto es una lista de comportamientos que Anthropic decidió documentar en lugar de corregir en el entrenamiento.
+***** Comments
+- Esto es un fracaso de las fundiciones de IA; si hay que usar técnicas de prompting totalmente distintas para cada modelo, esto no va a funcionar.
+- Lo que no me quito de la cabeza es que han configurado el modelo para negarse a dar los tokens de razonamiento. Voy a mover aún más carga de trabajo a proveedores chinos.
+- Rechazo: las salvaguardas de Opus 5.5 marcaron esta sesión. Es mi propio código, mi entorno de pruebas y desarrollo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Prompting für Claude Opus 5.5
+***** TLDR
+Anthropics Prompting-Leitfaden für Opus 5.5. Thinking läuft immer und lässt sich nicht mehr abschalten, der Standard-Effort sinkt auf medium, wo das Modell laut Anthropic Opus 5 auf high bei Coding und Knowledge Work erreicht oder übertrifft. Der Leitfaden dreht sich vor allem um den Harness: unbeaufsichtigte Agenten, die nach einem reinen Textzug zu früh aufhören, Fortschrittsmeldungen, die jetzt als Thinking-Blöcke statt als Textblöcke ankommen, Zeitbudgets, mit denen Multiagenten-Teams früher fertig werden, und das Markieren eingefügter Nutzertexte gegen Prompt Injection. Eine neue Ablehnungskategorie reasoning_extraction weist Prompts zurück, die das Modell drängen, seine interne Argumentation im Antworttext wiederzugeben.
+***** Take
+Der entscheidende Punkt ist kein Prompting-Tipp. Eine Ablehnungskategorie für 'schreib deine Argumentation aus' ist eine Produktentscheidung darüber, wer das Modell denken sehen darf, und der Leitfaden erwähnt sie so beiläufig wie eine Notiz zur Cache-Invalidierung. Der Rest liest sich wie eine Liste von Verhaltensweisen, die Anthropic lieber dokumentiert als wegtrainiert hat.
+***** Comments
+- Das ist ein Versagen der KI-Anbieter; wenn wir für jedes Modell völlig andere Prompting-Techniken brauchen, funktioniert das nicht.
+- Mir fällt immer wieder auf, dass sie es so eingestellt haben, dass Nutzern die Thinking-Tokens verweigert werden. Ich verlagere noch mehr Arbeit zu chinesischen Anbietern.
+- Ablehnung: Die Schutzmechanismen von Opus 5.5 haben diese Sitzung markiert. Das ist mein eigener Code, meine Test- und Entwicklungsumgebung.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude Opus 5.5 프롬프팅
+***** TLDR
+Anthropic의 Opus 5.5 프롬프팅 가이드. 사고(thinking)가 항상 켜져 있고 이제 끌 수 없으며, 기본 effort는 medium으로 내려갔다. Anthropic은 medium이 코딩과 지식 업무에서 high로 돌린 Opus 5와 같거나 더 낫다고 말한다. 가이드의 대부분은 하네스 이야기다. 도구 호출 없는 턴 뒤에 일찍 멈춰버리는 무인 에이전트, 이제 텍스트 블록이 아니라 thinking 블록으로 오는 진행 상황 알림, 멀티 에이전트 팀을 더 빨리 끝내게 만드는 경과 시간 예산, 프롬프트 인젝션을 막기 위해 사용자가 붙여넣은 텍스트를 태그로 감싸는 방법 등이다. 새 거부 범주인 reasoning_extraction은 모델이 내부 추론을 응답에 그대로 쓰도록 압박하는 프롬프트를 거절한다.
+***** Take
+핵심은 프롬프팅 요령이 아니다. '추론 과정을 적어달라'에 대한 거부 범주를 넣은 것은 누가 모델의 사고를 볼 수 있는지에 대한 제품 결정이고, 가이드는 그것을 캐시 무효화 주석처럼 담담하게 적어 놓았다. 나머지는 Anthropic이 가중치에서 고치는 대신 문서로 남기기로 한 동작 목록으로 읽힌다.
+***** Comments
+- 이건 AI 제공사들의 실패다. 모델마다 완전히 다른 프롬프팅 기법을 써야 한다면 이 방식은 지속될 수 없다.
+- 사용자에게 thinking 토큰을 주지 않도록 설정했다는 점이 계속 걸린다. 주요 작업을 중국 제공사로 더 옮길 생각이다.
+- 거부: Opus 5.5의 안전장치가 이 세션을 표시했습니다. 이건 내 코드고, 내 테스트와 개발 환경이다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claude Opus 5.5のプロンプティング
+***** TLDR
+AnthropicによるOpus 5.5のプロンプティングガイド。thinkingは常時オンで無効化できなくなり、既定のeffortはmediumに下がった。Anthropicはコーディングと知識労働でmediumがhighのOpus 5に並ぶか上回るとしている。内容の多くはハーネス側の話だ。ツール呼び出しのないターンの後に早期停止する無人エージェント、テキストブロックではなくthinkingブロックとして届くようになった進捗更新、マルチエージェントの作業を早く終わらせる経過時間の予算、プロンプトインジェクション対策として貼り付けテキストをタグで囲む方法など。新しい拒否カテゴリreasoning_extractionは、内部の推論を応答本文に書き出させようとするプロンプトを拒否する。
+***** Take
+重要なのはプロンプトの小技ではない。「推論を書き出せ」に対する拒否カテゴリを用意したことは、誰がモデルの思考を見てよいかという製品判断であり、ガイドはそれをキャッシュ無効化の注記と同じ調子で書いている。残りは、Anthropicが重みで直す代わりに文書化することにした挙動の一覧に読める。
+***** Comments
+- これはAI各社の失敗だ。モデルごとに全く違うプロンプト技法が必要なら、この方式は成り立たない。
+- ユーザーにthinkingトークンを渡さない設定にした点がどうしても引っかかる。主要な作業をさらに中国系プロバイダに移す。
+- 拒否: Opus 5.5のセーフガードがこのセッションを検知しました。これは自分のコードで、自分のテストと開発環境だ。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为 Claude Opus 5.5 写提示词
+***** TLDR
+Anthropic 发布的 Opus 5.5 提示词指南。思考过程现在始终开启且无法关闭，默认 effort 降到 medium，Anthropic 称在编程和知识工作上，medium 的表现追平甚至超过 high 档的 Opus 5。指南大部分内容其实是在讲外围框架：无人值守的智能体在一次没有工具调用的回合后提前停止、进度更新现在以 thinking 块而非文本块返回、给多智能体团队设置耗时预算可以更早收工、以及用标签包住用户粘贴的文本来抵御注入。新增的拒绝类别 reasoning_extraction 会拒掉那些逼模型把内部推理写进回复的提示词。
+***** Take
+真正关键的不是提示技巧。为「写出你的推理过程」单设一个拒绝类别，是关于谁有资格看到模型思考的产品决定，而指南把它写得像一条缓存失效的注释一样平淡。其余部分读起来像是 Anthropic 选择用文档记录、而不是在权重里修掉的一串行为。
+***** Comments
+- 这是 AI 厂商的失败；如果每个模型都要用完全不同的提示技巧，这条路走不通。
+- 最扎眼的是他们把模型设成拒绝向用户提供思考 token。我会把更多主力工作迁到中国的服务商。
+- 拒绝：Opus 5.5 的安全机制标记了此会话。这是我自己的代码、我自己的测试和开发环境。
+** The state of SIMD in Rust in 2026 :rust:simd:performance:compilers:
+:PROPERTIES:
+:ID:       49844629
+:URL:      https://shnatsel.github.io/state-of-simd-rust-2026/
+:HN_URL:   https://news.ycombinator.com/item?id=49844629
+:POINTS:   163
+:COMMENTS: 38
+:BY:       verdagon
+:END:
+
+*** TLDR
+A survey of Rust's portable SIMD options. fearless_simd reached 1.0 with multiversioning via a #［simd］ annotation and very little unsafe. std::simd is still nightly-only with occasional breaking changes, but sits directly on LLVM so it reaches unusual targets, and falls back badly when LLVM has no matching operation. wide covers many platforms and ships trig functions but does not work with x86 multiversioning; pulp and macerator target math-heavy native-width work. SSE2, AVX2, AVX-512, NEON and WebAssembly are all supported. The biggest gap is vectorized math: SLEEF is only partly ported, and the author's rule is that shipping scalar implementations dressed as SIMD is the cardinal sin. AVX-512 gets a warning, enable it only on Ice Lake or newer Intel or on AMD, because early Intel parts downclocked the whole system. ARM needs no multiversioning at all since 64-bit NEON is mandatory.
+
+*** Take
+The recommendation is fearless_simd, and the honest summary is that portable SIMD in Rust became usable outside the standard library while std::simd stayed on nightly. The trig gap is the part to watch, because a crate that fills it with scalar loops behind vector types is selling you the API and none of the speed.
+
+*** Comments
+
+**** ack_complete
+AArch64 has a much more comprehensive baseline than x86-64, but ARM has no portable equivalent to CPUID for querying feature flags and is terrible at documenting which intrinsics need specific FEAT_⁎ extensions.
+
+**** tancop
+Whether you can just assert AVX2 depends on what you're making. Plenty of games set their requirements that way; distributing binaries to strangers is different.
+
+**** sharktheone
+I am hoping for portable SIMD so much. But I still think that often a manually rolled SIMD will be faster.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El estado de SIMD en Rust en 2026
+***** TLDR
+Un repaso de las opciones de SIMD portable en Rust. fearless_simd llegó a 1.0 con multiversionado mediante una anotación #［simd］ y muy poco unsafe. std::simd sigue solo en nightly con cambios rompedores ocasionales, pero se apoya directamente en LLVM y por eso alcanza plataformas raras, aunque falla mal cuando LLVM no tiene la operación equivalente. wide cubre muchas plataformas e incluye funciones trigonométricas, pero no funciona con el multiversionado en x86; pulp y macerator apuntan a cargas matemáticas con vectores de ancho nativo. SSE2, AVX2, AVX-512, NEON y WebAssembly están soportados. La mayor carencia es la matemática vectorizada: SLEEF solo está portado en parte, y la regla del autor es que enviar implementaciones escalares disfrazadas de SIMD es el pecado capital. Aviso sobre AVX-512: actívalo solo en Intel Ice Lake o posterior, o en AMD, porque los primeros chips de Intel bajaban la frecuencia de todo el sistema. ARM no necesita multiversionado porque NEON de 64 bits es obligatorio.
+***** Take
+La recomendación es fearless_simd, y el resumen honesto es que el SIMD portable en Rust se volvió usable fuera de la biblioteca estándar mientras std::simd se quedaba en nightly. La carencia de trigonometría es lo que hay que vigilar, porque un crate que la rellene con bucles escalares detrás de tipos vectoriales te vende la API y nada de la velocidad.
+***** Comments
+- AArch64 tiene una base mucho más completa que x86-64, pero ARM no tiene un equivalente portable a CPUID para consultar los flags de funcionalidad y documenta fatal qué intrínsecos necesitan extensiones FEAT_⁎ concretas.
+- Si puedes dar AVX2 por hecho depende de lo que estés haciendo. Muchos juegos fijan así sus requisitos; distribuir binarios a desconocidos es otra cosa.
+- Deseo muchísimo que llegue el SIMD portable. Pero sigo pensando que a menudo el SIMD escrito a mano será más rápido.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der Stand von SIMD in Rust im Jahr 2026
+***** TLDR
+Ein Überblick über portable SIMD-Optionen in Rust. fearless_simd hat 1.0 erreicht, mit Multiversioning über eine #［simd］-Annotation und sehr wenig unsafe. std::simd gibt es weiterhin nur auf nightly mit gelegentlichen Breaking Changes, sitzt dafür direkt auf LLVM und erreicht so ungewöhnliche Zielplattformen, versagt aber, wenn LLVM keine passende Operation hat. wide deckt viele Plattformen ab und bringt Trigonometrie mit, funktioniert aber nicht mit x86-Multiversioning; pulp und macerator zielen auf rechenlastige Arbeit mit nativer Vektorbreite. SSE2, AVX2, AVX-512, NEON und WebAssembly werden unterstützt. Die größte Lücke ist vektorisierte Mathematik: SLEEF ist nur teilweise portiert, und die Regel des Autors lautet, skalare Implementierungen im SIMD-Gewand auszuliefern sei die Todsünde. Warnung zu AVX-512: nur auf Intel ab Ice Lake oder auf AMD aktivieren, weil frühe Intel-Chips das ganze System heruntertakteten. ARM braucht gar kein Multiversioning, da 64-Bit-NEON verpflichtend ist.
+***** Take
+Die Empfehlung lautet fearless_simd, und die ehrliche Zusammenfassung ist: Portables SIMD in Rust wurde außerhalb der Standardbibliothek brauchbar, während std::simd auf nightly festsitzt. Die Trigonometrie-Lücke ist der Punkt, den man beobachten sollte, denn ein Crate, das sie mit skalaren Schleifen hinter Vektortypen füllt, verkauft die API und nichts von der Geschwindigkeit.
+***** Comments
+- AArch64 hat eine deutlich umfassendere Basis als x86-64, aber ARM hat kein portables Äquivalent zu CPUID für Feature-Flags und dokumentiert miserabel, welche Intrinsics bestimmte FEAT_⁎-Erweiterungen brauchen.
+- Ob man AVX2 einfach voraussetzen kann, hängt davon ab, was man baut. Viele Spiele setzen ihre Anforderungen so; Binaries an Fremde zu verteilen ist etwas anderes.
+- Ich wünsche mir portables SIMD sehr. Aber ich glaube weiterhin, dass handgeschriebenes SIMD oft schneller ist.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+2026년 Rust의 SIMD 현황
+***** TLDR
+Rust의 이식 가능한 SIMD 선택지를 정리한 글. fearless_simd는 #［simd］ 애너테이션으로 멀티버저닝을 처리하고 unsafe를 거의 쓰지 않은 채 1.0에 도달했다. std::simd는 여전히 nightly 전용이고 가끔 호환성이 깨지지만, LLVM 위에 바로 얹혀 있어 특이한 타깃까지 닿는 대신 LLVM에 대응 연산이 없으면 크게 무너진다. wide는 플랫폼 커버리지가 넓고 삼각함수도 제공하지만 x86 멀티버저닝과 함께 쓸 수 없고, pulp와 macerator는 네이티브 폭 벡터를 쓰는 수치 연산을 겨냥한다. SSE2, AVX2, AVX-512, NEON, WebAssembly가 모두 지원된다. 가장 큰 공백은 벡터화된 수학 함수다. SLEEF는 일부만 이식됐고, 저자는 스칼라 구현을 SIMD인 척 배포하는 것이 가장 큰 죄라고 말한다. AVX-512에는 경고가 붙는다. 초기 인텔 칩이 시스템 전체 클럭을 떨어뜨렸기 때문에 Ice Lake 이후 인텔이나 AMD에서만 켜라는 것이다. ARM은 64비트 NEON이 필수라 멀티버저닝 자체가 필요 없다.
+***** Take
+결론은 fearless_simd다. 솔직히 요약하면, Rust의 이식 가능한 SIMD는 표준 라이브러리 밖에서 쓸 만해졌고 std::simd는 nightly에 발이 묶였다. 지켜볼 지점은 삼각함수 공백이다. 벡터 타입 뒤에 스칼라 루프를 채워 넣는 크레이트는 API만 팔고 속도는 팔지 않는다.
+***** Comments
+- AArch64의 기본 명령 집합은 x86-64보다 훨씬 포괄적이지만, ARM에는 기능 플래그를 조회할 CPUID에 해당하는 이식 가능한 수단이 없고 어떤 인트린식이 어떤 FEAT_⁎ 확장을 요구하는지 문서화가 형편없다.
+- AVX2를 그냥 전제해도 되는지는 무엇을 만드느냐에 달렸다. 많은 게임이 그렇게 요구 사양을 잡는다. 낯선 사람에게 바이너리를 배포하는 건 다른 문제다.
+- 이식 가능한 SIMD를 정말 바란다. 그래도 직접 손으로 쓴 SIMD가 더 빠른 경우가 많다고 본다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+2026年のRustにおけるSIMDの現状
+***** TLDR
+Rustのポータブルな SIMD 選択肢の総覧。fearless_simd は #［simd］ アノテーションによるマルチバージョニングとほぼ unsafe なしで 1.0 に到達した。std::simd は依然 nightly 限定で破壊的変更もあるが、LLVM の真上にあるため珍しいターゲットにも届く一方、LLVM に対応する演算がないと大きく崩れる。wide は対応プラットフォームが広く三角関数も持つが x86 のマルチバージョニングとは併用できず、pulp と macerator はネイティブ幅ベクトルを使う数値計算向けだ。SSE2、AVX2、AVX-512、NEON、WebAssembly はいずれも対応済み。最大の欠落はベクトル化された数学関数で、SLEEF の移植は部分的にとどまる。著者いわく、スカラ実装を SIMD の見た目で出荷するのは大罪だ。AVX-512 には警告があり、初期のインテル製品はシステム全体のクロックを落としたため、Ice Lake 以降のインテルか AMD でのみ有効にせよという。ARM は 64 ビット NEON が必須なのでマルチバージョニング自体が不要だ。
+***** Take
+推奨は fearless_simd で、正直にまとめれば、Rust のポータブル SIMD は標準ライブラリの外で実用的になり、std::simd は nightly に取り残された。注目点は三角関数の欠落だ。ベクトル型の裏をスカラループで埋めるクレートは、API だけを売って速度は売らない。
+***** Comments
+- AArch64 のベースラインは x86-64 よりずっと充実しているが、ARM には機能フラグを問い合わせる CPUID 相当のポータブルな手段がなく、どの intrinsic がどの FEAT_⁎ 拡張を必要とするかの文書化もひどい。
+- AVX2 を前提にしてよいかは作るものによる。多くのゲームはそう要求仕様を決めている。見知らぬ相手にバイナリを配るのは別の話だ。
+- ポータブル SIMD を強く待ち望んでいる。それでも手書きの SIMD のほうが速いことは多いと思う。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+2026 年 Rust 的 SIMD 现状
+***** TLDR
+一篇对 Rust 可移植 SIMD 方案的梳理。fearless_simd 已发布 1.0，通过 #［simd］ 注解处理多版本分发，几乎不用 unsafe。std::simd 仍然只在 nightly 上，偶有破坏性变更，但它直接建在 LLVM 之上，因此能覆盖冷门平台，代价是 LLVM 缺少对应操作时退化得很难看。wide 平台覆盖广、自带三角函数，但无法与 x86 的多版本分发配合；pulp 和 macerator 面向使用原生位宽向量的数学密集型任务。SSE2、AVX2、AVX-512、NEON 和 WebAssembly 都已支持。最大的空缺是向量化数学函数，SLEEF 只移植了一部分，作者的原则是：把标量实现包装成 SIMD 发布是头号大罪。AVX-512 有个警告：只在 Ice Lake 之后的英特尔或 AMD 上开启，因为早期英特尔芯片会拉低整机频率。ARM 则完全不需要多版本分发，因为 64 位 NEON 是强制的。
+***** Take
+作者的推荐是 fearless_simd。老实说，结论是 Rust 的可移植 SIMD 在标准库之外变得可用了，而 std::simd 仍被困在 nightly。真正要盯住的是三角函数这块空白：用标量循环填在向量类型背后的库，卖给你的是 API，不是速度。
+***** Comments
+- AArch64 的基线比 x86-64 完整得多，但 ARM 没有可移植的 CPUID 等价物来查询特性标志，而且对哪些 intrinsic 需要哪些 FEAT_⁎ 扩展的文档糟糕透顶。
+- 能不能直接假定有 AVX2，取决于你做的是什么。很多游戏就是这样定配置要求的；把二进制发给陌生人则是另一回事。
+- 我非常期待可移植 SIMD。但我仍然认为手写的 SIMD 往往更快。
+** Malleable software: Restoring user agency in a world of locked-down apps (2025) :software:hci:tools:inkandswitch:
+:PROPERTIES:
+:ID:       49869755
+:URL:      https://www.inkandswitch.com/essay/malleable-software/
+:HN_URL:   https://news.ycombinator.com/item?id=49869755
+:POINTS:   102
+:COMMENTS: 47
+:BY:       evakhoury
+:END:
+
+*** TLDR
+An Ink & Switch essay arguing that apps are single-purpose gadgets and that users should be able to change their tools without a cliff between using and building. Three principles: a gentle slope from user to creator, with spreadsheets as the model; tools over apps, which needs a shared data repository and composable UI instead of isolated windows; and communal creation, where local groups share adaptations rather than everyone using one global product. It is backed by their prototypes: Pushpin, Cambria for translating between schemas, Farm for storing code as synced data, and Patchwork, the most mature, which keeps both data and code in collaborative documents and is where they write their essays. They add that AI-assisted coding alone does not remove the barriers, but speeds up tool-making inside a malleable environment.
+
+*** Take
+The prototypes are real and the argument is old, which is the problem. HyperCard shipped explicit user levels in 1987 and the case still has to be argued in 2026. The thread lands the counterpoint better than the essay does: most people do not want to build their tools, they want someone else's tool to stop fighting them, and plain files on disk buy most of that without any new substrate.
+
+*** Comments
+
+**** lucrbvi
+One of the best ways of stopping lock-in is to be file-based. Obsidian is a good example. Users can just keep their data as is and move on with their lives.
+
+**** piterrro
+This whole article is true and to the point but reality is: most people still don't build their own setups. This applies only to a small group of users.
+
+**** trashb
+The essence of the GPL is trying to solve this issue, but most business software is still very rigid.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Software maleable: recuperar la agencia del usuario en un mundo de apps cerradas (2025)
+***** TLDR
+Un ensayo de Ink & Switch que sostiene que las apps son aparatos de un solo uso y que los usuarios deberían poder cambiar sus herramientas sin un salto brusco entre usar y construir. Tres principios: una pendiente suave de usuario a creador, con la hoja de cálculo como modelo; herramientas en vez de apps, lo que exige un repositorio de datos compartido y una UI componible en lugar de ventanas aisladas; y creación comunitaria, donde grupos locales comparten adaptaciones en vez de que todos usen un único producto global. Lo respaldan con sus prototipos: Pushpin, Cambria para traducir entre esquemas, Farm para guardar el código como datos sincronizados y Patchwork, el más maduro, que guarda datos y código en documentos colaborativos y es donde escriben sus ensayos. Añaden que la programación asistida por IA por sí sola no elimina las barreras, pero acelera la creación de herramientas dentro de un entorno maleable.
+***** Take
+Los prototipos son reales y el argumento es viejo, y ahí está el problema. HyperCard traía niveles de usuario explícitos en 1987 y en 2026 todavía hay que defender la idea. El hilo da mejor con la réplica que el ensayo: la mayoría no quiere construir sus herramientas, quiere que la herramienta ajena deje de pelearse con ellos, y los archivos planos en disco ya consiguen casi todo eso sin ningún sustrato nuevo.
+***** Comments
+- Una de las mejores formas de frenar el lock-in es basarse en archivos. Obsidian es un buen ejemplo. Los usuarios se quedan con sus datos tal cual y siguen con su vida.
+- Todo el artículo es cierto y va al grano, pero la realidad es que la mayoría sigue sin construir sus propios montajes. Esto solo aplica a un grupo pequeño de usuarios.
+- La esencia de la GPL intenta resolver este mismo problema, pero la mayoría del software empresarial sigue siendo muy rígido.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Formbare Software: Nutzerautonomie in einer Welt abgeschotteter Apps (2025)
+***** TLDR
+Ein Essay von Ink & Switch, der argumentiert, Apps seien Einzweckgeräte und Nutzer sollten ihre Werkzeuge ändern können, ohne eine Klippe zwischen Benutzen und Bauen. Drei Prinzipien: ein sanfter Anstieg vom Nutzer zum Ersteller, mit der Tabellenkalkulation als Vorbild; Werkzeuge statt Apps, was ein gemeinsames Datenrepositorium und eine komponierbare Oberfläche statt isolierter Fenster verlangt; und gemeinschaftliches Erstellen, bei dem lokale Gruppen Anpassungen teilen, statt dass alle ein globales Produkt nutzen. Belegt wird das mit ihren Prototypen: Pushpin, Cambria zum Übersetzen zwischen Schemata, Farm zum Speichern von Code als synchronisierte Daten und Patchwork, das reifste, das Daten und Code in kollaborativen Dokumenten hält und in dem sie ihre Essays schreiben. Sie ergänzen, dass KI-gestütztes Programmieren allein die Hürden nicht beseitigt, das Werkzeugbauen in einer formbaren Umgebung aber beschleunigt.
+***** Take
+Die Prototypen sind echt und das Argument ist alt, und genau das ist das Problem. HyperCard hatte 1987 explizite Nutzerstufen, und 2026 muss der Fall immer noch vorgetragen werden. Der Thread trifft den Einwand besser als der Essay: Die meisten wollen ihre Werkzeuge nicht bauen, sie wollen, dass fremde Werkzeuge aufhören, sich zu wehren, und einfache Dateien auf der Platte liefern das Meiste davon ohne neues Substrat.
+***** Comments
+- Eine der besten Methoden gegen Lock-in ist Dateibasiertheit. Obsidian ist ein gutes Beispiel. Nutzer behalten ihre Daten einfach so und machen weiter.
+- Der ganze Artikel stimmt und trifft den Punkt, aber die Realität ist: Die meisten bauen sich ihr Setup nicht selbst. Das gilt nur für eine kleine Gruppe von Nutzern.
+- Der Kern der GPL versucht genau dieses Problem zu lösen, aber die meiste Unternehmenssoftware ist weiterhin sehr starr.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+말랑한 소프트웨어: 잠긴 앱의 시대에 사용자 주도권 되찾기 (2025)
+***** TLDR
+앱은 한 가지 용도의 기구일 뿐이고, 사용자는 쓰는 것과 만드는 것 사이의 절벽 없이 자기 도구를 바꿀 수 있어야 한다고 주장하는 Ink & Switch의 에세이. 세 가지 원칙을 든다. 스프레드시트를 본보기로 삼는, 사용자에서 제작자로 가는 완만한 경사. 앱이 아니라 도구, 이를 위해서는 창이 따로 노는 대신 공유 데이터 저장소와 조합 가능한 UI가 필요하다. 그리고 모두가 하나의 글로벌 제품을 쓰는 대신 지역 공동체가 각자의 변형을 공유하는 공동 창작. 근거는 이들의 프로토타입이다. Pushpin, 스키마 사이를 번역하는 Cambria, 코드를 동기화되는 데이터로 저장하는 Farm, 그리고 가장 성숙한 Patchwork는 데이터와 코드를 모두 협업 문서에 담으며 이들이 에세이를 쓰는 곳이기도 하다. AI 코딩만으로 장벽이 사라지지는 않지만, 말랑한 환경 안에서는 도구 제작을 빠르게 해 준다고 덧붙인다.
+***** Take
+프로토타입은 실재하고 주장은 오래됐는데, 바로 그 점이 문제다. HyperCard는 1987년에 이미 명시적인 사용자 레벨을 제공했는데 2026년에도 같은 주장을 다시 해야 한다. 반론은 에세이보다 댓글 쪽이 더 정확하다. 대부분은 자기 도구를 만들고 싶은 게 아니라 남의 도구가 자기를 방해하지 않기를 바랄 뿐이고, 디스크 위의 평범한 파일이면 새 기반 없이도 그 대부분을 얻는다.
+***** Comments
+- 종속을 막는 가장 좋은 방법 중 하나는 파일 기반으로 가는 것이다. Obsidian이 좋은 예다. 사용자는 데이터를 그대로 들고 자기 갈 길을 가면 된다.
+- 글 전체가 맞는 말이고 핵심을 짚지만, 현실은 대부분이 여전히 자기 환경을 직접 만들지 않는다는 것이다. 이건 소수의 사용자에게만 해당한다.
+- GPL의 본질도 같은 문제를 풀려는 것이지만, 기업용 소프트웨어는 여전히 아주 경직돼 있다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+マリアブルなソフトウェア: 閉じたアプリの世界でユーザーの裁量を取り戻す (2025)
+***** TLDR
+アプリは単機能の道具にすぎず、使うことと作ることの間に断崖を置かずにユーザーが道具を変えられるべきだ、と論じる Ink & Switch のエッセイ。三つの原則を挙げる。表計算を手本とする、ユーザーから作り手への緩やかな坂。アプリではなく道具、そのためには孤立したウィンドウではなく共有データリポジトリと組み合わせ可能な UI が要る。そして全員が一つの世界的製品を使うのではなく、地域のコミュニティが改変を共有する共同制作。裏づけは彼らの試作群だ。Pushpin、スキーマ間を変換する Cambria、コードを同期データとして保存する Farm、そして最も成熟した Patchwork は、データもコードも共同編集ドキュメントに収め、彼ら自身がエッセイを書く場でもある。AI 支援のコーディングだけでは障壁は消えないが、マリアブルな環境の中では道具作りを速めるとも述べている。
+***** Take
+試作は実在し、主張は古い。そこが問題だ。HyperCard は 1987 年に明示的なユーザーレベルを備えていたのに、2026 年になってもまだ同じ主張をしなければならない。反論はエッセイよりスレッドのほうが的確だ。多くの人は自分の道具を作りたいのではなく、他人の道具が邪魔をしないでほしいだけで、ディスク上のただのファイルがあれば新しい基盤なしにその大半は手に入る。
+***** Comments
+- ロックインを防ぐ最良の方法の一つはファイルベースにすることだ。Obsidian がよい例で、ユーザーはデータをそのまま持って先へ進める。
+- 記事は全部正しく要点も突いているが、現実には多くの人は自分の環境を組み立てない。これは一部のユーザーにしか当てはまらない。
+- GPL の本質も同じ問題を解こうとしているが、企業向けソフトウェアは相変わらず非常に硬直している。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+可塑软件：在应用被锁死的世界里找回用户的主动权 (2025)
+***** TLDR
+Ink & Switch 的一篇长文，认为应用不过是单一用途的小工具，用户应该能修改自己的工具，而不必在「使用」和「构建」之间跨过一道断崖。文章提出三条原则：从用户到创作者的平缓坡度，样板是电子表格；要工具不要应用，这需要共享的数据仓库和可组合的界面，而不是各自孤立的窗口；以及共同创作，由本地社群分享各自的改造，而不是所有人共用一个全球产品。支撑它的是他们的原型：Pushpin、在不同 schema 之间做转换的 Cambria、把代码当作同步数据存储的 Farm，以及最成熟的 Patchwork，它把数据和代码都放进协作文档，作者们的文章就是在里面写的。他们还补充说，只靠 AI 辅助编程并不能消除这些障碍，但在可塑的环境里能加快造工具的速度。
+***** Take
+原型是真的，论点是旧的，问题恰恰在这里。HyperCard 在 1987 年就有明确的用户层级，到了 2026 年还得重新论证这件事。评论区比文章更准确地给出了反面：多数人并不想自己造工具，只希望别人的工具别跟自己作对，而磁盘上的普通文件不需要任何新底座就能满足其中大部分诉求。
+***** Comments
+- 防止被锁定的最好办法之一就是基于文件。Obsidian 就是个好例子，用户把数据原样留着，然后继续过日子。
+- 整篇文章都对，也说到了点子上，但现实是大多数人仍然不会自己搭环境。这只适用于一小部分用户。
+- GPL 的核心也是想解决同一个问题，但大多数商用软件依然非常僵硬。
+** Nissan's third generation e-POWER powertrain :cars:hybrid:engineering:nissan:
+:PROPERTIES:
+:ID:       49872883
+:URL:      https://www.nissan-global.com/EN/INNOVATION/TECHNOLOGY/ARCHIVE/E_POWER_GEN3/
+:HN_URL:   https://news.ycombinator.com/item?id=49872883
+:POINTS:   73
+:COMMENTS: 90
+:BY:       mroche
+:END:
+
+*** TLDR
+Nissan's page for the third generation of e-POWER, a series hybrid where the engine only generates electricity and never drives the wheels. New in this version: a 5-in-1 module combining motor, reducer, inverter, increaser and generator, flat wire motor coils, double-sided inverter cooling, and silicon carbide semiconductors in some variants. Two engines are built specifically for generation, the naturally aspirated long-stroke HR14DDe and the turbocharged ZR15DDTe using Nissan's STARC combustion concept, both running high compression and high EGR at a constant speed. Parts are shared with Nissan's 3-in-1 EV powertrain to cut cost. Nissan claims better fuel economy and less noise than the second-generation Qashqai system, but publishes charts rather than numbers.
+
+*** Take
+Running an engine at exactly one operating point is the sound way to burn gasoline, and Nissan has now spent three generations sharpening it. The awkward part is timing: this is the most refined version of a bridge technology, arriving while the bridge is being argued over, and a page that shows efficiency as an unlabeled chart is not making the case any easier.
+
+*** Comments
+
+**** dluan
+Like putting in the final optimizations in the crossbow right as others have figured out machine guns.
+
+**** bob1029
+If we can consider fixed RPM operation and are willing to endure turbomachinery, I don't know why we wouldn't just go all in on a gas turbine. Far fewer moving parts and a much wider range of fuels.
+
+**** gcanyon
+It always puzzled me how the gas engines in hybrids are so efficient: constant RPM and a stroke geometry where the power stroke is longer than the other strokes.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La tercera generación del sistema e-POWER de Nissan
+***** TLDR
+La página de Nissan sobre la tercera generación de e-POWER, un híbrido en serie donde el motor de gasolina solo genera electricidad y nunca mueve las ruedas. Novedades: un módulo 5 en 1 que combina motor eléctrico, reductora, inversor, elevador de tensión y generador; bobinas de hilo plano en el motor; refrigeración del inversor por ambas caras; y semiconductores de carburo de silicio en algunas variantes. Hay dos motores construidos específicamente para generar, el HR14DDe atmosférico de carrera larga y el ZR15DDTe turboalimentado con el concepto de combustión STARC de Nissan, ambos con alta compresión y alta EGR a régimen constante. Se comparten piezas con el propulsor eléctrico 3 en 1 para abaratar costes. Nissan afirma mejor consumo y menos ruido que el sistema de segunda generación del Qashqai, pero publica gráficas en vez de cifras.
+***** Take
+Hacer funcionar un motor en un único punto de operación es la forma sensata de quemar gasolina, y Nissan lleva ya tres generaciones afinándola. Lo incómodo es el momento: esta es la versión más refinada de una tecnología puente, y llega mientras se discute el puente entero. Una página que muestra la eficiencia como una gráfica sin números no ayuda a defenderla.
+***** Comments
+- Como meter las últimas optimizaciones en la ballesta justo cuando otros han descubierto la ametralladora.
+- Si aceptamos funcionamiento a régimen fijo y estamos dispuestos a aguantar turbomaquinaria, no sé por qué no apostar directamente por una turbina de gas. Muchas menos piezas móviles y una gama de combustibles mucho más amplia.
+- Siempre me desconcertó lo eficientes que son los motores de gasolina en los híbridos: régimen constante y una geometría donde la carrera de expansión es más larga que las demás.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Nissans e-POWER-Antrieb der dritten Generation
+***** TLDR
+Nissans Seite zur dritten Generation von e-POWER, einem seriellen Hybrid, bei dem der Verbrenner nur Strom erzeugt und die Räder nie antreibt. Neu sind ein 5-in-1-Modul aus Elektromotor, Getriebe, Inverter, Hochsetzsteller und Generator, Flachdrahtwicklungen im Motor, beidseitige Inverterkühlung und in einigen Varianten Siliziumkarbid-Halbleiter. Zwei Motoren sind eigens zur Stromerzeugung gebaut: der saugende Langhuber HR14DDe und der aufgeladene ZR15DDTe mit Nissans STARC-Brennverfahren, beide mit hoher Verdichtung und hoher AGR-Rate bei konstanter Drehzahl. Teile werden mit Nissans 3-in-1-E-Antrieb geteilt, um Kosten zu senken. Nissan verspricht geringeren Verbrauch und weniger Geräusch als beim Qashqai-System der zweiten Generation, veröffentlicht dazu aber Diagramme statt Zahlen.
+***** Take
+Einen Motor in genau einem Betriebspunkt laufen zu lassen, ist die vernünftige Art, Benzin zu verbrennen, und Nissan verfeinert sie nun in dritter Generation. Unangenehm ist das Timing: Das ist die ausgereifteste Version einer Brückentechnologie, und sie kommt, während über die Brücke selbst gestritten wird. Eine Seite, die Effizienz als unbeschriftetes Diagramm zeigt, macht die Sache nicht leichter.
+***** Comments
+- Als würde man die letzten Optimierungen an der Armbrust einbauen, während andere gerade das Maschinengewehr erfunden haben.
+- Wenn wir feste Drehzahl akzeptieren und Turbomaschinen in Kauf nehmen, weiß ich nicht, warum wir nicht gleich auf eine Gasturbine setzen. Deutlich weniger bewegte Teile und eine viel größere Kraftstoffbandbreite.
+- Mich hat immer verblüfft, wie effizient die Verbrenner in Hybriden sind: konstante Drehzahl und eine Hubgeometrie, bei der der Arbeitstakt länger ist als die anderen Takte.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+닛산 3세대 e-POWER 파워트레인
+***** TLDR
+엔진이 전기만 만들고 바퀴는 절대 굴리지 않는 직렬 하이브리드, 닛산 e-POWER 3세대에 대한 공식 페이지. 새로운 점은 모터, 감속기, 인버터, 승압기, 발전기를 하나로 묶은 5-in-1 모듈, 모터의 평각선 코일, 인버터의 양면 냉각, 일부 사양에 들어가는 탄화규소 반도체다. 발전 전용으로 만든 엔진이 두 가지인데, 자연흡기 장행정 HR14DDe와 닛산의 STARC 연소 개념을 쓰는 터보 ZR15DDTe로, 둘 다 높은 압축비와 높은 EGR로 일정한 회전수에서 돈다. 원가를 낮추려고 닛산의 3-in-1 전기 파워트레인과 부품을 공유한다. 닛산은 2세대 캐시카이 시스템보다 연비가 좋고 조용하다고 주장하지만, 수치 대신 그래프만 싣고 있다.
+***** Take
+엔진을 단 하나의 운전점에서만 돌리는 것은 휘발유를 태우는 합리적인 방식이고, 닛산은 이제 세 세대에 걸쳐 그것을 다듬었다. 곤란한 건 시점이다. 다리 자체를 두고 논쟁이 벌어지는 와중에 가교 기술의 가장 정교한 판본이 도착했다. 효율을 눈금 없는 그래프로 보여주는 페이지는 그 변호에 전혀 도움이 되지 않는다.
+***** Comments
+- 남들이 기관총을 알아낸 시점에 석궁의 마지막 최적화를 집어넣는 격이다.
+- 고정 회전수 운전을 받아들이고 터보 기계를 감수할 수 있다면, 아예 가스터빈으로 가지 않을 이유를 모르겠다. 움직이는 부품이 훨씬 적고 쓸 수 있는 연료 폭도 훨씬 넓다.
+- 하이브리드의 가솔린 엔진이 왜 그렇게 효율적인지 늘 궁금했다. 일정한 회전수, 그리고 팽창 행정이 다른 행정보다 긴 행정 구조 덕분이다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+日産の第3世代e-POWERパワートレイン
+***** TLDR
+エンジンが発電だけを担い、車輪は一切駆動しないシリーズハイブリッド、日産 e-POWER 第3世代の技術ページ。新しいのは、モーター、減速機、インバーター、昇圧機、発電機をまとめた 5-in-1 モジュール、モーターの平角線コイル、インバーターの両面冷却、一部仕様での炭化ケイ素半導体だ。発電専用に作られたエンジンは2種類で、自然吸気ロングストロークの HR14DDe と、日産の STARC 燃焼コンセプトを用いたターボの ZR15DDTe。いずれも高圧縮比と高 EGR で一定回転数を保つ。コスト低減のため 3-in-1 の EV パワートレインと部品を共用する。日産は第2世代キャシュカイのシステムより燃費が良く静かだとするが、数値ではなくグラフを載せるにとどまる。
+***** Take
+エンジンをただ一つの運転点で回すのは、ガソリンを燃やす理にかなったやり方で、日産はそれを三世代かけて磨いてきた。厄介なのは時期だ。橋そのものの是非が争われている最中に、つなぎの技術の最も洗練された版が届いた。効率を目盛りのないグラフで見せるページは、その擁護をまるで助けていない。
+***** Comments
+- 他人が機関銃を見つけたころに、クロスボウへ最後の最適化を入れているようなものだ。
+- 固定回転数の運転を受け入れ、ターボ機械を我慢できるなら、いっそガスタービンに振り切らない理由が分からない。可動部品ははるかに少なく、使える燃料の幅もずっと広い。
+- ハイブリッドのガソリンエンジンがなぜあれほど効率的なのか、ずっと不思議だった。一定回転数と、膨張行程が他の行程より長いストローク構造のおかげだ。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+日产第三代 e-POWER 动力系统
+***** TLDR
+日产第三代 e-POWER 的技术页面。这是一套串联式混动，发动机只负责发电，永远不驱动车轮。本代的新东西包括把电机、减速器、逆变器、升压器和发电机合为一体的 5 合 1 模块、电机的扁线绕组、逆变器双面冷却，以及部分版本采用的碳化硅半导体。两台发动机都是为发电专门设计的：自然吸气长行程的 HR14DDe，以及采用日产 STARC 燃烧概念的涡轮增压 ZR15DDTe，两者都以高压缩比和高 EGR 在恒定转速下运转。为降低成本，它与日产 3 合 1 纯电动力总成共用零件。日产称其油耗和噪音都优于第二代逍客上的系统，但页面给的是曲线图而不是具体数字。
+***** Take
+让发动机只在单一工况点运转，本来就是烧汽油最合理的方式，日产已经为此打磨了三代。尴尬的是时机：这是一项过渡技术最精致的版本，而它出现的时候，这座桥该不该走本身正在被争论。用一张没有刻度的曲线图来展示效率，对辩护毫无帮助。
+***** Comments
+- 就像别人已经搞出机枪了，你还在给弩做最后的优化。
+- 如果我们能接受固定转速运转、也愿意忍受涡轮机械，我不明白为什么不干脆上燃气轮机。运动部件少得多，可用燃料的范围也宽得多。
+- 我一直想不通混动里的汽油机为什么那么高效：恒定转速，加上做功行程比其他行程更长的冲程结构。
+** Lunar Terminator Paradox :astronomy:moon:visualization:science:
+:PROPERTIES:
+:ID:       49870837
+:URL:      https://notes.secretsauce.net/notes/2026/09/27_lunar-terminator-paradox.html
+:HN_URL:   https://news.ycombinator.com/item?id=49870837
+:POINTS:   85
+:COMMENTS: 54
+:BY:       dima55
+:END:
+
+*** TLDR
+After sunset, the lit side of the moon often appears to point upward rather than down toward the sun below the horizon. The author noticed it while camping and wrote a program, published on GitHub, that produces two plots: how a three-quarter moon's lit face looks as it climbs from the horizon to the zenith, and how the illumination changes as the sun moves from new-moon to full-moon geometry. The explanation is viewing geometry. We look up at the moon from below, so as it rises we see more of its unlit underside, and the lit region appears rotated upward rather than pointing at where the sun actually is.
+
+*** Take
+Half the thread says the author has conflated lunar elevation with phase, the other half re-derives the geometry from first principles with a basketball analogy, and nobody quite concedes. That is what happens when an optical illusion meets a crowd that reasons in coordinates. The plots are the part worth keeping; the word paradox is carrying a lot of weight.
+
+*** Comments
+
+**** j1mr10rd4n
+This article conflates lunar elevation and phase. Together with ambiguous use of up, down, above and below, it's hard to tell what the author's software is meant to visualise.
+
+**** fizzbuzzbarbazz
+You walk into a dark basketball court lit by one doorway. Even very drunk, you don't assume that spinning around lets you see more of the ball than you already do.
+
+**** nojs
+The sun doesn't set because the sun or earth moves, it sets because the earth spins. There's no reason the setting sun should change which part of the moon is illuminated.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La paradoja del terminador lunar
+***** TLDR
+Tras la puesta de sol, la parte iluminada de la luna suele parecer apuntar hacia arriba en vez de hacia abajo, hacia el sol ya bajo el horizonte. El autor lo notó acampando y escribió un programa, publicado en GitHub, que genera dos gráficas: cómo se ve la cara iluminada de una luna en tres cuartos mientras sube del horizonte al cenit, y cómo cambia la iluminación al desplazarse el sol de la geometría de luna nueva a la de luna llena. La explicación es la geometría de observación: miramos la luna desde abajo, así que al subir vemos más de su parte inferior no iluminada, y la región iluminada parece girada hacia arriba en lugar de señalar dónde está realmente el sol.
+***** Take
+Media discusión dice que el autor confunde la elevación lunar con la fase, la otra media vuelve a deducir la geometría desde cero con una analogía de baloncesto, y nadie cede del todo. Eso pasa cuando una ilusión óptica se encuentra con un público que razona en coordenadas. Las gráficas son lo que merece la pena guardar; la palabra paradoja está haciendo mucho trabajo.
+***** Comments
+- Este artículo confunde elevación lunar y fase. Sumado al uso ambiguo de arriba, abajo, sobre y bajo, cuesta saber qué pretende visualizar el software del autor.
+- Entras en una cancha de baloncesto a oscuras iluminada por una sola puerta. Aunque vayas muy borracho, no supones que girar sobre ti mismo te dejará ver más pelota de la que ya ves.
+- El sol no se pone porque el sol o la tierra se muevan, se pone porque la tierra gira. No hay razón para que la puesta de sol cambie qué parte de la luna está iluminada.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das Paradox des Mondterminators
+***** TLDR
+Nach Sonnenuntergang scheint die beleuchtete Seite des Mondes oft nach oben zu zeigen statt nach unten zur längst untergegangenen Sonne. Dem Autor fiel das beim Zelten auf, und er schrieb ein Programm, veröffentlicht auf GitHub, das zwei Diagramme erzeugt: wie die beleuchtete Seite eines zu drei Vierteln vollen Mondes aussieht, während er vom Horizont zum Zenit steigt, und wie sich die Beleuchtung ändert, wenn die Sonne von der Neumond- zur Vollmondgeometrie wandert. Die Erklärung ist die Beobachtungsgeometrie: Wir schauen von unten zum Mond hinauf, sehen mit steigender Höhe mehr von seiner unbeleuchteten Unterseite, und der helle Bereich wirkt nach oben gedreht, statt dorthin zu zeigen, wo die Sonne tatsächlich steht.
+***** Take
+Die eine Hälfte des Threads sagt, der Autor verwechsle Mondhöhe mit Phase, die andere leitet die Geometrie mit einer Basketball-Analogie neu her, und niemand gibt wirklich nach. So endet es, wenn eine optische Täuschung auf ein Publikum trifft, das in Koordinaten denkt. Die Diagramme sind der bleibende Teil; das Wort Paradox trägt hier sehr schwer.
+***** Comments
+- Der Artikel vermischt Mondhöhe und Phase. Zusammen mit dem unklaren Gebrauch von oben, unten, über und unter ist schwer zu erkennen, was die Software des Autors eigentlich zeigen soll.
+- Du betrittst eine dunkle Basketballhalle, beleuchtet nur von einer Tür. Selbst sehr betrunken nimmst du nicht an, dass du durch Drehen mehr vom Ball siehst als ohnehin schon.
+- Die Sonne geht nicht unter, weil Sonne oder Erde sich bewegen, sondern weil die Erde sich dreht. Es gibt keinen Grund, warum der Sonnenuntergang ändern sollte, welcher Teil des Mondes beleuchtet ist.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+달 명암경계선의 역설
+***** TLDR
+해가 진 뒤에도 달의 밝은 쪽은 지평선 아래의 태양을 향해 아래를 가리키는 대신 위를 향하는 것처럼 보일 때가 많다. 저자는 캠핑 중에 이를 알아차리고 GitHub에 공개한 프로그램을 만들었다. 이 프로그램은 두 종류의 그림을 그린다. 4분의 3쯤 찬 달이 지평선에서 천정까지 올라가는 동안 밝은 면이 어떻게 보이는지, 그리고 태양이 삭에서 망의 배치로 옮겨갈 때 조명이 어떻게 달라지는지다. 설명은 관측 기하학이다. 우리는 달을 아래에서 올려다보기 때문에 달이 높이 뜰수록 어두운 아랫면을 더 많이 보게 되고, 밝은 영역은 태양의 실제 방향을 가리키는 대신 위로 돌아간 것처럼 보인다.
+***** Take
+스레드의 절반은 저자가 달의 고도와 위상을 혼동했다고 말하고, 나머지 절반은 농구공 비유로 기하학을 처음부터 다시 유도하며, 누구도 완전히 물러서지 않는다. 착시가 좌표로 사고하는 집단과 만나면 이렇게 된다. 남길 만한 것은 그림이고, 역설이라는 단어가 지나치게 많은 일을 하고 있다.
+***** Comments
+- 이 글은 달의 고도와 위상을 뒤섞는다. 위, 아래, 위쪽, 아래쪽이라는 말을 모호하게 쓰다 보니 저자의 프로그램이 무엇을 보여주려는 건지 알기 어렵다.
+- 문 하나에서 들어오는 빛뿐인 어두운 농구 코트에 들어선다고 해보자. 아무리 취했어도, 제자리에서 돈다고 공이 더 많이 보이리라고 생각하지는 않는다.
+- 해가 지는 건 태양이나 지구가 이동해서가 아니라 지구가 자전하기 때문이다. 해가 진다고 달의 어느 쪽이 밝은지가 달라질 이유는 없다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+月の明暗境界線のパラドックス
+***** TLDR
+日没後、月の明るい側は地平線の下にある太陽の方へ下を向くのではなく、しばしば上を向いて見える。著者はキャンプ中にそれに気づき、GitHub で公開したプログラムを書いた。このプログラムは二つの図を描く。四分の三ほど満ちた月が地平線から天頂へ昇るあいだ、明るい面がどう見えるか。そして太陽が新月の配置から満月の配置へ移るとき、照らされ方がどう変わるか。説明は観測の幾何にある。私たちは月を下から見上げているので、月が高く昇るほど照らされていない下側を多く見ることになり、明るい部分は太陽の実際の方向を指す代わりに上へ回転して見える。
+***** Take
+スレッドの半分は著者が月の高度と位相を取り違えていると言い、もう半分はバスケットボールの比喩で幾何を一から導き直し、誰も完全には引き下がらない。錯視が座標で考える集団に出会うとこうなる。残す価値があるのは図のほうで、パラドックスという語が相当な重荷を背負っている。
+***** Comments
+- この記事は月の高度と位相を混同している。上、下、above、below の使い方も曖昧で、著者のソフトが何を可視化したいのか分かりにくい。
+- 戸口の明かりひとつだけの暗いバスケットコートに入るとする。どれだけ酔っていても、その場で回れば今より多くボールが見えるとは思わないはずだ。
+- 日が沈むのは太陽や地球が移動するからではなく、地球が自転するからだ。日没が月のどの部分を照らすかを変える理由はない。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+月球明暗界线的悖论
+***** TLDR
+日落之后，月亮被照亮的一侧常常看上去朝上，而不是朝下指向已落到地平线以下的太阳。作者是在露营时注意到这一点的，随后写了一个程序（已发布在 GitHub 上），生成两张图：一张是四分之三盈月从地平线升到天顶的过程中，亮面看起来如何变化；另一张是太阳从新月位置移到满月位置时，受照情况如何改变。解释在于观测几何：我们是从下方仰望月亮的，月亮升得越高，我们看到的未被照亮的底面就越多，于是亮区看起来像是向上旋转，而不是指向太阳的真实方位。
+***** Take
+评论区一半人说作者把月亮的高度角和月相混为一谈，另一半人用篮球场的比喻从头重新推导几何，谁也没真正让步。当一个视觉错觉遇上一群用坐标思考的人，结果就是这样。值得留下的是那两张图，而「悖论」这个词承担得有点多了。
+***** Comments
+- 这篇文章把月亮的高度角和月相混在一起了。再加上「上」「下」「above」「below」用得含糊，很难看出作者的软件到底想可视化什么。
+- 假设你走进一个漆黑的篮球场，只有门口有一盏灯。就算你醉得厉害，也不会以为原地转圈能让你看到比现在更多的球面。
+- 太阳落山不是因为太阳或地球在移动，而是因为地球在自转。没有理由认为日落会改变月亮哪一部分被照亮。
