@@ -1,0 +1,510 @@
+#+TITLE: HN Digest 2026-09-29 11:00 UTC
+#+DATE: 2026-09-29T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A 0.8B classifier hits 79%, 200 million Brazilian records sat behind one sloppy flaw, and a 1993 Stratus server never crashed once
+
+* Highlights
+- Jeff: 0.8B decision models, ~30 ms, trained in two hours on one GPU
+- Goebeklitepe: the bones scattered because the hill moved, not the mourners
+- A Stratus server ran from 1993 to 2017 with zero unplanned shutdowns
+
+* Stories
+
+** Jeff - Jev-compatible 0.8B decision models, trained at home, ~30 ms :ai:local-models:classification:qwen:
+:PROPERTIES:
+:ID:       49883844
+:URL:      https://github.com/firelex/jeff
+:HN_URL:   https://news.ycombinator.com/item?id=49883844
+:POINTS:   505
+:COMMENTS: 192
+:BY:       firelex
+:END:
+
+*** TLDR
+Three fine-tuned small models (Qwen3.5-0.8B, Qwen3.5-2B, Gemma4-E2B) that take a situation plus a list of options in plain language and return a calibrated probability per option in a single forward pass, with no text generation. Median latency is 22-29 ms on an RTX PRO 6000, 28-60 ms on an M4 Max via MLX, and 463-1000 ms on 32 CPU threads. Accuracy across five public datasets runs 79.1% for the 0.8B to 83.1% for the 2B. Training ran on one RTX PRO 6000: about 2 hours for the 0.8B, 3.5 hours for the 2B, one epoch, batches of 256, synthetic data. Code is MIT, weights Apache 2.0. It copies Jev's request format and states it is not affiliated with TypeSafe.
+
+*** Take
+The accuracy number is the story, not the 30 ms. Scoring 79% on a classifier you can retrain overnight for one GPU-day means a lot of route-this-ticket work never needed an API call. But the commenters asking why an embedder plus logistic regression would not match this deserve a reply the README does not give.
+
+*** Comments
+
+**** vektormemory
+Can someone remove the extra LLM and just have an embedder do the classifier work? It's turning into pimp my llm...
+
+**** olwmc
+Do we have actual clear implementation details for Jev? I keep seeing these recreations and I find it strange.
+
+**** hadlock
+For a more impressive example, laya-duum uses a micropython Doom implementation and plays through the first two levels with the standard jev api.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Jeff - 兼容 Jev 的 0.8B 决策模型，家里训练，约 30 毫秒
+***** TLDR
+三个微调小模型（Qwen3.5-0.8B、Qwen3.5-2B、Gemma4-E2B），输入自然语言描述的情境和选项列表，单次前向传播返回每个选项的校准概率，不生成文本。中位延迟在 RTX PRO 6000 上为 22-29 毫秒，M4 Max 走 MLX 为 28-60 毫秒，32 线程 CPU 为 463-1000 毫秒。五个公开数据集上的准确率从 0.8B 的 79.1% 到 2B 的 83.1%。训练只用一张 RTX PRO 6000：0.8B 约 2 小时，2B 约 3.5 小时，单轮，批量 256，合成数据。代码 MIT，权重 Apache 2.0。它沿用了 Jev 的请求格式，并声明与 TypeSafe 无关。
+***** Take
+重点是准确率，不是 30 毫秒。一个一晚上、一个 GPU 日就能重训的分类器能到 79%，说明大量「把这张工单分到哪个队列」的活儿本来就不需要调 API。但评论里问「为什么用嵌入加逻辑回归做不到同样效果」的人，没有从 README 里得到答案。
+***** Comments
+- 能不能把多出来的那个 LLM 去掉，直接用嵌入模型做分类？这越来越像给 LLM 硬加改装件了……
+- Jev 到底有没有公开清楚的实现细节？我一直看到这些复刻版，觉得很奇怪。
+- 有个更厉害的例子：laya-duum 用 micropython 版 Doom，靠标准 jev api 打通了前两关。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Jeff - Jev互換の0.8B意思決定モデル、自宅で訓練、約30ms
+***** TLDR
+ファインチューニング済みの小型モデル3種（Qwen3.5-0.8B、Qwen3.5-2B、Gemma4-E2B）。自然言語で状況と選択肢のリストを渡すと、テキスト生成なしで1回の順伝播ごとに各選択肢の校正済み確率を返す。中央値レイテンシはRTX PRO 6000で22-29ms、MLX経由のM4 Maxで28-60ms、32スレッドCPUで463-1000ms。公開データセット5件での精度は0.8Bが79.1%、2Bが83.1%。訓練はRTX PRO 6000を1枚だけ使い、0.8Bが約2時間、2Bが約3.5時間、1エポック、バッチ256、合成データ。コードはMIT、重みはApache 2.0。Jevのリクエスト形式を踏襲しているが、TypeSafeとは無関係だと明記している。
+***** Take
+注目すべきは精度で、30msではない。1GPU日で一晩再訓練できる分類器が79%に届くなら、「この問い合わせをどのキューに送るか」という作業の多くは最初からAPI呼び出しを必要としていなかった。ただし、埋め込みとロジスティック回帰で同じことができないのかと問うコメントに、READMEは答えていない。
+***** Comments
+- 余分なLLMを外して、埋め込みモデルだけで分類させられないのか。LLMの改造自慢みたいになってきた……
+- Jevの実装詳細は本当に公開されているのか。この手の再現版ばかり見かけるのが不思議だ。
+- もっと面白い例がある。laya-duumはmicropython版Doomを使い、標準のjev apiで最初の2面をクリアする。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Jeff - Jev 호환 0.8B 의사결정 모델, 집에서 훈련, 약 30ms
+***** TLDR
+파인튜닝된 소형 모델 세 개(Qwen3.5-0.8B, Qwen3.5-2B, Gemma4-E2B). 자연어로 상황과 선택지 목록을 주면 텍스트 생성 없이 단일 순전파로 각 선택지의 보정된 확률을 돌려준다. 중간값 지연은 RTX PRO 6000에서 22-29ms, MLX를 쓴 M4 Max에서 28-60ms, 32스레드 CPU에서 463-1000ms다. 공개 데이터셋 다섯 개 기준 정확도는 0.8B가 79.1%, 2B가 83.1%. 훈련은 RTX PRO 6000 한 장으로 0.8B는 약 2시간, 2B는 약 3.5시간, 1에폭, 배치 256, 합성 데이터를 썼다. 코드는 MIT, 가중치는 Apache 2.0. Jev의 요청 형식을 그대로 쓰지만 TypeSafe와는 무관하다고 밝힌다.
+***** Take
+핵심은 정확도이고 30ms가 아니다. GPU 하루치로 밤새 재훈련할 수 있는 분류기가 79%에 닿는다면, 티켓을 어느 큐로 보낼지 정하는 일 대부분은 애초에 API 호출이 필요 없었다는 뜻이다. 다만 임베딩에 로지스틱 회귀만 붙여도 같은 결과가 나오지 않느냐는 댓글에 README는 답하지 않는다.
+***** Comments
+- 추가된 LLM을 빼고 임베딩 모델만으로 분류를 시킬 수 없나? 점점 LLM 튜닝 자랑 대회가 되고 있다……
+- Jev의 구현 세부사항이 실제로 공개돼 있나? 이런 재현판만 계속 보이는 게 이상하다.
+- 더 인상적인 예가 있다. laya-duum은 micropython 버전 Doom을 쓰고 표준 jev api로 첫 두 레벨을 끝까지 깬다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Jeff: modelos de decisión de 0,8B compatibles con Jev, entrenados en casa, ~30 ms
+***** TLDR
+Tres modelos pequeños ajustados (Qwen3.5-0.8B, Qwen3.5-2B, Gemma4-E2B) que reciben una situación y una lista de opciones en lenguaje natural y devuelven una probabilidad calibrada por opción en una sola pasada, sin generar texto. La latencia mediana es de 22-29 ms en una RTX PRO 6000, 28-60 ms en un M4 Max vía MLX y 463-1000 ms en CPU con 32 hilos. La precisión en cinco conjuntos de datos públicos va del 79,1% del modelo de 0,8B al 83,1% del de 2B. El entrenamiento usó una sola RTX PRO 6000: unas 2 horas para el 0,8B y 3,5 para el 2B, una época, lotes de 256 y datos sintéticos. Código MIT, pesos Apache 2.0. Copia el formato de peticiones de Jev y aclara que no tiene relación con TypeSafe.
+***** Take
+Lo relevante es la precisión, no los 30 ms. Que un clasificador que puedes reentrenar en una noche por el coste de un día de GPU alcance el 79% significa que mucho trabajo de clasificar tickets nunca necesitó una llamada a una API. Pero quienes preguntan en los comentarios por qué un embedding con regresión logística no daría lo mismo merecen una respuesta que el README no ofrece.
+***** Comments
+- ¿Alguien puede quitar el LLM extra y dejar que un modelo de embeddings haga la clasificación? Esto se está convirtiendo en tunear LLM por deporte...
+- ¿Existen detalles claros de implementación de Jev? Veo estas recreaciones todo el tiempo y me resulta extraño.
+- Hay un ejemplo mejor: laya-duum usa una implementación de Doom en micropython y completa los dos primeros niveles con la api estándar de jev.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Jeff - Jev-kompatible 0,8B-Entscheidungsmodelle, zu Hause trainiert, ~30 ms
+***** TLDR
+Drei feinabgestimmte kleine Modelle (Qwen3.5-0.8B, Qwen3.5-2B, Gemma4-E2B), die eine Situation plus Optionsliste in natürlicher Sprache entgegennehmen und in einem einzigen Forward-Pass eine kalibrierte Wahrscheinlichkeit pro Option zurückgeben, ohne Text zu generieren. Die mediane Latenz liegt bei 22-29 ms auf einer RTX PRO 6000, 28-60 ms auf einem M4 Max über MLX und 463-1000 ms auf 32 CPU-Threads. Die Genauigkeit über fünf öffentliche Datensätze reicht von 79,1% beim 0,8B bis 83,1% beim 2B. Trainiert wurde auf einer einzigen RTX PRO 6000: rund 2 Stunden für das 0,8B, 3,5 Stunden für das 2B, eine Epoche, Batches von 256, synthetische Daten. Code unter MIT, Gewichte unter Apache 2.0. Das Projekt übernimmt Jevs Anfrageformat und stellt klar, dass es nicht zu TypeSafe gehört.
+***** Take
+Die Genauigkeit ist die Nachricht, nicht die 30 ms. Wenn ein Klassifikator, den man über Nacht für einen GPU-Tag neu trainiert, 79% erreicht, dann brauchte viel Ticket-Sortierarbeit nie einen API-Aufruf. Die Kommentare, die fragen, warum Embeddings plus logistische Regression das nicht genauso schaffen, bekommen im README allerdings keine Antwort.
+***** Comments
+- Kann man das zusätzliche LLM nicht weglassen und die Klassifikation einfach von einem Embedding-Modell machen lassen? Das wird langsam zum LLM-Tuning-Wettbewerb...
+- Gibt es tatsächlich klare Implementierungsdetails zu Jev? Ich sehe ständig diese Nachbauten und finde das seltsam.
+- Es gibt ein beeindruckenderes Beispiel: laya-duum nutzt eine Doom-Implementierung in micropython und spielt die ersten zwei Level mit der Standard-jev-api durch.
+** The systems that no one will test :security:ai:government:privacy:
+:PROPERTIES:
+:ID:       49876052
+:URL:      https://blog.christianperone.com/2026/09/the-systems-that-no-one-will-test/
+:HN_URL:   https://news.ycombinator.com/item?id=49876052
+:POINTS:   73
+:COMMENTS: 30
+:BY:       perone
+:END:
+
+*** TLDR
+Christian Perone describes finding a flaw in a Brazilian federal database in 2020 that exposed ID, CPF, passport, birthplace, parents' names, driver's licence, addresses and phone numbers for more than 200 million citizens, including witness protection status. He reported it and it was patched quickly. His argument: the flaw "didn't require any extraordinary expertise, just attention to detail", and frontier labs are now scaling reinforcement learning environments that train agents to do exactly that kind of probing, citing an OpenAI incident report where agents found SSRF paths through internal systems. Governments that cannot afford AI-assisted penetration testing will be the ones found first.
+
+*** Take
+The strongest objection is in the thread, not the post: attackers already had attention to detail, what changes is the price. But teiferer names the real disease. A bike shop in a small town holds itself to a higher standard than the average shop shipping a 200-million-record government database, and "software is software" is how that keeps being acceptable.
+
+*** Comments
+
+**** teiferer
+"Software is software" is the problem. Every bike shop in my little town is better on quality than the average software shop, and a software engineer gets paid 10x.
+
+**** kitd
+Can't escape the feeling the original vulnerability was deliberately planted as a way for law enforcement or criminal orgs to expedite investigations.
+
+**** Modified3019
+Relevant: The Work Number is an Equifax-owned database of employment and pay information you can just log into and pull.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+没人会去测试的那些系统
+***** TLDR
+Christian Perone 讲述他在 2020 年发现巴西一个联邦数据库的漏洞，该漏洞暴露了两亿多公民的身份证号、CPF、护照、出生地、父母姓名、驾照、住址和电话，还包括证人保护状态。他上报后很快被修补。他的论点是：这个漏洞「不需要什么特别本事，只需要细心」，而前沿实验室正在大规模扩建强化学习环境，训练智能体做的正是这种试探。他引用了 OpenAI 的一份事故报告，其中智能体通过内部系统找到了 SSRF 路径。付不起 AI 辅助渗透测试的政府会最先被找上门。
+***** Take
+最有力的反驳在评论区，不在文章里：攻击者本来就有细心，变的是价格。但 teiferer 点出了真正的病根。小镇上的自行车店对质量的要求，都高于那些交付两亿条记录政府数据库的团队，而「软件就是软件」正是这件事能一直被接受的理由。
+***** Comments
+- 「软件就是软件」才是问题所在。我们小镇上任何一家自行车店在质量上都胜过一般的软件公司，而软件工程师的薪水是十倍。
+- 我总觉得这个漏洞是故意留的，好让执法机构或犯罪组织「加快」调查。
+- 相关：The Work Number 是 Equifax 旗下的就业和薪资数据库，你注册个账号就能把数据拉出来。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+誰もテストしないシステム
+***** TLDR
+Christian Peroneは2020年、ブラジルの連邦データベースに欠陥を見つけたと述べている。2億人を超える市民のID、CPF、パスポート、出生地、両親の氏名、運転免許、住所、電話番号が露出しており、証人保護の該当状況まで含まれていた。報告すると速やかに修正された。彼の主張はこうだ。その欠陥は「並外れた専門知識ではなく、注意深さだけで足りた」。そして先端の研究所はいま、まさにその種の探りを学習させる強化学習環境を大規模に整備している。根拠として、エージェントが内部システム経由でSSRFの経路を見つけたOpenAIのインシデント報告を挙げる。AI支援のペネトレーションテストを買えない政府が、最初に見つけられる側になる。
+***** Take
+最も強い反論は記事ではなくスレッドにある。攻撃者はもともと注意深かったのであり、変わるのは価格だ。ただしteifererが本当の病巣を指している。小さな町の自転車屋のほうが、2億件の政府データベースを納品する平均的な会社より品質基準が高い。「ソフトウェアはソフトウェアだ」という態度が、それを許し続ける仕組みになっている。
+***** Comments
+- 「ソフトウェアはソフトウェアだ」という態度こそが問題だ。うちの小さな町の自転車屋はどこも平均的なソフトウェア会社より品質が高いのに、ソフトウェアエンジニアは10倍もらっている。
+- この脆弱性は、法執行機関か犯罪組織が捜査を「早める」ために意図的に仕込んだのではという感覚が拭えない。
+- 関連：The Work NumberはEquifax傘下の雇用と給与のデータベースで、ログインを作れば引き出せる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+아무도 시험하지 않을 시스템들
+***** TLDR
+Christian Perone은 2020년 브라질 연방 데이터베이스에서 결함을 찾아낸 일을 이야기한다. 2억 명이 넘는 시민의 신분증 번호, CPF, 여권, 출생지, 부모 이름, 운전면허, 주소, 전화번호가 노출돼 있었고 증인보호 대상 여부까지 포함돼 있었다. 신고하자 빠르게 수정됐다. 그의 논지는 이렇다. 그 결함은 "특별한 전문성이 아니라 세심함만 필요했다". 그런데 최전선 연구소들은 지금 바로 그런 식의 탐색을 학습시키는 강화학습 환경을 대규모로 늘리고 있다. 근거로 에이전트가 내부 시스템을 거쳐 SSRF 경로를 찾아낸 OpenAI 사고 보고서를 든다. AI 기반 침투 테스트를 감당할 수 없는 정부가 가장 먼저 발각되는 쪽이 된다.
+***** Take
+가장 강한 반론은 글이 아니라 댓글에 있다. 공격자는 원래 세심했고, 달라지는 것은 가격이다. 다만 teiferer가 진짜 병인을 짚는다. 작은 마을 자전거 가게가 2억 건짜리 정부 데이터베이스를 납품하는 평균적인 회사보다 품질 기준이 높다. "소프트웨어는 소프트웨어다"라는 태도가 그것을 계속 용인되게 만든다.
+***** Comments
+- "소프트웨어는 소프트웨어다"라는 태도가 문제다. 우리 동네 자전거 가게는 어디든 평균적인 소프트웨어 회사보다 품질이 낫고, 소프트웨어 엔지니어는 10배를 받는다.
+- 이 취약점이 수사를 "신속하게" 하려는 수사기관이나 범죄 조직을 위해 의도적으로 심어졌다는 느낌을 지울 수 없다.
+- 관련: The Work Number는 Equifax 소유의 고용·급여 데이터베이스인데, 로그인만 만들면 데이터를 뽑을 수 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los sistemas que nadie va a poner a prueba
+***** TLDR
+Christian Perone cuenta que en 2020 encontró un fallo en una base de datos federal brasileña que exponía documento de identidad, CPF, pasaporte, lugar de nacimiento, nombres de los padres, permiso de conducir, direcciones y teléfonos de más de 200 millones de ciudadanos, incluida la condición de protección de testigos. Lo reportó y se corrigió rápido. Su argumento: el fallo "no requería ninguna pericia extraordinaria, solo atención al detalle", y los laboratorios punteros están escalando entornos de aprendizaje por refuerzo que entrenan a los agentes en exactamente ese tipo de sondeo, citando un informe de incidente de OpenAI donde los agentes encontraron rutas SSRF a través de sistemas internos. Los gobiernos que no pueden pagar pruebas de penetración asistidas por IA serán los primeros en ser encontrados.
+***** Take
+La objeción más fuerte está en los comentarios, no en el texto: los atacantes ya tenían atención al detalle, lo que cambia es el precio. Pero teiferer señala la enfermedad de fondo. Un taller de bicicletas de pueblo se exige más que la empresa media que entrega una base de datos estatal de 200 millones de registros, y "el software es software" es la frase que hace que eso siga siendo aceptable.
+***** Comments
+- "El software es software" es el problema. Cualquier taller de bicicletas de mi pueblo cuida más la calidad que la empresa de software media, y un ingeniero de software cobra diez veces más.
+- No puedo quitarme la sensación de que la vulnerabilidad original se plantó a propósito para que la policía o el crimen organizado pudieran agilizar investigaciones.
+- Relacionado: The Work Number es una base de datos de empleo y salarios propiedad de Equifax a la que basta crearse un usuario para consultarla.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Systeme, die niemand testen wird
+***** TLDR
+Christian Perone schildert, wie er 2020 eine Lücke in einer brasilianischen Bundesdatenbank fand, die Ausweisnummer, CPF, Pass, Geburtsort, Namen der Eltern, Führerschein, Adressen und Telefonnummern von mehr als 200 Millionen Bürgern offenlegte, samt Zeugenschutzstatus. Er meldete sie, sie wurde schnell geschlossen. Sein Argument: die Lücke "erforderte keine außergewöhnliche Expertise, nur Aufmerksamkeit für Details", und die führenden Labore skalieren gerade Reinforcement-Learning-Umgebungen, die Agenten genau dieses Abtasten beibringen. Er verweist auf einen OpenAI-Vorfallsbericht, in dem Agenten SSRF-Wege durch interne Systeme fanden. Regierungen, die sich KI-gestützte Penetrationstests nicht leisten können, werden zuerst gefunden.
+***** Take
+Der stärkste Einwand steht im Thread, nicht im Beitrag: Angreifer hatten Aufmerksamkeit für Details schon vorher, was sich ändert, ist der Preis. Aber teiferer benennt die eigentliche Krankheit. Ein Fahrradladen in einer Kleinstadt hält höhere Qualitätsmaßstäbe als der durchschnittliche Betrieb, der eine Behördendatenbank mit 200 Millionen Datensätzen ausliefert, und "Software ist Software" ist der Satz, der das weiterhin durchgehen lässt.
+***** Comments
+- "Software ist Software" ist das Problem. Jeder Fahrradladen in meiner Kleinstadt achtet mehr auf Qualität als die durchschnittliche Softwarefirma, und ein Softwareentwickler verdient das Zehnfache.
+- Ich komme nicht von dem Gefühl weg, dass die ursprüngliche Lücke absichtlich gelegt wurde, damit Strafverfolger oder kriminelle Organisationen Ermittlungen beschleunigen können.
+- Passend dazu: The Work Number ist eine Equifax-Datenbank mit Beschäftigungs- und Gehaltsdaten, für die man sich einfach ein Konto anlegen und abfragen kann.
+** MicroLLM Lab - Try 7 tiny LLMs in the browser :ai:webgpu:browser:local-models:
+:PROPERTIES:
+:ID:       49882781
+:URL:      https://stateofutopia.com/experiments/microllmlab/
+:HN_URL:   https://news.ycombinator.com/item?id=49882781
+:POINTS:   248
+:COMMENTS: 86
+:BY:       logicallee
+:END:
+
+*** TLDR
+A browser page that downloads and runs language models between 25M and 360M parameters locally, using WebGPU with fallbacks to WebAssembly and plain JavaScript. Four-bit quantization cuts the memory footprint by about 75%, so a model download lands around 50 to 84 MB. The benchmarks score objective checks (regex and exact tokens) rather than writing quality, and the site is upfront that these models are a triage layer, not reasoners: "A 135M model is allowed to fail - that is the measurement." It needs to be served over HTTP, not opened as a local file. Firefox users in the thread hit an undefined GPUShaderStage error; Chromium works.
+
+*** Take
+Click it for the failure modes rather than the leaderboard. One commenter got PetitGPT to answer that cats are not animals, then in the next sentence that cats are warm-blooded animals with a backbone and a heart. That single output tells you what 135M parameters buys more clearly than any chart on the page, which is exactly what the author says the benchmark is for.
+
+*** Comments
+
+**** touchme
+Q: Is a cat an animal? Answer yes or no. A: Cats are not animals. Cats are warm-blooded animals that have a backbone and a heart. Good job PetitGPT research-v1.
+
+**** langurmonkey
+Not loading for me on Firefox 156 on Arch: Uncaught ReferenceError: GPUShaderStage is not defined. Works fine on Chromium.
+
+**** demibabs
+Cool project, but the text is too small and it's way too dense. I have to scroll past a page of mostly useless AI-generated text before reaching the interface.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+MicroLLM Lab - 在浏览器里试 7 个微型 LLM
+***** TLDR
+一个网页，在本地下载并运行 25M 到 360M 参数的语言模型，主要用 WebGPU，并可回退到 WebAssembly 和纯 JavaScript。四位量化把内存占用削掉约 75%，单个模型下载量落在 50 到 84 MB 左右。基准测试打分用的是客观检查（正则和精确 token），不评判文笔，站点也直言这些模型是分流层而非推理器：「135M 的模型允许失败，那正是测量本身。」它必须通过 HTTP 提供，不能当本地文件打开。评论里 Firefox 用户遇到 GPUShaderStage 未定义的报错，Chromium 正常。
+***** Take
+值得点开的是它的失败方式，不是排行榜。一位评论者让 PetitGPT 回答猫是不是动物，模型先说猫不是动物，紧接着说猫是有脊椎和心脏的温血动物。这一段输出比页面上任何图表都更清楚地说明 135M 参数能买到什么，而作者说基准测试的用途本来就是这个。
+***** Comments
+- 问：猫是动物吗？回答是或不是。答：猫不是动物。猫是有脊椎和心脏的温血动物。干得好，PetitGPT research-v1。
+- 在 Arch 上的 Firefox 156 加载不了：Uncaught ReferenceError: GPUShaderStage is not defined。Chromium 上正常。
+- 项目不错，但字太小、信息太密。我得先滚过一整页基本没用的 AI 生成文字才能看到真正的界面。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+MicroLLM Lab - ブラウザで7つの超小型LLMを試す
+***** TLDR
+25Mから360Mパラメータの言語モデルをローカルにダウンロードして動かすウェブページ。WebGPUを使い、WebAssemblyと素のJavaScriptにフォールバックする。4ビット量子化でメモリ使用量が約75%減り、モデルのダウンロードは50から84MB程度に収まる。ベンチマークは文章の質ではなく客観的な判定（正規表現と完全一致トークン）で採点し、サイト自身がこれらのモデルは推論器ではなく振り分け層だと明言している。「135Mのモデルは失敗してよい。それが測定なのだ」。ローカルファイルとしてではなくHTTP経由で配信する必要がある。スレッドではFirefoxユーザーがGPUShaderStage未定義のエラーに遭遇し、Chromiumでは動いた。
+***** Take
+見るべきはリーダーボードより失敗の仕方だ。あるコメント投稿者がPetitGPTに猫は動物かと尋ねると、猫は動物ではないと答え、次の文で猫は背骨と心臓を持つ温血動物だと答えた。この出力ひとつが、ページ上のどのグラフよりも135Mパラメータで買えるものを示している。作者が言うベンチマークの目的は、まさにそれだ。
+***** Comments
+- 問：猫は動物か。はいかいいえで答えよ。答：猫は動物ではありません。猫は背骨と心臓を持つ温血動物です。よくやった、PetitGPT research-v1。
+- ArchのFirefox 156では読み込めない。Uncaught ReferenceError: GPUShaderStage is not defined。Chromiumでは問題なし。
+- 面白い試みだが、文字が小さすぎて情報が詰まりすぎている。実際のインターフェースに着くまで、ほぼ無意味なAI生成テキストを1ページ分スクロールさせられる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+MicroLLM Lab - 브라우저에서 초소형 LLM 7종 시험하기
+***** TLDR
+25M에서 360M 파라미터 사이의 언어 모델을 로컬에 내려받아 실행하는 웹페이지다. WebGPU를 쓰고 WebAssembly와 순수 JavaScript로 폴백한다. 4비트 양자화로 메모리 사용량이 약 75% 줄어 모델 다운로드는 50~84MB 수준이다. 벤치마크는 글의 품질이 아니라 객관적 검사(정규식과 정확한 토큰)로 채점하며, 사이트는 이 모델들이 추론기가 아니라 분류·전달 계층이라고 분명히 밝힌다. "135M 모델은 실패해도 된다. 그게 바로 측정이다." 로컬 파일이 아니라 HTTP로 서빙해야 한다. 댓글에서 Firefox 사용자들은 GPUShaderStage 미정의 오류를 만났고 Chromium에서는 잘 돌았다.
+***** Take
+리더보드보다 실패 방식을 보러 들어갈 만하다. 어떤 댓글 작성자가 PetitGPT에 고양이가 동물인지 묻자, 모델은 고양이는 동물이 아니라고 답하고 바로 다음 문장에서 고양이는 척추와 심장을 가진 온혈동물이라고 답했다. 이 한 번의 출력이 페이지의 어떤 그래프보다 135M 파라미터로 무엇을 얻는지 분명하게 보여준다. 저자가 말하는 벤치마크의 목적이 바로 그것이다.
+***** Comments
+- 질문: 고양이는 동물인가? 예 또는 아니오로 답하라. 답: 고양이는 동물이 아닙니다. 고양이는 척추와 심장을 가진 온혈동물입니다. 잘했다, PetitGPT research-v1.
+- Arch의 Firefox 156에서는 로드되지 않는다. Uncaught ReferenceError: GPUShaderStage is not defined. Chromium에서는 잘 된다.
+- 괜찮은 프로젝트지만 글자가 너무 작고 정보가 과하게 빽빽하다. 실제 인터페이스에 닿기까지 거의 쓸모없는 AI 생성 문장 한 페이지를 스크롤해야 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+MicroLLM Lab: prueba 7 LLM diminutos en el navegador
+***** TLDR
+Una página que descarga y ejecuta localmente modelos de lenguaje de entre 25M y 360M de parámetros, usando WebGPU con respaldo en WebAssembly y JavaScript puro. La cuantización de cuatro bits recorta la memoria en torno al 75%, así que la descarga de un modelo queda entre 50 y 84 MB. Las pruebas puntúan comprobaciones objetivas (expresiones regulares y tokens exactos) en lugar de la calidad de la escritura, y el sitio dice sin rodeos que estos modelos son una capa de triaje, no razonadores: "A un modelo de 135M se le permite fallar, eso es la medición". Hay que servirla por HTTP, no abrirla como archivo local. En el hilo, los usuarios de Firefox chocan con un error de GPUShaderStage no definido; en Chromium funciona.
+***** Take
+Merece la pena entrar por los modos de fallo, no por la tabla de resultados. Un comentarista consiguió que PetitGPT respondiera que los gatos no son animales y, en la frase siguiente, que los gatos son animales de sangre caliente con columna y corazón. Esa única salida explica qué compran 135M de parámetros mejor que cualquier gráfico de la página, que es justo para lo que el autor dice que sirve la prueba.
+***** Comments
+- P: ¿Es un gato un animal? Responde sí o no. R: Los gatos no son animales. Los gatos son animales de sangre caliente con columna y corazón. Buen trabajo, PetitGPT research-v1.
+- No me carga en Firefox 156 en Arch: Uncaught ReferenceError: GPUShaderStage is not defined. En Chromium va bien.
+- Buen proyecto, pero la letra es demasiado pequeña y está todo muy denso. Tengo que bajar una página entera de texto generado por IA, casi todo inútil, antes de llegar a la interfaz.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+MicroLLM Lab - 7 winzige LLMs im Browser ausprobieren
+***** TLDR
+Eine Webseite, die Sprachmodelle zwischen 25M und 360M Parametern lokal herunterlädt und ausführt, über WebGPU mit Rückfall auf WebAssembly und reines JavaScript. Vier-Bit-Quantisierung senkt den Speicherbedarf um etwa 75%, ein Modell-Download landet damit bei rund 50 bis 84 MB. Die Benchmarks bewerten objektive Prüfungen (Regex und exakte Tokens) statt Schreibqualität, und die Seite sagt offen, dass diese Modelle eine Triage-Schicht sind und keine Denker: "Ein 135M-Modell darf scheitern - genau das ist die Messung." Sie muss über HTTP ausgeliefert werden, nicht als lokale Datei geöffnet. Im Thread stoßen Firefox-Nutzer auf einen Fehler wegen undefiniertem GPUShaderStage; unter Chromium läuft es.
+***** Take
+Reinschauen lohnt wegen der Fehlerbilder, nicht wegen der Rangliste. Ein Kommentator brachte PetitGPT dazu zu antworten, Katzen seien keine Tiere, und im nächsten Satz, Katzen seien warmblütige Tiere mit Rückgrat und Herz. Diese eine Ausgabe zeigt deutlicher als jedes Diagramm der Seite, was 135M Parameter leisten, und genau dafür ist der Benchmark laut Autor gedacht.
+***** Comments
+- F: Ist eine Katze ein Tier? Antworte mit ja oder nein. A: Katzen sind keine Tiere. Katzen sind warmblütige Tiere mit Rückgrat und Herz. Gut gemacht, PetitGPT research-v1.
+- Lädt bei mir unter Firefox 156 auf Arch nicht: Uncaught ReferenceError: GPUShaderStage is not defined. Unter Chromium läuft es einwandfrei.
+- Schönes Projekt, aber die Schrift ist zu klein und alles viel zu dicht. Ich muss erst eine Seite überwiegend nutzlosen KI-Text durchscrollen, bevor ich zur eigentlichen Oberfläche komme.
+** 12,000-year-old Goebeklitepe burials explain scattered bones :archaeology:science:history:
+:PROPERTIES:
+:ID:       49855059
+:URL:      https://archaeologymag.com/2026/09/gobeklitepe-burials-hundreds-of-scattered-bones/
+:HN_URL:   https://news.ycombinator.com/item?id=49855059
+:POINTS:   140
+:COMMENTS: 36
+:BY:       yusufaytas
+:END:
+
+*** TLDR
+Gresky and Clare report the first two intact burials found at Goebeklitepe in Turkey, dated to the Pre-Pottery Neolithic B period, 8,700 to 8,000 BCE. One pit under a plaster floor held at least three people: a woman over 35, a man between 20 and 30, and a girl of 11 to 14. The second held a young adult woman on her left side facing east. The researchers compared bone damage in the graves, including rodent gnawing, calcareous deposits and soil pressure, against the 928 scattered fragments recovered since 1995. The patterns match, which points to burials beneath floors on the higher part of the settlement, with soil and remains carried downhill by erosion and slope slides across roughly 3,000 square metres.
+
+*** Take
+This is the unglamorous kind of result that clears a shelf of speculation. The bones are scattered because the hill moved, not because anyone scattered them. What it does not settle is the argument culi raises in the thread about whether Goebeklitepe implies complex society without agriculture, and it is worth being clear that taphonomy answers a different question than social structure.
+
+*** Comments
+
+**** culi
+More evidence for Graeber and Wengrow's reading of the site. Between Goebekli Tepe, Poverty Point and Cahokia we have good evidence of complex urban societies that did not rely on agriculture.
+
+**** mihaic
+It's not really clear to me what's so groundbreaking about this, especially given that Catalhuyuk already shows similar care for the dead not much later.
+
+**** ferrule
+Always assumed those scattered bones were just, well, scattered. It's cool how a new understanding of burial practices provides such a neat explanation.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+一万两千年前的哥贝克力石阵墓葬解释了散落的骸骨
+***** TLDR
+Gresky 与 Clare 报告了在土耳其哥贝克力石阵发现的首两处完整墓葬，年代属前陶新石器时代 B 期，公元前 8700 至 8000 年。石灰地板下的一个坑里至少埋了三人：一名 35 岁以上的女性、一名 20 至 30 岁的男性和一名 11 至 14 岁的女孩。第二处埋着一名侧卧左身、面朝东方的年轻成年女性。研究者把墓中骨骼的损伤特征，包括鼠类啃咬、钙质沉积和土壤压力痕迹，与 1995 年以来出土的 928 块散碎骨片作了比对。特征吻合，说明遗体原本埋在聚落较高处的地板之下，泥土和骸骨被侵蚀和坡地滑动带往下方，散布在约 3000 平方米的范围内。
+***** Take
+这是那种不起眼却能清掉一整架猜测的结果：骸骨散落是因为山坡在移动，不是有人把它们撒开。它没有解决的是评论里 culi 提出的争论，即哥贝克力石阵是否意味着无需农业的复杂社会。要说清楚一点：埋藏学回答的是另一个问题，不是社会结构。
+***** Comments
+- 这为 Graeber 和 Wengrow 对该遗址的解读增加了证据。从哥贝克力石阵到 Poverty Point 再到 Cahokia，我们有相当好的证据表明存在不依赖农业的复杂城市社会。
+- 我看不出这有什么特别开创性的地方，尤其考虑到恰塔霍裕克在不久之后就已经显示出类似的对待亡者的做法。
+- 我一直以为那些散落的骸骨就只是散落而已。新的丧葬习俗理解能给出这么利落的解释，挺有意思。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+1万2000年前のギョベクリ・テペの埋葬が散乱した骨を説明する
+***** TLDR
+GreskyとClareが、トルコのギョベクリ・テペで見つかった最初の2基の完全な埋葬を報告した。年代は先土器新石器時代B期、紀元前8700年から8000年。漆喰の床下の土坑には少なくとも3人が埋葬されていた。35歳を超える女性、20歳から30歳の男性、11歳から14歳の少女である。2基目には若い成人女性が左側を下にし、東を向いて横たわっていた。研究者は墓内の骨の損傷、すなわち齧歯類の食害、石灰質の付着、土圧による変形を、1995年以降に回収された928点の散乱した骨片と比較した。パターンが一致しており、遺体はもともと集落の高い場所の床下に埋葬され、土と遺骨が侵食と斜面崩落によって下方へ運ばれ、およそ3000平方メートルに広がったことを示している。
+***** Take
+派手さはないが、推測を棚ごと片づける種類の結果だ。骨が散っているのは丘が動いたからで、誰かが散らしたからではない。決着していないのは、ギョベクリ・テペが農業なしの複雑な社会を示すのかというculiがスレッドで提起した論点で、そこは明確にしておきたい。堆積過程が答えるのは社会構造とは別の問いである。
+***** Comments
+- GraeberとWengrowによるこの遺跡の読み方を補強する証拠だ。ギョベクリ・テペ、ポバティ・ポイント、カホキアを合わせると、農業に依存しない複雑な都市社会の証拠はかなり揃っている。
+- 何がそれほど画期的なのか正直よく分からない。少し後のチャタル・ヒュユクでも死者への同様の配慮は見られる。
+- あの散乱した骨は、単に散らばっているだけだと思い込んでいた。埋葬習慣の新しい理解がこれほど明快な説明を与えるのは面白い。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+1만 2000년 전 괴베클리테페 무덤이 흩어진 뼈를 설명하다
+***** TLDR
+Gresky와 Clare가 터키 괴베클리테페에서 발견된 첫 온전한 무덤 두 기를 보고했다. 연대는 선토기 신석기 B기로 기원전 8700년에서 8000년 사이다. 회반죽 바닥 아래 구덩이에는 최소 세 사람이 있었다. 35세가 넘은 여성, 20~30세 남성, 11~14세 소녀다. 두 번째 무덤에는 젊은 성인 여성이 왼쪽으로 누워 동쪽을 향해 있었다. 연구자들은 무덤 속 뼈의 손상, 즉 설치류가 갉은 흔적, 석회질 침착, 토압에 의한 변형을 1995년 이후 수거된 928개의 흩어진 뼈 조각과 비교했다. 양상이 일치하며, 시신이 본래 취락의 높은 쪽 바닥 아래에 묻혔고 흙과 유해가 침식과 사면 붕괴로 아래쪽으로 운반돼 약 3000제곱미터에 퍼졌음을 가리킨다.
+***** Take
+화려하지 않지만 추측 한 선반을 치워버리는 종류의 결과다. 뼈가 흩어진 것은 언덕이 움직였기 때문이고, 누가 흩어놓은 것이 아니다. 해결되지 않은 것은 괴베클리테페가 농경 없는 복잡 사회를 뜻하느냐는, culi가 댓글에서 꺼낸 논점이다. 분명히 해두자면 매장 후 변화 과정이 답하는 것은 사회 구조와 다른 질문이다.
+***** Comments
+- Graeber와 Wengrow의 유적 해석을 뒷받침하는 증거가 더 나온 셈이다. 괴베클리테페, 포버티 포인트, 카호키아를 합치면 농경에 의존하지 않은 복잡한 도시 사회의 증거가 꽤 탄탄하다.
+- 무엇이 그렇게 획기적인지 잘 모르겠다. 얼마 뒤의 차탈회윅에서도 죽은 이를 비슷하게 대한 모습이 이미 보인다.
+- 그 흩어진 뼈들은 그냥 흩어진 거라고만 생각했다. 매장 관습에 대한 새 이해가 이렇게 깔끔한 설명을 주는 게 멋지다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Unos enterramientos de hace 12.000 años en Goebeklitepe explican los huesos dispersos
+***** TLDR
+Gresky y Clare presentan los dos primeros enterramientos intactos hallados en Goebeklitepe, en Turquía, fechados en el Neolítico Precerámico B, entre 8.700 y 8.000 a. C. Una fosa bajo un suelo de yeso contenía al menos tres personas: una mujer de más de 35 años, un hombre de entre 20 y 30 y una niña de 11 a 14. La segunda albergaba a una mujer adulta joven tendida sobre el costado izquierdo y orientada al este. Los investigadores compararon los daños en los huesos de las tumbas, entre ellos roeduras de roedores, depósitos calcáreos y deformación por presión del suelo, con los 928 fragmentos dispersos recuperados desde 1995. Los patrones coinciden, lo que apunta a enterramientos bajo los suelos de la parte alta del asentamiento, con tierra y restos arrastrados cuesta abajo por la erosión y los deslizamientos de ladera a lo largo de unos 3.000 metros cuadrados.
+***** Take
+Es el tipo de resultado sin brillo que despeja un estante entero de especulaciones: los huesos están dispersos porque la colina se movió, no porque alguien los dispersara. Lo que no resuelve es el debate que plantea culi en el hilo sobre si Goebeklitepe implica una sociedad compleja sin agricultura, y conviene decirlo claro: la tafonomía responde a una pregunta distinta de la estructura social.
+***** Comments
+- Más pruebas a favor de la lectura del yacimiento que hacen Graeber y Wengrow. Entre Goebekli Tepe, Poverty Point y Cahokia tenemos buena evidencia de sociedades urbanas complejas que no dependían de la agricultura.
+- No me queda claro qué tiene esto de revolucionario, sobre todo porque Catalhuyuk ya muestra un cuidado parecido con los muertos poco después.
+- Siempre asumí que esos huesos dispersos estaban, bueno, simplemente dispersos. Es bonito que una nueva comprensión de las prácticas funerarias dé una explicación tan limpia.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+12.000 Jahre alte Bestattungen in Goebeklitepe erklären die verstreuten Knochen
+***** TLDR
+Gresky und Clare berichten über die ersten zwei intakten Bestattungen, die in Goebeklitepe in der Türkei gefunden wurden, datiert auf das präkeramische Neolithikum B, 8.700 bis 8.000 v. Chr. Eine Grube unter einem Gipsboden enthielt mindestens drei Menschen: eine Frau über 35, einen Mann zwischen 20 und 30 und ein Mädchen von 11 bis 14 Jahren. In der zweiten lag eine junge erwachsene Frau auf der linken Seite mit Blick nach Osten. Die Forschenden verglichen die Knochenschäden in den Gräbern, darunter Nagespuren von Nagetieren, Kalkablagerungen und Verformung durch Bodendruck, mit den 928 verstreuten Fragmenten, die seit 1995 geborgen wurden. Die Muster stimmen überein, was auf Bestattungen unter den Böden im höher gelegenen Teil der Siedlung hindeutet, wobei Erde und Überreste durch Erosion und Hangrutsche über etwa 3.000 Quadratmeter bergab getragen wurden.
+***** Take
+Das ist die unspektakuläre Art von Ergebnis, die ein ganzes Regal an Spekulation ausräumt: Die Knochen liegen verstreut, weil sich der Hügel bewegt hat, nicht weil jemand sie verstreut hat. Nicht geklärt ist die Frage, die culi im Thread aufwirft, ob Goebeklitepe eine komplexe Gesellschaft ohne Landwirtschaft belegt. Man sollte es deutlich sagen: Taphonomie antwortet auf eine andere Frage als Sozialstruktur.
+***** Comments
+- Weitere Belege für die Lesart des Ortes von Graeber und Wengrow. Zusammen mit Goebekli Tepe, Poverty Point und Cahokia haben wir gute Hinweise auf komplexe städtische Gesellschaften, die nicht auf Landwirtschaft beruhten.
+- Mir ist nicht klar, was daran so wegweisend sein soll, zumal Catalhuyuk kurz darauf schon eine ähnliche Sorge um die Toten zeigt.
+- Ich hatte immer angenommen, dass die verstreuten Knochen einfach verstreut waren. Schön, dass ein neues Verständnis der Bestattungspraxis so eine saubere Erklärung liefert.
+** Booted up in 1993, this server still runs - but not for much longer (2017) :hardware:retrocomputing:reliability:history:
+:PROPERTIES:
+:ID:       49870376
+:URL:      https://www.computerworld.com/article/1673071/booted-up-in-1993-this-server-still-runs-but-not-for-much-longer-2.html
+:HN_URL:   https://news.ycombinator.com/item?id=49870376
+:POINTS:   62
+:COMMENTS: 20
+:BY:       doener
+:END:
+
+*** TLDR
+A January 2017 Computerworld piece on a Stratus fault-tolerant server at the Great Lakes Works steel plant in Dearborn, Michigan. It was booted in 1993 and was still running 24 years later on roughly 80% original hardware, with a build of Stratus's proprietary VOS operating system last updated in the early 2000s and a green-screen character interface. It won Stratus's 2010 longevity contest as the company's longest-running system, and the operator could not recall a single unplanned shutdown: it never went down on its own from a fault it could not handle. U.S. Steel bought Great Lakes Works in 2015 and scheduled the replacement upgrade for April 2017.
+
+*** Take
+colonwqbang has the line of the thread: 24 years is not long for a machine to do one job, and airliners stay in service past 50. The server did not last because VOS was magic. It lasted because the scope never changed and nobody was allowed to add features. That constraint, not the hardware, is the part our industry cannot reproduce.
+
+*** Comments
+
+**** colonwqbang
+24 years is not such a long time for a machine to keep doing what it's supposed to be doing. It says something about our profession that we find it surprising. There are airliners in service over 50 years.
+
+**** nineteen999
+We ran Stratus VOS on Continuum hardware at a lottery company. It handled the jackpot system deciding which of 13,500 poker machines would pay out. Never failed once.
+
+**** mech422
+I started on Stratus machines right out of high school. Pure hardware fault tolerance, and Tandem wasn't. VOS was decent too, if not all the utils you expect on a unix box.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+1993 年开机的这台服务器还在跑，但快到头了（2017）
+***** TLDR
+2017 年 1 月《Computerworld》的一篇报道，讲的是密歇根州迪尔伯恩 Great Lakes Works 钢厂里一台 Stratus 容错服务器。它 1993 年开机，24 年后仍在运行，约 80% 是原装硬件，跑的是 Stratus 自家的 VOS 操作系统，最后一次更新是在 2000 年代初，界面是绿屏字符终端。它在 2010 年赢得了 Stratus 的长寿服务器评比，是该公司当时运行时间最长的系统，操作员想不起有过一次非计划停机：它从未因为自己扛不住的故障而自行宕机。美国钢铁公司在 2015 年收购了 Great Lakes Works，并把替换升级排在 2017 年 4 月。
+***** Take
+评论里 colonwqbang 说得最到位：一台机器干同一件事 24 年并不算长，客机服役超过 50 年。这台服务器能撑下来不是因为 VOS 有什么魔法，而是因为它的职责从未变过，没人被允许往上加功能。真正无法复制的是这个约束，而不是硬件。
+***** Comments
+- 一台机器持续做它该做的事，24 年并不算长。我们觉得这很惊人，反倒说明了我们这个行业的问题。有些客机服役已经超过 50 年。
+- 我们在一家彩票公司用 Continuum 硬件跑 Stratus VOS，它负责的奖池系统决定 13500 台扑克机里哪一台中奖。一次都没出过故障。
+- 我高中一毕业就开始碰 Stratus 机器。那是纯硬件容错，Tandem 不是。VOS 也不错，只是没有 unix 上那一套齐全的工具。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+1993年に起動したこのサーバーはまだ動いている、ただしもう長くはない（2017）
+***** TLDR
+ミシガン州ディアボーンのGreat Lakes Works製鉄所にあるStratusのフォールトトレラント・サーバーを扱った2017年1月のComputerworldの記事。1993年に起動し、24年後もおよそ80%が当初のハードウェアのまま稼働していた。OSはStratus独自のVOSで、最後の更新は2000年代初頭、画面はグリーンスクリーンの文字端末である。2010年にはStratus社内で最も長く動いているシステムとして長寿コンテストで優勝した。運用担当者は計画外の停止を一度も思い出せないという。自ら処理できない障害でダウンしたことがなかった。U.S. Steelが2015年にGreat Lakes Worksを買収し、置き換えのアップグレードを2017年4月に予定した。
+***** Take
+スレッドで最も的を射ているのはcolonwqbangだ。機械が同じ仕事を24年続けるのは長いことではなく、旅客機は50年を超えて飛んでいる。このサーバーが生き延びたのはVOSが魔法だったからではない。役割が変わらず、誰も機能を追加できなかったからだ。再現できないのはハードウェアではなく、その制約のほうである。
+***** Comments
+- 機械が本来の仕事を続けるのに24年は長くない。それを驚くべきことだと感じる点に、我々の職業の問題が表れている。50年以上飛んでいる旅客機もある。
+- 宝くじ会社でContinuumハードウェア上のStratus VOSを運用していた。1万3500台のポーカーマシンのどれが当たるかを決めるジャックポットシステムを担っていて、一度も落ちなかった。
+- 高校を出てすぐStratusの機械を触り始めた。あれは純粋なハードウェア・フォールトトレランスで、Tandemは違った。VOSも悪くない。unixで期待するユーティリティが全部揃っているわけではないが。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+1993년에 켠 이 서버는 아직 돌아간다, 다만 오래 남지 않았다 (2017)
+***** TLDR
+미시간주 디어본의 Great Lakes Works 제철소에 있는 Stratus 무정지 서버를 다룬 2017년 1월 Computerworld 기사다. 1993년에 부팅해 24년이 지난 시점에도 약 80%가 원래 하드웨어 그대로 돌아가고 있었다. 운영체제는 Stratus 자체 VOS이고 마지막 갱신은 2000년대 초반, 화면은 녹색 문자 단말이다. 2010년에는 사내에서 가장 오래 가동된 시스템으로 Stratus의 장수 서버 대회에서 우승했다. 운영자는 계획 외 정지를 단 한 번도 기억하지 못했다. 스스로 감당하지 못한 장애로 멈춘 적이 없었다는 뜻이다. U.S. Steel이 2015년에 Great Lakes Works를 인수하고 교체 업그레이드를 2017년 4월로 잡았다.
+***** Take
+댓글에서 가장 정확한 말은 colonwqbang의 것이다. 기계가 한 가지 일을 24년 하는 건 긴 시간이 아니고, 여객기는 50년을 넘겨 난다. 이 서버가 버틴 이유는 VOS가 마법이었기 때문이 아니다. 역할이 바뀌지 않았고 누구도 기능을 더할 수 없었기 때문이다. 우리 업계가 재현할 수 없는 것은 하드웨어가 아니라 그 제약이다.
+***** Comments
+- 기계가 제 할 일을 계속하는 데 24년은 긴 시간이 아니다. 우리가 그걸 놀랍게 여긴다는 점이 이 직업에 대해 뭔가를 말해준다. 50년 넘게 운항하는 여객기도 있다.
+- 복권 회사에서 Continuum 하드웨어로 Stratus VOS를 돌렸다. 포커 머신 1만 3500대 중 어느 것이 당첨될지 정하는 잭팟 시스템을 맡았고, 한 번도 실패하지 않았다.
+- 고등학교를 마치자마자 Stratus 기계를 만졌다. 순수한 하드웨어 무정지 방식이었고 Tandem은 아니었다. VOS도 괜찮았다. unix에서 기대하는 유틸리티가 다 있지는 않았지만.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Arrancado en 1993, este servidor sigue funcionando, pero no por mucho más (2017)
+***** TLDR
+Un artículo de Computerworld de enero de 2017 sobre un servidor tolerante a fallos de Stratus en la acería Great Lakes Works de Dearborn, Michigan. Se arrancó en 1993 y 24 años después seguía en marcha con alrededor del 80% del hardware original, con una versión del sistema operativo propietario VOS de Stratus actualizada por última vez a principios de los 2000 y una interfaz de caracteres de pantalla verde. Ganó el concurso de longevidad de Stratus en 2010 como el sistema más antiguo en funcionamiento de la compañía, y el operador no recordaba ni una sola parada no planificada: nunca cayó por sí solo por un fallo que no pudiera manejar. U.S. Steel compró Great Lakes Works en 2015 y programó la actualización de reemplazo para abril de 2017.
+***** Take
+La mejor frase del hilo es la de colonwqbang: 24 años no es mucho para que una máquina haga un solo trabajo, y hay aviones de pasajeros en servicio más de 50. El servidor no duró porque VOS fuera mágico. Duró porque su alcance nunca cambió y a nadie se le permitió añadirle funciones. Esa restricción, no el hardware, es la parte que nuestro sector no consigue reproducir.
+***** Comments
+- 24 años no es tanto tiempo para que una máquina siga haciendo lo que debe hacer. Dice algo de nuestra profesión que nos parezca sorprendente. Hay aviones comerciales en servicio desde hace más de 50 años.
+- Usábamos Stratus VOS sobre hardware Continuum en una empresa de lotería. Gestionaba el sistema de premios que decidía cuál de 13.500 máquinas de póker pagaba. No falló ni una vez.
+- Empecé con máquinas Stratus al salir del instituto. Era tolerancia a fallos puramente por hardware, y Tandem no lo era. VOS también era decente, aunque no traía todas las utilidades que esperas en una máquina unix.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+1993 gestartet, dieser Server läuft noch - aber nicht mehr lange (2017)
+***** TLDR
+Ein Computerworld-Artikel von Januar 2017 über einen fehlertoleranten Stratus-Server im Stahlwerk Great Lakes Works in Dearborn, Michigan. Er wurde 1993 gestartet und lief 24 Jahre später noch mit rund 80% Originalhardware, mit einem Stand des hauseigenen Stratus-Betriebssystems VOS, der letztmals Anfang der 2000er aktualisiert wurde, und einer Zeichenoberfläche im Greenscreen-Stil. 2010 gewann er den Langlebigkeitswettbewerb von Stratus als das am längsten laufende System des Unternehmens, und der Betreiber konnte sich an keine einzige ungeplante Abschaltung erinnern: der Server fiel nie von selbst wegen eines Fehlers aus, den er nicht bewältigen konnte. U.S. Steel kaufte Great Lakes Works 2015 und setzte die Ersatzmodernisierung auf April 2017.
+***** Take
+Den besten Satz im Thread hat colonwqbang: 24 Jahre sind nicht lang für eine Maschine, die eine Aufgabe erledigt, und Verkehrsflugzeuge fliegen über 50 Jahre. Der Server hielt nicht, weil VOS Magie war. Er hielt, weil sich der Aufgabenumfang nie änderte und niemand Funktionen hinzufügen durfte. Diese Beschränkung, nicht die Hardware, ist der Teil, den unsere Branche nicht reproduzieren kann.
+***** Comments
+- 24 Jahre sind keine so lange Zeit für eine Maschine, die weiter tut, was sie tun soll. Es sagt etwas über unseren Berufsstand, dass wir das überraschend finden. Es gibt Verkehrsflugzeuge, die seit über 50 Jahren im Einsatz sind.
+- Wir betrieben Stratus VOS auf Continuum-Hardware bei einem Lotterieunternehmen. Es steuerte das Jackpot-System, das entschied, welcher von 13.500 Pokerautomaten auszahlt. Es fiel nicht ein einziges Mal aus.
+- Ich habe direkt nach der Schule mit Stratus-Maschinen angefangen. Das war reine Hardware-Fehlertoleranz, Tandem war es nicht. VOS war auch ordentlich, wenn auch ohne all die Werkzeuge, die man auf einer Unix-Kiste erwartet.
