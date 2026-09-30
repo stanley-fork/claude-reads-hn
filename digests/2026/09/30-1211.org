@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-09-30 12:11 UTC
+#+DATE: 2026-09-30T12:11:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Pi ships the MCP it spent a year mocking, a stranger hands Last.fm back its RSS, and a dental atlas built in three days gets told it built nothing
+
+* Highlights
+- Pi reversed its no-MCP stance: the sandbox interpreter it needed anyway paid for the integration
+- lfm.xiffy.nl rebuilds the feeds Last.fm cut in 2015, no JS, no trackers
+- Dental Scope: 32 teeth, five dissection levels, MIT code, 20 commits over 3 days
+- JBR-001 is CC0 but its brain is a Qualcomm-based Arduino with no clones
+- A Facet plus naga test catches WGSL and Rust struct drift before it needs a reboot
+
+* Stories
+
+** Pi.dev: You Said No MCP :mcp:ai:agents:protocols:
+:PROPERTIES:
+:ID:       49906637
+:URL:      https://earendil.com/posts/you-said-no-mcp/
+:HN_URL:   https://news.ycombinator.com/item?id=49906637
+:POINTS:   153
+:COMMENTS: 63
+:BY:       yarapavan
+:END:
+
+*** TLDR
+Earendil, the team behind the Pi coding agent, spent a year publicly dismissing MCP, including a post by Mario Zechner arguing it was unnecessary. MCP is now in Pi's core. The stated reasons: the protocol improved, and the work required to support it was useful anyway, because what MCP needs and what Pi needs are the same thing, a sandbox interpreter. The mechanism is Codemode, a JavaScript orchestration layer that runs in the trusted harness rather than the untrusted sandbox, lets tools return structured data instead of text-optimised strings, keeps session state in the transcript rather than the filesystem, and ships as WASM binaries. Their worked example pulls 167 open issues from Linear over MCP, classifies frustration sentiment with Jev, and returns structured results in seconds. They still say MCP composes badly and want it closer to OpenAPI with real tool discovery.
+
+*** Take
+The reversal is not that MCP got good, it is that MCP got unavoidable, and the interpreter Pi needed for other reasons made the integration cheap. Read the complaint carefully and it is not about the wire format: it is that most MCP servers are written for harnesses that dump every tool into the context window. Codemode routes around those servers rather than fixing them, which works and does not scale to an ecosystem.
+
+*** Comments
+
+**** _fw
+:PROPERTIES:
+:COMMENT_ID: 49906865
+:END:
+I appreciate their reluctance towards MCP, but /something/ is better than nothing. It's suboptimal for the reasons the author outlines, but so is USB-C, so is NVME, so is HDMI. We use these in spite of their flaws because they're widely compatible and easy for the end user.
+
+**** praveenvijayan
+:PROPERTIES:
+:COMMENT_ID: 49907731
+:END:
+Codemode isn't replacing MCP, it's fixing MCP's biggest flaw. The script doesn't write code itself, it acts as workflow automation: it pulls data from an issue tracker, delegates the analysis to a model, and synthesizes the results.
+
+**** KronisLV
+:PROPERTIES:
+:COMMENT_ID: 49906964
+:END:
+I feel the same way about needing support for sub-agents, those feel pretty foundational to me. A smart model driving multiple dumber models for work, then sub-agents with the same smart model for adversarial review, will be a pretty common pattern.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Pi.dev：你们不是说不要 MCP 吗
+***** TLDR
+Pi 编程代理背后的团队 Earendil 公开贬低 MCP 一年之久，其中包括 Mario Zechner 一篇认为它没有必要的文章。现在 MCP 进了 Pi 的核心。给出的理由是：协议本身改进了，而且支持它所需的改动本来就有用，因为 MCP 需要的和 Pi 需要的是同一样东西，一个沙箱解释器。实现方式叫 Codemode，一个 JavaScript 编排层，运行在受信任的 harness 里而不是不受信任的沙箱里，让工具返回结构化数据而不是为文本优化的字符串，把会话状态保存在对话记录而不是文件系统里，并以 WASM 二进制形式分发。他们的示例通过 MCP 从 Linear 拉取 167 个未关闭的 issue，用 Jev 分类情绪，几秒内返回结构化结果。他们仍然认为 MCP 难以组合，希望它更接近 OpenAPI 并具备真正的工具发现能力。
+***** Take
+这次转向不是因为 MCP 变好了，而是因为 MCP 变得无法回避，而 Pi 出于其他原因本来就要做的解释器让这次集成变得便宜。仔细看他们的抱怨，问题不在协议本身：而在于多数 MCP 服务器是为那种把所有工具一股脑塞进上下文窗口的 harness 写的。Codemode 绕开了这些服务器，而不是修好它们，这行得通，但撑不起一个生态。
+***** Comments
+- 我理解他们对 MCP 的抵触，但有个东西总比没有好。它确实像作者说的那样不理想，可 USB-C、NVME、HDMI 也一样。我们用这些技术是因为它们兼容性广、对终端用户友好。
+- Codemode 不是要取代 MCP，而是在修 MCP 最大的缺陷。脚本本身不写代码，它做的是工作流自动化：从 issue 跟踪系统拉数据，把分析交给模型，再综合结果。
+- 我对子代理支持的需求有同感，那东西对我来说很基础。一个聪明模型驱动多个笨模型干活，再用同一个聪明模型的子代理做对抗式审查，这会成为很常见的模式。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Pi.dev：MCPはやらないと言っていたはずだ
+***** TLDR
+Piコーディングエージェントを開発するEarendilは、Mario Zechnerによる不要論の記事を含め、1年にわたって公然とMCPを否定してきた。そのMCPが今やPiのコアに入った。理由は二つ。プロトコル自体が改善したこと、そして対応に必要な変更がもともと有用だったこと。MCPが必要とするものとPiが必要とするものは同じ、サンドボックスのインタプリタだからだ。仕組みはCodemodeと呼ばれ、信頼できないサンドボックスではなく信頼されたharness側で動くJavaScriptのオーケストレーション層で、ツールはテキスト最適化された文字列ではなく構造化データを返し、セッション状態はファイルシステムではなくトランスクリプトに保持され、WASMバイナリとして配布される。実例ではMCP経由でLinearから167件のオープンissueを取得し、Jevで不満の感情を分類して数秒で構造化結果を返す。それでもMCPは合成が難しく、OpenAPIに近い形と本物のツール発見が望ましいと述べている。
+***** Take
+方針転換の理由はMCPが良くなったからではなく、避けられなくなったからであり、Piが別の目的で必要だったインタプリタが統合を安くした。不満をよく読むと、問題はワイヤフォーマットではない。多くのMCPサーバーが、全ツールをコンテキストに投げ込むharness向けに書かれていることだ。Codemodeはそうしたサーバーを直すのではなく迂回する。動きはするが、エコシステム全体には通用しない。
+***** Comments
+- MCPへの抵抗感は理解できるが、何もないより何かある方がいい。著者の指摘どおり最適ではないが、USB-CもNVMEもHDMIも同じだ。互換性が広くエンドユーザーに簡単だから、欠点があっても使われている。
+- CodemodeはMCPを置き換えるのではなく、MCP最大の欠陥を直している。スクリプト自体はコードを書かず、ワークフロー自動化として動く。issueトラッカーからデータを取り、分析をモデルに委ね、結果をまとめる。
+- サブエージェント対応が必要という点は同感で、あれは基礎的だと思う。賢いモデルが複数の劣るモデルを動かし、同じ賢いモデルのサブエージェントが敵対的レビューをする形はよくあるパターンになるだろう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Pi.dev: MCP는 안 한다고 했잖아
+***** TLDR
+Pi 코딩 에이전트를 만든 Earendil은 Mario Zechner의 불필요론 글을 포함해 1년 동안 공개적으로 MCP를 깎아내렸다. 그 MCP가 이제 Pi 코어에 들어갔다. 이유는 두 가지다. 프로토콜 자체가 개선되었고, 지원에 필요한 변경이 애초에 유용했다는 것이다. MCP가 필요한 것과 Pi가 필요한 것이 같은 물건, 즉 샌드박스 인터프리터이기 때문이다. 구현체는 Codemode로, 신뢰할 수 없는 샌드박스가 아니라 신뢰된 harness에서 돌아가는 자바스크립트 오케스트레이션 계층이다. 도구는 텍스트에 최적화된 문자열 대신 구조화된 데이터를 반환하고, 세션 상태는 파일시스템이 아니라 대화 기록에 남으며, WASM 바이너리로 배포된다. 예시에서는 MCP로 Linear에서 열린 이슈 167건을 가져와 Jev로 불만 감정을 분류하고 몇 초 만에 구조화된 결과를 돌려준다. 그럼에도 MCP는 조합이 어렵고, OpenAPI에 가까운 형태와 제대로 된 도구 탐색이 필요하다고 말한다.
+***** Take
+입장을 바꾼 이유는 MCP가 좋아졌기 때문이 아니라 피할 수 없게 되었기 때문이고, Pi가 다른 이유로 어차피 필요했던 인터프리터가 통합 비용을 낮췄다. 불만을 자세히 보면 문제는 와이어 포맷이 아니다. 대부분의 MCP 서버가 모든 도구를 컨텍스트에 쏟아붓는 harness를 전제로 작성되었다는 점이다. Codemode는 그런 서버를 고치는 대신 우회한다. 동작은 하지만 생태계 규모로는 확장되지 않는다.
+***** Comments
+- MCP를 꺼리는 마음은 이해하지만, 아무것도 없는 것보다는 뭐라도 있는 게 낫다. 저자가 지적한 이유로 최적은 아니지만 USB-C도, NVME도, HDMI도 마찬가지다. 호환성이 넓고 사용자에게 쉬우니 결함이 있어도 쓰는 것이다.
+- Codemode는 MCP를 대체하는 게 아니라 MCP의 가장 큰 결함을 고치는 것이다. 스크립트 자체는 코드를 쓰지 않고 워크플로 자동화로 동작한다. 이슈 트래커에서 데이터를 가져와 분석을 모델에 맡기고 결과를 종합한다.
+- 서브에이전트 지원이 필요하다는 데 동의한다. 그건 기초에 가깝다. 똑똑한 모델이 여러 덜 똑똑한 모델을 굴리고, 같은 똑똑한 모델의 서브에이전트가 반대편에서 검토하는 방식은 흔한 패턴이 될 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Pi.dev: dijiste que nada de MCP
+***** TLDR
+Earendil, el equipo detrás del agente de programación Pi, pasó un año descartando MCP en público, incluido un post de Mario Zechner que lo consideraba innecesario. MCP ya está en el núcleo de Pi. Las razones que dan: el protocolo mejoró y el trabajo necesario para soportarlo era útil de todos modos, porque lo que necesita MCP y lo que necesita Pi es lo mismo, un intérprete en sandbox. El mecanismo se llama Codemode, una capa de orquestación en JavaScript que corre en el harness de confianza y no en el sandbox no confiable, deja que las herramientas devuelvan datos estructurados en vez de cadenas optimizadas para texto, guarda el estado de sesión en la transcripción y no en el sistema de archivos, y se distribuye como binarios WASM. Su ejemplo toma 167 issues abiertos de Linear vía MCP, clasifica el sentimiento de frustración con Jev y devuelve resultados estructurados en segundos. Siguen diciendo que MCP compone mal y que debería parecerse más a OpenAPI con descubrimiento real de herramientas.
+***** Take
+El giro no es que MCP se haya vuelto bueno, es que se volvió inevitable, y el intérprete que Pi necesitaba por otros motivos abarató la integración. Si se lee con cuidado, la queja no es sobre el formato del protocolo: es que la mayoría de servidores MCP están escritos para harnesses que vuelcan todas las herramientas en la ventana de contexto. Codemode esquiva esos servidores en lugar de arreglarlos, lo cual funciona y no escala a un ecosistema.
+***** Comments
+- Entiendo su reticencia hacia MCP, pero algo es mejor que nada. Es subóptimo por las razones que expone el autor, pero también lo son USB-C, NVME y HDMI. Usamos esas tecnologías a pesar de sus defectos porque son ampliamente compatibles y fáciles para el usuario final.
+- Codemode no reemplaza a MCP, arregla su mayor defecto. El script no escribe código, funciona como automatización de flujos: saca datos de un gestor de issues, delega el análisis a un modelo y sintetiza los resultados.
+- Comparto la necesidad de soporte para subagentes, me parece algo fundamental. Un modelo listo dirigiendo varios modelos más tontos, y luego subagentes con el mismo modelo listo para una revisión adversarial, será un patrón muy común.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Pi.dev: Ihr habt doch kein MCP gesagt
+***** TLDR
+Earendil, das Team hinter dem Coding-Agenten Pi, hat MCP ein Jahr lang öffentlich abgelehnt, inklusive eines Posts von Mario Zechner, der es für unnötig hielt. Jetzt steckt MCP im Kern von Pi. Die genannten Gründe: das Protokoll hat sich verbessert, und die nötigen Änderungen waren ohnehin nützlich, weil MCP und Pi dasselbe brauchen, einen Interpreter in einer Sandbox. Der Mechanismus heißt Codemode, eine JavaScript-Orchestrierungsschicht, die im vertrauenswürdigen Harness läuft und nicht in der unsicheren Sandbox. Werkzeuge liefern strukturierte Daten statt textoptimierter Strings, der Sitzungszustand liegt im Transkript statt im Dateisystem, und das Ganze wird als WASM-Binaries ausgeliefert. Ihr Beispiel holt 167 offene Issues über MCP aus Linear, klassifiziert Frustrationsstimmung mit Jev und liefert in Sekunden strukturierte Ergebnisse. Sie halten MCP weiterhin für schlecht komponierbar und wünschen sich etwas näher an OpenAPI mit echter Tool-Discovery.
+***** Take
+Die Kehrtwende liegt nicht daran, dass MCP gut geworden ist, sondern daran, dass es unvermeidlich wurde, und der Interpreter, den Pi aus anderen Gründen brauchte, machte die Integration billig. Liest man die Kritik genau, geht es nicht um das Protokollformat: die meisten MCP-Server sind für Harnesses geschrieben, die jedes Werkzeug ins Kontextfenster kippen. Codemode umgeht diese Server, statt sie zu reparieren. Das funktioniert und skaliert nicht auf ein Ökosystem.
+***** Comments
+- Ich verstehe die Zurückhaltung gegenüber MCP, aber irgendetwas ist besser als nichts. Es ist suboptimal aus den Gründen, die der Autor nennt, aber USB-C, NVME und HDMI sind es auch. Wir nutzen diese Technik trotz ihrer Fehler, weil sie breit kompatibel und für Endnutzer einfach ist.
+- Codemode ersetzt MCP nicht, es behebt dessen größten Fehler. Das Skript schreibt selbst keinen Code, es ist Workflow-Automatisierung: es holt Daten aus einem Issue-Tracker, gibt die Analyse an ein Modell ab und fasst die Ergebnisse zusammen.
+- Beim Bedarf an Sub-Agenten sehe ich es genauso, das wirkt grundlegend. Ein schlaues Modell, das mehrere dümmere Modelle steuert, und danach Sub-Agenten mit demselben schlauen Modell für adversariales Review, wird ein verbreitetes Muster.
+** RSS Feeds for Last.fm :rss:lastfm:music:web:
+:PROPERTIES:
+:ID:       49903862
+:URL:      https://lfm.xiffy.nl/
+:HN_URL:   https://news.ycombinator.com/item?id=49903862
+:POINTS:   92
+:COMMENTS: 24
+:BY:       Baljhin
+:END:
+
+*** TLDR
+lfm.xiffy.nl generates RSS for any Last.fm username: recent tracks, loved tracks, top tracks, top artists, and recommended tracks, the last also available as Soundixx-compatible JSON. You put the username in the path and add ?period= with 7day, 1month, 3month, 6month, 12month or overall for the top lists. No ads, no trackers, no webfonts, no JavaScript required, and cover images ride along as enclosures. Built by @xiffy in response to the 2015 redesign that removed the features that made the site useful, source on GitHub. In the thread, dewey notes Last.fm became independent again in May 2026 after years under CBS, and msephton reports the recommended-track feeds disagree between formats, the JSON fails validation, and it is served with the wrong MIME type.
+
+*** Take
+A redesign from 2015 is still producing replacement tools eleven years later, which is the real measure of what was cut. Dropping RSS was the cheapest line item on that project and it removed the part of Last.fm people keep rebuilding by hand. The site is independent again as of May; shipping first-party feeds is a week of work and would retire this page.
+
+*** Comments
+
+**** dewey
+:PROPERTIES:
+:COMMENT_ID: 49907637
+:END:
+In May of this year Last.fm became independent again after being owned by CBS for a very long time, which is very exciting, and I'm glad it wasn't just shut down by CBS.
+
+**** TFNA
+:PROPERTIES:
+:COMMENT_ID: 49905452
+:END:
+The redesign over a decade ago stripped so much functionality that the site became useless except for merely tracking one's own listens, and libre alternatives already existed for that. Old Last.fm was deeply linked with real life. It's my go-to example of how the internet has become a lonelier place.
+
+**** captn3m0
+:PROPERTIES:
+:COMMENT_ID: 49907625
+:END:
+Is the code public? I'd like to port this to rss-bridge.org
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+给 Last.fm 做的 RSS 订阅
+***** TLDR
+lfm.xiffy.nl 能为任何 Last.fm 用户名生成 RSS：最近播放、喜爱的曲目、热门曲目、热门艺人和推荐曲目，最后一项还提供兼容 Soundixx 的 JSON。用法是把用户名放进路径，热门榜单可加 ?period= 参数，取值为 7day、1month、3month、6month、12month 或 overall。没有广告、没有追踪器、没有网络字体，不需要 JavaScript，封面图以 enclosure 形式附带。作者 @xiffy 是因为 2015 年那次改版砍掉了让这个站点好用的功能才动手做的，源码在 GitHub。评论里 dewey 提到 Last.fm 在被 CBS 拥有多年后，于 2026 年 5 月重新独立；msephton 报告推荐曲目在两种格式下结果不一致、JSON 校验不通过、MIME 类型也不对。
+***** Take
+一次 2015 年的改版，十一年后还在催生替代工具，这才是被砍掉的东西的真实分量。去掉 RSS 是那个项目里最省钱的一条，却拿走了人们至今还在手工重建的那部分 Last.fm。它今年 5 月已经重新独立，官方自己做订阅源大概一周工作量，这个页面也就可以退休了。
+***** Comments
+- Last.fm 被 CBS 拥有很多年，今年 5 月重新独立了，这很让人兴奋，也庆幸它没有被 CBS 直接关掉。
+- 十多年前那次改版砍掉了太多功能，站点除了记录自己听了什么之外基本没用了，而这件事本来就有自由软件替代品。老的 Last.fm 和现实生活紧密相连，我一直拿它举例说明互联网变得多孤单。
+- 代码公开吗？我想把它移植到 rss-bridge.org。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Last.fm用のRSSフィード
+***** TLDR
+lfm.xiffy.nlは任意のLast.fmユーザー名に対してRSSを生成する。最近の再生、お気に入り、トップトラック、トップアーティスト、おすすめトラックで、最後のものはSoundixx互換のJSONでも提供される。使い方はパスにユーザー名を入れるだけで、トップ系は?period=に7day、1month、3month、6month、12month、overallを指定できる。広告なし、トラッカーなし、ウェブフォントなし、JavaScriptも不要で、ジャケット画像はenclosureとして付く。作者の@xiffyは、サイトを便利にしていた機能を削った2015年のリデザインを受けて作った。ソースはGitHubにある。スレッドではdeweyが、Last.fmが長年CBS傘下だった後2026年5月に再び独立したと指摘し、msephtonはおすすめフィードが形式間で食い違う、JSONが検証を通らない、MIMEタイプが誤っていると報告している。
+***** Take
+2015年のリデザインが11年後になお代替ツールを生んでいる。それが削られたものの大きさの実測値だ。RSSの廃止はあのプロジェクトで最も安い項目だったが、人々が手作業で作り直し続けている部分を奪った。5月に再び独立したのだから、公式がフィードを出すのは一週間の仕事で、このページは役目を終えられる。
+***** Comments
+- Last.fmは長年CBSの傘下だったが、今年5月に再び独立した。とても嬉しいし、CBSに閉鎖されずに済んだのは良かった。
+- 10年以上前のリデザインで機能が大量に削られ、自分の再生履歴を記録するだけのサイトになった。それならすでに自由なソフトの代替があった。昔のLast.fmは現実の生活と強く結びついていて、インターネットがどれだけ孤独になったかを説明する例として私はいつもこれを挙げる。
+- コードは公開されている？rss-bridge.orgに移植したい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Last.fm을 위한 RSS 피드
+***** TLDR
+lfm.xiffy.nl은 아무 Last.fm 사용자명에 대해 RSS를 만들어 준다. 최근 재생, 좋아한 트랙, 인기 트랙, 인기 아티스트, 추천 트랙이 있고 마지막 항목은 Soundixx 호환 JSON으로도 제공된다. 경로에 사용자명을 넣으면 되고, 인기 목록에는 ?period=에 7day, 1month, 3month, 6month, 12month, overall을 붙일 수 있다. 광고도 트래커도 웹폰트도 없고 자바스크립트가 필요 없으며, 커버 이미지는 enclosure로 함께 온다. @xiffy가 사이트를 쓸모 있게 만들던 기능을 없앤 2015년 리디자인 때문에 만들었고, 소스는 GitHub에 있다. 스레드에서 dewey는 Last.fm이 오랜 CBS 소유를 벗고 2026년 5월에 다시 독립했다고 말하고, msephton은 추천 피드가 형식마다 결과가 다르고 JSON이 검증을 통과하지 못하며 MIME 타입도 잘못됐다고 보고한다.
+***** Take
+2015년 리디자인이 11년이 지나서도 대체 도구를 만들어 내고 있다. 그것이 당시 잘려나간 것의 실제 크기다. RSS 제거는 그 프로젝트에서 가장 값싼 항목이었지만, 사람들이 아직도 손으로 다시 만드는 Last.fm의 그 부분을 가져갔다. 5월에 다시 독립했으니 공식 피드를 내는 것은 일주일 작업이고, 그러면 이 페이지는 은퇴할 수 있다.
+***** Comments
+- Last.fm은 아주 오랫동안 CBS 소유였다가 올해 5월에 다시 독립했다. 무척 반가운 일이고, CBS가 그냥 문을 닫지 않아서 다행이다.
+- 10여 년 전 리디자인이 기능을 너무 많이 걷어내서, 사이트는 자기 청취 기록을 남기는 것 외에는 쓸모가 없어졌다. 그건 이미 자유 소프트웨어 대안이 있던 일이다. 옛 Last.fm은 현실 생활과 깊이 얽혀 있었고, 나는 인터넷이 얼마나 외로워졌는지 설명할 때 늘 이걸 예로 든다.
+- 코드가 공개돼 있나? rss-bridge.org로 포팅하고 싶다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Feeds RSS para Last.fm
+***** TLDR
+lfm.xiffy.nl genera RSS para cualquier usuario de Last.fm: temas recientes, temas marcados como favoritos, temas más escuchados, artistas más escuchados y temas recomendados, estos últimos también en JSON compatible con Soundixx. Se pone el nombre de usuario en la ruta y se añade ?period= con 7day, 1month, 3month, 6month, 12month u overall para los rankings. Sin anuncios, sin rastreadores, sin webfonts y sin necesidad de JavaScript; las portadas viajan como enclosures. Lo hizo @xiffy a raíz del rediseño de 2015 que quitó las funciones que hacían útil el sitio, y el código está en GitHub. En el hilo, dewey señala que Last.fm volvió a ser independiente en mayo de 2026 tras años bajo CBS, y msephton informa de que los feeds de recomendaciones no coinciden entre formatos, el JSON no pasa la validación y se sirve con el MIME type incorrecto.
+***** Take
+Un rediseño de 2015 sigue generando herramientas de reemplazo once años después, y eso mide lo que se recortó. Quitar RSS fue la partida más barata de aquel proyecto y se llevó la parte de Last.fm que la gente sigue reconstruyendo a mano. El sitio es independiente otra vez desde mayo: publicar feeds propios es una semana de trabajo y jubilaría esta página.
+***** Comments
+- En mayo de este año Last.fm volvió a ser independiente después de pertenecer a CBS durante muchísimo tiempo, lo cual es emocionante, y me alegra que CBS no lo cerrara sin más.
+- El rediseño de hace más de una década quitó tantas funciones que el sitio quedó inútil salvo para registrar tus propias escuchas, y para eso ya había alternativas libres. El Last.fm antiguo estaba muy ligado a la vida real. Es mi ejemplo favorito de cómo internet se ha vuelto un lugar más solitario.
+- ¿El código es público? Me gustaría portarlo a rss-bridge.org.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+RSS-Feeds für Last.fm
+***** TLDR
+lfm.xiffy.nl erzeugt RSS für jeden Last.fm-Nutzernamen: kürzlich gehörte Titel, favorisierte Titel, Top-Titel, Top-Künstler und empfohlene Titel, letztere auch als Soundixx-kompatibles JSON. Der Nutzername steht im Pfad, für die Ranglisten kommt ?period= mit 7day, 1month, 3month, 6month, 12month oder overall hinzu. Keine Werbung, keine Tracker, keine Webfonts, kein JavaScript nötig, Coverbilder kommen als Enclosures mit. Gebaut hat es @xiffy als Reaktion auf das Redesign von 2015, das die nützlichen Funktionen entfernte; der Quellcode liegt auf GitHub. Im Thread weist dewey darauf hin, dass Last.fm im Mai 2026 nach Jahren unter CBS wieder unabhängig wurde, und msephton berichtet, dass die Empfehlungs-Feeds zwischen den Formaten abweichen, das JSON die Validierung nicht besteht und der MIME-Type falsch ist.
+***** Take
+Ein Redesign von 2015 bringt elf Jahre später noch Ersatzwerkzeuge hervor, und das ist das Maß für das, was gestrichen wurde. RSS abzuschalten war der günstigste Posten jenes Projekts und nahm genau den Teil von Last.fm mit, den Leute immer wieder von Hand nachbauen. Seit Mai ist die Seite wieder unabhängig: eigene Feeds sind eine Woche Arbeit und würden diese Seite überflüssig machen.
+***** Comments
+- Im Mai dieses Jahres wurde Last.fm wieder unabhängig, nach sehr langer Zeit unter CBS. Das ist erfreulich, und ich bin froh, dass CBS es nicht einfach abgeschaltet hat.
+- Das Redesign vor über einem Jahrzehnt hat so viel Funktionalität entfernt, dass die Seite außer zum Mitschreiben der eigenen Hörgewohnheiten nutzlos wurde, und dafür gab es längst freie Alternativen. Das alte Last.fm war eng mit dem echten Leben verbunden. Es ist mein Standardbeispiel dafür, wie einsam das Internet geworden ist.
+- Ist der Code öffentlich? Ich würde das gern nach rss-bridge.org portieren.
+** Built Dental Scope :3d:education:opensource:webgl:
+:PROPERTIES:
+:ID:       49886535
+:URL:      https://dental-scope.com/
+:HN_URL:   https://news.ycombinator.com/item?id=49886535
+:POINTS:   50
+:COMMENTS: 10
+:BY:       Zeruxe
+:END:
+
+*** TLDR
+Dental Scope is a browser tool for 3D dental anatomy. All 32 permanent teeth are individually selectable and labelled with FDI, Universal and Palmer numbering; five dissection levels peel back enamel, coronal and radicular dentin, cementum, periodontal ligament and the pulp chamber with pulp horns and one canal per root. It also does sagittal, coronal and axial cross sections, search by name, number or synonym, deep links to specific structures, keyboard navigation, and five languages including Latin. Meshes come from BodyParts3D under CC BY-SA 2.1 Japan, with nerves and vessels informed by Z-Anatomy; the stack is Vite, React 19, strict TypeScript, Three.js, Zustand and glTF with meshopt, plus a Python asset pipeline using NumPy, SciPy and scikit-image. Code is MIT, educational text CC BY-SA 4.0. The author is finishing a master's in AI and ML and says a previous PC anatomy project got picked up by teachers. The repo shows 20 commits over about three days, which is what the thread argued about.
+
+*** Take
+The argument worth having is amelius's: Elsevier charges about $60 a year for the full-body equivalent, and this should probably live next to a Wikipedia article. "You built nothing" is not that argument. Someone found CC-licensed anatomical meshes, wrote a Python pipeline to turn them into compressed glTF, wired up three numbering systems and five languages, and put it online for free under MIT. Three days is the finding, not the indictment.
+
+*** Comments
+
+**** tmarice
+:PROPERTIES:
+:COMMENT_ID: 49907748
+:END:
+You built nothing. You pointed your clanker of choice to a dataset, or more realistically asked it to find an appropriate dataset, and told it to build an interactive 3d model. You learned nothing from this project because no mental effort was spent beyond listing out features.
+
+**** amelius
+:PROPERTIES:
+:COMMENT_ID: 49907313
+:END:
+It reminds me of Elsevier's full-body anatomy tool, which is very cool but requires a license of about $60 a year, probably targeted at doctors and medical students. I hope someone can replicate the essence of it and make such a tool available for free. This could be part of Wikipedia.
+
+**** fifilura
+:PROPERTIES:
+:COMMENT_ID: 49907301
+:END:
+In this case I applaud the utility of something built in 3 days. Not the engineering effort behind it. It still looks great, and it's very good for understanding whatever it is my dentist is doing with my teeth.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+做了个 Dental Scope
+***** TLDR
+Dental Scope 是一个在浏览器里看三维牙齿解剖的工具。32 颗恒牙都可单独选中，并标注 FDI、Universal 和 Palmer 三套编号；五级剖切依次揭开牙釉质、冠部和根部牙本质、牙骨质、牙周膜，以及带髓角的髓腔和每根牙根一条根管。它还支持矢状、冠状、轴向切面，按名称、编号或同义词搜索，深链到具体结构，键盘操作，以及包括拉丁语在内的五种语言。网格模型来自 BodyParts3D（CC BY-SA 2.1 日本），神经和血管参考了 Z-Anatomy；技术栈是 Vite、React 19、严格模式 TypeScript、Three.js、Zustand 和带 meshopt 压缩的 glTF，另有用 NumPy、SciPy、scikit-image 的 Python 资源流水线。代码 MIT，教学文本 CC BY-SA 4.0。作者正在完成 AI 与机器学习硕士学位，说之前一个电脑解剖项目被老师们拿去用了。仓库显示约三天内 20 次提交，讨论也就围着这一点打转。
+***** Take
+真正值得吵的是 amelius 那条：Elsevier 的全身版每年收约 60 美元，而这种东西大概本该放在维基百科词条旁边。「你什么都没做」不是这种论点。有人找到了 CC 授权的解剖网格，写了 Python 流水线把它们转成压缩 glTF，接上三套编号和五种语言，然后以 MIT 免费发布。三天是结论，不是罪证。
+***** Comments
+- 你什么都没做。你把你选的那个机器指向一个数据集，更现实的说法是让它去找个合适的数据集，然后叫它做个交互式三维模型。你从这个项目里什么都没学到，因为除了列功能清单之外没花过脑力。
+- 这让我想起 Elsevier 的全身解剖工具，很酷，但需要每年约 60 美元的许可，大概是面向医生和医学生的。希望有人能复刻它的精髓并免费开放。这东西可以成为维基百科的一部分。
+- 这个例子里我赞的是三天做出来的东西有用，不是背后的工程量。它看起来还是很不错，而且很适合理解我的牙医到底在我牙上做什么。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Dental Scopeを作った
+***** TLDR
+Dental Scopeはブラウザで歯の3D解剖を見るツールだ。32本の永久歯を個別に選択でき、FDI・Universal・Palmerの3種の番号が付く。5段階の解剖表示でエナメル質、歯冠部と歯根部の象牙質、セメント質、歯根膜、そして髄角を持つ歯髄腔と各根に1本の根管まで剥がしていける。矢状・前額・水平の断面表示、名称や番号や同義語での検索、特定構造へのディープリンク、キーボード操作、ラテン語を含む5言語にも対応する。メッシュはBodyParts3D（CC BY-SA 2.1 Japan）由来で、神経と血管はZ-Anatomyを参照。技術構成はVite、React 19、strictなTypeScript、Three.js、Zustand、meshopt圧縮付きglTFに加え、NumPy・SciPy・scikit-imageを使うPythonのアセットパイプライン。コードはMIT、教育テキストはCC BY-SA 4.0。著者はAIと機械学習の修士を修了間近で、以前のPC解剖プロジェクトは教師に使われたという。リポジトリは約3日で20コミット。スレッドが争ったのはそこだ。
+***** Take
+議論する価値があるのはameliusの指摘だ。Elsevierの全身版は年60ドル程度を取る。これはWikipediaの記事の隣にあってよいものだ。「何も作っていない」はその議論ではない。誰かがCCライセンスの解剖メッシュを見つけ、Pythonのパイプラインで圧縮glTFに変換し、3つの番号体系と5言語をつなぎ、MITで無料公開した。3日というのは結論であって、告発ではない。
+***** Comments
+- 君は何も作っていない。好きな機械をデータセットに向け、現実的にはデータセット探しごと任せて、インタラクティブな3Dモデルを作れと言っただけだ。機能を列挙する以上の頭は使っていないから、このプロジェクトから何も学んでいない。
+- Elsevierの全身解剖ツールを思い出す。とても良いが年60ドルほどのライセンスが必要で、おそらく医師と医学生向けだ。誰かがその本質を再現して無料で使えるようにしてほしい。これはWikipediaの一部になれる。
+- この件では3日で作られたものの有用性を評価する。背後の工学的努力ではない。見た目も良く、歯医者が私の歯に何をしているのか理解するのにとても役立つ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Dental Scope를 만들었다
+***** TLDR
+Dental Scope는 브라우저에서 치아 3D 해부를 보는 도구다. 영구치 32개를 개별로 선택할 수 있고 FDI, Universal, Palmer 세 가지 번호 체계로 표시된다. 다섯 단계의 절개 보기로 에나멜, 치관부와 치근부 상아질, 시멘트질, 치주인대, 그리고 치수각이 있는 치수실과 뿌리마다 하나씩 있는 근관까지 벗겨 볼 수 있다. 시상·관상·수평 단면, 이름과 번호와 동의어 검색, 특정 구조로의 딥링크, 키보드 조작, 라틴어를 포함한 5개 언어도 지원한다. 메시는 BodyParts3D(CC BY-SA 2.1 Japan)에서 왔고 신경과 혈관은 Z-Anatomy를 참고했다. 스택은 Vite, React 19, strict TypeScript, Three.js, Zustand, meshopt 압축 glTF에 NumPy·SciPy·scikit-image를 쓰는 파이썬 애셋 파이프라인이다. 코드는 MIT, 교육용 텍스트는 CC BY-SA 4.0. 저자는 AI·머신러닝 석사를 마치는 중이고, 이전 PC 해부 프로젝트가 교사들에게 쓰였다고 한다. 저장소에는 약 3일간 20개 커밋이 있고, 스레드가 다툰 지점이 바로 그것이다.
+***** Take
+다툴 가치가 있는 논점은 amelius의 것이다. Elsevier는 전신 해부 도구에 연 60달러쯤을 받는데, 이런 건 위키백과 문서 옆에 있어야 할 물건이다. "아무것도 만들지 않았다"는 그 논점이 아니다. 누군가 CC 라이선스 해부 메시를 찾아 파이썬 파이프라인으로 압축 glTF로 바꾸고, 번호 체계 세 개와 언어 다섯 개를 붙여 MIT로 무료 공개했다. 3일은 결론이지 고발이 아니다.
+***** Comments
+- 당신은 아무것도 만들지 않았다. 고른 기계를 데이터셋에 겨누고, 더 현실적으로는 적당한 데이터셋을 찾아 달라고 시킨 뒤, 인터랙티브 3D 모델을 만들라고 했을 뿐이다. 기능을 나열하는 것 말고는 머리를 쓰지 않았으니 이 프로젝트에서 배운 것도 없다.
+- Elsevier의 전신 해부 도구가 떠오른다. 아주 좋지만 연 60달러쯤의 라이선스가 필요하고, 아마 의사와 의대생을 노린 것이다. 누군가 그 본질을 재현해 무료로 쓰게 해 주면 좋겠다. 이건 위키백과의 일부가 될 수 있다.
+- 이 경우 나는 3일 만에 만든 물건의 유용성에 박수를 보낸다. 그 뒤의 공학적 노력이 아니라. 보기에도 좋고, 치과의사가 내 이에 무엇을 하는지 이해하는 데 아주 유용하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Hice Dental Scope
+***** TLDR
+Dental Scope es una herramienta web de anatomía dental en 3D. Los 32 dientes permanentes se seleccionan uno a uno y están etiquetados con las numeraciones FDI, Universal y Palmer; cinco niveles de disección van retirando esmalte, dentina coronal y radicular, cemento, ligamento periodontal y la cámara pulpar con sus cuernos y un conducto por raíz. También ofrece cortes sagital, coronal y axial, búsqueda por nombre, número o sinónimo, enlaces directos a estructuras concretas, navegación por teclado y cinco idiomas, incluido el latín. Las mallas vienen de BodyParts3D con licencia CC BY-SA 2.1 Japón, y los nervios y vasos se basan en Z-Anatomy; el stack es Vite, React 19, TypeScript estricto, Three.js, Zustand y glTF con meshopt, más una tubería de assets en Python con NumPy, SciPy y scikit-image. El código es MIT y el texto educativo CC BY-SA 4.0. El autor está terminando un máster en IA y aprendizaje automático y cuenta que un proyecto anterior de anatomía de PC acabó en manos de profesores. El repositorio tiene 20 commits en unos tres días, y eso es lo que discutió el hilo.
+***** Take
+El debate que vale la pena es el de amelius: Elsevier cobra unos 60 dólares al año por el equivalente de cuerpo entero, y esto debería vivir junto a un artículo de Wikipedia. "No construiste nada" no es ese debate. Alguien encontró mallas anatómicas con licencia CC, escribió una tubería en Python para convertirlas en glTF comprimido, conectó tres sistemas de numeración y cinco idiomas, y lo publicó gratis bajo MIT. Tres días es el hallazgo, no la acusación.
+***** Comments
+- No construiste nada. Apuntaste la máquina que prefieras a un conjunto de datos, o más realistamente le pediste que encontrara uno adecuado, y le dijiste que hiciera un modelo 3D interactivo. No aprendiste nada del proyecto porque no hubo esfuerzo mental más allá de enumerar funciones.
+- Me recuerda a la herramienta de anatomía de cuerpo completo de Elsevier, que es muy buena pero requiere una licencia de unos 60 dólares al año, probablemente pensada para médicos y estudiantes de medicina. Ojalá alguien replique su esencia y la ofrezca gratis. Esto podría formar parte de Wikipedia.
+- En este caso aplaudo la utilidad de algo hecho en 3 días. No el esfuerzo de ingeniería detrás. Aun así se ve muy bien y sirve mucho para entender qué está haciendo mi dentista con mis dientes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Dental Scope gebaut
+***** TLDR
+Dental Scope ist ein Browserwerkzeug für 3D-Zahnanatomie. Alle 32 bleibenden Zähne sind einzeln auswählbar und mit FDI-, Universal- und Palmer-Nummerierung beschriftet; fünf Präparationsstufen legen Zahnschmelz, koronales und radikuläres Dentin, Zement, Zahnhalteapparat sowie die Pulpahöhle mit Pulpahörnern und einem Kanal pro Wurzel frei. Dazu kommen sagittale, koronale und axiale Schnitte, Suche nach Name, Nummer oder Synonym, Deeplinks auf einzelne Strukturen, Tastaturbedienung und fünf Sprachen inklusive Latein. Die Meshes stammen aus BodyParts3D unter CC BY-SA 2.1 Japan, Nerven und Gefäße orientieren sich an Z-Anatomy; der Stack ist Vite, React 19, striktes TypeScript, Three.js, Zustand und glTF mit meshopt, plus eine Python-Asset-Pipeline mit NumPy, SciPy und scikit-image. Der Code steht unter MIT, die Lerntexte unter CC BY-SA 4.0. Der Autor beendet gerade einen Master in KI und Machine Learning und erzählt, dass ein früheres PC-Anatomie-Projekt von Lehrkräften aufgegriffen wurde. Das Repository zeigt 20 Commits in etwa drei Tagen, und genau darüber stritt der Thread.
+***** Take
+Die Debatte, die sich lohnt, ist die von amelius: Elsevier verlangt für das Ganzkörper-Äquivalent rund 60 Dollar pro Jahr, und so etwas gehört eigentlich neben einen Wikipedia-Artikel. "Du hast nichts gebaut" ist nicht diese Debatte. Jemand hat CC-lizenzierte anatomische Meshes gefunden, eine Python-Pipeline geschrieben, die sie in komprimiertes glTF verwandelt, drei Nummerierungssysteme und fünf Sprachen angebunden und alles kostenlos unter MIT veröffentlicht. Drei Tage sind der Befund, nicht die Anklage.
+***** Comments
+- Du hast nichts gebaut. Du hast die Maschine deiner Wahl auf einen Datensatz gerichtet, realistischer noch sie den passenden Datensatz suchen lassen, und ihr gesagt, sie solle ein interaktives 3D-Modell bauen. Du hast nichts gelernt, weil außer dem Auflisten von Features keine Denkarbeit anfiel.
+- Das erinnert mich an das Ganzkörper-Anatomiewerkzeug von Elsevier, das sehr gut ist, aber eine Lizenz von etwa 60 Dollar im Jahr braucht, wohl für Ärzte und Medizinstudierende. Ich hoffe, jemand bildet das Wesentliche nach und stellt es kostenlos bereit. Das könnte Teil von Wikipedia sein.
+- In diesem Fall lobe ich den Nutzen von etwas, das in 3 Tagen entstanden ist. Nicht den Ingenieursaufwand dahinter. Es sieht trotzdem gut aus und hilft sehr zu verstehen, was mein Zahnarzt da mit meinen Zähnen macht.
+** Show HN: JBR-001 – An open-source 3D printable desktop robot :arduino:robotics:hardware:3dprinting:
+:PROPERTIES:
+:ID:       49890707
+:URL:      https://projecthub.arduino.cc/syntheticaidata/jbr-001-a-desktop-companion-robot-powered-by-arduino-uno-q-b11c96
+:HN_URL:   https://news.ycombinator.com/item?id=49890707
+:POINTS:   26
+:COMMENTS: 7
+:BY:       gvuksic
+:END:
+
+*** TLDR
+JBR-001 is a desktop companion robot released on Arduino Project Hub under CC0 with source, printable STLs and assembly instructions. The bill of materials is an Arduino UNO Q 2GB, Modulino Distance, Modulino Motors and Modulino Buzzer boards, and an 8-in-1 USB-C hub; three servos move the head and arms, and an LED matrix handles the animated display. The published sketch plays a four-note greeting at startup with a head and arm sequence, loops an alternating heart pattern, and greets anyone who comes within 200mm, resetting at 250mm. The Show HN post also claims a camera and object recognition, but the Project Hub writeup documents only the distance-sensor behaviour.
+
+*** Take
+mrheosuper's objection is the one that matters: the UNO Q runs a Qualcomm SoC, so there are no cheap clones, and a project whose pitch is that you print it at home still routes everyone through one vendor's board at one vendor's price. CC0 on the STLs and the sketch is generous and it does not make the robot reproducible. The interesting part of the design is also the least documented: the object recognition is in the pitch and not in the writeup.
+
+*** Comments
+
+**** mrheosuper
+:PROPERTIES:
+:COMMENT_ID: 49907355
+:END:
+I'm sad that it uses the Uno Q. I really dislike the Uno Q, since it uses a QC SoC, which means no cheap Chinese clone, which is not very accessible to everyone.
+
+**** salamachinas
+:PROPERTIES:
+:COMMENT_ID: 49891318
+:END:
+Love that it's open source with the 3D files and instructions included. My son and I are going to build this together.
+
+**** NikhilChowdaryG
+:PROPERTIES:
+:COMMENT_ID: 49907420
+:END:
+I have started to use my editor to build a robotic arm and we are using JEPA for perception and a local Ornith model for reasoning, a hybrid approach, because there's no single model that handles both.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN：JBR-001，一个开源可 3D 打印的桌面机器人
+***** TLDR
+JBR-001 是发布在 Arduino Project Hub 上的桌面陪伴机器人，采用 CC0 授权，提供源码、可打印的 STL 文件和组装说明。物料清单包括 Arduino UNO Q 2GB、Modulino 测距、Modulino 电机和 Modulino 蜂鸣器模块，以及一个 8 合 1 USB-C 集线器；三个伺服电机驱动头部和手臂，LED 点阵负责动画显示。公开的程序在启动时播放四音符问候并配合头臂动作，循环播放交替的心形图案，并在有人进入 200 毫米范围时打招呼，250 毫米时复位。Show HN 帖子还提到摄像头和物体识别，但 Project Hub 的说明只记录了测距传感器的行为。
+***** Take
+mrheosuper 的反对意见才是关键：UNO Q 用的是高通 SoC，所以没有便宜的克隆板，而一个主打「在家自己打印」的项目，最后仍然要求所有人买同一家厂商的板子、付同一家厂商的价格。STL 和代码用 CC0 很大方，但这不等于机器人可复制。设计中最有意思的部分恰恰文档最少：物体识别出现在宣传里，没出现在说明里。
+***** Comments
+- 遗憾的是它用了 Uno Q。我很不喜欢 Uno Q，因为它用高通 SoC，也就意味着没有便宜的中国克隆板，对很多人来说不够容易获得。
+- 喜欢它是开源的，还附上了 3D 文件和说明。我打算和儿子一起把它做出来。
+- 我开始用我的编辑器做机械臂，感知用 JEPA，推理用本地的 Ornith 模型，走混合路线，因为没有单个模型能同时搞定两件事。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: JBR-001、3Dプリントできるオープンソースの卓上ロボット
+***** TLDR
+JBR-001はArduino Project HubでCC0として公開された卓上コンパニオンロボットで、ソースコード、印刷用STL、組立説明が揃っている。部品はArduino UNO Q 2GB、Modulinoの距離センサー、モーター、ブザー基板、そして8in1のUSB-Cハブ。3つのサーボが頭と腕を動かし、LEDマトリクスがアニメーション表示を担う。公開されたスケッチは起動時に4音の挨拶を鳴らして頭と腕を動かし、交互のハート模様をループ表示し、200mm以内に人が入ると挨拶して250mmで解除する。Show HNの投稿ではカメラと物体認識にも触れているが、Project Hubの記事に書かれているのは距離センサーの挙動だけだ。
+***** Take
+重要なのはmrheosuperの指摘だ。UNO QはQualcomm製SoCを使うため安価なクローンが存在せず、家で印刷できるという売り文句のプロジェクトでも、結局は特定ベンダーの基板を特定ベンダーの価格で買うことになる。STLとスケッチをCC0にしたのは気前がいいが、それでロボットが再現可能になるわけではない。設計で最も面白い部分が最も文書化されていない点も残る。物体認識は宣伝にあって記事にはない。
+***** Comments
+- Uno Qを使っているのが残念だ。Uno QはQualcomm製SoCを使うので安い中国製クローンが存在せず、誰にでも手が届くとは言いがたい。
+- 3Dファイルと手順まで含めてオープンソースなのが良い。息子と一緒に作るつもりだ。
+- エディタを使ってロボットアームを作り始めた。知覚はJEPA、推論はローカルのOrnithモデルというハイブリッド構成だ。両方を一つでこなせるモデルがないからだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: JBR-001, 3D 프린팅 가능한 오픈소스 데스크톱 로봇
+***** TLDR
+JBR-001은 Arduino Project Hub에 CC0으로 공개된 데스크톱 동반 로봇으로, 소스 코드와 인쇄용 STL, 조립 설명이 함께 제공된다. 부품은 Arduino UNO Q 2GB, Modulino 거리 센서, 모터, 부저 보드, 그리고 8-in-1 USB-C 허브다. 서보 세 개가 머리와 팔을 움직이고 LED 매트릭스가 애니메이션 표시를 맡는다. 공개된 스케치는 부팅 시 네 음짜리 인사를 연주하며 머리와 팔을 움직이고, 하트 패턴을 번갈아 반복하고, 200mm 안으로 사람이 들어오면 인사한 뒤 250mm에서 초기화한다. Show HN 글에는 카메라와 물체 인식도 언급되지만, Project Hub 설명에 기록된 것은 거리 센서 동작뿐이다.
+***** Take
+핵심은 mrheosuper의 반론이다. UNO Q는 퀄컴 SoC를 쓰므로 값싼 클론이 없고, 집에서 인쇄한다는 것이 홍보 문구인 프로젝트가 결국 모두를 한 업체의 보드와 한 업체의 가격으로 몰아넣는다. STL과 코드를 CC0으로 낸 것은 후한 일이지만 그것으로 로봇이 재현 가능해지지는 않는다. 설계에서 가장 흥미로운 부분이 가장 문서화되지 않은 점도 남는다. 물체 인식은 홍보에는 있고 설명에는 없다.
+***** Comments
+- Uno Q를 쓴 게 아쉽다. Uno Q는 퀄컴 SoC를 쓰기 때문에 저렴한 중국 클론이 없고, 그래서 누구나 접근하기 쉽지 않다.
+- 3D 파일과 설명까지 포함해 오픈소스인 게 좋다. 아들과 함께 만들어 볼 생각이다.
+- 에디터로 로봇 팔을 만들기 시작했다. 지각은 JEPA, 추론은 로컬 Ornith 모델을 쓰는 하이브리드 방식인데, 둘을 한꺼번에 처리하는 모델이 없기 때문이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: JBR-001, un robot de escritorio imprimible en 3D y de código abierto
+***** TLDR
+JBR-001 es un robot de compañía de escritorio publicado en Arduino Project Hub bajo CC0, con código fuente, STL imprimibles e instrucciones de montaje. La lista de materiales es un Arduino UNO Q de 2GB, placas Modulino de distancia, motores y zumbador, y un hub USB-C 8 en 1; tres servos mueven la cabeza y los brazos, y una matriz de LED se encarga de la pantalla animada. El código publicado toca un saludo de cuatro notas al arrancar con una secuencia de cabeza y brazos, repite un patrón de corazones alternos y saluda a quien se acerque a menos de 200mm, reiniciándose a 250mm. El post en Show HN también menciona una cámara y reconocimiento de objetos, pero la ficha de Project Hub solo documenta el comportamiento del sensor de distancia.
+***** Take
+La objeción que importa es la de mrheosuper: el UNO Q usa un SoC de Qualcomm, así que no hay clones baratos, y un proyecto cuyo argumento es que lo imprimes en casa sigue obligando a todos a pasar por la placa de un único fabricante al precio de ese fabricante. Poner los STL y el código en CC0 es generoso y no hace que el robot sea reproducible. Además, la parte más interesante del diseño es la menos documentada: el reconocimiento de objetos está en el anuncio y no en la ficha.
+***** Comments
+- Me da pena que use el Uno Q. Me disgusta bastante el Uno Q, porque usa un SoC de Qualcomm, lo que significa que no hay clon chino barato, y eso no es muy accesible para todos.
+- Me encanta que sea de código abierto con los archivos 3D y las instrucciones incluidas. Mi hijo y yo vamos a construirlo juntos.
+- He empezado a usar mi editor para construir un brazo robótico y usamos JEPA para la percepción y un modelo local Ornith para el razonamiento, un enfoque híbrido, porque no hay un solo modelo que haga las dos cosas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: JBR-001, ein 3D-druckbarer Open-Source-Desktoproboter
+***** TLDR
+JBR-001 ist ein Desktop-Begleitroboter, veröffentlicht auf dem Arduino Project Hub unter CC0, mit Quellcode, druckbaren STLs und Aufbauanleitung. Die Stückliste: ein Arduino UNO Q mit 2GB, Modulino-Platinen für Distanz, Motoren und Buzzer sowie ein 8-in-1-USB-C-Hub; drei Servos bewegen Kopf und Arme, eine LED-Matrix übernimmt die animierte Anzeige. Der veröffentlichte Sketch spielt beim Start einen Vier-Ton-Gruß mit Kopf- und Armsequenz, wiederholt ein alternierendes Herzmuster und begrüßt jeden, der näher als 200mm kommt, mit Reset bei 250mm. Der Show-HN-Beitrag nennt außerdem eine Kamera und Objekterkennung, dokumentiert ist auf dem Project Hub aber nur das Verhalten des Distanzsensors.
+***** Take
+Der Einwand von mrheosuper ist der entscheidende: Der UNO Q nutzt einen Qualcomm-SoC, es gibt also keine billigen Klone, und ein Projekt, dessen Versprechen das Drucken zu Hause ist, schickt trotzdem alle über die Platine eines einzigen Herstellers zu dessen Preis. STLs und Sketch unter CC0 sind großzügig und machen den Roboter nicht reproduzierbar. Der interessanteste Teil des Entwurfs ist zugleich der am schlechtesten dokumentierte: die Objekterkennung steht in der Ankündigung, nicht im Artikel.
+***** Comments
+- Schade, dass er den Uno Q verwendet. Ich mag den Uno Q nicht, weil er einen Qualcomm-SoC nutzt, also gibt es keinen billigen chinesischen Klon, und das ist nicht für alle zugänglich.
+- Gut, dass es Open Source ist, mit 3D-Dateien und Anleitung. Mein Sohn und ich werden das zusammen bauen.
+- Ich habe angefangen, mit meinem Editor einen Roboterarm zu bauen, mit JEPA für die Wahrnehmung und einem lokalen Ornith-Modell für das Schlussfolgern, also hybrid, weil kein einzelnes Modell beides beherrscht.
+** Testing WebGPU data layouts with Facet :rust:webgpu:graphics:testing:
+:PROPERTIES:
+:ID:       49883913
+:URL:      https://www.mattkeeter.com/blog/2026-08-23-wgpu-facet/
+:HN_URL:   https://news.ycombinator.com/item?id=49883913
+:POINTS:   52
+:COMMENTS: 3
+:BY:       luu
+:END:
+
+*** TLDR
+Matt Keeter writes up a class of bug that has no compiler behind it: WGSL and Rust disagree about struct layout. His example is a Config struct where a WGSL mat3x3f pads every row to 16 bytes for 48 total, while Rust's ［［f32; 3］; 3］ is packed at 36, so a shared buffer silently misreads and in his case left GPU threads spinning until he rebooted. The fix is a test rather than a wrapper type: derive facet::Facet on the config structs in test builds only, parse the WGSL with naga, and let a generic compare_struct_layout<T: facet::Facet>() check total size plus every field offset and size against the shader, with special handling for runtime-sized arrays. Run over five config structs, ColorConfig, MergeConfig, ShadeConfig, SsaoConfig and BlurConfig, it found no existing mismatches.
+
+*** Take
+Finding zero bugs is the result worth reporting. What he actually bought is that the next shader edit that drifts from its Rust struct fails in CI instead of hanging a GPU, and the maintenance cost is one derive per struct. Reflection libraries usually argue for themselves through serialization, where a hand-written impl is nearly as good; this is the better case, because nobody is going to hand-write offset assertions for every field of every uniform.
+
+*** Comments
+
+**** flohofwoe
+:PROPERTIES:
+:COMMENT_ID: 49907056
+:END:
+There's a WebGPU extension which harmonizes uniform buffer struct layout with other address spaces, but currently it's only implemented in Chromium-based browsers. The std140-style layout restrictions are basically legacy.
+
+**** brinepot
+:PROPERTIES:
+:COMMENT_ID: 49906826
+:END:
+Spent too much time debugging alignment issues with Vulkan buffers. WebGPU having good tools like Facet from the start is a huge win.
+
+**** jauntywundrkind
+:PROPERTIES:
+:COMMENT_ID: 49906880
+:END:
+It's absurd how often programming languages still treat types as a compile time check. It's great having tools like Facet around to add runtime type information in.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用 Facet 测试 WebGPU 的数据布局
+***** TLDR
+Matt Keeter 写了一类没有编译器兜底的 bug：WGSL 和 Rust 对结构体布局的理解不一致。他的例子是一个 Config 结构体，WGSL 的 mat3x3f 会把每一行补齐到 16 字节、总共 48 字节，而 Rust 的 ［［f32; 3］; 3］ 紧凑排布只有 36 字节，于是共享缓冲区被静默误读，在他这里导致 GPU 线程一直空转，只能重启。他的解法不是包一层类型，而是加测试：只在测试构建里给配置结构体加 facet::Facet 派生，用 naga 解析 WGSL，再由一个泛型的 compare_struct_layout<T: facet::Facet>() 对照着着色器检查总大小以及每个字段的偏移和大小，并特别处理运行时长度数组。在 ColorConfig、MergeConfig、ShadeConfig、SsaoConfig 和 BlurConfig 这五个结构体上跑下来，没有发现已有的不匹配。
+***** Take
+查出零个 bug 才是值得写的结果。他真正买到的是：下一次着色器改动和 Rust 结构体脱节时，会在 CI 里失败，而不是把 GPU 挂住，代价是每个结构体一行派生。反射库通常靠序列化来证明自己的价值，而手写实现在那里几乎一样好；这个案例更有说服力，因为没人会为每个 uniform 的每个字段手写偏移断言。
+***** Comments
+- 有一个 WebGPU 扩展，可以让 uniform 缓冲区的结构体布局与其他地址空间保持一致，但目前只在基于 Chromium 的浏览器里实现了。std140 风格的布局限制基本上是历史遗留。
+- 我在 Vulkan 缓冲区的对齐问题上耗了太多时间。WebGPU 从一开始就有 Facet 这样的好工具，是很大的胜利。
+- 编程语言至今还常把类型当成编译期检查，这很荒谬。有 Facet 这类工具把运行时类型信息补回来，非常好。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+FacetでWebGPUのデータレイアウトをテストする
+***** TLDR
+Matt Keeterが、コンパイラが守ってくれない種類のバグを書いている。WGSLとRustで構造体のレイアウトが食い違う問題だ。例に挙がるConfig構造体では、WGSLのmat3x3fが各行を16バイトに詰めて合計48バイトになる一方、Rustの［［f32; 3］; 3］は詰めた36バイトなので、共有バッファが静かに誤読され、彼の場合はGPUスレッドが回り続けて再起動するしかなくなった。対処はラッパー型ではなくテストだ。テストビルドに限って設定構造体にfacet::Facetを導出し、WGSLをnagaで解析し、汎用のcompare_struct_layout<T: facet::Facet>()がシェーダーと照らして全体サイズと各フィールドのオフセットとサイズを検証する。実行時サイズの配列も特別扱いする。ColorConfig、MergeConfig、ShadeConfig、SsaoConfig、BlurConfigの5つで走らせた結果、既存の不一致は見つからなかった。
+***** Take
+バグがゼロだったことこそ報告に値する結果だ。彼が手に入れたのは、次にシェーダーとRust構造体がずれた瞬間にGPUが固まる代わりにCIが落ちる状態で、維持費は構造体ごとに導出一行だけだ。リフレクションライブラリは普段シリアライズで自分を正当化するが、そこは手書き実装でもほぼ足りる。こちらの方が良い論拠になる。すべてのuniformの全フィールドにオフセットの検証を手書きする人はいないからだ。
+***** Comments
+- uniformバッファの構造体レイアウトを他のアドレス空間と揃えるWebGPU拡張があるが、現状はChromium系ブラウザにしか実装されていない。std140風のレイアウト制約はほぼ過去の遺物だ。
+- Vulkanバッファのアライメント問題のデバッグに時間を使いすぎた。WebGPUに最初からFacetのような良い道具があるのは大きな利点だ。
+- プログラミング言語がいまだに型をコンパイル時チェックとしてしか扱わないのは馬鹿げている。Facetのような道具で実行時の型情報を足せるのは素晴らしい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Facet으로 WebGPU 데이터 레이아웃 테스트하기
+***** TLDR
+Matt Keeter가 컴파일러가 막아 주지 않는 종류의 버그를 정리했다. WGSL과 Rust가 구조체 레이아웃을 다르게 본다는 문제다. 예로 든 Config 구조체에서 WGSL의 mat3x3f는 각 행을 16바이트로 채워 총 48바이트가 되는데, Rust의 ［［f32; 3］; 3］은 빈틈 없이 36바이트다. 그래서 공유 버퍼가 조용히 잘못 읽히고, 그의 경우 GPU 스레드가 계속 돌아서 재부팅해야 했다. 해법은 래퍼 타입이 아니라 테스트다. 테스트 빌드에서만 설정 구조체에 facet::Facet을 파생하고, WGSL을 naga로 파싱한 뒤, 제네릭 compare_struct_layout<T: facet::Facet>()이 셰이더와 비교해 전체 크기와 모든 필드의 오프셋과 크기를 검사한다. 런타임 크기 배열은 따로 처리한다. ColorConfig, MergeConfig, ShadeConfig, SsaoConfig, BlurConfig 다섯 개에 돌린 결과 기존 불일치는 없었다.
+***** Take
+버그가 하나도 없었다는 게 보고할 값어치가 있는 결과다. 그가 실제로 산 것은, 다음번에 셰이더가 Rust 구조체와 어긋나는 순간 GPU가 멈추는 대신 CI가 실패한다는 것이고, 유지비는 구조체마다 파생 한 줄이다. 리플렉션 라이브러리는 보통 직렬화로 자신을 정당화하는데 거기서는 손으로 쓴 구현도 거의 충분하다. 이쪽이 더 나은 논거다. uniform마다 모든 필드의 오프셋 단정문을 손으로 쓸 사람은 없기 때문이다.
+***** Comments
+- uniform 버퍼 구조체 레이아웃을 다른 주소 공간과 맞춰 주는 WebGPU 확장이 있지만, 현재는 Chromium 계열 브라우저에만 구현돼 있다. std140 방식의 레이아웃 제약은 사실상 유산이다.
+- Vulkan 버퍼 정렬 문제를 디버깅하는 데 시간을 너무 많이 썼다. WebGPU에 Facet 같은 좋은 도구가 처음부터 있는 건 큰 이득이다.
+- 프로그래밍 언어가 아직도 타입을 컴파일 타임 검사로만 다루는 건 터무니없다. Facet 같은 도구로 런타임 타입 정보를 되돌려 넣을 수 있는 건 훌륭하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Probando los diseños de datos de WebGPU con Facet
+***** TLDR
+Matt Keeter documenta una clase de error sin compilador que la atrape: WGSL y Rust no coinciden en el diseño de las estructuras. Su ejemplo es una estructura Config donde un mat3x3f de WGSL rellena cada fila hasta 16 bytes, 48 en total, mientras que el ［［f32; 3］; 3］ de Rust queda compacto en 36, así que un búfer compartido se lee mal en silencio y, en su caso, dejó hilos de GPU girando hasta que reinició la máquina. La solución es una prueba, no un tipo envoltorio: derivar facet::Facet en las estructuras de configuración solo en las compilaciones de test, parsear el WGSL con naga y dejar que una función genérica compare_struct_layout<T: facet::Facet>() verifique el tamaño total y el desplazamiento y tamaño de cada campo contra el shader, con un tratamiento aparte para los arrays de tamaño dinámico. Aplicada a cinco estructuras, ColorConfig, MergeConfig, ShadeConfig, SsaoConfig y BlurConfig, no encontró ninguna discrepancia existente.
+***** Take
+Encontrar cero errores es el resultado que merece publicarse. Lo que compró en realidad es que la próxima edición de un shader que se desvíe de su estructura en Rust falle en CI en lugar de colgar una GPU, y el coste de mantenimiento es un derive por estructura. Las bibliotecas de reflexión suelen justificarse con la serialización, donde una implementación a mano casi da igual; este es el caso mejor, porque nadie va a escribir a mano aserciones de desplazamiento para cada campo de cada uniform.
+***** Comments
+- Existe una extensión de WebGPU que armoniza el diseño de las estructuras de los búferes uniform con otros espacios de direcciones, pero por ahora solo está implementada en navegadores basados en Chromium. Las restricciones de diseño estilo std140 son básicamente un legado.
+- Pasé demasiado tiempo depurando problemas de alineación con búferes de Vulkan. Que WebGPU tenga buenas herramientas como Facet desde el principio es una gran ventaja.
+- Es absurdo que los lenguajes de programación sigan tratando los tipos solo como una comprobación en tiempo de compilación. Tener herramientas como Facet para añadir información de tipos en tiempo de ejecución es excelente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+WebGPU-Datenlayouts mit Facet testen
+***** TLDR
+Matt Keeter beschreibt eine Fehlerklasse, für die kein Compiler einsteht: WGSL und Rust sind sich über Struct-Layouts nicht einig. Sein Beispiel ist ein Config-Struct, in dem eine WGSL-mat3x3f jede Zeile auf 16 Byte auffüllt, insgesamt 48, während Rusts ［［f32; 3］; 3］ kompakt bei 36 liegt. Ein gemeinsamer Puffer wird dadurch still falsch gelesen, in seinem Fall liefen GPU-Threads endlos, bis er neu startete. Die Lösung ist ein Test statt eines Wrapper-Typs: facet::Facet nur in Testbuilds auf den Config-Structs deriven, das WGSL mit naga parsen und eine generische compare_struct_layout<T: facet::Facet>() prüft Gesamtgröße sowie Offset und Größe jedes Felds gegen den Shader, mit Sonderbehandlung für Arrays dynamischer Länge. Über fünf Structs laufen gelassen, ColorConfig, MergeConfig, ShadeConfig, SsaoConfig und BlurConfig, fand sie keine bestehenden Abweichungen.
+***** Take
+Null gefundene Fehler ist das Ergebnis, das den Bericht wert ist. Gekauft hat er damit, dass die nächste Shader-Änderung, die vom Rust-Struct abdriftet, in der CI scheitert statt eine GPU aufzuhängen, und die Wartung kostet ein Derive pro Struct. Reflection-Bibliotheken rechtfertigen sich meist über Serialisierung, wo eine handgeschriebene Implementierung fast genauso gut ist; dies ist der stärkere Fall, weil niemand für jedes Feld jedes Uniforms Offset-Assertions von Hand schreibt.
+***** Comments
+- Es gibt eine WebGPU-Erweiterung, die das Struct-Layout von Uniform-Buffern mit anderen Adressräumen harmonisiert, aber derzeit ist sie nur in Chromium-basierten Browsern implementiert. Die Layout-Beschränkungen im std140-Stil sind im Grunde Altlast.
+- Ich habe zu viel Zeit damit verbracht, Alignment-Probleme mit Vulkan-Buffern zu debuggen. Dass WebGPU von Anfang an gute Werkzeuge wie Facet hat, ist ein großer Gewinn.
+- Es ist absurd, wie oft Programmiersprachen Typen noch als reine Compile-Zeit-Prüfung behandeln. Werkzeuge wie Facet, die Typinformationen zur Laufzeit ergänzen, sind großartig.
