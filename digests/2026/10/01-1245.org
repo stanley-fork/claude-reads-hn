@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-01 12:45 UTC
+#+DATE: 2026-10-01T12:45:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Netlify swaps isolates for microVMs, DLSS 5 gets reimplemented bit-exact, and TLA+ admits what it can't prove
+
+* Highlights
+- Netlify: edge functions move to Firecracker, 25-40ms down to 5-6ms
+- OpenDLSS-NR: a bit-exact Vulkan reimplementation of DLSS 5's network
+- Hillel Wayne lists the properties TLA+ structurally cannot express
+- Ledge.sh: markdown notes where the code blocks actually run
+- CBP searched 55,318 travelers' devices in FY2025, no warrant needed
+
+* Stories
+
+** 5x faster Edge Functions: V8 isolates to Firecracker MicroVMs :infrastructure:serverless:firecracker:performance:
+:PROPERTIES:
+:ID:       49912444
+:URL:      https://www.netlify.com/blog/edge-functions-firecracker-microvms/
+:HN_URL:   https://news.ycombinator.com/item?id=49912444
+:POINTS:   190
+:COMMENTS: 85
+:BY:       jbott
+:END:
+
+*** TLDR
+Netlify moved Edge Functions off a hosted V8-isolate execution service and onto Firecracker microVMs running inside its own edge network. Warm invocation median went from 25-40ms to 5-6ms, p99 improved 47.4%, and cold starts (1.2% of traffic) average about 9ms. Unikraft built the compute layer handling VM boot, snapshot, restore and scale-to-zero. The old isolate-era limits still stand: 50ms CPU per request, 512MB memory, 20MB compressed code. Nothing changes for users, same API and pricing.
+
+*** Take
+The headline number is mostly about where the code runs, not how fast it runs. Netlify deleted a network hop to an external service and the median dropped. yencabulator in the thread spots this immediately, and the post never separates execution time from transport time. The interesting part is buried: Firecracker boots in under 1ms, which means the per-request isolate model has lost its main advantage, and the 50ms CPU cap Netlify kept is now a leftover from an architecture that no longer exists.
+
+*** Comments
+
+**** yencabulator
+:PROPERTIES:
+:COMMENT_ID: 49913201
+:END:
+So, the execution itself might now be slower as far as we know, they just eliminated some networking from the mix? Misleading.
+
+**** nderjung
+:PROPERTIES:
+:COMMENT_ID: 49912988
+:END:
+Alex from Unikraft here! Happy to answer any questions about the microVM part of the story from our side.
+
+**** Normal_gaussian
+:PROPERTIES:
+:COMMENT_ID: 49912770
+:END:
+I've been using SlicerVM extensively, Firecracker MicroVMs for the regular person, to run local edge-style workloads securely. It replaced my proxmox vm orchestrator.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+边缘函数提速 5 倍：从 V8 isolate 迁移到 Firecracker 微虚拟机
+***** TLDR
+Netlify 把 Edge Functions 从托管的 V8 isolate 执行服务迁移到自家边缘网络内运行的 Firecracker 微虚拟机。热调用中位数从 25-40 毫秒降到 5-6 毫秒，p99 提升 47.4%，冷启动（占流量 1.2%）平均约 9 毫秒。Unikraft 构建了负责虚拟机启动、快照、恢复和缩容到零的计算层。isolate 时代的限制依然存在：每请求 50 毫秒 CPU、512MB 内存、20MB 压缩代码。对用户没有任何变化，API 和定价不变。
+***** Take
+标题里的数字主要讲的是代码在哪里运行，而不是运行得多快。Netlify 去掉了通往外部服务的一次网络跳转，中位数就降下来了。帖子里 yencabulator 一眼就看穿了这点，而原文从未把执行时间和传输时间分开。真正有意思的被埋掉了：Firecracker 启动用时不到 1 毫秒，这意味着按请求创建 isolate 的模式已失去主要优势，而 Netlify 保留的 50 毫秒 CPU 上限，现在只是一个已不存在的架构留下的残余。
+***** Comments
+- 所以就我们所知，执行本身现在可能更慢了，他们只是去掉了链路里的一些网络环节？有误导性。
+- 我是 Unikraft 的 Alex！很乐意回答关于我们这边微虚拟机部分的任何问题。
+- 我一直在大量使用 SlicerVM，也就是给普通人用的 Firecracker 微虚拟机，安全地跑本地的边缘类工作负载。它取代了我的 proxmox 虚拟机编排器。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Edge Functionsが5倍高速化：V8 isolateからFirecracker MicroVMへ
+***** TLDR
+NetlifyはEdge Functionsを、ホスト型のV8 isolate実行サービスから自社エッジネットワーク内で動くFirecracker MicroVMへ移行した。ウォーム呼び出しの中央値は25〜40msから5〜6msになり、p99は47.4%改善、コールドスタート（トラフィックの1.2%）は平均約9ms。VMの起動、スナップショット、復元、ゼロスケールを担うコンピュート層はUnikraftが構築した。isolate時代の制限はそのままで、リクエストあたりCPU 50ms、メモリ512MB、圧縮コード20MB。ユーザー側の変更はなく、APIも料金も同じ。
+***** Take
+見出しの数字が示しているのは、コードがどれだけ速く走るかではなく、どこで走るかだ。Netlifyは外部サービスへのネットワークホップを1つ削り、中央値が下がった。スレッドのyencabulatorはすぐにそこを突いているが、記事は実行時間と転送時間を一度も切り分けていない。面白い点は埋もれている。Firecrackerの起動は1ms未満で、つまりリクエストごとのisolateモデルは最大の利点を失った。そしてNetlifyが残した50msのCPU上限は、もう存在しないアーキテクチャの名残だ。
+***** Comments
+- つまり分かっている範囲では実行自体はむしろ遅くなった可能性があり、ネットワーク部分を取り除いただけでは？誤解を招く。
+- UnikraftのAlexです！MicroVM部分について何でも質問してください。
+- SlicerVM、つまり普通の人向けのFirecracker MicroVMをかなり使って、ローカルでエッジ的なワークロードを安全に動かしている。proxmoxのVMオーケストレータを置き換えた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+5배 빨라진 Edge Functions: V8 아이솔레이트에서 Firecracker 마이크로VM으로
+***** TLDR
+Netlify는 Edge Functions를 호스팅형 V8 아이솔레이트 실행 서비스에서 자체 엣지 네트워크 안에서 돌아가는 Firecracker 마이크로VM으로 옮겼다. 웜 호출 중앙값은 25~40ms에서 5~6ms로 떨어졌고 p99는 47.4% 개선됐으며, 콜드 스타트(트래픽의 1.2%)는 평균 약 9ms다. VM 부팅, 스냅샷, 복원, 제로 스케일을 담당하는 컴퓨트 계층은 Unikraft가 만들었다. 아이솔레이트 시절의 제한은 그대로다. 요청당 CPU 50ms, 메모리 512MB, 압축 코드 20MB. 사용자 입장에서 바뀌는 것은 없고 API와 가격도 동일하다.
+***** Take
+헤드라인 숫자는 코드가 얼마나 빨리 도느냐가 아니라 어디서 도느냐에 관한 것이다. Netlify는 외부 서비스로 가는 네트워크 홉 하나를 없앴고 중앙값이 내려갔다. 스레드의 yencabulator가 곧바로 이 점을 짚었는데, 글은 실행 시간과 전송 시간을 한 번도 분리하지 않는다. 정작 흥미로운 대목은 묻혀 있다. Firecracker는 1ms 미만에 부팅하므로 요청마다 아이솔레이트를 띄우는 모델은 최대 장점을 잃었고, Netlify가 유지한 50ms CPU 상한은 이제 존재하지 않는 아키텍처의 잔재다.
+***** Comments
+- 그러니까 우리가 아는 한 실행 자체는 오히려 느려졌을 수도 있고, 그냥 네트워크 구간을 걷어낸 것뿐인가? 오해를 부른다.
+- Unikraft의 Alex입니다! 마이크로VM 쪽에 대해 무엇이든 물어보세요.
+- SlicerVM, 즉 일반인을 위한 Firecracker 마이크로VM을 많이 써서 로컬에서 엣지 스타일 워크로드를 안전하게 돌리고 있다. proxmox VM 오케스트레이터를 대체했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Edge Functions 5 veces más rápidas: de aislantes V8 a microVM de Firecracker
+***** TLDR
+Netlify movió sus Edge Functions de un servicio alojado de ejecución con aislantes V8 a microVM de Firecracker que corren dentro de su propia red de borde. La mediana de invocación en caliente bajó de 25-40 ms a 5-6 ms, el p99 mejoró 47,4% y los arranques en frío (1,2% del tráfico) promedian unos 9 ms. Unikraft construyó la capa de cómputo que gestiona arranque, snapshot, restauración y escalado a cero de las VM. Siguen los límites de la era de los aislantes: 50 ms de CPU por petición, 512 MB de memoria y 20 MB de código comprimido. Nada cambia para los usuarios: misma API y mismos precios.
+***** Take
+La cifra del titular habla sobre todo de dónde corre el código, no de cuán rápido corre. Netlify eliminó un salto de red hacia un servicio externo y la mediana cayó. yencabulator lo detecta de inmediato en el hilo, y el artículo nunca separa el tiempo de ejecución del tiempo de transporte. Lo interesante queda enterrado: Firecracker arranca en menos de 1 ms, así que el modelo de un aislante por petición perdió su principal ventaja, y el tope de 50 ms de CPU que Netlify mantuvo es un resto de una arquitectura que ya no existe.
+***** Comments
+- Entonces, por lo que sabemos, la ejecución misma podría ser más lenta ahora y solo quitaron parte de la red del camino. Engañoso.
+- Soy Alex, de Unikraft. Encantado de responder cualquier duda sobre la parte de microVM.
+- Llevo usando mucho SlicerVM, que es Firecracker MicroVM para gente normal, para correr cargas de estilo edge en local y de forma segura. Reemplazó mi orquestador de VM en proxmox.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Edge Functions 5-mal schneller: von V8-Isolates zu Firecracker-MicroVMs
+***** TLDR
+Netlify hat Edge Functions von einem gehosteten V8-Isolate-Ausführungsdienst auf Firecracker-MicroVMs im eigenen Edge-Netzwerk umgestellt. Der Median warmer Aufrufe sank von 25-40 ms auf 5-6 ms, p99 verbesserte sich um 47,4%, Cold Starts (1,2% des Traffics) liegen bei etwa 9 ms. Unikraft baute die Compute-Schicht für Boot, Snapshot, Restore und Scale-to-Zero der VMs. Die Grenzen aus der Isolate-Zeit bleiben: 50 ms CPU pro Request, 512 MB Speicher, 20 MB komprimierter Code. Für Nutzer ändert sich nichts, gleiche API und gleiche Preise.
+***** Take
+Die Zahl in der Überschrift sagt vor allem, wo der Code läuft, nicht wie schnell er läuft. Netlify hat einen Netzwerk-Hop zu einem externen Dienst gestrichen, und der Median fiel. yencabulator erkennt das im Thread sofort, und der Beitrag trennt Ausführungszeit nie von Transportzeit. Das Interessante steckt weiter unten: Firecracker bootet in unter 1 ms, womit das Modell eines Isolates pro Request seinen Hauptvorteil verliert, und das von Netlify beibehaltene CPU-Limit von 50 ms ist ein Überrest einer Architektur, die es nicht mehr gibt.
+***** Comments
+- Soweit wir wissen könnte die Ausführung selbst jetzt also langsamer sein, und sie haben nur etwas Netzwerk aus der Kette entfernt? Irreführend.
+- Alex von Unikraft hier! Ich beantworte gerne Fragen zum MicroVM-Teil der Geschichte.
+- Ich nutze SlicerVM intensiv, also Firecracker-MicroVMs für normale Leute, um lokale Edge-Workloads sicher laufen zu lassen. Es hat meinen Proxmox-VM-Orchestrator ersetzt.
+** OpenDLSS: A Vulkan Reimplementation of Nvidia's DLSS 5 Neural Rendering Network :graphics:nvidia:vulkan:reverse-engineering:
+:PROPERTIES:
+:ID:       49906100
+:URL:      https://github.com/maanHimself/OpenDLSS-NR
+:HN_URL:   https://news.ycombinator.com/item?id=49906100
+:POINTS:   136
+:COMMENTS: 77
+:BY:       sagacity
+:END:
+
+*** TLDR
+A Vulkan reimplementation of the neural rendering network in DLSS 5 build 310.8.0, producing bit-exact output against Nvidia's original. It reconstructs the 71-block Swin/ViT architecture with FP8 (E4M3) activations on tensor cores and FP16 accumulation. Inputs are one rendered frame, Gaussian noise, a reprojected previous frame and five conditioning scalars; output is an RGB residual plus a temporal-blend logit. It ships no Nvidia code or weights, you supply those yourself. 2.8ms at 768x768 and 29.3ms at 4K on an RTX 4070 SUPER. Windows only, Ada or newer, MIT licensed. DLSS-SR upscaling is not implemented.
+
+*** Take
+Bit-exact is the claim that matters and the thing that makes this legally awkward: matching Nvidia's output to the last bit means the architecture was recovered precisely, while the weights stay on Nvidia's side of the line. That split is the whole design. It also means the project is useless to anyone who doesn't already have a DLSS install, which is probably the point. Lerc asks the better engineering question in the thread: no z-buffer input, when depth is one of the most useful conditioning signals available to a renderer.
+
+*** Comments
+
+**** Lerc
+:PROPERTIES:
+:COMMENT_ID: 49906810
+:END:
+I'm rather surprised that it doesn't take the z-buffer as an input. I would have thought that would have provided useful information, it's one of the more useful forms of controlnet.
+
+**** dtf
+:PROPERTIES:
+:COMMENT_ID: 49906455
+:END:
+Seems quite similar to this repository? https://github.com/aloshdenny/open-dlss
+
+**** tim-projects
+:PROPERTIES:
+:COMMENT_ID: 49906620
+:END:
+Jensen: Nobody needs to code anymore... Programmer: OpenDLSS... Jensen: Wait. Not like that!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+OpenDLSS：用 Vulkan 重新实现英伟达 DLSS 5 神经渲染网络
+***** TLDR
+这是对 DLSS 5 build 310.8.0 中神经渲染网络的 Vulkan 重新实现，输出与英伟达原版逐位一致。项目还原了 71 个 block 的 Swin/ViT 架构，在张量核心上使用 FP8（E4M3）激活与 FP16 累加。输入是一帧渲染画面、高斯噪声、重投影的上一帧以及五个条件标量；输出是 RGB 残差加一个时序混合 logit。仓库不包含任何英伟达代码或权重，权重需自备。在 RTX 4070 SUPER 上，768x768 耗时 2.8 毫秒，4K 耗时 29.3 毫秒。仅支持 Windows，需要 Ada 及更新架构，MIT 许可。未实现 DLSS-SR 超分。
+***** Take
+逐位一致才是关键，也正是这件事在法律上尴尬的地方：输出能与英伟达精确到最后一位，说明架构被完整还原，而权重仍留在英伟达那一侧。这种切分就是整个设计。这也意味着项目对没有装过 DLSS 的人毫无用处，而这大概正是作者的意图。帖子里 Lerc 提出了更好的工程问题：为什么不把 z-buffer 作为输入，深度本来是渲染器能提供的最有用的条件信号之一。
+***** Comments
+- 我挺惊讶它没有把 z-buffer 作为输入。我本以为那会提供有用的信息，它是比较有用的一类 controlnet。
+- 看起来和这个仓库很像？https://github.com/aloshdenny/open-dlss
+- 黄仁勋：以后没人需要写代码了……程序员：OpenDLSS……黄仁勋：等等，不是这么个意思！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+OpenDLSS：NVIDIAのDLSS 5ニューラルレンダリングネットワークのVulkan再実装
+***** TLDR
+DLSS 5 build 310.8.0のニューラルレンダリングネットワークをVulkanで再実装したもので、NVIDIAのオリジナルとビット単位で一致する出力を出す。71ブロックのSwin/ViTアーキテクチャを、テンソルコア上のFP8（E4M3）活性化とFP16累算で再構成している。入力はレンダリング済みの1フレーム、ガウスノイズ、再投影した前フレーム、5つの条件スカラーで、出力はRGB残差と時間ブレンドのlogit。NVIDIAのコードも重みも含まれておらず、重みは自分で用意する。RTX 4070 SUPERで768x768が2.8ms、4Kが29.3ms。Windows専用、Ada世代以降、MITライセンス。DLSS-SRのアップスケーリングは未実装。
+***** Take
+重要なのはビット単位の一致で、それが法的に微妙な点でもある。NVIDIAの出力と最後のビットまで合うということはアーキテクチャが正確に復元されたということで、重みはNVIDIA側に残っている。この線引きが設計そのものだ。つまりDLSSを入れていない人にはまったく役に立たず、おそらくそれが狙いだろう。スレッドではLercがより良い技術的な問いを出している。深度はレンダラが使える条件付け信号の中でも有用な部類なのに、z-bufferが入力になっていない。
+***** Comments
+- z-bufferを入力に取らないのは意外だ。有用な情報を与えると思っていた。controlnetとしても有用な種類の一つだ。
+- このリポジトリとかなり似ている気がする？https://github.com/aloshdenny/open-dlss
+- ジェンスン：もう誰もコードを書く必要はない……プログラマ：OpenDLSS……ジェンスン：待て、そういう意味じゃない！
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+OpenDLSS: 엔비디아 DLSS 5 뉴럴 렌더링 네트워크의 Vulkan 재구현
+***** TLDR
+DLSS 5 build 310.8.0의 뉴럴 렌더링 네트워크를 Vulkan으로 재구현한 프로젝트로, 엔비디아 원본과 비트 단위로 동일한 출력을 낸다. 71개 블록의 Swin/ViT 구조를 텐서 코어에서 FP8(E4M3) 활성화와 FP16 누산으로 재구성했다. 입력은 렌더링된 한 프레임, 가우시안 노이즈, 재투영한 이전 프레임, 다섯 개의 조건 스칼라이며 출력은 RGB 잔차와 시간 혼합 logit이다. 엔비디아 코드나 가중치는 포함되지 않아 직접 구해야 한다. RTX 4070 SUPER에서 768x768은 2.8ms, 4K는 29.3ms. 윈도우 전용, Ada 이상, MIT 라이선스. DLSS-SR 업스케일링은 구현되지 않았다.
+***** Take
+핵심은 비트 단위 일치이고 바로 그 점이 법적으로 미묘하다. 엔비디아 출력과 마지막 비트까지 맞는다는 건 구조가 정확히 복원됐다는 뜻이고, 가중치는 엔비디아 쪽에 남아 있다. 이 분리가 설계의 전부다. 그래서 DLSS를 이미 설치한 사람이 아니면 쓸 데가 없는데, 아마 그게 의도일 것이다. 스레드에서 Lerc가 더 나은 공학적 질문을 던진다. 깊이는 렌더러가 쓸 수 있는 가장 유용한 조건 신호 중 하나인데 z-buffer가 입력에 없다.
+***** Comments
+- z-buffer를 입력으로 받지 않는 게 꽤 의외다. 유용한 정보를 줄 거라 생각했는데, controlnet으로서도 유용한 쪽에 속한다.
+- 이 저장소와 상당히 비슷해 보이는데? https://github.com/aloshdenny/open-dlss
+- 젠슨: 이제 아무도 코딩할 필요 없습니다… 프로그래머: OpenDLSS… 젠슨: 잠깐, 그런 뜻이 아니야!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+OpenDLSS: una reimplementación en Vulkan de la red de renderizado neuronal DLSS 5 de Nvidia
+***** TLDR
+Una reimplementación en Vulkan de la red de renderizado neuronal de DLSS 5 build 310.8.0 que produce una salida idéntica bit a bit a la de Nvidia. Reconstruye la arquitectura Swin/ViT de 71 bloques con activaciones FP8 (E4M3) en tensor cores y acumulación FP16. Las entradas son un fotograma renderizado, ruido gaussiano, el fotograma anterior reproyectado y cinco escalares de condicionamiento; la salida es un residuo RGB más un logit de mezcla temporal. No incluye código ni pesos de Nvidia: los pesos los aporta el usuario. 2,8 ms a 768x768 y 29,3 ms a 4K en una RTX 4070 SUPER. Solo Windows, Ada o posterior, licencia MIT. El escalado DLSS-SR no está implementado.
+***** Take
+Lo que importa es el bit a bit, y es también lo que lo vuelve incómodo en lo legal: igualar la salida de Nvidia hasta el último bit significa que la arquitectura se recuperó con precisión, mientras los pesos quedan del lado de Nvidia. Esa división es todo el diseño. También implica que el proyecto no sirve a quien no tenga ya DLSS instalado, que probablemente sea el objetivo. En el hilo, Lerc plantea la mejor pregunta de ingeniería: no hay entrada de z-buffer, cuando la profundidad es una de las señales de condicionamiento más útiles de un motor de render.
+***** Comments
+- Me sorprende bastante que no tome el z-buffer como entrada. Pensaba que aportaría información útil, es una de las formas más útiles de controlnet.
+- ¿No se parece bastante a este repositorio? https://github.com/aloshdenny/open-dlss
+- Jensen: Ya nadie necesita programar... Programador: OpenDLSS... Jensen: ¡Espera, no así!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+OpenDLSS: eine Vulkan-Reimplementierung von Nvidias DLSS-5-Netzwerk für neuronales Rendering
+***** TLDR
+Eine Vulkan-Reimplementierung des neuronalen Rendering-Netzwerks aus DLSS 5 Build 310.8.0, deren Ausgabe bitgenau mit Nvidias Original übereinstimmt. Sie rekonstruiert die Swin/ViT-Architektur mit 71 Blöcken, mit FP8-Aktivierungen (E4M3) auf Tensor Cores und FP16-Akkumulation. Eingaben sind ein gerendertes Bild, Gauß-Rauschen, das reprojizierte Vorbild und fünf Konditionierungsskalare; Ausgabe ist ein RGB-Residual plus ein Logit für die zeitliche Überblendung. Weder Nvidia-Code noch Gewichte sind enthalten, die Gewichte bringt man selbst mit. 2,8 ms bei 768x768 und 29,3 ms bei 4K auf einer RTX 4070 SUPER. Nur Windows, Ada oder neuer, MIT-Lizenz. DLSS-SR-Upscaling fehlt.
+***** Take
+Bitgenau ist die entscheidende Behauptung und gleichzeitig das juristisch Unangenehme: Wer Nvidias Ausgabe bis zum letzten Bit trifft, hat die Architektur exakt rekonstruiert, während die Gewichte auf Nvidias Seite bleiben. Diese Trennung ist der ganze Entwurf. Sie bedeutet auch, dass das Projekt für jeden ohne vorhandene DLSS-Installation nutzlos ist, was wohl so gewollt ist. Im Thread stellt Lerc die bessere technische Frage: kein z-Buffer als Eingabe, obwohl Tiefe eines der nützlichsten Konditionierungssignale eines Renderers ist.
+***** Comments
+- Mich überrascht, dass der z-Buffer nicht als Eingabe genutzt wird. Ich hätte gedacht, das liefert nützliche Informationen, es ist eine der brauchbareren Formen von Controlnet.
+- Sieht dem hier doch recht ähnlich? https://github.com/aloshdenny/open-dlss
+- Jensen: Niemand muss mehr programmieren... Programmierer: OpenDLSS... Jensen: Warte. Nicht so!
+** What TLA+ can and can't check :formal-methods:tla:verification:distributed-systems:
+:PROPERTIES:
+:ID:       49909056
+:URL:      https://buttondown.com/hillelwayne/archive/what-tla-can-and-cant-check/
+:HN_URL:   https://news.ycombinator.com/item?id=49909056
+:POINTS:   203
+:COMMENTS: 43
+:BY:       b-man
+:END:
+
+*** TLDR
+Hillel Wayne sorts TLA+ properties into what the tool handles natively and what it structurally cannot express. It checks invariants (［］P), action properties on state transitions (［］(x' >= x)), and liveness (［］<>P, <>［］P). It cannot express reachability (there exists a behavior where P holds), so you cannot ask whether a state is reachable or a game is winnable. It also cannot directly state multi-step properties like 'delete then undo restores the original', nor hyperproperties that compare two behaviors, such as proving low-power mode uses less energy than normal mode on the same action sequence. Workarounds exist via auxiliary variables and self-composition, but they bloat the model and loosen its correspondence to the real system.
+
+*** Take
+The root cause is one design decision: every TLA+ property is implicitly universally quantified over all behaviors, so existential claims have nowhere to live. That is a sharper framing than the usual 'formal methods are hard' complaint, and it explains why the workarounds feel wrong rather than merely tedious. The thread adds a real gap Wayne skips: singron points out PlusCal runs as if sequentially consistent, so weak memory models are invisible. If you reach for TLA+ to reason about atomics, that one is worth knowing before you start.
+
+*** Comments
+
+**** singron
+:PROPERTIES:
+:COMMENT_ID: 49909540
+:END:
+Another thing TLA+ isn't great at is modeling atomics and in particular weak-memory semantics. If you translate your algorithm to pcal, it will run as if it was sequentially consistent.
+
+**** spaintech
+:PROPERTIES:
+:COMMENT_ID: 49909330
+:END:
+I haven't noticed much mention of Ada/SPARK here, which surprised me. We used TLA+ for high-level formal specification, but transitioning the implementation to another language can be challenging.
+
+**** sourdecor
+:PROPERTIES:
+:COMMENT_ID: 49909210
+:END:
+Quint is an executable specification language which works in JavaScript, based on the temporal logic of actions. Anybody interested in TLA+ should check it out.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+TLA+ 能检查什么，不能检查什么
+***** TLDR
+Hillel Wayne 把 TLA+ 的性质分成工具原生支持的和结构上无法表达的两类。它能检查不变式（［］P）、状态转移上的动作性质（［］(x' >= x)）以及活性（［］<>P、<>［］P）。它无法表达可达性（存在某条行为使 P 成立），所以你没法问某个状态是否可达，或某个游戏是否可胜。它也无法直接表述跨多步的性质，比如“删除后撤销能恢复原状”，也无法表述比较两条行为的超性质，例如证明在同一动作序列下低功耗模式比普通模式更省电。用辅助变量和自组合可以绕过，但会让模型膨胀，并削弱它与真实系统的对应关系。
+***** Take
+根源是一个设计决定：TLA+ 的每条性质都隐式地对所有行为做全称量化，所以存在性断言根本无处安放。这个说法比通常那句“形式化方法很难”要锋利得多，也解释了为什么那些绕法让人觉得别扭，而不只是麻烦。帖子里补上了 Wayne 没提的一个真实缺口：singron 指出 PlusCal 的运行就像顺序一致，于是弱内存模型完全看不见。如果你打算用 TLA+ 推理原子操作，这一点值得在动手前先知道。
+***** Comments
+- TLA+ 不擅长的另一点是建模原子操作，尤其是弱内存语义。如果你把算法翻译成 pcal，它运行起来就像是顺序一致的。
+- 我在这里很少看到有人提 Ada/SPARK，这让我有点意外。我们用 TLA+ 做高层形式化规范，但把实现迁移到另一种语言会很有挑战。
+- Quint 是一种可执行的规范语言，在 JavaScript 里运行，基于动作时序逻辑。对 TLA+ 感兴趣的人都该看看。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+TLA+で検査できることと、できないこと
+***** TLDR
+Hillel Wayneは、TLA+が標準で扱える性質と構造的に表現できない性質を整理している。検査できるのは不変条件（［］P）、状態遷移に関する動作性質（［］(x' >= x)）、そして活性（［］<>P、<>［］P）。表現できないのは到達可能性（Pが成り立つ振る舞いが存在する）で、ある状態に到達できるか、ゲームに勝てるかは問えない。「削除して元に戻すと元の状態になる」といった複数ステップの性質も直接は書けず、2つの振る舞いを比べるハイパープロパティ、たとえば同じ操作列で省電力モードが通常モードより消費電力が少ないことの証明もできない。補助変数や自己合成で回避はできるが、モデルが膨らみ、実システムとの対応が曖昧になる。
+***** Take
+原因は設計上の一つの決定だ。TLA+のすべての性質は、あらゆる振る舞いに対して暗黙に全称量化されているため、存在を主張する命題は置き場所がない。これは「形式手法は難しい」というよくある不満よりずっと切れ味のある整理で、回避策が面倒なだけでなく筋が悪く感じる理由も説明する。スレッドではWayneが触れていない実際の穴が補われている。singronによれば、PlusCalは逐次一貫であるかのように実行されるため、弱いメモリモデルは見えない。アトミック操作の推論にTLA+を使うなら、始める前に知っておく価値がある。
+***** Comments
+- TLA+が苦手なもう一つの点はアトミック、特に弱いメモリ意味論のモデリングだ。アルゴリズムをpcalに翻訳すると、逐次一貫であるかのように動く。
+- ここでAda/SPARKの話をあまり見ないのは意外だった。高レベルの形式仕様にはTLA+を使ったが、実装を別の言語に移すのは難しい。
+- QuintはJavaScriptで動く実行可能な仕様記述言語で、動作時相論理に基づいている。TLA+に興味があるなら見てみるべきだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+TLA+가 검사할 수 있는 것과 할 수 없는 것
+***** TLDR
+Hillel Wayne은 TLA+가 기본으로 다루는 성질과 구조적으로 표현할 수 없는 성질을 나눈다. 검사 가능한 것은 불변식(［］P), 상태 전이에 대한 동작 성질(［］(x' >= x)), 그리고 활성(［］<>P, <>［］P)이다. 도달 가능성(P가 성립하는 행동이 존재한다)은 표현할 수 없어서 어떤 상태에 도달할 수 있는지, 게임을 이길 수 있는지는 물을 수 없다. '삭제 후 되돌리기로 원래 상태가 된다' 같은 여러 단계에 걸친 성질도 직접 쓸 수 없고, 같은 동작 시퀀스에서 절전 모드가 일반 모드보다 전력을 덜 쓴다는 식으로 두 행동을 비교하는 하이퍼프로퍼티도 불가능하다. 보조 변수와 자기 합성으로 우회할 수는 있지만 모델이 커지고 실제 시스템과의 대응이 느슨해진다.
+***** Take
+원인은 설계상의 한 가지 결정이다. TLA+의 모든 성질은 모든 행동에 대해 암묵적으로 전칭 한정되어 있어서 존재 주장은 들어갈 자리가 없다. 이는 흔한 '형식 기법은 어렵다'는 불만보다 훨씬 날카로운 정리이고, 우회책이 단지 번거로운 게 아니라 어긋나게 느껴지는 이유도 설명한다. 스레드는 Wayne이 건너뛴 실제 공백을 보탠다. singron은 PlusCal이 순차 일관성처럼 실행되므로 약한 메모리 모델이 보이지 않는다고 지적한다. 원자적 연산을 추론하려고 TLA+를 집어든다면 시작 전에 알아둘 만하다.
+***** Comments
+- TLA+가 잘 못하는 또 하나는 원자적 연산, 특히 약한 메모리 의미론을 모델링하는 것이다. 알고리즘을 pcal로 옮기면 순차 일관성처럼 돌아간다.
+- 여기서 Ada/SPARK 이야기를 거의 못 봐서 의외였다. 상위 수준 형식 명세에는 TLA+를 썼지만 구현을 다른 언어로 옮기는 건 어려울 수 있다.
+- Quint는 JavaScript에서 동작하는 실행 가능한 명세 언어로 동작 시간 논리에 기반한다. TLA+에 관심 있다면 봐야 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Lo que TLA+ puede y no puede comprobar
+***** TLDR
+Hillel Wayne separa las propiedades de TLA+ entre las que la herramienta maneja de forma nativa y las que no puede expresar por su estructura. Comprueba invariantes (［］P), propiedades de acción sobre transiciones de estado (［］(x' >= x)) y vivacidad (［］<>P, <>［］P). No puede expresar alcanzabilidad (existe un comportamiento donde P se cumple), así que no puedes preguntar si un estado es alcanzable o si un juego se puede ganar. Tampoco puede enunciar directamente propiedades de varios pasos como 'borrar y luego deshacer restaura el original', ni hiperpropiedades que comparen dos comportamientos, como probar que el modo de bajo consumo gasta menos energía que el normal con la misma secuencia de acciones. Hay rodeos con variables auxiliares y autocomposición, pero inflan el modelo y debilitan su correspondencia con el sistema real.
+***** Take
+La causa es una sola decisión de diseño: toda propiedad de TLA+ está cuantificada universalmente de forma implícita sobre todos los comportamientos, así que las afirmaciones existenciales no tienen dónde alojarse. Es un encuadre más preciso que la queja habitual de que los métodos formales son difíciles, y explica por qué los rodeos se sienten mal planteados y no solo tediosos. El hilo añade un hueco real que Wayne omite: singron señala que PlusCal se ejecuta como si hubiera consistencia secuencial, de modo que los modelos de memoria débil son invisibles. Si recurres a TLA+ para razonar sobre atómicos, conviene saberlo antes de empezar.
+***** Comments
+- Otra cosa en la que TLA+ no destaca es modelar atómicos y en particular la semántica de memoria débil. Si traduces tu algoritmo a pcal, se ejecutará como si fuera secuencialmente consistente.
+- No he visto mucha mención de Ada/SPARK por aquí, lo que me sorprendió. Usamos TLA+ para la especificación formal de alto nivel, pero pasar la implementación a otro lenguaje puede ser complicado.
+- Quint es un lenguaje de especificación ejecutable que funciona en JavaScript, basado en la lógica temporal de acciones. Quien se interese por TLA+ debería verlo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Was TLA+ prüfen kann und was nicht
+***** TLDR
+Hillel Wayne trennt TLA+-Eigenschaften in solche, die das Werkzeug direkt behandelt, und solche, die es strukturell nicht ausdrücken kann. Prüfbar sind Invarianten (［］P), Aktionseigenschaften über Zustandsübergänge (［］(x' >= x)) und Lebendigkeit (［］<>P, <>［］P). Nicht ausdrückbar ist Erreichbarkeit (es existiert ein Verhalten, in dem P gilt), man kann also nicht fragen, ob ein Zustand erreichbar oder ein Spiel gewinnbar ist. Ebenso fehlen mehrschrittige Eigenschaften wie 'löschen und dann rückgängig stellt das Original wieder her' sowie Hypereigenschaften, die zwei Verhalten vergleichen, etwa der Beweis, dass der Energiesparmodus bei gleicher Aktionsfolge weniger Strom verbraucht. Umwege über Hilfsvariablen und Selbstkomposition gibt es, sie blähen das Modell aber auf und lockern den Bezug zum realen System.
+***** Take
+Die Ursache ist eine einzige Entwurfsentscheidung: Jede TLA+-Eigenschaft ist implizit universell über alle Verhalten quantifiziert, existenzielle Aussagen haben also keinen Platz. Das ist eine schärfere Formulierung als die übliche Klage, formale Methoden seien schwer, und erklärt, warum die Umwege falsch statt nur mühsam wirken. Der Thread ergänzt eine echte Lücke, die Wayne auslässt: singron weist darauf hin, dass PlusCal so läuft, als gelte sequenzielle Konsistenz, womit schwache Speichermodelle unsichtbar bleiben. Wer mit TLA+ über Atomics nachdenken will, sollte das vorher wissen.
+***** Comments
+- Was TLA+ ebenfalls schlecht kann, ist Atomics zu modellieren, insbesondere schwache Speichersemantik. Übersetzt man den Algorithmus nach pcal, läuft er, als wäre er sequenziell konsistent.
+- Ada/SPARK wird hier kaum erwähnt, was mich überrascht hat. Wir haben TLA+ für die formale Spezifikation auf hoher Ebene genutzt, aber die Implementierung in eine andere Sprache zu überführen kann schwierig sein.
+- Quint ist eine ausführbare Spezifikationssprache für JavaScript, basierend auf der Temporallogik der Aktionen. Wer sich für TLA+ interessiert, sollte sie ansehen.
+** Show HN: Ledge.sh – Runnable Markdown Notes :devtools:markdown:show-hn:shell:
+:PROPERTIES:
+:ID:       49902382
+:URL:      https://ledge.sh
+:HN_URL:   https://news.ycombinator.com/item?id=49902382
+:POINTS:   159
+:COMMENTS: 70
+:BY:       dancablam
+:END:
+
+*** TLDR
+A markdown notebook where code blocks execute in place: press Cmd+Return on a block and output streams in beneath it. Supports shell, Python, Node, Ruby, PHP, SQL and AI prompts, with a persistent shell environment per note. Notes are plain markdown files, locally or on a remote server over SSH via ledge-server. Secrets live in profiles as environment variables rather than in the notes, and notes can be locked behind a passphrase. It also does git sync, wikilinks, backlinks, full-text search, daily notes, an MCP server for agents and a CLI. Built on Bun and Electrobun, Apache-2.0. Runs on macOS (Apple Silicon), Windows 11 with WSL, Linux, iOS and Android beta.
+
+*** Take
+The problem is real: the commands you actually run live in notes, and you retype or paste them all day. What Ledge adds over org-babel and Jupyter is the boring operational part, SSH execution against a named host, secrets in profiles instead of in the file, and a mobile client. That is the right set of things to care about for deploy runbooks. The risk is the same one every runbook tool has: a note with executable deploy commands and a one-key shortcut is a loaded gun, and the passphrase lock protects the file at rest, not the keystroke.
+
+*** Comments
+
+**** mfld
+:PROPERTIES:
+:COMMENT_ID: 49902810
+:END:
+During my time as a researcher, I heavily used org-babel to put code for data wrangling, plots, and notes into a single document. I would regularly export that to PDF using pdflatex to send it to collaborators.
+
+**** Piraty
+:PROPERTIES:
+:COMMENT_ID: 49903050
+:END:
+I see it might be handy for exploring, but I'd be careful about having runnable deploy commands sitting in notes.
+
+**** pratikdeoghare
+:PROPERTIES:
+:COMMENT_ID: 49902640
+:END:
+I have created Brashtag language for this and other things. Here I am using it as frontend to Jupyter and ollama.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN：Ledge.sh，可运行的 Markdown 笔记
+***** TLDR
+这是一个代码块能就地执行的 Markdown 笔记本：在代码块上按 Cmd+Return，输出就在下方流式显示。支持 shell、Python、Node、Ruby、PHP、SQL 和 AI 提示，每篇笔记有持久的 shell 环境。笔记就是普通 Markdown 文件，可存在本地，也可通过 ledge-server 以 SSH 存在远程服务器上。密钥放在 profile 里作为环境变量，而不是写进笔记，笔记还能用口令锁上。它还提供 git 同步、wikilink、反向链接、全文搜索、每日笔记、给 agent 用的 MCP 服务器和一个 CLI。基于 Bun 和 Electrobun，Apache-2.0 许可。支持 macOS（Apple Silicon）、带 WSL 的 Windows 11、Linux、iOS 和 Android 测试版。
+***** Take
+问题是真实的：你真正会运行的命令都躺在笔记里，然后你一整天不停地重敲或粘贴。Ledge 相比 org-babel 和 Jupyter 多出来的是那些不起眼的运维部分：针对指定主机的 SSH 执行、密钥放进 profile 而不是文件、以及一个移动端。对部署手册来说，这正是该关心的那几件事。风险和所有这类工具一样：一篇写着可执行部署命令、还配了一键快捷键的笔记就是一把上了膛的枪，而口令锁保护的是静态文件，不是那一次按键。
+***** Comments
+- 我做研究的时候大量使用 org-babel，把数据处理代码、图表和笔记放进同一个文档。我会定期用 pdflatex 导出成 PDF 发给合作者。
+- 我看得出它对探索性工作可能挺方便，但我会很小心，不想把可直接运行的部署命令放在笔记里。
+- 我为这类需求和其他事情做了 Brashtag 语言。这里我把它当作 Jupyter 和 ollama 的前端。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: Ledge.sh、実行できるMarkdownノート
+***** TLDR
+コードブロックをその場で実行できるMarkdownノートアプリ。ブロック上でCmd+Returnを押すと、出力が下にストリーミングされる。shell、Python、Node、Ruby、PHP、SQL、AIプロンプトに対応し、ノートごとに永続的なシェル環境を持つ。ノートはプレーンなMarkdownファイルで、ローカルでもledge-server経由のSSHでリモートサーバー上でも扱える。シークレットはノートではなくプロファイル内の環境変数として置き、ノートはパスフレーズでロックできる。git同期、wikilink、バックリンク、全文検索、デイリーノート、エージェント向けMCPサーバー、CLIも備える。BunとElectrobunで構築、Apache-2.0。macOS（Apple Silicon）、WSL入りWindows 11、Linux、iOS、Android（ベータ）で動く。
+***** Take
+課題は本物だ。実際に打つコマンドはノートの中にあり、一日中打ち直したり貼り付けたりしている。Ledgeがorg-babelやJupyterに足しているのは地味な運用部分、つまり指定ホストに対するSSH実行、ファイルではなくプロファイルに置くシークレット、そしてモバイルクライアントだ。デプロイ手順書で気にすべき点はまさにそこだ。リスクはこの種のツールに共通する。実行可能なデプロイコマンドとワンキーのショートカットが載ったノートは装填済みの銃で、パスフレーズのロックが守るのは保存されたファイルであって、そのキー入力ではない。
+***** Comments
+- 研究者だった頃、org-babelを多用してデータ整形のコードやプロット、ノートを一つの文書にまとめていた。pdflatexでPDFに書き出して共同研究者に送っていた。
+- 探索的な作業には便利そうだが、実行可能なデプロイコマンドをノートに置くのは慎重になりたい。
+- この用途などのためにBrashtagという言語を作った。ここではJupyterとollamaのフロントエンドとして使っている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: Ledge.sh, 실행되는 마크다운 노트
+***** TLDR
+코드 블록이 그 자리에서 실행되는 마크다운 노트 앱이다. 블록에서 Cmd+Return을 누르면 출력이 아래로 스트리밍된다. shell, Python, Node, Ruby, PHP, SQL, AI 프롬프트를 지원하고 노트마다 지속되는 셸 환경을 가진다. 노트는 평범한 마크다운 파일이며 로컬에 두거나 ledge-server를 통해 SSH로 원격 서버에 둘 수 있다. 비밀값은 노트가 아니라 프로파일의 환경 변수로 두고, 노트는 패스프레이즈로 잠글 수 있다. git 동기화, 위키링크, 백링크, 전문 검색, 데일리 노트, 에이전트용 MCP 서버, CLI도 제공한다. Bun과 Electrobun으로 만들었고 Apache-2.0. macOS(애플 실리콘), WSL을 갖춘 윈도우 11, 리눅스, iOS, 안드로이드 베타에서 동작한다.
+***** Take
+문제의식은 진짜다. 실제로 실행하는 명령은 노트에 들어 있고, 하루 종일 다시 타이핑하거나 붙여넣는다. Ledge가 org-babel과 Jupyter에 더하는 것은 눈에 안 띄는 운영 부분, 지정한 호스트를 상대로 한 SSH 실행, 파일이 아니라 프로파일에 둔 비밀값, 그리고 모바일 클라이언트다. 배포 런북에서 신경 써야 할 지점이 바로 그것들이다. 위험은 이런 도구 모두가 공유한다. 실행 가능한 배포 명령과 한 키 단축키가 담긴 노트는 장전된 총이고, 패스프레이즈 잠금이 보호하는 것은 저장된 파일이지 그 키 입력이 아니다.
+***** Comments
+- 연구자로 일할 때 org-babel을 많이 썼다. 데이터 가공 코드, 플롯, 메모를 한 문서에 넣고 pdflatex로 PDF로 내보내 공동 연구자에게 보냈다.
+- 탐색 작업에는 편할 것 같긴 한데, 실행 가능한 배포 명령을 노트에 두는 건 조심스럽다.
+- 이런 용도와 다른 것들을 위해 Brashtag 언어를 만들었다. 여기서는 Jupyter와 ollama의 프런트엔드로 쓰고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Ledge.sh, notas en markdown que se ejecutan
+***** TLDR
+Un cuaderno en markdown donde los bloques de código se ejecutan en el sitio: pulsas Cmd+Return sobre un bloque y la salida aparece debajo en streaming. Soporta shell, Python, Node, Ruby, PHP, SQL y prompts de IA, con un entorno de shell persistente por nota. Las notas son archivos markdown normales, en local o en un servidor remoto por SSH con ledge-server. Los secretos viven en perfiles como variables de entorno en lugar de dentro de las notas, y las notas se pueden bloquear con una contraseña. También hace sincronización con git, wikilinks, backlinks, búsqueda de texto completo, notas diarias, un servidor MCP para agentes y una CLI. Construido sobre Bun y Electrobun, licencia Apache-2.0. Funciona en macOS (Apple Silicon), Windows 11 con WSL, Linux, iOS y Android en beta.
+***** Take
+El problema es real: los comandos que de verdad ejecutas viven en tus notas, y te pasas el día reescribiéndolos o pegándolos. Lo que Ledge añade sobre org-babel y Jupyter es la parte operativa aburrida: ejecución por SSH contra un host concreto, secretos en perfiles en vez de en el archivo, y un cliente móvil. Para un runbook de despliegue, eso es exactamente lo que hay que cuidar. El riesgo es el mismo de siempre: una nota con comandos de despliegue ejecutables y un atajo de una tecla es un arma cargada, y el bloqueo por contraseña protege el archivo guardado, no la pulsación.
+***** Comments
+- En mi época de investigador usé mucho org-babel para meter código de tratamiento de datos, gráficas y notas en un solo documento. Lo exportaba a PDF con pdflatex para enviarlo a colaboradores.
+- Veo que puede resultar cómodo para explorar, pero tendría cuidado con dejar comandos de despliegue ejecutables dentro de las notas.
+- He creado el lenguaje Brashtag para esto y otras cosas. Aquí lo uso como frontend de Jupyter y ollama.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Ledge.sh, ausführbare Markdown-Notizen
+***** TLDR
+Ein Markdown-Notizbuch, in dem Codeblöcke an ihrer Stelle laufen: Cmd+Return auf einem Block, und die Ausgabe erscheint darunter im Stream. Unterstützt werden Shell, Python, Node, Ruby, PHP, SQL und KI-Prompts, mit einer dauerhaften Shell-Umgebung pro Notiz. Notizen sind einfache Markdown-Dateien, lokal oder per SSH über ledge-server auf einem entfernten Rechner. Geheimnisse liegen als Umgebungsvariablen in Profilen statt in den Notizen, und Notizen lassen sich mit einer Passphrase sperren. Dazu kommen Git-Sync, Wikilinks, Backlinks, Volltextsuche, Tagesnotizen, ein MCP-Server für Agenten und eine CLI. Gebaut auf Bun und Electrobun, Apache-2.0. Läuft auf macOS (Apple Silicon), Windows 11 mit WSL, Linux, iOS und Android im Beta-Stadium.
+***** Take
+Das Problem ist echt: Die Befehle, die man tatsächlich ausführt, stehen in Notizen, und man tippt oder kopiert sie den ganzen Tag. Was Ledge gegenüber org-babel und Jupyter ergänzt, ist der unspektakuläre Betriebsteil: SSH-Ausführung gegen einen benannten Host, Geheimnisse im Profil statt in der Datei und ein Mobil-Client. Für Deploy-Runbooks sind genau das die richtigen Punkte. Das Risiko ist dasselbe wie bei jedem Runbook-Werkzeug: Eine Notiz mit ausführbaren Deploy-Befehlen und einem Ein-Tasten-Kürzel ist eine geladene Waffe, und die Passphrase schützt die gespeicherte Datei, nicht den Tastendruck.
+***** Comments
+- In meiner Zeit als Forscher habe ich org-babel intensiv genutzt, um Code für Datenaufbereitung, Plots und Notizen in ein Dokument zu packen. Das habe ich regelmäßig mit pdflatex als PDF exportiert und an Mitarbeitende geschickt.
+- Für Exploration kann das praktisch sein, aber bei ausführbaren Deploy-Befehlen in Notizen wäre ich vorsichtig.
+- Ich habe dafür und für anderes die Sprache Brashtag gebaut. Hier nutze ich sie als Frontend für Jupyter und ollama.
+** Returning from vacation? The government can search your phone without a warrant :privacy:policy:surveillance:fourth-amendment:
+:PROPERTIES:
+:ID:       49920234
+:URL:      https://arstechnica.com/tech-policy/2026/09/immigration-advocate-sues-border-agents-for-demanding-his-cell-phone/
+:HN_URL:   https://news.ycombinator.com/item?id=49920234
+:POINTS:   89
+:COMMENTS: 61
+:BY:       rbanffy
+:END:
+
+*** TLDR
+Thomas Kennedy, an Argentinian-American writer and immigration advocate, is suing CBP after agents at Miami International Airport searched his bags, questioned him about his reading material, and demanded his phone. He was told that refusing meant extended interrogation and indefinite retention of the device. Agents held the phone about 45 minutes; Kennedy believes the data was copied and is asking a court to order it deleted. He argues he was targeted for his advocacy and Florida political organizing, citing earlier surveillance by Miami Police in 2021. The border exception to the Fourth Amendment is what makes these searches warrantless; CBP says it can copy device data given probable cause or a connection to immigration and customs matters. In FY2025 it searched 55,318 devices out of 419 million travelers processed, 0.0013%.
+
+*** Take
+The 0.0013% figure is CBP's defense and it is also the problem. A search power used on almost nobody is a search power that is being aimed, and Kennedy's claim is that the aim follows political activity. lbriner names the part that actually breaks: arrest comes with a stated suspicion and access to a lawyer, while a border device search comes with neither, so there is no record against which targeting could ever be shown. The statistic cannot distinguish restraint from selectivity, and that ambiguity is doing a lot of work in CBP's favor.
+
+*** Comments
+
+**** lbriner
+:PROPERTIES:
+:COMMENT_ID: 49920680
+:END:
+For me, it isn't the lack of warrant, it is the lack of transparency and accountability. If I was arrested on suspicion of something, I can get legal assistance and I can know what I am suspected of before any of my property could be taken.
+
+**** Tangurena2
+:PROPERTIES:
+:COMMENT_ID: 49920410
+:END:
+Out of 419 million travelers CBP processed, it searched the devices of 55,318, or 0.0013%. The harassment is targeted at critics and opponents of the current regime.
+
+**** TrackerFF
+:PROPERTIES:
+:COMMENT_ID: 49920520
+:END:
+People are not informed on just how much power border agents wield, not only in the US. I've worked cases where law enforcement would wait for surveillance objects to cross the border, as that's where they could collect the most data with the least hassle.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+度假归来？政府无需搜查令就能查你的手机
+***** TLDR
+阿根廷裔美国作家、移民权益倡导者 Thomas Kennedy 起诉美国海关与边境保护局（CBP）。在迈阿密国际机场，执法人员搜查了他的行李，询问他在读什么书，并要求交出手机。他被告知若拒绝，将面临更长时间的盘问并被无限期扣留设备。手机被扣约 45 分钟；Kennedy 认为数据被复制，现要求法院下令删除。他主张自己因倡导工作和在佛罗里达的政治组织活动而被针对，并提到 2021 年迈阿密警方对他的监视。让这类搜查无需搜查令的是第四修正案的边境例外；CBP 称在具备合理根据，或事项与移民、海关相关时可以复制设备数据。2025 财年，它在处理的 4.19 亿名旅客中搜查了 55,318 台设备，占 0.0013%。
+***** Take
+0.0013% 这个数字既是 CBP 的辩词，也正是问题所在。一项几乎不用在任何人身上的搜查权，就是一项被瞄准使用的搜查权，而 Kennedy 的指控是，瞄准跟着政治活动走。lbriner 点出了真正失效的地方：被逮捕时你会知道自己被怀疑什么，也能见律师，而边境设备搜查两者都没有，于是根本不存在任何可用来证明是否被针对的记录。这个统计数字无法区分克制与挑人，而这种含糊对 CBP 很有利。
+***** Comments
+- 对我来说，问题不是没有搜查令，而是缺乏透明度和问责。如果我因某项嫌疑被捕，我可以获得法律帮助，也能在任何财物被拿走之前知道自己被怀疑什么。
+- CBP 处理的 4.19 亿名旅客中，它搜查了 55,318 人的设备，占 0.0013%。这种骚扰是针对当前政权的批评者和反对者的。
+- 人们并不了解边境执法人员握有多大权力，这不只是美国。我办过一些案子，执法方会专门等监视对象过境，因为那里最容易、最省事地拿到数据。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+休暇から帰国？政府は令状なしであなたの携帯を調べられる
+***** TLDR
+アルゼンチン系アメリカ人の作家で移民支援活動家のThomas Kennedyが、CBPを訴えている。マイアミ国際空港で職員は彼の荷物を調べ、読んでいた本について質問し、携帯の提出を求めた。拒めば尋問が長引き、端末を無期限に保管すると告げられたという。携帯は約45分間保持され、Kennedyはデータが複製されたと考え、裁判所に削除を命じるよう求めている。彼は自分の支援活動とフロリダでの政治的な組織活動を理由に標的にされたと主張し、2021年のマイアミ警察による監視にも触れている。こうした捜索が令状なしで可能なのは、修正第4条の国境例外によるものだ。CBPは相当な理由がある場合、または移民・税関に関わる場合は端末データを複製できるとしている。2025会計年度には、処理した4億1900万人の旅行者のうち55,318台の端末を調べた。0.0013%にあたる。
+***** Take
+0.0013%という数字はCBPの弁明であり、同時に問題そのものだ。ほとんど誰にも使われない捜索権限は、狙いを定めて使われている捜索権限であり、Kennedyの主張はその狙いが政治活動を追っているというものだ。lbrinerが本当に壊れている部分を指摘している。逮捕には疑いの明示と弁護士へのアクセスが伴うが、国境での端末捜索にはどちらもない。だから標的化を示せるような記録がそもそも存在しない。この統計は自制と選別を区別できず、その曖昧さがCBPに有利に働いている。
+***** Comments
+- 私にとって問題は令状がないことではなく、透明性と説明責任の欠如だ。何かの疑いで逮捕されたなら、法的支援を受けられるし、財産を取られる前に何を疑われているか知ることができる。
+- CBPが処理した4億1900万人の旅行者のうち、端末を調べられたのは55,318人、0.0013%だ。この嫌がらせは現政権の批判者と反対者に向けられている。
+- 国境の職員がどれほどの権限を持つか、人々は知らない。米国だけの話でもない。法執行側が監視対象の越境を待つ事案に関わったことがある。そこが最も手間なくデータを集められる場所だからだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+휴가에서 돌아오는 길? 정부는 영장 없이 당신의 휴대폰을 뒤질 수 있다
+***** TLDR
+아르헨티나계 미국인 작가이자 이민 옹호 활동가인 Thomas Kennedy가 CBP를 상대로 소송을 냈다. 마이애미 국제공항에서 요원들은 그의 가방을 수색하고 읽던 책에 대해 캐물은 뒤 휴대폰을 요구했다. 거부하면 심문이 길어지고 기기를 무기한 보관하겠다는 말을 들었다고 한다. 휴대폰은 약 45분간 압수됐고, Kennedy는 데이터가 복제됐다고 보고 법원에 삭제 명령을 구하고 있다. 그는 자신의 옹호 활동과 플로리다에서의 정치 조직 활동 때문에 표적이 됐다고 주장하며 2021년 마이애미 경찰의 감시를 언급한다. 이런 수색을 영장 없이 가능하게 하는 것은 수정헌법 4조의 국경 예외다. CBP는 상당한 이유가 있거나 이민·관세 사안과 관련될 경우 기기 데이터를 복제할 수 있다고 밝힌다. 2025 회계연도에 처리한 여행자 4억 1900만 명 중 55,318대의 기기를 수색했고, 이는 0.0013%다.
+***** Take
+0.0013%라는 수치는 CBP의 변론이면서 동시에 문제 그 자체다. 거의 아무에게도 쓰이지 않는 수색 권한은 곧 겨냥해서 쓰이는 수색 권한이고, Kennedy의 주장은 그 겨냥이 정치 활동을 따라간다는 것이다. lbriner는 실제로 무너진 지점을 짚는다. 체포에는 어떤 혐의인지 알려주는 절차와 변호사 접근이 따라오지만 국경 기기 수색에는 둘 다 없다. 그래서 표적화를 입증할 수 있는 기록 자체가 존재하지 않는다. 이 통계는 자제와 선별을 구분하지 못하고, 그 모호함이 CBP에게 유리하게 작동한다.
+***** Comments
+- 내게 문제는 영장이 없다는 게 아니라 투명성과 책임성이 없다는 것이다. 어떤 혐의로 체포되면 법률 지원을 받을 수 있고, 재산을 가져가기 전에 무엇을 의심받는지 알 수 있다.
+- CBP가 처리한 4억 1900만 명의 여행자 중 기기를 수색당한 사람은 55,318명, 0.0013%다. 이 괴롭힘은 현 정권의 비판자와 반대자를 겨냥한 것이다.
+- 국경 요원이 얼마나 큰 권한을 쥐고 있는지 사람들은 모른다. 미국만의 일도 아니다. 법 집행 쪽이 감시 대상의 국경 통과를 기다리는 사건을 다뤄본 적 있다. 거기가 가장 손쉽게 데이터를 모을 수 있는 지점이기 때문이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿De vuelta de vacaciones? El gobierno puede revisar tu teléfono sin orden judicial
+***** TLDR
+Thomas Kennedy, escritor argentino-estadounidense y defensor de los inmigrantes, demanda a la CBP después de que agentes del Aeropuerto Internacional de Miami revisaran su equipaje, lo interrogaran sobre lo que estaba leyendo y le exigieran su teléfono. Le dijeron que negarse supondría un interrogatorio más largo y la retención indefinida del dispositivo. Los agentes retuvieron el teléfono unos 45 minutos; Kennedy cree que copiaron los datos y pide a un tribunal que ordene borrarlos. Sostiene que fue señalado por su activismo y su organización política en Florida, y cita una vigilancia previa de la policía de Miami en 2021. Lo que permite estos registros sin orden judicial es la excepción fronteriza a la Cuarta Enmienda; la CBP afirma que puede copiar datos si hay causa probable o relación con asuntos de inmigración y aduanas. En el año fiscal 2025 registró 55.318 dispositivos de 419 millones de viajeros procesados, el 0,0013%.
+***** Take
+La cifra del 0,0013% es la defensa de la CBP y también el problema. Una facultad de registro que se usa con casi nadie es una facultad que se está apuntando, y lo que alega Kennedy es que la puntería sigue la actividad política. lbriner señala lo que de verdad falla: una detención trae consigo una sospecha declarada y acceso a un abogado, y un registro de dispositivos en la frontera no trae ninguna de las dos, así que no existe un registro con el que pudiera demostrarse la selección. La estadística no distingue la contención de la selectividad, y esa ambigüedad trabaja mucho a favor de la CBP.
+***** Comments
+- Para mí el problema no es la falta de orden judicial, sino la falta de transparencia y rendición de cuentas. Si me detuvieran por sospecha de algo, puedo conseguir asistencia legal y saber de qué se me sospecha antes de que se llevaran nada mío.
+- De 419 millones de viajeros que procesó la CBP, registró los dispositivos de 55.318, el 0,0013%. El acoso está dirigido a los críticos y opositores del régimen actual.
+- La gente no sabe cuánto poder tienen los agentes fronterizos, y no solo en EE. UU. He trabajado casos en los que las fuerzas del orden esperaban a que los objetivos de vigilancia cruzaran la frontera, porque ahí podían recolectar más datos con menos trabas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zurück aus dem Urlaub? Der Staat darf dein Handy ohne Durchsuchungsbefehl durchsuchen
+***** TLDR
+Thomas Kennedy, argentinisch-amerikanischer Autor und Fürsprecher für Migranten, verklagt die CBP, nachdem Beamte am Miami International Airport sein Gepäck durchsucht, ihn zu seiner Lektüre befragt und sein Handy verlangt hatten. Man sagte ihm, eine Weigerung bedeute längeres Verhör und unbefristete Einbehaltung des Geräts. Die Beamten behielten das Handy etwa 45 Minuten; Kennedy geht davon aus, dass die Daten kopiert wurden, und verlangt vor Gericht deren Löschung. Er argumentiert, er sei wegen seiner Arbeit als Fürsprecher und seiner politischen Organisierung in Florida ins Visier geraten, und verweist auf eine Überwachung durch die Polizei von Miami im Jahr 2021. Möglich sind solche Durchsuchungen ohne Beschluss durch die Grenzausnahme vom vierten Verfassungszusatz; die CBP erklärt, sie dürfe Gerätedaten bei hinreichendem Verdacht oder bei Bezug zu Einwanderungs- und Zollfragen kopieren. Im Haushaltsjahr 2025 durchsuchte sie 55.318 Geräte bei 419 Millionen abgefertigten Reisenden, also 0,0013%.
+***** Take
+Die Zahl 0,0013% ist die Verteidigung der CBP und gleichzeitig das Problem. Eine Durchsuchungsbefugnis, die bei fast niemandem angewandt wird, ist eine Befugnis, die gezielt eingesetzt wird, und Kennedys Vorwurf lautet, das Ziel richte sich nach politischer Aktivität. lbriner benennt die Stelle, die wirklich bricht: Eine Verhaftung kommt mit einem genannten Verdacht und Zugang zu einem Anwalt, eine Gerätedurchsuchung an der Grenze mit keinem von beidem. Damit existiert kein Protokoll, an dem sich gezielte Auswahl überhaupt zeigen ließe. Die Statistik kann Zurückhaltung nicht von Selektivität unterscheiden, und diese Unklarheit arbeitet kräftig für die CBP.
+***** Comments
+- Für mich ist nicht der fehlende Beschluss das Problem, sondern die fehlende Transparenz und Rechenschaft. Würde ich unter Verdacht verhaftet, bekäme ich Rechtsbeistand und wüsste, was mir vorgeworfen wird, bevor mir etwas abgenommen wird.
+- Von 419 Millionen von der CBP abgefertigten Reisenden wurden bei 55.318 die Geräte durchsucht, 0,0013%. Die Schikane richtet sich gegen Kritiker und Gegner des aktuellen Regimes.
+- Menschen wissen nicht, wie viel Macht Grenzbeamte haben, und das gilt nicht nur für die USA. Ich habe an Fällen gearbeitet, in denen die Strafverfolgung wartete, bis die überwachten Personen eine Grenze überquerten, weil sich dort mit dem geringsten Aufwand am meisten Daten sammeln ließ.
