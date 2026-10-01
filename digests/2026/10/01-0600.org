@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-01 06:00 UTC
+#+DATE: 2026-10-01T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A 16-year-old forges a JWT at Microsoft, iron kills the Bronze Age, and HN argues over whether a farrier predicts our future
+
+* Highlights
+- Titan: alg:none got a teenager admin SQL on 17 trillion Microsoft rows, for $5,000
+- Bronze Age: local iron smelting is why no empire reconsolidated for centuries
+- Magnitude: 92% faster decode than llama.cpp, which commenters call the easy baseline
+- URSALA, RAQUEL, FARRAH: suitcase ELINT satellites that rode HEXAGON into orbit
+- 459 comments on whether a farrier turning mechanic says anything about AI
+
+* Stories
+
+** I could've accessed 17T Microsoft records :security:microsoft:jwt:bugbounty:
+:PROPERTIES:
+:ID:       49883970
+:URL:      https://blog.faav.net/how-i-couldve-accessed-17-trillion-microsoft-records
+:HN_URL:   https://news.ycombinator.com/item?id=49883970
+:POINTS:   285
+:COMMENTS: 120
+:BY:       luispa
+:END:
+
+*** TLDR
+Titan, an internal Microsoft analytics service, did not verify JWT signatures. The researcher, Faav, built an unsigned token with "alg":"none" and set the upn claim to "admin", which granted administrator SQL access across 17 connected analytics databases: about 17.3 trillion rows, 9,863 distinct table names, roughly 25,000 employee and account records with emails and login history, and Bing search activity with country and state level location. Faav ran two one-row queries to confirm access, extracted no customer PII, and received $5,000. Microsoft reviewed the writeup before publication and had sections and figures removed.
+
+*** Take
+The bug is alg:none, in 2026, at Microsoft, on a service wired to 17 databases. The $5,000 against a published program ceiling of $250,000, plus a pre-publication edit pass that cut figures, is how a company prices a report it would rather nobody read closely.
+
+*** Comments
+
+**** john_strinlai
+:PROPERTIES:
+:COMMENT_ID: 49884210
+:END:
+Microsoft had editorial control over this post, cutting sections and figures and reshaping how the impact is described before publication. That is not great. Pressuring a kid into handing over full editorial control of a disclosure is gross.
+
+**** sdfhbdf
+:PROPERTIES:
+:COMMENT_ID: 49884455
+:END:
+Awarded $5000. It's always controversial since it's hard to value an exploit, but the MSRC bounty page lists a top of $100,000 or $250,000 depending on the program.
+
+**** throwaway2037
+:PROPERTIES:
+:COMMENT_ID: 49884712
+:END:
+He published his first Microsoft write-up at 15, breaking into any Microsoft building via the guest check-in system. He's 16 now and this one is bigger.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我本可以访问 17 万亿条微软记录
+***** TLDR
+微软内部分析服务 Titan 不校验 JWT 签名。研究者 Faav 构造了一个 "alg":"none" 的未签名令牌，把 upn 声明改成 "admin"，于是获得了横跨 17 个互联分析数据库的管理员 SQL 权限：约 17.3 万亿行、9,863 个不同的表名、约 25,000 条含邮箱和登录历史的员工与账户记录，以及带国家和州级定位的 Bing 搜索行为数据。Faav 只跑了两次单行查询来确认权限，没有导出任何客户个人信息，获得 5,000 美元奖金。微软在文章发表前进行了审阅，删掉了部分章节和图表。
+***** Take
+漏洞就是 alg:none，发生在 2026 年的微软，在一个连着 17 个数据库的服务上。奖金 5,000 美元，而官方公布的上限是 250,000 美元，再加上发表前删图删段的审阅流程，这就是一家公司给一份它宁愿没人细看的报告定的价。
+***** Comments
+- 微软对这篇文章有编辑权，在发表前删掉了章节和图表，还重塑了影响的描述方式。这很糟糕。逼一个孩子交出披露文章的全部编辑权很恶劣。
+- 奖励 5000 美元。漏洞定价一向有争议，但 MSRC 奖金页面写的上限是 100,000 或 250,000 美元，取决于具体项目。
+- 他 15 岁时发表了第一篇微软研究，通过访客登记系统可以进入任何微软大楼。他现在 16 岁，这次的更大。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+17兆件のMicrosoftレコードにアクセスできた話
+***** TLDR
+Microsoft社内の分析サービスTitanがJWT署名を検証していなかった。研究者のFaavは"alg":"none"の未署名トークンを作り、upnクレームを"admin"に書き換えて、接続された17の分析データベースに対する管理者SQL権限を得た。約17.3兆行、9,863個のテーブル名、メールとログイン履歴を含む約25,000件の従業員・アカウント記録、国と州レベルの位置情報付きBing検索行動が対象だった。Faavは権限確認のため1行クエリを2回だけ実行し、顧客の個人情報は取得せず、報奨金5,000ドルを受け取った。Microsoftは公開前に記事を査読し、一部のセクションと図を削除させた。
+***** Take
+バグはalg:none。2026年のMicrosoftで、17のデータベースに繋がったサービスで起きた。公開されている上限が250,000ドルなのに5,000ドル、さらに図を削る公開前チェック。これは誰にも精読されたくない報告に会社が付けた値段だ。
+***** Comments
+- Microsoftがこの記事の編集権を持ち、公開前にセクションと図を削り、影響の記述を書き換えさせた。よくない。子どもに開示文の編集権を全部渡させるのは酷い。
+- 報奨金5000ドル。脆弱性の値付けは常に議論の的だが、MSRCの報奨金ページには上限100,000ドルか250,000ドルと書いてある。
+- 彼は15歳で最初のMicrosoft記事を公開した。来訪者受付システム経由でMicrosoftのどのビルにも入れるという話だ。今16歳で、今回はもっと大きい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+마이크로소프트 기록 17조 건에 접근할 수 있었다
+***** TLDR
+마이크로소프트 내부 분석 서비스 Titan이 JWT 서명을 검증하지 않았다. 연구자 Faav는 "alg":"none"인 미서명 토큰을 만들고 upn 클레임을 "admin"으로 바꿔, 연결된 17개 분석 데이터베이스에 대한 관리자 SQL 권한을 얻었다. 약 17.3조 행, 9,863개의 테이블 이름, 이메일과 로그인 기록이 담긴 약 25,000건의 직원 및 계정 기록, 국가와 주 단위 위치가 붙은 Bing 검색 활동이 포함됐다. Faav는 권한 확인용으로 한 행짜리 쿼리 두 번만 실행했고 고객 개인정보는 가져오지 않았으며 5,000달러를 받았다. 마이크로소프트는 공개 전 글을 검토해 일부 섹션과 그림을 삭제하게 했다.
+***** Take
+버그는 alg:none이다. 2026년 마이크로소프트에서, 데이터베이스 17개에 연결된 서비스에서 벌어졌다. 공개된 상한이 250,000달러인데 5,000달러, 거기에 그림을 잘라낸 사전 검토까지. 아무도 자세히 읽지 않기를 바라는 보고서에 회사가 매긴 가격이다.
+***** Comments
+- 마이크로소프트가 이 글에 편집권을 행사해 공개 전에 섹션과 그림을 자르고 영향 서술을 바꿨다. 좋지 않다. 아이에게 공개 문서의 편집권을 전부 넘기라고 압박하는 건 추하다.
+- 5000달러라니. 취약점 가치 산정은 늘 논쟁거리지만 MSRC 포상 페이지에는 프로그램에 따라 최고 100,000달러 또는 250,000달러라고 적혀 있다.
+- 그는 15살에 첫 마이크로소프트 보고서를 냈다. 방문자 체크인 시스템으로 어느 마이크로소프트 건물이든 들어갈 수 있다는 내용이었다. 지금 16살이고 이번 건이 더 크다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Pude haber accedido a 17 billones de registros de Microsoft
+***** TLDR
+Titan, un servicio interno de analítica de Microsoft, no verificaba las firmas JWT. El investigador Faav creó un token sin firmar con "alg":"none" y puso la reclamación upn en "admin", lo que le dio acceso SQL de administrador a 17 bases de datos analíticas conectadas: unos 17,3 billones de filas, 9.863 nombres de tablas distintos, unos 25.000 registros de empleados y cuentas con correos e historial de inicio de sesión, y actividad de búsqueda de Bing con ubicación a nivel de país y estado. Faav ejecutó dos consultas de una fila para confirmar el acceso, no extrajo datos personales de clientes y recibió 5.000 dólares. Microsoft revisó el artículo antes de publicarlo e hizo eliminar secciones y figuras.
+***** Take
+El fallo es alg:none, en 2026, en Microsoft, en un servicio conectado a 17 bases de datos. Los 5.000 dólares frente a un techo publicado de 250.000, más una revisión previa que recortó figuras, es el precio que pone una empresa a un informe que preferiría que nadie leyera con atención.
+***** Comments
+- Microsoft tuvo control editorial sobre este artículo, cortó secciones y figuras y reformuló cómo se describe el impacto antes de publicarlo. Eso está mal. Presionar a un chico para que ceda el control editorial de una divulgación es repugnante.
+- Premiado con 5000 dólares. Siempre es polémico porque es difícil valorar un exploit, pero la página de recompensas de MSRC indica un máximo de 100.000 o 250.000 dólares según el programa.
+- Publicó su primer informe sobre Microsoft a los 15 años: entrar en cualquier edificio de Microsoft a través del sistema de registro de visitantes. Ahora tiene 16 y este es más grande.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ich hätte auf 17 Billionen Microsoft-Datensätze zugreifen können
+***** TLDR
+Titan, ein interner Analysedienst von Microsoft, prüfte JWT-Signaturen nicht. Der Forscher Faav baute ein unsigniertes Token mit "alg":"none" und setzte den upn-Claim auf "admin", was ihm Administrator-SQL-Zugriff auf 17 verbundene Analysedatenbanken verschaffte: rund 17,3 Billionen Zeilen, 9.863 verschiedene Tabellennamen, etwa 25.000 Mitarbeiter- und Kontodatensätze mit E-Mails und Login-Historie sowie Bing-Suchaktivität mit Standort auf Länder- und Bundesstaatsebene. Faav führte zwei Einzeilenabfragen zur Bestätigung aus, extrahierte keine Kundendaten und erhielt 5.000 Dollar. Microsoft prüfte den Beitrag vor der Veröffentlichung und ließ Abschnitte und Abbildungen entfernen.
+***** Take
+Der Fehler ist alg:none, im Jahr 2026, bei Microsoft, in einem Dienst mit Zugang zu 17 Datenbanken. Die 5.000 Dollar gegen eine veröffentlichte Obergrenze von 250.000, dazu eine Vorabprüfung, die Abbildungen strich: so bepreist ein Konzern einen Bericht, den niemand genau lesen soll.
+***** Comments
+- Microsoft hatte redaktionelle Kontrolle über diesen Beitrag, strich Abschnitte und Abbildungen und formulierte die Beschreibung der Auswirkungen vor der Veröffentlichung um. Das ist nicht gut. Einen Jugendlichen zur Abgabe der redaktionellen Kontrolle über eine Offenlegung zu drängen, ist widerlich.
+- 5000 Dollar Belohnung. Der Wert eines Exploits ist immer umstritten, aber die MSRC-Bounty-Seite nennt je nach Programm ein Maximum von 100.000 oder 250.000 Dollar.
+- Mit 15 veröffentlichte er seinen ersten Microsoft-Bericht: Zugang zu jedem Microsoft-Gebäude über das Besucher-Check-in-System. Jetzt ist er 16 und das hier ist größer.
+** Why the Bronze Age Collapsed :history:archaeology:economics:
+:PROPERTIES:
+:ID:       49890732
+:URL:      https://www.worksinprogress.news/p/why-really-caused-the-bronze-age
+:HN_URL:   https://news.ycombinator.com/item?id=49890732
+:POINTS:   160
+:COMMENTS: 82
+:BY:       AnodicElegy
+:END:
+
+*** TLDR
+Works in Progress argues the real puzzle is not why Bronze Age empires fell but why nothing reconsolidated for centuries. Bronze needed tin from Afghanistan, Cornwall and France, so only states that could run long supply chains could arm an army. Once bloomery furnaces made iron workable around 1200 BC, the fourth most abundant element in the crust could be smelted locally, and peripheral communities could produce weapons comparable to elite ones. Supporting evidence cited: skeletal trauma rising after iron adoption, average reign lengths dropping 29%, and ancient writers linking iron directly to wider warfare. Drought, famine and the Sea Peoples are treated as shocks that explain the fall but not the long silence.
+
+*** Take
+Splitting the collapse from the failure to recover is the useful move here, because the Sea Peoples story never explained the centuries of silence. The weak point is the one randomImmigrant names in the thread: the Harappans had tin nearby and bronze in ordinary houses with little visible hierarchy, which the supply-chain-equals-centralization argument has to account for.
+
+*** Comments
+
+**** cobbzilla
+:PROPERTIES:
+:COMMENT_ID: 49891104
+:END:
+Eric Cline makes a good case that Bronze Age empires were organized around a palace economy, where only royals and their pals were allowed to trade. In some places the sovereign literally owned all the land and the people on it. A series of bad seasons, disasters and invasions would open a window for revolt.
+
+**** randomImmigrant
+:PROPERTIES:
+:COMMENT_ID: 49891388
+:END:
+Doesn't the Harappan civilization make a mess of all this? Tin was nearby, there's evidence of bronze artifacts in houses across the cities, and far less evidence of hierarchical power than in other Bronze Age civilizations.
+
+**** austin-cheney
+:PROPERTIES:
+:COMMENT_ID: 49890988
+:END:
+The event that really kicked things off was the explosion of Santorini. The dead empires weren't quickly replaced because after extensive famines and invasions they were replaced by different people with different social objectives.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+青铜时代为何崩溃
+***** TLDR
+Works in Progress 认为真正的谜题不是青铜时代帝国为何倒塌，而是为何几百年里没有新帝国重新整合。青铜需要来自阿富汗、康沃尔和法国的锡，因此只有能维持长供应链的国家才能武装军队。约公元前 1200 年块炼炉让铁可以加工后，这种地壳中含量第四高的元素可以就地冶炼，边缘社群也能造出与精英武器相当的兵器。文章援引的证据包括：铁普及后骸骨创伤增加、统治者在位时长平均下降 29%，以及古代作者直接把铁与战争扩散联系起来。干旱、饥荒和海上民族被视为能解释倒塌、但解释不了那段漫长空白的冲击。
+***** Take
+把崩溃和无法恢复拆成两个问题是本文最有价值的一步，因为海上民族的叙事从未解释那几百年的空白。薄弱处正是评论里 randomImmigrant 指出的：哈拉帕文明锡矿就在附近，青铜器出现在普通住宅里，等级结构的痕迹却很少，供应链等于中央集权的论证必须解释这一点。
+***** Comments
+- Eric Cline 有个很好的论证：青铜时代帝国围绕宫廷经济组织，只有王室及其亲信才被允许贸易。有些地方君主字面上拥有全部土地和土地上的人。连续的歉收、灾难和入侵会打开反叛的窗口。
+- 哈拉帕文明不是把这套说法搞乱了吗？那里锡矿就在附近，城市各处的住宅里都有青铜器，等级权力的证据也远少于其他青铜时代文明。
+- 真正引爆这一切的是圣托里尼火山爆发。那些死去的帝国没有被迅速取代，是因为在大规模饥荒和入侵之后，取代它们的是有着不同社会目标的另一批人。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+青銅器時代はなぜ崩壊したのか
+***** TLDR
+Works in Progressは、本当の謎は青銅器時代の帝国がなぜ倒れたかではなく、なぜ数世紀にわたって何も再統合しなかったかだと論じる。青銅にはアフガニスタン、コーンウォール、フランスからの錫が必要で、長い供給網を運営できる国家だけが軍を武装できた。紀元前1200年頃に塊鉄炉で鉄が扱えるようになると、地殻で4番目に豊富な元素を各地で製錬できるようになり、周縁の共同体でも支配層に匹敵する武器を作れた。根拠として、鉄の普及後に骨の外傷が増えたこと、治世の平均長さが29%短くなったこと、古代の著者が鉄と戦争の拡大を直接結び付けていたことが挙げられる。旱魃、飢饉、海の民は崩壊を説明するが、その後の長い空白は説明しない衝撃として扱われる。
+***** Take
+崩壊と再建の失敗を切り離したのがこの記事の価値だ。海の民の物語は数世紀の空白をついに説明しなかった。弱点はスレッドでrandomImmigrantが指摘した点にある。ハラッパーでは錫が近くにあり、普通の家に青銅器があり、階層の痕跡は乏しい。供給網が中央集権を生むという議論はこれを説明しなければならない。
+***** Comments
+- Eric Clineの論は説得力がある。青銅器時代の帝国は宮廷経済を軸に組織され、王族とその取り巻きだけが交易を許された。場所によっては君主が土地とそこに住む人間を文字通り所有していた。不作、災害、侵攻が続けば反乱の窓が開く。
+- ハラッパー文明はこの話を台無しにしないか。錫は近くにあり、都市中の住居から青銅器が出て、他の青銅器文明より階層的権力の証拠がずっと少ない。
+- すべての引き金はサントリーニの噴火だ。滅びた帝国がすぐに置き換わらなかったのは、大規模な飢饉と侵攻のあとに、別の社会目標を持つ別の人々が入ってきたからだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+청동기 시대는 왜 붕괴했는가
+***** TLDR
+Works in Progress는 진짜 수수께끼가 청동기 제국이 왜 무너졌는지가 아니라 왜 수백 년 동안 아무것도 재통합되지 않았는지라고 주장한다. 청동에는 아프가니스탄, 콘월, 프랑스에서 오는 주석이 필요했고, 긴 공급망을 운영할 수 있는 국가만 군대를 무장시킬 수 있었다. 기원전 1200년경 괴철로가 철을 다룰 수 있게 만들자 지각에서 네 번째로 풍부한 원소를 현지에서 제련할 수 있게 되었고, 변방 공동체도 지배층에 견줄 무기를 만들 수 있었다. 근거로는 철 도입 이후 늘어난 골격 외상, 평균 재위 기간 29% 감소, 철과 전쟁 확산을 직접 연결한 고대 저자들의 기록이 제시된다. 가뭄, 기근, 바다 민족은 붕괴는 설명하지만 그 뒤의 긴 공백은 설명하지 못하는 충격으로 다뤄진다.
+***** Take
+붕괴와 회복 실패를 분리한 것이 이 글의 쓸모다. 바다 민족 서사는 수백 년의 공백을 끝내 설명하지 못했다. 약한 지점은 스레드에서 randomImmigrant가 짚은 부분이다. 하라파에는 주석이 가까이 있었고 평범한 집에 청동기가 있었으며 위계의 흔적은 적었다. 공급망이 중앙집권을 낳는다는 논증은 이걸 설명해야 한다.
+***** Comments
+- Eric Cline의 주장은 설득력이 있다. 청동기 제국은 궁정 경제로 조직되어 왕족과 그 측근만 교역할 수 있었다. 어떤 곳에서는 군주가 모든 토지와 그 위의 사람들을 문자 그대로 소유했다. 흉작, 재난, 침입이 이어지면 반란의 창이 열린다.
+- 하라파 문명이 이 전체를 흐트러뜨리지 않나? 주석이 가까이 있었고 도시 전역의 집에서 청동 유물이 나오며, 다른 청동기 문명보다 위계적 권력의 증거가 훨씬 적다.
+- 모든 것을 촉발한 사건은 산토리니 폭발이다. 죽은 제국들이 빨리 대체되지 않은 이유는, 대규모 기근과 침입 뒤에 다른 사회적 목표를 가진 다른 사람들이 그 자리를 채웠기 때문이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué colapsó la Edad del Bronce
+***** TLDR
+Works in Progress sostiene que el verdadero enigma no es por qué cayeron los imperios de la Edad del Bronce, sino por qué nada se reconsolidó durante siglos. El bronce requería estaño de Afganistán, Cornualles y Francia, así que solo los estados capaces de gestionar cadenas de suministro largas podían armar un ejército. Cuando los hornos de reducción directa hicieron utilizable el hierro hacia el 1200 a.C., el cuarto elemento más abundante de la corteza pudo fundirse localmente y las comunidades periféricas pudieron fabricar armas comparables a las de la élite. Evidencia citada: aumento del trauma en restos óseos tras la adopción del hierro, caída del 29% en la duración media de los reinados y autores antiguos que vinculan el hierro con una guerra más extendida. La sequía, el hambre y los Pueblos del Mar se tratan como golpes que explican la caída pero no el largo silencio.
+***** Take
+Separar el colapso del fracaso en recuperarse es el movimiento útil del artículo, porque la historia de los Pueblos del Mar nunca explicó esos siglos de silencio. El punto débil es el que señala randomImmigrant en el hilo: los harappanos tenían estaño cerca y bronce en casas corrientes con poca jerarquía visible, algo que el argumento de cadena de suministro igual a centralización tiene que explicar.
+***** Comments
+- Eric Cline argumenta bien que los imperios de la Edad del Bronce se organizaban en torno a una economía palaciega, donde solo la realeza y sus allegados podían comerciar. En algunos sitios el soberano poseía literalmente toda la tierra y la gente que vivía en ella. Una serie de malas cosechas, desastres e invasiones abriría una ventana para la revuelta.
+- ¿No desbarata todo esto la civilización harappana? El estaño estaba cerca, hay artefactos de bronce en casas por toda la ciudad y mucha menos evidencia de poder jerárquico que en otras civilizaciones de la Edad del Bronce.
+- El acontecimiento que de verdad lo desencadenó fue la explosión de Santorini. Los imperios muertos no fueron reemplazados rápido porque, tras hambrunas e invasiones extensas, los reemplazó otra gente con otros objetivos sociales.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum die Bronzezeit kollabierte
+***** TLDR
+Works in Progress argumentiert, das eigentliche Rätsel sei nicht, warum die bronzezeitlichen Reiche fielen, sondern warum sich jahrhundertelang nichts neu konsolidierte. Bronze brauchte Zinn aus Afghanistan, Cornwall und Frankreich, also konnten nur Staaten mit langen Lieferketten ein Heer ausrüsten. Als Rennöfen um 1200 v. Chr. Eisen nutzbar machten, konnte das vierthäufigste Element der Erdkruste lokal verhüttet werden, und Gemeinschaften der Peripherie konnten Waffen herstellen, die denen der Eliten gleichkamen. Belege: mehr Skeletttraumata nach der Eiseneinführung, ein Rückgang der durchschnittlichen Regierungsdauer um 29% und antike Autoren, die Eisen direkt mit ausgeweiteter Kriegsführung verbinden. Dürre, Hunger und Seevölker gelten als Schocks, die den Fall erklären, nicht aber die lange Stille danach.
+***** Take
+Den Kollaps vom Scheitern des Wiederaufbaus zu trennen, ist der nützliche Schritt, denn die Seevölker-Erzählung hat die Jahrhunderte der Stille nie erklärt. Die Schwachstelle benennt randomImmigrant im Thread: Die Harappa-Kultur hatte Zinn in der Nähe und Bronze in gewöhnlichen Häusern bei kaum sichtbarer Hierarchie, und das muss das Argument Lieferkette gleich Zentralisierung erklären.
+***** Comments
+- Eric Cline begründet gut, dass bronzezeitliche Reiche um eine Palastwirtschaft organisiert waren, in der nur Könige und ihre Günstlinge handeln durften. Mancherorts besaß der Herrscher buchstäblich alles Land und die Menschen darauf. Eine Reihe schlechter Erntejahre, Katastrophen und Invasionen öffnete das Fenster für Aufstände.
+- Bringt die Harappa-Kultur das nicht alles durcheinander? Zinn lag nahe, es gibt Bronzeartefakte in Häusern über die Städte verteilt, und viel weniger Belege für hierarchische Macht als in anderen bronzezeitlichen Kulturen.
+- Das Ereignis, das alles ins Rollen brachte, war die Explosion von Santorin. Die toten Reiche wurden nicht schnell ersetzt, weil nach umfangreichen Hungersnöten und Invasionen andere Menschen mit anderen gesellschaftlichen Zielen an ihre Stelle traten.
+** Launch HN: Magnitude (YC S25) – Self-optimizing inference engine for agents :ai:localllm:performance:yc:
+:PROPERTIES:
+:ID:       49911995
+:URL:      https://github.com/magnitudedev/magnitude
+:HN_URL:   https://news.ycombinator.com/item?id=49911995
+:POINTS:   143
+:COMMENTS: 70
+:BY:       anerli
+:END:
+
+*** TLDR
+Magnitude compiles and tunes its kernels on your actual device before a model runs, instead of shipping precompiled kernels for broad hardware classes the way llama.cpp does. Claimed numbers against llama.cpp: 92% faster decode and 9% faster prefill on Metal, 19% faster decode and 23% faster prefill on CUDA. Apache 2.0, runs on Apple Silicon, NVIDIA, AMD or plain CPU, exposes an OpenAI-compatible API, and hand-writes optimized kernels for the popular open-weight families rather than supporting everything. The pitch is local agent workloads: long sessions, several running at once, while you still use the machine.
+
+*** Take
+Two of the top three commenters land the same hit, and it is the right one: on Apple Silicon the baseline people actually run is MLX, not llama.cpp. Until there's an mlx_lm number, 92% faster decode on Metal is a measurement against the opponent that makes the chart look best. sebastienburel's second point matters more anyway: for agents the cost is resending the system prompt and tool schemas every turn, which no kernel tuning touches.
+
+*** Comments
+
+**** sebastienburel
+:PROPERTIES:
+:COMMENT_ID: 49912201
+:END:
+On a Mac the baseline I'd want is MLX, not llama.cpp. llama.cpp isn't the fast path on Apple Silicon for most models people run locally, so a speedup over llama.cpp could still be slower than mlx_lm. Second, more important for agents: decode speed is rarely what hurts. It's resending the same system prompt plus tool schemas every turn.
+
+**** kmike84
+:PROPERTIES:
+:COMMENT_ID: 49912377
+:END:
+This seems to be a good idea. However, beating llama.cpp on speed is a low bar. I found it to be a good baseline, but at least on Mac there was always something way faster, like ds4, omlx, mtplx.
+
+**** lxe
+:PROPERTIES:
+:COMMENT_ID: 49912455
+:END:
+On my local inference box I have a perpetual codex thread open in my llama.cpp checkout that I periodically ask to look at pending llama.cpp PRs, research the latest MTP and attention optimizations, check model quants and finetunes, and sweep the frontier.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Launch HN：Magnitude（YC S25）——为智能体打造的自优化推理引擎
+***** TLDR
+Magnitude 在模型运行前于你的实际设备上编译并调优内核，而不是像 llama.cpp 那样为大类硬件分发预编译内核。对比 llama.cpp 的宣称数字：Metal 上解码快 92%、预填充快 9%，CUDA 上解码快 19%、预填充快 23%。Apache 2.0 许可，可运行在 Apple Silicon、NVIDIA、AMD 或纯 CPU 上，提供 OpenAI 兼容 API，并为主流开放权重模型家族手写优化内核，而不是什么都支持。卖点是本地智能体负载：会话长、常有多个并行，同时你还要用这台机器干别的事。
+***** Take
+前三条评论里有两条打中了同一个点，而且打得对：在 Apple Silicon 上大家真正用的基线是 MLX，不是 llama.cpp。在拿出 mlx_lm 的数字之前，Metal 上解码快 92% 只是选了一个让图表最好看的对手。sebastienburel 的第二点其实更重要：智能体的开销在于每一轮都重发系统提示和工具 schema，而内核调优碰不到这件事。
+***** Comments
+- 在 Mac 上我想要的基线是 MLX，不是 llama.cpp。对大多数人本地跑的模型来说，llama.cpp 并不是 Apple Silicon 上的快路径，所以比 llama.cpp 快仍可能比 mlx_lm 慢。第二点对智能体更重要：解码速度很少是痛点，痛的是每一轮都重发同样的系统提示和工具 schema。
+- 想法不错。但在速度上打败 llama.cpp 是很低的门槛。我觉得它是个好基线，可至少在 Mac 上总有快得多的东西，比如 ds4、omlx、mtplx。
+- 在我的本地推理机上，我在 llama.cpp 的代码仓库里长期开着一个 codex 会话，定期让它看待合并的 llama.cpp PR、研究最新的 MTP 和注意力优化、查看模型量化和微调版本，把前沿扫一遍。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Launch HN: Magnitude (YC S25) – エージェント向けの自己最適化推論エンジン
+***** TLDR
+Magnitudeは、llama.cppのように広いハードウェア分類向けのプリコンパイル済みカーネルを配るのではなく、モデル実行前に実機上でカーネルをコンパイルしチューニングする。llama.cpp比の主張値はMetalでデコード92%高速・プリフィル9%高速、CUDAでデコード19%高速・プリフィル23%高速。Apache 2.0ライセンスで、Apple Silicon、NVIDIA、AMD、素のCPUで動き、OpenAI互換APIを公開し、何でも対応するのではなく主要なオープンウェイト系列向けに最適化カーネルを手書きする。狙いはローカルのエージェント用途だ。セッションが長く、同時に複数走り、それでもマシンを他の作業に使いたい。
+***** Take
+上位3コメントのうち2つが同じ急所を突いていて、それは正しい。Apple Siliconで人が実際に使う基準はllama.cppではなくMLXだ。mlx_lmの数字が出るまで、Metalでデコード92%高速はグラフが一番よく見える相手を選んだ計測にすぎない。より重要なのはsebastienburelの2点目だ。エージェントのコストは毎ターン同じシステムプロンプトとツールスキーマを送り直すことにあり、カーネルのチューニングはそこに触れない。
+***** Comments
+- Macでの基準にしたいのはMLXでllama.cppではない。多くの人がローカルで動かすモデルでは、llama.cppはApple Siliconの速い経路ではないので、llama.cpp比で速くてもmlx_lmより遅い可能性がある。もう一点、エージェントにはもっと重要だが、デコード速度はめったに痛くない。痛いのは毎ターン同じシステムプロンプトとツールスキーマを送り直すことだ。
+- 良いアイデアに見える。ただ速度でllama.cppに勝つのはハードルが低い。良い基準ではあるが、少なくともMacではds4、omlx、mtplxのようにずっと速いものが常にあった。
+- ローカルの推論マシンでは、llama.cppのチェックアウト内にcodexのスレッドを常駐させ、保留中のllama.cpp PRを見させ、最新のMTPやアテンション最適化を調べさせ、量子化やファインチューンを確認させて、フロンティアを一通りさらっている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Launch HN: Magnitude (YC S25) – 에이전트를 위한 자기 최적화 추론 엔진
+***** TLDR
+Magnitude는 llama.cpp처럼 넓은 하드웨어 분류용 사전 컴파일 커널을 배포하는 대신, 모델 실행 전에 실제 기기에서 커널을 컴파일하고 튜닝한다. llama.cpp 대비 주장 수치는 Metal에서 디코드 92%, 프리필 9% 향상, CUDA에서 디코드 19%, 프리필 23% 향상이다. Apache 2.0이고 Apple Silicon, NVIDIA, AMD 또는 순수 CPU에서 돌아가며, OpenAI 호환 API를 제공하고, 모든 것을 지원하는 대신 인기 있는 오픈 웨이트 계열에 맞춰 최적화 커널을 직접 작성한다. 노리는 건 로컬 에이전트 작업이다. 세션이 길고 여러 개가 동시에 돌며, 그러면서도 그 기계로 다른 일을 해야 한다.
+***** Take
+상위 세 댓글 중 둘이 같은 급소를 찌르는데 그게 옳다. Apple Silicon에서 사람들이 실제로 쓰는 기준선은 llama.cpp가 아니라 MLX다. mlx_lm 수치가 나오기 전까지 Metal 디코드 92% 향상은 그래프가 가장 좋아 보이는 상대를 고른 측정일 뿐이다. 더 중요한 건 sebastienburel의 두 번째 지적이다. 에이전트의 비용은 매 턴 같은 시스템 프롬프트와 도구 스키마를 다시 보내는 데서 나오고, 커널 튜닝은 거기에 손대지 못한다.
+***** Comments
+- 맥에서 원하는 기준선은 llama.cpp가 아니라 MLX다. 사람들이 로컬에서 돌리는 대부분 모델에서 llama.cpp는 Apple Silicon의 빠른 경로가 아니므로, llama.cpp보다 빨라도 mlx_lm보다 느릴 수 있다. 둘째, 에이전트에 더 중요한 점은 디코드 속도가 아픈 지점이 아니라는 거다. 아픈 건 매 턴 같은 시스템 프롬프트와 도구 스키마를 다시 보내는 것이다.
+- 좋은 아이디어 같다. 다만 속도로 llama.cpp를 이기는 건 낮은 기준이다. 좋은 기준선이긴 하지만 적어도 맥에서는 ds4, omlx, mtplx처럼 훨씬 빠른 게 늘 있었다.
+- 로컬 추론 머신에서 llama.cpp 체크아웃 안에 codex 스레드를 상시로 띄워 두고, 주기적으로 대기 중인 llama.cpp PR을 보게 하고 최신 MTP와 어텐션 최적화를 조사하게 하고 양자화와 파인튠을 확인하게 해서 프런티어를 한 번씩 훑는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Launch HN: Magnitude (YC S25) – Motor de inferencia autooptimizado para agentes
+***** TLDR
+Magnitude compila y ajusta sus kernels en tu dispositivo real antes de ejecutar un modelo, en lugar de distribuir kernels precompilados para clases amplias de hardware como hace llama.cpp. Cifras declaradas frente a llama.cpp: 92% más rápido en decodificación y 9% en prefill sobre Metal, 19% y 23% sobre CUDA. Licencia Apache 2.0, funciona en Apple Silicon, NVIDIA, AMD o CPU a secas, expone una API compatible con OpenAI y escribe a mano kernels optimizados para las familias de pesos abiertos más populares en vez de soportarlo todo. La propuesta son cargas de agentes locales: sesiones largas, varias a la vez, mientras sigues usando la máquina.
+***** Take
+Dos de los tres comentarios principales dan en el mismo punto, y es el correcto: en Apple Silicon la referencia que la gente usa de verdad es MLX, no llama.cpp. Hasta que haya una cifra con mlx_lm, un 92% más rápido en decodificación sobre Metal mide contra el rival que deja mejor la gráfica. El segundo punto de sebastienburel importa más: para los agentes el coste está en reenviar el prompt de sistema y los esquemas de herramientas en cada turno, algo que ningún ajuste de kernel toca.
+***** Comments
+- En un Mac la referencia que yo querría es MLX, no llama.cpp. llama.cpp no es la vía rápida en Apple Silicon para la mayoría de los modelos que la gente ejecuta localmente, así que una mejora sobre llama.cpp podría seguir siendo más lenta que mlx_lm. Segundo, y más importante para agentes: la velocidad de decodificación rara vez es lo que duele. Lo que duele es reenviar el mismo prompt de sistema y los esquemas de herramientas en cada turno.
+- Parece una buena idea. Pero ganarle a llama.cpp en velocidad es un listón bajo. Me parece una buena referencia, pero al menos en Mac siempre había algo mucho más rápido, como ds4, omlx o mtplx.
+- En mi máquina de inferencia local tengo un hilo de codex permanentemente abierto en mi copia de llama.cpp al que periódicamente le pido que revise los PR pendientes, investigue las últimas optimizaciones de MTP y atención, mire las cuantizaciones y los finetunes, y repase la frontera.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Launch HN: Magnitude (YC S25) – Selbstoptimierende Inferenz-Engine für Agenten
+***** TLDR
+Magnitude kompiliert und tunt seine Kernel auf dem konkreten Gerät, bevor ein Modell läuft, statt wie llama.cpp vorkompilierte Kernel für breite Hardwareklassen auszuliefern. Angegebene Werte gegen llama.cpp: 92% schnelleres Decoding und 9% schnelleres Prefill auf Metal, 19% und 23% auf CUDA. Apache 2.0, läuft auf Apple Silicon, NVIDIA, AMD oder reiner CPU, bietet eine OpenAI-kompatible API und schreibt optimierte Kernel für die populären Open-Weight-Familien von Hand, statt alles zu unterstützen. Das Zielbild sind lokale Agenten-Workloads: lange Sitzungen, mehrere gleichzeitig, während man die Maschine weiter benutzt.
+***** Take
+Zwei der drei Topkommentare treffen denselben Punkt, und zwar den richtigen: Auf Apple Silicon ist die Referenz, die Leute tatsächlich nutzen, MLX und nicht llama.cpp. Solange keine mlx_lm-Zahl vorliegt, misst 92% schnelleres Decoding auf Metal gegen den Gegner, bei dem das Diagramm am besten aussieht. Wichtiger ist sebastienburels zweiter Punkt: Bei Agenten kostet das erneute Senden von Systemprompt und Tool-Schemas in jeder Runde, und daran ändert Kernel-Tuning nichts.
+***** Comments
+- Auf einem Mac wäre meine Referenz MLX, nicht llama.cpp. llama.cpp ist für die meisten lokal genutzten Modelle nicht der schnelle Pfad auf Apple Silicon, also kann ein Vorsprung gegenüber llama.cpp trotzdem langsamer als mlx_lm sein. Zweitens, und für Agenten wichtiger: Die Decoding-Geschwindigkeit ist selten das Problem. Das Problem ist, denselben Systemprompt samt Tool-Schemas in jeder Runde neu zu senden.
+- Klingt nach einer guten Idee. Aber llama.cpp bei der Geschwindigkeit zu schlagen, ist eine niedrige Hürde. Als Basislinie ist es gut, aber zumindest auf dem Mac gab es immer etwas deutlich Schnelleres, etwa ds4, omlx oder mtplx.
+- Auf meiner lokalen Inferenzmaschine habe ich dauerhaft einen Codex-Thread in meinem llama.cpp-Checkout offen, den ich regelmäßig bitte, offene llama.cpp-PRs anzusehen, die neuesten MTP- und Attention-Optimierungen zu recherchieren, Quantisierungen und Finetunes zu prüfen und die Front abzuklopfen.
+** The top secret URSALA, RAQUEL, and FARRAH satellites (2025) :space:intelligence:history:declassified:
+:PROPERTIES:
+:ID:       49915082
+:URL:      https://www.thespacereview.com/article/4951/1
+:HN_URL:   https://news.ycombinator.com/item?id=49915082
+:POINTS:   186
+:COMMENTS: 83
+:BY:       Bluestein
+:END:
+
+*** TLDR
+Dwayne Day traces a 40-year US program of suitcase-sized ELINT satellites launched as hitchhikers off larger spacecraft, mostly the HEXAGON photo-reconnaissance birds. They spun rapidly, sweeping antennas across the ground to record radar and other signals, usually storing them for later downlink. URSALA did general search at 2 to 12 GHz, four launched in the 1970s. RAQUEL did directed search and technical intelligence at 4 to 18 GHz, two variants in 1974 and 1978. FARRAH combined both at 2 to 18 GHz, with small versions in 1982 to 1984 and larger shuttle-intended models that flew on Titan rockets from 1988 to 1992. Most of this, including previously secret shuttle payloads, was declassified only in the past year. The program pioneered TENCAP, pushing intercepts to field commanders through mobile ground stations rather than only to Washington.
+
+*** Take
+The detail worth keeping is the one Almondsetat raises: in 2012 the NRO handed NASA two decommissioned satellites that turned out to be Hubble-class telescopes pointed down. The US had those to spare while NASA fought for budget. These programs were never constrained by what was technically possible, only by who was asking.
+
+*** Comments
+
+**** Almondsetat
+:PROPERTIES:
+:COMMENT_ID: 49915301
+:END:
+The incredible technologies the US deployed decades before the competition reminds me of how the NRO gifted NASA a couple of their decommissioned satellites in 2012 and they turned out to be basically upgraded Hubble telescopes pointed at earth. From the 90s to the 2000s the US had multiple Hubble-level telescopes just for spying while NASA was fighting for one.
+
+**** generuso
+:PROPERTIES:
+:COMMENT_ID: 49915477
+:END:
+A while ago NRO put online a bunch of declassified documents, including their internal books on the history of satellite reconnaissance. But it was all in one unsorted pile, often scans of barely legible pages. I think this was the original source of some of the documents in this article.
+
+**** dbdoug
+:PROPERTIES:
+:COMMENT_ID: 49915588
+:END:
+I'm not going to be alive in 40 years, but I would like to have known what classified information will be released in 2066 dealing with satellites in orbit now.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+绝密的 URSALA、RAQUEL 和 FARRAH 卫星（2025）
+***** TLDR
+Dwayne Day 梳理了美国一个持续 40 年的项目：手提箱大小的电子情报卫星作为搭车载荷，从更大的航天器上释放，主要是 HEXAGON 照相侦察卫星。它们高速自旋，让天线扫过地面以记录雷达和其他信号，通常先存储再回传。URSALA 做 2 到 12 GHz 的普查，1970 年代发射了四颗。RAQUEL 在 4 到 18 GHz 做定向搜索与技术情报，1974 和 1978 年各发射一种型号。FARRAH 把两种功能合在 2 到 18 GHz，1982 到 1984 年是小型号，原计划用航天飞机发射的大型号在 1988 到 1992 年改用大力神火箭上天。这些内容，包括此前保密的航天飞机载荷，直到过去一年才解密。该项目开创了 TENCAP，通过移动地面站把截获信号直接送给战地指挥官，而不只是送往华盛顿。
+***** Take
+值得记住的细节是 Almondsetat 提到的那个：2012 年国家侦察局送给 NASA 两颗退役卫星，结果是哈勃级别的望远镜，只是朝下看。美国有这种东西可以当富余品送人，而 NASA 还在为预算挣扎。这些项目从来不受技术可能性限制，只受谁在提要求限制。
+***** Comments
+- 美国比对手早几十年部署的那些技术，让我想起 2012 年国家侦察局送给 NASA 两颗退役卫星，结果基本上是朝向地球的升级版哈勃望远镜。从 90 年代到 2000 年代，美国有多台哈勃级望远镜专门用来侦察，而 NASA 连一台都要争。
+- 国家侦察局前些年放出了一批解密文件，包括他们内部的卫星侦察史著作。但全部堆成一堆没有整理，很多是几乎看不清的扫描页。我想这篇文章里有些文件就出自那里。
+- 我活不到 40 年后，但我真想知道 2066 年会解密什么关于现在在轨卫星的内容。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+極秘衛星URSALA、RAQUEL、FARRAH（2025）
+***** TLDR
+Dwayne Dayは、スーツケース大のELINT衛星を大型機からヒッチハイク方式で放出していた米国の40年にわたる計画をたどる。母機は主にHEXAGON写真偵察衛星だった。高速で自転しながらアンテナを地表に掃かせ、レーダーなどの信号を記録し、通常は蓄積してから地上に送った。URSALAは2から12 GHzの一般捜索で1970年代に4機。RAQUELは4から18 GHzの指向捜索と技術情報収集で、1974年と1978年に2種。FARRAHは両方を2から18 GHzで兼ね、1982から1984年の小型版と、シャトル打ち上げを想定した大型版が1988から1992年にタイタンで上がった。これらは、以前は秘密だったシャトル搭載物も含め、この1年でようやく機密解除された。計画はTENCAPの先駆けで、移動地上局を通じて傍受をワシントンだけでなく前線指揮官に直接届けた。
+***** Take
+残しておく価値がある細部はAlmondsetatが挙げた点だ。2012年、NROはNASAに退役衛星2基を譲り、それは地表に向けたハッブル級の望遠鏡だった。米国はそれを余らせていて、NASAは予算を争っていた。こうした計画を縛っていたのは技術の限界ではなく、誰が要求しているかだった。
+***** Comments
+- 米国が競合より数十年早く投入した技術というと、2012年にNROが退役衛星2基をNASAに譲り、それが地球に向けた改良版ハッブル望遠鏡だったという話を思い出す。90年代から2000年代、米国は偵察用にハッブル級望遠鏡を複数持っていて、NASAは1基を得るために戦っていた。
+- 以前NROが機密解除文書を大量に公開した。衛星偵察史の内部書籍も含まれていた。だが未整理の山で、判読困難なスキャンも多い。この記事の文書の一部はそこが出所だと思う。
+- 40年後に自分は生きていないが、いま軌道上にある衛星について2066年に何が公開されるのかは知りたかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+극비 위성 URSALA, RAQUEL, FARRAH (2025)
+***** TLDR
+Dwayne Day는 여행가방 크기의 전자정보 위성을 더 큰 우주선에서 편승 방식으로 방출하던 미국의 40년 프로그램을 추적한다. 모선은 대부분 HEXAGON 사진정찰 위성이었다. 이 위성들은 빠르게 자전하며 안테나로 지표를 쓸어 레이더 등 신호를 기록했고, 보통 저장한 뒤 지상으로 내려보냈다. URSALA는 2~12 GHz 일반 탐색으로 1970년대에 네 기가 올라갔다. RAQUEL은 4~18 GHz에서 지향 탐색과 기술정보 수집을 했고 1974년과 1978년에 두 변종이 발사됐다. FARRAH는 둘을 합쳐 2~18 GHz를 담당했으며, 1982~1984년 소형판과 셔틀 발사를 전제로 설계된 대형판이 1988~1992년 타이탄 로켓으로 올라갔다. 이 내용 대부분은 과거 비밀이던 셔틀 탑재물까지 포함해 지난 1년 사이에야 기밀 해제됐다. 이 프로그램은 TENCAP의 출발점으로, 이동 지상국을 통해 감청 결과를 워싱턴만이 아니라 야전 지휘관에게 직접 전달했다.
+***** Take
+기억할 대목은 Almondsetat이 꺼낸 것이다. 2012년 NRO는 퇴역 위성 두 기를 NASA에 넘겼고, 그것은 아래를 향한 허블급 망원경이었다. 미국은 그런 걸 남길 만큼 가지고 있었고 NASA는 예산을 다투고 있었다. 이 프로그램들을 제약한 건 기술적 가능성이 아니라 누가 요구하느냐였다.
+***** Comments
+- 미국이 경쟁국보다 수십 년 앞서 투입한 기술이라면, 2012년 NRO가 퇴역 위성 두 기를 NASA에 넘겼는데 사실상 지구를 향한 개량 허블 망원경이었다는 이야기가 떠오른다. 90년대부터 2000년대까지 미국은 정찰용으로 허블급 망원경을 여러 대 갖고 있었고 NASA는 한 대를 두고 싸우고 있었다.
+- 얼마 전 NRO가 기밀 해제 문서를 대량 공개했다. 위성 정찰사에 관한 내부 서적도 포함됐다. 그런데 정리되지 않은 한 덩어리였고, 읽기 힘든 스캔이 많았다. 이 기사의 문서 일부도 거기서 나왔을 것이다.
+- 40년 뒤에 나는 살아 있지 않겠지만, 지금 궤도에 있는 위성에 대해 2066년에 무엇이 공개될지 알고 싶었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los satélites secretos URSALA, RAQUEL y FARRAH (2025)
+***** TLDR
+Dwayne Day recorre un programa estadounidense de 40 años de satélites ELINT del tamaño de una maleta, lanzados como pasajeros desde naves mayores, sobre todo los satélites de reconocimiento fotográfico HEXAGON. Giraban rápidamente, barriendo el suelo con sus antenas para registrar radares y otras señales, normalmente almacenándolas para enviarlas después. URSALA hacía búsqueda general entre 2 y 12 GHz, con cuatro lanzamientos en los años setenta. RAQUEL hacía búsqueda dirigida e inteligencia técnica entre 4 y 18 GHz, con dos variantes en 1974 y 1978. FARRAH combinaba ambas funciones entre 2 y 18 GHz, con versiones pequeñas entre 1982 y 1984 y modelos grandes pensados para el transbordador que acabaron volando en cohetes Titan entre 1988 y 1992. Casi todo esto, incluidas cargas secretas del transbordador, se desclasificó solo en el último año. El programa fue el origen de TENCAP, que llevaba las interceptaciones a los mandos en el campo mediante estaciones terrestres móviles y no solo a Washington.
+***** Take
+El detalle que vale la pena guardar es el que saca Almondsetat: en 2012 la NRO regaló a la NASA dos satélites dados de baja que resultaron ser telescopios de clase Hubble apuntando hacia abajo. Estados Unidos los tenía de sobra mientras la NASA peleaba por presupuesto. Estos programas nunca estuvieron limitados por lo técnicamente posible, solo por quién hacía la petición.
+***** Comments
+- Las tecnologías que Estados Unidos desplegó décadas antes que la competencia me recuerdan a cuando la NRO regaló a la NASA un par de satélites dados de baja en 2012 y resultaron ser básicamente telescopios Hubble mejorados apuntando a la Tierra. De los noventa a los dos mil, Estados Unidos tenía varios telescopios de nivel Hubble solo para espiar mientras la NASA peleaba por uno.
+- Hace tiempo la NRO puso en línea un montón de documentos desclasificados, incluidos sus libros internos sobre la historia del reconocimiento por satélite. Pero estaba todo en un montón sin ordenar, a menudo escaneos de páginas apenas legibles. Creo que de ahí salen algunos de los documentos del artículo.
+- No voy a estar vivo en 40 años, pero me gustaría haber sabido qué información clasificada se publicará en 2066 sobre los satélites que hoy están en órbita.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die geheimen Satelliten URSALA, RAQUEL und FARRAH (2025)
+***** TLDR
+Dwayne Day verfolgt ein 40 Jahre laufendes US-Programm kofferkleiner ELINT-Satelliten, die als Mitflieger von größeren Raumfahrzeugen abgesetzt wurden, meist von den HEXAGON-Fotoaufklärern. Sie rotierten schnell, strichen mit ihren Antennen über den Boden und zeichneten Radar- und andere Signale auf, die sie üblicherweise speicherten und später übertrugen. URSALA betrieb allgemeine Suche von 2 bis 12 GHz, vier Starts in den 1970ern. RAQUEL betrieb gerichtete Suche und technische Aufklärung von 4 bis 18 GHz, zwei Varianten 1974 und 1978. FARRAH vereinte beides von 2 bis 18 GHz, mit kleinen Versionen 1982 bis 1984 und größeren, für das Shuttle gedachten Modellen, die zwischen 1988 und 1992 auf Titan-Raketen flogen. Das meiste davon, einschließlich bislang geheimer Shuttle-Nutzlasten, wurde erst im vergangenen Jahr freigegeben. Das Programm begründete TENCAP und brachte Abhörergebnisse über mobile Bodenstationen direkt zu Truppenführern, nicht nur nach Washington.
+***** Take
+Das Detail, das bleibt, nennt Almondsetat: 2012 überließ die NRO der NASA zwei ausgemusterte Satelliten, die sich als Hubble-Klasse-Teleskope mit Blick nach unten erwiesen. Die USA hatten solche Geräte übrig, während die NASA um Budget kämpfte. Diese Programme waren nie durch das technisch Mögliche begrenzt, sondern nur dadurch, wer gefragt hat.
+***** Comments
+- Die Technologien, die die USA Jahrzehnte vor der Konkurrenz einsetzten, erinnern mich daran, wie die NRO der NASA 2012 zwei ausgemusterte Satelliten schenkte, die sich als im Grunde verbesserte Hubble-Teleskope mit Blick auf die Erde entpuppten. Von den 90ern bis in die 2000er hatten die USA mehrere Teleskope auf Hubble-Niveau nur zum Spionieren, während die NASA um eines kämpfte.
+- Die NRO hat vor einiger Zeit viele freigegebene Dokumente online gestellt, darunter ihre internen Bücher zur Geschichte der Satellitenaufklärung. Aber alles lag auf einem unsortierten Haufen, oft als kaum lesbare Scans. Ich glaube, daraus stammen einige Dokumente in diesem Artikel.
+- In 40 Jahren lebe ich nicht mehr, aber ich hätte gern gewusst, welche geheimen Informationen 2066 über die Satelliten veröffentlicht werden, die jetzt im Orbit sind.
+** The last time my family was replaced by technology :careers:ai:automation:labor:
+:PROPERTIES:
+:ID:       49908394
+:URL:      https://manuel.darcemont.fr/posts/the-last-time-my-family-was-replaced-by-technology/
+:HN_URL:   https://news.ycombinator.com/item?id=49908394
+:POINTS:   213
+:COMMENTS: 459
+:BY:       megalomanu
+:END:
+
+*** TLDR
+The author's great-great-grandfather was a farrier in rural France, shoeing horses and repairing carts. When cars arrived he became a mechanic, and his descendants stayed in that trade for generations. The constant was the purpose, helping people get around, while the means moved from horses to engines. The argument for developers facing AI: what most of them actually value is making things, solving problems and seeing people use the result, not writing code as such. The closing line is to let go of the how in order to keep the why.
+
+*** Take
+The farrier analogy works because the car still needed a person with hands, tools and a shop in the same village. That is the part the thread keeps circling: 459 comments, and bhelkey's horse quote is the strongest objection in it. The author's own follow-up concedes the point, that this is a personal story rather than advice, which is the honest framing the title does not give.
+
+*** Comments
+
+**** bhelkey
+:PROPERTIES:
+:COMMENT_ID: 49908712
+:END:
+There is a quote from a CGP Grey video from a bit over a decade ago: there isn't a rule of economics that says better technology makes more, better jobs for horses. It sounds shockingly dumb to say out loud, but swap horses for humans and suddenly people think it sounds about right.
+
+**** NichoPaolucci
+:PROPERTIES:
+:COMMENT_ID: 49908905
+:END:
+Lots of doom in here. If software engineering goes the way of the dodo, I suspect most other white collar jobs are also displaced. A few years after that I suspect an overwhelming supply of physical labor. It's a house of cards at that point.
+
+**** megalomanu
+:PROPERTIES:
+:COMMENT_ID: 49908501
+:END:
+Author here. This post isn't meant as a lesson or a judgment, something to tell people to shut up and adapt like my ancestor did. The situation is hard and I wasn't trying to dismiss anyone's anxiety. No one wants to hear you'll be fine when something bad just happened.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+上一次我家被技术取代时
+***** TLDR
+作者的曾曾祖父是法国乡村的马蹄铁匠，给马钉蹄铁、修马车。汽车来了之后他成了机械师，他的后代在这一行干了好几代。不变的是目的，帮人出行；变的是手段，从马到发动机。面向被 AI 冲击的开发者，文章的论点是：大多数人真正在意的是做出东西、解决问题、看到有人用自己的成果，而不是写代码本身。结尾一句是：放下「怎么做」，才能守住「为什么做」。
+***** Take
+马蹄铁匠的类比能成立，是因为汽车仍然需要同一个村子里一个有双手、有工具、有店面的人。这正是评论区反复绕回去的地方：459 条评论里，bhelkey 引的那句关于马的话是最有力的反驳。作者自己的补充承认了这一点，说这只是个人故事而非建议，这个定位比标题诚实。
+***** Comments
+- 十多年前 CGP Grey 的视频里有句话：经济学里没有哪条规律说更好的技术会给马创造更多更好的工作。说出口听着蠢得离谱，但把马换成人，人们突然就觉得这话听着挺对。
+- 这里末日情绪不少。如果软件工程真的灭绝了，我猜大多数其他白领工作也会被替代。再过几年，体力劳动的供给会严重过剩。到那时整个结构就是纸牌屋。
+- 作者在此。这篇文章不是教训或评判，不是要告诉谁「闭嘴，像我祖先那样适应」。处境确实艰难，我没打算否定任何人的焦虑。刚出事的时候，没人想听「你会没事的」。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+前回、私の家族が技術に置き換えられたとき
+***** TLDR
+著者の曽祖父の父はフランスの農村の蹄鉄工で、馬に蹄鉄を打ち、荷車を直していた。自動車が来ると整備士になり、子孫は何世代もその仕事を続けた。変わらなかったのは目的、人の移動を助けることで、手段は馬からエンジンへ移った。AIに直面する開発者への論旨はこうだ。多くの人が本当に大切にしているのは、物を作り、問題を解き、誰かが使う姿を見ることであって、コードを書くこと自体ではない。締めの一文は、なぜを守るために、どうやってを手放せ、だ。
+***** Take
+蹄鉄工のたとえが成り立つのは、自動車にも同じ村で手と道具と工場を持つ人が必要だったからだ。スレッドが繰り返し戻るのはそこで、459件のコメントの中でbhelkeyが引いた馬の言葉が最も強い反論だ。著者自身の追記はその点を認め、これは助言ではなく個人的な話だと述べている。タイトルよりも誠実な位置づけだ。
+***** Comments
+- 10年ちょっと前のCGP Greyの動画にこんな言葉がある。より良い技術が馬のためにより多くより良い仕事を生むという経済法則は存在しない。口に出すと馬鹿げて聞こえるが、馬を人間に置き換えると、なぜか正しく聞こえてしまう。
+- ここは悲観論が多い。ソフトウェア工学が絶滅するなら、他のホワイトカラー職も大半が置き換わるだろう。その数年後には肉体労働の供給が過剰になる。そこまで来れば全体が砂上の楼閣だ。
+- 著者です。この記事は教訓や判断ではなく、祖先のように黙って適応せよと言うためのものではありません。状況は厳しく、誰の不安も軽んじるつもりはなかった。悪いことが起きた直後に、大丈夫だよと言われたい人はいない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+지난번에 우리 가족이 기술에 대체되었을 때
+***** TLDR
+저자의 고조부는 프랑스 시골의 편자 장인으로 말에 편자를 박고 수레를 고쳤다. 자동차가 등장하자 그는 정비사가 되었고 그 후손들은 여러 세대 동안 그 일을 이어갔다. 변하지 않은 것은 사람들의 이동을 돕는다는 목적이었고, 수단은 말에서 엔진으로 옮겨갔다. AI를 마주한 개발자들에게 던지는 논지는 이렇다. 대다수가 실제로 아끼는 것은 무언가를 만들고 문제를 풀고 사람들이 그 결과를 쓰는 걸 보는 일이며, 코드를 쓰는 것 자체가 아니다. 마지막 문장은 왜를 지키려면 어떻게를 놓으라는 것이다.
+***** Take
+편자 장인 비유가 성립하는 건 자동차에도 같은 마을에서 손과 공구와 작업장을 가진 사람이 필요했기 때문이다. 스레드가 계속 돌아오는 지점이 바로 거기다. 댓글 459개 중 bhelkey가 인용한 말 이야기가 가장 강한 반박이다. 저자 본인의 후속 댓글은 그 점을 인정하며 이건 조언이 아니라 개인적인 이야기라고 말한다. 제목보다 정직한 위치다.
+***** Comments
+- 10여 년 전 CGP Grey 영상에 이런 말이 있다. 더 나은 기술이 말에게 더 많고 더 좋은 일자리를 만든다는 경제 법칙은 없다. 소리 내어 말하면 터무니없이 들리지만, 말을 인간으로 바꾸면 갑자기 사람들은 그 말이 맞게 들린다고 생각한다.
+- 여기 비관론이 많다. 소프트웨어 엔지니어링이 멸종한다면 다른 화이트칼라 직종도 대부분 대체될 것이다. 그 몇 년 뒤에는 육체 노동 공급이 넘쳐날 것이다. 그 지점이면 전체가 사상누각이다.
+- 저자입니다. 이 글은 교훈이나 판단이 아니고, 내 조상처럼 입 다물고 적응하라고 말하려는 게 아닙니다. 상황은 힘들고 누구의 불안도 무시할 생각은 없었습니다. 나쁜 일이 막 벌어진 사람에게 괜찮을 거라는 말은 아무도 듣고 싶지 않죠.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La última vez que la tecnología reemplazó a mi familia
+***** TLDR
+El bisabuelo del abuelo del autor era herrador en la Francia rural: herraba caballos y reparaba carros. Cuando llegaron los automóviles se hizo mecánico, y sus descendientes siguieron en ese oficio durante generaciones. Lo constante fue el propósito, ayudar a la gente a desplazarse, mientras el medio pasaba de los caballos a los motores. El argumento para los desarrolladores que enfrentan la IA: lo que de verdad valoran la mayoría es hacer cosas, resolver problemas y ver a gente usar el resultado, no escribir código en sí. La frase final es soltar el cómo para conservar el por qué.
+***** Take
+La analogía del herrador funciona porque el coche seguía necesitando a alguien con manos, herramientas y un taller en el mismo pueblo. Eso es lo que el hilo no deja de rodear: 459 comentarios, y la cita sobre los caballos de bhelkey es la objeción más fuerte. La respuesta del propio autor concede el punto, que es una historia personal y no un consejo, que es el encuadre honesto que el título no da.
+***** Comments
+- Hay una cita de un vídeo de CGP Grey de hace poco más de una década: no existe una regla económica que diga que mejor tecnología crea más y mejores trabajos para los caballos. Dicho en voz alta suena absurdo, pero cambia caballos por humanos y de pronto a la gente le parece razonable.
+- Mucho fatalismo por aquí. Si la ingeniería de software se extingue, sospecho que la mayoría de los demás empleos de oficina también se desplazan. Unos años después sospecho una oferta abrumadora de trabajo físico. A esas alturas todo es un castillo de naipes.
+- Autor aquí. Este texto no pretende ser una lección ni un juicio, ni decirle a nadie que se calle y se adapte como hizo mi antepasado. La situación es dura y no intentaba minimizar la angustia de nadie. Nadie quiere oír que todo irá bien justo cuando acaba de pasar algo malo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das letzte Mal, als meine Familie von Technik ersetzt wurde
+***** TLDR
+Der Ururgroßvater des Autors war Hufschmied im ländlichen Frankreich, beschlug Pferde und reparierte Karren. Als die Autos kamen, wurde er Mechaniker, und seine Nachkommen blieben über Generationen in diesem Beruf. Konstant blieb der Zweck, Menschen beim Vorankommen zu helfen, während sich das Mittel von Pferden zu Motoren verschob. Das Argument für Entwickler angesichts von KI: Was die meisten tatsächlich schätzen, ist Dinge zu bauen, Probleme zu lösen und zu sehen, dass jemand das Ergebnis nutzt, nicht das Schreiben von Code als solches. Der Schlusssatz lautet, das Wie loszulassen, um das Warum zu behalten.
+***** Take
+Die Hufschmied-Analogie trägt, weil das Auto weiterhin jemanden mit Händen, Werkzeug und einer Werkstatt im selben Dorf brauchte. Genau darum kreist der Thread: 459 Kommentare, und bhelkeys Pferde-Zitat ist der stärkste Einwand darin. Die Nachbemerkung des Autors räumt den Punkt ein, dass dies eine persönliche Geschichte und kein Ratschlag ist, was die ehrlichere Einordnung ist als der Titel.
+***** Comments
+- Es gibt ein Zitat aus einem CGP-Grey-Video von vor gut zehn Jahren: Es gibt keine Regel der Wirtschaft, die sagt, bessere Technik schaffe mehr und bessere Jobs für Pferde. Laut ausgesprochen klingt das verblüffend dumm, aber tauscht man Pferde gegen Menschen, finden es Leute plötzlich einleuchtend.
+- Hier herrscht viel Untergangsstimmung. Wenn Softwareentwicklung ausstirbt, werden wohl auch die meisten anderen Bürojobs verdrängt. Ein paar Jahre später vermute ich ein überwältigendes Angebot an körperlicher Arbeit. Dann ist das Ganze ein Kartenhaus.
+- Autor hier. Dieser Beitrag ist nicht als Lehrstunde oder Urteil gedacht, nicht als Aufforderung, den Mund zu halten und sich anzupassen wie mein Vorfahr. Die Lage ist schwer, und ich wollte niemandes Angst abtun. Niemand will hören, dass alles gut wird, wenn gerade etwas Schlimmes passiert ist.
