@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-02 01:00 UTC
+#+DATE: 2026-10-02T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Pi hits 1.0, Scott Chacon says Git's SHA-256 switch will hurt, and 19 of 21 cars phone home to trackers
+
+* Highlights
+- Pi 1.0 ships Codemode, deferred tool loading and MCP, after months of saying no
+- Scott Chacon: Git 3.0's SHA-256 default breaks every commit link and submodule
+- Northeastern and Consumer Reports tested 21 cars: 19 contacted third-party trackers
+- turbopuffer v3 demotes vectors to a secondary index and retires the term vector database
+- ESP32 chips have an undocumented raw IQ capture mode, found by three projects at once
+
+* Stories
+
+** Pi 1.0 :ai:agents:tooling:opensource:
+:PROPERTIES:
+:ID:       49926069
+:URL:      https://earendil.com/posts/pi-1-0/
+:HN_URL:   https://news.ycombinator.com/item?id=49926069
+:POINTS:   713
+:COMMENTS: 246
+:BY:       sergiotapia
+:END:
+
+*** TLDR
+Earendil tagged its minimal agent harness Pi as 1.0. New in this release: Codemode with native MCP support and non-LLM models like Jev and image models, extension support for virtual models, deferred tool loading, cache warming for Anthropic models, mid-conversation system messages, a new TUI theme, and full-screen mode by default. The team frames its process as waiting until a feature proves itself before adopting it, and says the list of things that got cut is longer than the list that shipped. A companion experimental project, Pi Durable, ships alongside for long-running agents. Both are MIT licensed.
+
+*** Take
+The feature list is the argument against the positioning. MCP, Codemode and deferred tool loading are the exact things Pi spent a year declining to add, and the post explains the reversal as proof the vetting process works rather than as a change of mind. Minimalism measured against what you shipped is a real constraint. Minimalism measured against what you considered and rejected is a press release.
+
+*** Comments
+
+**** hhh
+:PROPERTIES:
+:COMMENT_ID: 49926262
+:END:
+I don't really understand the criteria for when something is 'proven' to the Pi team. Jev and the like took off less than a month ago, but MCP has been growing for nearly 2 years, and it only gets support now?
+
+**** FacelessJim
+:PROPERTIES:
+:COMMENT_ID: 49926563
+:END:
+Pi was the only one that actually worked decently with local models because it didn't have a gargantuan system prompt that would take minutes to prefill on my scrawny laptop.
+
+**** utilize1808
+:PROPERTIES:
+:COMMENT_ID: 49927088
+:END:
+I don't understand why "Cache warming for anthropic models" was not put into a standalone package, but has to be bundled with the "minimal" coding agent.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Pi 1.0
+***** TLDR
+Earendil 将其极简 agent 框架 Pi 标记为 1.0。本次发布新增：支持原生 MCP 及 Jev、图像模型等非 LLM 模型的 Codemode、虚拟模型扩展支持、延迟工具加载、Anthropic 模型的缓存预热、对话中途系统消息、新的 TUI 主题，以及默认全屏模式。团队称其流程是等某个功能被证明可行后才采用，并表示被砍掉的清单比发布的更长。配套的实验性项目 Pi Durable 面向长时间运行的 agent 同步发布。两者均采用 MIT 许可。
+***** Take
+功能清单本身就在反驳这套说法。MCP、Codemode 和延迟工具加载，恰好是 Pi 过去一年一直拒绝加入的东西，而这篇文章把这次掉头解释成甄别流程奏效，而不是改变主意。用你发布了什么来衡量极简，是真的约束；用你考虑过又否决了什么来衡量极简，那是新闻稿。
+***** Comments
+- 我真的搞不懂 Pi 团队判断某个东西「已被证明」的标准是什么。Jev 这类东西火起来还不到一个月，而 MCP 已经发展了快两年，现在才获得支持？
+- Pi 是唯一一个能把本地模型跑得像样的，因为它没有那种庞大到要在我这台破笔记本上预填好几分钟的系统提示词。
+- 我不明白为什么「Anthropic 模型的缓存预热」没有做成独立包，非要捆进这个「极简」的编码 agent 里。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Pi 1.0
+***** TLDR
+Earendilがミニマルなエージェントハーネス Pi を 1.0 とした。今回の新機能は、ネイティブMCPとJevや画像モデルなど非LLMモデルに対応したCodemode、仮想モデルの拡張サポート、遅延ツールロード、Anthropicモデル向けキャッシュウォーミング、会話途中のシステムメッセージ、新しいTUIテーマ、デフォルトのフルスクリーンモード。チームは、機能が実証されるまで採用を待つのが自分たちのプロセスだとし、落とした機能のリストの方が長いと述べている。長時間稼働エージェント向けの実験的プロジェクト Pi Durable も同時公開。どちらもMITライセンス。
+***** Take
+機能一覧そのものがこの位置づけへの反論になっている。MCP、Codemode、遅延ツールロードは、まさにPiが1年かけて拒み続けてきたものだ。記事はこの方向転換を、考えが変わったのではなく選別プロセスが機能した証拠として説明している。何を出荷したかで測るミニマリズムは本物の制約だ。検討して却下したもので測るミニマリズムはプレスリリースにすぎない。
+***** Comments
+- Piチームにとって何が「実証済み」なのか、基準が分からない。Jevのようなものが流行り出したのは1か月足らず前なのに、MCPは2年近く伸び続けてようやく今サポートされる？
+- 巨大なシステムプロンプトがなくて貧弱なノートPCでのプリフィルに何分もかからないので、ローカルモデルをまともに動かせたのはPiだけだった。
+- 「Anthropicモデルのキャッシュウォーミング」をなぜ独立したパッケージにせず、「ミニマル」なコーディングエージェントに同梱する必要があるのか分からない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Pi 1.0
+***** TLDR
+Earendil이 미니멀 에이전트 하네스 Pi를 1.0으로 태그했다. 이번 릴리스에는 네이티브 MCP와 Jev, 이미지 모델 같은 비LLM 모델을 지원하는 Codemode, 가상 모델 확장 지원, 지연 도구 로딩, Anthropic 모델용 캐시 워밍, 대화 중간 시스템 메시지, 새 TUI 테마, 기본 전체 화면 모드가 들어갔다. 팀은 기능이 입증될 때까지 기다렸다가 채택하는 것이 자신들의 방식이라며, 탈락한 목록이 출시된 목록보다 길다고 밝혔다. 장시간 실행 에이전트용 실험 프로젝트 Pi Durable도 함께 공개됐다. 둘 다 MIT 라이선스다.
+***** Take
+기능 목록 자체가 이 포지셔닝을 반박한다. MCP, Codemode, 지연 도구 로딩은 Pi가 1년 내내 추가를 거부해 온 바로 그것들이다. 글은 이 방향 전환을 생각이 바뀐 것이 아니라 검증 절차가 제대로 작동한 증거로 설명한다. 무엇을 출시했는지로 재는 미니멀리즘은 진짜 제약이다. 검토했다가 버린 것으로 재는 미니멀리즘은 보도자료다.
+***** Comments
+- Pi 팀에게 무엇이 '입증됐다'는 기준인지 정말 모르겠다. Jev 같은 건 뜬 지 한 달도 안 됐는데, MCP는 거의 2년을 커 왔는데 이제야 지원인가?
+- 거대한 시스템 프롬프트가 없어서 내 빈약한 노트북에서 프리필에 몇 분씩 걸리지 않았고, 그래서 로컬 모델을 제대로 돌릴 수 있었던 건 Pi뿐이었다.
+- 'Anthropic 모델 캐시 워밍'을 왜 별도 패키지로 만들지 않고 '미니멀'한 코딩 에이전트에 묶어 넣었는지 모르겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Pi 1.0
+***** TLDR
+Earendil etiquetó como 1.0 su arnés minimalista de agentes Pi. Novedades de esta versión: Codemode con soporte nativo de MCP y modelos no LLM como Jev y modelos de imagen, soporte de extensiones para modelos virtuales, carga diferida de herramientas, precalentamiento de caché para modelos de Anthropic, mensajes de sistema a mitad de conversación, un nuevo tema de TUI y modo pantalla completa por defecto. El equipo describe su proceso como esperar a que una función se demuestre antes de adoptarla, y dice que la lista de lo descartado es más larga que la de lo incluido. Junto a ello publican Pi Durable, un proyecto experimental para agentes de larga duración. Ambos con licencia MIT.
+***** Take
+La lista de funciones contradice el discurso. MCP, Codemode y la carga diferida de herramientas son exactamente lo que Pi pasó un año rechazando, y el texto presenta el giro como prueba de que el proceso de selección funciona, no como un cambio de opinión. El minimalismo medido por lo que publicas es una restricción real. Medido por lo que consideraste y descartaste, es una nota de prensa.
+***** Comments
+- No entiendo cuál es el criterio del equipo de Pi para dar algo por 'probado'. Jev y similares despegaron hace menos de un mes, y MCP lleva casi dos años creciendo y solo ahora recibe soporte.
+- Pi fue el único que funcionó decentemente con modelos locales porque no tenía un prompt de sistema gigantesco que tardara minutos en precargarse en mi portátil cutre.
+- No entiendo por qué el 'precalentamiento de caché para modelos de Anthropic' no se publicó como paquete aparte en vez de ir dentro del agente de código 'minimalista'.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Pi 1.0
+***** TLDR
+Earendil hat sein minimalistisches Agenten-Harness Pi als 1.0 markiert. Neu in diesem Release: Codemode mit nativer MCP-Unterstützung und Nicht-LLM-Modellen wie Jev und Bildmodellen, Erweiterungen für virtuelle Modelle, verzögertes Laden von Tools, Cache-Warming für Anthropic-Modelle, Systemnachrichten mitten im Gespräch, ein neues TUI-Theme und Vollbild als Standard. Das Team beschreibt sein Vorgehen so, dass es wartet, bis sich eine Funktion bewährt hat, und sagt, die Liste des Verworfenen sei länger als die des Ausgelieferten. Daneben erscheint Pi Durable, ein experimentelles Projekt für langlaufende Agenten. Beides unter MIT-Lizenz.
+***** Take
+Die Funktionsliste widerspricht der Positionierung. MCP, Codemode und verzögertes Tool-Laden sind genau das, was Pi ein Jahr lang abgelehnt hat, und der Beitrag erklärt die Kehrtwende als Beleg dafür, dass der Prüfprozess funktioniert, statt als Meinungsänderung. Minimalismus, gemessen an dem, was man ausliefert, ist eine echte Einschränkung. Gemessen an dem, was man geprüft und verworfen hat, ist er eine Pressemitteilung.
+***** Comments
+- Mir ist nicht klar, nach welchem Kriterium für das Pi-Team etwas 'bewährt' ist. Jev und Ähnliches gibt es seit keinem Monat, MCP wächst seit fast zwei Jahren und wird erst jetzt unterstützt.
+- Pi war das Einzige, das mit lokalen Modellen ordentlich lief, weil es keinen riesigen Systemprompt hatte, dessen Prefill auf meinem schwachen Laptop Minuten dauert.
+- Ich verstehe nicht, warum 'Cache-Warming für Anthropic-Modelle' kein eigenständiges Paket ist, sondern im 'minimalen' Coding-Agenten mitgeliefert wird.
+** Git 3.0's upcoming SHA-256 default will be a costly mistake :git:security:cryptography:tooling:
+:PROPERTIES:
+:ID:       49924179
+:URL:      https://blog.gitbutler.com/git-3-sha-256
+:HN_URL:   https://news.ycombinator.com/item?id=49924179
+:POINTS:   192
+:COMMENTS: 213
+:BY:       chmaynard
+:END:
+
+*** TLDR
+Scott Chacon argues Git 3.0 should not default new repositories to SHA-256. His case: SHA-1 in Git is a consistency check, not a security boundary, and the real protection is trusting where you pull from. The costs he lists are concrete. SHA-256 and SHA-1 repos cannot interoperate, submodules must match hash types, every existing commit hash in URLs, changelogs and issue trackers becomes unresolvable after a conversion, tools that assume 40-character hashes break, and most Git library implementations still lack full SHA-256 support. He proposes independent tree hash headers instead: attach a SHA-256 checksum to signed objects, leave the object store alone, roughly what Colin Walters' git-evtag did in 2015.
+
+*** Take
+The strongest reply in the thread is kpcyrd's, and it lands: SHAttered was a working collision in 2017, not a theory, and Git escaped only because nobody bothered to brute-force a blob prefix. But Chacon's compatibility list survives that rebuttal intact, because it is about tooling, not cryptography. Two things are true at once. The hash needs replacing and the transition design makes every link you have ever pasted into a bug report a dead end.
+
+*** Comments
+
+**** kpcyrd
+:PROPERTIES:
+:COMMENT_ID: 49924738
+:END:
+This article is full of mistakes. It claims SHA-1 insecurity is theoretical, while SHAttered in 2017 was a practical proof of concept. Git wasn't affected only because they didn't bother bruteforcing a git-blob prefix.
+
+**** nicoburns
+:PROPERTIES:
+:COMMENT_ID: 49924513
+:END:
+SHA-256 in git is showing every sign of being another IPv6: implemented in a non-backwards-compatible way, nebulous benefits, and a large amount of tooling to update.
+
+**** purpleidea
+:PROPERTIES:
+:COMMENT_ID: 49924699
+:END:
+If you migrate your repo, every commit message containing text like 'please see commit abc123' is now broken. This will be a train wreck.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Git 3.0 即将默认使用 SHA-256 是个代价高昂的错误
+***** TLDR
+Scott Chacon 认为 Git 3.0 不应让新仓库默认使用 SHA-256。他的理由是：Git 里的 SHA-1 是一致性校验，不是安全边界，真正的防护在于你信任的拉取来源。他列出的代价很具体：SHA-256 和 SHA-1 仓库无法互通，子模块的哈希类型必须一致，转换后 URL、changelog 和 issue 跟踪系统里所有现有的 commit 哈希都将失效，假定哈希为 40 个字符的工具会崩，而且大多数 Git 库实现仍不完整支持 SHA-256。他提出的替代方案是独立的树哈希头：给签名对象附加一个 SHA-256 校验和，不动对象存储，大致就是 Colin Walters 在 2015 年用 git-evtag 做的事。
+***** Take
+帖子里最有力的反驳来自 kpcyrd，而且说到了点上：SHAttered 在 2017 年是能跑通的碰撞，不是理论，Git 逃过一劫只是因为没人费力去暴力破解 blob 前缀。但 Chacon 那份兼容性清单在这条反驳之后依然成立，因为它讲的是工具链，不是密码学。两件事同时为真：哈希该换了，而这套迁移设计会让你以前粘进 bug 报告里的每一个链接变成死链。
+***** Comments
+- 这篇文章错误百出。它说 SHA-1 的不安全只是理论，可 2017 年的 SHAttered 就是能跑通的概念验证。Git 没中招，只是因为没人费力去暴力破解 git-blob 前缀。
+- Git 里的 SHA-256 处处都像是又一个 IPv6：以不向后兼容的方式实现、收益含糊、还有一大堆工具要改。
+- 如果你迁移了仓库，所有包含「见 commit abc123」这类文字的提交信息都会失效。这会是一场灾难。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Git 3.0のSHA-256デフォルト化は高くつく失敗になる
+***** TLDR
+Scott Chaconは、Git 3.0で新規リポジトリをSHA-256既定にすべきではないと主張する。彼の論拠は、GitにおけるSHA-1は整合性チェックであって安全境界ではなく、本当の防御はどこからpullするかの信頼にあるというもの。挙げているコストは具体的だ。SHA-256リポジトリとSHA-1リポジトリは相互運用できず、サブモジュールはハッシュ種別を揃える必要があり、変換後はURL・変更履歴・課題管理に残る既存のコミットハッシュがすべて解決不能になり、40文字のハッシュを前提としたツールは壊れ、多くのGitライブラリ実装は今もSHA-256に完全対応していない。代案として独立したツリーハッシュヘッダを提案する。署名対象にSHA-256チェックサムを付け、オブジェクトストアには手を入れない。2015年のColin Waltersのgit-evtagとほぼ同じ発想だ。
+***** Take
+スレッドで最も強い反論はkpcyrdのもので、これは的を射ている。SHAtteredは2017年に実際に動いた衝突であって理論ではなく、Gitが無傷だったのは誰もblobプレフィックスを総当たりしなかっただけだ。それでもChaconの互換性リストは無傷で残る。暗号の話ではなくツールの話だからだ。2つが同時に成り立つ。ハッシュは置き換えるべきで、かつこの移行設計はバグ報告に貼ってきたリンクをすべて行き止まりにする。
+***** Comments
+- この記事は誤りだらけだ。SHA-1の脆弱性を理論上のものだと書いているが、2017年のSHAtteredは実際に動く概念実証だった。Gitが無事だったのは、誰もgit-blobプレフィックスの総当たりをしなかったからにすぎない。
+- GitのSHA-256はもう一つのIPv6になる兆候しかない。後方互換性のない実装、曖昧な利点、更新が必要な膨大なツール群。
+- リポジトリを移行すると、「commit abc123を参照」のような文言を含むコミットメッセージがすべて壊れる。大惨事になる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Git 3.0의 SHA-256 기본값 전환은 비싼 실수가 될 것
+***** TLDR
+Scott Chacon은 Git 3.0이 새 저장소의 기본값을 SHA-256으로 삼아서는 안 된다고 주장한다. 근거는 Git의 SHA-1은 보안 경계가 아니라 무결성 검사이며, 실제 보호는 어디서 pull하는지에 대한 신뢰에서 나온다는 것이다. 그가 든 비용은 구체적이다. SHA-256 저장소와 SHA-1 저장소는 상호 운용되지 않고, 서브모듈은 해시 종류가 같아야 하며, 변환 후에는 URL과 변경 기록, 이슈 트래커에 남은 기존 커밋 해시가 모두 해석 불능이 되고, 40자 해시를 전제한 도구들이 깨지며, 대부분의 Git 라이브러리 구현은 아직 SHA-256을 완전히 지원하지 않는다. 대안으로는 독립적인 트리 해시 헤더를 제안한다. 서명 객체에 SHA-256 체크섬을 붙이고 객체 저장소는 그대로 두는 방식으로, 2015년 Colin Walters의 git-evtag와 거의 같다.
+***** Take
+스레드에서 가장 강한 반박은 kpcyrd의 것이고 정확하다. SHAttered는 2017년에 실제로 동작한 충돌이지 이론이 아니었고, Git이 무사했던 건 아무도 blob 접두사를 무차별 대입하지 않았기 때문이다. 그래도 Chacon의 호환성 목록은 그대로 남는다. 암호학이 아니라 도구 이야기이기 때문이다. 두 가지가 동시에 참이다. 해시는 교체되어야 하고, 이 전환 설계는 그동안 버그 리포트에 붙여온 모든 링크를 막다른 길로 만든다.
+***** Comments
+- 이 글은 오류투성이다. SHA-1의 취약성이 이론적이라고 주장하지만 2017년 SHAttered는 실제로 동작하는 개념 증명이었다. Git이 영향을 받지 않은 건 아무도 git-blob 접두사를 무차별 대입하지 않았기 때문일 뿐이다.
+- Git의 SHA-256은 또 하나의 IPv6가 될 징후만 보인다. 하위 호환 없는 구현, 모호한 이점, 손봐야 할 방대한 도구들.
+- 저장소를 마이그레이션하면 '커밋 abc123 참조' 같은 문구가 들어간 커밋 메시지가 전부 깨진다. 대참사가 될 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El futuro valor por defecto SHA-256 de Git 3.0 será un error costoso
+***** TLDR
+Scott Chacon sostiene que Git 3.0 no debería crear los repositorios nuevos con SHA-256 por defecto. Su argumento: en Git, SHA-1 es una comprobación de consistencia, no una frontera de seguridad, y la protección real está en confiar en el origen del que haces pull. Los costes que enumera son concretos. Los repos SHA-256 y SHA-1 no interoperan, los submódulos deben coincidir en tipo de hash, tras una conversión dejan de resolverse todos los hashes de commit que haya en URLs, registros de cambios y gestores de incidencias, las herramientas que asumen hashes de 40 caracteres se rompen, y la mayoría de implementaciones de bibliotecas Git aún no soportan SHA-256 del todo. Propone en su lugar cabeceras de hash de árbol independientes: añadir una suma SHA-256 a los objetos firmados sin tocar el almacén de objetos, básicamente lo que hizo git-evtag de Colin Walters en 2015.
+***** Take
+La réplica más fuerte del hilo es la de kpcyrd, y acierta: SHAttered fue una colisión real en 2017, no una teoría, y Git se libró solo porque nadie se molestó en forzar un prefijo de blob. Pero la lista de incompatibilidades de Chacon sobrevive intacta a esa réplica, porque habla de herramientas, no de criptografía. Las dos cosas son ciertas a la vez. Hay que sustituir el hash, y el diseño de la transición convierte en callejón sin salida todos los enlaces que has pegado alguna vez en un informe de error.
+***** Comments
+- El artículo está lleno de errores. Afirma que la inseguridad de SHA-1 es teórica, cuando SHAttered en 2017 fue una prueba de concepto práctica. Git no se vio afectado solo porque nadie se molestó en forzar un prefijo de git-blob.
+- SHA-256 en git da todas las señales de ser otro IPv6: implementado sin compatibilidad hacia atrás, beneficios difusos y una enorme cantidad de herramientas por actualizar.
+- Si migras tu repositorio, todo mensaje de commit que contenga algo como 'ver commit abc123' queda roto. Va a ser un desastre.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der kommende SHA-256-Standard in Git 3.0 wird ein teurer Fehler
+***** TLDR
+Scott Chacon argumentiert, Git 3.0 sollte neue Repositories nicht standardmäßig auf SHA-256 setzen. Seine Begründung: SHA-1 ist in Git eine Konsistenzprüfung, keine Sicherheitsgrenze, und der eigentliche Schutz liegt im Vertrauen in die Quelle, von der man pullt. Die aufgeführten Kosten sind konkret. SHA-256- und SHA-1-Repos sind nicht interoperabel, Submodule müssen denselben Hash-Typ haben, nach einer Umstellung lassen sich sämtliche Commit-Hashes in URLs, Changelogs und Ticketsystemen nicht mehr auflösen, Werkzeuge mit der Annahme von 40 Zeichen langen Hashes brechen, und die meisten Git-Bibliotheken unterstützen SHA-256 noch nicht vollständig. Stattdessen schlägt er unabhängige Tree-Hash-Header vor: eine SHA-256-Prüfsumme an signierte Objekte hängen und den Objektspeicher unangetastet lassen, ungefähr das, was Colin Walters' git-evtag 2015 gemacht hat.
+***** Take
+Die stärkste Erwiderung im Thread kommt von kpcyrd und sie trifft: SHAttered war 2017 eine funktionierende Kollision, keine Theorie, und Git kam nur davon, weil sich niemand die Mühe machte, ein Blob-Präfix zu brute-forcen. Chacons Kompatibilitätsliste übersteht diesen Einwand trotzdem, denn sie handelt von Werkzeugen, nicht von Kryptografie. Beides stimmt gleichzeitig. Der Hash muss ersetzt werden, und das Design des Übergangs macht jeden Link, den man je in einen Fehlerbericht kopiert hat, zur Sackgasse.
+***** Comments
+- Der Artikel steckt voller Fehler. Er behauptet, die Unsicherheit von SHA-1 sei theoretisch, dabei war SHAttered 2017 ein praktischer Proof of Concept. Git war nur deshalb nicht betroffen, weil sich niemand die Mühe machte, ein git-blob-Präfix zu brute-forcen.
+- SHA-256 in Git zeigt alle Anzeichen eines zweiten IPv6: nicht abwärtskompatibel umgesetzt, nebulöser Nutzen und eine riesige Menge an Werkzeugen, die angepasst werden müssen.
+- Wenn man sein Repo migriert, ist jede Commit-Nachricht kaputt, die Text wie 'siehe commit abc123' enthält. Das wird ein Desaster.
+** Automatic Transmission – a data-privacy study of connected vehicles :privacy:automotive:research:tracking:
+:PROPERTIES:
+:ID:       49926628
+:URL:      https://automatictransmission.khoury.northeastern.edu/index.html
+:HN_URL:   https://news.ycombinator.com/item?id=49926628
+:POINTS:   138
+:COMMENTS: 134
+:BY:       rafaelc
+:END:
+
+*** TLDR
+Researchers at Northeastern University's Khoury College, working with Consumer Reports, tested 21 vehicles from 19 manufacturers plus 30 companion apps between October 2024 and August 2025. Findings: 19 of the 21 cars contacted at least one third-party domain over Wi-Fi, including advertising and tracking services. 7 of the 30 apps sent sensitive identifiers such as VINs and precise location to third parties. Installing the companion app roughly doubled a vehicle's exposure to ad and tracking companies. The study documents a gap between what privacy policies disclose and what the cars actually transmit. Honda is named as the one maker that changed its practice to stop sending precise geolocation to a tracking-linked third party.
+
+*** Take
+The useful part is not the headline count, it is the app multiplier. The car alone leaks; pairing the phone app roughly doubles it, and the app is the thing dealers push hardest because it carries remote start and the features people actually bought. The owner's only lever is refusing the app, which is why the comment section fills with people pulling telemetry fuses on 20-year-old trucks. That is not a privacy strategy, it is the absence of one.
+
+*** Comments
+
+**** prasadvara
+:PROPERTIES:
+:COMMENT_ID: 49926658
+:END:
+The ongoing theme of all these responses was shifting the blame to the consumer. Consumers need to push back, but the majority are tech savvy and not privacy savvy.
+
+**** deepsun
+:PROPERTIES:
+:COMMENT_ID: 49926877
+:END:
+Honda improved its data collection practices to prevent sending precise geolocation to a third party associated with user tracking. I know what my next car will be.
+
+**** drnick1
+:PROPERTIES:
+:COMMENT_ID: 49927641
+:END:
+It's sad that the paper does not mention even once a straightforward solution, which is to pull the cellular modem's fuse or to outright unplug it.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Automatic Transmission：联网汽车数据隐私研究
+***** TLDR
+美国东北大学 Khoury 学院的研究者与《消费者报告》合作，在 2024 年 10 月至 2025 年 8 月间测试了来自 19 家厂商的 21 款车以及 30 个配套 App。结论：21 辆车中有 19 辆通过 Wi-Fi 联系了至少一个第三方域名，其中包括广告与追踪服务。30 个 App 中有 7 个把 VIN 码和精确位置等敏感标识发给了第三方。安装配套 App 后，车辆暴露给广告和追踪公司的程度大致翻倍。研究记录了隐私政策的声明与车辆实际传输内容之间的落差。本田是唯一被点名的改进者，它停止了把精确地理位置发给与追踪相关的第三方。
+***** Take
+有价值的不是那个标题数字，而是 App 的放大效应。车本身就在泄露，配上手机 App 大约翻倍，而 App 恰恰是经销商最卖力推销的东西，因为远程启动这类人们真正掏钱买的功能都在里面。车主唯一的筹码就是不装 App，所以评论区挤满了给 20 年车龄的皮卡拔遥测保险丝的人。这不是隐私策略，这是没有策略。
+***** Comments
+- 这些厂商回应贯穿始终的主题就是把责任推给消费者。消费者确实需要反击，但多数人懂技术，不懂隐私。
+- 本田改进了数据收集方式，不再把精确地理位置发给与用户追踪相关的第三方。我知道下一辆车买什么了。
+- 遗憾的是这篇论文一次都没提到一个直截了当的办法：拔掉蜂窝模块的保险丝，或者干脆把它拔下来。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Automatic Transmission – コネクテッドカーのデータプライバシー調査
+***** TLDR
+ノースイースタン大学Khoury Collegeの研究者がConsumer Reportsと組み、2024年10月から2025年8月にかけて19メーカー21車種と30本の専用アプリを調査した。結果は、21台中19台がWi-Fi経由で広告・追跡サービスを含む第三者ドメインに少なくとも1つ接続していた。30本のアプリのうち7本がVINや正確な位置情報などの機微な識別子を第三者に送信していた。専用アプリを入れると、広告・追跡企業への露出はおよそ2倍になる。プライバシーポリシーの記載と実際の送信内容との乖離も記録されている。追跡関連の第三者への正確な位置情報送信をやめた唯一の例としてホンダが挙げられている。
+***** Take
+重要なのは見出しの台数ではなく、アプリによる倍率だ。車単体でも漏れるが、スマホアプリを組み合わせるとおよそ2倍になる。そしてそのアプリこそ、リモートスタートなど人々が実際に金を払った機能が載っているため、販売店が最も強く勧めてくるものだ。所有者に残された手段はアプリを使わないことだけで、だからコメント欄は20年落ちのトラックのテレメトリ用ヒューズを抜く話で埋まる。それはプライバシー戦略ではなく、戦略の不在だ。
+***** Comments
+- 各社の回答に一貫していたのは、責任を消費者に転嫁する姿勢だ。消費者も押し返す必要はあるが、大半は技術には詳しくてもプライバシーには詳しくない。
+- ホンダはデータ収集を改め、ユーザー追跡に関わる第三者への正確な位置情報送信をやめた。次に買う車が決まった。
+- 率直な解決策、つまりセルラーモデムのヒューズを抜くか丸ごと外すことに、この論文が一度も触れていないのは残念だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Automatic Transmission – 커넥티드 차량 데이터 프라이버시 연구
+***** TLDR
+노스이스턴대 Khoury 칼리지 연구진이 Consumer Reports와 함께 2024년 10월부터 2025년 8월까지 19개 제조사의 차량 21대와 전용 앱 30개를 조사했다. 결과는 21대 중 19대가 Wi-Fi를 통해 광고·추적 서비스를 포함한 제3자 도메인에 최소 한 곳 접속했다. 앱 30개 중 7개는 VIN과 정밀 위치 같은 민감 식별자를 제3자에 전송했다. 전용 앱을 설치하면 광고·추적 업체에 대한 노출이 대략 두 배가 된다. 개인정보 처리방침에 적힌 내용과 차량이 실제로 전송하는 내용 사이의 격차도 기록됐다. 추적 관련 제3자에게 정밀 위치를 보내지 않도록 관행을 바꾼 유일한 사례로 혼다가 언급됐다.
+***** Take
+핵심은 헤드라인의 대수가 아니라 앱이 만드는 배수다. 차만으로도 새어 나가는데 휴대폰 앱을 붙이면 대략 두 배가 된다. 그리고 그 앱이야말로 원격 시동처럼 사람들이 실제로 돈 주고 산 기능이 들어 있어 딜러가 가장 강하게 밀어붙이는 물건이다. 차주에게 남은 수단은 앱을 쓰지 않는 것뿐이고, 그래서 댓글창은 20년 된 트럭의 텔레메트리 퓨즈를 뽑는 이야기로 채워진다. 그건 프라이버시 전략이 아니라 전략의 부재다.
+***** Comments
+- 업체 답변을 관통하는 주제는 책임을 소비자에게 떠넘기는 것이었다. 소비자도 밀어붙여야 하지만, 대다수는 기술에는 밝아도 프라이버시에는 밝지 않다.
+- 혼다는 데이터 수집 방식을 개선해 사용자 추적과 연관된 제3자에게 정밀 위치를 보내지 않게 했다. 다음 차가 뭘지 알겠다.
+- 셀룰러 모뎀 퓨즈를 뽑거나 아예 분리하는 간단한 해법을 논문이 한 번도 언급하지 않은 점이 아쉽다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Automatic Transmission: un estudio de privacidad de datos en vehículos conectados
+***** TLDR
+Investigadores del Khoury College de la Northeastern University, junto con Consumer Reports, analizaron 21 vehículos de 19 fabricantes y 30 aplicaciones asociadas entre octubre de 2024 y agosto de 2025. Resultados: 19 de los 21 coches contactaron por Wi-Fi con al menos un dominio de terceros, incluidos servicios de publicidad y rastreo. 7 de las 30 aplicaciones enviaron identificadores sensibles como el VIN y la ubicación precisa a terceros. Instalar la aplicación del fabricante duplicaba aproximadamente la exposición del vehículo a empresas de publicidad y rastreo. El estudio documenta la brecha entre lo que declaran las políticas de privacidad y lo que los coches transmiten en realidad. Honda aparece como el único fabricante que cambió su práctica para dejar de enviar geolocalización precisa a un tercero vinculado al rastreo.
+***** Take
+Lo relevante no es la cifra del titular, sino el multiplicador de la aplicación. El coche solo ya filtra; emparejarlo con la app del móvil lo duplica aproximadamente, y esa app es justo lo que más empujan los concesionarios, porque trae el arranque remoto y las funciones por las que la gente pagó. La única palanca del propietario es no usar la app, y por eso los comentarios se llenan de gente quitando fusibles de telemetría en camionetas de hace veinte años. Eso no es una estrategia de privacidad, es su ausencia.
+***** Comments
+- El hilo conductor de todas esas respuestas era trasladar la culpa al consumidor. Los consumidores deben presionar, pero la mayoría sabe de tecnología y no de privacidad.
+- Honda cambió sus prácticas de recogida de datos para no enviar geolocalización precisa a un tercero asociado al rastreo. Ya sé cuál será mi próximo coche.
+- Es triste que el artículo no mencione ni una vez la solución directa: quitar el fusible del módem celular o desconectarlo del todo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Automatic Transmission: eine Datenschutzstudie zu vernetzten Fahrzeugen
+***** TLDR
+Forschende des Khoury College der Northeastern University haben gemeinsam mit Consumer Reports zwischen Oktober 2024 und August 2025 21 Fahrzeuge von 19 Herstellern sowie 30 zugehörige Apps untersucht. Ergebnisse: 19 der 21 Autos kontaktierten über WLAN mindestens eine Drittanbieter-Domain, darunter Werbe- und Tracking-Dienste. 7 der 30 Apps schickten sensible Kennungen wie Fahrgestellnummern und genaue Standorte an Dritte. Die Installation der Hersteller-App verdoppelte die Exposition gegenüber Werbe- und Tracking-Firmen in etwa. Die Studie dokumentiert die Lücke zwischen dem, was Datenschutzerklärungen angeben, und dem, was die Autos tatsächlich senden. Honda wird als einziger Hersteller genannt, der seine Praxis geändert hat und keine genaue Geolokalisierung mehr an einen tracking-nahen Dritten sendet.
+***** Take
+Entscheidend ist nicht die Zahl aus der Überschrift, sondern der Multiplikator durch die App. Das Auto allein sendet schon; mit der Handy-App kommt grob das Doppelte dazu, und genau diese App drücken Händler am stärksten, weil darin Fernstart und die Funktionen stecken, für die Leute bezahlt haben. Der einzige Hebel der Besitzer ist, die App wegzulassen, weshalb sich die Kommentare mit Leuten füllen, die bei zwanzig Jahre alten Pickups die Telemetriesicherung ziehen. Das ist keine Datenschutzstrategie, sondern deren Fehlen.
+***** Comments
+- Das durchgehende Motiv all dieser Antworten war, die Schuld auf die Verbraucher zu schieben. Verbraucher müssen sich wehren, aber die meisten sind technikaffin und nicht datenschutzaffin.
+- Honda hat seine Datenerhebung verbessert und schickt keine genaue Geolokalisierung mehr an einen mit Nutzer-Tracking verbundenen Dritten. Ich weiß, was mein nächstes Auto wird.
+- Schade, dass die Arbeit die naheliegende Lösung kein einziges Mal erwähnt: die Sicherung des Mobilfunkmodems ziehen oder es ganz abklemmen.
+** RIP, vector database :databases:search:ai:infrastructure:
+:PROPERTIES:
+:ID:       49923466
+:URL:      https://turbopuffer.com/blog/rip-vector-database
+:HN_URL:   https://news.ycombinator.com/item?id=49923466
+:POINTS:   270
+:COMMENTS: 78
+:BY:       razin
+:END:
+
+*** TLDR
+turbopuffer is dropping the label vector database and shipping v3, which rebuilds the storage layer around a new primary index with ANN demoted to just another secondary index. The old design keyed documents by their vector's ANN address, so when SPFresh rebalanced clusters the full document contents and every inverted index referencing them had to move too. Updating one vector could relocate hundreds of attributes. The vector-primary layout also blocked query plans like GROUP BY and aggregations. Numbers cited: 1T+ documents stored, 10M+ writes/s, 25k+ queries/s, single indexes of 100B+ vectors at 200 ms p99 and 1k+ QPS, and a full-text search rewrite with 10x smaller indexes and up to 20x faster queries.
+
+*** Take
+gopalv puts it best in the thread: this is the Postgres-to-MySQL index design move, clustering on a primary key instead of on the thing you search by. It is a correct change and it is also an admission that the category name picked the architecture. Naming your company after the index type you happened to start with is how you end up writing a blog post about retiring the index type you happened to start with.
+
+*** Comments
+
+**** gopalv
+:PROPERTIES:
+:COMMENT_ID: 49924039
+:END:
+This is a direct parallel to how Postgres and MySQL built indexes. Your design choice went from a Postgres design pattern to a MySQL one.
+
+**** sreekanth850
+:PROPERTIES:
+:COMMENT_ID: 49923786
+:END:
+I find very little reason to use a pure vector database for enterprise retrieval. We built ours on a SQL database with native vector support and the flexibility is something we cannot ignore.
+
+**** gk1
+:PROPERTIES:
+:COMMENT_ID: 49924116
+:END:
+Vector databases were always more about retrieval than either vectors or data storage. But the term stuck all too well and companies held on to it a tad too long. Sorry :)
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+向量数据库，安息吧
+***** TLDR
+turbopuffer 决定弃用「向量数据库」这个标签，并发布 v3，围绕一个新的主索引重建存储层，把 ANN 降级为普通的二级索引。旧设计按向量的 ANN 地址来存放文档，于是 SPFresh 重新平衡聚类时，完整的文档内容以及所有引用它们的倒排索引都得跟着搬。更新一个向量可能导致几百个属性被挪动。向量为主的布局还挡住了 GROUP BY 和聚合这类查询计划。文中给出的数字：存储超过 1 万亿份文档、每秒写入超过 1000 万次、每秒查询超过 2.5 万次，单个索引超过 1000 亿向量时 p99 为 200 毫秒、QPS 超过 1000，另外全文检索重写后索引体积缩小 10 倍、查询最高快 20 倍。
+***** Take
+帖子里 gopalv 说得最到位：这就是从 Postgres 式索引换成 MySQL 式索引，按主键聚簇，而不是按你用来检索的东西聚簇。这个改动是对的，同时也承认了是品类名称替他们选了架构。用你恰好起步时用的索引类型给公司命名，结局就是写一篇博客宣布淘汰你恰好起步时用的索引类型。
+***** Comments
+- 这和 Postgres 与 MySQL 构建索引的方式完全对应。你们的设计从 Postgres 的模式换成了 MySQL 的模式。
+- 企业检索场景里我实在找不到用纯向量数据库的理由。我们在原生支持向量的 SQL 数据库上自建了一套，那种灵活性是没法忽视的。
+- 向量数据库从来讲的都是检索，而不是向量或数据存储。只是这个词太深入人心，各家公司抱着它不放的时间久了点。抱歉啦 :)
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+さらば、ベクトルデータベース
+***** TLDR
+turbopufferが「ベクトルデータベース」という呼称を捨て、v3を公開した。新しいプライマリインデックスを中心にストレージ層を作り直し、ANNは単なるセカンダリインデックスに格下げされた。旧設計では文書をベクトルのANNアドレスで配置していたため、SPFreshがクラスタを再バランスすると文書本体とそれを参照する転置インデックスまで動かす必要があった。ベクトル1つの更新で数百の属性が移動しうる。ベクトル中心のレイアウトはGROUP BYや集計といったクエリプランも阻んでいた。挙げられた数値は、保存文書1兆件超、毎秒1000万件超の書き込み、毎秒2万5000件超のクエリ、1000億ベクトル超の単一インデックスでp99 200ミリ秒かつ1000 QPS超、さらに全文検索の書き直しでインデックスは10分の1、クエリは最大20倍速。
+***** Take
+スレッドのgopalvの指摘が的確だ。これはPostgres型のインデックス設計からMySQL型への移行、つまり検索キーではなく主キーでクラスタリングする変更だ。正しい変更であり、同時にカテゴリ名がアーキテクチャを決めてしまっていたという告白でもある。たまたま最初に使ったインデックス方式を社名にすると、たまたま最初に使ったインデックス方式を引退させるブログを書く羽目になる。
+***** Comments
+- これはPostgresとMySQLのインデックスの作り方そのままの対応関係だ。設計の選択がPostgres的なパターンからMySQL的なものに移った。
+- 企業向けの検索で純粋なベクトルデータベースを使う理由はほとんど見当たらない。ネイティブにベクトルをサポートするSQLデータベースの上に構築したが、その柔軟性は無視できない。
+- ベクトルデータベースは常にベクトルやデータ保存ではなく検索の話だった。ただこの言葉が定着しすぎて、各社が少し長く抱えすぎた。すまない :)
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+벡터 데이터베이스, 안녕히
+***** TLDR
+turbopuffer가 '벡터 데이터베이스'라는 이름을 버리고 v3를 내놓았다. 새 기본 인덱스를 중심으로 저장 계층을 다시 짜고 ANN은 그저 하나의 보조 인덱스로 내렸다. 기존 설계는 문서를 벡터의 ANN 주소에 두었기 때문에 SPFresh가 클러스터를 재조정하면 문서 본문과 이를 참조하는 역색인까지 함께 옮겨야 했다. 벡터 하나를 갱신하는 데 수백 개 속성이 이동할 수 있었다. 벡터 중심 배치는 GROUP BY와 집계 같은 쿼리 플랜도 막았다. 제시된 수치는 1조 건 이상의 문서, 초당 1000만 건 이상의 쓰기, 초당 2만 5000건 이상의 쿼리, 1000억 벡터 이상 단일 인덱스에서 p99 200밀리초와 1000 QPS 이상, 그리고 전문 검색 재작성으로 인덱스 크기 10분의 1, 쿼리 최대 20배 속도 향상이다.
+***** Take
+스레드의 gopalv가 정확히 짚었다. 이건 Postgres식 인덱스 설계에서 MySQL식으로 가는 수순, 즉 검색 대상이 아니라 기본 키로 클러스터링하는 변경이다. 옳은 변경이고, 동시에 카테고리 이름이 아키텍처를 골라버렸다는 자백이기도 하다. 우연히 처음 쓴 인덱스 종류를 회사 이름으로 삼으면, 우연히 처음 쓴 인덱스 종류를 퇴역시키는 블로그 글을 쓰게 된다.
+***** Comments
+- 이건 Postgres와 MySQL이 인덱스를 만드는 방식과 그대로 대응된다. 설계 선택이 Postgres 패턴에서 MySQL 패턴으로 옮겨 간 것이다.
+- 엔터프라이즈 검색에서 순수 벡터 데이터베이스를 쓸 이유를 거의 찾지 못했다. 벡터를 기본 지원하는 SQL 데이터베이스 위에 직접 만들었는데 그 유연성은 무시할 수 없다.
+- 벡터 데이터베이스는 늘 벡터나 데이터 저장이 아니라 검색에 관한 것이었다. 다만 그 용어가 너무 잘 붙어버렸고 회사들이 조금 오래 붙들고 있었다. 미안 :)
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Descanse en paz, la base de datos vectorial
+***** TLDR
+turbopuffer abandona la etiqueta de base de datos vectorial y publica la v3, que reconstruye la capa de almacenamiento en torno a un nuevo índice primario y degrada el ANN a un índice secundario más. El diseño anterior guardaba los documentos según la dirección ANN de su vector, de modo que cuando SPFresh reequilibraba los clústeres había que mover también el contenido completo del documento y todos los índices invertidos que lo referenciaban. Actualizar un solo vector podía desplazar cientos de atributos. La disposición centrada en vectores además bloqueaba planes de consulta como GROUP BY y agregaciones. Cifras citadas: más de un billón de documentos almacenados, más de 10 millones de escrituras por segundo, más de 25.000 consultas por segundo, índices únicos de más de 100.000 millones de vectores con p99 de 200 ms y más de 1.000 QPS, y una reescritura de la búsqueda de texto completo con índices 10 veces más pequeños y consultas hasta 20 veces más rápidas.
+***** Take
+gopalv lo resume mejor que nadie en el hilo: esto es pasar del diseño de índices de Postgres al de MySQL, agrupar por clave primaria en lugar de por aquello que consultas. Es un cambio correcto y a la vez una admisión de que el nombre de la categoría eligió la arquitectura. Bautizar tu empresa con el tipo de índice con el que casualmente empezaste es la forma de acabar escribiendo una entrada de blog sobre jubilar el tipo de índice con el que casualmente empezaste.
+***** Comments
+- Es un paralelo directo de cómo construyeron los índices Postgres y MySQL. Vuestra decisión de diseño pasó de un patrón Postgres a uno MySQL.
+- Encuentro muy pocas razones para usar una base de datos vectorial pura en recuperación empresarial. Construimos la nuestra sobre una base de datos SQL con soporte vectorial nativo y esa flexibilidad no se puede ignorar.
+- Las bases de datos vectoriales siempre fueron más sobre recuperación que sobre vectores o almacenamiento. Pero el término cuajó demasiado bien y las empresas lo mantuvieron un poco de más. Perdón :)
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ruhe in Frieden, Vektordatenbank
+***** TLDR
+turbopuffer legt das Etikett Vektordatenbank ab und veröffentlicht v3, das die Speicherschicht um einen neuen Primärindex herum neu baut und ANN zu einem gewöhnlichen Sekundärindex herabstuft. Im alten Entwurf lagen Dokumente unter der ANN-Adresse ihres Vektors, sodass beim Rebalancing der Cluster durch SPFresh auch der komplette Dokumentinhalt und jeder darauf verweisende invertierte Index mitwandern musste. Das Aktualisieren eines einzigen Vektors konnte Hunderte Attribute verschieben. Das vektorzentrierte Layout blockierte zudem Abfragepläne wie GROUP BY und Aggregationen. Genannte Zahlen: über 1 Billion gespeicherte Dokumente, über 10 Millionen Schreibvorgänge pro Sekunde, über 25.000 Abfragen pro Sekunde, einzelne Indizes mit über 100 Milliarden Vektoren bei 200 ms p99 und über 1.000 QPS sowie eine neu geschriebene Volltextsuche mit zehnmal kleineren Indizes und bis zu zwanzigmal schnelleren Abfragen.
+***** Take
+gopalv bringt es im Thread am besten auf den Punkt: Das ist der Schritt vom Postgres- zum MySQL-Indexentwurf, also Clustering nach Primärschlüssel statt nach dem, wonach man sucht. Die Änderung ist richtig und zugleich ein Eingeständnis, dass der Kategoriename die Architektur ausgewählt hat. Wer seine Firma nach dem Indextyp benennt, mit dem er zufällig angefangen hat, schreibt irgendwann einen Blogbeitrag über die Abschaffung genau dieses Indextyps.
+***** Comments
+- Das ist eine direkte Parallele dazu, wie Postgres und MySQL ihre Indizes gebaut haben. Eure Entwurfsentscheidung ist von einem Postgres-Muster zu einem MySQL-Muster gewechselt.
+- Für Enterprise-Retrieval sehe ich kaum einen Grund für eine reine Vektordatenbank. Wir haben unsere auf einer SQL-Datenbank mit nativer Vektorunterstützung gebaut, und diese Flexibilität lässt sich nicht ignorieren.
+- Bei Vektordatenbanken ging es immer um Retrieval, nicht um Vektoren oder Datenspeicherung. Aber der Begriff hat sich zu gut gehalten, und die Firmen haben etwas zu lange daran festgehalten. Sorry :)
+** Various Projects Find Hidden SDR Capabilities in ESP32 Microcontrollers :hardware:radio:esp32:reverseengineering:
+:PROPERTIES:
+:ID:       49922674
+:URL:      https://www.rtl-sdr.com/various-projects-independently-find-hidden-sdr-capabilities-in-esp32-microcontrollers/
+:HN_URL:   https://news.ycombinator.com/item?id=49922674
+:POINTS:   162
+:COMMENTS: 26
+:BY:       nkw
+:END:
+
+*** TLDR
+Three projects independently found that ESP32 chips have an undocumented mode letting firmware bypass the fixed Wi-Fi and Bluetooth radios and capture raw IQ baseband samples. ESPARGOS uses it for Wi-Fi direction finding with a phased antenna array, h0m3us3r streams IQ continuously to a PC via FPGA, and C5VRX uses it for FPV video reception. Coverage is 2.2 to 2.7 GHz at up to 80 MS/s on standard parts, 4.8 to 6.0 GHz on the ESP32-C5, and 16 MS/s streamed continuously over Gigabit Ethernet on the ESP32-S31, with 13 to 54 MHz of analog bandwidth depending on the chip. Most parts can only take snapshots rather than stream, which limits them to spectrum analysis. It is receive-only as implemented; ESPARGOS says transmit is technically possible but chose not to build it.
+
+*** Take
+The interesting constraint here is not technical. mallets points out that plenty of cheap wireless chips carry a capable radio that will never be documented, because documenting it invites certification, compliance and export-control problems. The capability was always in the silicon. What was missing was a vendor willing to admit it in writing, and the realistic risk now is that Espressif patches it out before the ham radio projects finish.
+
+*** Comments
+
+**** mallets
+:PROPERTIES:
+:COMMENT_ID: 49925416
+:END:
+So many $1 wireless ICs have a powerful SDR, but will never be documented due to certification, compliance and export-control reasons. Espressif might be forced to patch this away if arbitrary TX is possible.
+
+**** BlackRabbit1
+:PROPERTIES:
+:COMMENT_ID: 49925432
+:END:
+With the new ESP32-S31 we most likely can extract the I/Q data over its new 1 Gbit/s interface. These hacks will most likely be a revolution for 13cm ham radio.
+
+**** xd1936
+:PROPERTIES:
+:COMMENT_ID: 49925620
+:END:
+The prototype used the FPGA to clock the ESP32, which gives poor phase noise. Looks like this was solved five days ago.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+多个项目各自发现 ESP32 微控制器隐藏的 SDR 能力
+***** TLDR
+三个项目各自独立发现，ESP32 芯片存在一个未公开的模式，可让固件绕过固定的 Wi-Fi 和蓝牙功能，直接采集原始 IQ 基带样本。ESPARGOS 用它配合相控天线阵做 Wi-Fi 测向，h0m3us3r 通过 FPGA 把 IQ 数据持续传给电脑，C5VRX 则用它接收 FPV 图传。标准型号覆盖 2.2 至 2.7 GHz、最高 80 MS/s，ESP32-C5 可达 4.8 至 6.0 GHz，ESP32-S31 能以 16 MS/s 经千兆以太网持续输出，模拟带宽随芯片不同为 13 至 54 MHz。多数型号只能抓快照而无法持续串流，因此只适合做频谱分析。目前的实现只支持接收；ESPARGOS 表示发射在技术上可行，但他们选择不做。
+***** Take
+这里有意思的限制不是技术层面的。mallets 指出，许多廉价无线芯片都带着一颗能力不俗的射频核心，却永远不会被写进文档，因为写进文档就会招来认证、合规和出口管制的麻烦。这个能力一直就在硅片里，缺的是一家愿意白纸黑字承认它的厂商。而现实风险是，乐鑫可能会在这些业余无线电项目做完之前把它堵掉。
+***** Comments
+- 太多一美元的无线芯片里都藏着一个能力很强的 SDR，但出于认证、合规和出口管制的原因永远不会有文档。如果任意发射也可行，乐鑫可能会被迫把它封掉。
+- 有了新的 ESP32-S31，我们很可能可以通过它新的 1 Gbit/s 接口把 I/Q 数据导出来。这些玩法大概会给 13 厘米波段业余无线电带来一场革命。
+- 原型用 FPGA 给 ESP32 提供时钟，导致相位噪声很差。看起来五天前已经解决了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+複数のプロジェクトがESP32マイコンの隠れたSDR機能を発見
+***** TLDR
+3つのプロジェクトが独立に、ESP32チップには固定のWi-FiとBluetooth機能を迂回して生のIQベースバンドサンプルを取得できる非公開モードがあることを突き止めた。ESPARGOSはフェーズドアンテナアレイによるWi-Fi方向探知に、h0m3us3rはFPGA経由でPCへの連続IQストリーミングに、C5VRXはFPV映像受信に利用している。標準品で2.2〜2.7 GHz・最大80 MS/s、ESP32-C5は4.8〜6.0 GHz、ESP32-S31はギガビットイーサネット経由で16 MS/sの連続出力、アナログ帯域はチップにより13〜54 MHz。多くの品種は連続ストリーミングができずスナップショットのみで、用途はスペクトル解析に限られる。実装は受信専用で、ESPARGOSは送信も技術的には可能だが実装しない選択をしたとしている。
+***** Take
+ここで興味深い制約は技術ではない。mallets が指摘するとおり、安価な無線ICの多くは強力な無線機能を積んでいるが、文書化すれば認証・コンプライアンス・輸出規制の問題を招くため永久に文書化されない。機能は最初からシリコンの中にあった。欠けていたのは、それを文書で認めるベンダーだ。そして現実的なリスクは、アマチュア無線のプロジェクトが完成する前にEspressifがこれを塞いでしまうことだ。
+***** Comments
+- 1ドルの無線ICの多くが強力なSDRを備えているが、認証・コンプライアンス・輸出規制の理由で永久に文書化されない。任意の送信が可能なら、Espressifは塞がざるを得なくなるかもしれない。
+- 新しいESP32-S31なら、新搭載の1 Gbit/sインターフェース経由でI/Qデータを取り出せる可能性が高い。この手のハックは13cmバンドのアマチュア無線に革命をもたらすだろう。
+- 試作ではFPGAでESP32にクロックを供給していて位相雑音が悪かった。5日前に解決されたようだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+여러 프로젝트가 ESP32 마이크로컨트롤러의 숨겨진 SDR 기능을 발견
+***** TLDR
+세 프로젝트가 각각 독립적으로, ESP32 칩에 펌웨어가 고정된 Wi-Fi와 블루투스 기능을 우회해 원시 IQ 베이스밴드 샘플을 받아올 수 있는 비공개 모드가 있음을 알아냈다. ESPARGOS는 위상 배열 안테나로 Wi-Fi 방향 탐지에, h0m3us3r는 FPGA를 거쳐 PC로 IQ를 연속 스트리밍하는 데, C5VRX는 FPV 영상 수신에 쓴다. 표준 제품은 2.2~2.7 GHz에 최대 80 MS/s, ESP32-C5는 4.8~6.0 GHz, ESP32-S31은 기가비트 이더넷으로 16 MS/s 연속 전송이 가능하며 아날로그 대역폭은 칩에 따라 13~54 MHz다. 대부분의 제품은 연속 스트리밍이 안 되고 스냅샷만 가능해 용도가 스펙트럼 분석에 한정된다. 현재 구현은 수신 전용이며, ESPARGOS는 송신도 기술적으로 가능하지만 만들지 않기로 했다고 밝혔다.
+***** Take
+여기서 흥미로운 제약은 기술이 아니다. mallets의 지적대로, 값싼 무선 IC 상당수가 꽤 쓸 만한 무선 코어를 품고 있으면서도 영원히 문서화되지 않는다. 문서화하는 순간 인증과 규제 준수, 수출 통제 문제가 따라오기 때문이다. 기능은 처음부터 실리콘 안에 있었다. 없던 것은 그것을 문서로 인정할 제조사였다. 그리고 현실적인 위험은 아마추어 무선 프로젝트들이 끝나기 전에 Espressif가 이 구멍을 막아버리는 것이다.
+***** Comments
+- 1달러짜리 무선 IC 상당수가 강력한 SDR을 품고 있지만 인증, 규제 준수, 수출 통제 때문에 절대 문서화되지 않는다. 임의 송신까지 가능하다면 Espressif는 이를 막을 수밖에 없을지도 모른다.
+- 새 ESP32-S31이라면 새로 들어간 1 Gbit/s 인터페이스로 I/Q 데이터를 빼낼 수 있을 가능성이 크다. 이런 해킹은 13cm 아마추어 무선에 혁명이 될 것이다.
+- 시제품은 FPGA로 ESP32에 클럭을 공급해 위상 잡음이 나빴다. 닷새 전에 해결된 것으로 보인다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Varios proyectos descubren capacidades SDR ocultas en los microcontroladores ESP32
+***** TLDR
+Tres proyectos descubrieron por separado que los chips ESP32 tienen un modo no documentado que permite al firmware saltarse las funciones fijas de Wi-Fi y Bluetooth y capturar muestras IQ en banda base en bruto. ESPARGOS lo usa para radiogoniometría de Wi-Fi con un array de antenas en fase, h0m3us3r transmite IQ de forma continua a un PC mediante FPGA y C5VRX lo emplea para recepción de vídeo FPV. La cobertura es de 2,2 a 2,7 GHz con hasta 80 MS/s en los modelos estándar, de 4,8 a 6,0 GHz en el ESP32-C5 y 16 MS/s en continuo por Gigabit Ethernet en el ESP32-S31, con un ancho de banda analógico de 13 a 54 MHz según el chip. La mayoría de los modelos solo pueden tomar instantáneas en vez de transmitir en continuo, lo que los limita al análisis de espectro. Tal como está implementado es solo de recepción; ESPARGOS dice que transmitir es técnicamente posible pero decidió no hacerlo.
+***** Take
+La restricción interesante aquí no es técnica. mallets señala que muchos chips inalámbricos baratos llevan una radio capaz que nunca se documentará, porque documentarla acarrea problemas de certificación, cumplimiento y control de exportaciones. La capacidad siempre estuvo en el silicio. Lo que faltaba era un fabricante dispuesto a reconocerlo por escrito, y el riesgo real ahora es que Espressif la elimine antes de que los proyectos de radioafición terminen.
+***** Comments
+- Muchísimos circuitos inalámbricos de un dólar llevan un SDR potente, pero nunca se documentará por motivos de certificación, cumplimiento y control de exportaciones. Si la transmisión arbitraria es posible, Espressif podría verse obligada a eliminarlo.
+- Con el nuevo ESP32-S31 lo más probable es que podamos extraer los datos I/Q por su nueva interfaz de 1 Gbit/s. Estos trucos serán seguramente una revolución para la radioafición en 13 cm.
+- El prototipo usaba la FPGA para dar reloj al ESP32, lo que da mal ruido de fase. Parece que se resolvió hace cinco días.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Mehrere Projekte entdecken versteckte SDR-Fähigkeiten in ESP32-Mikrocontrollern
+***** TLDR
+Drei Projekte haben unabhängig voneinander herausgefunden, dass ESP32-Chips einen undokumentierten Modus besitzen, mit dem die Firmware die festen WLAN- und Bluetooth-Funktionen umgeht und rohe IQ-Basisbandsamples aufnimmt. ESPARGOS nutzt das für WLAN-Peilung mit einer phasengesteuerten Antennengruppe, h0m3us3r streamt IQ-Daten per FPGA fortlaufend an einen PC, und C5VRX verwendet es für FPV-Videoempfang. Abgedeckt werden 2,2 bis 2,7 GHz mit bis zu 80 MS/s bei den Standardtypen, 4,8 bis 6,0 GHz beim ESP32-C5 und 16 MS/s im Dauerbetrieb über Gigabit-Ethernet beim ESP32-S31, bei 13 bis 54 MHz analoger Bandbreite je nach Chip. Die meisten Typen können nur Momentaufnahmen statt eines Dauerstroms liefern, was sie auf Spektrumanalyse beschränkt. In der jetzigen Umsetzung ist es reiner Empfang; ESPARGOS sagt, Senden wäre technisch möglich, hat es aber bewusst nicht gebaut.
+***** Take
+Die interessante Grenze ist hier keine technische. mallets weist darauf hin, dass viele billige Funkchips einen leistungsfähigen Empfänger mitbringen, der nie dokumentiert wird, weil eine Dokumentation Zertifizierungs-, Compliance- und Exportkontrollprobleme nach sich zieht. Die Fähigkeit steckte immer schon im Silizium. Gefehlt hat ein Hersteller, der sie schriftlich zugibt. Das realistische Risiko ist nun, dass Espressif sie wegpatcht, bevor die Amateurfunkprojekte fertig sind.
+***** Comments
+- So viele Funkchips für einen Dollar haben ein leistungsfähiges SDR an Bord, das wegen Zertifizierung, Compliance und Exportkontrolle nie dokumentiert wird. Wenn beliebiges Senden möglich ist, könnte Espressif gezwungen sein, das wegzupatchen.
+- Mit dem neuen ESP32-S31 können wir die I/Q-Daten höchstwahrscheinlich über die neue 1-Gbit/s-Schnittstelle auslesen. Diese Hacks dürften eine Revolution für den 13-cm-Amateurfunk werden.
+- Der Prototyp taktete den ESP32 über das FPGA, was schlechtes Phasenrauschen ergibt. Das wurde offenbar vor fünf Tagen gelöst.
