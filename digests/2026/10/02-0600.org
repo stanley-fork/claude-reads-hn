@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-10-02 06:00 UTC
+#+DATE: 2026-10-02T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Cloudflare ships open-weight decision models, Debian lists 1,000 kernel CVEs, and arXiv caps you at two papers a month
+
+* Highlights
+- Clef: Cloudflare's decision models answer in 38ms, Apache 2.0, fine-tuned from Qwen
+- Debian's kernel advisory lists over 1,000 CVEs, largely because any bugfix gets one
+- SvelteKit 3 moves config into vite.config.ts and renames $lib to #lib
+- arXiv caps submitters at two papers a month after September hit 40,363 submissions
+- Singapore's GovTech is matchmaking civil servants with the Gale-Shapley algorithm
+
+* Stories
+
+** Clef: Open-weight decision models, and new RL fine-tuning platform :ai:cloudflare:openweights:infrastructure:
+:PROPERTIES:
+:ID:       49923692
+:URL:      https://blog.cloudflare.com/clef-decision-models/
+:HN_URL:   https://news.ycombinator.com/item?id=49923692
+:POINTS:   474
+:COMMENTS: 170
+:BY:       jasondavies
+:END:
+
+*** TLDR
+Cloudflare released Clef and Clef-flash, two models built for classification rather than text generation: an agent asks which of a set of labels applies and gets bounded structured output with confidence scores. Clef is fine-tuned from Qwen 3.8-27B, Clef-flash from Qwen 3.5-9B, both with a 64k context and a vision encoder for image input. Scoring is non-autoregressive, with a two-stage attention routing step that evaluates schemas in parallel. Median latency is 209.3ms for Clef and 38.8ms for flash, against 524.1ms for Jev, across 43 benchmarks including 94.20 macro-F1 on BANKING77 and 97.43 on CLINC150+OOS. Weights are Apache 2.0 on Hugging Face. Cloudflare also announced RL fine-tuning, first as hands-on work by its forward-deployed engineers and later self-serve, using AI Gateway to capture data, Containers as RL sandboxes and Workers AI to serve the result.
+
+*** Take
+The latency number is the product. Classification is the one place where generating tokens one at a time is pure overhead, and 38ms is fast enough to sit in the request path instead of behind a queue. The open-weights claim is thinner than the headline: Apache 2.0 weights fine-tuned from a proprietary Qwen checkpoint, with no training data or pipeline published, which is reproducible by nobody. And the only commenter who actually ran it against a working Jev setup found it slower and worse.
+
+*** Comments
+
+**** manlymuppet
+Am I hearing this right, that they made a decision model based on Typesafe's new paradigm, and actually made a model better than Jev on Typesafe's own ranking? And it's only been a few weeks.
+
+**** buildbuildbuild
+Open weights, not open source. The weights have permissive licensing, but the data and training pipeline are not published to reproduce them from their proprietary Qwen starting points. Weights are not "source."
+
+**** agrippanux
+I stuck Jev in front of a Cloudflare-hosted Ollama model for chat moderation, so I was excited to test Clef. Clef was 2-3x slower and worse.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Clef：开放权重决策模型与新的 RL 微调平台
+***** TLDR
+Cloudflare 发布了 Clef 与 Clef-flash 两个模型，用于分类而非文本生成：智能体询问某组标签中哪一个适用，得到带置信度的结构化输出。Clef 基于 Qwen 3.8-27B 微调，Clef-flash 基于 Qwen 3.5-9B，均为 64k 上下文，并带有处理图像输入的视觉编码器。评分为非自回归，配合两阶段注意力路由并行评估多个 schema。在 43 项基准测试中，Clef 中位延迟 209.3 毫秒，flash 为 38.8 毫秒，Jev 为 524.1 毫秒；BANKING77 macro-F1 为 94.20，CLINC150+OOS 为 97.43。权重以 Apache 2.0 发布在 Hugging Face。Cloudflare 同时宣布 RL 微调服务，先由其驻场工程团队人工完成，之后开放自助：用 AI Gateway 收集数据，用 Containers 做 RL 沙箱，用 Workers AI 部署。
+***** Take
+延迟数字就是产品本身。分类恰恰是逐个生成 token 纯属浪费的场景，38 毫秒足够放进请求链路，而不必塞进队列后面。开放权重的说法比标题单薄：Apache 2.0 的权重是从闭源 Qwen 检查点微调而来，训练数据和流程都未公开，谁都无法复现。而唯一真正拿它和现有 Jev 方案做对比的评论者，结论是更慢也更差。
+***** Comments
+- 我没听错吧，他们基于 Typesafe 的新范式做了一个决策模型，而且按 Typesafe 自己的排行榜还超过了 Jev？这才过了几周。
+- 是开放权重，不是开源。权重授权宽松，但训练数据和流程没有公开，无法从他们闭源的 Qwen 起点复现。权重不等于「源代码」。
+- 我把 Jev 放在 Cloudflare 托管的 Ollama 模型前面做聊天内容审核，所以很期待试 Clef。结果 Clef 慢了 2-3 倍，效果还更差。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Clef: オープンウェイトの判定モデルと新しいRLファインチューニング基盤
+***** TLDR
+Cloudflareが、テキスト生成ではなく分類に特化した2つのモデル、ClefとClef-flashを公開した。エージェントがラベル候補のどれが当てはまるかを問い、信頼度付きの構造化出力を受け取る。ClefはQwen 3.8-27B、Clef-flashはQwen 3.5-9Bからファインチューニングされ、どちらも64kコンテキストと画像入力用のビジョンエンコーダを持つ。スコアリングは非自己回帰で、2段構えのアテンションルーティングによりスキーマを並列評価する。43のベンチマークで中央値レイテンシはClefが209.3ms、flashが38.8ms、Jevは524.1ms。BANKING77のmacro-F1は94.20、CLINC150+OOSは97.43。重みはApache 2.0でHugging Faceに公開。RLファインチューニングも発表され、当初は常駐エンジニアによる支援、後にセルフサービス化し、AI Gatewayでデータ収集、ContainersをRLサンドボックス、Workers AIで配信する。
+***** Take
+レイテンシの数字こそが製品だ。分類はトークンを1つずつ生成するのが完全な無駄になる領域で、38msならキューの裏ではなくリクエスト経路に置ける。オープンウェイトという主張は見出しより薄い。Apache 2.0の重みはクローズドなQwenのチェックポイントからのファインチューニングで、学習データも学習パイプラインも非公開、つまり誰も再現できない。そして実際に稼働中のJev構成と比べた唯一のコメント者の結論は、遅くて質も低い、だった。
+***** Comments
+- 聞き間違いでなければ、Typesafeの新しいパラダイムを使った判定モデルを作り、Typesafe自身のランキングでJevを上回ったということ？まだ数週間しか経っていないのに。
+- オープンウェイトであってオープンソースではない。重みのライセンスは寛容だが、データと学習パイプラインは公開されておらず、クローズドなQwenの出発点から再現できない。重みは「ソース」ではない。
+- チャットのモデレーションでJevをCloudflare上のOllamaモデルの前段に置いていたので、Clefを試すのが楽しみだった。結果はClefのほうが2〜3倍遅く、精度も劣った。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Clef: 오픈웨이트 판단 모델과 새로운 RL 파인튜닝 플랫폼
+***** TLDR
+Cloudflare가 텍스트 생성이 아닌 분류를 위한 모델 두 개, Clef와 Clef-flash를 공개했다. 에이전트가 주어진 라벨 중 무엇이 해당하는지 묻고 신뢰도가 붙은 구조화 출력을 받는 방식이다. Clef는 Qwen 3.8-27B, Clef-flash는 Qwen 3.5-9B에서 파인튜닝되었고 둘 다 64k 컨텍스트와 이미지 입력용 비전 인코더를 갖췄다. 점수 계산은 비자기회귀 방식이며, 2단계 어텐션 라우팅으로 스키마를 병렬 평가한다. 43개 벤치마크에서 중위 지연은 Clef 209.3ms, flash 38.8ms, Jev는 524.1ms였고 BANKING77 macro-F1 94.20, CLINC150+OOS 97.43을 기록했다. 가중치는 Apache 2.0으로 Hugging Face에 올라갔다. RL 파인튜닝도 함께 발표됐는데, 처음에는 상주 엔지니어가 직접 수행하고 이후 셀프서비스로 전환하며 AI Gateway로 데이터를 모으고 Containers를 RL 샌드박스로 쓰고 Workers AI로 서비스한다.
+***** Take
+지연 시간 숫자가 곧 제품이다. 분류는 토큰을 하나씩 생성하는 것이 순수한 낭비인 영역이고, 38ms면 큐 뒤가 아니라 요청 경로에 바로 넣을 수 있다. 오픈웨이트라는 주장은 제목보다 빈약하다. Apache 2.0 가중치는 비공개 Qwen 체크포인트에서 파인튜닝한 것이고 학습 데이터와 파이프라인은 공개되지 않아 아무도 재현할 수 없다. 그리고 실제로 운영 중인 Jev 구성과 비교해본 유일한 댓글 작성자의 결론은 더 느리고 더 나쁘다는 것이었다.
+***** Comments
+- 제대로 들은 게 맞나? Typesafe의 새 패러다임으로 판단 모델을 만들고, Typesafe 자체 랭킹에서 Jev를 앞섰다는 거죠? 겨우 몇 주 만에.
+- 오픈웨이트지 오픈소스가 아니다. 가중치 라이선스는 관대하지만 데이터와 학습 파이프라인은 공개되지 않아 비공개 Qwen 출발점에서 재현할 수 없다. 가중치는 '소스'가 아니다.
+- 채팅 모더레이션에서 Jev를 Cloudflare의 Ollama 모델 앞단에 두고 쓰고 있어서 Clef를 기대했다. 결과는 2~3배 느리고 성능도 더 나빴다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Clef: modelos de decisión de pesos abiertos y nueva plataforma de ajuste con RL
+***** TLDR
+Cloudflare publicó Clef y Clef-flash, dos modelos hechos para clasificar y no para generar texto: el agente pregunta cuál de un conjunto de etiquetas aplica y recibe una salida estructurada con puntuaciones de confianza. Clef se ajustó a partir de Qwen 3.8-27B y Clef-flash de Qwen 3.5-9B, ambos con contexto de 64k y un codificador de visión para imágenes. La puntuación no es autorregresiva e incluye un enrutamiento de atención en dos etapas que evalúa esquemas en paralelo. La latencia mediana es de 209,3 ms en Clef y 38,8 ms en flash, frente a 524,1 ms de Jev, en 43 pruebas que incluyen 94,20 de macro-F1 en BANKING77 y 97,43 en CLINC150+OOS. Los pesos están en Hugging Face con licencia Apache 2.0. Cloudflare también anunció ajuste con aprendizaje por refuerzo, primero como trabajo manual de sus ingenieros asignados y después autoservicio, usando AI Gateway para capturar datos, Containers como entorno de RL y Workers AI para servir el modelo.
+***** Take
+La cifra de latencia es el producto. La clasificación es justo el caso donde generar un token a la vez es puro desperdicio, y 38 ms permite ponerlo en la ruta de la petición en lugar de detrás de una cola. La afirmación de pesos abiertos es más débil que el titular: pesos Apache 2.0 ajustados desde un punto de partida cerrado de Qwen, sin datos ni tubería de entrenamiento publicados, es decir, reproducible por nadie. Y el único comentarista que lo probó contra una configuración real de Jev lo encontró más lento y peor.
+***** Comments
+- ¿Lo entiendo bien? Hicieron un modelo de decisión con el nuevo paradigma de Typesafe y superaron a Jev en el propio ranking de Typesafe. Y solo han pasado unas semanas.
+- Pesos abiertos, no código abierto. La licencia de los pesos es permisiva, pero no publican los datos ni la tubería de entrenamiento para reproducirlos desde su punto de partida cerrado de Qwen. Los pesos no son "fuente".
+- Tenía Jev delante de un modelo Ollama alojado en Cloudflare para moderar chat, así que quería probar Clef. Resultó 2-3 veces más lento y peor.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Clef: Entscheidungsmodelle mit offenen Gewichten und neue RL-Finetuning-Plattform
+***** TLDR
+Cloudflare hat Clef und Clef-flash veröffentlicht, zwei Modelle für Klassifikation statt Textgenerierung: Ein Agent fragt, welches aus einer Menge von Labels zutrifft, und bekommt strukturierte Ausgabe mit Konfidenzwerten. Clef ist aus Qwen 3.8-27B feinabgestimmt, Clef-flash aus Qwen 3.5-9B, beide mit 64k Kontext und einem Vision-Encoder für Bildeingaben. Die Bewertung läuft nicht autoregressiv, mit einem zweistufigen Attention-Routing, das Schemata parallel prüft. Die mediane Latenz liegt bei 209,3 ms für Clef und 38,8 ms für flash, gegenüber 524,1 ms bei Jev, über 43 Benchmarks hinweg, darunter 94,20 Makro-F1 auf BANKING77 und 97,43 auf CLINC150+OOS. Die Gewichte liegen unter Apache 2.0 auf Hugging Face. Dazu kommt RL-Finetuning, zunächst als Handarbeit der eigenen Vor-Ort-Ingenieure, später als Selbstbedienung, mit AI Gateway zur Datenerfassung, Containers als RL-Sandbox und Workers AI für den Betrieb.
+***** Take
+Die Latenzzahl ist das Produkt. Klassifikation ist genau der Fall, in dem das Erzeugen einzelner Token reiner Überhang ist, und 38 ms reicht, um das Modell in den Anfragepfad zu setzen statt hinter eine Warteschlange. Der Anspruch offener Gewichte ist dünner als die Schlagzeile: Apache-2.0-Gewichte, feinabgestimmt von einem geschlossenen Qwen-Checkpoint, ohne veröffentlichte Trainingsdaten oder Pipeline, also von niemandem reproduzierbar. Und der einzige Kommentator, der es gegen ein laufendes Jev-Setup getestet hat, fand es langsamer und schlechter.
+***** Comments
+- Verstehe ich das richtig: Sie haben ein Entscheidungsmodell nach dem neuen Paradigma von Typesafe gebaut und schlagen Jev in Typesafes eigenem Ranking? Und das nach wenigen Wochen.
+- Offene Gewichte, nicht Open Source. Die Lizenz der Gewichte ist freizügig, aber Daten und Trainingspipeline sind nicht veröffentlicht, also nicht vom geschlossenen Qwen-Ausgangspunkt reproduzierbar. Gewichte sind kein "Quellcode".
+- Ich hatte Jev vor einem bei Cloudflare gehosteten Ollama-Modell für Chat-Moderation, war also auf Clef gespannt. Clef war 2-3 mal langsamer und schlechter.
+** Several vulnerabilities have been discovered in the Linux kernel :security:linux:kernel:cve:
+:PROPERTIES:
+:ID:       49928121
+:URL:      https://lwn.net/Articles/1097401/
+:HN_URL:   https://news.ycombinator.com/item?id=49928121
+:POINTS:   217
+:COMMENTS: 141
+:BY:       luispa
+:END:
+
+*** TLDR
+Debian advisory DSA-6528-1 bundles over a thousand kernel CVEs, numbered from 2024 through 2026, under one sentence: they may lead to privilege escalation, denial of service or information leaks. The advisory names no subsystems, no researchers and no CVSS scores, and points readers at the security tracker. Stable (trixie) is fixed in kernel 6.12.111-1. The HN thread spends most of its time on why the count is so high, and the answer is in the kernel's own documentation: because almost any kernel bug might be exploitable, the CVE assignment team is deliberately over-cautious and gives a CVE to any bugfix it identifies.
+
+*** Take
+The headline number measures the kernel's CVE policy, not the kernel's security. Since Linux became its own CVE numbering authority, "over a thousand vulnerabilities" and "a few months of normal bugfixes" are close to the same sentence, which is why nobody in the thread is alarmed. The more durable point is romaniitedomum's: models introduce bugs at roughly the human rate while finding them far faster than humans ever could, so the count rises at both ends and tells you even less next year than it does now.
+
+*** Comments
+
+**** john_strinlai
+Note that _any_ bugfix is assigned a CVE, which makes for big numbers. From the kernel docs: because almost any bug might be exploitable to compromise the kernel, the CVE assignment team is overly cautious and assigns CVE numbers to any bugfix they identify.
+
+**** intrepidsoldier
+Just the beginning. AI is going to expose how fragile the entire computing infrastructure in our world is.
+
+**** romaniitedomum
+AIs writing code introduce vulnerabilities at a rate similar to humans writing the same code. So we're looking at a massively accelerated volume of vulnerabilities thanks to AI-assisted security research, with no reduction in new ones.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Linux 内核中发现多个漏洞
+***** TLDR
+Debian 公告 DSA-6528-1 把一千多个内核 CVE 打包在一句话里：可能导致权限提升、拒绝服务或信息泄露，编号跨 2024 到 2026 年。公告没有指明任何子系统、研究者或 CVSS 评分，只让读者去查安全追踪器。稳定版（trixie）在内核 6.12.111-1 中修复。HN 讨论的焦点是数字为何如此之大，答案就在内核自己的文档里：由于内核中几乎任何 bug 都可能被利用，CVE 分配团队刻意从宽处理，给他们识别出的任何 bug 修复都分配一个 CVE。
+***** Take
+这个标题数字衡量的是内核的 CVE 政策，不是内核的安全性。自从 Linux 成为自己的 CVE 编号机构，「一千多个漏洞」和「几个月的常规 bug 修复」几乎是同一句话，这也是讨论区没人惊慌的原因。更站得住脚的是 romaniitedomum 的观点：模型写代码引入漏洞的比率与人类相当，而找漏洞的速度远超人类，于是两端同时推高计数，明年这个数字能说明的事情会比今天更少。
+***** Comments
+- 注意：任何 bug 修复都会分配一个 CVE，所以数字很大。内核文档里写着：由于内核中几乎任何 bug 都可能被用来破坏内核安全，CVE 分配团队过度谨慎，会给他们识别出的任何修复分配 CVE。
+- 这只是开始。AI 会让全世界整个计算基础设施有多脆弱暴露出来。
+- AI 写代码引入漏洞的比率跟人类写同样代码差不多。所以在 AI 辅助安全研究的推动下，漏洞数量会大幅加速增长，而新漏洞的产生也不会减少。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Linuxカーネルに複数の脆弱性
+***** TLDR
+Debianの勧告DSA-6528-1は、2024年から2026年にかけて番号が振られた1000件超のカーネルCVEを一文でまとめている。権限昇格、サービス拒否、情報漏洩につながる可能性があるというだけで、サブシステムも研究者もCVSSスコアも示されず、詳細はセキュリティトラッカーに委ねられている。安定版(trixie)はカーネル6.12.111-1で修正済み。HNのスレッドは件数の多さの理由に集中し、答えはカーネル自身の文書にある。カーネルのバグはほぼ何でも悪用されうるため、CVE割り当てチームはあえて過剰に慎重で、特定したバグ修正すべてにCVEを付ける。
+***** Take
+見出しの数字が測っているのはカーネルのCVE方針であって、カーネルの安全性ではない。LinuxがCVE採番機関になって以降、「1000件超の脆弱性」と「数か月分の通常のバグ修正」はほぼ同じ意味の文であり、だからスレッドの誰も慌てていない。より長持ちする論点はromaniitedomumの指摘だ。モデルはおおむね人間と同じ率でバグを持ち込み、一方で人間より圧倒的に速く見つける。件数は両端から押し上げられ、来年にはこの数字が示す意味はさらに減る。
+***** Comments
+- どんなバグ修正にもCVEが振られるので数が大きくなる点に注意。カーネルの文書にある通り、カーネルのバグはほぼ何でも悪用されうるため、CVE割り当てチームは過剰に慎重で、特定した修正すべてにCVE番号を付ける。
+- まだ始まりに過ぎない。AIは世界の計算基盤全体がどれほど脆いかを明らかにしていくだろう。
+- AIがコードを書くとき、同じコードを書く人間と同程度の率で脆弱性を持ち込む。AI支援のセキュリティ研究によって脆弱性の件数は大幅に加速し、新規の発生も減らない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+리눅스 커널에서 여러 취약점 발견
+***** TLDR
+데비안 권고 DSA-6528-1은 2024년부터 2026년까지 번호가 붙은 1000건이 넘는 커널 CVE를 한 문장으로 묶었다. 권한 상승, 서비스 거부, 정보 유출로 이어질 수 있다는 것 외에 서브시스템도 연구자도 CVSS 점수도 적지 않고 보안 트래커를 보라고만 한다. 안정판(trixie)은 커널 6.12.111-1에서 수정됐다. HN 스레드는 숫자가 왜 이렇게 큰지에 집중하는데, 답은 커널 자체 문서에 있다. 커널의 거의 모든 버그가 악용될 수 있기 때문에 CVE 할당 팀은 의도적으로 과도하게 조심스럽게, 식별한 모든 버그 수정에 CVE를 부여한다.
+***** Take
+제목의 숫자가 측정하는 것은 커널의 CVE 정책이지 커널의 보안이 아니다. 리눅스가 자체 CVE 발급 기관이 된 뒤로 '1000건이 넘는 취약점'과 '몇 달치 일반 버그 수정'은 거의 같은 문장이고, 그래서 스레드에서 아무도 놀라지 않는다. 더 오래 남을 지적은 romaniitedomum의 것이다. 모델은 인간과 비슷한 비율로 버그를 넣으면서 인간보다 훨씬 빠르게 찾아낸다. 숫자는 양쪽에서 밀려 올라가고, 내년에는 지금보다도 더 적은 의미를 갖게 된다.
+***** Comments
+- 어떤 버그 수정이든 CVE가 부여되기 때문에 숫자가 커진다는 점에 유의하라. 커널 문서에 따르면 커널의 거의 모든 버그가 악용될 수 있으므로 CVE 할당 팀은 과도하게 조심스럽게 식별한 모든 수정에 CVE 번호를 부여한다.
+- 시작일 뿐이다. AI는 전 세계 컴퓨팅 인프라 전체가 얼마나 허약한지 드러낼 것이다.
+- AI가 코드를 쓸 때 같은 코드를 쓰는 사람과 비슷한 비율로 취약점을 넣는다. AI 지원 보안 연구 덕분에 취약점 수가 크게 가속되는 한편, 새로 생기는 취약점도 줄지 않는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Se han descubierto varias vulnerabilidades en el kernel de Linux
+***** TLDR
+El aviso DSA-6528-1 de Debian agrupa más de mil CVE del kernel, numerados entre 2024 y 2026, bajo una sola frase: pueden provocar escalada de privilegios, denegación de servicio o filtración de información. No menciona subsistemas, ni investigadores, ni puntuaciones CVSS, y remite al rastreador de seguridad. La rama estable (trixie) queda corregida en el kernel 6.12.111-1. El hilo de HN se centra en por qué la cifra es tan alta, y la respuesta está en la documentación del propio kernel: como casi cualquier fallo del kernel podría ser explotable, el equipo de asignación es deliberadamente muy precavido y asigna un CVE a cualquier corrección que identifica.
+***** Take
+La cifra del titular mide la política de CVE del kernel, no su seguridad. Desde que Linux se convirtió en su propia autoridad de numeración, "más de mil vulnerabilidades" y "unos meses de correcciones normales" son casi la misma frase, y por eso nadie en el hilo se alarma. El punto más duradero es el de romaniitedomum: los modelos introducen fallos a un ritmo parecido al humano y los encuentran mucho más rápido de lo que nunca pudo un humano, así que la cuenta sube por los dos extremos y el año que viene dirá todavía menos que hoy.
+***** Comments
+- Ojo: _cualquier_ corrección recibe un CVE, lo que infla las cifras. Según la documentación del kernel, como casi cualquier fallo podría servir para comprometer el kernel, el equipo de asignación es excesivamente precavido y asigna CVE a toda corrección que identifica.
+- Esto es solo el principio. La IA va a dejar al descubierto lo frágil que es toda la infraestructura informática del mundo.
+- Las IA que escriben código introducen vulnerabilidades a un ritmo parecido al de las personas que escriben el mismo código. Así que vamos hacia un volumen enormemente acelerado de vulnerabilidades por la investigación de seguridad asistida por IA, sin que bajen las nuevas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Mehrere Sicherheitslücken im Linux-Kernel entdeckt
+***** TLDR
+Die Debian-Meldung DSA-6528-1 bündelt über tausend Kernel-CVEs mit Nummern von 2024 bis 2026 in einem Satz: Sie können zu Rechteausweitung, Dienstverweigerung oder Informationslecks führen. Weder Subsysteme noch Forschende noch CVSS-Werte werden genannt, Verweis geht an den Security-Tracker. Für stable (trixie) ist der Fehler in Kernel 6.12.111-1 behoben. Der HN-Thread dreht sich vor allem darum, warum die Zahl so hoch ist, und die Antwort steht in der Kernel-Dokumentation selbst: Da fast jeder Kernel-Bug ausnutzbar sein könnte, ist das CVE-Team absichtlich übervorsichtig und vergibt für jeden erkannten Bugfix eine CVE.
+***** Take
+Die Zahl in der Überschrift misst die CVE-Politik des Kernels, nicht seine Sicherheit. Seit Linux eigene CVE-Nummern vergibt, sind "über tausend Sicherheitslücken" und "ein paar Monate normale Bugfixes" fast derselbe Satz, weshalb im Thread niemand beunruhigt ist. Der haltbarere Punkt kommt von romaniitedomum: Modelle bauen Fehler etwa im menschlichen Tempo ein und finden sie weit schneller, als Menschen es je konnten. Die Zahl steigt also von beiden Seiten und sagt nächstes Jahr noch weniger als heute.
+***** Comments
+- Beachtet: _jeder_ Bugfix bekommt eine CVE, das treibt die Zahlen hoch. Laut Kernel-Dokumentation ist das CVE-Team übervorsichtig und vergibt für jeden erkannten Bugfix eine CVE-Nummer, weil fast jeder Bug zur Kompromittierung des Kernels taugen könnte.
+- Das ist nur der Anfang. KI wird offenlegen, wie fragil die gesamte Rechen-Infrastruktur der Welt ist.
+- KI-geschriebener Code enthält Sicherheitslücken in etwa derselben Rate wie der gleiche von Menschen geschriebene Code. Durch KI-gestützte Sicherheitsforschung steigt das Volumen also massiv, während die Zahl neuer Lücken nicht sinkt.
+** SvelteKit 3 :webdev:svelte:javascript:frameworks:
+:PROPERTIES:
+:ID:       49926536
+:URL:      https://svelte.dev/blog/sveltekit-3-is-here
+:HN_URL:   https://news.ycombinator.com/item?id=49926536
+:POINTS:   197
+:COMMENTS: 64
+:BY:       sampsn
+:END:
+
+*** TLDR
+SvelteKit 3 shipped on October 1. Configuration moves out of svelte.config.js into vite.config.ts, the $lib alias becomes #lib so it uses standard subpath imports, and environment variables, service workers and error handling all get reworked. Existing projects upgrade with `npx sv migrate sveltekit-3 --tasks all --confirm`, which applies the automatic changes and prints a list of what you still have to do yourself. Remote functions, the type-safe client-server calls the team names its top priority, are still experimental and require Async Svelte behind a flag.
+
+*** Take
+A major version whose headline changes are where config lives and one character in an import alias is a framework that has stopped churning, which is worth more than a feature list. The thread's real question is stillatit's: whether models write Svelte as well as they write React. Nobody answers with numbers, only that the Svelte 4 and 5 mix-ups got better. In 2026 that is the actual adoption tax on any framework that isn't the default, and no migration codemod touches it.
+
+*** Comments
+
+**** poetril
+Prior to Opus 4.6-8 and that era of model releases, they often struggled to get Svelte 4/5 code straight and mixed it up quite a bit. Having used it a lot this year, that has improved.
+
+**** jamies
+I converted my React-enjoying cofounders to Svelte/SvelteKit worried they wouldn't like it, but they absolutely love it. Wails serves our Go and SvelteKit provides the UX.
+
+**** stillatit
+I love the hands-on developer experience of Svelte. But since we're in October 2026 I have to ask, is the vibe-coding experience in Svelte any different than in React?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+SvelteKit 3 发布
+***** TLDR
+SvelteKit 3 于 10 月 1 日发布。配置从 svelte.config.js 移到 vite.config.ts，$lib 别名改为 #lib 以便使用标准 subpath imports，环境变量、service worker 和错误处理也都重做了。已有项目用 `npx sv migrate sveltekit-3 --tasks all --confirm` 升级，它会应用自动改动并列出你仍需手工处理的部分。团队称为首要任务的 remote functions（类型安全的客户端-服务端调用）仍是实验性的，需要开启 Async Svelte 的开关。
+***** Take
+一个大版本的头条变化是配置文件搬家和 import 别名改了一个字符，说明这个框架已经不再折腾了，这比一长串新功能更有价值。讨论里真正的问题是 stillatit 提的：模型写 Svelte 的水平是否赶得上写 React。没人拿出数据，只说 Svelte 4 和 5 混用的问题好转了。在 2026 年，这就是任何非默认框架真正的采用成本，而迁移脚本一点也帮不上。
+***** Comments
+- 在 Opus 4.6-8 那批模型之前，它们经常搞不清 Svelte 4/5 的代码，混得很厉害。今年我大量使用后，这方面确实有改善。
+- 我把喜欢 React 的联合创始人转到 Svelte/SvelteKit，本来担心他们不喜欢，结果他们爱得不行。Wails 负责我们的 Go，SvelteKit 负责界面。
+- 我很喜欢 Svelte 的开发体验。但既然已经是 2026 年 10 月，我得问一句：在 Svelte 里 vibe coding 的体验跟 React 有区别吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+SvelteKit 3
+***** TLDR
+SvelteKit 3が10月1日にリリースされた。設定はsvelte.config.jsからvite.config.tsへ移り、$libエイリアスは標準のサブパスインポートを使うため#libになり、環境変数、サービスワーカー、エラー処理も作り直された。既存プロジェクトは`npx sv migrate sveltekit-3 --tasks all --confirm`で移行でき、自動変更を適用したうえで手作業が必要な項目を一覧で出す。チームが最優先と位置づける型安全なクライアント・サーバー通信のremote functionsは、まだ実験的でAsync Svelteのフラグが必要。
+***** Take
+メジャーバージョンの目玉が設定ファイルの引っ越しとインポートエイリアス1文字の変更なら、それは落ち着いたフレームワークだという意味で、機能一覧より価値がある。スレッドの本当の論点はstillatitの問いだ。モデルはReactと同じくらいうまくSvelteを書けるのか。数字で答える人はおらず、Svelte 4と5の混同が改善したという話だけが出る。2026年において、これがデフォルトでないフレームワークの実質的な導入コストであり、移行用のコード変換では解決しない。
+***** Comments
+- Opus 4.6-8あたりのモデル以前は、Svelte 4/5のコードをよく取り違えて混ぜていた。今年たくさん使ってみて、その点は改善した。
+- React好きの共同創業者をSvelte/SvelteKitに移したら、嫌がるかと心配したのに大好きになった。GoはWailsが受け持ち、UXはSvelteKitが担っている。
+- Svelteの開発体験は大好きだ。ただ2026年10月なので聞きたい。Svelteでのバイブコーディング体験はReactと違うのか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+SvelteKit 3
+***** TLDR
+SvelteKit 3이 10월 1일 출시됐다. 설정이 svelte.config.js에서 vite.config.ts로 옮겨가고, $lib 별칭은 표준 subpath import를 쓰도록 #lib이 되며, 환경 변수와 서비스 워커, 오류 처리도 손봤다. 기존 프로젝트는 `npx sv migrate sveltekit-3 --tasks all --confirm`으로 올리면 자동 변경을 적용하고 직접 해야 할 항목을 목록으로 보여준다. 팀이 최우선 과제라고 말하는 타입 안전 클라이언트-서버 호출인 remote functions는 여전히 실험 단계이고 Async Svelte 플래그가 필요하다.
+***** Take
+메이저 버전의 대표 변경이 설정 파일 위치와 import 별칭 한 글자라면, 그 프레임워크는 더 이상 요동치지 않는다는 뜻이고 이는 기능 목록보다 값지다. 스레드의 진짜 질문은 stillatit의 것이다. 모델이 React만큼 Svelte를 잘 쓰느냐. 숫자로 답하는 사람은 없고 Svelte 4와 5를 섞는 문제가 나아졌다는 얘기만 나온다. 2026년에 이것이 기본값이 아닌 프레임워크의 실질적인 도입 비용이고, 마이그레이션 코드모드로는 해결되지 않는다.
+***** Comments
+- Opus 4.6-8 세대 이전 모델들은 Svelte 4/5 코드를 자주 헷갈리고 많이 섞었다. 올해 많이 써 보니 그 부분은 나아졌다.
+- React를 좋아하던 공동창업자들을 Svelte/SvelteKit으로 옮겼는데, 싫어할까 걱정했지만 아주 마음에 들어 한다. Go는 Wails가 맡고 UX는 SvelteKit이 담당한다.
+- Svelte의 개발 경험은 정말 좋다. 그런데 2026년 10월이니 묻고 싶다. Svelte에서의 바이브 코딩 경험이 React와 다른가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+SvelteKit 3
+***** TLDR
+SvelteKit 3 salió el 1 de octubre. La configuración pasa de svelte.config.js a vite.config.ts, el alias $lib se convierte en #lib para usar importaciones de subruta estándar, y se rehacen las variables de entorno, los service workers y el manejo de errores. Los proyectos existentes se actualizan con `npx sv migrate sveltekit-3 --tasks all --confirm`, que aplica los cambios automáticos y lista lo que queda por hacer a mano. Las remote functions, las llamadas cliente-servidor con tipos que el equipo señala como su prioridad, siguen siendo experimentales y requieren Async Svelte tras una bandera.
+***** Take
+Una versión mayor cuyos cambios estrella son dónde vive la configuración y una letra en un alias de importación es un framework que ha dejado de agitarse, y eso vale más que una lista de funciones. La pregunta real del hilo es la de stillatit: si los modelos escriben Svelte tan bien como React. Nadie responde con datos, solo que las confusiones entre Svelte 4 y 5 han mejorado. En 2026 ese es el coste real de adoptar cualquier framework que no sea el predeterminado, y ningún codemod de migración lo toca.
+***** Comments
+- Antes de Opus 4.6-8 y esa generación de modelos, a menudo no acertaban con el código de Svelte 4/5 y lo mezclaban bastante. Tras usarlo mucho este año, eso ha mejorado.
+- Pasé a mis cofundadores, que adoraban React, a Svelte/SvelteKit temiendo que no les gustara, y les encanta. Wails sirve nuestro Go y SvelteKit aporta la interfaz.
+- Me encanta la experiencia de desarrollo de Svelte. Pero estamos en octubre de 2026, así que pregunto: ¿la experiencia de vibe coding en Svelte es distinta de la de React?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+SvelteKit 3
+***** TLDR
+SvelteKit 3 ist am 1. Oktober erschienen. Die Konfiguration wandert von svelte.config.js in vite.config.ts, der Alias $lib wird zu #lib und nutzt damit Standard-Subpath-Imports, und Umgebungsvariablen, Service Worker und Fehlerbehandlung wurden überarbeitet. Bestehende Projekte aktualisiert `npx sv migrate sveltekit-3 --tasks all --confirm`, das die automatischen Änderungen anwendet und auflistet, was von Hand bleibt. Remote Functions, die typsicheren Client-Server-Aufrufe, die das Team als oberste Priorität nennt, sind weiterhin experimentell und brauchen Async Svelte hinter einem Flag.
+***** Take
+Eine Hauptversion, deren größte Änderungen der Ort der Konfiguration und ein Zeichen in einem Import-Alias sind, ist ein Framework, das aufgehört hat, sich dauernd umzubauen, und das ist mehr wert als eine Featureliste. Die eigentliche Frage im Thread stellt stillatit: Schreiben Modelle Svelte so gut wie React? Niemand antwortet mit Zahlen, nur dass die Verwechslungen zwischen Svelte 4 und 5 seltener geworden sind. 2026 ist genau das die reale Einstiegshürde jedes Frameworks, das nicht die Vorgabe ist, und kein Migrations-Codemod fasst sie an.
+***** Comments
+- Vor Opus 4.6-8 und dieser Modellgeneration kamen sie beim Svelte-4/5-Code oft durcheinander und mischten beides. Nach viel Nutzung in diesem Jahr ist das besser geworden.
+- Ich habe meine React-begeisterten Mitgründer auf Svelte/SvelteKit umgestellt und befürchtet, es würde ihnen nicht gefallen. Sie lieben es. Wails liefert unser Go, SvelteKit die Oberfläche.
+- Die Entwicklererfahrung von Svelte mag ich sehr. Aber wir sind im Oktober 2026, also die Frage: Ist Vibe Coding in Svelte anders als in React?
+** ArXiv's Updated Rate Limit Policy :science:publishing:arxiv:ai:
+:PROPERTIES:
+:ID:       49926512
+:URL:      https://blog.arxiv.org/2026/10/01/updated-rate-limit-policy/
+:HN_URL:   https://news.ycombinator.com/item?id=49926512
+:POINTS:   98
+:COMMENTS: 39
+:BY:       50kIters
+:END:
+
+*** TLDR
+From October 1, arXiv limits each submitter to two submissions per calendar month and three active submissions at a time. The numbers behind it: 9,869 submissions in September 2016, 20,569 in September 2024, and 40,363 this September, which produced roughly 9,000 support tickets for staff and volunteer moderators. The AI categories grew sixfold. arXiv blames a sharp increase in thin papers of narrow scope and says a small proportion of authors submit a large number of low-quality papers and consume a disproportionate share of moderator time. The limit is per submitter rather than per author, rejected papers count against it, and papers deleted before announcement do not.
+
+*** Take
+Per submitter rather than per author is the entire policy, and it is the right lever. A twenty-author collaboration keeps its throughput while the person posting four slices of the same result each week gets throttled, so the cost lands on the exact behaviour arXiv described. The complaint in the thread is a different problem: vzaliva waited weeks for approval, gave up and posted to hal.science instead, and has another paper on hold at 18 days. Rate limits shorten the queue. They do not fix a moderation pipeline that was already too slow before the queue existed.
+
+*** Comments
+
+**** kiwih
+As an academic and regular submitter, this is an eminently sensible policy. I like that it's per-submitter and not per-author, which means big labs with large collaborations shouldn't be terribly put out.
+
+**** bryan0
+September 2016: 9,869 submissions. September 2024: 20,569. This September: 40,363, which generated almost 9,000 support tickets for arXiv staff and moderators.
+
+**** vzaliva
+ArXiv has become too slow to publish. My previous paper took weeks to be approved, so I posted it on hal.science instead and it was up in a day. Another has been on hold for 18 days and counting.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+arXiv 更新投稿速率限制政策
+***** TLDR
+从 10 月 1 日起，arXiv 将每位投稿人限制为每个自然月 2 篇投稿，同时最多 3 篇处于活跃状态。背后的数字是：2016 年 9 月 9,869 篇投稿，2024 年 9 月 20,569 篇，今年 9 月 40,363 篇，给工作人员和志愿审核员带来了约 9,000 个支持工单。AI 类别增长了 6 倍。arXiv 把原因归于范围狭窄的「薄」论文激增，并表示少部分作者提交了大量低质量论文，占用了不成比例的审核时间。限额按投稿人而非按作者计算，被拒论文也计入，在公告前删除的论文不计入。
+***** Take
+按投稿人而不是按作者计算，这就是整个政策，也正是该用的杠杆。20 人合作的大团队吞吐量不变，而每周把同一个结果切成四片发出来的人会被限速，成本正好落在 arXiv 描述的那种行为上。讨论里的抱怨是另一个问题：vzaliva 等了几周没过审，干脆改投 hal.science，一天就上线了，另一篇已经挂了 18 天。速率限制能缩短队列，却修不好在队列出现之前就已经太慢的审核流程。
+***** Comments
+- 作为学者和经常投稿的人，这是非常合理的政策。我喜欢它按投稿人而非按作者计算，这意味着有大规模合作的大实验室不会太受影响。
+- 2016 年 9 月：9,869 篇投稿。2024 年 9 月：20,569 篇。今年 9 月：40,363 篇，给 arXiv 工作人员和审核员带来了近 9,000 个支持工单。
+- arXiv 现在发表太慢了。我上一篇论文等了好几周才通过，于是改发 hal.science，一天就上线。另一篇已经挂了 18 天还在等。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+arXivが投稿レート制限の方針を更新
+***** TLDR
+10月1日から、arXivは投稿者ごとに1か月2件、同時にアクティブな投稿は3件までに制限する。背景の数字は、2016年9月が9,869件、2024年9月が20,569件、今年9月が40,363件で、スタッフとボランティアのモデレーターに約9,000件のサポートチケットを生んだ。AI系カテゴリは6倍に増えた。arXivは範囲の狭い薄い論文の急増を理由に挙げ、少数の著者が大量の低品質論文を投稿してモデレーターの時間を不釣り合いに消費していると述べる。制限は著者単位ではなく投稿者単位で、却下された論文も数に含まれ、公開前に削除した論文は含まれない。
+***** Take
+著者単位ではなく投稿者単位、それが方針のすべてであり、正しいレバーだ。20人の共同研究はこれまでの処理量を保ち、同じ結果を週4分割で出す人は絞られる。負担はarXivが説明した行動にぴたりと落ちる。スレッドの不満は別の問題だ。vzalivaは承認を数週間待ち、諦めてhal.scienceに出したら1日で公開され、別の論文は18日間保留のままだという。レート制限は待ち行列を短くするが、行列ができる前からすでに遅かった審査体制は直さない。
+***** Comments
+- 研究者で常連の投稿者として、これは極めて理にかなった方針だ。著者単位ではなく投稿者単位なのが良く、大規模共同研究を抱える大きなラボはそれほど困らないはずだ。
+- 2016年9月は9,869件、2024年9月は20,569件、今年9月は40,363件で、arXivのスタッフとモデレーターに9,000件近いサポートチケットが発生した。
+- arXivは公開が遅くなりすぎた。前の論文は承認まで数週間かかったので、hal.scienceに出したら1日で載った。もう1本は18日間保留が続いている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+arXiv의 투고 제한 정책 변경
+***** TLDR
+10월 1일부터 arXiv는 투고자 한 명당 한 달 2건, 동시에 활성 상태인 투고는 3건으로 제한한다. 근거 숫자는 2016년 9월 9,869건, 2024년 9월 20,569건, 올해 9월 40,363건이며 이로 인해 직원과 자원봉사 모더레이터에게 약 9,000건의 지원 티켓이 발생했다. AI 분야는 6배로 늘었다. arXiv는 범위가 좁은 얄팍한 논문의 급증을 이유로 들며, 소수의 저자가 다량의 저품질 논문을 올려 모더레이터의 시간을 불균형하게 소모한다고 밝혔다. 제한은 저자 단위가 아니라 투고자 단위이고 반려된 논문도 포함되며, 공개 전에 삭제한 논문은 포함되지 않는다.
+***** Take
+저자 단위가 아니라 투고자 단위라는 점이 정책의 전부이고, 올바른 지점이다. 저자 20명의 공동 연구는 처리량을 유지하고, 같은 결과를 주당 네 조각으로 쪼개 올리는 사람은 제한을 받는다. 비용이 arXiv가 설명한 행동에 정확히 떨어진다. 스레드의 불만은 다른 문제다. vzaliva는 승인을 몇 주 기다리다 포기하고 hal.science에 올려 하루 만에 공개했고, 다른 논문은 18일째 보류 중이다. 제한은 대기열을 줄이지만, 대기열이 생기기 전부터 이미 느렸던 심사 과정을 고치지는 못한다.
+***** Comments
+- 학계에 있고 자주 투고하는 사람으로서 지극히 합리적인 정책이다. 저자 단위가 아니라 투고자 단위라는 점이 좋고, 대규모 공동 연구를 하는 큰 연구실은 크게 불편하지 않을 것이다.
+- 2016년 9월 9,869건, 2024년 9월 20,569건, 올해 9월 40,363건으로 arXiv 직원과 모더레이터에게 9,000건에 가까운 지원 티켓이 생겼다.
+- arXiv는 공개가 너무 느려졌다. 지난 논문은 승인까지 몇 주가 걸려서 hal.science에 올렸고 하루 만에 게시됐다. 다른 한 편은 18일째 보류 상태다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La nueva política de límites de envío de arXiv
+***** TLDR
+Desde el 1 de octubre, arXiv limita a cada remitente a dos envíos por mes natural y tres envíos activos a la vez. Las cifras detrás: 9.869 envíos en septiembre de 2016, 20.569 en septiembre de 2024 y 40.363 este septiembre, que generaron unos 9.000 tickets de soporte para el personal y los moderadores voluntarios. Las categorías de IA crecieron seis veces. arXiv culpa al fuerte aumento de artículos delgados y de alcance estrecho, y señala que una pequeña proporción de autores envía muchos artículos de baja calidad y consume una parte desproporcionada del tiempo de moderación. El límite es por remitente y no por autor, los artículos rechazados cuentan y los borrados antes del anuncio no.
+***** Take
+Por remitente y no por autor es toda la política, y es la palanca correcta. Una colaboración de veinte autores mantiene su ritmo, mientras que quien publica cuatro rebanadas del mismo resultado cada semana queda limitado, así que el coste cae justo sobre la conducta que arXiv describió. La queja del hilo es otro problema: vzaliva esperó semanas la aprobación, se rindió y publicó en hal.science, y tiene otro artículo retenido desde hace 18 días. Los límites acortan la cola. No arreglan un proceso de moderación que ya era demasiado lento antes de que existiera la cola.
+***** Comments
+- Como académico y remitente habitual, me parece una política muy sensata. Me gusta que sea por remitente y no por autor: así los grandes laboratorios con colaboraciones amplias no deberían salir muy perjudicados.
+- Septiembre de 2016: 9.869 envíos. Septiembre de 2024: 20.569. Este septiembre: 40.363, que generaron casi 9.000 tickets de soporte para el personal y los moderadores de arXiv.
+- arXiv se ha vuelto demasiado lento para publicar. Mi artículo anterior tardó semanas en aprobarse, así que lo publiqué en hal.science y apareció en un día. Otro lleva 18 días retenido.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+arXiv aktualisiert seine Einreichungsgrenzen
+***** TLDR
+Seit dem 1. Oktober begrenzt arXiv jede einreichende Person auf zwei Einreichungen pro Kalendermonat und drei gleichzeitig aktive Einreichungen. Die Zahlen dahinter: 9.869 Einreichungen im September 2016, 20.569 im September 2024 und 40.363 in diesem September, woraus etwa 9.000 Support-Tickets für Mitarbeitende und freiwillige Moderatoren entstanden. Die KI-Kategorien wuchsen um das Sechsfache. arXiv nennt als Grund die stark gestiegene Zahl dünner Arbeiten mit engem Zuschnitt und sagt, ein kleiner Teil der Autorinnen und Autoren reiche viele Arbeiten geringer Qualität ein und verbrauche einen unverhältnismäßigen Anteil der Moderationszeit. Die Grenze gilt pro einreichender Person, nicht pro Autorenschaft, abgelehnte Arbeiten zählen mit, vor der Ankündigung gelöschte nicht.
+***** Take
+Pro einreichender Person statt pro Autorenschaft ist die ganze Regel, und es ist der richtige Hebel. Eine Zusammenarbeit mit zwanzig Beteiligten behält ihren Durchsatz, wer dasselbe Ergebnis in vier Scheiben pro Woche hochlädt, wird gebremst. Die Kosten treffen genau das Verhalten, das arXiv beschrieben hat. Die Klage im Thread betrifft ein anderes Problem: vzaliva wartete Wochen auf die Freigabe, gab auf und veröffentlichte bei hal.science, eine weitere Arbeit hängt seit 18 Tagen. Grenzen verkürzen die Warteschlange. Sie reparieren keine Moderation, die schon vor der Warteschlange zu langsam war.
+***** Comments
+- Als Wissenschaftler und regelmäßiger Einreicher halte ich das für eine sehr sinnvolle Regel. Gut finde ich, dass sie pro einreichender Person und nicht pro Autorenschaft gilt, große Labore mit vielen Kooperationen trifft es so kaum.
+- September 2016: 9.869 Einreichungen. September 2024: 20.569. Dieser September: 40.363, woraus fast 9.000 Support-Tickets für arXiv-Mitarbeitende und Moderatoren entstanden.
+- arXiv veröffentlicht inzwischen zu langsam. Mein letztes Paper brauchte Wochen bis zur Freigabe, also habe ich es bei hal.science eingestellt und es war an einem Tag online. Ein weiteres hängt seit 18 Tagen.
+** How Singapore's government-run dating service works :singapore:government:algorithms:social:
+:PROPERTIES:
+:ID:       49929113
+:URL:      https://www.singapore-samizdat.com/p/how-singapores-government-run-dating-service-firstdate-works
+:HN_URL:   https://news.ycombinator.com/item?id=49929113
+:POINTS:   69
+:COMMENTS: 32
+:BY:       danielfoster
+:END:
+
+*** TLDR
+GovTech, Singapore's government technology agency, is piloting a dating service called FirstDate, starting with government employees. It is open to ages 21 to 35, asks more than 33 questions covering interests, lifestyle, travel, communication style and relationship preferences, and runs the Gale-Shapley stable marriage algorithm in rounds: one match per cycle, with contact details exchanged only if both sides agree. No fees or participation numbers are published. The author's objection is that stable matching assumes a commitment voluntary dating does not have, that the questionnaire conflates personal traits with partner preferences, and that the money would do more in third spaces and cultural programming.
+
+*** Take
+jjmarr raises the objection the article misses, and it is the one that matters: Gale-Shapley is asymmetric. The proposing side gets its best stable match and the other side gets its worst, and "stable" has quietly come to read as "fair" because the result won a Nobel. For a state-run service, deciding which side proposes is a policy choice about whose preferences win, applied to real people, and nobody has said who proposes. That question outranks whether 33 questions can predict chemistry.
+
+*** Comments
+
+**** water-data-dude
+There's probably fewer perverse incentives with a government run dating service. I can imagine ways it could suck, but compared to how commercial dating services are run it's hard to see how they could do a worse job.
+
+**** jjmarr
+Gale-Shapley has the property that the proposing side is guaranteed their most advantageous stable match while the other side is guaranteed their worst possible stable match. I've never heard this discussed as a drawback because it's Nobel Prize winning and "stable" is shorthand for "fair".
+
+**** dominicq
+Stable matches still mean quite a lot. You are given a much better match than a random pairing. If you still aren't interested, you can decline. If the date doesn't work out, you can decline.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+新加坡政府运营的交友服务是怎么运作的
+***** TLDR
+新加坡政府科技局 GovTech 正在试点一个名为 FirstDate 的交友服务，先从公务员开始。服务面向 21 至 35 岁，要回答 33 道以上问题，涵盖兴趣、生活方式、旅行、沟通风格和择偶偏好，并分轮运行 Gale-Shapley 稳定婚姻算法：每轮一个匹配，只有双方都同意才交换联系方式。费用和参与人数都未公布。作者的质疑是：稳定匹配假定了自愿交友并不具备的承诺，问卷把个人特质和对伴侣的偏好混为一谈，而这笔钱花在第三空间和文化活动上效果会更好。
+***** Take
+jjmarr 提出了文章漏掉、也是真正要紧的一点：Gale-Shapley 是不对称的。提出一方拿到自己最好的稳定匹配，另一方拿到自己最差的那个，而「稳定」因为拿过诺贝尔奖，不知不觉被读成了「公平」。对一项政府服务来说，决定哪一方提出，就是在决定谁的偏好胜出，而且作用在真人身上，可至今没人说清是哪一方提出。这个问题比 33 道题能不能预测来电重要得多。
+***** Comments
+- 政府运营的交友服务大概反向激励更少。我当然能想到它会怎么糟，但跟商业交友服务的运作方式一比，很难想象它能做得更差。
+- Gale-Shapley 有个性质：提出的一方保证拿到对自己最有利的稳定匹配，另一方保证拿到自己最差的那个稳定匹配。我从没听人把这当成缺点讨论，因为它是诺贝尔奖成果，而「稳定」被当成了「公平」的简称。
+- 稳定匹配还是很有意义的。你拿到的匹配远好过随机配对。如果还是没兴趣，你可以拒绝。见了面不合适，也可以拒绝。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+シンガポール政府が運営する婚活サービスの仕組み
+***** TLDR
+シンガポールの政府技術庁GovTechが、FirstDateという婚活サービスを公務員から試験的に始めている。対象は21歳から35歳で、興味、生活様式、旅行、コミュニケーションの取り方、相手への希望など33問以上に回答し、Gale-Shapleyの安定結婚アルゴリズムをラウンド制で動かす。1サイクルにつき1件のマッチングで、連絡先は双方が同意した場合のみ交換される。料金や参加者数は公表されていない。筆者の批判は、安定マッチングが任意の交際には存在しないコミットメントを前提にしていること、質問票が個人の特性と相手への希望を混同していること、同じ予算はサードプレイスや文化事業に使うほうが効くというものだ。
+***** Take
+jjmarrが記事の抜けを突いており、それが肝心な点だ。Gale-Shapleyは非対称である。申し込む側は自分にとって最良の安定マッチを得て、もう一方は最悪の安定マッチを得る。ノーベル賞を取った結果なので「安定」がいつのまにか「公平」と読まれてきた。国が運営するサービスで、どちらが申し込む側になるかを決めることは、誰の希望が通るかを決める政策判断であり、しかも生身の人間に効く。それなのに、どちらが申し込むのかは誰も述べていない。33問で相性を予測できるかより先に答えるべき問いだ。
+***** Comments
+- 政府が運営する婚活サービスなら、ゆがんだ誘因は少ないだろう。もちろん悪くなる道筋も想像できるが、商業的な婚活サービスの運営ぶりと比べれば、これより下手にやるのは難しい。
+- Gale-Shapleyには、申し込む側が自分にとって最も有利な安定マッチを保証され、もう一方は可能な中で最悪の安定マッチを保証されるという性質がある。ノーベル賞の成果で「安定」が「公平」の略語になっているため、欠点として議論されるのを聞いたことがない。
+- 安定マッチにはかなり意味がある。ランダムな組み合わせよりずっと良い相手が割り当てられる。それでも興味がなければ断れるし、会ってみて合わなければ断れる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+싱가포르 정부가 운영하는 소개팅 서비스의 작동 방식
+***** TLDR
+싱가포르 정부기술청 GovTech가 FirstDate라는 소개팅 서비스를 공무원부터 시범 운영하고 있다. 21세에서 35세가 대상이고, 관심사와 생활 방식, 여행, 소통 방식, 상대에 대한 선호 등 33개 이상의 질문에 답하면 Gale-Shapley 안정 결혼 알고리즘이 라운드마다 돌아간다. 한 주기에 한 명씩 매칭되고 연락처는 양쪽이 동의할 때만 교환된다. 요금이나 참여자 수는 공개되지 않았다. 저자의 반론은 안정 매칭이 자발적 연애에는 없는 약속을 전제한다는 점, 설문이 개인의 특성과 상대에 대한 선호를 뒤섞는다는 점, 그리고 같은 예산을 제3의 공간과 문화 프로그램에 쓰는 편이 낫다는 것이다.
+***** Take
+jjmarr가 기사에서 빠진, 그리고 정작 중요한 지점을 짚는다. Gale-Shapley는 비대칭이다. 제안하는 쪽은 자신에게 가장 유리한 안정 짝을 보장받고, 반대쪽은 가능한 것 중 최악을 보장받는다. 노벨상을 받은 결과라서 '안정'이 어느새 '공정'으로 읽혀 왔다. 국가가 운영하는 서비스에서 어느 쪽이 제안하는지를 정하는 일은 누구의 선호가 이기는지를 정하는 정책 결정이고, 그것이 실제 사람들에게 적용된다. 그런데 어느 쪽이 제안하는지는 아무도 말하지 않았다. 질문 33개가 끌림을 예측할 수 있느냐보다 먼저 답해야 할 문제다.
+***** Comments
+- 정부가 운영하는 소개팅 서비스라면 왜곡된 유인이 더 적을 것이다. 나빠질 수 있는 경로도 상상이 되지만, 상업 소개팅 서비스의 운영 방식과 비교하면 이보다 못하기도 어렵다.
+- Gale-Shapley에는 제안하는 쪽이 자신에게 가장 유리한 안정 짝을 보장받고 다른 쪽은 가능한 최악의 안정 짝을 보장받는 성질이 있다. 노벨상을 받은 결과이고 '안정'이 '공정'의 줄임말처럼 쓰이기 때문에, 이를 단점으로 논의하는 걸 들어본 적이 없다.
+- 안정 매칭에도 의미는 상당히 있다. 무작위 짝짓기보다 훨씬 나은 상대를 받게 된다. 그래도 마음에 들지 않으면 거절할 수 있고, 만나보고 안 맞으면 거절할 수 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo funciona el servicio de citas del gobierno de Singapur
+***** TLDR
+GovTech, la agencia tecnológica del gobierno de Singapur, está probando un servicio de citas llamado FirstDate, empezando por los empleados públicos. Está abierto a personas de 21 a 35 años, plantea más de 33 preguntas sobre intereses, estilo de vida, viajes, forma de comunicarse y preferencias de pareja, y ejecuta el algoritmo de matrimonio estable de Gale-Shapley por rondas: un emparejamiento por ciclo, con intercambio de contactos solo si ambas partes aceptan. No se publican tarifas ni cifras de participación. La objeción del autor es que el emparejamiento estable supone un compromiso que las citas voluntarias no tienen, que el cuestionario confunde rasgos propios con preferencias de pareja, y que ese dinero rendiría más en terceros espacios y actividades culturales.
+***** Take
+jjmarr plantea la objeción que el artículo pasa por alto, y es la que importa: Gale-Shapley es asimétrico. El lado que propone obtiene su mejor emparejamiento estable y el otro obtiene el peor posible, y "estable" ha pasado a leerse como "justo" porque el resultado ganó un Nobel. En un servicio público, decidir qué lado propone es una decisión política sobre las preferencias de quién ganan, aplicada a personas reales, y nadie ha dicho quién propone. Esa pregunta pesa más que si 33 preguntas pueden predecir la química.
+***** Comments
+- Probablemente haya menos incentivos perversos en un servicio de citas público. Se me ocurren formas en que podría salir mal, pero comparado con cómo se gestionan los servicios comerciales, cuesta ver cómo podrían hacerlo peor.
+- Gale-Shapley tiene la propiedad de que el lado que propone obtiene garantizado su emparejamiento estable más ventajoso, mientras que el otro obtiene garantizado el peor posible. Nunca he visto que se discuta como inconveniente porque ganó un Nobel y "estable" se usa como atajo de "justo".
+- Los emparejamientos estables siguen significando bastante. Te dan una pareja mucho mejor que un emparejamiento al azar. Si aun así no te interesa, puedes rechazarla. Si la cita no funciona, puedes rechazarla.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie Singapurs staatlicher Partnervermittlungsdienst funktioniert
+***** TLDR
+GovTech, Singapurs staatliche Technologiebehörde, testet einen Partnervermittlungsdienst namens FirstDate, zunächst mit Beschäftigten des öffentlichen Dienstes. Teilnehmen können 21- bis 35-Jährige, es sind über 33 Fragen zu Interessen, Lebensstil, Reisen, Kommunikationsstil und Partnerwünschen zu beantworten, und der Gale-Shapley-Algorithmus für stabile Paarungen läuft in Runden: ein Vorschlag pro Zyklus, Kontaktdaten nur bei beidseitiger Zustimmung. Zu Gebühren und Teilnahmezahlen gibt es keine Angaben. Der Autor hält dem entgegen, dass stabile Paarung eine Bindung voraussetzt, die freiwilliges Dating nicht hat, dass der Fragebogen eigene Eigenschaften mit Partnerwünschen vermischt, und dass das Geld in dritten Orten und Kulturangeboten mehr bewirken würde.
+***** Take
+jjmarr bringt den Einwand, den der Artikel übersieht, und es ist der entscheidende: Gale-Shapley ist asymmetrisch. Die vorschlagende Seite bekommt ihre beste stabile Paarung, die andere ihre schlechtestmögliche, und "stabil" liest sich inzwischen stillschweigend als "gerecht", weil das Ergebnis einen Nobelpreis bekam. Bei einem staatlichen Dienst ist die Entscheidung, welche Seite vorschlägt, eine politische darüber, wessen Wünsche gewinnen, angewendet auf echte Menschen. Wer vorschlägt, hat bisher niemand gesagt. Diese Frage wiegt mehr als die, ob 33 Fragen Anziehung vorhersagen können.
+***** Comments
+- Bei einem staatlichen Partnerdienst gibt es wahrscheinlich weniger schädliche Anreize. Mir fallen durchaus Wege ein, wie das schlecht laufen kann, aber verglichen damit, wie kommerzielle Dienste betrieben werden, ist schwer vorstellbar, dass sie es schlechter machen.
+- Gale-Shapley hat die Eigenschaft, dass die vorschlagende Seite garantiert ihre vorteilhafteste stabile Paarung erhält, die andere garantiert ihre schlechtestmögliche. Als Nachteil habe ich das noch nie diskutiert gehört, weil es Nobelpreis-gekrönt ist und "stabil" als Kurzform für "gerecht" gilt.
+- Stabile Paarungen bedeuten durchaus etwas. Man erhält eine deutlich bessere Zuordnung als eine zufällige. Wenn man trotzdem kein Interesse hat, kann man ablehnen. Wenn das Date nicht passt, kann man ablehnen.
