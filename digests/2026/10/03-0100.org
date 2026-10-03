@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-03 01:00 UTC
+#+DATE: 2026-10-03T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A judge rules Utah's VPN law physically impossible, Greg KH audits Mythos's 79 kernel CVEs down to 10, and Stratego falls to a $10k GPU bill
+
+* Highlights
+- Utah SB 73 enjoined: compliance would need "geolocation perfection"
+- Mythos's 79 Linux vulnerabilities: 10 real bugs, about an hour of kernel work
+- Ataraxos beats the greatest Stratego player 15-1 on 16 GPUs
+- Halmos, 1973: the von Neumann legend gets the wrong thing right
+- Mike Tomlin spent 12 years building a Minecraft city, and HN ran the playoff math
+
+* Stories
+
+** Court agrees with EFF: Utah's VPN law demands a technical impossibility :privacy:vpn:law:censorship:
+:PROPERTIES:
+:ID:       49927754
+:URL:      https://www.eff.org/deeplinks/2026/10/court-agrees-eff-utahs-vpn-law-demands-technical-impossibility
+:HN_URL:   https://news.ycombinator.com/item?id=49927754
+:POINTS:   484
+:COMMENTS: 216
+:BY:       hn_acker
+:END:
+
+*** TLDR
+A federal judge granted a preliminary injunction against the VPN provisions of Utah's SB 73, which required adult sites to either block VPN traffic or establish a visitor's real physical location, and also barred sites from explaining how to use a VPN. Judge Barlow wrote that the amended statute "essentially imposes strict liability" and that compliance would require "geolocation perfection," which "is not presently possible." EFF argued the detection methods on offer, such as reading latency or device time zones, are unreliable and would push invasive data collection onto users everywhere, including outside Utah. Utah legislators have signaled they may rewrite the law next session.
+
+*** Take
+The ruling matters less for the First Amendment line than for the engineering one: the court treated "this cannot be built" as a reason a statute fails, not as a compliance detail for defendants to solve. Expect the rewrite to swap the verbs for "commercially reasonable efforts" and keep the same impossible requirement, because that phrasing survives this opinion.
+
+*** Comments
+
+**** irenaeus
+:PROPERTIES:
+:COMMENT_ID: 49936331
+:END:
+Not sure what the impossibility is. VPNs have a set of exit relays. If traffic is coming from one of those exit relays, it's coming from a VPN, so adult websites can be required to block traffic from those exit relays. What am I missing?
+
+**** SoftTalker
+:PROPERTIES:
+:COMMENT_ID: 49935866
+:END:
+Is it even possible to reliably know that a connection is from a VPN? Anyone can proxy through a random hosting provider.
+
+**** rhcom2
+:PROPERTIES:
+:COMMENT_ID: 49936527
+:END:
+It even went so far as to prohibit websites from offering instructions on how to use a VPN to bypass these checks. How is that not a blatant first amendment violation?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+法院支持 EFF：犹他州 VPN 法要求技术上不可能做到的事
+***** TLDR
+联邦法官对犹他州 SB 73 法案中的 VPN 条款下达了初步禁令。该条款要求成人网站要么屏蔽所有 VPN 流量，要么确认访客的真实物理位置，并禁止网站说明如何使用 VPN。Barlow 法官写道，修订后的法条"实质上施加了严格责任"，而遵守它需要"地理定位的完美无误"，这"目前无法实现"。EFF 指出，现有的检测手段（例如测量延迟或读取设备时区）并不可靠，还会迫使全世界的用户接受侵入式数据收集，而不只是犹他州的用户。犹他州议员已表示可能在下一个会期重写该法。
+***** Take
+这项裁决的意义不在于第一修正案，而在于工程事实：法院把"这件事做不出来"当作法条不成立的理由，而不是让被告自己想办法解决的合规细节。可以预期重写版本会把措辞换成"商业上合理的努力"，同时保留同样不可能的要求，因为这种措辞能绕过本判决。
+***** Comments
+- 我不明白哪里不可能。VPN 有固定的出口中继节点。如果流量来自这些节点，就说明来自 VPN，可以要求成人网站屏蔽这些节点的流量。我漏掉了什么？
+- 真的有办法可靠地判断一个连接来自 VPN 吗？任何人都可以通过随便一家主机商做代理。
+- 它甚至禁止网站说明如何用 VPN 绕过这些检查。这怎么不算明显违反第一修正案？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+裁判所がEFFを支持、ユタ州のVPN法は技術的に不可能なことを要求している
+***** TLDR
+連邦裁判官がユタ州SB 73のVPN条項に対し仮差止命令を出した。同条項はアダルトサイトにVPNトラフィックの遮断か訪問者の実際の所在地の確認を義務付け、VPNの使い方を説明することも禁じていた。Barlow裁判官は、改正後の条文は「事実上の厳格責任を課している」とし、遵守には「地理位置特定の完璧さ」が必要だが「それは現時点で不可能だ」と述べた。EFFは、遅延測定やデバイスのタイムゾーン読み取りといった検出手法は信頼できず、ユタ州の外を含む世界中の利用者に侵襲的なデータ収集を強いると主張した。ユタ州議員は次の会期での法改正を示唆している。
+***** Take
+この判断で重要なのは修正第一条の論点より工学的な論点だ。裁判所は「それは作れない」を、被告が解決すべきコンプライアンスの細部ではなく、法律が成立しない理由として扱った。改正版は文言を「商業的に合理的な努力」に置き換え、同じ不可能な要求を残すだろう。その表現ならこの判決を回避できる。
+***** Comments
+- 何が不可能なのか分からない。VPNには出口リレーの集合がある。そこからのトラフィックならVPN経由だと分かるので、アダルトサイトにその遮断を義務付ければいい。何を見落としている？
+- 接続がVPN経由だと確実に判定することは本当に可能なのか。誰でも適当なホスティング業者を経由させられる。
+- VPNでチェックを回避する方法の説明まで禁止している。これが明白な修正第一条違反でないわけがない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+법원이 EFF 손을 들어주다: 유타주 VPN 법은 기술적으로 불가능한 것을 요구한다
+***** TLDR
+연방 판사가 유타주 SB 73의 VPN 조항에 대해 가처분 명령을 내렸다. 이 조항은 성인 사이트가 VPN 트래픽을 차단하거나 방문자의 실제 물리적 위치를 확인하도록 요구했고, VPN 사용법을 안내하는 것도 금지했다. Barlow 판사는 개정된 법조문이 "사실상 엄격책임을 부과한다"고 적었고, 준수하려면 "지오로케이션의 완벽함"이 필요하지만 "현재로서는 불가능하다"고 했다. EFF는 지연 시간 측정이나 기기 시간대 확인 같은 탐지 방법이 신뢰할 수 없으며, 유타주 밖을 포함한 전 세계 이용자에게 침습적인 데이터 수집을 강요한다고 주장했다. 유타주 의원들은 다음 회기에 법을 다시 쓸 수 있다고 시사했다.
+***** Take
+이 판결에서 중요한 것은 수정헌법 제1조가 아니라 공학적 사실이다. 법원은 "그것은 만들 수 없다"를 피고가 알아서 풀어야 할 준수 세부사항이 아니라 법률이 성립하지 않는 이유로 받아들였다. 개정판은 문구를 "상업적으로 합리적인 노력"으로 바꾸고 똑같이 불가능한 요구를 유지할 것이다. 그 표현은 이 판결을 비켜가기 때문이다.
+***** Comments
+- 무엇이 불가능한지 모르겠다. VPN에는 정해진 출구 릴레이 집합이 있다. 거기서 오는 트래픽이면 VPN이니, 성인 사이트에 그 차단을 요구하면 된다. 내가 놓친 게 뭔가?
+- 연결이 VPN에서 왔는지 확실히 알 수 있나? 누구나 아무 호스팅 업체를 통해 프록시할 수 있다.
+- VPN으로 검사를 우회하는 방법을 안내하는 것까지 금지했다. 이게 명백한 수정헌법 제1조 위반이 아닐 수가 있나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El tribunal coincide con la EFF: la ley de VPN de Utah exige una imposibilidad técnica
+***** TLDR
+Un juez federal concedió una medida cautelar contra las disposiciones sobre VPN de la ley SB 73 de Utah, que obligaba a los sitios para adultos a bloquear el tráfico de VPN o a determinar la ubicación física real del visitante, y que además prohibía explicar cómo usar una VPN. El juez Barlow escribió que la norma reformada "impone en esencia responsabilidad objetiva" y que cumplirla exigiría una "perfección en la geolocalización" que "no es posible hoy". La EFF argumentó que los métodos de detección disponibles, como medir la latencia o leer la zona horaria del dispositivo, no son fiables y forzarían una recolección invasiva de datos sobre usuarios de todo el mundo, no solo de Utah. Legisladores de Utah ya anticipan reescribir la ley en la próxima sesión.
+***** Take
+Lo relevante del fallo no es la línea de la Primera Enmienda sino la de ingeniería: el tribunal tomó "esto no se puede construir" como razón para invalidar la ley, no como un detalle de cumplimiento que los demandados deban resolver. La reescritura cambiará los verbos por "esfuerzos comercialmente razonables" y mantendrá el mismo requisito imposible, porque esa formulación sobrevive a esta sentencia.
+***** Comments
+- No veo dónde está la imposibilidad. Las VPN tienen un conjunto de relés de salida. Si el tráfico viene de ahí, viene de una VPN, así que se puede exigir a los sitios para adultos que lo bloqueen. ¿Qué me falta?
+- ¿Es realmente posible saber con fiabilidad que una conexión viene de una VPN? Cualquiera puede pasar por un proveedor de hosting cualquiera.
+- Hasta llegó a prohibir que los sitios expliquen cómo usar una VPN para saltarse estas comprobaciones. ¿Cómo no es eso una violación flagrante de la Primera Enmienda?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gericht folgt der EFF: Utahs VPN-Gesetz verlangt etwas technisch Unmögliches
+***** TLDR
+Ein Bundesrichter hat die VPN-Bestimmungen von Utahs SB 73 vorläufig untersagt. Sie verpflichteten Pornoseiten dazu, VPN-Verkehr zu blockieren oder den tatsächlichen Aufenthaltsort der Besucher festzustellen, und verboten Seiten außerdem, Anleitungen zur VPN-Nutzung zu veröffentlichen. Richter Barlow schrieb, das geänderte Gesetz "begründet im Kern eine verschuldensunabhängige Haftung", und die Einhaltung erfordere eine "Perfektion der Geolokalisierung", die "derzeit nicht möglich" sei. Die EFF argumentierte, die angebotenen Erkennungsmethoden wie Latenzmessung oder das Auslesen der Gerätezeitzone seien unzuverlässig und würden invasive Datensammlung über Nutzer überall erzwingen, nicht nur in Utah. Abgeordnete in Utah deuten eine Neufassung in der nächsten Sitzungsperiode an.
+***** Take
+Wichtig an der Entscheidung ist nicht die Linie zum First Amendment, sondern die technische: Das Gericht behandelte "das lässt sich nicht bauen" als Grund für das Scheitern des Gesetzes und nicht als Compliance-Problem, das die Beklagten zu lösen hätten. Die Neufassung wird die Verben durch "wirtschaftlich zumutbare Anstrengungen" ersetzen und dieselbe unmögliche Anforderung behalten, denn diese Formulierung übersteht dieses Urteil.
+***** Comments
+- Mir ist unklar, was unmöglich sein soll. VPNs haben eine feste Menge an Exit-Relays. Kommt Verkehr von dort, kommt er aus einem VPN, also kann man Pornoseiten verpflichten, diesen zu blockieren. Was übersehe ich?
+- Kann man überhaupt zuverlässig erkennen, dass eine Verbindung aus einem VPN kommt? Jeder kann über irgendeinen Hoster proxyen.
+- Es verbot Seiten sogar, zu erklären, wie man diese Prüfungen per VPN umgeht. Wie soll das kein offenkundiger Verstoß gegen das First Amendment sein?
+** Greg Kroah-Hartman - Security in the LLM Age ［video］ :linux:security:llm:kernel:
+:PROPERTIES:
+:ID:       49929391
+:URL:      https://www.youtube.com/watch?v=NnV_cWeoo5Q
+:HN_URL:   https://news.ycombinator.com/item?id=49929391
+:POINTS:   168
+:COMMENTS: 38
+:BY:       usernomdeguerre
+:END:
+
+*** TLDR
+At Kernel Recipes 2026, Greg Kroah-Hartman took apart the headline that Anthropic's Mythos found 79 Linux vulnerabilities: 24 reports had no detail, 14 were not bugs, 3 contained invented data, 15 were already fixed in the latest release (4 of those by Anthropic), and of the remainder 20 needed fixes, 7 of which assumed a malicious filesystem image, which the kernel's documented threat model excludes. His count of real bug fixes was 10, which he put at about an hour of kernel development. Kernel CVEs now run roughly 33 a day, up from 50 a week a year ago, and he said mean time to exploit has gone from 63 days in 2018 to negative today. His advice: push back immediately on reports padded with long changelogs and comments, assume anything you send a hosted model will surface in someone else's report, point reporters at the documented threat model, and use local models anyway. He cited Coverity's finding that a false positive rate above 20% gets a tool ignored. ［Video is behind a CAPTCHA for us; details from the Kernel Recipes live blog of the talk and the slides quoted in the thread.］
+
+*** Take
+The 79-to-10 gap is a reporting failure, not a capability result: pattern-matching decades of kernel fixes against unpatched code is a legitimate technique, and 10 fixes in a week of compute is fine work. Shipping it as 79 vulnerabilities is what burns the maintainers who have to triage it, and Greg's Coverity citation is the real warning shot: tools do not get rejected for being wrong, they get rejected for being wrong 20% of the time while sounding certain.
+
+*** Comments
+
+**** usernomdeguerre
+:PROPERTIES:
+:COMMENT_ID: 49929433
+:END:
+From his Kernel Recipes 2026 slide on Mythos: 24 no detail at all, 14 not a bug at all, 3 totally made up data, 15 already fixed in latest release, 20 fixes were needed. GKH called this 10 'real' bugfixes.
+
+**** djoldman
+:PROPERTIES:
+:COMMENT_ID: 49938609
+:END:
+If you're someone at OpenAI or Anthropic and you truly believe what you're making could destroy the world, this is the kind of thing that isn't doing you any favors when it comes to convincing the public.
+
+**** blinkingled
+:PROPERTIES:
+:COMMENT_ID: 49937192
+:END:
+Mythos may not be great today but it is not far fetched to imagine bug discovery, analysis and fixes can be made much quicker, accurate and even newly possible with specialized models.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Greg Kroah-Hartman：LLM 时代的安全（视频）
+***** TLDR
+在 Kernel Recipes 2026 上，Greg Kroah-Hartman 逐条拆解了"Anthropic 的 Mythos 发现 79 个 Linux 漏洞"这一说法：24 份报告没有任何细节，14 份根本不是 bug，3 份含有编造的数据，15 个在最新版本中已被修复（其中 4 个由 Anthropic 自己修复）；剩下 20 个确实需要修复，但其中 7 个的前提是"假设存在恶意文件系统镜像"，而内核已记录的威胁模型明确将其排除在外。他给出的真实修复数是 10 个，约等于一小时的内核开发工作量。内核 CVE 现在约为每天 33 个，一年前是每周 50 个；他说平均利用时间已从 2018 年的 63 天变成今天的负数。他的建议：遇到用冗长 changelog 和注释堆砌的报告要立刻质疑；假定你发给托管模型的任何内容都会出现在别人的报告里；把报告者指向已记录的威胁模型；同时该用本地模型就用。他还引用 Coverity 的结论：误报率超过 20% 的工具最终会被忽略。［视频对我们被 CAPTCHA 挡住；细节来自 Kernel Recipes 的现场博客记录和讨论中引用的幻灯片。］
+***** Take
+79 比 10 的差距是报告方式的失败，不是能力的结论：把几十年的内核修复模式匹配到未打补丁的代码上是正当技术，一周算力换 10 个修复也是好成果。把它包装成 79 个漏洞，烧的是必须做分类审查的维护者。Greg 引用 Coverity 才是真正的警告：工具不会因为出错被拒绝，而是因为在语气确定的同时有 20% 的出错率被拒绝。
+***** Comments
+- 他在 Kernel Recipes 2026 关于 Mythos 的幻灯片：24 个完全没有细节，14 个根本不是 bug，3 个数据完全编造，15 个在最新版本已修复，20 个确实需要修复。GKH 把这称为 10 个"真实"的修复。
+- 如果你在 OpenAI 或 Anthropic，并且真的相信自己做的东西可能毁灭世界，那这种事对你说服公众毫无帮助。
+- Mythos 今天也许不出色，但可以想象，有了专用模型，bug 的发现、分析和修复会更快、更准，甚至能做到以前做不到的事。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Greg Kroah-Hartman「LLM時代のセキュリティ」［動画］
+***** TLDR
+Kernel Recipes 2026で、Greg Kroah-HartmanはAnthropicのMythosがLinuxの脆弱性79件を発見したという見出しを分解した。24件は詳細なし、14件はバグではない、3件は捏造データ、15件は最新リリースで修正済み（うち4件はAnthropic自身による）。残りのうち20件は修正が必要だったが、7件は「悪意あるファイルシステムイメージを前提とする」もので、カーネルの文書化された脅威モデルが明確に除外している。彼の数えた実際の修正は10件、カーネル開発でおよそ1時間分だという。カーネルCVEは1年前の週50件から現在は1日33件程度になり、悪用までの平均日数は2018年の63日から現在はマイナスになったと述べた。助言は、長いchangelogやコメントで膨らんだ報告にはすぐ押し返すこと、ホスト型モデルに送った情報は他人の報告に現れると考えること、報告者を文書化された脅威モデルに誘導すること、それでもローカルモデルは使うこと。誤検知率が20%を超えるとツールは無視されるというCoverityの知見も引いた。［動画はCAPTCHAで取得できず、Kernel Recipesのライブブログとスレッドで引用されたスライドに基づく］
+***** Take
+79対10の差は報告の仕方の失敗で、能力の結論ではない。数十年分のカーネル修正パターンを未修正コードに当てる手法は正当で、1週間の計算資源で10件の修正は良い成果だ。それを脆弱性79件として売り出すことが、トリアージを担う保守担当者を焼く。Coverityの引用こそが本当の警告だ。ツールは間違えたから拒まれるのではなく、断定的な口調のまま20%間違えるから拒まれる。
+***** Comments
+- Kernel Recipes 2026のMythosのスライドより: 詳細なし24件、バグではない14件、完全な捏造データ3件、最新リリースで修正済み15件、修正が必要だったもの20件。GKHはこれを10件の「本物の」修正と呼んだ。
+- OpenAIやAnthropicにいて、自分の作るものが世界を破壊しうると本気で信じているなら、こういうことは世間を説得する上で何の助けにもならない。
+- Mythosは今日は優秀でないかもしれないが、専用モデルによってバグの発見・分析・修正がもっと速く正確になり、これまで不可能だったことも可能になると想像するのは無理筋ではない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Greg Kroah-Hartman - LLM 시대의 보안 ［영상］
+***** TLDR
+Kernel Recipes 2026에서 Greg Kroah-Hartman은 Anthropic의 Mythos가 리눅스 취약점 79건을 찾았다는 헤드라인을 해부했다. 24건은 세부 내용이 전혀 없었고, 14건은 버그가 아니었고, 3건은 데이터가 지어낸 것이었고, 15건은 최신 릴리스에서 이미 고쳐져 있었다(그중 4건은 Anthropic이 직접 고친 것). 나머지 중 20건은 수정이 필요했지만 7건은 "악성 파일시스템 이미지를 가정"하는 것으로, 커널의 문서화된 위협 모델이 명시적으로 배제하는 경우다. 그가 센 실제 수정은 10건, 커널 개발로 약 한 시간 분량이다. 커널 CVE는 1년 전 주당 50건에서 지금은 하루 33건 수준이고, 악용까지 걸리는 평균 시간은 2018년 63일에서 지금은 음수가 되었다고 했다. 조언은 긴 changelog와 주석으로 부풀린 보고서에는 즉시 반박하라, 호스팅 모델에 보낸 것은 남의 보고서에 나타난다고 가정하라, 보고자를 문서화된 위협 모델로 안내하라, 그래도 로컬 모델은 쓰라는 것. 오탐률이 20%를 넘으면 도구는 무시당한다는 Coverity의 결론도 인용했다. ［영상은 CAPTCHA로 가져올 수 없어, Kernel Recipes 라이브 블로그와 스레드에 인용된 슬라이드를 근거로 정리했다.］
+***** Take
+79 대 10의 격차는 보고 방식의 실패이지 역량에 대한 결론이 아니다. 수십 년치 커널 수정 패턴을 아직 안 고쳐진 코드에 대보는 건 정당한 기법이고, 일주일 연산으로 수정 10건은 괜찮은 성과다. 그것을 취약점 79건으로 포장하는 것이 트리아지를 떠안는 메인테이너를 태운다. Coverity 인용이 진짜 경고다. 도구는 틀려서 버림받는 게 아니라, 확신에 찬 말투로 20% 틀려서 버림받는다.
+***** Comments
+- Kernel Recipes 2026 Mythos 슬라이드에서: 세부 내용 전혀 없음 24건, 버그 아님 14건, 완전히 지어낸 데이터 3건, 최신 릴리스에서 이미 수정됨 15건, 수정이 필요했던 것 20건. GKH는 이를 '진짜' 수정 10건이라고 불렀다.
+- OpenAI나 Anthropic에 있으면서 자기가 만드는 것이 세상을 파괴할 수 있다고 진심으로 믿는다면, 이런 일은 대중을 설득하는 데 전혀 도움이 되지 않는다.
+- Mythos가 지금은 뛰어나지 않을 수 있지만, 특화된 모델로 버그 발견과 분석, 수정이 훨씬 빠르고 정확해지고 전에는 불가능했던 것까지 가능해진다고 보는 건 무리한 상상이 아니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Greg Kroah-Hartman: seguridad en la era de los LLM ［vídeo］
+***** TLDR
+En Kernel Recipes 2026, Greg Kroah-Hartman desarmó el titular de que Mythos, de Anthropic, encontró 79 vulnerabilidades en Linux: 24 informes sin ningún detalle, 14 que no eran errores, 3 con datos inventados, 15 ya corregidos en la última versión (4 de ellos por Anthropic), y del resto, 20 necesitaban arreglo, 7 de los cuales presuponían una imagen de sistema de archivos maliciosa, algo que el modelo de amenazas documentado del kernel excluye. Su recuento de correcciones reales fue de 10, que cifró en alrededor de una hora de desarrollo de kernel. Los CVE del kernel van ya por unos 33 al día, frente a 50 por semana hace un año, y dijo que el tiempo medio hasta la explotación pasó de 63 días en 2018 a negativo hoy. Sus consejos: replicar de inmediato a los informes inflados con changelogs y comentarios largos, dar por hecho que lo que envíes a un modelo alojado aparecerá en el informe de otra persona, remitir a quien informa al modelo de amenazas documentado, y usar modelos locales de todos modos. Citó el hallazgo de Coverity de que una tasa de falsos positivos superior al 20% hace que una herramienta acabe ignorada. ［El vídeo nos queda tras un CAPTCHA; los detalles vienen del live blog de Kernel Recipes y de las diapositivas citadas en el hilo.］
+***** Take
+La brecha de 79 a 10 es un fallo de comunicación, no un resultado sobre capacidades: cruzar décadas de correcciones del kernel con código sin parchear es una técnica legítima, y 10 arreglos con una semana de cómputo es buen trabajo. Venderlo como 79 vulnerabilidades es lo que quema a quienes tienen que triarlo, y la cita de Coverity es el aviso de verdad: las herramientas no se descartan por equivocarse, se descartan por equivocarse el 20% de las veces mientras suenan seguras.
+***** Comments
+- De su diapositiva sobre Mythos en Kernel Recipes 2026: 24 sin ningún detalle, 14 que no eran errores, 3 con datos totalmente inventados, 15 ya corregidos en la última versión, 20 que necesitaban arreglo. GKH llamó a esto 10 correcciones 'reales'.
+- Si trabajas en OpenAI o Anthropic y de verdad crees que lo que estás construyendo podría destruir el mundo, esto no te ayuda nada a convencer al público.
+- Mythos puede no ser bueno hoy, pero no es descabellado imaginar que con modelos especializados el descubrimiento, el análisis y la corrección de errores se vuelvan mucho más rápidos, precisos e incluso posibles por primera vez.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Greg Kroah-Hartman: Sicherheit im LLM-Zeitalter ［Video］
+***** TLDR
+Auf den Kernel Recipes 2026 nahm Greg Kroah-Hartman die Schlagzeile auseinander, Anthropics Mythos habe 79 Linux-Schwachstellen gefunden: 24 Meldungen ohne jedes Detail, 14 gar keine Bugs, 3 mit erfundenen Daten, 15 im aktuellen Release längst behoben (4 davon von Anthropic selbst). Vom Rest mussten 20 behoben werden, davon setzten 7 ein bösartiges Dateisystem-Image voraus, was das dokumentierte Bedrohungsmodell des Kernels ausdrücklich ausschließt. Seine Zahl echter Fixes lag bei 10, nach seiner Schätzung etwa eine Stunde Kernel-Entwicklung. Kernel-CVEs liegen inzwischen bei rund 33 pro Tag, vor einem Jahr waren es 50 pro Woche, und die mittlere Zeit bis zum Exploit sei von 63 Tagen im Jahr 2018 auf heute negativ gefallen. Seine Ratschläge: bei Meldungen, die mit langen Changelogs und Kommentaren aufgeblasen sind, sofort widersprechen; davon ausgehen, dass alles, was man an ein gehostetes Modell schickt, im Bericht eines anderen auftaucht; Melder auf das dokumentierte Bedrohungsmodell verweisen; lokale Modelle trotzdem nutzen. Er zitierte Coveritys Befund, dass ein Werkzeug ab einer Falsch-Positiv-Rate über 20% am Ende ignoriert wird. ［Das Video ist für uns hinter einem CAPTCHA; die Details stammen aus dem Live-Blog der Kernel Recipes und den im Thread zitierten Folien.］
+***** Take
+Die Lücke von 79 auf 10 ist ein Kommunikationsfehler, kein Befund über Fähigkeiten: Jahrzehnte an Kernel-Fixes gegen ungepatchten Code zu mustern ist eine legitime Technik, und 10 Fixes für eine Woche Rechenzeit sind gute Arbeit. Das Ganze als 79 Schwachstellen zu verkaufen verbrennt jene, die es triagieren müssen, und Greg' Coverity-Zitat ist die eigentliche Warnung: Werkzeuge werden nicht abgelehnt, weil sie falsch liegen, sondern weil sie in 20% der Fälle falsch liegen und dabei sicher klingen.
+***** Comments
+- Aus seiner Mythos-Folie bei den Kernel Recipes 2026: 24 ohne jedes Detail, 14 gar keine Bugs, 3 mit völlig erfundenen Daten, 15 im aktuellen Release schon behoben, 20 mit nötigen Fixes. GKH nannte das 10 'echte' Bugfixes.
+- Wenn du bei OpenAI oder Anthropic arbeitest und wirklich glaubst, dass dein Produkt die Welt zerstören könnte, hilft dir so etwas überhaupt nicht, die Öffentlichkeit zu überzeugen.
+- Mythos ist heute vielleicht nicht gut, aber es ist nicht abwegig, dass Bugsuche, Analyse und Fixes mit spezialisierten Modellen deutlich schneller und genauer werden und manches erst möglich wird.
+** With most information hidden, the game Stratego had stumped AI until now :ai:games:research:reinforcement-learning:
+:PROPERTIES:
+:ID:       49933740
+:URL:      https://arstechnica.com/science/2026/10/ai-finally-beat-the-best-stratego-player-in-history-and-did-it-on-a-budget/
+:HN_URL:   https://news.ycombinator.com/item?id=49933740
+:POINTS:   172
+:COMMENTS: 83
+:BY:       PaulHoule
+:END:
+
+*** TLDR
+Researchers from Carnegie Mellon, MIT, NYU and Stanford built Ataraxos, which beat Pim Niemeijer, four-time world champion and over 600 weeks ranked number one, 15-1 with 4 draws across 20 games, and won 38 of 40 against world championship challengers. The system pairs self-play with a belief model that predicts where the opponent's pieces are, so search can sample plausible board states instead of trying to cover all of them. It trained on roughly 163 million self-play games, about 34 times fewer than DeepMind's DeepNash, using 16 GPUs for a week plus 4 GPUs for four more days, around $5,000 to $10,000, against DeepNash's estimated $3 to $4.5 million on 1,024 TPUs for two to three months.
+
+*** Take
+The belief model is the result and the price tag is the proof: DeepNash tried to be strong without explicitly modeling what the opponent is hiding, and paid for it in games played. Stratego was never hard because the board is big, it was hard because the right move depends on facts you cannot see, and guessing them well beats searching harder by two orders of magnitude in compute.
+
+*** Comments
+
+**** janalsncm
+:PROPERTIES:
+:COMMENT_ID: 49938983
+:END:
+It played about 34 times fewer games than DeepNash, and still ended up much stronger. Imo, this is the critical piece and what makes the AI work at all. With hidden information games, the best move depends on information you don't have.
+
+**** osti
+:PROPERTIES:
+:COMMENT_ID: 49937248
+:END:
+Wait, wasn't there that strong stratego bot that came out from deepmind in 2022?
+
+**** SilkRoadie
+:PROPERTIES:
+:COMMENT_ID: 49938833
+:END:
+While interesting from a technology stand point I get disheartened each time I see this sort of news. Look at competitive chess and Go and how they have fundamentally been transformed. Now the box is opened, it can't be closed.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+信息大多隐藏的西洋陆军棋，此前一直难住 AI
+***** TLDR
+卡内基梅隆、MIT、纽约大学和斯坦福的研究者做出了 Ataraxos：在 20 局中以 15 胜 1 负 4 平击败四届世界冠军、曾超过 600 周排名第一的 Pim Niemeijer，并在对世界锦标赛挑战者的 40 局中胜 38 局。该系统把自我对弈与一个"信念模型"结合，后者预测对手棋子的位置，使搜索可以对可能的局面抽样，而不必穷举。训练约 1.63 亿局自我对弈，大约是 DeepMind 的 DeepNash 的三十四分之一，用 16 块 GPU 跑一周再加 4 块 GPU 跑四天，成本约 5000 到 10000 美元；DeepNash 则估计用 1024 块 TPU 跑两到三个月，花费 300 万到 450 万美元。
+***** Take
+信念模型是结论，价格标签是证明：DeepNash 试图在不显式建模对手所隐藏信息的前提下变强，代价体现在对局数上。西洋陆军棋难，从来不是因为棋盘大，而是因为正确的走法取决于你看不见的事实；把这些事实猜得准，比单纯加大搜索在算力上便宜两个数量级。
+***** Comments
+- 它的对局数比 DeepNash 少约 34 倍，最终却强得多。在我看来这才是关键，也是这个 AI 能成立的原因。在隐藏信息的游戏里，最佳走法取决于你没有的信息。
+- 等等，DeepMind 不是 2022 年就出过一个很强的西洋陆军棋机器人吗？
+- 从技术角度看很有意思，但每次看到这类消息我都有些失落。看看竞技国际象棋和围棋被彻底改变成了什么样。盒子一旦打开就关不上了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+情報の大半が隠されたゲーム「ストラテゴ」は今までAIを苦しめてきた
+***** TLDR
+カーネギーメロン、MIT、NYU、スタンフォードの研究者がAtaraxosを作り、4度の世界チャンピオンで通算600週以上世界1位だったPim Niemeijerに20局で15勝1敗4引き分け、世界選手権の挑戦者たちに対しては40局中38勝を挙げた。自己対戦に加え、相手の駒の位置を予測する「信念モデル」を組み合わせ、すべての局面を網羅せずに妥当な盤面をサンプリングして探索できるようにした。学習は約1億6300万局の自己対戦で、DeepMindのDeepNashの約34分の1。GPU16枚で1週間、さらに4枚で4日、費用はおよそ5000〜1万ドル。DeepNashはTPU1024枚を2〜3か月使い、推定300万〜450万ドルだった。
+***** Take
+信念モデルが結論であり、価格が証拠だ。DeepNashは相手が隠しているものを明示的にモデル化せずに強くなろうとし、その代償を対局数で払った。ストラテゴが難しかったのは盤が広いからではなく、正しい手が見えない事実に左右されるからだ。その事実をうまく推測するほうが、探索を増やすより計算量で2桁安い。
+***** Comments
+- DeepNashより約34倍少ない対局数で、それでもはるかに強くなった。これが決定的な部分で、このAIが成立する理由だと思う。隠れた情報のあるゲームでは、最善手は持っていない情報に左右される。
+- 待って、DeepMindが2022年に出した強いストラテゴのボットがあったのでは？
+- 技術的には興味深いが、こういうニュースを見るたび気落ちする。競技チェスや囲碁がどう根本的に変えられたか見てほしい。箱は開いたら閉じられない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+정보 대부분이 가려진 게임 스트라테고는 지금까지 AI를 막아 왔다
+***** TLDR
+카네기멜런, MIT, NYU, 스탠퍼드 연구진이 만든 Ataraxos가 4회 세계 챔피언이자 세계 1위를 600주 넘게 지킨 Pim Niemeijer를 20국에서 15승 1패 4무로 이겼고, 세계선수권 도전자들을 상대로는 40국 중 38승을 거뒀다. 이 시스템은 자기 대국에 상대 기물의 위치를 예측하는 '신념 모델'을 결합해, 모든 국면을 훑는 대신 그럴듯한 판을 표본으로 뽑아 탐색한다. 학습은 자기 대국 약 1억 6300만 판으로 DeepMind의 DeepNash보다 약 34배 적고, GPU 16장 1주일에 4장 4일을 더해 비용은 5천~1만 달러 수준이다. DeepNash는 TPU 1024장을 2~3개월 돌려 300만~450만 달러로 추정된다.
+***** Take
+신념 모델이 결론이고 가격표가 증거다. DeepNash는 상대가 숨긴 것을 명시적으로 모델링하지 않고 강해지려 했고, 그 대가를 대국 수로 치렀다. 스트라테고가 어려웠던 이유는 판이 넓어서가 아니라 최선의 수가 볼 수 없는 사실에 달려 있기 때문이다. 그 사실을 잘 추측하는 쪽이 탐색을 늘리는 쪽보다 연산에서 두 자릿수 더 싸다.
+***** Comments
+- DeepNash보다 약 34배 적은 대국으로 훨씬 더 강해졌다. 내 생각엔 이게 핵심이고, 이 AI가 작동하는 이유다. 숨은 정보가 있는 게임에서 최선의 수는 내가 갖지 못한 정보에 달려 있다.
+- 잠깐, 2022년에 DeepMind가 내놓은 강한 스트라테고 봇이 있지 않았나?
+- 기술적으로는 흥미롭지만 이런 소식을 볼 때마다 기운이 빠진다. 경쟁 체스와 바둑이 어떻게 근본적으로 바뀌었는지 보라. 상자는 열리면 닫을 수 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Con casi toda la información oculta, Stratego había resistido a la IA hasta ahora
+***** TLDR
+Investigadores de Carnegie Mellon, MIT, NYU y Stanford construyeron Ataraxos, que venció a Pim Niemeijer, cuatro veces campeón del mundo y más de 600 semanas como número uno, por 15-1 con 4 tablas en 20 partidas, y ganó 38 de 40 frente a aspirantes al campeonato mundial. El sistema combina autojuego con un modelo de creencias que predice dónde están las piezas del rival, de modo que la búsqueda puede muestrear tableros plausibles en lugar de intentar cubrirlos todos. Se entrenó con unos 163 millones de partidas de autojuego, cerca de 34 veces menos que DeepNash de DeepMind, usando 16 GPU durante una semana más 4 GPU durante cuatro días, entre 5.000 y 10.000 dólares, frente a los 3 a 4,5 millones estimados de DeepNash con 1.024 TPU durante dos o tres meses.
+***** Take
+El modelo de creencias es el resultado y el precio es la prueba: DeepNash intentó ser fuerte sin modelar explícitamente lo que el rival esconde, y lo pagó en partidas jugadas. Stratego nunca fue difícil por el tamaño del tablero, sino porque la jugada correcta depende de hechos que no puedes ver, y adivinarlos bien sale dos órdenes de magnitud más barato en cómputo que buscar más.
+***** Comments
+- Jugó unas 34 veces menos partidas que DeepNash y aun así quedó mucho más fuerte. Para mí esta es la pieza clave y lo que hace que la IA funcione. En los juegos de información oculta, la mejor jugada depende de información que no tienes.
+- Espera, ¿no hubo un bot de Stratego muy fuerte que sacó DeepMind en 2022?
+- Es interesante desde el punto de vista técnico, pero cada vez que veo noticias así me desanimo. Mira cómo se transformaron el ajedrez y el Go de competición. La caja ya está abierta y no se puede cerrar.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Mit größtenteils verborgener Information hatte das Spiel Stratego die KI bisher ausgebremst
+***** TLDR
+Forschende von Carnegie Mellon, MIT, NYU und Stanford haben Ataraxos gebaut, das Pim Niemeijer, vierfacher Weltmeister und über 600 Wochen auf Platz eins, in 20 Partien mit 15:1 bei 4 Remis besiegte und gegen WM-Herausforderer 38 von 40 Partien gewann. Das System verbindet Selbstspiel mit einem Belief-Modell, das vorhersagt, wo die Figuren des Gegners stehen, sodass die Suche plausible Stellungen abtasten kann statt alle zu prüfen. Trainiert wurde mit rund 163 Millionen Selbstspielpartien, etwa 34-mal weniger als DeepMinds DeepNash, auf 16 GPUs für eine Woche plus 4 GPUs für vier weitere Tage, also etwa 5.000 bis 10.000 Dollar, gegenüber geschätzten 3 bis 4,5 Millionen Dollar für DeepNash auf 1.024 TPUs über zwei bis drei Monate.
+***** Take
+Das Belief-Modell ist das Ergebnis, und der Preis ist der Beweis: DeepNash wollte stark werden, ohne explizit zu modellieren, was der Gegner verbirgt, und zahlte dafür mit gespielten Partien. Stratego war nie schwer, weil das Brett groß ist, sondern weil der richtige Zug von Fakten abhängt, die man nicht sieht. Diese gut zu erraten ist zwei Größenordnungen billiger als mehr zu suchen.
+***** Comments
+- Es spielte etwa 34-mal weniger Partien als DeepNash und wurde trotzdem viel stärker. Für mich ist das der entscheidende Punkt und der Grund, warum die KI überhaupt funktioniert. In Spielen mit verdeckter Information hängt der beste Zug von Information ab, die man nicht hat.
+- Moment, gab es nicht 2022 einen starken Stratego-Bot von DeepMind?
+- Technisch interessant, aber bei solchen Nachrichten werde ich jedes Mal etwas trübsinnig. Man sieht ja, wie Turnierschach und Go grundlegend verändert wurden. Die Büchse ist offen und lässt sich nicht mehr schließen.
+** The Legend of von Neumann (1973) ［pdf］ :math:history:computing:
+:PROPERTIES:
+:ID:       49933235
+:URL:      https://gwern.net/doc/math/1973-halmos.pdf
+:HN_URL:   https://news.ycombinator.com/item?id=49933235
+:POINTS:   239
+:COMMENTS: 138
+:BY:       suopspaces
+:END:
+
+*** TLDR
+Paul Halmos's 1973 essay catalogs the von Neumann stories, memorizing columns of the phone book, doing eight-digit division in his head as a child, answering the fly-between-two-trains puzzle instantly by summing the infinite series, out-computing an early machine, then argues the legend emphasizes the wrong thing. Halmos holds that the source of von Neumann's power was command of the axiomatic method, not raw speed, and names the lasting work: operator theory, the ergodic theorem, von Neumann algebras, continuous geometry, plus the turn after 1940 toward computers, game theory and meteorology. His summary is that von Neumann was first and always a mathematician whose clarity of thought ran orders of magnitude above everyone else's, all the time.
+
+*** Take
+Halmos wrote the essay to argue against exactly the reading the thread gave it. The anecdotes are bait; the thesis is that mental arithmetic was the least interesting thing about him, and that axiomatizing a field is what moves it. Read it for the four pages on operator theory, not the sandwich joke.
+
+*** Comments
+
+**** srejk
+:PROPERTIES:
+:COMMENT_ID: 49934006
+:END:
+When you look at it holistically, von Neumann was more influential in science and mathematics in the 20th century than either Einstein or Planck.
+
+**** brcmthrowaway
+:PROPERTIES:
+:COMMENT_ID: 49934613
+:END:
+He was good for the time, but Jane Street and Anthropic have hundreds of equivalent intellects working for them.
+
+**** simianwords
+:PROPERTIES:
+:COMMENT_ID: 49934302
+:END:
+I found this style of writing extremely clear and readable. There is zero pretension and it just exists to impart information.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+冯·诺伊曼的传说（1973）［PDF］
+***** TLDR
+Paul Halmos 1973 年的这篇文章先罗列了那些冯·诺伊曼轶事：背下电话簿的整列、童年时心算八位数除法、用求无穷级数的方式瞬间答出"苍蝇在两列火车之间"的谜题、在算力上压过早期计算机；随后他主张传说强调错了重点。Halmos 认为冯·诺伊曼力量的来源是对公理化方法的掌握，而不是单纯的速度，并点出真正留下来的工作：算子理论、遍历定理、冯·诺伊曼代数、连续几何，以及 1940 年后转向计算机、博弈论和气象学。他的结论是：冯·诺伊曼首先并且始终是数学家，其思维的清晰程度在任何时候都高出所有人几个数量级。
+***** Take
+Halmos 写这篇文章，正是为了反驳讨论区给它的那种读法。轶事是诱饵，论点是：心算是他身上最无趣的部分，真正推动一个领域的是把它公理化。该读的是关于算子理论的那四页，而不是三明治那个笑话。
+***** Comments
+- 整体来看，冯·诺伊曼在 20 世纪科学与数学中的影响力超过爱因斯坦或普朗克。
+- 在那个年代他很厉害，但 Jane Street 和 Anthropic 手下有几百个同等水平的头脑。
+- 我觉得这种写作风格极其清晰易读。毫无故作姿态，只为传达信息而存在。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+フォン・ノイマンの伝説（1973）［PDF］
+***** TLDR
+Paul Halmosの1973年の論考は、まずフォン・ノイマン伝説を並べる。電話帳の段を丸暗記した、子どものころ8桁の割り算を暗算した、2台の列車の間を飛ぶハエの問題を無限級数の和として即答した、初期の計算機より速く計算した。そのうえでHalmosは、伝説は強調すべき点を間違えていると論じる。彼の力の源は公理的方法の掌握であって速度ではない、と。残った業績として作用素論、エルゴード定理、フォン・ノイマン代数、連続幾何、そして1940年以降の計算機・ゲーム理論・気象学への転回を挙げる。結論は、フォン・ノイマンは何よりもまず常に数学者であり、その思考の明晰さは常に他の誰よりも桁違いだった、というものだ。
+***** Take
+Halmosがこの文章を書いたのは、まさにスレッドがした読み方に反対するためだ。逸話は餌であり、主張は、暗算は彼のいちばん面白くない部分で、分野を動かすのは公理化だということ。読むべきは作用素論の4ページで、サンドイッチの冗談ではない。
+***** Comments
+- 全体として見れば、20世紀の科学と数学においてフォン・ノイマンはアインシュタインやプランクより影響力が大きかった。
+- 当時としては優秀だったが、Jane StreetやAnthropicには同等の知性が何百人も働いている。
+- この文章のスタイルは極めて明快で読みやすいと思った。気取りがまったくなく、情報を伝えるためだけに存在している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+폰 노이만의 전설 (1973) ［PDF］
+***** TLDR
+Paul Halmos의 1973년 글은 먼저 폰 노이만 일화들을 모은다. 전화번호부의 단을 통째로 암기했고, 어린 시절 여덟 자리 나눗셈을 머릿속으로 했고, 두 기차 사이를 오가는 파리 문제를 무한급수의 합으로 즉시 답했고, 초기 계산기보다 빠르게 계산했다. 그런 뒤 Halmos는 전설이 엉뚱한 지점을 강조한다고 주장한다. 그의 힘의 원천은 공리적 방법의 숙달이지 속도가 아니라는 것이다. 남은 업적으로 작용소 이론, 에르고딕 정리, 폰 노이만 대수, 연속 기하학, 그리고 1940년 이후 컴퓨터와 게임이론, 기상학으로의 전환을 꼽는다. 결론은 폰 노이만이 무엇보다 늘 수학자였고, 그 사고의 명료함은 언제나 다른 누구보다 몇 자릿수 위였다는 것이다.
+***** Take
+Halmos가 이 글을 쓴 것은 바로 그 스레드식 독해를 반박하기 위해서다. 일화는 미끼이고, 논지는 암산이 그에게서 가장 재미없는 부분이며 분야를 움직이는 것은 공리화라는 것이다. 읽어야 할 곳은 작용소 이론을 다룬 네 쪽이고, 샌드위치 농담이 아니다.
+***** Comments
+- 전체를 놓고 보면 20세기 과학과 수학에서 폰 노이만은 아인슈타인이나 플랑크보다 영향력이 컸다.
+- 그 시대로서는 뛰어났지만, Jane Street와 Anthropic에는 그와 동급의 지성이 수백 명 일하고 있다.
+- 이 글의 문체가 대단히 명료하고 읽기 쉽다고 느꼈다. 허세가 전혀 없고 정보를 전하기 위해서만 존재한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La leyenda de von Neumann (1973) ［pdf］
+***** TLDR
+El ensayo de Paul Halmos de 1973 recoge primero las historias sobre von Neumann: memorizar columnas del directorio telefónico, hacer divisiones de ocho cifras de memoria siendo niño, responder al instante al acertijo de la mosca entre dos trenes sumando la serie infinita, calcular más rápido que una de las primeras máquinas. Después sostiene que la leyenda subraya lo que menos importa: la fuente de su poder era el dominio del método axiomático, no la velocidad. Y nombra la obra que queda: teoría de operadores, el teorema ergódico, las álgebras de von Neumann, la geometría continua, además del giro posterior a 1940 hacia las computadoras, la teoría de juegos y la meteorología. Su resumen es que von Neumann fue siempre, antes que nada, un matemático cuya claridad de pensamiento estaba órdenes de magnitud por encima de la de los demás, todo el tiempo.
+***** Take
+Halmos escribió el ensayo precisamente contra la lectura que le dio el hilo. Las anécdotas son el cebo; la tesis es que el cálculo mental era lo menos interesante de él y que lo que mueve un campo es axiomatizarlo. Léelo por las cuatro páginas sobre teoría de operadores, no por el chiste del sándwich.
+***** Comments
+- Si lo miras en conjunto, von Neumann influyó en la ciencia y las matemáticas del siglo XX más que Einstein o Planck.
+- Era bueno para su época, pero Jane Street y Anthropic tienen cientos de intelectos equivalentes trabajando para ellos.
+- Me pareció un estilo de escritura extremadamente claro y legible. Cero pretensión, existe solo para transmitir información.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Legende von von Neumann (1973) ［pdf］
+***** TLDR
+Paul Halmos' Essay von 1973 sammelt zunächst die von-Neumann-Geschichten: Spalten des Telefonbuchs auswendig lernen, als Kind achtstellige Divisionen im Kopf rechnen, das Fliegen-Rätsel zwischen zwei Zügen sofort durch Summieren der unendlichen Reihe lösen, eine frühe Rechenmaschine im Kopfrechnen schlagen. Dann argumentiert er, die Legende betone das Falsche: Quelle seiner Kraft sei die Beherrschung der axiomatischen Methode gewesen, nicht die Geschwindigkeit. Als bleibende Arbeit nennt er Operatortheorie, den Ergodensatz, von-Neumann-Algebren, kontinuierliche Geometrie und die Wende nach 1940 zu Computern, Spieltheorie und Meteorologie. Sein Fazit: von Neumann war zuerst und immer Mathematiker, dessen Klarheit des Denkens die der meisten jederzeit um Größenordnungen überstieg.
+***** Take
+Halmos schrieb den Essay genau gegen die Lesart, die der Thread ihm gibt. Die Anekdoten sind der Köder; die These ist, dass Kopfrechnen das Uninteressanteste an ihm war und dass ein Feld durch Axiomatisierung vorankommt. Lies die vier Seiten über Operatortheorie, nicht den Sandwich-Witz.
+***** Comments
+- Ganzheitlich betrachtet war von Neumann für Wissenschaft und Mathematik des 20. Jahrhunderts einflussreicher als Einstein oder Planck.
+- Für seine Zeit war er gut, aber Jane Street und Anthropic haben Hunderte gleichwertige Intellekte im Haus.
+- Ich fand diesen Schreibstil extrem klar und lesbar. Null Prätention, er existiert nur, um Information zu vermitteln.
+** Mike Tomlin spent 12 years building a Minecraft city :minecraft:gaming:sports:culture:
+:PROPERTIES:
+:ID:       49925184
+:URL:      https://www.nytimes.com/athletic/7648198/2026/10/01/mike-tomlin-minecraft-nfl-coach/
+:HN_URL:   https://news.ycombinator.com/item?id=49925184
+:POINTS:   247
+:COMMENTS: 65
+:BY:       CoryOndrejka
+:END:
+
+*** TLDR
+Mike Tomlin, head coach of the Pittsburgh Steelers from 2007 until he resigned last year, released a YouTube tour of a city he has built in Minecraft creative mode since about 2014. It is laid out around water like Pittsburgh and includes NFL, MLS and baseball stadiums, one of them modeled on PNC Park, apartment towers, a hotel with a spa, an aquarium, offices, and a student complex called The View named after where his son lived in college. His son Dino, a former college wide receiver, produced the video. Tomlin said the build was therapeutic and a way to spend time with his kids, and that getting the water right was a nightmare.
+
+*** Take
+The thread's instinct was to check whether the hobby cost him games, and someone did the split: 5-3 in the playoffs through 2013, 3-9 from 2014 on. That is 20 games of noise, and it is the wrong question anyway. The actual content here is 12 years of unpublished work with no audience and no end state, which is the rarest thing in the video of a public figure.
+
+*** Comments
+
+**** jeffgreco
+:PROPERTIES:
+:COMMENT_ID: 49937715
+:END:
+A pretty funny analysis I saw: Before Minecraft city (2007-2013): 5-3 in the playoffs, 62.5% win rate. After starting the city (2014-2025): 3-9 in the playoffs, 25.0% win rate.
+
+**** CSMastermind
+:PROPERTIES:
+:COMMENT_ID: 49937705
+:END:
+Mike Tomlin is the second longest tenured coach in the league and never had a losing season. The idea of any NFL head coach having time to do this, especially a winning one, is absurd.
+
+**** xpct
+:PROPERTIES:
+:COMMENT_ID: 49938926
+:END:
+I love this, and love listening to how much he's connected to the thing he made. This should remind us that not everything is done with an end goal in mind.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Mike Tomlin 用 12 年建了一座《我的世界》城市
+***** TLDR
+2007 年起执教匹兹堡钢人、去年辞职的主教练 Mike Tomlin 发布了一段 YouTube 视频，带人参观他从大约 2014 年起在《我的世界》创造模式里建造的城市。城市像匹兹堡一样围水而建，包含 NFL、MLS 和棒球场馆（其中一座仿照 PNC Park）、公寓楼、带水疗的酒店、水族馆、办公区，以及一处名为 The View 的学生公寓，取自他儿子大学时住的地方。视频由他的儿子 Dino（前大学外接手）制作。Tomlin 说这个建造过程对他有治疗作用，也是和孩子们相处的方式，而把水做好"简直是噩梦"。
+***** Take
+讨论区的第一反应是查这个爱好有没有让他输球，还真有人算了：2013 年之前季后赛 5 胜 3 负，2014 年起 3 胜 9 负。那只是 20 场比赛的噪声，而且本来就问错了问题。这里真正的内容是 12 年没有观众、没有终点、也没有发表的工作，而这在一个公众人物的视频里是最罕见的东西。
+***** Comments
+- 我看到一个挺好笑的分析：建城之前（2007-2013）季后赛 5 胜 3 负，胜率 62.5%。开始建城之后（2014-2025）季后赛 3 胜 9 负，胜率 25%。
+- Mike Tomlin 是联盟里任期第二长的主教练，而且从没有过一个败绩赛季。任何 NFL 主教练能有时间做这种事，尤其还是个赢球的主教练，这太荒谬了。
+- 我很喜欢这个，也喜欢听他讲自己和所建之物的联系。这应该提醒我们：不是每件事都要带着目标去做。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+マイク・トムリンは12年かけてMinecraftの都市を作った
+***** TLDR
+2007年からピッツバーグ・スティーラーズのヘッドコーチを務め、昨年退いたマイク・トムリンが、2014年ごろからMinecraftのクリエイティブモードで作り続けてきた都市を案内するYouTube動画を公開した。ピッツバーグのように水辺を中心に配置され、NFL・MLS・野球のスタジアム（うち1つはPNCパークを模した）、高層アパート、スパ付きホテル、水族館、オフィス、そして息子が大学時代に住んでいた場所にちなんだThe Viewという学生寮がある。動画は元カレッジのワイドレシーバーである息子Dinoが制作した。トムリンは、この作業は自分にとって癒しであり子どもたちと過ごす方法だったと語り、水をうまく作るのは悪夢だったと述べた。
+***** Take
+スレッドの反射は、この趣味が試合を損なったか調べることだった。実際に誰かが分割した。2013年までプレーオフ5勝3敗、2014年以降は3勝9敗。それは20試合分のノイズで、そもそも問いが違う。ここにある中身は、観客も終わりもないまま12年続いた未公開の作業で、公人の動画ではこれがいちばん珍しい。
+***** Comments
+- 見かけた面白い分析: Minecraftの都市を始める前（2007-2013）はプレーオフ5勝3敗、勝率62.5%。始めた後（2014-2025）は3勝9敗、勝率25%。
+- マイク・トムリンはリーグで2番目に在任が長いコーチで、負け越しシーズンが一度もなかった。NFLのヘッドコーチが、しかも勝っているコーチがこんな時間を持てるというのは常識外れだ。
+- これが好きだ。自分が作ったものへの思い入れを語るのを聞くのもいい。すべてが目標ありきで行われるわけではないと思い出させてくれる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+마이크 톰린이 12년 동안 만든 마인크래프트 도시
+***** TLDR
+2007년부터 피츠버그 스틸러스 감독을 맡았고 지난해 사임한 마이크 톰린이, 2014년 무렵부터 마인크래프트 크리에이티브 모드에서 만들어 온 도시를 소개하는 유튜브 영상을 공개했다. 피츠버그처럼 물을 중심으로 배치되어 있고, NFL과 MLS, 야구 경기장(하나는 PNC 파크를 본떴다), 아파트 타워, 스파가 있는 호텔, 아쿠아리움, 오피스, 그리고 아들이 대학 때 살던 곳에서 이름을 딴 학생 아파트 The View가 있다. 영상은 전직 대학 와이드리시버인 아들 Dino가 제작했다. 톰린은 이 작업이 자신에게 치유였고 아이들과 함께 보내는 방법이었다고 말했으며, 물을 제대로 만드는 일이 끔찍했다고 했다.
+***** Take
+스레드의 본능은 이 취미가 경기를 망쳤는지 확인하는 것이었고, 누군가 실제로 나눠 봤다. 2013년까지 플레이오프 5승 3패, 2014년 이후 3승 9패. 그건 20경기짜리 잡음이고, 애초에 잘못된 질문이다. 여기서 진짜 내용은 관객도 종착점도 없이 12년간 공개하지 않은 작업이고, 공인의 영상에서 그런 것이 가장 드물다.
+***** Comments
+- 본 중에 꽤 재미있던 분석: 마인크래프트 도시 전(2007-2013) 플레이오프 5승 3패, 승률 62.5%. 도시를 시작한 후(2014-2025) 3승 9패, 승률 25%.
+- 마이크 톰린은 리그에서 두 번째로 오래 재임한 감독이고 패배 시즌이 한 번도 없었다. NFL 감독이, 그것도 이기는 감독이 이런 걸 할 시간이 있다는 게 말이 안 된다.
+- 이게 참 좋다. 자기가 만든 것에 얼마나 애착이 있는지 듣는 것도 좋다. 모든 일이 목표를 두고 이루어지는 건 아니라는 걸 떠올리게 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Mike Tomlin pasó 12 años construyendo una ciudad en Minecraft
+***** TLDR
+Mike Tomlin, entrenador principal de los Pittsburgh Steelers desde 2007 hasta su renuncia el año pasado, publicó un recorrido en YouTube por la ciudad que ha construido en el modo creativo de Minecraft desde alrededor de 2014. Está organizada en torno al agua, como Pittsburgh, e incluye estadios de la NFL, la MLS y de béisbol, uno de ellos inspirado en PNC Park, torres de apartamentos, un hotel con spa, un acuario, oficinas y un complejo estudiantil llamado The View, por el lugar donde vivió su hijo en la universidad. El vídeo lo produjo su hijo Dino, exreceptor universitario. Tomlin dijo que la construcción fue terapéutica para él y una forma de pasar tiempo con sus hijos, y que lograr que el agua quedara bien fue una pesadilla.
+***** Take
+El reflejo del hilo fue comprobar si el pasatiempo le costó partidos, y alguien hizo la cuenta: 5-3 en playoffs hasta 2013, 3-9 desde 2014. Son 20 partidos de ruido y, de todos modos, es la pregunta equivocada. El contenido real son 12 años de trabajo sin publicar, sin público y sin estado final, que es lo más raro que puede haber en el vídeo de una figura pública.
+***** Comments
+- Un análisis bastante gracioso que vi: antes de la ciudad de Minecraft (2007-2013), 5-3 en playoffs, 62,5% de victorias. Después de empezarla (2014-2025), 3-9 en playoffs, 25%.
+- Mike Tomlin es el entrenador con la segunda permanencia más larga de la liga y nunca tuvo una temporada perdedora. Que un head coach de la NFL tenga tiempo para esto, y encima uno ganador, es absurdo.
+- Me encanta esto, y me encanta oír lo conectado que está con lo que hizo. Debería recordarnos que no todo se hace con un objetivo final en mente.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Mike Tomlin hat 12 Jahre an einer Minecraft-Stadt gebaut
+***** TLDR
+Mike Tomlin, von 2007 bis zu seinem Rücktritt im vergangenen Jahr Head Coach der Pittsburgh Steelers, hat eine YouTube-Tour durch die Stadt veröffentlicht, die er seit etwa 2014 im Kreativmodus von Minecraft baut. Sie ist wie Pittsburgh ums Wasser herum angelegt und enthält Stadien für NFL, MLS und Baseball, eines nach dem Vorbild des PNC Park, Apartmenttürme, ein Hotel mit Spa, ein Aquarium, Büros und einen Studentenkomplex namens The View, benannt nach der Anlage, in der sein Sohn im College wohnte. Produziert hat das Video sein Sohn Dino, früher College-Wide-Receiver. Tomlin sagte, das Bauen sei therapeutisch für ihn gewesen und eine Möglichkeit, Zeit mit seinen Kindern zu verbringen, und das Wasser richtig hinzubekommen sei ein Albtraum gewesen.
+***** Take
+Der Reflex im Thread war zu prüfen, ob das Hobby ihn Spiele gekostet hat, und jemand hat es aufgeteilt: 5:3 in den Playoffs bis 2013, 3:9 ab 2014. Das sind 20 Spiele Rauschen, und es ist ohnehin die falsche Frage. Der eigentliche Inhalt sind 12 Jahre unveröffentlichte Arbeit ohne Publikum und ohne Endzustand, und das ist das Seltenste im Video einer öffentlichen Person.
+***** Comments
+- Eine ziemlich lustige Auswertung, die ich gesehen habe: vor der Minecraft-Stadt (2007-2013) 5:3 in den Playoffs, 62,5% Siegquote. Nach dem Baubeginn (2014-2025) 3:9 in den Playoffs, 25%.
+- Mike Tomlin ist der Coach mit der zweitlängsten Amtszeit der Liga und hatte nie eine Saison mit negativer Bilanz. Dass ein NFL-Head-Coach, zumal ein erfolgreicher, dafür Zeit hat, ist absurd.
+- Ich finde das großartig und höre gern, wie verbunden er mit dem ist, was er gebaut hat. Es erinnert daran, dass nicht alles mit einem Endziel im Kopf gemacht wird.
