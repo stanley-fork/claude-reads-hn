@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-03 15:04 UTC
+#+DATE: 2026-10-03T15:04:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Aleph Alpha ships Kolibri under Apache 2.0, Kagi kills Orion on Linux and Windows, and GitHub makes the agent dashboard the default
+
+* Highlights
+- Kolibri: 78B MoE with 3.5B active, 1M context, Apache 2.0, and a 27B Qwen beating it in German
+- Orion: Kagi ends Linux and Windows development and open-sources both
+- Cloudflare OHTTP Gateway: the privacy half is a paid per-zone add-on, bring your own relay
+- Newgrounds: 25 years of Flash still playable because Ruffle got good
+- GitHub dashboard: agent sessions pinned, info density down, opt-out one dropdown away
+
+* Stories
+
+** Show HN: Germany's new sovereign AI model Kolibri :ai:llm:germany:openweights:
+:PROPERTIES:
+:ID:       49943034
+:URL:      https://tej.as/blog/aleph-alpha-kolibri
+:HN_URL:   https://news.ycombinator.com/item?id=49943034
+:POINTS:   152
+:COMMENTS: 88
+:BY:       tejaskumar__
+:END:
+
+*** TLDR
+Aleph Alpha released Kolibri on German Reunification Day: a German-English mixture-of-experts model, 78.1B total parameters with 3.46B active per token, 50 layers, 384 experts plus one shared expert, six experts routed per token. Context is 262k native and tested to 1M. Apache 2.0 weights on Hugging Face, trained on roughly 24T tokens (over a fifth German) on 768 NVIDIA B200 GPUs in German and Finnish data centers, knowledge cutoff June 18 2026. Its UniBPE tokenizer cuts German token counts 11.2% versus GPT-5's, 40 of 50 layers use sliding-window attention, and it reasons in German natively. Scores: 70.8 German overall, 96.9 on AIME 2025, 63.2 at 1M context, and it declines to answer 44% of the time when uncertain. Weak spots are closed-book recall (51.0 on the RAG benchmark), multi-turn tool use (39.8 on Berkeley Function Calling), coding, and mid-range 128k contexts.
+
+*** Take
+The engineering here is real and specific: a tokenizer that buys 11% on German text, sliding-window attention in 80% of the layers, and a model that refuses to answer 44% of uncertain questions instead of inventing something. The word doing the most work is 'sovereign'. Qwen3.8 27B scores 79.9 against Kolibri's 70.8 in German on Kolibri's own harness, and Aleph Alpha's own newsroom lists an agreement with Toronto-based Cohere. What this release actually delivers is Apache 2.0 weights you can run inside your own building on German infrastructure, which is a procurement story, not a benchmark story. Sell it that way.
+
+*** Comments
+
+**** sajithdilshan
+:PROPERTIES:
+:COMMENT_ID: 49943617
+:END:
+Knows less from memory, weaker multi-turn tool calling, not the best coding agent. So what is it actually good at?
+
+**** niemandhier
+:PROPERTIES:
+:COMMENT_ID: 49944391
+:END:
+What a sovereign model mainly needs to be good at right now is auditing the output of other models. A cheap, fast second model acts as a trust adapter.
+
+**** 9dev
+:PROPERTIES:
+:COMMENT_ID: 49943940
+:END:
+Aleph Alpha is a sad joke by now. The talent left, they never caught up to the other labs, and they failed to deliver on several projects.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Show HN：德国新的主权 AI 模型 Kolibri
+***** TLDR
+Aleph Alpha 在德国统一日发布了 Kolibri：一个德英双语的混合专家模型，总参数 781 亿，每个 token 激活 34.6 亿，50 层，每层 384 个专家加一个共享专家，每个 token 路由到 6 个专家。原生上下文 262k，已测试到 100 万。权重以 Apache 2.0 许可发布在 Hugging Face 上，使用 768 块 NVIDIA B200 GPU 在德国和芬兰的数据中心训练，约 24 万亿 token（超过五分之一为德语），知识截止日期为 2026 年 6 月 18 日。其 UniBPE 分词器相比 GPT-5 的分词器将德语 token 数减少 11.2%，50 层中有 40 层使用滑动窗口注意力，并且原生用德语推理。成绩：德语综合 70.8，AIME 2025 得 96.9，100 万上下文下 63.2，在不确定时有 44% 的情况拒绝回答。弱项是闭卷记忆（RAG 基准 51.0）、多轮工具调用（Berkeley Function Calling 39.8）、编程，以及 128k 的中等长度上下文。
+***** Take
+这里的工程工作是真实而具体的：一个在德语文本上省下 11% 的分词器、80% 的层使用滑动窗口注意力，以及一个在 44% 的不确定问题上选择拒答而不是编造答案的模型。承担最多工作的词是「主权」。在 Kolibri 自己的评测框架和基准上，Qwen3.8 27B 的德语得分是 79.9，而 Kolibri 是 70.8；而 Aleph Alpha 自己的新闻页就列着与总部位于多伦多的 Cohere 签署的协议。这次发布真正交付的，是可以在自己楼里、在德国基础设施上运行的 Apache 2.0 权重，这是一个采购故事，不是一个跑分故事。就该这么卖。
+***** Comments
+- 记忆里的知识更少，多轮工具调用更弱，也不是最好的编程助手。那它到底擅长什么？
+- 眼下主权模型最需要擅长的，其实是审核其他模型的输出。一个便宜又快的第二个模型可以当作信任适配器。
+- Aleph Alpha 现在已经是个笑话了。人才走了，始终没追上其他实验室，好几个项目也没交付。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Show HN: ドイツの新しいソブリンAIモデル Kolibri
+***** TLDR
+Aleph Alphaがドイツ統一記念日にKolibriを公開した。独英のMixture-of-Expertsモデルで、総パラメータ781億、トークンあたり有効34.6億、50層、各層384エキスパート＋共有エキスパート1つ、トークンごとに6エキスパートへルーティングする。コンテキストはネイティブ262k、100万トークンまで検証済み。重みはApache 2.0でHugging Faceに公開。ドイツとフィンランドのデータセンターでNVIDIA B200を768基使い、約24兆トークン（5分の1以上がドイツ語）で学習、知識のカットオフは2026年6月18日。UniBPEトークナイザーはGPT-5のものに比べドイツ語のトークン数を11.2%削減し、50層のうち40層がスライディングウィンドウ注意を使い、ドイツ語でそのまま推論する。スコアはドイツ語総合70.8、AIME 2025で96.9、100万コンテキストで63.2、不確かな場合は44%の割合で回答を拒否する。弱点はクローズドブックの知識（RAGベンチマーク51.0）、マルチターンのツール利用（Berkeley Function Calling 39.8）、コーディング、そして128k程度の中間コンテキスト。
+***** Take
+ここでの技術的な作り込みは具体的だ。ドイツ語テキストで11%稼ぐトークナイザー、層の8割に入ったスライディングウィンドウ注意、そして不確かな質問の44%で作り話をせず拒否するモデル。一番無理をしている言葉は「ソブリン」だ。Kolibri自身の評価環境とベンチマークで、ドイツ語はQwen3.8 27Bが79.9、Kolibriが70.8。しかもAleph Alpha自身のニュースルームにはトロントのCohereとの合意が載っている。このリリースが実際に届けるのは、自社の建物の中でドイツのインフラ上で動かせるApache 2.0の重みだ。これはベンチマークの話ではなく調達の話であり、そう売るべきだ。
+***** Comments
+- 記憶からの知識は少なく、マルチターンのツール呼び出しは弱く、最高のコーディングエージェントでもない。では何が得意なのか。
+- 今のソブリンモデルに一番必要な能力は、他のモデルの出力を監査することだ。安くて速い二番目のモデルは信頼アダプタとして機能する。
+- Aleph Alphaはもう情けない冗談だ。人材は去り、他のラボに追いつけず、いくつかのプロジェクトも実現できなかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Show HN: 독일의 새로운 소버린 AI 모델 Kolibri
+***** TLDR
+Aleph Alpha가 독일 통일 기념일에 Kolibri를 공개했다. 독일어-영어 혼합 전문가(MoE) 모델로 총 781억 파라미터 중 토큰당 34.6억이 활성화되고, 50개 층에 층마다 384개 전문가와 공유 전문가 1개를 두며 토큰마다 6개 전문가로 라우팅한다. 컨텍스트는 기본 262k, 100만 토큰까지 테스트됐다. 가중치는 Apache 2.0으로 Hugging Face에 올라왔고, 독일과 핀란드 데이터센터의 NVIDIA B200 768장으로 약 24조 토큰(5분의 1 이상이 독일어)을 학습했으며 지식 기준일은 2026년 6월 18일이다. UniBPE 토크나이저는 GPT-5 토크나이저보다 독일어 토큰 수를 11.2% 줄이고, 50개 층 중 40개가 슬라이딩 윈도 어텐션을 쓰며, 독일어로 바로 추론한다. 점수는 독일어 종합 70.8, AIME 2025 96.9, 100만 컨텍스트에서 63.2이고, 불확실할 때 44% 비율로 답변을 거부한다. 약점은 암기 기반 지식(RAG 벤치마크 51.0), 다중 턴 도구 사용(Berkeley Function Calling 39.8), 코딩, 그리고 128k 중간 길이 컨텍스트다.
+***** Take
+여기 들어간 엔지니어링은 구체적이다. 독일어 텍스트에서 11%를 버는 토크나이저, 전체 층의 80%에 적용된 슬라이딩 윈도 어텐션, 불확실한 질문의 44%에서 지어내지 않고 거부하는 모델. 가장 무리하는 단어는 '소버린'이다. Kolibri 자신의 평가 환경과 벤치마크에서 독일어 점수는 Qwen3.8 27B가 79.9, Kolibri가 70.8이다. 게다가 Aleph Alpha 자사 뉴스룸에는 토론토의 Cohere와 맺은 계약이 올라와 있다. 이 공개가 실제로 제공하는 것은 독일 인프라 위, 자기 건물 안에서 돌릴 수 있는 Apache 2.0 가중치다. 벤치마크 이야기가 아니라 조달 이야기이고, 그렇게 팔아야 한다.
+***** Comments
+- 기억에서 아는 것은 적고, 다중 턴 도구 호출은 약하고, 최고의 코딩 에이전트도 아니다. 그럼 뭘 잘하는 건가?
+- 지금 소버린 모델이 가장 잘해야 하는 일은 다른 모델의 출력을 감사하는 것이다. 싸고 빠른 두 번째 모델은 신뢰 어댑터 역할을 한다.
+- Aleph Alpha는 이제 딱한 농담이다. 인재는 떠났고, 다른 연구소를 끝내 따라잡지 못했고, 여러 프로젝트를 실현하지 못했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Show HN: Kolibri, el nuevo modelo de IA soberano de Alemania
+***** TLDR
+Aleph Alpha publicó Kolibri el Día de la Unidad Alemana: un modelo de mezcla de expertos alemán-inglés con 78.100 millones de parámetros totales y 3.460 millones activos por token, 50 capas, 384 expertos por capa más un experto compartido y seis expertos enrutados por token. El contexto nativo es de 262k y se probó hasta 1 millón. Pesos bajo Apache 2.0 en Hugging Face, entrenado con unos 24 billones de tokens (más de una quinta parte en alemán) sobre 768 GPU NVIDIA B200 en centros de datos alemanes y finlandeses, con corte de conocimiento el 18 de junio de 2026. Su tokenizador UniBPE reduce un 11,2% los tokens del texto alemán frente al de GPT-5, 40 de las 50 capas usan atención de ventana deslizante y razona en alemán de forma nativa. Puntuaciones: 70,8 en alemán global, 96,9 en AIME 2025, 63,2 con 1 millón de contexto, y se niega a responder el 44% de las veces cuando duda. Flojea en conocimiento memorizado (51,0 en el benchmark RAG), uso de herramientas en varios turnos (39,8 en Berkeley Function Calling), programación y contextos medios de 128k.
+***** Take
+La ingeniería es real y concreta: un tokenizador que gana un 11% en texto alemán, atención de ventana deslizante en el 80% de las capas y un modelo que rechaza el 44% de las preguntas dudosas en lugar de inventarse algo. La palabra que más carga soporta es 'soberano'. Qwen3.8 27B saca 79,9 frente a los 70,8 de Kolibri en alemán, en el propio arnés de evaluación de Kolibri, y la sala de prensa de Aleph Alpha incluye un acuerdo con Cohere, con sede en Toronto. Lo que esta publicación entrega de verdad son pesos Apache 2.0 que puedes ejecutar en tu propio edificio sobre infraestructura alemana. Eso es una historia de compras públicas, no de benchmarks. Véndanlo así.
+***** Comments
+- Recuerda menos de memoria, llama peor a herramientas en varios turnos y no es el mejor agente de código. ¿Entonces en qué es bueno?
+- Lo que más necesita saber hacer hoy un modelo soberano es auditar la salida de otros modelos. Un segundo modelo rápido y barato funciona como adaptador de confianza.
+- Aleph Alpha ya es un chiste triste. El talento se fue, nunca alcanzaron a los otros laboratorios y no cumplieron con varios proyectos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Show HN: Kolibri, Deutschlands neues souveränes KI-Modell
+***** TLDR
+Aleph Alpha hat Kolibri am Tag der Deutschen Einheit veröffentlicht: ein deutsch-englisches Mixture-of-Experts-Modell mit 78,1 Milliarden Parametern, davon 3,46 Milliarden pro Token aktiv, 50 Schichten, 384 Experten pro Schicht plus ein gemeinsamer Experte, sechs Experten pro Token. Der Kontext liegt nativ bei 262k und wurde bis 1 Million getestet. Gewichte unter Apache 2.0 auf Hugging Face, trainiert auf rund 24 Billionen Token (über ein Fünftel deutsch) mit 768 NVIDIA B200 GPUs in deutschen und finnischen Rechenzentren, Wissensstand 18. Juni 2026. Der UniBPE-Tokenizer senkt die Tokenzahl für deutschen Text um 11,2% gegenüber dem von GPT-5, 40 der 50 Schichten nutzen Sliding-Window-Attention, und das Modell denkt direkt auf Deutsch. Werte: 70,8 im Deutschen insgesamt, 96,9 bei AIME 2025, 63,2 bei 1 Million Kontext, und bei Unsicherheit verweigert es in 44% der Fälle die Antwort. Schwach ist es bei Faktenwissen aus dem Gedächtnis (51,0 im RAG-Benchmark), mehrstufiger Werkzeugnutzung (39,8 bei Berkeley Function Calling), beim Programmieren und bei mittleren Kontexten um 128k.
+***** Take
+Die technische Arbeit ist konkret: ein Tokenizer, der 11% bei deutschem Text spart, Sliding-Window-Attention in 80% der Schichten, und ein Modell, das 44% der unsicheren Fragen ablehnt statt etwas zu erfinden. Das Wort mit der größten Last ist 'souverän'. Qwen3.8 27B erreicht im Deutschen 79,9 gegen Kolibris 70,8, und zwar in Kolibris eigenem Testaufbau; im Newsroom von Aleph Alpha steht eine Vereinbarung mit dem in Toronto sitzenden Cohere. Was dieses Release tatsächlich liefert, sind Apache-2.0-Gewichte, die im eigenen Haus auf deutscher Infrastruktur laufen. Das ist eine Beschaffungsgeschichte, keine Benchmark-Geschichte. So sollte man sie verkaufen.
+***** Comments
+- Weiß weniger aus dem Gedächtnis, ruft Werkzeuge über mehrere Schritte schlechter auf, ist nicht der beste Coding-Agent. Worin ist es dann gut?
+- Worin ein souveränes Modell derzeit vor allem gut sein muss, ist das Prüfen der Ausgaben anderer Modelle. Ein billiges, schnelles zweites Modell wirkt als Vertrauensadapter.
+- Aleph Alpha ist inzwischen ein trauriger Witz. Die Talente sind weg, sie haben die anderen Labore nie eingeholt und mehrere Projekte nicht geliefert.
+** An Update on Orion for Linux and Windows :browsers:kagi:webkit:opensource:
+:PROPERTIES:
+:ID:       49941447
+:URL:      https://blog.kagi.com/update-orion-linux-windows
+:HN_URL:   https://news.ycombinator.com/item?id=49941447
+:POINTS:   122
+:COMMENTS: 60
+:BY:       pentagrama
+:END:
+
+*** TLDR
+Kagi is ending development of its Orion browser on Linux and Windows and open-sourcing both. The Linux beta stops receiving updates after October 2 2026 and keeps working unsupported; the Windows build, which was slated for late 2026, will not ship from Kagi at all. Source release details are promised within 30 days, and Kagi says it is talking to open-source foundations about long-term stewardship. The stated reason is team size: rather than spread a small team across three platforms, they are concentrating on macOS and iOS. Orion is built on WebKit, deliberately not forked from Chromium.
+
+*** Take
+The whole argument for Orion was that it was neither Chromium nor Gecko, and that argument only pays off if it runs where you work. Building a WebKit browser for three platforms with a team this size was the bet, and Kagi lost it. Open-sourcing is the right call over letting the code rot, but the sequencing is backwards: updates already stopped, the source is 'details within 30 days', and the Windows build nobody outside Kagi has ever run is the one most likely to arrive as an unmaintainable dump. For paying subscribers the uncomfortable read is that search funded a browser on three platforms and now funds one on two.
+
+*** Comments
+
+**** clivedup
+:PROPERTIES:
+:COMMENT_ID: 49943114
+:END:
+They chose to build it the hard way by not forking Chromium. Bad call: that is genuinely too hard for a company Kagi's size, as they have just discovered.
+
+**** petepete
+:PROPERTIES:
+:COMMENT_ID: 49942262
+:END:
+As a non-Apple Kagi subscriber I kind of wish they would just concentrate on search, the thing I am paying for.
+
+**** opem
+:PROPERTIES:
+:COMMENT_ID: 49944307
+:END:
+Good call by Kagi, I hope someone else takes the lead!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+关于 Orion 在 Linux 和 Windows 上的最新进展
+***** TLDR
+Kagi 将终止 Orion 浏览器在 Linux 和 Windows 上的开发，并把两者开源。Linux 测试版在 2026 年 10 月 2 日之后不再更新，仍可使用但不再获得支持；原定 2026 年底推出的 Windows 版本则完全不会由 Kagi 发布。源码发布细节承诺在 30 天内公布，Kagi 表示正在与开源基金会洽谈长期托管。给出的理由是团队规模：与其让一支小团队分散在三个平台上，不如专注于 macOS 和 iOS。Orion 基于 WebKit 构建，有意不从 Chromium 分叉。
+***** Take
+支持 Orion 的全部理由就是它既不是 Chromium 也不是 Gecko，而这个理由只有在它能跑在你工作的系统上才成立。用这种规模的团队为三个平台打造一个 WebKit 浏览器是一场赌注，Kagi 输了。比让代码腐烂更好的选择当然是开源，但顺序是反的：更新已经停了，源码还是「30 天内公布细节」，而 Kagi 之外从没人跑过的 Windows 版本，最可能以无法维护的代码包形式出现。对付费订阅者来说，别扭的解读是：搜索业务曾经供养三个平台上的一个浏览器，现在供养两个平台上的一个。
+***** Comments
+- 他们选择了不分叉 Chromium 的硬路线。这是个错误决定，对 Kagi 这种体量的公司来说确实太难了，他们刚刚自己发现了这一点。
+- 作为一个不用苹果设备的 Kagi 订阅者，我其实希望他们专注做搜索，也就是我真正付钱买的东西。
+- Kagi 这个决定不错，希望有别人来接手。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+LinuxとWindows版Orionについての報告
+***** TLDR
+KagiはOrionブラウザのLinux版とWindows版の開発を終了し、両方をオープンソース化する。Linuxベータは2026年10月2日以降更新されず、サポートなしで動作し続ける。2026年後半に予定されていたWindows版はKagiからは一切リリースされない。ソース公開の詳細は30日以内に告知するとされ、長期的な維持についてオープンソース財団と話を進めているという。理由はチーム規模で、小さなチームを3つのプラットフォームに分散させるより、macOSとiOSに集中するとしている。OrionはWebKit上に作られており、意図的にChromiumのフォークを避けていた。
+***** Take
+Orionを支持する理由は、ChromiumでもGeckoでもないという一点にあった。そしてその理由は、自分が作業する環境で動いて初めて価値になる。この規模のチームで3プラットフォーム向けのWebKitブラウザを作るのは賭けであり、Kagiは負けた。コードを腐らせるよりオープンソース化の方が正しいが、順番が逆だ。更新はすでに止まり、ソースは「30日以内に詳細」で、Kagi以外の誰も動かしたことがないWindows版こそ、保守不能な塊として出てくる可能性が最も高い。有料購読者にとって居心地の悪い読み方はこうだ。検索が3プラットフォームのブラウザを支えていたのが、いまは2プラットフォーム分になった。
+***** Comments
+- 彼らはChromiumをフォークしないという難しい道を選んだ。悪い判断だ。Kagiの規模の会社には本当に無理で、それを今自分たちで確かめたわけだ。
+- Apple製品を使わないKagi購読者としては、自分が金を払っている対象である検索に集中してほしいと思う。
+- Kagiの良い判断だ。誰か別の人が引き継いでくれるといい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+리눅스와 윈도우용 Orion에 관한 소식
+***** TLDR
+Kagi가 Orion 브라우저의 리눅스와 윈도우 개발을 종료하고 둘 다 오픈소스로 공개한다. 리눅스 베타는 2026년 10월 2일 이후 업데이트가 끊기고 지원 없이 계속 동작하며, 2026년 하반기로 예정됐던 윈도우 빌드는 Kagi에서 아예 나오지 않는다. 소스 공개 세부사항은 30일 안에 알리기로 했고, 장기 관리에 대해 오픈소스 재단들과 이야기 중이라고 한다. 이유는 팀 규모다. 작은 팀을 세 플랫폼에 흩뿌리는 대신 macOS와 iOS에 집중하겠다는 것이다. Orion은 WebKit 기반이며 의도적으로 Chromium을 포크하지 않았다.
+***** Take
+Orion을 지지할 근거는 Chromium도 Gecko도 아니라는 점 하나였고, 그 근거는 내가 일하는 환경에서 돌아갈 때만 값을 한다. 이 규모의 팀으로 세 플랫폼용 WebKit 브라우저를 만드는 건 도박이었고 Kagi는 졌다. 코드를 썩히는 것보다 오픈소스가 맞지만 순서가 거꾸로다. 업데이트는 이미 멈췄고 소스는 '30일 내 세부사항'이며, Kagi 밖에서 아무도 돌려본 적 없는 윈도우 빌드가 유지 불가능한 덩어리로 도착할 가능성이 가장 크다. 유료 구독자에게 불편한 해석은 이것이다. 검색이 세 플랫폼의 브라우저를 먹여살리다가 이제 두 플랫폼짜리를 먹여살린다.
+***** Comments
+- Chromium을 포크하지 않는 어려운 길을 택했다. 잘못된 결정이었고, Kagi 규모의 회사에는 정말 무리였다는 걸 이제 스스로 확인한 셈이다.
+- 애플 기기를 안 쓰는 Kagi 구독자로서, 내가 돈을 내고 있는 대상인 검색에 집중해줬으면 한다.
+- Kagi가 잘 판단했다. 다른 누군가가 이어받으면 좋겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Novedades sobre Orion para Linux y Windows
+***** TLDR
+Kagi deja de desarrollar su navegador Orion para Linux y Windows y abre el código de ambos. La beta de Linux no recibirá actualizaciones después del 2 de octubre de 2026 y seguirá funcionando sin soporte; la versión de Windows, prevista para finales de 2026, no saldrá de la mano de Kagi. Los detalles de la publicación del código se anunciarán en 30 días y la empresa dice estar hablando con fundaciones de software libre sobre la custodia a largo plazo. El motivo declarado es el tamaño del equipo: en lugar de repartir un equipo pequeño entre tres plataformas, se concentran en macOS e iOS. Orion está construido sobre WebKit y deliberadamente no es un fork de Chromium.
+***** Take
+Todo el argumento a favor de Orion era que no era Chromium ni Gecko, y ese argumento solo rinde si funciona donde trabajas. Hacer un navegador WebKit para tres plataformas con un equipo de este tamaño era la apuesta, y Kagi la perdió. Abrir el código es mejor que dejarlo podrirse, pero el orden está invertido: las actualizaciones ya pararon, el código es 'detalles en 30 días' y la versión de Windows, que nadie fuera de Kagi ha ejecutado nunca, es la que con más probabilidad llegará como un volcado imposible de mantener. Para quien paga la suscripción, la lectura incómoda es que la búsqueda financiaba un navegador en tres plataformas y ahora financia uno en dos.
+***** Comments
+- Eligieron el camino difícil de no hacer un fork de Chromium. Mala decisión: es genuinamente demasiado para una empresa del tamaño de Kagi, como acaban de descubrir.
+- Como suscriptor de Kagi que no usa Apple, ojalá se concentraran en la búsqueda, que es lo que estoy pagando.
+- Buena decisión de Kagi, espero que alguien más tome el relevo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein Update zu Orion für Linux und Windows
+***** TLDR
+Kagi beendet die Entwicklung seines Orion-Browsers für Linux und Windows und stellt beide als Open Source bereit. Die Linux-Beta erhält nach dem 2. Oktober 2026 keine Updates mehr und läuft ohne Support weiter; der für Ende 2026 geplante Windows-Build kommt von Kagi überhaupt nicht. Details zur Code-Veröffentlichung sollen innerhalb von 30 Tagen folgen, und Kagi spricht laut eigener Aussage mit Open-Source-Stiftungen über eine langfristige Pflege. Begründet wird es mit der Teamgröße: Statt ein kleines Team auf drei Plattformen zu verteilen, konzentriert man sich auf macOS und iOS. Orion baut auf WebKit auf und ist bewusst kein Chromium-Fork.
+***** Take
+Das ganze Argument für Orion war, dass er weder Chromium noch Gecko ist, und dieses Argument zahlt sich nur aus, wenn er dort läuft, wo man arbeitet. Mit einem Team dieser Größe einen WebKit-Browser für drei Plattformen zu bauen war die Wette, und Kagi hat sie verloren. Open Source ist besser, als den Code verrotten zu lassen, aber die Reihenfolge stimmt nicht: Die Updates sind schon gestoppt, der Quellcode ist 'Details in 30 Tagen', und der Windows-Build, den außerhalb von Kagi nie jemand ausgeführt hat, kommt am ehesten als nicht pflegbarer Haufen. Für zahlende Abonnenten lautet die unangenehme Lesart: Die Suche hat einen Browser auf drei Plattformen finanziert und finanziert jetzt einen auf zwei.
+***** Comments
+- Sie haben den harten Weg gewählt und Chromium nicht geforkt. Falsche Entscheidung, denn für eine Firma in Kagis Größe ist das wirklich zu viel, wie sie gerade selbst gemerkt haben.
+- Als Kagi-Abonnent ohne Apple-Geräte wünsche ich mir, sie würden sich auf die Suche konzentrieren, also auf das, wofür ich zahle.
+- Gute Entscheidung von Kagi, ich hoffe, jemand anderes übernimmt.
+** Cloudflare OHTTP gateway :privacy:cloudflare:ohttp:networking:
+:PROPERTIES:
+:ID:       49941091
+:URL:      https://blog.cloudflare.com/announcing-cloudflare-ohttp-gateway/
+:HN_URL:   https://news.ycombinator.com/item?id=49941091
+:POINTS:   132
+:COMMENTS: 56
+:BY:       est
+:END:
+
+*** TLDR
+Cloudflare opened a closed beta for a self-serve OHTTP Gateway and renamed its existing Privacy Gateway product to Cloudflare OHTTP Relay. Oblivious HTTP splits a request across two non-colluding parties: the relay sees your IP and TLS fingerprint but only ciphertext, and the gateway decrypts the request body but never learns who sent it. The gateway becomes a paid per-zone add-on, and it refuses to decapsulate requests arriving from Cloudflare Workers or proxied hosts, since those would collapse the two roles into one. You still have to write an OHTTP client and supply your own relay. Existing deployments cited include Flo Health's Anonymous Mode and Apple's Private Cloud Compute and Live Caller ID.
+
+*** Take
+The protocol is sound and the threat model is explicit, which is more than most privacy launches manage. The friction is structural: the guarantee rests on the relay and gateway not colluding, and Cloudflare now sells both halves, so the documentation ends up advising you to get your relay somewhere else. That is honest, and it is also the whole catch. Charging per zone for the privacy half while already operating the identity half is the part worth arguing about, not the cryptography.
+
+*** Comments
+
+**** shieldagent
+:PROPERTIES:
+:COMMENT_ID: 49944822
+:END:
+OHTTP is a neat split: the relay learns who you are, the gateway learns what you ask, and neither gets both.
+
+**** freedomben
+:PROPERTIES:
+:COMMENT_ID: 49944816
+:END:
+Charging extra for websites to add privacy seems like a poor incentive if the goal is to improve privacy.
+
+**** ZiiS
+:PROPERTIES:
+:COMMENT_ID: 49942822
+:END:
+If I want to preserve my users' privacy I will avoid massive behavior-capturing networks like Cloudflare, not hand them the tracking.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Cloudflare OHTTP 网关
+***** TLDR
+Cloudflare 为自助式 OHTTP 网关开启了封闭测试，并把原有的 Privacy Gateway 产品改名为 Cloudflare OHTTP Relay。Oblivious HTTP 把一个请求拆给两个互不串通的方：中继看得到你的 IP 和 TLS 指纹，但只能看到密文；网关能解密请求内容，但永远不知道是谁发的。网关将作为按区域计费的付费附加功能，并且会拒绝为来自 Cloudflare Workers 或代理主机的请求解封，因为那会把两个角色合成一个。你仍然需要自己实现 OHTTP 客户端并自备中继。文中提到的现有部署包括 Flo Health 的匿名模式，以及 Apple 的 Private Cloud Compute 和 Live Caller ID。
+***** Take
+协议本身是可靠的，威胁模型也写得明确，这已经比多数隐私产品发布做得好。摩擦在结构上：这个保证依赖中继和网关不串通，而 Cloudflare 现在把两半都卖，于是文档只能建议你去别处找中继。这很诚实，同时也正是全部的问题所在。真正值得争论的不是密码学，而是在已经经营「身份」那一半的情况下，还要按区域收费来卖「隐私」那一半。
+***** Comments
+- OHTTP 的拆分很巧妙：中继知道你是谁，网关知道你问了什么，两边都拿不到完整信息。
+- 如果目标是改善隐私，让网站额外付费才能获得隐私，这种激励方式看起来不太对。
+- 如果我要保护用户隐私，我会避开 Cloudflare 这类大规模行为采集网络，而不是把追踪数据交给它们。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Cloudflare OHTTPゲートウェイ
+***** TLDR
+Cloudflareがセルフサービス型のOHTTPゲートウェイをクローズドベータで公開し、既存のPrivacy Gateway製品をCloudflare OHTTP Relayに改名した。Oblivious HTTPはリクエストを共謀しない2者に分割する。リレーはIPとTLSフィンガープリントを見るが中身は暗号文のままで、ゲートウェイは本文を復号できるが送信者が誰かは分からない。ゲートウェイはゾーン単位の有料アドオンとなり、Cloudflare Workersやプロキシ経由のホストから届いたリクエストの復号は拒否する。二つの役割が一つに潰れてしまうからだ。利用者側はOHTTPクライアントを自分で書き、リレーも自分で用意する必要がある。既存の導入例としてFlo Healthの匿名モード、AppleのPrivate Cloud ComputeとLive Caller IDが挙げられている。
+***** Take
+プロトコルは筋が通っており、脅威モデルも明示されている。これだけでも多くのプライバシー系発表より上だ。引っかかるのは構造だ。保証はリレーとゲートウェイが共謀しないことに依存するのに、Cloudflareは今その両方を売っている。だからドキュメントは、リレーは別のところから調達せよと助言することになる。正直ではあるが、そこが落とし穴そのものでもある。議論すべきは暗号ではなく、すでに身元側を運営しながらプライバシー側をゾーン単位で課金する点だ。
+***** Comments
+- OHTTPの分割はうまい。リレーは誰かを知り、ゲートウェイは何を尋ねたかを知る。どちらも両方は得られない。
+- プライバシーを改善するのが目的なら、サイト側が追加料金を払わないと privacy が付かないという仕組みは誘因として筋が悪い。
+- ユーザーのプライバシーを守りたいなら、Cloudflareのような巨大な行動収集ネットワークは避ける。追跡データを渡すのではなく。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Cloudflare OHTTP 게이트웨이
+***** TLDR
+Cloudflare가 셀프서비스 OHTTP 게이트웨이의 비공개 베타를 열고, 기존 Privacy Gateway 제품명을 Cloudflare OHTTP Relay로 바꿨다. Oblivious HTTP는 요청을 서로 공모하지 않는 두 당사자에게 나눈다. 릴레이는 IP와 TLS 지문을 보지만 내용은 암호문이고, 게이트웨이는 본문을 복호화하지만 누가 보냈는지는 알 수 없다. 게이트웨이는 영역(zone) 단위 유료 부가 기능이 되며, Cloudflare Workers나 프록시된 호스트에서 온 요청은 복호화를 거부한다. 두 역할이 하나로 합쳐지기 때문이다. 이용하려면 OHTTP 클라이언트를 직접 구현하고 릴레이도 직접 마련해야 한다. 기존 사례로 Flo Health의 익명 모드, Apple의 Private Cloud Compute와 Live Caller ID가 언급됐다.
+***** Take
+프로토콜은 견고하고 위협 모델도 명시돼 있다. 이것만으로도 웬만한 프라이버시 발표보다 낫다. 걸리는 지점은 구조다. 보장은 릴레이와 게이트웨이가 공모하지 않는다는 데 기대는데, 이제 Cloudflare가 두 쪽을 다 판다. 그래서 문서가 릴레이는 다른 곳에서 구하라고 조언하게 된다. 정직하지만 바로 거기에 함정이 있다. 논쟁할 지점은 암호학이 아니라, 신원 쪽을 이미 운영하면서 프라이버시 쪽을 영역 단위로 과금한다는 사실이다.
+***** Comments
+- OHTTP의 분할은 깔끔하다. 릴레이는 당신이 누구인지 알고, 게이트웨이는 무엇을 물었는지 안다. 어느 쪽도 둘 다 갖지 못한다.
+- 프라이버시를 개선하는 게 목표라면, 사이트가 돈을 더 내야 프라이버시가 붙는 구조는 유인이 잘못됐다.
+- 사용자 프라이버시를 지키려면 Cloudflare 같은 거대 행동수집 네트워크를 피한다. 추적 데이터를 넘겨주는 게 아니라.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La pasarela OHTTP de Cloudflare
+***** TLDR
+Cloudflare abrió una beta cerrada de su pasarela OHTTP autoservicio y renombró su producto Privacy Gateway como Cloudflare OHTTP Relay. Oblivious HTTP reparte una petición entre dos partes que no se coordinan: el relé ve tu IP y tu huella TLS pero solo texto cifrado, y la pasarela descifra el cuerpo de la petición pero nunca sabe quién la envió. La pasarela será un complemento de pago por zona y rechaza descifrar peticiones que llegan de Cloudflare Workers o de hosts proxificados, porque eso juntaría los dos roles en uno. Aun así hay que programar un cliente OHTTP y poner un relé propio. Entre los despliegues existentes se citan el Modo Anónimo de Flo Health y el Private Cloud Compute y Live Caller ID de Apple.
+***** Take
+El protocolo es sólido y el modelo de amenaza está explícito, que es más de lo que logran la mayoría de los lanzamientos de privacidad. La fricción es estructural: la garantía depende de que el relé y la pasarela no se coordinen, y Cloudflare ahora vende las dos mitades, así que su propia documentación acaba recomendando conseguir el relé en otro sitio. Es honesto y es también toda la trampa. Lo discutible no es la criptografía, sino cobrar por zona por la mitad de la privacidad cuando ya se opera la mitad de la identidad.
+***** Comments
+- OHTTP es una división elegante: el relé sabe quién eres, la pasarela sabe qué pides y ninguno tiene las dos cosas.
+- Cobrar más a los sitios por añadir privacidad parece un mal incentivo si el objetivo es mejorar la privacidad.
+- Si quiero preservar la privacidad de mis usuarios, evitaré redes de captura masiva de comportamiento como Cloudflare, no les entregaré el rastreo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Cloudflare OHTTP Gateway
+***** TLDR
+Cloudflare hat eine geschlossene Beta für ein Self-Service-OHTTP-Gateway gestartet und sein bisheriges Produkt Privacy Gateway in Cloudflare OHTTP Relay umbenannt. Oblivious HTTP teilt eine Anfrage auf zwei nicht kooperierende Parteien auf: Das Relay sieht IP und TLS-Fingerprint, aber nur Chiffretext, und das Gateway entschlüsselt den Anfrageinhalt, erfährt aber nie, wer ihn geschickt hat. Das Gateway wird ein kostenpflichtiges Add-on pro Zone und verweigert die Entschlüsselung für Anfragen aus Cloudflare Workers oder von proxyten Hosts, weil dadurch beide Rollen zusammenfallen würden. Man muss weiterhin einen eigenen OHTTP-Client schreiben und ein eigenes Relay stellen. Als bestehende Einsätze werden Flo Healths Anonymous Mode sowie Apples Private Cloud Compute und Live Caller ID genannt.
+***** Take
+Das Protokoll ist tragfähig und das Bedrohungsmodell wird ausgesprochen, das schaffen die meisten Privacy-Ankündigungen nicht. Die Reibung ist struktureller Art: Die Garantie hängt daran, dass Relay und Gateway nicht zusammenarbeiten, und Cloudflare verkauft jetzt beide Hälften, weshalb die eigene Dokumentation empfiehlt, das Relay woanders zu beziehen. Das ist ehrlich und genau das ist der Haken. Streitwert hat nicht die Kryptografie, sondern dass die Privatsphäre-Hälfte pro Zone Geld kostet, während die Identitäts-Hälfte schon im eigenen Haus läuft.
+***** Comments
+- OHTTP ist eine saubere Aufteilung: Das Relay erfährt, wer du bist, das Gateway erfährt, was du fragst, und keines bekommt beides.
+- Websites extra für mehr Privatsphäre zahlen zu lassen, wirkt als Anreiz verkehrt, wenn das Ziel bessere Privatsphäre ist.
+- Wenn ich die Privatsphäre meiner Nutzer schützen will, meide ich riesige verhaltenserfassende Netzwerke wie Cloudflare und überlasse ihnen nicht das Tracking.
+** Newgrounds.com – A community of games, music, and art :web:flash:gamedev:preservation:
+:PROPERTIES:
+:ID:       49940394
+:URL:      https://www.newgrounds.com/
+:HN_URL:   https://news.ycombinator.com/item?id=49940394
+:POINTS:   340
+:COMMENTS: 95
+:BY:       azhenley
+:END:
+
+*** TLDR
+Newgrounds is still running and still shaped the way it was in the Flash era: games, movies, art, audio and a community section, with user voting that decides whether a submission survives. The front page carries October 2026 submissions, a Halloween Spooktacular 2026 event, collab deadlines and artist news alongside long-running series like Madness and Spooky Month. The old Flash catalogue is playable in-browser through Ruffle, so uploads from 15 and 20 years ago still run, and the site funds itself partly through a Supporter membership.
+
+*** Take
+The notable thing is not nostalgia, it is that the archive survived a platform extinction event. When Adobe killed Flash, a quarter century of games and animations was supposed to go dark; Ruffle reimplemented the runtime and Newgrounds kept the submissions, the IDs and the judging system in place instead of migrating to something more fashionable. Most sites from 2000 are gone because an owner pivoted. This one is here because nobody did.
+
+*** Comments
+
+**** Arkeus
+:PROPERTIES:
+:COMMENT_ID: 49941334
+:END:
+Ruffle has come far enough that a Flash game I uploaded 15 years ago is completely playable again. I had assumed it was gone forever.
+
+**** ghurtado
+:PROPERTIES:
+:COMMENT_ID: 49941580
+:END:
+New Mandela effect unlocked: remember when Newgrounds ceased to exist?
+
+**** bobcatsmith
+:PROPERTIES:
+:COMMENT_ID: 49941816
+:END:
+Will there be an AI label? Would be good to give love and support to human game devs and not AI slop.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Newgrounds.com：一个游戏、音乐与艺术的社区
+***** TLDR
+Newgrounds 还在运行，而且形态仍是 Flash 时代的样子：游戏、动画、美术、音频和社区板块，由用户投票决定一个投稿能不能留下来。首页上有 2026 年 10 月的新投稿、2026 万圣节活动、合作项目截稿日和作者动态，旁边还有 Madness、Spooky Month 这些长期连载。旧的 Flash 内容通过 Ruffle 直接在浏览器里就能玩，15 年甚至 20 年前上传的作品仍然跑得起来，网站部分靠 Supporter 会员制维持。
+***** Take
+值得注意的不是怀旧，而是这个档案库活过了一次平台灭绝事件。Adobe 停掉 Flash 时，四分之一个世纪的游戏和动画本应就此黑屏；Ruffle 重新实现了运行时，而 Newgrounds 没有迁移到更时髦的东西，而是把投稿、ID 和评审机制原样保留了下来。2000 年前后的网站大多消失了，因为所有者转型了。这家还在，因为没有人转型。
+***** Comments
+- Ruffle 已经做到我 15 年前上传的那个 Flash 游戏又能完整地玩了。我原本以为它永远没了。
+- 解锁了一个新的曼德拉效应：还记得 Newgrounds 关站的那阵子吗？
+- 会不会加个 AI 标签？把支持给到真人游戏开发者，而不是 AI 垃圾产物，这样挺好。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Newgrounds.com — ゲーム、音楽、アートのコミュニティ
+***** TLDR
+Newgroundsはいまも稼働中で、形もFlash時代のままだ。ゲーム、ムービー、アート、オーディオ、コミュニティの各セクションがあり、投稿が生き残るかはユーザー投票で決まる。トップページには2026年10月の投稿、Halloween Spooktacular 2026、コラボの締切、作者ニュースが並び、MadnessやSpooky Monthのような長期シリーズも健在だ。古いFlash作品はRuffleによってブラウザ上で動き、15年前や20年前のアップロードもそのまま遊べる。運営費の一部はSupporter会員制で賄われている。
+***** Take
+注目すべきは懐かしさではなく、このアーカイブがプラットフォームの絶滅を生き延びたことだ。AdobeがFlashを終わらせたとき、四半世紀分のゲームとアニメは消える前提だった。Ruffleがランタイムを再実装し、Newgroundsは流行りの何かに移行せず、投稿もIDも審査の仕組みもそのまま残した。2000年前後のサイトの多くは、所有者が路線変更したために消えた。ここが残っているのは、誰も変更しなかったからだ。
+***** Comments
+- Ruffleはここまで来たのか。15年前に自分がアップしたFlashゲームが完全に動く。永遠に失われたと思っていた。
+- 新しいマンデラ効果を獲得。Newgroundsが消滅した時期、覚えてる？
+- AIラベルは付くのだろうか。AIのスロップではなく人間のゲーム開発者を応援できるといい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Newgrounds.com — 게임, 음악, 예술의 커뮤니티
+***** TLDR
+Newgrounds는 여전히 돌아가고 있고, 모양도 플래시 시절 그대로다. 게임, 무비, 아트, 오디오, 커뮤니티 섹션이 있고 투고가 살아남을지는 사용자 투표가 결정한다. 첫 화면에는 2026년 10월 투고, 핼러윈 스푸크타큘러 2026 행사, 합작 마감일, 작가 소식이 올라와 있고 Madness와 Spooky Month 같은 장기 시리즈도 그대로다. 옛 플래시 작품은 Ruffle로 브라우저에서 바로 돌아가며 15년, 20년 전 업로드도 실행된다. 운영비 일부는 Supporter 멤버십으로 충당한다.
+***** Take
+눈여겨볼 건 향수가 아니라, 이 아카이브가 플랫폼 멸종 사건을 살아남았다는 사실이다. Adobe가 플래시를 끝냈을 때 25년 분량의 게임과 애니메이션은 꺼질 예정이었다. Ruffle이 런타임을 다시 구현했고, Newgrounds는 더 유행하는 무엇으로 옮겨가지 않고 투고와 ID와 심사 체계를 그대로 뒀다. 2000년 무렵의 사이트 대부분은 소유자가 방향을 틀어서 사라졌다. 이곳이 남은 건 아무도 틀지 않았기 때문이다.
+***** Comments
+- Ruffle이 이만큼 왔다. 15년 전에 올린 내 플래시 게임이 완전히 돌아간다. 영원히 사라졌다고 생각했는데.
+- 새로운 만델라 효과 해금: Newgrounds가 없어졌던 시절 기억나?
+- AI 표시가 붙을까? AI 슬롭이 아니라 사람 개발자에게 응원이 가면 좋겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Newgrounds.com, una comunidad de juegos, música y arte
+***** TLDR
+Newgrounds sigue en marcha y conserva la forma que tenía en la era Flash: juegos, animaciones, arte, audio y una sección de comunidad, con votación de usuarios que decide si un envío sobrevive. La portada muestra envíos de octubre de 2026, el evento Halloween Spooktacular 2026, fechas límite de colaboraciones y noticias de autores, junto a series veteranas como Madness y Spooky Month. El catálogo antiguo de Flash se juega en el navegador gracias a Ruffle, así que subidas de hace 15 y 20 años siguen funcionando, y el sitio se financia en parte con una membresía Supporter.
+***** Take
+Lo llamativo no es la nostalgia, es que el archivo sobrevivió a la extinción de una plataforma. Cuando Adobe mató Flash, un cuarto de siglo de juegos y animaciones iba a apagarse; Ruffle reimplementó el runtime y Newgrounds mantuvo los envíos, los identificadores y el sistema de votación en su sitio en lugar de migrar a algo más de moda. Casi todos los sitios del año 2000 desaparecieron porque su dueño cambió de rumbo. Este está aquí porque nadie lo cambió.
+***** Comments
+- Ruffle ha avanzado tanto que un juego Flash que subí hace 15 años vuelve a ser perfectamente jugable. Daba por hecho que se había perdido para siempre.
+- Nuevo efecto Mandela desbloqueado: ¿te acuerdas de cuando Newgrounds dejó de existir?
+- ¿Habrá una etiqueta de IA? Estaría bien apoyar a los desarrolladores humanos y no a la morralla generada.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Newgrounds.com – eine Community für Spiele, Musik und Kunst
+***** TLDR
+Newgrounds läuft weiter und sieht noch aus wie in der Flash-Zeit: Spiele, Filme, Kunst, Audio und ein Community-Bereich, mit Nutzerabstimmung darüber, ob ein Beitrag bleibt. Auf der Startseite stehen Einsendungen aus Oktober 2026, das Halloween Spooktacular 2026, Collab-Fristen und Künstlernews neben Dauerserien wie Madness und Spooky Month. Der alte Flash-Katalog läuft dank Ruffle direkt im Browser, Uploads von vor 15 und 20 Jahren funktionieren noch, und die Seite finanziert sich zum Teil über eine Supporter-Mitgliedschaft.
+***** Take
+Bemerkenswert ist nicht die Nostalgie, sondern dass dieses Archiv ein Plattform-Aussterben überlebt hat. Als Adobe Flash beendete, sollte ein Vierteljahrhundert an Spielen und Animationen dunkel werden; Ruffle hat die Runtime neu implementiert, und Newgrounds hat Einsendungen, IDs und das Bewertungssystem einfach stehen gelassen, statt auf etwas Modischeres umzuziehen. Die meisten Seiten von 2000 sind verschwunden, weil ein Eigentümer das Geschäftsmodell gewechselt hat. Diese ist noch da, weil es niemand getan hat.
+***** Comments
+- Ruffle ist so weit, dass ein Flash-Spiel, das ich vor 15 Jahren hochgeladen habe, wieder komplett spielbar ist. Ich hatte es für endgültig verloren gehalten.
+- Neuer Mandela-Effekt freigeschaltet: Erinnert sich jemand daran, wie Newgrounds aufgehört hat zu existieren?
+- Wird es eine KI-Kennzeichnung geben? Wäre gut, menschliche Spieleentwickler zu unterstützen und nicht KI-Schrott.
+** GitHub's new dashboard experience now the default :github:ui:devtools:copilot:
+:PROPERTIES:
+:ID:       49942818
+:URL:      https://github.blog/changelog/2026-10-01-new-dashboard-experience-now-the-default/
+:HN_URL:   https://news.ycombinator.com/item?id=49942818
+:POINTS:   58
+:COMMENTS: 72
+:BY:       vanyauhalin
+:END:
+
+*** TLDR
+As of October 1 2026 GitHub's redesigned dashboard is the default for everyone after a period as a feature preview. It puts active agent sessions, issues and pull requests in one view, allows filters with up to 12 items per section, and adds inline actions like assigning an issue to the Copilot coding agent or opening a pull request in Copilot Chat. The activity feed was not deleted but moved to its own tab. The old dashboard is still reachable through the dropdown next to Preview, and github.com/dashboard-feed still works.
+
+*** Take
+58 points and 72 comments is a thread full of people who disliked it enough to write. Two complaints are specific rather than reflexive: the list rows use looser padding than /notifications, /issues and /pulls, so the same screen shows less, and the single most-repeated request from the preview period, making the agent sections removable, was not implemented. Everything else GitHub shipped here is reasonable, and the agent row is the part that will still be there after the opt-out quietly expires.
+
+*** Comments
+
+**** 0natcer
+:PROPERTIES:
+:COMMENT_ID: 49943531
+:END:
+When they launched this in beta they asked what they should improve. Most of the comments asked for making the agent sections removable. Guess what they didn't change.
+
+**** oefrha
+:PROPERTIES:
+:COMMENT_ID: 49943361
+:END:
+Noticeably worse info density than /notifications, /issues and /pulls, whose list entries use tighter padding.
+
+**** radicalriddler
+:PROPERTIES:
+:COMMENT_ID: 49943220
+:END:
+A lot of people seem to be complaining, but the last iteration had Copilot at the top and a feed of what other people were doing. Pushing your issues and pull requests to the front is significantly better.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+GitHub 新版仪表盘现已成为默认界面
+***** TLDR
+从 2026 年 10 月 1 日起，GitHub 重新设计的仪表盘在经过一段功能预览期后成为所有人的默认界面。它把进行中的 agent 会话、issue 和 pull request 放进同一个视图，支持每个分区最多 12 项的筛选器，并加入了把 issue 指派给 Copilot coding agent、或在 Copilot Chat 中打开 pull request 这类内联操作。动态信息流没有被删除，而是移到了独立的标签页。旧版仪表盘仍可通过 Preview 旁边的下拉菜单回到，github.com/dashboard-feed 也仍然可用。
+***** Take
+58 分、72 条评论，说明这是一个不喜欢到愿意动手写几句的人聚集的讨论。其中两条批评是具体而非条件反射式的：列表行的内边距比 /notifications、/issues 和 /pulls 更松，同一块屏幕显示的内容更少；而预览期里被重复最多的一个请求——让 agent 分区可以移除——并没有被实现。GitHub 这次做的其他改动都算合理，而 agent 那一栏，正是等到退出选项悄悄失效之后仍然留在那儿的部分。
+***** Comments
+- 他们在 beta 阶段问大家该改什么。多数评论要求让 agent 分区可以移除。猜猜他们没改哪一项。
+- 信息密度明显不如 /notifications、/issues 和 /pulls，那几个页面的列表项内边距更紧凑。
+- 很多人在抱怨，但上一版是 Copilot 在最上面，再加一条别人在干什么的信息流。把你自己的 issue 和 PR 放到前面，明显更好。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GitHubの新しいダッシュボードが既定になった
+***** TLDR
+2026年10月1日より、機能プレビュー期間を経てGitHubの新ダッシュボードが全ユーザーの既定になった。進行中のエージェントセッション、issue、pull requestを一つのビューにまとめ、セクションごとに最大12件のフィルターを設定でき、issueをCopilot coding agentに割り当てたり、pull requestをCopilot Chatで開いたりといったインライン操作が加わった。アクティビティフィードは削除されず、独立したタブに移された。旧ダッシュボードはPreview横のドロップダウンから戻せて、github.com/dashboard-feedも引き続き動く。
+***** Take
+58ポイントに対してコメント72件。わざわざ書き込むほど気に入らなかった人が集まったスレッドだ。反射的でない具体的な指摘は二つある。リスト行のパディングが/notifications、/issues、/pullsより緩く、同じ画面に入る情報が減ったこと。そしてプレビュー期間に最も繰り返された要望、エージェントのセクションを消せるようにしてほしいという点が実装されなかったこと。それ以外の変更は妥当で、そしてエージェントの行こそ、オプトアウトが静かに終わった後も残る部分だ。
+***** Comments
+- ベータで公開したとき、何を改善すべきか尋ねていた。コメントの多くはエージェントのセクションを削除可能にしてほしいというものだった。変えなかったのはどれでしょう。
+- /notifications、/issues、/pullsより情報密度が明らかに低い。あちらのリスト項目はパディングがもっと詰まっている。
+- 不満の声は多いが、前の版はCopilotが最上部で、その下に他人の活動フィードだった。自分のissueとPRを前に出したのは明確に良い。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+GitHub의 새 대시보드가 기본값이 됐다
+***** TLDR
+2026년 10월 1일부터 기능 프리뷰 기간을 거친 GitHub의 새 대시보드가 모든 사용자의 기본값이 됐다. 진행 중인 에이전트 세션과 이슈, 풀 리퀘스트를 한 화면에 모으고, 섹션별 최대 12개 항목의 필터를 지원하며, 이슈를 Copilot coding agent에 할당하거나 풀 리퀘스트를 Copilot Chat에서 여는 인라인 동작이 추가됐다. 활동 피드는 삭제되지 않고 별도 탭으로 옮겨졌다. 이전 대시보드는 Preview 옆 드롭다운으로 돌아갈 수 있고 github.com/dashboard-feed도 아직 동작한다.
+***** Take
+58점에 댓글 72개. 굳이 글을 쓸 만큼 마음에 안 들었던 사람들이 모인 스레드다. 반사적이지 않은 구체적 지적이 둘 있다. 목록 행의 패딩이 /notifications, /issues, /pulls보다 느슨해서 같은 화면에 들어가는 정보가 줄었다는 것, 그리고 프리뷰 기간에 가장 많이 반복된 요청인 에이전트 섹션 제거 기능이 들어가지 않았다는 것. 나머지 변경은 합리적이고, 에이전트 줄은 옵트아웃이 조용히 사라진 뒤에도 남아 있을 부분이다.
+***** Comments
+- 베타로 내놓을 때 무엇을 개선해야 할지 물었다. 댓글 대부분은 에이전트 섹션을 없앨 수 있게 해달라는 것이었다. 안 바꾼 게 뭔지 맞혀보라.
+- /notifications, /issues, /pulls보다 정보 밀도가 눈에 띄게 나쁘다. 그쪽 목록 항목은 패딩이 더 촘촘하다.
+- 불만이 많지만 이전 버전은 Copilot이 맨 위에 있고 그 아래가 남들 활동 피드였다. 내 이슈와 PR을 앞으로 보낸 건 분명히 낫다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El nuevo panel de GitHub ya es el predeterminado
+***** TLDR
+Desde el 1 de octubre de 2026, el panel rediseñado de GitHub es el predeterminado para todos, tras un periodo como vista previa. Reúne en una sola pantalla las sesiones de agentes activas, las incidencias y los pull requests, permite filtros con hasta 12 elementos por sección y añade acciones directas como asignar una incidencia al agente de código Copilot o abrir un pull request en Copilot Chat. El feed de actividad no se eliminó: se movió a su propia pestaña. El panel anterior sigue accesible desde el desplegable junto a Preview, y github.com/dashboard-feed todavía funciona.
+***** Take
+58 puntos y 72 comentarios describen un hilo lleno de gente a la que le disgustó lo suficiente como para escribir. Dos quejas son concretas y no reflejos: las filas de las listas usan más relleno que /notifications, /issues y /pulls, así que la misma pantalla muestra menos, y la petición más repetida durante la vista previa, poder quitar las secciones de agentes, no se implementó. El resto de lo que lanzó GitHub es razonable, y la fila de agentes es justamente la parte que seguirá ahí cuando la opción de volver atrás desaparezca sin anuncio.
+***** Comments
+- Cuando lo lanzaron en beta preguntaron qué deberían mejorar. La mayoría de los comentarios pedía poder quitar las secciones de agentes. Adivina qué no cambiaron.
+- La densidad de información es notablemente peor que en /notifications, /issues y /pulls, cuyas entradas de lista usan menos relleno.
+- Mucha gente se queja, pero la versión anterior tenía Copilot arriba y un feed de lo que hacían los demás. Poner tus incidencias y pull requests por delante es claramente mejor.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+GitHubs neues Dashboard ist jetzt Standard
+***** TLDR
+Seit dem 1. Oktober 2026 ist GitHubs überarbeitetes Dashboard nach einer Phase als Feature-Preview für alle der Standard. Es zeigt laufende Agent-Sessions, Issues und Pull Requests in einer Ansicht, erlaubt Filter mit bis zu zwölf Einträgen pro Bereich und ergänzt direkte Aktionen, etwa ein Issue dem Copilot Coding Agent zuzuweisen oder einen Pull Request in Copilot Chat zu öffnen. Der Activity-Feed wurde nicht gelöscht, sondern in einen eigenen Tab verschoben. Das alte Dashboard bleibt über das Dropdown neben Preview erreichbar, und github.com/dashboard-feed funktioniert weiterhin.
+***** Take
+58 Punkte und 72 Kommentare beschreiben einen Thread voller Leute, denen es genug missfiel, um etwas zu schreiben. Zwei Einwände sind konkret und nicht reflexhaft: Die Listenzeilen haben mehr Innenabstand als /notifications, /issues und /pulls, also passt weniger auf den gleichen Bildschirm, und der in der Preview-Phase am häufigsten geäußerte Wunsch, die Agent-Bereiche entfernen zu können, wurde nicht umgesetzt. Alles andere ist vernünftig, und die Agent-Zeile ist genau der Teil, der noch da sein wird, wenn die Rückkehroption still verschwindet.
+***** Comments
+- Beim Beta-Start haben sie gefragt, was sie verbessern sollen. Die meisten Kommentare wollten, dass man die Agent-Bereiche entfernen kann. Ratet, was sie nicht geändert haben.
+- Deutlich schlechtere Informationsdichte als /notifications, /issues und /pulls, deren Listeneinträge engere Abstände nutzen.
+- Viele beschweren sich, aber in der letzten Version stand Copilot oben und darunter ein Feed über das, was andere tun. Die eigenen Issues und Pull Requests nach vorne zu holen, ist deutlich besser.
