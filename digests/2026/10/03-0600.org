@@ -1,0 +1,496 @@
+#+TITLE: HN Digest 2026-10-03 06:00 UTC
+#+DATE: 2026-10-03T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Apple narrows Full Disk Access, OpenAI starts hosting the sites it writes, and an M4 forgets its registers
+
+* Highlights
+- Full Disk Access: Apple promises controls, blames AI agents, gives no date
+- Sites in ChatGPT: OpenAI now does the hosting, the login and the storage
+- ds4: antirez ships a C inference engine that supports four model families on purpose
+- M4 zeroes x0-x31 on WFI, and mainline Linux now routes around it
+- Two labs land on the same story about why cells lose their identity with age
+
+* Stories
+
+** Updates to Full Disk Access in macOS :apple:macos:security:privacy:
+:PROPERTIES:
+:ID:       49937631
+:URL:      https://developer.apple.com/news/?id=p6zjojqw
+:HN_URL:   https://news.ycombinator.com/item?id=49937631
+:POINTS:   170
+:COMMENTS: 108
+:BY:       notfirstpost
+:END:
+
+*** TLDR
+A short Apple developer note says macOS will add controls so apps can no longer lean on blanket Full Disk Access to read mail, messages and browsing history, and that granting it will require explicit user action. The note names increasingly autonomous AI agents as part of the reason. It gives no macOS version, no date, no new API and no entitlement.
+
+*** Take
+The thread has the right complaint: Full Disk Access is a single switch because Apple never shipped granular APIs for mail, messages and history. Adding friction to the switch without shipping those APIs moves the problem to the permission dialog instead of solving it.
+
+*** Comments
+
+**** eviks
+Apple says it gives developers powerful APIs, and that Full Disk Access sidesteps the controls. It sidesteps them because those APIs do not actually exist.
+
+**** moecables
+Good to get more specific controls. I checked my own list and found Spotify and Gemini sitting in there with no reason to be.
+
+**** liuliu
+I do not follow the complaints about AI agents. Local Code works without full disk access: when the agent needs a file, the permit tool triggers the OS folder grant.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+macOS 完全磁盘访问权限的变更
+***** TLDR
+苹果发布了一则简短的开发者通告：macOS 将增加限制，应用不能再依靠笼统的完全磁盘访问权限去读取邮件、消息和浏览记录，授权也将需要用户明确操作。通告把日益自主的 AI 智能体列为原因之一，但没有给出 macOS 版本、时间、新 API 或授权标识。
+***** Take
+评论区抓住了要点：完全磁盘访问之所以是一个粗糙的总开关，是因为苹果从未为邮件、消息和浏览记录提供细粒度 API。只给开关加阻力而不补上这些 API，只是把问题推给了授权弹窗。
+***** Comments
+- 苹果说自己给了开发者强大的 API，又说完全磁盘访问绕过了这些控制。它之所以能绕过，正是因为那些 API 根本不存在。
+- 加入更细的控制是好事。我查了自己的清单，发现 Spotify 和 Gemini 都在里面，毫无理由。
+- 我不理解关于 AI 智能体的抱怨。Local Code 不需要完全磁盘访问：智能体需要文件时，permit 工具会调起系统的目录授权界面。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+macOSのフルディスクアクセスの変更
+***** TLDR
+Appleの短い開発者向け告知によると、macOSは制御を追加し、アプリがメールやメッセージ、閲覧履歴を読むために包括的なフルディスクアクセスに頼れないようにする。付与にはユーザーの明示的な操作が必要になる。理由の一つとして自律性を増すAIエージェントを挙げているが、macOSのバージョン、時期、新しいAPI、エンタイトルメントはいずれも示されていない。
+***** Take
+スレッドの指摘が正しい。フルディスクアクセスが大雑把なスイッチなのは、Appleがメール・メッセージ・履歴向けの細かいAPIを出してこなかったからだ。APIを出さずにスイッチだけ渋くしても、問題を許可ダイアログに移すだけだ。
+***** Comments
+- Appleは強力なAPIを開発者に提供していると言い、フルディスクアクセスがその制御を回避しているとも言う。回避できるのは、そのAPIが実在しないからだ。
+- 細かい制御が増えるのは良いことだ。自分のリストを確認したら、理由もなくSpotifyとGeminiが入っていた。
+- AIエージェントへの不満がよく分からない。Local Codeはフルディスクアクセスなしで動く。ファイルが必要になればpermitツールがOSのフォルダ許可画面を出す。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+macOS 전체 디스크 접근 권한 변경
+***** TLDR
+애플의 짧은 개발자 공지에 따르면 macOS는 앱이 메일, 메시지, 방문 기록을 읽기 위해 포괄적인 전체 디스크 접근 권한에 기대지 못하도록 제어를 추가하고, 권한 부여에 사용자의 명시적 동작을 요구한다. 점점 자율적으로 움직이는 AI 에이전트를 이유 중 하나로 들었지만 macOS 버전, 시점, 새 API, 엔타이틀먼트는 전혀 없다.
+***** Take
+댓글의 지적이 맞다. 전체 디스크 접근이 뭉뚱그려진 스위치인 이유는 애플이 메일, 메시지, 기록용 세분화 API를 내놓지 않았기 때문이다. API 없이 스위치만 뻑뻑하게 만들면 문제를 권한 팝업으로 옮기는 것일 뿐이다.
+***** Comments
+- 애플은 개발자에게 강력한 API를 준다고 하면서 전체 디스크 접근이 그 통제를 우회한다고 말한다. 우회가 가능한 건 그 API가 실제로 없기 때문이다.
+- 세분화된 제어가 생기는 건 좋다. 내 목록을 확인해 보니 이유도 없이 Spotify와 Gemini가 들어 있었다.
+- AI 에이전트에 대한 불만은 이해가 안 된다. Local Code는 전체 디스크 접근 없이 동작하고, 파일이 필요하면 permit 도구가 OS 폴더 허용 화면을 띄운다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cambios en el Acceso Total al Disco en macOS
+***** TLDR
+Un aviso breve de Apple para desarrolladores dice que macOS añadirá controles para que las apps no puedan apoyarse en el Acceso Total al Disco para leer correo, mensajes e historial de navegación, y que concederlo exigirá una acción explícita del usuario. El aviso menciona a los agentes de IA cada vez más autónomos como motivo. No da versión de macOS, ni fecha, ni API nueva, ni entitlement.
+***** Take
+La queja del hilo es la correcta: el Acceso Total al Disco es un interruptor burdo porque Apple nunca publicó APIs granulares para correo, mensajes e historial. Endurecer el interruptor sin publicar esas APIs traslada el problema al diálogo de permisos en vez de resolverlo.
+***** Comments
+- Apple dice que da APIs potentes a los desarrolladores y que el Acceso Total al Disco esquiva esos controles. Los esquiva precisamente porque esas APIs no existen.
+- Está bien tener controles más específicos. Revisé mi lista y encontré a Spotify y Gemini ahí sin razón alguna.
+- No entiendo las quejas sobre los agentes de IA. Local Code funciona sin acceso total al disco: cuando el agente necesita un archivo, la herramienta permit abre el diálogo de carpetas del sistema.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Änderungen beim Festplattenvollzugriff in macOS
+***** TLDR
+Eine kurze Entwicklermitteilung von Apple kündigt an, dass macOS zusätzliche Kontrollen bekommt, damit Apps sich nicht mehr auf pauschalen Festplattenvollzugriff stützen können, um Mail, Nachrichten und Browserverlauf zu lesen. Die Freigabe soll eine ausdrückliche Nutzeraktion verlangen. Als Grund nennt Apple unter anderem zunehmend autonome KI-Agenten. Weder macOS-Version noch Termin, neue API oder Entitlement werden genannt.
+***** Take
+Der Thread trifft den Punkt: Festplattenvollzugriff ist ein grober Schalter, weil Apple nie granulare APIs für Mail, Nachrichten und Verlauf geliefert hat. Den Schalter zu verschärfen, ohne diese APIs zu liefern, verschiebt das Problem in den Berechtigungsdialog.
+***** Comments
+- Apple sagt, es gebe Entwicklern mächtige APIs, und der Festplattenvollzugriff umgehe diese Kontrollen. Er umgeht sie, weil es diese APIs gar nicht gibt.
+- Spezifischere Kontrollen sind gut. Ich habe meine Liste geprüft und fand Spotify und Gemini darin, ohne jeden Grund.
+- Ich verstehe die Klagen über KI-Agenten nicht. Local Code läuft ohne Vollzugriff: Braucht der Agent eine Datei, öffnet das permit-Tool den Ordnerdialog des Systems.
+** Sites in ChatGPT :openai:ai:web:hosting:
+:PROPERTIES:
+:ID:       49927747
+:URL:      https://chatgpt.com/features/sites/
+:HN_URL:   https://news.ycombinator.com/item?id=49927747
+:POINTS:   246
+:COMMENTS: 234
+:BY:       polvi
+:END:
+
+*** TLDR
+OpenAI's feature page: describe a site or app, ChatGPT builds it, OpenAI hosts it. Sites are private by default and can be opened to named people, a workspace or the public. Visitors can use Sign in with ChatGPT to keep state, there is built-in storage for uploaded files, eligible workspaces can connect read-only tools, and you can point your own domain at it. No pricing or limits are listed.
+
+*** Take
+Generation is the least interesting part. OpenAI is now shipping hosting, auth and storage, which is a Vercel plus Firebase account most of these users will never open. The price is that the login belongs to OpenAI, which is exactly the lock-in the top comment is routing around.
+
+*** Comments
+
+**** jwpapi
+I think this really does replace industries. People will ask ChatGPT for a website instead of paying a designer 2,000 dollars.
+
+**** vitorbaptistaa
+Artifacts and Sites are among the most useful features, but I switch models too often to accept the lock-in, so I built my own deploy path on Cloudflare Workers.
+
+**** nathanfig
+Underrated. Any time I get a quick app idea I hand it to Sites and usually have a working prototype within the hour.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ChatGPT 里的 Sites
+***** TLDR
+OpenAI 的功能页面：你描述一个网站或应用，ChatGPT 生成，OpenAI 负责托管。站点默认私有，可以开放给指定的人、工作区或公众。访客可用「使用 ChatGPT 登录」保存进度，内置存储可保存上传的文件，符合条件的工作区可连接只读工具，也可以绑定自有域名。页面没有列出价格和限额。
+***** Take
+生成反而是最不值一提的部分。OpenAI 现在提供的是托管、登录和存储，而这些用户多半永远不会去注册 Vercel 加 Firebase。代价是登录体系归 OpenAI 所有，这正是高赞评论要绕开的锁定。
+***** Comments
+- 我认为这确实会取代一些行业。人们会让 ChatGPT 做网站，而不是花 2000 美元请设计师。
+- Artifacts 和 Sites 是最有用的功能之一，但我换模型太频繁，不愿接受锁定，所以自己用 Cloudflare Workers 搭了部署流程。
+- 被低估了。我一有小应用的点子就丢给 Sites，通常一小时内就能拿到可用的原型。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ChatGPTのSites
+***** TLDR
+OpenAIの機能ページ。サイトやアプリを説明するとChatGPTが作り、OpenAIがホスティングする。サイトは既定で非公開で、指定した相手、ワークスペース、一般公開に切り替えられる。訪問者は「ChatGPTでサインイン」で状態を保持でき、アップロードしたファイル用のストレージも内蔵。条件を満たすワークスペースでは読み取り専用のツール連携も可能で、独自ドメインも割り当てられる。価格や制限の記載はない。
+***** Take
+生成部分が一番どうでもいい。OpenAIが出したのはホスティングと認証とストレージであり、これらの利用者の多くはVercelとFirebaseのアカウントを一生作らない。代償はログインがOpenAIのものになることで、上位コメントはまさにそれを避けている。
+***** Comments
+- これは本当に業界を置き換えると思う。2,000ドル払ってデザイナーに頼む代わりに、ChatGPTにサイトを作らせるようになる。
+- ArtifactsとSitesは最も便利な機能のひとつだが、モデルを頻繁に乗り換えるのでロックインは受け入れられず、Cloudflare Workersで自前のデプロイ手段を作った。
+- 過小評価されている。思いついたアプリのアイデアはSitesに渡せば、たいてい一時間以内に動くプロトタイプになる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ChatGPT의 Sites
+***** TLDR
+OpenAI 기능 페이지: 사이트나 앱을 설명하면 ChatGPT가 만들고 OpenAI가 호스팅한다. 사이트는 기본 비공개이며 지정한 사람, 워크스페이스, 전체 공개로 열 수 있다. 방문자는 'ChatGPT로 로그인'으로 상태를 유지할 수 있고, 업로드 파일용 저장소가 내장돼 있으며, 조건을 갖춘 워크스페이스는 읽기 전용 도구를 연결할 수 있고, 보유한 도메인도 연결된다. 가격과 한도는 나와 있지 않다.
+***** Take
+생성은 가장 덜 중요한 부분이다. OpenAI가 내놓은 것은 호스팅과 인증과 저장소이고, 이 사용자들 대부분은 Vercel과 Firebase 계정을 평생 만들지 않을 사람들이다. 대가는 로그인이 OpenAI 소유가 된다는 점이고, 상위 댓글이 바로 그 종속을 피해 가고 있다.
+***** Comments
+- 이건 정말로 몇몇 업계를 대체한다고 본다. 2,000달러를 디자이너에게 주는 대신 ChatGPT에 사이트를 만들라고 할 것이다.
+- Artifacts와 Sites는 가장 유용한 기능이지만 모델을 너무 자주 바꿔서 종속을 받아들일 수 없었고, 그래서 Cloudflare Workers로 직접 배포 경로를 만들었다.
+- 저평가됐다. 앱 아이디어가 떠오르면 Sites에 넘기고 보통 한 시간 안에 동작하는 프로토타입을 받는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Sites en ChatGPT
+***** TLDR
+Página de la función de OpenAI: describes un sitio o una app, ChatGPT la construye y OpenAI la aloja. Los sitios son privados por defecto y se pueden abrir a personas concretas, al espacio de trabajo o al público. Los visitantes pueden usar Iniciar sesión con ChatGPT para conservar su progreso, hay almacenamiento integrado para archivos subidos, los espacios elegibles pueden conectar herramientas de solo lectura y puedes apuntar tu propio dominio. No se indican precios ni límites.
+***** Take
+La generación es lo menos interesante. OpenAI está entregando alojamiento, autenticación y almacenamiento, es decir, una cuenta de Vercel más Firebase que estos usuarios nunca abrirán. El precio es que el inicio de sesión pertenece a OpenAI, justo la dependencia que el comentario más votado está esquivando.
+***** Comments
+- Creo que esto sí reemplaza industrias. La gente le pedirá un sitio web a ChatGPT en lugar de pagar 2.000 dólares a un diseñador.
+- Artifacts y Sites están entre las funciones más útiles, pero cambio de modelo demasiado a menudo para aceptar la dependencia, así que me hice mi propio despliegue con Cloudflare Workers.
+- Infravalorado. Cada vez que se me ocurre una app se la paso a Sites y suelo tener un prototipo funcionando en menos de una hora.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Sites in ChatGPT
+***** TLDR
+OpenAIs Funktionsseite: Man beschreibt eine Website oder App, ChatGPT baut sie, OpenAI hostet sie. Sites sind standardmäßig privat und lassen sich für einzelne Personen, einen Workspace oder die Öffentlichkeit freigeben. Besucher können sich mit ChatGPT anmelden und ihren Stand behalten, es gibt Speicher für hochgeladene Dateien, geeignete Workspaces können Tools mit Lesezugriff anbinden, und eine eigene Domain lässt sich verknüpfen. Preise und Limits fehlen.
+***** Take
+Das Generieren ist der langweiligste Teil. OpenAI liefert jetzt Hosting, Login und Speicher, also ein Vercel-plus-Firebase-Konto, das diese Nutzer nie anlegen würden. Der Preis ist, dass der Login OpenAI gehört, genau die Bindung, die der Topkommentar umgeht.
+***** Comments
+- Ich glaube, das ersetzt tatsächlich Branchen. Leute lassen sich von ChatGPT eine Website bauen, statt 2.000 Dollar an einen Designer zu zahlen.
+- Artifacts und Sites gehören zu den nützlichsten Funktionen, aber ich wechsle zu oft das Modell, um die Bindung zu akzeptieren, also habe ich mir ein eigenes Deployment auf Cloudflare Workers gebaut.
+- Unterschätzt. Wenn mir eine App-Idee kommt, gebe ich sie an Sites und habe meist innerhalb einer Stunde einen laufenden Prototyp.
+** From the creator of Redis; run LLM locally with ds4 :llm:c:localai:performance:
+:PROPERTIES:
+:ID:       49936575
+:URL:      https://dwarfstar.sh/
+:HN_URL:   https://news.ycombinator.com/item?id=49936575
+:POINTS:   202
+:COMMENTS: 56
+:BY:       fibo
+:END:
+
+*** TLDR
+Salvatore Sanfilippo, who wrote Redis, released ds4 (DwarfStar 4), an inference engine in C for high-memory Macs, CUDA machines and AMD ROCm boxes. It supports a short list of mixture-of-experts models, including DeepSeek V4 and V4.1 Flash, GLM 5.x and Qwen 3.8 Flash Next, uses asymmetric 2-bit quantization aimed at MoE layouts, persists the KV cache to SSD so long contexts resume, and ships a CLI, an API server and a native agent. The stated requirement is 64GB or more, with 512GB Mac Studios for the big models.
+
+*** Take
+The design decision is the refusal to be general. llama.cpp accepts any GGUF and pays for it in per-model quality; ds4 validates four families end to end and is useless to you if your machine has 32GB. That is a real trade, not a rewrite for its own sake.
+
+*** Comments
+
+**** twoodfin
+The project GitHub page is a much better introduction for this crowd than the landing page.
+
+**** neomantra
+I maintain a fork built as shared libraries, so it can be used from other languages over FFI, plus Go bindings and a small set of tools.
+
+**** simoiacos
+Nothing comparable, but DwarfStar got me to write my own little inference engine for 32GB Intel Xe-LP laptops with no XMX.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Redis 作者出品：用 ds4 在本地跑大模型
+***** TLDR
+Redis 作者 Salvatore Sanfilippo 发布了 ds4（DwarfStar 4），一个用 C 写的推理引擎，面向大内存 Mac、CUDA 机器和 AMD ROCm 机器。它只支持一小批 MoE 模型，包括 DeepSeek V4 与 V4.1 Flash、GLM 5.x 和 Qwen 3.8 Flash Next，采用针对 MoE 结构的非对称 2 位量化，把 KV 缓存持久化到 SSD 以便恢复长上下文，并提供 CLI、API 服务器和原生 agent。官方要求 64GB 起步，大模型需要 512GB 的 Mac Studio。
+***** Take
+关键设计是拒绝通用。llama.cpp 接受任何 GGUF，代价是单个模型上的质量；ds4 只端到端验证四个模型家族，如果你的机器只有 32GB 它对你毫无用处。这是真实的取舍，而不是为了重写而重写。
+***** Comments
+- 对这里的读者来说，项目的 GitHub 页面比落地页好懂得多。
+- 我维护了一个共享库形式的分支，可以通过 FFI 在其他语言里使用，还做了 Go 绑定和一小套工具。
+- 没法相提并论，但 DwarfStar 让我动手为没有 XMX 的 32GB Intel Xe-LP 笔记本写了一个小推理引擎。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Redis作者による、ds4でLLMをローカル実行
+***** TLDR
+Redisを書いたSalvatore Sanfilippoが、C言語の推論エンジンds4（DwarfStar 4）を公開した。大容量メモリのMac、CUDAマシン、AMD ROCm環境向けで、DeepSeek V4とV4.1 Flash、GLM 5.x、Qwen 3.8 Flash Nextなど少数のMoEモデルだけに対応する。MoE構造を狙った非対称2ビット量子化を使い、KVキャッシュをSSDに保存して長い文脈を再開でき、CLI、APIサーバー、ネイティブエージェントを備える。要件は64GB以上で、大きなモデルには512GBのMac Studioを挙げている。
+***** Take
+設計の肝は汎用性を捨てたことだ。llama.cppはあらゆるGGUFを受け入れ、その代償をモデルごとの品質で払う。ds4は4系統だけを端から端まで検証し、32GBの機械しかない人には何の役にも立たない。これは書き直しのための書き直しではなく、本物のトレードオフだ。
+***** Comments
+- ここの読者にはランディングページよりGitHubページのほうがずっと良い入口だ。
+- 共有ライブラリとしてビルドするフォークを維持していて、FFI経由で他の言語から使える。Goバインディングと小さなツール群もある。
+- 比べ物にはならないが、DwarfStarに触発されてXMXのない32GBのIntel Xe-LPノート向けに小さな推論エンジンを書いた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Redis 제작자가 만든 ds4로 로컬에서 LLM 실행하기
+***** TLDR
+Redis를 만든 Salvatore Sanfilippo가 C로 작성한 추론 엔진 ds4(DwarfStar 4)를 공개했다. 메모리가 큰 Mac, CUDA 머신, AMD ROCm 장비를 대상으로 하며 DeepSeek V4와 V4.1 Flash, GLM 5.x, Qwen 3.8 Flash Next 등 소수의 MoE 모델만 지원한다. MoE 구조를 겨냥한 비대칭 2비트 양자화를 쓰고, KV 캐시를 SSD에 저장해 긴 문맥을 이어가며, CLI와 API 서버, 네이티브 에이전트를 함께 제공한다. 요구 사양은 64GB 이상이고 큰 모델에는 512GB Mac Studio를 든다.
+***** Take
+핵심 설계는 범용성을 포기한 것이다. llama.cpp는 어떤 GGUF든 받아들이고 모델별 품질로 그 대가를 치른다. ds4는 네 계열만 끝까지 검증하며, 32GB 머신을 쓰는 사람에게는 아무 쓸모가 없다. 재작성을 위한 재작성이 아니라 진짜 맞교환이다.
+***** Comments
+- 여기 독자들에게는 랜딩 페이지보다 프로젝트 GitHub 페이지가 훨씬 나은 소개다.
+- 공유 라이브러리로 빌드하는 포크를 관리하고 있어서 FFI로 다른 언어에서도 쓸 수 있다. Go 바인딩과 작은 도구 모음도 있다.
+- 비교할 수준은 아니지만 DwarfStar에 자극받아 XMX 없는 32GB Intel Xe-LP 노트북용 작은 추론 엔진을 직접 만들었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Del creador de Redis: ejecuta un LLM en local con ds4
+***** TLDR
+Salvatore Sanfilippo, autor de Redis, publicó ds4 (DwarfStar 4), un motor de inferencia en C para Macs con mucha memoria, máquinas CUDA y equipos AMD con ROCm. Soporta una lista corta de modelos de mezcla de expertos, entre ellos DeepSeek V4 y V4.1 Flash, GLM 5.x y Qwen 3.8 Flash Next, usa cuantización asimétrica de 2 bits pensada para arquitecturas MoE, guarda la caché KV en SSD para retomar contextos largos y trae CLI, servidor de API y un agente nativo. Pide 64GB o más, y Mac Studio de 512GB para los modelos grandes.
+***** Take
+La decisión de diseño es negarse a ser genérico. llama.cpp acepta cualquier GGUF y lo paga en calidad por modelo; ds4 valida cuatro familias de principio a fin y no te sirve de nada si tu máquina tiene 32GB. Es un intercambio real, no una reescritura por deporte.
+***** Comments
+- La página de GitHub del proyecto es mucho mejor introducción para este público que la web de presentación.
+- Mantengo un fork compilado como bibliotecas compartidas, así se puede usar desde otros lenguajes por FFI, además de bindings de Go y unas cuantas herramientas.
+- No es comparable, pero DwarfStar me llevó a escribir mi propio motorcito de inferencia para portátiles Intel Xe-LP de 32GB sin XMX.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Vom Redis-Erfinder: LLMs lokal mit ds4 ausführen
+***** TLDR
+Salvatore Sanfilippo, der Autor von Redis, hat ds4 (DwarfStar 4) veröffentlicht, eine Inferenz-Engine in C für Macs mit viel Speicher, CUDA-Rechner und AMD-ROCm-Maschinen. Sie unterstützt nur eine kurze Liste von Mixture-of-Experts-Modellen, darunter DeepSeek V4 und V4.1 Flash, GLM 5.x und Qwen 3.8 Flash Next, nutzt asymmetrische 2-Bit-Quantisierung für MoE-Layouts, legt den KV-Cache auf SSD ab, um lange Kontexte fortzusetzen, und bringt CLI, API-Server und einen nativen Agenten mit. Verlangt werden 64GB und mehr, für die großen Modelle Mac Studios mit 512GB.
+***** Take
+Die Entwurfsentscheidung ist die Weigerung, allgemein zu sein. llama.cpp nimmt jedes GGUF und bezahlt dafür mit Qualität je Modell; ds4 validiert vier Familien durchgängig und nützt niemandem mit 32GB. Das ist ein echter Kompromiss, keine Neuschreibung zum Selbstzweck.
+***** Comments
+- Die GitHub-Seite des Projekts ist für dieses Publikum eine viel bessere Einführung als die Landingpage.
+- Ich pflege einen Fork als Shared Libraries, damit man ihn per FFI aus anderen Sprachen nutzen kann, dazu Go-Bindings und ein paar kleine Tools.
+- Nicht vergleichbar, aber DwarfStar hat mich dazu gebracht, eine eigene kleine Inferenz-Engine für 32GB-Laptops mit Intel Xe-LP ohne XMX zu schreiben.
+** The Forgetful CPU (Linux on M4) :linux:apple:hardware:kernel:
+:PROPERTIES:
+:ID:       49933869
+:URL:      https://yuka.dev/blog-2026-10-02-linux-m4.html
+:HN_URL:   https://news.ycombinator.com/item?id=49933869
+:POINTS:   173
+:COMMENTS: 86
+:BY:       signa11
+:END:
+
+*** TLDR
+Yureka Lilian writes up booting mainline Linux on an M4 Mac mini. M4 is the first Apple Silicon generation to mandate SPTM, the Secure Page Table Monitor, which breaks the m1n1 hypervisor tracing that earlier ports relied on, so the bring-up ran on a serial console and bisection instead. The bug behind the title: on M4 the WFI instruction zeroes registers x0 to x31, which contradicts the ARM64 requirement that WFI not lose architectural state, and the chicken bit that disabled this on older chips is locked or gone. The author first replaced WFI and WFIT with NOPs, then landed a bootarg in mainline that m1n1 adds on bare metal M4. Current releases boot M4, M4 Pro, M4 Max and M5 with all secondary cores.
+
+*** Take
+On a platform with published errata this would be one line in a document. Here it took printf debugging secondary-core crashes over a serial cable to find a CPU that drops its register file on an idle instruction. That gap is the actual cost of Apple shipping no hardware documentation, and the Asahi project keeps paying it.
+
+*** Comments
+
+**** sscaryterry
+Imagine how big Apple could be if it embraced open hardware. macOS is bloated and I hate it, but the hardware is better than anything else.
+
+**** ankurdhama
+I went looking for a good external trackpad for macOS and there basically are none, because the whole gesture protocol is closed.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+健忘的 CPU（在 M4 上跑 Linux）
+***** TLDR
+Yureka Lilian 记录了在 M4 Mac mini 上启动主线 Linux 的过程。M4 是首代强制启用 SPTM（安全页表监控）的 Apple Silicon，这让早期移植依赖的 m1n1 虚拟机追踪手段失效，于是只能靠串口控制台和二分法排查。标题所指的 bug 是：在 M4 上执行 WFI 指令会把 x0 到 x31 寄存器清零，这违反了 ARM64 关于 WFI 不得丢失架构状态的规定，而旧芯片上用来关闭该行为的 chicken bit 已被锁定或移除。作者先把 WFI 和 WFIT 替换成 NOP，之后向主线内核提交了一个启动参数，由 m1n1 在裸机 M4 上自动加上。目前的版本已能在 M4、M4 Pro、M4 Max 和 M5 上启动并启用全部副核。
+***** Take
+在一个会公开勘误表的平台上，这只会是文档里的一行字。而这里，要靠串口 printf 调试副核崩溃，才能发现一颗 CPU 在空闲指令上丢掉整个寄存器文件。这个落差就是苹果不提供硬件文档的实际代价，而 Asahi 项目一直在替它买单。
+***** Comments
+- 想想如果苹果拥抱开放硬件能做到多大。macOS 臃肿得让我讨厌，但硬件确实比什么都强。
+- 我找过 macOS 能用的好外接触控板，基本上没有，因为整套手势协议都是封闭的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+忘れっぽいCPU（M4でLinux）
+***** TLDR
+Yureka LilianがM4 Mac miniでメインラインLinuxを起動した記録。M4はSPTM（Secure Page Table Monitor）が必須になった最初のApple Siliconで、従来の移植が頼っていたm1n1ハイパーバイザによるトレースが使えない。そのためシリアルコンソールと二分探索で進めた。表題のバグは、M4ではWFI命令がx0からx31のレジスタをゼロにすることで、WFIはアーキテクチャ状態を失ってはならないというARM64の規定に反する。旧世代でこれを無効化できたchicken bitはロックされたか削除されている。著者はまずWFIとWFITをNOPに置き換え、その後メインラインにブート引数を入れ、ベアメタルのM4ではm1n1がそれを付与する。現行リリースはM4、M4 Pro、M4 Max、M5で全セカンダリコアを有効にして起動する。
+***** Take
+エラッタが公開されるプラットフォームなら、これは文書の一行で済む話だ。ここではシリアル越しのprintfデバッグでセカンダリコアのクラッシュを追い、アイドル命令でレジスタファイルを捨てるCPUを見つけるしかなかった。この差こそAppleがハードウェア文書を出さない実際のコストで、Asahiプロジェクトが払い続けている。
+***** Comments
+- Appleがオープンなハードウェアを受け入れたらどれほど大きくなれるか。macOSは肥大化していて嫌いだが、ハードウェアは他の何よりも優れている。
+- macOSで使える良い外付けトラックパッドを探したが、ほぼ存在しない。ジェスチャのプロトコル全体が閉じているからだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+건망증 있는 CPU (M4에서 리눅스)
+***** TLDR
+Yureka Lilian이 M4 Mac mini에서 메인라인 리눅스를 부팅한 과정을 정리했다. M4는 SPTM(Secure Page Table Monitor)이 필수가 된 첫 애플 실리콘이라, 이전 포팅이 의존하던 m1n1 하이퍼바이저 추적이 통하지 않아 시리얼 콘솔과 이분 탐색으로 작업해야 했다. 제목이 가리키는 버그는 M4에서 WFI 명령이 x0부터 x31까지 레지스터를 0으로 만든다는 것으로, WFI가 아키텍처 상태를 잃어서는 안 된다는 ARM64 규정에 어긋난다. 구형 칩에서 이를 끄던 chicken bit는 잠겼거나 사라졌다. 저자는 먼저 WFI와 WFIT를 NOP으로 바꾸고, 이후 메인라인에 부트 인자를 넣어 베어메탈 M4에서는 m1n1이 자동으로 붙이도록 했다. 현재 릴리스는 M4, M4 Pro, M4 Max, M5에서 모든 보조 코어를 켜고 부팅한다.
+***** Take
+에라타를 공개하는 플랫폼이었다면 문서 한 줄로 끝날 일이다. 여기서는 시리얼 케이블로 보조 코어 크래시를 printf 디버깅해야 유휴 명령에서 레지스터 파일을 버리는 CPU를 찾아낼 수 있었다. 그 격차가 애플이 하드웨어 문서를 내지 않는 실제 비용이고, Asahi 프로젝트가 계속 그 값을 치르고 있다.
+***** Comments
+- 애플이 개방형 하드웨어를 받아들였다면 얼마나 커질 수 있었을까. macOS는 비대해서 싫지만 하드웨어만큼은 어떤 것보다 낫다.
+- macOS용 괜찮은 외장 트랙패드를 찾아봤는데 사실상 없다. 제스처 프로토콜 전체가 닫혀 있기 때문이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La CPU olvidadiza (Linux en el M4)
+***** TLDR
+Yureka Lilian documenta el arranque de Linux mainline en un Mac mini M4. El M4 es la primera generación de Apple Silicon que impone SPTM, el Secure Page Table Monitor, lo que inutiliza el trazado con el hipervisor m1n1 en que se apoyaban los ports anteriores, así que todo se hizo con consola serie y bisección. El fallo del título: en el M4 la instrucción WFI pone a cero los registros x0 a x31, algo que contradice el requisito de ARM64 de que WFI no pierda estado arquitectónico, y el chicken bit que desactivaba esto en chips anteriores está bloqueado o ha desaparecido. La autora sustituyó primero WFI y WFIT por NOP y después llevó a mainline un bootarg que m1n1 añade en M4 sobre hierro desnudo. Las versiones actuales arrancan en M4, M4 Pro, M4 Max y M5 con todos los núcleos secundarios.
+***** Take
+En una plataforma con erratas publicadas esto sería una línea en un documento. Aquí hizo falta depurar con printf los cuelgues de los núcleos secundarios por cable serie para descubrir una CPU que tira su banco de registros en una instrucción de espera. Esa diferencia es el coste real de que Apple no publique documentación de hardware, y el proyecto Asahi lo sigue pagando.
+***** Comments
+- Imagina lo grande que podría ser Apple si adoptara el hardware abierto. macOS está inflado y lo detesto, pero el hardware es mejor que cualquier otro.
+- Busqué un buen trackpad externo para macOS y prácticamente no existe, porque todo el protocolo de gestos es cerrado.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die vergessliche CPU (Linux auf dem M4)
+***** TLDR
+Yureka Lilian beschreibt, wie sie Mainline-Linux auf einem M4 Mac mini gebootet hat. Der M4 ist die erste Apple-Silicon-Generation mit verpflichtendem SPTM, dem Secure Page Table Monitor, wodurch das Tracing über den m1n1-Hypervisor wegfällt, auf das sich frühere Ports stützten. Gearbeitet wurde stattdessen mit serieller Konsole und Bisection. Der Fehler aus dem Titel: Auf dem M4 nullt der WFI-Befehl die Register x0 bis x31, was dem ARM64-Grundsatz widerspricht, dass WFI keinen Architekturzustand verlieren darf, und das Chicken-Bit, das dies auf älteren Chips abschaltete, ist gesperrt oder entfernt. Zuerst ersetzte sie WFI und WFIT durch NOPs, dann landete ein Bootarg in Mainline, das m1n1 auf echten M4-Geräten setzt. Aktuelle Releases booten M4, M4 Pro, M4 Max und M5 mit allen Sekundärkernen.
+***** Take
+Auf einer Plattform mit veröffentlichten Errata wäre das eine Zeile in einem Dokument. Hier brauchte es printf-Debugging von Sekundärkern-Abstürzen über ein serielles Kabel, um eine CPU zu finden, die bei einem Idle-Befehl ihre Registerdatei wegwirft. Diese Lücke ist der tatsächliche Preis dafür, dass Apple keine Hardwaredokumentation liefert, und das Asahi-Projekt zahlt ihn weiter.
+***** Comments
+- Man stelle sich vor, wie groß Apple sein könnte, wenn es offene Hardware zuließe. macOS ist aufgebläht und ich hasse es, aber die Hardware ist besser als alles andere.
+- Ich habe ein gutes externes Trackpad für macOS gesucht und es gibt praktisch keines, weil das gesamte Gestenprotokoll geschlossen ist.
+** Loss of cell identity drives human aging: Two new papers :biology:aging:science:epigenetics:
+:PROPERTIES:
+:ID:       49926411
+:URL:      https://erictopol.substack.com/p/loss-of-cell-identity-drives-human
+:HN_URL:   https://news.ycombinator.com/item?id=49926411
+:POINTS:   212
+:COMMENTS: 60
+:BY:       bookofjoe
+:END:
+
+*** TLDR
+Eric Topol reviews two papers that argue aging is cells losing track of what they are. The Nature paper from Vadim Gladyshev's lab at Harvard describes identity as three layers: a fast transcription-factor response, an intermediate layer of state transitions, and a slow chromatin layer, held in place by PRC2, that locks identity. It links epigenetic clocks to the rate of PRC2 erosion across 348 mammalian species and argues chronic inflammation overrides the fast layer and blocks PRC2. The Cell paper from Juan Carlos Izpisua Belmonte's group at Altos Labs describes mesenchymal drift, specialized cells sliding toward fibroblast-like states across 46 tissue types, with feedback loops and links to atherosclerosis, macular degeneration and Alzheimer's. Topol points out the Nature paper does not cite the earlier Cell work.
+
+*** Take
+Two labs reaching the same picture from different data is the part that matters; one lab with a theory of aging is a weekly occurrence. The skeptic in the thread is right that nothing here explains the Hayflick limit or why dogs age faster than people, and that is the test these models still have to pass.
+
+*** Comments
+
+**** egglinton
+This is the accumulated damage hypothesis in new window dressing. It gives no mechanism for the Hayflick limit, and it does not explain why dogs age and die faster than humans.
+
+**** dyauspitr
+So chronic stress is one of the main contributors to aging. Do we currently have the ability to do targeted methylation or demethylation at specific sites in cells?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+细胞身份的丧失驱动人类衰老：两篇新论文
+***** TLDR
+Eric Topol 评述了两篇论文，核心观点是衰老即细胞逐渐忘记自己是什么。哈佛 Vadim Gladyshev 实验室发表在《自然》的论文把细胞身份分为三层：快速的转录因子反应、中间的状态转换层，以及由 PRC2 维持、锁定身份的慢速染色质层。论文把表观遗传时钟与 348 个哺乳动物物种中 PRC2 的侵蚀速率联系起来，并认为慢性炎症会压过快层并阻断 PRC2。Altos Labs 的 Juan Carlos Izpisua Belmonte 团队发表在《细胞》的论文提出「间充质漂移」：在 46 种组织中，特化细胞滑向类成纤维细胞状态，形成正反馈，并与动脉粥样硬化、黄斑变性和阿尔茨海默病相关。Topol 指出《自然》那篇没有引用更早的《细胞》论文。
+***** Take
+两个实验室从不同数据得出同一幅图景，这才是重点；单独一个实验室提出一套衰老理论每周都有。评论区的质疑者说得对：这里没有解释海弗里克极限，也没有解释狗为什么老得比人快，而这正是这些模型还得通过的检验。
+***** Comments
+- 这不过是把累积损伤假说换了身新衣。它没有给出海弗里克极限的机制，也没有解释狗为什么比人衰老和死亡得更快。
+- 所以慢性压力是衰老的主要推手之一。我们现在有能力在细胞中特定位点做定向甲基化或去甲基化吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+細胞アイデンティティの喪失が人の老化を駆動する：新しい2本の論文
+***** TLDR
+Eric Topolが2本の論文を解説する。いずれも老化とは細胞が自分の素性を見失うことだと論じる。ハーバードのVadim Gladyshev研によるNature論文は、細胞のアイデンティティを三層で捉える。転写因子による速い応答、状態遷移の中間層、そしてPRC2が保持しアイデンティティを固定する遅いクロマチン層だ。348の哺乳類種にわたりエピジェネティック時計をPRC2の摩耗速度と結び付け、慢性炎症が速い層を上書きしPRC2を阻害すると述べる。Altos LabsのJuan Carlos Izpisua BelmonteらによるCell論文は「間葉ドリフト」を示し、46種類の組織で特殊化した細胞が線維芽細胞様の状態へ滑っていき、正のフィードバックを生み、動脈硬化、黄斑変性、アルツハイマー病と結び付くとする。TopolはNature論文が先行するCell論文を引用していないと指摘する。
+***** Take
+異なるデータから二つの研究室が同じ絵にたどり着いた点が重要だ。老化理論を掲げる研究室が一つだけなら毎週ある話にすぎない。スレッドの懐疑派が正しく、ここにはヘイフリック限界の説明も、犬が人より早く老いる理由の説明もない。それがこのモデルの残る試金石だ。
+***** Comments
+- これは蓄積ダメージ仮説の衣替えだ。ヘイフリック限界の機構を示していないし、犬が人より早く老いて死ぬ理由も説明していない。
+- つまり慢性的ストレスが老化の主因の一つということか。今、細胞内の特定部位を狙ったメチル化や脱メチル化はできるのだろうか。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+세포 정체성의 상실이 인간 노화를 이끈다: 새 논문 두 편
+***** TLDR
+Eric Topol이 논문 두 편을 정리했다. 둘 다 노화를 세포가 자기 정체를 잊어가는 과정으로 본다. 하버드 Vadim Gladyshev 연구실의 Nature 논문은 세포 정체성을 세 층으로 본다. 전사인자에 의한 빠른 반응, 상태 전이의 중간층, 그리고 PRC2가 붙들어 정체성을 고정하는 느린 크로마틴 층이다. 포유류 348종에 걸쳐 후성유전 시계를 PRC2 침식 속도와 연결하고, 만성 염증이 빠른 층을 덮어쓰며 PRC2를 막는다고 주장한다. Altos Labs의 Juan Carlos Izpisua Belmonte 그룹의 Cell 논문은 '중간엽 표류'를 제시해, 46개 조직에서 특수화된 세포가 섬유아세포 비슷한 상태로 미끄러지고 양성 되먹임을 만들며 죽상동맥경화, 황반변성, 알츠하이머와 연결된다고 본다. Topol은 Nature 논문이 먼저 나온 Cell 논문을 인용하지 않았다고 지적한다.
+***** Take
+서로 다른 데이터로 두 연구실이 같은 그림에 도달했다는 점이 중요하다. 노화 이론을 내놓는 연구실 하나는 매주 나온다. 스레드의 회의론자가 옳다. 여기에는 헤이플릭 한계도, 개가 사람보다 빨리 늙는 이유도 설명되지 않았고, 그것이 이 모델이 아직 통과해야 할 시험이다.
+***** Comments
+- 축적 손상 가설에 새 포장지를 씌운 것이다. 헤이플릭 한계의 기전도 없고, 개가 사람보다 빨리 늙고 죽는 이유도 설명하지 못한다.
+- 그러니까 만성 스트레스가 노화의 주요 원인 중 하나라는 말인데, 지금 세포 내 특정 부위를 겨냥한 메틸화나 탈메틸화가 가능한가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La pérdida de identidad celular impulsa el envejecimiento humano: dos artículos nuevos
+***** TLDR
+Eric Topol repasa dos artículos que sostienen que envejecer es que las células pierdan la noción de lo que son. El artículo en Nature del laboratorio de Vadim Gladyshev en Harvard describe la identidad en tres capas: una respuesta rápida de factores de transcripción, una capa intermedia de transiciones de estado y una capa lenta de cromatina, sostenida por PRC2, que fija la identidad. Vincula los relojes epigenéticos con la velocidad de erosión de PRC2 en 348 especies de mamíferos y sostiene que la inflamación crónica anula la capa rápida y bloquea PRC2. El artículo en Cell del grupo de Juan Carlos Izpisua Belmonte en Altos Labs describe la deriva mesenquimal: células especializadas que se deslizan hacia estados parecidos a fibroblastos en 46 tipos de tejido, con bucles de retroalimentación y vínculos con aterosclerosis, degeneración macular y alzhéimer. Topol señala que el artículo de Nature no cita el trabajo previo de Cell.
+***** Take
+Lo relevante es que dos laboratorios llegan al mismo cuadro desde datos distintos; un laboratorio con una teoría del envejecimiento aparece cada semana. El escéptico del hilo tiene razón: nada de esto explica el límite de Hayflick ni por qué los perros envejecen más rápido que las personas, y ese es el examen que estos modelos aún deben aprobar.
+***** Comments
+- Esto es la hipótesis del daño acumulado con ropa nueva. No da mecanismo para el límite de Hayflick ni explica por qué los perros envejecen y mueren más rápido que los humanos.
+- Así que el estrés crónico es uno de los grandes contribuyentes al envejecimiento. ¿Tenemos hoy capacidad de hacer metilación o desmetilación dirigida en sitios concretos de las células?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Verlust der Zellidentität treibt das menschliche Altern: zwei neue Arbeiten
+***** TLDR
+Eric Topol bespricht zwei Arbeiten, die Altern als Verlust des Wissens einer Zelle über sich selbst beschreiben. Die Nature-Arbeit aus Vadim Gladyshevs Labor in Harvard gliedert Identität in drei Schichten: eine schnelle Antwort über Transkriptionsfaktoren, eine mittlere Schicht aus Zustandsübergängen und eine langsame Chromatinschicht, die von PRC2 gehalten wird und die Identität festlegt. Sie verknüpft epigenetische Uhren mit der Erosionsrate von PRC2 über 348 Säugetierarten und argumentiert, chronische Entzündung überschreibe die schnelle Schicht und blockiere PRC2. Die Cell-Arbeit aus der Gruppe von Juan Carlos Izpisua Belmonte bei Altos Labs beschreibt mesenchymale Drift: spezialisierte Zellen rutschen in 46 Gewebetypen in fibroblastenähnliche Zustände, mit Rückkopplung und Bezügen zu Atherosklerose, Makuladegeneration und Alzheimer. Topol merkt an, dass die Nature-Arbeit die ältere Cell-Arbeit nicht zitiert.
+***** Take
+Entscheidend ist, dass zwei Labore aus verschiedenen Daten dasselbe Bild erhalten; ein einzelnes Labor mit einer Alterstheorie gibt es jede Woche. Der Skeptiker im Thread hat recht: Nichts davon erklärt die Hayflick-Grenze oder warum Hunde schneller altern als Menschen, und genau das müssen diese Modelle noch leisten.
+***** Comments
+- Das ist die Schadensakkumulationshypothese in neuer Verpackung. Sie liefert keinen Mechanismus für die Hayflick-Grenze und erklärt nicht, warum Hunde schneller altern und sterben als Menschen.
+- Chronischer Stress ist also einer der Haupttreiber des Alterns. Können wir derzeit gezielt an bestimmten Stellen in Zellen methylieren oder demethylieren?
