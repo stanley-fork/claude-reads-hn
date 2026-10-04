@@ -1,0 +1,504 @@
+#+TITLE: HN Digest 2026-10-04 12:01 UTC
+#+DATE: 2026-10-04T12:01:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Valve revives decade-old Radeons, C2PA signatures turn out to sign nothing, and Jagex starts RuneScape over in Unreal
+
+* Highlights
+- Valve engineer moves GCN 1.0/1.1 Radeons to AMDGPU, ~30% faster in Linux 6.19
+- C2PA 'exclusions' let a signer exclude the whole file and still verify
+- Jagex announces RS4 in Unreal Engine, years out, alongside RS3 and OSRS
+- 21 ranked excuses for not becoming an EMT, ending in fear
+- Grant Sanderson on why rigor-first math teaching fails students
+
+* Stories
+
+** The work by Valve's Timur Kristóf on improving old AMD GPUs on Linux :linux:amd:gpu:valve:opensource:
+:PROPERTIES:
+:ID:       49946895
+:URL:      https://www.phoronix.com/news/XDC-2026-Valve-Timur-AMDGPU
+:HN_URL:   https://news.ycombinator.com/item?id=49946895
+:POINTS:   323
+:COMMENTS: 52
+:BY:       speckx
+:END:
+
+*** TLDR
+At XDC 2026, Valve's Timur Kristóf walked through his work moving GCN 1.0 and 1.1 Radeon cards and APUs, hardware from about a decade ago, off the old radeon driver and onto the modern AMDGPU kernel driver. That switch gives them the RADV Vulkan driver, and getting there meant fixing AMDGPU display code defects, power management problems, and adding soft reset support. Linux 6.19 ships roughly a 30% performance gain for these old cards. The talk also covered how he got into AMDGPU kernel development, aimed at people who want to do the same. AMD itself has put few resources into these generations for years.
+
+*** Take
+The economics here are backwards in a useful way: AMD has no reason to spend engineering time on cards it stopped selling ten years ago, but Valve does, because every old laptop that runs games well is a Steam customer. One salaried engineer produced a 30% gain on hardware its own manufacturer had written off.
+
+*** Comments
+
+**** LaurensBER
+Bought a used Ayaneo 2 with an older mobile RDNA 2 GPU. Anything that is not a recent AAA game runs faster and smoother under Linux than Windows. Considering switching my 9070XT desktop too.
+
+**** azkalam
+I have AI fatigue, but fixing bugs in old hardware is very exciting to me. Perhaps we will even be able to reverse firmware blobs into open source alternatives?
+
+**** gary_0
+Direct link to the talk, with timestamp: youtu.be/j5W5ErEMnvM?t=21385
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Valve 的 Timur Kristóf 对 Linux 上老旧 AMD GPU 的改进工作
+***** TLDR
+在 XDC 2026 上，Valve 的 Timur Kristóf 介绍了他把大约十年前的 GCN 1.0 和 1.1 Radeon 显卡与 APU 从旧的 radeon 驱动迁移到现代 AMDGPU 内核驱动的工作。这次迁移让它们可以使用 RADV Vulkan 驱动，过程中他修复了 AMDGPU 显示代码缺陷、电源管理问题，并加入了软复位支持。Linux 6.19 为这些老显卡带来约 30% 的性能提升。演讲还讲了他如何开始参与 AMDGPU 内核开发，面向想做同样事情的人。AMD 自己多年来几乎没有为这些世代投入资源。
+***** Take
+这里的经济逻辑反过来却很有用：AMD 没有理由为十年前就停售的显卡投入工程时间，但 Valve 有，因为每台能流畅跑游戏的老笔记本都是一个 Steam 客户。一位拿薪水的工程师，在原厂已经放弃的硬件上做出了 30% 的提升。
+***** Comments
+- 买了台二手 Ayaneo 2，用的是较旧的移动版 RDNA 2 GPU。除了最近的 3A 大作，其他都比 Windows 下跑得更快更流畅。我在考虑把我的 9070XT 台式机也换成 Linux。
+- 我对 AI 已经疲惫了，但修复老硬件的 bug 让我很兴奋。也许我们甚至能把固件 blob 逆向成开源替代品？
+- 演讲直达链接带时间戳：youtu.be/j5W5ErEMnvM?t=21385
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ValveのTimur Kristófが取り組むLinux上の旧AMD GPU改善
+***** TLDR
+XDC 2026で、ValveのTimur Kristófは約10年前のGCN 1.0および1.1のRadeonカードとAPUを、旧radeonドライバから現代のAMDGPUカーネルドライバへ移す作業を解説した。この移行によりRADV Vulkanドライバが使えるようになり、その過程でAMDGPU表示コードの不具合や電源管理の問題を修正し、ソフトリセット対応を追加した。Linux 6.19ではこれら旧カードに約30%の性能向上が入る。講演では、同じことをしたい人向けに彼がAMDGPUカーネル開発に関わった経緯も語られた。AMD自身はこれらの世代に何年もほとんど資源を割いていない。
+***** Take
+ここでの経済合理性は逆転しているが有用だ。AMDには10年前に販売を終えたカードに工数を割く理由がないが、Valveにはある。ゲームが快適に動く古いノートPCはすべてSteamの顧客だからだ。給料をもらう一人のエンジニアが、製造元自身が見捨てたハードウェアで30%の向上を出した。
+***** Comments
+- 中古のAyaneo 2を買った。やや古いモバイルRDNA 2 GPUだが、最近のAAAゲーム以外はWindowsより速く滑らかに動く。9070XTのデスクトップも移行を検討中だ。
+- AI疲れしているが、古いハードウェアのバグ修正はとても面白い。ファームウェアblobをオープンソースに逆解析できるようになるかもしれない。
+- 講演への直接リンク、タイムスタンプ付き: youtu.be/j5W5ErEMnvM?t=21385
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Valve의 Timur Kristóf가 진행한 Linux 구형 AMD GPU 개선 작업
+***** TLDR
+XDC 2026에서 Valve의 Timur Kristóf는 약 10년 전 GCN 1.0 및 1.1 Radeon 카드와 APU를 구형 radeon 드라이버에서 최신 AMDGPU 커널 드라이버로 옮긴 작업을 설명했다. 이 전환으로 RADV Vulkan 드라이버를 쓸 수 있게 됐고, 그 과정에서 AMDGPU 디스플레이 코드 결함과 전력 관리 문제를 고치고 소프트 리셋 지원을 추가했다. Linux 6.19는 이 구형 카드들에 약 30%의 성능 향상을 담았다. 발표에서는 같은 일을 하고 싶은 사람들을 위해 그가 AMDGPU 커널 개발에 참여하게 된 과정도 다뤘다. AMD 자신은 이 세대들에 수년간 거의 자원을 쓰지 않았다.
+***** Take
+여기서 경제 논리는 뒤집혀 있지만 유용하다. AMD는 10년 전 단종된 카드에 엔지니어링 시간을 쓸 이유가 없지만 Valve는 있다. 게임이 잘 돌아가는 모든 구형 노트북이 Steam 고객이기 때문이다. 월급 받는 엔지니어 한 명이 제조사가 포기한 하드웨어에서 30% 향상을 만들어냈다.
+***** Comments
+- 중고 Ayaneo 2를 샀는데 다소 구형인 모바일 RDNA 2 GPU다. 최신 AAA 게임이 아니면 Windows보다 빠르고 부드럽게 돌아간다. 9070XT 데스크톱도 바꿀까 고민 중이다.
+- AI 피로감이 있지만 구형 하드웨어의 버그를 고치는 건 정말 신난다. 펌웨어 blob을 오픈소스 대안으로 리버스할 수도 있지 않을까?
+- 발표 직접 링크, 타임스탬프 포함: youtu.be/j5W5ErEMnvM?t=21385
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El trabajo de Timur Kristóf, de Valve, para mejorar GPUs AMD antiguas en Linux
+***** TLDR
+En XDC 2026, Timur Kristóf de Valve repasó su trabajo para pasar tarjetas Radeon y APUs GCN 1.0 y 1.1, hardware de hace unos diez años, del viejo driver radeon al driver de kernel moderno AMDGPU. Ese cambio les da acceso al driver Vulkan RADV, y para llegar ahí tuvo que corregir defectos del código de pantalla de AMDGPU, problemas de gestión de energía y añadir soporte de soft reset. Linux 6.19 trae alrededor de un 30% más de rendimiento en estas tarjetas antiguas. La charla también cubrió cómo entró en el desarrollo del kernel AMDGPU, dirigida a quienes quieran hacer lo mismo. AMD apenas ha dedicado recursos a estas generaciones en años.
+***** Take
+La economía aquí está invertida de forma útil: AMD no tiene motivos para gastar horas de ingeniería en tarjetas que dejó de vender hace diez años, pero Valve sí, porque cada portátil viejo que corre juegos bien es un cliente de Steam. Un ingeniero asalariado logró un 30% de mejora en hardware que su propio fabricante había descartado.
+***** Comments
+- Compré un Ayaneo 2 de segunda mano con una GPU móvil RDNA 2 algo antigua. Todo lo que no sea un AAA reciente corre más rápido y fluido en Linux que en Windows. Estoy pensando en pasar también mi equipo con 9070XT.
+- Tengo fatiga de IA, pero arreglar errores en hardware viejo me entusiasma mucho. Quizá incluso podamos revertir los blobs de firmware a alternativas de código abierto.
+- Enlace directo a la charla, con marca de tiempo: youtu.be/j5W5ErEMnvM?t=21385
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Arbeit von Valves Timur Kristóf an alten AMD-GPUs unter Linux
+***** TLDR
+Auf der XDC 2026 stellte Timur Kristóf von Valve seine Arbeit vor, GCN-1.0- und 1.1-Radeon-Karten und APUs, also Hardware von vor rund zehn Jahren, vom alten radeon-Treiber auf den modernen AMDGPU-Kerneltreiber umzustellen. Damit wird der RADV-Vulkan-Treiber nutzbar, und dafür musste er Fehler im AMDGPU-Display-Code und Probleme beim Power-Management beheben sowie Soft-Reset-Unterstützung ergänzen. Linux 6.19 bringt für diese alten Karten rund 30% mehr Leistung. Der Vortrag behandelte auch, wie er in die AMDGPU-Kernelentwicklung kam, gedacht für Leute, die dasselbe vorhaben. AMD selbst hat diesen Generationen seit Jahren kaum Ressourcen gewidmet.
+***** Take
+Die Wirtschaftlichkeit ist hier auf nützliche Weise verdreht: AMD hat keinen Grund, Entwicklungszeit in Karten zu stecken, die es vor zehn Jahren aus dem Verkauf nahm, Valve aber schon, denn jeder alte Laptop, auf dem Spiele gut laufen, ist ein Steam-Kunde. Ein angestellter Entwickler holte 30% mehr Leistung aus Hardware, die der Hersteller selbst abgeschrieben hatte.
+***** Comments
+- Habe ein gebrauchtes Ayaneo 2 mit älterer mobiler RDNA-2-GPU gekauft. Alles außer aktuellen AAA-Titeln läuft unter Linux schneller und flüssiger als unter Windows. Ich überlege, auch meinen 9070XT-Rechner umzustellen.
+- Ich habe KI-Müdigkeit, aber Fehler in alter Hardware zu beheben finde ich sehr spannend. Vielleicht lassen sich sogar Firmware-Blobs zu Open-Source-Alternativen zurückentwickeln.
+- Direktlink zum Vortrag, mit Zeitstempel: youtu.be/j5W5ErEMnvM?t=21385
+** How to hack time, with C2PA :security:c2pa:cryptography:provenance:
+:PROPERTIES:
+:ID:       49946707
+:URL:      https://www.da.vidbuchanan.co.uk/blog/hacking-time.html
+:HN_URL:   https://news.ycombinator.com/item?id=49946707
+:POINTS:   43
+:COMMENTS: 4
+:BY:       Retr0id
+:END:
+
+*** TLDR
+David Buchanan shows that C2PA's "exclusions" feature, which lets a signer mark byte ranges as outside the signature calculation, can be pointed at the entire file. He signed an image with a valid Time Stamp Authority timestamp while excluding all 3,995,383 bytes, so the claim signature covers the hash of an empty string. He then edited the image after lottery numbers were published and the result still verifies, timestamp intact. C2PA verification tools flag nothing unusual. Exclusions exist for real reasons, such as PNG CRC32 fields that change when a manifest is embedded, but nothing stops a signer from excluding everything.
+
+*** Take
+A signature scheme where the signer picks which bytes are signed, and the verifier does not warn when that set is empty, is not a provenance system. The EU AI Act already requires C2PA manifests on generated content, so the gap is now baked into regulation rather than just a spec.
+
+*** Comments
+
+**** bawolff
+Any excluded bytes can be altered without detection. Glad to see we learned from the mistakes of SAML.
+
+**** mugul
+Would have been great to have that sorted out and fixed before passing the EU AI Act and forcing all content generation providers to embed C2PA manifests in their outputs.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+如何用 C2PA 篡改时间
+***** TLDR
+David Buchanan 展示了 C2PA 的「排除区间」功能可以指向整个文件。该功能允许签名者把某些字节范围标记为不参与签名计算。他对一张图片做了带有效时间戳机构（TSA）时间戳的签名，同时排除了全部 3,995,383 字节，于是声明签名覆盖的是空字符串的哈希。随后他在彩票号码公布之后修改了图片，结果仍然验证通过，时间戳完好。C2PA 验证工具没有报告任何异常。排除机制本身有正当用途，比如 PNG 的 CRC32 字段会在嵌入清单后改变，但没有任何机制阻止签名者排除所有内容。
+***** Take
+一个由签名者自己决定哪些字节被签名、而验证方在这个集合为空时也不警告的签名方案，不是来源证明系统。欧盟 AI 法案已经要求生成内容附带 C2PA 清单，所以这个缺口现在已经写进了法规，而不只是停留在规范层面。
+***** Comments
+- 任何被排除的字节都可以被改动而不被发现。很高兴看到我们从 SAML 的错误中学到了东西。
+- 要是在通过欧盟 AI 法案、强制所有内容生成服务商在输出中嵌入 C2PA 清单之前就把这个问题解决掉，那就好了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+C2PAで時間を改ざんする方法
+***** TLDR
+David Buchananは、署名者が特定のバイト範囲を署名計算の対象外にできるC2PAの「除外」機能を、ファイル全体に向けられることを示した。彼は有効なタイムスタンプ局（TSA）の時刻印を付けて画像に署名しつつ、3,995,383バイトすべてを除外した。その結果、クレーム署名が覆うのは空文字列のハッシュだけになる。その後、宝くじの番号が発表されてから画像を編集したが、署名は有効のままでタイムスタンプも無傷だった。C2PAの検証ツールは何も異常を示さない。除外には、マニフェスト埋め込みで変化するPNGのCRC32フィールドなど正当な用途があるが、署名者がすべてを除外するのを止める仕組みはない。
+***** Take
+どのバイトが署名対象かを署名者自身が選び、その集合が空でも検証側が警告しない署名方式は、来歴証明の仕組みではない。EUのAI法はすでに生成コンテンツへのC2PAマニフェスト添付を義務づけており、この穴は仕様の問題を超えて法制度に組み込まれてしまっている。
+***** Comments
+- 除外されたバイトはすべて検出されずに改変できる。SAMLの失敗から学べていてよかった。
+- EUのAI法を通してすべての生成サービスに出力へのC2PAマニフェスト埋め込みを義務づける前に、これを直しておいてほしかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+C2PA로 시간을 조작하는 방법
+***** TLDR
+David Buchanan은 서명자가 특정 바이트 범위를 서명 계산에서 제외할 수 있게 하는 C2PA의 '제외' 기능을 파일 전체에 적용할 수 있음을 보여줬다. 그는 유효한 타임스탬프 기관(TSA) 시각 증명을 붙여 이미지에 서명하면서 3,995,383바이트 전부를 제외했고, 그 결과 클레임 서명이 덮는 것은 빈 문자열의 해시뿐이었다. 이후 복권 번호가 발표된 다음 이미지를 수정했지만 서명은 그대로 검증되고 타임스탬프도 멀쩡했다. C2PA 검증 도구는 아무런 이상도 표시하지 않는다. 제외 기능 자체는 매니페스트 삽입으로 바뀌는 PNG의 CRC32 필드처럼 정당한 용도가 있지만, 서명자가 전부를 제외하는 것을 막는 장치는 없다.
+***** Take
+어떤 바이트가 서명되는지 서명자가 고르고, 그 집합이 비어 있어도 검증자가 경고하지 않는 서명 방식은 출처 증명 시스템이 아니다. EU AI법은 이미 생성 콘텐츠에 C2PA 매니페스트를 요구하므로, 이 구멍은 명세 차원을 넘어 법으로 굳어진 상태다.
+***** Comments
+- 제외된 바이트는 전부 탐지 없이 변경할 수 있다. SAML의 실수에서 배웠다는 걸 보니 기쁘다.
+- EU AI법을 통과시키고 모든 생성 서비스에 출력에 C2PA 매니페스트를 넣도록 강제하기 전에 이걸 먼저 정리했으면 좋았을 텐데.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cómo hackear el tiempo con C2PA
+***** TLDR
+David Buchanan muestra que la función de "exclusiones" de C2PA, que permite al firmante marcar rangos de bytes como fuera del cálculo de la firma, puede apuntar al archivo completo. Firmó una imagen con una marca de tiempo válida de una Autoridad de Sellado de Tiempo mientras excluía los 3.995.383 bytes, de modo que la firma de la declaración cubre el hash de una cadena vacía. Después editó la imagen una vez publicados los números de la lotería y el resultado sigue verificándose, con la marca de tiempo intacta. Las herramientas de verificación de C2PA no señalan nada raro. Las exclusiones existen por motivos reales, como los campos CRC32 de PNG que cambian al incrustar un manifiesto, pero nada impide que un firmante excluya todo.
+***** Take
+Un esquema de firma en el que el firmante elige qué bytes se firman, y el verificador no avisa cuando ese conjunto está vacío, no es un sistema de procedencia. El Reglamento de IA de la UE ya exige manifiestos C2PA en el contenido generado, así que el agujero está ahora incrustado en la norma legal y no solo en una especificación.
+***** Comments
+- Cualquier byte excluido puede alterarse sin que se detecte. Me alegra ver que aprendimos de los errores de SAML.
+- Habría estado bien resolver esto antes de aprobar el Reglamento de IA de la UE y obligar a todos los proveedores de generación de contenido a incrustar manifiestos C2PA en sus salidas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wie man mit C2PA die Zeit hackt
+***** TLDR
+David Buchanan zeigt, dass sich die C2PA-Funktion „Exclusions“, mit der ein Signierer Byte-Bereiche von der Signaturberechnung ausnehmen kann, auf die gesamte Datei richten lässt. Er signierte ein Bild mit einem gültigen Zeitstempel einer Time Stamp Authority und schloss dabei alle 3.995.383 Bytes aus, sodass die Claim-Signatur nur den Hash einer leeren Zeichenkette abdeckt. Danach bearbeitete er das Bild, nachdem die Lottozahlen veröffentlicht waren, und das Ergebnis verifiziert weiterhin, der Zeitstempel bleibt intakt. C2PA-Prüfwerkzeuge melden nichts Auffälliges. Exclusions haben echte Gründe, etwa PNG-CRC32-Felder, die sich beim Einbetten eines Manifests ändern, doch nichts hindert einen Signierer daran, alles auszuschließen.
+***** Take
+Ein Signaturverfahren, bei dem der Signierer auswählt, welche Bytes signiert werden, und der Prüfer nicht warnt, wenn diese Menge leer ist, ist kein Herkunftsnachweis. Die KI-Verordnung der EU verlangt bereits C2PA-Manifeste für generierte Inhalte, womit die Lücke nun im Gesetz steckt und nicht bloß in einer Spezifikation.
+***** Comments
+- Alle ausgeschlossenen Bytes lassen sich unentdeckt verändern. Schön zu sehen, dass wir aus den Fehlern von SAML gelernt haben.
+- Es wäre gut gewesen, das zu klären und zu beheben, bevor die KI-Verordnung der EU verabschiedet wurde und alle Anbieter von Inhaltsgenerierung C2PA-Manifeste in ihre Ausgaben einbetten müssen.
+** Reasons I didn't become an EMT, ranked :career:ems:psychology:writing:
+:PROPERTIES:
+:ID:       49947631
+:URL:      https://ben.stolovitz.com/posts/reasons-not-emt-ranked/
+:HN_URL:   https://news.ycombinator.com/item?id=49947631
+:POINTS:   162
+:COMMENTS: 78
+:BY:       citelao
+:END:
+
+*** TLDR
+Ben Stolovitz lists 21 reasons he put off EMT certification, ordered from reasonable to absurd. The defensible ones: his accelerated course ran 28 consecutive days (the usual path is semester-long night classes), and EMS workplace culture has real burnout and real problems for women entering first-responder work. Then come the middling ones, including the roughly $5,000 he paid when typical courses run about $2,000, uncertainty about EMT scope of practice, trouble finding a volunteer slot, and certification lapsing without use. The last three are the honest ones: fear of liking it enough to leave his tech job, and plain fear of being a beginner somewhere unfamiliar.
+
+*** Take
+The ranking format does the work a straight essay could not. Putting the $5,000 and the 28-day schedule at the top and then admitting at number 21 that none of it was the reason shows how long a person can argue logistics with themselves to avoid saying they are scared.
+
+*** Comments
+
+**** fm2606
+Got an aerospace engineering BS in 1998, job jumped, realized I didn't care for it. Around 2003 I went to night school for EMT so I could be a dive master on dive boats.
+
+**** whartung
+A friend was an EMT, then a paramedic. The work suited him, he enjoyed it. Then one day he quit, didn't renew his certification, and won't talk about it.
+
+**** phillc73
+If you're interested, consider remote work: wilderness, expeditions, offshore. Scope of practice differs around the world, so there is sometimes the opportunity to be more involved.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我没有去当急救员的理由，按程度排序
+***** TLDR
+Ben Stolovitz 列出了他推迟考取急救员（EMT）证书的 21 个理由，从合理排到荒谬。站得住脚的那些是：他报的速成课程要连续上 28 天（常规路径是持续一个学期的夜校），以及急救行业的职场文化确实存在严重的职业倦怠，女性进入急救领域也面临真实的问题。中间那些包括：他付了约 5,000 美元，而一般课程大约 2,000 美元；对急救员执业范围不清楚；找不到志愿岗位；证书不用就会过期。最后三条才是实话：怕自己太喜欢这份工作以致离开科技业，以及单纯害怕在一个陌生领域从零开始。
+***** Take
+这种排序写法做到了普通随笔做不到的事。把 5,000 美元和 28 天日程放在最前面，然后在第 21 条承认这些都不是真正的原因，恰好展示了一个人能跟自己争论多久的后勤细节，只为了不说出「我怕」。
+***** Comments
+- 1998 年拿了航空航天工程学士，换了几份工作，发现自己并不喜欢。2003 年左右我去上夜校考急救员，为的是能在潜水船上当潜水长。
+- 我一个朋友当过急救员，后来成了护理急救员。这工作很适合他，他也喜欢。然后有一天他辞职了，证书也不续了，而且不愿谈这件事。
+- 如果你有兴趣，可以考虑偏远地区的工作：野外、探险队、海上。各地的执业范围不同，有时能参与得更深。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+私が救急救命士にならなかった理由、ランキング
+***** TLDR
+Ben Stolovitzは、EMT（救急救命士）資格の取得を先延ばしにした21の理由を、妥当なものからばかばかしいものまで順に並べた。擁護できるのは、彼が選んだ短期集中コースが28日連続だったこと（通常は1学期かけた夜間講座）、そして救急の職場文化には実際の燃え尽きがあり、女性が救急職に入る際の問題も現実にあることだ。中位には、一般的なコースが約2,000ドルなのに彼は約5,000ドル払ったこと、EMTの業務範囲が分からなかったこと、ボランティアの枠が見つからないこと、使わなければ資格が失効することが並ぶ。最後の3つが本音で、気に入りすぎてIT職を辞めてしまう恐れ、そして不慣れな世界で初心者になることへの素朴な恐れだ。
+***** Take
+ランキング形式が、普通のエッセイではできない仕事をしている。5,000ドルと28日の日程を上位に置き、21番目でどれも理由ではなかったと認めることで、人が「怖い」と言わずに済ませるために、どれだけ長く自分と段取りの議論を続けられるかが見える。
+***** Comments
+- 1998年に航空宇宙工学の学士を取り、転職を繰り返して、好きではないと気づいた。2003年頃、ダイビング船のダイブマスターになるためにEMTの夜間学校へ行った。
+- 友人はEMTを経て救急救命士になった。仕事は合っていたし楽しんでいた。それがある日辞め、資格も更新せず、その件を話したがらない。
+- 興味があるなら遠隔地の仕事も考えてみて。山岳、探検隊、洋上など。業務範囲は国によって違うので、もっと深く関われる場合もある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+내가 응급구조사가 되지 않은 이유, 순위별로
+***** TLDR
+Ben Stolovitz는 EMT(응급구조사) 자격 취득을 미룬 21가지 이유를 합당한 것부터 터무니없는 것까지 나열했다. 변호할 수 있는 것은, 그가 들은 속성 과정이 28일 연속이었다는 점(보통은 한 학기짜리 야간 수업)과 응급 의료 직장 문화에 실제로 번아웃이 있고 여성이 응급 현장에 들어갈 때 겪는 문제도 현실이라는 점이다. 중간쯤에는 일반 과정이 약 2,000달러인데 그는 약 5,000달러를 냈다는 점, EMT의 업무 범위가 불확실하다는 점, 자원봉사 자리를 찾기 어렵다는 점, 쓰지 않으면 자격이 만료된다는 점이 있다. 마지막 세 가지가 솔직한 이유다. 너무 좋아해서 기술직을 떠날까 하는 두려움, 그리고 낯선 세계에서 초보가 되는 것에 대한 순수한 두려움.
+***** Take
+순위 형식이 일반 에세이로는 못 할 일을 한다. 5,000달러와 28일 일정을 맨 위에 놓고 21번에서 그 어느 것도 이유가 아니었다고 인정하는 구성은, 사람이 '무섭다'고 말하지 않으려고 얼마나 오래 자기와 실무 조건을 두고 논쟁할 수 있는지를 보여준다.
+***** Comments
+- 1998년에 항공우주공학 학사를 받고 여러 번 이직하다 이 일이 내 길이 아님을 깨달았다. 2003년쯤 다이빙 보트의 다이브 마스터가 되려고 야간학교에서 EMT를 배웠다.
+- 친구가 EMT를 거쳐 응급구조사가 됐다. 일이 잘 맞았고 즐거워했다. 그러다 어느 날 그만두고 자격도 갱신하지 않았으며, 그 얘기는 하지 않으려 한다.
+- 관심 있다면 원격지 근무도 생각해보라. 산악, 탐험대, 해상 등이다. 업무 범위는 나라마다 달라서 더 깊이 관여할 기회도 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Razones por las que no me hice técnico de emergencias, ordenadas
+***** TLDR
+Ben Stolovitz enumera 21 razones por las que fue postergando la certificación de técnico en emergencias médicas, ordenadas de razonables a absurdas. Las defendibles: su curso acelerado duraba 28 días consecutivos (la vía habitual son clases nocturnas de un semestre), y la cultura laboral del sector tiene desgaste real y problemas reales para las mujeres que entran en los servicios de emergencia. Luego vienen las intermedias, como los unos 5.000 dólares que pagó cuando los cursos típicos cuestan unos 2.000, la incertidumbre sobre el alcance de la práctica, la dificultad de encontrar un puesto de voluntario y la caducidad de la certificación si no se usa. Las tres últimas son las honestas: miedo a que le gustara tanto como para dejar su trabajo en tecnología, y miedo simple a ser principiante en un mundo desconocido.
+***** Take
+El formato de ranking logra lo que un ensayo lineal no podría. Poner los 5.000 dólares y los 28 días arriba y admitir en el número 21 que nada de eso era el motivo muestra cuánto tiempo puede discutir alguien de logística consigo mismo para no decir que tiene miedo.
+***** Comments
+- Me gradué en ingeniería aeroespacial en 1998, cambié varias veces de trabajo y me di cuenta de que no me interesaba. Hacia 2003 fui a clases nocturnas de técnico de emergencias para poder ser dive master en barcos de buceo.
+- Un amigo fue técnico de emergencias y luego paramédico. El trabajo le iba bien, lo disfrutaba. Un día lo dejó, no renovó la certificación y no quiere hablar del tema.
+- Si te interesa, considera el trabajo remoto: naturaleza, expediciones, alta mar. El alcance de la práctica varía según el país, así que a veces hay oportunidad de implicarse más.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gründe, warum ich kein Rettungssanitäter wurde, sortiert
+***** TLDR
+Ben Stolovitz listet 21 Gründe auf, warum er die EMT-Zertifizierung aufschob, geordnet von vernünftig bis absurd. Die haltbaren: Sein Intensivkurs lief 28 Tage in Folge (der übliche Weg sind Abendkurse über ein Semester), und die Arbeitskultur im Rettungsdienst bringt echtes Burnout mit sich sowie reale Probleme für Frauen, die in den Rettungsdienst einsteigen. Dann folgen die mittleren: die etwa 5.000 Dollar, die er zahlte, während typische Kurse rund 2.000 kosten, Unklarheit über den Tätigkeitsrahmen, Schwierigkeiten, eine Freiwilligenstelle zu finden, und das Verfallen der Zertifizierung ohne Praxis. Die letzten drei sind die ehrlichen: die Angst, es so sehr zu mögen, dass er seinen Tech-Job verlässt, und schlichte Angst davor, irgendwo Fremdem Anfänger zu sein.
+***** Take
+Das Ranking-Format leistet, was ein durchgehender Essay nicht könnte. Die 5.000 Dollar und die 28 Tage oben zu platzieren und bei Nummer 21 zuzugeben, dass nichts davon der Grund war, zeigt, wie lange ein Mensch mit sich über Logistik streiten kann, nur um nicht zu sagen, dass er Angst hat.
+***** Comments
+- Habe 1998 einen Bachelor in Luft- und Raumfahrttechnik gemacht, bin mehrmals gewechselt und merkte, dass es mich nicht interessiert. Um 2003 besuchte ich die Abendschule für EMT, um Dive Master auf Tauchbooten werden zu können.
+- Ein Freund war EMT und wurde dann Paramedic. Die Arbeit passte zu ihm, er mochte sie. Dann hörte er eines Tages auf, erneuerte seine Zertifizierung nicht und will nicht darüber reden.
+- Wer Interesse hat, sollte auch an abgelegene Einsätze denken: Wildnis, Expeditionen, Offshore. Der Tätigkeitsrahmen unterscheidet sich weltweit, manchmal kann man dort mehr machen.
+** We're working on a new RuneScape MMO :gaming:mmo:runescape:unreal:
+:PROPERTIES:
+:ID:       49949588
+:URL:      https://play.runescape.com/4
+:HN_URL:   https://news.ycombinator.com/item?id=49949588
+:POINTS:   87
+:COMMENTS: 34
+:BY:       droidjj
+:END:
+
+*** TLDR
+Jagex announced RS4, a new RuneScape MMO built in Unreal Engine and still a few years from launch. It starts in Ashenfall, the landmass northeast of the main continent introduced in RuneScape Dragonwilds, and is meant to expand into familiar parts of Gielinor over time. Jagex says it will not replace RuneScape 3, Old School RuneScape, or Dragonwilds, and will sit alongside them with its own team and roadmap. The pitch leans on integrity and permanent progression, plus community involvement from this early stage.
+
+*** Take
+Announcing an MMO years before launch is a recruiting move for community goodwill, and Jagex needs it: Old School RuneScape, the 2007 snapshot the players demanded, has several times the player base of the modern version Jagex built on purpose. Unreal Engine fidelity is the one thing that history suggests RuneScape players were never asking for.
+
+*** Comments
+
+**** Foxhuls
+For anyone unaware, this is stated to essentially be the MMO continuation of RuneScape Dragonwilds, a survival and crafting game that recently released into 1.0 after commercial success.
+
+**** Fizz43
+Everything Jagex touches turns to shit. They are not good at creating. At best they are a steward for already created IP and the community provides the taste that makes it good.
+
+**** joegibbs
+Is graphical fidelity what people want in a RuneScape game? OSRS has something like 5x the player base and the gap only seems to be growing, so investing this much in a continuation of RS3 looks odd.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我们正在开发新的 RuneScape MMO
+***** TLDR
+Jagex 宣布了 RS4，一款用 Unreal 引擎开发的新 RuneScape MMO，距离上线还有几年。游戏起点是 Ashenfall，即《RuneScape Dragonwilds》中引入的主大陆东北方的那片陆地，之后会逐步扩展到 Gielinor 中玩家熟悉的区域。Jagex 表示它不会取代 RuneScape 3、Old School RuneScape 或 Dragonwilds，而是与它们并行存在，各有自己的团队和路线图。宣传重点是游戏诚信与永久成长，以及从现在这个早期阶段就让社区参与。
+***** Take
+在上线数年前就公布一款 MMO，是为了争取社区好感，而 Jagex 确实需要这个：由玩家要求保留的 2007 年版本 Old School RuneScape，玩家规模是 Jagex 刻意打造的现代版的数倍。而 Unreal 引擎带来的画面精度，恰恰是历史表明 RuneScape 玩家从未要求过的东西。
+***** Comments
+- 不清楚的人可以了解一下：官方说这基本上是《RuneScape Dragonwilds》的 MMO 续作，那是一款生存建造游戏，商业上成功后最近推出了 1.0 版。
+- Jagex 碰什么都毁什么。他们不擅长创造。最好的情况下他们只是既有 IP 的看守者，真正让东西好起来的品味来自社区。
+- RuneScape 玩家要的是画面精度吗？OSRS 的玩家规模大概是 5 倍，而且差距还在扩大，所以在 RS3 的续作上投入这么多看起来很奇怪。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+新しいRuneScape MMOを開発中
+***** TLDR
+Jagexは、Unreal Engineで開発中の新作RuneScape MMO「RS4」を発表した。公開はまだ数年先だという。舞台は『RuneScape Dragonwilds』で登場した本大陸北東の土地Ashenfallから始まり、時間をかけてGielinorの馴染みの地域へ広げていく方針だ。RuneScape 3、Old School RuneScape、Dragonwildsを置き換えるものではなく、それぞれ独自のチームとロードマップを持ったまま並存するとしている。訴求点はゲームの健全性と永続的な成長要素、そしてこの早い段階からのコミュニティ参加だ。
+***** Take
+発売の数年前にMMOを発表するのはコミュニティの好意を集めるための動きで、Jagexにはそれが必要だ。プレイヤーが求めて残された2007年版のOld School RuneScapeは、Jagexが意図して作った現行版の数倍のプレイヤー数を持つ。Unreal Engineの描画品質は、歴史を見るかぎりRuneScapeのプレイヤーが求めてこなかった唯一のものだ。
+***** Comments
+- 知らない人向けに。これは商業的成功を経て最近1.0になったサバイバル・クラフトゲーム『RuneScape Dragonwilds』のMMO続編にあたると説明されている。
+- Jagexが触るものは全部だめになる。彼らは作るのが得意ではない。せいぜい既存IPの管理人で、良さを生む感性はコミュニティ側が提供している。
+- RuneScapeに求められているのは描画品質なのか。OSRSはプレイヤー数が5倍ほどあり差は広がる一方なので、RS3の続編にこれだけ投資するのは奇妙に見える。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+새로운 RuneScape MMO를 개발 중입니다
+***** TLDR
+Jagex는 Unreal Engine으로 만드는 새 RuneScape MMO인 RS4를 발표했다. 출시까지는 아직 몇 년이 남았다. 시작 지역은 『RuneScape Dragonwilds』에서 등장한 본토 북동쪽 땅 Ashenfall이며, 시간이 지나면서 Gielinor의 익숙한 지역들로 확장할 계획이다. Jagex는 이것이 RuneScape 3, Old School RuneScape, Dragonwilds를 대체하지 않고 각자 팀과 로드맵을 유지한 채 함께 존재할 것이라고 밝혔다. 강조점은 게임의 건전성과 영구적인 성장, 그리고 이 이른 단계부터의 커뮤니티 참여다.
+***** Take
+출시 몇 년 전에 MMO를 발표하는 것은 커뮤니티 호감을 끌어모으려는 움직임이고, Jagex에게는 그것이 필요하다. 플레이어들이 요구해 남긴 2007년 버전 Old School RuneScape는 Jagex가 의도적으로 만든 현대판보다 플레이어 수가 몇 배 많다. Unreal Engine의 그래픽 품질은 역사를 보면 RuneScape 플레이어들이 한 번도 요구하지 않은 바로 그것이다.
+***** Comments
+- 모르는 사람을 위해: 이것은 상업적 성공 후 최근 1.0으로 출시된 생존·제작 게임 『RuneScape Dragonwilds』의 MMO 후속작이라고 설명되어 있다.
+- Jagex가 손대는 건 다 망한다. 그들은 창작에 능하지 않다. 잘해도 기존 IP의 관리자일 뿐이고, 좋게 만드는 감각은 커뮤니티가 제공한다.
+- RuneScape에서 사람들이 원하는 게 그래픽 품질인가? OSRS 플레이어 수가 5배쯤 되고 격차는 계속 벌어지는데, RS3 후속작에 이만큼 투자하는 건 이상해 보인다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Estamos trabajando en un nuevo MMO de RuneScape
+***** TLDR
+Jagex anunció RS4, un nuevo MMO de RuneScape hecho en Unreal Engine y que aún está a varios años del lanzamiento. Empieza en Ashenfall, la masa de tierra al noreste del continente principal que apareció en RuneScape Dragonwilds, y la intención es ampliarlo con el tiempo hacia zonas conocidas de Gielinor. Jagex dice que no reemplazará a RuneScape 3, Old School RuneScape ni Dragonwilds, y que convivirá con ellos con su propio equipo y hoja de ruta. El mensaje se apoya en la integridad y el progreso permanente, además de la participación de la comunidad desde esta fase temprana.
+***** Take
+Anunciar un MMO años antes del lanzamiento es una maniobra para ganar buena voluntad de la comunidad, y Jagex la necesita: Old School RuneScape, la versión de 2007 que los jugadores exigieron, tiene varias veces la base de jugadores de la versión moderna que Jagex construyó a propósito. La fidelidad gráfica de Unreal Engine es justo lo que la historia sugiere que los jugadores de RuneScape nunca pidieron.
+***** Comments
+- Para quien no lo sepa, se dice que esto es la continuación en formato MMO de RuneScape Dragonwilds, un juego de supervivencia y construcción que llegó a la versión 1.0 tras su éxito comercial.
+- Todo lo que Jagex toca se arruina. No son buenos creando. En el mejor de los casos son administradores de una IP ya creada y la comunidad aporta el criterio que la hace buena.
+- ¿Es la fidelidad gráfica lo que la gente quiere en un RuneScape? OSRS tiene unas 5 veces más jugadores y la brecha sigue creciendo, así que invertir tanto en una continuación de RS3 resulta extraño.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wir arbeiten an einem neuen RuneScape-MMO
+***** TLDR
+Jagex hat RS4 angekündigt, ein neues RuneScape-MMO in der Unreal Engine, das noch einige Jahre vom Start entfernt ist. Es beginnt in Ashenfall, der Landmasse nordöstlich des Hauptkontinents, die in RuneScape Dragonwilds eingeführt wurde, und soll sich mit der Zeit in bekannte Teile von Gielinor ausdehnen. Jagex betont, es werde RuneScape 3, Old School RuneScape und Dragonwilds nicht ersetzen, sondern mit eigenem Team und eigener Roadmap daneben bestehen. Beworben wird es mit Integrität und dauerhaftem Fortschritt sowie Beteiligung der Community schon in dieser frühen Phase.
+***** Take
+Ein MMO Jahre vor dem Start anzukündigen ist ein Werben um Goodwill in der Community, und Jagex braucht das: Old School RuneScape, der von den Spielern eingeforderte Stand von 2007, hat ein Mehrfaches der Spielerbasis der modernen Version, die Jagex absichtlich gebaut hat. Grafische Detailtreue durch die Unreal Engine ist genau das, was RuneScape-Spieler der Geschichte nach nie verlangt haben.
+***** Comments
+- Für alle, die es nicht wissen: Das soll im Wesentlichen die MMO-Fortsetzung von RuneScape Dragonwilds sein, einem Survival- und Crafting-Spiel, das nach kommerziellem Erfolg kürzlich in Version 1.0 erschien.
+- Alles, was Jagex anfasst, geht kaputt. Sie sind nicht gut im Erschaffen. Im besten Fall verwalten sie eine bereits erschaffene IP, und der Geschmack, der sie gut macht, kommt von der Community.
+- Ist grafische Detailtreue das, was man in einem RuneScape-Spiel will? OSRS hat etwa die fünffache Spielerbasis und der Abstand wächst, also wirkt es sonderbar, so viel in eine Fortsetzung von RS3 zu stecken.
+** Math's pedagogical curse – Grant Sanderson ［video］ :math:education:pedagogy:video:
+:PROPERTIES:
+:ID:       49940482
+:URL:      https://www.youtube.com/watch?v=UOuxo6SA8Uc
+:HN_URL:   https://news.ycombinator.com/item?id=49940482
+:POINTS:   48
+:COMMENTS: 22
+:BY:       bobajeff
+:END:
+
+*** TLDR
+Grant Sanderson of 3Blue1Brown argues that the formal rigor mathematicians need in their own work becomes a distraction when teaching. Textbooks lead with abstract rules and finished proofs, which hides why an idea matters and how anyone arrived at it, so students memorize instead of understanding. He contrasts two treatments of the difference of squares, one visual and concrete, one straight to the formula, and points to the gap in outcomes. His checklist: motivate first, visualize, move from concrete to abstract, present ideas as a plausible path of discovery, and let people struggle before showing the answer.
+
+*** Take
+The argument generalizes past math to any documentation written by the person who already understands the thing. Rigor is the easiest part to check and the least useful part to lead with, which is exactly why it keeps ending up first.
+
+*** Comments
+
+**** pxagntuvzt
+Mathematicians lie by omission. Lie one: this solution is how I solved it. If problem solving is A⁎ search, the written solution is not what was actually done. Each step on the blackboard goes in the right direction, with the wrong turns omitted.
+
+**** qnleigh
+All the advice he gives would be amazing applied to research papers too. After scratching the itch of knowing something is written rigorously, it's easy to call a work done when maybe we shouldn't.
+
+**** estetlinus
+"The roots of education are bitter, but the fruit is sweet." Aristotle
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+数学的教学诅咒 – Grant Sanderson ［视频］
+***** TLDR
+3Blue1Brown 的 Grant Sanderson 认为，数学家在自己研究中需要的形式严谨性，在教学中反而成了干扰。教科书先抛出抽象规则和完成形态的证明，这掩盖了一个想法为什么重要、以及任何人是怎么想到它的，于是学生只能背而不是懂。他对比了平方差的两种讲法，一种借助图形与具体例子，一种直接给公式，并指出两者在学习效果上的差距。他给出的清单是：先给动机、用可视化、从具体走向抽象、把想法呈现为一条可信的发现路径，并让人先自己挣扎一会儿再给答案。
+***** Take
+这个论点不只适用于数学，而适用于任何由已经懂了的人写出的文档。严谨性是最容易检查的部分，也是最不适合放在开头的部分，而这恰恰就是它总被放在最前面的原因。
+***** Comments
+- 数学家靠省略来撒谎。第一个谎是：这个解法就是我当初解出来的过程。如果把解题看作 A⁎ 搜索，写下来的解法并不是实际做过的事。黑板上的每一步都朝着正确方向，走错的岔路都被省掉了。
+- 他给的所有建议，用在研究论文上也会很棒。在满足了「知道这东西写得很严谨」这种痒之后，人很容易就觉得工作做完了，而其实也许还没完。
+- 「教育的根是苦的，但果实是甜的。」亚里士多德
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+数学の教育における呪い – Grant Sanderson ［動画］
+***** TLDR
+3Blue1BrownのGrant Sandersonは、数学者が自分の研究で必要とする形式的な厳密さが、教える場面では妨げになると論じる。教科書は抽象的な規則と完成した証明から始めるため、なぜその考えが重要なのか、どうやってそこに至ったのかが隠れてしまい、学生は理解せず暗記する。彼は平方の差について、図形的で具体的な扱いと、いきなり公式を出す扱いを比べ、学習成果の差を指摘する。提示するチェックリストは、まず動機づけ、可視化、具体から抽象への順序、発見のもっともらしい筋道として提示すること、そして答えを見せる前にしばらく悩ませることだ。
+***** Take
+この議論は数学を超えて、すでに理解している人が書いたあらゆるドキュメントに当てはまる。厳密さは最も検証しやすい部分であり、最初に置くには最も役に立たない部分だ。だからこそ、いつも先頭に来てしまう。
+***** Comments
+- 数学者は省略によって嘘をつく。第一の嘘は「この解法が私の解いた道筋だ」というもの。問題解決をA⁎探索と見るなら、書かれた解法は実際にやったことではない。黒板の各ステップは正しい方向へ進み、間違った分岐は省かれている。
+- 彼の助言はすべて、研究論文に当てはめても素晴らしいだろう。厳密に書けたという満足感を得たあと、まだ終わりでないのに終わりと呼んでしまいやすい。
+- 「教育の根は苦いが、その果実は甘い」アリストテレス
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+수학의 교육적 저주 – Grant Sanderson ［영상］
+***** TLDR
+3Blue1Brown의 Grant Sanderson은 수학자가 자기 연구에서 필요로 하는 형식적 엄밀성이 가르칠 때는 방해가 된다고 주장한다. 교과서는 추상적 규칙과 완성된 증명부터 내놓기 때문에 왜 그 아이디어가 중요한지, 누가 어떻게 거기에 도달했는지가 가려지고, 학생들은 이해 대신 암기를 한다. 그는 제곱의 차를 다루는 두 방식, 시각적이고 구체적인 쪽과 곧바로 공식을 제시하는 쪽을 비교하며 학습 결과의 차이를 지적한다. 그의 체크리스트는 먼저 동기를 주고, 시각화하고, 구체에서 추상으로 가고, 아이디어를 그럴듯한 발견 경로로 제시하고, 답을 보여주기 전에 씨름하게 두는 것이다.
+***** Take
+이 주장은 수학을 넘어, 이미 이해한 사람이 쓴 모든 문서에 적용된다. 엄밀성은 확인하기 가장 쉬운 부분이면서 맨 앞에 두기에는 가장 쓸모없는 부분이고, 바로 그래서 늘 맨 앞에 오게 된다.
+***** Comments
+- 수학자는 생략으로 거짓말한다. 첫 번째 거짓말은 '이 해법이 내가 푼 방식이다'라는 것. 문제 해결을 A⁎ 탐색으로 본다면 적힌 해법은 실제로 한 일이 아니다. 칠판의 각 단계는 올바른 방향으로 가고, 잘못 든 길은 빠져 있다.
+- 그가 준 조언은 모두 연구 논문에 적용해도 훌륭할 것이다. 엄밀하게 썼다는 만족을 채운 뒤에는, 아직 끝이 아닐지도 모르는데 끝났다고 부르기 쉽다.
+- "교육의 뿌리는 쓰지만 그 열매는 달다." 아리스토텔레스
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La maldición pedagógica de las matemáticas – Grant Sanderson ［vídeo］
+***** TLDR
+Grant Sanderson, de 3Blue1Brown, sostiene que el rigor formal que los matemáticos necesitan en su propio trabajo se vuelve una distracción al enseñar. Los libros empiezan por reglas abstractas y demostraciones acabadas, lo que oculta por qué una idea importa y cómo alguien llegó a ella, así que los estudiantes memorizan en lugar de entender. Contrasta dos tratamientos de la diferencia de cuadrados, uno visual y concreto y otro que va directo a la fórmula, y señala la diferencia de resultados. Su lista: motivar primero, visualizar, pasar de lo concreto a lo abstracto, presentar las ideas como un camino plausible de descubrimiento y dejar que la gente se esfuerce antes de mostrar la respuesta.
+***** Take
+El argumento se extiende más allá de las matemáticas a cualquier documentación escrita por quien ya entiende el tema. El rigor es la parte más fácil de comprobar y la menos útil para empezar, que es exactamente por lo que siempre acaba primero.
+***** Comments
+- Los matemáticos mienten por omisión. Primera mentira: esta solución es como yo lo resolví. Si resolver problemas es una búsqueda A⁎, la solución escrita no es lo que se hizo. Cada paso en la pizarra va en la dirección correcta, y los desvíos equivocados se omiten.
+- Todos sus consejos serían magníficos aplicados también a los artículos de investigación. Tras saciar la necesidad de saber que algo está escrito con rigor, es fácil dar un trabajo por terminado cuando quizá no deberíamos.
+- "Las raíces de la educación son amargas, pero el fruto es dulce." Aristóteles
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der pädagogische Fluch der Mathematik – Grant Sanderson ［Video］
+***** TLDR
+Grant Sanderson von 3Blue1Brown argumentiert, dass die formale Strenge, die Mathematiker in ihrer eigenen Arbeit brauchen, beim Unterrichten zur Ablenkung wird. Lehrbücher beginnen mit abstrakten Regeln und fertigen Beweisen, was verdeckt, warum eine Idee wichtig ist und wie jemand auf sie kam, sodass Lernende auswendig lernen statt zu verstehen. Er stellt zwei Darstellungen der dritten binomischen Formel gegenüber, eine anschaulich und konkret, eine direkt über die Formel, und verweist auf den Unterschied im Lernerfolg. Seine Checkliste: zuerst motivieren, visualisieren, vom Konkreten zum Abstrakten gehen, Ideen als plausiblen Entdeckungsweg präsentieren und Lernende ringen lassen, bevor man die Lösung zeigt.
+***** Take
+Das Argument reicht über Mathematik hinaus auf jede Dokumentation, die von jemandem geschrieben wurde, der die Sache schon versteht. Strenge ist der am leichtesten überprüfbare Teil und der am wenigsten nützliche Einstieg, und genau deshalb landet sie immer zuerst.
+***** Comments
+- Mathematiker lügen durch Auslassung. Erste Lüge: So habe ich es gelöst. Versteht man Problemlösen als A⁎-Suche, ist die aufgeschriebene Lösung nicht das, was wirklich geschah. Jeder Schritt an der Tafel geht in die richtige Richtung, die Irrwege fehlen.
+- All seine Ratschläge wären auch auf Forschungsarbeiten angewandt großartig. Hat man den Drang gestillt, etwas streng aufgeschrieben zu wissen, nennt man eine Arbeit leicht fertig, obwohl sie es vielleicht nicht ist.
+- „Die Wurzeln der Bildung sind bitter, doch die Frucht ist süß.“ Aristoteles
