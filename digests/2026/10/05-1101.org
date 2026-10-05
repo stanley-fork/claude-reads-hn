@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-10-05 11:01 UTC
+#+DATE: 2026-10-05T11:01:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Denmark's whole population register walks out through one vendor's legal access, Qualcomm buys Huawei patents, and Doom's renderer turns out to be 89 CTEs
+
+* Highlights
+- Denmark: 8.8M CPR records pulled through one company's authorized lookup access
+- Qualcomm and Huawei cross-license 5G and AI patents, and Qualcomm buys some outright
+- CedarDB ships Doom in 7,200 lines of SQL at 35 FPS
+- A film scanner nearly destroyed by an agent, then a working inversion pipeline
+- The Tao of Backup turns 29 and the integrity chapter still lands
+
+* Stories
+
+** Denmark Data Breach Exposes 8.8M People's Personal Data :security:privacy:denmark:databreach:
+:PROPERTIES:
+:ID:       49962012
+:URL:      https://www.cpr.dk/cpr-nyt/nyhedsarkiv/2026/okt/omfattende-uautoriseret-adgang-til-borgeres-cpr-oplysninger
+:HN_URL:   https://news.ycombinator.com/item?id=49962012
+:POINTS:   155
+:COMMENTS: 104
+:BY:       clan
+:END:
+
+*** TLDR
+Denmark's Central Person Register says someone abused a Danish company's lawful CPR lookup access to pull names, addresses and CPR numbers on about 8.8 million registered people. That is effectively everyone alive in the register plus foreign nationals who have been resident. People who registered name and address protection were excluded. CPR revoked the company's access, reported it to the data protection authority Datatilsynet and to police, and has an investigation running with outside specialists.
+
+*** Take
+Nothing was hacked. A vendor with a legal query interface into the national identity database was the entire attack surface, and 8.8 million lookups went through it without tripping anything. The deeper problem is that the CPR number works as an authenticator at Danish banks and insurers, so a national ID that is both public and a password holds up exactly until the first leak.
+
+*** Comments
+
+**** clan
+For scale: for every living Danish citizen and foreign national who has been resident, and quite a few dead ones, this covers CPR number, age, sex, family relations, physical address, protected addresses and sex change.
+
+**** gnull
+In Sweden we leak residents' data officially. hitta.se lets you look up personal numbers, names, addresses and birthdays of any resident, no consent asked.
+
+**** aiiotnoodle
+I'm at the point of not wanting to talk to my doctor because it gets recorded and leaked, or fly because my passport might be used to take out a loan.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+丹麦数据泄露，880 万人个人信息外泄
+***** TLDR
+丹麦中央人口登记系统（CPR）称，有人滥用一家丹麦企业的合法 CPR 查询权限，获取了约 880 万名登记人员的姓名、地址和 CPR 号码。这基本上覆盖了登记在册的所有在世者，以及曾在丹麦居住的外国公民。已登记姓名和地址保护的人未受影响。CPR 已撤销该公司的访问权限，向数据保护机构 Datatilsynet 和警方报案，并在外部专家协助下展开调查。
+***** Take
+没有任何系统被攻破。拥有合法查询接口的供应商就是全部攻击面，880 万次查询通过它流出，却没有触发任何警报。更根本的问题是 CPR 号码在丹麦银行和保险公司被当作身份验证凭据：一个既公开又当密码用的国民身份号码，只能撑到第一次泄露为止。
+***** Comments
+- 说明一下规模：所有在世的丹麦公民、曾在丹麦居住的外国人，以及相当多已故者的 CPR 号码、年龄、性别、亲属关系、实际住址、受保护地址和性别变更记录都在其中。
+- 在瑞典，我们是官方公开居民数据的。hitta.se 可以查任何居民的个人编号、姓名、地址和生日，不需要本人同意。
+- 我现在已经不太想跟医生说话了，因为记录会被留存并泄露；也不太想坐飞机，因为护照可能被用来贷款。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+デンマークのデータ侵害で880万人の個人情報が流出
+***** TLDR
+デンマークの中央個人登録（CPR）は、あるデンマーク企業の正規のCPR検索権限が悪用され、登録者約880万人の氏名、住所、CPR番号が持ち出されたと発表した。これは登録簿上の生存者ほぼ全員に加え、居住歴のある外国籍者を含む。氏名・住所の保護を登録していた人は対象外。CPRは当該企業のアクセスを停止し、データ保護当局Datatilsynetと警察に届け出て、外部専門家とともに調査を進めている。
+***** Take
+何も破られていない。国民IDデータベースへの正規の検索インターフェースを持つベンダーが攻撃面のすべてで、880万件の照会が何の警報も鳴らさずに通過した。より根本的な問題は、CPR番号がデンマークの銀行や保険会社で本人確認として使われている点だ。公開情報でありながらパスワードでもある国民IDは、最初の流出までしか持たない。
+***** Comments
+- 規模の話をすると、生存するデンマーク国民と居住歴のある外国籍者の全員、さらに相当数の故人について、CPR番号、年齢、性別、家族関係、住所、保護対象の住所、性別変更の記録が含まれる。
+- スウェーデンでは住民データを公式に流出させている。hitta.seで誰の個人番号、氏名、住所、生年月日も本人の同意なく調べられる。
+- 記録が残って流出するから医師に話すのも避けたくなっているし、パスポートがローン契約に使われるかもしれないから飛行機にも乗りたくない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+덴마크 데이터 유출로 880만 명 개인정보 노출
+***** TLDR
+덴마크 중앙인구등록(CPR)은 한 덴마크 기업의 합법적인 CPR 조회 권한이 악용되어 등록자 약 880만 명의 이름, 주소, CPR 번호가 빠져나갔다고 밝혔다. 사실상 등록부에 있는 생존자 전원과 덴마크 거주 이력이 있는 외국인이 포함된다. 이름과 주소 보호를 등록한 사람은 제외됐다. CPR은 해당 기업의 접근 권한을 차단하고 데이터보호감독기관 Datatilsynet과 경찰에 신고했으며, 외부 전문가와 함께 조사를 진행하고 있다.
+***** Take
+해킹은 없었다. 국가 신원 데이터베이스에 합법적인 조회 인터페이스를 가진 협력업체가 공격면 전체였고, 880만 건의 조회가 아무런 경보도 울리지 않고 통과했다. 더 근본적인 문제는 CPR 번호가 덴마크 은행과 보험사에서 본인 인증 수단으로 쓰인다는 점이다. 공개 정보이면서 동시에 비밀번호인 주민번호는 첫 유출까지만 버틴다.
+***** Comments
+- 규모를 짚자면, 생존한 덴마크 국민과 거주 이력이 있는 외국인 전원, 그리고 상당수 사망자의 CPR 번호, 나이, 성별, 가족관계, 실거주지, 보호 주소, 성별 정정 기록이 포함된다.
+- 스웨덴에서는 주민 데이터를 공식적으로 유출한다. hitta.se에서 누구든 개인번호, 이름, 주소, 생일을 본인 동의 없이 조회할 수 있다.
+- 기록이 남고 유출되니 의사에게 말하기도 꺼려지고, 여권이 대출에 쓰일 수 있으니 비행기도 타기 싫은 지점까지 왔다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Una filtración en Dinamarca expone los datos personales de 8,8 millones de personas
+***** TLDR
+El Registro Central de Personas de Dinamarca (CPR) informa de que alguien abusó del acceso legítimo de consulta de una empresa danesa para extraer nombres, direcciones y números CPR de unos 8,8 millones de personas registradas. Eso equivale a toda la población viva del registro más los extranjeros que han residido en el país. Quedan fuera quienes tenían registrada la protección de nombre y dirección. El CPR revocó el acceso de la empresa, lo notificó a la autoridad de protección de datos Datatilsynet y a la policía, y mantiene una investigación con especialistas externos.
+***** Take
+No hubo intrusión. Un proveedor con una interfaz legal de consulta a la base de datos nacional de identidad era toda la superficie de ataque, y 8,8 millones de consultas pasaron por ella sin activar nada. El problema de fondo es que el número CPR funciona como autenticador en bancos y aseguradoras danesas: un identificador nacional que es público y contraseña a la vez aguanta exactamente hasta la primera filtración.
+***** Comments
+- Para entender la escala: de todo ciudadano danés vivo y de todo extranjero que haya residido aquí, además de bastantes fallecidos, esto incluye número CPR, edad, sexo, relaciones familiares, dirección física, direcciones protegidas y cambio de sexo.
+- En Suecia filtramos los datos de los residentes oficialmente. hitta.se permite consultar el número personal, nombre, dirección y fecha de nacimiento de cualquier residente, sin pedir consentimiento.
+- He llegado al punto de no querer hablar con mi médico porque queda registrado y se filtra, ni volar porque mi pasaporte podría usarse para pedir un préstamo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Datenleck in Dänemark legt persönliche Daten von 8,8 Millionen Menschen offen
+***** TLDR
+Das dänische Zentrale Personenregister (CPR) teilt mit, dass jemand den legalen CPR-Abfragezugang eines dänischen Unternehmens missbraucht hat, um Namen, Adressen und CPR-Nummern von rund 8,8 Millionen registrierten Personen abzuziehen. Das sind praktisch alle lebenden Registrierten plus Ausländer, die in Dänemark gemeldet waren. Wer Namens- und Adressschutz eingetragen hatte, ist nicht betroffen. Das CPR hat den Zugang des Unternehmens entzogen, die Datenschutzbehörde Datatilsynet und die Polizei informiert und untersucht den Fall mit externen Fachleuten.
+***** Take
+Hier wurde nichts gehackt. Ein Dienstleister mit legaler Abfrageschnittstelle zur nationalen Identitätsdatenbank war die gesamte Angriffsfläche, und 8,8 Millionen Abfragen liefen darüber, ohne dass etwas auffiel. Das eigentliche Problem: Die CPR-Nummer dient bei dänischen Banken und Versicherern als Authentifikator. Eine nationale Kennung, die gleichzeitig öffentlich und Passwort ist, hält genau bis zum ersten Leak.
+***** Comments
+- Zur Größenordnung: Für jeden lebenden dänischen Staatsbürger und jeden Ausländer mit Wohnsitz hier, plus eine Menge Verstorbene, umfasst das CPR-Nummer, Alter, Geschlecht, Familienbeziehungen, Wohnadresse, geschützte Adressen und Geschlechtsänderung.
+- In Schweden leaken wir die Daten der Einwohner offiziell. Über hitta.se lassen sich Personennummer, Name, Adresse und Geburtsdatum jedes Einwohners abfragen, ohne Einwilligung.
+- Ich bin an dem Punkt, nicht mehr mit meiner Ärztin sprechen zu wollen, weil es gespeichert und geleakt wird, und nicht mehr fliegen zu wollen, weil mein Pass für einen Kredit missbraucht werden könnte.
+** Huawei and Qualcomm Announce Broad Patent License Agreement :patents:5g:huawei:qualcomm:
+:PROPERTIES:
+:ID:       49961861
+:URL:      https://www.huawei.com/en/news/2026/10/qualcomm-broad-patent-agreement
+:HN_URL:   https://news.ycombinator.com/item?id=49961861
+:POINTS:   71
+:COMMENTS: 50
+:BY:       0xedb
+:END:
+
+*** TLDR
+Huawei and Qualcomm signed a multi-year cross-license covering patents in 5G, compute, AI and networking, and Qualcomm is separately buying a set of Huawei's US patents in those same areas. No financial terms were disclosed and the purchase still needs regulatory approval. Both sides restated their FRAND commitments: Huawei's Alan Fan pointed to decades of its own R&D in mobile communications, Qualcomm's John Han framed the deal as recognition of Qualcomm's 5G standard-essential patent licensing program.
+
+*** Take
+Both press quotes declare victory, which is how you know the net payment direction changed and neither party wants to name it. Huawei stopped buying Qualcomm modems after the Kirin 9000, so the chip-revenue half of that relationship is gone and only the patent half is left. The more consequential line is Qualcomm buying Huawei's US patents outright: it moves them to a licensor that can actually enforce them in American courts.
+
+*** Comments
+
+**** whatever1
+Remember when they were telling us how important the 5G race was and how critical it was for the US to lead it? And now they are just giving it away?
+
+**** rwmj
+Aren't Huawei on the Entity List? How can Qualcomm enter into agreements like this without getting into massive hot water?
+
+**** maxglute
+Pre-sanctions, Huawei paid Qualcomm for mobile chipset SEPs while Qualcomm paid Huawei for 5G SEPs, with the net balance favoring Qualcomm. Huawei indigenized its SoC with the Kirin 9000, and now that it is off Qualcomm silicon, Qualcomm is simply stuck net paying Huawei.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+华为与高通宣布达成广泛专利许可协议
+***** TLDR
+华为与高通签署了一项为期多年的交叉许可协议，涵盖 5G、计算、AI 和网络领域的专利，同时高通还将单独收购华为在这些领域的一批美国专利。协议未披露财务条款，收购仍需监管批准。双方都重申了 FRAND 承诺：华为首席知识产权官樊志勇强调公司数十年的移动通信研发投入，高通执行副总裁 John Han 则称该协议再次确认了高通 5G 标准必要专利许可项目的成功。
+***** Take
+双方的新闻稿都在宣布胜利，这恰好说明净付款方向变了，而谁都不想说清楚。华为自麒麟 9000 之后不再采购高通基带，这段关系中的芯片收入那一半已经消失，只剩专利这一半。更有分量的是高通直接买下华为的美国专利：这些专利转到了一个能在美国法院真正行使权利的许可方手里。
+***** Comments
+- 还记得他们当年怎么说 5G 竞赛有多重要、美国必须领先吗？现在就这么拱手让出去了？
+- 华为不是在实体清单上吗？高通签这种协议怎么可能不惹上大麻烦？
+- 制裁前，华为为移动芯片标准必要专利向高通付费，高通为 5G 标准必要专利向华为付费，净额对高通有利。华为用麒麟 9000 实现了 SoC 自研，如今不再用高通芯片，高通反而变成净付款方了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ファーウェイとクアルコムが広範な特許ライセンス契約を発表
+***** TLDR
+ファーウェイとクアルコムは、5G、コンピューティング、AI、ネットワーキング分野の特許を対象とする複数年のクロスライセンス契約を締結した。さらにクアルコムは、同分野におけるファーウェイの米国特許の一部を別途買い取る。金銭条件は非開示で、買収には規制当局の承認が必要。双方はFRAND順守を改めて表明し、ファーウェイのアラン・ファン氏は自社の移動通信分野での数十年のR&D投資を挙げ、クアルコムのジョン・ハン氏は同社の5G標準必須特許ライセンス事業への業界の評価だと位置づけた。
+***** Take
+双方のコメントがどちらも勝利宣言になっている。つまり純支払いの向きが変わり、どちらもそれを口にしたくないということだ。ファーウェイはKirin 9000以降クアルコムのモデムを買っておらず、この関係のチップ売上という半分はすでに消えて、特許という半分だけが残った。より重いのはクアルコムがファーウェイの米国特許を買い取る点だ。米国の法廷で実際に行使できるライセンサーの手に移る。
+***** Comments
+- 5G競争がどれほど重要で、米国が主導権を握ることがいかに決定的かと言っていたのを覚えているか。それを今、ただ譲り渡すのか。
+- ファーウェイはエンティティリストに載っているのでは。クアルコムはこんな契約を結んで問題にならないのか。
+- 制裁前は、ファーウェイがモバイルチップセットの標準必須特許でクアルコムに払い、クアルコムが5G標準必須特許でファーウェイに払って、差額はクアルコム有利だった。ファーウェイはKirin 9000でSoCを自前化し、クアルコム製シリコンから離れた今、クアルコムが差額を払う側になっている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+화웨이와 퀄컴, 포괄적 특허 라이선스 계약 발표
+***** TLDR
+화웨이와 퀄컴이 5G, 컴퓨팅, AI, 네트워킹 분야 특허를 포괄하는 다년간 교차 라이선스 계약을 체결했다. 퀄컴은 같은 분야에서 화웨이의 미국 특허 일부를 별도로 매입한다. 금액 조건은 공개되지 않았고 매입은 규제 승인이 남아 있다. 양측은 FRAND 원칙 준수를 재확인했으며, 화웨이의 앨런 판은 수십 년간의 이동통신 R&D 투자를, 퀄컴의 존 한은 퀄컴 5G 표준특허 라이선스 사업에 대한 업계의 인정이라고 평가했다.
+***** Take
+양쪽 보도자료 모두 승리를 선언한다. 순지급 방향이 바뀌었고 어느 쪽도 그걸 말하고 싶지 않다는 뜻이다. 화웨이는 기린 9000 이후 퀄컴 모뎀을 사지 않았으니 이 관계에서 칩 매출이라는 절반은 이미 사라지고 특허라는 절반만 남았다. 더 무거운 쪽은 퀄컴이 화웨이의 미국 특허를 직접 사들인다는 부분이다. 미국 법정에서 실제로 행사할 수 있는 라이선서의 손으로 넘어간다.
+***** Comments
+- 5G 경쟁이 얼마나 중요하고 미국이 주도해야 한다고 말하던 때가 기억나는가. 그런데 이제 그냥 넘겨주는 건가.
+- 화웨이는 엔티티 리스트에 올라 있지 않나. 퀄컴이 이런 계약을 맺고도 문제가 안 되나.
+- 제재 전에는 화웨이가 모바일 칩셋 표준특허로 퀄컴에 지불하고 퀄컴이 5G 표준특허로 화웨이에 지불해 차액은 퀄컴에 유리했다. 화웨이가 기린 9000으로 SoC를 자체화하고 퀄컴 실리콘에서 벗어난 지금, 퀄컴이 차액을 내는 쪽이 됐다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Huawei y Qualcomm anuncian un amplio acuerdo de licencia de patentes
+***** TLDR
+Huawei y Qualcomm firmaron una licencia cruzada de varios años sobre patentes de 5G, computación, IA y redes, y Qualcomm comprará además un conjunto de patentes estadounidenses de Huawei en esas mismas áreas. No se revelaron las condiciones económicas y la compra aún necesita aprobación regulatoria. Ambas partes reiteraron sus compromisos FRAND: Alan Fan, de Huawei, destacó décadas de I+D propia en comunicaciones móviles, y John Han, de Qualcomm, presentó el acuerdo como un reconocimiento al programa de licencias de patentes esenciales 5G de Qualcomm.
+***** Take
+Las dos citas de prensa declaran victoria, que es como se sabe que cambió la dirección del pago neto y que ninguna parte quiere decirlo. Huawei dejó de comprar módems de Qualcomm después del Kirin 9000, así que la mitad de esa relación basada en ingresos por chips ya no existe y solo queda la de las patentes. Lo más relevante es que Qualcomm compre las patentes estadounidenses de Huawei: pasan a un licenciante que sí puede hacerlas valer en tribunales de Estados Unidos.
+***** Comments
+- ¿Recuerdan cuando nos decían lo importante que era la carrera del 5G y lo crítico que era que Estados Unidos liderara? ¿Y ahora simplemente lo regalan?
+- ¿Huawei no está en la Entity List? ¿Cómo puede Qualcomm firmar acuerdos así sin meterse en un problema enorme?
+- Antes de las sanciones, Huawei pagaba a Qualcomm por patentes esenciales de chipsets móviles mientras Qualcomm pagaba a Huawei por patentes esenciales de 5G, con el saldo neto a favor de Qualcomm. Huawei hizo su propio SoC con el Kirin 9000 y, ahora que ya no usa silicio de Qualcomm, es Qualcomm quien acaba pagando el neto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Huawei und Qualcomm kündigen umfassende Patentlizenzvereinbarung an
+***** TLDR
+Huawei und Qualcomm haben eine mehrjährige Kreuzlizenz für Patente in den Bereichen 5G, Computing, KI und Netzwerktechnik geschlossen. Zusätzlich kauft Qualcomm einen Teil der US-Patente von Huawei in denselben Feldern. Finanzielle Konditionen wurden nicht genannt, der Kauf braucht noch die Zustimmung der Aufsichtsbehörden. Beide Seiten bekräftigten ihre FRAND-Zusagen: Huaweis Alan Fan verwies auf jahrzehntelange eigene Forschung im Mobilfunk, Qualcomms John Han stellte den Deal als Anerkennung des 5G-SEP-Lizenzprogramms von Qualcomm dar.
+***** Take
+Beide Pressezitate erklären den Sieg, und genau daran erkennt man, dass sich die Richtung der Nettozahlung geändert hat und keine Seite das benennen will. Huawei kauft seit dem Kirin 9000 keine Qualcomm-Modems mehr, die Chip-Umsatz-Hälfte dieser Beziehung ist also weg, geblieben ist die Patent-Hälfte. Schwerer wiegt, dass Qualcomm Huaweis US-Patente direkt kauft: Sie wandern zu einem Lizenzgeber, der sie vor US-Gerichten tatsächlich durchsetzen kann.
+***** Comments
+- Erinnert sich noch jemand, wie wichtig das Rennen um 5G sei und wie entscheidend, dass die USA führen? Und jetzt gibt man es einfach her?
+- Steht Huawei nicht auf der Entity List? Wie kann Qualcomm solche Vereinbarungen eingehen, ohne massiven Ärger zu bekommen?
+- Vor den Sanktionen zahlte Huawei an Qualcomm für Mobilchipsatz-SEPs, während Qualcomm an Huawei für 5G-SEPs zahlte, mit einem Nettosaldo zugunsten von Qualcomm. Huawei hat seinen SoC mit dem Kirin 9000 selbst entwickelt, und nun, da Qualcomm-Silizium wegfällt, zahlt Qualcomm netto an Huawei.
+** We ported the original Doom to SQL :sql:databases:doom:gamedev:
+:PROPERTIES:
+:ID:       49948300
+:URL:      https://cedardb.com/blog/sqldoom/
+:HN_URL:   https://news.ycombinator.com/item?id=49948300
+:POINTS:   140
+:COMMENTS: 20
+:BY:       Vaslo
+:END:
+
+*** TLDR
+CedarDB implemented Doom's game logic and its renderer in SQL: about 5,900 lines for the game and 1,300 lines across 89 CTEs for the 320x200 renderer. Recursive CTEs handle BSP traversal and line of sight, window functions reproduce Doom's imperative ceilingclip and floorclip by sorted aggregation, and a single query returns the whole framebuffer as a 192,000-byte bytea. A Python client only polls the keyboard, drives the 35 Hz tick and blits to pygame. They measure 2.15 ms per game tic and roughly 13 ms per frame on a Ryzen 7 7840U, and admit BSP rendering is a bad fit for SQL: their earlier raycasting version was simpler to express and faster per pixel.
+
+*** Take
+The postmortem is the valuable part. Two wins are real: every weapon and monster is a table row you can change without recompiling, and multiplayer consistency falls out of transactions with database roles as the anti-cheat. The renderer is the confession. Because set semantics cannot mutate a z-buffer in place, they generate every candidate pixel and resolve the winner with MIN() over a packed bigint. It works, it hits frame budget, and it is three times the work the C version does.
+
+*** Comments
+
+**** bob1029
+I still think HN is taking major naps on the capabilities of contemporary SQL. There are businesses so complicated that maintaining procedural code over the domain is largely infeasible, and implementing the rules in SQL decomposes the problem better.
+
+**** soltanov
+Fewer lines of code than vanilla C while abusing query planning as a state machine is peak engineering malpractice. I love it.
+
+**** noduerme
+When I wrote my casino in 2010, every remote call updated game state in SQL tables used as the source of truth. With multiple players you can imagine there were deadlocks, and I'm still unsure whether that was a good decision.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我们把最初的 Doom 移植到了 SQL
+***** TLDR
+CedarDB 用 SQL 实现了 Doom 的游戏逻辑和渲染器：游戏部分约 5900 行，320x200 渲染器约 1300 行、分布在 89 个 CTE 中。递归 CTE 负责 BSP 遍历和视线判定，窗口函数用排序聚合复现了 Doom 原本命令式的 ceilingclip 和 floorclip，一条查询就返回整帧 192000 字节的 bytea。Python 客户端只负责读键盘、驱动 35 Hz 的 tick 以及把画面交给 pygame。在 Ryzen 7 7840U 上，每个游戏 tic 约 2.15 毫秒，每帧渲染约 13 毫秒。作者也承认 BSP 渲染并不适合 SQL：他们早先的光线投射版本更易表达、单像素更快。
+***** Take
+最有价值的是复盘部分。两项收益是真的：每件武器、每个怪物都是一行表数据，改了不用重新编译；多人一致性直接来自事务，数据库角色就是反作弊机制。渲染器则是一份自白。集合语义无法就地修改 z-buffer，于是他们生成所有候选像素，再用打包成 bigint 的键做 MIN() 来定胜负。这办法能跑、能满足帧预算，但工作量是 C 版本的三倍。
+***** Comments
+- 我还是觉得 HN 严重低估了现代 SQL 的能力。有些业务复杂到用过程式代码维护领域逻辑基本不可行，而用 SQL 实现规则能把问题拆得更好。
+- 代码行数比原版 C 还少，同时把查询规划滥用成状态机，这是工程渎职的巅峰。我爱了。
+- 我 2010 年写赌场系统时，每个远程调用都更新 SQL 表里的游戏状态，并把它当作唯一真相来源。多人同时在线时可以想象会有死锁，我至今不确定那个决定是对还是错。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+オリジナルのDoomをSQLに移植した
+***** TLDR
+CedarDBがDoomのゲームロジックとレンダラーをSQLで実装した。ゲーム部分が約5,900行、320x200のレンダラーが89個のCTEに分かれた約1,300行。再帰CTEがBSP走査と視線判定を担い、ウィンドウ関数がDoomの命令的なceilingclipとfloorclipをソート集約で再現し、1本のクエリがフレームバッファ全体を192,000バイトのbyteaで返す。Pythonクライアントはキーボード入力、35 Hzのティック駆動、pygameへの描画だけを行う。Ryzen 7 7840Uでゲームティックが2.15ミリ秒、1フレームの描画が約13ミリ秒。著者らはBSPレンダリングがSQLに向かないことも認めており、以前のレイキャスティング版の方が記述が簡単でピクセル当たりも速かったという。
+***** Take
+価値があるのは振り返りの部分だ。本物の利点は二つある。武器もモンスターもテーブルの1行なので再コンパイルなしに変更できること、そしてマルチプレイの整合性がトランザクションから自然に出てきて、データベースのロールがそのままチート対策になること。レンダラーの方は告白だ。集合意味論ではzバッファをその場で書き換えられないので、候補となる全ピクセルを生成し、bigintに詰め込んだキーのMIN()で勝者を決める。動くしフレーム予算にも収まるが、C版の3倍の仕事をしている。
+***** Comments
+- HNは今のSQLの能力を過小評価しすぎだと思う。手続き型コードでドメインを維持するのが事実上不可能なほど複雑な業務もあり、ルールをSQLで書いた方が問題をうまく分解できる。
+- 素のCより行数が少なく、しかもクエリプランニングをステートマシンとして酷使している。エンジニアリング的背任の極みだ。最高。
+- 2010年にカジノを書いたとき、すべてのリモート呼び出しがSQLテーブル上のゲーム状態を更新し、それを真実の源にしていた。複数プレイヤーだとデッドロックも起きたし、今でもあれが良い判断だったのか分からない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+오리지널 둠을 SQL로 이식했다
+***** TLDR
+CedarDB가 둠의 게임 로직과 렌더러를 SQL로 구현했다. 게임 부분이 약 5,900줄, 320x200 렌더러가 89개 CTE에 걸쳐 약 1,300줄이다. 재귀 CTE가 BSP 순회와 시야 판정을 맡고, 윈도 함수가 둠의 명령형 ceilingclip과 floorclip을 정렬 집계로 재현하며, 단일 쿼리가 프레임버퍼 전체를 192,000바이트 bytea로 반환한다. 파이썬 클라이언트는 키보드 입력, 35Hz 틱 구동, pygame 출력만 담당한다. Ryzen 7 7840U에서 게임 틱이 2.15밀리초, 프레임 렌더링이 약 13밀리초다. 저자들은 BSP 렌더링이 SQL에 맞지 않는다고 인정한다. 이전 레이캐스팅 버전이 표현하기 쉽고 픽셀당 속도도 빨랐다.
+***** Take
+가치 있는 부분은 회고다. 진짜 이점은 둘이다. 무기와 몬스터가 모두 테이블의 한 행이어서 재컴파일 없이 바꿀 수 있고, 멀티플레이 일관성이 트랜잭션에서 그냥 나오며 데이터베이스 역할이 그대로 치트 방지 장치가 된다. 렌더러는 고백이다. 집합 의미론으로는 z버퍼를 제자리에서 바꿀 수 없으니 모든 후보 픽셀을 만들고 bigint에 눌러 담은 키의 MIN()으로 승자를 정한다. 돌아가고 프레임 예산도 맞추지만, C 버전의 세 배 일을 한다.
+***** Comments
+- HN이 요즘 SQL의 능력을 크게 과소평가한다고 본다. 절차적 코드로 도메인을 유지하는 게 사실상 불가능할 만큼 복잡한 업무도 있고, 규칙을 SQL로 구현하면 문제를 더 잘 분해할 수 있다.
+- 순수 C보다 줄 수가 적은데 쿼리 플래닝을 상태 기계로 학대하고 있다. 엔지니어링 배임의 정점이다. 마음에 든다.
+- 2010년에 카지노를 만들 때 모든 원격 호출이 SQL 테이블의 게임 상태를 갱신하고 그걸 진실의 원천으로 썼다. 플레이어가 여럿이면 데드락도 생겼고, 지금도 그게 좋은 결정이었는지 모르겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Portamos el Doom original a SQL
+***** TLDR
+CedarDB implementó la lógica de juego de Doom y su renderizador en SQL: unas 5.900 líneas para el juego y 1.300 líneas repartidas en 89 CTE para el renderizador de 320x200. Los CTE recursivos recorren el árbol BSP y calculan la línea de visión, las funciones de ventana reproducen el ceilingclip y el floorclip imperativos de Doom mediante agregación ordenada, y una sola consulta devuelve el framebuffer completo como un bytea de 192.000 bytes. El cliente en Python solo lee el teclado, marca el tic a 35 Hz y dibuja con pygame. Miden 2,15 ms por tic de juego y unos 13 ms por fotograma en un Ryzen 7 7840U, y admiten que el renderizado BSP encaja mal con SQL: su versión anterior con raycasting era más simple de expresar y más rápida por píxel.
+***** Take
+Lo valioso es el postmortem. Hay dos ventajas reales: cada arma y cada monstruo es una fila de tabla que se puede cambiar sin recompilar, y la consistencia en multijugador sale de las transacciones, con los roles de la base de datos como antitrampas. El renderizador es la confesión. Como la semántica de conjuntos no permite mutar un z-buffer en el sitio, generan todos los píxeles candidatos y resuelven el ganador con un MIN() sobre un bigint empaquetado. Funciona y entra en el presupuesto de fotograma, pero hace el triple de trabajo que la versión en C.
+***** Comments
+- Sigo pensando que en HN se duerme con las capacidades del SQL actual. Hay negocios tan complicados que mantener código procedimental sobre el dominio es casi imposible, y escribir las reglas en SQL descompone mejor el problema.
+- Menos líneas que el C original mientras se abusa de la planificación de consultas como máquina de estados: negligencia profesional de nivel máximo. Me encanta.
+- Cuando escribí mi casino en 2010, cada llamada remota actualizaba el estado del juego en tablas SQL que eran la fuente de verdad. Con varios jugadores ya imaginan que hubo deadlocks, y sigo sin saber si fue una buena decisión.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wir haben das originale Doom nach SQL portiert
+***** TLDR
+CedarDB hat Doom-Spiellogik und Renderer in SQL umgesetzt: rund 5.900 Zeilen für das Spiel und 1.300 Zeilen über 89 CTEs für den 320x200-Renderer. Rekursive CTEs übernehmen BSP-Traversierung und Sichtlinien, Fensterfunktionen bilden Dooms imperative ceilingclip und floorclip über sortierte Aggregation nach, und eine einzige Abfrage liefert den gesamten Framebuffer als 192.000-Byte-bytea. Ein Python-Client liest nur die Tastatur, treibt den 35-Hz-Tick und zeichnet über pygame. Gemessen werden 2,15 ms pro Spiel-Tic und etwa 13 ms pro Frame auf einem Ryzen 7 7840U. Die Autoren geben zu, dass BSP-Rendering schlecht zu SQL passt: Ihre frühere Raycasting-Version war einfacher auszudrücken und pro Pixel schneller.
+***** Take
+Wertvoll ist das Postmortem. Zwei Vorteile sind echt: Jede Waffe und jedes Monster ist eine Tabellenzeile, die man ohne Neukompilieren ändern kann, und Mehrspieler-Konsistenz ergibt sich aus Transaktionen, mit Datenbankrollen als Cheat-Schutz. Der Renderer ist das Geständnis. Weil sich ein z-Buffer in Mengensemantik nicht an Ort und Stelle ändern lässt, erzeugen sie jeden Kandidatenpixel und ermitteln den Gewinner per MIN() über einen gepackten bigint. Das funktioniert und hält das Frame-Budget, leistet aber die dreifache Arbeit der C-Version.
+***** Comments
+- Ich finde weiterhin, HN verschläft die Fähigkeiten von heutigem SQL. Es gibt Geschäftsbereiche, die so komplex sind, dass prozeduraler Code über der Domäne kaum wartbar ist, und die Regeln in SQL zerlegen das Problem besser.
+- Weniger Codezeilen als reines C und gleichzeitig die Query-Planung als Zustandsmaschine missbrauchen: Ingenieurs-Kunstfehler in Reinform. Ich liebe es.
+- Als ich 2010 mein Casino schrieb, aktualisierte jeder Remote-Aufruf den Spielzustand in SQL-Tabellen, die als Quelle der Wahrheit dienten. Bei mehreren Spielern gab es erwartbar Deadlocks, und ich bin mir bis heute nicht sicher, ob das eine gute Entscheidung war.
+** Automating my 35mm film scanning pipeline :photography:film:python:localllm:
+:PROPERTIES:
+:ID:       49946148
+:URL:      https://shannadige.com/blog/darkroom/
+:HN_URL:   https://news.ycombinator.com/item?id=49946148
+:POINTS:   81
+:COMMENTS: 58
+:BY:       shannadige
+:END:
+
+*** TLDR
+The author was spending about four hours per 36-frame roll: scan each frame in VueScan, then open every file in darktable to invert and edit it by hand. Over 11 days and 64 commits they automated the post-scan half. A Python and NumPy routine inverts the negatives using the blank film leader as a per-roll color reference so all 36 frames convert consistently, dust and scratch detection feeds the LaMa inpainting model to fill spots without smearing grain, and Qwen3-VL running locally through Ollama tags each frame in about five seconds. An earlier attempt to give Claude direct control of the scanner over SANE drove the carriage backwards and nearly destroyed its gears. Scanning, approving dust fixes and choosing what to publish stay manual. 22 rolls, 314 photographs.
+
+*** Take
+The reusable idea here is not the models, it is using the blank leader as the per-roll color reference. That is a darkroom habit turned into code, and it is the reason batch inversion holds across a whole roll instead of drifting frame to frame. The scanner incident is the other takeaway: an agent with write access to a stepper motor has no undo.
+
+*** Comments
+
+**** skort
+What an odd thing to have an LLM make. There is plenty of existing software for film scanning. I use NegPy, which interfaces with anything supported by SANE and handles inversion and editing nicely.
+
+**** varjag
+Seeing the Plustek scanner on his desk I was excited that he came up with some physical automation for film strip handling. Alas, it's software again. The AI exponential curve stops where emptying the dishwasher starts.
+
+**** hankbond
+I have a love-hate relationship with the Foveon X3 sensor, which needs sluggish and limited Sigma software to convert its RAWs. Recently I've been using AI to build a converter that processes them similarly with some improvements.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+把我的 35mm 胶片扫描流程自动化
+***** TLDR
+作者原本每卷 36 张要花大约四小时：先在 VueScan 里逐张扫描，再在 darktable 里逐个文件手动反转和修图。他用 11 天、64 次提交把扫描之后的那一半自动化了。一段 Python 加 NumPy 的程序以胶片空白片头作为整卷的色彩参考来反转负片，让 36 张的转换结果保持一致；灰尘和划痕检测配合 LaMa 补绘模型填补污点而不糊掉颗粒；通过 Ollama 本地运行的 Qwen3-VL 约五秒为每张图打标签。此前他曾试图让 Claude 通过 SANE 直接控制扫描仪，结果让滑架反向运动，差点毁掉齿轮。扫描、确认除尘结果和挑选发布内容仍是手动。共处理 22 卷、314 张照片。
+***** Take
+这里真正可复用的不是模型，而是用空白片头做整卷的色彩参考。那是把暗房里的习惯写成了代码，也正是批量反转能在一整卷里保持一致、不会逐张漂移的原因。扫描仪那段是另一个教训：让智能体拥有步进电机的写权限，是没有撤销键的。
+***** Comments
+- 让大模型做这个挺奇怪的。胶片扫描已有不少现成软件。我用 NegPy，它支持所有 SANE 能驱动的扫描仪，反转和修图都做得很好。
+- 看到他桌上那台 Plustek，我还以为他做了胶片条传送的物理自动化。结果又是软件。AI 的指数曲线到了清空洗碗机那一步就停了。
+- 我对 Foveon X3 传感器又爱又恨，它的 RAW 必须靠适马那套又慢又受限的软件转换。最近我在用 AI 做一个转换器，流程类似但有些改进。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+35mmフィルムのスキャン工程を自動化した
+***** TLDR
+著者は36枚撮り1本につき約4時間かけていた。VueScanで1コマずつスキャンし、darktableで全ファイルを開いて手作業で反転と編集をしていた。11日間、64コミットでスキャン後の半分を自動化した。PythonとNumPyのルーチンがフィルムの未露光リーダー部をロールごとの色基準として使って反転するため、36コマが一貫して変換される。ゴミと傷の検出はインペインティングモデルLaMaに渡され、粒子を潰さずに点を埋める。Ollama経由でローカル実行するQwen3-VLが各コマに約5秒でタグを付ける。以前にSANE経由でClaudeにスキャナーを直接操作させた試みでは、キャリッジが逆走してギアを壊しかけた。スキャン、ゴミ取りの確認、公開するコマの選択は手作業のまま。22本、314枚を処理した。
+***** Take
+再利用できる発想はモデルではなく、未露光リーダー部をロールごとの色基準に使う点だ。暗室の習慣をコードにしたもので、だからこそ一括反転が1本を通してずれずに保たれる。スキャナーの一件はもう一つの教訓だ。ステッピングモーターへの書き込み権限を持つエージェントに、取り消しは存在しない。
+***** Comments
+- LLMにこれを作らせるのは妙な話だ。フィルムスキャン用のソフトはすでに十分ある。自分はNegPyを使っていて、SANE対応のスキャナーなら何でも扱えて反転も編集もきれいにこなす。
+- 机の上のPlustekを見て、フィルムストリップの物理的な送りを自動化したのかと期待した。だが結局またソフトウェアだ。AIの指数曲線は食洗機を片づけるところで止まる。
+- Foveon X3センサーには愛憎がある。RAW変換には動作が重くて機能も限られたシグマのソフトが必要だ。最近はAIを使って同じ処理に改良を加えたコンバーターを作っている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+35mm 필름 스캔 파이프라인 자동화하기
+***** TLDR
+저자는 36컷 한 롤에 약 네 시간을 쓰고 있었다. VueScan에서 한 컷씩 스캔한 뒤 darktable에서 모든 파일을 열어 손으로 반전하고 보정했다. 11일, 64커밋으로 스캔 이후 절반을 자동화했다. 파이썬과 NumPy 루틴이 필름의 빈 리더 부분을 롤 단위 색 기준으로 삼아 네거티브를 반전하므로 36컷이 일관되게 변환된다. 먼지와 스크래치 검출 결과는 인페인팅 모델 LaMa로 넘겨 입자를 뭉개지 않고 점을 메운다. Ollama로 로컬 실행하는 Qwen3-VL이 컷마다 약 5초에 태그를 붙인다. 앞서 SANE로 클로드에게 스캐너를 직접 제어하게 한 시도에서는 캐리지가 역주행해 기어가 거의 망가졌다. 스캔, 먼지 제거 확인, 공개할 컷 선택은 여전히 수동이다. 22롤, 314장을 처리했다.
+***** Take
+여기서 가져갈 아이디어는 모델이 아니라 빈 리더를 롤 단위 색 기준으로 쓴다는 점이다. 암실의 습관을 코드로 옮긴 것이고, 그래서 일괄 반전이 한 롤 내내 컷마다 흐트러지지 않는다. 스캐너 사고는 또 다른 교훈이다. 스테핑 모터에 쓰기 권한을 가진 에이전트에게는 되돌리기가 없다.
+***** Comments
+- LLM에게 이걸 만들게 한 건 이상한 선택이다. 필름 스캔 소프트웨어는 이미 충분히 많다. 나는 NegPy를 쓰는데 SANE이 지원하는 스캐너는 다 붙고 반전과 편집도 깔끔하다.
+- 책상 위 Plustek을 보고 필름 스트립 이송을 물리적으로 자동화한 줄 알고 설렜다. 결국 또 소프트웨어다. AI의 지수 곡선은 식기세척기 비우는 데서 멈춘다.
+- Foveon X3 센서에는 애증이 있다. RAW 변환에 느리고 기능도 제한된 시그마 소프트웨어가 필요하다. 요즘은 AI로 같은 처리를 개선한 컨버터를 만들고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Automatizando mi flujo de escaneo de película de 35 mm
+***** TLDR
+El autor dedicaba unas cuatro horas por rollo de 36 fotos: escanear cada fotograma en VueScan y luego abrir todos los archivos en darktable para invertirlos y editarlos a mano. En 11 días y 64 commits automatizó la mitad posterior al escaneo. Una rutina en Python y NumPy invierte los negativos usando la cola de película en blanco como referencia de color de cada rollo, de modo que los 36 fotogramas se convierten de forma consistente; la detección de polvo y arañazos alimenta al modelo de inpainting LaMa para rellenar las manchas sin arrastrar el grano; y Qwen3-VL, ejecutado en local mediante Ollama, etiqueta cada fotograma en unos cinco segundos. Un intento anterior de dar a Claude control directo del escáner por SANE hizo retroceder el carro y casi destruyó sus engranajes. Escanear, aprobar las correcciones de polvo y elegir qué publicar siguen siendo manuales. 22 rollos, 314 fotografías.
+***** Take
+La idea reutilizable no son los modelos, es usar la cola en blanco como referencia de color por rollo. Es una costumbre de laboratorio convertida en código, y por eso la inversión por lotes se mantiene a lo largo de todo el rollo en vez de irse desviando fotograma a fotograma. El incidente del escáner es la otra lección: un agente con permiso de escritura sobre un motor paso a paso no tiene deshacer.
+***** Comments
+- Qué cosa tan extraña para encargar a un LLM. Ya hay bastante software para escanear película. Yo uso NegPy, que habla con cualquier escáner compatible con SANE y hace la inversión y la edición muy bien.
+- Al ver el Plustek en su escritorio me entusiasmé pensando que había automatizado físicamente el manejo de las tiras de película. Pero no, otra vez software. La curva exponencial de la IA se detiene donde empieza vaciar el lavavajillas.
+- Tengo una relación de amor y odio con el sensor Foveon X3, cuyos RAW requieren un software de Sigma lento y limitado. Últimamente uso IA para construir un conversor que los procesa de forma parecida con algunas mejoras.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ich habe meinen Scan-Workflow für 35-mm-Film automatisiert
+***** TLDR
+Der Autor brauchte pro Film mit 36 Bildern rund vier Stunden: jedes Bild in VueScan scannen, dann jede Datei in darktable öffnen, von Hand invertieren und bearbeiten. In 11 Tagen und 64 Commits hat er die Hälfte nach dem Scannen automatisiert. Eine Routine in Python und NumPy invertiert die Negative und nutzt den unbelichteten Filmvorspann als Farbreferenz pro Film, sodass alle 36 Bilder konsistent umgewandelt werden. Eine Staub- und Kratzererkennung übergibt an das Inpainting-Modell LaMa, das Flecken füllt, ohne das Korn zu verschmieren. Qwen3-VL, lokal über Ollama, verschlagwortet jedes Bild in etwa fünf Sekunden. Ein früherer Versuch, Claude über SANE direkte Kontrolle über den Scanner zu geben, ließ den Schlitten rückwärts fahren und zerstörte beinahe die Zahnräder. Scannen, das Freigeben der Staubkorrekturen und die Auswahl der Veröffentlichungen bleiben manuell. 22 Filme, 314 Fotos.
+***** Take
+Übertragbar sind nicht die Modelle, sondern der unbelichtete Vorspann als Farbreferenz pro Film. Das ist eine Dunkelkammer-Gewohnheit in Code, und genau deshalb hält die Stapelinvertierung über einen ganzen Film, statt von Bild zu Bild zu driften. Der Scanner-Vorfall ist die zweite Lehre: Ein Agent mit Schreibzugriff auf einen Schrittmotor hat kein Undo.
+***** Comments
+- Seltsam, das von einem LLM bauen zu lassen. Für Filmscans gibt es reichlich fertige Software. Ich nutze NegPy, das mit allem spricht, was SANE unterstützt, und Invertierung und Bearbeitung gut erledigt.
+- Als ich den Plustek auf seinem Schreibtisch sah, hoffte ich auf eine physische Automatisierung für den Filmstreifentransport. Leider wieder nur Software. Die exponentielle KI-Kurve endet dort, wo das Ausräumen der Spülmaschine beginnt.
+- Ich habe eine Hassliebe zum Foveon-X3-Sensor, dessen RAWs eine träge und eingeschränkte Sigma-Software brauchen. Zuletzt baue ich mit KI einen Konverter, der sie ähnlich verarbeitet, mit einigen Verbesserungen.
+** The Tao of Backup :backup:sysadmin:dataintegrity:classic:
+:PROPERTIES:
+:ID:       49932236
+:URL:      http://www.taobackup.com/index.html
+:HN_URL:   https://news.ycombinator.com/item?id=49932236
+:POINTS:   160
+:COMMENTS: 53
+:BY:       vntok
+:END:
+
+*** TLDR
+A 1997 site by Ross Williams of Rocksoft that teaches backup through seven short parables, one per aspect: coverage, frequency, separation, history, testing, security and integrity. Each page has a novice proposing a shortcut, a master answering in aphorism or in silence, and then the consequence. The novice who skips system and application files because they can be reinstalled from distribution disks loses his disk the next day and is still reinstalling three days later. The novice who backs up everything offsite and verifies it still has an intruder quietly corrupting random files for six months, until no backup generation is known to be clean. The last page has the novice ask whether all of this exists to sell more copies of Rocksoft's Veracity, and the master confirms it.
+
+*** Take
+Twenty-nine years on, the integrity chapter is the one that still bites. Everything since 1997 has made coverage, frequency and separation purchasable: object storage, snapshots, cross-region replication. None of it tells you whether the bytes you are faithfully replicating were already wrong. Silent corruption flowing through a healthy backup rotation is still how people lose data in 2026, and the sales pitch at the end is more honest than most vendor content published this week.
+
+*** Comments
+
+**** ibotty
+The novice became suspicious and asked whether all this Tao of Backup stuff is just so the master can sell more copies of Veracity. The master said: Now you are truly enlightened.
+
+**** dbdr
+The novice said he would save his working files but not his system and application files, since those can always be reinstalled from their distribution disks. The next day his disk crashed. Three days later he was still reinstalling software.
+
+**** nzoschke
+I just launched a music backup tool. Storage is a Hetzner Storage Box, which feels great so far: cheap, and it supports SFTP and WebDAV so you can use rsync or restic. Hosting in Germany from the US feels a little slow. Any alternatives folks use?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+备份之道
+***** TLDR
+这是 Rocksoft 的 Ross Williams 在 1997 年做的网站，用七则短寓言讲备份，每则对应一个要点：覆盖范围、频率、异地分离、历史版本、测试、安全和完整性。每页都是新手提出一条捷径，师父用格言回应或干脆沉默，接着是后果。那个因为系统和应用文件能从安装盘重装而不备份它们的新手，第二天硬盘就坏了，三天后还在装软件。另一个把所有文件异地备份并做了校验的新手，网络里却潜伏着入侵者，半年来一直在随机破坏文件，最后已经没有哪一代备份能确定是干净的。最后一页，新手问这一整套东西是不是就为了多卖几份 Rocksoft 的 Veracity，师父给了肯定答复。
+***** Take
+二十九年过去，仍然扎人的是完整性那一章。1997 年之后的一切都让覆盖、频率和异地分离变成可以直接买到的东西：对象存储、快照、跨区域复制。但没有任何一样能告诉你，你忠实复制的那些字节本来是不是已经错了。静默损坏顺着一套看起来健康的备份轮换流过去，到 2026 年依然是人们丢数据的方式。而结尾那段推销，比本周多数厂商内容都要诚实。
+***** Comments
+- 新手起了疑心，问这一整套『备份之道』是不是只为了让师父多卖几份 Veracity。师父说：现在你真正开悟了。
+- 新手说他会保存工作文件，但不备份系统和应用文件，因为那些随时能从安装盘重装。第二天他的硬盘崩了。三天后他还在装软件。
+- 我刚上线了一个音乐备份工具。存储用的是 Hetzner Storage Box，目前体验很好：便宜，支持 SFTP 和 WebDAV，所以可以用 rsync 或 restic。从美国访问德国机房感觉有点慢。大家还有别的选择吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+バックアップの道
+***** TLDR
+RocksoftのRoss Williamsが1997年に作ったサイトで、七つの短い寓話でバックアップを説く。網羅、頻度、隔離、履歴、検証、セキュリティ、完全性の各項目に一話ずつ。どのページも、初心者が手抜きを提案し、師が格言か沈黙で答え、そして結果が訪れる。システムファイルとアプリケーションファイルは配布ディスクから入れ直せるからと省いた初心者は、翌日ディスクが壊れ、三日後もまだ再インストールをしている。全ファイルを遠隔地に保存し検証までしていた初心者のところには侵入者が半年前から潜み、ランダムにファイルを壊し続けていて、どの世代のバックアップが無事なのか分からなくなっている。最後のページで初心者は、この一式はRocksoftのVeracityを売るためではないかと問い、師はそれを認める。
+***** Take
+29年経って、いまも刺さるのは完全性の章だ。1997年以降のあらゆる進歩は、網羅と頻度と隔離を買えるものにした。オブジェクトストレージ、スナップショット、リージョン間レプリケーション。だがどれも、忠実に複製しているそのバイト列がすでに壊れていたかどうかは教えてくれない。健全に見えるバックアップ運用を静かな破損が流れていくのは、2026年でもデータを失う主要な経路だ。そして末尾の売り込みは、今週出たベンダーコンテンツの大半より正直だ。
+***** Comments
+- 初心者は疑って、この「バックアップの道」一式は師がVeracityをもっと売るためではないかと尋ねた。師は言った。今こそお前は真に悟った。
+- 初心者は、作業ファイルは保存するがシステムファイルとアプリケーションファイルは配布ディスクから入れ直せるので保存しないと言った。翌日、彼のディスクはクラッシュした。三日後、彼はまだソフトを入れ直していた。
+- 音楽のバックアップツールを公開した。ストレージはHetzner Storage Boxで、今のところ満足している。安いし、SFTPとWebDAVに対応しているのでrsyncやresticが使える。ドイツのホスティングを米国から使うと少し遅く感じる。他に使っているところはある？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+백업의 도
+***** TLDR
+Rocksoft의 로스 윌리엄스가 1997년에 만든 사이트로, 일곱 편의 짧은 우화로 백업을 가르친다. 범위, 빈도, 분리, 이력, 검증, 보안, 무결성에 각각 한 편씩이다. 모든 페이지는 초보자가 지름길을 제안하고, 스승이 격언으로 답하거나 침묵하고, 그다음 결과가 온다. 시스템과 애플리케이션 파일은 배포 디스크에서 다시 설치할 수 있으니 빼겠다던 초보자는 다음 날 디스크가 깨지고, 사흘 뒤에도 여전히 재설치 중이다. 모든 파일을 원격지에 보관하고 검증까지 한 초보자의 네트워크에는 침입자가 여섯 달째 숨어 파일을 무작위로 손상시켜 왔고, 이제 어느 세대의 백업이 깨끗한지 알 수 없다. 마지막 페이지에서 초보자가 이 모든 게 Rocksoft의 Veracity를 더 팔기 위한 것인지 묻고, 스승은 그렇다고 인정한다.
+***** Take
+29년이 지나도 여전히 아픈 쪽은 무결성 장이다. 1997년 이후의 모든 진보는 범위와 빈도와 분리를 돈으로 살 수 있게 만들었다. 오브젝트 스토리지, 스냅샷, 리전 간 복제. 그러나 어느 것도 당신이 충실하게 복제하는 그 바이트가 이미 잘못된 것이었는지는 알려주지 않는다. 건강해 보이는 백업 순환을 조용한 손상이 통과해 흐르는 일은 2026년에도 데이터를 잃는 방식이다. 그리고 마지막의 영업 멘트는 이번 주에 나온 대부분의 벤더 콘텐츠보다 솔직하다.
+***** Comments
+- 초보자가 의심이 들어, 이 '백업의 도' 전체가 스승이 Veracity를 더 팔기 위한 것이냐고 물었다. 스승이 말했다. 이제 너는 참으로 깨달았다.
+- 초보자는 작업 파일은 저장하겠지만 시스템과 애플리케이션 파일은 배포 디스크에서 언제든 다시 설치할 수 있으니 저장하지 않겠다고 했다. 다음 날 그의 디스크가 깨졌다. 사흘 뒤에도 그는 여전히 소프트웨어를 다시 설치하고 있었다.
+- 음악 백업 도구를 막 출시했다. 저장소는 Hetzner Storage Box인데 지금까지 아주 좋다. 싸고 SFTP와 WebDAV를 지원해서 rsync나 restic을 쓸 수 있다. 미국에서 독일 호스팅을 쓰니 조금 느리게 느껴진다. 다른 대안을 쓰는 분 있나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El Tao de las copias de seguridad
+***** TLDR
+Un sitio de 1997 de Ross Williams, de Rocksoft, que enseña el respaldo mediante siete parábolas breves, una por aspecto: cobertura, frecuencia, separación, historial, pruebas, seguridad e integridad. En cada página un novicio propone un atajo, un maestro responde con un aforismo o con silencio, y después llega la consecuencia. El novicio que omite los archivos de sistema y de aplicaciones porque pueden reinstalarse desde los discos de distribución pierde su disco al día siguiente y tres días después sigue reinstalando. El novicio que guarda todo fuera de las instalaciones y lo verifica tiene a un intruso corrompiendo archivos al azar desde hace seis meses, hasta que ninguna generación de copias se sabe limpia. En la última página el novicio pregunta si todo esto existe para vender más copias de Veracity, de Rocksoft, y el maestro lo confirma.
+***** Take
+Veintinueve años después, el capítulo que sigue doliendo es el de la integridad. Todo lo que vino desde 1997 ha vuelto comprables la cobertura, la frecuencia y la separación: almacenamiento de objetos, snapshots, replicación entre regiones. Nada de eso te dice si los bytes que replicas con tanta fidelidad ya estaban mal. La corrupción silenciosa circulando por una rotación de copias aparentemente sana sigue siendo la forma en que se pierden datos en 2026, y el anuncio del final es más honesto que la mayoría del contenido de proveedores publicado esta semana.
+***** Comments
+- El novicio sospechó y preguntó si todo este asunto del Tao de las copias de seguridad existe solo para que el maestro venda más licencias de Veracity. El maestro dijo: ahora sí estás verdaderamente iluminado.
+- El novicio dijo que guardaría sus archivos de trabajo pero no los del sistema ni las aplicaciones, porque siempre se pueden reinstalar desde sus discos de distribución. Al día siguiente su disco falló. Tres días después seguía reinstalando software.
+- Acabo de lanzar una herramienta de respaldo de música. El almacenamiento es un Hetzner Storage Box, que de momento va muy bien: barato y con soporte de SFTP y WebDAV, así que puedes usar rsync o restic. Alojarlo en Alemania y usarlo desde Estados Unidos se siente algo lento. ¿Qué alternativas usan?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das Tao des Backups
+***** TLDR
+Eine Website von 1997 von Ross Williams von Rocksoft, die Backup in sieben kurzen Parabeln lehrt, je eine pro Aspekt: Abdeckung, Häufigkeit, Trennung, Historie, Prüfung, Sicherheit und Integrität. Auf jeder Seite schlägt ein Novize eine Abkürzung vor, ein Meister antwortet mit einem Aphorismus oder mit Schweigen, und dann kommt die Folge. Der Novize, der System- und Anwendungsdateien auslässt, weil sie von den Datenträgern neu installiert werden können, verliert am nächsten Tag seine Platte und installiert drei Tage später noch. Der Novize, der alles auswärts sichert und prüft, hat seit sechs Monaten einen Eindringling im Netz, der zufällige Dateien beschädigt, bis von keiner Backup-Generation mehr bekannt ist, ob sie sauber ist. Auf der letzten Seite fragt der Novize, ob das alles nur existiert, um mehr Lizenzen von Rocksofts Veracity zu verkaufen, und der Meister bestätigt es.
+***** Take
+Neunundzwanzig Jahre später beißt noch das Integritätskapitel. Alles seit 1997 hat Abdeckung, Häufigkeit und Trennung kaufbar gemacht: Objektspeicher, Snapshots, regionsübergreifende Replikation. Nichts davon sagt, ob die Bytes, die man so treu repliziert, schon vorher falsch waren. Stille Korruption, die durch eine gesund aussehende Backup-Rotation fließt, ist auch 2026 noch der Weg, auf dem Daten verloren gehen. Und die Verkaufsbotschaft am Ende ist ehrlicher als die meisten Hersteller-Inhalte dieser Woche.
+***** Comments
+- Der Novize wurde misstrauisch und fragte, ob dieses ganze Tao des Backups nur dazu dient, dass der Meister mehr Veracity-Lizenzen verkauft. Der Meister sagte: Jetzt bist du wahrhaft erleuchtet.
+- Der Novize sagte, er werde seine Arbeitsdateien sichern, aber nicht System- und Anwendungsdateien, da diese jederzeit von den Datenträgern neu installiert werden können. Am nächsten Tag stürzte seine Platte ab. Drei Tage später installierte er noch Software.
+- Ich habe gerade ein Backup-Tool für Musik veröffentlicht. Als Speicher dient eine Hetzner Storage Box, die sich bisher gut anfühlt: günstig, und sie unterstützt SFTP und WebDAV, also lassen sich rsync oder restic nutzen. Aus den USA auf Hosting in Deutschland zuzugreifen fühlt sich etwas langsam an. Welche Alternativen nutzt ihr?
