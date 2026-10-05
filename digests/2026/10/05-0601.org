@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-05 06:01 UTC
+#+DATE: 2026-10-05T06:01:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+The FIA patches F1 power unit firmware during a red flag, an Irkutsk plague lab worker dies, and VB6 comes back as a browser tab
+
+* Highlights
+- F1: a wet-mode bug stuck cars in idle, fixed by a patch all 11 teams installed in 50 minutes
+- Irkutsk: 197 contacts under observation and two incompatible accounts of the exposure
+- ArtCraft: seven Rust apps shaped like Adobe's, drivable from a CLI or MCP server
+- VB6 rebuilt in HTML and JavaScript, debugger included, COM and Win32 excluded
+- HTTP tunnels built from nothing but OpenSSH and Nginx, plus the hole in the first config
+
+* Stories
+
+** Powerless F1 drivers frustrated by Bahrain F1 software glitch :f1:embedded:firmware:software:
+:PROPERTIES:
+:ID:       49959869
+:URL:      https://www.motorsport.com/f1/news/horrible-totally-unacceptable-powerless-f1-drivers-frustrated-by-bahrain-f1-software-glitch/10861968/
+:HN_URL:   https://news.ycombinator.com/item?id=49959869
+:POINTS:   164
+:COMMENTS: 97
+:BY:       llm_nerd
+:END:
+
+*** TLDR
+At the wet race billed as the Bahrain GP but run at Sepang, a bug in the power unit controller's wet weather mode left cars stuck in idle at very low speed, so several drivers had no drive on the way to the grid. Lando Norris, Oscar Piastri, Sergio Perez and Oliver Bearman were among those affected. The FIA coded a patch that lifted the usual wet weather power reduction in the affected zones and had all 11 teams install it during the red flag; the start was delayed about 50 minutes. Norris called it horrible and said it proves the cars should not carry that machinery; Perez called it unacceptable for the sport; Bearman said he was shocked the FIA could reach the throttle at all.
+
+*** Take
+Bearman found the actual story while complaining about it: the governing body can change how every car responds to the throttle, and it did so in under an hour with no lab time. That is a release-process question, not a hybrid question, so Norris blaming the powertrain aims at the wrong target. Any system where an emergency patch can reach 20 cars in 50 minutes is a system where a bad patch can too.
+
+*** Comments
+
+**** jey
+:PROPERTIES:
+:COMMENT_ID: 49960091
+:END:
+Seems wild that they can code and deploy an update of a critical-seeming component in the field like that. I thought such a firmware update would need extensive QA in the lab, along with root causing why this bug slipped through their processes anyway.
+
+**** aetherspawn
+:PROPERTIES:
+:COMMENT_ID: 49960362
+:END:
+Auto software engineer here. Motorsport software guys develop stuff with virtually no processes and usually have only very basic engineering skills, yet every day they are told Motorsport is at the forefront of technology.
+
+**** boredatoms
+:PROPERTIES:
+:COMMENT_ID: 49960026
+:END:
+Time to go back to NA engines, the hybrids don't give the rock concert wall of sound
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+巴林站软件故障让 F1 车手失去动力
+***** TLDR
+这场挂着巴林大奖赛名头、实际在雪邦赛道雨中举行的比赛出现故障：动力单元控制器的雨天模式有一个 bug，车辆在极低速下被卡在怠速状态，几位车手在驶向发车位的途中失去动力。受影响的包括诺里斯、皮亚斯特里、佩雷兹和贝尔曼。FIA 现场编写补丁，取消了相关区域的常规雨天降功率设定，并让全部 11 支车队在红旗期间完成安装，发车推迟约 50 分钟。诺里斯说这很糟糕，证明赛车不该装这些东西；佩雷兹称这对这项运动来说无法接受；贝尔曼说他震惊于 FIA 竟然能控制油门。
+***** Take
+贝尔曼在抱怨中说出了真正的要点：管理机构能改变每辆车对油门的响应方式，而且这次只用了不到一小时、没有任何实验室验证。这是发布流程的问题，不是混合动力的问题，所以诺里斯把矛头指向动力总成是找错了对象。一个能在 50 分钟内把紧急补丁推送到 20 辆赛车的系统，同样能推送一个有问题的补丁。
+***** Comments
+- 能在赛场上现写现部署这种关键部件的更新，实在离谱。我以为这种固件更新需要在实验室做大量 QA，还要追查这个 bug 为什么会漏过他们的流程。
+- 我是汽车软件工程师。赛车圈的软件人员几乎没有流程，工程基本功通常也很一般，但每天都有人告诉他们赛车运动处在技术最前沿。
+- 该回到自然进气发动机了，混合动力给不了那种摇滚现场般的声浪
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+バーレーンGPのソフトウェア不具合でF1ドライバーが動力を失う
+***** TLDR
+バーレーンGPと銘打たれながらセパンで行われた雨のレースで、パワーユニット制御のウェットモードにバグがあり、極低速で車両がアイドル状態から抜け出せなくなった。グリッドに向かう途中で複数のドライバーが駆動を失い、ノリス、ピアストリ、ペレス、ベアマンらが影響を受けた。FIAは該当区域での通常のウェット時パワー低減を解除するパッチを即席で作成し、赤旗中に11チーム全てにインストールさせた。スタートは約50分遅れた。ノリスは「ひどい」と述べ、こうした機構を積むべきではない証拠だと語り、ペレスはスポーツとして受け入れられないと述べ、ベアマンはFIAがスロットルにまで手を出せることに驚いたと話した。
+***** Take
+ベアマンは文句を言いながら本質を突いた。統括団体が全車のスロットル応答を書き換えられ、しかも検証なしで1時間以内に実行した。これはハイブリッドの問題ではなくリリース手順の問題であり、パワートレインを責めるノリスは的を外している。緊急パッチが50分で20台に届く仕組みは、不良パッチも同じ速度で届く仕組みだ。
+***** Comments
+- 重要部品の更新を現場でコーディングして配布できるのは驚きだ。この種のファームウェア更新には実験室での入念なQAと、バグが工程を通過した原因の究明が必要だと思っていた。
+- 自動車ソフトのエンジニアだが、モータースポーツのソフト担当はほぼ無手順で開発していて、工学の基礎も大抵は浅い。それでも毎日、モータースポーツは技術の最先端だと言われ続けている。
+- 自然吸気エンジンに戻る時だ。ハイブリッドではあのロックコンサートのような音の壁が出ない
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+바레인 GP 소프트웨어 결함으로 동력을 잃은 F1 드라이버들
+***** TLDR
+바레인 GP라는 이름으로 세팡에서 열린 빗길 경기에서 파워유닛 컨트롤러의 웻 모드 버그로 차량이 아주 낮은 속도에서 아이들 상태에 갇혔다. 그리드로 향하던 여러 드라이버가 동력을 잃었고 노리스, 피아스트리, 페레스, 베어먼이 포함됐다. FIA는 해당 구간의 통상적인 빗길 출력 제한을 해제하는 패치를 현장에서 작성해 적기 중단 중 11개 팀 전원에게 설치시켰고, 출발은 약 50분 늦어졌다. 노리스는 끔찍하다며 차에 그런 장치를 달아선 안 된다는 증거라고 했고, 페레스는 스포츠로서 받아들일 수 없다고 했으며, 베어먼은 FIA가 스로틀까지 건드릴 수 있다는 데 충격을 받았다고 말했다.
+***** Take
+베어먼은 불평하면서 핵심을 짚었다. 통치 기구가 모든 차의 스로틀 반응을 바꿀 수 있고, 실험실 검증 없이 한 시간 안에 실행했다. 이는 하이브리드 문제가 아니라 배포 절차 문제이고, 파워트레인을 지목한 노리스는 과녁을 잘못 잡았다. 긴급 패치가 50분 만에 20대에 닿는 체계는 불량 패치도 같은 속도로 닿는 체계다.
+***** Comments
+- 핵심 부품의 업데이트를 현장에서 작성해 배포할 수 있다는 게 놀랍다. 이런 펌웨어 업데이트는 실험실에서 광범위한 QA를 거치고, 버그가 왜 절차를 통과했는지 원인 규명까지 해야 하는 줄 알았다.
+- 자동차 소프트웨어 엔지니어다. 모터스포츠 소프트웨어 인력은 사실상 절차 없이 개발하고 공학 기본기도 대개 얕은데, 매일 모터스포츠가 기술의 최전선이라는 말을 듣는다.
+- 자연흡기 엔진으로 돌아갈 때다. 하이브리드는 그 록 콘서트 같은 사운드를 내주지 못한다
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Pilotos de F1 sin potencia por un fallo de software en el GP de Baréin
+***** TLDR
+En la carrera anunciada como GP de Baréin pero disputada en Sepang con pista mojada, un fallo en el modo de lluvia del controlador de la unidad de potencia dejó a los coches atrapados en ralentí a muy baja velocidad, y varios pilotos se quedaron sin tracción camino de la parrilla. Entre los afectados estuvieron Lando Norris, Oscar Piastri, Sergio Pérez y Oliver Bearman. La FIA programó un parche que eliminaba la reducción habitual de potencia en mojado en las zonas afectadas y lo hizo instalar a los 11 equipos durante la bandera roja; la salida se retrasó unos 50 minutos. Norris lo llamó horrible y dijo que demuestra que los coches no deberían llevar eso; Pérez lo calificó de inaceptable para el deporte; Bearman dijo que le impresionó que la FIA pueda llegar al acelerador.
+***** Take
+Bearman dio con la noticia real mientras se quejaba: el organismo rector puede cambiar cómo responde cada coche al acelerador, y lo hizo en menos de una hora sin pasar por laboratorio. Es un problema de proceso de liberación, no de hibridación, así que Norris apunta al blanco equivocado al culpar al tren motriz. Un sistema donde un parche de urgencia llega a 20 coches en 50 minutos es un sistema donde también llega uno defectuoso.
+***** Comments
+- Sorprende que puedan programar y desplegar en pista una actualización de un componente tan crítico. Pensaba que una actualización de firmware así exigiría un QA extenso en laboratorio y averiguar por qué el fallo se les escapó.
+- Soy ingeniero de software de automoción. Los de software en el motorsport desarrollan prácticamente sin procesos y suelen tener una base de ingeniería muy básica, pero cada día les dicen que el motorsport está en la vanguardia tecnológica.
+- Es hora de volver a los motores atmosféricos, los híbridos no dan ese muro de sonido de concierto de rock
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+F1-Fahrer ohne Antrieb nach Software-Fehler beim Bahrain-GP
+***** TLDR
+Beim als Bahrain-GP angekündigten, aber in Sepang auf nasser Strecke gefahrenen Rennen hing ein Fehler im Regenmodus der Antriebssteuerung: Bei sehr niedriger Geschwindigkeit blieben Autos im Leerlauf hängen, mehrere Fahrer hatten auf dem Weg zur Startaufstellung keinen Antrieb. Betroffen waren unter anderem Lando Norris, Oscar Piastri, Sergio Perez und Oliver Bearman. Die FIA schrieb vor Ort einen Patch, der die übliche Leistungsreduzierung bei Nässe in den betroffenen Zonen aufhebt, und ließ ihn während der Rotflaggenphase von allen 11 Teams installieren; der Start verzögerte sich um etwa 50 Minuten. Norris nannte es furchtbar und sah es als Beleg, dass solche Technik nicht ins Auto gehört; Perez nannte es für den Sport unakzeptabel; Bearman sagte, er sei schockiert, dass die FIA überhaupt an das Gaspedal kommt.
+***** Take
+Bearman hat beim Klagen die eigentliche Nachricht gefunden: Der Verband kann verändern, wie jedes Auto auf das Gaspedal reagiert, und tat es in unter einer Stunde ohne Prüfstand. Das ist eine Frage des Freigabeprozesses, nicht des Hybridantriebs, deshalb zielt Norris mit seiner Motorkritik daneben. Ein System, in dem ein Notfall-Patch 20 Autos in 50 Minuten erreicht, ist ein System, in dem ein fehlerhafter Patch das auch tut.
+***** Comments
+- Erstaunlich, dass sie ein Update für eine so kritische Komponente an der Strecke schreiben und ausrollen können. Ich dachte, so ein Firmware-Update bräuchte umfangreiches QA im Labor und eine Ursachenanalyse, warum der Fehler durch ihre Prozesse gekommen ist.
+- Softwareentwickler aus der Autoindustrie hier. Die Softwareleute im Motorsport entwickeln praktisch ohne Prozesse und haben meist nur sehr grundlegende Ingenieurskenntnisse, hören aber täglich, Motorsport sei die Spitze der Technik.
+- Zeit, zu Saugmotoren zurückzukehren, die Hybride liefern diese Klangwand wie bei einem Rockkonzert nicht
+** Nearly 200 people under observation after Irkutsk lab worker dies from plague :biosafety:publichealth:russia:labsafety:
+:PROPERTIES:
+:ID:       49960084
+:URL:      https://www.themoscowtimes.com/2026/10/02/nearly-200-people-under-observation-after-irkutsk-lab-worker-dies-from-plague-a93857
+:HN_URL:   https://news.ycombinator.com/item?id=49960084
+:POINTS:   164
+:COMMENTS: 119
+:BY:       ericmay
+:END:
+
+*** TLDR
+A worker at the Irkutsk anti-plague institute, identified by local outlets as Daria Sh., 27 or 28, was hospitalized Tuesday in Shelekhov with severe pneumonia, placed on a ventilator and died Thursday. Media reports describe pneumonic plague; regional officials confirmed plague without naming the form. She reportedly told medical staff she had broken a test tube of live bacteria while collecting samples. About 197 contacts are under medical observation, more than 100 of them in hospital wards, and the hospital was quarantined. Governor Igor Kobzev says all contacts so far show no symptoms and test negative. A criminal investigation was opened into health safety violations resulting in death.
+
+*** Take
+Two versions of the exposure are circulating: the broken test tube, and a commenter's account that she was infected during field sampling in Buryatia. They lead to different conclusions, one a containment failure inside a BSL facility and the other a field hazard, and neither Rospotrebnadzor nor the institute has published the strain, the containment level, or the procedure she was running. Commenters asking why plague killed a lab worker with antibiotics available are asking the right question; the answer depends on facts Russian authorities have not released.
+
+*** Comments
+
+**** helsinkiandrew
+:PROPERTIES:
+:COMMENT_ID: 49960247
+:END:
+So breaks a test tube of live bacteria at an anti-plague institute, possibly infects 100 colleagues, then when she developed plague like symptoms is taken to hospital and possibly infects 100 patients. I think they need to investigate their safety protocols.
+
+**** poilcn
+:PROPERTIES:
+:COMMENT_ID: 49960737
+:END:
+This information that she broke a tube is tabloid bs. Non-tabloid version is that she didn't catch it in the lab, she got ill while being on a research trip to Buryatia region near the border where sources of the disease were found.
+
+**** chasil
+:PROPERTIES:
+:COMMENT_ID: 49960553
+:END:
+Yersinia pestis is normally treated with doxycycline, cipro, or streptomycin. Is this a resistant strain?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+伊尔库茨克实验室人员死于鼠疫后，近 200 人接受医学观察
+***** TLDR
+当地媒体称，伊尔库茨克抗鼠疫研究所一名 27 或 28 岁的工作人员（Daria Sh.）周二在舍列霍夫因重症肺炎入院，上了呼吸机，周四死亡。媒体报道称为肺型鼠疫，地方官员确认是鼠疫但未说明类型。据报道她告诉医护人员，自己在采样时打碎了一支装有活菌的试管。约 197 名接触者正在接受医学观察，其中 100 多人在医院病房内，该医院已被隔离。州长科布泽夫表示所有接触者目前无症状且检测为阴性。当局已就违反卫生安全规定致人死亡立案侦查。
+***** Take
+关于感染过程有两种说法：打碎试管，以及一位评论者所说的她在布里亚特进行野外采样时感染。两者的结论完全不同，一个是生物安全实验室内的防护失效，另一个是野外暴露，而俄罗斯消费者权益监督局和研究所都没有公布菌株、防护等级或她当时执行的操作。评论区质疑为何在有抗生素的情况下实验室人员仍死于鼠疫，这个问题问得对，但答案取决于俄方尚未公开的事实。
+***** Comments
+- 在一家抗鼠疫研究所打碎了装活菌的试管，可能感染了 100 名同事，出现鼠疫症状后被送进医院，又可能感染了 100 名病人。他们该查一查自己的安全规程了。
+- 所谓她打碎试管的说法是小报胡扯。非小报的版本是她不是在实验室感染的，而是在靠近边境、已发现疫源地的布里亚特地区出差做研究时病倒的。
+- 鼠疫耶尔森菌通常用多西环素、环丙沙星或链霉素治疗。这是耐药菌株吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+イルクーツクの研究所職員がペストで死亡、約200人が医学観察下に
+***** TLDR
+地元報道によると、イルクーツク抗ペスト研究所の職員で27歳か28歳のダリヤ・シさんが火曜にシェレホフで重症肺炎のため入院し、人工呼吸器を装着したのち木曜に死亡した。報道は肺ペストとしており、地方当局はペストと確認したが型は明らかにしていない。彼女は検体採取中に生菌入りの試験管を割ったと医療スタッフに話したと伝えられている。接触者約197人が医学観察下にあり、うち100人以上は病棟内で、病院は隔離された。コブゼフ知事は接触者全員に症状はなく検査も陰性だとしている。衛生安全規則違反による死亡について刑事捜査が開始された。
+***** Take
+感染経路について二つの説が流れている。試験管の破損と、ブリヤートでの野外採集中に感染したというコメント投稿者の説だ。前者ならBSL施設内の封じ込め失敗、後者なら野外での曝露で、結論は全く異なる。ロスポトレブナゾルも研究所も、菌株、封じ込めレベル、当時の作業手順を公表していない。抗生物質がある中でなぜ研究所職員が死亡したのかという問いは正しいが、答えはロシア側が出していない事実に依存する。
+***** Comments
+- 抗ペスト研究所で生菌入りの試験管を割り、同僚100人に感染させた可能性があり、ペストの症状が出て病院に運ばれて患者100人にも感染させた可能性がある。安全手順を調査すべきだ。
+- 試験管を割ったという情報はタブロイドの作り話だ。そうでない説明では、彼女は研究所で感染したのではなく、感染源が確認されている国境近くのブリヤート地域への調査出張中に発症した。
+- ペスト菌は通常ドキシサイクリン、シプロフロキサシン、ストレプトマイシンで治療する。これは耐性株なのか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+이르쿠츠크 연구소 직원이 페스트로 사망, 약 200명 의학 관찰
+***** TLDR
+현지 매체에 따르면 이르쿠츠크 항페스트 연구소 직원인 27~28세 다리야 S.씨가 화요일 셸레호프에서 중증 폐렴으로 입원해 인공호흡기를 달았고 목요일에 사망했다. 언론은 폐페스트로 보도했고, 지역 당국은 페스트라고 확인했지만 유형은 밝히지 않았다. 그는 시료 채취 중 생균이 든 시험관을 깨뜨렸다고 의료진에게 말한 것으로 전해졌다. 접촉자 약 197명이 의학 관찰 중이며 그중 100명 이상은 병동에 있고 해당 병원은 격리됐다. 코브제프 주지사는 접촉자 전원이 무증상이고 검사 결과도 음성이라고 밝혔다. 보건안전 규정 위반에 따른 사망으로 형사 수사가 개시됐다.
+***** Take
+감염 경로에 대해 두 가지 설이 돌고 있다. 시험관 파손설과, 부랴티야 현장 채집 중 감염됐다는 한 댓글 작성자의 설이다. 전자는 생물안전 시설 내 격리 실패이고 후자는 현장 노출이어서 결론이 전혀 다르다. 로스포트레브나조르도 연구소도 균주, 격리 등급, 당시 수행한 절차를 공개하지 않았다. 항생제가 있는데 왜 연구소 직원이 사망했는지 묻는 댓글은 정확한 질문이지만, 답은 러시아 당국이 내놓지 않은 사실에 달려 있다.
+***** Comments
+- 항페스트 연구소에서 생균이 든 시험관을 깨 동료 100명을 감염시킬 수 있었고, 페스트 증상이 나타나 병원으로 옮겨져 환자 100명도 감염시킬 수 있었다. 안전 절차를 조사해야 한다.
+- 시험관을 깼다는 정보는 타블로이드 헛소리다. 다른 설명으로는 연구소에서 감염된 게 아니라, 감염원이 확인된 국경 근처 부랴티야 지역 연구 출장 중에 발병했다는 것이다.
+- 페스트균은 보통 독시사이클린, 시프로플록사신, 스트렙토마이신으로 치료한다. 내성 균주인가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Casi 200 personas en observación tras la muerte por peste de una trabajadora de laboratorio en Irkutsk
+***** TLDR
+Una trabajadora del instituto antipeste de Irkutsk, identificada por medios locales como Daria Sh., de 27 o 28 años, ingresó el martes en Shelekhov con neumonía grave, fue conectada a un respirador y murió el jueves. Los medios hablan de peste neumónica; las autoridades regionales confirmaron peste sin precisar la forma. Según los informes, dijo al personal médico que había roto un tubo de ensayo con bacterias vivas mientras recogía muestras. Unos 197 contactos están bajo observación médica, más de 100 de ellos en salas hospitalarias, y el hospital quedó en cuarentena. El gobernador Igor Kobzev afirma que ningún contacto presenta síntomas y que todos dan negativo. Se abrió una investigación penal por violación de normas sanitarias con resultado de muerte.
+***** Take
+Circulan dos versiones de la exposición: el tubo roto y el relato de un comentarista según el cual se infectó durante un muestreo de campo en Buriatia. Llevan a conclusiones distintas, un fallo de contención dentro de una instalación de bioseguridad o un riesgo de campo, y ni Rospotrebnadzor ni el instituto han publicado la cepa, el nivel de contención ni el procedimiento que realizaba. Los comentaristas que preguntan cómo murió de peste una trabajadora de laboratorio habiendo antibióticos hacen la pregunta correcta; la respuesta depende de datos que las autoridades rusas no han divulgado.
+***** Comments
+- Rompe un tubo de ensayo con bacterias vivas en un instituto antipeste, posiblemente infecta a 100 colegas y, cuando desarrolla síntomas de peste, va al hospital y posiblemente infecta a 100 pacientes. Creo que deberían revisar sus protocolos de seguridad.
+- Lo del tubo roto es basura de tabloide. La versión no sensacionalista es que no se contagió en el laboratorio, sino que enfermó durante un viaje de investigación a la región de Buriatia, cerca de la frontera, donde se habían encontrado focos de la enfermedad.
+- Yersinia pestis se trata normalmente con doxiciclina, ciprofloxacino o estreptomicina. ¿Es una cepa resistente?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Fast 200 Menschen unter Beobachtung, nachdem eine Laborkraft in Irkutsk an der Pest starb
+***** TLDR
+Eine Mitarbeiterin des Anti-Pest-Instituts in Irkutsk, von lokalen Medien als Daria Sch., 27 oder 28 Jahre alt, benannt, kam am Dienstag in Schelechow mit schwerer Lungenentzündung ins Krankenhaus, wurde beatmet und starb am Donnerstag. Medien berichten von Lungenpest; die Regionalbehörden bestätigten Pest, ohne die Form zu nennen. Berichten zufolge sagte sie dem medizinischen Personal, sie habe beim Entnehmen von Proben ein Röhrchen mit lebenden Bakterien zerbrochen. Rund 197 Kontaktpersonen stehen unter medizinischer Beobachtung, mehr als 100 davon in Krankenhausstationen, das Krankenhaus wurde unter Quarantäne gestellt. Gouverneur Igor Kobsew erklärt, alle Kontakte seien symptomfrei und negativ getestet. Ein Strafverfahren wegen Verstoßes gegen Gesundheitsschutzvorschriften mit Todesfolge wurde eröffnet.
+***** Take
+Es kursieren zwei Versionen der Ansteckung: das zerbrochene Röhrchen und die Darstellung eines Kommentators, sie habe sich bei Feldproben in Burjatien infiziert. Daraus folgen völlig verschiedene Schlüsse, einmal ein Versagen der Einschließung in einer Biosicherheitsanlage, einmal eine Gefährdung im Feld. Weder Rospotrebnadsor noch das Institut haben Stamm, Schutzstufe oder die durchgeführte Prozedur veröffentlicht. Die Kommentare, die fragen, warum eine Laborkraft trotz verfügbarer Antibiotika an der Pest starb, stellen die richtige Frage; die Antwort hängt an Angaben, die die russischen Behörden nicht herausgeben.
+***** Comments
+- Sie zerbricht in einem Anti-Pest-Institut ein Röhrchen mit lebenden Bakterien, infiziert möglicherweise 100 Kollegen, und als sie Pestsymptome entwickelt, kommt sie ins Krankenhaus und infiziert möglicherweise 100 Patienten. Die sollten ihre Sicherheitsprotokolle überprüfen.
+- Die Information mit dem zerbrochenen Röhrchen ist Boulevard-Unsinn. Die seriöse Version lautet, sie habe sich nicht im Labor angesteckt, sondern sei auf einer Forschungsreise in die Region Burjatien nahe der Grenze erkrankt, wo Herde der Krankheit gefunden wurden.
+- Yersinia pestis wird normalerweise mit Doxycyclin, Cipro oder Streptomycin behandelt. Ist das ein resistenter Stamm?
+** ArtCraft Apps – open-source Adobe compatible suite written in Rust :rust:opensource:graphics:adobe:
+:PROPERTIES:
+:ID:       49958850
+:URL:      https://getartcraft.com/apps
+:HN_URL:   https://news.ycombinator.com/item?id=49958850
+:POINTS:   79
+:COMMENTS: 78
+:BY:       aghuang
+:END:
+
+*** TLDR
+Storytold shipped seven Rust desktop apps that mirror Adobe's lineup: PhotoCraft for image editing, VectorCraft for vector work, FilmCraft for video, LightCraft as a RAW developer and library, PrintCraft as a PDF workbench, EffectCraft for motion graphics, DesignCraft for layout. Native builds for macOS, Windows and Linux plus WebAssembly versions, MIT and Apache licensed, no telemetry, and every app drivable from a CLI, a JSON control channel or an MCP server. The pages claim no Adobe file format compatibility despite the HN title, and in the thread the author says these are early alpha and he had not meant to post them yet.
+
+*** Take
+Seven Adobe-shaped apps arriving at once tells you where the work went: the surface is cloned, the depth is not, and parity on any one of them is years of edge cases away. The claim worth testing is the control channel, because no Adobe app lets an agent drive it from a CLI or MCP server, and that is a capability rather than a copy. Of the seven, PrintCraft is the one to watch, since PDF editing on Linux is the gap with no good answer today.
+
+*** Comments
+
+**** praet
+:PROPERTIES:
+:COMMENT_ID: 49959822
+:END:
+Adobe's moat is so small, so it's a matter of time until someone frustrated with their pricing would rather just rebuild the entire Creative Suite. I have also rebuilt the features from Photoshop I want using Rust recently and it's been great to work with.
+
+**** echelon
+:PROPERTIES:
+:COMMENT_ID: 49959605
+:END:
+I wasn't ready to post this to HN. It's not anywhere close to ready. These are still super early alpha. All MIT/Apache licensed. No telemetry. I'm going to try to drive these to 100% parity but it's going to take a minute.
+
+**** hypfer
+:PROPERTIES:
+:COMMENT_ID: 49961177
+:END:
+The most interesting part to me is their PDF stuff, as that has been at times somewhat lackluster on Linux. I'm not sure it really makes sense to copy the UI and visual language of the source that verbatim, and I believe Adobe will rightfully retaliate on specifically that.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ArtCraft Apps：用 Rust 写的开源 Adobe 兼容套件
+***** TLDR
+Storytold 发布了七款对标 Adobe 产品线的 Rust 桌面应用：PhotoCraft（图像编辑）、VectorCraft（矢量）、FilmCraft（视频）、LightCraft（RAW 处理与图库）、PrintCraft（PDF 工作台）、EffectCraft（动态图形）、DesignCraft（排版）。提供 macOS、Windows、Linux 原生版本和 WebAssembly 版本，采用 MIT 与 Apache 许可，无遥测，每个应用都可通过 CLI、JSON 控制通道或 MCP 服务器驱动。尽管 HN 标题提到 Adobe 兼容，官网并未声称支持 Adobe 文件格式；作者在讨论中说这些还是早期 alpha，他本来没打算现在发到 HN。
+***** Take
+七款 Adobe 形状的应用同时出现，说明工作量花在哪里：外壳复制了，深度没有，任何一款要达到真正对等都还差好几年的边缘情况。真正值得检验的是控制通道，因为没有一款 Adobe 应用允许 agent 通过 CLI 或 MCP 服务器驱动它，那是新能力而不是模仿。七款里最值得关注的是 PrintCraft，因为 Linux 上的 PDF 编辑至今没有好答案。
+***** Comments
+- Adobe 的护城河太窄了，所以早晚会有人受不了它的定价，干脆把整个 Creative Suite 重做一遍。我最近也用 Rust 把自己需要的 Photoshop 功能重写了一遍，体验很好。
+- 我本来没准备把这个发到 HN，它远没到可用的程度，还是非常早期的 alpha。全部 MIT/Apache 许可，没有遥测。我会努力做到 100% 对等，但这需要时间。
+- 我最感兴趣的是他们的 PDF 部分，这块在 Linux 上一直比较弱。我不太认为把源产品的 UI 和视觉语言照搬是个好主意，而且我相信 Adobe 会正当地在这一点上反击。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ArtCraft Apps - Rustで書かれたオープンソースのAdobe互換スイート
+***** TLDR
+StorytoldがAdobeのラインアップに対応する7本のRustデスクトップアプリを公開した。画像編集のPhotoCraft、ベクターのVectorCraft、動画のFilmCraft、RAW現像とライブラリのLightCraft、PDF作業台のPrintCraft、モーショングラフィックスのEffectCraft、レイアウトのDesignCraftだ。macOS、Windows、Linuxのネイティブ版とWebAssembly版があり、MITとApacheライセンス、テレメトリなし、各アプリはCLI、JSON制御チャネル、MCPサーバーから操作できる。HNのタイトルに反して、サイトはAdobeファイル形式の互換性を主張していない。スレッドでは作者自身が、まだ超初期のアルファで投稿する予定ではなかったと述べている。
+***** Take
+Adobe型のアプリ7本が同時に出てきたことが作業配分を物語る。表層は複製されたが深さはなく、どれか1本でも本当の同等性に達するには無数のエッジケースと数年が要る。検証に値するのは制御チャネルだ。CLIやMCPサーバーからエージェントに操作させられるAdobeアプリは存在しないので、これは単なる真似ではなく新しい能力である。7本の中で注目すべきはPrintCraftで、LinuxでのPDF編集には今も良い答えがない。
+***** Comments
+- Adobeの堀はとても浅いので、価格に嫌気が差した誰かがCreative Suiteを丸ごと作り直すのは時間の問題だ。自分も最近、欲しいPhotoshopの機能をRustで作り直したが、とても快適だった。
+- HNに投稿する準備はできていなかった。全然完成に近くない、まだ超初期アルファだ。すべてMIT/Apacheライセンス、テレメトリなし。100%の同等性を目指すが、時間はかかる。
+- 一番興味深いのはPDF周りで、Linuxでは物足りないことが多かった分野だ。元製品のUIと視覚言語をそのまま複製するのが本当に良いとは思えないし、Adobeはまさにその点で当然反撃してくるだろう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ArtCraft Apps - Rust로 작성된 오픈소스 Adobe 호환 스위트
+***** TLDR
+Storytold가 Adobe 제품군에 대응하는 Rust 데스크톱 앱 7개를 공개했다. 이미지 편집 PhotoCraft, 벡터 VectorCraft, 영상 FilmCraft, RAW 현상과 라이브러리 LightCraft, PDF 작업대 PrintCraft, 모션그래픽 EffectCraft, 레이아웃 DesignCraft다. macOS, Windows, Linux 네이티브 빌드와 WebAssembly 버전이 있고 MIT·Apache 라이선스에 텔레메트리가 없으며, 모든 앱을 CLI나 JSON 제어 채널, MCP 서버에서 구동할 수 있다. HN 제목과 달리 사이트는 Adobe 파일 포맷 호환성을 주장하지 않으며, 작성자는 스레드에서 아직 초기 알파이고 지금 올릴 생각은 아니었다고 밝혔다.
+***** Take
+Adobe 모양의 앱 7개가 한꺼번에 나온 것이 작업의 소재를 말해준다. 표면은 복제됐고 깊이는 없으며, 그중 하나라도 진짜 동등성에 도달하려면 수년치 예외 처리가 남았다. 검증할 만한 주장은 제어 채널이다. 에이전트가 CLI나 MCP 서버로 조작할 수 있는 Adobe 앱은 없으니 이것은 모방이 아니라 새 기능이다. 일곱 중 지켜볼 것은 PrintCraft인데, 리눅스의 PDF 편집은 아직 마땅한 답이 없는 공백이다.
+***** Comments
+- Adobe의 진입장벽은 아주 얕아서, 가격에 지친 누군가가 Creative Suite 전체를 다시 만드는 건 시간문제다. 나도 최근 원하는 Photoshop 기능을 Rust로 다시 만들었는데 작업이 꽤 좋았다.
+- HN에 올릴 준비가 안 돼 있었다. 완성과는 거리가 멀고 아직 아주 초기 알파다. 전부 MIT/Apache 라이선스이고 텔레메트리는 없다. 100% 동등성까지 끌고 가겠지만 시간이 걸린다.
+- 가장 흥미로운 건 PDF 쪽인데, 리눅스에서는 늘 아쉬웠던 영역이다. 원본 제품의 UI와 시각 언어를 그대로 복제하는 게 과연 타당한지 모르겠고, Adobe는 바로 그 지점에서 정당하게 대응할 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ArtCraft Apps: suite de código abierto compatible con Adobe escrita en Rust
+***** TLDR
+Storytold publicó siete aplicaciones de escritorio en Rust que replican la gama de Adobe: PhotoCraft para edición de imagen, VectorCraft para vectores, FilmCraft para vídeo, LightCraft como revelador RAW y biblioteca, PrintCraft como taller de PDF, EffectCraft para motion graphics y DesignCraft para maquetación. Hay compilaciones nativas para macOS, Windows y Linux además de versiones WebAssembly, con licencias MIT y Apache, sin telemetría, y cada aplicación se puede controlar desde una CLI, un canal JSON o un servidor MCP. Pese al título en HN, las páginas no afirman compatibilidad con formatos de Adobe, y en el hilo el autor dice que son alfa muy temprana y que no pensaba publicarlas todavía.
+***** Take
+Siete aplicaciones con forma de Adobe a la vez indican dónde fue el esfuerzo: la superficie está clonada, la profundidad no, y la paridad en cualquiera de ellas está a años de casos límite. Lo que merece prueba es el canal de control, porque ninguna aplicación de Adobe permite que un agente la maneje desde una CLI o un servidor MCP, y eso es una capacidad, no una copia. De las siete, PrintCraft es la que hay que vigilar: editar PDF en Linux sigue siendo el hueco sin buena respuesta.
+***** Comments
+- El foso de Adobe es tan pequeño que es cuestión de tiempo que alguien harto de sus precios prefiera reconstruir toda la Creative Suite. Yo también he reconstruido en Rust las funciones de Photoshop que quiero y ha sido muy agradable.
+- No estaba listo para publicar esto en HN. No está ni de cerca terminado, siguen siendo alfa muy temprana. Todo con licencia MIT/Apache y sin telemetría. Voy a intentar llevarlas al 100% de paridad, pero llevará su tiempo.
+- Lo que más me interesa es su parte de PDF, que en Linux ha sido bastante flojo. No estoy seguro de que tenga sentido copiar la interfaz y el lenguaje visual del original de forma tan literal, y creo que Adobe responderá con razón justo por eso.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ArtCraft Apps: Open-Source-Suite in Rust mit Adobe-Zuschnitt
+***** TLDR
+Storytold hat sieben Rust-Desktop-Apps veröffentlicht, die Adobes Palette nachbilden: PhotoCraft für Bildbearbeitung, VectorCraft für Vektorgrafik, FilmCraft für Video, LightCraft als RAW-Entwickler und Bibliothek, PrintCraft als PDF-Werkbank, EffectCraft für Motion Graphics und DesignCraft für Layout. Es gibt native Builds für macOS, Windows und Linux sowie WebAssembly-Versionen, MIT- und Apache-Lizenz, keine Telemetrie, und jede App lässt sich über eine CLI, einen JSON-Steuerkanal oder einen MCP-Server fernsteuern. Entgegen dem HN-Titel behaupten die Seiten keine Kompatibilität mit Adobe-Dateiformaten, und im Thread sagt der Autor, es sei sehr frühe Alpha und er habe noch nicht posten wollen.
+***** Take
+Sieben Apps im Adobe-Zuschnitt auf einen Schlag zeigen, wohin die Arbeit ging: Die Oberfläche ist geklont, die Tiefe nicht, und Gleichstand bei einer einzigen davon liegt jahrelange Sonderfälle entfernt. Prüfenswert ist der Steuerkanal, denn keine Adobe-App lässt sich von einem Agenten über CLI oder MCP-Server bedienen, und das ist eine Fähigkeit statt einer Kopie. Von den sieben lohnt PrintCraft die Aufmerksamkeit, weil PDF-Bearbeitung unter Linux die Lücke ohne gute Antwort ist.
+***** Comments
+- Adobes Burggraben ist so schmal, dass es nur eine Frage der Zeit ist, bis jemand aus Ärger über die Preise die ganze Creative Suite neu baut. Ich habe die Photoshop-Funktionen, die ich brauche, kürzlich auch in Rust nachgebaut, und das war angenehm.
+- Ich war nicht bereit, das auf HN zu posten. Es ist nicht annähernd fertig, immer noch sehr frühe Alpha. Alles MIT/Apache-lizenziert, keine Telemetrie. Ich will auf 100 Prozent Gleichstand kommen, aber das dauert.
+- Am interessantesten finde ich den PDF-Teil, der unter Linux immer etwas schwach war. Ob es sinnvoll ist, Oberfläche und Bildsprache des Originals so wörtlich zu kopieren, bezweifle ich, und ich glaube, Adobe wird genau dort zu Recht zurückschlagen.
+** A browser-native classic Visual Basic VB6 IDE :retrocomputing:javascript:webgpu:vb6:
+:PROPERTIES:
+:ID:       49956681
+:URL:      https://wieslawsoltes.github.io/VB6/
+:HN_URL:   https://news.ycombinator.com/item?id=49956681
+:POINTS:   154
+:COMMENTS: 57
+:BY:       wiso
+:END:
+
+*** TLDR
+Wieslaw Soltes rebuilt the VB6 development environment in HTML, CSS and JavaScript: Project Explorer, Properties panel, Form Layout, Object Browser, project search and bookmarks, a form designer, a debugger with conditional breakpoints, stepping, frame inspection and variable editing, and 37 control types including TreeView, ListView and grids. VB-style code runs on a VM with its own instruction model rather than JavaScript eval, drawing goes through WebGPU with a Canvas2D fallback, and projects export as a single standalone HTML app. The README rules out COM and OCX, DLL and Windows API calls, type libraries and add-ins, and external ADO or DAO, with in-memory recordsets only.
+
+*** Take
+The chrome is the easy half and it is not what makes this notable; a working debugger with conditional breakpoints and a property grid driven off real object metadata is the hard half, and it is here. The exclusion list is the honest part: VB6 code that still earns money is wired into COM, OCX controls and Win32, so this runs teaching examples and your old homework, not the 1998 line-of-business app someone is still maintaining. One commenter reports IntelliSense and debugging not working for them, which is the gap between a README and a build.
+
+*** Comments
+
+**** waldrews
+:PROPERTIES:
+:COMMENT_ID: 49961077
+:END:
+The property grid control is still the greatest general purpose UI of all time. Define your classes with some attributes and it just works. It was all downhill from there with web and mobile.
+
+**** wiradikusuma
+:PROPERTIES:
+:COMMENT_ID: 49960323
+:END:
+Debugging and IntelliSense don't work, and the deliverable isn't a .exe but an .html (though it works). Wondering if it can access ODBC lol.
+
+**** webprofusion
+:PROPERTIES:
+:COMMENT_ID: 49961132
+:END:
+Looks great! However using an active trademark from a mega corp seems like risky move even for a fun project.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+浏览器原生的经典 Visual Basic VB6 IDE
+***** TLDR
+Wieslaw Soltes 用 HTML、CSS 和 JavaScript 重建了 VB6 开发环境：工程资源管理器、属性面板、窗体布局、对象浏览器、工程搜索与书签、窗体设计器，带条件断点、单步、栈帧检查和变量编辑的调试器，以及包括 TreeView、ListView 和表格在内的 37 种控件。VB 风格代码运行在自带指令模型的虚拟机上，而不是用 JavaScript eval；绘图走 WebGPU，并有 Canvas2D 回退；工程可导出为单个独立 HTML 应用。README 明确排除 COM 和 OCX、DLL 与 Windows API 调用、类型库与加载项，以及外部 ADO/DAO，只支持内存中的记录集。
+***** Take
+外壳是容易的那一半，也不是它值得关注的原因；带条件断点的可用调试器，以及真正依据对象元数据驱动的属性网格，才是难的那一半，而这部分做出来了。排除清单是最诚实的部分：今天还在赚钱的 VB6 代码都缠着 COM、OCX 控件和 Win32，所以它能跑教学示例和你当年的作业，跑不了那个还有人在维护的 1998 年业务系统。有位评论者说调试和 IntelliSense 在他那里不工作，这就是 README 与实际构建之间的差距。
+***** Comments
+- 属性网格控件仍然是史上最好的通用 UI。给类加几个特性就能直接用。从那以后 Web 和移动端就一路走下坡路。
+- 调试和 IntelliSense 用不了，产出也不是 .exe 而是 .html（不过能跑）。不知道它能不能访问 ODBC，哈哈。
+- 看着很棒！不过就算只是个好玩的项目，用一家巨头公司仍然有效的商标也挺冒险。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ブラウザネイティブな古典Visual Basic VB6 IDE
+***** TLDR
+Wieslaw SoltesがVB6開発環境をHTML、CSS、JavaScriptで再構築した。プロジェクトエクスプローラー、プロパティパネル、フォームレイアウト、オブジェクトブラウザ、プロジェクト検索とブックマーク、フォームデザイナー、条件付きブレークポイントとステップ実行、フレーム検査、変数編集を備えたデバッガ、TreeViewやListView、グリッドを含む37種のコントロールが入っている。VB風のコードはJavaScriptのevalではなく独自の命令モデルを持つVM上で動き、描画はWebGPUでCanvas2Dにフォールバックし、プロジェクトは単一の独立HTMLアプリとして書き出せる。READMEはCOMとOCX、DLLおよびWindows API呼び出し、タイプライブラリとアドイン、外部のADO/DAOを対象外とし、レコードセットはメモリ内のみとしている。
+***** Take
+外観は簡単な半分で、注目に値する理由でもない。条件付きブレークポイントが動くデバッガと、実際のオブジェクトメタデータで駆動するプロパティグリッドが難しい半分であり、それがここにある。除外リストこそ誠実な部分だ。今も収益を生んでいるVB6コードはCOM、OCXコントロール、Win32に絡みついているので、これで動くのは教材例や昔の課題であって、誰かが今も保守している1998年の業務アプリではない。あるコメント投稿者はIntelliSenseとデバッグが動かないと報告しており、それがREADMEと実ビルドの差だ。
+***** Comments
+- プロパティグリッドは今でも史上最高の汎用UIだ。クラスに属性をいくつか付ければそれで動く。Webとモバイル以降は下り坂だった。
+- デバッグとIntelliSenseは動かず、成果物は.exeではなく.htmlだ（動くけれど）。ODBCにアクセスできるのか気になる。
+- よくできている。ただ、遊びのプロジェクトでも巨大企業の現行商標を使うのはリスクが高そうだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+브라우저 네이티브 클래식 Visual Basic VB6 IDE
+***** TLDR
+Wieslaw Soltes가 VB6 개발 환경을 HTML, CSS, JavaScript로 다시 만들었다. 프로젝트 탐색기, 속성 패널, 폼 레이아웃, 개체 브라우저, 프로젝트 검색과 북마크, 폼 디자이너, 조건부 중단점·단계 실행·프레임 검사·변수 편집을 갖춘 디버거, TreeView와 ListView와 그리드를 포함한 37종 컨트롤이 들어 있다. VB 스타일 코드는 JavaScript eval이 아니라 자체 명령 모델을 가진 VM에서 실행되고, 그리기는 WebGPU에 Canvas2D 폴백을 쓰며, 프로젝트는 단일 독립 HTML 앱으로 내보낼 수 있다. README는 COM과 OCX, DLL 및 Windows API 호출, 타입 라이브러리와 추가 기능, 외부 ADO/DAO를 제외하고 레코드셋은 메모리 내에서만 지원한다고 밝힌다.
+***** Take
+껍데기는 쉬운 절반이고 주목할 이유도 아니다. 조건부 중단점이 동작하는 디버거와 실제 객체 메타데이터로 구동되는 속성 그리드가 어려운 절반이며, 그것이 구현돼 있다. 제외 목록은 정직한 부분이다. 지금도 돈을 버는 VB6 코드는 COM, OCX 컨트롤, Win32에 얽혀 있으므로 이것으로는 교육용 예제와 옛 과제가 돌아갈 뿐, 누군가 여전히 유지보수하는 1998년 업무 앱은 돌지 않는다. 한 댓글 작성자는 IntelliSense와 디버깅이 동작하지 않는다고 보고했는데, 그게 README와 실제 빌드의 간격이다.
+***** Comments
+- 속성 그리드 컨트롤은 지금도 역대 최고의 범용 UI다. 클래스에 속성 몇 개만 붙이면 그냥 동작한다. 그 뒤 웹과 모바일로 오면서 내리막이었다.
+- 디버깅과 IntelliSense가 안 되고, 산출물도 .exe가 아니라 .html이다(동작은 한다). ODBC에 접근할 수 있는지 궁금하다.
+- 훌륭해 보인다. 다만 재미로 만든 프로젝트라도 거대 기업의 유효한 상표를 쓰는 건 위험해 보인다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un IDE clásico de Visual Basic VB6 nativo del navegador
+***** TLDR
+Wieslaw Soltes reconstruyó el entorno de desarrollo de VB6 en HTML, CSS y JavaScript: Explorador de proyectos, panel de Propiedades, Form Layout, Examinador de objetos, búsqueda en el proyecto y marcadores, diseñador de formularios, un depurador con puntos de ruptura condicionales, ejecución paso a paso, inspección de marcos y edición de variables, y 37 tipos de controles incluidos TreeView, ListView y rejillas. El código estilo VB corre sobre una VM con su propio modelo de instrucciones en lugar de eval de JavaScript, el dibujado va por WebGPU con respaldo en Canvas2D, y los proyectos se exportan como una única aplicación HTML independiente. El README descarta COM y OCX, llamadas a DLL y a la API de Windows, bibliotecas de tipos y complementos, y ADO o DAO externos, con recordsets solo en memoria.
+***** Take
+La carcasa es la mitad fácil y no es lo que hace esto destacable; un depurador funcional con puntos de ruptura condicionales y una rejilla de propiedades alimentada por metadatos reales de objetos son la mitad difícil, y están aquí. La lista de exclusiones es la parte honesta: el código VB6 que todavía da dinero está atado a COM, controles OCX y Win32, así que esto ejecuta ejemplos didácticos y tus deberes antiguos, no la aplicación de gestión de 1998 que alguien sigue manteniendo. Un comentarista informa de que IntelliSense y la depuración no le funcionan, que es la distancia entre un README y una compilación.
+***** Comments
+- La rejilla de propiedades sigue siendo la mejor interfaz de propósito general de todos los tiempos. Defines tus clases con unos atributos y funciona sin más. De ahí en adelante todo fue cuesta abajo con la web y el móvil.
+- La depuración y IntelliSense no funcionan, y el entregable no es un .exe sino un .html (aunque funciona). Me pregunto si podrá acceder a ODBC.
+- Tiene buena pinta, pero usar una marca registrada activa de una megacorporación parece arriesgado incluso para un proyecto por diversión.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Eine browser-native klassische Visual-Basic-VB6-IDE
+***** TLDR
+Wieslaw Soltes hat die VB6-Entwicklungsumgebung in HTML, CSS und JavaScript nachgebaut: Projekt-Explorer, Eigenschaftenfenster, Form Layout, Objektkatalog, Projektsuche und Lesezeichen, einen Formular-Designer, einen Debugger mit bedingten Haltepunkten, Einzelschritt, Frame-Inspektion und Variablenbearbeitung sowie 37 Steuerelementtypen inklusive TreeView, ListView und Grids. VB-artiger Code läuft auf einer VM mit eigenem Instruktionsmodell statt über JavaScript-eval, gezeichnet wird über WebGPU mit Canvas2D als Rückfallebene, und Projekte lassen sich als einzelne eigenständige HTML-Anwendung exportieren. Die README schließt COM und OCX, DLL- und Windows-API-Aufrufe, Typbibliotheken und Add-ins sowie externes ADO oder DAO aus; Recordsets gibt es nur im Speicher.
+***** Take
+Die Oberfläche ist die leichte Hälfte und nicht der Grund, warum das bemerkenswert ist; ein funktionierender Debugger mit bedingten Haltepunkten und ein Eigenschaftenraster, das aus echten Objekt-Metadaten gespeist wird, sind die schwere Hälfte, und die ist da. Die Ausschlussliste ist der ehrliche Teil: VB6-Code, der heute noch Geld verdient, steckt in COM, OCX-Steuerelementen und Win32, also laufen hier Lehrbeispiele und alte Hausaufgaben, nicht die Fachanwendung von 1998, die jemand weiter pflegt. Ein Kommentator berichtet, dass IntelliSense und Debugging bei ihm nicht laufen, und genau das ist der Abstand zwischen README und Build.
+***** Comments
+- Das Eigenschaftenraster ist bis heute die beste Allzweck-Oberfläche überhaupt. Man definiert seine Klassen mit ein paar Attributen und es funktioniert einfach. Danach ging es mit Web und Mobile nur abwärts.
+- Debugging und IntelliSense funktionieren nicht, und das Ergebnis ist keine .exe, sondern eine .html (läuft aber). Ob das ODBC ansprechen kann, frage ich mich.
+- Sieht gut aus. Eine aktive Marke eines Großkonzerns zu verwenden, wirkt aber selbst für ein Spaßprojekt riskant.
+** Self-hosted HTTP tunnels with SSH and Nginx :ssh:nginx:selfhosting:networking:
+:PROPERTIES:
+:ID:       49958569
+:URL:      https://vincent.bernat.ch/en/blog/2026-http-over-ssh
+:HN_URL:   https://news.ycombinator.com/item?id=49958569
+:POINTS:   110
+:COMMENTS: 30
+:BY:       renehsz
+:END:
+
+*** TLDR
+Vincent Bernat shares a local service, say a blog preview on localhost:8080, without ngrok or Cloudflare Tunnel. He runs ssh -R 0:localhost:8080 so the server picks an ephemeral port, then a helper script finds that port by inspecting sshd-session processes. An Nginx server block matches hostnames with a regex, p<port>.ssh.luffy.cx, and proxies to 127.0.0.1 on the extracted port. Wildcard DNS plus a Let's Encrypt wildcard certificate via DNS-01 covers the subdomains. Access control comes from ngx_http_secure_link_module, which checks an MD5 over expiry, port and a shared secret, carried in the URL as basic-auth credentials. Nothing new runs on the box: just OpenSSH and Nginx.
+
+*** Take
+The signed-URL step is not optional decoration, and the thread caught why: the plain regex block proxies to whatever is listening on 127.0.0.1 at the port in the hostname, so without the secure-link check anyone can walk the port range and reach services that were never meant to leave the loopback, firewall rules included. On a box that exists only to terminate tunnels that is a small surface; on a server that also runs your database it is a bad afternoon. The approach is still the right shape, because composing OpenSSH and Nginx leaves you nothing new to patch.
+
+*** Comments
+
+**** jamiesonbecker
+:PROPERTIES:
+:COMMENT_ID: 49960432
+:END:
+This is wildly over-complicated and also has a bunch of footguns and security risks. For example, that very first NGINX section allows an attacker to direct their incoming traffic to any arbitrary listening port on localhost. This also bypasses any firewall rules that you might have.
+
+**** antoniomika
+:PROPERTIES:
+:COMMENT_ID: 49960540
+:END:
+A number of years ago, I created a fully open source (MIT) project called sish that does just this. You get all of the benefits of SSH, but also automatic TLS, a web console of requests a tunnel has received, and you can tunnel more than just HTTP(S).
+
+**** superkuh
+:PROPERTIES:
+:COMMENT_ID: 49959717
+:END:
+I forward port 80/443 on my router to my home LAN nginx webserver and point my domain name to my home IPv4. Then I put files in directories. It works great and has worked great for a couple decades.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用 SSH 和 Nginx 自建 HTTP 隧道
+***** TLDR
+Vincent Bernat 不用 ngrok 或 Cloudflare Tunnel，把本地服务（比如 localhost:8080 上的博客预览）分享出去。他执行 ssh -R 0:localhost:8080 让服务器分配一个临时端口，再用一个辅助脚本通过检查 sshd-session 进程找出该端口。Nginx 的 server 块用正则匹配主机名 p<port>.ssh.luffy.cx，并代理到 127.0.0.1 的对应端口。通配 DNS 加上通过 DNS-01 申请的 Let's Encrypt 通配证书覆盖这些子域名。访问控制依靠 ngx_http_secure_link_module，校验由过期时间、端口和共享密钥算出的 MD5，并以基本认证凭据的形式放在 URL 里。机器上不需要新增任何常驻进程，只用 OpenSSH 和 Nginx。
+***** Take
+签名 URL 那一步不是装饰，讨论区指出了原因：裸正则的 server 块会把请求代理到主机名里那个端口上任何正在监听的 127.0.0.1 服务，所以少了 secure-link 校验，任何人都能遍历端口范围，访问本来不该离开回环地址的服务，防火墙规则也绕过了。如果这台机器只用来终结隧道，暴露面很小；如果它同时还跑着你的数据库，那就是糟糕的一下午。这个思路的形状依然是对的，因为把 OpenSSH 和 Nginx 组合起来，你没有新的东西需要打补丁。
+***** Comments
+- 这做法过于复杂，还带着一堆坑和安全风险。比如第一段 NGINX 配置就允许攻击者把自己的流量导向 localhost 上任意正在监听的端口，这还会绕过你可能设置的防火墙规则。
+- 几年前我做了一个完全开源（MIT）的项目 sish，干的就是这件事。你能拿到 SSH 的全部好处，另外还有自动 TLS、查看隧道收到请求的 Web 控制台，而且能隧道的不只是 HTTP(S)。
+- 我把路由器的 80/443 端口转发到家里局域网的 nginx 服务器，域名指向家里的 IPv4，然后把文件放进目录。效果很好，这样用了二十来年。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+SSHとNginxで自前のHTTPトンネル
+***** TLDR
+Vincent Bernatは、ngrokやCloudflare Tunnelを使わずにlocalhost:8080のブログプレビューのようなローカルサービスを共有する。ssh -R 0:localhost:8080 を実行してサーバー側に一時ポートを割り当てさせ、補助スクリプトがsshd-sessionプロセスを調べてそのポートを特定する。Nginxのserverブロックは正規表現でホスト名 p<port>.ssh.luffy.cx を照合し、127.0.0.1の該当ポートへプロキシする。ワイルドカードDNSとDNS-01で取得したLet's Encryptのワイルドカード証明書でサブドメインをカバーする。アクセス制御はngx_http_secure_link_moduleが担い、有効期限、ポート、共有秘密から計算したMD5をURL内のBasic認証情報として検証する。新しい常駐プロセスは不要で、OpenSSHとNginxだけで済む。
+***** Take
+署名付きURLの段階は飾りではなく、スレッドがその理由を突いた。素の正規表現ブロックはホスト名のポートで127.0.0.1上に待ち受けている何にでもプロキシするので、secure-linkの検証がなければ誰でもポート範囲を走査し、ループバックから出すつもりのなかったサービスにファイアウォール規則ごと到達できる。トンネル終端専用のマシンなら露出は小さいが、データベースも動かしているサーバーなら厄介な午後になる。それでも方向性は正しい。OpenSSHとNginxを組み合わせれば、新たにパッチを当てる対象が増えないからだ。
+***** Comments
+- これはやたら複雑で、地雷とセキュリティリスクが多い。たとえば最初のNGINX設定だけで、攻撃者は自分のトラフィックをlocalhostの任意の待ち受けポートへ向けられる。設定したファイアウォール規則も回避される。
+- 数年前に、まさにこれをやるMITの完全オープンソースプロジェクトsishを作った。SSHの利点すべてに加えて自動TLS、トンネルが受けたリクエストを見るWebコンソールがあり、HTTP(S)以外もトンネルできる。
+- ルーターの80/443を自宅LANのnginxサーバーに転送し、ドメイン名を自宅のIPv4に向けている。あとはディレクトリにファイルを置くだけ。20年ほどこれで問題なく動いている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+SSH와 Nginx로 직접 만드는 HTTP 터널
+***** TLDR
+Vincent Bernat는 ngrok이나 Cloudflare Tunnel 없이 localhost:8080의 블로그 미리보기 같은 로컬 서비스를 공유한다. ssh -R 0:localhost:8080으로 서버가 임시 포트를 고르게 하고, 보조 스크립트가 sshd-session 프로세스를 살펴 그 포트를 찾는다. Nginx server 블록은 정규식으로 호스트명 p<port>.ssh.luffy.cx를 매칭해 127.0.0.1의 해당 포트로 프록시한다. 와일드카드 DNS와 DNS-01로 받은 Let's Encrypt 와일드카드 인증서가 서브도메인을 덮는다. 접근 제어는 ngx_http_secure_link_module이 맡아 만료 시각, 포트, 공유 비밀로 계산한 MD5를 URL의 기본 인증 자격증명 형태로 검증한다. 서버에 새로 띄울 데몬은 없고 OpenSSH와 Nginx만 쓴다.
+***** Take
+서명된 URL 단계는 장식이 아니며 스레드가 그 이유를 집어냈다. 맨 정규식 블록은 호스트명에 적힌 포트로 127.0.0.1에서 듣고 있는 무엇에든 프록시하므로, secure-link 검사가 없으면 누구나 포트 범위를 훑어 루프백을 떠날 의도가 없던 서비스에 방화벽 규칙까지 우회해 도달할 수 있다. 터널 종단 전용 장비라면 노출면이 작지만, 데이터베이스도 돌리는 서버라면 괴로운 오후가 된다. 그래도 접근 방식의 형태는 옳다. OpenSSH와 Nginx를 조합하면 새로 패치할 대상이 생기지 않는다.
+***** Comments
+- 지나치게 복잡하고 함정과 보안 위험도 많다. 예를 들어 맨 첫 NGINX 섹션만으로 공격자가 자기 트래픽을 localhost의 임의 대기 포트로 보낼 수 있다. 설정해 둔 방화벽 규칙도 우회된다.
+- 몇 년 전에 바로 이 일을 하는 완전 오픈소스(MIT) 프로젝트 sish를 만들었다. SSH의 장점을 모두 누리면서 자동 TLS와 터널이 받은 요청을 보는 웹 콘솔이 있고, HTTP(S) 말고도 터널링할 수 있다.
+- 공유기의 80/443을 집 LAN의 nginx 서버로 포워딩하고 도메인을 집 IPv4로 가리킨다. 그다음엔 디렉터리에 파일을 넣는다. 20년 넘게 잘 돌아간다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Túneles HTTP autoalojados con SSH y Nginx
+***** TLDR
+Vincent Bernat comparte un servicio local, por ejemplo una vista previa del blog en localhost:8080, sin ngrok ni Cloudflare Tunnel. Ejecuta ssh -R 0:localhost:8080 para que el servidor asigne un puerto efímero y un script auxiliar lo descubre inspeccionando los procesos sshd-session. Un bloque server de Nginx casa los nombres de host con una expresión regular, p<puerto>.ssh.luffy.cx, y hace proxy a 127.0.0.1 en el puerto extraído. Un DNS comodín y un certificado comodín de Let's Encrypt vía DNS-01 cubren los subdominios. El control de acceso lo aporta ngx_http_secure_link_module, que verifica un MD5 sobre caducidad, puerto y un secreto compartido, transportado en la URL como credenciales de autenticación básica. No hace falta ningún proceso nuevo en la máquina: solo OpenSSH y Nginx.
+***** Take
+El paso de las URL firmadas no es adorno, y el hilo dio con el motivo: el bloque con la expresión regular a secas hace proxy a lo que esté escuchando en 127.0.0.1 en el puerto del nombre de host, así que sin la comprobación de secure-link cualquiera puede recorrer el rango de puertos y alcanzar servicios que nunca debían salir del bucle local, reglas de cortafuegos incluidas. En una máquina dedicada solo a terminar túneles la superficie es pequeña; en un servidor que además corre tu base de datos es una tarde mala. El enfoque sigue teniendo la forma correcta, porque componer OpenSSH y Nginx no te deja nada nuevo que parchear.
+***** Comments
+- Esto es tremendamente complicado y además tiene un montón de trampas y riesgos de seguridad. Por ejemplo, esa primera sección de NGINX permite a un atacante dirigir su tráfico a cualquier puerto a la escucha en localhost. También salta cualquier regla de cortafuegos que tengas.
+- Hace años creé un proyecto totalmente de código abierto (MIT) llamado sish que hace justo esto. Tienes todas las ventajas de SSH y además TLS automático, una consola web de las peticiones que ha recibido el túnel, y puedes tunelizar más que HTTP(S).
+- Reenvío los puertos 80 y 443 del router a mi servidor nginx en la LAN de casa y apunto mi dominio a la IPv4 doméstica. Luego pongo los archivos en directorios. Funciona muy bien y lleva un par de décadas haciéndolo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Selbst gehostete HTTP-Tunnel mit SSH und Nginx
+***** TLDR
+Vincent Bernat teilt einen lokalen Dienst, etwa eine Blog-Vorschau auf localhost:8080, ohne ngrok oder Cloudflare Tunnel. Er startet ssh -R 0:localhost:8080, sodass der Server einen ephemeren Port wählt, und ein Hilfsskript findet diesen Port, indem es die sshd-session-Prozesse auswertet. Ein Nginx-Server-Block trifft Hostnamen per Regex, p<port>.ssh.luffy.cx, und leitet an 127.0.0.1 auf dem ausgelesenen Port weiter. Wildcard-DNS und ein Let's-Encrypt-Wildcard-Zertifikat über DNS-01 deckt die Subdomains ab. Die Zugangskontrolle liefert ngx_http_secure_link_module, das einen MD5 über Ablaufzeit, Port und ein gemeinsames Geheimnis prüft, übertragen in der URL als Basic-Auth-Zugangsdaten. Auf der Maschine läuft nichts Neues, nur OpenSSH und Nginx.
+***** Take
+Der Schritt mit den signierten URLs ist keine Zierde, und der Thread hat den Grund gefunden: Der nackte Regex-Block leitet an alles weiter, was auf 127.0.0.1 auf dem Port aus dem Hostnamen lauscht. Ohne die Secure-Link-Prüfung kann also jeder den Portbereich durchgehen und Dienste erreichen, die das Loopback nie verlassen sollten, Firewallregeln inklusive. Auf einer Maschine, die nur Tunnel terminiert, ist das eine kleine Angriffsfläche; auf einem Server, der auch die Datenbank fährt, ein schlechter Nachmittag. Der Ansatz hat trotzdem die richtige Form, denn wer OpenSSH und Nginx kombiniert, hat nichts Neues zu patchen.
+***** Comments
+- Das ist völlig überkompliziert und steckt voller Fußangeln und Sicherheitsrisiken. Schon der erste NGINX-Abschnitt erlaubt es einem Angreifer, seinen Verkehr auf jeden beliebigen lauschenden Port auf localhost zu lenken. Damit werden auch alle Firewallregeln umgangen.
+- Vor einigen Jahren habe ich ein vollständig offenes Projekt (MIT) namens sish geschrieben, das genau das macht. Man bekommt alle Vorteile von SSH, dazu automatisches TLS, eine Web-Konsole der Anfragen an den Tunnel, und man kann mehr als HTTP(S) tunneln.
+- Ich leite Port 80/443 vom Router auf meinen nginx-Server im Heim-LAN und richte den Domainnamen auf meine Heim-IPv4. Dann lege ich Dateien in Verzeichnisse. Das funktioniert prima, seit gut zwei Jahrzehnten.
