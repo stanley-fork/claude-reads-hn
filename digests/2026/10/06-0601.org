@@ -1,0 +1,504 @@
+#+TITLE: HN Digest 2026-10-06 06:01 UTC
+#+DATE: 2026-10-06T06:01:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Common Lisp claims the LLM crown, Deno loses a friend, and Dominion's random ballot numbers turn out to be a counter
+
+* Highlights
+- Common Lisp: the pitch is now feedback loops, and the comments want types instead
+- Deno to Node: a 429 from JSR, a crash bug, and Node shipping TypeScript natively
+- Ballot scanners: the anonymizing PRNG was reversible, and the 2023 fix is still uninstalled
+- 12 Zigbee temp sensors tested: five hit 0.2C, the Sonoff SNZB-02P wins
+- Samon: a Zen raking puzzle where one rule about rake width cuts millions of solutions to eight
+
+* Stories
+
+** Why Common Lisp is now the best programming language :lisp:programming-languages:llm:developer-tools:
+:PROPERTIES:
+:ID:       49973598
+:URL:      https://www.vivienhenz.com/common-lisp
+:HN_URL:   https://news.ycombinator.com/item?id=49973598
+:POINTS:   88
+:COMMENTS: 111
+:BY:       misterchocolat
+:END:
+
+*** TLDR
+Vivien Henz argues that LLM coding moves the bottleneck from writing code to finding out whether it works, and that this changes which language features matter. Common Lisp's live image lets you redefine a function and see the effect without a rebuild. Its condition system opens an interactive debugger with the stack intact instead of exiting with a trace. Macros let you ship a domain language that users can edit rather than break. He also claims Lisp code is six to seven times shorter than the Python equivalent, which saves context window, and notes the ANSI standard has not changed since 1994.
+
+*** Take
+The feedback-loop point is the strong part of the argument and it does not need the rest. The six-to-seven-times claim arrives with no code to back it, and the top comment lands the real objection: models work better against types and compiler errors, which is exactly the feedback Common Lisp declines to give them. A language that answers 'it compiled' is cheap to iterate in and expensive to be wrong in.
+
+*** Comments
+
+**** qalmakka
+Strong types and guardrails like in Haskell, Rust or OCaml help massively with LLMs because they get very clear messages back. AIs, just like humans, tend to lose the thread with very dynamic code.
+
+**** vincnetas
+Unless there are multiple dimensions of good, which is exactly the case. There are best languages per dimension, but not an absolute best.
+
+**** dexterlagan
+Seems written by somebody who has never worked within a team. I love Common Lisp and Racket, but there is that pesky Lisp curse and the fact that nobody would want to work with me.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么 Common Lisp 现在是最好的编程语言
+***** TLDR
+Vivien Henz 认为，LLM 写代码把瓶颈从编写代码转移到了确认代码是否可用，而这改变了哪些语言特性真正重要。Common Lisp 的活动镜像让你重新定义一个函数后立即看到效果，无需重新构建；它的条件系统会在栈完整的情况下打开交互式调试器，而不是打印堆栈跟踪后退出；宏让你交付一门用户可以修改而不是弄坏的领域语言。他还声称 Lisp 代码比等价的 Python 短六到七倍，因此节省上下文窗口，并指出 ANSI 标准自 1994 年起没有变过。
+***** Take
+反馈循环这一点是整篇论证中最有力的部分，而它并不需要其余的论据。六到七倍的说法没有任何代码支撑，而热评点出了真正的反驳：模型在类型和编译器错误面前表现更好，而这恰恰是 Common Lisp 不愿提供的反馈。一门只会回答「编译通过了」的语言，迭代便宜，出错昂贵。
+***** Comments
+- 像 Haskell、Rust 或 OCaml 那样的强类型和护栏对 LLM 帮助极大，因为它们能得到非常明确的反馈。AI 和人一样，在高度动态的代码里容易失去线索。
+- 除非「好」本身存在多个维度，而事实正是如此。每个维度上都有最好的语言，但没有绝对最好的语言。
+- 看起来是没在团队里工作过的人写的。我爱 Common Lisp 和 Racket，但确实存在那个恼人的 Lisp 诅咒，而且没人愿意跟我一起用它。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+なぜCommon Lispが今、最良のプログラミング言語なのか
+***** TLDR
+Vivien Henzは、LLMによるコーディングでボトルネックがコードを書くことから動くかどうかを確かめることへ移り、それによって重要な言語機能が変わったと論じる。Common Lispのライブイメージでは関数を再定義すればリビルドなしで結果が見える。コンディションシステムはスタックトレースを出して終了するのではなく、スタックを保ったまま対話的デバッガを開く。マクロを使えば、ユーザーが壊すのではなく編集できるドメイン言語を提供できる。さらに著者はLispのコードは等価なPythonの6〜7分の1の長さでコンテキストウィンドウを節約できると主張し、ANSI標準が1994年から変わっていない点も挙げる。
+***** Take
+フィードバックループの指摘がこの論考で最も強い部分で、それ以外の根拠は必要ない。6〜7分の1という主張を裏づけるコードは示されておらず、トップコメントが本当の反論を突いている。モデルは型とコンパイラのエラーを相手にした方が性能が出るが、それはCommon Lispが与えようとしないフィードバックだ。「コンパイルは通った」としか答えない言語は、反復は安いが間違いは高くつく。
+***** Comments
+- Haskell、Rust、OCamlのような強い型とガードレールはLLMに大きく役立つ。非常に明確なメッセージが返ってくるからだ。AIも人間同様、動的すぎるコードでは筋を見失う。
+- 「良い」に複数の次元がある場合は別だが、まさにそれが現実だ。次元ごとに最良の言語はあるが、絶対的な最良はない。
+- チームで働いたことのない人が書いたように見える。Common LispもRacketも大好きだが、あの厄介なLispの呪いがあり、誰も一緒に使ってくれない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+왜 지금 커먼 리스프가 최고의 프로그래밍 언어인가
+***** TLDR
+비비앙 헨츠는 LLM 코딩이 병목을 코드 작성에서 그 코드가 실제로 동작하는지 확인하는 일로 옮겼고, 그래서 중요한 언어 기능이 달라졌다고 주장한다. 커먼 리스프의 라이브 이미지는 함수를 재정의하면 재빌드 없이 바로 결과를 보여준다. 컨디션 시스템은 스택 트레이스를 뿌리고 종료하는 대신 스택을 유지한 채 대화형 디버거를 띄운다. 매크로는 사용자가 망가뜨리는 대신 직접 수정할 수 있는 도메인 언어를 제공하게 해준다. 저자는 리스프 코드가 같은 기능의 파이썬보다 6~7배 짧아 컨텍스트 윈도를 절약한다고 말하며, ANSI 표준이 1994년 이후 바뀌지 않았다는 점도 든다.
+***** Take
+피드백 루프 논점이 이 글에서 가장 단단한 부분이고, 나머지 근거는 필요하지도 않다. 6~7배라는 주장에는 뒷받침할 코드가 없고, 최상위 댓글이 진짜 반박을 짚는다. 모델은 타입과 컴파일러 오류를 상대할 때 더 잘 작동하는데, 그게 바로 커먼 리스프가 주지 않으려는 피드백이다. '컴파일됐다'만 답하는 언어는 반복은 싸고 틀렸을 때는 비싸다.
+***** Comments
+- 하스켈, 러스트, OCaml 같은 강한 타입과 가드레일은 LLM에 크게 도움이 된다. 아주 명확한 메시지를 돌려받기 때문이다. AI도 사람처럼 지나치게 동적인 코드에서는 맥락을 놓친다.
+- '좋음'에 여러 차원이 있다면 얘기가 다른데, 현실이 바로 그렇다. 차원별 최고 언어는 있어도 절대적인 최고는 없다.
+- 팀에서 일해본 적 없는 사람이 쓴 글처럼 보인다. 커먼 리스프와 래킷을 정말 좋아하지만, 그 지긋지긋한 리스프의 저주가 있고 아무도 나와 함께 쓰려 하지 않는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué Common Lisp es ahora el mejor lenguaje de programación
+***** TLDR
+Vivien Henz sostiene que programar con LLM traslada el cuello de botella de escribir código a averiguar si funciona, y que eso cambia qué características del lenguaje importan. La imagen viva de Common Lisp permite redefinir una función y ver el efecto sin recompilar. Su sistema de condiciones abre un depurador interactivo con la pila intacta en lugar de terminar con un volcado. Las macros permiten entregar un lenguaje de dominio que los usuarios pueden editar en vez de romper. Además afirma que el código Lisp es seis o siete veces más corto que el equivalente en Python, lo que ahorra ventana de contexto, y recuerda que el estándar ANSI no ha cambiado desde 1994.
+***** Take
+El argumento del ciclo de retroalimentación es la parte sólida y no necesita el resto. La afirmación del seis o siete a uno llega sin una línea de código que la respalde, y el comentario más votado da con la objeción real: los modelos rinden mejor contra tipos y errores de compilación, que es justo la retroalimentación que Common Lisp se niega a darles. Un lenguaje que solo responde 'compiló' es barato para iterar y caro cuando te equivocas.
+***** Comments
+- Los tipos fuertes y las barreras de Haskell, Rust u OCaml ayudan muchísimo con los LLM porque reciben mensajes muy claros de vuelta. Las IA, igual que las personas, pierden el hilo con código muy dinámico.
+- Salvo que haya varias dimensiones de 'bueno', que es exactamente el caso. Hay mejores lenguajes por dimensión, pero no uno mejor en términos absolutos.
+- Parece escrito por alguien que nunca ha trabajado en equipo. Adoro Common Lisp y Racket, pero existe esa molesta maldición de Lisp y el hecho de que nadie querría trabajar conmigo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum Common Lisp jetzt die beste Programmiersprache ist
+***** TLDR
+Vivien Henz argumentiert, dass Programmieren mit LLMs den Engpass vom Schreiben des Codes zum Herausfinden verlagert, ob er funktioniert, und dass sich damit ändert, welche Spracheigenschaften zählen. Das lebende Image von Common Lisp erlaubt es, eine Funktion neu zu definieren und die Wirkung ohne Rebuild zu sehen. Das Condition-System öffnet einen interaktiven Debugger mit intaktem Stack, statt mit einem Trace abzubrechen. Makros erlauben es, eine Domänensprache auszuliefern, die Nutzer bearbeiten statt kaputtmachen. Außerdem behauptet er, Lisp-Code sei sechs bis sieben Mal kürzer als das Python-Äquivalent, was Kontextfenster spart, und verweist darauf, dass der ANSI-Standard seit 1994 unverändert ist.
+***** Take
+Das Argument mit der Feedbackschleife ist der tragfähige Teil und braucht den Rest nicht. Die Behauptung von sechs bis sieben Mal kürzer kommt ohne eine Zeile Code daher, und der Topkommentar trifft den eigentlichen Einwand: Modelle arbeiten besser gegen Typen und Compilerfehler, also genau das Feedback, das Common Lisp verweigert. Eine Sprache, die nur 'kompiliert' antwortet, ist billig im Iterieren und teuer im Irren.
+***** Comments
+- Starke Typen und Leitplanken wie in Haskell, Rust oder OCaml helfen bei LLMs enorm, weil sie sehr klare Meldungen zurückbekommen. KIs verlieren wie Menschen bei sehr dynamischem Code den Faden.
+- Es sei denn, es gibt mehrere Dimensionen von 'gut', und genau so ist es. Pro Dimension gibt es beste Sprachen, aber keine absolut beste.
+- Wirkt geschrieben von jemandem, der nie im Team gearbeitet hat. Ich liebe Common Lisp und Racket, aber es gibt diesen leidigen Lisp-Fluch und die Tatsache, dass niemand mit mir arbeiten wollen würde.
+** Friendship ended with Deno, now Node is my best friend :javascript:deno:nodejs:typescript:
+:PROPERTIES:
+:ID:       49971719
+:URL:      https://dbushell.com/2026/10/03/deno-to-node/
+:HN_URL:   https://news.ycombinator.com/item?id=49971719
+:POINTS:   117
+:COMMENTS: 51
+:BY:       ibobev
+:END:
+
+*** TLDR
+David Bushell moved his static site generator from Deno back to Node and lists what pushed him out: ZSH completions broken for weeks, the JSR registry handing back 429 rate-limit errors, and a bug in concurrent HTTP requests that crashed builds. What pulled him in: Node 26.10 runs TypeScript without a build step, node:fs has a modern promise API, and nothing in his code needed require() anymore. The port took few changes and builds came out about 15 percent faster. He also argues Deno Land has stopped investing in the runtime in favour of hosted products and AI features.
+
+*** Take
+Deno's whole pitch was Node with the batteries Node refused to include. Node spent the last few years installing those batteries while Deno shipped a deploy platform, a KV store and an AI story. Reliability decided it, not features: a registry that rate-limits your build and a runtime bug that crashes it beat any argument about built-in linters.
+
+*** Comments
+
+**** AgentME
+Deno is still an easy pick for me because of the built-in test runner, linter and type checker. I have no idea what the new hotness and proper configuration is for all of these things in a new Node project.
+
+**** isyouaint
+I helped Deno bring the Standard Library to v1 and have always loved the team. But these days I am saddened by the slow decline into obscurity. After the layoffs there seems to be no roadmap, no comms.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+与 Deno 友尽，现在 Node 是我最好的朋友
+***** TLDR
+David Bushell 把自己的静态站点生成器从 Deno 迁回 Node，并列出了把他推走的原因：ZSH 补全坏了好几周、JSR 注册表不断返回 429 限流错误、并发 HTTP 请求的一个 bug 让构建崩溃。吸引他回去的是：Node 26.10 无需构建步骤即可运行 TypeScript，node:fs 有了现代的 promise API，代码里再也不需要 require()。迁移改动很少，构建速度还快了约 15%。他还认为 Deno Land 已经停止投入运行时，转而去做托管产品和 AI 功能。
+***** Take
+Deno 当初的卖点就是「带上 Node 拒绝内置的那些电池的 Node」。过去几年 Node 把这些电池一个个装上了，而 Deno 去做了部署平台、KV 存储和 AI 叙事。决定胜负的是可靠性而不是功能：一个会给你的构建限流的注册表，加上一个会让构建崩溃的运行时 bug，胜过任何关于内置 linter 的论证。
+***** Comments
+- 对我来说 Deno 依然是容易的选择，因为它内置测试运行器、linter 和类型检查器。在一个新的 Node 项目里，这些东西现在该用什么、该怎么配置，我完全不知道。
+- 我曾参与把 Deno 标准库推进到 v1，一直很喜欢这个团队。但如今看着它慢慢走向边缘，我很难过。裁员之后似乎没有路线图，也没有沟通。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Denoとは友情終了、今はNodeが一番の友だ
+***** TLDR
+David Bushellは自作の静的サイトジェネレーターをDenoからNodeへ戻し、離れた理由を挙げている。ZSH補完が数週間壊れたまま、JSRレジストリが429のレート制限を返す、並行HTTPリクエストのバグでビルドがクラッシュする。戻った理由は、Node 26.10がビルド手順なしでTypeScriptを実行でき、node:fsにモダンなPromise APIがあり、コードからrequire()が不要になったこと。移植は少ない変更で済み、ビルドは約15%速くなった。さらにDeno Landがランタイムへの投資をやめ、ホスティング製品やAI機能に向かっていると論じている。
+***** Take
+Denoの売り文句はずっと「Nodeが入れようとしなかった電池入りのNode」だった。この数年でNodeはその電池を次々と搭載し、Denoはデプロイ基盤、KVストア、AIの物語を出荷した。勝敗を決めたのは機能ではなく信頼性だ。ビルドをレート制限するレジストリと、ビルドを落とすランタイムのバグは、内蔵linterについてのどんな議論にも勝つ。
+***** Comments
+- テストランナー、linter、型チェッカーが内蔵されているので、私にはDenoが今でも無理のない選択だ。新しいNodeプロジェクトでこれらに何を使い、どう設定するのが正解なのか見当もつかない。
+- Denoの標準ライブラリをv1に持っていく作業に関わり、ずっとこのチームが好きだった。でも今は、静かに埋もれていく様子が悲しい。レイオフ以降、ロードマップもコミュニケーションもないように見える。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Deno와는 절교, 이제 Node가 내 최고의 친구
+***** TLDR
+데이비드 부셸이 자신의 정적 사이트 생성기를 Deno에서 Node로 되돌렸다. 떠난 이유는 몇 주 동안 깨져 있던 ZSH 자동완성, 429 레이트 리밋을 돌려주는 JSR 레지스트리, 빌드를 죽이는 동시 HTTP 요청 버그다. 돌아간 이유는 Node 26.10이 빌드 단계 없이 타입스크립트를 실행하고, node:fs에 현대적인 프로미스 API가 있고, 코드에 더는 require()가 필요 없다는 점이다. 이식은 적은 변경으로 끝났고 빌드는 약 15% 빨라졌다. 그는 또 Deno Land가 런타임 투자를 접고 호스팅 제품과 AI 기능으로 옮겨갔다고 지적한다.
+***** Take
+Deno의 판매 문구는 줄곧 'Node가 넣기를 거부한 배터리가 들어 있는 Node'였다. 지난 몇 년간 Node는 그 배터리를 하나씩 장착했고, Deno는 배포 플랫폼과 KV 스토어와 AI 서사를 내놓았다. 승부를 가른 건 기능이 아니라 신뢰성이다. 빌드에 레이트 리밋을 거는 레지스트리와 빌드를 죽이는 런타임 버그는 내장 린터에 관한 어떤 논증도 이긴다.
+***** Comments
+- 테스트 러너, 린터, 타입 체커가 내장돼 있어서 나에게는 Deno가 여전히 쉬운 선택이다. 새 Node 프로젝트에서 이런 것들을 뭘로 쓰고 어떻게 설정하는 게 맞는지 전혀 모르겠다.
+- Deno 표준 라이브러리를 v1까지 끌고 가는 일을 도왔고 팀을 늘 좋아했다. 하지만 요즘 서서히 잊혀가는 모습이 안타깝다. 정리해고 이후로는 로드맵도, 소통도 없어 보인다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Amistad terminada con Deno, ahora Node es mi mejor amigo
+***** TLDR
+David Bushell devolvió su generador de sitios estáticos de Deno a Node y enumera lo que lo expulsó: autocompletado de ZSH roto durante semanas, el registro JSR devolviendo errores 429 por límite de peticiones y un fallo en peticiones HTTP concurrentes que hacía caer las compilaciones. Lo que lo atrajo: Node 26.10 ejecuta TypeScript sin paso de compilación, node:fs tiene una API moderna de promesas y su código ya no necesitaba require(). El traslado requirió pocos cambios y las compilaciones quedaron un 15 por ciento más rápidas. También sostiene que Deno Land dejó de invertir en el runtime para dedicarse a productos alojados y funciones de IA.
+***** Take
+Toda la propuesta de Deno era Node con las pilas que Node se negaba a incluir. Node pasó los últimos años instalando esas pilas mientras Deno lanzaba una plataforma de despliegue, un almacén KV y un relato sobre IA. Lo decidió la fiabilidad, no las funciones: un registro que limita tus compilaciones y un fallo del runtime que las tumba le ganan a cualquier argumento sobre linters integrados.
+***** Comments
+- Deno sigue siendo una elección fácil para mí por el ejecutor de pruebas, el linter y el verificador de tipos integrados. No tengo idea de qué se usa ahora ni cómo se configura todo eso en un proyecto Node nuevo.
+- Ayudé a llevar la biblioteca estándar de Deno a la v1 y siempre quise a ese equipo. Pero hoy me entristece ver su lento declive hacia la irrelevancia. Tras los despidos no parece haber hoja de ruta ni comunicación.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Freundschaft mit Deno beendet, jetzt ist Node mein bester Freund
+***** TLDR
+David Bushell hat seinen Static-Site-Generator von Deno zurück auf Node geholt und zählt auf, was ihn vertrieben hat: wochenlang kaputte ZSH-Vervollständigung, das JSR-Registry mit 429-Fehlern wegen Rate-Limits und ein Bug bei parallelen HTTP-Anfragen, der Builds abstürzen ließ. Was ihn angezogen hat: Node 26.10 führt TypeScript ohne Build-Schritt aus, node:fs hat eine moderne Promise-API und sein Code brauchte kein require() mehr. Die Portierung kam mit wenigen Änderungen aus, die Builds wurden rund 15 Prozent schneller. Außerdem argumentiert er, Deno Land investiere nicht mehr in die Runtime, sondern in gehostete Produkte und KI-Funktionen.
+***** Take
+Denos ganzes Versprechen war Node mit den Batterien, die Node nicht beilegen wollte. Node hat die letzten Jahre damit verbracht, genau diese Batterien einzubauen, während Deno eine Deploy-Plattform, einen KV-Store und eine KI-Erzählung auslieferte. Entschieden hat die Zuverlässigkeit, nicht der Funktionsumfang: ein Registry, das deinen Build ausbremst, und ein Runtime-Bug, der ihn abschießt, schlagen jedes Argument über eingebaute Linter.
+***** Comments
+- Deno bleibt für mich eine einfache Wahl wegen des eingebauten Test-Runners, Linters und Typecheckers. Ich habe keine Ahnung, was dafür in einem neuen Node-Projekt gerade angesagt ist und wie man es richtig konfiguriert.
+- Ich habe geholfen, Denos Standardbibliothek auf v1 zu bringen, und mochte das Team immer. Heute macht mich der langsame Abstieg in die Bedeutungslosigkeit traurig. Nach den Entlassungen scheint es keine Roadmap und keine Kommunikation zu geben.
+** An algorithmic failure beneath the secret ballot :security:voting:privacy:cryptography:
+:PROPERTIES:
+:ID:       49945588
+:URL:      https://blog.citp.princeton.edu/2026/08/03/an-algorithmic-failure-beneath-the-secret-ballot/
+:HN_URL:   https://news.ycombinator.com/item?id=49945588
+:POINTS:   63
+:COMMENTS: 21
+:BY:       leecoursey
+:END:
+
+*** TLDR
+Princeton's CITP blog walks through a privacy flaw in Dominion ballot scanners. To keep published electronic ballot records anonymous, each record gets a supposedly random ID, but the generator is a reversible counter that steps by 864,803 modulo 1,000,000. Anyone with the public records can therefore sort them back into the order the ballots were cast, and in a small precinct where the order of voters is observable that links ballots to people. Researchers published the problem in October 2022, a corrected software version was certified in March 2023, and as of May 2026 many jurisdictions across the 21 affected states still have not installed it.
+
+*** Take
+A multiply-and-mod counter passed as randomization, which is bad, but the three-year gap between a certified fix and an installed fix is the part that should worry people. Election infrastructure has a disclosure process and a certification process and no process that makes a county actually load the patch. The cryptography was the easy half.
+
+*** Comments
+
+**** anilakar
+So they were never secret in the first place. I have never understood the desire to have voting machines when a paper ballot works just fine. We tried electronic voting in three municipal elections in 2008 and courts invalidated the results over usability.
+
+**** cryptonector
+Texas fixed this since 2024 by requiring sequentially numbered ballots. The presiding judge takes 10 to 20 at a time, signs them, shuffles them and places them serial-number down.
+
+**** beloch
+The 2022 report showed the machines assigned a seemingly random number to each electronic ballot record at scan time for later auditing, and the algorithm was the critical privacy failure.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+秘密投票之下的一个算法失误
+***** TLDR
+普林斯顿 CITP 博客剖析了 Dominion 选票扫描仪中的一个隐私缺陷。为了让公开的电子选票记录保持匿名，每条记录会被赋予一个看似随机的 ID，但生成器其实是一个可逆的计数器，每次以 864,803 对 1,000,000 取模递增。因此任何拿到公开记录的人都能把它们重新排回选票投入的顺序，而在选民投票顺序可被观察到的小投票站里，这就把选票和人对应起来了。研究者在 2022 年 10 月公布了该问题，修正版软件在 2023 年 3 月获得认证，但截至 2026 年 5 月，受影响的 21 个州中仍有许多辖区没有安装。
+***** Take
+用一个乘加取模的计数器冒充随机化当然很糟，但真正该让人担心的是：认证修复和实际安装修复之间隔了三年。选举基础设施有披露流程，有认证流程，却没有任何流程能让一个县真正把补丁装上。密码学那半反而是简单的。
+***** Comments
+- 所以它们从一开始就不是秘密的。我一直不理解为什么要用投票机，纸质选票完全够用。我们在 2008 年的三次市政选举中试过电子投票，结果因为可用性问题被法院判定无效。
+- 德克萨斯州从 2024 年起的做法是要求选票连续编号。主持法官每次取 10 到 20 张，签名后洗乱，再把编号朝下放置。
+- 2022 年那份报告指出，机器在扫描时给每条电子选票记录分配了一个看似随机的编号用于后续审计，而那个算法就是致命的隐私缺陷。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+秘密投票の下にあるアルゴリズムの失敗
+***** TLDR
+プリンストン大CITPのブログが、Dominion製の投票用紙スキャナーにあるプライバシー上の欠陥を解説している。公開される電子投票記録を匿名に保つため各記録にランダムとされるIDが付くが、その生成器は864,803を足して1,000,000で割った余りを取る可逆なカウンターにすぎない。つまり公開記録を手にした者は記録を投票された順序に並べ戻せる。有権者の順番が観察できる小さな投票区では、それが票と人物を結びつけてしまう。研究者は2022年10月に問題を公表し、修正版ソフトウェアは2023年3月に認証されたが、2026年5月時点でも影響を受ける21州の多くの自治体が導入していない。
+***** Take
+掛けて剰余を取るだけのカウンターがランダム化として通っていたのは確かにひどいが、本当に心配すべきは認証された修正と導入された修正のあいだに三年の空白があることだ。選挙インフラには情報公開の手続きと認証の手続きがあり、郡に実際にパッチを当てさせる手続きだけがない。暗号の部分は簡単な方の半分だった。
+***** Comments
+- つまり最初から秘密ではなかったわけだ。紙の投票用紙で十分機能するのに、なぜ投票機を欲しがるのか理解できない。2008年の三つの自治体選挙で電子投票を試したが、使いにくさを理由に裁判所が結果を無効にした。
+- テキサスでは2024年以降、投票用紙に連番を振ることを義務づけて対処している。主任判事が10〜20枚ずつ取り、署名してシャッフルし、連番を下向きにして置く。
+- 2022年の報告書は、機械がスキャン時に各電子投票記録へ後の監査用に一見ランダムな番号を割り当てており、そのアルゴリズムが致命的なプライバシー欠陥だったと示した。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+비밀투표 밑에 깔린 알고리즘 실패
+***** TLDR
+프린스턴 CITP 블로그가 도미니언 투표용지 스캐너의 프라이버시 결함을 짚는다. 공개되는 전자 투표 기록을 익명으로 유지하려고 각 기록에 무작위라는 ID를 붙이는데, 그 생성기는 864,803을 더해 1,000,000으로 나눈 나머지를 쓰는 되돌릴 수 있는 카운터였다. 그래서 공개 기록만 있으면 투표가 투입된 순서대로 다시 정렬할 수 있고, 유권자 순서가 관찰되는 작은 선거구에서는 그것이 표와 사람을 연결한다. 연구자들은 2022년 10월 이 문제를 공개했고 수정 버전은 2023년 3월에 인증됐지만, 2026년 5월 기준으로 영향을 받는 21개 주의 많은 관할구가 아직 설치하지 않았다.
+***** Take
+곱하고 나머지를 취하는 카운터가 무작위화로 통했다는 것도 나쁘지만, 정말 걱정해야 할 부분은 인증된 수정과 설치된 수정 사이의 3년 공백이다. 선거 인프라에는 공개 절차도 있고 인증 절차도 있는데, 카운티가 실제로 패치를 올리게 만드는 절차만 없다. 암호학은 쉬운 쪽 절반이었다.
+***** Comments
+- 그러니까 애초에 비밀이 아니었던 거다. 종이 투표용지로 충분히 되는데 왜 투표기를 원하는지 이해한 적이 없다. 2008년 세 차례 지방선거에서 전자투표를 시도했는데 사용성 문제로 법원이 결과를 무효화했다.
+- 텍사스는 2024년부터 투표용지에 연번을 매기도록 해서 이 문제를 해결했다. 주재 판사가 한 번에 10~20장을 가져가 서명하고 섞은 뒤 번호가 아래로 향하게 놓는다.
+- 2022년 보고서는 기계가 스캔 시점에 감사용으로 각 전자 투표 기록에 무작위처럼 보이는 번호를 부여했고, 그 알고리즘이 치명적인 프라이버시 결함이었음을 보여줬다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un fallo algorítmico bajo el voto secreto
+***** TLDR
+El blog del CITP de Princeton explica un fallo de privacidad en los escáneres de papeletas de Dominion. Para mantener anónimos los registros electrónicos publicados, cada uno recibe un identificador supuestamente aleatorio, pero el generador es un contador reversible que avanza sumando 864.803 módulo 1.000.000. Cualquiera con los registros públicos puede así reordenarlos según la secuencia en que se depositaron las papeletas, y en un colegio pequeño donde el orden de los votantes es observable eso vincula papeletas con personas. Los investigadores publicaron el problema en octubre de 2022, una versión corregida se certificó en marzo de 2023 y, a mayo de 2026, muchas jurisdicciones de los 21 estados afectados siguen sin instalarla.
+***** Take
+Que un contador con multiplicación y módulo pasara por aleatorización es malo, pero lo que debería preocupar es el hueco de tres años entre un parche certificado y un parche instalado. La infraestructura electoral tiene un proceso de divulgación y otro de certificación, y ninguno que obligue a un condado a cargar la actualización. La criptografía era la mitad fácil.
+***** Comments
+- Entonces nunca fueron secretas. Nunca he entendido el afán por las máquinas de votar cuando la papeleta de papel funciona perfectamente. Probamos el voto electrónico en tres elecciones municipales de 2008 y los tribunales anularon los resultados por problemas de usabilidad.
+- Texas lo resolvió desde 2024 exigiendo papeletas numeradas secuencialmente. El juez que preside toma de 10 a 20 cada vez, las firma, las mezcla y las coloca con el número hacia abajo.
+- El informe de 2022 mostró que las máquinas asignaban un número aparentemente aleatorio a cada registro electrónico al escanearlo, para auditorías posteriores, y que ese algoritmo era el fallo crítico de privacidad.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein algorithmisches Versagen unter dem Wahlgeheimnis
+***** TLDR
+Der CITP-Blog in Princeton erklärt einen Datenschutzfehler in Wahlzettel-Scannern von Dominion. Damit die veröffentlichten elektronischen Stimmdatensätze anonym bleiben, erhält jeder eine angeblich zufällige Kennung, doch der Generator ist ein umkehrbarer Zähler, der in Schritten von 864.803 modulo 1.000.000 läuft. Wer die öffentlichen Datensätze hat, kann sie damit in die Reihenfolge zurücksortieren, in der die Zettel eingeworfen wurden, und in einem kleinen Wahlbezirk, in dem die Reihenfolge der Wähler beobachtbar ist, verknüpft das Stimmen mit Personen. Forscher veröffentlichten das Problem im Oktober 2022, eine korrigierte Softwareversion wurde im März 2023 zertifiziert, und im Mai 2026 hatten viele Bezirke in den 21 betroffenen Staaten sie noch nicht installiert.
+***** Take
+Dass ein Zähler mit Multiplikation und Modulo als Randomisierung durchging, ist schlimm, aber die eigentliche Sorge ist die Lücke von drei Jahren zwischen zertifiziertem und installiertem Fix. Die Wahlinfrastruktur hat ein Offenlegungsverfahren und ein Zertifizierungsverfahren und kein Verfahren, das einen Bezirk dazu bringt, den Patch auch einzuspielen. Die Kryptografie war die leichtere Hälfte.
+***** Comments
+- Also waren sie von Anfang an nicht geheim. Ich habe den Wunsch nach Wahlmaschinen nie verstanden, wo der Papierzettel völlig ausreicht. Wir haben 2008 in drei Kommunalwahlen elektronisch gewählt, und Gerichte haben die Ergebnisse wegen Bedienbarkeit annulliert.
+- Texas hat das seit 2024 gelöst, indem fortlaufend numerierte Wahlzettel vorgeschrieben sind. Der vorsitzende Wahlleiter nimmt 10 bis 20 auf einmal, unterschreibt sie, mischt sie und legt sie mit der Nummer nach unten ab.
+- Der Bericht von 2022 zeigte, dass die Maschinen jedem elektronischen Stimmdatensatz beim Scannen eine scheinbar zufällige Nummer für spätere Audits zuwiesen, und dass dieser Algorithmus der kritische Datenschutzfehler war.
+** Testing 12 different Zigbee temperature/humidity sensors :hardware:zigbee:home-automation:sensors:
+:PROPERTIES:
+:ID:       49950653
+:URL:      https://smarthomescene.com/reviews/best-selling-zigbee-temperature-sensors-tested/
+:HN_URL:   https://news.ycombinator.com/item?id=49950653
+:POINTS:   78
+:COMMENTS: 27
+:BY:       walrus01
+:END:
+
+*** TLDR
+SmartHomeScene tested 12 Zigbee temperature and humidity sensors from Aqara, Sonoff, Tuya, ThirdReality, Zemismart and Moes, priced from $4.60 to $19.99, all placed 3.5m from a Zigbee2MQTT coordinator and compared against a calibrated reference, plus a run inside a refrigerator. Five held an average deviation of 0.2C: the Aqara WSDCGQ11LM, both Sonoff SNZB-02P and 02B, the Moes ZSS-S01-TH and the Tuya TH09Z. The weakest, including the Tuya ZTH02 and the ThirdReality 3RTHS0224Z, drifted up to 0.8C and reported inconsistently. The overall pick is the Sonoff SNZB-02P for its adjustable reporting interval, firmware calibration and a CR2477 rated for about four years.
+
+*** Take
+The review is worth reading because it measures reporting behaviour and not just accuracy, and erratic reporting is what actually ruins an automation. The top comments find the real gap: nobody tells you whether you are buying a Sensirion part or a bare thermistor, and that choice determines the accuracy and battery numbers the review is measuring downstream of.
+
+*** Comments
+
+**** DocG
+Sadly it is missing the IKEA one. They are cheap and most importantly use AAA standard batteries instead of coin cells, and IKEA sells rechargeable ones cheap.
+
+**** rpcope1
+What I never see in reports like this is which sensor is used, Bosch or Sensirion or a plain thermistor, and which MCU. Those have a huge bearing on precision and battery life.
+
+**** Gigachad
+I put a Thread sensor in my fridge and it has been more useful than expected. The capacitive touch buttons get bumped and change the set temperature, so now Home Assistant alerts me when the fridge leaves the safe zone.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+测试 12 款不同的 Zigbee 温湿度传感器
+***** TLDR
+SmartHomeScene 测试了来自 Aqara、Sonoff、Tuya、ThirdReality、Zemismart 和 Moes 的 12 款 Zigbee 温湿度传感器，价格从 4.60 美元到 19.99 美元，全部放在距 Zigbee2MQTT 协调器 3.5 米处，与一个已校准的参考设备对比，并额外做了冰箱内测试。五款的平均偏差保持在 0.2°C：Aqara WSDCGQ11LM、Sonoff SNZB-02P 和 02B、Moes ZSS-S01-TH 以及 Tuya TH09Z。表现最差的包括 Tuya ZTH02 和 ThirdReality 3RTHS0224Z，偏差最高达 0.8°C，上报也不稳定。综合首选是 Sonoff SNZB-02P：可调上报间隔、支持固件校准，CR2477 电池标称可用约四年。
+***** Take
+这篇评测值得读，因为它测的不只是精度，还有上报行为，而真正毁掉自动化的恰恰是时断时续的上报。热评点出了真正缺失的一环：没人告诉你买到的是 Sensirion 的芯片还是一个裸热敏电阻，而这个选择决定了评测在下游测到的精度和续航数字。
+***** Comments
+- 可惜漏了宜家那款。它便宜，更重要的是用标准 AAA 电池而不是纽扣电池，宜家的可充电电池也很便宜。
+- 这类评测里我从没见过的是：用的究竟是哪家的传感器，博世、Sensirion 还是普通热敏电阻，以及用的是哪款 MCU。这些对精度和电池寿命影响巨大。
+- 我在冰箱里放了一个 Thread 传感器，比预期有用得多。电容触摸按钮会被碰到，改掉设定温度，现在冰箱一离开安全区间，Home Assistant 就会提醒我。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Zigbee温湿度センサー12種を比較テスト
+***** TLDR
+SmartHomeSceneがAqara、Sonoff、Tuya、ThirdReality、Zemismart、Moesの12種類のZigbee温湿度センサーを、4.60ドルから19.99ドルの価格帯でテストした。すべてZigbee2MQTTコーディネーターから3.5mの位置に設置し、校正済みの基準機と比較、さらに冷蔵庫内でも試している。平均偏差0.2℃に収まったのは5機種、Aqara WSDCGQ11LM、Sonoff SNZB-02Pと02B、Moes ZSS-S01-TH、Tuya TH09Zだ。Tuya ZTH02やThirdReality 3RTHS0224Zなど下位機種は最大0.8℃ずれ、報告も不安定だった。総合一位はSonoff SNZB-02Pで、報告間隔が調整でき、ファームウェアでの校正に対応し、CR2477で約4年もつとされる。
+***** Take
+この比較記事が読む価値を持つのは、精度だけでなく報告の挙動を測っているからだ。オートメーションを本当に壊すのは不規則な報告のほうだ。トップコメントが本当の欠落を突いている。買う製品がSensirionのセンサーなのか素の熱電対なのか誰も教えてくれないが、その選択こそが記事が測っている精度や電池寿命の数字を決めている。
+***** Comments
+- 残念ながらIKEAのものが入っていない。安いうえに、何より大事なのはコイン電池ではなく標準のAAA電池を使う点だ。IKEAは充電式も安く売っている。
+- この種のレポートで決して見ないのは、使われているセンサーがBoschなのかSensirionなのか単なる熱電対なのか、そしてMCUが何かという情報だ。精度と電池寿命に決定的に関わる。
+- 冷蔵庫にThreadセンサーを入れたら予想以上に役立った。静電容量式のタッチボタンが当たって設定温度が変わるので、今はHome Assistantが安全域を外れたら通知してくれる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+지그비 온습도 센서 12종 비교 테스트
+***** TLDR
+SmartHomeScene이 Aqara, Sonoff, Tuya, ThirdReality, Zemismart, Moes의 지그비 온습도 센서 12종을 4.60달러에서 19.99달러 가격대로 테스트했다. 모두 Zigbee2MQTT 코디네이터에서 3.5m 떨어진 곳에 두고 보정된 기준기와 비교했으며, 냉장고 안 테스트도 했다. 평균 편차 0.2도를 지킨 건 다섯 종으로 Aqara WSDCGQ11LM, Sonoff SNZB-02P와 02B, Moes ZSS-S01-TH, Tuya TH09Z다. Tuya ZTH02와 ThirdReality 3RTHS0224Z 같은 하위권은 최대 0.8도까지 벌어지고 보고도 불규칙했다. 종합 추천은 Sonoff SNZB-02P로, 보고 주기를 조절할 수 있고 펌웨어 보정을 지원하며 CR2477로 약 4년을 간다.
+***** Take
+이 리뷰가 읽을 만한 이유는 정확도만이 아니라 보고 동작을 측정했기 때문이다. 자동화를 실제로 망치는 건 들쭉날쭉한 보고다. 상위 댓글이 진짜 빈틈을 찾아낸다. 내가 사는 게 Sensirion 부품인지 그냥 서미스터인지 아무도 알려주지 않지만, 그 선택이 리뷰가 하류에서 측정하는 정확도와 배터리 수치를 결정한다.
+***** Comments
+- 아쉽게도 이케아 제품이 빠졌다. 싸고, 무엇보다 코인셀이 아니라 표준 AAA 배터리를 쓴다. 이케아는 충전식도 싸게 판다.
+- 이런 리포트에서 한 번도 못 본 정보가 있다. 어떤 센서를 쓰는지, 보쉬인지 Sensirion인지 그냥 서미스터인지, 그리고 MCU가 뭔지. 정밀도와 배터리 수명에 결정적이다.
+- 냉장고에 Thread 센서를 넣었더니 기대보다 훨씬 유용했다. 정전식 터치 버튼이 부딪혀 설정 온도가 바뀌곤 했는데, 이제 냉장고가 안전 구간을 벗어나면 Home Assistant가 알려준다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Probando 12 sensores Zigbee de temperatura y humedad
+***** TLDR
+SmartHomeScene probó 12 sensores Zigbee de temperatura y humedad de Aqara, Sonoff, Tuya, ThirdReality, Zemismart y Moes, con precios de 4,60 a 19,99 dólares, todos colocados a 3,5 metros de un coordinador Zigbee2MQTT y comparados con una referencia calibrada, además de una prueba dentro de un refrigerador. Cinco mantuvieron una desviación media de 0,2 grados: el Aqara WSDCGQ11LM, los Sonoff SNZB-02P y 02B, el Moes ZSS-S01-TH y el Tuya TH09Z. Los peores, entre ellos el Tuya ZTH02 y el ThirdReality 3RTHS0224Z, se desviaron hasta 0,8 grados y reportaron de forma irregular. La elección general es el Sonoff SNZB-02P por su intervalo de reporte ajustable, la calibración por firmware y una pila CR2477 estimada en unos cuatro años.
+***** Take
+La reseña vale la pena porque mide el comportamiento de reporte y no solo la exactitud, y lo que realmente arruina una automatización es un reporte errático. Los comentarios más votados encuentran el hueco real: nadie te dice si compras una pieza de Sensirion o un termistor pelado, y esa elección determina las cifras de exactitud y batería que la reseña mide después.
+***** Comments
+- Lamentablemente falta el de IKEA. Son baratos y, sobre todo, usan pilas AAA estándar en vez de pilas de botón, y IKEA vende recargables muy baratas.
+- Lo que nunca veo en informes así es qué sensor se usa, Bosch o Sensirion o un termistor simple, y qué microcontrolador. Eso influye enormemente en la precisión y la duración de la batería.
+- Puse un sensor Thread en mi refrigerador y resultó más útil de lo que esperaba. Los botones táctiles capacitivos se golpean y cambian la temperatura, así que ahora Home Assistant me avisa cuando sale de la zona segura.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zwölf Zigbee-Sensoren für Temperatur und Luftfeuchte im Test
+***** TLDR
+SmartHomeScene hat zwölf Zigbee-Sensoren für Temperatur und Luftfeuchte von Aqara, Sonoff, Tuya, ThirdReality, Zemismart und Moes getestet, Preise von 4,60 bis 19,99 Dollar, alle 3,5 Meter von einem Zigbee2MQTT-Koordinator entfernt und gegen eine kalibrierte Referenz verglichen, dazu ein Durchlauf im Kühlschrank. Fünf hielten eine mittlere Abweichung von 0,2 Grad: der Aqara WSDCGQ11LM, beide Sonoff SNZB-02P und 02B, der Moes ZSS-S01-TH und der Tuya TH09Z. Die schwächsten, darunter der Tuya ZTH02 und der ThirdReality 3RTHS0224Z, wichen bis zu 0,8 Grad ab und meldeten unregelmäßig. Gesamtempfehlung ist der Sonoff SNZB-02P mit einstellbarem Melde-Intervall, Kalibrierung per Firmware und einer CR2477 für rund vier Jahre.
+***** Take
+Der Test lohnt sich, weil er das Melde-Verhalten und nicht nur die Genauigkeit misst, und was eine Automatisierung wirklich ruiniert, sind unregelmäßige Meldungen. Die Topkommentare finden die echte Lücke: niemand sagt dir, ob du ein Sensirion-Bauteil oder einen nackten Thermistor kaufst, und genau diese Wahl bestimmt die Werte für Genauigkeit und Batterielaufzeit, die der Test weiter unten misst.
+***** Comments
+- Leider fehlt der von IKEA. Sie sind günstig und nutzen vor allem normale AAA-Batterien statt Knopfzellen, und IKEA verkauft Akkus sehr billig.
+- Was ich in solchen Berichten nie sehe: welcher Sensor verbaut ist, Bosch oder Sensirion oder ein einfacher Thermistor, und welcher Mikrocontroller. Das hat enormen Einfluss auf Präzision und Batterielaufzeit.
+- Ich habe einen Thread-Sensor in den Kühlschrank gelegt und er ist nützlicher als erwartet. Die kapazitiven Tasten werden angestoßen und verstellen die Soll-Temperatur, jetzt warnt mich Home Assistant, wenn der Kühlschrank den sicheren Bereich verlässt.
+** Samon: Designing a Zen Garden Raking Puzzle :game-design:puzzles:algorithms:gwern:
+:PROPERTIES:
+:ID:       49972211
+:URL:      https://gwern.net/doc/design/2026-10-03-gwern-samon.html
+:HN_URL:   https://news.ycombinator.com/item?id=49972211
+:POINTS:   38
+:COMMENTS: 14
+:BY:       networked
+:END:
+
+*** TLDR
+Gwern's design write-up for Samon, a puzzle about raking a Zen sand garden in one unbroken stroke. Formally it is a Hamiltonian path on a grid that has to end at the gate, scored on the number of turns because fewer turns reads as calmer raking. The interesting part is the method: he ran a solver over thousands of candidate rule sets to see which ones leave a solution space small enough to be a puzzle. Ripple stones must be encircled, wave bands must run straight edge to edge, and the rule that made it work is physical, since a wide rake cannot U-turn in open sand and can only reverse against a wall or stone. That one constraint cuts an empty garden from millions of valid rakings to between two and eight. The page embeds a playable prototype with 148 gardens across 7 worlds.
+
+*** Take
+This is the part of puzzle design that normally stays private: not inventing mechanics but running a solver until you find the rule that makes the solution space narrow. The wide-rake constraint works because it is a fact about rakes rather than an arbitrary restriction, which is also why players will accept it without an explanation.
+
+*** Comments
+
+**** Wowfunhappy
+If you like this, I happen to think Cardinal Chains is a more interesting take on the same overall concept.
+
+**** lubujackson
+Surprisingly deep and seems quite in line with the underlying concept of Zen gardens.
+
+**** contingencies
+Ideas for more complex mechanics: animal interactions, precipitation, wind, mirrors, earthquakes, spreading plants that respond to nutrient and seasonal conditions, littering humans.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Samon：设计一个禅意庭园耙沙益智游戏
+***** TLDR
+Gwern 为 Samon 写的设计笔记。这是一个用一笔不断的轨迹耙完禅意沙庭的益智游戏，形式上是在网格上寻找必须终止于门口的哈密顿路径，按转向次数计分，因为转得越少，耙沙就显得越平静。真正有意思的是方法：他让求解器跑过数千套候选规则，看哪些规则留下的解空间小到足以构成谜题。涟漪石必须被完整环绕，波纹带必须从一边直通到另一边，而让整个设计成立的规则来自物理：宽耙无法在开放沙地上掉头，只能靠着墙或石头折返。仅这一条约束，就把空庭的有效耙法从数百万种压缩到两到八种。页面内嵌了一个可玩原型，含 7 个世界共 148 个庭园。
+***** Take
+这正是益智游戏设计中通常不外传的那部分：不是发明机制，而是不断跑求解器，直到找到能把解空间收窄的那条规则。宽耙约束之所以有效，是因为它是关于耙子的事实，而不是随意设下的限制，这也是玩家无需解释就会接受它的原因。
+***** Comments
+- 如果你喜欢这个，我个人认为 Cardinal Chains 对同一个整体概念的处理更有意思。
+- 出乎意料地有深度，而且相当贴合禅意庭园背后的理念。
+- 更复杂机制的想法：动物互动、降水、风、镜子、地震、会随养分和季节变化蔓延的植物、乱丢垃圾的人。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Samon：禅庭を砂紋で描くパズルの設計
+***** TLDR
+Gwernによるパズル「Samon」の設計ノート。禅の枯山水を一筆書きで掻き終えるパズルで、形式的にはグリッド上で門に終点を持つハミルトン路を探す問題であり、曲がりの回数が少ないほど静かな作庭と見なして採点する。面白いのは手法のほうだ。数千通りの候補ルールにソルバーをかけ、どのルールならパズルとして成り立つ程度に解空間が狭まるかを調べている。波紋石は切れ目なく囲まなければならず、波帯は端から端までまっすぐ走らせる必要があり、設計を成立させた決め手は物理的な制約だった。幅の広い熊手は開けた砂地でUターンできず、壁か石に沿ってしか反転できない。この一つの制約だけで、空の庭の有効な作庭が数百万通りから2〜8通りに縮む。ページには7ワールド148庭のプレイ可能なプロトタイプが埋め込まれている。
+***** Take
+これは通常は外に出ないパズル設計の工程だ。機構を発明するのではなく、解空間を十分狭くするルールが見つかるまでソルバーを回す作業である。幅広の熊手という制約が効くのは、それが恣意的な禁止ではなく熊手についての事実だからで、だからこそプレイヤーは説明なしに受け入れる。
+***** Comments
+- これが好きなら、同じ発想をより面白く扱っているのはCardinal Chainsだと思う。
+- 思ったより奥が深く、禅庭の根底にある考え方にもよく沿っている。
+- より複雑な機構のアイデア：動物との相互作用、降水、風、鏡、地震、養分や季節に応じて広がる植物、ごみを捨てる人間。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Samon: 선 정원 모래 긁기 퍼즐 설계하기
+***** TLDR
+선 정원의 마른 모래를 한 번에 끊지 않고 긁어내는 퍼즐 Samon에 대한 Gwern의 설계 기록이다. 형식적으로는 격자에서 반드시 문에서 끝나는 해밀턴 경로를 찾는 문제이고, 방향 전환 횟수로 점수를 매긴다. 전환이 적을수록 더 차분한 긁기로 읽히기 때문이다. 흥미로운 건 방법론이다. 수천 가지 후보 규칙에 솔버를 돌려 어떤 규칙이 퍼즐이 될 만큼 해 공간을 좁히는지 확인했다. 물결 돌은 끊김 없이 둘러싸야 하고, 물결 띠는 끝에서 끝까지 직선으로 가야 하며, 설계를 성립시킨 규칙은 물리적인 것이었다. 폭이 넓은 갈퀴는 열린 모래에서 U턴할 수 없고 벽이나 돌에 기대서만 방향을 되돌릴 수 있다. 이 하나의 제약이 빈 정원의 유효한 긁기 방식을 수백만 가지에서 둘에서 여덟 가지로 줄인다. 페이지에는 7개 월드, 148개 정원의 플레이 가능한 프로토타입이 들어 있다.
+***** Take
+보통은 밖으로 나오지 않는 퍼즐 설계 과정이다. 기믹을 발명하는 게 아니라, 해 공간을 충분히 좁히는 규칙이 나올 때까지 솔버를 돌리는 작업이다. 넓은 갈퀴 제약이 먹히는 이유는 그것이 임의의 금지가 아니라 갈퀴에 관한 사실이기 때문이고, 그래서 플레이어는 설명 없이도 받아들인다.
+***** Comments
+- 이게 마음에 든다면, 같은 개념을 더 흥미롭게 다룬 건 Cardinal Chains라고 생각한다.
+- 예상보다 깊이가 있고, 선 정원의 근본 개념과도 꽤 잘 맞는다.
+- 더 복잡한 기믹 아이디어: 동물과의 상호작용, 강수, 바람, 거울, 지진, 영양분과 계절에 반응해 퍼지는 식물, 쓰레기를 버리는 사람.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Samon: diseñar un puzle de rastrillar un jardín zen
+***** TLDR
+Notas de diseño de Gwern sobre Samon, un puzle que consiste en rastrillar un jardín zen de arena en un solo trazo continuo. Formalmente es un camino hamiltoniano en una rejilla que debe terminar en la puerta, puntuado por el número de giros, porque menos giros se lee como un rastrillado más sereno. Lo interesante es el método: pasó un solucionador por miles de conjuntos de reglas candidatas para ver cuáles dejan un espacio de soluciones lo bastante pequeño como para ser un puzle. Las piedras de onda deben quedar rodeadas sin cortes, las bandas de olas deben recorrer recto de borde a borde, y la regla que hizo funcionar todo es física: un rastrillo ancho no puede girar en U en arena abierta y solo puede invertir apoyado en un muro o una piedra. Esa única restricción reduce un jardín vacío de millones de rastrillados válidos a entre dos y ocho. La página incluye un prototipo jugable con 148 jardines en 7 mundos.
+***** Take
+Esta es la parte del diseño de puzles que normalmente no se ve: no inventar mecánicas, sino correr un solucionador hasta encontrar la regla que estrecha el espacio de soluciones. La restricción del rastrillo ancho funciona porque es un hecho sobre rastrillos y no una prohibición arbitraria, y por eso los jugadores la aceptan sin que nadie la explique.
+***** Comments
+- Si te gusta esto, a mí me parece que Cardinal Chains es una versión más interesante del mismo concepto general.
+- Sorprendentemente profundo y bastante en línea con la idea de fondo de los jardines zen.
+- Ideas para mecánicas más complejas: interacción con animales, precipitación, viento, espejos, terremotos, plantas que se extienden según nutrientes y estaciones, humanos que tiran basura.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Samon: ein Rätsel über das Rechen eines Zen-Gartens entwerfen
+***** TLDR
+Gwerns Designnotizen zu Samon, einem Rätsel über das Rechen eines Zen-Sandgartens in einem einzigen ununterbrochenen Zug. Formal ist es ein Hamiltonpfad auf einem Gitter, der am Tor endet, bewertet nach der Zahl der Richtungswechsel, weil weniger Wechsel als ruhigeres Rechen gelesen wird. Interessant ist die Methode: er ließ einen Solver über Tausende Kandidatenregeln laufen, um zu sehen, welche einen Lösungsraum hinterlassen, der klein genug für ein Rätsel ist. Wellensteine müssen ohne Unterbrechung umkreist werden, Wellenbänder müssen gerade von Rand zu Rand laufen, und die entscheidende Regel ist physikalisch: ein breiter Rechen kann im offenen Sand keine Kehrtwende machen und nur an einer Wand oder einem Stein umkehren. Diese eine Einschränkung reduziert einen leeren Garten von Millionen gültiger Rechungen auf zwei bis acht. Die Seite enthält einen spielbaren Prototyp mit 148 Gärten in 7 Welten.
+***** Take
+Das ist der Teil des Rätseldesigns, der normalerweise unter Verschluss bleibt: nicht Mechaniken erfinden, sondern einen Solver laufen lassen, bis man die Regel findet, die den Lösungsraum eng macht. Die Regel zum breiten Rechen funktioniert, weil sie eine Tatsache über Rechen ist und kein willkürliches Verbot, und genau deshalb akzeptieren Spieler sie ohne Erklärung.
+***** Comments
+- Wenn dir das gefällt: Ich finde, Cardinal Chains ist eine interessantere Umsetzung desselben Grundkonzepts.
+- Überraschend tief und ziemlich im Einklang mit der Grundidee von Zen-Gärten.
+- Ideen für komplexere Mechaniken: Tierinteraktionen, Niederschlag, Wind, Spiegel, Erdbeben, Pflanzen, die sich je nach Nährstoffen und Jahreszeit ausbreiten, Menschen, die Müll hinterlassen.
