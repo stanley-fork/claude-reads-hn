@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-07 01:13 UTC
+#+DATE: 2026-10-07T01:13:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+An AI designs a working TPU, OpenAI sells yes/no answers by the million, and California makes your Montana LLC personal
+
+* Highlights
+- OpenTPU: AI-designed FPGA accelerator runs real models at 82 tok/s
+- Decisions API: $0.10 per million tokens for a confidence score
+- Claude Code's suggested messages are an RL data pipeline
+- One California resident in your Montana LLC now taxes the whole thing
+- AnyPS5 relinks PS5 binaries instead of emulating them
+
+* Stories
+
+** OpenTPU – An open-source AI accelerator, developed by AI :hardware:ai:fpga:accelerators:verilog:
+:PROPERTIES:
+:ID:       49980715
+:URL:      https://github.com/FeSens/openTPU
+:HN_URL:   https://news.ycombinator.com/item?id=49980715
+:POINTS:   223
+:COMMENTS: 292
+:BY:       fsbonetto
+:END:
+
+*** TLDR
+OpenTPU is an Apache 2.0 AI accelerator whose architecture was guided by AI agents, targeting an Inspur YPCB-00338 card with a Xilinx Kintex-7 xc7k480t FPGA and dual DDR3 channels at 17.1 GB/s peak bandwidth. The design is deliberately plain: a sequencer issues one instruction per cycle to a DMA unit, a matrix unit multiplying int8 weights streamed from DRAM, an fp32 vector unit, and a quantizer. It runs ten modern models with real weights, hitting 52.3 tok/s decode on LFM2.5-230M at int8 and 82.1 tok/s at 4-bit, reaching 82 to 94% of theoretical DRAM peak, with RTL output matching the simulator bit-for-bit. Mixture-of-experts models work via expert streaming. Prefill performance and timing margins are still open.
+
+*** Take
+The interesting claim is not that an AI wrote Verilog, it is that the resulting design hits 82 to 94% of theoretical memory bandwidth and matches the simulator bit-exactly. Memory-bound accelerator design is where human engineers spend most of their effort, and that number is the part worth checking. A Kintex-7 running a 230M model is a demo, not a product, but the bit-exactness is a real verification result rather than a vibe.
+
+*** Comments
+
+**** pcarolan
+:PROPERTIES:
+:COMMENT_ID: 49980842
+:END:
+Really dumb question from a software guy. Why aren't the labs burning their frontier models into chips already? Seems like the performance gains and cost per request would be worth it.
+
+**** athrowaway3z
+:PROPERTIES:
+:COMMENT_ID: 49980977
+:END:
+My guess is that a SOTA model has been able to produce an accelerator that runs a model since around December. The obvious next step is enough memory throughput to run that SOTA model itself so it can develop its own hardware.
+
+**** rcarmo
+:PROPERTIES:
+:COMMENT_ID: 49981103
+:END:
+Well, as long as it doesn't start developing anatomically accurate metal skeletons with red glowing eyes.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+OpenTPU：由 AI 开发的开源 AI 加速器
+***** TLDR
+OpenTPU 是一个 Apache 2.0 许可的 AI 加速器，其架构由 AI 代理主导设计，目标硬件是搭载 Xilinx Kintex-7 xc7k480t FPGA 和双 DDR3 通道（峰值带宽 17.1 GB/s）的浪潮 YPCB-00338 板卡。设计刻意保持简单：一个定序器每周期发出一条指令给 DMA 单元、从 DRAM 流式读取 int8 权重的矩阵单元、fp32 向量单元和量化器。它能用真实权重运行十个现代模型，LFM2.5-230M 在 int8 下解码达 52.3 tok/s，4-bit 下达 82.1 tok/s，DRAM 带宽利用率达理论峰值的 82% 到 94%，RTL 输出与模拟器逐位一致。混合专家模型通过专家流式加载支持。预填充性能和时序余量仍未解决。
+***** Take
+有意思的不是 AI 写了 Verilog，而是最终设计达到了理论内存带宽的 82% 到 94%，并与模拟器逐位一致。内存受限的加速器设计正是人类工程师投入精力最多的地方，这个数字才是值得核查的部分。用 Kintex-7 跑一个 2.3 亿参数模型是演示而非产品，但逐位一致是真实的验证结果，不是感觉。
+***** Comments
+- 一个软件背景的人问个傻问题。为什么各实验室还没把前沿模型固化进芯片？看起来性能提升和单次请求成本都值得这么做。
+- 我猜从去年十二月左右开始，SOTA 模型就已经能产出可以运行模型的加速器了。下一步显然是把内存吞吐做到足以运行那个 SOTA 模型本身，让它自己开发硬件。
+- 只要它别开始设计红眼发光、解剖学精确的金属骨架就行。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+OpenTPU: AIが開発したオープンソースAIアクセラレータ
+***** TLDR
+OpenTPUはApache 2.0ライセンスのAIアクセラレータで、アーキテクチャの判断をAIエージェントが主導した。ターゲットはXilinx Kintex-7 xc7k480t FPGAとDDR3デュアルチャネル（ピーク帯域17.1 GB/s）を搭載したInspur YPCB-00338カードだ。設計は意図的に単純で、シーケンサが毎サイクル1命令をDMAユニット、DRAMからint8重みをストリーミングする行列ユニット、fp32ベクタユニット、量子化器に発行する。実際の重みで現代のモデル10本を動かし、LFM2.5-230Mのデコードはint8で52.3 tok/s、4ビットで82.1 tok/s、DRAM効率は理論ピークの82〜94%に達し、RTL出力はシミュレータとビット単位で一致する。MoEモデルはエキスパートのストリーミングで対応。プリフィル性能とタイミングマージンは未解決だ。
+***** Take
+注目すべきはAIがVerilogを書いたことではなく、できた設計が理論メモリ帯域の82〜94%に届き、シミュレータとビット単位で一致している点だ。メモリ律速のアクセラレータ設計は人間の技術者が最も労力を割く領域であり、この数字こそ検証する価値がある。Kintex-7で2.3億パラメータのモデルを動かすのはデモで製品ではないが、ビット一致は雰囲気ではなく実際の検証結果だ。
+***** Comments
+- ソフト側の人間からの素朴な質問。なぜ各ラボはフロンティアモデルをチップに焼き込まないのか。性能向上とリクエスト単価を考えれば見合うように思える。
+- 推測だが、SOTAモデルは昨年12月あたりからモデルを動かせるアクセラレータを生成できていたのだろう。次の明白な一手は、そのSOTAモデル自体を動かせるメモリ帯域を確保し、自分で自分のハードを設計させることだ。
+- 解剖学的に正確で赤く光る目を持つ金属骨格を設計し始めないかぎりは、まあいい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+OpenTPU: AI가 개발한 오픈소스 AI 가속기
+***** TLDR
+OpenTPU는 Apache 2.0 라이선스 AI 가속기로, 아키텍처 결정을 AI 에이전트가 주도했다. 대상 하드웨어는 Xilinx Kintex-7 xc7k480t FPGA와 DDR3 듀얼 채널(피크 대역폭 17.1 GB/s)을 갖춘 Inspur YPCB-00338 카드다. 설계는 의도적으로 단순하다. 시퀀서가 매 사이클 명령 하나를 DMA 유닛, DRAM에서 int8 가중치를 스트리밍하는 행렬 유닛, fp32 벡터 유닛, 양자화기에 보낸다. 실제 가중치로 현대 모델 10종을 돌려 LFM2.5-230M 디코드가 int8에서 52.3 tok/s, 4비트에서 82.1 tok/s를 기록했고, DRAM 효율은 이론 피크의 82~94%에 달하며 RTL 출력이 시뮬레이터와 비트 단위로 일치한다. MoE 모델은 전문가 스트리밍으로 지원한다. 프리필 성능과 타이밍 마진은 아직 과제다.
+***** Take
+흥미로운 지점은 AI가 Verilog를 썼다는 게 아니라, 나온 설계가 이론 메모리 대역폭의 82~94%에 도달하고 시뮬레이터와 비트 단위로 일치한다는 것이다. 메모리 병목 가속기 설계는 인간 엔지니어가 가장 많은 공을 들이는 영역이고, 검증해 볼 가치가 있는 숫자는 바로 그것이다. Kintex-7에서 2.3억 파라미터 모델을 돌리는 건 제품이 아니라 데모지만, 비트 일치는 분위기가 아니라 실제 검증 결과다.
+***** Comments
+- 소프트웨어 쪽 사람의 다소 단순한 질문. 연구소들은 왜 아직 프런티어 모델을 칩에 구워 넣지 않나? 성능 향상과 요청당 비용을 보면 할 만해 보인다.
+- 내 짐작으로는 작년 12월쯤부터 SOTA 모델이 모델을 돌릴 수 있는 가속기를 만들어낼 수 있었을 것이다. 다음 수는 명백하다. 그 SOTA 모델 자체를 돌릴 메모리 대역폭을 확보해 스스로 하드웨어를 설계하게 하는 것.
+- 해부학적으로 정확하고 눈이 빨갛게 빛나는 금속 골격을 설계하기 시작하지만 않는다면 괜찮다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+OpenTPU: un acelerador de IA de código abierto, desarrollado por IA
+***** TLDR
+OpenTPU es un acelerador de IA con licencia Apache 2.0 cuya arquitectura fue guiada por agentes de IA, dirigido a una tarjeta Inspur YPCB-00338 con FPGA Xilinx Kintex-7 xc7k480t y doble canal DDR3 a 17,1 GB/s de ancho de banda máximo. El diseño es deliberadamente simple: un secuenciador emite una instrucción por ciclo a una unidad DMA, una unidad matricial que multiplica pesos int8 transmitidos desde DRAM, una unidad vectorial fp32 y un cuantizador. Ejecuta diez modelos actuales con pesos reales, alcanzando 52,3 tok/s de decodificación en LFM2.5-230M con int8 y 82,1 tok/s con 4 bits, llegando al 82-94% del máximo teórico de DRAM, con salida RTL que coincide bit a bit con el simulador. Los modelos de mezcla de expertos funcionan mediante transmisión de expertos. El rendimiento de prefill y los márgenes de temporización siguen pendientes.
+***** Take
+Lo interesante no es que una IA escribiera Verilog, sino que el diseño resultante alcance el 82-94% del ancho de banda teórico de memoria y coincida bit a bit con el simulador. El diseño de aceleradores limitados por memoria es donde los ingenieros humanos invierten casi todo su esfuerzo, y ese número es la parte que merece comprobación. Un Kintex-7 ejecutando un modelo de 230M es una demo, no un producto, pero la coincidencia bit a bit es un resultado real de verificación, no una impresión.
+***** Comments
+- Pregunta muy tonta desde el lado del software. ¿Por qué los laboratorios no están ya grabando sus modelos frontera en chips? Parece que las mejoras de rendimiento y el coste por petición lo justificarían.
+- Supongo que un modelo SOTA ha podido producir un acelerador capaz de ejecutar un modelo desde diciembre aproximadamente. El siguiente paso obvio es lograr suficiente ancho de banda para ejecutar ese modelo SOTA y que diseñe su propio hardware.
+- Bueno, mientras no empiece a diseñar esqueletos metálicos anatómicamente correctos con ojos rojos brillantes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+OpenTPU: ein Open-Source-KI-Beschleuniger, von KI entwickelt
+***** TLDR
+OpenTPU ist ein KI-Beschleuniger unter Apache 2.0, dessen Architektur von KI-Agenten geleitet wurde. Zielplattform ist eine Inspur YPCB-00338-Karte mit Xilinx Kintex-7 xc7k480t FPGA und zwei DDR3-Kanälen bei 17,1 GB/s Spitzenbandbreite. Der Entwurf ist bewusst schlicht: Ein Sequencer gibt pro Takt eine Instruktion an eine DMA-Einheit, eine Matrixeinheit, die int8-Gewichte aus dem DRAM multipliziert, eine fp32-Vektoreinheit und einen Quantisierer. Zehn aktuelle Modelle laufen mit echten Gewichten, LFM2.5-230M erreicht 52,3 tok/s Decode bei int8 und 82,1 tok/s bei 4 Bit, die DRAM-Effizienz liegt bei 82 bis 94% des theoretischen Maximums, und die RTL-Ausgabe stimmt bitgenau mit dem Simulator überein. Mixture-of-Experts-Modelle laufen über Expert-Streaming. Prefill-Leistung und Timing-Margen sind noch offen.
+***** Take
+Bemerkenswert ist nicht, dass eine KI Verilog geschrieben hat, sondern dass der Entwurf 82 bis 94% der theoretischen Speicherbandbreite erreicht und bitgenau zum Simulator passt. Speichergebundenes Beschleunigerdesign ist genau der Bereich, in den menschliche Ingenieure den Großteil ihrer Arbeit stecken, und diese Zahl ist der prüfenswerte Teil. Ein Kintex-7 mit einem 230M-Modell ist eine Demo, kein Produkt, aber die Bitgenauigkeit ist ein echtes Verifikationsergebnis und kein Eindruck.
+***** Comments
+- Ziemlich dumme Frage von einem Software-Menschen. Warum brennen die Labore ihre Frontier-Modelle nicht längst in Chips? Leistungsgewinn und Kosten pro Anfrage scheinen das zu rechtfertigen.
+- Meine Vermutung: Ein SOTA-Modell konnte etwa seit Dezember einen Beschleuniger erzeugen, der ein Modell ausführt. Der nächste naheliegende Schritt ist genug Speicherdurchsatz, um dieses SOTA-Modell selbst laufen zu lassen, damit es eigene Hardware entwickelt.
+- Nun, solange es nicht anfängt, anatomisch korrekte Metallskelette mit rot glühenden Augen zu entwerfen.
+** Decisions API is in public beta :ai:openai:api:classification:pricing:
+:PROPERTIES:
+:ID:       49984025
+:URL:      https://developers.openai.com/api/docs/guides/decisions
+:HN_URL:   https://news.ycombinator.com/item?id=49984025
+:POINTS:   124
+:COMMENTS: 52
+:BY:       chiefstorm
+:END:
+
+*** TLDR
+OpenAI opened a public beta of POST /v1/decisions, a dedicated endpoint for typed answers over text and images that it says runs about 10x faster than the Responses API. It answers three shapes of question: predicate, returning a 0-to-1 estimate the condition is true; choice, returning a selected value plus a probability distribution and confidence; and score, returning a probability-weighted average across ordered levels. Only gpt-6-luna is available during beta. Input is $0.10 per million tokens, with no charge for output tokens or cache operations. The docs steer users toward classification, routing, prioritization, and severity assessment, and away from complex reasoning or object generation.
+
+*** Take
+Not charging for output tokens is the tell: there is almost no output, just a number. This is OpenAI conceding that a large share of production LLM traffic is classification that never needed a chat completion, and pricing accordingly after Jev demonstrated the same thing more cheaply. Anyone who built a classifier by parsing JSON out of a chat endpoint has been overpaying for a text generator to emit one token.
+
+*** Comments
+
+**** TSiege
+:PROPERTIES:
+:COMMENT_ID: 49984188
+:END:
+The response to Jev should be the nail in the coffin over whether or not the AI business is a commodity market. Out of nowhere Jev appeared as the next round of the price wars and showed the value of System One models. A fast yes/no/confidence score is cheaper and often all people want.
+
+**** Topfi
+:PROPERTIES:
+:COMMENT_ID: 49984301
+:END:
+Ran my decisions evals (still rudimentary, under 600 calls) on this via OpenRouter against Jev and Mercury Decide. Jev has replaced my mt0 efforts by sheer force of affordability.
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 49984077
+:END:
+curl https://api.openai.com/v1/decisions with model gpt-6-luna and an input_text block. That is the whole API surface.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Decisions API 进入公开测试
+***** TLDR
+OpenAI 开放了 POST /v1/decisions 的公开测试版，这是一个针对文本和图像返回类型化答案的专用端点，官方称其比 Responses API 快约 10 倍。它回答三类问题：predicate，返回条件为真的 0 到 1 估计值；choice，返回所选值加概率分布和置信度；score，返回有序等级上的概率加权平均值。测试期间仅支持 gpt-6-luna。输入每百万 token 0.10 美元，输出 token 和缓存操作不计费。文档引导用户将其用于分类、路由、优先级排序和严重性评估，而非复杂推理或对象生成。
+***** Take
+输出 token 不收费是关键信号：这里几乎没有输出，只有一个数字。这等于 OpenAI 承认生产环境中大量 LLM 流量其实是分类任务，从来不需要聊天补全，并在 Jev 用更低价格证明同一点之后相应调整了定价。任何通过解析聊天端点返回的 JSON 来搭建分类器的人，都在为一个文本生成器吐出一个 token 而多付钱。
+***** Comments
+- 对 Jev 的这番回应，应该能为「AI 业务是否是大宗商品市场」这个问题盖棺定论。Jev 突然出现，成为新一轮价格战，并展示了 System One 模型的价值。快速的是／否／置信度分数更便宜，而且往往就是人们想要的全部。
+- 我通过 OpenRouter 用自己的 decisions 评测（还很粗糙，不到 600 次调用）把它和 Jev、Mercury Decide 做了对比。Jev 单凭价格优势就取代了我原先在 mt0 上的尝试。
+- curl https://api.openai.com/v1/decisions，模型用 gpt-6-luna，加一个 input_text 块。这就是整个 API 的全貌。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Decisions APIがパブリックベータに
+***** TLDR
+OpenAIがPOST /v1/decisionsのパブリックベータを公開した。テキストと画像に対して型付きの答えを返す専用エンドポイントで、Responses APIより約10倍速いとしている。扱う質問は3種類。predicateは条件が真である確率を0から1で返す。choiceは選択値に加えて確率分布と信頼度を返す。scoreは順序付きレベル上の確率加重平均を返す。ベータ期間中はgpt-6-lunaのみ利用できる。入力は100万トークンあたり0.10ドルで、出力トークンとキャッシュ操作は無料。ドキュメントは分類、ルーティング、優先順位付け、重大度評価での利用を勧め、複雑な推論やオブジェクト生成からは遠ざけている。
+***** Take
+出力トークンを課金しない点が本質を示している。出力はほぼ存在せず、数値だけだからだ。これはOpenAIが、本番のLLMトラフィックの大半はチャット補完を必要としない分類だったと認め、Jevが同じことをより安く示した後に価格を合わせた動きだ。チャットエンドポイントの戻りJSONを解析して分類器を作っていた人は、1トークンを出すためにテキスト生成器へ過剰に払ってきたことになる。
+***** Comments
+- Jevへのこの反応は、AIビジネスがコモディティ市場かどうかという議論に決着をつけるはずだ。突然現れたJevが価格競争の次の波となり、System One型モデルの価値を示した。高速なyes/no/信頼度スコアは安く、そして多くの場合それが欲しいものすべてだ。
+- OpenRouter経由で自分のdecisions評価（まだ粗く、600コール未満）をJevとMercury Decideと比較して回した。Jevは価格の力だけで私のmt0での取り組みを置き換えた。
+- curl https://api.openai.com/v1/decisions にモデルgpt-6-lunaとinput_textブロックを渡す。それがAPIの全体像だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Decisions API 퍼블릭 베타 공개
+***** TLDR
+OpenAI가 POST /v1/decisions의 퍼블릭 베타를 열었다. 텍스트와 이미지에 대해 타입이 정해진 답을 돌려주는 전용 엔드포인트로, Responses API보다 약 10배 빠르다고 한다. 질문 형태는 세 가지다. predicate는 조건이 참일 확률을 0에서 1로 반환하고, choice는 선택값과 확률 분포, 신뢰도를 반환하며, score는 순서가 있는 등급들에 대한 확률 가중 평균을 반환한다. 베타 기간에는 gpt-6-luna만 쓸 수 있다. 입력은 100만 토큰당 0.10달러이고 출력 토큰과 캐시 작업은 무료다. 문서는 분류, 라우팅, 우선순위 지정, 심각도 평가에 쓰도록 안내하고 복잡한 추론이나 객체 생성에서는 멀어지게 한다.
+***** Take
+출력 토큰에 과금하지 않는다는 점이 핵심을 드러낸다. 출력이 거의 없고 숫자 하나뿐이기 때문이다. 이는 프로덕션 LLM 트래픽의 상당 부분이 애초에 채팅 완성이 필요 없던 분류였음을 OpenAI가 인정한 것이고, Jev가 같은 것을 더 싸게 보여준 뒤 가격을 맞춘 조치다. 채팅 엔드포인트의 JSON을 파싱해 분류기를 만들던 사람은 토큰 하나를 뽑으려고 텍스트 생성기에 과하게 지불해 온 셈이다.
+***** Comments
+- Jev에 대한 이 대응은 AI 사업이 범용 상품 시장인지에 대한 논쟁에 못을 박을 것이다. 갑자기 나타난 Jev가 가격 전쟁의 다음 라운드가 되어 System One 모델의 가치를 보여줬다. 빠른 예/아니오/신뢰도 점수는 더 싸고, 사람들이 원하는 건 대개 그것뿐이다.
+- OpenRouter를 통해 내 decisions 평가(아직 거칠고 600회 미만)를 Jev와 Mercury Decide와 비교해 돌렸다. Jev는 순전히 가격 경쟁력만으로 내 mt0 작업을 대체했다.
+- curl https://api.openai.com/v1/decisions에 모델 gpt-6-luna와 input_text 블록을 넣는다. 그게 API 표면 전부다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La Decisions API está en beta pública
+***** TLDR
+OpenAI abrió la beta pública de POST /v1/decisions, un endpoint dedicado a respuestas tipadas sobre texto e imágenes que, según la empresa, es unas 10 veces más rápido que la Responses API. Responde a tres formas de pregunta: predicate, que devuelve una estimación de 0 a 1 de que la condición sea cierta; choice, que devuelve el valor elegido más una distribución de probabilidad y una confianza; y score, que devuelve una media ponderada por probabilidad sobre niveles ordenados. Durante la beta solo está disponible gpt-6-luna. La entrada cuesta 0,10 dólares por millón de tokens, sin cargo por tokens de salida ni operaciones de caché. La documentación orienta hacia clasificación, enrutado, priorización y evaluación de gravedad, y aparta de razonamientos complejos o generación de objetos.
+***** Take
+No cobrar por tokens de salida es la señal: apenas hay salida, solo un número. OpenAI está admitiendo que buena parte del tráfico LLM en producción es clasificación que nunca necesitó un chat completion, y ajusta el precio después de que Jev demostrara lo mismo más barato. Quien construyó un clasificador parseando JSON de un endpoint de chat ha estado pagando de más por un generador de texto que emite un token.
+***** Comments
+- La respuesta a Jev debería ser el clavo final en el debate sobre si el negocio de la IA es un mercado de commodities. De la nada apareció Jev como la siguiente ronda de la guerra de precios y mostró el valor de los modelos System One. Un sí/no con puntuación de confianza es más barato y a menudo es todo lo que la gente quiere.
+- Pasé mis evaluaciones de decisiones (aún rudimentarias, menos de 600 llamadas) por OpenRouter contra Jev y Mercury Decide. Jev ha reemplazado mis intentos con mt0 por pura fuerza de asequibilidad.
+- curl https://api.openai.com/v1/decisions con el modelo gpt-6-luna y un bloque input_text. Esa es toda la superficie de la API.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Decisions API ist in der öffentlichen Beta
+***** TLDR
+OpenAI hat die öffentliche Beta von POST /v1/decisions gestartet, einen eigenen Endpunkt für typisierte Antworten auf Text und Bilder, der laut Anbieter rund zehnmal schneller als die Responses API ist. Er beantwortet drei Fragetypen: predicate liefert eine Schätzung von 0 bis 1, dass die Bedingung zutrifft; choice liefert den gewählten Wert plus Wahrscheinlichkeitsverteilung und Konfidenz; score liefert einen wahrscheinlichkeitsgewichteten Mittelwert über geordnete Stufen. In der Beta ist nur gpt-6-luna verfügbar. Eingabe kostet 0,10 Dollar pro Million Tokens, Ausgabe-Tokens und Cache-Operationen sind kostenlos. Die Dokumentation lenkt zu Klassifikation, Routing, Priorisierung und Schwerebewertung und weg von komplexem Reasoning oder Objektgenerierung.
+***** Take
+Dass Ausgabe-Tokens nichts kosten, ist der Hinweis: Es gibt kaum Ausgabe, nur eine Zahl. OpenAI gibt damit zu, dass ein großer Teil des produktiven LLM-Verkehrs Klassifikation war, die nie ein Chat-Completion brauchte, und passt den Preis an, nachdem Jev dasselbe günstiger gezeigt hat. Wer einen Klassifikator gebaut hat, indem er JSON aus einem Chat-Endpunkt parste, hat zu viel für einen Textgenerator bezahlt, der ein Token ausgibt.
+***** Comments
+- Die Antwort auf Jev dürfte die Debatte beenden, ob das KI-Geschäft ein Commodity-Markt ist. Aus dem Nichts erschien Jev als nächste Runde des Preiskampfs und zeigte den Wert von System-One-Modellen. Ein schnelles Ja/Nein mit Konfidenzwert ist günstiger und oft alles, was man will.
+- Ich habe meine Decisions-Evals (noch rudimentär, unter 600 Aufrufe) über OpenRouter gegen Jev und Mercury Decide laufen lassen. Jev hat meine mt0-Versuche allein durch den Preis ersetzt.
+- curl https://api.openai.com/v1/decisions mit Modell gpt-6-luna und einem input_text-Block. Das ist die gesamte API-Oberfläche.
+** Claude Code's suggested message feature: I think the real customer is the model :ai:claude-code:ux:rlhf:developer-tools:
+:PROPERTIES:
+:ID:       49981905
+:URL:      https://www.zohaib.cc/blog/smartest-claude-code-feature
+:HN_URL:   https://news.ycombinator.com/item?id=49981905
+:POINTS:   86
+:COMMENTS: 47
+:BY:       zed_labs_dev
+:END:
+
+*** TLDR
+Claude Code pre-fills the prompt box after a task with a predicted next message like "run the tests" or "commit this." The author argues the feature works as a preference-data collector: sending a suggestion unchanged signals the prediction was right, and editing it produces a preference pair showing exactly where the model's forecast diverged from what the developer actually wanted. His example is changing "run the tests" to "run only the auth tests," which he calls a correction from someone who knows the project, written at the moment they care about getting it right. The conclusion is that the convenience is real but the durable value is reinforcement learning signal from working developers in real codebases, which is expensive to buy through annotation.
+
+*** Take
+The mechanism described is correct and unremarkable: completion interfaces have always generated implicit feedback, and this is the same loop Gmail's Smart Reply ran. The framing that this makes the model rather than the user the customer does not follow. Both get paid here, and the commenter calling it a light pattern has the better argument. The genuine objection is the one about interfaces that finish your sentences shaping what you ask for, and that is a cost no preference pair records.
+
+*** Comments
+
+**** rcxdude
+:PROPERTIES:
+:COMMENT_ID: 49982041
+:END:
+If you've played around with raw LLM interactions you've already seen this: feeding a prompt that ends with a start-of-user token will produce a plausible query into the agent. Next-token prediction does not particularly distinguish who is speaking.
+
+**** schiffern
+:PROPERTIES:
+:COMMENT_ID: 49982177
+:END:
+The real customer implies there must be only one, but this is a way for both to benefit. I actually think this is an example of a light pattern, not a dark pattern. AI companies should be doing more of this.
+
+**** Cyan488
+:PROPERTIES:
+:COMMENT_ID: 49982290
+:END:
+I've always hated interfaces that try to complete my sentences for me. It started with suggested replies in email and IM apps, and it really bugs me in LLM chat interfaces.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Claude Code 的建议消息功能：我认为真正的客户是模型
+***** TLDR
+Claude Code 会在任务结束后在输入框预填一条预测的下一条消息，比如「跑测试」或「提交这个」。作者认为这个功能实际是偏好数据收集器：原样发送建议表示预测正确，而修改它则产生一组偏好对，精确显示模型的预测在哪里偏离了开发者真正想要的。他举的例子是把「跑测试」改成「只跑 auth 测试」，他称这是来自熟悉项目的人的纠正，写在他们最在意把事情做对的那一刻。结论是便利性是真的，但持久价值在于来自真实代码库中在职开发者的强化学习信号，这种数据用标注方式购买成本很高。
+***** Take
+文中描述的机制是对的，也不新奇：补全类界面一向会产生隐式反馈，这和 Gmail 智能回复跑的是同一个循环。但「因此客户是模型而不是用户」这个推论站不住。双方在这里都有所得，那位称之为「光明模式」的评论者论证更站得住。真正值得提的异议是另一个：会替你把话说完的界面会塑造你提出的要求，而这个代价没有任何偏好对会记录。
+***** Comments
+- 如果你玩过原始的 LLM 交互，就已经见过这个：把一个以「用户起始」标记结尾的提示喂进去，就会生成一条看起来合理的用户查询。下一个 token 预测并不特别区分说话者是谁。
+- 「真正的客户」暗示只能有一个，但这是一个双方都受益的方式。我其实认为这是「光明模式」的例子，不是暗黑模式。AI 公司应该多做这类事。
+- 我一向讨厌试图替我把句子说完的界面。这从邮件和即时通讯应用的建议回复开始，而在 LLM 聊天界面里真的让我很烦。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claude Codeの推奨メッセージ機能: 本当の顧客はモデルだと思う
+***** TLDR
+Claude Codeはタスク完了後、「テストを走らせて」「これをコミットして」といった次のメッセージの予測を入力欄に先に入れる。筆者はこれが選好データの収集装置として働くと論じる。提案をそのまま送れば予測が当たったという合図になり、編集すれば、モデルの予測が開発者の意図とどこでずれたかを正確に示す選好ペアができる。例として「テストを走らせて」を「authのテストだけ走らせて」に変える場面を挙げ、プロジェクトを知る人が、正しくやりたいと最も強く思う瞬間に書いた訂正だと述べる。結論は、利便性は本物だが持続的な価値は実際のコードベースで働く開発者からの強化学習シグナルにあり、それはアノテーションで買うには高価だというものだ。
+***** Take
+記事が述べる仕組みは正しく、かつ目新しくもない。補完型のインターフェースは昔から暗黙のフィードバックを生んでおり、これはGmailのSmart Replyと同じループだ。だが「だから顧客はユーザーではなくモデルだ」という結論は導けない。ここでは双方が得をしており、これはライトパターンだと書いたコメントの方が筋が通っている。本当に指摘すべき反論は別にある。文を先に書き上げてしまうインターフェースは、こちらが何を求めるかを形作る。その代償はどの選好ペアにも記録されない。
+***** Comments
+- 生のLLMをいじったことがあれば見慣れた話だ。ユーザー発話開始のトークンで終わるプロンプトを入れれば、もっともらしい問い合わせが生成される。次トークン予測は話者が誰かを特に区別しない。
+- 「本当の顧客」という言い方は1つしかないことを含意するが、これは双方が得をする仕組みだ。むしろダークパターンではなくライトパターンの例だと思う。AI企業はもっとこういうことをすべきだ。
+- 私の文を代わりに完成させようとするインターフェースは昔から嫌いだ。メールやIMの返信候補から始まり、LLMのチャット画面では本当に気に障る。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude Code의 추천 메시지 기능: 진짜 고객은 모델이라고 생각한다
+***** TLDR
+Claude Code는 작업이 끝나면 입력창에 "테스트 돌려"나 "이거 커밋해" 같은 다음 메시지 예측을 미리 채워 넣는다. 저자는 이 기능이 선호 데이터 수집기로 작동한다고 본다. 제안을 그대로 보내면 예측이 맞았다는 신호가 되고, 수정하면 모델의 예측이 개발자의 실제 의도와 어디서 갈라졌는지 정확히 보여주는 선호 쌍이 생긴다. 그가 든 예는 "테스트 돌려"를 "auth 테스트만 돌려"로 바꾸는 경우이고, 프로젝트를 아는 사람이 제대로 하고 싶은 순간에 적은 교정이라고 표현한다. 결론은 편의성은 진짜지만 지속적인 가치는 실제 코드베이스에서 일하는 개발자로부터 나오는 강화학습 신호이며, 그런 데이터는 어노테이션으로 사기엔 비싸다는 것이다.
+***** Take
+글이 설명하는 메커니즘은 맞고 새롭지도 않다. 자동완성형 인터페이스는 늘 암묵적 피드백을 만들어 왔고, 이는 Gmail의 스마트 답장이 돌린 것과 같은 루프다. 다만 그래서 고객이 사용자가 아니라 모델이라는 결론은 따라오지 않는다. 여기서는 양쪽이 다 이득을 보고, 이걸 라이트 패턴이라고 부른 댓글이 더 설득력 있다. 진짜 짚을 반론은 다른 쪽이다. 문장을 먼저 완성해 주는 인터페이스는 내가 무엇을 요청할지를 형성하고, 그 비용은 어떤 선호 쌍에도 기록되지 않는다.
+***** Comments
+- 원시 LLM 상호작용을 만져 봤다면 이미 본 현상이다. 사용자 발화 시작 토큰으로 끝나는 프롬프트를 넣으면 그럴듯한 질의가 생성된다. 다음 토큰 예측은 누가 말하는지를 특별히 구분하지 않는다.
+- "진짜 고객"이라는 표현은 하나만 있어야 한다는 뜻이지만, 이건 양쪽이 모두 이득을 보는 방식이다. 나는 오히려 다크 패턴이 아니라 라이트 패턴의 예라고 본다. AI 기업들은 이런 걸 더 해야 한다.
+- 내 문장을 대신 끝내려 드는 인터페이스를 늘 싫어했다. 이메일과 메신저의 추천 답장에서 시작됐고, LLM 채팅 화면에서는 정말 거슬린다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La función de mensaje sugerido de Claude Code: creo que el cliente real es el modelo
+***** TLDR
+Claude Code rellena el cuadro de texto al terminar una tarea con un mensaje previsto como "ejecuta los tests" o "haz commit de esto". El autor sostiene que la función funciona como recolector de datos de preferencia: enviar la sugerencia sin cambios indica que la predicción fue correcta, y editarla produce un par de preferencia que muestra exactamente dónde se desvió el pronóstico del modelo de lo que el desarrollador quería. Su ejemplo es cambiar "ejecuta los tests" por "ejecuta solo los tests de auth", que describe como una corrección de alguien que conoce el proyecto, escrita en el momento en que más le importa acertar. La conclusión es que la comodidad es real, pero el valor duradero es la señal de aprendizaje por refuerzo de desarrolladores reales en bases de código reales, algo caro de comprar mediante anotación.
+***** Take
+El mecanismo que describe es correcto y poco sorprendente: las interfaces de autocompletado siempre han generado retroalimentación implícita, y es el mismo bucle que usaba Smart Reply de Gmail. Pero de ahí no se sigue que el cliente sea el modelo y no el usuario. Aquí ganan ambos, y el comentarista que lo llama patrón luminoso tiene el mejor argumento. La objeción de fondo es la otra: las interfaces que terminan tus frases moldean lo que acabas pidiendo, y ese coste no lo registra ningún par de preferencia.
+***** Comments
+- Si has jugado con interacciones LLM en crudo ya lo has visto: alimentar un prompt que termina con un token de inicio de usuario produce una consulta plausible hacia el agente. La predicción del siguiente token no distingue especialmente quién habla.
+- Decir el cliente real implica que solo puede haber uno, pero esto es una forma de que ambos se beneficien. De hecho creo que es un ejemplo de patrón luminoso, no oscuro. Las empresas de IA deberían hacer más de esto.
+- Siempre he odiado las interfaces que intentan completarme las frases. Empezó con las respuestas sugeridas en el correo y la mensajería, y en las interfaces de chat con LLM me molesta de verdad.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Claude Codes Funktion für vorgeschlagene Nachrichten: Ich glaube, der echte Kunde ist das Modell
+***** TLDR
+Claude Code füllt nach einer Aufgabe das Eingabefeld mit einer vorhergesagten nächsten Nachricht wie "führe die Tests aus" oder "committe das". Der Autor argumentiert, die Funktion wirke als Sammler von Präferenzdaten: Wird der Vorschlag unverändert gesendet, war die Vorhersage richtig; wird er bearbeitet, entsteht ein Präferenzpaar, das genau zeigt, wo die Prognose des Modells von der Absicht des Entwicklers abwich. Sein Beispiel ist die Änderung von "führe die Tests aus" zu "führe nur die Auth-Tests aus", die er als Korrektur von jemandem beschreibt, der das Projekt kennt und in dem Moment schreibt, in dem es ihm auf Richtigkeit ankommt. Das Fazit: Der Komfort ist echt, der dauerhafte Wert liegt aber im Reinforcement-Learning-Signal arbeitender Entwickler in echten Codebasen, das über Annotation teuer zu kaufen wäre.
+***** Take
+Der beschriebene Mechanismus ist richtig und unspektakulär: Vervollständigungs-Interfaces erzeugen seit immer implizites Feedback, und es ist dieselbe Schleife wie bei Gmails Smart Reply. Dass damit das Modell und nicht der Nutzer der Kunde wäre, folgt daraus nicht. Hier profitieren beide, und der Kommentator, der von einem Light Pattern spricht, hat das bessere Argument. Der eigentliche Einwand ist der andere: Interfaces, die deine Sätze beenden, formen, was du überhaupt verlangst, und diese Kosten erfasst kein Präferenzpaar.
+***** Comments
+- Wer mit rohen LLM-Interaktionen gespielt hat, kennt das schon: Ein Prompt, der mit einem Nutzer-Start-Token endet, erzeugt eine plausible Anfrage an den Agenten. Next-Token-Prediction unterscheidet nicht besonders, wer spricht.
+- Der echte Kunde unterstellt, es könne nur einen geben, aber hier profitieren beide. Ich halte es sogar für ein Beispiel eines Light Patterns, nicht eines Dark Patterns. KI-Firmen sollten mehr davon machen.
+- Ich habe Interfaces immer gehasst, die meine Sätze vervollständigen wollen. Es begann mit Antwortvorschlägen in E-Mail- und Messenger-Apps, und in LLM-Chats störte es mich erst recht.
+** California closed the Montana license plate loophole :law:tax:cars:california:policy:
+:PROPERTIES:
+:ID:       49981186
+:URL:      https://www.thedrive.com/news/heres-how-california-closed-the-montana-license-plate-loophole
+:HN_URL:   https://news.ycombinator.com/item?id=49981186
+:POINTS:   50
+:COMMENTS: 97
+:BY:       speckx
+:END:
+
+*** TLDR
+California residents registered expensive cars to Montana shell LLCs to dodge California sales tax and smog requirements, which worked because the old law only taxed a business if more than half its operations were inside California. State Bill 1406, effective September 30, 2026, deletes that 50% test: a shell company counts as a California resident if any shareholder, partner, member, or beneficial owner lives in California. The bill also extends coverage to partnerships, limited partnerships, and limited liability partnerships, and makes officers, managers, partners, and beneficial owners personally liable for unpaid taxes, interest, and penalties, with nonpayment potentially constituting a crime.
+
+*** Take
+The 50% operations test was always the weak point, and California replaced it with a single-resident trigger that is hard to engineer around. The real change is personal liability: before, getting caught meant a tax bill addressed to a Montana LLC with no assets. Now it reaches the owner directly, which is the part that actually ends the practice.
+
+*** Comments
+
+**** fedpost
+:PROPERTIES:
+:COMMENT_ID: 49981302
+:END:
+Can I just take this moment to mention that I think we need a better system for car registrations across the board? I don't like that there are all these edge cases with titles, insurance, inspections, window tint, plate expiry, taxes whenever you move or even travel.
+
+**** jhallenworld
+:PROPERTIES:
+:COMMENT_ID: 49981455
+:END:
+I've seen car dealers in MA use Montana dealer plates. At the very least they are cheaper: avoids $220/year excise tax and registration fees vs. $25 for Montana.
+
+**** turlockmike
+:PROPERTIES:
+:COMMENT_ID: 49981588
+:END:
+Eventually everything will be a use tax. It's the only fair tax and there will always be loopholes otherwise.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+加州堵死了蒙大拿车牌漏洞
+***** TLDR
+加州居民把豪车登记到蒙大拿的空壳 LLC 名下，以规避加州销售税和尾气检测要求。这一招能成立，是因为旧法只在企业一半以上业务位于加州时才征税。2026 年 9 月 30 日生效的州法案 1406 删除了这个 50% 门槛：只要有任何股东、合伙人、成员或实际受益人居住在加州，空壳公司即被视为加州居民。该法案还把合伙企业、有限合伙和有限责任合伙纳入适用范围，并规定公司高管、经理、合伙人和实际受益人对未缴税款、利息和罰金承担个人责任，不缴纳可能构成犯罪。
+***** Take
+50% 业务门槛一直是薄弱环节，加州把它换成了「一名居民即触发」，很难通过结构设计绕开。真正的变化是个人责任：以前被查到，账单落在一家没有资产的蒙大拿 LLC 身上。现在直接追到车主本人，这才是真正终结这种做法的部分。
+***** Comments
+- 借这个机会说一句：我认为车辆登记制度整体都需要改进。我不喜欢一搬家甚至一出行，就有产权证、保险、检验、车窗贴膜、牌照到期、税费这一堆边缘情况。
+- 我见过马萨诸塞的车商使用蒙大拿经销商牌照。至少便宜：蒙大拿 25 美元，省掉每年 220 美元的消费税和登记费。
+- 最终一切都会变成使用税。那是唯一公平的税，否则总会有漏洞。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+カリフォルニアがモンタナ・ナンバープレートの抜け道を封じた
+***** TLDR
+カリフォルニア州の住民は高級車をモンタナ州のペーパーLLC名義で登録し、州の売上税と排ガス検査を回避してきた。旧法では事業の過半が州内にある場合にのみ課税されたため、この手口が通用した。2026年9月30日施行の州法案1406はこの50%要件を削除する。株主、パートナー、構成員、実質的所有者のいずれか1人でもカリフォルニア州に居住していれば、ペーパー会社は同州の居住者とみなされる。法案はパートナーシップ、リミテッド・パートナーシップ、LLPにも適用範囲を広げ、役員、管理者、パートナー、実質的所有者に未納税額、利息、罰金の個人責任を負わせる。不払いは犯罪となりうる。
+***** Take
+50%の事業要件は以前から弱点で、カリフォルニアはこれを住民が1人いれば適用という条件に置き換えた。法人の設計で回避するのは難しい。本質的な変化は個人責任にある。以前は摘発されても請求は資産のないモンタナのLLCに届くだけだった。今は所有者本人に直接及ぶ。この手口を実際に終わらせるのはそこだ。
+***** Comments
+- この機会に言わせてほしい。自動車登録の仕組みは全般的にもっと良くなるべきだと思う。引っ越しや移動のたびに、権利証、保険、検査、窓のフィルム、プレートの期限、税金といった例外処理が付いて回るのは好きではない。
+- マサチューセッツのディーラーがモンタナのディーラープレートを使っているのを見たことがある。少なくとも安い。年220ドルの物品税と登録料を避けてモンタナなら25ドルだ。
+- 最終的にはすべて使用税になるだろう。それが唯一公平な税で、そうでなければ抜け道は常に存在する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+캘리포니아가 몬태나 번호판 빠져나가기를 막았다
+***** TLDR
+캘리포니아 주민들은 고가 차량을 몬태나주 페이퍼 LLC 명의로 등록해 주 판매세와 배출가스 검사를 피해왔다. 구법은 사업의 절반 이상이 캘리포니아 안에 있을 때만 과세했기 때문에 이 수법이 통했다. 2026년 9월 30일 발효된 주 법안 1406은 이 50% 기준을 없앴다. 주주, 파트너, 구성원, 실질 소유자 중 한 명이라도 캘리포니아에 거주하면 페이퍼 회사는 이 주의 거주자로 간주된다. 법안은 파트너십, 유한 파트너십, LLP까지 적용 범위를 넓히고, 임원, 관리자, 파트너, 실질 소유자에게 미납 세금, 이자, 과태료에 대한 개인 책임을 지운다. 미납은 범죄가 될 수 있다.
+***** Take
+50% 사업 기준은 늘 약한 고리였고, 캘리포니아는 이를 거주자 한 명으로 발동하는 조건으로 바꿨다. 구조 설계로 피하기가 어렵다. 실질적인 변화는 개인 책임이다. 전에는 적발돼도 청구서가 자산 없는 몬태나 LLC로 갔다. 이제는 소유자에게 직접 미친다. 이 관행을 실제로 끝내는 건 그 부분이다.
+***** Comments
+- 이 기회에 말하고 싶다. 차량 등록 제도 전반이 더 나아져야 한다고 본다. 이사하거나 여행만 해도 소유권 증서, 보험, 검사, 창문 틴팅, 번호판 만료, 세금 같은 예외 처리가 줄줄이 따라붙는 게 싫다.
+- 매사추세츠 딜러들이 몬태나 딜러 번호판을 쓰는 걸 봤다. 최소한 더 싸다. 연 220달러 물품세와 등록비를 피하고 몬태나는 25달러다.
+- 결국 모든 게 사용세가 될 것이다. 그것만이 공정한 세금이고, 그러지 않으면 빠져나갈 구멍은 늘 생긴다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+California cerró el vacío legal de las matrículas de Montana
+***** TLDR
+Residentes de California registraban coches caros a nombre de sociedades pantalla de Montana para evitar el impuesto estatal sobre ventas y la inspección de emisiones, algo posible porque la ley anterior solo gravaba a una empresa si más de la mitad de su actividad estaba en California. El Proyecto de Ley Estatal 1406, en vigor desde el 30 de septiembre de 2026, elimina ese umbral del 50%: una sociedad pantalla es residente de California si cualquier accionista, socio, miembro o titular real vive en el estado. La norma también alcanza a sociedades colectivas, comanditarias y de responsabilidad limitada, y hace a directivos, gerentes, socios y titulares reales personalmente responsables de impuestos, intereses y sanciones impagados, cuyo no pago puede constituir delito.
+***** Take
+El umbral del 50% de actividad siempre fue el punto débil, y California lo sustituyó por un disparador de un solo residente, difícil de esquivar con ingeniería societaria. El cambio de fondo es la responsabilidad personal: antes, ser descubierto significaba una factura fiscal dirigida a una LLC de Montana sin activos. Ahora alcanza directamente al propietario, y eso es lo que de verdad acaba con la práctica.
+***** Comments
+- Aprovecho para decir que creo que necesitamos un sistema mejor de matriculación de vehículos en general. No me gusta que haya tantos casos límite con títulos, seguros, inspecciones, tintado de ventanillas, caducidad de placas e impuestos cada vez que te mudas o incluso viajas.
+- He visto concesionarios en Massachusetts usar placas de concesionario de Montana. Como mínimo son más baratas: evitan 220 dólares anuales de impuesto y tasas de matriculación frente a 25 dólares en Montana.
+- Al final todo será un impuesto sobre el uso. Es el único impuesto justo y, si no, siempre habrá vacíos legales.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kalifornien hat das Montana-Kennzeichen-Schlupfloch geschlossen
+***** TLDR
+Einwohner Kaliforniens meldeten teure Autos auf Montana-Mantelgesellschaften an, um die kalifornische Umsatzsteuer und die Abgasuntersuchung zu umgehen. Das funktionierte, weil das alte Recht ein Unternehmen nur besteuerte, wenn mehr als die Hälfte seiner Tätigkeit in Kalifornien lag. State Bill 1406, in Kraft seit dem 30. September 2026, streicht diese 50-Prozent-Prüfung: Eine Mantelgesellschaft gilt als in Kalifornien ansässig, sobald irgendein Anteilseigner, Partner, Mitglied oder wirtschaftlich Berechtigter dort wohnt. Das Gesetz erfasst zudem Personengesellschaften, Kommanditgesellschaften und LLPs und macht Geschäftsführer, Manager, Partner und wirtschaftlich Berechtigte persönlich für nicht gezahlte Steuern, Zinsen und Strafen haftbar, wobei Nichtzahlung eine Straftat darstellen kann.
+***** Take
+Die 50-Prozent-Prüfung war immer die Schwachstelle, und Kalifornien hat sie durch einen Auslöser bei einem einzigen Einwohner ersetzt, der sich kaum umkonstruieren lässt. Der eigentliche Hebel ist die persönliche Haftung: Früher traf eine Entdeckung nur eine Montana-LLC ohne Vermögen. Jetzt greift sie direkt auf den Eigentümer durch, und das beendet die Praxis tatsächlich.
+***** Comments
+- Ich nutze die Gelegenheit: Wir brauchen insgesamt ein besseres System für Fahrzeugzulassungen. Mir gefällt nicht, dass es bei Fahrzeugpapieren, Versicherung, Prüfungen, Scheibentönung, Kennzeichenablauf und Steuern so viele Sonderfälle gibt, sobald man umzieht oder auch nur verreist.
+- Ich habe Autohändler in Massachusetts mit Montana-Händlerkennzeichen gesehen. Zumindest sind sie billiger: Man vermeidet 220 Dollar Verbrauchssteuer und Zulassungsgebühren pro Jahr gegenüber 25 Dollar in Montana.
+- Irgendwann wird alles eine Nutzungssteuer sein. Es ist die einzige gerechte Steuer, und sonst wird es immer Schlupflöcher geben.
+** AnyPS5: Port PS5 binaries to PC without emulation (87% system libraries mapped) :gaming:reverse-engineering:playstation:linux:open-source:
+:PROPERTIES:
+:ID:       49985664
+:URL:      https://github.com/boykopovar/AnyPS5
+:HN_URL:   https://news.ycombinator.com/item?id=49985664
+:POINTS:   57
+:COMMENTS: 26
+:BY:       Fe2O3
+:END:
+
+*** TLDR
+AnyPS5 converts PS5 executables to run natively on Linux and Windows instead of emulating the console. It ships a relinker that rewrites the executable into the host's native format and native reimplementations of PS5 system libraries for dynamic linking, so there is no emulator and no separate runtime process. The advertised coverage figure is percent of system functions declared in the project's own database, not of every PS5 system function, and that denominator grows as more are declared. Verified titles are modest so far: Dreaming Sarah, a 2D platformer, runs at a stable 60 fps on a GTX 1050 Ti with an i5-7500. The project distributes no copyrighted firmware, keys, or proprietary libraries and puts legal compliance on the user.
+
+*** Take
+Read the coverage number carefully: 87% is of functions the project has catalogued, so the denominator moves as work continues. The approach is sound and more promising than emulation, but a 2D platformer at 60 fps on a 1050 Ti tells you almost nothing about how the graphics path handles a real PS5 title. Commenters worried about takedowns have history on their side, and local clones are the reasonable precaution.
+
+*** Comments
+
+**** weakened_malloc
+:PROPERTIES:
+:COMMENT_ID: 49985712
+:END:
+Unfortunately, this is only going to push Sony/Nintendo/MS more towards cloud gaming. Preventing vendor lock-in is always something I'll support, but it's hard not to see them pushing gamers towards cloud-only to stop this kind of thing.
+
+**** someperson
+:PROPERTIES:
+:COMMENT_ID: 49985803
+:END:
+It's always nice to have local git clone backups of these projects because they may eventually be taken down through legal threats, like Yuzu and Ryujinx.
+
+**** lewelove
+:PROPERTIES:
+:COMMENT_ID: 49985776
+:END:
+You will own everything and be happy.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+AnyPS5：无需模拟将 PS5 二进制文件移植到 PC（已映射 87% 系统库）
+***** TLDR
+AnyPS5 把 PS5 可执行文件转换为在 Linux 和 Windows 上原生运行，而不是模拟主机。它附带一个重链接器，将可执行文件改写为宿主系统的原生格式，并提供 PS5 系统库的原生重新实现用于动态链接，因此不需要模拟器，也不需要单独的运行时进程。宣传的覆盖率数字是项目自有数据库中已声明的系统函数百分比，而非全部 PS5 系统函数，而且这个分母会随着更多函数被声明而增长。目前已验证的游戏还很少：2D 平台游戏 Dreaming Sarah 在 GTX 1050 Ti 配 i5-7500 上稳定 60 fps。项目不分发任何受版权保护的固件、密钥或专有库，法律合规责任归用户。
+***** Take
+仔细看那个覆盖率数字：87% 是相对于项目已编目的函数，所以分母会随工作推进而变动。这个思路是合理的，也比模拟更有前景，但一款 2D 平台游戏在 1050 Ti 上跑 60 fps，几乎说明不了图形路径如何处理真正的 PS5 游戏。担心被下架的评论者有历史依据，本地克隆备份是合理的预防措施。
+***** Comments
+- 遗憾的是，这只会把索尼／任天堂／微软更快推向云游戏。防止厂商锁定我一向支持，但很难不认为他们会把玩家推向纯云端，以阻止这类事情。
+- 给这些项目留本地 git 克隆备份总是好的，因为它们可能最终被法律威胁下架，就像 Yuzu 和 Ryujinx。
+- 你将拥有一切，并且很快乐。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AnyPS5: エミュレーションなしでPS5バイナリをPCに移植（システムライブラリの87%をマップ）
+***** TLDR
+AnyPS5はPS5の実行ファイルを変換し、コンソールをエミュレートせずにLinuxとWindowsでネイティブに動かす。実行ファイルをホストのネイティブ形式に書き換えるリリンカと、動的リンク用のPS5システムライブラリのネイティブ再実装を同梱するため、エミュレータも別の実行プロセスも不要だ。公表されているカバー率はプロジェクト自身のデータベースに登録済みのシステム関数に対する割合で、PS5の全システム関数に対するものではない。登録が進めば分母も増える。動作確認済みタイトルはまだ少なく、2DプラットフォーマーのDreaming SarahがGTX 1050 TiとCore i5-7500で安定60 fpsという程度だ。著作権のあるファームウェア、鍵、独自ライブラリは一切配布せず、法的順守は利用者の責任としている。
+***** Take
+カバー率の数字は丁寧に読む必要がある。87%はプロジェクトが目録化した関数に対する割合であり、作業が進めば分母も動く。手法としては筋が通っており、エミュレーションより有望だ。ただし1050 Tiで2Dプラットフォーマーが60 fps出たからといって、実際のPS5タイトルでグラフィックス経路がどう振る舞うかはほとんど分からない。削除を心配するコメントには前例があり、ローカルにクローンを持つのは妥当な予防策だ。
+***** Comments
+- 残念ながら、これはソニーや任天堂、MSをクラウドゲームへさらに押し進めるだけだろう。ベンダーロックインの防止は常に支持するが、こうしたことを防ぐために各社がクラウド専用へ誘導していくのは想像しやすい。
+- こういうプロジェクトはローカルにgitクローンのバックアップを持っておくといい。YuzuやRyujinxのように、いずれ法的圧力で消される可能性があるからだ。
+- あなたはすべてを所有し、幸せになる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AnyPS5: 에뮬레이션 없이 PS5 바이너리를 PC로 이식(시스템 라이브러리 87% 매핑)
+***** TLDR
+AnyPS5는 PS5 실행 파일을 변환해 콘솔을 에뮬레이션하지 않고 Linux와 Windows에서 네이티브로 실행한다. 실행 파일을 호스트의 네이티브 형식으로 다시 쓰는 리링커와 동적 링크용 PS5 시스템 라이브러리의 네이티브 재구현을 함께 제공하므로 에뮬레이터도, 별도 런타임 프로세스도 없다. 공개된 커버리지 숫자는 프로젝트 자체 데이터베이스에 등록된 시스템 함수에 대한 비율이고 PS5 전체 시스템 함수에 대한 비율이 아니며, 등록이 늘면 분모도 커진다. 검증된 타이틀은 아직 적다. 2D 플랫포머 Dreaming Sarah가 GTX 1050 Ti와 i5-7500에서 안정적으로 60 fps를 낸다. 프로젝트는 저작권 있는 펌웨어, 키, 독점 라이브러리를 배포하지 않고 법적 준수 책임을 사용자에게 둔다.
+***** Take
+커버리지 숫자는 꼼꼼히 읽어야 한다. 87%는 프로젝트가 목록화한 함수에 대한 비율이라 작업이 진행되면 분모가 움직인다. 접근법은 타당하고 에뮬레이션보다 전망이 좋다. 다만 1050 Ti에서 2D 플랫포머가 60 fps 나온다는 사실은 실제 PS5 타이틀에서 그래픽 경로가 어떻게 동작할지에 대해 거의 말해 주지 않는다. 삭제를 걱정하는 댓글에는 선례가 있고, 로컬 클론은 합리적인 예방책이다.
+***** Comments
+- 안타깝게도 이건 소니/닌텐도/MS를 클라우드 게임 쪽으로 더 밀어붙이기만 할 것이다. 벤더 종속 방지는 늘 지지하지만, 이런 일을 막으려고 게이머를 클라우드 전용으로 몰아가는 그림이 그려진다.
+- 이런 프로젝트는 로컬에 git 클론 백업을 두는 게 좋다. Yuzu나 Ryujinx처럼 결국 법적 압박으로 내려갈 수 있으니까.
+- 당신은 모든 것을 소유하고 행복해질 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+AnyPS5: portar binarios de PS5 al PC sin emulación (87% de las bibliotecas del sistema mapeadas)
+***** TLDR
+AnyPS5 convierte ejecutables de PS5 para que corran de forma nativa en Linux y Windows en lugar de emular la consola. Incluye un relinker que reescribe el ejecutable al formato nativo del anfitrión y reimplementaciones nativas de las bibliotecas del sistema de PS5 para enlazado dinámico, así que no hay emulador ni proceso de ejecución aparte. La cifra de cobertura anunciada es el porcentaje de funciones declaradas en la base de datos del propio proyecto, no de todas las funciones del sistema PS5, y ese denominador crece a medida que se declaran más. Los títulos verificados son pocos por ahora: Dreaming Sarah, un plataformas 2D, corre a 60 fps estables en una GTX 1050 Ti con un i5-7500. El proyecto no distribuye firmware, claves ni bibliotecas propietarias con copyright y deja el cumplimiento legal al usuario.
+***** Take
+Hay que leer con cuidado la cifra de cobertura: el 87% es sobre las funciones que el proyecto ha catalogado, así que el denominador se mueve mientras avanza el trabajo. El enfoque es sólido y más prometedor que la emulación, pero un plataformas 2D a 60 fps en una 1050 Ti no dice casi nada sobre cómo se comporta la ruta gráfica con un título real de PS5. Quienes temen retiradas legales tienen la historia de su lado, y los clones locales son la precaución razonable.
+***** Comments
+- Por desgracia, esto solo va a empujar más a Sony/Nintendo/MS hacia el juego en la nube. Siempre apoyaré evitar el bloqueo de proveedor, pero es difícil no ver cómo llevan a los jugadores al modelo solo nube para impedir este tipo de cosas.
+- Siempre es buena idea tener copias locales en git de estos proyectos, porque pueden acabar retirados por amenazas legales, como Yuzu y Ryujinx.
+- Lo poseerás todo y serás feliz.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+AnyPS5: PS5-Binaries ohne Emulation auf den PC portieren (87% der Systembibliotheken abgebildet)
+***** TLDR
+AnyPS5 wandelt PS5-Programmdateien so um, dass sie native auf Linux und Windows laufen, statt die Konsole zu emulieren. Es liefert einen Relinker, der die Programmdatei ins native Format des Hosts umschreibt, sowie native Neuimplementierungen der PS5-Systembibliotheken zum dynamischen Linken, sodass es keinen Emulator und keinen separaten Laufzeitprozess gibt. Die genannte Abdeckungszahl bezieht sich auf die in der projekteigenen Datenbank erfassten Systemfunktionen, nicht auf alle PS5-Systemfunktionen, und dieser Nenner wächst mit jeder weiteren Erfassung. Bestätigte Titel sind bislang überschaubar: Dreaming Sarah, ein 2D-Plattformer, läuft mit stabilen 60 fps auf einer GTX 1050 Ti mit i5-7500. Das Projekt verteilt keine urheberrechtlich geschützte Firmware, Schlüssel oder proprietären Bibliotheken und legt die Rechtskonformität den Nutzern auf.
+***** Take
+Die Abdeckungszahl muss man genau lesen: 87% beziehen sich auf die vom Projekt katalogisierten Funktionen, der Nenner verschiebt sich also mit dem Fortschritt. Der Ansatz ist tragfähig und aussichtsreicher als Emulation, aber ein 2D-Plattformer mit 60 fps auf einer 1050 Ti sagt fast nichts darüber, wie der Grafikpfad mit einem echten PS5-Titel umgeht. Wer Löschungen befürchtet, hat die Geschichte auf seiner Seite, und lokale Klone sind die sinnvolle Vorsichtsmaßnahme.
+***** Comments
+- Leider wird das Sony/Nintendo/MS nur stärker zum Cloud-Gaming drängen. Vendor-Lock-in zu verhindern unterstütze ich immer, aber man sieht förmlich, wie sie Spieler in reine Cloud-Angebote treiben, um genau das zu verhindern.
+- Lokale Git-Klone solcher Projekte sind immer gut, denn sie können irgendwann durch rechtliche Drohungen verschwinden, wie Yuzu und Ryujinx.
+- Du wirst alles besitzen und glücklich sein.
