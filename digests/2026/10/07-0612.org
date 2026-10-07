@@ -1,0 +1,535 @@
+#+TITLE: HN Digest 2026-10-07 06:12 UTC
+#+DATE: 2026-10-07T06:12:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+PS5 binaries get relinked instead of emulated, three hijacked ccTLD registries mint real certificates for Google, and a $2 microcontroller does Pi-hole's job
+
+* Highlights
+- AnyPS5 relinks PS5 executables into native Linux and Windows binaries, no emulator
+- EmbeddingGemma 2 splits 740M into a 270M text core plus optional vision and audio
+- Codemode: run model-written JavaScript in the harness so output skips the context window
+- ESP32-C3 Adblock stores 140k blocked domains as 5-byte hashes in flash, ~50 KB RAM
+- Attackers hijacked .gh, .sl and .as DNS and got valid certificates for Google domains
+
+* Stories
+
+** AnyPS5: Port PS5 binaries to PC without emulation (87% system libraries mapped) :gaming:reverse-engineering:playstation:linux:gpl:
+:PROPERTIES:
+:ID:       49985664
+:URL:      https://github.com/boykopovar/AnyPS5
+:HN_URL:   https://news.ycombinator.com/item?id=49985664
+:POINTS:   189
+:COMMENTS: 145
+:BY:       Fe2O3
+:END:
+
+*** TLDR
+AnyPS5 converts PS5 executables into native Linux and Windows binaries instead of emulating the console. A relinker rewrites the executable into the host's native format and links it against reimplemented PS5 system libraries, so there is no emulator and no separate runtime process; a shader recompiler emits SPIR-V validated with SPIRV-Tools. The 87% figure counts only functions the project has declared in core/libs/prx, not every PS5 system function. It is GPL-2 and ships no firmware, cryptographic keys or proprietary libraries. The documented compatibility list is short: Dreaming Sarah, a 2D platformer, runs at a stable 60 fps on a GTX 1050 Ti.
+
+*** Take
+Doing Wine for the PS5 rather than an emulator is the right architecture, and that makes the gap between the 87% badge and one working 2D platformer the whole story. Function coverage counts declarations, not correctness. The comment thread is running several thousand functions ahead of the compatibility table.
+
+*** Comments
+
+**** manlymuppet
+:PROPERTIES:
+:COMMENT_ID: 49988904
+:END:
+I have been in the PlayStation jailbreaking scene for a while, and my God is this news. If this ends up letting me play GTA 6 on my PC within a few months of release I will be euphoric.
+
+**** weakened_malloc
+:PROPERTIES:
+:COMMENT_ID: 49986566
+:END:
+This is only going to push Sony, Nintendo and Microsoft further toward cloud gaming, where none of this reverse engineering is possible.
+
+**** vuurmot
+:PROPERTIES:
+:COMMENT_ID: 49986561
+:END:
+GTA 6 is releasing on PS5, right? Who is going to pay a single cent for software if everything can be ripped day one?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+AnyPS5：无需模拟即可把 PS5 二进制文件移植到 PC（已映射 87% 系统库）
+***** TLDR
+AnyPS5 不模拟主机，而是把 PS5 可执行文件转换成原生的 Linux 和 Windows 二进制文件。重链接器把可执行文件改写成宿主系统的原生格式，并链接到重新实现的 PS5 系统库，因此既没有模拟器也没有独立的运行时进程；着色器重编译器生成由 SPIRV-Tools 校验的 SPIR-V。87% 这个数字只统计项目在 core/libs/prx 中声明过的函数，而非全部 PS5 系统函数。项目采用 GPL-2，不附带固件、密钥或专有库。已记录的兼容列表很短：2D 平台游戏《Dreaming Sarah》在 GTX 1050 Ti 上稳定 60 fps。
+***** Take
+做 PS5 版的 Wine 而不是模拟器，架构方向是对的，这也让 87% 徽章和一款能跑的 2D 平台游戏之间的差距成了故事本身。函数覆盖率统计的是声明，不是正确性。评论区已经领先兼容列表好几千个函数了。
+***** Comments
+- 我在 PlayStation 破解圈子里待了一段时间，这消息太重磅了。如果它能让我在 GTA 6 发售几个月内在 PC 上玩到，我会欣喜若狂。
+- 这只会把索尼、任天堂和微软进一步推向云游戏，那里根本做不了这类逆向工程。
+- GTA 6 是在 PS5 上发售的吧？如果什么东西首日就能被扒走，谁还会为软件花一分钱？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AnyPS5: エミュレーションなしでPS5バイナリをPCへ移植（システムライブラリ87%をマップ）
+***** TLDR
+AnyPS5はコンソールをエミュレートせず、PS5の実行ファイルをLinuxとWindowsのネイティブバイナリに変換する。リリンカが実行ファイルをホストのネイティブ形式に書き換え、再実装したPS5システムライブラリにリンクするため、エミュレータも別プロセスのランタイムも不要。シェーダ再コンパイラはSPIRV-Toolsで検証したSPIR-Vを出力する。87%という数字はcore/libs/prxで宣言済みの関数だけを数えたもので、PS5の全システム関数ではない。ライセンスはGPL-2で、ファームウェアや鍵、プロプライエタリなライブラリは同梱しない。記載された動作リストは短く、2Dプラットフォーマー「Dreaming Sarah」がGTX 1050 Tiで安定60 fpsというもの。
+***** Take
+エミュレータではなくPS5版Wineを作るというのは正しい設計で、だからこそ87%のバッジと動作確認済み2Dゲーム1本の差がこの話の本体になる。関数カバレッジが数えているのは宣言であり、正しさではない。コメント欄は互換性リストの数千関数先を走っている。
+***** Comments
+- PlayStationの脱獄シーンにしばらくいるが、これは大ニュースだ。発売から数カ月でGTA 6をPCで遊べるなら歓喜する。
+- これはソニー、任天堂、マイクロソフトをクラウドゲーミングへさらに押しやるだけだ。あちらではこの種のリバースエンジニアリングは成立しない。
+- GTA 6はPS5で出るんだろう？ 何でも初日に抜かれるなら、誰がソフトに一銭でも払う？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AnyPS5: 에뮬레이션 없이 PS5 바이너리를 PC로 이식 (시스템 라이브러리 87% 매핑)
+***** TLDR
+AnyPS5는 콘솔을 에뮬레이트하지 않고 PS5 실행 파일을 리눅스와 윈도우 네이티브 바이너리로 변환한다. 리링커가 실행 파일을 호스트의 네이티브 형식으로 다시 쓰고 재구현한 PS5 시스템 라이브러리에 링크하므로 에뮬레이터도, 별도 런타임 프로세스도 없다. 셰이더 리컴파일러는 SPIRV-Tools로 검증한 SPIR-V를 생성한다. 87%라는 수치는 프로젝트가 core/libs/prx에 선언한 함수만 센 것이고 PS5 전체 시스템 함수가 아니다. 라이선스는 GPL-2이며 펌웨어, 암호 키, 독점 라이브러리를 포함하지 않는다. 문서화된 호환 목록은 짧다. 2D 플랫포머 Dreaming Sarah가 GTX 1050 Ti에서 60 fps로 안정 동작한다는 것뿐이다.
+***** Take
+에뮬레이터 대신 PS5용 Wine을 만드는 방향은 맞다. 그래서 87% 배지와 실제로 돌아가는 2D 게임 한 편 사이의 간격이 이 이야기의 핵심이 된다. 함수 커버리지는 선언 수를 세는 것이고 정확성을 세는 게 아니다. 댓글은 호환 목록보다 수천 개 함수 앞서가고 있다.
+***** Comments
+- PlayStation 탈옥 씬에 한동안 있었는데 이건 대형 뉴스다. 출시 몇 달 안에 PC에서 GTA 6를 돌릴 수 있다면 환호할 것이다.
+- 이건 소니, 닌텐도, 마이크로소프트를 클라우드 게이밍으로 더 밀어붙일 뿐이다. 거기서는 이런 리버스 엔지니어링이 불가능하다.
+- GTA 6는 PS5로 나오지 않나? 전부 출시 당일에 복제된다면 누가 소프트웨어에 한 푼이라도 쓰겠나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+AnyPS5: portar binarios de PS5 al PC sin emulación (87% de las bibliotecas del sistema mapeadas)
+***** TLDR
+AnyPS5 convierte ejecutables de PS5 en binarios nativos de Linux y Windows en lugar de emular la consola. Un relinker reescribe el ejecutable al formato nativo del anfitrión y lo enlaza con bibliotecas de sistema de PS5 reimplementadas, así que no hay emulador ni proceso de runtime aparte; un recompilador de shaders emite SPIR-V validado con SPIRV-Tools. El 87% cuenta solo las funciones que el proyecto ha declarado en core/libs/prx, no todas las del sistema PS5. La licencia es GPL-2 y no incluye firmware, claves criptográficas ni bibliotecas propietarias. La lista de compatibilidad documentada es corta: Dreaming Sarah, un plataformas 2D, corre a 60 fps estables en una GTX 1050 Ti.
+***** Take
+Hacer un Wine para PS5 en vez de un emulador es la arquitectura correcta, y eso convierte la distancia entre el 87% del badge y un único plataformas 2D funcionando en el verdadero tema. La cobertura de funciones cuenta declaraciones, no corrección. Los comentarios van varios miles de funciones por delante de la tabla de compatibilidad.
+***** Comments
+- Llevo tiempo en la escena del jailbreak de PlayStation y esto es noticia grande. Si acabo jugando GTA 6 en mi PC pocos meses después del lanzamiento, estaré eufórico.
+- Esto solo empujará a Sony, Nintendo y Microsoft más hacia el juego en la nube, donde nada de esta ingeniería inversa es posible.
+- GTA 6 sale en PS5, ¿no? ¿Quién va a pagar un céntimo por software si todo se puede copiar el primer día?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+AnyPS5: PS5-Binaries ohne Emulation auf den PC portieren (87 % der Systembibliotheken abgebildet)
+***** TLDR
+AnyPS5 wandelt PS5-Executables in native Linux- und Windows-Binaries um, statt die Konsole zu emulieren. Ein Relinker schreibt die Datei in das native Format des Hosts um und linkt sie gegen nachimplementierte PS5-Systembibliotheken, es gibt also keinen Emulator und keinen separaten Runtime-Prozess; ein Shader-Recompiler erzeugt mit SPIRV-Tools validiertes SPIR-V. Die 87 % zählen nur Funktionen, die das Projekt in core/libs/prx deklariert hat, nicht alle PS5-Systemfunktionen. Lizenz ist GPL-2, Firmware, Schlüssel und proprietäre Bibliotheken liegen nicht bei. Die dokumentierte Kompatibilitätsliste ist kurz: Dreaming Sarah, ein 2D-Plattformer, läuft mit stabilen 60 fps auf einer GTX 1050 Ti.
+***** Take
+Ein Wine für die PS5 statt eines Emulators ist die richtige Architektur, und genau deshalb ist der Abstand zwischen dem 87-Prozent-Badge und einem laufenden 2D-Plattformer die eigentliche Geschichte. Funktionsabdeckung zählt Deklarationen, nicht Korrektheit. Der Kommentarthread ist der Kompatibilitätstabelle mehrere Tausend Funktionen voraus.
+***** Comments
+- Ich bin seit einer Weile in der PlayStation-Jailbreak-Szene, und das ist eine große Nachricht. Wenn ich GTA 6 wenige Monate nach Release auf dem PC spielen kann, bin ich euphorisch.
+- Das treibt Sony, Nintendo und Microsoft nur weiter Richtung Cloud-Gaming, wo nichts von diesem Reverse Engineering möglich ist.
+- GTA 6 kommt für die PS5, richtig? Wer zahlt noch einen Cent für Software, wenn alles am ersten Tag abgezogen werden kann?
+** Hackers obtain counterfeit TLS certificates for Google and other large services :security:tls:dns:pki:chrome:
+:PROPERTIES:
+:ID:       49988230
+:URL:      https://arstechnica.com/security/2026/10/hackers-obtain-counterfeit-tls-certificates-for-google-and-other-large-services/
+:HN_URL:   https://news.ycombinator.com/item?id=49988230
+:POINTS:   21
+:COMMENTS: 4
+:BY:       colinprince
+:END:
+
+*** TLDR
+Attackers compromised the registries behind three country-code top-level domains, .gh (Ghana), .sl (Sierra Leone) and .as (American Samoa), modified authoritative DNS records, and used that control to pass automated domain control validation and obtain genuinely issued HTTPS certificates covering several Google domains plus domains of other large brands and online services. Google's own systems were not breached, and per the report the certificate authorities followed all their requirements, which is the point. Chrome has been updated to block the known unauthorized certificates, and Google worked with CAs to revoke the ones covering its domains. Google's advice to domain owners is to monitor certificate transparency logs and publish restrictive CAA records. No attribution is given.
+
+*** Take
+Automated domain validation makes DNS the root of trust for the whole web PKI, so whoever owns a registry can mint valid certificates for every domain beneath it, and no amount of CA diligence changes that. Google's own advice has the hole Borealid points at: CAA records tell CAs which issuer to accept, but an attacker who controls the registry's DNS can rewrite the CAA record on the way past. The mechanism that actually would have stopped this is key pinning, and HPKP was deprecated years ago.
+
+*** Comments
+
+**** fulafel
+:PROPERTIES:
+:COMMENT_ID: 49988517
+:END:
+From Google's post: the attackers compromised the third-party ccTLDs, not Google, putting any domain ending in .gh, .sl or .as at risk. They modified authoritative DNS records and obtained unauthorized HTTPS certificates covering several Google domains and others. So entire top level domain registries were compromised.
+
+**** Borealid
+:PROPERTIES:
+:COMMENT_ID: 49988998
+:END:
+This sounds like something HPKP could have prevented and CAA records could not. But HPKP is deprecated.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+黑客为谷歌等大型服务获取了伪造的 TLS 证书
+***** TLDR
+攻击者攻破了三个国家代码顶级域的注册局：.gh（加纳）、.sl（塞拉利昂）和 .as（美属萨摩亚），修改权威 DNS 记录，并借此通过自动化域名控制验证，拿到了覆盖多个谷歌域名以及其他大品牌和在线服务域名的、正式签发的 HTTPS 证书。谷歌自身系统没有被入侵，而且据报道各证书颁发机构完全遵守了自己的规定，这恰恰是问题所在。Chrome 已更新以拦截已知的未授权证书，谷歌也与 CA 合作吊销了覆盖其域名的那些证书。谷歌给域名持有者的建议是监控证书透明度日志并发布限制性 CAA 记录。报道未给出攻击者归属。
+***** Take
+自动化域名验证让 DNS 成为整个 Web PKI 的信任根，因此谁掌握了一个注册局，就能为其下所有域名签出有效证书，CA 再怎么尽职也改变不了这一点。谷歌自己的建议有 Borealid 指出的漏洞：CAA 记录告诉 CA 应接受哪家签发方，但控制了注册局 DNS 的攻击者顺手就能改写 CAA 记录。真正能挡住这件事的机制是公钥固定，而 HPKP 几年前就被废弃了。
+***** Comments
+- 来自谷歌的通告：攻击者攻破的是第三方 ccTLD，不是谷歌，这让所有以 .gh、.sl 或 .as 结尾的域名都处于风险之中。他们修改了权威 DNS 记录，拿到了覆盖多个谷歌域名和其他组织域名的未授权 HTTPS 证书。也就是说整个顶级域注册局被攻陷了。
+- 这听起来是 HPKP 本可以防住、而 CAA 记录防不住的事情。可是 HPKP 已经被废弃了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+攻撃者がGoogleなど大手サービス向けの偽TLS証明書を取得
+***** TLDR
+攻撃者が3つの国別コードトップレベルドメインのレジストリ、.gh（ガーナ）、.sl（シエラレオネ）、.as（米領サモア）を侵害し、権威DNSレコードを改変。それを使って自動のドメイン管理権検証を通し、複数のGoogleドメインや他の大手ブランド・オンラインサービスのドメインを対象とする正規発行のHTTPS証明書を取得した。Google自身のシステムは侵害されておらず、報道によれば認証局は自らの要件をすべて満たしている。そこが問題だ。Chromeは既知の不正証明書をブロックするよう更新され、GoogleはCAと協力して自社ドメイン対象分を失効させた。ドメイン保有者への助言は、証明書透明性ログの監視と制限的なCAAレコードの公開。攻撃者の帰属は示されていない。
+***** Take
+自動のドメイン検証はDNSをWeb PKI全体のトラストアンカーにしてしまうので、レジストリを握った者はその配下の全ドメインに有効な証明書を発行できる。CAがどれだけ真面目でもこれは変わらない。Googleの助言にはBorealidが指摘する穴がある。CAAレコードはどの発行者を受け入れるかCAに伝えるが、レジストリのDNSを支配する攻撃者はそのCAAレコードも書き換えられる。実際に止められた仕組みは鍵のピン留めであり、HPKPは数年前に廃止された。
+***** Comments
+- Googleの投稿より。攻撃者が侵害したのはGoogleではなく第三者のccTLDで、.gh、.sl、.asで終わるすべてのドメインが危険にさらされた。権威DNSレコードを改変し、複数のGoogleドメインや他組織のドメインを対象とする不正なHTTPS証明書を取得した。つまりトップレベルドメインのレジストリ丸ごとが侵害された。
+- これはHPKPなら防げてCAAレコードでは防げない類の話に聞こえる。だがHPKPは廃止済みだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+공격자들이 구글 등 대형 서비스용 위조 TLS 인증서를 발급받았다
+***** TLDR
+공격자들이 세 개 국가 코드 최상위 도메인의 레지스트리, 즉 .gh(가나), .sl(시에라리온), .as(미국령 사모아)를 침해해 권한 DNS 레코드를 변경하고, 이를 이용해 자동 도메인 소유권 검증을 통과시켜 여러 구글 도메인과 다른 대형 브랜드 및 온라인 서비스 도메인을 포함하는 정식 발급 HTTPS 인증서를 얻었다. 구글 자체 시스템은 침해되지 않았고, 보도에 따르면 인증기관들은 자신들의 요건을 모두 지켰다. 바로 그게 문제다. 크롬은 알려진 무단 인증서를 차단하도록 업데이트됐고, 구글은 CA와 협력해 자사 도메인 대상 인증서를 폐기했다. 도메인 소유자를 향한 구글의 조언은 인증서 투명성 로그 감시와 제한적인 CAA 레코드 게시다. 공격 주체는 밝혀지지 않았다.
+***** Take
+자동 도메인 검증은 DNS를 웹 PKI 전체의 신뢰 기점으로 만든다. 따라서 레지스트리를 장악한 쪽은 그 아래 모든 도메인에 대해 유효한 인증서를 발급할 수 있고, CA가 얼마나 성실한지는 상관이 없다. 구글의 조언에는 Borealid가 지적한 구멍이 있다. CAA 레코드는 어느 발급자를 받아들일지 CA에 알려주지만, 레지스트리 DNS를 통제하는 공격자는 그 CAA 레코드까지 고쳐 쓸 수 있다. 실제로 막을 수 있었던 수단은 키 피닝이고, HPKP는 몇 년 전에 폐기됐다.
+***** Comments
+- 구글 글에서: 공격자가 침해한 것은 구글이 아니라 제3자 ccTLD였고, .gh, .sl, .as로 끝나는 모든 도메인이 위험에 놓였다. 권한 DNS 레코드를 변경해 여러 구글 도메인과 다른 조직 도메인을 포함한 무단 HTTPS 인증서를 받았다. 최상위 도메인 레지스트리 전체가 뚫린 것이다.
+- 이건 HPKP라면 막을 수 있었고 CAA 레코드로는 막을 수 없었던 사안처럼 들린다. 그런데 HPKP는 폐기됐다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Atacantes obtienen certificados TLS falsificados para Google y otros grandes servicios
+***** TLDR
+Los atacantes comprometieron los registros de tres dominios de primer nivel de código de país, .gh (Ghana), .sl (Sierra Leona) y .as (Samoa Americana), modificaron los registros DNS autoritativos y usaron ese control para superar la validación automática de control de dominio y obtener certificados HTTPS emitidos legítimamente que cubren varios dominios de Google y dominios de otras grandes marcas y servicios en línea. Los sistemas de Google no fueron vulnerados y, según el informe, las autoridades de certificación cumplieron todos sus requisitos, que es justamente el problema. Chrome se actualizó para bloquear los certificados no autorizados conocidos, y Google trabajó con las CA para revocar los que cubrían sus dominios. Su consejo a los titulares de dominios es vigilar los registros de transparencia de certificados y publicar registros CAA restrictivos. No hay atribución.
+***** Take
+La validación automática de dominios convierte el DNS en la raíz de confianza de toda la PKI web, así que quien controla un registro puede emitir certificados válidos para cada dominio bajo él, y la diligencia de las CA no cambia eso. El consejo de Google tiene el agujero que señala Borealid: los registros CAA le dicen a la CA qué emisor aceptar, pero un atacante que controla el DNS del registro también puede reescribir ese CAA. El mecanismo que sí lo habría impedido es el pinning de claves, y HPKP quedó obsoleto hace años.
+***** Comments
+- De la publicación de Google: los atacantes comprometieron los ccTLD de terceros, no Google, poniendo en riesgo cualquier dominio que termine en .gh, .sl o .as. Modificaron registros DNS autoritativos y obtuvieron certificados HTTPS no autorizados que cubren varios dominios de Google y de otras organizaciones. Es decir, se comprometieron registros enteros de dominios de primer nivel.
+- Esto suena a algo que HPKP podría haber evitado y los registros CAA no. Pero HPKP está obsoleto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Angreifer erhalten gefälschte TLS-Zertifikate für Google und andere große Dienste
+***** TLDR
+Angreifer kompromittierten die Registries dreier länderspezifischer Top-Level-Domains, .gh (Ghana), .sl (Sierra Leone) und .as (Amerikanisch-Samoa), änderten autoritative DNS-Einträge und bestanden damit die automatisierte Domain-Kontroll-Validierung, um regulär ausgestellte HTTPS-Zertifikate für mehrere Google-Domains sowie Domains anderer großer Marken und Onlinedienste zu erhalten. Googles eigene Systeme wurden nicht kompromittiert, und dem Bericht nach haben die Zertifizierungsstellen alle ihre Anforderungen erfüllt. Genau das ist der Punkt. Chrome wurde aktualisiert, um die bekannten unautorisierten Zertifikate zu blockieren, und Google ließ die eigenen gemeinsam mit den CAs widerrufen. Googles Rat an Domaininhaber: Certificate-Transparency-Logs überwachen und restriktive CAA-Einträge veröffentlichen. Eine Zuordnung der Täter fehlt.
+***** Take
+Automatisierte Domainvalidierung macht DNS zum Vertrauensanker der gesamten Web-PKI. Wer also eine Registry kontrolliert, kann gültige Zertifikate für jede Domain darunter ausstellen, und keine Sorgfalt der CAs ändert daran etwas. Googles eigener Rat hat die Lücke, auf die Borealid zeigt: CAA-Einträge sagen den CAs, welchen Aussteller sie akzeptieren sollen, aber ein Angreifer mit Kontrolle über das Registry-DNS kann den CAA-Eintrag gleich mit umschreiben. Verhindert hätte das Key-Pinning, und HPKP wurde vor Jahren abgekündigt.
+***** Comments
+- Aus Googles Beitrag: Kompromittiert wurden die fremden ccTLDs, nicht Google, womit jede Domain auf .gh, .sl oder .as gefährdet war. Die Angreifer änderten autoritative DNS-Einträge und erhielten unautorisierte HTTPS-Zertifikate für mehrere Google-Domains und Domains anderer Organisationen. Es wurden also ganze Top-Level-Domain-Registries übernommen.
+- Das klingt nach etwas, das HPKP verhindert hätte und CAA-Einträge nicht. Aber HPKP ist abgekündigt.
+** EmbeddingGemma 2: An open, lightweight multimodal embedding model :ai:embeddings:google:open-weights:on-device:
+:PROPERTIES:
+:ID:       49980487
+:URL:      https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/
+:HN_URL:   https://news.ycombinator.com/item?id=49980487
+:POINTS:   288
+:COMMENTS: 31
+:BY:       ilreb
+:END:
+
+*** TLDR
+EmbeddingGemma 2 is 740M parameters total, split so you load only what you query: a 270M text encoder plus an optional 170M vision encoder and 300M audio encoder. Text, code, images, audio and video share one embedding space, so a voice memo can retrieve video. Context is 8K tokens, four times EmbeddingGemma 1, enough for about 5.5 minutes of audio, 29 images or 58 video frames. Matryoshka Representation Learning lets you truncate 768-dim vectors to 512, 256 or 128 for up to 6x less storage. MTEB Code moves from 68.76 to 78.68. Apache 2.0, weights on Hugging Face and Kaggle, Model Garden to follow.
+
+*** Take
+The modality split is the real product decision: a 270M text-only download beats shipping 740M for audio you never query. The nearly ten-point MTEB Code jump is the number worth reproducing on your own corpus. Note sourcecodeplz's correction though, plain text scores are unchanged from v1, so pure-text users are getting better packaging rather than better retrieval.
+
+*** Comments
+
+**** simonw
+:PROPERTIES:
+:COMMENT_ID: 49983751
+:END:
+Apache 2.0 matters most for embedding models. You calculate and store millions of vectors, and a proprietary hosted model that gets retired or changed strands all of them.
+
+**** sourcecodeplz
+:PROPERTIES:
+:COMMENT_ID: 49984477
+:END:
+For text, the benchmarks are identical to the first EmbeddingGemma. What's new is being able to enable or disable the modalities you don't need.
+
+**** aabhay
+:PROPERTIES:
+:COMMENT_ID: 49984401
+:END:
+It's trained with MRL, not MatFormer, so you shrink the embedding dimensions but not the model weights alongside them.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+EmbeddingGemma 2：开放、轻量的多模态嵌入模型
+***** TLDR
+EmbeddingGemma 2 总共 740M 参数，但做了拆分，只加载你实际要用的部分：270M 文本编码器，加上可选的 170M 视觉编码器和 300M 音频编码器。文本、代码、图像、音频和视频共享同一个嵌入空间，所以可以用语音备忘录检索视频。上下文为 8K token，是 EmbeddingGemma 1 的四倍，约可容纳 5.5 分钟音频、29 张图片或 58 个视频帧。Matryoshka 表示学习允许把 768 维向量截断到 512、256 或 128 维，存储最多可减少 6 倍。MTEB Code 从 68.76 提升到 78.68。Apache 2.0 授权，权重已在 Hugging Face 和 Kaggle 发布，Model Garden 随后上线。
+***** Take
+模态拆分才是真正的产品决策：只下 270M 的纯文本版，胜过为你从不查询的音频背上 740M。MTEB Code 近十分的提升是值得在自己语料上复现的数字。但要注意 sourcecodeplz 的提醒：纯文本成绩与 v1 相同，所以只做文本的用户得到的是更好的封装，不是更好的检索。
+***** Comments
+- 对嵌入模型来说 Apache 2.0 最重要。你要计算并存下几百万个向量，而一个闭源托管模型一旦下线或变更，这些向量全部作废。
+- 就文本而言，各项基准与第一代 EmbeddingGemma 完全相同。新东西是可以开关你不需要的模态。
+- 它用 MRL 训练，不是 MatFormer，所以你能缩小嵌入维度，但不能同时缩小模型权重。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+EmbeddingGemma 2: 軽量なオープン多モーダル埋め込みモデル
+***** TLDR
+EmbeddingGemma 2は合計740Mパラメータだが分割構成で、必要な部分だけ読み込める。270Mのテキストエンコーダに、任意で170Mの視覚エンコーダと300Mの音声エンコーダを足す形だ。テキスト、コード、画像、音声、動画が同一の埋め込み空間を共有するため、ボイスメモで動画を検索できる。コンテキストは8KトークンでEmbeddingGemma 1の4倍、音声約5.5分、画像29枚、動画58フレーム相当。Matryoshka表現学習により768次元ベクトルを512、256、128次元へ切り詰め、ストレージを最大6分の1にできる。MTEB Codeは68.76から78.68へ。ライセンスはApache 2.0で、重みはHugging FaceとKaggleに、Model Gardenは後続。
+***** Take
+本当の製品判断はモダリティの分割にある。問い合わせもしない音声のために740Mを運ぶより、270Mのテキスト専用版をダウンロードする方が良い。MTEB Codeの約10ポイント上昇は自分のコーパスで再現すべき数字だ。ただしsourcecodeplzの指摘に注意。テキスト単体のスコアはv1と変わらないので、テキストだけの用途では検索品質ではなくパッケージングが改善されたということになる。
+***** Comments
+- 埋め込みモデルではApache 2.0が最も重要だ。何百万ものベクトルを計算して保存するのに、ホスト型のプロプライエタリモデルが廃止や変更されればすべて無駄になる。
+- テキストに関してはベンチマークが初代EmbeddingGemmaと同一だ。新しいのは不要なモダリティを有効化・無効化できる点。
+- MatFormerではなくMRLで訓練されているので、埋め込み次元は縮められるがモデル重みは一緒に縮まらない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+EmbeddingGemma 2: 가볍고 개방적인 멀티모달 임베딩 모델
+***** TLDR
+EmbeddingGemma 2는 총 740M 파라미터지만 분리 설계로 필요한 부분만 올릴 수 있다. 270M 텍스트 인코더에 선택적으로 170M 비전 인코더와 300M 오디오 인코더를 더하는 구조다. 텍스트, 코드, 이미지, 오디오, 비디오가 하나의 임베딩 공간을 공유하므로 음성 메모로 영상을 검색할 수 있다. 컨텍스트는 8K 토큰으로 EmbeddingGemma 1의 네 배이고, 오디오 약 5.5분, 이미지 29장, 비디오 58프레임에 해당한다. Matryoshka 표현 학습으로 768차원 벡터를 512, 256, 128차원으로 잘라 저장 공간을 최대 6분의 1로 줄인다. MTEB Code는 68.76에서 78.68로 올랐다. Apache 2.0이며 가중치는 Hugging Face와 Kaggle에 공개됐고 Model Garden은 추후 지원 예정이다.
+***** Take
+진짜 제품 결정은 모달리티 분리다. 한 번도 조회하지 않을 오디오 때문에 740M을 들고 다니기보다 270M 텍스트 전용을 받는 게 낫다. MTEB Code의 10점 가까운 상승은 자기 코퍼스에서 재현해볼 만한 수치다. 다만 sourcecodeplz의 지적을 보라. 순수 텍스트 점수는 v1과 같으므로 텍스트만 쓰는 쪽은 검색 품질이 아니라 포장이 개선된 것이다.
+***** Comments
+- 임베딩 모델에서는 Apache 2.0이 가장 중요하다. 수백만 개 벡터를 계산해 저장하는데, 호스팅형 독점 모델이 중단되거나 바뀌면 그 전부가 무용지물이 된다.
+- 텍스트에 대해서는 벤치마크가 1세대 EmbeddingGemma와 동일하다. 새로운 것은 필요 없는 모달리티를 켜고 끌 수 있다는 점이다.
+- MatFormer가 아니라 MRL로 학습되었기 때문에 임베딩 차원은 줄일 수 있지만 모델 가중치는 함께 줄지 않는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+EmbeddingGemma 2: un modelo de embeddings multimodal, abierto y ligero
+***** TLDR
+EmbeddingGemma 2 tiene 740M de parámetros en total, repartidos para que cargues solo lo que consultas: un codificador de texto de 270M más un codificador de visión opcional de 170M y uno de audio de 300M. Texto, código, imágenes, audio y vídeo comparten un mismo espacio de embeddings, así que una nota de voz puede recuperar vídeo. El contexto es de 8K tokens, cuatro veces el de EmbeddingGemma 1, suficiente para unos 5,5 minutos de audio, 29 imágenes o 58 fotogramas. Matryoshka Representation Learning permite truncar vectores de 768 dimensiones a 512, 256 o 128, con hasta 6x menos almacenamiento. MTEB Code pasa de 68,76 a 78,68. Licencia Apache 2.0, pesos en Hugging Face y Kaggle, Model Garden más adelante.
+***** Take
+La división por modalidades es la verdadera decisión de producto: descargar 270M solo de texto gana a cargar 740M por un audio que nunca consultas. El salto de casi diez puntos en MTEB Code es la cifra que merece reproducirse en tu propio corpus. Pero atención a la corrección de sourcecodeplz: las puntuaciones de texto puro son idénticas a v1, así que quien solo embebe texto gana mejor empaquetado, no mejor recuperación.
+***** Comments
+- Apache 2.0 importa sobre todo en modelos de embeddings. Calculas y almacenas millones de vectores, y un modelo propietario alojado que se retire o cambie los deja a todos inservibles.
+- Para texto, los benchmarks son idénticos al primer EmbeddingGemma. Lo nuevo es poder activar o desactivar las modalidades que no necesitas.
+- Está entrenado con MRL, no con MatFormer, así que reduces las dimensiones del embedding pero no los pesos del modelo junto con ellas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+EmbeddingGemma 2: ein offenes, leichtgewichtiges multimodales Embedding-Modell
+***** TLDR
+EmbeddingGemma 2 hat insgesamt 740M Parameter, aufgeteilt, damit man nur lädt, was man abfragt: einen Text-Encoder mit 270M plus optional einen Vision-Encoder mit 170M und einen Audio-Encoder mit 300M. Text, Code, Bilder, Audio und Video teilen einen Embedding-Raum, eine Sprachnotiz kann also Video finden. Der Kontext beträgt 8K Token, viermal so viel wie bei EmbeddingGemma 1, genug für etwa 5,5 Minuten Audio, 29 Bilder oder 58 Videoframes. Matryoshka Representation Learning erlaubt, 768-dimensionale Vektoren auf 512, 256 oder 128 zu kürzen, bis zu 6x weniger Speicher. MTEB Code steigt von 68,76 auf 78,68. Apache 2.0, Gewichte auf Hugging Face und Kaggle, Model Garden folgt.
+***** Take
+Die Aufteilung nach Modalitäten ist die eigentliche Produktentscheidung: ein 270M-Download nur für Text schlägt 740M für Audio, das man nie abfragt. Der Sprung von fast zehn Punkten bei MTEB Code ist die Zahl, die man am eigenen Korpus nachprüfen sollte. Dazu sourcecodeplz' Korrektur: die reinen Textwerte sind unverändert gegenüber v1, wer nur Text einbettet, bekommt also besseres Packaging, nicht bessere Retrieval-Qualität.
+***** Comments
+- Apache 2.0 zählt bei Embedding-Modellen am meisten. Man berechnet und speichert Millionen Vektoren, und ein proprietäres gehostetes Modell, das abgeschaltet oder geändert wird, macht sie alle wertlos.
+- Für Text sind die Benchmarks identisch mit dem ersten EmbeddingGemma. Neu ist, dass man die Modalitäten, die man nicht braucht, abschalten kann.
+- Es ist mit MRL trainiert, nicht mit MatFormer, man verkleinert also die Embedding-Dimensionen, aber nicht die Modellgewichte mit.
+** What Is Codemode :ai:agents:mcp:javascript:tooling:
+:PROPERTIES:
+:ID:       49978333
+:URL:      https://lucumr.pocoo.org/2026/10/6/codemode/
+:HN_URL:   https://news.ycombinator.com/item?id=49978333
+:POINTS:   50
+:COMMENTS: 7
+:BY:       Tomte
+:END:
+
+*** TLDR
+Armin Ronacher defines code mode as letting the model write JavaScript that runs in a sandboxed QuickJS interpreter inside the agent harness (the brain) rather than in the execution environment (the hands) where bash runs. The payoff is that output never has to pass through the context window: a bash call made as a regular tool call might only put the trailing 2000 lines into context, while code mode can consume the whole result structurally, keep state between invocations via store(), run work concurrently, and reach harness-internal capabilities such as image generation and classifiers that do not fit a tool interface. His examples are batch image generation, running a sentiment classifier across 100 GitHub issues, and driving 30 sequential game-engine steps that mix bash with classification. The open problems he lists: snapshots and recovery after an interrupted run, JavaScript possibly being the wrong choice against deterministic Starlark, MCP's lack of large binary data support, MCP servers returning inconsistent structured data at scale, and the pattern not working on small models.
+
+*** Take
+What code mode actually buys is context budget, not expressiveness. Every example in the post is doable with ordinary tool calls; they just cost tokens nobody has. The unresolved item is the one that will hurt in production, and soltanov names it: without snapshots or recovery you cannot tell which side effects already landed after an interrupted run, which is exactly the problem workflow engines exist to solve.
+
+*** Comments
+
+**** ylxdzsw
+:PROPERTIES:
+:COMMENT_ID: 49988381
+:END:
+I'm not sure why almost all codemode implementations choose JavaScript. I prototyped an agent that uses bash as the language and it worked equally well, with literally zero prompt needed to teach the model about it. A tool named "bash" is enough.
+
+**** soltanov
+:PROPERTIES:
+:COMMENT_ID: 49988422
+:END:
+Recovery after interrupted execution; distinguishing completed side effects from calls that can safely repeat.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+什么是 Codemode
+***** TLDR
+Armin Ronacher 把 code mode 定义为：让模型写 JavaScript，在 agent harness（大脑）内部的沙箱化 QuickJS 解释器里运行，而不是在跑 bash 的执行环境（手）里运行。好处是输出不必经过上下文窗口：作为普通工具调用的 bash 可能只把最后 2000 行放进上下文，而 code mode 可以结构化地消费完整结果、通过 store() 在多次调用间保存状态、并发执行，并访问那些不适合工具接口的 harness 内部能力，比如图像生成和分类器。他举的例子有批量生成图像、对 100 个 GitHub issue 跑情感分类器、以及驱动 30 步串行的游戏引擎流程（混合 bash 与分类）。他列出的未解问题：中断后的快照与恢复、JavaScript 可能不如确定性的 Starlark 合适、MCP 缺少大二进制数据支持、MCP 服务端在规模上返回不一致的结构化数据，以及这个模式在小模型上行不通。
+***** Take
+code mode 真正买到的是上下文预算，不是表达力。文中每个例子用普通工具调用都能做到，只是会花掉谁也没有的 token。会在生产中真正造成痛苦的是那个未解项，soltanov 点明了它：没有快照和恢复机制，中断之后你无法判断哪些副作用已经生效，而这恰恰是工作流引擎存在的理由。
+***** Comments
+- 我不明白为什么几乎所有 codemode 实现都选 JavaScript。我做过一个用 bash 当语言的 agent 原型，效果一样好，而且完全不需要提示词去教模型。一个叫 “bash” 的工具就够了。
+- 中断执行后的恢复；区分已经完成的副作用和可以安全重试的调用。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Codemodeとは何か
+***** TLDR
+Armin Ronacherはcode modeを、モデルが書いたJavaScriptをbashが走る実行環境（手）ではなく、エージェントのハーネス（脳）内部のサンドボックス化されたQuickJSインタプリタで実行する仕組みと定義する。利点は出力がコンテキストウィンドウを通らなくて済むことだ。通常のツール呼び出しとしてのbashは末尾2000行しかコンテキストに入らないかもしれないが、code modeは結果全体を構造的に扱い、store()で呼び出し間の状態を保ち、並行実行し、画像生成や分類器のようにツールインターフェースに収まらないハーネス内部機能にも届く。例として、画像の一括生成、100件のGitHub issueへの感情分類の適用、bashと分類を組み合わせた30ステップのゲームエンジン駆動が挙がる。未解決として列挙されるのは、中断後のスナップショットと復旧、決定的なStarlarkに対してJavaScriptが適切でない可能性、MCPの大きなバイナリデータ非対応、規模が増すとMCPサーバーが一貫しない構造化データを返す点、そして小さいモデルではこの方式が機能しないことだ。
+***** Take
+code modeが実際に買っているのは表現力ではなくコンテキスト予算だ。記事中のどの例も通常のツール呼び出しで実現できるが、誰も持っていないトークンを消費する。本番で痛むのは未解決項目のほうで、soltanovがそれを指摘している。スナップショットも復旧もなければ、中断後にどの副作用が既に発生したのか判別できない。それはまさにワークフローエンジンが存在する理由だ。
+***** Comments
+- codemodeの実装がほぼ全部JavaScriptを選ぶ理由が分からない。bashを言語に使うエージェントを試作したが同程度にうまく動き、モデルに教えるプロンプトは一切不要だった。「bash」という名前のツールがあれば十分だ。
+- 中断後の復旧。完了済みの副作用と、安全に再実行できる呼び出しを区別すること。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Codemode란 무엇인가
+***** TLDR
+Armin Ronacher는 code mode를, 모델이 작성한 JavaScript를 bash가 돌아가는 실행 환경(손)이 아니라 에이전트 하네스(뇌) 안의 샌드박스 QuickJS 인터프리터에서 실행하는 방식으로 정의한다. 이점은 출력이 컨텍스트 윈도를 거치지 않아도 된다는 것이다. 일반 도구 호출로서의 bash는 마지막 2000줄만 컨텍스트에 들어갈 수 있지만, code mode는 결과 전체를 구조적으로 처리하고, store()로 호출 간 상태를 유지하며, 작업을 병렬로 돌리고, 이미지 생성이나 분류기처럼 도구 인터페이스에 맞지 않는 하네스 내부 기능에도 접근한다. 예시는 이미지 일괄 생성, GitHub 이슈 100건에 감정 분류기 적용, bash와 분류를 섞은 30단계 게임 엔진 구동이다. 그가 꼽은 미해결 과제는 중단 후 스냅샷과 복구, 결정적인 Starlark 대비 JavaScript가 부적합할 가능성, MCP의 대용량 바이너리 데이터 미지원, 규모가 커질 때 MCP 서버가 일관되지 않은 구조화 데이터를 반환하는 문제, 그리고 작은 모델에서는 이 패턴이 통하지 않는다는 점이다.
+***** Take
+code mode가 실제로 사주는 것은 표현력이 아니라 컨텍스트 예산이다. 글에 나오는 모든 예시는 일반 도구 호출로도 가능하고, 다만 아무도 가진 적 없는 토큰을 쓴다. 운영에서 아플 지점은 미해결 항목이고 soltanov가 정확히 짚는다. 스냅샷과 복구가 없으면 중단된 실행 뒤에 어떤 부수 효과가 이미 적용됐는지 알 수 없다. 그것이 바로 워크플로 엔진이 존재하는 이유다.
+***** Comments
+- codemode 구현이 거의 전부 JavaScript를 고르는 이유를 모르겠다. bash를 언어로 쓰는 에이전트를 시험해봤는데 똑같이 잘 돌았고, 모델에게 설명하는 프롬프트가 전혀 필요 없었다. 'bash'라는 이름의 도구만 있으면 된다.
+- 중단된 실행 후의 복구. 이미 완료된 부수 효과와 안전하게 재실행할 수 있는 호출을 구분하는 일.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Qué es el codemode
+***** TLDR
+Armin Ronacher define el code mode como dejar que el modelo escriba JavaScript que corre en un intérprete QuickJS aislado dentro del harness del agente (el cerebro), en lugar del entorno de ejecución (las manos) donde corre bash. La ganancia es que la salida nunca tiene que pasar por la ventana de contexto: una llamada a bash como herramienta normal puede meter solo las últimas 2000 líneas en contexto, mientras el code mode consume el resultado completo de forma estructurada, guarda estado entre invocaciones con store(), ejecuta trabajo en paralelo y alcanza capacidades internas del harness, como generación de imágenes y clasificadores, que no encajan en una interfaz de herramienta. Sus ejemplos: generación de imágenes en lote, pasar un clasificador de sentimiento por 100 issues de GitHub y dirigir 30 pasos secuenciales de un motor de juego mezclando bash y clasificación. Los problemas abiertos que enumera: snapshots y recuperación tras una ejecución interrumpida, que JavaScript quizá sea peor elección que el determinista Starlark, la falta de soporte de datos binarios grandes en MCP, servidores MCP que devuelven datos estructurados inconsistentes a escala, y que el patrón no funciona con modelos pequeños.
+***** Take
+Lo que compra el code mode es presupuesto de contexto, no expresividad. Todos los ejemplos del post se pueden hacer con llamadas a herramientas normales; solo cuestan tokens que nadie tiene. El punto sin resolver es el que dolerá en producción, y soltanov lo nombra: sin snapshots ni recuperación no puedes saber qué efectos secundarios ya ocurrieron tras una ejecución interrumpida, que es justo el problema para el que existen los motores de workflow.
+***** Comments
+- No entiendo por qué casi todas las implementaciones de codemode eligen JavaScript. Prototipé un agente que usa bash como lenguaje y funcionó igual de bien, sin un solo prompt para explicárselo al modelo. Basta con una herramienta llamada "bash".
+- La recuperación tras una ejecución interrumpida; distinguir efectos secundarios ya completados de llamadas que se pueden repetir sin riesgo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Was ist Codemode
+***** TLDR
+Armin Ronacher definiert Code Mode so: das Modell schreibt JavaScript, das in einem gesandboxten QuickJS-Interpreter im Agent-Harness (dem Gehirn) läuft, nicht in der Ausführungsumgebung (den Händen), wo bash läuft. Der Gewinn ist, dass Ausgaben nicht durch das Kontextfenster müssen. Ein bash-Aufruf als normaler Tool-Call bringt vielleicht nur die letzten 2000 Zeilen in den Kontext, während Code Mode das ganze Ergebnis strukturiert verarbeitet, Zustand zwischen Aufrufen per store() hält, Arbeit parallel ausführt und harness-interne Fähigkeiten wie Bildgenerierung und Klassifikatoren erreicht, die in keine Tool-Schnittstelle passen. Seine Beispiele: Bildgenerierung im Batch, ein Sentiment-Klassifikator über 100 GitHub-Issues, und 30 sequenzielle Schritte einer Game-Engine mit bash und Klassifikation gemischt. Offene Punkte laut Beitrag: Snapshots und Wiederherstellung nach abgebrochenem Lauf, JavaScript als möglicherweise falsche Wahl gegenüber dem deterministischen Starlark, fehlende Unterstützung großer Binärdaten in MCP, MCP-Server mit inkonsistenten strukturierten Antworten im großen Maßstab, und dass das Muster bei kleinen Modellen nicht funktioniert.
+***** Take
+Code Mode kauft Kontextbudget, nicht Ausdruckskraft. Jedes Beispiel im Beitrag geht auch mit normalen Tool-Calls, es kostet nur Token, die niemand hat. Wehtun wird in der Produktion der offene Punkt, den soltanov benennt: ohne Snapshots und Wiederherstellung lässt sich nach einem Abbruch nicht sagen, welche Seiteneffekte schon eingetreten sind, und genau dafür existieren Workflow-Engines.
+***** Comments
+- Mir ist unklar, warum fast alle Codemode-Implementierungen JavaScript wählen. Ich habe einen Agenten prototypisiert, der bash als Sprache nutzt, und das funktionierte genauso gut, ohne einen einzigen Prompt, der dem Modell das erklärt. Ein Tool namens "bash" reicht.
+- Wiederherstellung nach abgebrochener Ausführung; abgeschlossene Seiteneffekte von Aufrufen unterscheiden, die man gefahrlos wiederholen kann.
+** ESP32-C3 Adblock :hardware:esp32:dns:adblock:embedded:
+:PROPERTIES:
+:ID:       49986862
+:URL:      https://github.com/M-Abozaid/esp32-c3-adblock
+:HN_URL:   https://news.ycombinator.com/item?id=49986862
+:POINTS:   52
+:COMMENTS: 12
+:BY:       jayhoon
+:END:
+
+*** TLDR
+A Pi-hole-style DNS sinkhole on a $2 ESP32-C3 with 4 MB flash and no PSRAM. Instead of holding domain strings in RAM it stores each blocked domain as a 5-byte (40-bit) FNV-1a hash, sorted in flash and queried by binary search: roughly 18 flash reads and about 10 ms per lookup, with around 50 KB of RAM in use. 140,000 domains fit in about 0.7 MB; the 537k "ultimate" list also fits, at the cost of roughly one hash collision, meaning one unlucky domain gets over-blocked. Blocked queries answer 0.0.0.0, everything else is forwarded to an upstream resolver, and subdomains of blocked domains are blocked too. A dashboard at c3adblock.local gives per-client stats, manual block and allow lists, OTA updates and scheduled blocklist pulls, with Basic Auth plus a custom header on mutating endpoints. Keeping dual OTA slots for rollback drops capacity to about 250k domains.
+
+*** Take
+Hashing domains into sorted flash and binary-searching them is the right trick for a chip with no RAM to spare, and the README is honest about the cost: about one over-blocked domain at 537k entries, fixable from the dashboard. The number worth arguing over is the 10 ms per lookup that jolux and fwip both flag. It lands on every uncached DNS query, so whether it matters depends entirely on how much your resolver already caches.
+
+*** Comments
+
+**** BLKNSLVR
+:PROPERTIES:
+:COMMENT_ID: 49988699
+:END:
+I run a Pi-hole with 14 to 16M blocked domains, but I'm almost moving to an allow-list mindset. This would probably work better for that. I wonder if the good parts of the internet would fit in a 140k list.
+
+**** muti
+:PROPERTIES:
+:COMMENT_ID: 49987489
+:END:
+The README talks about hash collisions the wrong way round. Two blocked domains sharing a hash is fine, both should be blocked. Collisions matter for false positives, if hash(google.com) equals hash(adserver.com).
+
+**** jolux
+:PROPERTIES:
+:COMMENT_ID: 49988978
+:END:
+10ms? Good grief that's slow.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ESP32-C3 广告拦截器
+***** TLDR
+在一块 2 美元、4 MB 闪存、没有 PSRAM 的 ESP32-C3 上跑 Pi-hole 式的 DNS 黑洞。它不把域名字符串放在 RAM 里，而是把每个被拦截的域名存成 5 字节（40 位）FNV-1a 哈希，在闪存中排序并用二分查找：每次查询约 18 次闪存读取、约 10 毫秒，运行时占用约 50 KB RAM。14 万个域名约占 0.7 MB；53.7 万条的 “ultimate” 列表也能放下，代价是大约一次哈希碰撞，也就是有一个倒霉域名会被误拦。被拦截的查询返回 0.0.0.0，其余转发给上游解析器，被拦域名的子域也会被拦。c3adblock.local 上的面板提供按客户端统计、手动黑白名单、OTA 更新和定时拉取列表，写操作端点使用 Basic Auth 加自定义请求头。保留双 OTA 分区以便回滚会把容量降到约 25 万条。
+***** Take
+把域名哈希后排序存进闪存再二分查找，对一块没有多余 RAM 的芯片来说正是对路的办法，而 README 对代价也很坦诚：53.7 万条时大约误拦一个域名，可在面板里修正。真正值得争论的是 jolux 和 fwip 都点出的每次查询 10 毫秒。它作用在每个未命中缓存的 DNS 查询上，所以影响大小完全取决于你的解析器已经缓存了多少。
+***** Comments
+- 我跑的 PiHole 拦截列表有 1400 万到 1600 万个域名，但我快要转向白名单思路了。这个方案大概更适合那种做法。我在想，互联网上好的那部分能不能装进 14 万条列表里。
+- README 把哈希碰撞讲反了。两个被拦域名共用一个哈希没问题，它们本来都该被拦。碰撞真正要紧的是误报，比如 hash(google.com) 等于 hash(adserver.com)。
+- 10 毫秒？天呐，这也太慢了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ESP32-C3 Adblock
+***** TLDR
+2ドルのESP32-C3（フラッシュ4 MB、PSRAMなし）でPi-hole方式のDNSシンクホールを動かす。ドメイン文字列をRAMに置かず、ブロック対象を5バイト（40ビット）のFNV-1aハッシュとして保存し、フラッシュ上でソートして二分探索する。1回の問い合わせでフラッシュ読み出し約18回、約10ミリ秒、RAM使用量は約50 KB。14万ドメインで約0.7 MB、53.7万件の「ultimate」リストも収まるが、ハッシュ衝突が約1件発生し、運の悪い1ドメインが過剰ブロックされる。ブロック時は0.0.0.0を返し、それ以外は上流リゾルバへ転送、ブロック対象のサブドメインもブロックされる。c3adblock.localのダッシュボードでクライアント別統計、手動のブロック・許可リスト、OTA更新、リスト定期取得が可能で、更新系エンドポイントはBasic Authと独自ヘッダで保護する。ロールバック用に2つのOTAスロットを残すと容量は約25万件に下がる。
+***** Take
+ドメインをハッシュ化してフラッシュに並べ二分探索するのは、RAMに余裕のないチップには正しい手だ。READMEは代償についても正直で、53.7万件で誤ブロック約1件、ダッシュボードから修正できる。議論すべき数字はjoluxとfwipが共に指摘する1回10ミリ秒だ。キャッシュに乗らないDNS問い合わせごとに掛かるので、影響の大小はリゾルバのキャッシュ状況で決まる。
+***** Comments
+- 私のPiHoleはブロックリストが1400万〜1600万ドメインあるが、許可リスト方式へ移りかけている。この方式はそちらに向いているだろう。インターネットの良い部分が14万件に収まるのか気になる。
+- READMEのハッシュ衝突の説明は逆だ。ブロック対象2件が同じハッシュでも問題ない、どちらもブロックされるべきだから。衝突が問題になるのは誤検知、hash(google.com)がhash(adserver.com)と一致する場合だ。
+- 10ミリ秒？ なんとも遅い。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ESP32-C3 애드블록
+***** TLDR
+플래시 4 MB에 PSRAM이 없는 2달러짜리 ESP32-C3에서 Pi-hole 방식 DNS 싱크홀을 돌린다. 도메인 문자열을 RAM에 두지 않고 차단 도메인을 5바이트(40비트) FNV-1a 해시로 저장해 플래시에 정렬해 두고 이진 탐색한다. 조회당 플래시 읽기 약 18회, 약 10밀리초가 걸리고 RAM 사용량은 약 50 KB다. 14만 도메인이 약 0.7 MB에 들어가고, 53.7만 개 'ultimate' 목록도 들어가지만 해시 충돌이 약 1건 생겨 운 없는 도메인 하나가 과도 차단된다. 차단된 질의에는 0.0.0.0을 주고 나머지는 상위 리졸버로 전달하며, 차단 도메인의 서브도메인도 차단한다. c3adblock.local 대시보드에서 클라이언트별 통계, 수동 차단·허용 목록, OTA 업데이트, 목록 정기 갱신을 제공하고, 변경 엔드포인트는 Basic Auth와 커스텀 헤더로 막는다. 롤백용 OTA 슬롯 두 개를 유지하면 용량은 약 25만 개로 줄어든다.
+***** Take
+도메인을 해시로 바꿔 플래시에 정렬해 두고 이진 탐색하는 것은 여유 RAM이 없는 칩에 맞는 방법이고, README는 비용에도 정직하다. 53.7만 개에서 과도 차단 약 1건, 대시보드에서 고칠 수 있다. 다툴 만한 숫자는 jolux와 fwip이 모두 지적한 조회당 10밀리초다. 캐시에 없는 모든 DNS 질의에 붙으므로, 체감은 리졸버가 이미 얼마나 캐시하는지에 전적으로 달려 있다.
+***** Comments
+- 나는 차단 도메인이 1400만~1600만 개인 Pi-hole을 돌리는데, 거의 허용 목록 방식으로 넘어가는 중이다. 이 방식이 그쪽에 더 맞을 것 같다. 인터넷의 좋은 부분이 14만 개 목록에 들어갈지 궁금하다.
+- README의 해시 충돌 설명이 거꾸로다. 차단 대상 두 개가 같은 해시를 갖는 건 문제가 아니다, 둘 다 차단되어야 하니까. 충돌이 문제인 건 오탐이다. hash(google.com)이 hash(adserver.com)과 같을 때다.
+- 10밀리초? 세상에, 느리다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ESP32-C3 Adblock
+***** TLDR
+Un sumidero DNS estilo Pi-hole en un ESP32-C3 de 2 dólares con 4 MB de flash y sin PSRAM. En lugar de guardar las cadenas de dominio en RAM, almacena cada dominio bloqueado como un hash FNV-1a de 5 bytes (40 bits), ordenado en flash y consultado por búsqueda binaria: unas 18 lecturas de flash y unos 10 ms por consulta, con alrededor de 50 KB de RAM en uso. 140.000 dominios caben en unos 0,7 MB; la lista "ultimate" de 537k también cabe, a costa de aproximadamente una colisión de hash, es decir un dominio desafortunado que queda sobrebloqueado. Las consultas bloqueadas responden 0.0.0.0, el resto se reenvía a un resolver upstream, y los subdominios de dominios bloqueados también se bloquean. Un panel en c3adblock.local da estadísticas por cliente, listas manuales de bloqueo y permiso, actualizaciones OTA y descargas programadas de listas, con Basic Auth más un encabezado propio en los endpoints que modifican estado. Mantener dos ranuras OTA para rollback baja la capacidad a unos 250k dominios.
+***** Take
+Convertir dominios en hashes ordenados en flash y buscarlos por bisección es el truco correcto para un chip sin RAM de sobra, y el README es honesto sobre el coste: cerca de un dominio sobrebloqueado con 537k entradas, corregible desde el panel. La cifra discutible son los 10 ms por consulta que señalan jolux y fwip. Afectan a cada consulta DNS no cacheada, así que su importancia depende por completo de cuánto cachee ya tu resolver.
+***** Comments
+- Tengo un Pi-hole con entre 14 y 16M de dominios bloqueados, pero casi estoy pasando a una mentalidad de lista de permitidos. Esto probablemente funcionaría mejor para eso. Me pregunto si las partes buenas de internet cabrían en una lista de 140k.
+- El README plantea las colisiones de hash al revés. Que dos dominios bloqueados compartan hash no es problema, los dos deben bloquearse. Las colisiones importan por los falsos positivos, si hash(google.com) es igual a hash(adserver.com).
+- ¿10 ms? Madre mía, qué lento.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ESP32-C3 Adblock
+***** TLDR
+Ein DNS-Sinkhole nach Pi-hole-Art auf einem 2-Dollar-ESP32-C3 mit 4 MB Flash und ohne PSRAM. Statt Domainstrings im RAM zu halten, speichert es jede gesperrte Domain als 5-Byte-FNV-1a-Hash (40 Bit), sortiert im Flash und per Binärsuche abgefragt: etwa 18 Flash-Lesezugriffe und rund 10 ms pro Abfrage, bei etwa 50 KB RAM-Verbrauch. 140.000 Domains passen in rund 0,7 MB; die "ultimate"-Liste mit 537k passt auch, um den Preis von etwa einer Hash-Kollision, also einer unglücklichen Domain, die zu viel blockiert wird. Gesperrte Abfragen bekommen 0.0.0.0, alles andere geht an einen Upstream-Resolver, Subdomains gesperrter Domains werden mitgesperrt. Ein Dashboard unter c3adblock.local liefert Statistiken je Client, manuelle Sperr- und Erlaubnislisten, OTA-Updates und geplante Listen-Downloads, mit Basic Auth plus eigenem Header auf schreibenden Endpunkten. Zwei OTA-Slots für Rollback senken die Kapazität auf etwa 250k Domains.
+***** Take
+Domains als Hashes sortiert im Flash abzulegen und binär zu suchen, ist für einen Chip ohne RAM-Reserven der richtige Trick, und die README benennt den Preis ehrlich: bei 537k Einträgen etwa eine überblockte Domain, über das Dashboard korrigierbar. Streitwert hat die Zahl, die jolux und fwip nennen: 10 ms pro Abfrage. Sie fallen bei jeder nicht gecachten DNS-Anfrage an, ob das stört, hängt also vollständig davon ab, wie viel dein Resolver ohnehin cacht.
+***** Comments
+- Ich betreibe ein Pi-hole mit 14 bis 16 Mio. gesperrten Domains, gehe aber fast zu einer Allowlist-Denkweise über. Dafür wäre das hier wahrscheinlich besser geeignet. Ich frage mich, ob die guten Teile des Internets in eine 140k-Liste passen.
+- Die README dreht die Sache mit den Hash-Kollisionen um. Dass zwei gesperrte Domains denselben Hash haben, ist kein Problem, beide sollen gesperrt werden. Kollisionen zählen bei False Positives, wenn hash(google.com) gleich hash(adserver.com) ist.
+- 10 ms? Meine Güte, das ist langsam.
