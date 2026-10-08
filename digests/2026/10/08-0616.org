@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-10-08 06:16 UTC
+#+DATE: 2026-10-08T06:16:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Thorium clocks start ticking, Cleo's impossible integrals turn out to be a sock puppet, and a 15-year hunt for a band that charted once
+
+* Highlights
+- TU Wien's thorium-229 nuclear clock reaches low 10^-14 and tightens dark matter bounds by up to 1000x
+- Cleo, the Math Stack Exchange oracle, was a developer running both sides of the thread
+- Hundred Rabbits: a sailboat, a solar budget, and a 16-bit VM you can rebuild from a short spec
+- Embedded Swift boots on QEMU's aarch64 virt machine and echoes serial input
+- Salvage charted at #47 in 2006; the producer's credits page ended a 15-year search
+
+* Stories
+
+** In Vienna and Beijing, the first (thorium) nuclear clocks begin to tick :physics:metrology:dark-matter:science:
+:PROPERTIES:
+:ID:       49996406
+:URL:      https://www.nytimes.com/2026/10/07/science/first-nuclear-clocks-thorium-229.html
+:HN_URL:   https://news.ycombinator.com/item?id=49996406
+:POINTS:   73
+:COMMENTS: 10
+:BY:       gumby
+:END:
+
+*** TLDR
+［NYT is paywalled; this is from the Nature paper a commenter linked.］ A TU Wien group built a stand-alone clock that ticks on a nuclear transition in thorium-229 rather than on electron shells, pairing a cavity-stabilized laser for short-term stability with the thorium crystal for long-term feedback. They report fractional frequency instability in the low 10^-14 range within a single run, but day-to-day reproducibility only around 5x10^-13, which they blame on the crystal shifting when the laser is realigned. They used it to hunt for periodic drift in the transition frequency and set limits on scalar dark matter couplings 10 to 1000 times tighter than atomic clock experiments.
+
+*** Take
+The clock loses to the best optical atomic clocks on stability and still wins the physics, which is the whole argument for building it. The thorium transition sits where competing nuclear forces nearly cancel, so it reacts far more strongly to any shift in fundamental constants, and a mediocre clock on a hypersensitive transition beats an excellent clock on a dull one. The 5x10^-13 reproducibility number is the honest part: right now the limiting component is someone nudging the crystal.
+
+*** Comments
+
+**** dgacmu
+The actual journal article, since NYT didn't bother linking to it: nature.com/articles/s41586-026-11084-4
+
+**** soltanov
+Standard atomic clocks probe outer-shell electrons sensitive to stray EM noise. Locking directly to the nucleus is how you actually kill environment drift.
+
+**** austin-cheney
+Thorium is probably created by neutron stars or supernovae, making it one of the rarest elements in the galaxy. But it's quite abundant on Earth, maybe 3x as abundant as uranium in the crust.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+维也纳与北京，首批（钍）核钟开始计时
+***** TLDR
+［《纽约时报》有付费墙，以下内容来自评论者贴出的 Nature 论文。］ 维也纳工业大学的一个团队搭建了一台独立的时钟，它基于钍-229 的核跃迁而非电子壳层计时，用腔稳激光提供短期稳定性，用钍晶体做长期反馈。他们报告单次连续运行内的分数频率不稳定度达到 10^-14 量级的低位，但不同日期之间的可重复性只有约 5×10^-13，原因是重新校准激光时晶体位置发生移动。他们用它搜寻跃迁频率的周期性漂移，并把标量暗物质耦合的限制收紧到比原子钟实验严格 10 到 1000 倍。
+***** Take
+这台钟在稳定性上输给最好的光学原子钟，却在物理上取胜，这正是造它的全部理由。钍的跃迁恰好处在几种核力几乎相互抵消的位置，因此对基本常数的任何变化反应都强烈得多，一台普通的钟配上超敏跃迁，胜过一台优秀的钟配上平庸跃迁。5×10^-13 这个可重复性数字是最诚实的部分：目前的瓶颈元件是那个碰到晶体的人。
+***** Comments
+- 既然《纽约时报》懒得给出链接，这是真正的期刊论文：nature.com/articles/s41586-026-11084-4
+- 标准原子钟探测的是外层电子，容易受杂散电磁噪声影响。直接锁定原子核才是真正消除环境漂移的办法。
+- 钍大概是由中子星或超新星产生的，这使它成为银河系中最稀有的元素之一。但它在地球上相当丰富，在地壳中的含量也许是铀的三倍。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ウィーンと北京で、最初の（トリウム）核時計が動き出す
+***** TLDR
+［NYTは有料。以下はコメント欄で挙がったNature論文より。］ ウィーン工科大学のグループが、電子殻ではなくトリウム229の核遷移で時を刻む独立型の時計を構築した。短期安定性はキャビティ安定化レーザー、長期安定性はトリウム結晶によるフィードバックで担う。連続運転中の分数周波数不安定度は10^-14台の低い値に達したが、日をまたぐ再現性は約5×10^-13にとどまり、レーザー再調整時に結晶位置がずれることが原因だという。これを用いて遷移周波数の周期的なずれを探索し、スカラー暗黒物質の結合に対する制限を原子時計実験より10倍から1000倍厳しくした。
+***** Take
+この時計は安定性では最良の光格子時計に負け、それでも物理では勝つ。これが建造の理由すべてだ。トリウムの遷移は複数の核力がほぼ打ち消し合う位置にあり、基本定数のわずかな変化に桁違いに強く反応する。平凡な時計に超敏感な遷移を組み合わせたほうが、優秀な時計に鈍い遷移を組み合わせるより強い。5×10^-13という再現性の数字が最も正直な部分だ。現在の律速部品は結晶に触る人間である。
+***** Comments
+- NYTがリンクを張らないので、実際の論文はこちら：nature.com/articles/s41586-026-11084-4
+- 標準的な原子時計は外殻電子を調べるため、迷走する電磁ノイズに弱い。核に直接ロックするのが環境ドリフトを本当に消す方法だ。
+- トリウムはおそらく中性子星や超新星で作られるため、銀河では最も希少な元素のひとつだ。しかし地球上では比較的豊富で、地殻中ではウランの3倍ほどあるらしい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+빈과 베이징에서 첫 (토륨) 핵시계가 작동을 시작하다
+***** TLDR
+［NYT는 유료. 아래 내용은 댓글에 올라온 네이처 논문에서 가져왔다.］ 빈 공대 연구팀이 전자 껍질이 아니라 토륨-229의 핵 전이로 시간을 세는 독립형 시계를 만들었다. 단기 안정성은 공동 안정화 레이저가, 장기 안정성은 토륨 결정 피드백이 담당한다. 연속 운전 중 분수 주파수 불안정도는 10^-14 초반에 이르렀지만, 날짜 간 재현성은 약 5×10^-13에 머물렀고 레이저를 재정렬할 때 결정 위치가 흔들리는 탓이라고 한다. 이를 이용해 전이 주파수의 주기적 변동을 탐색하고, 스칼라 암흑물질 결합 한계를 원자시계 실험보다 10배에서 1000배 더 조였다.
+***** Take
+이 시계는 안정성에서 최고의 광학 원자시계에 지고도 물리에서 이긴다. 그게 이걸 만드는 이유 전부다. 토륨 전이는 서로 다른 핵력이 거의 상쇄되는 지점에 놓여 있어 기본 상수의 작은 변화에도 훨씬 크게 반응한다. 평범한 시계에 초민감 전이를 붙이는 쪽이 훌륭한 시계에 둔한 전이를 붙이는 쪽을 이긴다. 5×10^-13이라는 재현성 수치가 가장 솔직한 부분이다. 지금 성능을 제한하는 부품은 결정을 건드리는 사람이다.
+***** Comments
+- NYT가 링크를 걸지 않았으니 실제 논문은 여기: nature.com/articles/s41586-026-11084-4
+- 표준 원자시계는 외곽 전자를 측정하므로 떠돌아다니는 전자기 잡음에 약하다. 핵에 직접 잠그는 것이 환경 드리프트를 실제로 없애는 방법이다.
+- 토륨은 아마 중성자별이나 초신성에서 만들어져 은하에서 가장 희귀한 원소 중 하나다. 그런데 지구에서는 꽤 풍부해서 지각 함량이 우라늄의 3배쯤 된다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+En Viena y Pekín empiezan a funcionar los primeros relojes nucleares (de torio)
+***** TLDR
+［El NYT está tras un muro de pago; esto sale del artículo de Nature que enlazó un comentarista.］ Un grupo de la TU Wien construyó un reloj autónomo que marca el tiempo con una transición nuclear del torio-229 en vez de con capas electrónicas, combinando un láser estabilizado por cavidad para la estabilidad a corto plazo con el cristal de torio para la realimentación a largo plazo. Reportan una inestabilidad de frecuencia fraccional en la parte baja de 10^-14 dentro de una misma sesión, pero una reproducibilidad entre días de solo unos 5x10^-13, que atribuyen al desplazamiento del cristal al realinear el láser. Con él buscaron derivas periódicas en la frecuencia de transición y fijaron límites a los acoplamientos de materia oscura escalar entre 10 y 1000 veces más estrictos que los de relojes atómicos.
+***** Take
+El reloj pierde en estabilidad frente a los mejores relojes atómicos ópticos y aun así gana en física, que es toda la razón para construirlo. La transición del torio está justo donde las fuerzas nucleares casi se cancelan, así que reacciona muchísimo más a cualquier cambio en las constantes fundamentales, y un reloj mediocre sobre una transición hipersensible le gana a un reloj excelente sobre una aburrida. El 5x10^-13 de reproducibilidad es la parte honesta: hoy el componente limitante es alguien moviendo el cristal.
+***** Comments
+- El artículo real, ya que el NYT no se molestó en enlazarlo: nature.com/articles/s41586-026-11084-4
+- Los relojes atómicos estándar sondean electrones de capa externa, sensibles al ruido electromagnético parásito. Engancharse directamente al núcleo es como de verdad eliminas la deriva ambiental.
+- El torio probablemente se forma en estrellas de neutrones o supernovas, lo que lo hace uno de los elementos más raros de la galaxia. Pero en la Tierra es bastante abundante, quizá 3x más que el uranio en la corteza.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+In Wien und Peking beginnen die ersten (Thorium-)Kernuhren zu ticken
+***** TLDR
+［Die NYT steht hinter einer Bezahlschranke; das Folgende stammt aus dem Nature-Artikel, den ein Kommentator verlinkt hat.］ Eine Gruppe der TU Wien hat eine eigenständige Uhr gebaut, die auf einem Kernübergang in Thorium-229 statt auf Elektronenschalen tickt, und kombiniert dafür einen resonatorstabilisierten Laser für die Kurzzeitstabilität mit dem Thoriumkristall für die Langzeitrückkopplung. Innerhalb eines Durchlaufs erreichen sie eine relative Frequenzinstabilität im unteren 10^-14-Bereich, die Reproduzierbarkeit zwischen Messtagen liegt aber nur bei etwa 5x10^-13, was sie auf das Verrutschen des Kristalls beim Neuausrichten des Lasers zurückführen. Damit suchten sie nach periodischen Verschiebungen der Übergangsfrequenz und setzten Grenzen für Kopplungen an skalare dunkle Materie, die 10- bis 1000-mal strenger sind als bei Atomuhrexperimenten.
+***** Take
+Die Uhr verliert bei der Stabilität gegen die besten optischen Atomuhren und gewinnt trotzdem bei der Physik, und genau das ist der Grund, sie zu bauen. Der Thoriumübergang liegt dort, wo konkurrierende Kernkräfte sich fast aufheben, reagiert also weit stärker auf jede Änderung der Naturkonstanten. Eine mittelmäßige Uhr auf einem hochempfindlichen Übergang schlägt eine exzellente Uhr auf einem langweiligen. Die 5x10^-13 sind der ehrliche Teil: derzeit ist das begrenzende Bauteil jemand, der den Kristall anstößt.
+***** Comments
+- Der eigentliche Fachartikel, weil die NYT ihn nicht verlinkt hat: nature.com/articles/s41586-026-11084-4
+- Gewöhnliche Atomuhren tasten Außenelektronen ab, die auf Streufelder reagieren. Direkt auf den Kern zu locken ist der Weg, Umgebungsdrift wirklich zu beseitigen.
+- Thorium entsteht wohl in Neutronensternen oder Supernovae und ist damit eines der seltensten Elemente der Galaxie. Auf der Erde ist es aber recht häufig, in der Kruste etwa 3x so häufig wie Uran.
+** Cleo (mathematician) :math:internet:mystery:stackexchange:
+:PROPERTIES:
+:ID:       49982445
+:URL:      https://en.wikipedia.org/wiki/Cleo_(mathematician)
+:HN_URL:   https://news.ycombinator.com/item?id=49982445
+:POINTS:   111
+:COMMENTS: 15
+:BY:       djoldman
+:END:
+
+*** TLDR
+Cleo was a Math Stack Exchange account that posted 39 answers between 2013 and 2015, almost all hard closed-form integrals, giving only the final result with no working and claiming a medical condition that ruled out long discussions. The famous one was an integral neither Mathematica nor Maple could do, answered correctly in about four and a half hours. In January 2025 a YouTuber's investigation turned up a shared backup email between Cleo and the account that had posted that question, and Vladimir Reshetnikov, a software developer, confirmed he was Cleo. He also ran the accounts asking some of the questions, to draw attention to problems the site was ignoring.
+
+*** Take
+The reveal is better than the mystery. Reshetnikov was working both sides of the thread, so the legendary four-hour solve was partly staged, and the "anonymous genius" framing survived a decade mostly because nobody checked the questioners. snailmailman's comparison to current AI proof dumps is the right one: a correct answer with no derivation teaches nobody, whether a persona or a model produced it.
+
+*** Comments
+
+**** snailmailman
+There are interesting parallels between what the Cleo account did and what the large AI companies are doing with proofs now. There may be value in the answers, but for some the value is in understanding how to get from problem to solution.
+
+**** epcoa
+Were any of the 39 answers to a question that was not likely from a sock puppet? It doesn't make the solutions less impressive, but it's a relevant detail left out of the Wikipedia summary.
+
+**** DavidSJ
+The page credits a late-2023 analysis, but I and others were on the scent at least as far back as April 2023.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Cleo（数学家）
+***** TLDR
+Cleo 是 Math Stack Exchange 上的一个账号，2013 到 2015 年间发了 39 个回答，几乎全是难解的闭式积分，只给最终结果、不给过程，并声称有健康问题无法参与长篇讨论。最著名的一次是 Mathematica 和 Maple 都算不出的积分，他在约四个半小时内给出了正确答案。2025 年 1 月，一位 YouTuber 的调查发现 Cleo 与发布那道题的账号共用备用邮箱，软件开发者 Vladimir Reshetnikov 随后确认自己就是 Cleo。他还运营着提问的那些账号，目的是让站内被忽视的问题获得关注。
+***** Take
+揭晓比谜题本身更精彩。Reshetnikov 同时扮演提问和回答两边，所以那场传奇的四小时解题有一部分是自己安排的，而"匿名天才"的叙事能撑十年，主要是因为没人去查提问者。snailmailman 把它和当下的 AI 证明倾倒作比较是对的：没有推导过程的正确答案教不了任何人，无论产出它的是一个人设还是一个模型。
+***** Comments
+- Cleo 账号做的事和如今大型 AI 公司在证明上做的事之间有有趣的相似之处。答案也许有价值，但对有些人来说，价值在于理解如何从问题走到答案。
+- 那 39 个回答里，有哪一个对应的问题不像是出自马甲账号？这不会让解答本身不那么出色，但这是维基百科摘要里漏掉的相关细节。
+- 条目把功劳给了 2023 年底的分析，但我和其他人至少从 2023 年 4 月就已经在追查了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Cleo（数学者）
+***** TLDR
+CleoはMath Stack Exchangeのアカウントで、2013年から2015年にかけて39件の回答を投稿した。ほぼすべてが難しい閉形式の積分で、途中の計算を示さず最終結果のみを提示し、長い議論ができない健康上の事情があると述べていた。有名な例はMathematicaもMapleも解けなかった積分で、約4時間半で正答を出した。2025年1月、あるYouTuberの調査でCleoとその問題を投稿したアカウントが同じ予備メールアドレスを共有していることが判明し、ソフトウェア開発者のVladimir Reshetnikovが自分がCleoだと認めた。彼は質問側のアカウントも運用しており、サイトで注目されない問題に関心を集める狙いだったという。
+***** Take
+謎より種明かしのほうが面白い。Reshetnikovは質問と回答の両側を動かしていたので、伝説の4時間半の解答は一部が仕込みだった。「匿名の天才」という枠組みが10年もったのは、誰も質問者側を確認しなかったからだ。snailmailmanが現在のAIによる証明投下と比べたのは的を射ている。導出のない正答は誰にも何も教えない。生んだのが人格設定でもモデルでも同じだ。
+***** Comments
+- Cleoのアカウントがやったことと、いま大手AI企業が証明でやっていることには興味深い共通点がある。答えに価値はあるかもしれないが、人によっては問題から解へ至る道筋の理解にこそ価値がある。
+- 39件の回答のうち、ソックパペット由来でなさそうな質問に答えたものはあったのか。解答の見事さは変わらないが、ウィキペディアの要約から落ちている重要な点だ。
+- 記事は2023年末の分析を功績としているが、私も他の人も少なくとも2023年4月には追跡を始めていた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Cleo (수학자)
+***** TLDR
+Cleo는 2013년부터 2015년까지 Math Stack Exchange에 39개의 답을 올린 계정이다. 대부분 어려운 닫힌 형식 적분이었고, 풀이 과정 없이 최종 결과만 제시하며 긴 토론이 불가능한 건강 사정이 있다고 밝혔다. 가장 유명한 사례는 Mathematica도 Maple도 풀지 못한 적분을 약 4시간 30분 만에 정확히 답한 것이다. 2025년 1월 한 유튜버의 조사로 Cleo와 그 문제를 올린 계정이 같은 예비 이메일을 공유한 사실이 드러나고, 소프트웨어 개발자 Vladimir Reshetnikov가 자신이 Cleo라고 확인했다. 그는 질문을 올린 계정들도 운영했는데, 사이트에서 외면받던 문제에 관심을 끌려는 의도였다고 한다.
+***** Take
+수수께끼보다 정답 공개가 더 재미있다. Reshetnikov는 질문과 답 양쪽을 다 움직였으니 전설적인 4시간 반 풀이는 일부가 연출이었다. "익명의 천재" 서사가 10년을 버틴 건 아무도 질문자 쪽을 확인하지 않았기 때문이다. snailmailman이 지금의 AI 증명 투하와 비교한 것은 적절하다. 유도 과정 없는 정답은 누구도 가르치지 못한다. 그것을 만든 것이 설정된 인격이든 모델이든 마찬가지다.
+***** Comments
+- Cleo 계정이 한 일과 지금 대형 AI 기업들이 증명으로 하는 일 사이에는 흥미로운 유사점이 있다. 답에 가치가 있을 수는 있지만, 어떤 사람에게는 문제에서 해답으로 가는 과정의 이해에 가치가 있다.
+- 39개의 답 중 소셜 가짜 계정이 올린 것 같지 않은 질문에 달린 것이 하나라도 있었나? 해답의 인상적인 점이 줄어드는 건 아니지만, 위키백과 요약에서 빠진 중요한 사실이다.
+- 항목은 2023년 말의 분석을 공로로 적지만, 나와 다른 사람들은 적어도 2023년 4월부터 추적하고 있었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cleo (matemática)
+***** TLDR
+Cleo era una cuenta de Math Stack Exchange que publicó 39 respuestas entre 2013 y 2015, casi todas integrales difíciles en forma cerrada, dando solo el resultado final sin desarrollo y alegando una condición médica que le impedía discusiones largas. La más célebre fue una integral que ni Mathematica ni Maple resolvían, respondida correctamente en unas cuatro horas y media. En enero de 2025, la investigación de un youtuber reveló un correo de respaldo compartido entre Cleo y la cuenta que había publicado esa pregunta, y el desarrollador de software Vladimir Reshetnikov confirmó que era Cleo. También manejaba las cuentas que hacían algunas de las preguntas, para atraer atención hacia problemas que el sitio ignoraba.
+***** Take
+La revelación es mejor que el misterio. Reshetnikov movía los dos lados del hilo, así que la legendaria resolución en cuatro horas estaba en parte montada, y el marco del "genio anónimo" sobrevivió una década sobre todo porque nadie revisó a los que preguntaban. La comparación de snailmailman con los volcados de pruebas de la IA actual es la correcta: una respuesta correcta sin derivación no enseña a nadie, la produzca un personaje o un modelo.
+***** Comments
+- Hay paralelismos interesantes entre lo que hizo la cuenta Cleo y lo que hacen ahora las grandes empresas de IA con las demostraciones. Puede haber valor en las respuestas, pero para algunos el valor está en entender cómo se llega del problema a la solución.
+- ¿Alguna de las 39 respuestas correspondía a una pregunta que no viniera probablemente de una cuenta títere? No hace menos impresionantes las soluciones, pero es un detalle relevante que falta en el resumen de Wikipedia.
+- La página atribuye el mérito a un análisis de finales de 2023, pero yo y otros estábamos sobre la pista al menos desde abril de 2023.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Cleo (Mathematikerin)
+***** TLDR
+Cleo war ein Konto auf Math Stack Exchange, das zwischen 2013 und 2015 39 Antworten einstellte, fast alle zu schwierigen Integralen in geschlossener Form, jeweils nur mit dem Endergebnis ohne Rechenweg und mit dem Hinweis auf eine Erkrankung, die längere Diskussionen ausschließe. Berühmt wurde ein Integral, das weder Mathematica noch Maple lösten und das in etwa viereinhalb Stunden korrekt beantwortet wurde. Im Januar 2025 ergab die Recherche eines YouTubers, dass Cleo und das Konto, das jene Frage gestellt hatte, dieselbe Ersatz-E-Mail nutzten; der Softwareentwickler Vladimir Reshetnikov bestätigte, Cleo zu sein. Er führte auch die fragenden Konten, um Aufmerksamkeit auf Probleme zu lenken, die die Seite überging.
+***** Take
+Die Auflösung ist besser als das Rätsel. Reshetnikov bediente beide Seiten des Threads, die legendäre Lösung in viereinhalb Stunden war also teils gestellt, und das Narrativ vom anonymen Genie hielt vor allem deshalb ein Jahrzehnt, weil niemand die Fragesteller prüfte. Snailmailmans Vergleich mit heutigen KI-Beweisabwürfen trifft zu: eine richtige Antwort ohne Herleitung lehrt niemanden, egal ob eine Kunstfigur oder ein Modell sie liefert.
+***** Comments
+- Es gibt interessante Parallelen zwischen dem, was das Cleo-Konto tat, und dem, was die großen KI-Firmen jetzt mit Beweisen machen. Die Antworten können Wert haben, aber für manche liegt der Wert darin, zu verstehen, wie man vom Problem zur Lösung kommt.
+- War eine der 39 Antworten auf eine Frage, die wahrscheinlich nicht von einem Sockenpuppen-Konto kam? Das macht die Lösungen nicht weniger beeindruckend, aber es ist ein relevantes Detail, das in der Wikipedia-Zusammenfassung fehlt.
+- Die Seite schreibt das einer Analyse von Ende 2023 zu, aber ich und andere waren mindestens seit April 2023 auf der Spur.
+** Living off-grid: Hundred Rabbits :offgrid:uxn:software:minimalism:
+:PROPERTIES:
+:ID:       49970767
+:URL:      https://100r.ca/site/home.html
+:HN_URL:   https://news.ycombinator.com/item?id=49970767
+:POINTS:   123
+:COMMENTS: 24
+:BY:       Muhammad523
+:END:
+
+*** TLDR
+Hundred Rabbits is Rek and Devine, who live and work aboard the sailboat Pino on solar power with connectivity that comes and goes. The site is their logbook plus the output: Uxn, a small 16-bit virtual machine with its own assembly language, emulators for it, games like Donsol and Oquonie, utilities, the GrimGrains recipe site, and Rabbit Waves, an interactive comic teaching seafaring. The common thread is offline-first tooling small enough that they can rebuild and repair it themselves.
+
+*** Take
+Separate the aesthetic from the engineering and the engineering is the interesting half. Uxn exists because a solar budget and a laptop that might die are real constraints, and software written against a spec short enough to reimplement survives both. The transferable part is not the boat. It is choosing a target small enough that you can fix it when it breaks, which is a standard most of us gave up on without noticing.
+
+*** Comments
+
+**** newtypecola
+I liked the part in their log where they took apart an old hat to figure out how to make a new one and compared clothing to open-source software. Being able to understand, repair, and recreate the things you depend on.
+
+**** soltanov
+Seeing their life on the water makes me want to close every browser tab, disconnect the internet, and just build things slowly again.
+
+**** cavoirom
+They are living their dream and doing incredible work.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+离网生活：Hundred Rabbits
+***** TLDR
+Hundred Rabbits 是 Rek 和 Devine 两人，他们住在帆船 Pino 上靠太阳能工作，网络时断时续。网站既是他们的航海日志，也是成果展示：Uxn，一台带有自己汇编语言的小型 16 位虚拟机，以及它的模拟器、Donsol 和 Oquonie 等游戏、各种小工具、GrimGrains 食谱站，还有教航海技能的互动漫画 Rabbit Waves。贯穿其中的是离线优先、且小到他们自己能重建和修复的工具。
+***** Take
+把美学和工程分开看，工程那一半才是有意思的。Uxn 之所以存在，是因为太阳能预算和随时可能报废的笔记本是真实约束，而写在一份短到能重新实现的规范之上的软件能扛过这两者。可迁移的部分不是那条船，而是选择一个小到坏了你自己能修的目标，这个标准我们大多数人在不知不觉中已经放弃了。
+***** Comments
+- 我喜欢他们日志里拆开一顶旧帽子研究怎么做新帽子的那段，还把衣物和开源软件作了类比。能够理解、修复并重新做出你所依赖的东西。
+- 看到他们在水上的生活，我想关掉所有浏览器标签页、断开网络，重新慢慢地做东西。
+- 他们正过着自己的梦想生活，而且做出了了不起的作品。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+オフグリッドで暮らす：Hundred Rabbits
+***** TLDR
+Hundred RabbitsはRekとDevineの二人で、ヨットPinoの上で太陽光発電に頼って暮らし働き、接続は途切れがちだ。サイトは航海日誌と成果物の両方になっている。独自のアセンブリ言語を持つ小型16ビット仮想機械Uxn、そのエミュレータ、DonsolやOquonieなどのゲーム、各種ユーティリティ、レシピサイトGrimGrains、航海術を教える対話型コミックRabbit Waves。共通するのは、自分たちで作り直して直せるほど小さいオフラインファーストの道具立てだ。
+***** Take
+美学と工学を切り分けると、面白いのは工学の側だ。Uxnが存在するのは、太陽光の電力枠といつ壊れるかわからないノートPCが現実の制約だからで、再実装できるほど短い仕様に沿って書かれたソフトはその両方を生き延びる。移植可能な部分は船ではない。壊れたときに自分で直せるほど小さい対象を選ぶという基準であり、我々の多くは気づかないうちにその基準を捨てている。
+***** Comments
+- 古い帽子を分解して新しい帽子の作り方を調べ、衣服をオープンソースソフトウェアに例えたログの箇所が好きだ。依存しているものを理解し、修理し、再現できるということ。
+- 水上の彼らの暮らしを見ると、ブラウザのタブを全部閉じ、ネットを切って、またゆっくり物を作りたくなる。
+- 彼らは夢を生きていて、しかも見事な仕事をしている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+오프그리드 생활: Hundred Rabbits
+***** TLDR
+Hundred Rabbits는 Rek와 Devine 두 사람으로, 요트 Pino에서 태양광 전력에 의존해 살고 일하며 연결은 끊기기 일쑤다. 사이트는 항해 일지이면서 결과물 목록이다. 자체 어셈블리 언어를 가진 작은 16비트 가상 머신 Uxn과 그 에뮬레이터, Donsol과 Oquonie 같은 게임, 각종 유틸리티, 요리 사이트 GrimGrains, 항해술을 가르치는 인터랙티브 만화 Rabbit Waves. 공통점은 직접 다시 만들고 고칠 수 있을 만큼 작은 오프라인 우선 도구들이다.
+***** Take
+미학과 공학을 분리하면 재미있는 쪽은 공학이다. Uxn이 존재하는 이유는 태양광 전력 예산과 언제 죽을지 모르는 노트북이 실제 제약이기 때문이고, 다시 구현할 수 있을 만큼 짧은 명세에 맞춰 쓴 소프트웨어는 그 둘을 모두 넘긴다. 옮겨올 수 있는 부분은 배가 아니다. 고장 났을 때 직접 고칠 수 있을 만큼 작은 대상을 고르는 기준이고, 우리 대부분은 그 기준을 모르는 사이에 포기했다.
+***** Comments
+- 낡은 모자를 분해해 새 모자 만드는 법을 알아내고 옷을 오픈소스 소프트웨어에 비유한 일지 대목이 좋았다. 의존하는 것을 이해하고 수리하고 다시 만들 수 있다는 것.
+- 물 위에서의 그들의 삶을 보면 브라우저 탭을 모두 닫고 인터넷을 끊고 다시 천천히 뭔가를 만들고 싶어진다.
+- 그들은 자기 꿈을 살고 있고, 게다가 훌륭한 작업을 하고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Vivir fuera de la red: Hundred Rabbits
+***** TLDR
+Hundred Rabbits son Rek y Devine, que viven y trabajan a bordo del velero Pino con energía solar y una conectividad que va y viene. El sitio es su cuaderno de bitácora y también el resultado: Uxn, una pequeña máquina virtual de 16 bits con su propio lenguaje ensamblador, emuladores para ella, juegos como Donsol y Oquonie, utilidades, el sitio de recetas GrimGrains y Rabbit Waves, un cómic interactivo que enseña navegación. El hilo común son herramientas offline-first lo bastante pequeñas para que ellos mismos puedan reconstruirlas y repararlas.
+***** Take
+Separa la estética de la ingeniería y la ingeniería es la mitad interesante. Uxn existe porque un presupuesto solar y un portátil que puede morir son restricciones reales, y el software escrito contra una especificación corta como para reimplementarla sobrevive a ambas. La parte transferible no es el barco: es elegir un objetivo lo bastante pequeño para poder arreglarlo cuando se rompe, un criterio que la mayoría abandonamos sin darnos cuenta.
+***** Comments
+- Me gustó la parte del diario en que desarmaron un sombrero viejo para entender cómo hacer uno nuevo y compararon la ropa con el software libre. Poder entender, reparar y recrear las cosas de las que dependes.
+- Ver su vida en el agua me da ganas de cerrar todas las pestañas del navegador, desconectar internet y volver a construir cosas despacio.
+- Están viviendo su sueño y haciendo un trabajo increíble.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Leben ohne Netz: Hundred Rabbits
+***** TLDR
+Hundred Rabbits sind Rek und Devine, die an Bord des Segelboots Pino mit Solarstrom leben und arbeiten, bei Verbindung, die kommt und geht. Die Seite ist ihr Logbuch und gleichzeitig das Ergebnis: Uxn, eine kleine 16-Bit-virtuelle Maschine mit eigener Assemblersprache, Emulatoren dafür, Spiele wie Donsol und Oquonie, Hilfsprogramme, die Rezeptseite GrimGrains und Rabbit Waves, ein interaktiver Comic über Seemannschaft. Gemeinsamer Faden sind Offline-first-Werkzeuge, klein genug, dass sie sie selbst neu bauen und reparieren können.
+***** Take
+Trennt man Ästhetik von Technik, ist die Technik die interessante Hälfte. Uxn existiert, weil ein Solarbudget und ein Laptop, der ausfallen kann, echte Randbedingungen sind, und Software gegen eine Spezifikation, die kurz genug zum Neuimplementieren ist, übersteht beides. Übertragbar ist nicht das Boot, sondern ein Ziel zu wählen, das klein genug ist, um es bei einem Defekt selbst zu reparieren. Diesen Maßstab haben die meisten von uns unbemerkt aufgegeben.
+***** Comments
+- Mir hat die Stelle im Logbuch gefallen, an der sie einen alten Hut auseinandernehmen, um herauszufinden, wie man einen neuen macht, und Kleidung mit Open-Source-Software vergleichen. Verstehen, reparieren und neu herstellen können, worauf man angewiesen ist.
+- Ihr Leben auf dem Wasser zu sehen, macht Lust, alle Browser-Tabs zu schließen, das Internet zu trennen und wieder langsam Dinge zu bauen.
+- Sie leben ihren Traum und machen dabei beeindruckende Arbeit.
+** A minimal kernel in Swift, running in QEMU :swift:kernel:embedded:qemu:
+:PROPERTIES:
+:ID:       49977351
+:URL:      https://carette.xyz/posts/minimal_swift_kernel_on_qemu/
+:HN_URL:   https://news.ycombinator.com/item?id=49977351
+:POINTS:   56
+:COMMENTS: 10
+:BY:       surprisetalk
+:END:
+
+*** TLDR
+A walkthrough of a bare-metal kernel written in Embedded Swift, the subset that drops the standard library and assumes no operating system, targeting aarch64-none-none-elf on QEMU's virt machine. The kernel prints a greeting, polls the serial device for characters, echoes them and handles newlines. The friction was in the plumbing: getting the linker script to place ELF metadata sections correctly, supplying putchar and memmove by hand, declaring C-compatible entry points so assembly can call into Swift, and setting up memory layout and the stack. The author stops there and lists interrupts and BSS initialization as future work.
+
+*** Take
+The value is not that the world needs a Swift kernel, it is a clean inventory of what Embedded Swift still makes you build yourself. No putchar, no memmove, manual linker script fights over metadata sections. It ends at a serial echo loop and says so plainly, which puts it ahead of most posts titled "I wrote an OS".
+
+*** Comments
+
+**** aseipp
+Embedded Swift is honestly very cool. Good niche since embedded dev could use another tool, and it doesn't suffer the usual Swift complaints about cross-platform support and slow compiles because it is so small.
+
+**** mannyv
+Just pound values into registers! That's how i/o worked before DMA on many systems.
+
+**** soltanov
+Good proof of concept showing Embedded Swift can target freestanding ARM without runtime bloat.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用 Swift 写的最小内核，跑在 QEMU 上
+***** TLDR
+一篇用 Embedded Swift 写裸机内核的实践记录。Embedded Swift 是去掉标准库、假定没有操作系统的 Swift 子集，本文目标平台是 QEMU virt 机器上的 aarch64-none-none-elf。内核打印一条欢迎信息，轮询串口读取字符，回显并处理换行。麻烦都在底层衔接上：让链接脚本正确安放 ELF 元数据段、手工提供 putchar 和 memmove、声明 C 兼容入口让汇编调用 Swift、以及安排内存布局和栈。作者就此停下，把中断处理和 BSS 初始化列为后续工作。
+***** Take
+价值不在于世界需要一个 Swift 内核，而在于它清点了 Embedded Swift 仍然要你自己搭的那些东西：没有 putchar、没有 memmove、还要手动和链接脚本争元数据段。它停在一个串口回显循环，并且直说了这一点，这就已经强过大多数标题写着"我写了个操作系统"的文章。
+***** Comments
+- Embedded Swift 确实很酷。这是个不错的切入点，嵌入式开发本来就需要多一种工具，而且因为它足够小，不会有大家常说的 Swift 跨平台支持差、编译慢这些毛病。
+- 直接往寄存器里塞值就完事！在很多系统上，DMA 之前的 I/O 就是这么干的。
+- 一个很好的概念验证，说明 Embedded Swift 能在不带运行时负担的情况下面向独立运行的 ARM。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Swiftで書いた最小カーネルをQEMUで動かす
+***** TLDR
+標準ライブラリを外しOSの存在を前提としないSwiftのサブセット、Embedded Swiftでベアメタルカーネルを書く手順の解説。対象はQEMUのvirtマシン上のaarch64-none-none-elf。カーネルは挨拶を表示し、シリアルをポーリングして文字を読み、エコーして改行を処理する。手間はすべて下回りにあった。リンカスクリプトでELFメタデータセクションを正しく配置すること、putcharとmemmoveを自分で用意すること、アセンブリからSwiftを呼べるようC互換のエントリポイントを宣言すること、メモリ配置とスタックの設定だ。著者はここで止め、割り込み処理とBSS初期化を今後の課題として挙げている。
+***** Take
+価値はSwift製カーネルが世に必要だという点ではなく、Embedded Swiftでいまも自分で用意しなければならないものの明快な棚卸しにある。putcharなし、memmoveなし、メタデータセクションを巡るリンカスクリプトとの手作業の格闘。シリアルのエコーループで終わり、それをはっきり書いている。その点で「OSを書いた」と題する記事の大半より上だ。
+***** Comments
+- Embedded Swiftは正直とても良い。組み込み開発にはもう一つ道具があってよいので良いニッチだし、小さいおかげでクロスプラットフォーム対応やコンパイルの遅さといったSwiftへの定番の不満も当てはまらない。
+- レジスタに値を叩き込むだけ！多くのシステムでDMA以前のI/Oはそうだった。
+- Embedded Swiftがランタイムの膨らみなしにフリースタンディングARMを狙えることを示す良い概念実証だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Swift로 쓴 최소 커널, QEMU에서 실행
+***** TLDR
+표준 라이브러리를 빼고 운영체제가 없다고 가정하는 Swift의 부분집합인 Embedded Swift로 베어메탈 커널을 만드는 과정을 다룬 글이다. 대상은 QEMU virt 머신의 aarch64-none-none-elf다. 커널은 인사말을 출력하고 시리얼을 폴링해 문자를 읽어 되돌려 보내며 줄바꿈을 처리한다. 고생은 전부 아래쪽 배관에 있었다. 링커 스크립트에서 ELF 메타데이터 섹션을 제대로 배치하기, putchar와 memmove를 손으로 제공하기, 어셈블리가 Swift를 호출할 수 있게 C 호환 진입점을 선언하기, 메모리 배치와 스택 설정하기다. 저자는 여기서 멈추고 인터럽트 처리와 BSS 초기화를 다음 과제로 적었다.
+***** Take
+가치는 세상이 Swift 커널을 필요로 한다는 데 있지 않고, Embedded Swift가 여전히 직접 만들게 하는 것들의 깔끔한 목록에 있다. putchar 없음, memmove 없음, 메타데이터 섹션을 두고 링커 스크립트와 손씨름. 시리얼 에코 루프에서 끝나고 그렇다고 분명히 적는다. 그 점만으로도 "운영체제를 만들었다"는 제목의 글 대부분보다 앞선다.
+***** Comments
+- Embedded Swift는 솔직히 아주 좋다. 임베디드 개발에 도구가 하나 더 있어도 좋으니 괜찮은 틈새이고, 워낙 작아서 크로스 플랫폼 지원이나 느린 컴파일 같은 Swift의 흔한 불만도 해당되지 않는다.
+- 레지스터에 값을 그냥 때려 넣으면 된다! 많은 시스템에서 DMA 이전의 I/O가 바로 그랬다.
+- Embedded Swift가 런타임 부담 없이 프리스탠딩 ARM을 겨냥할 수 있음을 보여주는 좋은 개념 증명이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un kernel mínimo en Swift, corriendo en QEMU
+***** TLDR
+Un recorrido por un kernel bare-metal escrito en Embedded Swift, el subconjunto que renuncia a la biblioteca estándar y asume que no hay sistema operativo, apuntando a aarch64-none-none-elf en la máquina virt de QEMU. El kernel imprime un saludo, sondea el puerto serie en busca de caracteres, los repite y gestiona los saltos de línea. La fricción estaba en la fontanería: lograr que el script del enlazador coloque bien las secciones de metadatos ELF, aportar putchar y memmove a mano, declarar puntos de entrada compatibles con C para que el ensamblador llame a Swift, y preparar la disposición de memoria y la pila. El autor se detiene ahí y deja interrupciones e inicialización de BSS como trabajo futuro.
+***** Take
+El valor no es que el mundo necesite un kernel en Swift, es un inventario limpio de lo que Embedded Swift todavía te obliga a construir. Sin putchar, sin memmove, y peleas manuales con el script del enlazador por las secciones de metadatos. Termina en un bucle de eco por puerto serie y lo dice claramente, lo que lo pone por delante de casi todos los posts titulados "escribí un sistema operativo".
+***** Comments
+- Embedded Swift es francamente muy interesante. Buen nicho, porque al desarrollo embebido le sobra espacio para otra herramienta, y al ser tan pequeño no sufre las quejas habituales sobre Swift: soporte multiplataforma y compilaciones lentas.
+- ¡Solo mete valores a golpes en los registros! Así funcionaba la E/S antes del DMA en muchos sistemas.
+- Buena prueba de concepto de que Embedded Swift puede apuntar a ARM independiente sin hinchazón de runtime.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein minimaler Kernel in Swift, ausgeführt in QEMU
+***** TLDR
+Eine Schritt-für-Schritt-Beschreibung eines Bare-Metal-Kernels in Embedded Swift, der Teilmenge ohne Standardbibliothek und ohne Annahme eines Betriebssystems, mit Ziel aarch64-none-none-elf auf QEMUs virt-Maschine. Der Kernel gibt eine Begrüßung aus, pollt die serielle Schnittstelle nach Zeichen, gibt sie zurück und behandelt Zeilenumbrüche. Die Mühe lag in der Verdrahtung: das Linker-Skript dazu bringen, ELF-Metadatenabschnitte richtig zu platzieren, putchar und memmove selbst bereitstellen, C-kompatible Einsprungpunkte deklarieren, damit Assembler Swift aufrufen kann, sowie Speicherlayout und Stack einrichten. Der Autor hört dort auf und nennt Interrupt-Behandlung und BSS-Initialisierung als nächste Schritte.
+***** Take
+Der Wert liegt nicht darin, dass die Welt einen Swift-Kernel braucht, sondern in der sauberen Bestandsaufnahme dessen, was Embedded Swift noch selbst bauen lässt. Kein putchar, kein memmove, Handarbeit am Linker-Skript wegen Metadatenabschnitten. Es endet bei einer seriellen Echo-Schleife und sagt das offen, was es vor die meisten Beiträge mit dem Titel "Ich habe ein OS geschrieben" stellt.
+***** Comments
+- Embedded Swift ist ehrlich gesagt sehr cool. Eine gute Nische, denn die Embedded-Entwicklung verträgt noch ein Werkzeug, und weil es so klein ist, treffen die üblichen Swift-Vorwürfe zu Plattformunterstützung und langsamen Kompilaten nicht zu.
+- Einfach Werte in Register hämmern! So lief E/A auf vielen Systemen vor DMA.
+- Guter Machbarkeitsnachweis, dass Embedded Swift freistehendes ARM ohne Runtime-Ballast anvisieren kann.
+** The 15-year search for a band that charted once and vanished :music:internet:archaeology:search:
+:PROPERTIES:
+:ID:       49959280
+:URL:      https://shahidhussain.com/writing/search-for-salvage/
+:HN_URL:   https://news.ycombinator.com/item?id=49959280
+:POINTS:   23
+:COMMENTS: 9
+:BY:       shahidhussain
+:END:
+
+*** TLDR
+The author owned a CD by an indie band called Salvage, bought in 2011, and almost no other information. Generic band and song names defeated search engines, so over 15 years he worked the metadata instead: traced the barcode through GS1 to the manufacturer Key Production, found a UK indie chart entry at number 47 in June 2006, swept Spotify, Bandcamp, Last.fm and YouTube, transcribed lyrics, and ran two years of AI-assisted attempts with logs. The break came from the credits: producer Greg Haver replied and put him in touch with singer-guitarist Sam Tattersall. Salvage had dissolved around 2008 and regrouped as OK Tokyo.
+
+*** Take
+The AI logs are the least interesting part of this. Two years of model-assisted searching produced nothing, and the credits page produced an answer in one hop, because a working producer keeps a reachable public record and a defunct band does not. That generalizes: when a search for a thing fails, go looking for the people who were paid to make it.
+
+*** Comments
+
+**** onli
+The streaming model really makes remembering details difficult. One album got stuck in my head and for a long while I couldn't find it again. No name, no lyrics, just a pink unicorn and the fact it was psychedelic rock.
+
+**** BLKNSLVR
+I've had a few of these musical splinters, and most of them have worked their way out with time.
+
+**** GuestFAUniverse
+OK Tokyo's predecessor. I never bothered to look for their roots. Cool pointer, thanks.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+寻找一支只上榜一次就消失的乐队，历时十五年
+***** TLDR
+作者手上有一张 2011 年买的独立乐队 Salvage 的 CD，除此之外几乎一无所知。乐队名和歌名太普通，搜索引擎无能为力，于是十五年间他转而追查元数据：通过 GS1 顺着条形码找到制造商 Key Production，查到 2006 年 6 月英国独立榜第 47 名的记录，把 Spotify、Bandcamp、Last.fm 和 YouTube 翻了一遍，转录歌词，还做了两年有 AI 辅助并留有日志的尝试。突破来自制作人名单：制作人 Greg Haver 回了信，把他介绍给主唱兼吉他手 Sam Tattersall。Salvage 约在 2008 年解散，后来重组为 OK Tokyo。
+***** Take
+AI 日志是这件事里最无趣的部分。两年的模型辅助搜索毫无结果，而制作人名单一步就给出了答案，因为一位在职的制作人会留下可触达的公开记录，一支解散的乐队不会。这是可以推广的：当你找不到一件东西时，去找当年被付钱做出它的那些人。
+***** Comments
+- 流媒体模式确实让记住细节变得困难。有一张专辑一直在我脑子里，但很长时间我都找不回来。没有名字，没有歌词，只记得一只粉色独角兽，以及它是迷幻摇滚。
+- 我也有过几根这样的音乐木刺，大多随着时间自己冒出来了。
+- 原来是 OK Tokyo 的前身。我从没去查过他们的来历。不错的线索，谢了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+一度だけチャートに入って消えたバンドを15年探した話
+***** TLDR
+著者は2011年に買ったインディーバンドSalvageのCDを持っていたが、それ以外の情報はほぼなかった。バンド名も曲名もありふれていて検索エンジンでは行き詰まり、15年のあいだ彼はメタデータをたどることにした。GS1経由でバーコードから製造元Key Productionを特定し、2006年6月の英インディーチャート47位という記録を見つけ、Spotify、Bandcamp、Last.fm、YouTubeを洗い、歌詞を書き起こし、ログを残しながら2年間AIを使った試行も重ねた。突破口はクレジットだった。プロデューサーのGreg Haverが返信し、ボーカル兼ギターのSam Tattersallにつないでくれた。Salvageは2008年頃に解散し、OK Tokyoとして再編されていた。
+***** Take
+この話で最も面白くない部分がAIのログだ。2年のモデル支援検索は何も生まず、クレジットのページは一手で答えを出した。現役のプロデューサーは到達可能な公開記録を残し、解散したバンドは残さないからだ。これは一般化できる。物を探して行き詰まったら、それを作るために報酬を受け取った人を探すことだ。
+***** Comments
+- ストリーミング中心だと細部を覚えておくのが本当に難しい。あるアルバムが頭に残っていたが、長いあいだ見つけ直せなかった。名前もなく歌詞もなく、ピンクのユニコーンとサイケデリックロックだったことだけ覚えていた。
+- こういう音楽のとげは何度か刺さったが、たいていは時間とともに抜けていった。
+- OK Tokyoの前身だったのか。彼らのルーツを調べたことはなかった。良い手がかりをありがとう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+한 번 차트에 올랐다 사라진 밴드를 15년간 찾은 이야기
+***** TLDR
+저자는 2011년에 산 인디 밴드 Salvage의 CD를 갖고 있었지만 그 외 정보는 거의 없었다. 밴드 이름과 곡 제목이 너무 흔해 검색 엔진으로는 막혔고, 15년에 걸쳐 그는 대신 메타데이터를 추적했다. GS1을 통해 바코드에서 제조사 Key Production을 찾고, 2006년 6월 영국 인디 차트 47위 기록을 발견하고, Spotify와 Bandcamp, Last.fm, YouTube를 훑고, 가사를 받아 적고, 기록을 남기며 2년간 AI를 동원한 시도도 했다. 돌파구는 크레딧이었다. 프로듀서 Greg Haver가 답장해 보컬 겸 기타의 Sam Tattersall을 연결해 주었다. Salvage는 2008년 무렵 해산해 OK Tokyo로 다시 모였다.
+***** Take
+이 이야기에서 가장 재미없는 부분이 AI 기록이다. 2년의 모델 보조 검색은 아무것도 내놓지 못했고, 크레딧 페이지는 한 단계로 답을 냈다. 현역 프로듀서는 닿을 수 있는 공개 기록을 남기고 해산한 밴드는 남기지 않기 때문이다. 이건 일반화된다. 어떤 물건을 찾다 막히면, 그것을 만들라고 돈을 받았던 사람들을 찾아라.
+***** Comments
+- 스트리밍 방식은 정말로 세부를 기억하기 어렵게 만든다. 한 앨범이 머리에 박혀 있었는데 오랫동안 다시 찾지 못했다. 이름도 가사도 없고, 분홍 유니콘과 사이키델릭 록이라는 사실만 남아 있었다.
+- 이런 음악 가시가 몇 번 박혔는데 대부분 시간이 지나며 저절로 빠져나왔다.
+- OK Tokyo의 전신이었구나. 그들의 뿌리를 찾아본 적이 없었다. 좋은 단서, 고맙다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La búsqueda de 15 años de una banda que entró una vez en las listas y desapareció
+***** TLDR
+El autor tenía un CD de una banda indie llamada Salvage, comprado en 2011, y casi ninguna otra información. Los nombres genéricos de banda y canciones derrotaron a los buscadores, así que durante 15 años trabajó los metadatos: rastreó el código de barras vía GS1 hasta el fabricante Key Production, encontró una entrada en la lista indie británica en el puesto 47 en junio de 2006, barrió Spotify, Bandcamp, Last.fm y YouTube, transcribió letras y dedicó dos años a intentos asistidos por IA con registros. El avance llegó de los créditos: el productor Greg Haver respondió y lo puso en contacto con el cantante y guitarrista Sam Tattersall. Salvage se disolvió hacia 2008 y se reagrupó como OK Tokyo.
+***** Take
+Los registros de IA son la parte menos interesante. Dos años de búsqueda asistida por modelos no dieron nada, y la página de créditos dio la respuesta en un solo salto, porque un productor en activo deja un registro público localizable y una banda disuelta no. Eso se generaliza: cuando la búsqueda de una cosa fracasa, busca a las personas a las que pagaron por hacerla.
+***** Comments
+- El modelo de streaming hace muy difícil recordar detalles. Un álbum se me quedó en la cabeza y durante mucho tiempo no logré encontrarlo. Sin nombre, sin letras, solo un unicornio rosa y que era rock psicodélico.
+- He tenido varias de estas astillas musicales, y la mayoría han salido solas con el tiempo.
+- El predecesor de OK Tokyo. Nunca me molesté en buscar sus raíces. Buen dato, gracias.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die 15 Jahre lange Suche nach einer Band, die einmal in die Charts kam und verschwand
+***** TLDR
+Der Autor besaß eine 2011 gekaufte CD der Indieband Salvage und fast keine weiteren Informationen. Generische Band- und Songnamen ließen Suchmaschinen scheitern, also arbeitete er 15 Jahre lang die Metadaten ab: den Barcode über GS1 bis zum Hersteller Key Production, einen Eintrag auf Platz 47 der britischen Indie-Charts im Juni 2006, Streifzüge durch Spotify, Bandcamp, Last.fm und YouTube, Transkriptionen der Texte und zwei Jahre KI-gestützter Versuche mit Protokollen. Der Durchbruch kam aus den Credits: Produzent Greg Haver antwortete und stellte den Kontakt zu Sänger und Gitarrist Sam Tattersall her. Salvage löste sich um 2008 auf und formierte sich als OK Tokyo neu.
+***** Take
+Die KI-Protokolle sind der langweiligste Teil. Zwei Jahre modellgestützte Suche brachten nichts, und die Credits-Seite lieferte die Antwort in einem Schritt, weil ein aktiver Produzent eine erreichbare öffentliche Spur hinterlässt und eine aufgelöste Band nicht. Das lässt sich verallgemeinern: scheitert die Suche nach einer Sache, suche die Leute, die dafür bezahlt wurden, sie zu machen.
+***** Comments
+- Das Streaming-Modell macht es wirklich schwer, Details zu behalten. Ein Album blieb mir im Kopf und ich fand es lange nicht wieder. Kein Name, kein Text, nur ein pinkes Einhorn und dass es Psychedelic Rock war.
+- Ich hatte einige solcher musikalischen Splitter, und die meisten haben sich mit der Zeit von selbst gelöst.
+- Der Vorgänger von OK Tokyo. Ich habe nie nach ihren Wurzeln gesucht. Guter Hinweis, danke.
