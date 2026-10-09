@@ -1,0 +1,496 @@
+#+TITLE: HN Digest 2026-10-09 06:00 UTC
+#+DATE: 2026-10-09T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+C sheds 45 undefined behaviors, pro audio moves to plain CAT6, and terminals argue over which escape sequence means "done"
+
+* Highlights
+- C2y removes about 45 undefined behaviors, but memory safety still needs runtime checks or proofs
+- ETH-68: 6-in/8-out pro audio over ordinary Ethernet, 3.6 ms round trip, Linux first
+- OSC 7501 vs systemd's OSC 3008: two ways for a program to tell your terminal it is done
+- DuckLake 1.0 keeps lakehouse metadata in Postgres instead of a catalog server
+- Small talk as modem handshake: the warmup is the point
+
+* Stories
+
+** Reducing undefined behavior in the C language :c:compilers:memory-safety:lwn:
+:PROPERTIES:
+:ID:       50015074
+:URL:      https://lwn.net/Articles/1095811/
+:HN_URL:   https://news.ycombinator.com/item?id=50015074
+:POINTS:   80
+:COMMENTS: 47
+:BY:       signa11
+:END:
+
+*** TLDR
+LWN's writeup of Martin Uecker's Kernel Recipes 2026 talk. Uecker is a biomedical engineering professor who writes MRI scanner control software, and his case is that C is worth repairing rather than replacing. C23 removed K&R function definitions, support for sign-magnitude and one's-complement machines, and trigraphs, and added bit-precise integer types and checked integer operations. C2y adds case ranges, named for-loops and a _Countof() macro, and deletes roughly 45 of the remaining 100 undefined behaviors. He splits memory safety three ways: type safety, which annotations and void-pointer checking can mostly cover; spatial safety, partially solved, with the counted_by attribute handling flexible array members; and temporal safety, the hard one. His conclusion is that full memory safety in C needs either expensive runtime checking or formal verification, so the realistic path is restricted subsets plus verification tools, not a safe C.
+
+*** Take
+Removing 45 undefined behaviors is real work and worth having. The trouble is the talk's own conclusion: everything left requires runtime cost or formal proof, which is exactly where Fil-C and CHERI already sit. C is getting less dangerous at the speed a standards committee can move, and pizlonator is right in the thread that the article undersells the tools that already closed the gap.
+
+*** Comments
+
+**** pizlonator
+Fil-C doesn't just find a lot of temporal-safety bugs. It closes off memory safety bugs for exploit writers and gives the whole language a tight semantics. The article undersells it, and CHERI too.
+
+**** hn_submit
+Barking up the wrong tree. C is high-level assembly for systems programming. Add runtime behavior to fight undefined behavior and you blow up execution times, and static analysis only goes so far before compile times blow up.
+
+**** chasil
+"Some Honeywell machines had nine-bit bytes." OS 2200 has 36-bit words and is still a supported platform.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+减少 C 语言中的未定义行为
+***** TLDR
+LWN 对 Martin Uecker 在 Kernel Recipes 2026 上演讲的报道。Uecker 是生物医学工程教授，平时写 MRI 扫描仪的控制软件，他的观点是 C 值得修补而不是替换。C23 删除了 K&R 风格函数定义、对符号-数值和反码机器的支持以及三字符组，新增了位精确整数类型和带检查的整数运算。C2y 将加入 case 范围、具名 for 循环和 _Countof() 宏，并删除剩余约 100 项未定义行为中的 45 项。他把内存安全分成三块：类型安全，靠注解和 void 指针检查基本可解；空间安全，部分解决，counted_by 属性处理柔性数组成员；时间安全，最难的一块。他的结论是，C 要达到完整的内存安全，要么付出昂贵的运行时检查，要么依赖形式化验证，所以现实路径是受限子集加验证工具，而不是一个安全的 C。
+***** Take
+删掉 45 项未定义行为是实打实的工作，值得肯定。问题在于演讲自己的结论：剩下的部分都需要运行时开销或形式化证明，而这正是 Fil-C 和 CHERI 已经站的位置。C 变安全的速度就是标准委员会的速度，帖子里 pizlonator 说得对，这篇文章低估了那些已经把缺口补上的工具。
+***** Comments
+- Fil-C 不只是找出大量时间安全漏洞，它直接堵死了攻击者能利用的内存安全漏洞，并给整个语言定下了严格的语义。文章低估了它，也低估了 CHERI。
+- 方向错了。C 就是系统编程用的高级汇编。为了对付未定义行为而加入运行时检查，执行时间就会暴涨；静态分析走不了多远，编译时间就先炸了。
+- “有些 Honeywell 机器用 9 位字节。”OS 2200 是 36 位字长，至今仍在支持列表里。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+C言語の未定義動作を減らす
+***** TLDR
+Kernel Recipes 2026でのMartin Uecker氏の講演をLWNがまとめた記事。Uecker氏は生物医学工学の教授で、MRIスキャナーの制御ソフトを書いている。主張は、Cは置き換えるのではなく直す価値があるということだ。C23ではK&R形式の関数定義、符号絶対値表現と1の補数マシンのサポート、トライグラフが削除され、ビット精度整数型とチェック付き整数演算が追加された。C2yではcase範囲、名前付きforループ、_Countof()マクロが加わり、残る約100件の未定義動作のうち45件ほどが削除される。氏はメモリ安全性を3つに分ける。型安全性は注釈とvoidポインタの検査でおおむね対応できる。空間安全性は部分的に解決済みで、counted_by属性が可変長配列メンバーを扱う。時間安全性が最も難しい。結論は、Cで完全なメモリ安全性を得るには高価な実行時チェックか形式検証が必要であり、現実的な道は安全なCではなく、制限されたサブセットと検証ツールの組み合わせだというものだ。
+***** Take
+未定義動作を45件削るのは実際の成果で、価値がある。問題は講演自身の結論だ。残った部分はすべて実行時コストか形式的な証明を要求する。それはまさにFil-CとCHERIが既にいる位置だ。Cが安全になる速度は標準化委員会が動く速度にすぎない。スレッドのpizlonator氏が言う通り、この記事は既に穴を埋めたツールを過小評価している。
+***** Comments
+- Fil-Cは時間安全性のバグを大量に見つけるだけではない。攻撃者が使えるメモリ安全性のバグを塞ぎ、言語全体に厳密な意味論を与える。記事はこれを、そしてCHERIも過小評価している。
+- 方向が違う。Cはシステムプログラミング用の高級アセンブリだ。未定義動作に対抗して実行時の処理を足せば実行時間が膨らむし、静的解析もコンパイル時間が爆発する前に限界が来る。
+- 「9ビットバイトのHoneywellマシンもあった」。OS 2200は36ビットワードで、今もサポート対象のプラットフォームだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+C 언어의 미정의 동작 줄이기
+***** TLDR
+Kernel Recipes 2026에서 진행된 Martin Uecker의 발표를 LWN이 정리한 기사다. Uecker는 MRI 스캐너 제어 소프트웨어를 만드는 생물의학공학 교수이며, C는 대체할 것이 아니라 고칠 가치가 있다고 주장한다. C23은 K&R 방식 함수 정의, 부호-절댓값 및 1의 보수 머신 지원, 트라이그래프를 제거하고 비트 정밀 정수 타입과 검사 기능이 있는 정수 연산을 추가했다. C2y에는 case 범위, 이름 있는 for 루프, _Countof() 매크로가 들어가고 남은 약 100개의 미정의 동작 중 45개 정도가 삭제된다. 그는 메모리 안전성을 세 가지로 나눈다. 타입 안전성은 애너테이션과 void 포인터 검사로 대부분 해결할 수 있고, 공간 안전성은 부분적으로 해결되어 counted_by 속성이 유연 배열 멤버를 처리하며, 시간 안전성이 가장 어렵다. 결론은 C에서 완전한 메모리 안전성을 얻으려면 비싼 런타임 검사나 형식 검증이 필요하므로, 현실적인 경로는 안전한 C가 아니라 제한된 부분집합과 검증 도구의 조합이라는 것이다.
+***** Take
+미정의 동작 45개를 없애는 것은 실제 성과이고 의미가 있다. 문제는 발표 자체의 결론이다. 남은 것은 모두 런타임 비용이나 형식적 증명을 요구하는데, 그건 Fil-C와 CHERI가 이미 서 있는 자리다. C는 표준 위원회가 움직이는 속도만큼만 안전해지고 있고, 스레드의 pizlonator가 말한 대로 이 기사는 이미 그 간극을 메운 도구들을 과소평가한다.
+***** Comments
+- Fil-C는 시간 안전성 버그를 많이 찾아내는 데서 끝나지 않는다. 공격자가 쓸 수 있는 메모리 안전성 버그를 막고 언어 전체에 엄격한 의미론을 부여한다. 기사는 이것도, CHERI도 과소평가했다.
+- 방향이 틀렸다. C는 시스템 프로그래밍용 고급 어셈블리다. 미정의 동작에 맞서려고 런타임 처리를 넣으면 실행 시간이 폭증하고, 정적 분석도 컴파일 시간이 터지기 전까지만 갈 수 있다.
+- "9비트 바이트를 쓰는 Honeywell 머신도 있었다." OS 2200은 36비트 워드이고 아직도 지원되는 플랫폼이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Reducir el comportamiento indefinido en el lenguaje C
+***** TLDR
+La crónica de LWN sobre la charla de Martin Uecker en Kernel Recipes 2026. Uecker es profesor de ingeniería biomédica y escribe software de control para escáneres de resonancia magnética; su tesis es que C merece arreglarse en lugar de sustituirse. C23 eliminó las definiciones de funciones estilo K&R, el soporte para máquinas de signo-magnitud y complemento a uno, y los trigrafos, y añadió tipos enteros de precisión de bits y operaciones enteras verificadas. C2y incorpora rangos en case, bucles for con nombre y la macro _Countof(), y suprime unos 45 de los cerca de 100 comportamientos indefinidos restantes. Divide la seguridad de memoria en tres: la seguridad de tipos, que las anotaciones y la verificación de punteros void cubren en buena medida; la seguridad espacial, resuelta en parte, con el atributo counted_by para los miembros de arreglo flexible; y la seguridad temporal, la más difícil. Su conclusión es que una seguridad de memoria completa en C exige o comprobaciones costosas en tiempo de ejecución o verificación formal, así que el camino realista son subconjuntos restringidos más herramientas de verificación, no un C seguro.
+***** Take
+Quitar 45 comportamientos indefinidos es trabajo real y vale la pena. El problema es la conclusión de la propia charla: todo lo que queda exige coste en tiempo de ejecución o demostración formal, que es justo donde ya están Fil-C y CHERI. C se vuelve menos peligroso a la velocidad a la que puede moverse un comité de estandarización, y pizlonator tiene razón en el hilo: el artículo subestima las herramientas que ya cerraron la brecha.
+***** Comments
+- Fil-C no solo encuentra montones de errores de seguridad temporal. Cierra los errores de seguridad de memoria para quien escribe exploits y le da al lenguaje entero una semántica estricta. El artículo lo subestima, y a CHERI también.
+- Se equivocan de árbol. C es ensamblador de alto nivel para programación de sistemas. Si añades comportamiento en tiempo de ejecución para combatir el comportamiento indefinido, los tiempos de ejecución se disparan, y el análisis estático no llega muy lejos antes de que explote el tiempo de compilación.
+- "Algunas máquinas Honeywell tenían bytes de nueve bits." OS 2200 usa palabras de 36 bits y sigue siendo una plataforma soportada.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Undefiniertes Verhalten in der Sprache C reduzieren
+***** TLDR
+LWNs Bericht über Martin Ueckers Vortrag auf den Kernel Recipes 2026. Uecker ist Professor für biomedizinische Technik und schreibt Steuerungssoftware für MRT-Scanner; sein Argument lautet, C sei es wert, repariert statt ersetzt zu werden. C23 hat Funktionsdefinitionen im K&R-Stil, die Unterstützung für Vorzeichen-Betrag- und Einerkomplement-Maschinen sowie Trigraphen entfernt und bitgenaue Integertypen und geprüfte Integeroperationen hinzugefügt. C2y bringt Case-Bereiche, benannte for-Schleifen und das Makro _Countof() und streicht etwa 45 der rund 100 verbleibenden undefinierten Verhaltensweisen. Er teilt Speichersicherheit dreifach auf: Typsicherheit, die Annotationen und das Prüfen von void-Zeigern größtenteils abdecken; räumliche Sicherheit, teilweise gelöst, mit dem Attribut counted_by für flexible Array-Mitglieder; und zeitliche Sicherheit, der schwierigste Teil. Sein Fazit: Vollständige Speichersicherheit in C braucht entweder teure Laufzeitprüfungen oder formale Verifikation, der realistische Weg sind also eingeschränkte Teilmengen plus Verifikationswerkzeuge, kein sicheres C.
+***** Take
+45 undefinierte Verhaltensweisen zu entfernen ist echte Arbeit und lohnt sich. Das Problem ist das Fazit des Vortrags selbst: Alles Übrige verlangt Laufzeitkosten oder formale Beweise, und genau dort stehen Fil-C und CHERI längst. C wird in dem Tempo weniger gefährlich, in dem sich ein Normungsgremium bewegen kann, und pizlonator hat im Thread recht, dass der Artikel die Werkzeuge unterschätzt, die die Lücke schon geschlossen haben.
+***** Comments
+- Fil-C findet nicht nur viele Fehler bei der zeitlichen Sicherheit. Es schließt Speichersicherheitsfehler für Exploit-Schreiber und gibt der ganzen Sprache eine enge Semantik. Der Artikel unterschätzt das, und CHERI ebenso.
+- Falscher Ansatz. C ist hochsprachiger Assembler für Systemprogrammierung. Wer Laufzeitverhalten gegen undefiniertes Verhalten einbaut, treibt die Ausführungszeiten hoch, und statische Analyse kommt nicht weit, bevor die Compilezeiten explodieren.
+- "Manche Honeywell-Maschinen hatten Neun-Bit-Bytes." OS 2200 arbeitet mit 36-Bit-Wörtern und ist weiterhin eine unterstützte Plattform.
+** ETH-68: Ethernet Audio Interface for Linux :audio:hardware:linux:networking:
+:PROPERTIES:
+:ID:       49992994
+:URL:      https://naturalsystems.io/eth68
+:HN_URL:   https://news.ycombinator.com/item?id=49992994
+:POINTS:   130
+:COMMENTS: 77
+:BY:       chabad360
+:END:
+
+*** TLDR
+Alex Lowell built a 1U rack audio interface that carries audio over ordinary Ethernet instead of USB or Dante. Six balanced TRS inputs, eight balanced outputs, 48 and 96 kHz through a Burr-Brown PCM3168A codec, plus DIN MIDI. Round-trip latency is 3.620 ms at 48 kHz with a 64-sample buffer and 1.814 ms at 96 kHz, which the page says matches an RME HDSPe AIO Pro at 48 kHz and beats it by 0.33 ms at 96. No AVB or TSN hardware required: it needs 100M full duplex, ideally a dedicated LAN, and the page recommends a $15 to $30 Intel I210 NIC. On the host it runs through JACK's netone backend or PipeWire via a pw-eth68 client, configured with an eth68ctl.py script.
+
+*** Take
+Pro audio vendors treat Linux as an afterthought, so a Linux-first interface that publishes its own round-trip numbers and ships a config script is already unusual. The sharpest question in the thread is the one the page does not answer: clock recovery. There is a BNC for syncing multiple units, but nothing explains how the receiver tracks the sender's sample clock, and that detail decides whether a three-hour session drifts.
+
+*** Comments
+
+**** landgenoot
+Very cool, but I think I'm missing the use case. It needs a separate LAN, so it's basically audio over CAT6? How does this compare to PipeWire over Ethernet, realtime versus buffered?
+
+**** jhallenworld
+How does the receive side recover the transmit side's sample clock? There's a BNC for clock sharing between multiple units, but is that required between transmit and receive? Otherwise there would be long-term drift.
+
+**** alowell
+I'm Alex, I made ETH-68. I didn't post this to HN but I'll answer some of the questions that have come up.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ETH-68：面向 Linux 的以太网音频接口
+***** TLDR
+Alex Lowell 做了一台 1U 机架音频接口，用普通以太网而不是 USB 或 Dante 传输音频。6 路平衡 TRS 输入、8 路平衡输出，通过 Burr-Brown PCM3168A 编解码器支持 48 kHz 和 96 kHz，还带 DIN MIDI。在 64 采样缓冲下，48 kHz 的往返延迟为 3.620 毫秒，96 kHz 为 1.814 毫秒；页面称这在 48 kHz 持平 RME HDSPe AIO Pro，在 96 kHz 还快 0.33 毫秒。它不需要 AVB 或 TSN 硬件，只要 100M 全双工，最好是一条独立局域网，页面推荐 15 到 30 美元的 Intel I210 网卡。主机端通过 JACK 的 netone 后端或 PipeWire 的 pw-eth68 客户端运行，用 eth68ctl.py 脚本配置。
+***** Take
+专业音频厂商一向把 Linux 当附带项，所以一台 Linux 优先、还自己公布往返延迟数据并附带配置脚本的接口已经很少见。帖子里最尖锐的问题恰好是页面没答的：时钟恢复。设备上有 BNC 口用于多台同步，但没有任何说明交代接收端如何跟上发送端的采样时钟，而这个细节决定了三小时的录音会不会漂移。
+***** Comments
+- 很酷，但我大概没抓住使用场景。它需要一条独立局域网，所以本质上就是跑在 CAT6 上的音频？跟 PipeWire over Ethernet 相比怎么样，是实时还是带缓冲的？
+- 接收端怎么恢复发送端的采样时钟？设备上有个 BNC 口用于多台设备共享时钟，但收发之间是否也必须接？不然长时间会漂移吧。
+- 我是 Alex，ETH-68 是我做的。这帖不是我发到 HN 的，但我可以回答评论里提到的一些问题。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ETH-68: Linux向けイーサネット・オーディオインターフェース
+***** TLDR
+Alex Lowell氏が、USBやDanteではなく通常のイーサネットで音声を運ぶ1Uラック型オーディオインターフェースを製作した。バランスTRS入力6系統、バランス出力8系統、Burr-Brown PCM3168Aコーデックで48kHzと96kHzに対応し、DIN MIDIも備える。64サンプルバッファでの往復レイテンシは48kHzで3.620ミリ秒、96kHzで1.814ミリ秒。ページによれば48kHzではRME HDSPe AIO Proと同等で、96kHzでは0.33ミリ秒上回るという。AVBやTSN対応ハードウェアは不要で、100M全二重があればよく、専用LANが望ましい。ネットワークカードは15〜30ドルのIntel I210を推奨している。ホスト側はJACKのnetoneバックエンドか、PipeWireのpw-eth68クライアント経由で動作し、設定はeth68ctl.pyスクリプトで行う。
+***** Take
+プロオーディオのメーカーはLinuxを後回しにしてきたので、Linuxを前提に作られ、自前の往復レイテンシ値を公開し、設定スクリプトまで同梱する機器はそれ自体が珍しい。スレッドで最も鋭い疑問は、ページが答えていない点、つまりクロック再生だ。複数台を同期するBNC端子はあるが、受信側が送信側のサンプルクロックをどう追うのかの説明がない。3時間のセッションがずれるかどうかは、そこで決まる。
+***** Comments
+- とてもいいけれど、用途が掴めていない。専用LANが必要なら、要するにCAT6で音声を流すということ？PipeWire over Ethernetと比べてどうなのか、リアルタイムなのかバッファありなのか。
+- 受信側は送信側のサンプルクロックをどう再生するのか。複数台間のクロック共有用にBNCがあるが、送受信間でも必要なのか。そうでなければ長時間でドリフトするはずだ。
+- Alexです、ETH-68を作りました。HNへの投稿は私ではありませんが、コメントで出た質問にはいくつか答えます。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ETH-68: 리눅스용 이더넷 오디오 인터페이스
+***** TLDR
+Alex Lowell이 USB나 Dante 대신 일반 이더넷으로 오디오를 전송하는 1U 랙형 오디오 인터페이스를 만들었다. 밸런스 TRS 입력 6채널, 밸런스 출력 8채널, Burr-Brown PCM3168A 코덱으로 48kHz와 96kHz를 지원하고 DIN MIDI도 있다. 64샘플 버퍼에서 왕복 지연은 48kHz에서 3.620밀리초, 96kHz에서 1.814밀리초로, 페이지에 따르면 48kHz에서는 RME HDSPe AIO Pro와 같고 96kHz에서는 0.33밀리초 앞선다. AVB나 TSN 하드웨어는 필요 없고 100M 풀 듀플렉스만 있으면 되며 전용 LAN을 권한다. 네트워크 카드로는 15~30달러짜리 Intel I210을 추천한다. 호스트 쪽에서는 JACK의 netone 백엔드나 PipeWire의 pw-eth68 클라이언트로 동작하고, 설정은 eth68ctl.py 스크립트로 한다.
+***** Take
+프로 오디오 업체들은 리눅스를 늘 뒤로 미뤄왔으니, 리눅스를 우선으로 만들고 자체 왕복 지연 수치를 공개하며 설정 스크립트까지 함께 주는 인터페이스는 그 자체로 드물다. 스레드에서 가장 날카로운 질문은 페이지가 답하지 않은 부분, 즉 클럭 복원이다. 여러 대를 동기화하는 BNC 단자는 있지만 수신 측이 송신 측의 샘플 클럭을 어떻게 따라가는지에 대한 설명이 없고, 세 시간짜리 세션이 밀리는지는 바로 그 부분에서 갈린다.
+***** Comments
+- 멋지긴 한데 사용 사례를 못 잡겠다. 별도 LAN이 필요하다면 결국 CAT6로 오디오를 보내는 것 아닌가? PipeWire over Ethernet과 비교하면 어떤가, 실시간인가 버퍼 방식인가?
+- 수신 측은 송신 측의 샘플 클럭을 어떻게 복원하나? 여러 장치 간 클럭 공유용 BNC가 있는데 송수신 사이에도 필요한가? 아니라면 장시간 드리프트가 생길 텐데.
+- 저는 Alex이고 ETH-68을 만들었습니다. HN에 글을 올린 건 제가 아니지만, 댓글에 올라온 질문 몇 가지에는 답하겠습니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ETH-68: interfaz de audio por Ethernet para Linux
+***** TLDR
+Alex Lowell construyó una interfaz de audio en rack de 1U que transporta audio por Ethernet común en lugar de USB o Dante. Seis entradas TRS balanceadas, ocho salidas balanceadas, 48 y 96 kHz mediante un códec Burr-Brown PCM3168A y MIDI DIN. La latencia de ida y vuelta es de 3,620 ms a 48 kHz con búfer de 64 muestras y de 1,814 ms a 96 kHz, cifras que según la página igualan a una RME HDSPe AIO Pro a 48 kHz y la superan por 0,33 ms a 96. No hace falta hardware AVB ni TSN: basta con 100M full duplex, preferiblemente en una LAN dedicada, y la página recomienda una tarjeta Intel I210 de 15 a 30 dólares. En el host funciona a través del backend netone de JACK o de PipeWire mediante un cliente pw-eth68, y se configura con un script eth68ctl.py.
+***** Take
+Los fabricantes de audio profesional tratan Linux como algo secundario, así que una interfaz pensada primero para Linux que publica sus propias cifras de latencia y entrega un script de configuración ya es rara. La pregunta más afilada del hilo es la que la página no responde: la recuperación de reloj. Hay un BNC para sincronizar varias unidades, pero nada explica cómo el receptor sigue el reloj de muestreo del emisor, y ese detalle decide si una sesión de tres horas se desfasa.
+***** Comments
+- Muy interesante, pero creo que no veo el caso de uso. Necesita una LAN aparte, así que ¿es básicamente audio por CAT6? ¿Cómo se compara con PipeWire sobre Ethernet, en tiempo real o con búfer?
+- ¿Cómo recupera el lado receptor el reloj de muestreo del emisor? Hay un BNC para compartir reloj entre varias unidades, pero ¿hace falta también entre emisor y receptor? Si no, habría deriva a largo plazo.
+- Soy Alex, yo hice el ETH-68. No publiqué esto en HN, pero responderé algunas de las preguntas que han surgido.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ETH-68: Ethernet-Audio-Interface für Linux
+***** TLDR
+Alex Lowell hat ein 1U-Rack-Audiointerface gebaut, das Audio über gewöhnliches Ethernet statt über USB oder Dante überträgt. Sechs symmetrische TRS-Eingänge, acht symmetrische Ausgänge, 48 und 96 kHz über einen Burr-Brown-PCM3168A-Codec, dazu DIN-MIDI. Die Round-Trip-Latenz liegt bei 3,620 ms bei 48 kHz mit 64-Sample-Puffer und bei 1,814 ms bei 96 kHz; laut Seite entspricht das bei 48 kHz einer RME HDSPe AIO Pro und übertrifft sie bei 96 kHz um 0,33 ms. AVB- oder TSN-Hardware ist nicht nötig: 100M Full Duplex genügen, am besten in einem eigenen LAN, und die Seite empfiehlt eine Intel-I210-Karte für 15 bis 30 Dollar. Auf dem Host läuft es über JACKs netone-Backend oder PipeWire per pw-eth68-Client, konfiguriert mit einem eth68ctl.py-Skript.
+***** Take
+Hersteller von Pro-Audio behandeln Linux als Nebensache, deshalb ist ein Linux-zuerst-Interface, das eigene Round-Trip-Werte veröffentlicht und ein Konfigurationsskript mitliefert, schon für sich ungewöhnlich. Die schärfste Frage im Thread ist die, die die Seite nicht beantwortet: die Clock-Rückgewinnung. Es gibt eine BNC-Buchse zum Synchronisieren mehrerer Geräte, aber nichts erklärt, wie der Empfänger dem Sample-Takt des Senders folgt, und davon hängt ab, ob eine dreistündige Session wegläuft.
+***** Comments
+- Sehr schön, aber ich sehe den Anwendungsfall nicht. Es braucht ein eigenes LAN, also ist es im Grunde Audio über CAT6? Wie verhält sich das zu PipeWire über Ethernet, echtzeitfähig oder gepuffert?
+- Wie gewinnt die Empfangsseite den Sample-Takt der Sendeseite zurück? Es gibt eine BNC-Buchse zum Takt-Teilen zwischen mehreren Geräten, aber ist die zwischen Sender und Empfänger erforderlich? Sonst gäbe es langfristig Drift.
+- Ich bin Alex und habe das ETH-68 gebaut. Ich habe es nicht auf HN gepostet, werde aber einige der Fragen aus den Kommentaren beantworten.
+** The value of not getting to the point (2015) :communication:essay:culture:
+:PROPERTIES:
+:ID:       50010470
+:URL:      https://ken.arneson.name/2015/11/the-value-of-not-getting-to-the-point/
+:HN_URL:   https://news.ycombinator.com/item?id=50010470
+:POINTS:   144
+:COMMENTS: 46
+:BY:       NaOH
+:END:
+
+*** TLDR
+A 2015 essay by Ken Arneson arguing that wandering conversation is not wasted time. His college-age daughter texts that she wants to talk; when he asks what about, she gets annoyed, and they spend half an hour on politics and other unimportant things before she brings up what was actually bothering her. His account of why: language is imprecise, feelings are hard to put into words, and saying something true about yourself leaves you exposed, so the ritual of small talk exists to build enough safety to reach the real subject. He adds that meeting over coffee or a beer works because the food and drink remove the obligation to have something to say, and he faults Twitter's 140 characters for deleting the warmup and leaving people to fight instead.
+
+*** Take
+The essay reads as an indictment of how most of us run meetings and write messages. "Get to the point" is correct for a status update and wrong for anything where the other person first has to decide whether to trust you. nine_k's reply compresses it best: small talk is a modem handshake, and handshakes are supposed to be boring and predictable.
+
+*** Comments
+
+**** nine_k
+Small talk is like two modems establishing a link: they send signals to assess how the line behaves and what the other side supports. It can never be a pithy conversation, because its purpose is a formal, zero-surprise exchange.
+
+**** paimapi
+A more helpful frame is to see this as a practice of emotional maturity rather than rhetoric. When you start talking you don't know what's going on in someone's emotional state, or whether they've had time to understand it themselves.
+
+**** ahyattdev
+Read it while you can. Verisign is discontinuing third-level .name domains next year.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+不直奔主题的价值（2015）
+***** TLDR
+Ken Arneson 2015 年的一篇文章，主张漫无目的的闲聊不是浪费时间。他上大学的女儿发消息说想聊聊，他问聊什么，她就不耐烦了；两人先花了半小时聊政治之类无关紧要的事，她才说出真正困扰她的问题。他的解释是：语言本身不精确，情绪难以说清，而说出关于自己的真话会让人暴露，所以闲聊这套仪式的作用是先建立起足够的安全感，再进入真正的话题。他还说，约人喝咖啡或喝一杯之所以有效，是因为吃喝本身免去了必须开口的压力；他批评推特的 140 字限制删掉了这段预热，留下的只有争吵。
+***** Take
+这篇文章实际上是在批评大多数人开会和写消息的方式。“直接说重点”对一条状态汇报是对的，但对任何需要对方先判断能否信任你的事情都是错的。帖子里 nine_k 的回复概括得最好：闲聊就是调制解调器的握手，而握手本来就应该无聊、可预测。
+***** Comments
+- 闲聊就像两台调制解调器建立连接：互发信号来评估线路状况和对方支持什么。它永远不会是精炼的对话，因为它的目的就是一次正式的、毫无意外的交换。
+- 更有用的框架是把这当作情绪成熟度的练习，而不是修辞技巧。开口时你并不知道对方的情绪状态如何，甚至不知道对方有没有时间弄清自己的情绪。
+- 趁还能看赶紧看吧。Verisign 明年就要停掉三级 .name 域名了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+要点にすぐ入らないことの価値（2015）
+***** TLDR
+Ken Arneson氏による2015年のエッセイで、とりとめのない会話は無駄な時間ではないと論じる。大学生の娘から話したいとメッセージが来て、何についてかと尋ねると娘は苛立つ。politicsなどどうでもいい話を30分続けたあとで、ようやく本当に気にかかっていたことを口にした。氏の説明はこうだ。言語は不正確で、感情は言葉にしにくく、自分について本当のことを言えば身をさらすことになる。だから雑談という儀礼は、本題に入れるだけの安心感を作るために存在する。コーヒーやビールを前にして会うのがうまくいくのは、飲食が「何か話さなければ」という義務から解放してくれるからだとも言う。そしてTwitterの140文字が、この助走を削り取って争いだけを残したと批判する。
+***** Take
+このエッセイは、多くの人の会議の進め方やメッセージの書き方への批判として読める。「要点を先に」は進捗報告には正しく、相手がまずこちらを信用するか判断しなければならない場面には間違っている。スレッドのnine_k氏の返信が最もよく圧縮している。雑談はモデムのハンドシェイクであり、ハンドシェイクは退屈で予測可能であるべきなのだ。
+***** Comments
+- 雑談は2台のモデムがリンクを確立するのに似ている。回線の状態と相手が何に対応しているかを測る信号を送り合う。目的は形式的で意外性のないやり取りなのだから、核心を突いた会話になることは決してない。
+- 修辞の技術ではなく、情緒的な成熟の実践として見るほうが有益だ。話し始める時点では、相手の感情の状態も、相手自身がそれを整理する時間を持てたかも分からない。
+- 読めるうちに読んだほうがいい。Verisignが来年、第3レベルの.nameドメインを廃止する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+본론으로 바로 들어가지 않는 것의 가치 (2015)
+***** TLDR
+Ken Arneson이 2015년에 쓴 에세이로, 겉도는 대화가 낭비는 아니라고 주장한다. 대학생 딸이 이야기하고 싶다고 문자를 보내왔고, 무슨 이야기냐고 묻자 딸은 짜증을 냈다. 둘은 정치 같은 사소한 이야기를 30분쯤 나눈 뒤에야 딸이 정말로 신경 쓰던 문제를 꺼냈다. 그의 설명은 이렇다. 언어는 부정확하고, 감정은 말로 옮기기 어렵고, 자기 자신에 관한 진실을 말하면 스스로가 드러난다. 그래서 잡담이라는 의례는 본론에 도달할 만큼의 안전감을 만들기 위해 존재한다. 커피나 맥주를 앞에 두고 만나는 것이 통하는 이유도, 먹고 마시는 행위가 무언가 말해야 한다는 의무를 덜어주기 때문이라고 덧붙인다. 그리고 트위터의 140자가 이 준비 과정을 없애고 싸움만 남겼다고 비판한다.
+***** Take
+이 에세이는 사실 대부분의 사람이 회의를 진행하고 메시지를 쓰는 방식에 대한 비판으로 읽힌다. "요점부터"는 진행 보고에는 맞고, 상대가 먼저 나를 믿을지 판단해야 하는 일에는 틀렸다. 스레드의 nine_k 댓글이 가장 잘 압축했다. 잡담은 모뎀의 핸드셰이크이고, 핸드셰이크는 지루하고 예측 가능해야 한다.
+***** Comments
+- 잡담은 모뎀 두 대가 연결을 맺는 것과 비슷하다. 회선 상태와 상대가 무엇을 지원하는지 가늠하는 신호를 주고받는다. 목적이 형식적이고 놀랄 일 없는 교환이니, 핵심을 찌르는 대화가 될 수는 없다.
+- 수사법이 아니라 정서적 성숙의 훈련으로 보는 편이 더 유용하다. 말을 시작하는 순간에는 상대의 감정 상태도, 상대가 그것을 들여다볼 시간이 있었는지도 알 수 없다.
+- 볼 수 있을 때 보시길. Verisign이 내년에 3단계 .name 도메인을 없앤다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El valor de no ir al grano (2015)
+***** TLDR
+Un ensayo de 2015 de Ken Arneson que sostiene que la conversación que divaga no es tiempo perdido. Su hija, estudiante universitaria, le escribe que quiere hablar; cuando él pregunta de qué, ella se molesta, y pasan media hora con política y otras cosas sin importancia antes de que ella saque lo que de verdad le preocupaba. Su explicación: el lenguaje es impreciso, los sentimientos son difíciles de poner en palabras y decir algo cierto sobre uno mismo te deja expuesto, así que el ritual de la charla trivial existe para construir la seguridad suficiente para llegar al tema real. Añade que quedar para un café o una cerveza funciona porque la comida y la bebida quitan la obligación de tener algo que decir, y culpa a los 140 caracteres de Twitter de eliminar ese calentamiento y dejar solo la pelea.
+***** Take
+El ensayo se lee como una acusación contra la forma en que la mayoría dirige reuniones y escribe mensajes. "Ve al grano" es correcto para un informe de estado y equivocado para cualquier cosa en la que el otro primero tenga que decidir si confía en ti. La respuesta de nine_k lo comprime mejor que nadie: la charla trivial es un saludo entre módems, y los saludos deben ser aburridos y predecibles.
+***** Comments
+- La charla trivial es como dos módems estableciendo un enlace: se envían señales para evaluar cómo se comporta la línea y qué admite el otro lado. Nunca puede ser una conversación aguda, porque su propósito es un intercambio formal y sin sorpresas.
+- Un marco más útil es verlo como una práctica de madurez emocional en lugar de retórica. Cuando empiezas a hablar no sabes qué ocurre en el estado emocional del otro, ni si ha tenido tiempo de entenderlo.
+- Léelo mientras puedas. Verisign va a descontinuar los dominios .name de tercer nivel el año que viene.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der Wert davon, nicht zum Punkt zu kommen (2015)
+***** TLDR
+Ein Essay von Ken Arneson aus dem Jahr 2015, der dafür argumentiert, dass abschweifende Gespräche keine verlorene Zeit sind. Seine Tochter, die studiert, schreibt ihm, sie wolle reden; als er fragt, worüber, wird sie ungehalten, und sie verbringen eine halbe Stunde mit Politik und anderen unwichtigen Dingen, bevor sie das anspricht, was sie wirklich beschäftigte. Seine Erklärung: Sprache ist unpräzise, Gefühle sind schwer in Worte zu fassen, und etwas Wahres über sich selbst zu sagen macht angreifbar, also existiert das Ritual des Small Talk, um genug Sicherheit für das eigentliche Thema aufzubauen. Dass ein Treffen bei Kaffee oder Bier funktioniert, liege daran, dass Essen und Trinken von der Pflicht befreien, etwas sagen zu müssen. Twitters 140 Zeichen wirft er vor, diese Anlaufphase gestrichen zu haben und nur den Streit übrig zu lassen.
+***** Take
+Das Essay liest sich als Anklage gegen die Art, wie die meisten von uns Meetings führen und Nachrichten schreiben. "Komm zum Punkt" ist richtig für ein Status-Update und falsch für alles, bei dem die andere Seite erst entscheiden muss, ob sie dir vertraut. nine_ks Antwort fasst es am besten zusammen: Small Talk ist ein Modem-Handshake, und Handshakes sollen langweilig und vorhersehbar sein.
+***** Comments
+- Small Talk ist wie zwei Modems, die eine Verbindung aufbauen: Sie senden sich Signale, um zu prüfen, wie die Leitung sich verhält und was die Gegenseite unterstützt. Ein prägnantes Gespräch kann daraus nie werden, denn der Zweck ist ein formaler Austausch ohne Überraschungen.
+- Hilfreicher ist, das als Übung in emotionaler Reife zu sehen statt als Rhetorik. Wenn man zu sprechen beginnt, weiß man nicht, was im emotionalen Zustand des anderen vorgeht, und nicht einmal, ob er selbst Zeit hatte, das zu verstehen.
+- Lest es, solange es geht. Verisign stellt nächstes Jahr die .name-Domains der dritten Ebene ein.
+** A Terminal Protocol for Program Status (OSC 7501) :terminal:protocols:devtools:
+:PROPERTIES:
+:ID:       49984159
+:URL:      https://mitchellh.com/writing/program-status-osc7501
+:HN_URL:   https://news.ycombinator.com/item?id=49984159
+:POINTS:   131
+:COMMENTS: 44
+:BY:       mfiguiere
+:END:
+
+*** TLDR
+Mitchell Hashimoto proposes an escape sequence that lets a program tell the terminal what it is doing. The program writes ESC ］ 7501 ; state=<state>:key=value ESC \ to the pty, with one of five states: idle, working (optionally with a progress percentage), done, blocked (with a kind such as permission, question or authentication), or error. Optional fields carry a machine-readable app name and a base64-encoded one-line message. The goal is to replace what terminals do today, which is watch the foreground process or guess from output going quiet, so that a terminal can reliably notify you when a long build finishes or a tool is waiting on approval. He has it implemented in Ghostty via libghostty and in the Rex terminal, with proof-of-concept patches for Terraform, Claude Code, Codex and Homebrew, and says the spec was shaped with input from other terminal maintainers.
+
+*** Take
+The need is real, and agent tools made it worse: "output went quiet" used to mean finished and now often means thinking. The objection in the thread lands too. systemd already ships OSC 3008 for roughly this job and it is in Ubuntu 26.04, so what stands between this proposal and adoption is not design quality, it is that we are on course to have two sequences for one problem.
+
+*** Comments
+
+**** paaloeye
+The problem OSC 7501 addresses would slot almost perfectly into UAPI's OSC 3008, which systemd already implements and which ships in Ubuntu 26.04. I'd rather see OSC 3008 extended.
+
+**** drewg123
+The BSDs have had a version of this for many years. Hit ^T and you deliver a SIGINFO to the application you're waiting on, and by default you get the program name, what it's blocked on, and real/user/sys time plus memory use.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+一个用于程序状态的终端协议（OSC 7501）
+***** TLDR
+Mitchell Hashimoto 提出一种转义序列，让程序能把自己正在做什么告诉终端。程序向 pty 写入 ESC ］ 7501 ; state=<状态>:键=值 ESC \，状态有五种：idle（空闲）、working（运行中，可带进度百分比）、done（完成）、blocked（等待用户操作，附带 permission、question、authentication 等类型）和 error（出错）。可选字段还能带上机器可读的程序名和一行 base64 编码的提示信息。目的是取代终端现在的做法，也就是盯着前台进程或靠输出停下来猜，从而让终端能可靠地在长时间构建完成或工具在等你批准时通知你。他已在 Ghostty（通过 libghostty）和 Rex 终端中实现，并为 Terraform、Claude Code、Codex 和 Homebrew 做了概念验证补丁，还说这份规范在制定过程中听取了其他终端维护者的意见。
+***** Take
+需求是真实的，而代理类工具让情况更糟：“输出安静了”过去意味着跑完了，现在往往意味着在思考。帖子里的反对意见也站得住脚。systemd 已经为大致相同的用途提供了 OSC 3008，并且进了 Ubuntu 26.04，所以挡在这个提案和落地之间的不是设计水平，而是我们正要为同一个问题留下两套序列。
+***** Comments
+- OSC 7501 要解决的问题几乎可以完整塞进 UAPI 的 OSC 3008，systemd 已经实现了它，Ubuntu 26.04 里就有。我更希望看到扩展 OSC 3008。
+- BSD 系统多年前就有类似的东西。按 ^T 会给你正在等待的程序发一个 SIGINFO，默认就能看到程序名、它阻塞在什么上，以及实际/用户/系统时间和内存占用。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+プログラムの状態を伝えるターミナルプロトコル（OSC 7501）
+***** TLDR
+Mitchell Hashimoto氏が、プログラムが自分の状態をターミナルに伝えるためのエスケープシーケンスを提案した。プログラムはptyに ESC ］ 7501 ; state=<状態>:キー=値 ESC \ を書き込む。状態は5種類で、idle（ユーザーの指示待ち）、working（実行中、進捗率を付けられる）、done（完了）、blocked（permissionやquestion、authenticationといった種別付きでユーザーの操作待ち）、error（失敗して停止）。任意のフィールドとして、機械可読なアプリ名とbase64で符号化した1行メッセージを渡せる。狙いは、フォアグラウンドのプロセスを監視したり出力が止まったことから推測したりという現在のターミナルのやり方を置き換え、長いビルドが終わったときやツールが承認を待っているときに確実に通知できるようにすることだ。氏はlibghostty経由でGhosttyに、またRexターミナルに実装し、Terraform、Claude Code、Codex、Homebrew向けの概念実証パッチも用意した。仕様は他のターミナル開発者の意見も取り入れて作ったという。
+***** Take
+必要性は本物で、エージェント系のツールがそれを悪化させた。「出力が止まった」はかつて完了を意味したが、今では考え中を意味することが多い。スレッドの反論にも理がある。systemdはほぼ同じ目的のOSC 3008を既に出荷しており、Ubuntu 26.04に入っている。つまりこの提案と普及の間にあるのは設計の質ではなく、一つの問題に対して二つのシーケンスが並び立とうとしていることだ。
+***** Comments
+- OSC 7501が扱う問題は、UAPIのOSC 3008にほぼぴったり収まる。systemdが既に実装していて、Ubuntu 26.04で使える。OSC 3008を拡張するほうを見たい。
+- BSDには何年も前から同様の仕組みがある。^Tを押すと待っているアプリにSIGINFOが届き、既定でプログラム名、何でブロックしているか、実時間/ユーザー時間/システム時間とメモリ使用量が表示される。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+프로그램 상태를 알리는 터미널 프로토콜 (OSC 7501)
+***** TLDR
+Mitchell Hashimoto가 프로그램이 지금 무엇을 하고 있는지 터미널에 알릴 수 있는 이스케이프 시퀀스를 제안했다. 프로그램은 pty에 ESC ］ 7501 ; state=<상태>:키=값 ESC \ 를 쓰고, 상태는 다섯 가지다. idle(사용자 지시 대기), working(실행 중, 진행률 선택 가능), done(완료), blocked(permission, question, authentication 같은 종류와 함께 사용자 조작 대기), error(실패 후 중단). 선택 필드로 기계가 읽을 수 있는 앱 이름과 base64로 인코딩한 한 줄 메시지를 담을 수 있다. 목적은 포그라운드 프로세스를 감시하거나 출력이 멈춘 것으로 추측하는 현재 방식을 대체해, 긴 빌드가 끝났을 때나 도구가 승인을 기다릴 때 터미널이 확실히 알려주게 하는 것이다. 그는 libghostty를 통해 Ghostty에, 그리고 Rex 터미널에 구현했고 Terraform, Claude Code, Codex, Homebrew용 개념 증명 패치도 만들었으며, 명세는 다른 터미널 메인테이너들의 의견을 받아 다듬었다고 밝혔다.
+***** Take
+필요는 분명하고, 에이전트 도구들이 상황을 더 나쁘게 만들었다. "출력이 멈췄다"는 예전에 끝났다는 뜻이었지만 이제는 생각 중이라는 뜻인 경우가 많다. 스레드의 반론도 타당하다. systemd는 거의 같은 일을 하는 OSC 3008을 이미 내놓았고 Ubuntu 26.04에 들어 있다. 그러니 이 제안과 보급 사이에 놓인 것은 설계 품질이 아니라, 하나의 문제에 두 개의 시퀀스를 갖게 될 전망이다.
+***** Comments
+- OSC 7501이 다루는 문제는 UAPI의 OSC 3008에 거의 그대로 들어맞는다. systemd가 이미 구현했고 Ubuntu 26.04에서 쓸 수 있다. 나는 OSC 3008을 확장하는 쪽을 보고 싶다.
+- BSD에는 수년 전부터 비슷한 기능이 있다. ^T를 누르면 기다리고 있는 애플리케이션에 SIGINFO가 전달되고, 기본적으로 프로그램 이름, 무엇에서 블록됐는지, 실제/사용자/시스템 시간과 메모리 사용량이 나온다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un protocolo de terminal para el estado de los programas (OSC 7501)
+***** TLDR
+Mitchell Hashimoto propone una secuencia de escape que permite a un programa decirle a la terminal qué está haciendo. El programa escribe ESC ］ 7501 ; state=<estado>:clave=valor ESC \ en el pty, con uno de cinco estados: idle (esperando instrucciones), working (en ejecución, opcionalmente con porcentaje de progreso), done (terminado), blocked (esperando al usuario, con un tipo como permission, question o authentication) o error (falló y se detuvo). Hay campos opcionales para un nombre de aplicación legible por máquina y un mensaje de una línea codificado en base64. El objetivo es sustituir lo que hacen hoy las terminales, que es vigilar el proceso en primer plano o adivinar a partir de un silencio en la salida, para que la terminal pueda avisar de forma fiable cuando una compilación larga acaba o una herramienta espera aprobación. Lo tiene implementado en Ghostty mediante libghostty y en la terminal Rex, con parches de prueba para Terraform, Claude Code, Codex y Homebrew, y dice que la especificación se perfiló con aportes de otros mantenedores de terminales.
+***** Take
+La necesidad es real, y las herramientas de agentes la empeoraron: "la salida se quedó en silencio" antes significaba terminado y ahora suele significar pensando. La objeción del hilo también acierta. systemd ya distribuye OSC 3008 para más o menos lo mismo y está en Ubuntu 26.04, así que lo que separa esta propuesta de su adopción no es la calidad del diseño, sino que vamos camino de tener dos secuencias para un solo problema.
+***** Comments
+- El problema que aborda OSC 7501 encajaría casi a la perfección en el OSC 3008 de UAPI, que systemd ya implementa y que viene en Ubuntu 26.04. Preferiría ver una extensión de OSC 3008.
+- Los BSD tienen una versión de esto desde hace muchos años. Pulsas ^T y envías un SIGINFO a la aplicación que estás esperando: por defecto obtienes el nombre del programa, en qué está bloqueado y los tiempos real/usuario/sistema más el uso de memoria.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein Terminal-Protokoll für Programmstatus (OSC 7501)
+***** TLDR
+Mitchell Hashimoto schlägt eine Escape-Sequenz vor, mit der ein Programm dem Terminal mitteilt, was es tut. Das Programm schreibt ESC ］ 7501 ; state=<Zustand>:Schlüssel=Wert ESC \ in das pty, mit einem von fünf Zuständen: idle (wartet auf Anweisungen), working (läuft, optional mit Fortschritt in Prozent), done (fertig), blocked (wartet auf den Nutzer, mit einer Art wie permission, question oder authentication) oder error (fehlgeschlagen und gestoppt). Optionale Felder tragen einen maschinenlesbaren App-Namen und eine base64-kodierte einzeilige Nachricht. Ziel ist, das heutige Vorgehen der Terminals zu ersetzen, nämlich den Vordergrundprozess zu beobachten oder aus ausbleibender Ausgabe zu raten, damit ein Terminal zuverlässig benachrichtigen kann, wenn ein langer Build fertig ist oder ein Werkzeug auf Zustimmung wartet. Umgesetzt hat er es in Ghostty über libghostty und im Rex-Terminal, dazu Proof-of-Concept-Patches für Terraform, Claude Code, Codex und Homebrew; die Spezifikation sei mit Rückmeldungen anderer Terminal-Maintainer entstanden.
+***** Take
+Der Bedarf ist echt, und Agenten-Werkzeuge haben ihn verschärft: "die Ausgabe ist still geworden" hieß früher fertig und heißt heute oft denkt nach. Der Einwand im Thread trifft ebenfalls. systemd liefert für im Grunde dieselbe Aufgabe bereits OSC 3008 aus, und das steckt in Ubuntu 26.04. Zwischen diesem Vorschlag und seiner Verbreitung steht also nicht die Qualität des Entwurfs, sondern die Aussicht auf zwei Sequenzen für ein Problem.
+***** Comments
+- Das Problem, das OSC 7501 angeht, würde fast perfekt in das OSC 3008 der UAPI passen, das systemd schon implementiert und das in Ubuntu 26.04 enthalten ist. Ich würde lieber eine Erweiterung von OSC 3008 sehen.
+- Die BSDs haben seit vielen Jahren eine Variante davon. Mit ^T schickst du ein SIGINFO an die Anwendung, auf die du wartest, und bekommst standardmäßig den Programmnamen, worauf sie blockiert, sowie Real-/User-/Sys-Zeit und Speicherverbrauch.
+** DuckDB Ducklake :duckdb:data:lakehouse:parquet:
+:PROPERTIES:
+:ID:       49996149
+:URL:      https://github.com/duckdb/ducklake
+:HN_URL:   https://news.ycombinator.com/item?id=49996149
+:POINTS:   156
+:COMMENTS: 20
+:BY:       saikatsg
+:END:
+
+*** TLDR
+DuckLake is DuckDB's lakehouse format, MIT licensed and at v1.0 since April 2026. Data sits in plain Parquet files on local disk or object storage, and all metadata, snapshots and column statistics live in an ordinary ACID SQL database, which can be PostgreSQL, MySQL, SQLite or DuckDB itself. That arrangement gives you time travel, schema evolution, change data feeds, partitioning, filter pushdown statistics and concurrent transactions without running a dedicated catalog server, and the Parquet files stay compatible with Iceberg readers. The project says it is already in production use at a number of organizations.
+
+*** Take
+The hard part of Iceberg and Delta was never the file layout, it was running a catalog on object storage that has to behave like a transactional database. Putting the metadata in a database that already is one is the obvious answer, and the real story is how long the industry spent avoiding it. One thing buyers should hear out loud: your lakehouse's availability is now your Postgres instance's availability.
+
+*** Comments
+
+**** smithclay
+Not widely understood: DuckLake doesn't require DuckDB. It's just a good data lake spec that happens to work in DuckDB. There's a Rust/DataFusion implementation going too.
+
+**** suchire
+But "Duckpond" was right there!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+DuckDB DuckLake
+***** TLDR
+DuckLake 是 DuckDB 的湖仓格式，采用 MIT 许可，自 2026 年 4 月起发布 v1.0。数据以普通 Parquet 文件存放在本地磁盘或对象存储上，而全部元数据、快照和列统计信息放在一个普通的、支持 ACID 的 SQL 数据库里，可以是 PostgreSQL、MySQL、SQLite 或 DuckDB 本身。这种安排让你无需运行专门的 catalog 服务就能获得时间旅行、模式演进、变更数据流、分区、用于过滤下推的统计信息和并发事务，而 Parquet 文件仍与 Iceberg 的读取端兼容。项目方称已有若干机构在生产环境中使用。
+***** Take
+Iceberg 和 Delta 的难点从来不是文件布局，而是要在对象存储之上运行一个必须像事务型数据库那样表现的 catalog。把元数据放进一个本来就是数据库的东西里是显而易见的答案，真正值得说的是业界绕开这个答案绕了多久。有一点买家应该听清楚：你的湖仓可用性，现在就是你那台 Postgres 的可用性。
+***** Comments
+- 一个还没被广泛理解的点：DuckLake 不依赖 DuckDB。它就是一份不错的数据湖规范，恰好能在 DuckDB 里用。另外还有一个 Rust/DataFusion 的实现在推进。
+- 可是“Duckpond”这个名字明明就在那儿啊！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+DuckDB DuckLake
+***** TLDR
+DuckLakeはDuckDBのレイクハウス形式で、MITライセンス、2026年4月からv1.0になっている。データはローカルディスクやオブジェクトストレージ上の素のParquetファイルとして置かれ、メタデータ、スナップショット、列統計はすべて通常のACID対応SQLデータベースに格納される。この用途にはPostgreSQL、MySQL、SQLite、あるいはDuckDB自身が使える。この構成により、専用のカタログサーバーを動かさずにタイムトラベル、スキーマ進化、変更データフィード、パーティショニング、フィルタプッシュダウン用の統計、並行トランザクションが得られ、ParquetファイルはIcebergのリーダーと互換のままだ。プロジェクトは、すでに複数の組織で本番運用されているとしている。
+***** Take
+IcebergやDeltaの難所はファイルのレイアウトではなく、トランザクショナルなデータベースのように振る舞わなければならないカタログをオブジェクトストレージの上で運用することだった。メタデータを、もともとデータベースであるものに置くのは当然の答えで、本当の話は業界がそれを避け続けた時間の長さだ。導入側が声に出して確認すべき点が一つある。レイクハウスの可用性は、これからはPostgresインスタンスの可用性そのものになる。
+***** Comments
+- あまり理解されていないが、DuckLakeはDuckDBを必要としない。DuckDBで動く、よくできたデータレイクの仕様というだけだ。Rust/DataFusionでの実装も進んでいる。
+- でも「Duckpond」という名前がすぐそこにあったのに！
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+DuckDB DuckLake
+***** TLDR
+DuckLake는 DuckDB의 레이크하우스 형식으로, MIT 라이선스이며 2026년 4월부터 v1.0이다. 데이터는 로컬 디스크나 오브젝트 스토리지의 평범한 Parquet 파일로 놓이고, 메타데이터와 스냅숏, 컬럼 통계는 모두 일반적인 ACID SQL 데이터베이스에 들어간다. 여기에는 PostgreSQL, MySQL, SQLite 또는 DuckDB 자신을 쓸 수 있다. 이 구조 덕분에 전용 카탈로그 서버를 운영하지 않고도 타임 트래블, 스키마 진화, 변경 데이터 피드, 파티셔닝, 필터 푸시다운용 통계, 동시 트랜잭션을 얻으며 Parquet 파일은 Iceberg 리더와 호환을 유지한다. 프로젝트 측은 이미 여러 조직에서 운영 환경에 쓰이고 있다고 밝힌다.
+***** Take
+Iceberg와 Delta의 어려운 부분은 파일 레이아웃이 아니라, 트랜잭션 데이터베이스처럼 동작해야 하는 카탈로그를 오브젝트 스토리지 위에서 운영하는 일이었다. 메타데이터를 이미 데이터베이스인 것에 넣는 건 당연한 답이고, 정작 할 이야기는 업계가 그 답을 얼마나 오래 피했는지다. 도입하는 쪽이 분명히 들어야 할 한 가지: 이제 레이크하우스의 가용성은 당신의 Postgres 인스턴스의 가용성이다.
+***** Comments
+- 널리 알려지지 않은 점: DuckLake는 DuckDB를 필요로 하지 않는다. DuckDB에서 동작하는 괜찮은 데이터 레이크 명세일 뿐이다. Rust/DataFusion 구현도 진행 중이다.
+- 그런데 'Duckpond'라는 이름이 바로 거기 있었는데!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+DuckDB DuckLake
+***** TLDR
+DuckLake es el formato lakehouse de DuckDB, con licencia MIT y en v1.0 desde abril de 2026. Los datos viven como archivos Parquet corrientes en disco local o almacenamiento de objetos, y todos los metadatos, instantáneas y estadísticas de columnas residen en una base de datos SQL ACID común, que puede ser PostgreSQL, MySQL, SQLite o DuckDB mismo. Ese reparto da viaje en el tiempo, evolución de esquema, feeds de cambios, particionado, estadísticas para filter pushdown y transacciones concurrentes sin montar un servidor de catálogo dedicado, y los archivos Parquet siguen siendo compatibles con los lectores de Iceberg. El proyecto afirma que ya se usa en producción en varias organizaciones.
+***** Take
+La parte difícil de Iceberg y Delta nunca fue la disposición de los archivos, sino operar sobre almacenamiento de objetos un catálogo que tiene que comportarse como una base de datos transaccional. Poner los metadatos en una base de datos que ya lo es resulta la respuesta evidente, y la historia real es cuánto tardó el sector en aceptarla. Un punto que los compradores deberían oír claro: la disponibilidad de tu lakehouse es ahora la disponibilidad de tu instancia de Postgres.
+***** Comments
+- Poco entendido: DuckLake no requiere DuckDB. Es simplemente una buena especificación de data lake que funciona en DuckDB. También avanza una implementación en Rust/DataFusion.
+- ¡Pero "Duckpond" estaba ahí mismo!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+DuckDB DuckLake
+***** TLDR
+DuckLake ist das Lakehouse-Format von DuckDB, MIT-lizenziert und seit April 2026 in Version 1.0. Die Daten liegen als gewöhnliche Parquet-Dateien auf lokaler Platte oder Objektspeicher, und alle Metadaten, Snapshots und Spaltenstatistiken stecken in einer normalen ACID-fähigen SQL-Datenbank, die PostgreSQL, MySQL, SQLite oder DuckDB selbst sein kann. Diese Aufteilung bringt Time Travel, Schemaentwicklung, Change Data Feeds, Partitionierung, Statistiken für Filter-Pushdown und gleichzeitige Transaktionen, ohne dass ein eigener Katalogserver läuft, und die Parquet-Dateien bleiben mit Iceberg-Lesern kompatibel. Laut Projekt ist das Format bei mehreren Organisationen bereits im Produktiveinsatz.
+***** Take
+Das Schwierige an Iceberg und Delta war nie das Dateilayout, sondern einen Katalog auf Objektspeicher zu betreiben, der sich wie eine transaktionale Datenbank verhalten muss. Die Metadaten in etwas zu legen, das schon eine Datenbank ist, ist die naheliegende Antwort, und die eigentliche Geschichte ist, wie lange die Branche darum herumgelaufen ist. Eines sollten Interessenten laut hören: Die Verfügbarkeit deines Lakehouse ist ab jetzt die Verfügbarkeit deiner Postgres-Instanz.
+***** Comments
+- Wenig verstanden: DuckLake braucht DuckDB nicht. Es ist einfach eine gute Data-Lake-Spezifikation, die in DuckDB funktioniert. Eine Implementierung in Rust/DataFusion ist ebenfalls im Gange.
+- Aber "Duckpond" wäre doch da gewesen!
