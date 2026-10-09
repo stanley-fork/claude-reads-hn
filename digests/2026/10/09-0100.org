@@ -1,0 +1,504 @@
+#+TITLE: HN Digest 2026-10-09 01:00 UTC
+#+DATE: 2026-10-09T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A 16.9 MB speech model, a Keurig that saturated a Wi-Fi access point, and DVD menus that did more with sixteen registers than Blu-ray does with Java
+
+* Highlights
+- Whistle: 16.9 MB speech-to-text, 11 ms to first token, seventeen build targets
+- DeepSeek 4.1 Flash runs about $0.003 a query, and subsidized subscriptions hide the gap
+- A Keurig moved 1 TB in 10 days, all of it on the local network
+- Scooby-Doo 2's DVD menu shipped two playable games inside sixteen registers
+- 73-78% of people with ADHD have a delayed sleep/wake cycle; causation still unclear
+
+* Stories
+
+** Whistle: Speech to Text in 16.9 MB :ai:speech:on-device:open-source:
+:PROPERTIES:
+:ID:       50008427
+:URL:      https://cactuscompute.com/blog/whistle
+:HN_URL:   https://news.ycombinator.com/item?id=50008427
+:POINTS:   512
+:COMMENTS: 117
+:BY:       gmays
+:END:
+
+*** TLDR
+Cactus Compute released Whistle, a 16.9 MB open speech recognition model that runs on CPU with no dependencies: eight Simple Attention encoder blocks, eight laddered decoder blocks, 16 kHz mono input up to 30 seconds. It transcribes seven languages (English, German, French, Spanish, Italian, Dutch, Polish) with automatic language detection, reaches 11.1 ms to first token and 1,319 tokens/sec decoding on an M4 Pro CPU, and beats Whisper Base (145.3 MB) on LibriSpeech test-clean/other, SPGISpeech and Earnings-22 while losing to it on TED-LIUM and AMI. Builds ship for seventeen targets including RISC-V, MIPS, watchOS, the browser and WASI. It loads into the same C++ engine as the company's Needle model, so one binary can turn a clip into a transcript plus function calls.
+
+*** Take
+The size is the headline and the benchmark table is the content. Whistle wins on read speech and finance audio, loses on TED talks and AMI meeting recordings, which is the exact split you get from a small model trained on clean data. Meeting audio with crosstalk and accents is where transcription actually gets used, and that is where skolos measured it well behind a 1.7B Qwen ASR model over 170 messages. That comparison is unfair on purpose: 16.9 MB on a watch and 1.7B on an RTX 5080 are not the same product. The seventeen build targets are the real claim here, not the word error rate.
+
+*** Comments
+
+**** skolos
+I used Whistle to take ownership of my Echo Show. It doesn't dial Amazon at all now, it processes locally and talks to Home Assistant. Compared to qwen asr (1.7b) on an RTX 5080, Whistle was really bad.
+
+**** INTPenis
+The challenge with speech to text was never the size of the binary. It is understanding my 84 year old Croatian father with a sagging mouth after a stroke, when he's trying to write his autobiography.
+
+**** snvzz
+Ships with a RISC-V build. This is much appreciated!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Whistle：16.9 MB 的语音转文字模型
+***** TLDR
+Cactus Compute 发布了 Whistle，一个 16.9 MB 的开源语音识别模型，在 CPU 上运行且无依赖：编码器为八个 Simple Attention 模块，解码器为八个阶梯式模块，输入为 16 kHz 单声道、最长 30 秒。它支持七种语言（英语、德语、法语、西班牙语、意大利语、荷兰语、波兰语）并能自动识别语种，在 M4 Pro 的 CPU 上首个 token 延迟 11.1 毫秒、解码速度每秒 1319 个 token，在 LibriSpeech test-clean/other、SPGISpeech 和 Earnings-22 上胜过 145.3 MB 的 Whisper Base，但在 TED-LIUM 和 AMI 上落后。官方提供十七个目标平台的构建，包括 RISC-V、MIPS、watchOS、浏览器和 WASI。它与该公司的 Needle 模型共用同一个 C++ 引擎，因此一个二进制文件就能把音频片段同时转成文字和函数调用。
+***** Take
+体积是标题，真正的内容是那张基准测试表。Whistle 在朗读语音和财经音频上胜出，在 TED 演讲和 AMI 会议录音上落败，这正是一个用干净数据训练的小模型会呈现的分化。带有交叠说话和口音的会议音频才是语音识别真正被使用的场景，而 skolos 在 170 条消息上测出它明显落后于 1.7B 的 Qwen ASR。这个对比故意不公平：手表上的 16.9 MB 和 RTX 5080 上的 1.7B 不是同一类产品。真正的看点是十七个构建目标，而不是词错误率。
+***** Comments
+- 我用 Whistle 接管了自己的 Echo Show。它现在完全不连亚马逊，全部本地处理，并接入 Home Assistant。相比跑在 RTX 5080 上的 qwen asr（1.7b），Whistle 表现相当差。
+- 语音转文字的难点从来不是二进制文件的大小。难点是听懂我 84 岁的克罗地亚父亲，他中风后嘴部下垂，正试着写自传。
+- 附带 RISC-V 构建版本。非常感谢！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Whistle: 16.9MBの音声認識モデル
+***** TLDR
+Cactus Computeが16.9MBのオープンな音声認識モデルWhistleを公開した。依存関係なしでCPU上で動作し、エンコーダはSimple Attentionブロック8個、デコーダは階段状ブロック8個、入力は16kHzモノラルで最長30秒。7言語（英語、ドイツ語、フランス語、スペイン語、イタリア語、オランダ語、ポーランド語）を自動言語判定付きで文字起こしし、M4 ProのCPUで最初のトークンまで11.1ミリ秒、デコード毎秒1319トークンを記録。LibriSpeech test-clean/other、SPGISpeech、Earnings-22では145.3MBのWhisper Baseを上回るが、TED-LIUMとAMIでは下回る。RISC-V、MIPS、watchOS、ブラウザ、WASIを含む17のターゲット向けビルドを提供。同社のNeedleモデルと同じC++エンジンに読み込まれるため、1つのバイナリで音声を文字起こしと関数呼び出しに変換できる。
+***** Take
+サイズが見出しで、中身はベンチマーク表だ。Whistleは朗読音声と金融音声で勝ち、TED講演とAMI会議録音で負ける。クリーンなデータで訓練された小型モデルに典型的な分かれ方だ。発話の重なりと訛りがある会議音声こそ文字起こしが実際に使われる場所で、そこでskolosは170件のメッセージで1.7BのQwen ASRに明確に劣ると測定した。この比較は意図的に不公平だ。腕時計上の16.9MBとRTX 5080上の1.7Bは同じ製品ではない。本当の主張は単語誤り率ではなく17のビルドターゲットにある。
+***** Comments
+- Whistleを使ってEcho Showを自分のものにした。もうAmazonには一切接続せず、ローカルで処理してHome Assistantと連携している。RTX 5080上のqwen asr（1.7b）と比べると、Whistleはかなり悪かった。
+- 音声認識の課題はバイナリのサイズではなかった。脳卒中で口が下がった84歳のクロアチア人の父が自伝を書こうとしているのを聞き取ることだ。
+- RISC-Vビルドが同梱されている。これは本当にありがたい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Whistle: 16.9MB 음성 인식 모델
+***** TLDR
+Cactus Compute가 16.9MB 크기의 오픈 음성 인식 모델 Whistle을 공개했다. 의존성 없이 CPU에서 동작하며 인코더는 Simple Attention 블록 8개, 디코더는 계단형 블록 8개, 입력은 16kHz 모노로 최대 30초다. 7개 언어(영어, 독일어, 프랑스어, 스페인어, 이탈리아어, 네덜란드어, 폴란드어)를 자동 언어 감지와 함께 전사하고, M4 Pro CPU에서 첫 토큰까지 11.1밀리초, 디코딩 초당 1319토큰을 기록했다. LibriSpeech test-clean/other, SPGISpeech, Earnings-22에서는 145.3MB의 Whisper Base를 앞서지만 TED-LIUM과 AMI에서는 뒤진다. RISC-V, MIPS, watchOS, 브라우저, WASI를 포함한 17개 타깃용 빌드를 제공한다. 같은 회사의 Needle 모델과 동일한 C++ 엔진에 로드되므로 바이너리 하나로 음성을 전사와 함수 호출로 동시에 바꿀 수 있다.
+***** Take
+크기가 헤드라인이고 내용은 벤치마크 표다. Whistle은 낭독 음성과 금융 오디오에서 이기고 TED 강연과 AMI 회의 녹음에서 진다. 깨끗한 데이터로 학습한 소형 모델에서 정확히 예상되는 갈림이다. 발화가 겹치고 억양이 섞인 회의 오디오가 전사가 실제로 쓰이는 곳이고, 바로 거기서 skolos는 메시지 170건으로 1.7B Qwen ASR에 뚜렷하게 밀린다고 측정했다. 이 비교는 의도적으로 불공정하다. 손목시계의 16.9MB와 RTX 5080의 1.7B는 같은 제품이 아니다. 진짜 주장은 단어 오류율이 아니라 17개 빌드 타깃이다.
+***** Comments
+- Whistle로 내 Echo Show를 완전히 장악했다. 이제 아마존에 전혀 연결하지 않고 로컬에서 처리하며 Home Assistant와 연동한다. RTX 5080에서 돌린 qwen asr(1.7b)과 비교하면 Whistle은 상당히 나빴다.
+- 음성 인식의 난점은 바이너리 크기가 아니었다. 뇌졸중으로 입이 처진 84세 크로아티아인 아버지가 자서전을 쓰려 할 때 그 말을 알아듣는 것이다.
+- RISC-V 빌드가 포함되어 있다. 정말 고맙다!
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Whistle: reconocimiento de voz en 16,9 MB
+***** TLDR
+Cactus Compute publicó Whistle, un modelo abierto de reconocimiento de voz de 16,9 MB que corre en CPU sin dependencias: codificador de ocho bloques Simple Attention, decodificador de ocho bloques escalonados, entrada mono de 16 kHz hasta 30 segundos. Transcribe siete idiomas (inglés, alemán, francés, español, italiano, neerlandés y polaco) con detección automática, alcanza 11,1 ms hasta el primer token y 1.319 tokens por segundo de decodificación en una CPU M4 Pro, y supera a Whisper Base (145,3 MB) en LibriSpeech test-clean/other, SPGISpeech y Earnings-22, pero pierde en TED-LIUM y AMI. Hay compilaciones para diecisiete objetivos, incluidos RISC-V, MIPS, watchOS, el navegador y WASI. Se carga en el mismo motor C++ que el modelo Needle de la empresa, así que un solo binario convierte un audio en transcripción más llamadas a funciones.
+***** Take
+El tamaño es el titular y la tabla de benchmarks es el contenido. Whistle gana en habla leída y audio financiero, y pierde en charlas TED y grabaciones de reuniones AMI, que es la división esperable de un modelo pequeño entrenado con datos limpios. El audio de reuniones, con voces solapadas y acentos, es donde la transcripción se usa de verdad, y ahí skolos lo midió claramente por detrás de un modelo Qwen ASR de 1.700 millones de parámetros en 170 mensajes. La comparación es injusta a propósito: 16,9 MB en un reloj y 1,7B en una RTX 5080 no son el mismo producto. Los diecisiete objetivos de compilación son el argumento real, no la tasa de error.
+***** Comments
+- Usé Whistle para tomar el control de mi Echo Show. Ya no llama a Amazon, procesa todo localmente y se conecta a Home Assistant. Comparado con qwen asr (1.7b) en una RTX 5080, Whistle fue bastante malo.
+- El reto del reconocimiento de voz nunca fue el tamaño del binario. Es entender a mi padre croata de 84 años, con la boca caída tras un ictus, cuando intenta escribir su autobiografía.
+- Incluye una compilación para RISC-V. ¡Muy agradecido!
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Whistle: Spracherkennung in 16,9 MB
+***** TLDR
+Cactus Compute hat Whistle veröffentlicht, ein offenes Spracherkennungsmodell von 16,9 MB, das ohne Abhängigkeiten auf der CPU läuft: Encoder aus acht Simple-Attention-Blöcken, Decoder aus acht gestaffelten Blöcken, Eingabe 16 kHz mono bis 30 Sekunden. Es transkribiert sieben Sprachen (Englisch, Deutsch, Französisch, Spanisch, Italienisch, Niederländisch, Polnisch) mit automatischer Spracherkennung, erreicht 11,1 ms bis zum ersten Token und 1.319 Token pro Sekunde beim Decodieren auf einer M4-Pro-CPU und schlägt Whisper Base (145,3 MB) bei LibriSpeech test-clean/other, SPGISpeech und Earnings-22, verliert aber bei TED-LIUM und AMI. Builds gibt es für siebzehn Ziele, darunter RISC-V, MIPS, watchOS, den Browser und WASI. Es lädt in dieselbe C++-Engine wie das Needle-Modell der Firma, sodass eine Binärdatei aus einem Clip Transkript und Funktionsaufrufe macht.
+***** Take
+Die Größe ist die Schlagzeile, die Benchmark-Tabelle ist der Inhalt. Whistle gewinnt bei vorgelesener Sprache und Finanz-Audio und verliert bei TED-Vorträgen und AMI-Meetingaufnahmen, genau die Aufteilung, die ein kleines Modell mit sauberen Trainingsdaten liefert. Meeting-Audio mit Durcheinanderreden und Akzenten ist der Ort, an dem Transkription wirklich benutzt wird, und dort lag es laut skolos über 170 Nachrichten deutlich hinter einem 1,7B-Qwen-ASR-Modell. Dieser Vergleich ist absichtlich unfair: 16,9 MB auf einer Uhr und 1,7B auf einer RTX 5080 sind nicht dasselbe Produkt. Die siebzehn Build-Ziele sind das eigentliche Argument, nicht die Wortfehlerrate.
+***** Comments
+- Ich habe mit Whistle meinen Echo Show übernommen. Er ruft Amazon überhaupt nicht mehr an, verarbeitet alles lokal und spricht mit Home Assistant. Verglichen mit qwen asr (1.7b) auf einer RTX 5080 war Whistle wirklich schlecht.
+- Das Problem der Spracherkennung war nie die Größe der Binärdatei. Es ist, meinen 84-jährigen kroatischen Vater zu verstehen, dessen Mund nach einem Schlaganfall herabhängt, wenn er seine Autobiografie schreiben will.
+- Kommt mit einem RISC-V-Build. Sehr willkommen!
+** Why isn't the industry freaking out about DeepSeek 4.1 Flash? :ai:llm:economics:deepseek:
+:PROPERTIES:
+:ID:       50000488
+:URL:      https://www.dgt.is/blog/2026-10-07-deepseek-freek-out/
+:HN_URL:   https://news.ycombinator.com/item?id=50000488
+:POINTS:   380
+:COMMENTS: 321
+:BY:       jonotime
+:END:
+
+*** TLDR
+A blog post arguing DeepSeek 4.1 Flash delivers frontier quality at a small fraction of frontier price. The author says that during normal work sessions they could not tell whether they were on DeepSeek or Opus, runs 4.1 Flash as their primary model with Claude Opus 5.5 reserved for final code review, and reports complex single queries costing about $0.003 and whole sessions staying under $1 on a $10/month OpenCode Go subscription. The mechanism credited is KV cache size, roughly 437x smaller than DeepSeek V1, which makes all-day sessions cheap to keep in context. The conclusion: Chinese labs will take the market because the same workloads cost far less.
+
+*** Take
+The post compares API prices and the thread answers with subscription prices, and that mismatch is the whole story. Nobody on a $100 or $200 monthly plan feels per-token cost, so a model that is orders of magnitude cheaper per token is competing against a number its customers never see. vishvananda burned $50 on OpenRouter in a few days and noted that is a quarter of a Codex subscription that would have absorbed more tokens than that. mlinsey ran the controlled version: GLM 5.3 on a $100/mo Z.ai plan against Opus 5.5 on a $100/mo Claude plan, no big gap. giancarlostoro's VRAM table covers the other exit, since 1,664 GB at FP16 means you are renting someone's cluster either way. The freak-out is scheduled for whenever the subsidies end, not for when the benchmarks land.
+
+*** Comments
+
+**** vishvananda
+The reason people aren't freaking out is because most people are using heavily subsidized subscriptions. I tried the cheapest provider on openrouter and burned through $50 in a few days. That $50 is 1/4 of my codex subscription where I could have burned that many tokens or more. This won't last.
+
+**** giancarlostoro
+FP16 requires ~1,664 GB of VRAM, INT8 ~832 GB, INT4 ~416 GB. VRAM aint cheap, and Nvidia doesnt make enough consumer GPUs.
+
+**** mlinsey
+I'm paying for the heavily-discounted subscriptions, not the API rates. There isn't really a cost gap for me. Comparing GLM 5.3 from a $100/mo Z.ai subscription to Opus 5.5 on a $100/mo Claude subscription, there wasn't a big gap.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+业界为什么没有为 DeepSeek 4.1 Flash 感到震动？
+***** TLDR
+一篇博文主张 DeepSeek 4.1 Flash 以前沿模型的一小部分价格提供了前沿级质量。作者说在日常工作中他分不清自己用的是 DeepSeek 还是 Opus，他把 4.1 Flash 当主力模型，只在最后做代码审查时用 Claude Opus 5.5，并称复杂的单次查询约花 0.003 美元，在每月 10 美元的 OpenCode Go 订阅下整场会话也不到 1 美元。他把这归功于 KV 缓存体积，大约只有 DeepSeek V1 的 1/437，因此可以廉价地把整天的上下文保留下来。结论是中国的实验室会拿下市场，因为同样的工作负载便宜得多。
+***** Take
+博文比的是 API 价格，而评论区回的是订阅价格，这个错位就是全部答案。每月付 100 或 200 美元的人感受不到按 token 计费，所以一个单价便宜几个数量级的模型，是在跟一个用户根本看不到的数字竞争。vishvananda 在 OpenRouter 上几天烧掉 50 美元，并指出那只是他 Codex 订阅费的四分之一，而订阅能消耗的 token 还更多。mlinsey 做了更干净的对照：100 美元/月的 Z.ai 套餐里的 GLM 5.3 对 100 美元/月 Claude 套餐里的 Opus 5.5，差距并不大。giancarlostoro 的显存表堵住了另一条出路，FP16 要 1664 GB，意味着你无论如何都在租别人的集群。真正的震动会在补贴结束时到来，而不是在基准测试出来时。
+***** Comments
+- 大家没有震动，是因为多数人用的是被大幅补贴的订阅。我试了 openrouter 上最便宜的供应商，几天就烧掉 50 美元。而这 50 美元只是我 Codex 订阅费的四分之一，用订阅我能烧掉同样多甚至更多的 token。这种状况不会长久。
+- FP16 需要约 1664 GB 显存，INT8 约 832 GB，INT4 约 416 GB。显存不便宜，而英伟达的消费级 GPU 产量也不够。
+- 我付的是大幅打折的订阅费，不是 API 价格，所以对我来说并不存在成本差距。拿 100 美元/月 Z.ai 订阅里的 GLM 5.3 和 100 美元/月 Claude 订阅里的 Opus 5.5 比，差距并不大。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+なぜ業界はDeepSeek 4.1 Flashに騒いでいないのか？
+***** TLDR
+DeepSeek 4.1 Flashがフロンティア級の品質をフロンティア価格のごく一部で提供していると主張するブログ記事。著者は通常の作業中にDeepSeekとOpusのどちらを使っているか区別できなかったと述べ、4.1 Flashを主力モデルとして使い、最終的なコードレビューにだけClaude Opus 5.5を使う。複雑な単一クエリは約0.003ドル、月10ドルのOpenCode Goサブスクリプションではセッション全体でも1ドル未満だという。要因としてKVキャッシュのサイズを挙げ、DeepSeek V1の約437分の1なので、一日中のセッションを文脈に保ったままでも安い。結論は、同じ作業がはるかに安く済むため中国の研究所が市場を取るというものだ。
+***** Take
+記事はAPI価格を比べ、スレッドはサブスクリプション価格で返している。このすれ違いがすべてだ。月100ドルや200ドルのプランを払っている人はトークン単価を感じないので、単価が桁違いに安いモデルは顧客が目にすることのない数字と競争していることになる。vishvanandaはOpenRouterで数日に50ドルを使い、それはCodexサブスクリプション料の4分の1に過ぎず、サブスクならもっと多くのトークンを消費できたと指摘した。mlinseyはより公正な比較をした。月100ドルのZ.aiプランのGLM 5.3と月100ドルのClaudeプランのOpus 5.5では、大きな差はなかった。giancarlostoroのVRAM表はもう一つの出口を塞ぐ。FP16で1,664GBということは、結局は誰かのクラスタを借りることになる。騒ぎが起きるのは補助金が終わるときで、ベンチマークが出るときではない。
+***** Comments
+- みんなが騒いでいない理由は、ほとんどの人が大幅に補助されたサブスクリプションを使っているからだ。openrouterで一番安いプロバイダを試したら数日で50ドルを使い切った。その50ドルは私のcodexサブスクリプション料の4分の1で、サブスクならそれ以上のトークンを使えた。この状況は続かない。
+- FP16は約1,664GBのVRAM、INT8は約832GB、INT4は約416GBを要求する。VRAMは安くないし、Nvidiaはコンシューマ向けGPUを十分に作っていない。
+- 私が払っているのは大幅割引のサブスクリプションでAPI料金ではないので、コスト差は実質ない。月100ドルのZ.aiサブスクのGLM 5.3と月100ドルのClaudeサブスクのOpus 5.5を比べても、大きな差はなかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+업계는 왜 DeepSeek 4.1 Flash에 놀라지 않는가?
+***** TLDR
+DeepSeek 4.1 Flash가 프런티어급 품질을 프런티어 가격의 아주 일부로 제공한다고 주장하는 블로그 글이다. 저자는 평소 작업 중에는 DeepSeek을 쓰는지 Opus를 쓰는지 구분할 수 없었다고 말하며, 4.1 Flash를 주력으로 쓰고 최종 코드 리뷰에만 Claude Opus 5.5를 쓴다. 복잡한 단일 질의가 약 0.003달러, 월 10달러 OpenCode Go 구독에서 세션 전체도 1달러 미만이라고 보고한다. 근거로 든 메커니즘은 KV 캐시 크기이며 DeepSeek V1의 약 437분의 1이라서 하루 종일 이어지는 세션을 맥락에 유지해도 싸다. 결론은 같은 작업이 훨씬 싸게 끝나므로 중국 연구소들이 시장을 가져간다는 것이다.
+***** Take
+글은 API 가격을 비교하고 댓글은 구독 가격으로 답한다. 이 엇갈림이 전부다. 월 100달러나 200달러 요금제를 쓰는 사람은 토큰 단가를 체감하지 않으므로, 단가가 수십 배 싼 모델은 고객이 한 번도 보지 않는 숫자와 경쟁하는 셈이다. vishvananda는 OpenRouter에서 며칠에 50달러를 썼고 그것이 Codex 구독료의 4분의 1에 불과하며 구독으로는 그보다 많은 토큰을 썼을 것이라고 지적했다. mlinsey는 더 공정한 비교를 했다. 월 100달러 Z.ai 요금제의 GLM 5.3과 월 100달러 Claude 요금제의 Opus 5.5 사이에 큰 차이는 없었다. giancarlostoro의 VRAM 표는 다른 출구를 막는다. FP16에서 1,664GB라면 결국 누군가의 클러스터를 빌리게 된다. 놀랄 시점은 보조금이 끝날 때이고 벤치마크가 나올 때가 아니다.
+***** Comments
+- 사람들이 놀라지 않는 이유는 대부분 크게 보조된 구독을 쓰기 때문이다. openrouter에서 가장 싼 제공자를 써봤는데 며칠에 50달러를 다 썼다. 그 50달러는 내 codex 구독료의 4분의 1이고, 구독으로는 그만큼 또는 그 이상의 토큰을 쓸 수 있었다. 이런 상태는 오래가지 않는다.
+- FP16은 약 1,664GB VRAM, INT8은 약 832GB, INT4는 약 416GB가 필요하다. VRAM은 싸지 않고 엔비디아는 소비자용 GPU를 충분히 만들지 않는다.
+- 나는 API 요금이 아니라 크게 할인된 구독료를 낸다. 그래서 비용 격차가 사실상 없다. 월 100달러 Z.ai 구독의 GLM 5.3과 월 100달러 Claude 구독의 Opus 5.5를 비교해도 큰 차이는 없었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Por qué la industria no está alarmada con DeepSeek 4.1 Flash?
+***** TLDR
+Una entrada de blog sostiene que DeepSeek 4.1 Flash ofrece calidad de frontera a una fracción mínima del precio de frontera. El autor dice que en sesiones normales de trabajo no podría decir si está usando DeepSeek u Opus, utiliza 4.1 Flash como modelo principal y reserva Claude Opus 5.5 para la revisión final de código, y reporta consultas complejas de unos 0,003 dólares y sesiones completas por debajo de un dólar con una suscripción OpenCode Go de 10 dólares al mes. El mecanismo que le atribuye es el tamaño de la caché KV, unas 437 veces menor que en DeepSeek V1, lo que abarata mantener en contexto sesiones de todo el día. La conclusión: los laboratorios chinos se quedarán con el mercado porque las mismas cargas de trabajo cuestan mucho menos.
+***** Take
+El artículo compara precios de API y el hilo responde con precios de suscripción, y ese desencaje es toda la historia. Nadie con un plan de 100 o 200 dólares al mes siente el coste por token, así que un modelo órdenes de magnitud más barato por token compite contra una cifra que sus clientes nunca ven. vishvananda gastó 50 dólares en OpenRouter en pocos días y señaló que eso es un cuarto de su suscripción a Codex, con la que habría consumido más tokens. mlinsey hizo la comparación limpia: GLM 5.3 en un plan Z.ai de 100 dólares frente a Opus 5.5 en un plan Claude de 100 dólares, sin gran diferencia. La tabla de VRAM de giancarlostoro cierra la otra salida, porque 1.664 GB en FP16 significa que alquilas el clúster de alguien igual. La alarma está programada para cuando terminen los subsidios, no para cuando lleguen los benchmarks.
+***** Comments
+- La gente no está alarmada porque la mayoría usa suscripciones muy subvencionadas. Probé el proveedor más barato de openrouter y gasté 50 dólares en pocos días. Esos 50 dólares son un cuarto de mi suscripción a codex, donde podría haber consumido esa cantidad de tokens o más. Esto no va a durar.
+- FP16 requiere unos 1.664 GB de VRAM, INT8 unos 832 GB, INT4 unos 416 GB. La VRAM no es barata y Nvidia no fabrica suficientes GPU de consumo.
+- Yo pago las suscripciones muy rebajadas, no las tarifas de API. Para mí no hay brecha de coste. Comparando GLM 5.3 con una suscripción Z.ai de 100 dólares al mes frente a Opus 5.5 con una suscripción Claude de 100 dólares al mes, no había gran diferencia.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum regt sich die Branche nicht über DeepSeek 4.1 Flash auf?
+***** TLDR
+Ein Blogbeitrag argumentiert, DeepSeek 4.1 Flash liefere Frontier-Qualität zu einem Bruchteil des Frontier-Preises. Der Autor sagt, er könne bei normaler Arbeit nicht unterscheiden, ob er DeepSeek oder Opus benutzt, nutzt 4.1 Flash als Hauptmodell und behält Claude Opus 5.5 für das abschließende Code-Review. Komplexe Einzelanfragen kosten laut ihm rund 0,003 Dollar, ganze Sitzungen bleiben mit einem OpenCode-Go-Abo für 10 Dollar im Monat unter einem Dollar. Als Mechanismus nennt er die KV-Cache-Größe, etwa 437-mal kleiner als bei DeepSeek V1, was ganztägige Sitzungen im Kontext billig macht. Das Fazit: Chinesische Labore holen sich den Markt, weil dieselben Workloads weit weniger kosten.
+***** Take
+Der Beitrag vergleicht API-Preise, der Thread antwortet mit Abo-Preisen, und diese Verschiebung ist die ganze Geschichte. Wer 100 oder 200 Dollar im Monat zahlt, spürt keine Token-Kosten, also konkurriert ein um Größenordnungen billigeres Modell gegen eine Zahl, die seine Kunden nie sehen. vishvananda verbrauchte in wenigen Tagen 50 Dollar auf OpenRouter und merkte an, das sei ein Viertel seines Codex-Abos, mit dem er mehr Token hätte verbrennen können. mlinsey hat den saubereren Vergleich gemacht: GLM 5.3 in einem Z.ai-Abo für 100 Dollar gegen Opus 5.5 in einem Claude-Abo für 100 Dollar, kein großer Unterschied. giancarlostoros VRAM-Tabelle schließt den anderen Ausweg, denn 1.664 GB bei FP16 heißt, dass man ohnehin jemandes Cluster mietet. Die Aufregung ist für das Ende der Subventionen angesetzt, nicht für das Erscheinen der Benchmarks.
+***** Comments
+- Die Leute regen sich nicht auf, weil die meisten stark subventionierte Abos nutzen. Ich habe den günstigsten Anbieter auf openrouter probiert und in wenigen Tagen 50 Dollar verbraucht. Diese 50 Dollar sind ein Viertel meines Codex-Abos, mit dem ich genauso viele Token oder mehr hätte verbrauchen können. Das hält nicht.
+- FP16 braucht ~1.664 GB VRAM, INT8 ~832 GB, INT4 ~416 GB. VRAM ist nicht billig, und Nvidia baut nicht genug Consumer-GPUs.
+- Ich zahle die stark rabattierten Abos, nicht die API-Tarife. Für mich gibt es keine Kostenlücke. Im Vergleich von GLM 5.3 aus einem Z.ai-Abo für 100 Dollar im Monat mit Opus 5.5 aus einem Claude-Abo für 100 Dollar im Monat war der Unterschied nicht groß.
+** Man discovers his parents' coffee machine used 1TB of data in 10 days :iot:privacy:networking:hardware:
+:PROPERTIES:
+:ID:       49995495
+:URL:      https://www.dexerto.com/entertainment/man-discovers-his-parents-coffee-machine-used-1tb-of-data-in-10-days-3416399/
+:HN_URL:   https://news.ycombinator.com/item?id=49995495
+:POINTS:   370
+:COMMENTS: 229
+:BY:       ck2
+:END:
+
+*** TLDR
+An IT worker posting as "Nomad" on X checked his parents' network remotely and found their Keurig coffee machine had moved 1 TB in 10 days. In the thread he clarifies two things: the traffic stayed on the local network rather than going out over the uplink, and it was enough to saturate the Wi-Fi access point. He calls it likely a bug in that particular unit, unplugged it, and bought his parents a replacement coffee maker, saying it is not worth keeping an IoT device connected that can melt down a network like that. The article carries no statement from Keurig.
+
+*** Take
+Read the thread and the headline shrinks: a terabyte of LAN chatter from a broken device is a firmware loop, not an upload of anyone's coffee habits to a data broker. What survives the correction is still bad, because the machine was scanning the local network at all. altairprime's framing, that the scanning exists so Keurig can profile the household and sell it, is the claim worth arguing about, and it needs no terabyte to be alarming. The practical lesson is the one Nomad reached: the realistic failure mode of a connected appliance is that it takes down your Wi-Fi, and a coffee maker has nothing to gain by being on it.
+
+*** Comments
+
+**** altairprime
+In the Twitter thread linked, the person confirms two things: 1. It saturated the local network with 1TB of metadata sniffing scans, not the network uplink to the outside world. 2. It does so because, as Keurig notes, it's collecting data about your household in order to let Keurig sell it to advertisers.
+
+**** drop_the_mike
+I wonder how difficult it would be to program a raspberry pi to poison the datasets of these types of things. Program it to impersonate a wide set of devices and randomly respond as such in a home.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+男子发现父母的咖啡机 10 天用掉 1TB 流量
+***** TLDR
+一位在 X 上化名 "Nomad" 的 IT 从业者远程检查父母家的网络，发现他们的 Keurig 咖啡机在 10 天里跑了 1 TB 流量。他在帖子里澄清了两点：这些流量留在局域网内，并没有经上行链路发到外网；但其规模足以把 Wi-Fi 接入点压满。他认为这多半是这台机器的固件缺陷，于是拔掉电源，给父母换了一台普通咖啡机，理由是不值得让一个可能把网络搞瘫的物联网设备联网。文章没有引用 Keurig 的任何回应。
+***** Take
+读完原帖，标题就缩水了：一台出故障的设备在局域网里刷出 1 TB，是固件死循环，不是把谁的咖啡习惯上传给数据经纪商。但纠正之后剩下的部分同样糟糕，因为这台机器本来就在扫描局域网。altairprime 的说法——扫描的目的是让 Keurig 给你家做画像再卖出去——才是值得争论的主张，而它根本不需要那 1 TB 来显得可怕。真正可用的结论就是 Nomad 得出的那个：联网家电最现实的故障形态是把你的 Wi-Fi 搞挂，而咖啡机上网没有任何好处。
+***** Comments
+- 在链接的推特帖子里，发帖人确认了两件事：1. 那 1TB 是在局域网内刷出的元数据嗅探扫描，并没有占用对外的上行链路。2. 之所以这么做，按 Keurig 自己的说法，是在收集你家庭的数据，以便 Keurig 卖给广告商。
+- 我在想，用树莓派给这类东西的数据集投毒有多难。让它模拟一大批设备，在家里随机以这些身份应答。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+両親のコーヒーメーカーが10日で1TBの通信を使っていた
+***** TLDR
+X上で「Nomad」として投稿したIT技術者が、両親のネットワークを遠隔で確認し、Keurigのコーヒーメーカーが10日間で1TBを流していたことを見つけた。スレッドで本人は二点を明確にしている。通信は上流回線に出ておらずローカルネットワーク内に留まっていたこと、そしてその量がWi-Fiアクセスポイントを飽和させるほどだったことだ。彼はこの個体のバグだろうと述べ、電源を抜いて両親に普通のコーヒーメーカーを買い直した。ネットワークをこうして潰しうるIoT機器をつなげておく価値はない、という理由だ。記事にKeurigの見解は載っていない。
+***** Take
+スレッドを読むと見出しは縮む。壊れた機器がLAN内で1TBを吐くのはファームウェアのループで、誰かのコーヒーの好みをデータブローカーに送信しているわけではない。だが訂正後に残る部分も十分に悪い。そもそもこの機械がローカルネットワークをスキャンしていたからだ。altairprimeの整理、つまりスキャンはKeurigが家庭をプロファイリングして売るために存在するという主張こそ議論すべき点で、それは1TBを必要としない。実用的な教訓はNomadが到達したものだ。ネット接続家電の現実的な故障形態はWi-Fiを落とすことであり、コーヒーメーカーがネットにつながって得るものは何もない。
+***** Comments
+- リンクされたツイートのスレッドで、本人は二点を確認している。1. 1TBはローカルネットワーク内のメタデータ探索スキャンで飽和させたもので、外部への上流回線ではない。2. そうするのは、Keurig自身が述べているとおり、家庭に関するデータを集めて広告主に売るためだ。
+- こういう製品のデータセットを汚染するラズベリーパイを組むのはどれくらい難しいだろうか。広い範囲の機器になりすまし、家の中でランダムにそう応答させるようにプログラムするのだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+부모님 커피머신이 10일간 1TB를 썼다는 사실을 발견
+***** TLDR
+X에서 "Nomad"라는 이름으로 글을 쓴 IT 종사자가 부모님 집 네트워크를 원격으로 점검하다 Keurig 커피머신이 10일 동안 1TB를 주고받은 것을 발견했다. 그는 스레드에서 두 가지를 분명히 했다. 트래픽은 상향 회선으로 나가지 않고 로컬 네트워크 안에 머물렀으며, 그 양이 Wi-Fi 액세스 포인트를 포화시킬 만큼 많았다는 것이다. 그는 해당 기기의 버그로 보인다고 말하고 전원을 뽑은 뒤 부모님께 일반 커피메이커를 사드렸다. 네트워크를 이렇게 망가뜨릴 수 있는 IoT 기기를 연결해 둘 가치가 없다는 이유였다. 기사에 Keurig의 입장은 없다.
+***** Take
+스레드를 읽으면 헤드라인은 줄어든다. 고장 난 기기가 LAN에서 1TB를 쏟아내는 것은 펌웨어 루프이고, 누군가의 커피 취향을 데이터 브로커에 업로드한 것이 아니다. 그래도 정정 후 남는 부분은 여전히 나쁘다. 이 기계가 애초에 로컬 네트워크를 스캔하고 있었기 때문이다. 스캔이 Keurig가 가정을 프로파일링해 팔기 위해 존재한다는 altairprime의 정리가 논쟁할 가치가 있는 주장이고, 그 주장은 1TB를 필요로 하지 않는다. 실용적 교훈은 Nomad가 도달한 것이다. 연결된 가전의 현실적 고장 양상은 Wi-Fi를 끊어버리는 것이고, 커피메이커가 네트워크에 붙어서 얻을 것은 없다.
+***** Comments
+- 링크된 트위터 스레드에서 작성자는 두 가지를 확인했다. 1. 1TB는 로컬 네트워크를 포화시킨 메타데이터 탐색 스캔이고 외부로 나가는 상향 회선이 아니었다. 2. 그렇게 하는 이유는 Keurig 자신이 밝힌 대로, 가정에 관한 데이터를 모아 광고주에게 팔기 위해서다.
+- 이런 제품들의 데이터셋을 오염시키는 라즈베리파이를 만드는 게 얼마나 어려울지 궁금하다. 다양한 기기를 흉내 내고 집 안에서 무작위로 그렇게 응답하도록 프로그래밍하는 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Descubre que la cafetera de sus padres consumió 1 TB en 10 días
+***** TLDR
+Un informático que publica como "Nomad" en X revisó a distancia la red de sus padres y encontró que su cafetera Keurig había movido 1 TB en 10 días. En el hilo aclara dos cosas: el tráfico se quedó en la red local y no salió por el enlace a internet, y bastó para saturar el punto de acceso Wi-Fi. Lo atribuye a un fallo probable de esa unidad concreta, la desenchufó y compró a sus padres una cafetera de recambio, con el argumento de que no vale la pena mantener conectado un dispositivo IoT capaz de tumbar una red así. El artículo no incluye declaración alguna de Keurig.
+***** Take
+Al leer el hilo, el titular se encoge: un terabyte de cháchara en la red local desde un aparato averiado es un bucle de firmware, no la subida de los hábitos de café de nadie a un intermediario de datos. Lo que sobrevive a la corrección sigue siendo malo, porque la máquina estaba escaneando la red local. El planteamiento de altairprime, que ese escaneo existe para que Keurig perfile el hogar y lo venda, es la afirmación que merece discusión, y no necesita el terabyte para resultar inquietante. La lección práctica es la que alcanzó Nomad: el modo de fallo realista de un electrodoméstico conectado es tumbarte el Wi-Fi, y una cafetera no gana nada estando en la red.
+***** Comments
+- En el hilo de Twitter enlazado, la persona confirma dos cosas: 1. Saturó la red local con 1 TB de escaneos de metadatos, no el enlace hacia el exterior. 2. Lo hace porque, como indica Keurig, está recopilando datos sobre tu hogar para que Keurig pueda venderlos a los anunciantes.
+- Me pregunto qué difícil sería programar una Raspberry Pi para envenenar los datos de este tipo de cosas. Programarla para que suplante a un amplio conjunto de dispositivos y responda como tal al azar en una casa.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Mann entdeckt: Die Kaffeemaschine seiner Eltern verbrauchte 1 TB in 10 Tagen
+***** TLDR
+Ein IT-Mitarbeiter, der auf X als "Nomad" schreibt, prüfte aus der Ferne das Netzwerk seiner Eltern und fand, dass deren Keurig-Kaffeemaschine in 10 Tagen 1 TB bewegt hatte. Im Thread stellt er zwei Dinge klar: Der Verkehr blieb im lokalen Netz und ging nicht über die Internetleitung hinaus, und er reichte aus, um den WLAN-Access-Point zu sättigen. Er hält es für einen Fehler dieses Geräts, zog den Stecker und kaufte seinen Eltern eine neue Kaffeemaschine, mit der Begründung, ein IoT-Gerät, das ein Netzwerk so lahmlegen kann, müsse nicht angeschlossen bleiben. Eine Stellungnahme von Keurig enthält der Artikel nicht.
+***** Take
+Liest man den Thread, schrumpft die Schlagzeile: ein Terabyte LAN-Geplapper von einem defekten Gerät ist eine Firmware-Schleife, kein Upload von jemandes Kaffeegewohnheiten an einen Datenhändler. Was die Korrektur überlebt, ist dennoch schlecht, denn die Maschine hat das lokale Netz überhaupt gescannt. altairprimes Deutung, dass dieses Scannen existiert, damit Keurig den Haushalt profilieren und verkaufen kann, ist die diskussionswürdige Behauptung, und sie braucht das Terabyte nicht, um beunruhigend zu sein. Die praktische Lehre ist die, zu der Nomad gekommen ist: Der realistische Fehlerfall eines vernetzten Haushaltsgeräts ist, dass es dein WLAN abschießt, und eine Kaffeemaschine gewinnt nichts dadurch, dass sie darin hängt.
+***** Comments
+- Im verlinkten Twitter-Thread bestätigt die Person zwei Dinge: 1. Es hat das lokale Netz mit 1 TB Metadaten-Scans gesättigt, nicht die Leitung nach außen. 2. Es tut das, weil es, wie Keurig anmerkt, Daten über deinen Haushalt sammelt, damit Keurig sie an Werbetreibende verkaufen kann.
+- Ich frage mich, wie schwer es wäre, einen Raspberry Pi so zu programmieren, dass er die Datensätze solcher Geräte vergiftet. Man lässt ihn eine breite Palette von Geräten imitieren und im Haus zufällig als solche antworten.
+** Beauty in DVD Menus :design:dvd:nostalgia:ui:
+:PROPERTIES:
+:ID:       50005527
+:URL:      https://vale.rocks/posts/dvd-menus
+:HN_URL:   https://news.ycombinator.com/item?id=50005527
+:POINTS:   256
+:COMMENTS: 144
+:BY:       speckx
+:END:
+
+*** TLDR
+An appreciation of 2000s DVD menu design and the constraints it worked inside: fixed 720x480 (NTSC) or 720x576 (PAL) resolution, interactive highlights drawn as 2-bit subpictures limited to four colors at a time, and a DVD Virtual Machine with sixteen general parameter registers to hold all state. Named examples include Scooby-Doo 2 with custom 3D animation and two playable games, Prisoner of Azkaban's Knight Bus menu with Daily Prophet scene selection, Shrek 2's Brady Bunch grid, the Rocky Horror curtain effects, Wayne's World as a fake cable guide, and the 2005 Doctor Who TARDIS menus with hidden Easter eggs. The argument: Blu-ray and streaming have far more capability and ship generic interfaces instead.
+
+*** Take
+Sixteen registers and four colors produced playable games, and modern players with a full Java stack produce a still frame with PLAY MOVIE on it. The constraint was not what caused the creativity, though, and gwbas1c gives the honest counter: people who still buy discs mostly want to press play, and the special features went unwatched. What died was the marketing budget, not the capability. These menus existed because a new format had to prove it was worth replacing VHS, and once that argument was won nobody was paying to animate a Knight Bus.
+
+*** Comments
+
+**** gwbas1c
+I disagree; it's because we prefer disks with very simple menus, and care very little about the special features.
+
+**** alt227
+I remember watching the DVD of Memento, and using the secret DVD menu button combination to enable watching the film backwards scene by scene. I remember thinking that was amazing and we were entering a new era of creative movie distribution.
+
+**** kalleboo
+Back in High School me and my friends made a zombie movie over summer vacation, and I had so much fun making overly-complicated DVD menus for it using a pirated copy of DVD Studio Pro. Menu selections that were fully graphical, not using the 2-bit overlays.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+DVD 菜单之美
+***** TLDR
+一篇对 2000 年代 DVD 菜单设计的致敬，同时讲清了它所受的限制：分辨率固定在 720x480（NTSC）或 720x576（PAL），交互高亮用 2 位的子图层绘制、同时最多只能用四种颜色，而 DVD 虚拟机只有十六个通用参数寄存器来保存全部状态。文中列举的例子包括带自制 3D 动画和两个可玩小游戏的《史酷比 2》、以骑士巴士为主题、场景选择做成《预言家日报》的《阿兹卡班的囚徒》、《怪物史瑞克 2》的布雷迪家庭式九宫格、《洛基恐怖秀》的幕布特效、把菜单做成假有线电视节目表的《反斗智多星》，以及藏有彩蛋的 2005 版《神秘博士》TARDIS 菜单。作者的论点是：蓝光和流媒体的能力强得多，却只给出千篇一律的界面。
+***** Take
+十六个寄存器和四种颜色做出了可玩的游戏，而带完整 Java 栈的现代播放器只给出一张写着 PLAY MOVIE 的静帧。不过限制本身并不是创意的成因，gwbas1c 给出了诚实的反驳：现在还买碟的人大多只想按播放，花絮根本没人看。死掉的是营销预算，不是技术能力。这些菜单之所以存在，是因为一个新格式必须证明自己值得取代 VHS，而这场辩论赢下来之后，就没人再为一辆会动的骑士巴士付钱了。
+***** Comments
+- 我不同意这个归因；原因是我们更喜欢菜单极简的碟片，对花絮也几乎不在意。
+- 我记得看《记忆碎片》的 DVD 时，用隐藏的菜单按键组合启用了逐场景倒着看整部电影。当时我觉得这太惊人了，以为我们正进入电影发行的创意新时代。
+- 高中时我和朋友在暑假拍了一部僵尸片，我用盗版的 DVD Studio Pro 给它做了过度复杂的菜单，玩得特别开心。菜单选项是完全图形化的，没有用 2 位覆盖层。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+DVDメニューの美しさ
+***** TLDR
+2000年代のDVDメニュー設計への賛辞と、その制約の整理。解像度は720x480（NTSC）または720x576（PAL）に固定、操作時のハイライトは2ビットのサブピクチャで描かれ同時に4色まで、そしてDVD仮想マシンは全状態を保持するための汎用パラメータレジスタが16本しかない。挙げられた例は、独自の3Dアニメーションと2本のプレイ可能なゲームを収めた『スクービー・ドゥー2』、ナイトバスをテーマにしシーン選択を『日刊預言者新聞』風にした『アズカバンの囚人』、『シュレック2』のブレイディ・バンチ風グリッド、『ロッキー・ホラー・ショー』の幕の演出、ケーブルTV番組表を模した『ウェインズ・ワールド』、そしてイースターエッグを隠した2005年版『ドクター・フー』のターディスメニュー。主張は、Blu-rayと配信はずっと高い能力を持ちながら、代わりに画一的なインターフェースを出しているというものだ。
+***** Take
+16本のレジスタと4色がプレイ可能なゲームを生み、完全なJavaスタックを備えた現代のプレーヤーはPLAY MOVIEと書かれた静止画を出す。ただし制約が創造性の原因だったわけではなく、gwbas1cの反論が正直だ。今でもディスクを買う人はたいてい再生を押したいだけで、特典映像は見られていない。消えたのはマーケティング予算で、技術的な能力ではない。こうしたメニューが存在したのは、新しい規格がVHSを置き換える価値を証明しなければならなかったからで、その論争に勝った後は誰もナイトバスのアニメーションに金を払わなくなった。
+***** Comments
+- その見立てには同意しない。理由は、私たちがごく単純なメニューのディスクを好み、特典映像をほとんど気にしていないからだ。
+- 『メメント』のDVDで、隠しメニューのボタン操作を使って映画をシーンごとに逆順で見られるようにしたのを覚えている。あれは驚きで、映画配布の創造的な新時代に入ると思ったものだ。
+- 高校時代、夏休みに友人とゾンビ映画を作り、海賊版のDVD Studio Proで過剰に複雑なメニューを作るのがとても楽しかった。メニュー選択は2ビットのオーバーレイを使わず完全にグラフィカルだった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+DVD 메뉴의 아름다움
+***** TLDR
+2000년대 DVD 메뉴 디자인에 대한 헌사이면서 그것이 놓였던 제약을 정리한 글이다. 해상도는 720x480(NTSC) 또는 720x576(PAL)으로 고정, 조작 시 강조 표시는 2비트 서브픽처로 그려져 한 번에 네 색까지만 쓸 수 있고, DVD 가상 머신은 모든 상태를 담을 범용 파라미터 레지스터가 열여섯 개뿐이었다. 언급된 예로는 자체 3D 애니메이션과 플레이 가능한 게임 두 개를 담은 '스쿠비 두 2', 나이트 버스를 주제로 장면 선택을 예언자일보 풍으로 만든 '아즈카반의 죄수', '슈렉 2'의 브래디 번치식 격자, '록키 호러 쇼'의 커튼 효과, 케이블 TV 편성표를 흉내 낸 '웨인즈 월드', 그리고 이스터에그를 숨긴 2005년 '닥터 후'의 타디스 메뉴가 있다. 주장은 블루레이와 스트리밍이 훨씬 큰 능력을 갖고도 획일적인 인터페이스를 내놓는다는 것이다.
+***** Take
+레지스터 열여섯 개와 색 네 개가 플레이 가능한 게임을 만들었고, 완전한 자바 스택을 갖춘 현대 플레이어는 PLAY MOVIE가 적힌 정지 화면을 내놓는다. 다만 제약이 창의성의 원인은 아니었고, gwbas1c의 반론이 정직하다. 지금도 디스크를 사는 사람은 대개 재생을 누르고 싶을 뿐이고 특전 영상은 보지 않았다. 사라진 것은 마케팅 예산이고 기술적 능력이 아니다. 이런 메뉴가 존재한 이유는 새 포맷이 VHS를 대체할 가치를 증명해야 했기 때문이고, 그 논쟁을 이긴 뒤에는 아무도 움직이는 나이트 버스에 돈을 쓰지 않았다.
+***** Comments
+- 그 진단에는 동의하지 않는다. 이유는 우리가 아주 단순한 메뉴의 디스크를 선호하고 특전 영상에는 거의 관심이 없기 때문이다.
+- '메멘토' DVD를 보면서 숨겨진 메뉴 버튼 조합으로 영화를 장면 단위로 거꾸로 보게 했던 걸 기억한다. 그때는 그게 놀라웠고 영화 유통의 창의적인 새 시대가 온다고 생각했다.
+- 고등학생 때 여름방학에 친구들과 좀비 영화를 만들었고, 불법 복제한 DVD Studio Pro로 과도하게 복잡한 메뉴를 만드는 게 정말 재미있었다. 메뉴 선택은 2비트 오버레이를 쓰지 않고 완전히 그래픽이었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La belleza de los menús de DVD
+***** TLDR
+Un elogio del diseño de menús de DVD de los años 2000 y de las restricciones con las que trabajaba: resolución fija de 720x480 (NTSC) o 720x576 (PAL), resaltados interactivos dibujados como subimágenes de 2 bits limitadas a cuatro colores a la vez, y una máquina virtual de DVD con dieciséis registros de parámetros generales para todo el estado. Entre los ejemplos citados están Scooby-Doo 2, con animación 3D propia y dos juegos jugables; el menú del autobús noctámbulo de El prisionero de Azkaban, con selección de escenas estilo El Profeta; la cuadrícula tipo La tribu de los Brady de Shrek 2; los efectos de cortina de Rocky Horror; Wayne's World como falsa guía de televisión por cable; y los menús TARDIS del Doctor Who de 2005 con huevos de pascua escondidos. La tesis: el Blu-ray y el streaming tienen mucha más capacidad y entregan interfaces genéricas.
+***** Take
+Dieciséis registros y cuatro colores dieron juegos jugables, y los reproductores modernos con una pila Java completa dan un fotograma fijo que dice PLAY MOVIE. La restricción no fue la causa de la creatividad, y gwbas1c ofrece la réplica honesta: quien todavía compra discos sobre todo quiere darle a reproducir, y los extras no se veían. Lo que murió fue el presupuesto de marketing, no la capacidad técnica. Estos menús existieron porque un formato nuevo tenía que demostrar que merecía sustituir al VHS, y una vez ganado ese argumento nadie pagaba por animar un autobús noctámbulo.
+***** Comments
+- No estoy de acuerdo con esa explicación; es porque preferimos discos con menús muy simples y nos importan muy poco los extras.
+- Recuerdo ver el DVD de Memento y usar la combinación secreta de botones del menú para ver la película al revés, escena por escena. Pensé que era asombroso y que entrábamos en una nueva era creativa de distribución de películas.
+- En el instituto, mis amigos y yo hicimos una película de zombis en las vacaciones de verano, y me divertí muchísimo creando menús de DVD excesivamente complicados con una copia pirata de DVD Studio Pro. Las selecciones de menú eran totalmente gráficas, sin usar las superposiciones de 2 bits.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Schönheit von DVD-Menüs
+***** TLDR
+Eine Würdigung des DVD-Menüdesigns der 2000er und der Beschränkungen, unter denen es entstand: feste Auflösung von 720x480 (NTSC) oder 720x576 (PAL), interaktive Hervorhebungen als 2-Bit-Subpictures mit höchstens vier Farben gleichzeitig und eine DVD-Virtual-Machine mit sechzehn General Parameter Registern für den gesamten Zustand. Genannte Beispiele sind Scooby-Doo 2 mit eigener 3D-Animation und zwei spielbaren Spielen, das Fahrender-Ritter-Menü von Der Gefangene von Askaban mit Tagespropheten-Szenenauswahl, das Brady-Bunch-Raster von Shrek 2, die Vorhangeffekte von Rocky Horror, Wayne's World als falsche Kabel-TV-Programmzeitschrift und die TARDIS-Menüs von Doctor Who aus 2005 mit versteckten Easter Eggs. Das Argument: Blu-ray und Streaming können viel mehr und liefern stattdessen generische Oberflächen.
+***** Take
+Sechzehn Register und vier Farben brachten spielbare Spiele hervor, und moderne Player mit vollem Java-Stack bringen ein Standbild mit PLAY MOVIE darauf. Die Beschränkung war aber nicht die Ursache der Kreativität, und gwbas1c liefert den ehrlichen Gegeneinwand: Wer heute noch Discs kauft, will meist auf Play drücken, und die Extras wurden nicht angesehen. Gestorben ist das Marketingbudget, nicht die Fähigkeit. Diese Menüs existierten, weil ein neues Format beweisen musste, dass es VHS wert war zu ersetzen, und als dieses Argument gewonnen war, zahlte niemand mehr dafür, einen Fahrenden Ritter zu animieren.
+***** Comments
+- Ich widerspreche dieser Erklärung; es liegt daran, dass wir Discs mit sehr einfachen Menüs bevorzugen und uns die Extras kaum interessieren.
+- Ich erinnere mich an die Memento-DVD und die geheime Tastenkombination im Menü, mit der man den Film Szene für Szene rückwärts sehen konnte. Ich dachte, das sei großartig und wir träten in eine neue kreative Ära der Filmdistribution ein.
+- In der Highschool haben Freunde und ich in den Sommerferien einen Zombiefilm gedreht, und ich hatte großen Spaß daran, mit einer raubkopierten Version von DVD Studio Pro übermäßig komplizierte Menüs dafür zu bauen. Die Menüauswahlen waren vollständig grafisch, ohne die 2-Bit-Overlays.
+** ADHD as a circadian rhythm disorder: evidence and implications for chronotherapy (2025) :science:adhd:sleep:chronobiology:
+:PROPERTIES:
+:ID:       50011928
+:URL:      https://www.frontiersin.org/journals/psychiatry/articles/10.3389/fpsyt.2025.1697900/full
+:HN_URL:   https://news.ycombinator.com/item?id=50011928
+:POINTS:   151
+:COMMENTS: 113
+:BY:       bookofjoe
+:END:
+
+*** TLDR
+A 2025 perspective article in Frontiers in Psychiatry, not original research, arguing that circadian dysfunction is a prevalent and clinically important phenotype in a large subgroup of ADHD. The figures cited: 73-78% of children and adults with ADHD have a delayed sleep/wake cycle, sleep disturbance affects up to 80% of adults and 82% of children with ADHD, dim-light melatonin onset runs about 45 minutes late in children and 90 minutes late in adults, pineal gland volume is reduced, cortisol rhythms are blunted and delayed, and BMAL1/PER2 clock gene expression is attenuated in peripheral tissue. Proposed chronotherapy: melatonin at 0.5-6 mg (advancing melatonin onset by 44-88 minutes), bright light at 10,000 lux (advancing phase by 31 minutes to 2 hours), and behavioral protocols using fixed wake times, morning light and evening light restriction. The authors state the direction of causation is unclear and likely bidirectional, and that evidence for ADHD remission from circadian intervention alone is lacking.
+
+*** Take
+The prevalence figures are strong and the causal claim is not, which the authors say outright rather than burying. randomImmigrant, a chronobiologist in the thread who also has ADHD, sharpens the problem: a large share of brain processes are under circadian regulation, so whatever disrupts the brain will leave a circadian signature, and finding that signature is not evidence it is the cause. The paper is worth reading for the specificity of its intervention numbers, because it frames the effect as depending on timing relative to a person's own melatonin onset rather than on dose size. anigbrowl raises the explanation the paper does not test, that late nights are chosen because night is quiet, which would produce the same delayed phase from behavior rather than biology.
+
+*** Comments
+
+**** randomImmigrant
+Chronobiologist here, and also have ADHD. The associations with ADHD really are there, but that may just also be because a huge number of brain processes have a circadian regulation, and those get disrupted by whatever is causing ADHD. The causality is also bidirectional.
+
+**** baoooooooooooo
+After reading a chunk of this the correlation is pretty wild. Having the data it's quite striking. Sleep intervention as a form of ADHD treatment has always seemed reasonable to me but this gives a lot more clarity to the approach and mechanisms.
+
+**** anigbrowl
+Has anyone considered that one reason for being/staying awake late at night that's very salient for ADHD people is that night tends to be much quieter, so it's a period when it's much easier to think/read/work without constant interruptions. Noise pollution isn't taken seriously enough.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+把 ADHD 当作昼夜节律紊乱：证据与时间疗法的意义（2025）
+***** TLDR
+这是 2025 年发表在《Frontiers in Psychiatry》上的一篇观点文章，并非原创研究，主张昼夜节律功能失调在相当大一部分 ADHD 人群中是常见且具临床意义的表型。文中引用的数据：73% 至 78% 的 ADHD 儿童和成人存在睡眠-觉醒周期延迟；睡眠障碍影响多达 80% 的 ADHD 成人和 82% 的儿童；暗光下褪黑素起始时间在儿童中约晚 45 分钟，在成人中约晚 90 分钟；松果体体积偏小；皮质醇节律变钝并延后；外周组织中 BMAL1/PER2 时钟基因表达减弱。提出的时间疗法包括：0.5 至 6 毫克褪黑素（可把褪黑素起始提前 44 至 88 分钟）、10000 勒克斯强光照（可把相位提前 31 分钟至 2 小时），以及固定起床时间、早晨光照与夜间限光的行为方案。作者明确表示因果方向尚不清楚，且很可能是双向的，并指出缺乏仅靠节律干预就使 ADHD 缓解的证据。
+***** Take
+流行率数据很有力，因果主张则不然，而作者把这一点直说了出来，没有藏起来。评论区的 randomImmigrant 既是时间生物学家又有 ADHD，他把问题说得更清楚：大量脑内过程都受昼夜节律调控，因此任何扰乱大脑的因素都会留下节律上的印记，而找到这个印记并不能证明它是原因。这篇文章值得读的地方在于干预数据的具体性，因为它把效果归结为相对于个人自身褪黑素起始时间的时机，而不是剂量大小。anigbrowl 提出了文章没有检验的另一种解释：晚睡是被选择的，因为夜里安静；这会让同样的相位延迟来自行为而非生理。
+***** Comments
+- 我是时间生物学研究者，自己也有 ADHD。与 ADHD 的关联确实存在，但也可能只是因为大量脑内过程都受昼夜节律调控，而它们会被导致 ADHD 的那个因素一并扰乱。因果关系也是双向的。
+- 读了其中一部分之后，这个相关性相当惊人。有了数据就很醒目。把睡眠干预当作 ADHD 治疗手段我一直觉得合理，但这篇让方法和机制清楚了许多。
+- 有没有人想过，ADHD 人群深夜不睡的一个很突出的原因是夜里安静得多，所以那是一段更容易思考、阅读和工作而不被不断打断的时间。噪音污染没有被足够认真地对待。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ADHDを概日リズム障害として捉える: 証拠と時間治療への示唆（2025）
+***** TLDR
+Frontiers in Psychiatry掲載の2025年のパースペクティブ論文で、原著研究ではない。概日リズムの機能不全がADHDの大きな部分集団において高頻度かつ臨床的に重要な表現型だと主張する。挙げられた数値は次のとおり。ADHDの小児と成人の73から78パーセントに睡眠覚醒周期の遅れがある。睡眠障害はADHDの成人で最大80パーセント、小児で82パーセントに及ぶ。薄明下メラトニン分泌開始は小児で約45分、成人で約90分遅い。松果体の体積は小さい。コルチゾールのリズムは平坦化し遅れる。末梢組織でBMAL1とPER2の時計遺伝子発現が減弱している。提案される時間治療は、メラトニン0.5から6ミリグラム（メラトニン分泌開始を44から88分前進）、10,000ルクスの高照度光（位相を31分から2時間前進）、そして起床時刻の固定、朝の光曝露、夜間の光制限といった行動プロトコルだ。著者らは因果の方向は不明で双方向的だろうと述べ、概日介入のみでADHDが寛解する証拠は不足しているとしている。
+***** Take
+有病率の数値は強く、因果の主張は強くない。著者はそれを隠さず明言している。スレッドにいるrandomImmigrantは時間生物学者でADHDもあり、問題をより鋭く示す。脳内の多くの過程が概日調節下にあるため、脳を乱すものは何であれ概日的な痕跡を残す。その痕跡を見つけたことは、それが原因である証拠にはならない。この論文が読む価値を持つのは介入の数値が具体的な点で、効果は用量の大きさではなく本人のメラトニン分泌開始に対するタイミングに依ると位置づけている。anigbrowlは論文が検証していない説明を挙げる。夜更かしは夜が静かだから選ばれているのであり、それなら同じ位相の遅れが生理ではなく行動から生じる。
+***** Comments
+- 時間生物学の研究者で、自分もADHDだ。ADHDとの関連は本当に存在するが、それは単に脳内の非常に多くの過程が概日調節を受けており、ADHDを引き起こしている何かによってそれらが乱されるからかもしれない。因果も双方向だ。
+- 一部を読んだだけでも相関がかなりすごい。データを見ると際立っている。睡眠介入をADHD治療の一形態とする考えはずっと妥当に思えていたが、これで方法と機序がかなり明確になった。
+- ADHDの人にとって夜更かしをする非常に大きな理由のひとつは、夜のほうがずっと静かで、絶え間ない中断なしに考え、読み、作業しやすい時間だからだと考えた人はいるだろうか。騒音公害は十分に深刻に扱われていない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ADHD를 일주기 리듬 장애로 보기: 근거와 시간치료 적용（2025）
+***** TLDR
+Frontiers in Psychiatry에 실린 2025년 퍼스펙티브 논문이며 원저 연구는 아니다. 일주기 리듬 기능 이상이 ADHD의 큰 하위 집단에서 흔하고 임상적으로 중요한 표현형이라고 주장한다. 인용된 수치는 다음과 같다. ADHD 아동과 성인의 73~78퍼센트가 수면각성 주기 지연을 보인다. 수면 장애는 ADHD 성인의 최대 80퍼센트, 아동의 82퍼센트에 영향을 준다. 약광 멜라토닌 분비 시작은 아동에서 약 45분, 성인에서 약 90분 늦다. 솔방울샘 용적이 감소해 있다. 코르티솔 리듬은 둔화되고 지연된다. 말초 조직에서 BMAL1과 PER2 시계 유전자 발현이 약화되어 있다. 제안된 시간치료는 멜라토닌 0.5~6밀리그램(멜라토닌 분비 시작을 44~88분 앞당김), 10,000럭스 고조도 광(위상을 31분에서 2시간 앞당김), 그리고 기상 시각 고정, 아침 광 노출, 저녁 광 제한 같은 행동 프로토콜이다. 저자들은 인과의 방향이 불분명하고 양방향일 가능성이 크며, 일주기 개입만으로 ADHD가 완화된다는 근거는 부족하다고 밝힌다.
+***** Take
+유병률 수치는 강하고 인과 주장은 그렇지 않은데, 저자들이 이를 묻어두지 않고 그대로 말한다. 스레드의 randomImmigrant는 시간생물학자이면서 ADHD가 있고 문제를 더 날카롭게 정리한다. 뇌의 많은 과정이 일주기 조절을 받으므로 뇌를 교란하는 무엇이든 일주기적 흔적을 남기고, 그 흔적을 찾은 것이 그것이 원인이라는 증거는 아니다. 이 논문이 읽을 가치가 있는 지점은 개입 수치의 구체성이다. 효과를 용량 크기가 아니라 본인의 멜라토닌 분비 시작 시점에 대한 타이밍의 문제로 놓는다. anigbrowl은 논문이 검증하지 않은 설명을 제시한다. 밤이 조용하기 때문에 늦은 시간을 택한다는 것이며, 그렇다면 같은 위상 지연이 생리가 아니라 행동에서 나온다.
+***** Comments
+- 시간생물학 연구자이고 저도 ADHD가 있다. ADHD와의 연관은 실제로 존재하지만, 그것은 단지 아주 많은 뇌 과정이 일주기 조절을 받고 ADHD를 일으키는 무엇에 의해 함께 교란되기 때문일 수도 있다. 인과는 양방향이기도 하다.
+- 일부를 읽어보니 상관관계가 상당히 놀랍다. 데이터를 보면 두드러진다. 수면 개입을 ADHD 치료의 한 형태로 보는 것은 늘 합리적으로 보였는데, 이 글이 접근법과 기전을 훨씬 명확하게 해준다.
+- ADHD가 있는 사람이 밤늦게까지 깨어 있는 매우 두드러진 이유 하나가 밤이 훨씬 조용해서 끊임없는 방해 없이 생각하고 읽고 일하기가 훨씬 쉬운 시간이라는 점을 고려한 사람이 있는가. 소음 공해는 충분히 심각하게 다뤄지지 않는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El TDAH como trastorno del ritmo circadiano: evidencia e implicaciones para la cronoterapia (2025)
+***** TLDR
+Un artículo de perspectiva de 2025 en Frontiers in Psychiatry, no investigación original, que sostiene que la disfunción circadiana es un fenotipo frecuente y clínicamente relevante en un subgrupo amplio del TDAH. Las cifras citadas: entre el 73% y el 78% de niños y adultos con TDAH tienen el ciclo de sueño y vigilia retrasado; los trastornos del sueño afectan hasta al 80% de los adultos y al 82% de los niños con TDAH; el inicio de la melatonina en luz tenue llega unos 45 minutos tarde en niños y unos 90 minutos tarde en adultos; el volumen de la glándula pineal está reducido; los ritmos de cortisol están atenuados y retrasados; y la expresión de los genes reloj BMAL1 y PER2 está disminuida en tejido periférico. La cronoterapia propuesta: melatonina de 0,5 a 6 mg (que adelanta el inicio de la melatonina entre 44 y 88 minutos), luz intensa de 10.000 lux (que adelanta la fase entre 31 minutos y 2 horas) y protocolos conductuales con hora fija de despertar, luz matinal y restricción de luz por la noche. Los autores afirman que la dirección de la causalidad no está clara y probablemente es bidireccional, y que falta evidencia de remisión del TDAH solo con intervención circadiana.
+***** Take
+Las cifras de prevalencia son sólidas y la afirmación causal no lo es, algo que los autores dicen sin rodeos en lugar de esconderlo. randomImmigrant, cronobiólogo del hilo que además tiene TDAH, afina el problema: una gran parte de los procesos cerebrales está bajo regulación circadiana, así que cualquier cosa que altere el cerebro dejará una huella circadiana, y encontrar esa huella no prueba que sea la causa. El artículo merece lectura por la precisión de sus cifras de intervención, porque plantea el efecto como dependiente del momento respecto al propio inicio de melatonina de cada persona, y no del tamaño de la dosis. anigbrowl plantea la explicación que el artículo no pone a prueba: que las noches tardías se eligen porque la noche es tranquila, lo que daría el mismo retraso de fase desde la conducta y no desde la biología.
+***** Comments
+- Cronobiólogo aquí, y también tengo TDAH. Las asociaciones con el TDAH existen de verdad, pero puede ser simplemente porque un enorme número de procesos cerebrales tiene regulación circadiana y se ven alterados por aquello que esté causando el TDAH. La causalidad también es bidireccional.
+- Después de leer una buena parte, la correlación es bastante llamativa. Con los datos delante resulta notable. La intervención sobre el sueño como forma de tratar el TDAH siempre me pareció razonable, pero esto aporta mucha más claridad sobre el enfoque y los mecanismos.
+- ¿Alguien ha considerado que una razón muy destacada para que las personas con TDAH se queden despiertas de noche es que la noche suele ser mucho más tranquila, un periodo en el que es mucho más fácil pensar, leer y trabajar sin interrupciones constantes? La contaminación acústica no se toma lo bastante en serio.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ADHS als zirkadiane Rhythmusstörung: Belege und Folgen für die Chronotherapie (2025)
+***** TLDR
+Ein Perspective-Artikel von 2025 in Frontiers in Psychiatry, keine Originalforschung, der argumentiert, dass zirkadiane Dysfunktion ein häufiger und klinisch wichtiger Phänotyp in einer großen Untergruppe von ADHS ist. Die genannten Zahlen: 73 bis 78 Prozent der Kinder und Erwachsenen mit ADHS haben einen verzögerten Schlaf-Wach-Zyklus; Schlafstörungen betreffen bis zu 80 Prozent der Erwachsenen und 82 Prozent der Kinder mit ADHS; der Melatoninanstieg bei schwachem Licht setzt bei Kindern etwa 45 Minuten und bei Erwachsenen etwa 90 Minuten später ein; das Volumen der Zirbeldrüse ist verringert; die Cortisolrhythmen sind abgeflacht und verzögert; und die Expression der Uhrengene BMAL1 und PER2 ist in peripherem Gewebe abgeschwächt. Vorgeschlagene Chronotherapie: Melatonin in 0,5 bis 6 mg (verschiebt den Melatoninanstieg um 44 bis 88 Minuten nach vorn), helles Licht mit 10.000 Lux (verschiebt die Phase um 31 Minuten bis 2 Stunden) sowie Verhaltensprotokolle mit festen Aufwachzeiten, Morgenlicht und Lichtbeschränkung am Abend. Die Autoren halten die Richtung der Kausalität für unklar und wahrscheinlich bidirektional und stellen fest, dass Belege für eine ADHS-Remission allein durch zirkadiane Interventionen fehlen.
+***** Take
+Die Prävalenzzahlen sind stark, die Kausalbehauptung ist es nicht, und die Autoren sagen das offen statt es zu verstecken. randomImmigrant, Chronobiologe im Thread und selbst von ADHS betroffen, schärft das Problem: Ein großer Teil der Hirnprozesse unterliegt zirkadianer Regulation, also hinterlässt alles, was das Gehirn stört, eine zirkadiane Signatur, und diese Signatur zu finden ist kein Beweis, dass sie die Ursache ist. Lesenswert ist der Artikel wegen der Genauigkeit seiner Interventionszahlen, denn er beschreibt den Effekt als abhängig vom Zeitpunkt relativ zum eigenen Melatoninanstieg und nicht von der Dosisgröße. anigbrowl bringt die Erklärung ein, die der Artikel nicht prüft: dass späte Nächte gewählt werden, weil die Nacht ruhig ist, was dieselbe Phasenverzögerung aus Verhalten statt aus Biologie erzeugen würde.
+***** Comments
+- Chronobiologe hier, und ich habe selbst ADHS. Die Zusammenhänge mit ADHS gibt es wirklich, aber das kann auch einfach daran liegen, dass eine enorme Zahl von Hirnprozessen zirkadian reguliert ist und von dem gestört wird, was ADHS verursacht. Die Kausalität ist zudem bidirektional.
+- Nachdem ich einen Teil gelesen habe, ist die Korrelation ziemlich auffällig. Mit den Daten davor ist sie deutlich. Schlafintervention als Form der ADHS-Behandlung erschien mir immer plausibel, aber das bringt viel mehr Klarheit über den Ansatz und die Mechanismen.
+- Hat jemand bedacht, dass ein für ADHS-Betroffene sehr naheliegender Grund, nachts wach zu bleiben, darin liegt, dass es nachts viel ruhiger ist, also eine Zeit, in der man ohne ständige Unterbrechungen viel leichter denken, lesen und arbeiten kann? Lärmbelastung wird nicht ernst genug genommen.
