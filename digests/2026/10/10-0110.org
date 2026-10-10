@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-10 01:10 UTC
+#+DATE: 2026-10-10T01:10:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Ryan Dahl says Deno was not solving big problems, a decision model with free clones that outscore it raises $870M, and Oxide raises after turning a profit
+
+* Highlights
+- Deno: one year of patches, Deploy gone in six months, Dahl moves on to celld
+- TypeSafe AI: $7.5B for Jev, which an Apache-2.0 4B model already outscores
+- Oxide: $445M raised after profitability, still no GPU option and no pricing page
+- Navi Pillay wins the 2026 Peace Prize; the US sanctions the ICC the same day
+- Fake meeting audio is the gag; the fake calendar invite is the part that works
+
+* Stories
+
+** Cloudflare acquires Deno :javascript:cloudflare:deno:acquisition:runtime:
+:PROPERTIES:
+:ID:       50019911
+:URL:      https://deno.com/blog/cloudflare
+:HN_URL:   https://news.ycombinator.com/item?id=50019911
+:POINTS:   1056
+:COMMENTS: 550
+:BY:       ilreb
+:END:
+
+*** TLDR
+Cloudflare is acquiring the Deno team. The runtime gets monthly bug-fix and security releases for one year, after which Deno's own development ends; it stays MIT-licensed and open to anyone who wants to carry it forward. Deno Deploy shuts down in six months, with migration support for paying customers moving to Cloudflare Workers. JSR keeps running, with its infrastructure moving to Cloudflare. The team joins the Workers and Durable Objects groups, keeps maintaining rusty_v8, and will work on folding it into workerd. In the thread Ryan Dahl said the decision was joint and that he agrees with it: Deno is well engineered but "ultimately is not solving big problems," having been pulled into npm and Node compatibility that forces it to behave exactly as Node does. His focus now is celld, a server model that uses object storage alone for coordination and persistence.
+
+*** Take
+The useful document here is Dahl's comment, not the announcement. He built Deno to fix Node, then compatibility with Node became the price of adoption, which left only marginal speed, UX and security gains to justify an entire runtime. That is an engineering verdict on the project, and it is more honest than most shutdown posts manage. For anyone shipping on Deno the practical read is simpler: twelve months of security patches is a deprecation notice, and Deploy's six months is shorter than most migration budgets. Kenton Varda is right that Cloudflare did not buy Deno in order to kill it, and it makes no difference to the calendar.
+
+*** Comments
+
+**** rough-sea
+:PROPERTIES:
+:COMMENT_ID: 50023277
+:END:
+It's a joint decision and I agree with it. I'm most invested in its success and have put the most work into it, and I no longer think it's where I can do the most important work. It ultimately is not solving big problems. It has been sucked into the gravity well of node compatibility, which forces it to behave exactly as Node does. Why reimplement Node? It works. Marginal performance or UX or security benefits are not enough.
+
+**** steve_adams_86
+:PROPERTIES:
+:COMMENT_ID: 50026512
+:END:
+I'm so bummed about this. Deno is by far my favourite JS runtime. I could sense this coming for a while now, but I was hopeful. Sad we won't see any innovation like we did in the last 8 years. I hope workerd at least adopts Deno's security mechanisms so it functions as a better sandbox.
+
+**** kentonv
+:PROPERTIES:
+:COMMENT_ID: 50025430
+:END:
+"They had plans to buy out a company with the explicit intent to shut down their main product." I understand why it looks that way, and we knew it would be hard to combat this perception. But it's simply not true. The Deno team made a strategic decision to refocus on celld, and we are excited to support this work.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Cloudflare 收购 Deno
+***** TLDR
+Cloudflare 正在收购 Deno 团队。该运行时还会有一年的每月错误修复和安全更新，之后 Deno 自身的开发将结束；它仍保持 MIT 许可，任何想接手的人都可以继续。Deno Deploy 将在六个月后关闭，付费客户迁移到 Cloudflare Workers 可获得支持。JSR 继续运行，基础设施迁至 Cloudflare。团队将加入 Workers 和 Durable Objects 组，继续维护 rusty_v8，并把它整合进 workerd。在讨论帖中 Ryan Dahl 表示这是共同决定且他本人赞同：Deno 工程质量很好，但「终究没有解决大问题」，因为它被 npm 和 Node 兼容性拖住，被迫完全按 Node 的方式运行。他现在的重心是 celld，一种仅依靠对象存储做协调和持久化的服务端模型。
+***** Take
+这里真正有价值的文本是 Dahl 的评论，而不是官方公告。他造 Deno 是为了修好 Node，结果兼容 Node 成了获得用户的代价，最后只剩下速度、体验和安全上的边际收益来支撑一整个运行时。这是对项目本身的工程判决，而且比大多数停更公告都坦诚。对还在用 Deno 发布产品的人来说，结论更简单：十二个月的安全补丁就是弃用通知，而 Deploy 的六个月比多数迁移预算都短。Kenton Varda 说 Cloudflare 不是为了杀掉 Deno 才收购它，这是对的，但对日程表没有任何影响。
+***** Comments
+- 这是共同决定，我也赞同。我在它上面投入最多、最希望它成功，但我已经不认为那是我能做最重要工作的地方。它终究没有解决大问题。它被 Node 兼容性的引力井吸住，被迫完全按 Node 的方式运行。为什么要重新实现 Node？Node 本来就能用。性能、体验或安全上的边际收益不足以支撑这件事。
+- 我真的很失落。Deno 是我最喜欢的 JS 运行时。我早就感觉会这样，但一直抱有希望。遗憾的是我们再也看不到过去八年那样的创新了。希望 workerd 至少能采纳 Deno 的安全机制，做一个更好的沙箱。
+- 「他们收购一家公司就是为了关掉它的主要产品。」我理解为什么看起来是这样，我们也知道这种印象很难消除。但事实并非如此。Deno 团队做出了把重心转向 celld 的战略决定，而我们很乐意支持这项工作。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+CloudflareがDenoを買収
+***** TLDR
+CloudflareがDenoチームを買収する。ランタイムは1年間、毎月のバグ修正とセキュリティ更新を受けるが、その後Deno自身の開発は終了する。MITライセンスのままで、引き継ぎたい人は誰でも継続できる。Deno Deployは6か月後に停止し、有料顧客のCloudflare Workersへの移行は支援される。JSRは継続し、インフラはCloudflareに移る。チームはWorkersとDurable Objectsのグループに加わり、rusty_v8の保守を続けてworkerdへの統合を進める。スレッドでRyan Dahlは、これは共同の決定で自分も同意だと述べた。Denoは作りは良いが「結局は大きな問題を解決していない」。npmとNode互換性に引き込まれ、Nodeとまったく同じ挙動を強いられたからだ。今の関心はcelld、オブジェクトストレージだけで調整と永続化を行うサーバーモデルにある。
+***** Take
+ここで読む価値があるのは発表文ではなくDahlのコメントだ。彼はNodeを直すためにDenoを作り、やがてNode互換性が利用者を得る対価になり、残ったのは速度とUXとセキュリティのわずかな上積みだけ。それでランタイム一つを正当化はできない。これはプロジェクト自体への技術的な判定で、よくある終了告知よりずっと率直だ。Denoで製品を動かしている側の読み方はもっと単純で、12か月のセキュリティパッチは廃止通知であり、Deployの6か月は多くの移行計画より短い。CloudflareがDenoを潰すために買ったのではない、というKenton Vardaの指摘は正しいが、日程は何も変わらない。
+***** Comments
+- これは共同の決定で、自分も同意している。自分が一番力を注いできたし成功を願っているが、もうそこが最も重要な仕事をできる場所だとは思わない。結局は大きな問題を解決していない。Node互換性の重力に引き込まれ、Nodeとまったく同じ挙動を強いられる。なぜNodeを作り直すのか。Nodeは動いているのに。性能やUX、セキュリティのわずかな利点では足りない。
+- 本当に残念だ。DenoはJSランタイムの中で一番好きだった。こうなる気配は前から感じていたが、望みを持っていた。この8年のような革新がもう見られないのは寂しい。少なくともworkerdがDenoのセキュリティ機構を取り入れて、より良いサンドボックスになってほしい。
+- 「主力製品を止めるつもりで会社を買った」そう見える理由は分かるし、その印象を覆すのが難しいことも承知していた。だが事実ではない。Denoチームがcelldに注力するという戦略判断をし、我々はその仕事を支援できることを歓迎している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Cloudflare가 Deno를 인수
+***** TLDR
+Cloudflare가 Deno 팀을 인수한다. 런타임은 1년간 매월 버그 수정과 보안 업데이트를 받지만 그 후 Deno 자체 개발은 끝난다. MIT 라이선스는 유지되며 이어받고 싶은 사람은 누구나 계속할 수 있다. Deno Deploy는 6개월 뒤 종료되고, 유료 고객의 Cloudflare Workers 이전은 지원된다. JSR은 계속 운영되며 인프라가 Cloudflare로 옮겨간다. 팀은 Workers와 Durable Objects 조직에 합류해 rusty_v8을 계속 유지하고 workerd에 통합하는 작업을 한다. 스레드에서 Ryan Dahl은 이것이 공동 결정이며 자신도 동의한다고 밝혔다. Deno는 잘 만들어졌지만 "결국 큰 문제를 풀고 있지 않다"는 것이다. npm과 Node 호환성에 끌려들어가 Node와 똑같이 동작하도록 강제됐기 때문이다. 그의 현재 관심은 조정과 영속성을 오직 오브젝트 스토리지로만 처리하는 서버 모델 celld다.
+***** Take
+여기서 읽을 가치가 있는 문서는 발표문이 아니라 Dahl의 댓글이다. 그는 Node를 고치려고 Deno를 만들었고, 결국 Node 호환성이 사용자를 얻는 대가가 됐으며, 남은 것은 속도와 사용성, 보안에서의 미미한 이득뿐이었다. 그것으로 런타임 하나를 정당화할 수는 없다. 이는 프로젝트 자체에 대한 엔지니어링 판정이고, 흔한 종료 공지보다 훨씬 정직하다. Deno로 제품을 돌리는 쪽의 해석은 더 단순하다. 12개월의 보안 패치는 지원 중단 통보이고, Deploy의 6개월은 대부분의 이전 일정보다 짧다. Cloudflare가 Deno를 죽이려고 인수한 게 아니라는 Kenton Varda의 말은 맞지만, 일정은 달라지지 않는다.
+***** Comments
+- 공동 결정이고 나도 동의한다. 성공에 가장 많이 투자했고 가장 많이 일한 사람이지만, 더 이상 그곳이 내가 가장 중요한 일을 할 수 있는 자리라고 생각하지 않는다. 결국 큰 문제를 풀고 있지 않다. Node 호환성의 중력에 빨려들어 Node와 똑같이 동작해야 한다. 왜 Node를 다시 구현하나? Node는 잘 돌아간다. 성능이나 사용성, 보안의 미미한 이득으로는 부족하다.
+- 정말 아쉽다. Deno는 내가 가장 좋아하는 JS 런타임이다. 이렇게 될 것 같다는 느낌은 한동안 있었지만 희망을 가지고 있었다. 지난 8년 같은 혁신을 더는 못 본다는 게 슬프다. 최소한 workerd가 Deno의 보안 메커니즘을 받아들여 더 나은 샌드박스가 되길 바란다.
+- "주력 제품을 중단시킬 목적으로 회사를 인수했다." 그렇게 보이는 이유는 이해하고, 그 인식을 바꾸기 어렵다는 것도 알고 있었다. 하지만 사실이 아니다. Deno 팀이 celld에 집중하겠다는 전략적 결정을 내렸고, 우리는 그 작업을 지원하게 되어 기쁘다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cloudflare adquiere Deno
+***** TLDR
+Cloudflare está adquiriendo al equipo de Deno. El runtime recibirá versiones mensuales con correcciones de errores y parches de seguridad durante un año; después termina el desarrollo propio de Deno. Seguirá con licencia MIT y abierto a quien quiera continuarlo. Deno Deploy cierra en seis meses, con soporte de migración para clientes de pago que pasen a Cloudflare Workers. JSR sigue operando y su infraestructura se traslada a Cloudflare. El equipo se integra en los grupos de Workers y Durable Objects, mantiene rusty_v8 y trabajará en integrarlo en workerd. En el hilo, Ryan Dahl dijo que la decisión fue conjunta y que la comparte: Deno está bien construido, pero "al final no está resolviendo problemas grandes", porque quedó atrapado en la compatibilidad con npm y Node, que lo obliga a comportarse exactamente como Node. Ahora se centra en celld, un modelo de servidor que usa solo almacenamiento de objetos para coordinación y persistencia.
+***** Take
+El documento que vale la pena leer es el comentario de Dahl, no el anuncio. Construyó Deno para arreglar Node, luego la compatibilidad con Node se convirtió en el precio de la adopción, y lo que quedó fueron ganancias marginales en velocidad, usabilidad y seguridad. Con eso no se justifica un runtime entero. Es un veredicto de ingeniería sobre el propio proyecto, y es más honesto que la mayoría de los anuncios de cierre. Para quien tiene producto en Deno la lectura es más simple: doce meses de parches de seguridad son un aviso de obsolescencia, y los seis meses de Deploy son menos de lo que dura una migración típica. Kenton Varda tiene razón en que Cloudflare no compró Deno para matarlo, y eso no cambia el calendario.
+***** Comments
+- Es una decisión conjunta y estoy de acuerdo. Soy quien más ha invertido en su éxito y más trabajo le ha puesto, y ya no creo que sea donde puedo hacer el trabajo más importante. Al final no está resolviendo problemas grandes. Quedó absorbido por el pozo gravitatorio de la compatibilidad con Node, que lo obliga a comportarse exactamente como Node. ¿Para qué reimplementar Node? Funciona. Las ventajas marginales de rendimiento, usabilidad o seguridad no alcanzan.
+- Esto me da mucha pena. Deno es de lejos mi runtime de JS favorito. Hace tiempo que lo veía venir, pero mantenía la esperanza. Da tristeza que no veremos más innovación como la de estos ocho años. Espero que workerd al menos adopte los mecanismos de seguridad de Deno y funcione como un mejor sandbox.
+- "Planeaban comprar una empresa con la intención explícita de cerrar su producto principal." Entiendo por qué lo parece, y sabíamos que sería difícil combatir esa percepción. Pero simplemente no es cierto. El equipo de Deno tomó la decisión estratégica de centrarse en celld, y a nosotros nos entusiasma apoyar ese trabajo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Cloudflare übernimmt Deno
+***** TLDR
+Cloudflare übernimmt das Deno-Team. Die Runtime erhält ein Jahr lang monatliche Releases mit Bugfixes und Sicherheitsupdates, danach endet Denos eigene Entwicklung. Sie bleibt MIT-lizenziert und offen für alle, die sie weiterführen wollen. Deno Deploy wird in sechs Monaten abgeschaltet, zahlende Kunden erhalten Migrationshilfe beim Wechsel zu Cloudflare Workers. JSR läuft weiter, die Infrastruktur zieht zu Cloudflare. Das Team geht in die Workers- und Durable-Objects-Gruppen, pflegt rusty_v8 weiter und arbeitet an der Integration in workerd. Im Thread schrieb Ryan Dahl, die Entscheidung sei gemeinsam getroffen und er stehe dazu: Deno sei gut gebaut, löse aber "letztlich keine großen Probleme", weil es in die npm- und Node-Kompatibilität gezogen wurde, die es zwingt, sich genau wie Node zu verhalten. Sein Fokus liegt jetzt auf celld, einem Servermodell, das Koordination und Persistenz allein über Objektspeicher abbildet.
+***** Take
+Das lesenswerte Dokument ist Dahls Kommentar, nicht die Ankündigung. Er baute Deno, um Node zu reparieren, dann wurde Node-Kompatibilität der Preis für Nutzer, und übrig blieben marginale Gewinne bei Geschwindigkeit, Bedienung und Sicherheit. Damit rechtfertigt man keine ganze Runtime. Das ist ein technisches Urteil über das Projekt selbst und ehrlicher als die meisten Abschaltmeldungen. Wer Deno im Produktivbetrieb hat, liest es einfacher: zwölf Monate Sicherheitspatches sind eine Abkündigung, und die sechs Monate für Deploy sind kürzer als die meisten Migrationspläne. Kenton Varda hat recht, dass Cloudflare Deno nicht gekauft hat, um es zu beenden, am Zeitplan ändert das nichts.
+***** Comments
+- Es ist eine gemeinsame Entscheidung und ich stehe dazu. Niemand hat mehr in den Erfolg investiert und mehr Arbeit hineingesteckt als ich, und ich halte das nicht mehr für den Ort, an dem ich die wichtigste Arbeit leisten kann. Es löst letztlich keine großen Probleme. Es wurde in den Gravitationstrichter der Node-Kompatibilität gezogen, die es zwingt, sich genau wie Node zu verhalten. Warum Node neu implementieren? Node funktioniert. Marginale Vorteile bei Performance, Bedienung oder Sicherheit reichen nicht.
+- Das macht mich echt traurig. Deno ist mit Abstand meine liebste JS-Runtime. Ich habe das schon länger kommen sehen, aber gehofft. Schade, dass wir keine Innovation mehr sehen wie in den letzten acht Jahren. Ich hoffe, workerd übernimmt wenigstens Denos Sicherheitsmechanismen und wird so zur besseren Sandbox.
+- "Sie wollten eine Firma kaufen, um deren Hauptprodukt einzustellen." Ich verstehe, warum es so aussieht, und wir wussten, dass dieser Eindruck schwer zu entkräften ist. Aber er ist einfach falsch. Das Deno-Team hat die strategische Entscheidung getroffen, sich auf celld zu konzentrieren, und wir unterstützen diese Arbeit gern.
+** Typesafe AI raises $870M at $7.5B :ai:funding:venture-capital:benchmarks:open-source:
+:PROPERTIES:
+:ID:       50023450
+:URL:      https://typesafe.ai/blog/series-ai
+:HN_URL:   https://news.ycombinator.com/item?id=50023450
+:POINTS:   262
+:COMMENTS: 205
+:BY:       tosh
+:END:
+
+*** TLDR
+TypeSafe AI raised $870M at a $7.5B valuation, led by Andreessen Horowitz with Sequoia, existing investor DCVC and angels; Martin Casado joins the board. The post says a third of the Fortune 500 are using its Jev decision model and that it has saved customers millions in production, and otherwise defines almost nothing about the product: no inputs, no outputs, no benchmark, with the money going to "machine-native models," developer infrastructure and enterprise features. The thread supplied the missing specification. Jev takes application state plus typed questions and returns calibrated probabilities. Commenters listed competitors that shipped within days of Jev, including OpenAI's Decisions API and a Microsoft Decision-1 model released mid-discussion, and an H2O.ai employee posted an Apache-2.0 4B decision model that scores 72.5 against Jev 1.13's 71.5 on JevBench's composite.
+
+*** Take
+The round is not priced on the model, it is priced on Jev being the word people use when they mean "decision model," plus the bet that a team which spotted one missing primitive will spot the next one. That is a defensible venture thesis and christina97 states it better than the blog post does. The blog post is the actual problem: when a company asks the market to accept $7.5B and cannot describe its own product in a sentence, strangers in a comment thread write the spec instead, and this time their version arrived with free weights and a higher score.
+
+*** Comments
+
+**** armcat
+:PROPERTIES:
+:COMMENT_ID: 50024954
+:END:
+Two days after Jev was released there were a dozen decision models, a week later several dozen, mostly open source. OpenAI's own Decisions API beats it, and you can easily finetune your own. As I wrote this, Microsoft just released their own Decision-1 model.
+
+**** christina97
+:PROPERTIES:
+:COMMENT_ID: 50025232
+:END:
+It's clear they don't have a product with some incredible moat. But they clearly have good engineering and product people that came up with a product people wanted. On top of that they have very strong marketing muscle. They may well be a good team to throw money behind if you are hoping to bet on a new AI lab.
+
+**** pseudotensor
+:PROPERTIES:
+:COMMENT_ID: 50026118
+:END:
+Disclosure: I work at H2O.ai. We released an Apache-2.0, open-weight 4B decision model that scores above Jev 1.13 on JevBench's composite score (72.5 vs 71.5) and is currently the top open model there. Same contract as Jev: state plus typed questions in, calibrated probabilities out.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Typesafe AI 以 75 亿美元估值融资 8.7 亿
+***** TLDR
+TypeSafe AI 以 75 亿美元估值融资 8.7 亿美元，由 Andreessen Horowitz 领投，Sequoia、既有投资方 DCVC 和一批天使参投，Martin Casado 进入董事会。公告称财富 500 强中三分之一在用其 Jev 决策模型，并已在生产环境为客户省下数百万美元，但几乎没有定义产品本身：没有输入、没有输出、没有基准测试，资金用于「机器原生模型」、开发者基础设施和企业功能。讨论帖补上了缺失的规格说明：Jev 接收应用状态加带类型的问题，输出校准后的概率。评论者列出了 Jev 发布几天内就出现的竞品，包括 OpenAI 的 Decisions API 和讨论进行中微软发布的 Decision-1，还有一位 H2O.ai 员工贴出 Apache-2.0 的 40 亿参数决策模型，在 JevBench 综合分上以 72.5 对 71.5 超过 Jev 1.13。
+***** Take
+这轮融资定价依据不是模型本身，而是 Jev 已经成了人们说「决策模型」时用的那个词，再加上一个赌注：能发现一个缺失原语的团队，还会发现下一个。这是站得住脚的风投逻辑，而 christina97 把它讲得比公告本身更清楚。真正的问题出在那篇公告：当一家公司要市场接受 75 亿美元估值，却无法用一句话说清自己的产品，规格说明就会由评论区的陌生人来写，而这次他们的版本自带开放权重和更高的分数。
+***** Comments
+- Jev 发布两天后就有十来个决策模型，一周后有几十个，大多是开源的。OpenAI 自己的 Decisions API 就比它强，而且你很容易微调出自己的。我写这条评论的时候，微软刚发布了他们自己的 Decision-1 模型。
+- 显然他们没有什么坚固护城河的产品。但他们确实有优秀的工程和产品团队，做出了大家想要的东西，再加上非常强的市场营销能力。如果你想押注一家新的 AI 实验室，这个团队也许值得投钱。
+- 声明：我在 H2O.ai 工作。我们发布了一个 Apache-2.0 开放权重的 40 亿参数决策模型，在 JevBench 综合分上高于 Jev 1.13（72.5 对 71.5），目前是该榜上最强的开放模型。接口约定和 Jev 一样：输入状态加带类型的问题，输出校准后的概率。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Typesafe AIが評価額75億ドルで8.7億ドルを調達
+***** TLDR
+TypeSafe AIが評価額75億ドルで8億7000万ドルを調達した。Andreessen Horowitzがリードし、Sequoia、既存投資家のDCVC、複数のエンジェルが参加。Martin Casadoが取締役に加わる。発表文はフォーチュン500の3分の1が同社の決定モデルJevを使い、本番環境で顧客に数百万ドルを節約させたと述べるが、製品の定義はほぼない。入力も出力もベンチマークも示されず、資金は「マシンネイティブなモデル」、開発者向け基盤、エンタープライズ機能に充てるという。欠けていた仕様はスレッドが埋めた。Jevはアプリの状態と型付きの質問を受け取り、校正済みの確率を返す。コメント欄にはJev公開から数日で出た競合が並び、OpenAIのDecisions APIや議論中にMicrosoftが出したDecision-1も挙がった。H2O.aiの社員は、JevBenchの総合スコアでJev 1.13の71.5を上回る72.5を出したApache-2.0の40億パラメータ決定モデルを投稿した。
+***** Take
+この調達はモデルに値付けされたのではない。Jevが「決定モデル」と言うときに人が口にする語になったこと、そして欠けていた基本要素を一つ見つけたチームは次も見つけるという賭けに値付けされている。ベンチャーの理屈としては筋が通っていて、christina97の説明は発表文よりわかりやすい。問題は発表文のほうだ。75億ドルを市場に認めさせたい企業が自社製品を一文で説明できないと、仕様はコメント欄の他人が書くことになる。今回その版は、公開された重みとより高いスコアまで付いてきた。
+***** Comments
+- Jevが公開された2日後には決定モデルが十数個あり、1週間後には数十個、ほとんどがオープンソースだった。OpenAI自身のDecisions APIはそれを上回るし、自分で簡単にファインチューニングもできる。これを書いている間にMicrosoftが自社のDecision-1モデルを出した。
+- とてつもない堀のある製品を持っていないのは明らかだ。しかし彼らには優れたエンジニアとプロダクトの人材がいて、人々が欲しがるものを作った。そのうえ非常に強いマーケティング力がある。新しいAIラボに賭けたいなら、資金を託すに値するチームかもしれない。
+- 開示：私はH2O.aiに勤めている。我々はApache-2.0のオープンウェイト40億パラメータの決定モデルを公開し、JevBenchの総合スコアでJev 1.13を上回った（72.5対71.5）。現時点でそこでの最上位オープンモデルだ。契約はJevと同じで、状態と型付きの質問を入れると校正済みの確率が返る。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Typesafe AI, 75억 달러 가치로 8억 7천만 달러 조달
+***** TLDR
+TypeSafe AI가 75억 달러 가치로 8억 7천만 달러를 조달했다. Andreessen Horowitz가 주도하고 Sequoia, 기존 투자자 DCVC와 엔젤들이 참여했으며 Martin Casado가 이사회에 들어간다. 발표문은 포춘 500 기업의 3분의 1이 자사 결정 모델 Jev를 쓰고 있으며 프로덕션에서 고객 비용을 수백만 달러 절감했다고 말하지만, 제품 자체는 거의 정의하지 않는다. 입력도 출력도 벤치마크도 없고, 자금은 "머신 네이티브 모델", 개발자 인프라, 엔터프라이즈 기능에 쓰인다고만 한다. 빠진 명세는 스레드가 채웠다. Jev는 애플리케이션 상태와 타입이 지정된 질문을 받아 보정된 확률을 반환한다. 댓글에는 Jev 공개 며칠 안에 나온 경쟁 모델들이 나열됐고, OpenAI의 Decisions API와 토론 중 공개된 Microsoft의 Decision-1도 포함됐다. H2O.ai 직원은 JevBench 종합 점수에서 Jev 1.13의 71.5를 넘는 72.5를 기록한 Apache-2.0 40억 파라미터 결정 모델을 올렸다.
+***** Take
+이 라운드는 모델에 값을 매긴 것이 아니다. 사람들이 "결정 모델"이라고 말할 때 쓰는 단어가 Jev가 됐다는 점, 그리고 빠진 기본 요소 하나를 찾아낸 팀이 다음 것도 찾아낼 것이라는 베팅에 값을 매긴 것이다. 벤처 논리로는 충분히 방어 가능하고, christina97이 발표문보다 더 잘 설명한다. 진짜 문제는 그 발표문이다. 시장에 75억 달러를 인정해 달라고 하면서 자기 제품을 한 문장으로 설명하지 못하면, 명세는 댓글창의 낯선 사람들이 쓰게 된다. 이번에는 그 버전에 공개 가중치와 더 높은 점수까지 따라왔다.
+***** Comments
+- Jev가 공개된 이틀 뒤에 결정 모델이 열 개 넘게 있었고, 일주일 뒤에는 수십 개, 대부분 오픈소스였다. OpenAI의 Decisions API가 그것을 능가하고, 직접 파인튜닝하기도 쉽다. 이 글을 쓰는 사이 Microsoft가 자사 Decision-1 모델을 내놨다.
+- 엄청난 진입장벽을 가진 제품이 없다는 건 분명하다. 하지만 그들에게는 사람들이 원하는 제품을 만들어낸 좋은 엔지니어링·프로덕트 인력이 있고, 매우 강한 마케팅 역량도 있다. 새로운 AI 연구소에 베팅하고 싶다면 돈을 맡길 만한 팀일 수 있다.
+- 공개합니다. 저는 H2O.ai에서 일합니다. 저희는 Apache-2.0 공개 가중치 40억 파라미터 결정 모델을 냈고 JevBench 종합 점수에서 Jev 1.13을 앞섰습니다(72.5 대 71.5). 현재 그곳 최상위 공개 모델입니다. 계약은 Jev와 같습니다. 상태와 타입이 지정된 질문을 넣으면 보정된 확률이 나옵니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Typesafe AI levanta 870 millones a una valoración de 7.500 millones
+***** TLDR
+TypeSafe AI levantó 870 millones de dólares a una valoración de 7.500 millones, en una ronda liderada por Andreessen Horowitz con Sequoia, el inversor existente DCVC y varios ángeles; Martin Casado se incorpora al consejo. El anuncio dice que un tercio de las empresas del Fortune 500 usa su modelo de decisión Jev y que ha ahorrado millones a sus clientes en producción, pero casi no define el producto: sin entradas, sin salidas, sin benchmark, y el dinero va a "modelos nativos de máquina", infraestructura para desarrolladores y funciones empresariales. El hilo aportó la especificación que falta: Jev recibe el estado de la aplicación más preguntas tipadas y devuelve probabilidades calibradas. Los comentarios enumeran competidores aparecidos a los pocos días de Jev, incluida la Decisions API de OpenAI y un Decision-1 de Microsoft publicado durante la discusión, y un empleado de H2O.ai publicó un modelo de decisión de 4B con licencia Apache-2.0 que marca 72,5 frente al 71,5 de Jev 1.13 en el compuesto de JevBench.
+***** Take
+La ronda no está valorando el modelo, está valorando que Jev sea la palabra que la gente usa cuando dice "modelo de decisión", más la apuesta de que un equipo que detectó una pieza que faltaba detectará la siguiente. Es una tesis de inversión defendible, y christina97 la explica mejor que el propio anuncio. El problema real es el anuncio: cuando una empresa pide al mercado aceptar 7.500 millones y no puede describir su producto en una frase, la especificación la escriben desconocidos en un hilo de comentarios, y esta vez su versión llegó con pesos abiertos y una puntuación más alta.
+***** Comments
+- Dos días después de que saliera Jev había una docena de modelos de decisión, una semana más tarde varias docenas, casi todos de código abierto. La propia Decisions API de OpenAI lo supera, y puedes ajustar el tuyo sin dificultad. Mientras escribía esto, Microsoft acaba de publicar su propio modelo Decision-1.
+- Está claro que no tienen un producto con un foso increíble. Pero sí tienen buena gente de ingeniería y producto que creó algo que la gente quería, y además un músculo de marketing muy fuerte. Puede que sea un buen equipo al que dar dinero si quieres apostar por un nuevo laboratorio de IA.
+- Aviso: trabajo en H2O.ai. Publicamos un modelo de decisión de 4B con pesos abiertos y licencia Apache-2.0 que supera a Jev 1.13 en la puntuación compuesta de JevBench (72,5 frente a 71,5) y hoy es el mejor modelo abierto allí. El mismo contrato que Jev: entra el estado más preguntas tipadas, salen probabilidades calibradas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Typesafe AI sammelt 870 Millionen bei 7,5 Milliarden Bewertung
+***** TLDR
+TypeSafe AI hat 870 Millionen Dollar bei einer Bewertung von 7,5 Milliarden eingesammelt, angeführt von Andreessen Horowitz mit Sequoia, dem Bestandsinvestor DCVC und Angels; Martin Casado zieht in den Verwaltungsrat ein. Der Beitrag behauptet, ein Drittel der Fortune 500 nutze das Entscheidungsmodell Jev und es habe Kunden in der Produktion Millionen gespart, definiert das Produkt aber fast nicht: keine Eingaben, keine Ausgaben, kein Benchmark, das Geld geht in "maschinennative Modelle", Entwicklerinfrastruktur und Enterprise-Funktionen. Die fehlende Spezifikation lieferte der Thread. Jev nimmt Anwendungszustand plus typisierte Fragen und gibt kalibrierte Wahrscheinlichkeiten zurück. Kommentatoren listeten Konkurrenten auf, die wenige Tage nach Jev erschienen, darunter OpenAIs Decisions API und ein mitten in der Diskussion veröffentlichtes Microsoft-Modell Decision-1. Ein Mitarbeiter von H2O.ai postete ein Apache-2.0-Entscheidungsmodell mit 4B Parametern, das im JevBench-Gesamtwert 72,5 gegen 71,5 für Jev 1.13 erreicht.
+***** Take
+Die Runde bewertet nicht das Modell, sie bewertet, dass Jev das Wort ist, das Leute benutzen, wenn sie "Entscheidungsmodell" meinen, plus die Wette, dass ein Team, das ein fehlendes Grundelement erkannt hat, auch das nächste erkennt. Als Venture-Thesis ist das vertretbar, und christina97 formuliert sie besser als der Blogbeitrag. Das Problem ist der Beitrag selbst: Wenn ein Unternehmen vom Markt 7,5 Milliarden akzeptiert haben will und sein Produkt nicht in einem Satz beschreiben kann, schreiben Fremde im Kommentar-Thread die Spezifikation. Diesmal kam deren Version mit offenen Gewichten und einem höheren Wert.
+***** Comments
+- Zwei Tage nach der Veröffentlichung von Jev gab es ein Dutzend Entscheidungsmodelle, eine Woche später mehrere Dutzend, meist Open Source. OpenAIs eigene Decisions API schlägt es, und man kann sein eigenes leicht feintunen. Während ich das schrieb, hat Microsoft gerade sein eigenes Decision-1-Modell veröffentlicht.
+- Es ist klar, dass sie kein Produkt mit einem unglaublichen Burggraben haben. Aber sie haben offensichtlich gute Engineering- und Produktleute, die etwas gebaut haben, das Leute wollten, dazu eine sehr starke Marketingmuskulatur. Wenn man auf ein neues KI-Labor wetten will, ist das vielleicht ein gutes Team für das Geld.
+- Offenlegung: Ich arbeite bei H2O.ai. Wir haben ein Apache-2.0-Entscheidungsmodell mit offenen Gewichten und 4B Parametern veröffentlicht, das Jev 1.13 im JevBench-Gesamtwert übertrifft (72,5 gegen 71,5) und derzeit dort das beste offene Modell ist. Gleicher Vertrag wie Jev: Zustand plus typisierte Fragen hinein, kalibrierte Wahrscheinlichkeiten heraus.
+** Oxide Computer: Our $445M Series D :hardware:funding:servers:rust:cloud:
+:PROPERTIES:
+:ID:       50020014
+:URL:      https://oxide.computer/blog/our-445m-series-d
+:HN_URL:   https://news.ycombinator.com/item?id=50020014
+:POINTS:   586
+:COMMENTS: 260
+:BY:       ahlCVA
+:END:
+
+*** TLDR
+Oxide raised $445M led by Eclipse, with USIT, Riot Ventures, Jane Street, Friends and Family Capital, Counterpart, new investor Atreides Management, and AMD as a strategic investor. No valuation disclosed. The money goes to a large order backlog the company says far exceeds supply: manufacturing capacity and long-term growth while keeping financial independence. The framing of the post is that Oxide is already profitable and paying income tax on ordinary operations, which Bryan Cantrill treats as the unusual part, since "profitability is a lagging indicator of product/market fit" and most startups raise long before any of that exists. This follows a $100M Series B in July 2025 and a $200M Series C in February 2026.
+
+*** Take
+Raising after profitability rather than in order to reach it is the whole substance here, and it is the exact inverse of the TypeSafe round above. The thread also found the two soft spots. Oxide still sells no GPU or accelerator option, which is where the money currently is, and there is no public pricing, so the engineers most inclined to buy a rack cannot work out whether they can afford one without a sales call. The GPU gap is a roadmap question. The pricing page is an afternoon.
+
+*** Comments
+
+**** bcantrill
+:PROPERTIES:
+:COMMENT_ID: 50021738
+:END:
+In this case it was actually literally paying our taxes. In the photo, Steve is about to initiate a wire to the IRS. At our size, it's not a check. As to why we're paying taxes: while tax minimization is certainly a thing, we're paying taxes because we're profitable.
+
+**** typon
+:PROPERTIES:
+:COMMENT_ID: 50020551
+:END:
+I used to think that Oxide's business model sucks in the face of the hyperscalers. When AWS/GCP/Azure just works and is generally reliable and cheap, why would I go through the trouble of buying my own computers? Well, the past 5 years have been a constant decline towards more concentration of power and lack of care for their customers.
+
+**** siliconc0w
+:PROPERTIES:
+:COMMENT_ID: 50021242
+:END:
+Excellent podcast, still not sure about their stack. No GPU support is a hard sell these days.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Oxide Computer：我们的 4.45 亿美元 D 轮
+***** TLDR
+Oxide 完成 4.45 亿美元 D 轮融资，由 Eclipse 领投，参投方包括 USIT、Riot Ventures、Jane Street、Friends and Family Capital、Counterpart、新投资方 Atreides Management，以及战略投资方 AMD。未披露估值。资金用于公司称远超供货能力的大量订单积压：扩充产能、支撑长期增长，同时保持财务独立。文章的叙述重点是 Oxide 已经盈利并在正常经营中缴纳所得税，Bryan Cantrill 认为这才是不寻常的地方，因为「盈利是产品市场匹配的滞后指标」，而多数初创公司在这一切出现之前就融资了。此前是 2025 年 7 月的 1 亿美元 B 轮和 2026 年 2 月的 2 亿美元 C 轮。
+***** Take
+盈利之后再融资，而不是为了走到盈利而融资，这就是这件事的全部实质，而且恰好和上面那条 TypeSafe 的融资相反。讨论帖也找到了两处软肋。Oxide 至今不卖 GPU 或加速器机型，而钱现在正在那里；并且没有公开定价，最想买一机架的工程师不打销售电话就算不出自己买不买得起。GPU 的缺口是路线图问题，定价页面只是一个下午的工作。
+***** Comments
+- 这次确实就是在交税。照片里 Steve 正要给美国国税局发电汇。以我们的规模，这不是开张支票的事。至于为什么要交税：节税当然存在，但我们交税是因为我们在盈利。
+- 我以前觉得面对超大规模云厂商，Oxide 的商业模式很糟。当 AWS、GCP、Azure 就是能用、普遍可靠又便宜，我何必费劲自己买机器？可是过去五年一直在往权力更集中、对客户更不上心的方向滑。
+- 播客很棒，但我还是不太确定他们这套技术栈。现在不支持 GPU 很难卖。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Oxide Computer、4億4500万ドルのシリーズD
+***** TLDR
+OxideがEclipse主導で4億4500万ドルを調達した。USIT、Riot Ventures、Jane Street、Friends and Family Capital、Counterpart、新規のAtreides Management、戦略投資家としてAMDが参加。評価額は非開示。資金は、供給能力を大きく上回ると同社が言う大量の受注残に充てられ、製造能力の拡大と長期的な成長を、財務的独立を保ったまま進めるという。投稿の軸は、Oxideがすでに黒字で通常の事業として法人所得税を払っている点だ。Bryan Cantrillはそこが異例だとし、「収益性はプロダクトマーケットフィットの遅行指標」であり、ほとんどのスタートアップはそれ以前に資金を集めると述べる。2025年7月の1億ドルのシリーズB、2026年2月の2億ドルのシリーズCに続く。
+***** Take
+黒字になるために集めるのではなく、黒字になってから集めた。実質はそれだけで、上のTypeSafeのラウンドとちょうど逆だ。スレッドは弱点も二つ見つけている。OxideはいまだGPUやアクセラレータの選択肢を売っておらず、金が動いているのはまさにそこだ。もう一つは価格の非公開で、ラックを買いたい技術者が営業に連絡せずには予算に収まるか判断できない。GPUの欠落はロードマップの問題だが、価格ページは半日の仕事だ。
+***** Comments
+- 今回は文字どおり税金を払っていた。写真のSteveはこれからIRSに送金しようとしている。我々の規模では小切手では済まない。なぜ税金を払うのか。節税という話はもちろんあるが、我々が税金を払っているのは黒字だからだ。
+- 以前はハイパースケーラーの前でOxideのビジネスモデルは筋が悪いと思っていた。AWSやGCP、Azureが普通に動いて、おおむね信頼でき、安いのに、なぜ手間をかけて自分でコンピュータを買うのか。ところがこの5年は、権力の集中が進み顧客への配慮が薄れる方向に下がり続けている。
+- ポッドキャストは素晴らしいが、スタックについてはまだ確信が持てない。いまGPU非対応は売りにくい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Oxide Computer: 4억 4,500만 달러 시리즈 D
+***** TLDR
+Oxide가 Eclipse 주도로 4억 4,500만 달러를 조달했다. USIT, Riot Ventures, Jane Street, Friends and Family Capital, Counterpart, 신규 투자자 Atreides Management가 참여하고 AMD가 전략적 투자자로 들어왔다. 기업가치는 공개하지 않았다. 자금은 공급 능력을 크게 초과한다고 밝힌 대규모 수주 잔고에 쓰인다. 재무적 독립을 유지하면서 생산 능력을 늘리고 장기 성장에 투자한다는 것이다. 글의 중심은 Oxide가 이미 흑자이며 통상 영업에 대해 법인소득세를 내고 있다는 점이다. Bryan Cantrill은 그 점이 특이하다고 말한다. "수익성은 제품-시장 적합성의 후행 지표"이고 대부분의 스타트업은 그 전에 투자를 받기 때문이다. 2025년 7월 1억 달러 시리즈 B, 2026년 2월 2억 달러 시리즈 C에 이어지는 라운드다.
+***** Take
+흑자가 되기 위해서가 아니라 흑자가 된 다음에 조달했다는 것, 그것이 이 소식의 전부이고 위의 TypeSafe 라운드와 정확히 반대다. 스레드는 약한 지점 두 곳도 찾아냈다. Oxide는 아직 GPU나 가속기 옵션을 팔지 않는데 지금 돈이 도는 곳은 바로 거기다. 그리고 공개 가격표가 없어서, 랙을 사고 싶은 엔지니어가 영업에 연락하지 않고는 예산에 맞는지 계산할 수 없다. GPU 공백은 로드맵 문제지만, 가격 페이지는 반나절 일이다.
+***** Comments
+- 이번 건은 말 그대로 세금을 내는 장면이었다. 사진에서 Steve는 IRS로 송금을 시작하려는 중이다. 우리 규모에서는 수표로 될 일이 아니다. 왜 세금을 내느냐면, 절세라는 것도 분명 있지만 우리가 세금을 내는 이유는 흑자이기 때문이다.
+- 하이퍼스케일러 앞에서 Oxide의 사업 모델은 별로라고 생각했었다. AWS, GCP, Azure가 그냥 잘 돌아가고 대체로 안정적이고 저렴한데 왜 번거롭게 직접 컴퓨터를 사겠나. 그런데 지난 5년은 권력 집중이 심해지고 고객을 신경 쓰지 않는 방향으로 계속 내려갔다.
+- 팟캐스트는 훌륭하지만 그들의 스택은 아직 확신이 안 선다. 요즘 GPU 미지원은 팔기 어렵다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Oxide Computer: nuestra Serie D de 445 millones
+***** TLDR
+Oxide levantó 445 millones de dólares en una ronda liderada por Eclipse, con USIT, Riot Ventures, Jane Street, Friends and Family Capital, Counterpart, el nuevo inversor Atreides Management y AMD como inversor estratégico. No se revela valoración. El dinero va a una cartera de pedidos que la empresa dice que supera con mucho su capacidad de suministro: ampliar fabricación e invertir en crecimiento a largo plazo manteniendo la independencia financiera. El eje del texto es que Oxide ya es rentable y paga impuesto sobre la renta por su operación ordinaria, algo que Bryan Cantrill considera lo inusual, porque "la rentabilidad es un indicador rezagado del encaje producto-mercado" y la mayoría de las startups levanta capital mucho antes de eso. Llega tras una Serie B de 100 millones en julio de 2025 y una Serie C de 200 millones en febrero de 2026.
+***** Take
+Levantar capital después de ser rentable, y no para llegar a serlo, es toda la sustancia aquí, y es exactamente lo contrario de la ronda de TypeSafe de más arriba. El hilo también encontró los dos puntos flojos. Oxide todavía no vende opción de GPU ni de aceleradores, que es donde está el dinero hoy, y no hay precios públicos, así que los ingenieros más dispuestos a comprar un rack no pueden calcular si les cabe en el presupuesto sin hablar con ventas. El hueco de GPU es una cuestión de hoja de ruta. La página de precios es una tarde de trabajo.
+***** Comments
+- En este caso era literalmente pagar nuestros impuestos. En la foto, Steve está a punto de ordenar una transferencia al IRS. A nuestro tamaño, no es un cheque. Y sobre por qué pagamos impuestos: la minimización fiscal existe, claro, pero pagamos impuestos porque somos rentables.
+- Antes pensaba que el modelo de negocio de Oxide no tenía sentido frente a los hiperescaladores. Si AWS, GCP y Azure simplemente funcionan, son fiables y baratos, ¿para qué meterme en el lío de comprar mis propios ordenadores? Pues los últimos cinco años han sido un declive constante hacia más concentración de poder y menos cuidado por los clientes.
+- Excelente podcast, pero sigo sin estar seguro de su stack. No tener soporte de GPU es difícil de vender hoy.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Oxide Computer: unsere Series D über 445 Millionen
+***** TLDR
+Oxide hat 445 Millionen Dollar eingesammelt, angeführt von Eclipse, mit USIT, Riot Ventures, Jane Street, Friends and Family Capital, Counterpart, dem neuen Investor Atreides Management und AMD als strategischem Investor. Keine Bewertung genannt. Das Geld geht in einen großen Auftragsbestand, der die Lieferfähigkeit laut Unternehmen deutlich übersteigt: mehr Produktionskapazität und langfristiges Wachstum bei finanzieller Unabhängigkeit. Der Kern des Beitrags ist, dass Oxide bereits profitabel ist und im normalen Geschäft Einkommensteuer zahlt. Bryan Cantrill hält genau das für das Ungewöhnliche, denn "Profitabilität ist ein nachlaufender Indikator für Product/Market-Fit", und die meisten Startups sammeln Geld lange davor ein. Davor standen eine Series B über 100 Millionen im Juli 2025 und eine Series C über 200 Millionen im Februar 2026.
+***** Take
+Nach der Profitabilität Geld aufzunehmen statt dafür, sie zu erreichen, ist hier die ganze Substanz, und es ist das genaue Gegenteil der TypeSafe-Runde weiter oben. Der Thread hat auch die zwei weichen Stellen gefunden. Oxide verkauft weiterhin keine GPU- oder Beschleuniger-Option, und genau dort liegt das Geld. Dazu gibt es keine öffentlichen Preise, sodass ausgerechnet die Ingenieure, die am ehesten ein Rack kaufen würden, ohne Vertriebsgespräch nicht ausrechnen können, ob sie es sich leisten. Die GPU-Lücke ist eine Roadmap-Frage. Die Preisseite ist ein Nachmittag.
+***** Comments
+- In diesem Fall war es tatsächlich wortwörtlich das Zahlen unserer Steuern. Auf dem Foto ist Steve dabei, eine Überweisung an die IRS auszulösen. In unserer Größe ist das kein Scheck. Und warum wir Steuern zahlen: Steuerminimierung gibt es natürlich, aber wir zahlen Steuern, weil wir profitabel sind.
+- Früher dachte ich, Oxides Geschäftsmodell sei gegen die Hyperscaler sinnlos. Wenn AWS, GCP und Azure einfach funktionieren, zuverlässig und günstig sind, warum sollte ich mir die Mühe machen, eigene Rechner zu kaufen? Nun, die letzten fünf Jahre waren ein steter Abstieg zu mehr Machtkonzentration und weniger Rücksicht auf die Kunden.
+- Hervorragender Podcast, beim Stack bin ich mir aber weiter unsicher. Keine GPU-Unterstützung ist heute schwer zu verkaufen.
+** Nobel Peace Prize for 2026 to Navanethem Pillay :nobel:law:human-rights:icc:politics:
+:PROPERTIES:
+:ID:       50018420
+:URL:      https://www.nobelprize.org/prizes/peace/2026/press-release/
+:HN_URL:   https://news.ycombinator.com/item?id=50018420
+:POINTS:   440
+:COMMENTS: 225
+:BY:       Anon84
+:END:
+
+*** TLDR
+The Norwegian Nobel Committee awarded the 2026 Peace Prize to Navanethem "Navi" Pillay for work that, in the citation, has "held states and national leaders accountable and brought hope to victims of violence and conflict." Pillay was born in apartheid South Africa to an Indian Tamil family and began her career defending anti-apartheid activists, later serving on the Rwanda tribunal, the International Criminal Court, and as UN High Commissioner for Human Rights; in 2019 she sat as an ad hoc judge on the International Court of Justice in the genocide case against Myanmar. Her tribunal work established that sexual violence can constitute crimes against humanity and genocide, and that incitement to genocide through propaganda is prosecutable as a charge in its own right. The Committee's stated reasoning is that "international law is no longer just a supplement to peace and security. It is an absolute necessity." Hours after the announcement the US imposed sanctions on the ICC, which HN discussed in a separate thread.
+
+*** Take
+The Committee gave the prize to someone who built the accountability machinery at the moment that machinery is under sanction, and the sanctions landing the same day argued the citation better than the citation did. The recurring HN objection is older than this award and still reasonable: a roster that includes Kissinger and Arafat does not confer much by membership alone. That is why the case for Pillay should rest on the specific rulings, where rape was recognised as an instrument of genocide and broadcast incitement was prosecuted as its own crime, rather than on the prize's record.
+
+*** Comments
+
+**** nervai
+:PROPERTIES:
+:COMMENT_ID: 50018625
+:END:
+Reminder that the US administration is on a campaign to dismantle the ICC for echoing similar findings to this Nobel Prize winner in her role at UNHRC. I'm extremely grateful to, and humbled by, these people continuing their brave work knowing they will face the full wrath of governments and their campaigns to dismantle accountability for the worst crimes.
+
+**** josu
+:PROPERTIES:
+:COMMENT_ID: 50019949
+:END:
+"In 2019 she became an ad hoc judge on the International Court of Justice in the case in which Myanmar stands accused of genocide." I wonder who committed said genocide... oh, yeah, the 1991 Nobel Peace Prize winner Aung San Suu Kyi.
+
+**** carefree-bob
+:PROPERTIES:
+:COMMENT_ID: 50025316
+:END:
+Unfortunately Nobel Peace prizes are stained with the reputation of going to some pretty undeserving people (Henry Kissinger, Shimon Peres, Obama, etc) and this mars the image of the prize even as a whole. There are actually people who spend their lives working for peace, and die in the effort. And then there are people like Henry Kissinger. They share the same prize.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+2026 年诺贝尔和平奖授予 Navanethem Pillay
+***** TLDR
+挪威诺贝尔委员会把 2026 年和平奖授予 Navanethem「Navi」Pillay，颁奖理由称她的工作「追究了国家和国家领导人的责任，并为暴力和冲突的受害者带来希望」。Pillay 出生于种族隔离时期的南非一个印度泰米尔家庭，职业生涯始于为反种族隔离活动人士辩护，后来任职于卢旺达问题国际法庭、国际刑事法院，并担任联合国人权事务高级专员；2019 年她作为专案法官参与国际法院审理针对缅甸的种族灭绝案。她在法庭上的工作确立了性暴力可以构成反人类罪和种族灭绝罪，以及通过宣传煽动种族灭绝可以作为独立罪名起诉。委员会给出的理由是：「国际法不再只是和平与安全的补充，它是绝对的必需。」公告后数小时，美国对国际刑事法院实施制裁，HN 另有一帖讨论此事。
+***** Take
+委员会把奖给了一个建造追责机制的人，而这套机制正在被制裁；制裁当天就落地，这比颁奖词本身更有力地说明了颁奖词想说的事。HN 上反复出现的那条反对意见比这届奖更久远，而且仍然成立：一份包含基辛格和阿拉法特的名单，光靠入选说明不了多少。正因如此，为 Pillay 辩护应该落在具体判决上，也就是强奸被认定为种族灭绝手段、广播煽动被作为独立罪名起诉，而不是落在这个奖的历史记录上。
+***** Comments
+- 提醒一下，美国政府正在推动拆解国际刑事法院，原因是该院的认定与这位诺贝尔奖得主在联合国人权高专任内的结论相近。这些人明知会面对各国政府全力反扑、明知有人在全力拆解对最严重罪行的追责机制，却仍坚持这份工作，我对他们充满感激和敬意。
+- 「2019 年她成为国际法院审理缅甸被控种族灭绝案的专案法官。」我倒想知道这场种族灭绝是谁做的……哦对，1991 年诺贝尔和平奖得主昂山素季。
+- 可惜的是，诺贝尔和平奖背着颁给过一些相当不配的人的名声（亨利·基辛格、佩雷斯、奥巴马等），这损害了整个奖项的形象。真有人一生致力于和平，并为此付出生命。然后还有像基辛格这样的人。他们拿的是同一个奖。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+2026年ノーベル平和賞はナバネセム・ピレイに
+***** TLDR
+ノルウェー・ノーベル委員会は2026年の平和賞をナバネセム「ナビ」・ピレイに授与した。授賞理由は、彼女の仕事が「国家と国家指導者に責任を負わせ、暴力と紛争の被害者に希望をもたらした」こと。ピレイはアパルトヘイト下の南アフリカでインド系タミルの家庭に生まれ、反アパルトヘイト活動家の弁護から出発し、のちにルワンダ国際戦犯法廷、国際刑事裁判所に加わり、国連人権高等弁務官を務めた。2019年にはミャンマーを相手にしたジェノサイド訴訟で国際司法裁判所の特任裁判官を務めた。法廷での仕事を通じて、性暴力が人道に対する罪やジェノサイドを構成しうること、プロパガンダによるジェノサイド扇動が独立した訴因として起訴できることが確立された。委員会は「国際法はもはや平和と安全の補足ではない。絶対に必要なものだ」と述べている。発表の数時間後、米国は国際刑事裁判所に制裁を課し、HNでは別スレッドで議論された。
+***** Take
+委員会は、責任追及の仕組みを築いた人物に、その仕組みが制裁を受けているまさにその時点で賞を与えた。制裁が同じ日に出たことが、授賞理由の主張を理由書以上に裏づけた。HNで繰り返される異論はこの賞より古く、いまも筋が通る。キッシンジャーやアラファトを含む名簿は、名を連ねること自体では何も保証しない。だからこそピレイを擁護する論は、賞の履歴ではなく具体的な判決に置くべきだ。強姦がジェノサイドの手段として認定され、放送による扇動が独立した罪として起訴された判決である。
+***** Comments
+- 念のため言うと、米政権は国際刑事裁判所の解体に動いている。理由は、同裁判所の判断がこのノーベル賞受賞者の国連人権高等弁務官時代の結論と近いことだ。最悪の犯罪への責任追及を解体しようとする政府の全力の怒りを受けると分かっていて勇敢な仕事を続ける人たちに、心から感謝し、頭が下がる。
+- 「2019年、彼女はミャンマーがジェノサイドで訴えられた事件で国際司法裁判所の特任裁判官になった。」そのジェノサイドを行ったのは誰だったか……そう、1991年のノーベル平和賞受賞者アウン・サン・スー・チーだ。
+- 残念ながらノーベル平和賞には、かなり値しない人物（ヘンリー・キッシンジャー、シモン・ペレス、オバマなど）に贈られてきたという評判がつきまとい、それが賞全体の像を損なっている。実際に生涯を平和のために費やし、その途上で命を落とす人がいる。そしてキッシンジャーのような人もいる。同じ賞を分け合っている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+2026년 노벨 평화상, 나바네템 필레이에게
+***** TLDR
+노르웨이 노벨위원회가 2026년 평화상을 나바네템 "나비" 필레이에게 수여했다. 선정문은 그의 활동이 "국가와 국가 지도자에게 책임을 묻고 폭력과 분쟁의 피해자들에게 희망을 주었다"고 밝혔다. 필레이는 아파르트헤이트 시기 남아프리카의 인도계 타밀 가정에서 태어나 반아파르트헤이트 활동가를 변호하며 경력을 시작했고, 이후 르완다 국제형사재판소와 국제형사재판소에서 일했으며 유엔 인권최고대표를 지냈다. 2019년에는 미얀마를 상대로 한 제노사이드 사건에서 국제사법재판소 특별재판관을 맡았다. 그의 재판 활동으로 성폭력이 인도에 반한 죄와 제노사이드를 구성할 수 있다는 점, 선전을 통한 제노사이드 선동이 독립된 공소사실로 기소될 수 있다는 점이 확립됐다. 위원회는 "국제법은 더 이상 평화와 안보의 보완물이 아니다. 절대적인 필수다"라고 밝혔다. 발표 몇 시간 뒤 미국은 ICC에 제재를 부과했고, HN에서는 별도 스레드로 논의됐다.
+***** Take
+위원회는 책임 추궁 장치를 만든 사람에게, 그 장치가 제재받는 바로 그 시점에 상을 주었다. 같은 날 떨어진 제재가 선정문의 주장을 선정문보다 더 잘 증명했다. HN에서 반복되는 반론은 이번 상보다 오래됐고 여전히 타당하다. 키신저와 아라파트가 들어 있는 명단은 이름이 올랐다는 사실만으로는 아무것도 보장하지 않는다. 그래서 필레이를 옹호하는 논거는 상의 이력이 아니라 구체적 판결에 놓여야 한다. 강간이 제노사이드의 수단으로 인정되고, 방송 선동이 독립된 범죄로 기소된 판결들이다.
+***** Comments
+- 미국 행정부가 ICC를 해체하려는 캠페인을 벌이고 있다는 점을 짚고 싶다. 이 노벨상 수상자가 유엔 인권최고대표 시절 내린 결론과 비슷한 판단을 ICC가 내렸기 때문이다. 최악의 범죄에 대한 책임 추궁을 허물려는 정부들의 전면적인 분노를 맞게 될 것을 알면서도 용감하게 일을 계속하는 사람들에게 깊이 감사하고 겸허해진다.
+- "2019년 그는 미얀마가 제노사이드로 기소된 사건에서 국제사법재판소 특별재판관이 되었다." 그 제노사이드를 저지른 사람이 누구였는지 궁금한데... 아, 1991년 노벨 평화상 수상자 아웅산 수치다.
+- 안타깝게도 노벨 평화상은 꽤 자격 없는 사람들(헨리 키신저, 시몬 페레스, 오바마 등)에게 돌아갔다는 평판을 안고 있고, 그것이 상 전체의 이미지를 훼손한다. 실제로 평생을 평화를 위해 쓰고 그 과정에서 목숨을 잃는 사람들이 있다. 그리고 키신저 같은 사람도 있다. 둘이 같은 상을 나눠 갖는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El Nobel de la Paz 2026 para Navanethem Pillay
+***** TLDR
+El Comité Nobel noruego concedió el Premio de la Paz 2026 a Navanethem "Navi" Pillay por una labor que, según la mención, ha "exigido cuentas a Estados y líderes nacionales y dado esperanza a las víctimas de la violencia y los conflictos". Pillay nació en la Sudáfrica del apartheid en una familia india tamil y empezó su carrera defendiendo a activistas antiapartheid; después trabajó en el tribunal para Ruanda y en la Corte Penal Internacional, y fue Alta Comisionada de la ONU para los Derechos Humanos. En 2019 fue jueza ad hoc en la Corte Internacional de Justicia en el caso de genocidio contra Myanmar. Su trabajo judicial estableció que la violencia sexual puede constituir crimen de lesa humanidad y genocidio, y que la incitación al genocidio mediante propaganda es perseguible como delito propio. El Comité razona que "el derecho internacional ya no es solo un complemento de la paz y la seguridad. Es una necesidad absoluta". Horas después del anuncio, Estados Unidos impuso sanciones a la CPI, algo que HN discutió en un hilo aparte.
+***** Take
+El Comité premió a quien construyó la maquinaria de rendición de cuentas justo cuando esa maquinaria está sancionada, y las sanciones del mismo día defendieron la mención mejor que la propia mención. La objeción recurrente en HN es más antigua que este premio y sigue siendo razonable: una lista que incluye a Kissinger y a Arafat no otorga mucho por el solo hecho de pertenecer a ella. Por eso el argumento a favor de Pillay debe apoyarse en las sentencias concretas, donde la violación fue reconocida como instrumento de genocidio y la incitación radiofónica se juzgó como delito propio, y no en el historial del premio.
+***** Comments
+- Recordatorio de que la administración estadounidense está en campaña para desmantelar la CPI por sostener conclusiones parecidas a las de esta premiada Nobel cuando era Alta Comisionada de la ONU. Siento una enorme gratitud y humildad ante quienes siguen con este trabajo valiente sabiendo que se enfrentarán a toda la ira de gobiernos empeñados en desmontar la rendición de cuentas por los peores crímenes.
+- "En 2019 se convirtió en jueza ad hoc de la Corte Internacional de Justicia en el caso en que Myanmar está acusado de genocidio." Me pregunto quién cometió ese genocidio... ah, sí, la Nobel de la Paz de 1991, Aung San Suu Kyi.
+- Por desgracia, los Nobel de la Paz arrastran la fama de haber ido a gente bastante poco merecedora (Henry Kissinger, Shimon Peres, Obama) y eso daña la imagen del premio en su conjunto. Hay personas que dedican su vida a trabajar por la paz y mueren en el intento. Y luego hay gente como Henry Kissinger. Comparten el mismo premio.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Friedensnobelpreis 2026 an Navanethem Pillay
+***** TLDR
+Das norwegische Nobelkomitee hat den Friedenspreis 2026 an Navanethem "Navi" Pillay verliehen, für eine Arbeit, die laut Begründung "Staaten und Staatsführer zur Verantwortung gezogen und Opfern von Gewalt und Konflikten Hoffnung gebracht" hat. Pillay wurde im Apartheid-Südafrika in eine indisch-tamilische Familie geboren und begann ihre Laufbahn als Verteidigerin von Anti-Apartheid-Aktivisten. Später arbeitete sie am Ruanda-Tribunal und am Internationalen Strafgerichtshof und war UN-Hochkommissarin für Menschenrechte; 2019 saß sie als Ad-hoc-Richterin am Internationalen Gerichtshof im Genozid-Verfahren gegen Myanmar. Ihre Arbeit als Richterin hat festgeschrieben, dass sexuelle Gewalt Verbrechen gegen die Menschlichkeit und Genozid darstellen kann und dass Aufstachelung zum Genozid durch Propaganda als eigener Anklagepunkt verfolgbar ist. Das Komitee begründet: "Internationales Recht ist nicht länger nur eine Ergänzung von Frieden und Sicherheit. Es ist eine absolute Notwendigkeit." Stunden nach der Bekanntgabe verhängten die USA Sanktionen gegen den IStGH, was HN in einem eigenen Thread diskutierte.
+***** Take
+Das Komitee hat den Preis an eine Person gegeben, die den Apparat der Rechenschaft aufgebaut hat, und zwar genau in dem Moment, in dem dieser Apparat sanktioniert wird. Dass die Sanktionen am selben Tag kamen, hat die Begründung besser belegt als die Begründung selbst. Der wiederkehrende Einwand auf HN ist älter als dieser Preis und bleibt vernünftig: Eine Liste, auf der Kissinger und Arafat stehen, verleiht durch Mitgliedschaft allein nicht viel. Deshalb sollte das Argument für Pillay auf den konkreten Urteilen beruhen, in denen Vergewaltigung als Mittel des Genozids anerkannt und Aufstachelung über den Rundfunk als eigenes Verbrechen verfolgt wurde, und nicht auf der Bilanz des Preises.
+***** Comments
+- Zur Erinnerung: Die US-Regierung führt eine Kampagne zur Zerschlagung des IStGH, weil dieser zu ähnlichen Feststellungen kommt wie diese Nobelpreisträgerin in ihrer Zeit als UN-Menschenrechtskommissarin. Ich bin diesen Menschen überaus dankbar, die ihre mutige Arbeit fortsetzen, obwohl sie wissen, dass sie den vollen Zorn von Regierungen zu spüren bekommen, die die Rechenschaft für die schwersten Verbrechen abbauen wollen.
+- "2019 wurde sie Ad-hoc-Richterin am Internationalen Gerichtshof in dem Verfahren, in dem Myanmar des Genozids beschuldigt wird." Ich frage mich, wer diesen Genozid begangen hat ... ach ja, die Friedensnobelpreisträgerin von 1991, Aung San Suu Kyi.
+- Leider haftet den Friedensnobelpreisen der Ruf an, an einige recht unwürdige Personen gegangen zu sein (Henry Kissinger, Schimon Peres, Obama), und das beschädigt das Bild des Preises insgesamt. Es gibt tatsächlich Menschen, die ihr Leben der Friedensarbeit widmen und dabei sterben. Und dann gibt es Leute wie Henry Kissinger. Sie teilen denselben Preis.
+** Sorry, I'm in a meeting :remote-work:humor:ai:webdev:productivity:
+:PROPERTIES:
+:ID:       50018088
+:URL:      https://iminafleeting.com/
+:HN_URL:   https://news.ycombinator.com/item?id=50018088
+:POINTS:   754
+:COMMENTS: 234
+:BY:       splintersio
+:END:
+
+*** TLDR
+Fleeting plays a synthetic conference call out of your speakers so you sound busy, billed as "workplace self-defence against people stealing your time." You enter a name, pick an accent, choose a single looping meeting or back-to-back ones, and press play; "Leave" or "I have to drop" gets you out. Each meeting runs about 12 minutes and starts at a random point so it does not repeat. Every voice is synthetic and the faces are AI-generated or licensed stock; every name is invented except John Carroll's, who built the site. It also generates a fake calendar invite that links back to the page, so when the reminder fires you have something to join. It sells sponsorship slots inside the fake meetings. Commenters hit 404s on the media files under load, found that only the British audio worked, and reported that corporate networks are already blocking the domain.
+
+*** Take
+The calendar invite is the real feature and everything else is the demo. A blocked slot prevents the meeting request; audio only helps after someone has already walked up to your desk. alexpotato's version in the thread beats the product outright and costs nothing: a manager putting a standing three-hour block on the team calendar carries authority that a browser tab does not, which is exactly why his SREs asked him to create it rather than doing it themselves. The detail worth keeping is that IT departments have already added the domain to a blocklist, which is the most precise review the product will get.
+
+*** Comments
+
+**** alexpotato
+:PROPERTIES:
+:COMMENT_ID: 50020900
+:END:
+I managed a team of SREs at a "fire drill all the time" kind of place. They came to me and said they kept getting bombarded by meeting requests and had no focus time. My solution was to create a weekly "team meeting" from 8am to 11am every Friday and invite all of them to it. They loved it. I mentioned they could have done this themselves, but they responded: "It carries more weight coming from you. Plus, if someone tries to schedule over it, they are more likely to think twice."
+
+**** ghusto
+:PROPERTIES:
+:COMMENT_ID: 50020031
+:END:
+If you can't tell people you want to concentrate on your work, there's either something very wrong with where you work, or you.
+
+**** DharmaPolice
+:PROPERTIES:
+:COMMENT_ID: 50019392
+:END:
+Trying to access this site on my corporate Windows laptop and it was blocked "by your IT admin" (in Windows itself, not the browser/proxy). So it's already on some kind of list.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+抱歉，我在开会
+***** TLDR
+Fleeting 从你的音箱里放一场合成的电话会议，让你听起来很忙，宣传语是「职场自卫，对付那些偷走你时间的人」。你输入一个名字、选一种口音，决定是单场循环还是连着开，然后按播放；点「离开」或「我得先下了」就能退出。每场会议约 12 分钟，并从随机位置开始，避免重复。所有声音都是合成的，人脸是 AI 生成或授权素材，所有名字都是编的，只有做这个网站的 John Carroll 是真名。它还能生成一个指回该页面的假日历邀请，这样提醒弹出时你就有个会可以「加入」。网站还出售假会议里的赞助位。评论者在高负载下遇到媒体文件 404，发现只有英式音频能用，还报告企业网络已经在屏蔽这个域名。
+***** Take
+日历邀请才是真正的功能，其余都是演示。被占住的时段能阻止会议邀请发出来；音频只在别人已经走到你桌前之后才有用。讨论帖里 alexpotato 的做法完全胜过这个产品，而且免费：经理在团队日历上固定放一个三小时的时段，这份权威是一个浏览器标签页给不了的，这也正是他的 SRE 们宁愿请他来建、而不是自己建的原因。另一个值得记住的细节是，IT 部门已经把这个域名加进了屏蔽名单，这是这个产品能得到的最精确的评价。
+***** Comments
+- 我在一家「天天救火」的公司带过一个 SRE 团队。他们来找我说，会议邀请不断轰炸，完全没有专注时间。我的办法是建一个每周五上午 8 点到 11 点的「团队会议」，把他们全都邀请进去。他们很喜欢。我说这事他们自己就能做，他们回答：「由你来发更有分量。而且如果有人想把会排在这上面，他们更可能会犹豫一下。」
+- 如果你没法直接告诉别人你想专心工作，那要么你待的地方有很大问题，要么是你自己有问题。
+- 我在公司的 Windows 笔记本上打开这个网站，被「你的 IT 管理员」拦掉了（是 Windows 本身拦的，不是浏览器或代理）。所以它已经上了某份名单。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+すみません、会議中です
+***** TLDR
+Fleetingは合成された電話会議をスピーカーから流し、忙しそうに聞こえるようにする。うたい文句は「あなたの時間を奪う人への職場での自己防衛」。名前を入れ、アクセントを選び、1件をループさせるか連続で入れるかを決めて再生を押す。「退出」または「そろそろ落ちます」で抜けられる。1件は約12分で、繰り返しに聞こえないようランダムな位置から始まる。音声はすべて合成、顔はAI生成かライセンス素材で、名前はすべて架空、例外はサイトを作ったJohn Carrollだけだ。ページに戻るリンクが入った偽のカレンダー招待も作れるので、リマインダーが鳴ったときに「参加」できる会議がある。偽会議内のスポンサー枠も販売している。コメントでは負荷時にメディアファイルが404になる、英国アクセントの音声しか再生されない、企業ネットワークがすでにドメインを遮断している、といった報告が出た。
+***** Take
+本当の機能はカレンダー招待で、残りはデモだ。押さえられた枠は会議依頼そのものを防ぐが、音声は誰かが席まで来てからしか効かない。スレッドのalexpotatoのやり方は製品に完勝しているうえ無料だ。マネージャーがチームのカレンダーに毎週3時間の固定枠を入れると、ブラウザのタブにはない権威が付く。だから彼のSREたちは自分でやらずに彼に作ってほしいと頼んだ。もう一つ覚えておきたい事実は、情報システム部門がすでにこのドメインをブロックリストに入れていることだ。この製品が受け取る最も正確な評価はそれだろう。
+***** Comments
+- 「常に火消し」という職場でSREチームを率いていた。メンバーから、会議依頼に爆撃されて集中時間がないと相談された。私の解決策は、毎週金曜の午前8時から11時までの「チーム会議」を作り、全員を招待することだった。彼らはとても喜んだ。自分たちでもできたはずだと言ったら、こう返ってきた。「あなたから出るほうが重みがある。それに、上に会議を入れようとする人も一度考え直す」
+- 仕事に集中したいと人に言えないなら、職場に大きな問題があるか、あなたに問題があるかのどちらかだ。
+- 会社のWindowsノートでこのサイトを開こうとしたら「IT管理者によってブロックされています」と出た（ブラウザやプロキシではなくWindows自体で）。つまりもう何かのリストに載っている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+죄송해요, 지금 회의 중입니다
+***** TLDR
+Fleeting은 합성된 전화 회의 소리를 스피커로 재생해 바쁜 것처럼 들리게 한다. 소개 문구는 "당신의 시간을 빼앗는 사람들에 대한 직장 자기방어"다. 이름을 넣고 억양을 고르고, 한 회의를 반복할지 연달아 넣을지 정한 뒤 재생을 누른다. "나가기" 또는 "저는 먼저 내려가겠습니다"로 빠져나온다. 회의 하나는 약 12분이고, 반복처럼 들리지 않게 무작위 지점에서 시작한다. 모든 목소리는 합성이고 얼굴은 AI 생성이거나 라이선스 스톡이며, 이름은 모두 지어낸 것이다. 예외는 사이트를 만든 John Carroll뿐이다. 페이지로 되돌아오는 링크가 담긴 가짜 캘린더 초대도 만들어 주어, 알림이 뜰 때 "참가"할 회의가 생긴다. 가짜 회의 안의 스폰서 자리도 판다. 댓글에는 부하 상황에서 미디어 파일 404, 영국식 오디오만 재생됨, 회사 네트워크가 이미 도메인을 차단하고 있다는 보고가 올라왔다.
+***** Take
+진짜 기능은 캘린더 초대이고 나머지는 시연이다. 막아 둔 시간대는 회의 요청 자체를 막지만, 오디오는 누군가 이미 책상까지 온 뒤에만 쓸모가 있다. 스레드의 alexpotato 방식은 제품을 완전히 이기고 비용도 0이다. 매니저가 팀 캘린더에 매주 세 시간을 고정으로 잡아 두면 브라우저 탭에는 없는 권위가 생긴다. 그의 SRE들이 직접 하지 않고 그에게 만들어 달라고 한 이유가 바로 그것이다. 기억할 만한 또 하나의 사실은 IT 부서가 이미 이 도메인을 차단 목록에 넣었다는 점이다. 이 제품이 받을 가장 정확한 평가일 것이다.
+***** Comments
+- "항상 불 끄는 중"인 회사에서 SRE 팀을 관리했다. 팀원들이 와서 회의 요청에 폭격당해 집중할 시간이 없다고 했다. 내 해법은 매주 금요일 오전 8시부터 11시까지 "팀 회의"를 만들어 전원을 초대하는 것이었다. 아주 좋아했다. 본인들이 직접 할 수도 있었다고 말하자 이렇게 답했다. "당신이 하면 무게가 다릅니다. 게다가 누가 그 위에 회의를 잡으려 하면 한 번 더 생각하게 되죠."
+- 일에 집중하고 싶다고 사람들에게 말할 수 없다면, 직장에 큰 문제가 있거나 당신에게 문제가 있는 것이다.
+- 회사 Windows 노트북에서 이 사이트에 접속하려니 "IT 관리자에 의해 차단됨"이라고 나왔다. 브라우저나 프록시가 아니라 Windows 자체에서다. 이미 어떤 목록에 올라간 셈이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Perdón, estoy en una reunión
+***** TLDR
+Fleeting reproduce por tus altavoces una videollamada sintética para que suenes ocupado, presentada como "autodefensa laboral frente a quienes te roban el tiempo". Pones un nombre, eliges un acento, decides si quieres una reunión en bucle o varias seguidas y le das a reproducir; "Salir" o "tengo que dejarlo" te saca. Cada reunión dura unos 12 minutos y empieza en un punto aleatorio para no repetirse. Todas las voces son sintéticas y las caras son generadas por IA o material de stock con licencia; todos los nombres son inventados salvo el de John Carroll, que hizo el sitio. También genera una invitación de calendario falsa que enlaza de vuelta a la página, así cuando salta el recordatorio tienes algo a lo que "unirte". Vende espacios de patrocinio dentro de las reuniones falsas. En los comentarios aparecieron errores 404 en los archivos de audio bajo carga, que solo funcionaba el audio británico y que las redes corporativas ya están bloqueando el dominio.
+***** Take
+La invitación de calendario es la función de verdad y el resto es la demo. Un hueco bloqueado evita la solicitud de reunión; el audio solo sirve cuando alguien ya se te ha plantado en la mesa. La versión de alexpotato en el hilo gana de calle y además es gratis: un responsable que fija un bloque semanal de tres horas en el calendario del equipo tiene una autoridad que una pestaña del navegador no tiene, y por eso sus SRE le pidieron que lo creara él en lugar de hacerlo ellos. El detalle que conviene retener es que los departamentos de IT ya han añadido el dominio a una lista de bloqueo, que es la reseña más precisa que va a recibir el producto.
+***** Comments
+- Dirigía un equipo de SRE en un sitio de "simulacro de incendio permanente". Vinieron a decirme que los bombardeaban con solicitudes de reunión y no tenían tiempo de concentración. Mi solución fue crear una "reunión de equipo" semanal de 8 a 11 los viernes e invitarlos a todos. Les encantó. Les comenté que podrían haberlo hecho ellos mismos y respondieron: "Tiene más peso viniendo de ti. Y si alguien intenta poner algo encima, se lo piensa dos veces."
+- Si no puedes decirle a la gente que quieres concentrarte en tu trabajo, o hay algo muy mal en tu sitio de trabajo, o lo hay en ti.
+- Intenté abrir este sitio en mi portátil corporativo con Windows y estaba bloqueado "por tu administrador de IT" (en Windows mismo, no en el navegador ni el proxy). Así que ya está en alguna lista.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Sorry, ich bin in einem Meeting
+***** TLDR
+Fleeting spielt eine synthetische Telefonkonferenz über deine Lautsprecher, damit du beschäftigt klingst, vermarktet als "Selbstverteidigung am Arbeitsplatz gegen Leute, die dir die Zeit stehlen". Du gibst einen Namen ein, wählst einen Akzent, entscheidest zwischen einem Meeting in Dauerschleife oder mehreren hintereinander, und drückst Play; "Verlassen" oder "Ich muss raus" beendet es. Jedes Meeting läuft etwa 12 Minuten und startet an einer zufälligen Stelle, damit es sich nicht wiederholt. Alle Stimmen sind synthetisch, die Gesichter KI-generiert oder lizenziertes Stockmaterial, alle Namen erfunden, außer John Carroll, der die Seite gebaut hat. Dazu erzeugt sie eine gefälschte Kalendereinladung, die auf die Seite zurückverlinkt, sodass du beim Erinnerungs-Pop-up etwas zum "Beitreten" hast. Sponsoringplätze innerhalb der falschen Meetings werden verkauft. In den Kommentaren gab es 404-Fehler bei den Mediendateien unter Last, nur das britische Audio funktionierte, und Firmennetze blockieren die Domain bereits.
+***** Take
+Die Kalendereinladung ist das eigentliche Feature, alles andere ist die Demo. Ein belegter Slot verhindert die Meeting-Anfrage; Audio hilft erst, wenn jemand schon an deinem Schreibtisch steht. Die Variante von alexpotato im Thread schlägt das Produkt klar und kostet nichts: Wenn ein Vorgesetzter einen festen Dreistundenblock in den Teamkalender setzt, hat das eine Autorität, die ein Browser-Tab nicht hat. Genau deshalb haben seine SREs ihn darum gebeten, statt es selbst zu tun. Das Detail, das man behalten sollte: Die IT-Abteilungen haben die Domain bereits auf eine Blockliste gesetzt, und das ist die präziseste Bewertung, die dieses Produkt bekommen wird.
+***** Comments
+- Ich habe ein SRE-Team an einem Ort geführt, wo ständig Feueralarm war. Sie kamen zu mir und sagten, sie würden mit Meeting-Anfragen bombardiert und hätten keine Fokuszeit. Meine Lösung war ein wöchentliches "Teammeeting" freitags von 8 bis 11 Uhr, zu dem ich sie alle eingeladen habe. Sie waren begeistert. Ich merkte an, dass sie das auch selbst hätten machen können, und sie antworteten: "Von dir hat es mehr Gewicht. Und wenn jemand etwas darüberlegen will, denkt er eher zweimal nach."
+- Wenn man Leuten nicht sagen kann, dass man sich auf seine Arbeit konzentrieren will, ist entweder mit dem Arbeitsplatz etwas sehr falsch oder mit einem selbst.
+- Ich wollte die Seite auf meinem Firmen-Windows-Laptop öffnen, und sie war "von Ihrem IT-Administrator" gesperrt (in Windows selbst, nicht im Browser oder Proxy). Sie steht also schon auf irgendeiner Liste.
