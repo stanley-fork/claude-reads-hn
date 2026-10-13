@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-10-13 06:10 UTC
+#+DATE: 2026-10-13T06:10:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+E. coli runs a chemical computer with no brain, an 80B model streams off an SSD, and a Z80 intro took ten months at 455 bytes a week
+
+* Highlights
+- E. coli chemotaxis: a 1,500 rps motor, three-molecule sensitivity, methylation as memory
+- Janas streams MoE experts off NVMe to run an 80B model on a 32 GB laptop
+- A ZX Spectrum intro in 10,287 bytes of hand-written Z80 assembly
+- Phreak.ing: an anonymous SIP switch gated behind a DTMF captcha
+- Twenty-six years of Mac Dock icons, flattened into identical squircles
+
+* Stories
+
+** The baffling intelligence of a single cell (2024) :biology:computation:science:
+:PROPERTIES:
+:ID:       50041866
+:URL:      https://jsomers.net/e-coli-chemotaxis/
+:HN_URL:   https://news.ycombinator.com/item?id=50041866
+:POINTS:   183
+:COMMENTS: 26
+:BY:       jsomers
+:END:
+
+*** TLDR
+James Somers and Edwin Morris walk through E. coli chemotaxis as a worked example of computation with no brain anywhere in the system. The cell runs for about a second, tumbles for about a tenth of a second, and biases that random walk according to whether conditions are improving. Mechanically: attractant binding to membrane receptors inactivates the CheA kinase, less CheY gets phosphorylated, and it is CheY-p that binds the flagellar rotors and reverses them into a tumble. Six rotors spin at roughly 1,500 rotations per second at close to 100 percent efficiency. A 2 percent change in receptor occupancy produces about a 100 percent change in output, and the cell detects fewer than three molecules per cell volume. Adaptation comes from methylating the receptors, a chemical memory lasting several seconds that keeps the cell sensitive across five orders of magnitude of concentration.
+
+*** Take
+The adaptation mechanism is the part worth stealing. Methylation is gain control implemented in covalent chemistry: the cell rescales its own input range so it responds to relative change rather than absolute concentration, which is what your retina does and what any sensor working over five decades of input has to do somehow. No neurons and no central controller, just binding affinities arranged so the error signal is effectively a time derivative.
+
+*** Comments
+
+**** dekhn
+In some ways, a single cell is more like an entire artificial neural network. Real neurons have some amazing properties that individual neurons in ANNs do not. It's still unclear how we can exploit those properties to improve AI.
+
+**** the-mitr
+Of possible interest is John T. Bonner's book The Evolution of Culture in Animals.
+
+**** brudgers
+There are previous comments from the 2024 discussion worth reading alongside this.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+单个细胞令人困惑的智能（2024）
+***** TLDR
+James Somers 和 Edwin Morris 以大肠杆菌的趋化性为例，讲解一个完全没有大脑的系统如何完成计算。细胞向前「游动」约一秒，随后「翻滚」约十分之一秒，并根据环境是否在变好来给这段随机游走加上偏向。机制上：吸引物结合膜受体后会使 CheA 激酶失活，CheY 的磷酸化随之减少，而正是 CheY-p 结合鞭毛转子并使其反转，造成翻滚。六个转子以每秒约 1500 转的速度旋转，效率接近 100%。受体占据率变化 2% 就能带来约 100% 的输出变化，细胞能检测到每个细胞体积内不到三个分子。适应性来自受体的甲基化，这是一种可维持数秒的化学记忆，让细胞在跨越五个数量级的浓度范围内保持灵敏。
+***** Take
+最值得借用的是它的适应机制。甲基化就是用共价化学实现的增益控制：细胞重新标定自己的输入量程，于是它响应的是相对变化而不是绝对浓度，这和视网膜的做法一样，也是任何需要跨五个数量级工作的传感器必须解决的问题。没有神经元，没有中央控制器，只有被调好的结合亲和力，使误差信号实际上等于一个时间导数。
+***** Comments
+- 某种意义上，单个细胞更像是一整个人工神经网络。真实神经元具备一些惊人的特性，而人工神经网络里的单个神经元并不具备。我们还不清楚怎么利用这些特性来改进 AI。
+- 可能有兴趣的话，可以读 John T. Bonner 的《The Evolution of Culture in Animals》。
+- 2024 年那次讨论里的评论也值得和这篇一起看。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+たった一個の細胞の不可解な知能（2024）
+***** TLDR
+James Somers と Edwin Morris は、大腸菌の走化性を「脳がどこにもない系が計算する」具体例として解説する。細胞は約1秒間まっすぐ泳ぎ、約0.1秒間その場で回転（タンブル）し、環境が良くなっているかどうかでこのランダムウォークに偏りをつける。仕組みはこうだ。誘引物質が膜受容体に結合するとCheAキナーゼが不活性化し、CheYのリン酸化が減る。そしてCheY-pこそが鞭毛のローターに結合して回転を逆転させ、タンブルを起こす。6つのローターは毎秒約1,500回転し、効率はほぼ100%。受容体の占有率が2%変わるだけで出力は約100%変化し、細胞容積あたり3分子未満を検出できる。順応は受容体のメチル化によって生じ、数秒持続する化学的記憶として働き、濃度が5桁変わっても感度を保つ。
+***** Take
+盗むべきは順応の仕組みだ。メチル化は共有結合の化学で実装されたゲイン制御であり、細胞は自分の入力レンジを再スケールして、絶対濃度ではなく相対変化に応答する。網膜がやっていることと同じで、5桁の入力範囲で働くセンサーが何らかの形で必ず解かねばならない問題でもある。ニューロンも中央制御もなく、誤差信号が実質的に時間微分になるよう結合親和性が調整されているだけだ。
+***** Comments
+- ある意味、単一の細胞は人工ニューラルネットワーク全体に近い。実際のニューロンにはANNの個々のニューロンにはない驚くべき性質がある。その性質をどうAIの改善に活かせるかはまだ分かっていない。
+- 関心があるかもしれないが、John T. Bonnerの『The Evolution of Culture in Animals』という本がある。
+- 2024年の議論のコメントも、この記事と併せて読む価値がある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+단일 세포의 당혹스러운 지능 (2024)
+***** TLDR
+James Somers와 Edwin Morris는 대장균의 화학주성을 뇌가 전혀 없는 계가 계산을 수행하는 사례로 풀어낸다. 세포는 약 1초간 직진하고 약 0.1초간 제자리에서 회전(텀블)하며, 환경이 나아지고 있는지에 따라 이 무작위 행보에 편향을 준다. 작동 원리는 이렇다. 유인물질이 막 수용체에 결합하면 CheA 키네이스가 비활성화되고 CheY의 인산화가 줄어든다. 그리고 CheY-p가 편모 회전자에 결합해 회전 방향을 뒤집어 텀블을 일으킨다. 회전자 6개는 초당 약 1,500회 돌며 효율은 거의 100%다. 수용체 점유율이 2%만 변해도 출력은 약 100% 바뀌고, 세포 부피당 분자 세 개 미만을 감지한다. 순응은 수용체의 메틸화에서 나오며, 수 초간 유지되는 화학적 기억으로 작동해 농도가 다섯 자릿수로 변해도 민감도를 유지한다.
+***** Take
+가져다 쓸 만한 것은 순응 메커니즘이다. 메틸화는 공유결합 화학으로 구현된 게인 제어다. 세포가 자기 입력 범위를 다시 조정해 절대 농도가 아니라 상대 변화에 반응하게 만드는데, 망막이 하는 일이 바로 이것이고 다섯 자릿수 범위에서 작동하는 센서라면 어떤 식으로든 풀어야 하는 문제다. 뉴런도 중앙 제어기도 없고, 오차 신호가 사실상 시간 미분이 되도록 결합 친화도가 맞춰져 있을 뿐이다.
+***** Comments
+- 어떤 면에서 단일 세포는 인공신경망 전체에 더 가깝다. 실제 뉴런에는 ANN의 개별 뉴런에 없는 놀라운 성질이 있다. 그 성질을 어떻게 AI 개선에 활용할지는 아직 불분명하다.
+- 관심이 있다면 John T. Bonner의 책 『The Evolution of Culture in Animals』를 볼 만하다.
+- 2024년 토론의 댓글들도 이 글과 함께 읽을 가치가 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La desconcertante inteligencia de una sola célula (2024)
+***** TLDR
+James Somers y Edwin Morris explican la quimiotaxis de E. coli como un ejemplo trabajado de cómputo sin cerebro en ningún punto del sistema. La célula nada recto durante alrededor de un segundo, da una voltereta durante una décima de segundo y sesga ese paseo aleatorio según si las condiciones están mejorando. El mecanismo: al unirse el atrayente a los receptores de membrana se inactiva la quinasa CheA, se fosforila menos CheY, y es CheY-p lo que se une a los rotores flagelares y los invierte provocando la voltereta. Seis rotores giran a unas 1.500 revoluciones por segundo con una eficiencia cercana al 100 por ciento. Un cambio del 2 por ciento en la ocupación de receptores produce un cambio de salida de en torno al 100 por ciento, y la célula detecta menos de tres moléculas por volumen celular. La adaptación proviene de la metilación de los receptores, una memoria química de varios segundos que mantiene la sensibilidad a lo largo de cinco órdenes de magnitud de concentración.
+***** Take
+Lo que conviene robar es el mecanismo de adaptación. La metilación es control de ganancia implementado en química covalente: la célula reescala su propio rango de entrada para responder al cambio relativo y no a la concentración absoluta, que es lo que hace la retina y lo que cualquier sensor que trabaje sobre cinco décadas de entrada tiene que resolver de algún modo. Sin neuronas y sin controlador central, solo afinidades de unión ajustadas para que la señal de error sea en efecto una derivada temporal.
+***** Comments
+- En cierto sentido, una sola célula se parece más a toda una red neuronal artificial. Las neuronas reales tienen propiedades asombrosas que las neuronas individuales de las ANN no tienen. Todavía no está claro cómo aprovechar esas propiedades para mejorar la IA.
+- Puede interesar el libro de John T. Bonner, The Evolution of Culture in Animals.
+- Hay comentarios de la discusión de 2024 que merece la pena leer junto a esto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die verblüffende Intelligenz einer einzelnen Zelle (2024)
+***** TLDR
+James Somers und Edwin Morris erklären die Chemotaxis von E. coli als durchgerechnetes Beispiel für Berechnung ohne irgendein Gehirn im System. Die Zelle schwimmt etwa eine Sekunde geradeaus, taumelt etwa eine Zehntelsekunde und verzerrt diesen Zufallsweg danach, ob sich die Bedingungen verbessern. Der Mechanismus: Bindet ein Lockstoff an die Membranrezeptoren, wird die Kinase CheA inaktiviert, weniger CheY wird phosphoryliert, und es ist CheY-p, das an die Flagellen-Rotoren bindet und sie umdreht, was das Taumeln auslöst. Sechs Rotoren drehen mit rund 1.500 Umdrehungen pro Sekunde bei nahezu 100 Prozent Effizienz. Eine Änderung der Rezeptorbelegung um 2 Prozent führt zu etwa 100 Prozent Änderung am Ausgang, und die Zelle erkennt weniger als drei Moleküle pro Zellvolumen. Die Anpassung entsteht durch Methylierung der Rezeptoren, ein chemisches Gedächtnis über mehrere Sekunden, das die Empfindlichkeit über fünf Größenordnungen der Konzentration erhält.
+***** Take
+Übernehmen sollte man den Anpassungsmechanismus. Methylierung ist Verstärkungsregelung, umgesetzt in kovalenter Chemie: Die Zelle skaliert ihren eigenen Eingangsbereich neu und reagiert damit auf relative Änderung statt auf absolute Konzentration. Genau das macht die Netzhaut, und genau das muss jeder Sensor irgendwie lösen, der über fünf Dekaden hinweg arbeitet. Keine Neuronen, kein zentraler Regler, nur Bindungsaffinitäten, die so eingestellt sind, dass das Fehlersignal praktisch eine zeitliche Ableitung ist.
+***** Comments
+- In gewisser Weise ist eine einzelne Zelle eher wie ein ganzes künstliches neuronales Netz. Echte Neuronen haben erstaunliche Eigenschaften, die einzelne Neuronen in ANNs nicht haben. Es ist noch unklar, wie wir diese Eigenschaften nutzen können, um KI zu verbessern.
+- Möglicherweise interessant: John T. Bonners Buch The Evolution of Culture in Animals.
+- Es gibt Kommentare aus der Diskussion von 2024, die man dazu lesen sollte.
+** Janas: Run LLMs larger than RAM by streaming experts from SSD :llm:inference:performance:c:
+:PROPERTIES:
+:ID:       50063717
+:URL:      https://github.com/prabanta-dev/janas
+:HN_URL:   https://news.ycombinator.com/item?id=50063717
+:POINTS:   91
+:COMMENTS: 31
+:BY:       khalidkhair
+:END:
+
+*** TLDR
+Janas is an inference engine written in C that leaves model weights on an NVMe SSD and streams in only the mixture-of-experts weights each token actually routes to, keeping the experts that keep coming back in a RAM cache. That lets Qwen3-Next-80B, about 48 GB of quantized weights, run on a 32 GB laptop. The author reports 62 tok/s reading and 24 tok/s writing on that model, and 220/28 on Qwen3-4B, measured on an Intel Core Ultra 9 185H with integrated Arc graphics. It targets x86-64 with AVX2, FMA and AVX-VNNI, plus integrated and discrete GPUs through Vulkan, supports Qwen3, Qwen3.5, Qwen3.6 and Gemma 4, and can convert GGUF quantizations. The README claims it beats llama.cpp on all 13 models compared at Q4_K_M, including 62 against 16 tok/s on the largest. Everything was developed and tested on one machine.
+
+*** Take
+Expert streaming fits sparse MoE well, because the router tells you in advance which few gigabytes this token needs, and 62 tok/s prefill off an SSD on a laptop is a real number. The caveat is that every benchmark comes from a single Core Ultra 9 with integrated Arc, which is also the hardware llama.cpp is least tuned for. The commenters calling this a rediscovery are half right: llama.cpp can mmap weights and let the OS page them, but it has no hot-expert cache, and that is exactly the part that needs measuring on someone else's machine.
+
+*** Comments
+
+**** jdb9001
+Every few weeks, someone stumbles on what llama.cpp has had for years again, and reimplements it. I'm not sure why.
+
+**** suprjami
+Qwen 3? What year is it? Strata already does this with Qwen3.8-Flash-Next. What a waste of time.
+
+**** sieve
+Only once? A driver reset taking the desktop with it has happened to me so many times with LLM-assisted development. On other occasions the LLM would try to load 24GB of bf16 weights onto a 16GB GPU without understanding the consequences.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Janas：通过从 SSD 流式读取专家来运行超过内存容量的大模型
+***** TLDR
+Janas 是用 C 写的推理引擎，把模型权重留在 NVMe SSD 上，只把每个 token 实际路由到的那些 MoE 专家权重读进来，并把反复命中的专家留在内存缓存里。这样 Qwen3-Next-80B（量化后约 48 GB）就能在 32 GB 内存的笔记本上跑起来。作者报告该模型读取 62 tok/s、生成 24 tok/s，Qwen3-4B 为 220/28，测试平台是配集成 Arc 显卡的 Intel Core Ultra 9 185H。它面向支持 AVX2、FMA 和 AVX-VNNI 的 x86-64，以及通过 Vulkan 使用的集成与独立 GPU，支持 Qwen3、Qwen3.5、Qwen3.6 和 Gemma 4，可从 GGUF 量化格式转换。README 称在 Q4_K_M 下对比的 13 个模型上全面快于 llama.cpp，最大的那个是 62 对 16 tok/s。全部开发和测试都只在一台机器上完成。
+***** Take
+专家流式读取很契合稀疏 MoE，因为路由器会提前告诉你这个 token 需要哪几 GB，而笔记本上从 SSD 读出 62 tok/s 的预填充是实打实的数字。问题在于所有基准都来自同一台配集成 Arc 的 Core Ultra 9，而这恰好是 llama.cpp 最缺少调优的硬件。说这是「重新发现」的评论只说对了一半：llama.cpp 可以 mmap 权重交给操作系统分页，但它没有热专家缓存，而这正是需要在别人机器上验证的部分。
+***** Comments
+- 每隔几周就有人重新撞见 llama.cpp 多年前就有的东西，然后再实现一遍。我不太明白为什么。
+- Qwen 3？现在是哪一年？Strata 用 Qwen3.8-Flash-Next 早就做到了。纯属浪费时间。
+- 只有一次？在用大模型辅助开发的过程中，驱动重置把整个桌面一起带走的事我遇到过太多次了。还有些时候，模型会试图把 24GB 的 bf16 权重塞进 16GB 显存，完全不懂后果。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Janas：SSDからエキスパートをストリーミングしてRAMより大きいLLMを動かす
+***** TLDR
+JanasはC言語で書かれた推論エンジンで、モデルの重みをNVMe SSD上に置いたまま、各トークンが実際にルーティングされるMoEエキスパートの重みだけを読み込み、繰り返し使われるエキスパートをRAMのキャッシュに残す。これにより量子化後およそ48GBのQwen3-Next-80Bを32GBのノートPCで動かせる。著者の報告では同モデルで読み込み62 tok/s、生成24 tok/s、Qwen3-4Bでは220/28で、計測環境は内蔵Arcグラフィックス付きのIntel Core Ultra 9 185H。対象はAVX2、FMA、AVX-VNNI対応のx86-64に加え、Vulkan経由の内蔵および外付けGPU。Qwen3、Qwen3.5、Qwen3.6、Gemma 4に対応し、GGUF量子化からの変換もできる。READMEはQ4_K_Mで比較した13モデルすべてでllama.cppより速いと主張し、最大モデルでは62対16 tok/sだという。開発とテストはすべて1台のマシンで行われている。
+***** Take
+エキスパートのストリーミングは疎なMoEとよく合う。ルーターがそのトークンに必要な数GBを事前に教えてくれるからだ。ノートPCでSSDから62 tok/sのプリフィルという数字は本物だ。問題は、すべてのベンチマークが内蔵Arc付きのCore Ultra 9一台から出ていることで、これはllama.cppが最もチューニングされていないハードウェアでもある。これは再発見だというコメントは半分正しい。llama.cppは重みをmmapしてOSにページングさせられるが、ホットエキスパートのキャッシュは持たない。そこが他人のマシンで測るべき部分だ。
+***** Comments
+- 数週間ごとに誰かがllama.cppが何年も前から持っているものに行き当たり、また実装し直す。理由がよく分からない。
+- Qwen 3？いま何年だ？StrataがQwen3.8-Flash-Nextでもうやっている。時間の無駄だ。
+- 一度だけ？LLM支援の開発では、ドライバのリセットがデスクトップごと落ちることを何度も経験している。別の時には、LLMが16GBのGPUに24GBのbf16重みを載せようとして、その結果を理解していなかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Janas: SSD에서 전문가를 스트리밍해 램보다 큰 LLM 실행하기
+***** TLDR
+Janas는 C로 작성된 추론 엔진으로, 모델 가중치를 NVMe SSD에 그대로 두고 각 토큰이 실제로 라우팅되는 MoE 전문가 가중치만 읽어오며, 반복해서 쓰이는 전문가는 램 캐시에 남긴다. 덕분에 양자화 후 약 48GB인 Qwen3-Next-80B를 32GB 노트북에서 돌릴 수 있다. 저자는 해당 모델에서 읽기 62 tok/s, 생성 24 tok/s, Qwen3-4B에서 220/28을 보고했으며, 측정 환경은 내장 Arc 그래픽이 있는 인텔 Core Ultra 9 185H다. AVX2, FMA, AVX-VNNI를 지원하는 x86-64와 Vulkan을 통한 내장 및 외장 GPU를 대상으로 하고, Qwen3, Qwen3.5, Qwen3.6, Gemma 4를 지원하며 GGUF 양자화에서 변환할 수 있다. README는 Q4_K_M으로 비교한 13개 모델 전부에서 llama.cpp보다 빠르다고 주장하며, 가장 큰 모델에서는 62 대 16 tok/s라고 한다. 개발과 테스트는 전부 한 대의 기계에서 이뤄졌다.
+***** Take
+전문가 스트리밍은 희소 MoE에 잘 맞는다. 라우터가 이 토큰에 필요한 몇 기가바이트를 미리 알려주기 때문이다. 노트북에서 SSD로 62 tok/s 프리필은 실제 수치다. 문제는 모든 벤치마크가 내장 Arc를 쓰는 Core Ultra 9 한 대에서 나왔고, 그 하드웨어가 바로 llama.cpp 튜닝이 가장 덜 된 환경이라는 점이다. 이게 재발견이라는 댓글은 절반만 맞다. llama.cpp는 가중치를 mmap해 OS가 페이징하게 할 수 있지만 핫 전문가 캐시는 없고, 바로 그 부분을 남의 기계에서 측정해야 한다.
+***** Comments
+- 몇 주에 한 번씩 누군가 llama.cpp가 수년째 갖고 있던 것을 다시 발견해 또 구현한다. 왜 그러는지 모르겠다.
+- Qwen 3? 지금이 몇 년인가? Strata가 Qwen3.8-Flash-Next로 이미 한다. 시간 낭비다.
+- 딱 한 번뿐이었다고? LLM 보조 개발을 하다 보면 드라이버 리셋이 데스크톱까지 끌고 내려가는 일을 수없이 겪는다. 어떤 때는 LLM이 16GB GPU에 24GB bf16 가중치를 올리려 하면서 그 결과를 이해하지 못했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Janas: ejecutar LLM más grandes que la RAM transmitiendo expertos desde el SSD
+***** TLDR
+Janas es un motor de inferencia escrito en C que deja los pesos del modelo en un SSD NVMe y solo trae los pesos de los expertos de la mezcla (MoE) a los que cada token se enruta realmente, manteniendo en una caché en RAM los expertos que se repiten. Eso permite ejecutar Qwen3-Next-80B, unos 48 GB de pesos cuantizados, en un portátil de 32 GB. El autor reporta 62 tok/s de lectura y 24 tok/s de escritura en ese modelo, y 220/28 en Qwen3-4B, medidos en un Intel Core Ultra 9 185H con gráficos Arc integrados. Apunta a x86-64 con AVX2, FMA y AVX-VNNI, además de GPU integradas y dedicadas vía Vulkan, soporta Qwen3, Qwen3.5, Qwen3.6 y Gemma 4, y convierte cuantizaciones GGUF. El README afirma que supera a llama.cpp en los 13 modelos comparados en Q4_K_M, incluidos 62 frente a 16 tok/s en el mayor. Todo se desarrolló y probó en una sola máquina.
+***** Take
+La transmisión de expertos encaja bien con MoE disperso, porque el enrutador te dice por adelantado qué pocos gigabytes necesita este token, y 62 tok/s de prefill desde un SSD en un portátil es una cifra real. El reparo es que todas las mediciones salen de un único Core Ultra 9 con Arc integrada, que además es el hardware menos ajustado para llama.cpp. Quienes lo llaman un redescubrimiento tienen media razón: llama.cpp puede hacer mmap de los pesos y dejar que el sistema los pagine, pero no tiene caché de expertos calientes, y eso es justo lo que hay que medir en la máquina de otra persona.
+***** Comments
+- Cada pocas semanas alguien vuelve a tropezarse con lo que llama.cpp tiene desde hace años y lo reimplementa. No sé muy bien por qué.
+- ¿Qwen 3? ¿En qué año estamos? Strata ya hace esto con Qwen3.8-Flash-Next. Qué pérdida de tiempo.
+- ¿Solo una vez? Que un reinicio del driver se lleve el escritorio por delante me ha pasado muchísimas veces desarrollando con ayuda de LLM. En otras ocasiones el LLM intentaba cargar 24 GB de pesos bf16 en una GPU de 16 GB sin entender las consecuencias.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Janas: LLMs größer als der RAM betreiben, indem Experten vom SSD gestreamt werden
+***** TLDR
+Janas ist eine in C geschriebene Inferenz-Engine, die die Modellgewichte auf einer NVMe-SSD liegen lässt und nur die Mixture-of-Experts-Gewichte einliest, zu denen ein Token tatsächlich geroutet wird; Experten, die immer wieder vorkommen, bleiben in einem RAM-Cache. Damit läuft Qwen3-Next-80B mit rund 48 GB quantisierter Gewichte auf einem Laptop mit 32 GB. Der Autor nennt für dieses Modell 62 tok/s beim Lesen und 24 tok/s beim Schreiben, für Qwen3-4B 220/28, gemessen auf einem Intel Core Ultra 9 185H mit integrierter Arc-Grafik. Ziel sind x86-64 mit AVX2, FMA und AVX-VNNI sowie integrierte und dedizierte GPUs über Vulkan; unterstützt werden Qwen3, Qwen3.5, Qwen3.6 und Gemma 4, GGUF-Quantisierungen lassen sich konvertieren. Die README behauptet, llama.cpp bei allen 13 verglichenen Modellen in Q4_K_M zu schlagen, beim größten mit 62 gegen 16 tok/s. Entwickelt und getestet wurde alles auf einer einzigen Maschine.
+***** Take
+Experten-Streaming passt gut zu sparsamem MoE, weil der Router vorab sagt, welche wenigen Gigabyte dieses Token braucht, und 62 tok/s Prefill von einer SSD auf einem Laptop ist eine echte Zahl. Der Einwand: Alle Messwerte kommen von einem einzigen Core Ultra 9 mit integrierter Arc, also genau der Hardware, für die llama.cpp am wenigsten optimiert ist. Die Kommentare, das sei eine Wiederentdeckung, haben halb recht: llama.cpp kann Gewichte mmappen und das Betriebssystem auslagern lassen, hat aber keinen Cache für heiße Experten, und genau das müsste auf fremden Maschinen gemessen werden.
+***** Comments
+- Alle paar Wochen stolpert jemand erneut über das, was llama.cpp seit Jahren hat, und implementiert es neu. Ich weiß nicht, warum.
+- Qwen 3? Welches Jahr haben wir? Strata macht das längst mit Qwen3.8-Flash-Next. Was für eine Zeitverschwendung.
+- Nur einmal? Dass ein Treiber-Reset den ganzen Desktop mitnimmt, ist mir bei LLM-gestützter Entwicklung schon unzählige Male passiert. Andere Male wollte das LLM 24 GB bf16-Gewichte auf eine 16-GB-GPU laden, ohne die Folgen zu verstehen.
+** Writing a Demoscene Intro for the ZX Spectrum :retrocomputing:assembly:demoscene:z80:
+:PROPERTIES:
+:ID:       50061859
+:URL:      https://www.markround.com/blog/2026/zx-spectrum-intro
+:HN_URL:   https://news.ycombinator.com/item?id=50061859
+:POINTS:   101
+:COMMENTS: 17
+:BY:       zdw
+:END:
+
+*** TLDR
+Mark Dastmalchi-Round spent ten months writing a demoscene intro in Z80 assembly for a stock 128K ZX Spectrum: 10,287 bytes of code, 19,552 as a complete tape image, which he calculates as about 455 bytes per week. It has a scrolltext in a custom font, a three-channel AY soundtrack, bouncing VU meters and a parallax starfield. The build is a Makefile over the Pasmo assembler, his fork of zmakebas and the FUSE emulator, with final testing on a real +3 loaded over a TNFS network card. Most of the post is about the Spectrum's screen layout: the bitmap is split into three sections with interleaved rows, so incrementing an address moves you eight rows down rather than to the next line, and color lives in a separate attribute block that allows only two colors per 8x8 cell. He blames that layout for roughly 90 percent of his pain, and gets the scroller working by chaining RL instructions so pixels shifted out of one cell reappear through the carry flag in the next.
+
+*** Take
+The screen layout is the real subject, and the explanation for it is the good part: the interleaved ordering is cheap for text, where inc h moves down one pixel line and inc l moves right eight pixels, and only turns hostile the moment you want something that is not a character cell. Sinclair's team optimized for displaying BASIC listings, and that one 1982 decision is still collecting rent 44 years later, at 455 bytes a week.
+
+*** Comments
+
+**** SteveGerencser
+I was in high school when the demoscene took off in the 80s. It forever tainted my view of software development as full of lazy programmers not bothering to optimize code as hardware got better and better. Myself included.
+
+**** JdeBP
+The rather sad part is where the author had to use a pre-compiled binary from the Internet Archive, because the original site had rotted away and the source code did not assemble. This stuff rots if the community does not do the preservation work.
+
+**** eggsome
+Demoscene is still a thing. syntaxparty.org is on in a couple of weeks if you happen to be in Melbourne.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为 ZX Spectrum 写一个 Demoscene 片头
+***** TLDR
+Mark Dastmalchi-Round 花了十个月，用 Z80 汇编为一台原装 128K ZX Spectrum 写出一个 demoscene 片头：代码 10287 字节，打包成完整磁带镜像 19552 字节，他自己算下来约等于每周 455 字节。成品包含自制字体的滚动文字、三声道 AY 音轨、跳动的 VU 表和视差星空。构建环境是一个 Makefile，调用 Pasmo 汇编器、他自己 fork 的 zmakebas 和 FUSE 模拟器，最终在真机 +3 上通过 TNFS 网卡加载测试。文章大半篇幅在讲 Spectrum 的屏幕布局：位图被切成三段、行是交错排列的，所以地址加一不是跳到下一行，而是向下八行；颜色单独存放在属性块里，每个 8x8 单元只能有两种颜色。他说这个布局占了他九成的痛苦，而滚动效果的实现靠的是串起一连串 RL 指令，让从一个单元移出的像素通过进位标志出现在下一个单元里。
+***** Take
+真正的主角是屏幕布局，而对它的解释才是精华：这种交错排列对文字来说很省事，inc h 下移一个像素行，inc l 右移八个像素，只有当你想画不是字符单元的东西时，它才开始变得难缠。Sinclair 的团队是为显示 BASIC 程序清单而优化的，而那个 1982 年的决定在 44 年后仍在收租，租金是每周 455 字节。
+***** Comments
+- 80 年代 demoscene 兴起时我还在上高中。那段经历永久地影响了我对软件开发的看法：满是随着硬件越来越好而懒得优化代码的程序员，包括我自己。
+- 比较让人难过的是，作者不得不从 Internet Archive 取一个预编译的二进制文件，因为原站点已经烂掉，源码也无法汇编。如果社区不做保存工作，这些东西就是会腐烂。
+- Demoscene 现在依然活着。如果你刚好在墨尔本，syntaxparty.org 几周后就要办了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ZX Spectrum向けにデモシーンのイントロを書く
+***** TLDR
+Mark Dastmalchi-Roundは、素のままの128K ZX Spectrum向けにZ80アセンブリでデモシーンのイントロを書くのに10か月を費やした。コードは10,287バイト、完全なテープイメージで19,552バイト、本人の計算では週あたり約455バイトのペースだ。独自フォントのスクロールテキスト、3チャンネルのAYサウンドトラック、揺れるVUメーター、視差スターフィールドを備える。ビルドはMakefileからPasmoアセンブラ、自身がforkしたzmakebas、FUSEエミュレータを呼び出す構成で、最終確認は実機の+3にTNFSネットワークカード経由で読み込んで行った。記事の大半はSpectrumの画面レイアウトの話だ。ビットマップは3つの区画に分かれ、行がインターリーブされているため、アドレスを1増やすと次の行ではなく8行下に移動する。色は別の属性ブロックにあり、8x8セルごとに2色しか使えない。著者は自分の苦労の約9割がこのレイアウト由来だと言い、スクローラーはRL命令を連ねて、あるセルから押し出されたピクセルをキャリーフラグ経由で次のセルに出現させることで実現した。
+***** Take
+本当の主題は画面レイアウトで、その理由の説明が読みどころだ。インターリーブ配置はテキストには安上がりで、inc hで1ピクセル行下へ、inc lで8ピクセル右へ動ける。文字セル以外のものを描こうとした瞬間に初めて敵になる。SinclairのチームはBASICのリスト表示に最適化したのであり、その1982年の判断は44年後もなお家賃を取り立てている。レートは週455バイトだ。
+***** Comments
+- 80年代にデモシーンが盛り上がった頃、私は高校生だった。そのせいでソフトウェア開発を、ハードウェアが良くなるにつれ最適化を怠る怠惰なプログラマだらけの世界と見るようになってしまった。自分も含めて。
+- やや悲しいのは、元のサイトが朽ちてソースがアセンブルできず、著者がInternet Archiveのコンパイル済みバイナリを使わざるを得なかった箇所だ。コミュニティが保存作業をしなければ、こういうものは朽ちていく。
+- デモシーンはいまも健在だ。メルボルンにいるなら、数週間後にsyntaxparty.orgが開かれる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ZX 스펙트럼용 데모신 인트로 만들기
+***** TLDR
+Mark Dastmalchi-Round는 개조하지 않은 128K ZX 스펙트럼용 데모신 인트로를 Z80 어셈블리로 쓰는 데 열 달을 썼다. 코드 10,287바이트, 완성된 테이프 이미지로는 19,552바이트이고, 본인 계산으로 주당 약 455바이트 속도다. 커스텀 폰트 스크롤 텍스트, 3채널 AY 사운드트랙, 출렁이는 VU 미터, 패럴랙스 별 배경이 들어 있다. 빌드는 Makefile로 Pasmo 어셈블러, 직접 포크한 zmakebas, FUSE 에뮬레이터를 돌리고, 최종 확인은 TNFS 네트워크 카드로 실기 +3에 올려서 했다. 글의 대부분은 스펙트럼의 화면 레이아웃 이야기다. 비트맵이 세 구역으로 나뉘고 행이 인터리브되어 있어 주소를 1 올리면 다음 줄이 아니라 여덟 줄 아래로 간다. 색은 별도 속성 블록에 있고 8x8 셀마다 두 색만 쓸 수 있다. 저자는 고생의 90% 정도가 이 레이아웃 때문이었다고 말하며, 스크롤러는 RL 명령을 줄줄이 엮어 한 셀에서 밀려난 픽셀이 캐리 플래그를 거쳐 다음 셀에 나타나게 해 구현했다.
+***** Take
+진짜 주제는 화면 레이아웃이고, 그 이유에 대한 설명이 핵심이다. 인터리브 배치는 텍스트에는 값싸다. inc h로 한 픽셀 줄 아래, inc l로 여덟 픽셀 오른쪽으로 간다. 문자 셀이 아닌 것을 그리려는 순간에만 적대적으로 변한다. 싱클레어 팀은 BASIC 리스트 출력에 맞춰 최적화했고, 1982년의 그 결정은 44년이 지난 지금도 주당 455바이트라는 임대료를 걷고 있다.
+***** Comments
+- 80년대에 데모신이 떠올랐을 때 나는 고등학생이었다. 그 경험은 소프트웨어 개발을, 하드웨어가 좋아질수록 최적화를 귀찮아하는 게으른 프로그래머들로 가득한 일로 보게 만들었다. 나 자신도 포함해서.
+- 다소 안타까운 부분은, 원래 사이트가 썩고 소스가 어셈블되지 않아 저자가 Internet Archive의 미리 컴파일된 바이너리를 써야 했던 지점이다. 커뮤니티가 보존 작업을 하지 않으면 이런 것들은 썩는다.
+- 데모신은 아직 살아 있다. 멜버른에 있다면 몇 주 뒤에 syntaxparty.org가 열린다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Escribir una intro de demoscene para el ZX Spectrum
+***** TLDR
+Mark Dastmalchi-Round dedicó diez meses a escribir una intro de demoscene en ensamblador Z80 para un ZX Spectrum 128K de serie: 10.287 bytes de código, 19.552 como imagen de cinta completa, lo que según sus cuentas son unos 455 bytes por semana. Incluye un texto desplazante con fuente propia, una banda sonora AY de tres canales, vúmetros que rebotan y un campo de estrellas con parallax. La compilación es un Makefile sobre el ensamblador Pasmo, su fork de zmakebas y el emulador FUSE, con pruebas finales en un +3 real cargado por una tarjeta de red TNFS. La mayor parte del artículo trata la disposición de pantalla del Spectrum: el mapa de bits se divide en tres secciones con filas entrelazadas, de modo que incrementar una dirección te lleva ocho filas más abajo en lugar de a la línea siguiente, y el color vive en un bloque de atributos aparte que solo admite dos colores por celda de 8x8. Atribuye a esa disposición cerca del 90 por ciento de su sufrimiento, y hace funcionar el scroller encadenando instrucciones RL para que los píxeles que salen de una celda reaparezcan en la siguiente a través del bit de acarreo.
+***** Take
+El verdadero tema es la disposición de pantalla, y lo mejor es su explicación: el orden entrelazado es baratísimo para texto, donde inc h baja una línea de píxeles e inc l mueve ocho píxeles a la derecha, y solo se vuelve hostil cuando quieres dibujar algo que no sea una celda de caracteres. El equipo de Sinclair optimizó para mostrar listados de BASIC, y esa decisión de 1982 sigue cobrando alquiler 44 años después, a 455 bytes por semana.
+***** Comments
+- Estaba en el instituto cuando el demoscene despegó en los 80. Eso contaminó para siempre mi visión del desarrollo de software como un mundo lleno de programadores perezosos que no se molestan en optimizar a medida que el hardware mejora. Yo incluido.
+- La parte triste es cuando el autor tuvo que usar un binario precompilado del Internet Archive, porque el sitio original se había podrido y el código fuente no ensamblaba. Esto se degrada si la comunidad no hace el trabajo de preservación.
+- El demoscene sigue vivo. syntaxparty.org es dentro de un par de semanas, por si estás en Melbourne.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein Demoscene-Intro für den ZX Spectrum schreiben
+***** TLDR
+Mark Dastmalchi-Round hat zehn Monate damit verbracht, in Z80-Assembler ein Demoscene-Intro für einen unveränderten 128K ZX Spectrum zu schreiben: 10.287 Bytes Code, 19.552 als vollständiges Tape-Image, nach eigener Rechnung etwa 455 Bytes pro Woche. Es enthält einen Scrolltext in eigener Schrift, einen dreikanaligen AY-Soundtrack, wackelnde VU-Meter und ein Parallax-Sternenfeld. Gebaut wird per Makefile über den Pasmo-Assembler, seinen zmakebas-Fork und den FUSE-Emulator, letzte Tests liefen auf einem echten +3, geladen über eine TNFS-Netzwerkkarte. Der größte Teil des Beitrags behandelt das Bildschirmlayout des Spectrum: Die Bitmap ist in drei Abschnitte mit verschachtelten Zeilen geteilt, sodass ein Inkrement der Adresse acht Zeilen nach unten führt statt zur nächsten Zeile, und die Farbe steckt in einem separaten Attributblock, der nur zwei Farben pro 8x8-Zelle erlaubt. Rund 90 Prozent seiner Mühe schreibt er diesem Layout zu; den Scroller bekommt er zum Laufen, indem er RL-Befehle verkettet, sodass Pixel, die aus einer Zelle herausfallen, über das Carry-Flag in der nächsten wieder auftauchen.
+***** Take
+Das eigentliche Thema ist das Bildschirmlayout, und die Begründung dafür ist der gute Teil: Die verschachtelte Anordnung ist billig für Text, wo inc h eine Pixelzeile nach unten und inc l acht Pixel nach rechts geht, und sie wird erst feindlich, sobald man etwas zeichnen will, das keine Zeichenzelle ist. Sinclairs Team hat für die Anzeige von BASIC-Listings optimiert, und diese Entscheidung von 1982 kassiert 44 Jahre später noch Miete, zum Satz von 455 Bytes pro Woche.
+***** Comments
+- Ich war in der Oberschule, als die Demoscene in den 80ern abhob. Das hat meinen Blick auf Softwareentwicklung dauerhaft geprägt: voller fauler Programmierer, die sich mit besserer Hardware das Optimieren schenken. Mich eingeschlossen.
+- Traurig ist die Stelle, an der der Autor eine vorkompilierte Binärdatei aus dem Internet Archive nehmen musste, weil die Originalseite verrottet war und der Quellcode sich nicht assemblieren ließ. Dieses Zeug verfällt, wenn die Community keine Bewahrungsarbeit leistet.
+- Die Demoscene gibt es noch. syntaxparty.org findet in ein paar Wochen statt, falls du in Melbourne bist.
+** Phreak.ing: Internet Phone Switch :telephony:sip:privacy:showhn:
+:PROPERTIES:
+:ID:       50063417
+:URL:      https://phreak.ing/
+:HN_URL:   https://news.ycombinator.com/item?id=50063417
+:POINTS:   112
+:COMMENTS: 29
+:BY:       rickcarlino
+:END:
+
+*** TLDR
+Phreak.ing is a free anonymous PBX on the internet. You pick any extension of 3 to 10 digits, hand over no personal information (the site tells you not to use your real phone number), and get voice calls, voicemail, text messages, conference rooms, intercom, call forwarding, do-not-disturb and caller ID blocking. You reach it from a SIP client like Linphone or from the browser, there are dial codes such as ⁎97 for voicemail and ⁎69 for callback, an IRC channel at #phreak, and the operator states they keep no logs. Signup is gated behind a DTMF captcha that requires your device to hear its own tones, which several people could not get past. The page renders its visual effects with no JavaScript.
+
+*** Take
+The interesting part is that running a phone switch for strangers is now a one-person hobby project, with the expensive parts of telephony reduced to a SIP stack and a domain hack. The DTMF captcha is simultaneously the best and worst decision on the site: it blocks anyone without a second device to play tones into, which filters out bots and, judging by the thread, most humans too.
+
+*** Comments
+
+**** hmokiguess
+I couldn't get past the DTMF captcha. My device's microphone didn't listen to its own audio and I was too lazy to get a second device. Did anyone register? What happens after, do you get a sort of WebRTC P2P voice number?
+
+**** accrual
+The incredible background effects with no JS enabled have me both pondering and accepting of this fantastic display.
+
+**** cnqso
+Easter egg if you type in ⁎#06#
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Phreak.ing：互联网电话交换机
+***** TLDR
+Phreak.ing 是一个架在互联网上的免费匿名 PBX。你任选一个 3 到 10 位的分机号，不需要提供任何个人信息（站点明确提醒不要用你的真实手机号），就能获得语音通话、语音留言、短信、会议室、内部对讲、呼叫转移、免打扰和主叫号码屏蔽。可以用 Linphone 这类 SIP 客户端接入，也可以直接在浏览器里用；有 ⁎97 听留言、⁎69 回拨这类拨号码，还有一个 #phreak 的 IRC 频道，运营者声明不保留日志。注册要通过一个 DTMF 验证码，需要设备听见自己发出的按键音，好几个人没能通过。页面的视觉效果完全不用 JavaScript 实现。
+***** Take
+有意思的地方在于，为陌生人运营一台电话交换机，如今已经是一个人的业余项目：电话网络里昂贵的部分缩到了一个 SIP 栈加一个域名玩法。那个 DTMF 验证码既是全站最好也是最糟的决定：它挡住了所有没有第二台设备放音的人，确实过滤掉了机器人，而从帖子看来也过滤掉了大部分真人。
+***** Comments
+- 我没过得去那个 DTMF 验证码。我设备的麦克风听不到自己放出的声音，而我懒得再找一台设备。有人注册成功吗？之后会怎样，是给你一个 WebRTC 点对点语音号码？
+- 完全不开 JS 还能做出这么惊人的背景效果，让我既困惑又服气。
+- 输入 ⁎#06# 有彩蛋。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Phreak.ing：インターネット電話交換機
+***** TLDR
+Phreak.ingはインターネット上の無料かつ匿名のPBXだ。3〜10桁の内線番号を自分で選び、個人情報を一切渡さずに（サイトは本当の電話番号を使うなと明記している）、音声通話、ボイスメール、テキスト、会議室、インターコム、転送、応答拒否、発信者番号非通知が使える。LinphoneのようなSIPクライアントからでもブラウザからでもつながり、ボイスメールの⁎97や折り返しの⁎69といったダイヤルコード、#phreakのIRCチャンネルがあり、運営者はログを保存しないと明言している。登録はDTMFキャプチャで守られていて、端末が自分の出す音を聞き取る必要があるため、突破できなかった人も複数いた。ページの視覚効果はJavaScriptなしで描かれている。
+***** Take
+面白いのは、他人のために電話交換機を運営することが今や一人の趣味プロジェクトになった点だ。電話網の高コストな部分がSIPスタックとドメインハックまで縮んでいる。DTMFキャプチャはこのサイト最良かつ最悪の判断で、音を鳴らす2台目の端末がない人をすべて弾く。ボットは排除できるが、スレッドを見るかぎり人間の大半も排除している。
+***** Comments
+- DTMFキャプチャを突破できなかった。端末のマイクが自分の音を拾わず、2台目を用意するのが面倒だった。誰か登録できた人はいる？その後はどうなる、WebRTCのP2P音声番号がもらえるの？
+- JSを無効にしたままこの驚くような背景効果が出るのは、考え込みながらも受け入れるしかない見事さだ。
+- ⁎#06#と入力するとイースターエッグがある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Phreak.ing: 인터넷 전화 교환기
+***** TLDR
+Phreak.ing은 인터넷에 올려둔 무료 익명 PBX다. 3~10자리 내선번호를 직접 고르고 개인정보는 전혀 넘기지 않은 채(사이트는 실제 전화번호를 쓰지 말라고 안내한다) 음성 통화, 음성 메일, 문자, 회의실, 인터컴, 착신 전환, 방해 금지, 발신번호 표시 제한을 쓸 수 있다. Linphone 같은 SIP 클라이언트나 브라우저로 접속하고, 음성 메일 ⁎97, 콜백 ⁎69 같은 다이얼 코드가 있으며 #phreak IRC 채널도 있다. 운영자는 로그를 남기지 않는다고 밝힌다. 가입은 DTMF 캡차로 막혀 있는데, 기기가 자기 소리를 들어야 해서 통과하지 못한 사람이 여러 명 있었다. 페이지의 시각 효과는 자바스크립트 없이 구현됐다.
+***** Take
+흥미로운 지점은 낯선 사람들을 위해 전화 교환기를 운영하는 일이 이제 한 사람의 취미 프로젝트가 됐다는 것이다. 전화망에서 비싼 부분이 SIP 스택과 도메인 장난 정도로 줄었다. DTMF 캡차는 이 사이트 최고이자 최악의 결정이다. 소리를 재생할 두 번째 기기가 없는 사람을 전부 막아서 봇을 걸러내지만, 스레드를 보면 사람 대부분도 함께 걸러낸다.
+***** Comments
+- DTMF 캡차를 통과하지 못했다. 기기 마이크가 자기 소리를 듣지 못했고 두 번째 기기를 가져오기는 귀찮았다. 가입한 사람 있나? 그다음엔 어떻게 되나, WebRTC P2P 음성 번호를 받는 건가?
+- JS를 끈 상태에서 이 정도 배경 효과가 나오는 걸 보니, 생각에 잠기면서도 이 멋진 화면을 받아들이게 된다.
+- ⁎#06#을 입력하면 이스터에그가 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Phreak.ing: centralita telefónica en internet
+***** TLDR
+Phreak.ing es una centralita (PBX) gratuita y anónima en internet. Eliges una extensión de 3 a 10 dígitos, no entregas ningún dato personal (el sitio avisa de que no uses tu número real) y obtienes llamadas de voz, buzón, mensajes de texto, salas de conferencia, intercomunicador, desvío de llamadas, no molestar y ocultación del número. Se accede desde un cliente SIP como Linphone o desde el navegador, hay códigos de marcado como ⁎97 para el buzón y ⁎69 para la devolución de llamada, un canal IRC en #phreak, y el operador afirma no guardar registros. El registro está detrás de un captcha DTMF que exige que tu dispositivo oiga sus propios tonos, algo que varias personas no lograron superar. La página dibuja sus efectos visuales sin JavaScript.
+***** Take
+Lo interesante es que operar una centralita telefónica para desconocidos es hoy el proyecto de ocio de una sola persona: la parte cara de la telefonía se ha reducido a una pila SIP y un juego de palabras con el dominio. El captcha DTMF es a la vez la mejor y la peor decisión del sitio: bloquea a cualquiera que no tenga un segundo dispositivo con el que reproducir tonos, lo que filtra los bots y, a juzgar por el hilo, también a la mayoría de los humanos.
+***** Comments
+- No pude pasar el captcha DTMF. El micrófono de mi dispositivo no oía su propio audio y me dio pereza buscar un segundo aparato. ¿Alguien se registró? ¿Qué pasa después, te dan una especie de número de voz P2P por WebRTC?
+- Los increíbles efectos de fondo sin JS activado me dejan pensativo y a la vez rendido ante este despliegue.
+- Hay un huevo de pascua si escribes ⁎#06#
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Phreak.ing: Telefonvermittlung im Internet
+***** TLDR
+Phreak.ing ist eine kostenlose anonyme Telefonanlage im Internet. Man wählt eine Nebenstelle mit 3 bis 10 Ziffern, gibt keine persönlichen Daten an (die Seite warnt ausdrücklich davor, die echte Rufnummer zu verwenden) und bekommt Sprachanrufe, Mailbox, Textnachrichten, Konferenzräume, Intercom, Rufumleitung, Nicht-Stören und Rufnummernunterdrückung. Erreichbar ist das über einen SIP-Client wie Linphone oder direkt im Browser; es gibt Kurzwahlcodes wie ⁎97 für die Mailbox und ⁎69 für Rückruf, einen IRC-Kanal #phreak, und der Betreiber erklärt, keine Logs zu führen. Die Anmeldung schützt ein DTMF-Captcha, bei dem das Gerät seine eigenen Töne hören muss, woran mehrere Leute gescheitert sind. Die visuellen Effekte der Seite laufen ohne JavaScript.
+***** Take
+Bemerkenswert ist, dass der Betrieb einer Telefonvermittlung für Fremde heute ein Hobbyprojekt für eine Person ist: Der teure Teil der Telefonie ist auf einen SIP-Stack und einen Domain-Gag zusammengeschrumpft. Das DTMF-Captcha ist gleichzeitig die beste und die schlechteste Entscheidung der Seite. Es sperrt jeden aus, der kein zweites Gerät zum Abspielen der Töne hat, filtert damit Bots und, dem Thread nach zu urteilen, auch die meisten Menschen.
+***** Comments
+- Ich habe das DTMF-Captcha nicht geschafft. Das Mikrofon meines Geräts hat seinen eigenen Ton nicht gehört, und ein zweites Gerät zu holen war mir zu lästig. Hat sich jemand registriert? Was passiert danach, bekommt man eine Art WebRTC-P2P-Sprachnummer?
+- Die unglaublichen Hintergrundeffekte ohne aktiviertes JS lassen mich gleichzeitig grübeln und diese fantastische Darstellung einfach annehmen.
+- Easter Egg, wenn man ⁎#06# eingibt
+** The Dock on Mac, from OS 10 to macOS 27 :design:macos:ui:history:
+:PROPERTIES:
+:ID:       50065713
+:URL:      https://blog.jim-nielsen.com/2026/macos-dock-icons-over-time/
+:HN_URL:   https://news.ycombinator.com/item?id=50065713
+:POINTS:   47
+:COMMENTS: 25
+:BY:       soheilpro
+:END:
+
+*** TLDR
+Jim Nielsen's post is an archive rather than an argument: one high-resolution graphic lining up the default Mac Dock icons from OS X 10.0 through macOS 27, compiled while he was researching a possible book chapter, with almost no commentary attached. The discussion supplies what the post leaves out. Commenters trace the flattening to the iTunes icon in 10.7, say most of the illustration had drained out by 10.15, and note that 10.16 put every icon inside the same rounded square. Several report that the uniform silhouettes make icons harder to pick out at a glance than the older ones.
+
+*** Take
+The thread found the conclusion the post declined to draw. Once every icon is the same rounded square at the same size, shape stops carrying any information and you are down to reading color plus a small glyph. Apple traded recognition speed for grid consistency. People saying they now hunt for the right icon are describing a real regression in a visual search task, even if nostalgia is obviously in the mix too.
+
+*** Comments
+
+**** al_borland
+The icons sure do start to look boring when they are all the same shape. The iTunes icon in 10.7 kicked it off. It felt lazy and out of place even at the time. By 10.15 most of the life had been drained from the icons, then 10.16 shoved them all into their little squares.
+
+**** whatever1
+Completely useless for the past 20 years. I have it always hidden with 0 loss of functionality. It provides no info about what windows are open and it does random things when you click an icon.
+
+**** brandon272
+Snow Leopard was my favourite, and it was also the version I started with, so there's probably a nostalgia component. What I do know is that with the uniform icons we have now, I find myself hunting for the right one to click a lot more than I used to.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Mac 上的 Dock：从 OS 10 到 macOS 27
+***** TLDR
+Jim Nielsen 这篇文章更像是一份存档而不是一篇论述：一张高分辨率图，把 OS X 10.0 到 macOS 27 的默认 Dock 图标排在一起，是他为可能的书稿章节做研究时整理的，几乎没有附带评论。真正的分析来自讨论区。评论者把扁平化的起点追溯到 10.7 的 iTunes 图标，认为到 10.15 图标里大部分插画感已经被抽干，而 10.16 把所有图标塞进了同一个圆角方形。有好几个人说，这些统一的轮廓让图标比过去更难一眼认出来。
+***** Take
+帖子得出了文章本身不愿下的结论。一旦所有图标都是同样大小的同一个圆角方形，形状就不再承载任何信息，你只能靠颜色加一个小符号来辨认。苹果用识别速度换来了网格的一致性。那些说自己现在要「找」图标的人，描述的是一项视觉搜索任务上的真实退步，尽管其中显然也掺着怀旧。
+***** Comments
+- 当所有图标都变成同一个形状时，它们确实开始显得乏味。10.7 的 iTunes 图标是开端，当时就让人觉得偷懒且格格不入。到 10.15，图标里大部分生气已经被抽干，然后 10.16 把它们统统塞进了各自的小方块。
+- 过去二十年它完全没用。我一直把它隐藏起来，功能上毫无损失。它不告诉你哪些窗口是打开的，点图标时还会做出随机的事。
+- Snow Leopard 是我最喜欢的版本，也是我开始用 Mac 的版本，所以多半有怀旧成分。但我确定的是，面对现在这些整齐统一的图标，我要找到该点的那一个，比以前费劲多了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+MacのDock、OS 10からmacOS 27まで
+***** TLDR
+Jim Nielsenの記事は論考ではなくアーカイブだ。OS X 10.0からmacOS 27までの既定のDockアイコンを一枚の高解像度画像に並べたもので、書籍の章の下調べの副産物であり、解説はほとんど付いていない。足りない分析はコメント欄が埋めている。コメント投稿者たちはフラット化の起点を10.7のiTunesアイコンに求め、10.15までにイラストらしさの大半が抜け落ち、10.16ですべてのアイコンが同じ角丸四角の中に押し込められたと指摘する。統一されたシルエットのせいで、以前よりアイコンを一目で見つけにくくなったという声も複数ある。
+***** Take
+記事が出さなかった結論をスレッドが出した。すべてのアイコンが同じ大きさの同じ角丸四角になった時点で、形は情報を運ばなくなり、残るのは色と小さなグリフを読むことだけだ。Appleは認識の速さをグリッドの統一感と引き換えにした。今は目的のアイコンを探してしまうという人たちは、視覚探索タスクにおける実際の後退を述べている。もちろん懐古もいくらか混ざってはいる。
+***** Comments
+- すべて同じ形になると、アイコンは確かに退屈に見えてくる。10.7のiTunesアイコンがその始まりで、当時から手抜きで場違いに感じた。10.15までにアイコンから生気の多くが抜け、10.16では全部が小さな四角の中に押し込められた。
+- この20年、まったく役に立っていない。常に隠していて機能上の損失はゼロだ。どのウィンドウが開いているかは分からず、アイコンをクリックすると予測のつかないことをする。
+- Snow Leopardが一番好きだったし、自分が使い始めたバージョンでもあるので懐古の要素はあるだろう。ただ確かなのは、今の均質なアイコンでは、クリックすべきものを探す回数が以前よりずっと増えたということだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+맥의 독, OS 10부터 macOS 27까지
+***** TLDR
+Jim Nielsen의 글은 논증이라기보다 기록이다. OS X 10.0부터 macOS 27까지의 기본 독 아이콘을 한 장의 고해상도 그래픽에 나란히 놓은 것으로, 책의 한 챕터를 조사하다 모은 자료이며 해설은 거의 없다. 빠진 분석은 토론이 채운다. 댓글들은 평면화의 출발점을 10.7의 아이튠즈 아이콘으로 지목하고, 10.15쯤에는 일러스트적 생기가 대부분 빠졌으며, 10.16에서 모든 아이콘이 같은 둥근 사각형 안에 들어갔다고 말한다. 통일된 실루엣 때문에 전보다 아이콘을 한눈에 찾기 어렵다는 반응도 여럿이다.
+***** Take
+글이 내리지 않은 결론을 스레드가 내렸다. 모든 아이콘이 같은 크기의 같은 둥근 사각형이 되는 순간 형태는 정보를 전달하지 않게 되고, 남는 것은 색과 작은 글리프를 읽는 일뿐이다. 애플은 인식 속도를 격자의 일관성과 바꿨다. 이제 클릭할 아이콘을 찾아 헤맨다는 사람들은 시각 탐색 과제에서의 실제 퇴보를 말하고 있다. 물론 향수도 섞여 있다.
+***** Comments
+- 모두 같은 모양이 되면 아이콘은 정말 지루해 보이기 시작한다. 10.7의 아이튠즈 아이콘이 그 시작이었고, 그때도 게으르고 어울리지 않는다고 느꼈다. 10.15쯤에는 아이콘에서 생기가 거의 빠졌고, 10.16에서는 전부 작은 사각형 안에 밀어 넣었다.
+- 지난 20년간 완전히 쓸모없었다. 항상 숨겨 두는데 기능상 손실은 전혀 없다. 어떤 창이 열려 있는지 알려주지 않고, 아이콘을 누르면 제멋대로 동작한다.
+- 스노 레퍼드가 제일 좋았는데, 내가 맥을 시작한 버전이기도 하니 향수가 섞여 있을 것이다. 다만 확실한 건, 지금처럼 균일한 아이콘에서는 눌러야 할 걸 찾느라 훨씬 더 헤맨다는 점이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El Dock del Mac, de OS 10 a macOS 27
+***** TLDR
+El artículo de Jim Nielsen es un archivo más que un argumento: un único gráfico en alta resolución que alinea los iconos del Dock por defecto desde OS X 10.0 hasta macOS 27, recopilado mientras investigaba para un posible capítulo de libro, y casi sin comentario alguno. La discusión aporta lo que el artículo omite. Los comentaristas sitúan el inicio del aplanamiento en el icono de iTunes de 10.7, dicen que para 10.15 ya se había drenado casi toda la ilustración, y señalan que 10.16 metió todos los iconos dentro del mismo cuadrado redondeado. Varios cuentan que las siluetas uniformes hacen más difícil localizar un icono de un vistazo que antes.
+***** Take
+El hilo llegó a la conclusión que el artículo no quiso sacar. En cuanto todos los iconos son el mismo cuadrado redondeado del mismo tamaño, la forma deja de transportar información y solo queda leer el color y un glifo pequeño. Apple cambió velocidad de reconocimiento por consistencia de rejilla. Quienes dicen que ahora buscan el icono correcto están describiendo un retroceso real en una tarea de búsqueda visual, aunque también haya nostalgia en la mezcla.
+***** Comments
+- Los iconos empiezan a parecer aburridos cuando todos tienen la misma forma. El icono de iTunes en 10.7 lo arrancó. Ya entonces resultaba perezoso y fuera de lugar. Para 10.15 se había drenado casi toda la vida de los iconos, y luego 10.16 los metió a todos en sus cuadraditos.
+- Completamente inútil durante los últimos 20 años. Lo tengo siempre oculto sin perder ninguna funcionalidad. No da información sobre qué ventanas están abiertas y hace cosas aleatorias cuando pulsas un icono.
+- Snow Leopard fue mi favorito, y también la versión con la que empecé, así que habrá un componente de nostalgia. Lo que sí sé es que con los iconos uniformes de ahora me encuentro buscando el que quiero pulsar mucho más que antes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das Dock auf dem Mac, von OS 10 bis macOS 27
+***** TLDR
+Jim Nielsens Beitrag ist ein Archiv und keine Argumentation: eine einzige hochauflösende Grafik, die die Standard-Dock-Icons von OS X 10.0 bis macOS 27 aneinanderreiht, zusammengestellt bei der Recherche für ein möglichliches Buchkapitel, fast ohne Kommentar. Die Diskussion liefert, was der Beitrag auslässt. Kommentatoren datieren den Beginn der Verflachung auf das iTunes-Icon in 10.7, sagen, bis 10.15 sei fast alles Illustrative verschwunden, und 10.16 habe jedes Icon in dasselbe abgerundete Quadrat gesteckt. Mehrere berichten, dass die einheitlichen Silhouetten es schwerer machen, ein Icon auf einen Blick zu finden, als früher.
+***** Take
+Der Thread zieht den Schluss, den der Beitrag nicht zieht. Sobald jedes Icon dasselbe abgerundete Quadrat in derselben Größe ist, trägt die Form keine Information mehr, und es bleibt nur, Farbe plus eine kleine Glyphe zu lesen. Apple hat Erkennungsgeschwindigkeit gegen Rastereinheitlichkeit getauscht. Wer sagt, er suche inzwischen nach dem richtigen Icon, beschreibt einen echten Rückschritt bei einer visuellen Suchaufgabe, auch wenn Nostalgie offensichtlich mitspielt.
+***** Comments
+- Die Icons werden wirklich langweilig, wenn sie alle dieselbe Form haben. Das iTunes-Icon in 10.7 hat es losgetreten. Es wirkte schon damals faul und unpassend. Bis 10.15 war den Icons das meiste Leben entzogen, dann hat 10.16 sie alle in ihre kleinen Quadrate gestopft.
+- Seit 20 Jahren völlig nutzlos. Ich habe es immer ausgeblendet, ohne jeden Funktionsverlust. Es sagt nichts darüber, welche Fenster offen sind, und macht beim Klick auf ein Icon willkürliche Dinge.
+- Snow Leopard war mein Favorit und auch die Version, mit der ich angefangen habe, da steckt also wohl Nostalgie drin. Was ich aber weiß: Mit den einheitlichen Icons von heute suche ich deutlich häufiger nach dem, das ich anklicken will.
