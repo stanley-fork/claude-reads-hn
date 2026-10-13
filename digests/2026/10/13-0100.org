@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-13 01:00 UTC
+#+DATE: 2026-10-13T01:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Hackers defrost Europe's supermarket fridges, Codex CLI plants a 374 MB daemon, and Citroen revives the 2CV as a 13k EV
+
+* Highlights
+- Supermarket fridges: patched Danfoss controllers, unpatched stores, 300k euros of spoiled food in France alone
+- Codex CLI starts a self-updating background daemon by default, documented in one release-note line
+- Citroen 2CV returns at under a tonne and about 13,000 pounds, which matters more than the headlights
+- A commercial web app shipped as one C binary on OpenBSD httpd and CGI
+- GLM-Legal leads with 19.2% all-pass on Harvey LAB, and HN remembers z.ai's workspace snapshots
+
+* Stories
+
+** Hackers activate automatic defrosting in supermarket fridges across Europe :security:ics:retail:iot:
+:PROPERTIES:
+:ID:       50055304
+:URL:      https://www.tomshardware.com/tech-industry/cyber-security/unprecedented-cyberattack-cripples-supermarket-fridges-across-europe-as-hackers-activate-automatic-defrosting-delivery-and-store-prices-also-impacted-by-incident
+:HN_URL:   https://news.ycombinator.com/item?id=50055304
+:POINTS:   423
+:COMMENTS: 640
+:BY:       Zeekaas
+:END:
+
+*** TLDR
+Attackers reached Danfoss refrigeration controllers at supermarkets in France, the Netherlands and Belgium on October 12 and ran defrost cycles continuously at 50C instead of the usual two hours a day. Intermarche, Leclerc, Coopérative U, Albert Heijn, Etos, Gall & Gall and Delhaize were hit; electronic shelf labels, deliveries and loyalty programs also broke. Early French losses were put at 300,000 euros with national totals expected in the millions. Albert Heijn shut systems down preventively. No attribution. Claroty's Team82 had already published three bugs in the Danfoss AK-SM 800A line, including an authentication bypass via a hidden code-of-the-day (CVE-2025-41450), fixed in firmware R4.3.1, and counted roughly 2,765 of these controllers exposed on the public internet.
+
+*** Take
+The fix shipped before the attack. Danfoss sells internet-connected case controllers on the promise that a technician never has to drive out to start a defrost, and that same feature run in reverse is what spoiled the food. Supermarkets run on thin margins and nobody there budgets for a firmware upgrade on a box that has worked for fifteen years, so the exposure sits there until someone scans for it.
+
+*** Comments
+
+**** 9x39
+:PROPERTIES:
+:COMMENT_ID: 50062360
+:END:
+Some of the suspects are 15-20 year old controllers like the Danfoss SM800, end of service 2021. Why don't they just replace them? No margin. But there were CVEs. No margin.
+
+**** alexpotato
+:PROPERTIES:
+:COMMENT_ID: 50063319
+:END:
+Commenters keep asking why you would ever hook a freezer to the internet. Many of the people here worked at the firms that built the subscription models that require exactly that.
+
+**** renyicircle
+:PROPERTIES:
+:COMMENT_ID: 50055838
+:END:
+Danfoss markets remote defrost as an efficiency win. I wonder whether the incremental gains outweigh these damages.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+黑客触发全欧洲超市冰柜的自动除霜
+***** TLDR
+10 月 12 日，攻击者入侵了法国、荷兰和比利时超市的 Danfoss 制冷控制器，让除霜循环在 50C 下持续运行，而正常情况下每天只有约两小时。受影响的包括 Intermarche、Leclerc、Coopérative U、Albert Heijn、Etos、Gall & Gall 和 Delhaize；电子价签、配送和会员系统也出现故障。法国的初步损失估计为 30 万欧元，全国总额预计将达到数百万。Albert Heijn 预防性关闭了系统。目前没有归因。Claroty 的 Team82 此前已公布 Danfoss AK-SM 800A 系列的三个漏洞，其中包括通过隐藏的「当日口令」绕过认证（CVE-2025-41450），已在固件 R4.3.1 中修复，并统计出约 2765 台此类控制器暴露在公网上。
+***** Take
+补丁早在攻击之前就发布了。Danfoss 推销联网机柜控制器的卖点是技术人员不必再开车到现场启动除霜，而同一个功能被反向使用，就把食物弄坏了。超市利润微薄，没有人会为一台已经稳定运行十五年的盒子预留固件升级预算，于是这个暴露面就一直留在那里，直到有人扫描到它。
+***** Comments
+- 一些嫌疑设备是有 15 到 20 年历史的控制器，比如 2021 年就停止服务的 Danfoss SM800。为什么不换掉？没有利润空间。可是有 CVE 啊。还是没有利润空间。
+- 评论者一直在问，谁会把冰柜接到互联网上。但这里很多人正是在构建需要这种联网订阅模式的公司里工作的。
+- Danfoss 把远程除霜当作节能亮点来营销。我很想知道这些边际收益是否抵得上这次的损失。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ハッカーが欧州各国のスーパーの冷蔵設備で自動霜取りを作動させる
+***** TLDR
+10月12日、攻撃者がフランス、オランダ、ベルギーのスーパーにあるDanfoss製の冷凍制御機器に侵入し、通常は1日2時間程度の霜取りサイクルを50Cで連続実行させた。被害を受けたのはIntermarche、Leclerc、Coopérative U、Albert Heijn、Etos、Gall & Gall、Delhaize。電子棚札、配送、ポイントプログラムも停止した。フランスでの初期被害は30万ユーロと見られ、全国では数百万ユーロに達する見込み。Albert Heijnは予防的にシステムを停止した。攻撃者の特定は出ていない。ClarotyのTeam82はすでにDanfoss AK-SM 800A系の3件の脆弱性を公開しており、隠された「コード・オブ・ザ・デイ」による認証バイパス（CVE-2025-41450）はファームウェアR4.3.1で修正済み。同社はこの制御機器がインターネット上に約2,765台露出していると数えていた。
+***** Take
+修正は攻撃より前に出ていた。Danfossは、技術者が霜取りを始めるために現場へ行かなくて済むという利点でネット接続型の制御機器を売っている。その同じ機能が逆向きに使われて食品が傷んだ。スーパーの利益率は薄く、15年動き続けてきた機器のファームウェア更新に予算を割く人はいない。だから露出はそのまま残り、誰かがスキャンするまで放置される。
+***** Comments
+- 容疑に挙がっている機器の一部は、2021年にサービス終了したDanfoss SM800のような15〜20年前の制御機器だ。なぜ交換しないのか。利益率がないからだ。CVEは出ていたのに。それでも利益率がない。
+- なぜ冷凍庫をインターネットにつなぐのかという質問が続いているが、ここにいる多くの人は、まさにそれを必要とするサブスクモデルを作った会社で働いていた。
+- Danfossは遠隔霜取りを省エネの利点として売っている。その小さな利得が今回の損害に見合うのか疑問だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+해커들이 유럽 전역 슈퍼마켓 냉장 설비의 자동 성에 제거를 작동시켰다
+***** TLDR
+10월 12일 공격자들이 프랑스, 네덜란드, 벨기에 슈퍼마켓의 Danfoss 냉장 컨트롤러에 접근해, 평소 하루 두 시간 정도인 성에 제거 주기를 50C로 계속 돌렸다. Intermarche, Leclerc, Coopérative U, Albert Heijn, Etos, Gall & Gall, Delhaize가 영향을 받았고 전자 가격표, 배송, 멤버십 프로그램도 멈췄다. 프랑스의 초기 피해는 30만 유로로 추정되며 전국 합계는 수백만 유로에 이를 전망이다. Albert Heijn은 예방 차원에서 시스템을 껐다. 공격 주체는 밝혀지지 않았다. Claroty의 Team82는 이미 Danfoss AK-SM 800A 계열의 취약점 세 건을 공개했는데, 숨겨진 '오늘의 코드'를 통한 인증 우회(CVE-2025-41450)는 펌웨어 R4.3.1에서 수정됐고, 이 컨트롤러 약 2,765대가 공개 인터넷에 노출돼 있다고 집계했다.
+***** Take
+패치는 공격보다 먼저 나왔다. Danfoss는 기술자가 성에 제거를 시작하러 현장에 갈 필요가 없다는 점을 내세워 인터넷 연결 컨트롤러를 판다. 바로 그 기능이 반대로 쓰여 식품을 상하게 했다. 슈퍼마켓은 마진이 얇고, 15년간 잘 돌아간 장비의 펌웨어 업그레이드에 예산을 잡는 사람은 없다. 그래서 노출은 그대로 남아 누군가 스캔할 때까지 방치된다.
+***** Comments
+- 용의 장비 일부는 2021년 서비스가 끝난 Danfoss SM800 같은 15~20년 된 컨트롤러다. 왜 교체하지 않나. 마진이 없다. CVE가 있었는데도? 그래도 마진이 없다.
+- 냉동고를 왜 인터넷에 연결하느냐는 질문이 계속 나오는데, 여기 있는 많은 사람이 바로 그런 연결을 요구하는 구독 모델을 만든 회사에서 일했다.
+- Danfoss는 원격 성에 제거를 효율 개선으로 판다. 그 미세한 이득이 이번 피해를 감당할 만한지 의문이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Hackers activan el descongelado automático en las neveras de supermercados de toda Europa
+***** TLDR
+El 12 de octubre, unos atacantes llegaron a controladores de refrigeración Danfoss en supermercados de Francia, Países Bajos y Bélgica y ejecutaron ciclos de descongelado de forma continua a 50C, cuando lo normal son unas dos horas al día. Se vieron afectados Intermarche, Leclerc, Coopérative U, Albert Heijn, Etos, Gall & Gall y Delhaize; también fallaron las etiquetas electrónicas de precios, las entregas y los programas de fidelización. Las pérdidas iniciales en Francia se estimaron en 300.000 euros, con totales nacionales que se esperan en millones. Albert Heijn apagó sistemas de forma preventiva. No hay atribución. El equipo Team82 de Claroty ya había publicado tres fallos en la línea Danfoss AK-SM 800A, incluido un salto de autenticación mediante un código del día oculto (CVE-2025-41450), corregido en el firmware R4.3.1, y contabilizó unos 2.765 de estos controladores expuestos en internet.
+***** Take
+La corrección salió antes del ataque. Danfoss vende controladores conectados con la promesa de que ningún técnico tenga que desplazarse para iniciar un descongelado, y esa misma función al revés es lo que echó a perder la comida. Los supermercados operan con márgenes muy ajustados y nadie presupuesta una actualización de firmware para una caja que lleva quince años funcionando, así que la exposición se queda ahí hasta que alguien la escanea.
+***** Comments
+- Algunos de los equipos sospechosos son controladores de 15 a 20 años, como el Danfoss SM800, sin servicio desde 2021. ¿Por qué no los cambian? No hay margen. Pero había CVE. Sigue sin haber margen.
+- Los comentarios preguntan por qué conectarías una nevera a internet. Mucha gente de aquí trabajó en las empresas que construyeron los modelos de suscripción que lo exigen.
+- Danfoss promociona el descongelado remoto como una mejora de eficiencia. Me pregunto si esas ganancias marginales compensan estos daños.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Hacker lösen Abtauzyklen in Supermarktkühlungen in ganz Europa aus
+***** TLDR
+Am 12. Oktober erreichten Angreifer Danfoss-Kühlsteuerungen in Supermärkten in Frankreich, den Niederlanden und Belgien und ließen Abtauzyklen dauerhaft bei 50C laufen, üblich sind etwa zwei Stunden täglich. Betroffen waren Intermarche, Leclerc, Coopérative U, Albert Heijn, Etos, Gall & Gall und Delhaize; auch elektronische Preisschilder, Lieferungen und Treueprogramme fielen aus. Die ersten französischen Verluste wurden mit 300.000 Euro angegeben, landesweit werden Millionen erwartet. Albert Heijn fuhr Systeme vorsorglich herunter. Eine Zuordnung gibt es nicht. Clarotys Team82 hatte bereits drei Lücken in der Reihe Danfoss AK-SM 800A veröffentlicht, darunter eine Authentifizierungsumgehung über einen versteckten Tagescode (CVE-2025-41450), behoben in Firmware R4.3.1, und zählte rund 2.765 dieser Steuerungen offen im Internet.
+***** Take
+Der Fix war vor dem Angriff da. Danfoss verkauft vernetzte Kühlsteuerungen mit dem Versprechen, dass kein Techniker mehr hinfahren muss, um einen Abtauzyklus zu starten, und genau diese Funktion hat umgedreht die Ware verdorben. Supermärkte arbeiten mit dünnen Margen, und niemand plant Budget für ein Firmware-Update an einem Gerät ein, das seit fünfzehn Jahren läuft. Also bleibt die Angriffsfläche stehen, bis jemand danach scannt.
+***** Comments
+- Einige der verdächtigen Geräte sind 15 bis 20 Jahre alte Steuerungen wie die Danfoss SM800, Service-Ende 2021. Warum tauscht man sie nicht aus? Keine Marge. Aber es gab CVEs. Trotzdem keine Marge.
+- In den Kommentaren wird gefragt, warum man eine Kühltruhe überhaupt ans Internet hängt. Viele hier haben bei den Firmen gearbeitet, die genau die Abo-Modelle gebaut haben, die das verlangen.
+- Danfoss bewirbt das Abtauen per Fernzugriff als Effizienzgewinn. Ich frage mich, ob diese kleinen Gewinne diesen Schaden aufwiegen.
+** Codex CLI installs a persistent, self-updating background daemon by default :openai:devtools:cli:privacy:
+:PROPERTIES:
+:ID:       50060694
+:URL:      https://github.com/openai/codex/issues/48195
+:HN_URL:   https://news.ycombinator.com/item?id=50060694
+:POINTS:   448
+:COMMENTS: 229
+:BY:       whimblepop
+:END:
+
+*** TLDR
+Since version 0.157.0 the Codex CLI starts `codex app-server --managed-daemon` for eligible interactive sessions. It copies about 374 MB of platform files into ~/.codex/packages/app-server-daemon/, spawns an updater that checks hourly, survives closing the terminal, and pins the environment of whichever session started it first, so proxy settings and working directory leak across sessions. The release notes covered it in one line about automatic background-server startup. There is no documented setting, only the feature flag daemon_auto_start, and `codex app-server daemon stop` leaves the updater loop running. The issue is open with no maintainer reply.
+
+*** Take
+A background process that reinstalls itself every hour, keeps running after you close the terminal, and ignores the documented stop command is the part people are reacting to, not the idea of a daemon. Running an app server for interactive sessions is reasonable engineering. Turning it on by default, behind an undocumented flag, with a stop command that does not stop it, is how you get your own users comparing your CLI to malware.
+
+*** Comments
+
+**** whimblepop
+:PROPERTIES:
+:COMMENT_ID: 50061501
+:END:
+No documented setting disables this, but there is a feature flag: set daemon_auto_start = false under ［features］ in ~/.codex/config.toml.
+
+**** icantevenhold
+:PROPERTIES:
+:COMMENT_ID: 50060934
+:END:
+It fills my drive with old versions, about 12 gigabytes in total. For a harness that seems insane. People complain about Claude Code, but Codex is worse on every metric.
+
+**** dllu
+:PROPERTIES:
+:COMMENT_ID: 50061752
+:END:
+When auto-updating it randomly ruined permissions and made .git read-only, which blocked the run. I can't trust Codex to finish anything.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Codex CLI 默认安装一个常驻的自更新后台守护进程
+***** TLDR
+从 0.157.0 版开始，Codex CLI 会为符合条件的交互式会话启动 `codex app-server --managed-daemon`。它会把约 374 MB 的平台文件复制到 ~/.codex/packages/app-server-daemon/，启动一个每小时检查更新的进程，在终端关闭后继续运行，并固定住第一个启动它的会话的环境，导致代理设置和工作目录在会话之间串用。发布说明只用一行提到了自动启动后台服务。没有正式的配置项，只有一个 daemon_auto_start 功能开关，而 `codex app-server daemon stop` 并不会停掉更新循环。该 issue 仍处于开启状态，没有维护者回复。
+***** Take
+人们真正反感的不是守护进程这个想法，而是一个每小时自我重装、关掉终端后依然运行、并且无视官方停止命令的后台进程。为交互式会话跑一个 app server 本身是合理的工程选择。默认开启、藏在没有文档的开关后面、再配上一个停不下来的停止命令，这就是让自己的用户把你的 CLI 和恶意软件相提并论的方法。
+***** Comments
+- 没有正式设置可以关掉它，但有一个功能开关：在 ~/.codex/config.toml 的 ［features］ 下设置 daemon_auto_start = false。
+- 它用旧版本把我的硬盘填满了，总共大约 12 GB。对一个 harness 来说这太离谱了。大家都在抱怨 Claude Code，但 Codex 在每一项指标上都更糟。
+- 自动更新时它会随机破坏权限，把 .git 变成只读，任务就卡住了。我没法信任 Codex 完成任何事情。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Codex CLIが常駐して自己更新するバックグラウンドデーモンを既定でインストールする
+***** TLDR
+バージョン0.157.0以降、Codex CLIは対象となる対話セッションで`codex app-server --managed-daemon`を起動する。約374MBのプラットフォームファイルを~/.codex/packages/app-server-daemon/にコピーし、1時間ごとに更新を確認するプロセスを立ち上げ、ターミナルを閉じても生き残り、最初に起動したセッションの環境を固定するため、プロキシ設定や作業ディレクトリがセッション間に漏れる。リリースノートの記述は、バックグラウンドサーバーの自動起動に関する1行だけ。正式な設定項目はなくdaemon_auto_startという機能フラグのみで、`codex app-server daemon stop`を実行しても更新ループは残る。issueは未対応のままで、メンテナーの返信はない。
+***** Take
+反発を受けているのはデーモンという考え方ではなく、1時間ごとに自分を再インストールし、ターミナルを閉じても動き続け、公式の停止コマンドを無視するプロセスのほうだ。対話セッション向けにapp serverを動かすのは妥当な設計だ。それを既定で有効にし、文書化されていないフラグの裏に置き、止まらない停止コマンドを付ける。これが自社ユーザーに自分のCLIをマルウェアと並べて語らせる方法だ。
+***** Comments
+- 無効化する正式な設定はないが、機能フラグがある。~/.codex/config.tomlの［features］にdaemon_auto_start = falseを書けばよい。
+- 古いバージョンでディスクが埋まり、合計12GBほどになった。ただのharnessにしては異常だ。Claude Codeへの不満は多いが、Codexはどの指標でも悪い。
+- 自動更新のときに権限が壊れて.gitが読み取り専用になり、作業が止まった。Codexに何かを完遂させる信頼が持てない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Codex CLI가 기본값으로 상주하며 자가 업데이트하는 백그라운드 데몬을 설치한다
+***** TLDR
+0.157.0 버전부터 Codex CLI는 조건에 맞는 대화형 세션에서 `codex app-server --managed-daemon`을 실행한다. 약 374MB의 플랫폼 파일을 ~/.codex/packages/app-server-daemon/으로 복사하고, 매시간 업데이트를 확인하는 프로세스를 띄우며, 터미널을 닫아도 살아남고, 처음 실행한 세션의 환경을 고정해 프록시 설정과 작업 디렉터리가 세션 사이로 새어 나간다. 릴리스 노트에는 백그라운드 서버 자동 시작에 관한 한 줄만 있었다. 문서화된 설정은 없고 daemon_auto_start 플래그만 있으며, `codex app-server daemon stop`을 실행해도 업데이트 루프는 남는다. 이슈는 열린 상태로 메인테이너 답변이 없다.
+***** Take
+사람들이 반응하는 지점은 데몬이라는 발상이 아니라, 매시간 스스로를 재설치하고 터미널을 닫아도 계속 돌며 공식 중지 명령을 무시하는 프로세스다. 대화형 세션용으로 app server를 돌리는 것 자체는 합리적인 설계다. 그것을 기본으로 켜고, 문서 없는 플래그 뒤에 숨기고, 멈추지 않는 중지 명령을 붙이면, 자기 사용자들이 당신의 CLI를 악성코드와 비교하게 된다.
+***** Comments
+- 이걸 끄는 공식 설정은 없지만 기능 플래그가 있다. ~/.codex/config.toml의 ［features］에 daemon_auto_start = false를 넣으면 된다.
+- 구버전들로 디스크가 차서 총 12GB 정도가 됐다. 그냥 harness인데 말이 안 된다. Claude Code 불만이 많지만 Codex는 모든 항목에서 더 나쁘다.
+- 자동 업데이트 중에 권한이 깨져 .git이 읽기 전용이 되면서 작업이 막혔다. Codex가 뭔가를 끝낼 거라고 신뢰할 수 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Codex CLI instala por defecto un demonio en segundo plano persistente y autoactualizable
+***** TLDR
+Desde la versión 0.157.0, Codex CLI arranca `codex app-server --managed-daemon` en las sesiones interactivas que cumplen los requisitos. Copia unos 374 MB de archivos de plataforma en ~/.codex/packages/app-server-daemon/, lanza un actualizador que comprueba cada hora, sobrevive al cierre de la terminal y fija el entorno de la primera sesión que lo arrancó, de modo que la configuración de proxy y el directorio de trabajo se filtran entre sesiones. Las notas de la versión lo cubrieron con una línea sobre el arranque automático del servidor en segundo plano. No hay ajuste documentado, solo la bandera daemon_auto_start, y `codex app-server daemon stop` deja el bucle del actualizador en marcha. El issue sigue abierto sin respuesta de los mantenedores.
+***** Take
+Lo que molesta a la gente no es la idea de un demonio, sino un proceso que se reinstala cada hora, sigue corriendo cuando cierras la terminal e ignora el comando de parada documentado. Levantar un app server para sesiones interactivas es una decisión razonable. Activarlo por defecto, detrás de una bandera sin documentar y con un comando de parada que no para nada, es la forma de que tus propios usuarios comparen tu CLI con malware.
+***** Comments
+- Ningún ajuste documentado lo desactiva, pero existe una bandera: pon daemon_auto_start = false bajo ［features］ en ~/.codex/config.toml.
+- Me llena el disco con versiones viejas, unos 12 gigabytes en total. Para un harness es una locura. Se critica mucho a Claude Code, pero Codex es peor en todas las métricas.
+- Al autoactualizarse rompió permisos y dejó .git en solo lectura, lo que bloqueó la tarea. No puedo confiar en que Codex termine nada.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Codex CLI installiert standardmäßig einen dauerhaften, selbst aktualisierenden Hintergrund-Daemon
+***** TLDR
+Seit Version 0.157.0 startet die Codex CLI `codex app-server --managed-daemon` für geeignete interaktive Sitzungen. Sie kopiert rund 374 MB Plattformdateien nach ~/.codex/packages/app-server-daemon/, startet einen Updater mit stündlicher Prüfung, überlebt das Schließen des Terminals und fixiert die Umgebung der Sitzung, die ihn zuerst gestartet hat, sodass Proxy-Einstellungen und Arbeitsverzeichnis zwischen Sitzungen durchsickern. Die Release Notes erwähnten das in einer Zeile zum automatischen Start des Hintergrundservers. Es gibt keine dokumentierte Einstellung, nur das Feature-Flag daemon_auto_start, und `codex app-server daemon stop` lässt die Updater-Schleife laufen. Das Issue ist offen, ohne Antwort der Maintainer.
+***** Take
+Was die Leute aufbringt, ist nicht die Idee eines Daemons, sondern ein Prozess, der sich jede Stunde neu installiert, nach dem Schließen des Terminals weiterläuft und den dokumentierten Stop-Befehl ignoriert. Einen App-Server für interaktive Sitzungen zu betreiben, ist vernünftige Technik. Ihn standardmäßig einzuschalten, hinter einem undokumentierten Flag zu verstecken und mit einem Stop-Befehl zu versehen, der nichts stoppt, führt dazu, dass die eigenen Nutzer die CLI mit Malware vergleichen.
+***** Comments
+- Keine dokumentierte Einstellung schaltet es ab, aber es gibt ein Feature-Flag: daemon_auto_start = false unter ［features］ in ~/.codex/config.toml.
+- Es füllt meine Platte mit alten Versionen, insgesamt etwa 12 Gigabyte. Für ein Harness ist das absurd. Über Claude Code wird viel geklagt, aber Codex ist in jeder Hinsicht schlechter.
+- Beim Auto-Update hat es Rechte zerstört und .git auf schreibgeschützt gesetzt, womit der Lauf blockiert war. Ich kann Codex nicht zutrauen, etwas abzuschließen.
+** Citroen revives the 2CV for an electric age :automotive:ev:design:citroen:
+:PROPERTIES:
+:ID:       50055220
+:URL:      https://www.bbc.com/news/articles/c620r33plgppo
+:HN_URL:   https://news.ycombinator.com/item?id=50055220
+:POINTS:   260
+:COMMENTS: 315
+:BY:       scrlk
+:END:
+
+*** TLDR
+Citroen showed an electric 2CV concept aimed at showrooms by 2028 at around 13,000 pounds. The styling quotes the 1948 original with flared arches, a tall curved roof and round headlights, and the official site shows a van variant, mushroom-style pedals and an infotainment system named Radioen. Citroen CEO Xavier Chardon called it "a modern, ingenious and refreshing response to the mobility challenges of tomorrow". The BBC piece does not publish weight, battery size or range; commenters citing Citroen's own material put it under a tonne.
+
+*** Take
+The price and the kerb weight are the story, not the headlights. Under a tonne means a smaller battery buys the same range, which is how you get to 13,000 pounds, and it is the first time in years a European maker has aimed downmarket instead of adding another screen. It is also a concept with no published range two years out, and Citroen has shown cheap small cars before and then quietly raised the price.
+
+*** Comments
+
+**** Lio
+:PROPERTIES:
+:COMMENT_ID: 50056770
+:END:
+People are missing that this 2CV has class leading weight at under a tonne. Less weight means better range from a smaller battery, more efficient tyres and less road wear. That is how the target price gets so low.
+
+**** jacquesm
+:PROPERTIES:
+:COMMENT_ID: 50065017
+:END:
+The 2CV was my second car. Not fast, but great mileage and the easiest car I have ever worked on. If they built an electric DS without too much spyware I would consider it.
+
+**** rollulus
+:PROPERTIES:
+:COMMENT_ID: 50061299
+:END:
+I am still waiting for the revived Renault R17, which was a far cooler concept.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+雪铁龙在电动时代复活 2CV
+***** TLDR
+雪铁龙展示了一款电动 2CV 概念车，计划 2028 年进入展厅，目标价格约 13,000 英镑。造型沿用 1948 年原版的外扩轮拱、高耸的弧形车顶和圆形大灯，官方网站还展示了厢式车型、蘑菇造型的踏板和名为 Radioen 的车机系统。雪铁龙 CEO Xavier Chardon 称它是「对未来出行挑战的现代、巧妙而清新的回应」。BBC 的报道没有公布重量、电池容量或续航；引用雪铁龙自家资料的评论者称整车重量在一吨以下。
+***** Take
+真正值得关注的是价格和整车重量，不是大灯。重量在一吨以下意味着更小的电池就能跑出同样的续航，这才是价格能压到 13,000 英镑的原因，也是多年来欧洲厂商第一次向下定位而不是再加一块屏幕。但它仍然只是概念车，距上市还有两年且没有公布续航，而雪铁龙此前也展示过便宜的小车，然后悄悄涨了价。
+***** Comments
+- 大家忽略了这台 2CV 的重量在一吨以下，属于同级最轻。更轻意味着更小的电池就能有更好的续航，轮胎更省，路面磨损也更小。这正是目标价格能这么低的原因。
+- 2CV 是我的第二台车。不快，但油耗很好，也是我修过的最容易上手的车。如果他们做一台没有太多监控功能的电动 DS，我会考虑。
+- 我还在等那台复活版的雷诺 R17，那个概念车酷得多。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+シトロエンが電動化時代に2CVを復活させる
+***** TLDR
+シトロエンは電動2CVのコンセプトを公開し、2028年までに約1万3000ポンドでの販売を目指すとした。張り出したフェンダー、背の高い曲面ルーフ、丸いヘッドライトで1948年の原型を引き継ぎ、公式サイトにはバン仕様、きのこ型のペダル、Radioenという名のインフォテインメントも載っている。CEOのXavier Chardonは「明日のモビリティの課題に対する現代的で巧みな、新鮮な答え」と述べた。BBCの記事は重量、電池容量、航続距離を出していない。シトロエンの資料を引くコメントでは1トン未満とされている。
+***** Take
+注目すべきは価格と車重で、ヘッドライトではない。1トン未満なら小さい電池で同じ航続距離が得られる。それが1万3000ポンドという値付けの理屈であり、欧州メーカーが画面を足すのではなく下の価格帯を狙ったのは久しぶりだ。ただし発売は2年先で航続距離は未公表のコンセプトであり、シトロエンは以前も安い小型車を見せた後で静かに値上げしている。
+***** Comments
+- この2CVが1トン未満という同クラス最軽量であることが見落とされている。軽ければ小さい電池で航続距離が伸び、タイヤの効率も上がり路面も傷まない。だから目標価格がここまで下げられる。
+- 2CVは私の2台目の車だった。速くはないが燃費がよく、これまでで一番整備しやすい車だった。監視機能が過剰でない電動DSが出たら検討する。
+- 私はいまだに復活版ルノーR17を待っている。あちらのほうがずっと格好いいコンセプトだった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+시트로엥이 전동화 시대를 위해 2CV를 되살린다
+***** TLDR
+시트로엥이 전기 2CV 콘셉트를 공개하고 2028년까지 약 1만 3천 파운드로 판매하는 것을 목표로 제시했다. 벌어진 휠 아치, 높고 둥근 루프, 원형 헤드램프로 1948년 원형을 따랐고, 공식 사이트에는 밴 사양과 버섯 모양 페달, Radioen이라는 인포테인먼트도 올라와 있다. CEO Xavier Chardon은 이를 "내일의 이동성 과제에 대한 현대적이고 기발하며 신선한 답"이라고 표현했다. BBC 기사는 무게, 배터리 용량, 주행거리를 싣지 않았다. 시트로엥 자료를 인용한 댓글들은 1톤 미만이라고 말한다.
+***** Take
+핵심은 가격과 공차중량이고 헤드램프가 아니다. 1톤 미만이면 더 작은 배터리로 같은 주행거리를 얻을 수 있고, 그래서 1만 3천 파운드가 가능해진다. 유럽 제조사가 화면을 더 붙이는 대신 아래 가격대를 노린 것은 수년 만이다. 다만 아직 콘셉트이고 출시까지 2년이 남았는데 주행거리는 미공개다. 시트로엥은 전에도 값싼 소형차를 보여준 뒤 조용히 가격을 올린 적이 있다.
+***** Comments
+- 이 2CV가 1톤 미만으로 동급 최경량이라는 점을 사람들이 놓치고 있다. 가벼우면 더 작은 배터리로 주행거리가 늘고, 타이어 효율도 좋고 도로 마모도 적다. 목표 가격이 낮은 이유가 그것이다.
+- 2CV는 내 두 번째 차였다. 빠르지 않았지만 연비가 좋았고 내가 다뤄본 차 중 정비가 가장 쉬웠다. 감시 기능이 과하지 않은 전기 DS가 나오면 고려하겠다.
+- 나는 아직 되살아난 르노 R17을 기다린다. 그쪽이 훨씬 멋진 콘셉트였다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Citroen revive el 2CV para la era eléctrica
+***** TLDR
+Citroen presentó un 2CV eléctrico en forma de concepto, con la intención de llegar a los concesionarios en 2028 por unas 13.000 libras. El diseño cita al original de 1948 con pasos de rueda ensanchados, techo alto y curvado y faros redondos, y la web oficial muestra una variante furgoneta, pedales tipo champiñón y un sistema de infoentretenimiento llamado Radioen. El consejero delegado Xavier Chardon lo describió como "una respuesta moderna, ingeniosa y refrescante a los retos de movilidad del mañana". El artículo de la BBC no publica peso, capacidad de batería ni autonomía; los comentarios que citan material de Citroen hablan de menos de una tonelada.
+***** Take
+La noticia son el precio y el peso, no los faros. Por debajo de una tonelada, una batería más pequeña da la misma autonomía, y así se llega a 13.000 libras. Es la primera vez en años que un fabricante europeo apunta hacia abajo en lugar de añadir otra pantalla. También es un concepto sin autonomía publicada a dos años de distancia, y Citroen ya ha mostrado coches pequeños y baratos para luego subir el precio en silencio.
+***** Comments
+- Se está pasando por alto que este 2CV pesa menos de una tonelada, lo mejor de su clase. Menos peso da más autonomía con una batería menor, neumáticos más eficientes y menos desgaste del asfalto. Por eso el precio objetivo es tan bajo.
+- El 2CV fue mi segundo coche. No era rápido, pero consumía poquísimo y es el coche más fácil de reparar que he tenido. Si hicieran un DS eléctrico sin tanto software espía, me lo plantearía.
+- Yo sigo esperando el Renault R17 revivido, que era un concepto mucho mejor.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Citroen lässt den 2CV für das Elektrozeitalter wieder aufleben
+***** TLDR
+Citroen zeigte einen elektrischen 2CV als Konzept, das ab 2028 für rund 13.000 Pfund in die Autohäuser kommen soll. Die Form zitiert das Original von 1948 mit ausgestellten Radläufen, hohem gewölbtem Dach und runden Scheinwerfern, und die offizielle Website zeigt eine Kastenvariante, Pedale in Pilzform und ein Infotainment namens Radioen. Vorstandschef Xavier Chardon nannte es "eine moderne, erfindungsreiche und erfrischende Antwort auf die Mobilitätsfragen von morgen". Der BBC-Artikel nennt weder Gewicht noch Batteriegröße oder Reichweite; Kommentare mit Verweis auf Citroens eigene Unterlagen sprechen von unter einer Tonne.
+***** Take
+Die Nachricht sind Preis und Leergewicht, nicht die Scheinwerfer. Unter einer Tonne reicht eine kleinere Batterie für die gleiche Reichweite, und so kommt man auf 13.000 Pfund. Es ist das erste Mal seit Jahren, dass ein europäischer Hersteller nach unten zielt statt einen weiteren Bildschirm einzubauen. Es ist aber auch ein Konzept zwei Jahre vor dem Start, ohne veröffentlichte Reichweite, und Citroen hat schon einmal ein billiges Kleinauto gezeigt und den Preis danach still erhöht.
+***** Comments
+- Es wird überlesen, dass dieser 2CV mit unter einer Tonne das beste Gewicht seiner Klasse hat. Weniger Gewicht heißt mehr Reichweite aus einer kleineren Batterie, effizientere Reifen und weniger Straßenverschleiß. Deshalb liegt der Zielpreis so tief.
+- Der 2CV war mein zweites Auto. Nicht schnell, aber sparsam und das am leichtesten zu reparierende Auto, das ich hatte. Einen elektrischen DS ohne zu viel Spyware würde ich mir überlegen.
+- Ich warte immer noch auf den wiederbelebten Renault R17, das war ein viel cooleres Konzept.
+** A Modern Web App in C :c:webdev:openbsd:cgi:
+:PROPERTIES:
+:ID:       50058528
+:URL:      https://prophitt.me/writing/a-modern-web-app-in-c
+:HN_URL:   https://news.ycombinator.com/item?id=50058528
+:POINTS:   374
+:COMMENTS: 159
+:BY:       prophittcorey
+:END:
+
+*** TLDR
+Corey Prophitt describes shipping marketyour.games, a paying product with accounts, search dashboards, folders, Stripe payments and transactional email, as a single statically linked C binary served by OpenBSD httpd over CGI. SQLite holds the data, libcurl and libsodium plus vendored cJSON are the only dependencies, and assets are compiled into the executable. Security comes from pledge and unveil plus httpd's chroot. Every request forks a fresh process, deploys are one file replacement with no downtime, and incremental rebuilds finish in under half a second. The site needs no JavaScript. His stated caveat: you write your own cookie parsing, parameter validation, form handling and output escaping.
+
+*** Take
+The honest part of this post is the caveat. You trade a framework for a 500 millisecond rebuild, one binary and a deploy that is a file copy, and you pay for it by hand-writing your own output escaping, which is exactly the code you least want to hand-write. That trade works because Prophitt already knows C and OpenBSD gives him pledge and unveil for free. The commenters pointing at Go are making the right comparison: same single binary, same no-framework deploy, without you owning the escaping.
+
+*** Comments
+
+**** ramses0
+:PROPERTIES:
+:COMMENT_ID: 50059874
+:END:
+There are two diametrically opposed deployment styles: stack towers of glop until hello world runs in a container in a VM in a k8s cluster, or just run the process and front it with CGI.
+
+**** benlivengood
+:PROPERTIES:
+:COMMENT_ID: 50061057
+:END:
+Go also serves a site from a single binary with no libc and no separate web server, and I don't love concurrent programming in C. For a low traffic site CGI is fine.
+
+**** assimpleaspossi
+:PROPERTIES:
+:COMMENT_ID: 50062128
+:END:
+I built online ordering in C, FastCGI, FreeBSD and Postgres for 22 years. It ran so well the franchise bought it, then moved it to Microsoft and had issues ever after.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+用 C 写一个现代 Web 应用
+***** TLDR
+Corey Prophitt 介绍了他如何把 marketyour.games 这个付费产品做成一个静态链接的 C 二进制文件，由 OpenBSD httpd 通过 CGI 提供服务。产品包含账号、搜索面板、文件夹、Stripe 支付和事务邮件。数据存在 SQLite 里，依赖只有 libcurl、libsodium 和内置的 cJSON，静态资源直接编译进可执行文件。安全性依靠 pledge 和 unveil 以及 httpd 的 chroot。每个请求都 fork 一个新进程，部署就是替换一个文件且无需停机，增量编译不到半秒。站点完全不需要 JavaScript。他自己指出的代价是：cookie 解析、参数校验、表单处理和输出转义都要自己写。
+***** Take
+这篇文章最诚实的部分是那条代价。你用框架换来半秒的重新编译、一个二进制文件和一次文件拷贝式的部署，代价是手写输出转义，而这恰恰是你最不想手写的代码。这笔交易对 Prophitt 成立，因为他本来就熟悉 C，而 OpenBSD 免费给了他 pledge 和 unveil。评论里提到 Go 的人做了正确的对比：同样是单一二进制、同样免框架的部署，但转义不用你自己负责。
+***** Comments
+- 部署方式有两种完全相反的路子：一层层堆叠，直到 hello world 跑在 k8s 集群里的虚拟机里的容器里；或者直接跑进程，前面挂个 CGI。
+- Go 同样能用单一二进制提供站点服务，不依赖 libc，也不需要单独的 Web 服务器，而我并不喜欢在 C 里写并发。对低流量站点来说，CGI 没问题。
+- 我用 C、FastCGI、FreeBSD 和 Postgres 做在线订餐做了 22 年。它运行得太好，连锁公司把它买走了，然后改成微软那一套，从此问题不断。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Cで書いた現代的なウェブアプリ
+***** TLDR
+Corey Prophittは、有料プロダクトのmarketyour.gamesを、OpenBSD httpdがCGI経由で配信する単一の静的リンクCバイナリとして出荷した経緯を書いている。アカウント、検索ダッシュボード、フォルダ、Stripe決済、トランザクションメールを備える。データはSQLite、依存はlibcurlとlibsodiumに同梱のcJSONだけで、アセットは実行ファイルに埋め込む。セキュリティはpledgeとunveil、それにhttpdのchrootに頼る。リクエストごとに新しいプロセスをforkし、デプロイはファイル1つの差し替えで無停止、差分ビルドは0.5秒未満。サイトはJavaScript不要。著者自身が挙げる代償は、cookieの解析、パラメータ検証、フォーム処理、出力エスケープを自分で書くことだ。
+***** Take
+この記事の誠実な部分はその代償のところだ。フレームワークを捨てる代わりに0.5秒のビルド、1つのバイナリ、ファイルコピーで済むデプロイを得て、その対価として出力エスケープを手で書く。それは最も手書きしたくないコードだ。この取引が成立するのは、ProphittがもともとCを知っており、OpenBSDがpledgeとunveilを無料で与えるからだ。Goを挙げるコメントは正しい比較をしている。同じ単一バイナリ、同じフレームワークなしのデプロイで、エスケープを自分で抱えなくて済む。
+***** Comments
+- デプロイには正反対の二つの流儀がある。hello worldがk8sクラスタのVMの中のコンテナで動くまで積み上げるか、プロセスをそのまま動かしてCGIで受けるかだ。
+- Goも単一バイナリでサイトを配信でき、libcも別のウェブサーバーも要らない。私はCでの並行プログラミングが好きではない。低トラフィックのサイトならCGIで十分だ。
+- 私はC、FastCGI、FreeBSD、Postgresでオンライン注文システムを22年作ってきた。あまりに良く動いたのでフランチャイズが買い取り、その後Microsoft系に移して問題が続いた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+C로 만든 현대적인 웹 앱
+***** TLDR
+Corey Prophitt는 유료 제품 marketyour.games를 OpenBSD httpd가 CGI로 서비스하는 단일 정적 링크 C 바이너리로 출시한 과정을 적었다. 계정, 검색 대시보드, 폴더, Stripe 결제, 트랜잭션 메일을 갖췄다. 데이터는 SQLite에 있고 의존성은 libcurl과 libsodium에 내장한 cJSON뿐이며, 자산은 실행 파일에 컴파일해 넣는다. 보안은 pledge와 unveil, 그리고 httpd의 chroot에 의존한다. 요청마다 새 프로세스를 fork하고, 배포는 파일 하나 교체로 무중단이며 증분 빌드는 0.5초 미만이다. 사이트는 JavaScript가 필요 없다. 저자가 밝힌 대가는 쿠키 파싱, 파라미터 검증, 폼 처리, 출력 이스케이프를 직접 써야 한다는 점이다.
+***** Take
+이 글에서 정직한 대목은 그 대가 부분이다. 프레임워크를 포기하는 대신 0.5초 빌드, 바이너리 하나, 파일 복사로 끝나는 배포를 얻고, 그 값으로 출력 이스케이프를 손으로 쓴다. 그건 가장 손으로 쓰고 싶지 않은 코드다. 이 거래가 성립하는 이유는 Prophitt가 이미 C를 알고 OpenBSD가 pledge와 unveil을 공짜로 주기 때문이다. Go를 언급한 댓글들이 올바른 비교를 하고 있다. 같은 단일 바이너리, 같은 무프레임워크 배포인데 이스케이프를 직접 떠안지 않는다.
+***** Comments
+- 배포 방식에는 정반대의 두 갈래가 있다. hello world가 k8s 클러스터의 VM 안 컨테이너에서 돌 때까지 층층이 쌓거나, 그냥 프로세스를 돌리고 앞에 CGI를 두는 것이다.
+- Go도 단일 바이너리로 사이트를 서비스하고 libc도 별도 웹서버도 필요 없다. 나는 C에서 동시성 프로그래밍을 좋아하지 않는다. 트래픽이 적은 사이트라면 CGI로 충분하다.
+- 나는 C, FastCGI, FreeBSD, Postgres로 온라인 주문 시스템을 22년 만들었다. 너무 잘 돌아가서 프랜차이즈가 사들였고, 이후 마이크로소프트 쪽으로 옮기더니 계속 문제가 생겼다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Una aplicación web moderna en C
+***** TLDR
+Corey Prophitt cuenta cómo lanzó marketyour.games, un producto de pago con cuentas, paneles de búsqueda, carpetas, pagos con Stripe y correo transaccional, como un único binario en C enlazado estáticamente y servido por httpd de OpenBSD mediante CGI. Los datos están en SQLite, las únicas dependencias son libcurl y libsodium más cJSON incluido en el repositorio, y los recursos se compilan dentro del ejecutable. La seguridad viene de pledge y unveil junto al chroot de httpd. Cada petición bifurca un proceso nuevo, los despliegues son el reemplazo de un archivo sin caídas y las recompilaciones incrementales tardan menos de medio segundo. El sitio no necesita JavaScript. Su propia advertencia: tienes que escribir el análisis de cookies, la validación de parámetros, el manejo de formularios y el escapado de salida.
+***** Take
+La parte honesta del artículo es la advertencia. Cambias el framework por una recompilación de medio segundo, un solo binario y un despliegue que es copiar un archivo, y lo pagas escribiendo a mano tu propio escapado de salida, que es justo el código que menos conviene escribir a mano. El intercambio funciona porque Prophitt ya domina C y OpenBSD le regala pledge y unveil. Los comentarios que señalan Go hacen la comparación correcta: el mismo binario único, el mismo despliegue sin framework, pero sin que el escapado sea tuyo.
+***** Comments
+- Hay dos estilos de despliegue opuestos: apilar capas hasta que un hello world corre en un contenedor dentro de una VM en un clúster de k8s, o simplemente ejecutar el proceso y ponerle CGI delante.
+- Go también sirve un sitio desde un único binario, sin libc y sin servidor web aparte, y a mí no me gusta la programación concurrente en C. Para un sitio de poco tráfico, CGI está bien.
+- Monté pedidos online con C, FastCGI, FreeBSD y Postgres durante 22 años. Funcionaba tan bien que la franquicia lo compró, lo pasó a tecnología de Microsoft y desde entonces tuvieron problemas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Eine moderne Webanwendung in C
+***** TLDR
+Corey Prophitt beschreibt, wie er marketyour.games, ein zahlendes Produkt mit Konten, Such-Dashboards, Ordnern, Stripe-Zahlungen und Transaktionsmails, als einzelne statisch gelinkte C-Binärdatei ausgeliefert hat, die OpenBSDs httpd per CGI bedient. Die Daten liegen in SQLite, die einzigen Abhängigkeiten sind libcurl und libsodium plus mitgeliefertes cJSON, und die Assets werden in die ausführbare Datei kompiliert. Sicherheit kommt von pledge und unveil sowie dem chroot von httpd. Jede Anfrage forkt einen neuen Prozess, ein Deploy ist das Austauschen einer Datei ohne Ausfallzeit, und inkrementelle Builds brauchen unter einer halben Sekunde. Die Seite benötigt kein JavaScript. Sein eigener Vorbehalt: Cookie-Parsing, Parameterprüfung, Formularverarbeitung und Ausgabe-Escaping schreibt man selbst.
+***** Take
+Der ehrliche Teil des Textes ist der Vorbehalt. Man tauscht das Framework gegen einen Build in einer halben Sekunde, eine Binärdatei und ein Deploy, das ein Dateikopieren ist, und bezahlt mit handgeschriebenem Ausgabe-Escaping, also genau dem Code, den man am wenigsten selbst schreiben will. Der Tausch geht auf, weil Prophitt C schon kennt und OpenBSD ihm pledge und unveil gratis gibt. Die Kommentare, die auf Go zeigen, ziehen den richtigen Vergleich: dieselbe einzelne Binärdatei, dasselbe Deploy ohne Framework, nur ohne dass das Escaping dir gehört.
+***** Comments
+- Es gibt zwei völlig entgegengesetzte Deploy-Stile: Schichten stapeln, bis ein Hello World in einem Container in einer VM in einem k8s-Cluster läuft, oder einfach den Prozess starten und CGI davorsetzen.
+- Go liefert eine Seite ebenfalls aus einer einzigen Binärdatei, ohne libc und ohne separaten Webserver, und ich mag nebenläufige Programmierung in C nicht. Für eine Seite mit wenig Traffic ist CGI in Ordnung.
+- Ich habe 22 Jahre Online-Bestellsysteme mit C, FastCGI, FreeBSD und Postgres gebaut. Es lief so gut, dass die Franchise es gekauft hat, dann auf Microsoft-Technik umstellte und danach dauernd Probleme hatte.
+** GLM-Legal :ai:legal:llm:privacy:
+:PROPERTIES:
+:ID:       50058507
+:URL:      https://z.ai/blog/glm-legal
+:HN_URL:   https://news.ycombinator.com/item?id=50058507
+:POINTS:   417
+:COMMENTS: 240
+:BY:       ilreb
+:END:
+
+*** TLDR
+Z.ai released GLM-Legal, a legal agent built on the lightweight GLM-5.3-Flash, aimed at contract review and negotiation, evidence and document review, compliance research, multi-jurisdiction consultation and case prep. It claims a 19.2% all-pass rate on Harvey LAB across 24 practice areas, up 12.5 points over the base model, parity with closed frontier models on LegalBench contract and opinion parsing, and parity on the Chinese PLawBench. Training used mid-training on expanded legal corpora plus reinforcement learning in what the post calls tens of thousands of realistic legal environments. No open weights and no published price: access is by application, plus integration with z.ai's AutoClaw desktop agent. Lawyers make the final call in every example shown.
+
+*** Take
+A 19.2% all-pass rate is the headline number, which means four out of five real law firm workflows still come back wrong somewhere. That is usable as a first pass with a lawyer reading everything, which is what the examples show and what jedberg describes doing with contract redlines. The thread's sharper objection is not the benchmark: z.ai was recently caught snapshotting entire workspaces before every prompt, and a vendor with that habit is an odd choice for privileged documents.
+
+*** Comments
+
+**** jedberg
+:PROPERTIES:
+:COMMENT_ID: 50060191
+:END:
+I redlined an OEM agreement with Claude for three rounds, then my lawyer just said looks good to me. The other side called my lawyer surprisingly thorough. It saved real money.
+
+**** fireflysentinel
+:PROPERTIES:
+:COMMENT_ID: 50061341
+:END:
+People seem to have forgotten that Z.ai was snapshotting the entire workspace before every prompt. How can we trust a legal product from a company that ignored privacy law like that?
+
+**** victor9000
+:PROPERTIES:
+:COMMENT_ID: 50060403
+:END:
+Anthropic's policy now requires a qualified human in the loop when output affects legal rights or livelihood. A family law case affects all of those at once.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+GLM-Legal
+***** TLDR
+Z.ai 发布了 GLM-Legal，一个基于轻量级 GLM-5.3-Flash 的法律智能体，面向合同审阅与谈判、证据与文档审查、合规研究、跨司法辖区咨询和案件准备。官方称其在覆盖 24 个业务领域的 Harvey LAB 上取得 19.2% 的全项通过率，比基础模型高 12.5 个百分点；在 LegalBench 的合同与意见书解析上与闭源前沿模型持平，在中文 PLawBench 上也达到同等水平。训练方式是在扩充的法律语料上做中期训练，再在官方所称的数万个真实法律环境中做强化学习。没有开放权重，也没有公布价格：需要申请才能接入，并可与 z.ai 的桌面智能体 AutoClaw 集成。文中所有示例都由律师做最终判断。
+***** Take
+19.2% 的全项通过率是官方主打的数字，这意味着五个真实律所工作流里仍有四个会在某个环节出错。在律师逐字审阅的前提下，它可以当作第一遍处理，这也正是示例的做法，也是 jedberg 描述自己做合同红线修订的方式。讨论区更尖锐的质疑不在基准上：z.ai 近期被发现在每次提交提示前快照整个工作区，而有这种习惯的厂商，并不是处理特权文件的合适选择。
+***** Comments
+- 我用 Claude 对一份 OEM 协议做了三轮红线修订，然后我的律师只说「看起来没问题」。对方还说我的律师出乎意料地细致。这确实省了钱。
+- 大家好像忘了 Z.ai 在每次提示前都会快照整个工作区。一家这样忽视隐私法的公司做的法律产品，我们怎么能信？
+- Anthropic 的政策现在要求，当输出影响法律权利或生计时必须有合格的人类介入。一桩家事案件同时影响这几项。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GLM-Legal
+***** TLDR
+Z.aiは軽量なGLM-5.3-Flashを土台にした法務エージェントGLM-Legalを公開した。契約レビューと交渉、証拠と文書のレビュー、コンプライアンス調査、複数法域の相談、案件準備を対象とする。24の業務分野を含むHarvey LABで全項目合格率19.2%、基礎モデルより12.5ポイント高いとし、LegalBenchの契約・意見書の解析では閉鎖型のフロンティアモデルと同等、中国語のPLawBenchでも同等だと主張する。学習は拡充した法務コーパスでの中間学習に加え、同社が数万件の現実的な法務環境と呼ぶ場での強化学習による。重みは公開されず価格も示されていない。利用は申請制で、同社のデスクトップエージェントAutoClawと連携する。示された例ではすべて弁護士が最終判断を下している。
+***** Take
+19.2%という全項目合格率が前面に出ている。つまり実際の法律事務所のワークフロー5件のうち4件は、どこかで誤りが残る。弁護士が全文を読む前提の下書きとしては使える。示された例もそうだし、jedbergが契約の赤入れでやっていることもそれだ。スレッドのより鋭い指摘はベンチマークではない。z.aiは最近、プロンプトごとにワークスペース全体をスナップショットしていたことが判明した。その習慣のある事業者は、秘匿特権のある文書を預ける相手としては奇妙だ。
+***** Comments
+- OEM契約の赤入れをClaudeで3往復やったら、弁護士は「問題なさそう」と言うだけだった。相手方は私の弁護士が驚くほど丁寧だと言った。実際に費用を節約できた。
+- Z.aiがプロンプトごとにワークスペース全体をスナップショットしていたことを、みんな忘れたようだ。そんな形で privacy 法を無視した会社の法務製品をどう信用するのか。
+- Anthropicの方針は、出力が法的権利や生計に影響する場合に資格のある人間の関与を求めている。家事事件はそのすべてに同時に関わる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+GLM-Legal
+***** TLDR
+Z.ai가 경량 모델 GLM-5.3-Flash를 기반으로 한 법률 에이전트 GLM-Legal을 공개했다. 계약 검토와 협상, 증거 및 문서 검토, 컴플라이언스 조사, 다중 관할 상담, 사건 준비를 목표로 한다. 24개 실무 분야를 다루는 Harvey LAB에서 전 항목 통과율 19.2%로 기본 모델보다 12.5포인트 높고, LegalBench의 계약 및 의견서 해석에서 비공개 프런티어 모델과 동급이며 중국어 PLawBench에서도 동급이라고 주장한다. 학습은 확장된 법률 코퍼스에 대한 중간 학습과, 회사가 수만 개의 현실적인 법률 환경이라고 부르는 곳에서의 강화학습을 썼다. 가중치 공개도 가격 공개도 없다. 신청을 통해 접근하고, 자사 데스크톱 에이전트 AutoClaw와 연동한다. 제시된 모든 예시에서 최종 판단은 변호사가 한다.
+***** Take
+19.2%라는 전 항목 통과율이 전면에 나온 숫자다. 실제 로펌 워크플로 다섯 건 중 네 건은 어딘가에서 틀린다는 뜻이다. 변호사가 전부 읽는다는 전제에서 초안으로는 쓸 수 있고, 예시들이 그렇게 하고 있으며 jedberg가 계약 레드라인에서 하는 방식도 그렇다. 스레드의 더 날카로운 지적은 벤치마크가 아니다. z.ai는 최근 프롬프트마다 작업공간 전체를 스냅샷한 것이 드러났고, 그런 습관이 있는 업체는 특권 문서를 맡길 상대로는 이상한 선택이다.
+***** Comments
+- OEM 계약서를 Claude로 세 차례 레드라인했고, 변호사는 그냥 괜찮아 보인다고 했다. 상대측은 내 변호사가 놀랄 만큼 꼼꼼하다고 했다. 비용을 실제로 아꼈다.
+- Z.ai가 프롬프트마다 작업공간 전체를 스냅샷하던 일을 사람들이 잊은 것 같다. 그렇게 개인정보 법을 무시한 회사의 법률 제품을 어떻게 믿나.
+- Anthropic 정책은 출력이 법적 권리나 생계에 영향을 줄 때 자격 있는 사람의 개입을 요구한다. 가사 사건은 그 전부에 동시에 걸린다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+GLM-Legal
+***** TLDR
+Z.ai presentó GLM-Legal, un agente jurídico construido sobre el modelo ligero GLM-5.3-Flash, orientado a revisión y negociación de contratos, análisis de pruebas y documentos, investigación de cumplimiento, consulta multijurisdiccional y preparación de casos. Afirma un 19,2% de aprobación completa en Harvey LAB en 24 áreas de práctica, 12,5 puntos más que el modelo base, paridad con modelos frontera cerrados en el análisis de contratos y dictámenes de LegalBench, y paridad en el PLawBench chino. El entrenamiento combinó entrenamiento intermedio sobre corpus jurídicos ampliados con aprendizaje por refuerzo en lo que la empresa llama decenas de miles de entornos legales realistas. No hay pesos abiertos ni precio publicado: el acceso es por solicitud, con integración en el agente de escritorio AutoClaw. En todos los ejemplos mostrados, la decisión final es del abogado.
+***** Take
+El 19,2% de aprobación completa es la cifra destacada, lo que significa que cuatro de cada cinco flujos de trabajo reales de un despacho siguen fallando en algún punto. Sirve como primera pasada con un abogado leyéndolo todo, que es lo que muestran los ejemplos y lo que jedberg describe al revisar contratos. La objeción más afilada del hilo no es el benchmark: a z.ai se le descubrió hace poco capturando el espacio de trabajo completo antes de cada consulta, y un proveedor con esa costumbre es una elección extraña para documentos sujetos a secreto profesional.
+***** Comments
+- Revisé un acuerdo OEM con Claude durante tres rondas y mi abogado solo dijo que le parecía bien. La otra parte comentó que mi abogado había sido sorprendentemente minucioso. Ahorré dinero de verdad.
+- La gente parece haber olvidado que Z.ai capturaba el espacio de trabajo completo antes de cada consulta. ¿Cómo confiar en un producto jurídico de una empresa que ignoró así la ley de privacidad?
+- La política de Anthropic ahora exige una persona cualificada supervisando cuando la salida afecta derechos legales o medios de vida. Un caso de derecho de familia afecta a todo eso a la vez.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+GLM-Legal
+***** TLDR
+Z.ai hat GLM-Legal vorgestellt, einen Rechtsagenten auf Basis des leichtgewichtigen GLM-5.3-Flash, gedacht für Vertragsprüfung und Verhandlung, Beweis- und Dokumentensichtung, Compliance-Recherche, Beratung über mehrere Rechtsordnungen und Fallvorbereitung. Angegeben werden 19,2 Prozent vollständig bestandene Aufgaben im Harvey LAB über 24 Rechtsgebiete, 12,5 Punkte mehr als das Basismodell, Gleichstand mit geschlossenen Spitzenmodellen bei Vertrags- und Gutachtenanalyse in LegalBench und Gleichstand im chinesischen PLawBench. Trainiert wurde mit Mid-Training auf erweiterten Rechtskorpora und Reinforcement Learning in nach eigenen Angaben zehntausenden realistischen Rechtsumgebungen. Keine offenen Gewichte, kein veröffentlichter Preis: Zugang auf Antrag, dazu eine Integration in den Desktop-Agenten AutoClaw. In allen gezeigten Beispielen entscheidet am Ende der Anwalt.
+***** Take
+Die genannte Zahl ist eine Quote von 19,2 Prozent vollständig bestandener Aufgaben, also scheitern vier von fünf echten Kanzlei-Workflows irgendwo. Als erster Durchgang mit einem Anwalt, der alles liest, ist das brauchbar, genau so zeigen es die Beispiele und so beschreibt jedberg seine Vertragskorrekturen. Der härtere Einwand im Thread betrifft nicht den Benchmark: z.ai wurde kürzlich dabei erwischt, vor jedem Prompt den gesamten Workspace zu sichern, und ein Anbieter mit dieser Gewohnheit ist eine seltsame Wahl für mandatsgeschützte Dokumente.
+***** Comments
+- Ich habe einen OEM-Vertrag drei Runden mit Claude überarbeitet, danach sagte mein Anwalt nur, sieht gut aus. Die Gegenseite nannte meinen Anwalt überraschend gründlich. Das hat echtes Geld gespart.
+- Man scheint vergessen zu haben, dass Z.ai vor jedem Prompt den gesamten Workspace gesichert hat. Wie soll man einem Rechtsprodukt einer Firma vertrauen, die den Datenschutz so ignoriert hat?
+- Anthropics Richtlinie verlangt jetzt eine qualifizierte Person im Prozess, wenn die Ausgabe Rechte oder den Lebensunterhalt betrifft. Ein familienrechtlicher Fall betrifft all das gleichzeitig.
