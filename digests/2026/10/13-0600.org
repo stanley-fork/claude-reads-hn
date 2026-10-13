@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-10-13 06:00 UTC
+#+DATE: 2026-10-13T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Encrypted backdoors hide in model weights, balcony solar becomes legal in ten states, and Intel bets 480GB of cheap memory against HBM
+
+* Highlights
+- Backdoors built from digital lockers stay hidden under full white-box access
+- Plug-in solar: a million installs in Germany, Utah legalized it in 2025
+- Intel D270: 480GB LPDDR5X at 1.5TB/s on a 350W air-cooled PCIe card
+- Firefox cannot resume big downloads; the fix is one undocumented pref
+- Intel documented an FMA instruction that no CPU ever executed
+
+* Stories
+
+** AI Models Can Provably Hide Arbitrary Capabilities :ai:security:cryptography:ml:
+:PROPERTIES:
+:ID:       50065692
+:URL:      https://arxiv.org/abs/2610.13928
+:HN_URL:   https://news.ycombinator.com/item?id=50065692
+:POINTS:   103
+:COMMENTS: 49
+:BY:       sbulaev
+:END:
+
+*** TLDR
+Draguns, Motwani, Douglas and Schroeder de Witt embed an encrypted neural network inside a host model's weights so that it decrypts and runs only when it receives a secret trigger. The construction uses digital lockers, so under standard cryptographic assumptions the hidden circuit is provably hard to elicit or interpret even with full access to the weights. Earlier work could hide fixed strings; this hides arbitrary computation. They built it in PyTorch and tried to surface it with fine-tuning, weight noising, gradient-based trigger search and latent adversarial training. None worked. The demonstration is small: a chemical reaction prediction task used as a proxy for CBRN-relevant capability, not a frontier model. The conclusion is about audits. Capability evaluations assume a hidden capability can be elicited, and against a deliberate adversary that assumption does not hold.
+
+*** Take
+The title oversells and the comment thread undersells. Nobody needed a paper to believe a backdoor can be planted; what is new is the proof that weight inspection will not get it out, which turns 'we red-teamed the open weights' into a claim about effort rather than a safety guarantee. The real limit is that this attack needs a malicious trainer, so it says nothing about a model spontaneously concealing anything. The practical consequence is that where a weights file came from matters as much as how it scored, and almost nobody checks where a weights file came from.
+
+*** Comments
+
+**** vintermann
+More clear title, given how people talk about AI: 'Capabilities can be hidden in AI model weights by encryption'. It's not about AI agents being able to hide what they can do.
+
+**** ceroxylon
+This has always been my worry with open source models. Give them away for free, but with a sleeper agent built in that some arbitrary string can activate. Local deployments will still have web search connectors the majority of the time.
+
+**** johnsmith1840
+I saw a similar effect maybe 2.5 years ago now. I found that training an LLM hides information in the weights. It was only a ~1B model, but the interesting thing is what happens if you continue completely unrelated training.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+AI 模型可以被证明能够隐藏任意能力
+***** TLDR
+Draguns、Motwani、Douglas 和 Schroeder de Witt 把一个加密的神经网络嵌入宿主模型的权重中，只有收到秘密触发词时才会解密并运行。该构造使用数字锁（digital lockers），因此在标准密码学假设下，即使完全访问权重，隐藏电路也可被证明难以引出或解释。此前的工作只能隐藏固定字符串，这次隐藏的是任意计算。他们用 PyTorch 实现，并尝试用微调、权重加噪、基于梯度的触发词搜索和潜空间对抗训练把它引出来，全部失败。演示规模很小：一个化学反应预测任务，用作 CBRN 相关能力的替代，不是前沿模型。结论关乎审计。能力评估假设隐藏能力可以被引出，而面对有意为之的攻击者，这个假设不成立。
+***** Take
+标题夸大了，评论区又低估了。没人需要论文才相信后门可以被植入；新的地方在于证明了检查权重也拿不出来，这让“我们已经对开放权重做过红队测试”变成一句关于投入多少的话，而不是安全保证。真正的局限是这种攻击需要一个恶意的训练方，所以它完全没有说模型会自发隐藏什么。实际后果是：权重文件的来源和它的评测分数一样重要，而几乎没有人去核查权重文件的来源。
+***** Comments
+- 考虑到人们谈论 AI 的方式，更清楚的标题应该是：“可以用加密把能力藏进 AI 模型权重里”。这跟 AI 智能体能不能隐藏自己的能力无关。
+- 这一直是我对开源模型的担忧。免费送出去，但内置一个可以被任意字符串激活的潜伏特工。本地部署大多数时候仍然带着联网搜索功能。
+- 大概两年半前我见过类似现象。我发现训练 LLM 会把信息藏进权重里。那只是一个约 10 亿参数的模型，但有意思的是继续做完全无关的训练之后会发生什么。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AIモデルは任意の能力を証明可能な形で隠せる
+***** TLDR
+Draguns、Motwani、Douglas、Schroeder de Witt の4人が、暗号化したニューラルネットワークをホストモデルの重みに埋め込み、秘密のトリガーを受け取ったときだけ復号して実行させる手法を示した。digital lockers を使うため、標準的な暗号学的仮定の下では、重みに完全にアクセスできても隠された回路を引き出すことも解釈することも証明可能に困難になる。従来研究は固定文字列を隠すだけだったが、今回は任意の計算を隠す。PyTorch で実装し、ファインチューニング、重みへのノイズ付加、勾配ベースのトリガー探索、潜在空間での敵対的学習を試したが、いずれも露出させられなかった。実証は小規模で、CBRN 関連能力の代用としての化学反応予測タスクであり、フロンティアモデルではない。結論は監査の話だ。能力評価は隠れた能力を引き出せることを前提にしているが、意図的な敵対者に対してその前提は成り立たない。
+***** Take
+タイトルは誇張気味で、コメント欄は逆に過小評価している。バックドアを仕込めること自体は論文を待つ話ではない。新しいのは、重みを調べても取り出せないと証明された点で、「公開された重みをレッドチームで検証した」が安全性の保証ではなく投入した労力の話に変わる。限界は、この攻撃に悪意ある学習側が必要なことで、モデルが自発的に何かを隠すという話ではまったくない。実務上の帰結は、重みファイルの出所がベンチマークの点数と同じくらい重要になること。そして出所を確認している人はほとんどいない。
+***** Comments
+- AIの語られ方を考えると、もっと明確なタイトルは「暗号化によってAIモデルの重みに能力を隠せる」だ。AIエージェントが自分の能力を隠せるかという話ではない。
+- これはオープンソースモデルについて私がずっと心配してきたことだ。無料で配る、ただし任意の文字列で起動するスリーパーエージェントを仕込んで。ローカル配備でもたいていウェブ検索の接続は残っている。
+- 2年半ほど前に似た現象を見た。LLMの学習が重みに情報を隠すことに気づいた。10億パラメータ程度のモデルだったが、面白いのは全く無関係な学習を続けたあとに何が起きるかだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AI 모델은 임의의 능력을 증명 가능한 방식으로 숨길 수 있다
+***** TLDR
+Draguns, Motwani, Douglas, Schroeder de Witt가 암호화된 신경망을 호스트 모델 가중치 안에 심어, 비밀 트리거를 받을 때만 복호화되어 실행되도록 만들었다. digital lockers를 사용하므로 표준 암호학 가정 아래에서는 가중치에 완전히 접근할 수 있어도 숨겨진 회로를 끌어내거나 해석하는 것이 증명 가능하게 어렵다. 기존 연구는 고정된 문자열만 숨겼지만 이번에는 임의의 연산을 숨긴다. PyTorch로 구현하고 파인튜닝, 가중치 노이즈 주입, 그래디언트 기반 트리거 탐색, 잠재 공간 적대적 학습으로 끌어내려 했으나 모두 실패했다. 시연 규모는 작다. CBRN 관련 능력의 대리 과제로 쓴 화학 반응 예측 작업이며 프런티어 모델이 아니다. 결론은 감사에 관한 것이다. 능력 평가는 숨겨진 능력을 끌어낼 수 있다고 가정하지만, 의도적인 공격자 앞에서는 그 가정이 성립하지 않는다.
+***** Take
+제목은 과장이고 댓글은 과소평가다. 백도어를 심을 수 있다는 건 논문이 필요한 얘기가 아니었다. 새로운 건 가중치를 들여다봐도 꺼낼 수 없다는 증명이고, 그러면 '공개 가중치를 레드팀으로 검증했다'는 말은 안전 보장이 아니라 투입한 노력에 관한 진술이 된다. 한계는 이 공격에 악의적인 학습 주체가 필요하다는 점이며, 모델이 스스로 무언가를 숨긴다는 얘기는 전혀 아니다. 실질적 결론은 가중치 파일의 출처가 벤치마크 점수만큼 중요해졌다는 것이고, 출처를 확인하는 사람은 거의 없다.
+***** Comments
+- 사람들이 AI를 말하는 방식을 보면 더 명확한 제목은 '암호화로 AI 모델 가중치에 능력을 숨길 수 있다'다. AI 에이전트가 자기 능력을 숨길 수 있다는 얘기가 아니다.
+- 오픈소스 모델에 대해 늘 걱정했던 부분이다. 공짜로 배포하되 임의의 문자열로 활성화되는 슬리퍼 에이전트를 심어두는 것. 로컬 배포도 대개 웹 검색 연결을 갖고 있다.
+- 2년 반쯤 전에 비슷한 현상을 봤다. LLM 학습이 가중치에 정보를 숨긴다는 걸 발견했다. 10억 파라미터 정도의 모델이었지만, 흥미로운 건 전혀 무관한 학습을 계속한 뒤에 벌어지는 일이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los modelos de IA pueden ocultar capacidades arbitrarias de forma demostrable
+***** TLDR
+Draguns, Motwani, Douglas y Schroeder de Witt incrustan una red neuronal cifrada dentro de los pesos de un modelo anfitrión, de modo que solo se descifra y ejecuta al recibir un disparador secreto. La construcción usa digital lockers, así que bajo supuestos criptográficos estándar el circuito oculto es demostrablemente difícil de extraer o interpretar incluso con acceso completo a los pesos. El trabajo anterior ocultaba cadenas fijas; esto oculta computación arbitraria. Lo implementaron en PyTorch e intentaron sacarlo a la luz con ajuste fino, ruido en los pesos, búsqueda de disparadores por gradiente y entrenamiento adversario latente. Nada funcionó. La demostración es pequeña: una tarea de predicción de reacciones químicas como sustituto de capacidades relevantes para CBRN, no un modelo de frontera. La conclusión trata sobre las auditorías. Las evaluaciones de capacidad asumen que una capacidad oculta puede extraerse, y frente a un adversario deliberado ese supuesto no se sostiene.
+***** Take
+El título exagera y los comentarios se quedan cortos. Nadie necesitaba un artículo para creer que se puede plantar una puerta trasera; lo nuevo es la prueba de que inspeccionar los pesos no la saca, lo que convierte 'hicimos red teaming sobre los pesos abiertos' en una afirmación sobre esfuerzo y no en una garantía de seguridad. El límite real es que este ataque requiere un entrenador malicioso, así que no dice nada sobre un modelo que oculte algo por sí solo. La consecuencia práctica es que el origen de un archivo de pesos importa tanto como su puntuación, y casi nadie verifica ese origen.
+***** Comments
+- Un título más claro, dado cómo se habla de la IA: 'Las capacidades pueden ocultarse en los pesos de un modelo mediante cifrado'. No se trata de que los agentes de IA puedan esconder lo que saben hacer.
+- Siempre fue mi preocupación con los modelos de código abierto. Los regalan gratis, pero con un agente dormido que cualquier cadena arbitraria puede activar. Los despliegues locales seguirán teniendo conectores de búsqueda web la mayoría de las veces.
+- Vi un efecto parecido hace unos dos años y medio. Descubrí que entrenar un LLM esconde información en los pesos. Era solo un modelo de unos mil millones de parámetros, pero lo interesante es qué pasa si sigues entrenando con datos totalmente ajenos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+KI-Modelle können beliebige Fähigkeiten beweisbar verbergen
+***** TLDR
+Draguns, Motwani, Douglas und Schroeder de Witt bauen ein verschlüsseltes neuronales Netz in die Gewichte eines Trägermodells ein, das sich nur bei einem geheimen Trigger entschlüsselt und ausführt. Die Konstruktion nutzt Digital Lockers, sodass der versteckte Schaltkreis unter üblichen kryptografischen Annahmen beweisbar schwer zu extrahieren oder zu interpretieren ist, selbst bei vollem Zugriff auf die Gewichte. Frühere Arbeiten versteckten feste Zeichenketten, hier wird beliebige Berechnung versteckt. Umgesetzt in PyTorch, und der Versuch, es mit Fine-Tuning, Gewichtsrauschen, gradientenbasierter Triggersuche und latentem adversarialem Training hervorzuholen, scheiterte durchweg. Die Demonstration ist klein: eine Vorhersageaufgabe für chemische Reaktionen als Stellvertreter für CBRN-relevante Fähigkeiten, kein Frontier-Modell. Die Schlussfolgerung betrifft Audits. Fähigkeitsevaluierungen setzen voraus, dass eine verborgene Fähigkeit hervorgeholt werden kann, und gegen einen absichtlich handelnden Angreifer hält diese Voraussetzung nicht.
+***** Take
+Der Titel verspricht zu viel, die Kommentare zu wenig. Dass eine Hintertür eingebaut werden kann, brauchte kein Paper. Neu ist der Beweis, dass Gewichtsinspektion sie nicht herausholt, womit 'wir haben die offenen Gewichte red-teamed' zu einer Aussage über Aufwand wird und nicht zu einer Sicherheitsgarantie. Die echte Grenze: Der Angriff braucht einen bösartigen Trainer, sagt also nichts darüber, dass ein Modell von sich aus etwas verbirgt. Praktische Folge: Die Herkunft einer Gewichtsdatei zählt genauso viel wie ihr Benchmark-Ergebnis, und kaum jemand prüft die Herkunft.
+***** Comments
+- Angesichts der Art, wie über KI gesprochen wird, wäre der klarere Titel: 'Fähigkeiten können per Verschlüsselung in KI-Modellgewichten versteckt werden.' Es geht nicht darum, dass KI-Agenten verbergen können, was sie können.
+- Das war immer meine Sorge bei Open-Source-Modellen. Man gibt sie kostenlos weg, aber mit einem Schläfer darin, den irgendein beliebiger String aktiviert. Lokale Deployments haben meistens trotzdem Websuche-Konnektoren.
+- Einen ähnlichen Effekt habe ich vor etwa zweieinhalb Jahren gesehen. Beim Training eines LLM werden Informationen in den Gewichten versteckt. Es war nur ein Modell mit rund einer Milliarde Parametern, aber interessant ist, was passiert, wenn man mit völlig unverwandten Daten weitertrainiert.
+** Solar panels that plug into your wall :solar:energy:regulation:hardware:
+:PROPERTIES:
+:ID:       50056822
+:URL:      https://www.nationalgeographic.com/environment/article/balcony-plug-in-solar-panels-renewable-energy
+:HN_URL:   https://news.ycombinator.com/item?id=50056822
+:POINTS:   162
+:COMMENTS: 146
+:BY:       speckx
+:END:
+
+*** TLDR
+National Geographic on plug-in balcony solar: a panel and microinverter that go into a normal wall socket, no installer and no permit. Germany has passed a million units in recent years and IKEA sells kits there. In the US it was effectively illegal everywhere until Utah legalized it in spring 2025, followed by nine states (Colorado, Connecticut, Maine, Maryland, New Hampshire, New Jersey, Vermont, Virginia, California), with a New York bill awaiting signature and close to two dozen more states considering one. One owner paid under $300 for a single-panel unit and says he has saved more than $300 on power bills since August. Joshua Pearce estimates $13 billion a year in national electricity savings at wide adoption. Utilities raised electrocution and house-fire risks; Pearce found no microinverter sold in the US that can push power back to the grid, and British testing found no direct electrical hazard. UL Solutions wrote a standard and has certified one manufacturer. The nonprofit Bright Saver sells systems at cost in California.
+
+*** Take
+A $300 panel that pays for itself in two months should not need ten separate state laws first, and the safety argument fell apart as soon as someone tested it. The detail that settles it is that no US microinverter can backfeed the grid, which means the utility objection was about metering and control rather than linemen. Germany's million installations are the experiment and it already finished. What the US is building instead is a state-by-state legalization queue and exactly one UL-certified vendor, which is the standard method for turning a commodity into a specialty product.
+
+*** Comments
+
+**** MgB2
+I really don't understand why most people here act like this is some weird unproven and unsafe technology. This is literally a solved problem. They are everywhere in Germany and it's no issue. The inverters follow the grid AC and shut off their output if they are disconnected or unplugged, so the plug is never hot.
+
+**** ACCount39
+Solar panels are getting cheap enough for grid hook-ups, installation and regulatory approval to become the bottlenecks. Plug-in solar is suboptimal in many ways, but it does sidestep a lot of those hurdles.
+
+**** tiku
+I have two sets of these. Very cheap if you order it on Amazon yourself, and very easy to connect. The big panels are a bit of a hassle because of the size, not the weight.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+能直接插进墙上插座的太阳能板
+***** TLDR
+《国家地理》报道插电式阳台光伏：一块光伏板加一个微型逆变器，直接插进普通墙插，不需要安装工，也不需要许可。近年来德国的安装量已超过一百万套，宜家在当地就卖成套产品。在美国，这种做法几乎处处违法，直到 2025 年春天犹他州率先合法化，随后是九个州（科罗拉多、康涅狄格、缅因、马里兰、新罕布什尔、新泽西、佛蒙特、弗吉尼亚、加利福尼亚），纽约州的法案等待签署，另有近二十个州在审议。一位用户花不到 300 美元买了单板套件，称自 8 月以来已在电费上省下 300 多美元。Joshua Pearce 估算，若广泛采用，全国每年可节省 130 亿美元电费。电力公司提出触电和住宅火灾风险；Pearce 发现美国在售的微型逆变器都无法向电网回送电力，英国的测试也未发现直接电气危险。UL Solutions 制定了标准，目前认证了一家制造商。加州非营利组织 Bright Saver 以成本价出售系统。
+***** Take
+一块 300 美元、两个月就能回本的光伏板，不该先需要十个州各自立法，而且安全论证在有人真去测试的那一刻就垮了。决定性的细节是：美国在售的微型逆变器都无法向电网回送电力，这说明电力公司的反对关乎计量和控制权，而不是线路工人的安全。德国的一百万套安装就是那个实验，而且已经做完了。美国造出来的替代品是一条按州排队的合法化流程，加上恰好一家通过 UL 认证的供应商，这是把大宗商品变成特殊商品的标准做法。
+***** Comments
+- 我真不明白为什么这里大多数人把它当成某种未经验证、不安全的新技术。这就是个已经解决的问题。德国到处都是，没出什么事。逆变器跟随电网交流电，一旦断开或拔掉就停止输出，所以插头永远不带电。
+- 光伏板已经便宜到并网接入、安装和监管审批成了瓶颈。插电式光伏在很多方面并不理想，但它确实绕开了大量这类障碍。
+- 我装了两套。自己在亚马逊下单很便宜，接起来也很容易。大板子有点麻烦，是因为尺寸，不是重量。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+壁のコンセントに差すだけの太陽光パネル
+***** TLDR
+ナショナルジオグラフィックによるプラグイン式ベランダ太陽光の記事。パネルとマイクロインバーターを普通のコンセントに差すだけで、施工業者も許可も不要だ。ドイツではここ数年で設置が100万台を超え、IKEAがキットを販売している。米国ではほぼ全州で事実上違法だったが、2025年春にユタ州が合法化し、コロラド、コネチカット、メイン、メリーランド、ニューハンプシャー、ニュージャージー、バーモント、バージニア、カリフォルニアの9州が続いた。ニューヨーク州は知事の署名待ちで、20州近くが法案を検討中だ。ある利用者は1枚構成を300ドル未満で購入し、8月以降すでに300ドル以上電気代が減ったという。Joshua Pearce の試算では、普及すれば全米で年間130億ドルの電気代節約になる。電力会社は感電と住宅火災のリスクを挙げたが、Pearce は米国で売られているマイクロインバーターに系統へ逆流送電できるものはないと確認し、英国の試験でも直接的な電気的危険は見つからなかった。UL Solutions が規格を作り、現在1社を認証している。カリフォルニアの非営利団体 Bright Saver は原価でシステムを販売している。
+***** Take
+2か月で元が取れる300ドルのパネルに、まず10の州法が必要だったのはおかしい。安全性の主張は誰かが実際に試験した時点で崩れた。決め手は、米国で売られているマイクロインバーターが系統へ逆流送電できないという事実で、つまり電力会社の反対は作業員の安全ではなく計量と制御の話だった。ドイツの100万台が実験であり、その実験はもう終わっている。代わりに米国が作っているのは州ごとの合法化待ち行列と、UL認証を受けたたった1社の供給元だ。汎用品を特殊品に変える標準的な手口である。
+***** Comments
+- ここの多くの人がこれを未検証で危険な新技術のように扱うのが理解できない。完全に解決済みの問題だ。ドイツでは至る所にあって何の問題もない。インバーターは系統の交流に追従し、切断されたり抜かれたら出力を止めるので、プラグが通電することはない。
+- 太陽光パネルは安くなりすぎて、系統接続と施工と規制承認がボトルネックになっている。プラグイン太陽光は多くの点で最適ではないが、そうした障害の多くを回避できるのは確かだ。
+- 2セット使っている。自分でAmazonで注文すればとても安いし、接続も簡単だ。大きいパネルは少し厄介だが、重さではなくサイズのせいだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+벽 콘센트에 꽂는 태양광 패널
+***** TLDR
+내셔널지오그래픽이 다룬 플러그인 베란다 태양광. 패널과 마이크로인버터를 일반 콘센트에 꽂으면 끝이고, 시공업자도 허가도 필요 없다. 독일은 최근 몇 년간 설치 대수가 100만 대를 넘었고 IKEA가 키트를 판다. 미국에서는 사실상 어디서나 불법이었는데, 2025년 봄 유타주가 합법화한 뒤 콜로라도, 코네티컷, 메인, 메릴랜드, 뉴햄프셔, 뉴저지, 버몬트, 버지니아, 캘리포니아 9개 주가 뒤따랐다. 뉴욕주 법안은 서명을 기다리고 있고 스무 개 가까운 주가 검토 중이다. 한 사용자는 1패널 구성을 300달러 미만에 구입해 8월 이후 전기료를 300달러 넘게 아꼈다고 말한다. Joshua Pearce는 널리 보급되면 전국적으로 연 130억 달러의 전기료 절감이 가능하다고 추정한다. 전력회사들은 감전과 주택 화재 위험을 들었지만, Pearce는 미국에서 판매되는 마이크로인버터 중 전력을 계통으로 역송할 수 있는 제품이 없음을 확인했고 영국의 시험에서도 직접적인 전기적 위험은 발견되지 않았다. UL Solutions가 표준을 만들고 현재 한 제조사를 인증했다. 캘리포니아의 비영리단체 Bright Saver는 원가로 시스템을 판매한다.
+***** Take
+두 달이면 본전을 뽑는 300달러짜리 패널에 주법 열 개가 먼저 필요했다는 게 문제다. 안전 논거는 누군가 실제로 시험한 순간 무너졌다. 결정적인 사실은 미국에서 판매되는 마이크로인버터가 계통으로 역송할 수 없다는 것이고, 그렇다면 전력회사의 반대는 작업자 안전이 아니라 계량과 통제에 관한 것이었다. 독일의 100만 대 설치가 그 실험이고 이미 끝났다. 미국이 대신 만들고 있는 것은 주별 합법화 대기열과 UL 인증을 받은 단 한 곳의 공급사다. 범용품을 특수품으로 바꾸는 표준적인 방법이다.
+***** Comments
+- 여기 대부분이 이걸 검증되지 않은 위험한 신기술처럼 다루는 게 이해가 안 된다. 이미 해결된 문제다. 독일에는 널려 있고 아무 문제 없다. 인버터가 계통 교류를 따라가다가 분리되거나 뽑히면 출력을 끊으므로 플러그에 전기가 흐르는 일은 없다.
+- 태양광 패널이 충분히 싸져서 계통 연결, 설치, 규제 승인이 병목이 됐다. 플러그인 태양광은 여러 면에서 최적은 아니지만 그런 장벽을 상당히 우회한다.
+- 두 세트를 쓰고 있다. 아마존에서 직접 주문하면 아주 싸고 연결도 쉽다. 큰 패널은 조금 번거로운데 무게가 아니라 크기 때문이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Paneles solares que se enchufan a la pared
+***** TLDR
+National Geographic sobre la solar de balcón enchufable: un panel y un microinversor que van a un enchufe normal, sin instalador y sin permiso. Alemania ha superado el millón de unidades en los últimos años e IKEA vende kits allí. En Estados Unidos era ilegal en la práctica en todas partes hasta que Utah lo legalizó en la primavera de 2025, seguido por nueve estados (Colorado, Connecticut, Maine, Maryland, Nuevo Hampshire, Nueva Jersey, Vermont, Virginia y California), con un proyecto de ley de Nueva York pendiente de firma y cerca de dos docenas de estados más estudiándolo. Un propietario pagó menos de 300 dólares por una unidad de un panel y dice haber ahorrado más de 300 dólares en facturas desde agosto. Joshua Pearce estima 13.000 millones de dólares anuales de ahorro eléctrico nacional con adopción amplia. Las eléctricas alegaron riesgo de electrocución e incendios; Pearce no encontró ningún microinversor vendido en Estados Unidos capaz de devolver energía a la red, y los ensayos británicos no hallaron peligro eléctrico directo. UL Solutions redactó una norma y ha certificado a un fabricante. La organización sin ánimo de lucro Bright Saver vende sistemas a precio de coste en California.
+***** Take
+Un panel de 300 dólares que se amortiza en dos meses no debería necesitar primero diez leyes estatales, y el argumento de seguridad se deshizo en cuanto alguien lo puso a prueba. El dato que lo cierra es que ningún microinversor vendido en Estados Unidos puede inyectar a la red, lo que significa que la objeción de las eléctricas era sobre medición y control, no sobre los operarios. El millón de instalaciones de Alemania es el experimento y ya terminó. Lo que está construyendo Estados Unidos es una cola de legalización estado por estado y exactamente un proveedor certificado por UL, que es el método habitual para convertir un producto genérico en uno de especialidad.
+***** Comments
+- No entiendo por qué aquí casi todos tratan esto como una tecnología rara, no probada e insegura. Es un problema literalmente resuelto. Están por todas partes en Alemania y no pasa nada. Los inversores siguen la corriente alterna de la red y cortan su salida si se desconectan o se desenchufan, así que el enchufe nunca queda con tensión.
+- Los paneles solares se están volviendo tan baratos que la conexión a red, la instalación y la aprobación regulatoria se convierten en el cuello de botella. La solar enchufable no es óptima en muchos aspectos, pero esquiva buena parte de esos obstáculos.
+- Tengo dos equipos de estos. Muy baratos si los pides tú mismo en Amazon, y muy fáciles de conectar. Los paneles grandes dan algo de guerra por el tamaño, no por el peso.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Solarmodule, die man in die Wand steckt
+***** TLDR
+National Geographic über steckbare Balkonsolaranlagen: ein Modul und ein Mikrowechselrichter, die in eine normale Steckdose gehen, ohne Installateur und ohne Genehmigung. In Deutschland sind in den letzten Jahren über eine Million Einheiten installiert worden, IKEA verkauft dort Sets. In den USA war das praktisch überall illegal, bis Utah es im Frühjahr 2025 legalisierte, gefolgt von neun Bundesstaaten (Colorado, Connecticut, Maine, Maryland, New Hampshire, New Jersey, Vermont, Virginia, Kalifornien). Ein Gesetz in New York wartet auf die Unterschrift, fast zwei Dutzend weitere Staaten beraten darüber. Ein Besitzer zahlte unter 300 Dollar für eine Ein-Modul-Anlage und hat seit August bereits mehr als 300 Dollar Stromkosten gespart. Joshua Pearce schätzt bei breiter Verbreitung 13 Milliarden Dollar jährliche Stromkostenersparnis landesweit. Die Versorger führten Stromschlag- und Brandgefahr an; Pearce fand keinen in den USA verkauften Mikrowechselrichter, der ins Netz zurückspeisen kann, und britische Tests fanden keine direkte elektrische Gefahr. UL Solutions hat eine Norm geschrieben und bisher einen Hersteller zertifiziert. Die gemeinnützige Bright Saver verkauft Anlagen in Kalifornien zum Selbstkostenpreis.
+***** Take
+Ein Modul für 300 Dollar, das sich in zwei Monaten bezahlt, sollte nicht erst zehn Landesgesetze brauchen, und das Sicherheitsargument fiel in sich zusammen, sobald es jemand geprüft hat. Entscheidend ist, dass kein in den USA verkaufter Mikrowechselrichter rückspeisen kann. Der Einwand der Versorger ging also um Messung und Kontrolle, nicht um Monteure. Deutschlands eine Million Anlagen sind das Experiment, und es ist abgeschlossen. Die USA bauen stattdessen eine Legalisierungswarteschlange pro Bundesstaat und genau einen UL-zertifizierten Anbieter. So macht man aus einer Massenware ein Spezialprodukt.
+***** Comments
+- Ich verstehe wirklich nicht, warum die meisten hier das wie eine seltsame, unerprobte und unsichere Technik behandeln. Das ist ein gelöstes Problem. In Deutschland sind die überall und es gibt keine Probleme. Die Wechselrichter folgen dem Netzwechselstrom und schalten ihren Ausgang ab, wenn sie getrennt oder ausgesteckt werden, der Stecker steht also nie unter Spannung.
+- Solarmodule werden so billig, dass Netzanschluss, Installation und Genehmigung zum Engpass werden. Steckersolar ist in vielerlei Hinsicht nicht optimal, umgeht aber viele dieser Hürden.
+- Ich habe zwei solche Sets. Sehr günstig, wenn man selbst bei Amazon bestellt, und sehr einfach anzuschließen. Die großen Module sind etwas lästig, wegen der Größe, nicht wegen des Gewichts.
+** Intel D270 GPU AI Accelerator: up to 480 GB LPDDR5X :hardware:gpu:intel:ai:
+:PROPERTIES:
+:ID:       50063365
+:URL:      https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu/d-series.html
+:HN_URL:   https://news.ycombinator.com/item?id=50063365
+:POINTS:   148
+:COMMENTS: 65
+:BY:       hurricanepootis
+:END:
+
+*** TLDR
+Intel's product page for the D-series data center GPU. The D270 pairs 32 Xe3P cores and 256 XMX matrix engines with up to 480GB of LPDDR5X, quoted at 1.5TB/s, on a standard PCIe 5.0 card drawing 350W with air cooling and no liquid loop. LPDDR5X instead of HBM is the entire design bet: far more capacity per card at far less bandwidth than an HBM part. Intel aims it at inference only, listing agentic workloads, long-context RAG, enterprise and coding assistants, document and multimodal understanding, and high-concurrency serving. Software support is claimed for PyTorch, vLLM, SGLang and OpenVINO. The page gives no price and no availability date.
+
+*** Take
+480GB on one air-cooled 350W card addresses a real failure mode, because a large mixture-of-experts model that does not fit in memory is unusable at any bandwidth. But 1.5TB/s is roughly a single H100 and a fraction of current HBM parts, so this serves big sparse models to many users at once and will not train anything. The number the page omits is the only one that decides whether it matters, and Intel has a history here: Ponte Vecchio and Gaudi both arrived with the hardware ahead of a software stack that was late and incomplete. vLLM and SGLang in a bullet list is a claim, not a working deployment.
+
+*** Comments
+
+**** suprjami
+With an impressive 1.5TB/s RAM bandwidth you'd think they'd advertise that more. Marketing department asleep at the wheel.
+
+**** K0balt
+These are going to be so awesome to buy in 5-8 years. Right now I'm running 2x 3090 and 128GB RAM on a 180b model and it hums at 120t/s. For agentic work it does slow down quite a bit when the context fills up, but what do you want for running a 180b.
+
+**** p0w3n3d
+To be honest these ubiquitous AI hardware news look to me more and more like Maybach commercials. Not targeting me.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Intel D270 GPU AI 加速卡：最高 480GB LPDDR5X
+***** TLDR
+英特尔 D 系列数据中心 GPU 的产品页。D270 把 32 个 Xe3P 核心和 256 个 XMX 矩阵引擎与最高 480GB 的 LPDDR5X 搭配，标称带宽 1.5TB/s，采用标准 PCIe 5.0 插卡形态，350W，风冷，不需要水冷回路。用 LPDDR5X 而非 HBM 就是整个设计赌注：每张卡容量大得多，带宽则远低于 HBM 产品。英特尔只把它定位于推理，列出的场景包括智能体工作负载、长上下文 RAG、企业助手和编程助手、文档与多模态理解，以及高并发服务。软件方面声称支持 PyTorch、vLLM、SGLang 和 OpenVINO。页面没有给出价格，也没有上市日期。
+***** Take
+一张风冷 350W 的卡上放 480GB，确实解决了一个真实的失败模式：大型 MoE 模型如果装不进显存，再高的带宽也没用。但 1.5TB/s 大约相当于单张 H100，只是当前 HBM 产品的一小部分，所以这是把大型稀疏模型同时服务给很多用户的卡，训练什么都不行。页面没写的那个数字恰恰是决定它是否重要的唯一数字，而英特尔在这方面有前科：Ponte Vecchio 和 Gaudi 都是硬件先到，软件栈迟到且不完整。要点列表里的 vLLM 和 SGLang 是一种声明，不是已经跑起来的部署。
+***** Comments
+- 1.5TB/s 的内存带宽这么亮眼，你会以为他们该多宣传一下。市场部在打瞌睡。
+- 这些卡五到八年后买起来一定很爽。我现在用两张 3090 加 128GB 内存跑一个 1800 亿参数的模型，稳定在 120 token/s。做智能体任务时上下文一填满就明显变慢，但跑 1800 亿参数还能指望什么。
+- 说实话，这些满天飞的 AI 硬件新闻在我看来越来越像迈巴赫广告。不是冲我来的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Intel D270 GPU AIアクセラレータ: 最大480GBのLPDDR5X
+***** TLDR
+インテルのDシリーズ データセンターGPUの製品ページ。D270は32基のXe3Pコアと256基のXMXマトリクスエンジンに最大480GBのLPDDR5Xを組み合わせ、帯域は1.5TB/sとされる。標準的なPCIe 5.0カード形状で350W、空冷のみで水冷ループは不要だ。HBMではなくLPDDR5Xを選んだことが設計上の賭けそのもので、HBM製品よりカードあたり容量は大幅に多く、帯域は大幅に少ない。インテルは推論専用として位置づけ、エージェント型ワークロード、長コンテキストRAG、企業向けおよびコーディング支援、文書・マルチモーダル理解、高並列サービングを挙げている。ソフトウェアはPyTorch、vLLM、SGLang、OpenVINOへの対応をうたう。価格も出荷時期もページには書かれていない。
+***** Take
+空冷350Wのカード1枚に480GBというのは、実在する失敗モードに効く。大規模なMoEモデルはメモリに収まらなければ帯域がいくらあっても使えない。ただし1.5TB/sはH100一枚とほぼ同程度で、現行のHBM製品の数分の一だ。つまり大きなスパースモデルを多数のユーザーに同時提供するためのカードで、学習には使えない。ページが書いていない数字こそ、このカードが重要かどうかを決める唯一の数字だ。そしてインテルには前例がある。Ponte VecchioもGaudiもハードが先行し、ソフトウェアスタックが遅れて不完全なまま出てきた。箇条書きのvLLMとSGLangは主張であって、動いている構成ではない。
+***** Comments
+- 1.5TB/sという立派なメモリ帯域なのに、もっと宣伝すればいいのにと思う。マーケティング部門が居眠りしている。
+- 5〜8年後に買えたら最高だろうね。今は3090を2枚と128GBのRAMで180Bモデルを動かして120t/s出ている。エージェント用途ではコンテキストが埋まるとかなり遅くなるが、180Bを動かしてそれ以上望むのも無理な話だ。
+- 正直、あちこちで見るこのAIハードウェアのニュースは、だんだんマイバッハの広告みたいに見えてきた。自分向けではない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+인텔 D270 GPU AI 가속기: 최대 480GB LPDDR5X
+***** TLDR
+인텔 D 시리즈 데이터센터 GPU 제품 페이지. D270은 Xe3P 코어 32개와 XMX 매트릭스 엔진 256개에 최대 480GB LPDDR5X를 결합하며 대역폭은 1.5TB/s로 표기된다. 표준 PCIe 5.0 카드 형태에 350W, 공랭이고 수냉 루프가 필요 없다. HBM 대신 LPDDR5X를 쓴 것이 설계의 핵심 베팅이다. HBM 제품보다 카드당 용량은 훨씬 크고 대역폭은 훨씬 작다. 인텔은 추론 전용으로 겨냥하며 에이전트 워크로드, 긴 컨텍스트 RAG, 기업용 및 코딩 어시스턴트, 문서와 멀티모달 이해, 고동시성 서빙을 나열한다. 소프트웨어는 PyTorch, vLLM, SGLang, OpenVINO 지원을 주장한다. 가격과 출시 시점은 페이지에 없다.
+***** Take
+공랭 350W 카드 하나에 480GB는 실제로 존재하는 실패 양상을 해결한다. 큰 MoE 모델은 메모리에 들어가지 않으면 대역폭이 아무리 높아도 쓸 수 없다. 다만 1.5TB/s는 H100 한 장 수준이고 현행 HBM 제품의 일부에 불과하므로, 이건 큰 희소 모델을 다수 사용자에게 동시에 서빙하는 카드이고 학습은 못 한다. 페이지가 빼놓은 숫자가 이 카드의 의미를 결정하는 유일한 숫자다. 그리고 인텔에는 전례가 있다. Ponte Vecchio와 Gaudi 모두 하드웨어가 먼저 나오고 소프트웨어 스택이 늦고 불완전하게 따라왔다. 목록에 적힌 vLLM과 SGLang은 주장이지 돌아가는 배포가 아니다.
+***** Comments
+- 1.5TB/s라는 인상적인 메모리 대역폭이면 좀 더 광고할 것 같은데. 마케팅 부서가 졸고 있다.
+- 5~8년 뒤에 사면 정말 좋을 것이다. 지금은 3090 두 장과 128GB RAM으로 180B 모델을 돌려 120t/s가 나온다. 에이전트 작업에서는 컨텍스트가 차면 꽤 느려지지만, 180B를 돌리면서 그 이상을 바랄 수는 없다.
+- 솔직히 어디서나 보이는 이런 AI 하드웨어 소식이 점점 마이바흐 광고처럼 보인다. 나를 겨냥한 게 아니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Acelerador de IA Intel D270: hasta 480 GB de LPDDR5X
+***** TLDR
+Página de producto de Intel para la GPU de centro de datos de la serie D. La D270 combina 32 núcleos Xe3P y 256 motores matriciales XMX con hasta 480 GB de LPDDR5X, declarados a 1,5 TB/s, en una tarjeta PCIe 5.0 estándar de 350 W con refrigeración por aire y sin circuito líquido. Usar LPDDR5X en lugar de HBM es toda la apuesta del diseño: mucha más capacidad por tarjeta a mucho menos ancho de banda que una pieza con HBM. Intel la dirige solo a inferencia, y enumera cargas agénticas, RAG de contexto largo, asistentes empresariales y de programación, comprensión de documentos y multimodal, y servicio con alta concurrencia. Declara soporte de software para PyTorch, vLLM, SGLang y OpenVINO. La página no da precio ni fecha de disponibilidad.
+***** Take
+480 GB en una sola tarjeta de 350 W refrigerada por aire resuelve un fallo real, porque un modelo grande de mezcla de expertos que no cabe en memoria es inservible con cualquier ancho de banda. Pero 1,5 TB/s es aproximadamente una H100 y una fracción de las piezas HBM actuales, así que esto sirve modelos dispersos grandes a muchos usuarios a la vez y no va a entrenar nada. El número que la página omite es el único que decide si importa, e Intel tiene antecedentes: Ponte Vecchio y Gaudi llegaron con el hardware por delante de una pila de software tardía e incompleta. vLLM y SGLang en una lista de viñetas es una afirmación, no un despliegue que funcione.
+***** Comments
+- Con un ancho de banda de memoria tan impresionante de 1,5 TB/s, uno pensaría que lo anunciarían más. El departamento de marketing está dormido al volante.
+- Van a ser una compra buenísima en 5 u 8 años. Ahora mismo tengo 2x 3090 y 128 GB de RAM con un modelo de 180b y va a 120 t/s. Para trabajo agéntico se ralentiza bastante cuando se llena el contexto, pero qué más quieres para correr un 180b.
+- Sinceramente, estas noticias omnipresentes de hardware de IA me parecen cada vez más anuncios de Maybach. No van dirigidas a mí.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Intel D270 GPU-KI-Beschleuniger: bis zu 480 GB LPDDR5X
+***** TLDR
+Intels Produktseite zur Rechenzentrums-GPU der D-Serie. Die D270 kombiniert 32 Xe3P-Kerne und 256 XMX-Matrix-Engines mit bis zu 480 GB LPDDR5X, angegeben mit 1,5 TB/s, auf einer normalen PCIe-5.0-Karte mit 350 W, luftgekühlt und ohne Wasserkreislauf. LPDDR5X statt HBM ist die gesamte Design-Wette: viel mehr Kapazität pro Karte bei viel weniger Bandbreite als eine HBM-Karte. Intel richtet sie ausschließlich auf Inferenz aus und nennt agentische Workloads, RAG mit langem Kontext, Unternehmens- und Coding-Assistenten, Dokument- und multimodales Verständnis sowie Serving mit hoher Parallelität. Als Softwareunterstützung werden PyTorch, vLLM, SGLang und OpenVINO angegeben. Preis und Verfügbarkeitsdatum fehlen auf der Seite.
+***** Take
+480 GB auf einer luftgekühlten 350-W-Karte löst ein echtes Problem, denn ein großes Mixture-of-Experts-Modell, das nicht in den Speicher passt, ist bei jeder Bandbreite unbrauchbar. Aber 1,5 TB/s entspricht etwa einer einzelnen H100 und einem Bruchteil aktueller HBM-Karten. Das Ding liefert also große, spärlich aktivierte Modelle an viele Nutzer gleichzeitig und trainiert nichts. Die Zahl, die die Seite auslässt, ist die einzige, die über die Relevanz entscheidet, und Intel hat hier Vorgeschichte: Bei Ponte Vecchio und Gaudi kam die Hardware vor einem verspäteten, unvollständigen Software-Stack. vLLM und SGLang in einer Aufzählung sind eine Behauptung, kein funktionierendes Deployment.
+***** Comments
+- Bei beachtlichen 1,5 TB/s Speicherbandbreite würde man meinen, sie würden das stärker bewerben. Die Marketingabteilung schläft am Steuer.
+- Die werden in 5 bis 8 Jahren ein großartiger Kauf sein. Im Moment betreibe ich 2x 3090 und 128 GB RAM mit einem 180b-Modell und es läuft mit 120 t/s. Für agentische Arbeit wird es deutlich langsamer, wenn der Kontext voll wird, aber was will man bei einem 180b erwarten.
+- Ehrlich gesagt kommen mir diese allgegenwärtigen KI-Hardware-Nachrichten immer mehr wie Maybach-Werbung vor. Nicht an mich gerichtet.
+** Making big downloads resumable in Firefox :firefox:browsers:networking:til:
+:PROPERTIES:
+:ID:       50061791
+:URL:      https://lunarwatcher.codeberg.page/til/firefox/resumable-big-downloads.html
+:HN_URL:   https://news.ycombinator.com/item?id=50061791
+:POINTS:   147
+:COMMENTS: 54
+:BY:       speckx
+:END:
+
+*** TLDR
+A short TIL post. Large downloads in Firefox 28 and later fail partway and then cannot be resumed; Firefox ignores the existing .part file and starts over. The author's fix is to set network.http.response.timeout in about:config to 0, or to something very large, instead of the 300 second default. They are upfront that this is a guess at the mechanism: they did not read Firefox's source, and the theory is that the response timeout fires before Firefox's own retry logic gets a chance to recover. Two caveats: the server has to support range requests, and for anything important the author recommends wget -c instead. They note that resuming downloads in Firefox has been unreliable since at least 2005.
+
+*** Take
+The setting is less interesting than what it implies. A browser that has shipped since 2004 still cannot reliably finish a large file, and the workaround is an undocumented pref with a mechanism nobody has confirmed. The thread is a list of people who stopped trying: one performs a five-step dance of renaming .part files by hand to trick Firefox into resuming, the rest moved to aria2 or wget years ago. Download managers were a finished product category by 1998, and browsers un-finished it by absorbing the feature and then not maintaining it.
+
+*** Comments
+
+**** edflsafoiewq
+The way I have to resume downloads in Firefox is: move the .part file to a temp file, start the download again so a new .part gets created, pause the download, move the temp file over the new .part, then unpause and it resumes from where the old .part stopped.
+
+**** Retro_Dev
+I like using the aria2 download utility. I don't think I've downloaded anything bigger than a dozen megabytes through a web browser for the last several years. That said, it's nice someone found a solution for everyone who doesn't use an external tool.
+
+**** felixfurtak
+Who remembers GetRight?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+让 Firefox 里的大文件下载可以续传
+***** TLDR
+一篇简短的 TIL。在 Firefox 28 及之后的版本中，大文件下载会中途失败，而且无法续传：Firefox 会忽略已存在的 .part 文件，从头重新下载。作者的办法是在 about:config 里把 network.http.response.timeout 设为 0，或者设成一个很大的值，而不是默认的 300 秒。他直说这只是对机制的猜测：他没有读 Firefox 源码，推测是响应超时在 Firefox 自己的重试逻辑有机会恢复之前就先触发了。两个前提：服务器必须支持 range 请求；重要的东西作者建议直接用 wget -c。他还提到，Firefox 的下载续传从至少 2005 年起就一直不可靠。
+***** Take
+这个设置本身不如它暗示的事实有意思。一个从 2004 年就开始发行的浏览器，至今无法稳定下载完一个大文件，而解决办法是一个无文档的配置项，机制还没人确认过。评论区是一串放弃挣扎的人：有人靠手动改名 .part 文件的五步操作骗 Firefox 续传，其余人多年前就转去用 aria2 或 wget 了。下载管理器在 1998 年就是一个做完了的产品类别，浏览器把这个功能吸收进来、然后不再维护，于是把它做没了。
+***** Comments
+- 我在 Firefox 里续传的办法是：把 .part 文件移成临时文件，重新开始下载让它生成一个新的 .part，暂停下载，把临时文件覆盖回新的 .part，然后取消暂停，它就会从旧 .part 停下的位置接着下。
+- 我喜欢用 aria2 这个下载工具。过去好几年里，我大概没有用浏览器下载过超过十几兆的东西。不过还是挺好的，有人为那些不用外部工具的人找到了解决办法。
+- 还有人记得 GetRight 吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Firefoxで大きなダウンロードをレジューム可能にする
+***** TLDR
+短いTIL記事。Firefox 28以降では大きなファイルのダウンロードが途中で失敗し、しかもレジュームできない。既存の.partファイルを無視して最初からやり直してしまうのだ。著者の対処法は、about:configでnetwork.http.response.timeoutを既定の300秒から0、あるいは非常に大きな値に変えること。著者は仕組みについては推測だと明言している。Firefoxのソースは読んでおらず、レスポンスのタイムアウトがFirefox自身のリトライ処理が復帰する前に発火しているのではないかという仮説だ。注意点は2つ。サーバーがレンジリクエストに対応している必要があることと、重要なものには著者自身がwget -cを勧めていることだ。Firefoxのダウンロード再開は少なくとも2005年から不安定なままだという。
+***** Take
+設定そのものより、それが示していることのほうが興味深い。2004年から出荷されているブラウザが、いまだに大きなファイルを確実に取得できず、回避策は仕組みも未確認の文書化されていない設定項目だ。コメント欄は諦めた人たちの列挙になっている。.partファイルを手で改名する5手順でFirefoxを騙してレジュームさせる人もいれば、残りは何年も前からaria2やwgetに移っている。ダウンロードマネージャは1998年には完成した製品カテゴリだった。ブラウザがその機能を取り込んで保守しなかったことで、未完成に戻った。
+***** Comments
+- Firefoxでダウンロードを再開する私の方法はこうだ。.partファイルを一時ファイルに移し、ダウンロードを再開して新しい.partを作らせ、一時停止し、一時ファイルを新しい.partに上書きし、再開する。すると古い.partが止まった位置から続く。
+- aria2というダウンロードツールを使っている。ここ数年、ブラウザで十数メガバイトより大きいものをダウンロードした記憶がない。とはいえ、外部ツールを使わない人のために解決策を見つけてくれたのはありがたい。
+- GetRightを覚えている人はいる？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+파이어폭스에서 큰 다운로드를 이어받게 만들기
+***** TLDR
+짧은 TIL 글. 파이어폭스 28 이후 버전에서는 큰 파일 다운로드가 중간에 실패하고 이어받기도 안 된다. 기존 .part 파일을 무시하고 처음부터 다시 받는다. 저자의 해결책은 about:config에서 network.http.response.timeout을 기본값 300초 대신 0이나 아주 큰 값으로 바꾸는 것이다. 저자는 메커니즘이 추측임을 분명히 밝힌다. 파이어폭스 소스를 읽지 않았고, 응답 타임아웃이 파이어폭스 자체 재시도 로직이 복구할 기회를 갖기 전에 먼저 발동한다는 가설이다. 전제는 두 가지다. 서버가 range 요청을 지원해야 하고, 중요한 것이라면 저자도 wget -c를 권한다. 파이어폭스의 다운로드 이어받기는 최소 2005년부터 불안정했다고 한다.
+***** Take
+설정 자체보다 그것이 함의하는 바가 더 흥미롭다. 2004년부터 배포된 브라우저가 아직도 큰 파일을 안정적으로 받지 못하고, 우회책은 메커니즘조차 확인되지 않은 비문서화 설정값이다. 댓글은 포기한 사람들의 목록이다. 누군가는 .part 파일을 손으로 바꿔가며 다섯 단계로 파이어폭스를 속여 이어받게 하고, 나머지는 몇 년 전에 aria2나 wget으로 옮겼다. 다운로드 매니저는 1998년에 이미 완성된 제품 범주였는데, 브라우저가 그 기능을 흡수한 뒤 관리하지 않아 다시 미완성으로 돌려놨다.
+***** Comments
+- 파이어폭스에서 다운로드를 이어받는 내 방법은 이렇다. .part 파일을 임시 파일로 옮기고, 다운로드를 다시 시작해 새 .part가 만들어지게 하고, 일시정지하고, 임시 파일을 새 .part 위에 덮어쓰고, 다시 재생하면 예전 .part가 멈춘 지점부터 이어진다.
+- 나는 aria2 다운로드 유틸리티를 쓴다. 지난 몇 년간 브라우저로 십여 메가바이트보다 큰 걸 받은 기억이 없다. 그래도 외부 도구를 쓰지 않는 사람들을 위해 누군가 해결책을 찾아준 건 좋은 일이다.
+- GetRight 기억하는 사람?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Hacer que las descargas grandes se reanuden en Firefox
+***** TLDR
+Una entrada breve de tipo TIL. En Firefox 28 y posteriores las descargas grandes fallan a mitad y luego no se pueden reanudar: Firefox ignora el archivo .part existente y empieza de cero. El arreglo del autor es poner network.http.response.timeout en about:config a 0, o a un valor muy grande, en lugar de los 300 segundos por defecto. Es claro en que el mecanismo es una suposición: no leyó el código de Firefox, y su teoría es que el tiempo de espera de la respuesta se dispara antes de que la propia lógica de reintentos de Firefox pueda recuperarse. Dos advertencias: el servidor tiene que soportar peticiones de rango, y para algo importante el autor recomienda wget -c. Señala que reanudar descargas en Firefox ha sido poco fiable desde al menos 2005.
+***** Take
+El ajuste importa menos que lo que implica. Un navegador que se distribuye desde 2004 todavía no puede terminar de forma fiable un archivo grande, y el apaño es una preferencia indocumentada con un mecanismo que nadie ha confirmado. El hilo es una lista de gente que dejó de intentarlo: uno hace un baile de cinco pasos renombrando archivos .part a mano para engañar a Firefox, el resto se pasó a aria2 o wget hace años. Los gestores de descargas eran una categoría de producto terminada en 1998, y los navegadores la desterminaron al absorber la función y luego no mantenerla.
+***** Comments
+- Mi forma de reanudar descargas en Firefox es: mover el archivo .part a un temporal, volver a empezar la descarga para que se cree un .part nuevo, pausarla, mover el temporal encima del nuevo .part y reanudar; entonces continúa donde se detuvo el .part viejo.
+- Me gusta usar la utilidad de descargas aria2. No creo haber descargado nada mayor de una docena de megabytes con un navegador en los últimos años. Dicho eso, está bien que alguien haya encontrado una solución para quienes no usan una herramienta externa.
+- ¿Quién se acuerda de GetRight?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Große Downloads in Firefox fortsetzbar machen
+***** TLDR
+Ein kurzer TIL-Beitrag. In Firefox 28 und neuer brechen große Downloads mitten ab und lassen sich dann nicht fortsetzen: Firefox ignoriert die vorhandene .part-Datei und beginnt von vorn. Die Lösung des Autors ist, network.http.response.timeout in about:config auf 0 oder einen sehr großen Wert zu setzen statt auf die voreingestellten 300 Sekunden. Er sagt offen, dass der Mechanismus geraten ist: Er hat den Firefox-Quellcode nicht gelesen, und seine Theorie lautet, dass der Response-Timeout zuschlägt, bevor Firefox' eigene Retry-Logik sich erholen kann. Zwei Einschränkungen: Der Server muss Range-Requests unterstützen, und für Wichtiges empfiehlt der Autor selbst wget -c. Er merkt an, dass das Fortsetzen von Downloads in Firefox mindestens seit 2005 unzuverlässig ist.
+***** Take
+Die Einstellung ist weniger interessant als das, was sie bedeutet. Ein Browser, der seit 2004 ausgeliefert wird, bekommt eine große Datei noch immer nicht zuverlässig fertig, und der Workaround ist eine undokumentierte Einstellung mit einem unbestätigten Mechanismus. Der Thread ist eine Liste von Leuten, die aufgegeben haben: Einer benennt .part-Dateien in fünf Schritten von Hand um, um Firefox zum Fortsetzen zu überreden, der Rest ist vor Jahren zu aria2 oder wget gewechselt. Download-Manager waren 1998 eine fertige Produktkategorie, und Browser haben sie unfertig gemacht, indem sie die Funktion einverleibt und dann nicht gepflegt haben.
+***** Comments
+- So muss ich Downloads in Firefox fortsetzen: die .part-Datei in eine temporäre Datei verschieben, den Download neu starten, damit eine neue .part entsteht, pausieren, die temporäre Datei über die neue .part kopieren und dann fortsetzen. Dann läuft es da weiter, wo die alte .part aufgehört hat.
+- Ich nutze gern das Download-Tool aria2. Ich glaube, ich habe in den letzten Jahren nichts größer als ein Dutzend Megabyte über einen Browser geladen. Dennoch schön, dass jemand eine Lösung für alle gefunden hat, die kein externes Tool verwenden.
+- Wer erinnert sich an GetRight?
+** Who is vfmaddrnd231pd? :x86:intel:assembly:hardware:
+:PROPERTIES:
+:ID:       50063138
+:URL:      https://purplesyringa.moe/blog/who-is-vfmaddrnd231pd/
+:HN_URL:   https://news.ycombinator.com/item?id=50063138
+:POINTS:   163
+:COMMENTS: 16
+:BY:       pngmangi
+:END:
+
+*** TLDR
+Intel's Software Developer Manual documents vfmaddrnd231pd, a fused multiply-add on packed double-precision floats with rounding control set per instruction. That would be genuinely useful, because it gives per-instruction rounding without requiring AVX-512. The author tried to use it and nothing works: GNU as does not recognize the mnemonic, no compiler intrinsic exists, and executing the encoded bytes on a Haswell chip raises an undefined instruction fault. The documentation itself is strange. It uses the DDS notation for VEX.vvvv encoding that Intel dropped from later manual revisions, and it carries tables and pseudocode written only for this instruction, so a copy-paste typo does not explain it. It was in the 2024 manual and is gone from the 2026 edition. The author's conclusion is that Intel planned a vfmaddrnd family, pulled it from silicon, and left the documentation behind. Intel has not commented.
+
+*** Take
+Good archaeology, and the conclusion is almost certainly right: nobody writes bespoke pseudocode and an operand-encoding table for an instruction they never meant to ship. The quiet deletion from the 2026 manual is the real tell, since someone at Intel noticed and fixed the document rather than answering the question. Per-instruction rounding control on an AVX2-era part would have mattered for interval arithmetic and reproducible numerics, which is probably both why it got documented and why cutting it was worth doing silently.
+
+*** Comments
+
+**** pbsd
+An old version of binutils explains what DDS means. VEX.DDS: the second register operand is encoded in VEX.vvvv, where the content of the first source register will be overwritten by the result.
+
+**** enjoyyourlife
+See felixcloutier.com/x86/vfmaddrnd231pd. Theory: it was removed due to a hardware issue and never worked.
+
+**** Lerc
+I find myself expressing a concern that something has been lost when people never interact with something directly. Most of the discussion today is about AI and how that causes this issue, but I have been through this experience a few times now.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+vfmaddrnd231pd 是谁？
+***** TLDR
+英特尔的《软件开发者手册》里记录了 vfmaddrnd231pd，一条对打包双精度浮点做乘加、且舍入模式按指令单独设定的指令。这本该非常有用，因为它让你在不需要 AVX-512 的情况下获得逐指令的舍入控制。作者想用它，结果什么都不行：GNU as 不认这个助记符，没有任何编译器内建函数，把编码后的字节放到 Haswell 芯片上执行会触发未定义指令异常。文档本身也很怪：它使用了 VEX.vvvv 编码中的 DDS 记法，而英特尔在后来的手册修订中已删除该记法；而且它带着只为这一条指令写的表格和伪代码，所以不能用复制粘贴的笔误来解释。它出现在 2024 版手册里，在 2026 版中消失了。作者的结论是，英特尔曾计划过 vfmaddrnd 指令家族，后来从硅片上撤掉，却把文档留在了原处。英特尔没有回应。
+***** Take
+这是不错的考古，而且结论几乎肯定正确：没人会为一条从不打算发布的指令专门写伪代码和操作数编码表。真正的线索是它在 2026 版手册里被悄悄删掉，说明英特尔内部有人注意到了，然后选择修文档而不是回答问题。在 AVX2 时代的芯片上提供逐指令舍入控制，对区间算术和可复现数值计算是有意义的，这大概既解释了它为什么被写进文档，也解释了为什么把它删掉值得悄悄进行。
+***** Comments
+- 旧版 binutils 解释了 DDS 的含义。VEX.DDS：第二个寄存器操作数编码在 VEX.vvvv 中，第一个源寄存器的内容会被结果覆盖。
+- 看 felixcloutier.com/x86/vfmaddrnd231pd。猜测：因为硬件问题被移除，从来没能工作过。
+- 我发现自己在表达一种担忧：当人们从不直接接触某个东西时，有些东西就丢失了。今天大多数讨论都围绕 AI 如何造成这个问题，但这种经历我已经经历过几次了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+vfmaddrnd231pdとは誰なのか
+***** TLDR
+インテルのソフトウェア開発者マニュアルには、パック倍精度浮動小数点に対する積和演算で、丸めモードを命令単位で指定できるvfmaddrnd231pdという命令が記載されている。これは本当に有用なはずだ。AVX-512なしで命令ごとの丸め制御が得られるからだ。著者が使おうとすると何も動かない。GNU asはこのニーモニックを認識せず、コンパイラ組み込み関数も存在せず、エンコードしたバイト列をHaswellチップで実行すると未定義命令例外になる。ドキュメント自体も奇妙だ。VEX.vvvvのエンコードにDDS記法を使っているが、これは後のマニュアル改訂でインテルが削除したものだ。しかもこの命令専用に書かれた表と疑似コードが付いているので、コピペの誤りでは説明できない。2024年版マニュアルにはあり、2026年版では消えている。著者の結論は、インテルがvfmaddrnd系の命令群を計画し、シリコンから取り下げたが、ドキュメントをそのまま残したというものだ。インテルはコメントしていない。
+***** Take
+良い考古学であり、結論はほぼ確実に正しい。出荷する気のない命令のために、専用の疑似コードとオペランドエンコーディング表を書く者はいない。本当の手がかりは2026年版マニュアルからの静かな削除だ。インテルの誰かが気づき、質問に答えるのではなく文書を直したということだ。AVX2世代のチップで命令ごとの丸め制御が使えれば、区間演算や再現可能な数値計算には意味があった。だからこそ文書に残り、だからこそ黙って削る価値があったのだろう。
+***** Comments
+- 古いバージョンのbinutilsにDDSの意味が書かれている。VEX.DDS: 第2のレジスタオペランドはVEX.vvvvにエンコードされ、第1ソースレジスタの内容は結果で上書きされる。
+- felixcloutier.com/x86/vfmaddrnd231pdを見てほしい。仮説としては、ハードウェアの問題で削除され、そもそも動いたことがなかった。
+- 人が何かに直接触れなくなると何かが失われる、という懸念を自分でも口にしている。今日の議論の多くはAIがそれを招くという話だが、私はこの経験をもう何度か通ってきた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+vfmaddrnd231pd는 누구인가
+***** TLDR
+인텔 소프트웨어 개발자 매뉴얼에는 패킹된 배정밀도 부동소수점에 대한 곱셈 누산 연산이면서 반올림 모드를 명령 단위로 지정하는 vfmaddrnd231pd가 기재되어 있다. 이건 정말 유용할 법한 기능이다. AVX-512 없이도 명령별 반올림 제어를 얻기 때문이다. 저자가 써보려 하자 아무것도 되지 않았다. GNU as는 이 니모닉을 알지 못하고, 컴파일러 내장 함수도 없으며, 인코딩한 바이트를 Haswell 칩에서 실행하면 정의되지 않은 명령 예외가 발생한다. 문서 자체도 이상하다. VEX.vvvv 인코딩에 DDS 표기를 쓰는데 이는 인텔이 이후 매뉴얼 개정에서 없앤 표기다. 게다가 이 명령만을 위해 작성된 표와 의사코드가 붙어 있어 복사 붙여넣기 실수로는 설명되지 않는다. 2024년판 매뉴얼에는 있었고 2026년판에서는 사라졌다. 저자의 결론은 인텔이 vfmaddrnd 계열을 계획했다가 실리콘에서 빼면서 문서만 남겨뒀다는 것이다. 인텔은 답하지 않았다.
+***** Take
+훌륭한 발굴이고 결론도 거의 확실히 맞다. 출시할 생각이 없는 명령을 위해 전용 의사코드와 오퍼랜드 인코딩 표를 쓰는 사람은 없다. 진짜 단서는 2026년판 매뉴얼에서의 조용한 삭제다. 인텔 내부의 누군가가 알아차렸고 질문에 답하는 대신 문서를 고쳤다는 뜻이다. AVX2 세대 칩에서 명령별 반올림 제어는 구간 연산과 재현 가능한 수치 계산에 의미가 있었을 것이고, 그래서 문서에 남았고 또 그래서 조용히 지울 만했을 것이다.
+***** Comments
+- 오래된 binutils 버전이 DDS의 의미를 설명한다. VEX.DDS: 두 번째 레지스터 오퍼랜드가 VEX.vvvv에 인코딩되고, 첫 번째 소스 레지스터의 내용은 결과로 덮어쓰인다.
+- felixcloutier.com/x86/vfmaddrnd231pd를 보라. 가설은 하드웨어 문제로 제거되었고 애초에 동작한 적이 없다는 것이다.
+- 사람들이 무언가를 직접 다루지 않게 되면 뭔가가 사라진다는 우려를 나도 하게 된다. 오늘 논의 대부분은 AI가 그 문제를 일으킨다는 쪽이지만, 나는 이런 경험을 이미 몇 번 겪었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+¿Quién es vfmaddrnd231pd?
+***** TLDR
+El manual del desarrollador de software de Intel documenta vfmaddrnd231pd, una multiplicación-suma fusionada sobre dobles empaquetados con control de redondeo por instrucción. Eso sería realmente útil, porque da redondeo por instrucción sin necesidad de AVX-512. El autor intentó usarla y nada funciona: GNU as no reconoce el mnemónico, no existe ninguna función intrínseca del compilador, y ejecutar los bytes codificados en un chip Haswell provoca un fallo de instrucción no definida. La documentación en sí es extraña. Usa la notación DDS para la codificación VEX.vvvv que Intel eliminó en revisiones posteriores del manual, y trae tablas y pseudocódigo escritos solo para esta instrucción, así que un error de copiar y pegar no lo explica. Estaba en el manual de 2024 y ha desaparecido de la edición de 2026. La conclusión del autor es que Intel planeó una familia vfmaddrnd, la retiró del silicio y dejó la documentación atrás. Intel no ha comentado.
+***** Take
+Buena arqueología, y la conclusión es casi con seguridad correcta: nadie escribe pseudocódigo a medida y una tabla de codificación de operandos para una instrucción que no piensa lanzar. La pista real es la supresión silenciosa en el manual de 2026, porque alguien en Intel se dio cuenta y arregló el documento en lugar de responder a la pregunta. El control de redondeo por instrucción en una pieza de la era AVX2 habría importado para la aritmética de intervalos y los cálculos numéricos reproducibles, que es probablemente tanto el motivo de que se documentara como el motivo de que mereciera la pena eliminarla en silencio.
+***** Comments
+- Una versión antigua de binutils explica qué significa DDS. VEX.DDS: el segundo operando de registro se codifica en VEX.vvvv, donde el contenido del primer registro fuente será sobrescrito por el resultado.
+- Mira felixcloutier.com/x86/vfmaddrnd231pd. Teoría: se eliminó por un problema de hardware y nunca funcionó.
+- Me encuentro expresando la preocupación de que algo se pierde cuando la gente nunca interactúa con algo de forma directa. Hoy casi toda la discusión es sobre la IA y cómo provoca este problema, pero yo ya he pasado por esta experiencia varias veces.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Wer ist vfmaddrnd231pd?
+***** TLDR
+Intels Software Developer Manual dokumentiert vfmaddrnd231pd, eine verschmolzene Multiplikation-Addition auf gepackten Double-Werten mit Rundungssteuerung pro Instruktion. Das wäre wirklich nützlich, weil es Rundungssteuerung je Instruktion ohne AVX-512 liefert. Der Autor wollte sie benutzen, und nichts funktioniert: GNU as kennt das Mnemonic nicht, es gibt kein Compiler-Intrinsic, und die Ausführung der kodierten Bytes auf einem Haswell löst eine Undefined-Instruction-Exception aus. Die Dokumentation selbst ist eigenartig. Sie verwendet die DDS-Notation für die VEX.vvvv-Kodierung, die Intel in späteren Handbuchrevisionen entfernt hat, und sie bringt Tabellen und Pseudocode mit, die nur für diese Instruktion geschrieben wurden, ein Copy-Paste-Fehler erklärt das also nicht. Im Handbuch von 2024 war sie enthalten, in der Ausgabe von 2026 fehlt sie. Der Autor schließt daraus, dass Intel eine vfmaddrnd-Familie geplant, sie aus dem Silizium gestrichen und die Dokumentation zurückgelassen hat. Intel äußert sich nicht.
+***** Take
+Gute Archäologie, und der Schluss ist mit großer Sicherheit richtig: Niemand schreibt eigenen Pseudocode und eine Operanden-Kodierungstabelle für eine Instruktion, die nie ausgeliefert werden soll. Der eigentliche Hinweis ist die stille Löschung im Handbuch von 2026, denn jemand bei Intel hat es bemerkt und das Dokument korrigiert, statt die Frage zu beantworten. Rundungssteuerung je Instruktion auf einem Chip der AVX2-Ära hätte für Intervallarithmetik und reproduzierbare Numerik etwas bedeutet, was wahrscheinlich erklärt, warum sie dokumentiert wurde und warum es sich lohnte, sie lautlos zu streichen.
+***** Comments
+- Eine alte binutils-Version erklärt, was DDS bedeutet. VEX.DDS: Der zweite Registeroperand wird in VEX.vvvv kodiert, wobei der Inhalt des ersten Quellregisters durch das Ergebnis überschrieben wird.
+- Siehe felixcloutier.com/x86/vfmaddrnd231pd. Theorie: Sie wurde wegen eines Hardwareproblems entfernt und hat nie funktioniert.
+- Ich merke, dass ich die Sorge äußere, dass etwas verloren geht, wenn Menschen nie direkt mit einer Sache umgehen. Die meiste Diskussion dreht sich heute um KI und wie sie dieses Problem verursacht, aber ich habe diese Erfahrung schon ein paar Mal gemacht.
