@@ -1,0 +1,556 @@
+#+TITLE: HN Digest 2026-10-16 06:01 UTC
+#+DATE: 2026-10-16T06:01:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+One Mac window on your phone, a 500-hour puzzle game nobody can grade, and Chromium's two-tier openness
+
+* Highlights
+- sill streams a single Mac window to an iPhone over TLS 1.3, Apache 2.0, no servers or account
+- Order of the Sinking Star: brilliant puzzles, no difficulty valley, reviewer still undecided after 20 hours
+- Chromium bugs filed as public are visible only to Googlers after a tracker migration nobody fixed
+- A Haiku app emulates the BeBox, down to the AT&T Hobbit prototypes almost nobody ever touched
+
+* Stories
+
+** Any window from your Mac, on your iPhone and iPad :macos:ios:remote-desktop:open-source:
+:PROPERTIES:
+:ID:       50112739
+:URL:      https://github.com/Saffsanity/sill
+:HN_URL:   https://news.ycombinator.com/item?id=50112739
+:POINTS:   105
+:COMMENTS: 18
+:BY:       chanana
+:END:
+
+*** TLDR
+sill is an Apache-2.0 macOS and iOS app that streams one Mac window, or the whole desktop, to an iPhone or iPad and sends touch, Apple Pencil, trackpad and keyboard input back. Capture goes through ScreenCaptureKit, encodes as HEVC, and travels over TLS 1.3 after a one-time pairing; the link can be local network, USB cable, peer-to-peer Wi-Fi, or a VPN such as Tailscale. No servers, no account. It needs Apple silicon and macOS 14+, iOS or iPadOS 17+, and Screen Recording, Accessibility and Local Network permissions. Limits: one window at a time, no audio, text-only clipboard capped at 256 KB, and the Mac has to stay awake.
+
+*** Take
+The streaming is not the interesting part, the scoping is. Sidecar and VNC both hand you an entire desktop; sill hands you one window with Pencil input, which is what a 6-inch screen can actually use. Apache 2.0 and no server dependency are why this one gets installed instead of bookmarked.
+
+*** Comments
+
+**** alin23
+:PROPERTIES:
+:COMMENT_ID: 50113416
+:END:
+So much faster and seamless than VNC. Already helped me two times today.
+
+**** gumby
+:PROPERTIES:
+:COMMENT_ID: 50112821
+:END:
+Apple supports this already on the iPad by making the iPad another screen for your Mac (Sidecar). iPhone is novel though, but does a pencil work?
+
+**** Surac
+:PROPERTIES:
+:COMMENT_ID: 50113752
+:END:
+Is Windows support planned? Seeing a Windows window on iPad and controlling it with touch or pen.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+把 Mac 上的任意窗口投到 iPhone 和 iPad
+***** TLDR
+sill 是一款 Apache-2.0 协议的 macOS 与 iOS 应用，可以把 Mac 的单个窗口或整个桌面投送到 iPhone 或 iPad，并把触控、Apple Pencil、触控板和键盘输入传回去。画面通过 ScreenCaptureKit 采集、编码为 HEVC，一次配对后走 TLS 1.3 传输；连接方式可以是局域网、USB 线、点对点 Wi-Fi，或者 Tailscale 这类 VPN。无服务器、无需账号。要求 Apple 芯片与 macOS 14 以上、iOS/iPadOS 17 以上，以及屏幕录制、辅助功能和本地网络权限。限制：一次只能投一个窗口、无音频、剪贴板仅支持纯文本且上限 256 KB、Mac 必须保持唤醒。
+***** Take
+有意思的不是投屏本身，而是范围的取舍。Sidecar 和 VNC 都是把整个桌面给你；sill 只给你一个窗口，外加 Pencil 输入，这才是 6 英寸屏幕真正用得上的形态。Apache 2.0 和不依赖服务器，是它会被真正装上而不是只收藏的原因。
+***** Comments
+- 比 VNC 快得多也顺畅得多。今天已经帮了我两次。
+- 苹果其实已经支持了，把 iPad 当成 Mac 的扩展屏（Sidecar）。iPhone 这个确实新鲜，不过 Pencil 能用吗？
+- 有计划支持 Windows 吗？在 iPad 上看 Windows 窗口并用触控或笔操作。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Macのどのウィンドウでも、iPhoneとiPadで操作する
+***** TLDR
+sillはApache-2.0ライセンスのmacOS/iOSアプリで、Macの単一ウィンドウまたはデスクトップ全体をiPhoneやiPadに配信し、タッチ、Apple Pencil、トラックパッド、キーボードの入力を送り返す。ScreenCaptureKitでキャプチャしてHEVCにエンコードし、一度ペアリングした後はTLS 1.3で通信する。接続はローカルネットワーク、USBケーブル、ピアツーピアWi-Fi、Tailscaleのようなミドルのいずれでも可能。サーバーもアカウントも不要。要件はAppleシリコンとmacOS 14以降、iOS/iPadOS 17以降、そして画面収録・アクセシビリティ・ローカルネットワークの権限。制限は、同時に1ウィンドウのみ、音声なし、クリップボードはテキストのみで256KBまで、Macは起動状態を保つ必要がある。
+***** Take
+面白いのは配信ではなく、範囲の絞り方だ。SidecarもVNCもデスクトップ全体を渡してくるが、sillが渡すのはPencil入力付きの1ウィンドウで、6インチの画面で実際に使えるのはそちらだ。Apache 2.0でサーバー依存がないことが、これが実際にインストールされる理由になっている。
+***** Comments
+- VNCよりはるかに速くてシームレスだ。今日すでに2回助かった。
+- AppleはiPadをMacの追加画面にする形で既に対応している（Sidecar）。iPhoneは新しいが、Pencilは使えるのか？
+- Windows対応の予定はある？iPadでWindowsのウィンドウを見てタッチやペンで操作したい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Mac의 어떤 창이든 iPhone과 iPad에서
+***** TLDR
+sill은 Apache-2.0 라이선스의 macOS·iOS 앱으로, Mac의 창 하나 또는 전체 데스크톱을 iPhone이나 iPad로 스트리밍하고 터치, Apple Pencil, 트랙패드, 키보드 입력을 되돌려 보낸다. ScreenCaptureKit으로 캡처해 HEVC로 인코딩하며, 한 번 페어링한 뒤에는 TLS 1.3으로 전송한다. 연결은 로컬 네트워크, USB 케이블, 피어투피어 Wi-Fi, 또는 Tailscale 같은 VPN 중 아무거나 쓸 수 있다. 서버도 계정도 필요 없다. 요구 사항은 Apple 실리콘과 macOS 14 이상, iOS/iPadOS 17 이상, 그리고 화면 기록·손쉬운 사용·로컬 네트워크 권한이다. 제한은 한 번에 창 하나, 오디오 없음, 클립보드는 텍스트만 256KB까지, Mac은 깨어 있어야 한다는 점이다.
+***** Take
+흥미로운 지점은 스트리밍이 아니라 범위를 좁힌 선택이다. Sidecar와 VNC는 데스크톱 전체를 넘겨주지만 sill은 Pencil 입력이 붙은 창 하나를 넘겨주고, 6인치 화면이 실제로 쓸 수 있는 건 그쪽이다. Apache 2.0에 서버 의존이 없다는 점이 이 앱이 실제로 설치되는 이유다.
+***** Comments
+- VNC보다 훨씬 빠르고 매끄럽다. 오늘 벌써 두 번 도움을 받았다.
+- 애플은 iPad를 Mac의 보조 화면으로 만드는 방식(Sidecar)으로 이미 지원한다. iPhone은 새롭긴 한데, Pencil은 작동하나?
+- Windows 지원 계획은 있나? iPad에서 Windows 창을 보고 터치나 펜으로 조작하고 싶다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Cualquier ventana de tu Mac, en tu iPhone y iPad
+***** TLDR
+sill es una app de macOS e iOS con licencia Apache 2.0 que transmite una sola ventana del Mac, o todo el escritorio, a un iPhone o iPad y devuelve la entrada de tacto, Apple Pencil, trackpad y teclado. La captura pasa por ScreenCaptureKit, se codifica en HEVC y viaja por TLS 1.3 tras un emparejamiento único; la conexión puede ser red local, cable USB, Wi-Fi punto a punto o una VPN como Tailscale. Sin servidores ni cuenta. Requiere Apple silicon y macOS 14 o posterior, iOS o iPadOS 17 o posterior, y permisos de Grabación de Pantalla, Accesibilidad y Red Local. Límites: una ventana a la vez, sin audio, portapapeles solo de texto hasta 256 KB y el Mac debe permanecer despierto.
+***** Take
+Lo interesante no es la transmisión, es la decisión de limitar el alcance. Sidecar y VNC te entregan un escritorio entero; sill te entrega una ventana con entrada de Pencil, que es lo que una pantalla de 6 pulgadas puede usar de verdad. Apache 2.0 y no depender de un servidor son la razón de que esta se instale en vez de guardarse en marcadores.
+***** Comments
+- Mucho más rápido y fluido que VNC. Ya me ayudó dos veces hoy.
+- Apple ya lo soporta en el iPad convirtiéndolo en otra pantalla del Mac (Sidecar). El iPhone sí es novedoso, pero ¿funciona el Pencil?
+- ¿Hay planes de soporte para Windows? Ver una ventana de Windows en el iPad y controlarla con tacto o lápiz.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Jedes Fenster vom Mac, auf iPhone und iPad
+***** TLDR
+sill ist eine macOS- und iOS-App unter Apache 2.0, die ein einzelnes Mac-Fenster oder den ganzen Desktop auf ein iPhone oder iPad streamt und Eingaben per Touch, Apple Pencil, Trackpad und Tastatur zurückschickt. Die Aufnahme läuft über ScreenCaptureKit, wird als HEVC kodiert und nach einmaligem Pairing über TLS 1.3 übertragen; die Verbindung kann lokales Netzwerk, USB-Kabel, Peer-to-Peer-WLAN oder ein VPN wie Tailscale sein. Keine Server, kein Konto. Voraussetzungen sind Apple Silicon und macOS 14 oder neuer, iOS bzw. iPadOS 17 oder neuer sowie die Rechte für Bildschirmaufnahme, Bedienungshilfen und lokales Netzwerk. Grenzen: ein Fenster auf einmal, kein Audio, Zwischenablage nur als Text bis 256 KB, und der Mac muss wach bleiben.
+***** Take
+Interessant ist nicht das Streaming, sondern die bewusste Beschränkung. Sidecar und VNC geben einen kompletten Desktop heraus; sill gibt ein Fenster mit Pencil-Eingabe heraus, und genau das kann ein 6-Zoll-Display wirklich nutzen. Apache 2.0 und keine Serverabhängigkeit sind der Grund, warum diese App installiert statt nur gemerkt wird.
+***** Comments
+- Viel schneller und flüssiger als VNC. Hat mir heute schon zweimal geholfen.
+- Apple unterstützt das auf dem iPad längst, indem das iPad zum zweiten Bildschirm des Macs wird (Sidecar). Das iPhone ist neu, aber funktioniert der Pencil?
+- Ist Windows-Unterstützung geplant? Ein Windows-Fenster auf dem iPad sehen und mit Touch oder Stift bedienen.
+** '500-hour' Order of the Sinking Star is as complex and exhausting as it sounds :gaming:puzzle-games:game-design:
+:PROPERTIES:
+:ID:       50072119
+:URL:      https://www.polygon.com/order-of-the-sinking-star-impressions/
+:HN_URL:   https://news.ycombinator.com/item?id=50072119
+:POINTS:   67
+:COMMENTS: 28
+:BY:       cvoss
+:END:
+
+*** TLDR
+Polygon's impressions after a month and more than 20 hours with Thekla's new puzzle game, the one marketed as 500 hours long. It remakes four indie Sokoban-style games, from Alan Hazelden, Silver Spaceship Software and Jonah Ostroff, as the four cardinal directions of a single open world, then combines their mechanics in the regions where those directions meet. The writer calls the puzzle design brilliant and the fog-covered overworld a puzzle in its own right, with standout chambers like a dragon whose fiery breath you redirect through mirrors. The complaint is structural: the difficulty only escalates, the reward for a hard puzzle is a harder puzzle, the stitched-in storytelling gives little reason to push on, and the review build still had placeholder voice acting. No verdict is offered. Masterpiece or exercise in exhaustion, ask again next month.
+
+*** Take
+A reviewer who still cannot decide after a month is the most useful thing written about this game so far. The 500 hours is not a content number, it is a design choice: most puzzle games dial difficulty back down after teaching you a rule, and this one does not. That is a legitimate preference for a specific audience, and it is the exact opposite of what made The Witness work for everyone else.
+
+*** Comments
+
+**** dwroberts
+:PROPERTIES:
+:COMMENT_ID: 50114412
+:END:
+This is the first of Blow's games that I'm just not very interested in playing, and the fixation on its length and size is why. Being really long for the sake of it seems like a big step backwards compared to Braid and The Witness.
+
+**** danpalmer
+:PROPERTIES:
+:COMMENT_ID: 50113716
+:END:
+I'm 20 hours in and still feel like I'm scratching the surface. However, so far I can't point to anything substantial that should have been skipped. Almost every level is teaching me something.
+
+**** ball_of_lint
+:PROPERTIES:
+:COMMENT_ID: 50113908
+:END:
+The puzzle design is simply amazing. I'm about 20h in and agree the story is pretty meh, but that's no surprise coming from Blow.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+号称 500 小时的《Order of the Sinking Star》确实像听起来那么复杂、那么累
+***** TLDR
+Polygon 在玩了一个月、超过 20 小时后给出的体验文章，对象是 Thekla 那款号称长达 500 小时的新解谜游戏。它把四款独立推箱子类游戏（来自 Alan Hazelden、Silver Spaceship Software 和 Jonah Ostroff）重做成同一个开放世界的东南西北四个方向，再在这些方向交界处把各自的机制组合起来。作者认为谜题设计出色，被迷雾覆盖的大地图本身就是一道谜题，印象深刻的关卡包括用镜子反射巨龙火焰的那一段。批评集中在结构上：难度只升不降，解开一道难题的奖励是更难的一道题，嵌在谜题中的叙事几乎给不出继续下去的动力，而评测版本的配音还是占位用的。文章没有给结论：是杰作还是一场消耗战，下个月再问。
+***** Take
+一个月之后仍然下不了判断的评测者，是目前关于这款游戏最有用的一句话。500 小时不是内容量，而是一个设计选择：多数解谜游戏在教会你一条规则之后会把难度降回来，这款不会。对特定人群来说这是正当的偏好，但它恰好是《The Witness》能打动所有人的那一点的反面。
+***** Comments
+- 这是 Blow 的游戏里第一款我完全不感兴趣的，原因就是它对长度和体量的执念。单纯为了长而长，比起《Braid》和《The Witness》像是一次大退步。
+- 我玩了 20 小时，还是觉得只摸到了表面。不过到目前为止，我指不出哪一块是该砍掉的。几乎每一关都在教我东西。
+- 谜题设计就是惊人。我大概玩了 20 小时，同意故事比较平淡，但考虑到是 Blow，这并不意外。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+「500時間」のOrder of the Sinking Starは、聞こえる通りに複雑で疲れる
+***** TLDR
+Theklaの新作パズルゲーム、500時間と宣伝されているあの作品について、Polygonが1か月・20時間以上プレイした感想記事。Alan Hazelden、Silver Spaceship Software、Jonah Ostroffによる4本のインディー倉庫番系ゲームを作り直し、単一のオープンワールドの東西南北として配置し、それらが接する領域でメカニクスを組み合わせていく。筆者はパズル設計を見事だと評価し、霧に覆われた広大なマップそれ自体がパズルだとし、ドラゴンの炎を鏡で反射させる章などを挙げる。批判は構造的なものだ。難易度は上がる一方で、難問を解いた報酬はさらに難しい問題であり、パズルに織り込まれた物語は先へ進む動機をほとんど与えず、レビュー版の音声は仮のままだった。結論は出していない。傑作か消耗戦か、来月また聞いてくれという内容だ。
+***** Take
+1か月経っても判断を保留している評者の言葉が、今のところこのゲームについて最も有益だ。500時間はコンテンツ量ではなく設計上の選択である。多くのパズルゲームは新しいルールを教えた後に難易度を一度下げるが、この作品は下げない。特定の層にとっては正当な好みだが、The Witnessが幅広く機能した理由のちょうど裏返しでもある。
+***** Comments
+- Blowのゲームで初めて、プレイする気がまったく起きない作品だ。理由は長さと規模への執着にある。ただ長いことを目的にするのは、BraidやThe Witnessに比べて大きな後退に見える。
+- 20時間プレイしても、まだ表面を撫でている感覚だ。ただ、ここまでで省くべきだった部分は挙げられない。ほぼすべてのレベルが何かを教えてくれる。
+- パズル設計は端的に見事だ。20時間ほどプレイして、物語が平凡だという点には同意するが、Blowの作品ならば驚きはない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+'500시간' Order of the Sinking Star는 들리는 그대로 복잡하고 지친다
+***** TLDR
+Thekla의 새 퍼즐 게임, 500시간이라고 홍보된 그 작품을 한 달 동안 20시간 넘게 플레이한 Polygon의 체험기. Alan Hazelden, Silver Spaceship Software, Jonah Ostroff가 만든 인디 소코반 계열 게임 네 편을 다시 만들어 하나의 오픈월드의 동서남북으로 배치하고, 그 방향들이 만나는 지역에서 각 메커니즘을 결합한다. 필자는 퍼즐 설계가 훌륭하고 안개에 덮인 거대한 지도 자체가 하나의 퍼즐이라고 평하며, 용의 화염을 거울로 반사시키는 구간 같은 인상적인 방들을 꼽는다. 비판은 구조에 관한 것이다. 난이도는 오르기만 하고, 어려운 퍼즐을 푼 보상은 더 어려운 퍼즐이며, 퍼즐에 엮인 이야기는 계속할 동기를 거의 주지 않고, 리뷰 빌드의 음성은 아직 임시였다. 결론은 내리지 않았다. 걸작인지 소모전인지는 다음 달에 다시 물어보라는 식이다.
+***** Take
+한 달이 지나도 판단을 못 내린 리뷰어의 말이 지금까지 이 게임에 대해 나온 가장 쓸모 있는 평가다. 500시간은 분량이 아니라 설계 선택이다. 대부분의 퍼즐 게임은 규칙을 가르친 뒤 난이도를 한 번 낮추지만 이 게임은 낮추지 않는다. 특정 집단에게는 정당한 취향이지만, The Witness가 모두에게 통했던 이유의 정확한 반대편이다.
+***** Comments
+- Blow의 게임 중 처음으로 플레이할 마음이 전혀 안 생기는 작품이고, 이유는 길이와 규모에 대한 집착이다. 길이 자체를 목적으로 삼는 건 Braid나 The Witness에 비해 큰 후퇴로 보인다.
+- 20시간을 했는데도 여전히 표면만 긁고 있는 느낌이다. 다만 지금까지 빼도 됐을 부분을 지적할 수는 없다. 거의 모든 레벨이 뭔가를 가르쳐 준다.
+- 퍼즐 설계는 그냥 놀랍다. 20시간쯤 했고 이야기가 평범하다는 데는 동의하지만, Blow라면 놀랄 일은 아니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Las '500 horas' de Order of the Sinking Star son tan complejas y agotadoras como suenan
+***** TLDR
+Impresiones de Polygon tras un mes y más de 20 horas con el nuevo juego de puzles de Thekla, el que se anuncia como de 500 horas. Rehace cuatro juegos indie de estilo Sokoban, de Alan Hazelden, Silver Spaceship Software y Jonah Ostroff, como los cuatro puntos cardinales de un único mundo abierto, y luego combina sus mecánicas en las zonas donde esas direcciones se cruzan. El autor considera brillante el diseño de puzles y dice que el enorme mapa cubierto de niebla es un puzle en sí mismo, con cámaras destacadas como una en la que rediriges el aliento de fuego de un dragón con espejos. La crítica es estructural: la dificultad solo sube, el premio por resolver un puzle difícil es un puzle más difícil, la narrativa intercalada apenas da motivos para seguir y la versión de prueba aún tenía voces provisionales. No da veredicto: obra maestra o ejercicio de agotamiento, pregunta otra vez el mes que viene.
+***** Take
+Un crítico que sigue sin decidirse después de un mes es lo más útil que se ha escrito sobre este juego. Las 500 horas no son una cifra de contenido, son una decisión de diseño: la mayoría de los juegos de puzles bajan la dificultad después de enseñarte una regla, y este no lo hace. Es una preferencia legítima para un público concreto, y es exactamente lo contrario de lo que hizo que The Witness funcionara para todos los demás.
+***** Comments
+- Es el primer juego de Blow que simplemente no tengo ganas de jugar, y el motivo es la obsesión con su duración y su tamaño. Ser larguísimo por el hecho de serlo parece un gran paso atrás frente a Braid y The Witness.
+- Llevo 20 horas y aún siento que estoy rascando la superficie. Aun así, hasta ahora no puedo señalar nada sustancial que debiera haberse recortado. Casi cada nivel me está enseñando algo.
+- El diseño de puzles es simplemente asombroso. Llevo unas 20 horas y coincido en que la historia es bastante floja, pero eso no sorprende viniendo de Blow.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das '500-Stunden'-Spiel Order of the Sinking Star ist so komplex und erschöpfend, wie es klingt
+***** TLDR
+Polygons Eindrücke nach einem Monat und mehr als 20 Stunden mit Theklas neuem Puzzlespiel, dem mit 500 Stunden bewerbenen Titel. Es baut vier Indie-Sokoban-Spiele von Alan Hazelden, Silver Spaceship Software und Jonah Ostroff neu und ordnet sie als die vier Himmelsrichtungen einer einzigen offenen Welt an, um deren Mechaniken dann in den Zonen zu kombinieren, wo diese Richtungen aufeinandertreffen. Der Autor nennt das Puzzledesign brillant und die riesige, von Nebel verdeckte Karte selbst ein Rätsel, mit herausragenden Kammern wie jener, in der man den Feueratem eines Drachen über Spiegel umlenkt. Die Kritik ist struktureller Art: Der Schwierigkeitsgrad steigt nur, die Belohnung für ein schweres Rätsel ist ein schwereres, die eingeflochtene Erzählung liefert kaum einen Grund weiterzumachen, und die Testversion hatte noch Platzhalter-Sprachaufnahmen. Ein Urteil bleibt aus: Meisterwerk oder Erschöpfungsübung, frag nächsten Monat noch einmal.
+***** Take
+Ein Rezensent, der sich nach einem Monat noch nicht entscheiden kann, ist das Nützlichste, was bisher über dieses Spiel geschrieben wurde. Die 500 Stunden sind keine Inhaltsangabe, sondern eine Designentscheidung: Die meisten Puzzlespiele senken den Schwierigkeitsgrad wieder, nachdem sie eine Regel vermittelt haben, dieses nicht. Für ein bestimmtes Publikum ist das eine legitime Vorliebe, und es ist genau das Gegenteil von dem, was The Witness für alle anderen funktionieren ließ.
+***** Comments
+- Das ist das erste Spiel von Blow, das ich einfach nicht spielen möchte, und der Grund ist die Fixierung auf Länge und Umfang. Sehr lang zu sein, nur um lang zu sein, wirkt wie ein großer Rückschritt gegenüber Braid und The Witness.
+- Ich bin 20 Stunden drin und habe immer noch das Gefühl, nur an der Oberfläche zu kratzen. Trotzdem kann ich bisher nichts Substanzielles nennen, das man hätte weglassen sollen. Fast jedes Level bringt mir etwas bei.
+- Das Puzzledesign ist einfach erstaunlich. Ich bin etwa 20 Stunden drin und stimme zu, dass die Geschichte eher schwach ist, aber das überrascht bei Blow nicht.
+** Comparing Chromium Development at Google and Igalia :chromium:open-source:google:browsers:
+:PROPERTIES:
+:ID:       50112887
+:URL:      https://lwn.net/Articles/1094721/
+:HN_URL:   https://news.ycombinator.com/item?id=50112887
+:POINTS:   29
+:COMMENTS: 4
+:BY:       signa11
+:END:
+
+*** TLDR
+LWN's writeup of a talk by Sharon Yang, who worked on Chromium at Google for six years and then moved to Igalia, the employee-owned cooperative. The structural contrast: Google has roughly 180,000 employees, managers and pay bands, and incentives that reward flashy, promotable features; Igalia has roughly 180 people, no managers and equal pay across levels, which frees it to take on code-health and tech-debt work nobody gets promoted for. The friction for outside contributors is individually small and cumulatively telling: faster build infrastructure requires a formal request if you are not at Google, bugs filed as public are visible only to Google employees because of a bug-tracker migration years ago, internal design docs sit in unshared Google Docs, and all the project tooling is maintained by Google for Google with no channel for outside feedback. Yang calls these minor points of friction and says peer relationships across both organizations stay good.
+
+*** Take
+Chromium is open source by license and a Google product by operation. The tell is not malice, it is the bug tracker: a migration broke public visibility and nobody fixed it, because the only people who can see the problem are the only people it never blocks. Igalia's structure is the actual news here, no managers and flat pay means someone can spend a quarter on tech debt, which is work no promotion committee has ever rewarded.
+
+*** Comments
+
+**** rmunn
+:PROPERTIES:
+:COMMENT_ID: 50114194
+:END:
+Gentoo has given up on building Chromium from source, because upstream do not test their builds with any of their allegedly optional features disabled.
+
+**** octoberfranklin
+:PROPERTIES:
+:COMMENT_ID: 50114632
+:END:
+Their CI doesn't even run gn for the use-flag permutations, which would take a trivial amount of compute.
+
+**** Mic92
+:PROPERTIES:
+:COMMENT_ID: 50114524
+:END:
+Well. Maybe they should just not have so many flags then?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+对比在 Google 和 Igalia 做 Chromium 开发
+***** TLDR
+LWN 对 Sharon Yang 一场演讲的整理。她在 Google 做了六年 Chromium，之后加入了员工持股的合作社 Igalia。结构性反差：Google 约有 18 万名员工，有管理层和薪资区间，激励机制奖励那些亮眼、能用来晋升的功能；Igalia 约有 180 人，没有管理者，各层级同薪，因此可以去做没人靠它晋升的代码健康和技术债工作。外部贡献者面对的摩擦单看都不大，合起来却说明问题：不在 Google 的人要用更快的构建设施得正式申请；因为几年前的缺陷追踪系统迁移，本应公开的 bug 只有 Google 员工能看到；内部设计文档躺在未共享的 Google Docs 里；项目的全部工具链由 Google 维护、为 Google 维护，外部没有反馈渠道。Yang 把这些称为相对轻微的摩擦，并表示两边同行之间的关系一直不错。
+***** Take
+Chromium 在许可证意义上是开源，在运营意义上是 Google 的产品。症候不是恶意，而是那个缺陷追踪系统：一次迁移破坏了公开可见性，却没人去修，因为能看见这个问题的人，恰恰是唯一不会被它挡住的人。真正的新闻是 Igalia 的结构：没有管理者、薪资扁平，意味着有人可以花一个季度去还技术债，而这种活儿从没有哪个晋升委员会奖励过。
+***** Comments
+- Gentoo 已经放弃从源码构建 Chromium，因为上游从不在关闭那些号称可选的功能的情况下测试构建。
+- 他们的 CI 连针对各种 use flag 组合跑一遍 gn 都没做，而那点算力微不足道。
+- 那也许他们就别搞这么多开关好了？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GoogleとIgaliaにおけるChromium開発の比較
+***** TLDR
+GoogleでChromiumを6年開発し、その後従業員所有の協同組合Igaliaに移ったSharon Yangの講演を、LWNがまとめた記事。構造的な対比はこうだ。Googleは約18万人の従業員、管理職と給与レンジを持ち、目立つ、昇進につながる機能に報いる仕組みになっている。Igaliaは約180人で管理職がなく、職位を問わず給与が同じであり、そのため誰も昇進材料にできないコード健全性や技術的負債の仕事を引き受けられる。外部の貢献者が受ける摩擦は一つずつは小さいが、積み上がると構図が見える。Google社員でなければ高速なビルド環境の利用に正式な申請が必要であり、数年前のバグトラッカー移行のせいで公開として登録されたバグがGoogle社員にしか見えず、内部の設計文書は共有されていないGoogle Docsに置かれ、プロジェクトのツール類はすべてGoogleがGoogleのために保守していて外部からのフィードバック経路がない。Yangはこれらを比較的小さな摩擦と呼び、両組織をまたぐ同僚との関係は良好だと述べている。
+***** Take
+Chromiumはライセンス上はオープンソースで、運用上はGoogleの製品だ。兆候は悪意ではなくバグトラッカーにある。移行で公開範囲が壊れたまま誰も直さないのは、その問題を見られる人だけが、その問題に妨げられない唯一の人々だからだ。本当のニュースはIgaliaの構造の方で、管理職なし・給与一律であれば、誰かが四半期を技術的負債に使える。昇進委員会が評価したことのない種類の仕事だ。
+***** Comments
+- Gentooはソースからの Chromium ビルドを諦めた。上流がいわゆるオプション機能を無効にした状態でビルドを一切テストしないからだ。
+- 彼らのCIはuseフラグの組み合わせに対してgnを走らせることすらしていない。計算資源はごくわずかで済むのに。
+- ならフラグをそんなに増やさなければいいのでは？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Google과 Igalia에서의 Chromium 개발 비교
+***** TLDR
+Google에서 6년간 Chromium을 개발하다 직원 소유 협동조합 Igalia로 옮긴 Sharon Yang의 강연을 LWN이 정리한 글. 구조적 대비는 이렇다. Google은 직원이 약 18만 명이고 관리자와 급여 구간이 있으며, 눈에 띄고 승진에 쓸 수 있는 기능에 보상이 돌아간다. Igalia는 약 180명 규모에 관리자가 없고 직급과 무관하게 급여가 같아서, 아무도 승진 재료로 쓸 수 없는 코드 건강성과 기술 부채 작업을 맡을 수 있다. 외부 기여자가 겪는 마찰은 하나하나는 작지만 모아 보면 구도가 드러난다. Google 소속이 아니면 더 빠른 빌드 인프라를 쓰려면 정식 요청이 필요하고, 몇 년 전 버그 트래커 이전 때문에 공개로 등록된 버그가 Google 직원에게만 보이며, 내부 설계 문서는 공유되지 않은 Google Docs에 있고, 프로젝트 도구 전부가 Google이 Google을 위해 유지하는 것이어서 외부 피드백 경로가 없다. Yang은 이를 비교적 작은 마찰이라 부르며 양쪽 동료 관계는 여전히 좋다고 말한다.
+***** Take
+Chromium은 라이선스로는 오픈소스고 운영으로는 Google 제품이다. 징후는 악의가 아니라 버그 트래커다. 이전 작업이 공개 가시성을 깨뜨렸는데 아무도 고치지 않은 이유는, 그 문제를 볼 수 있는 사람들이 그 문제에 막히지 않는 유일한 사람들이기 때문이다. 정작 새로운 소식은 Igalia의 구조다. 관리자가 없고 급여가 평평하면 누군가 한 분기를 기술 부채에 쓸 수 있다. 어떤 승진 심사도 보상해 준 적 없는 일이다.
+***** Comments
+- Gentoo는 소스에서 Chromium을 빌드하는 걸 포기했다. 상류가 이른바 선택적 기능을 끈 상태로는 빌드를 전혀 테스트하지 않기 때문이다.
+- 그쪽 CI는 use 플래그 조합에 대해 gn을 돌려 보지도 않는다. 계산 자원은 아주 조금이면 되는데도.
+- 그럼 플래그를 그렇게 많이 두지 않으면 되지 않나?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Comparando el desarrollo de Chromium en Google y en Igalia
+***** TLDR
+Reseña de LWN sobre una charla de Sharon Yang, que trabajó en Chromium en Google durante seis años y luego pasó a Igalia, la cooperativa propiedad de sus trabajadores. El contraste estructural: Google tiene unos 180.000 empleados, jefes y bandas salariales, y unos incentivos que premian las funciones vistosas y promocionables; Igalia tiene unas 180 personas, sin jefes y con el mismo sueldo en todos los niveles, lo que le permite asumir trabajo de salud del código y deuda técnica por el que nadie consigue un ascenso. La fricción para quien contribuye desde fuera es pequeña una por una y muy reveladora en conjunto: usar la infraestructura de compilación rápida requiere una solicitud formal si no eres de Google, los errores abiertos como públicos solo los ven empleados de Google por una migración del gestor de incidencias hecha hace años, los documentos de diseño internos están en Google Docs sin compartir, y todas las herramientas del proyecto las mantiene Google para Google sin canal de retroalimentación externa. Yang las llama fricciones menores y dice que la relación con los colegas de ambas organizaciones sigue siendo buena.
+***** Take
+Chromium es código abierto por licencia y un producto de Google por operación. La señal no es la mala fe, es el gestor de incidencias: una migración rompió la visibilidad pública y nadie lo arregló, porque las únicas personas que pueden ver el problema son las únicas a las que nunca les bloquea. La noticia de verdad es la estructura de Igalia: sin jefes y con sueldo plano, alguien puede dedicar un trimestre a la deuda técnica, un trabajo que ningún comité de ascensos ha premiado nunca.
+***** Comments
+- Gentoo ha renunciado a compilar Chromium desde el código fuente, porque upstream no prueba sus compilaciones con ninguna de sus supuestas funciones opcionales desactivadas.
+- Su CI ni siquiera ejecuta gn para las permutaciones de use flags, y eso costaría una cantidad de cómputo trivial.
+- Bueno. ¿Y si simplemente no tuvieran tantos flags?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Chromium-Entwicklung bei Google und bei Igalia im Vergleich
+***** TLDR
+LWNs Bericht über einen Vortrag von Sharon Yang, die sechs Jahre bei Google an Chromium arbeitete und dann zu Igalia wechselte, der Genossenschaft im Besitz ihrer Beschäftigten. Der strukturelle Gegensatz: Google hat rund 180.000 Beschäftigte, Vorgesetzte und Gehaltsbänder sowie Anreize, die auffällige, beförderungstaugliche Features belohnen; Igalia hat rund 180 Leute, keine Vorgesetzten und gleiches Gehalt über alle Ebenen, was Raum für Arbeit an Codegesundheit und technischen Schulden lässt, für die niemand befördert wird. Die Reibung für externe Mitwirkende ist einzeln klein und in Summe aufschlussreich: schnellere Build-Infrastruktur erfordert einen formalen Antrag, wenn man nicht bei Google ist, als öffentlich eingetragene Bugs sind wegen einer Migration des Bugtrackers vor Jahren nur für Google-Beschäftigte sichtbar, interne Entwurfsdokumente liegen in nicht freigegebenen Google Docs, und das gesamte Projektwerkzeug wird von Google für Google gepflegt, ohne Kanal für Rückmeldungen von außen. Yang nennt das vergleichsweise kleine Reibungspunkte und sagt, die Beziehungen zu Kollegen in beiden Organisationen seien weiterhin gut.
+***** Take
+Chromium ist Open Source per Lizenz und ein Google-Produkt im Betrieb. Das verräterische Detail ist keine Böswilligkeit, sondern der Bugtracker: Eine Migration hat die öffentliche Sichtbarkeit zerstört und niemand hat es behoben, weil die Einzigen, die das Problem sehen können, die Einzigen sind, die es nie blockiert. Die eigentliche Nachricht ist Igalias Struktur: ohne Vorgesetzte und mit flacher Bezahlung kann jemand ein Quartal in technische Schulden stecken, eine Arbeit, die noch kein Beförderungsgremium belohnt hat.
+***** Comments
+- Gentoo hat es aufgegeben, Chromium aus dem Quellcode zu bauen, weil upstream seine Builds nie mit abgeschalteten, angeblich optionalen Features testet.
+- Ihre CI führt gn nicht einmal für die Permutationen der Use-Flags aus, und das würde kaum Rechenzeit kosten.
+- Nun ja. Vielleicht sollten sie einfach nicht so viele Flags haben?
+** BeBox is a Haiku application that emulates Be Inc.'s BeBox :emulation:beos:haiku:retrocomputing:
+:PROPERTIES:
+:ID:       50111742
+:URL:      https://github.com/johnrash/bebox
+:HN_URL:   https://news.ycombinator.com/item?id=50111742
+:POINTS:   42
+:COMMENTS: 11
+:BY:       rguiscard
+:END:
+
+*** TLDR
+An MIT-licensed Haiku application that emulates the BeBox, Be Inc.'s dual-PowerPC workstation, plus the earlier AT&T Hobbit dual-processor prototypes from 1993 and 1994. It models two PowerPC 603/603e CPUs at 66 to 133 MHz, the MPC105 bridge, boot ROM with flash, NVRAM and a real-time clock, Number Nine GXE64 and Cirrus Logic CL-GD5434 video, a Crystal CS4231A sound codec, SCSI, IDE and floppy storage, serial ports, NE2000-compatible Ethernet and shared folders with the host. It boots BeOS releases from Developer Release 6 through R5.0.3. The emulator core is portable C++17 and is also tested on Linux; the GUI is Haiku-native and scriptable via hey, with a bebox-img tool for disk images. Parallel port, GeekPort and MIDI are not implemented.
+
+*** Take
+The loop here is worth stating plainly: Haiku exists because BeOS died, and Haiku is now the host for the hardware BeOS originally ran on. The part that signals real work is the Hobbit support, prototype machines with AT&T processors that almost nobody outside Be ever touched, which is exactly the kind of completeness emulation projects are judged on. A portable C++17 core that builds on Linux means this outlives the Haiku GUI wrapped around it.
+
+*** Comments
+
+**** alberth
+:PROPERTIES:
+:COMMENT_ID: 50112194
+:END:
+I recall dual booting BeOS circa 1999/2000. It was shockingly performant, especially with anything graphical. The difficulty was no apps.
+
+**** YVoyiatzis
+:PROPERTIES:
+:COMMENT_ID: 50112853
+:END:
+Back then everything was white and beige and Windows blue screens. BeOS was pure joy, if only to play around with.
+
+**** ranger_danger
+:PROPERTIES:
+:COMMENT_ID: 50112489
+:END:
+Now just combine it with Cosmoe so you can run it from Linux too.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+BeBox：一个在 Haiku 上模拟 Be Inc. BeBox 的应用
+***** TLDR
+一个 MIT 许可的 Haiku 应用，模拟 Be Inc. 的双 PowerPC 工作站 BeBox，还包括 1993 至 1994 年那批更早的 AT&T Hobbit 双处理器原型机。它模拟两颗 66 到 133 MHz 的 PowerPC 603/603e、MPC105 桥接芯片、带闪存的引导 ROM、NVRAM 和实时时钟，Number Nine GXE64 与 Cirrus Logic CL-GD5434 显卡、Crystal CS4231A 声音编解码器，SCSI、IDE 和软驱存储，串口、NE2000 兼容以太网，以及与宿主共享的文件夹。它可以启动从 Developer Release 6 到 R5.0.3 的各版本 BeOS。模拟器核心是可移植的 C++17，也在 Linux 上做过测试；图形界面是 Haiku 原生的，可通过 hey 脚本化，还附带一个 bebox-img 磁盘镜像工具。并口、GeekPort 和 MIDI 尚未实现。
+***** Take
+这里的循环值得直说：Haiku 之所以存在，是因为 BeOS 死了；而现在 Haiku 成了 BeOS 当年运行的那套硬件的宿主。真正说明功夫下在哪里的是 Hobbit 支持，那是用 AT&T 处理器的原型机，Be 公司以外几乎没人碰过，而这种完整度正是模拟项目被衡量的标准。可移植的 C++17 核心能在 Linux 上构建，意味着它的寿命会长于外面那层 Haiku 界面。
+***** Comments
+- 我记得 1999 到 2000 年前后双系统跑过 BeOS。性能好得惊人，尤其是图形相关的东西。问题是没有应用。
+- 那时候到处都是白色、米色和 Windows 蓝屏。BeOS 纯粹是一种快乐，哪怕只是拿来玩玩。
+- 接下来把它和 Cosmoe 结合，这样在 Linux 上也能跑。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+BeBox: Be Inc.のBeBoxをエミュレートするHaikuアプリケーション
+***** TLDR
+MITライセンスのHaikuアプリケーションで、Be Inc.のデュアルPowerPCワークステーションBeBoxを、さらに1993年から94年の初期のAT&T Hobbitデュアルプロセッサ試作機までエミュレートする。66から133MHzのPowerPC 603/603eを2基、MPC105ブリッジ、フラッシュ付きブートROM、NVRAM、リアルタイムクロック、Number Nine GXE64とCirrus Logic CL-GD5434のビデオ、Crystal CS4231Aサウンドコーデック、SCSI・IDE・フロッピーのストレージ、シリアルポート、NE2000互換イーサネット、ホストとの共有フォルダを再現する。BeOSはDeveloper Release 6からR5.0.3までが起動する。エミュレータのコアは移植性のあるC++17でLinux上でもテストされており、GUIはHaikuネイティブでheyからスクリプト操作でき、ディスクイメージ用のbebox-imgツールが付属する。パラレルポート、GeekPort、MIDIは未実装。
+***** Take
+この循環は率直に述べる価値がある。HaikuはBeOSが死んだから存在し、そのHaikuが今やBeOSが本来動いていたハードウェアのホストになっている。実際の仕事量を示すのはHobbit対応だ。AT&Tのプロセッサを積んだ試作機で、Be社の外ではほとんど誰も触っていない代物であり、エミュレーションのプロジェクトが評価されるのはまさにこの種の網羅性による。移植可能なC++17のコアがLinuxでビルドできるということは、外側のHaiku GUIより長く生き残るという意味でもある。
+***** Comments
+- 1999年か2000年ごろにBeOSをデュアルブートしていたのを覚えている。特にグラフィック周りの性能が驚くほどよかった。問題はアプリがないことだった。
+- 当時はどこも白とベージュとWindowsのブルースクリーンばかりだった。BeOSは、ただ触って遊ぶだけでも純粋な喜びだった。
+- あとはCosmoeと組み合わせて、Linuxからも動かせるようにしてほしい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+BeBox: Be Inc.의 BeBox를 에뮬레이트하는 Haiku 애플리케이션
+***** TLDR
+MIT 라이선스의 Haiku 애플리케이션으로, Be Inc.의 듀얼 PowerPC 워크스테이션 BeBox는 물론 1993~94년의 더 이른 AT&T Hobbit 듀얼 프로세서 시제품까지 에뮬레이트한다. 66~133MHz의 PowerPC 603/603e 두 개, MPC105 브리지, 플래시가 달린 부트 ROM, NVRAM과 실시간 클록, Number Nine GXE64 및 Cirrus Logic CL-GD5434 비디오, Crystal CS4231A 사운드 코덱, SCSI·IDE·플로피 저장장치, 시리얼 포트, NE2000 호환 이더넷, 호스트와의 공유 폴더를 구현한다. BeOS는 Developer Release 6부터 R5.0.3까지 부팅된다. 에뮬레이터 코어는 이식 가능한 C++17이고 Linux에서도 테스트되며, GUI는 Haiku 네이티브로 hey를 통해 스크립트로 제어할 수 있고 디스크 이미지용 bebox-img 도구가 함께 제공된다. 병렬 포트, GeekPort, MIDI는 미구현이다.
+***** Take
+이 순환은 그대로 말해 둘 만하다. Haiku는 BeOS가 죽었기 때문에 존재하고, 지금 그 Haiku가 BeOS가 원래 돌던 하드웨어의 호스트가 되었다. 실제로 공을 들였다는 신호는 Hobbit 지원이다. AT&T 프로세서를 쓴 시제품으로 Be 밖에서는 거의 아무도 만져 본 적 없는 기계이며, 에뮬레이션 프로젝트는 바로 이런 완결성으로 평가받는다. 이식 가능한 C++17 코어가 Linux에서 빌드된다는 건, 그 바깥을 감싼 Haiku GUI보다 오래 남는다는 뜻이다.
+***** Comments
+- 1999~2000년쯤 BeOS를 듀얼 부팅했던 기억이 난다. 특히 그래픽 쪽 성능이 놀라울 정도였다. 문제는 앱이 없다는 거였다.
+- 그때는 온통 흰색과 베이지색, 그리고 Windows 블루스크린이었다. BeOS는 그냥 만지작거리는 것만으로도 순수한 즐거움이었다.
+- 이제 Cosmoe와 합쳐서 Linux에서도 돌릴 수 있게 해 달라.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+BeBox es una aplicación de Haiku que emula el BeBox de Be Inc.
+***** TLDR
+Una aplicación de Haiku con licencia MIT que emula el BeBox, la estación de trabajo de doble PowerPC de Be Inc., además de los prototipos anteriores AT&T Hobbit de doble procesador de 1993 y 1994. Modela dos CPU PowerPC 603/603e a entre 66 y 133 MHz, el puente MPC105, la ROM de arranque con flash, NVRAM y reloj en tiempo real, vídeo Number Nine GXE64 y Cirrus Logic CL-GD5434, un códec de sonido Crystal CS4231A, almacenamiento SCSI, IDE y de disquete, puertos serie, Ethernet compatible con NE2000 y carpetas compartidas con el anfitrión. Arranca versiones de BeOS desde Developer Release 6 hasta R5.0.3. El núcleo del emulador es C++17 portable y también se prueba en Linux; la interfaz es nativa de Haiku y se puede automatizar con hey, con una herramienta bebox-img para imágenes de disco. El puerto paralelo, el GeekPort y MIDI no están implementados.
+***** Take
+El bucle merece decirse sin rodeos: Haiku existe porque BeOS murió, y Haiku es ahora el anfitrión del hardware sobre el que BeOS corría originalmente. Lo que delata trabajo de verdad es el soporte de Hobbit, máquinas prototipo con procesadores de AT&T que casi nadie fuera de Be llegó a tocar, y es justo ese tipo de exhaustividad por el que se juzga a los proyectos de emulación. Un núcleo en C++17 portable que compila en Linux significa que esto sobrevivirá a la interfaz de Haiku que lo envuelve.
+***** Comments
+- Recuerdo tener BeOS en arranque dual alrededor de 1999 o 2000. Su rendimiento era asombroso, sobre todo con cualquier cosa gráfica. La dificultad era que no había aplicaciones.
+- Por entonces todo era blanco, beige y pantallas azules de Windows. BeOS era puro placer, aunque solo fuera para jugar con él.
+- Ahora solo falta combinarlo con Cosmoe para poder ejecutarlo también desde Linux.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+BeBox ist eine Haiku-Anwendung, die den BeBox von Be Inc. emuliert
+***** TLDR
+Eine Haiku-Anwendung unter MIT-Lizenz, die den BeBox emuliert, die Dual-PowerPC-Workstation von Be Inc., dazu die früheren AT&T-Hobbit-Prototypen mit zwei Prozessoren von 1993 und 1994. Sie modelliert zwei PowerPC 603/603e mit 66 bis 133 MHz, die MPC105-Bridge, Boot-ROM mit Flash, NVRAM und Echtzeituhr, Grafik von Number Nine GXE64 und Cirrus Logic CL-GD5434, einen Soundcodec Crystal CS4231A, Speicher über SCSI, IDE und Diskette, serielle Ports, NE2000-kompatibles Ethernet und gemeinsame Ordner mit dem Host. Sie bootet BeOS-Versionen von Developer Release 6 bis R5.0.3. Der Emulatorkern ist portables C++17 und wird auch unter Linux getestet; die GUI ist Haiku-nativ und per hey skriptbar, mit einem bebox-img-Werkzeug für Festplattenabbilder. Parallelport, GeekPort und MIDI fehlen noch.
+***** Take
+Die Schleife lohnt es, klar zu benennen: Haiku existiert, weil BeOS gestorben ist, und Haiku ist nun der Host für die Hardware, auf der BeOS ursprünglich lief. Was echte Arbeit verrät, ist die Hobbit-Unterstützung, Prototypen mit AT&T-Prozessoren, die außerhalb von Be fast niemand je angefasst hat, und genau an dieser Art Vollständigkeit werden Emulationsprojekte gemessen. Ein portabler C++17-Kern, der unter Linux baut, heißt auch, dass das Projekt die Haiku-GUI um sich herum überdauert.
+***** Comments
+- Ich erinnere mich, BeOS um 1999/2000 im Dual-Boot gefahren zu haben. Die Performance war verblüffend, gerade bei allem Grafischen. Das Problem waren die fehlenden Programme.
+- Damals war alles weiß und beige und Windows-Bluescreen. BeOS war eine reine Freude, selbst wenn man nur damit herumspielte.
+- Jetzt müsste man es nur noch mit Cosmoe kombinieren, damit es auch von Linux aus läuft.
+** Woman who rescued injured crow keeps getting 'thank-you gifts' from birds ［video］ :nature:birds:science:
+:PROPERTIES:
+:ID:       50065859
+:URL:      https://www.youtube.com/watch?v=sjNpfz4UzqU
+:HN_URL:   https://news.ycombinator.com/item?id=50065859
+:POINTS:   75
+:COMMENTS: 3
+:BY:       johnnyApplePRNG
+:END:
+
+*** TLDR
+［video only, not transcribable here］ A CTV News segment about a woman who nursed an injured crow and now finds objects left for her by the local crows. The HN thread is three comments long and all three are the same genre: people reporting their own corvid and songbird encounters rather than arguing about anything.
+
+*** Take
+This is the one front-page item today where the headline, the video and the comments all agree, which is why there is nothing to debate and 75 points anyway. The behaviour is not a fluke either, food-caching corvids recognise individual human faces and reciprocate, which is a stranger fact than the heartwarming framing suggests.
+
+*** Comments
+
+**** rglover
+:PROPERTIES:
+:COMMENT_ID: 50114566
+:END:
+Found a chickadee fledgling in the road earlier this year and nursed him for a couple days. Really got me thinking about how special birds are.
+
+**** prmoustache
+:PROPERTIES:
+:COMMENT_ID: 50069806
+:END:
+My ex mother in law bonded with a crow. It spent time on her shoulder whenever she was in her garden. A few centuries before, people would have had her burned for being a witch.
+
+**** kylehotchkiss
+:PROPERTIES:
+:COMMENT_ID: 50066869
+:END:
+I appreciate your AI (Avian Intelligence) contribution to HN.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+救助受伤乌鸦的女子不断收到鸟类送来的「谢礼」［视频］
+***** TLDR
+［仅有视频，此处无法转写］ CTV News 的一则新闻片段，讲一位女子照料过一只受伤的乌鸦，此后不断发现当地乌鸦留给她的小物件。HN 上的讨论只有三条评论，三条都属于同一类：各自讲自己遇到乌鸦和小鸟的经历，而不是在争论什么。
+***** Take
+这是今天首页上唯一一条标题、视频和评论三者意见一致的条目，所以没什么可吵的，却照样拿到 75 分。这种行为也不是偶然：会储食的鸦科鸟类能认出特定的人脸并给予回报，这个事实比那种暖心叙述所暗示的要更奇特。
+***** Comments
+- 今年早些时候在路上发现一只刚出窝的山雀，照顾了它几天。这让我真正想到鸟类有多特别。
+- 我前岳母和一只乌鸦处成了朋友。她在花园里时，那只乌鸦就待在她肩膀上。要是早几个世纪，人们会把她当女巫烧掉。
+- 感谢你为 HN 贡献的 AI（禽类智能）内容。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+傷ついたカラスを助けた女性に、鳥たちから「お礼の品」が届き続ける［動画］
+***** TLDR
+［動画のみで、ここでは書き起こせない］CTV Newsのニュース映像。傷ついたカラスを介抱した女性が、その後も地元のカラスたちが置いていく物を見つけ続けているという内容だ。HNのスレッドはコメント3件だけで、3件とも同じ種類のもの、つまり何かを議論するのではなく、各自のカラスや小鳥との出会いを語るものだ。
+***** Take
+今日のフロントページで、見出しと動画とコメントの三つが一致している唯一の項目だ。だから議論の余地がなく、それでも75ポイント付いている。この行動も偶然ではない。食物を貯蔵するカラス科の鳥は個々の人間の顔を識別して返礼する。心温まる語り口が示すよりも、事実のほうが奇妙だ。
+***** Comments
+- 今年の初めに道で巣立ちしたばかりのコガラを見つけ、数日面倒を見た。鳥がどれほど特別かを本当に考えさせられた。
+- 元義母がカラスと仲良くなった。庭にいるときはいつも肩に乗っていた。数世紀前なら魔女として焼かれていただろう。
+- HNへのAI（Avian Intelligence、鳥類知能）の寄稿に感謝する。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+다친 까마귀를 구조한 여성이 새들에게서 계속 '감사 선물'을 받는다 ［영상］
+***** TLDR
+［영상뿐이어서 여기서 전사할 수 없음］ CTV News의 보도 영상으로, 다친 까마귀를 돌봤던 여성이 그 뒤로 동네 까마귀들이 놓아두는 물건들을 계속 발견한다는 내용이다. HN 스레드는 댓글 세 개가 전부이고, 세 개 모두 같은 종류다. 무언가를 논쟁하는 게 아니라 각자 겪은 까마귀와 새 이야기를 전하는 글들이다.
+***** Take
+오늘 첫 페이지에서 제목과 영상과 댓글이 서로 일치하는 유일한 항목이다. 그래서 다툴 거리가 없는데도 75점이 붙었다. 이 행동도 우연이 아니다. 먹이를 저장하는 까마귀과 새들은 개별 사람의 얼굴을 알아보고 보답하는데, 이 사실은 훈훈한 서술이 암시하는 것보다 더 낯설다.
+***** Comments
+- 올해 초 길에서 갓 둥지를 떠난 박새를 발견해 며칠 돌봤다. 새가 얼마나 특별한지 정말 생각하게 됐다.
+- 전 장모님이 까마귀와 가까워졌다. 정원에 있을 때면 늘 어깨에 앉아 있었다. 몇 세기 전이라면 마녀로 몰려 화형당했을 것이다.
+- HN에 AI(Avian Intelligence, 조류 지능) 기여를 해 준 데 감사한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La mujer que rescató a un cuervo herido sigue recibiendo 'regalos de agradecimiento' de las aves ［vídeo］
+***** TLDR
+［solo vídeo, no transcribible aquí］ Un reportaje de CTV News sobre una mujer que cuidó a un cuervo herido y que ahora encuentra objetos dejados para ella por los cuervos de la zona. El hilo de HN tiene tres comentarios y los tres son del mismo tipo: gente contando sus propios encuentros con córvidos y pájaros, en lugar de discutir nada.
+***** Take
+Es el único asunto de la portada de hoy en el que el titular, el vídeo y los comentarios coinciden, y por eso no hay nada que debatir y aun así suma 75 puntos. El comportamiento tampoco es casualidad: los córvidos que almacenan comida reconocen caras humanas concretas y corresponden, un hecho más extraño que el envoltorio sentimental.
+***** Comments
+- A principios de año encontré un carbonero recién salido del nido en la carretera y lo cuidé un par de días. Me hizo pensar de verdad en lo especiales que son las aves.
+- Mi exsuegra se encariñó con un cuervo. Se le posaba en el hombro siempre que estaba en su jardín. Unos siglos antes la habrían quemado por bruja.
+- Agradezco tu aportación de IA (Inteligencia Aviar) a HN.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Frau, die eine verletzte Krähe rettete, bekommt weiter 'Dankesgeschenke' von Vögeln ［Video］
+***** TLDR
+［nur Video, hier nicht transkribierbar］ Ein Beitrag von CTV News über eine Frau, die eine verletzte Krähe gesund pflegte und seither immer wieder Gegenstände findet, die die Krähen der Umgebung für sie ablegen. Der HN-Thread besteht aus drei Kommentaren, und alle drei sind von derselben Sorte: Leute berichten eigene Begegnungen mit Rabenvögeln und Singvögeln, statt über irgendetwas zu streiten.
+***** Take
+Das ist heute der einzige Beitrag auf der Startseite, bei dem Überschrift, Video und Kommentare übereinstimmen, weshalb es nichts zu debattieren gibt und er trotzdem 75 Punkte hat. Das Verhalten ist auch kein Zufall: Rabenvögel, die Nahrung verstecken, erkennen einzelne Menschengesichter und erwidern Gefälligkeiten, was eine seltsamere Tatsache ist, als die herzerwärmende Verpackung vermuten lässt.
+***** Comments
+- Ich habe dieses Jahr eine flügge Meise auf der Straße gefunden und sie ein paar Tage versorgt. Das hat mich wirklich darüber nachdenken lassen, wie besonders Vögel sind.
+- Meine frühere Schwiegermutter hat sich mit einer Krähe angefreundet. Sie saß ihr auf der Schulter, wann immer sie im Garten war. Ein paar Jahrhunderte früher hätte man sie als Hexe verbrannt.
+- Danke für deinen KI-Beitrag (Krähen-Intelligenz) zu HN.
