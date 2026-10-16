@@ -1,0 +1,556 @@
+#+TITLE: HN Digest 2026-10-16 05:36 UTC
+#+DATE: 2026-10-16T05:36:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+UTC gives up on leap seconds, Meta writes itself a scraping license, and 28 services run on one N100 mini PC
+
+* Highlights
+- BIPM: no more leap seconds after May 20, 2027, tolerance widened to a full hour
+- Meta's Oct 30 commercial terms grant Meta the right to crawl business accounts' own websites
+- RPKI route validity jumps 54% to 70% in a year, mostly because of China
+- Apple ran a flexible graphite pipe through the iPhone Duo hinge to move heat across the fold
+
+* Stories
+
+** BIPM decides to stop adding leap seconds to UTC :time:standards:infrastructure:
+:PROPERTIES:
+:ID:       50105777
+:URL:      https://www.bipm.org/en/cgpm-2026/resolution-5
+:HN_URL:   https://news.ycombinator.com/item?id=50105777
+:POINTS:   129
+:COMMENTS: 59
+:BY:       gliffie
+:END:
+
+*** TLDR
+CGPM Resolution 5 (2026) makes UTC a continuous timescale from May 20, 2027: no more leap seconds inserted or removed. The allowed |UT1-UTC| gap widens from under 1 second to 3600 seconds, which BIPM says buys several centuries of continuity. The stated reason is risk: a negative leap second has never happened, and the resolution argues unprepared infrastructure (IoT fleets, smart grids, distributed sensors) would handle one badly. BIPM keeps monitoring UT1-UTC and stays inside the new one-hour bound.
+
+*** Take
+The fix is not that Earth's rotation got easier to predict. It is that the error budget got 3600x looser, so the problem lands on engineers born after everyone reading this. That is a real win: a negative leap second would have broken production this decade, and a leap hour is someone else's 2200s outage.
+
+*** Comments
+
+**** jcranmer
+:PROPERTIES:
+:COMMENT_ID: 50106356
+:END:
+TL;DR: No more leap seconds. The replacement will not be leap minutes but leap hours.
+
+**** krunck
+:PROPERTIES:
+:COMMENT_ID: 50106769
+:END:
+Am I wrong in interpreting this as just pushing the problem (divergence between International Atomic Time and the rotational speed of the earth) 100 years in the future?
+
+**** vikingerik
+:PROPERTIES:
+:COMMENT_ID: 50108259
+:END:
+We don't even keep very close to that as it is. Between daylight summer time changes and some time zones already being very far off from geography, some places like western Spain or China are already as much as 3 hours off from actual solar time.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+国际计量局决定停止为 UTC 添加闰秒
+***** TLDR
+2026 年 CGPM 第 5 号决议规定，从 2027 年 5 月 20 日起 UTC 成为连续时标：不再插入或删除闰秒。|UT1-UTC| 的容差从不足 1 秒放宽到 3600 秒，国际计量局称这可保证数个世纪的连续性。理由是风险：负闰秒从未出现过，决议认为物联网设备、智能电网和分布式传感器等未做准备的基础设施会出问题。国际计量局仍会监测 UT1-UTC 并保持在新的一小时范围内。
+***** Take
+问题不是地球自转变得好预测了，而是误差预算放宽了 3600 倍，于是麻烦落到现在还没出生的工程师头上。这确实是胜利：负闰秒本会在这十年里弄坏生产系统，而闰小时是别人 23 世纪的故障。
+***** Comments
+- 简而言之：不再有闰秒。替代方案不是闰分，而是闰小时。
+- 我这样理解对吗：这只是把国际原子时与地球自转速度的偏离问题推迟了 100 年？
+- 我们现在本来也没对得多准。算上夏令时，再加上一些时区本身就和地理位置差得很远，西班牙西部或中国的某些地方已经和真太阳时差了多达 3 小时。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+BIPMがUTCへのうるう秒追加の停止を決定
+***** TLDR
+CGPM決議5（2026年）により、2027年5月20日からUTCは連続時系となり、うるう秒の挿入も削除も行われなくなる。|UT1-UTC|の許容差は1秒未満から3600秒へ広がり、BIPMはこれで数世紀の連続性が確保できるとしている。理由はリスクで、負のうるう秒は前例がなく、決議はIoT機器やスマートグリッド、分散センサーなど準備のないインフラが対応しきれないと論じている。BIPMは引き続きUT1-UTCを監視し、新しい1時間の範囲内に収める。
+***** Take
+地球の自転が予測しやすくなったわけではない。誤差の許容幅が3600倍に緩み、問題が今の読者より後に生まれる技術者へ移っただけだ。それでも実質的な勝利で、負のうるう秒は今の10年のうちに本番環境を壊したはずだが、うるう時は23世紀の誰かの障害になる。
+***** Comments
+- 要点：うるう秒は廃止。代わりになるのはうるう分ではなく、うるう時だ。
+- これは国際原子時と地球の自転速度のずれという問題を100年先送りしただけ、という読み方で間違っていますか。
+- そもそも今もあまり合っていない。夏時間があり、地理と大きくずれた時間帯もあるので、スペイン西部や中国の一部では実際の太陽時と最大3時間ずれている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+BIPM, UTC에 윤초를 더 이상 추가하지 않기로 결정
+***** TLDR
+2026년 CGPM 결의 5호에 따라 2027년 5월 20일부터 UTC는 연속 시간 척도가 되며, 윤초를 삽입하거나 제거하지 않는다. |UT1-UTC| 허용 오차는 1초 미만에서 3600초로 넓어지고, BIPM은 이것으로 수 세기 동안 연속성이 확보된다고 밝혔다. 이유는 위험이다. 음의 윤초는 전례가 없고, 결의는 준비되지 않은 인프라(IoT 기기, 스마트 그리드, 분산 센서)가 이를 제대로 처리하지 못할 것이라고 본다. BIPM은 계속 UT1-UTC를 관측해 새 1시간 범위 안에 유지한다.
+***** Take
+지구 자전이 예측하기 쉬워진 것이 아니다. 오차 허용치가 3600배 느슨해져서 문제가 지금 이 글을 읽는 사람들보다 늦게 태어날 엔지니어에게 넘어간 것이다. 그래도 분명한 이득이다. 음의 윤초는 이번 10년 안에 운영 시스템을 망가뜨렸을 테지만, 윤시는 23세기 누군가의 장애다.
+***** Comments
+- 요약: 윤초는 폐지. 대체는 윤분이 아니라 윤시다.
+- 이건 국제원자시와 지구 자전 속도의 차이라는 문제를 100년 뒤로 미룬 것일 뿐이라고 이해하면 틀렸나요?
+- 지금도 그렇게 정확히 맞춰져 있지 않다. 일광절약시간이 있고 지리와 크게 어긋난 시간대도 있어서 스페인 서부나 중국 일부는 이미 실제 태양시와 최대 3시간 차이가 난다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El BIPM decide dejar de añadir segundos intercalares al UTC
+***** TLDR
+La Resolución 5 (2026) de la CGPM convierte al UTC en una escala de tiempo continua a partir del 20 de mayo de 2027: no se añadirán ni quitarán más segundos intercalares. La tolerancia de |UT1-UTC| pasa de menos de 1 segundo a 3600 segundos, lo que según el BIPM garantiza varios siglos de continuidad. El motivo declarado es el riesgo: nunca ha habido un segundo intercalar negativo, y la resolución sostiene que la infraestructura no preparada (dispositivos IoT, redes eléctricas inteligentes, sensores distribuidos) lo gestionaría mal. El BIPM seguirá vigilando UT1-UTC dentro del nuevo límite de una hora.
+***** Take
+La solución no es que la rotación de la Tierra se haya vuelto predecible. Es que el margen de error se aflojó 3600 veces, así que el problema cae en ingenieros que aún no han nacido. Eso sí es una ganancia real: un segundo intercalar negativo habría roto sistemas en producción esta década, y una hora intercalar será la caída de otra persona en el siglo XXIII.
+***** Comments
+- En resumen: no más segundos intercalares. El reemplazo no serán minutos intercalares, sino horas intercalares.
+- ¿Me equivoco al interpretar esto como un simple aplazamiento de 100 años del problema, la divergencia entre el Tiempo Atómico Internacional y la velocidad de rotación de la Tierra?
+- Ni siquiera estamos muy cerca de eso ahora. Entre los cambios de horario de verano y zonas horarias ya muy alejadas de su geografía, lugares como el oeste de España o China están hasta 3 horas desfasados del tiempo solar real.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+BIPM beschließt, keine Schaltsekunden mehr zum UTC hinzuzufügen
+***** TLDR
+Resolution 5 (2026) der CGPM macht UTC ab dem 20. Mai 2027 zu einer kontinuierlichen Zeitskala: keine Schaltsekunden mehr, weder hinzugefügt noch entfernt. Die zulässige Differenz |UT1-UTC| wächst von unter 1 Sekunde auf 3600 Sekunden, was laut BIPM mehrere Jahrhunderte Kontinuität sichert. Begründet wird es mit Risiko: Eine negative Schaltsekunde gab es noch nie, und die Resolution argumentiert, dass unvorbereitete Infrastruktur (IoT-Geräte, intelligente Stromnetze, verteilte Sensoren) damit schlecht umgehen würde. Das BIPM überwacht UT1-UTC weiter und hält es im neuen Ein-Stunden-Rahmen.
+***** Take
+Die Lösung besteht nicht darin, dass die Erdrotation vorhersagbarer wurde. Das Fehlerbudget wurde um den Faktor 3600 gelockert, damit landet das Problem bei Ingenieuren, die noch nicht geboren sind. Das ist ein echter Gewinn: Eine negative Schaltsekunde hätte in diesem Jahrzehnt Produktionssysteme zerlegt, eine Schaltstunde ist der Ausfall von jemand anderem im 23. Jahrhundert.
+***** Comments
+- Kurz: keine Schaltsekunden mehr. Der Ersatz sind nicht Schaltminuten, sondern Schaltstunden.
+- Liege ich falsch, wenn ich das so lese, dass das Problem (die Abweichung zwischen Internationaler Atomzeit und Erdrotation) einfach 100 Jahre nach hinten geschoben wird?
+- Wir liegen ja schon jetzt nicht besonders dicht dran. Zwischen Sommerzeit und Zeitzonen, die geografisch weit daneben liegen, sind Orte wie Westspanien oder China schon bis zu 3 Stunden von der echten Sonnenzeit entfernt.
+** Business accounts will consent to Meta scraping their websites starting Oct. 30 :meta:legal:ai:media:
+:PROPERTIES:
+:ID:       50111852
+:URL:      https://www.niemanlab.org/2026/10/metas-new-commercial-terms-will-allow-the-scraping-of-news-sites-legal-experts-say/
+:HN_URL:   https://news.ycombinator.com/item?id=50111852
+:POINTS:   137
+:COMMENTS: 59
+:BY:       0in
+:END:
+
+*** TLDR
+Meta's commercial terms, effective October 30, 2026, apply to anyone running a Facebook page, Instagram profile, Messenger account or WhatsApp channel as a business, which covers essentially every news organization. The terms grant Meta permission to use "web scrapers, bots, robots, spiders, crawlers, and user agents" on the websites associated with those accounts, and to use the content collected to provide, develop, improve, research, train and maintain Meta products, including AI. Meta may also create test credentials to get past registration walls. Media attorney Matt Topic told Nieman Lab it is unclear whether a court would enforce this but publishers should assume it would; Cornell's James Grimmelmann reads it as permission to train on publisher content and possibly deploy that content in competition with them. There is no opt-out: accept or stop using Meta business products.
+
+*** Take
+The interesting part is not the scraping, it is the venue. Copyright suits over AI training are slow and uncertain, so Meta moved the question to contract law, where a checkbox beats a lawsuit. Note the asymmetry commenters spotted: the page operator who clicks accept often does not own the syndicated wire copy they are licensing away.
+
+*** Comments
+
+**** Centigonal
+:PROPERTIES:
+:COMMENT_ID: 50112752
+:END:
+This is some next level legal judo. Say what you want about the metaverse or muse, but it's clear that Meta is still innovating when it comes to its Terms of Service.
+
+**** SomeHacker44
+:PROPERTIES:
+:COMMENT_ID: 50113209
+:END:
+I am not a lawyer, but I can't see how any court would enforce this unconscionable term in a clickwrap license.
+
+**** SoftTalker
+:PROPERTIES:
+:COMMENT_ID: 50113041
+:END:
+When you let someone else host your content, you don't control your content.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+商业账号将从 10 月 30 日起同意 Meta 抓取其网站
+***** TLDR
+Meta 的商业条款自 2026 年 10 月 30 日生效，适用于以商业身份运营 Facebook 主页、Instagram 账号、Messenger 账号或 WhatsApp 频道的任何人，这基本覆盖了所有新闻机构。条款授权 Meta 对这些账号关联的网站使用「网页抓取器、机器人、爬虫和用户代理」，并将收集到的内容用于提供、开发、改进、研究、训练和维护 Meta 产品，包括 AI。Meta 还可以创建测试账号以绕过注册墙。媒体律师 Matt Topic 对 Nieman Lab 表示，法院是否会支持这一条款不明确，但出版方应假定会；康奈尔大学的 James Grimmelmann 认为这等于允许用出版方内容训练模型，甚至可能把这些内容用于与出版方竞争。没有退出选项：要么接受，要么停用 Meta 的商业产品。
+***** Take
+有意思的不是抓取，而是战场。关于 AI 训练的版权诉讼慢且结果难料，于是 Meta 把问题搬到合同法里，一个勾选框就胜过一场官司。注意评论者指出的不对称：点击同意的主页运营者，往往并不拥有自己正在授权出去的通讯社稿件。
+***** Comments
+- 这是高段位的法律柔道。随你怎么说元宇宙或 Muse，但 Meta 在服务条款上显然还在创新。
+- 我不是律师，但我看不出哪个法院会支持点击同意许可里这种不合情理的条款。
+- 当你让别人托管你的内容时，你就不再控制自己的内容。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ビジネスアカウントは10月30日からMetaによる自社サイトのスクレイピングに同意することになる
+***** TLDR
+Metaの商用規約は2026年10月30日に発効し、Facebookページ、Instagramプロフィール、Messengerアカウント、WhatsAppチャンネルをビジネスとして運用する全員に適用される。事実上すべての報道機関が対象だ。規約はMetaに対し、それらのアカウントに紐づくサイトへ「ウェブスクレイパー、ボット、クローラー、ユーザーエージェント」を使う許可と、収集した内容をAIを含むMeta製品の提供、開発、改善、研究、学習、保守に使う権利を与える。登録の壁を越えるためのテスト用資格情報の作成も認められている。メディア弁護士のMatt TopicはNieman Labに、裁判所が認めるかは不明だが出版社は認められると想定すべきだと述べ、コーネル大のJames Grimmelmannは出版社のコンテンツで学習し、場合によってはそれを出版社と競合する形で使う許可だと読む。オプトアウトはなく、受け入れるかMetaのビジネス製品の利用をやめるかだ。
+***** Take
+注目すべきはスクレイピングではなく、舞台の選び方だ。AI学習をめぐる著作権訴訟は遅く結果も読めないので、Metaは問題を契約法に移した。そこではチェックボックスが訴訟に勝つ。コメントが突いた非対称性にも注意したい。同意をクリックするページ運営者は、譲り渡している通信社の記事の権利を持っていないことが多い。
+***** Comments
+- これは高度な法務の柔道だ。メタバースやMuseをどう評価するにせよ、Metaが利用規約で今も革新しているのは明らかだ。
+- 弁護士ではないが、クリックラップ契約のこんな不当な条項をどの裁判所が認めるのか分からない。
+- 自分のコンテンツを他人にホストさせた時点で、そのコンテンツは自分の管理下にない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+비즈니스 계정은 10월 30일부터 Meta의 자사 웹사이트 스크래핑에 동의하게 된다
+***** TLDR
+Meta의 상업 약관은 2026년 10월 30일부터 적용되며, Facebook 페이지, Instagram 프로필, Messenger 계정, WhatsApp 채널을 비즈니스로 운영하는 모든 주체가 대상이다. 사실상 모든 언론사가 포함된다. 약관은 Meta가 해당 계정과 연결된 웹사이트에 "웹 스크레이퍼, 봇, 크롤러, 사용자 에이전트"를 사용하고, 수집한 콘텐츠를 AI를 포함한 Meta 제품의 제공, 개발, 개선, 연구, 학습, 유지에 사용할 권리를 준다. 가입 장벽을 우회하기 위한 테스트 계정 생성도 허용된다. 언론 전문 변호사 Matt Topic은 법원이 이를 인정할지 불확실하지만 발행사는 인정된다고 가정해야 한다고 Nieman Lab에 말했고, 코넬대의 James Grimmelmann은 발행사 콘텐츠로 학습하고 때로는 그 콘텐츠를 발행사와 경쟁하는 데 쓰도록 허락하는 조항으로 읽는다. 선택적 거부는 없고, 수용하거나 Meta 비즈니스 제품 사용을 중단해야 한다.
+***** Take
+흥미로운 건 스크래핑이 아니라 싸움터다. AI 학습을 둘러싼 저작권 소송은 느리고 결과도 불확실하니, Meta는 문제를 계약법으로 옮겼다. 거기서는 체크박스가 소송을 이긴다. 댓글이 짚은 비대칭도 눈여겨볼 만하다. 동의를 누르는 페이지 운영자는 자신이 넘겨주는 통신사 기사의 권리를 가지고 있지 않은 경우가 많다.
+***** Comments
+- 고난도 법무 유도다. 메타버스나 Muse는 어떻든, Meta가 이용약관에서는 여전히 혁신하고 있는 게 분명하다.
+- 변호사는 아니지만, 클릭랩 라이선스의 이런 불공정한 조항을 어느 법원이 인정할지 모르겠다.
+- 콘텐츠를 다른 사람이 호스팅하게 하면, 그 콘텐츠는 더 이상 내 통제 아래 있지 않다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Las cuentas de empresa consentirán que Meta rastree sus sitios web desde el 30 de octubre
+***** TLDR
+Las condiciones comerciales de Meta, vigentes desde el 30 de octubre de 2026, se aplican a quien gestione una página de Facebook, un perfil de Instagram, una cuenta de Messenger o un canal de WhatsApp como empresa, lo que abarca a prácticamente todos los medios. Las condiciones autorizan a Meta a usar "rastreadores web, bots, arañas y agentes de usuario" en los sitios asociados a esas cuentas y a emplear el contenido recogido para proporcionar, desarrollar, mejorar, investigar, entrenar y mantener productos de Meta, incluida la IA. Meta también puede crear credenciales de prueba para saltarse muros de registro. El abogado de medios Matt Topic dijo a Nieman Lab que no está claro si un tribunal lo haría cumplir, pero que los editores deberían suponer que sí; James Grimmelmann, de Cornell, lo lee como permiso para entrenar con contenido de los editores y posiblemente desplegarlo compitiendo con ellos. No hay forma de rechazarlo: aceptar o dejar de usar los productos empresariales de Meta.
+***** Take
+Lo interesante no es el rastreo, es el foro elegido. Los pleitos de derechos de autor sobre entrenamiento de IA son lentos e inciertos, así que Meta trasladó la cuestión al derecho contractual, donde una casilla marcada vence a una demanda. Fíjese en la asimetría que detectaron los comentaristas: quien pulsa aceptar a menudo no es dueño del material de agencia que está licenciando.
+***** Comments
+- Esto es yudo legal de otro nivel. Diga lo que quiera del metaverso o de Muse, pero está claro que Meta sigue innovando en sus Condiciones de Servicio.
+- No soy abogado, pero no veo cómo algún tribunal haría cumplir esta cláusula abusiva en una licencia de clic.
+- Cuando dejas que otro aloje tu contenido, no controlas tu contenido.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Unternehmenskonten stimmen ab dem 30. Oktober dem Scraping ihrer Websites durch Meta zu
+***** TLDR
+Metas Geschäftsbedingungen gelten ab dem 30. Oktober 2026 für alle, die eine Facebook-Seite, ein Instagram-Profil, ein Messenger-Konto oder einen WhatsApp-Kanal geschäftlich betreiben, also praktisch für jedes Medienhaus. Die Bedingungen erlauben Meta den Einsatz von "Web-Scrapern, Bots, Robots, Spiders und User Agents" auf den zu diesen Konten gehörenden Websites sowie die Nutzung der erfassten Inhalte, um Meta-Produkte bereitzustellen, zu entwickeln, zu verbessern, zu erforschen, zu trainieren und zu pflegen, KI eingeschlossen. Meta darf zudem Testzugänge anlegen, um Registrierungshürden zu umgehen. Medienanwalt Matt Topic sagte Nieman Lab, es sei unklar, ob ein Gericht das durchsetzen würde, Verlage sollten aber damit rechnen; James Grimmelmann von Cornell liest darin die Erlaubnis, auf Verlagsinhalten zu trainieren und diese womöglich in Konkurrenz zu den Verlagen einzusetzen. Es gibt kein Opt-out: zustimmen oder Metas Geschäftsprodukte nicht mehr nutzen.
+***** Take
+Interessant ist nicht das Scraping, sondern die Wahl des Schauplatzes. Urheberrechtsprozesse um KI-Training sind langsam und unsicher, also hat Meta die Frage ins Vertragsrecht verlegt, wo ein Häkchen eine Klage schlägt. Beachtenswert ist die Asymmetrie, die Kommentatoren bemerkten: Wer auf Zustimmen klickt, besitzt die Agenturmeldungen, die er da weglizenziert, häufig gar nicht.
+***** Comments
+- Das ist juristisches Judo auf nächster Stufe. Sagen Sie über das Metaverse oder Muse, was Sie wollen, aber bei den Nutzungsbedingungen ist Meta offensichtlich weiter innovativ.
+- Ich bin kein Anwalt, aber ich sehe nicht, wie ein Gericht diese unzumutbare Klausel in einer Clickwrap-Lizenz durchsetzen sollte.
+- Wenn man seine Inhalte von jemand anderem hosten lässt, kontrolliert man seine Inhalte nicht.
+** What I self-host :selfhosting:homelab:linux:podman:
+:PROPERTIES:
+:ID:       50109715
+:URL:      https://viceconsole.fyi/blog/2026/10/10/what-i-self-host/
+:HN_URL:   https://news.ycombinator.com/item?id=50109715
+:POINTS:   376
+:COMMENTS: 235
+:BY:       BrunoBernardino
+:END:
+
+*** TLDR
+An inventory of 28 services on one Beelink mini PC: Intel N100, 16GB RAM, 512GB SSD, plus a 6TB external drive for media, idling around 7.5GB of memory. Seventeen run natively under systemd (Vaultwarden, Forgejo, Caddy, FreshRSS, Syncthing, Audiobookshelf, Actual Budget, PocketBase, MPD and Gonic pairs, Samba, slskd, Transmission, and more), eleven in Podman containers (Immich, Jellyfin, Home Assistant, Frigate, Vikunja, Uptime Kuma, Automatic Ripping Machine). The author prefers native and picked Podman over Docker specifically for systemd integration. Also listed is what they rejected: the ⁎arr stack as breakage-prone, Firefly III as too complex next to Actual Budget, Collabora because Google Docs is more convenient, and self-hosted email as too much work for too little benefit.
+
+*** Take
+The useful half of this post is the rejection list. Anyone can paste a docker-compose inventory; saying out loud that you tried Firefly III and Owntracks and went back is the part that saves a reader a weekend. And the comments immediately disproved the ⁎arr claim with idle memory figures of 157MB, which is how this genre is supposed to work.
+
+*** Comments
+
+**** Lucasoato
+:PROPERTIES:
+:COMMENT_ID: 50110179
+:END:
+A service that only comes as a Docker compose file and wants to run MySQL, Redis, and three other containers? I'm already looking for an alternative. Ok, I respect your opinion, but remember that there are poor souls like me out there that actually love the opposite.
+
+**** mtlynch
+:PROPERTIES:
+:COMMENT_ID: 50110604
+:END:
+All things being equal, why prefer Docker Compose? From my perspective, a single binary strictly dominates any Docker Compose solution.
+
+**** mtoner23
+:PROPERTIES:
+:COMMENT_ID: 50110451
+:END:
+Self hosting has never been easier and I imagine the average person has never been further from trying it. No one will ever get anywhere close to hosting this much stuff.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+我自托管了些什么
+***** TLDR
+一台 Beelink 迷你主机上跑 28 个服务的清单：Intel N100、16GB 内存、512GB 固态硬盘，外加一块 6TB 外置硬盘存媒体，空闲时约占 7.5GB 内存。其中 17 个由 systemd 原生运行（Vaultwarden、Forgejo、Caddy、FreshRSS、Syncthing、Audiobookshelf、Actual Budget、PocketBase、各两个实例的 MPD 和 Gonic、Samba、slskd、Transmission 等），11 个跑在 Podman 容器里（Immich、Jellyfin、Home Assistant、Frigate、Vikunja、Uptime Kuma、Automatic Ripping Machine）。作者偏好原生部署，选 Podman 而不是 Docker 正是为了它与 systemd 的集成。文中还列出了被放弃的东西：⁎arr 全套因易坏被弃，Firefly III 相比 Actual Budget 过于复杂，Collabora 不如 Google Docs 方便，自建邮件服务则是投入太多回报太少。
+***** Take
+这篇文章有用的一半是那份放弃清单。谁都能贴出一份 docker-compose 清单，但明说自己试过 Firefly III 和 Owntracks 又退回来，这才是替读者省下一个周末的部分。而评论区立刻用 157MB 的空闲内存数据反驳了关于 ⁎arr 的说法，这类文章本来就该这样运作。
+***** Comments
+- 一个只提供 docker compose 文件、还要拉起 MySQL、Redis 和另外三个容器的服务？我已经在找替代品了。好吧，我尊重你的看法，但要记得世上还有我这种偏偏喜欢反过来的可怜人。
+- 其他条件相同的话，为什么要偏好 Docker Compose？在我看来，单个二进制文件完全优于任何 Docker Compose 方案。
+- 自托管从没这么容易过，而我猜普通人从没离尝试它这么远过。没人会接近托管这么多东西。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+私がセルフホストしているもの
+***** TLDR
+Beelinkのミニ PC 一台で28のサービスを動かす構成一覧。Intel N100、メモリ16GB、SSD 512GBに、メディア用の6TB外付けドライブを追加し、アイドル時のメモリ使用量は約7.5GB。17個はsystemdでネイティブに動作（Vaultwarden、Forgejo、Caddy、FreshRSS、Syncthing、Audiobookshelf、Actual Budget、PocketBase、2インスタンスずつのMPDとGonic、Samba、slskd、Transmissionなど）、11個はPodmanコンテナ（Immich、Jellyfin、Home Assistant、Frigate、Vikunja、Uptime Kuma、Automatic Ripping Machine）。著者はネイティブを好み、systemd連携のためにDockerではなくPodmanを選んでいる。採用しなかったものも挙げている。⁎arr群は壊れやすい、Firefly IIIはActual Budgetに比べて複雑すぎる、CollaboraはGoogle Docsのほうが便利、自前のメールは手間に見合わない。
+***** Take
+この記事で役に立つのは後半の「やめたもの」一覧だ。docker-composeの一覧なら誰でも貼れる。Firefly IIIやOwntracksを試して戻ったと明言する部分が、読者の週末を救う。しかもコメント欄はアイドル157MBという実測値で⁎arrへの評価をすぐ覆した。このジャンルはそうあるべきだ。
+***** Comments
+- docker composeファイルしか提供されず、MySQLとRedisに加えて3つのコンテナを立ち上げたがるサービス？もう代替を探している。あなたの意見は尊重するが、その正反対が大好きな私のような気の毒な人間もいることを忘れないでほしい。
+- 条件が同じなら、なぜDocker Composeを選ぶのか。私の見方では、単一バイナリはあらゆるDocker Compose構成に明確に勝る。
+- セルフホストがこれほど簡単になったことはないが、普通の人がこれほど試そうとしなくなったこともないと思う。これだけの数をホストする人はまず現れない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+내가 셀프호스팅하는 것들
+***** TLDR
+Beelink 미니 PC 한 대에서 28개 서비스를 돌리는 목록. Intel N100, 램 16GB, SSD 512GB에 미디어용 6TB 외장 드라이브를 더했고, 유휴 상태 메모리 사용량은 약 7.5GB다. 17개는 systemd로 네이티브 실행되고(Vaultwarden, Forgejo, Caddy, FreshRSS, Syncthing, Audiobookshelf, Actual Budget, PocketBase, 각각 두 인스턴스인 MPD와 Gonic, Samba, slskd, Transmission 등), 11개는 Podman 컨테이너에서 돈다(Immich, Jellyfin, Home Assistant, Frigate, Vikunja, Uptime Kuma, Automatic Ripping Machine). 저자는 네이티브를 선호하며 systemd 연동 때문에 Docker가 아니라 Podman을 골랐다. 포기한 것도 적어 뒀다. ⁎arr 모음은 자주 깨지고, Firefly III는 Actual Budget에 비해 너무 복잡하고, Collabora보다 Google Docs가 편하고, 자체 메일 운영은 수고에 비해 얻는 게 적다.
+***** Take
+이 글에서 쓸모 있는 절반은 포기 목록이다. docker-compose 목록은 누구나 붙여 넣을 수 있지만, Firefly III와 Owntracks를 써 보고 돌아왔다고 밝히는 부분이 독자의 주말을 아껴 준다. 그리고 댓글은 유휴 메모리 157MB라는 수치로 ⁎arr 평가를 바로 반박했다. 이런 글은 그렇게 작동해야 한다.
+***** Comments
+- docker compose 파일로만 제공되면서 MySQL, Redis에 컨테이너 세 개를 더 띄우려는 서비스? 벌써 대안을 찾는 중이다. 당신 의견은 존중하지만, 세상에는 정반대를 정말 좋아하는 나 같은 딱한 사람도 있다는 걸 기억해 달라.
+- 다른 조건이 같다면 왜 Docker Compose를 선호하는가? 내가 보기엔 단일 바이너리가 어떤 Docker Compose 구성보다 확실히 낫다.
+- 셀프호스팅이 이렇게 쉬웠던 적은 없는데, 보통 사람이 이렇게 시도하지 않았던 적도 없는 것 같다. 이만큼 많이 돌리는 데 근접하는 사람은 없을 것이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Lo que autoalojo
+***** TLDR
+Un inventario de 28 servicios en un solo mini PC Beelink: Intel N100, 16GB de RAM, SSD de 512GB y un disco externo de 6TB para medios, con un consumo en reposo de unos 7,5GB de memoria. Diecisiete corren de forma nativa bajo systemd (Vaultwarden, Forgejo, Caddy, FreshRSS, Syncthing, Audiobookshelf, Actual Budget, PocketBase, parejas de MPD y Gonic, Samba, slskd, Transmission y más) y once en contenedores Podman (Immich, Jellyfin, Home Assistant, Frigate, Vikunja, Uptime Kuma, Automatic Ripping Machine). El autor prefiere lo nativo y eligió Podman sobre Docker precisamente por su integración con systemd. También enumera lo que descartó: la pila ⁎arr por propensa a romperse, Firefly III por complejo frente a Actual Budget, Collabora porque Google Docs resulta más cómodo, y el correo autoalojado por exigir demasiado trabajo para tan poco beneficio.
+***** Take
+La mitad útil de este artículo es la lista de descartes. Cualquiera puede pegar un inventario de docker-compose; decir en voz alta que probaste Firefly III y Owntracks y volviste atrás es lo que le ahorra un fin de semana al lector. Y los comentarios refutaron de inmediato lo del ⁎arr con cifras de 157MB en reposo, que es como debe funcionar este género.
+***** Comments
+- ¿Un servicio que solo viene como archivo de Docker Compose y quiere levantar MySQL, Redis y otros tres contenedores? Ya estoy buscando una alternativa. Respeto tu opinión, pero recuerda que hay pobres almas como yo a las que les encanta justo lo contrario.
+- En igualdad de condiciones, ¿por qué preferir Docker Compose? Desde mi punto de vista, un binario único domina claramente cualquier solución con Docker Compose.
+- Autoalojar nunca fue tan fácil y me imagino que la persona media nunca estuvo tan lejos de intentarlo. Nadie se acercará jamás a alojar tantas cosas.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Was ich selbst hoste
+***** TLDR
+Eine Aufstellung von 28 Diensten auf einem einzigen Beelink-Mini-PC: Intel N100, 16GB RAM, 512GB SSD plus eine externe 6TB-Platte für Medien, im Leerlauf rund 7,5GB Speicherverbrauch. Siebzehn laufen nativ unter systemd (Vaultwarden, Forgejo, Caddy, FreshRSS, Syncthing, Audiobookshelf, Actual Budget, PocketBase, je zwei Instanzen von MPD und Gonic, Samba, slskd, Transmission und mehr), elf in Podman-Containern (Immich, Jellyfin, Home Assistant, Frigate, Vikunja, Uptime Kuma, Automatic Ripping Machine). Der Autor bevorzugt native Installationen und nahm Podman statt Docker gerade wegen der systemd-Integration. Aufgelistet ist auch das Abgelehnte: der ⁎arr-Stack als störungsanfällig, Firefly III als zu komplex gegenüber Actual Budget, Collabora weil Google Docs bequemer ist, und selbst gehostete E-Mail als zu viel Arbeit für zu wenig Nutzen.
+***** Take
+Die nützliche Hälfte dieses Beitrags ist die Ablehnungsliste. Ein docker-compose-Inventar kann jeder einfügen; offen zu sagen, dass man Firefly III und Owntracks probiert hat und zurückgegangen ist, erspart der Leserschaft ein Wochenende. Und die Kommentare widerlegten die ⁎arr-Aussage sofort mit Leerlaufwerten von 157MB, genau so soll dieses Genre funktionieren.
+***** Comments
+- Ein Dienst, der nur als Docker-Compose-Datei kommt und MySQL, Redis und drei weitere Container starten will? Dann suche ich schon nach einer Alternative. Gut, ich respektiere deine Meinung, aber es gibt arme Seelen wie mich, die genau das Gegenteil lieben.
+- Warum sollte man bei sonst gleichen Bedingungen Docker Compose vorziehen? Aus meiner Sicht schlägt eine einzelne Binary jede Docker-Compose-Lösung klar.
+- Selbsthosting war nie einfacher, und ich vermute, der Durchschnittsmensch war nie weiter davon entfernt, es zu versuchen. Niemand wird jemals in die Nähe kommen, so viel zu hosten.
+** RPKI now protects 70% of internet routes :bgp:networking:security:rpki:
+:PROPERTIES:
+:ID:       50112330
+:URL:      https://ipinfo.io/blog/rpki-protects-70-internet-routes
+:HN_URL:   https://news.ycombinator.com/item?id=50112330
+:POINTS:   93
+:COMMENTS: 26
+:BY:       emot
+:END:
+
+*** TLDR
+ipinfo measured RPKI route origin validation going from 54% to 70.3% of routed prefixes in a year, against the 3 to 4 point annual gains before it. China drove most of it: 3.7% to 83.0% of its IPv4 addresses in valid routes, close to 60% of the global gain by address count. Egypt went 23% to 99%, Kazakhstan 16% to 84%, Mexico 37% to 78%. Excluding China the world still added about 5 points. Filtering appears to work: valid routes reach roughly 596 BGP vantage points on average while invalid ones reach 2, and nearly half of invalid routes reach exactly one. Of the remaining 30% unprotected, a quarter of the unprotected address space is US Department of Defense blocks that are announced but unused. IPv6 is ahead of IPv4 at 79% valid versus 68%.
+
+*** Take
+The vantage point numbers are the finding, not the 70%. An invalid announcement reaching 2 collectors instead of 596 means hijacks now die at the first validating neighbor, which is the actual security property everyone signed up for. The China jump is a reminder that global internet hygiene statistics are mostly a few large operators making a decision in a quarter.
+
+*** Comments
+
+**** cowlevel
+:PROPERTIES:
+:COMMENT_ID: 50112640
+:END:
+My concern about RPKI is legal pressure on the registries. By centralising all of Russia's allowed routes on a database server in the Netherlands and automatically enforcing it, it's trivial for the Dutch government to cut off Russia's internet access by tampering with that database.
+
+**** gizmo686
+:PROPERTIES:
+:COMMENT_ID: 50113134
+:END:
+Without RPKI, it would be easy for many governments to cut off Russia's internet access by launching a BGP attack. Assuming the Netherlands was acting unilaterally, Russian ISPs would be able to coordinate with other ISPs to get back online via other routes.
+
+**** 0xbadcafebee
+:PROPERTIES:
+:COMMENT_ID: 50114100
+:END:
+China went from 3.7% of its IPv4 addresses in valid routes to 83.0%. Interesting. China may have predicted cyber attacks in the near future. Or perhaps are readying for retaliation.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+RPKI 现已保护 70% 的互联网路由
+***** TLDR
+ipinfo 测得 RPKI 路由源验证在一年内从已通告前缀的 54% 升到 70.3%，而此前每年只增长 3 到 4 个百分点。主要推力来自中国：其 IPv4 地址处于有效路由中的比例从 3.7% 升到 83.0%，按地址量计接近全球增幅的 60%。埃及从 23% 到 99%，哈萨克斯坦从 16% 到 84%，墨西哥从 37% 到 78%。即便排除中国，全球仍增加约 5 个百分点。过滤看起来有效：有效路由平均能到达约 596 个 BGP 观测点，无效路由只到 2 个，近半数无效路由只到达一个。剩下未保护的 30% 中，有四分之一的未保护地址空间是美国国防部已通告但未使用的地址块。IPv6 领先 IPv4，有效比例为 79% 对 68%。
+***** Take
+真正的发现是观测点数字，而不是那个 70%。无效通告只到 2 个采集点而不是 596 个，说明劫持现在在第一个做验证的邻居那里就终止了，这才是大家当初想要的安全属性。中国的跃升则提醒我们，全球互联网卫生统计很大程度上取决于少数大运营商在某个季度做的决定。
+***** Comments
+- 我对 RPKI 的担忧是注册机构面临的法律压力。把俄罗斯所有被允许的路由集中在荷兰的一台数据库服务器上并自动执行，荷兰政府只要篡改那个数据库就能轻易切断俄罗斯的互联网接入。
+- 如果没有 RPKI，很多国家政府发动 BGP 攻击就能轻易切断俄罗斯的互联网接入。假如荷兰单方面行动，俄罗斯的 ISP 还可以和其他 ISP 协调，通过别的路径恢复上线。
+- 中国的 IPv4 地址处于有效路由中的比例从 3.7% 升到 83.0%。有意思。中国可能预判了不久将发生的网络攻击，或者在为反击做准备。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+RPKIが今やインターネット経路の70%を保護
+***** TLDR
+ipinfoの計測では、RPKIによる経路起点検証が1年で経路広告済みプレフィックスの54%から70.3%へ上昇した。それ以前は年3から4ポイントの伸びだった。主因は中国で、IPv4アドレスのうち有効な経路にあるものが3.7%から83.0%へ増え、アドレス数で見た世界全体の増分の約60%を占める。エジプトは23%から99%、カザフスタンは16%から84%、メキシコは37%から78%。中国を除いても世界は約5ポイント増えた。フィルタリングは機能しているようで、有効な経路は平均で約596のBGP観測点に届くのに対し、無効な経路は2つにしか届かず、無効経路の半数近くは1つにしか届かない。残る未保護の30%のうち、未保護アドレス空間の4分の1は米国防省が広告しているが使っていないブロックだ。IPv6は有効率79%でIPv4の68%を上回る。
+***** Take
+注目すべき数字は70%ではなく観測点の数だ。無効な広告が596ではなく2つの収集点にしか届かないということは、経路の乗っ取りが最初の検証する隣接ASで止まっていることを意味する。これこそ皆が求めていた安全性だ。中国の急増は、世界のインターネット衛生統計が結局は少数の大手事業者がある四半期に下した判断で決まることを思い出させる。
+***** Comments
+- RPKIについての懸念はレジストリへの法的圧力だ。ロシアの許可された経路をすべてオランダのデータベースサーバーに集約し自動的に強制すれば、オランダ政府がそのデータベースをいじるだけでロシアのインターネット接続を簡単に断てる。
+- RPKIがなければ、多くの政府はBGP攻撃でロシアのインターネット接続を容易に断てる。オランダが単独で動いたと仮定すれば、ロシアのISPは他のISPと連携して別経路で復旧できるだろう。
+- 中国のIPv4アドレスのうち有効な経路にあるものが3.7%から83.0%に増えた。興味深い。中国は近い将来のサイバー攻撃を予測しているのかもしれないし、反撃に備えているのかもしれない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+RPKI가 이제 인터넷 경로의 70%를 보호한다
+***** TLDR
+ipinfo 측정에 따르면 RPKI 경로 출처 검증 비율이 1년 만에 광고된 프리픽스의 54%에서 70.3%로 올랐다. 그 전에는 연 3~4포인트씩 늘었다. 가장 큰 요인은 중국으로, 유효 경로에 속한 IPv4 주소 비율이 3.7%에서 83.0%로 올라 주소 수 기준 전 세계 증가분의 약 60%를 차지했다. 이집트는 23%에서 99%, 카자흐스탄은 16%에서 84%, 멕시코는 37%에서 78%가 됐다. 중국을 빼도 전 세계는 약 5포인트 늘었다. 필터링은 작동하는 듯하다. 유효 경로는 평균 약 596개 BGP 관측 지점에 도달하는데 무효 경로는 2개에만 닿고, 무효 경로의 절반 가까이는 단 하나에만 닿는다. 남은 미보호 30% 가운데 미보호 주소 공간의 4분의 1은 미 국방부가 광고만 하고 쓰지 않는 블록이다. IPv6는 유효율 79%로 IPv4의 68%를 앞선다.
+***** Take
+핵심 수치는 70%가 아니라 관측 지점 숫자다. 무효 광고가 596곳이 아니라 2곳에만 도달한다는 것은 경로 탈취가 검증을 하는 첫 이웃에서 끊긴다는 뜻이고, 그게 모두가 원했던 보안 속성이다. 중국의 급등은 전 세계 인터넷 위생 통계가 결국 소수 대형 사업자가 어느 분기에 내린 결정으로 움직인다는 점을 다시 알려 준다.
+***** Comments
+- RPKI에 대한 내 걱정은 등록기관에 가해지는 법적 압력이다. 러시아의 허용 경로를 전부 네덜란드의 데이터베이스 서버에 모아 두고 자동으로 집행하면, 네덜란드 정부가 그 데이터베이스를 조작해 러시아의 인터넷 접속을 끊는 일은 간단하다.
+- RPKI가 없다면 많은 정부가 BGP 공격으로 러시아의 인터넷 접속을 쉽게 끊을 수 있다. 네덜란드가 단독으로 행동한다고 가정하면, 러시아 ISP들은 다른 ISP와 협력해 다른 경로로 복구할 수 있을 것이다.
+- 중국의 유효 경로 IPv4 주소 비율이 3.7%에서 83.0%로 올랐다. 흥미롭다. 중국이 가까운 미래의 사이버 공격을 예상했을 수도 있고, 보복을 준비하는 중일 수도 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+RPKI ya protege el 70% de las rutas de internet
+***** TLDR
+ipinfo midió que la validación del origen de rutas con RPKI pasó del 54% al 70,3% de los prefijos anunciados en un año, frente a los 3 o 4 puntos anuales previos. China aportó la mayor parte: del 3,7% al 83,0% de sus direcciones IPv4 en rutas válidas, cerca del 60% de la ganancia global contada por direcciones. Egipto pasó del 23% al 99%, Kazajistán del 16% al 84% y México del 37% al 78%. Sin contar a China, el mundo aún sumó unos 5 puntos. El filtrado parece funcionar: las rutas válidas llegan a unos 596 puntos de observación BGP de media mientras las inválidas llegan a 2, y casi la mitad de las inválidas llega exactamente a uno. Del 30% restante sin proteger, una cuarta parte del espacio de direcciones sin protección son bloques del Departamento de Defensa de EE. UU. anunciados pero sin usar. IPv6 va por delante de IPv4, con 79% válido frente a 68%.
+***** Take
+El hallazgo son las cifras de puntos de observación, no el 70%. Que un anuncio inválido llegue a 2 colectores en lugar de 596 significa que los secuestros mueren en el primer vecino que valida, que es la propiedad de seguridad que todos querían. El salto de China recuerda que las estadísticas de higiene de internet dependen sobre todo de unos pocos operadores grandes que toman una decisión en un trimestre.
+***** Comments
+- Mi preocupación con RPKI es la presión legal sobre los registros. Al centralizar todas las rutas permitidas de Rusia en un servidor de base de datos en Países Bajos y aplicarlas de forma automática, al gobierno neerlandés le resulta trivial cortar el acceso a internet de Rusia manipulando esa base de datos.
+- Sin RPKI, a muchos gobiernos les resultaría fácil cortar el acceso a internet de Rusia lanzando un ataque BGP. Si Países Bajos actuara de forma unilateral, los ISP rusos podrían coordinarse con otros ISP para volver a estar en línea por otras rutas.
+- China pasó del 3,7% al 83,0% de sus direcciones IPv4 en rutas válidas. Interesante. Puede que China haya previsto ciberataques próximos. O quizá se esté preparando para represalias.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+RPKI schützt jetzt 70% der Internetrouten
+***** TLDR
+ipinfo hat gemessen, dass die RPKI-Validierung des Routenursprungs binnen eines Jahres von 54% auf 70,3% der angekündigten Präfixe gestiegen ist, nach zuvor 3 bis 4 Punkten pro Jahr. Den größten Anteil hatte China: von 3,7% auf 83,0% seiner IPv4-Adressen in gültigen Routen, nach Adressanzahl knapp 60% des globalen Zuwachses. Ägypten ging von 23% auf 99%, Kasachstan von 16% auf 84%, Mexiko von 37% auf 78%. Ohne China legte die Welt immer noch etwa 5 Punkte zu. Die Filterung wirkt offenbar: Gültige Routen erreichen im Schnitt rund 596 BGP-Messpunkte, ungültige nur 2, und fast die Hälfte der ungültigen erreicht genau einen. Von den verbleibenden 30% ohne Schutz ist ein Viertel des ungeschützten Adressraums vom US-Verteidigungsministerium angekündigt, aber ungenutzt. IPv6 liegt mit 79% gültigen Präfixen vor IPv4 mit 68%.
+***** Take
+Der eigentliche Befund sind die Messpunktzahlen, nicht die 70%. Wenn eine ungültige Ankündigung 2 statt 596 Kollektoren erreicht, stirbt ein Hijack beim ersten validierenden Nachbarn, und genau das war die gewünschte Sicherheitseigenschaft. Chinas Sprung erinnert daran, dass globale Statistiken zur Internethygiene vor allem davon abhängen, dass ein paar große Betreiber in einem Quartal eine Entscheidung treffen.
+***** Comments
+- Meine Sorge bei RPKI ist juristischer Druck auf die Registries. Wenn alle erlaubten Routen Russlands auf einem Datenbankserver in den Niederlanden zentralisiert und automatisch durchgesetzt werden, kann die niederländische Regierung Russlands Internetzugang trivial abschneiden, indem sie diese Datenbank manipuliert.
+- Ohne RPKI könnten viele Regierungen Russlands Internetzugang leicht per BGP-Angriff abschneiden. Wenn die Niederlande einseitig handelten, könnten russische ISPs sich mit anderen ISPs abstimmen und über andere Routen wieder online gehen.
+- China ist von 3,7% auf 83,0% seiner IPv4-Adressen in gültigen Routen gesprungen. Interessant. Vielleicht erwartet China bald Cyberangriffe. Oder es rüstet sich für Vergeltung.
+** Apple routed a graphite pipe through the iPhone Duo's hinge to dissipate heat :apple:hardware:thermal:silicon:
+:PROPERTIES:
+:ID:       50068203
+:URL:      https://www.pcmag.com/news/apple-routed-a-graphite-pipe-through-the-iphone-duos-hinge
+:HN_URL:   https://news.ycombinator.com/item?id=50068203
+:POINTS:   100
+:COMMENTS: 59
+:BY:       giuliomagnifico
+:END:
+
+*** TLDR
+PCMag interviewed Apple's Dan Murray (VP of silicon engineering) and Banafsheh Barabadi (senior manager of thermal product design) about cooling the A20 Pro. Apple dropped package-on-package stacking, where DRAM sits on top of the SoC and blocks heat extraction, for a wafer-level multichip module that puts DRAM beside the chip, laptop style. That opens a direct path to a vapor chamber with three times the surface area of the iPhone 17 Pro's, coupled through a new "metal over foam" interface, plus a nanotwin copper display back plate with a graphite layer. In the iPhone 18 Pro the vapor chamber is structural, with battery and logic board mounted to it. The Duo gets a thinner floating chamber instead, and because a folded phone doubles its own thickness, Apple routed a flexible graphite pipe through the hinge to move heat between the halves. Barabadi says the part had to survive many hinge cycles while keeping thermal and structural integrity, and claims 35% higher sustained GPU performance than the iPhone 17 Pro.
+
+*** Take
+Unstacking the DRAM is the move here, and the hinge pipe is what it costs you. Apple spent a packaging generation and a custom flexible graphite part to buy 35% sustained GPU, which tells you how hard the thermal wall has become for on-device inference. The comment thread immediately turned it into the usual referendum on Apple's software, and honestly that contrast is earned.
+
+*** Comments
+
+**** ProfessorLayton
+:PROPERTIES:
+:COMMENT_ID: 50112276
+:END:
+I wish they put this level of care into their software. It's pretty shocking how nice their hardware has remained, while basic apps like Music/Photos etc. continue to decay.
+
+**** Grombobulous
+:PROPERTIES:
+:COMMENT_ID: 50112483
+:END:
+I really don't understand the criticism of Apple's software. I think we need to keep in mind a couple of things: 1. It's software designed for the masses. It's not intended to be a power user's playground. 2. There's no such thing as perfect software.
+
+**** mingus88
+:PROPERTIES:
+:COMMENT_ID: 50112528
+:END:
+If the last decade of Siri has taught us anything, they can literally ship the worst version of a thing and people will still buy an iphone. They're just that good.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+苹果在 iPhone Duo 的铰链里穿了一根石墨导热管来散热
+***** TLDR
+PCMag 采访了苹果硅工程副总裁 Dan Murray 和热设计高级经理 Banafsheh Barabadi，谈 A20 Pro 的散热。苹果放弃了把 DRAM 叠在 SoC 之上、因而阻碍导热的层叠封装，改用晶圆级多芯片模块，像笔记本那样把 DRAM 放在芯片旁边。这样就打通了通往新均热板的直接路径，该均热板表面积是 iPhone 17 Pro 的三倍，中间用一种新的「金属覆泡沫」界面材料耦合，另外还有带石墨层的纳米孪晶铜屏幕背板。在 iPhone 18 Pro 上，均热板本身是结构件，电池和主板直接装在它上面。Duo 则换成更薄的悬浮式均热板，而由于折叠机合起来厚度翻倍，苹果在铰链里穿了一根柔性石墨导热管，在两半之间转移热量。Barabadi 说这个部件必须在大量开合循环后仍保持导热和结构完整性，并称持续 GPU 性能比 iPhone 17 Pro 高 35%。
+***** Take
+关键一步是把 DRAM 从叠层里拿出来，铰链导热管则是为此付出的代价。苹果花了一代封装技术和一个定制柔性石墨件，换来 35% 的持续 GPU 性能，这说明端侧推理面对的散热墙已经有多硬。评论区立刻把它变成了对苹果软件的例行公投，老实说这种对比也不算冤。
+***** Comments
+- 真希望他们把这种用心也放到软件上。硬件一直这么好，而音乐、照片这类基本应用却继续退步，实在令人震惊。
+- 我真不理解对苹果软件的批评。有两点要记住：一，这是面向大众设计的软件，不是给高级用户当游乐场的；二，世上没有完美的软件。
+- 如果过去十年的 Siri 教给我们什么，那就是他们可以把一个东西做成最糟的版本，人们照样会买 iPhone。他们就是这么强。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AppleはiPhone Duoのヒンジにグラファイト製のパイプを通して放熱している
+***** TLDR
+PCMagがAppleのシリコンエンジニアリング担当VPのDan Murray氏と熱設計シニアマネージャーのBanafsheh Barabadi氏に、A20 Proの冷却について取材した。AppleはDRAMをSoCの上に積んで放熱を妨げるパッケージオンパッケージをやめ、ノートPCのようにDRAMをチップの横に置くウェハレベル・マルチチップモジュールへ移行した。これによりiPhone 17 Proの3倍の表面積を持つ新しいベイパーチャンバーへの直接的な熱経路が開き、両者は新素材「メタル・オーバー・フォーム」で結合される。さらにグラファイト層を備えたナノツイン銅のディスプレイ背面プレートも加わる。iPhone 18 Proではベイパーチャンバーが構造部材となり、バッテリーとロジックボードが直接取り付けられる。Duoではより薄く中空に浮く構造に変わり、折りたたみ機は閉じると厚みが倍になるため、Appleは柔軟なグラファイトパイプをヒンジに通して両側の熱を移動させている。Barabadi氏はこの部品が多数の開閉に耐えつつ熱的・構造的な健全性を保たなければならなかったと述べ、iPhone 17 Pro比で持続GPU性能が35%高いとしている。
+***** Take
+本質はDRAMの積層をやめたことで、ヒンジのパイプはその代価だ。Appleはパッケージ技術を一世代と専用の柔軟グラファイト部品を投じて持続GPU性能35%を買った。端末上の推論が直面する熱の壁がどれほど厚いかが分かる。コメント欄はすぐにApple のソフトウェアへの恒例の国民投票へ流れたが、その対比は正直なところ妥当だ。
+***** Comments
+- 同じだけの手間をソフトウェアにも注いでほしい。ハードウェアがこれほど良いままなのに、ミュージックや写真のような基本アプリが劣化し続けているのは驚くべきことだ。
+- Appleのソフトウェア批判が本当に理解できない。二つ覚えておくべきだ。一つ、これは大衆向けに設計されたソフトで、パワーユーザーの遊び場ではない。二つ、完璧なソフトウェアなど存在しない。
+- この10年のSiriが教えてくれたのは、最悪の出来のものを出荷しても人々はiPhoneを買うということだ。それほど強いのだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+애플은 iPhone Duo의 힌지에 흑연 파이프를 통과시켜 열을 내보낸다
+***** TLDR
+PCMag이 애플의 실리콘 엔지니어링 부사장 Dan Murray와 열 제품 설계 수석 매니저 Banafsheh Barabadi를 인터뷰해 A20 Pro의 냉각을 다뤘다. 애플은 DRAM을 SoC 위에 쌓아 방열을 막던 패키지 온 패키지를 버리고, 노트북처럼 DRAM을 칩 옆에 두는 웨이퍼 레벨 멀티칩 모듈로 바꿨다. 덕분에 iPhone 17 Pro보다 표면적이 3배 큰 새 베이퍼 챔버로 가는 직접 경로가 열렸고, 둘은 새 소재인 "메탈 오버 폼"으로 결합된다. 여기에 흑연층을 입힌 나노트윈 구리 디스플레이 배면 플레이트도 더해졌다. iPhone 18 Pro에서는 베이퍼 챔버가 구조재 역할을 하며 배터리와 로직보드가 직접 장착된다. Duo는 대신 더 얇고 가운데 떠 있는 챔버를 쓰고, 접는 기기는 닫으면 두께가 두 배가 되므로 애플은 유연한 흑연 파이프를 힌지에 통과시켜 양쪽 사이로 열을 옮긴다. Barabadi는 이 부품이 수많은 개폐를 견디면서 열적, 구조적 완전성을 유지해야 했다고 말하며, iPhone 17 Pro보다 지속 GPU 성능이 35% 높다고 밝혔다.
+***** Take
+핵심은 DRAM 적층을 포기한 결정이고, 힌지 파이프는 그 대가다. 애플은 패키징 한 세대와 맞춤 유연 흑연 부품을 들여 지속 GPU 성능 35%를 샀다. 온디바이스 추론이 마주한 열의 벽이 얼마나 단단해졌는지 알려 주는 숫자다. 댓글은 곧바로 애플 소프트웨어에 대한 늘 하던 국민투표로 흘렀는데, 솔직히 그 대비는 받을 만한 지적이다.
+***** Comments
+- 소프트웨어에도 이만큼 공을 들였으면 좋겠다. 하드웨어는 이렇게 좋은 수준을 유지하는데 음악, 사진 같은 기본 앱은 계속 나빠지는 게 꽤 충격적이다.
+- 애플 소프트웨어 비판이 정말 이해가 안 된다. 두 가지를 기억해야 한다. 하나, 이건 대중을 위해 설계된 소프트웨어이고 파워 유저의 놀이터가 아니다. 둘, 완벽한 소프트웨어는 존재하지 않는다.
+- 지난 10년의 Siri가 알려 준 게 있다면, 최악의 버전을 내놓아도 사람들은 여전히 아이폰을 산다는 것이다. 그만큼 강하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Apple pasó un tubo de grafito por la bisagra del iPhone Duo para disipar el calor
+***** TLDR
+PCMag entrevistó a Dan Murray (vicepresidente de ingeniería de silicio de Apple) y a Banafsheh Barabadi (directora sénior de diseño térmico de producto) sobre la refrigeración del A20 Pro. Apple abandonó el apilamiento package-on-package, en el que la DRAM se sitúa sobre el SoC y bloquea la extracción de calor, por un módulo multichip a nivel de oblea que coloca la DRAM al lado del chip, como en un portátil. Eso abre una vía directa a una cámara de vapor con el triple de superficie que la del iPhone 17 Pro, acoplada mediante un nuevo material llamado "metal sobre espuma", más una placa trasera de pantalla de cobre nanotwin con una capa de grafito. En el iPhone 18 Pro la cámara de vapor es estructural y la batería y la placa lógica se montan sobre ella. El Duo recibe en su lugar una cámara más fina que flota en el centro y, como un teléfono plegable duplica su propio grosor al cerrarse, Apple pasó un tubo flexible de grafito por la bisagra para mover calor entre las dos mitades. Barabadi dice que la pieza tenía que sobrevivir a muchos ciclos de bisagra manteniendo su integridad térmica y estructural, y afirma un 35% más de rendimiento sostenido de GPU que el iPhone 17 Pro.
+***** Take
+La jugada es desapilar la DRAM, y el tubo de la bisagra es lo que cuesta. Apple gastó una generación de encapsulado y una pieza flexible de grafito a medida para comprar un 35% de GPU sostenida, lo que indica lo dura que se ha vuelto la barrera térmica para la inferencia en el dispositivo. El hilo de comentarios lo convirtió de inmediato en el referéndum habitual sobre el software de Apple, y sinceramente ese contraste está merecido.
+***** Comments
+- Ojalá pusieran este nivel de cuidado en su software. Es bastante sorprendente lo bien que sigue su hardware mientras apps básicas como Música o Fotos siguen degradándose.
+- Realmente no entiendo las críticas al software de Apple. Hay que tener en cuenta dos cosas: 1. Es software diseñado para las masas, no pretende ser el patio de juegos de un usuario avanzado. 2. No existe el software perfecto.
+- Si la última década de Siri nos ha enseñado algo, es que pueden lanzar literalmente la peor versión de algo y la gente seguirá comprando un iPhone. Así de buenos son.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Apple führt ein Graphitrohr durch das Scharnier des iPhone Duo, um Wärme abzuführen
+***** TLDR
+PCMag hat Apples Dan Murray (VP Silicon Engineering) und Banafsheh Barabadi (Senior Manager Thermal Product Design) zur Kühlung des A20 Pro befragt. Apple hat das Package-on-Package-Stapeln aufgegeben, bei dem der DRAM über dem SoC sitzt und die Wärmeabfuhr blockiert, und setzt stattdessen auf ein Wafer-Level-Multichip-Modul, das den DRAM wie in einem Laptop neben den Chip legt. Das öffnet einen direkten Pfad zu einer Vapor Chamber mit dreifacher Oberfläche gegenüber der des iPhone 17 Pro, angekoppelt über ein neues Material namens "Metal over Foam", dazu eine Display-Rückplatte aus Nanotwin-Kupfer mit Graphitschicht. Im iPhone 18 Pro ist die Vapor Chamber tragendes Bauteil, Akku und Logicboard sind direkt daran montiert. Das Duo erhält stattdessen eine dünnere, frei schwebende Kammer, und weil ein Faltgerät geschlossen seine Dicke verdoppelt, führt Apple ein flexibles Graphitrohr durch das Scharnier, um Wärme zwischen den Hälften zu verschieben. Barabadi sagt, das Teil musste viele Scharnierzyklen überstehen und dabei thermisch und strukturell intakt bleiben, und nennt 35% höhere dauerhafte GPU-Leistung als beim iPhone 17 Pro.
+***** Take
+Der entscheidende Schritt ist das Entstapeln des DRAM, das Scharnierrohr ist der Preis dafür. Apple hat eine Packaging-Generation und ein maßgefertigtes flexibles Graphitteil ausgegeben, um 35% dauerhafte GPU-Leistung zu kaufen. Das zeigt, wie hart die thermische Wand für Inferenz auf dem Gerät geworden ist. Der Kommentarstrang wurde sofort zum üblichen Referendum über Apples Software, und dieser Kontrast ist ehrlich gesagt verdient.
+***** Comments
+- Ich wünschte, sie steckten diese Sorgfalt auch in ihre Software. Es ist schon erstaunlich, wie gut die Hardware geblieben ist, während grundlegende Apps wie Musik oder Fotos weiter verfallen.
+- Ich verstehe die Kritik an Apples Software wirklich nicht. Zwei Dinge sollte man bedenken: 1. Es ist Software für die Masse, kein Spielplatz für Power-User. 2. Perfekte Software gibt es nicht.
+- Wenn das letzte Jahrzehnt Siri uns etwas gelehrt hat, dann dass sie buchstäblich die schlechteste Version einer Sache ausliefern können und die Leute trotzdem ein iPhone kaufen. So gut sind sie.
