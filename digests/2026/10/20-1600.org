@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-20 16:00 UTC
+#+DATE: 2026-10-20T16:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A CA's private key turns out to be the number 4, Facebook charges $50 a month to post links, and 50,000 invented statistics reach investment research
+
+* Highlights
+- eMudhra: eight intermediate CA keys are integers under 256, one of them is 4
+- Facebook Pages: two links a month free, $499.99 for unlimited
+- 50,000 fake stats pages cost $50 and got cited by Shopify, DHL and a Qatari bank
+- tsrs: Cloudflare's Rust TypeScript port, and the TS team's doubts about why it's fast
+- iPadOS 27 hands the projector to whatever app you tapped last
+
+* Stories
+
+** eMudhra Intermediate CA Compromise :security:tls:pki:certificates:
+:PROPERTIES:
+:ID:       50166579
+:URL:      https://emudhra.we-have-a-problem.com/
+:HN_URL:   https://news.ycombinator.com/item?id=50166579
+:POINTS:   374
+:COMMENTS: 208
+:BY:       galadran
+:END:
+
+*** TLDR
+Eight eMudhra intermediate CA certificates have P-384 private keys that are integers below 256, recoverable in seconds by brute force; one of them is the number 4. eMudhra's Bugzilla explanation blames a flawed key generation ceremony script run on 2025-04-30 that produced a second, weaker key pair onboard and used it instead of the good one. Six TLS intermediates (DV, OV, EV) and two Microsoft code-signing intermediates are affected, chaining to the Comodo AAA Services root and emSign ECC Root CA - G3. Firefox and Chrome blocked them on October 17, Apple on October 19, via OneCRL, CRLite and CRLsets; Mozilla and Chrome are now removing emSign ECC Root CA - G3 entirely. eMudhra stopped issuance from the G3 chain and is migrating roughly 30,000 subscribers to RSA.
+
+*** Take
+Key generation is the one thing a CA cannot get wrong, and eMudhra shipped keys you can find by counting to 256. The more useful story is the cleanup gap: browsers killed these in hours through their own revocation channels, while Debian, Ubuntu, NSS, Go, Python certifi and Electron each need a separate update, and embedded clients that never update will keep trusting the number 4 for years.
+
+*** Comments
+
+**** eqvinox
+:PROPERTIES:
+:COMMENT_ID: 50169291
+:END:
+The private key for all 8 "compromised" CAs is a single byte. One of the private keys is literally "4". I'm putting "compromised" in quotes here, because I can't call it that without cringing and cursing.
+
+**** tech234a
+:PROPERTIES:
+:COMMENT_ID: 50170612
+:END:
+Explanation from eMudhra in the Mozilla bug report: there appears to be a flaw in the KGC script that was used on that specific day to create these ECC issuers.
+
+**** galadran
+:PROPERTIES:
+:COMMENT_ID: 50167244
+:END:
+The impact of this incident is very unevenly spread. Over 10 years ago Mozilla shipped OneCRL, so we remediated this in a couple of hours for Firefox users without the need for updates. Chrome, Apple and Microsoft have similar tooling. However, for others...
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+eMudhra 中间 CA 私钥泄露
+***** TLDR
+eMudhra 的八张中间 CA 证书，其 P-384 私钥都是小于 256 的整数，几秒钟就能暴力破解，其中一个私钥就是数字 4。eMudhra 在 Mozilla Bugzilla 的说明称，2025 年 4 月 30 日运行的密钥生成仪式脚本存在缺陷，在设备上生成了第二组更弱的密钥，并误用了这组密钥。受影响的包括六张 TLS 中间证书（DV、OV、EV）和两张微软代码签名中间证书，链接到 Comodo AAA Services 根证书和 emSign ECC Root CA - G3。Firefox 和 Chrome 在 10 月 17 日、Apple 在 10 月 19 日通过 OneCRL、CRLite 和 CRLsets 封锁了这些证书；Mozilla 和 Chrome 正在彻底移除 emSign ECC Root CA - G3。eMudhra 已停止从 G3 链签发，并将约 3 万名用户迁移到 RSA。
+***** Take
+密钥生成是 CA 唯一不能出错的环节，而 eMudhra 生成的密钥数到 256 就能找到。更有价值的是清理进度的落差：浏览器用自家吊销通道几小时就搞定，而 Debian、Ubuntu、NSS、Go、Python certifi 和 Electron 各自都要单独更新，那些永远不更新的嵌入式设备还会信任数字 4 好几年。
+***** Comments
+- 这 8 个「被泄露」CA 的私钥都只有一个字节。其中一个私钥字面上就是「4」。我给「泄露」打引号，因为不带着尴尬和咒骂说不出这个词。
+- eMudhra 在 Mozilla bug 报告里的解释：那天用来创建这些 ECC 签发者的 KGC 脚本似乎有缺陷。
+- 这次事件的影响非常不均衡。十多年前 Mozilla 就上线了 OneCRL，所以 Firefox 用户不需要更新，我们几小时就修好了。Chrome、Apple 和微软也有类似工具。但对其他人来说……
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+eMudhra 中間CAの秘密鍵が漏洩
+***** TLDR
+eMudhraの中間CA証明書8枚のP-384秘密鍵が256未満の整数で、数秒の総当たりで復元できる状態だった。1つは数字の「4」そのもの。eMudhraのBugzilla説明によると、2025年4月30日に実行した鍵生成セレモニーのスクリプトに欠陥があり、より弱い2組目の鍵が生成されて誤って使われた。影響はTLS中間証明書6枚（DV・OV・EV）とMicrosoft向けコード署名中間証明書2枚で、Comodo AAA ServicesルートとemSign ECC Root CA - G3に連なる。FirefoxとChromeは10月17日、Appleは10月19日にOneCRL・CRLite・CRLsetsでブロック。MozillaとChromeはemSign ECC Root CA - G3自体の削除に進んでいる。eMudhraはG3系からの発行を停止し、約3万件をRSAへ移行中。
+***** Take
+鍵生成はCAが唯一間違えてはいけない工程なのに、eMudhraは256まで数えれば見つかる鍵を出荷した。より示唆的なのは後始末の差だ。ブラウザは自前の失効機構で数時間で止めたが、Debian、Ubuntu、NSS、Go、Python certifi、Electronはそれぞれ個別更新が必要で、更新されない組み込み機器は今後何年も「4」を信頼し続ける。
+***** Comments
+- 8つの「漏洩」CAの秘密鍵はすべて1バイト。うち1つは文字どおり「4」だ。顔をしかめず罵らずには「漏洩」と呼べないので、かっこ付きにしている。
+- Mozillaのバグ報告にあるeMudhraの説明：その日これらのECC発行者を作るのに使ったKGCスクリプトに欠陥があったようだ。
+- この事件の影響は非常に偏っている。Mozillaは10年以上前にOneCRLを出したので、Firefoxユーザーは更新不要で数時間で対処できた。Chrome、Apple、Microsoftにも同様の仕組みがある。だが他は……
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+eMudhra 중간 CA 개인키 유출
+***** TLDR
+eMudhra의 중간 CA 인증서 8장의 P-384 개인키가 256보다 작은 정수였고, 몇 초 만에 무차별 대입으로 복구할 수 있었다. 그중 하나는 숫자 4 그 자체다. eMudhra는 Mozilla 버그질라 설명에서 2025년 4월 30일 실행한 키 생성 의식 스크립트의 결함으로 더 약한 두 번째 키 쌍이 생성되어 잘못 사용됐다고 밝혔다. TLS 중간 인증서 6장(DV, OV, EV)과 마이크로소프트 코드 서명 중간 인증서 2장이 영향을 받았고, Comodo AAA Services 루트와 emSign ECC Root CA - G3로 연결된다. Firefox와 Chrome은 10월 17일, Apple은 10월 19일에 OneCRL, CRLite, CRLsets로 차단했으며 Mozilla와 Chrome은 emSign ECC Root CA - G3를 트러스트 스토어에서 완전히 제거하는 중이다. eMudhra는 G3 체인 발급을 중단하고 약 3만 가입자를 RSA로 이전하고 있다.
+***** Take
+키 생성은 CA가 절대 틀려선 안 되는 단 하나의 작업인데, eMudhra는 256까지 세면 찾아지는 키를 내보냈다. 더 쓸모 있는 이야기는 정리 속도의 격차다. 브라우저는 자체 폐지 채널로 몇 시간 만에 막았지만 Debian, Ubuntu, NSS, Go, Python certifi, Electron은 각각 따로 업데이트해야 하고, 업데이트되지 않는 임베디드 기기는 앞으로 몇 년이고 숫자 4를 신뢰할 것이다.
+***** Comments
+- '유출된' CA 8곳의 개인키는 모두 1바이트다. 그중 하나는 말 그대로 '4'다. 민망함과 욕 없이는 '유출'이라 부를 수 없어서 따옴표를 붙였다.
+- Mozilla 버그 보고서에 올라온 eMudhra의 설명: 그날 이 ECC 발급자들을 만드는 데 쓴 KGC 스크립트에 결함이 있었던 것으로 보인다.
+- 이번 사고의 영향은 매우 고르지 않다. 10여 년 전 Mozilla가 OneCRL을 내놨기 때문에 Firefox 사용자는 업데이트 없이도 몇 시간 안에 보호됐다. Chrome, Apple, 마이크로소프트도 비슷한 도구가 있다. 하지만 나머지는……
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Compromiso de las CA intermedias de eMudhra
+***** TLDR
+Ocho certificados de CA intermedia de eMudhra tienen claves privadas P-384 que son enteros menores que 256, recuperables en segundos por fuerza bruta; una de ellas es el número 4. La explicación de eMudhra en Bugzilla culpa a un fallo en el script de la ceremonia de generación de claves ejecutado el 30 de abril de 2025, que creó un segundo par de claves más débil y lo usó en lugar del bueno. Hay seis intermedias TLS (DV, OV, EV) y dos de firma de código para Microsoft, encadenadas a la raíz Comodo AAA Services y a emSign ECC Root CA - G3. Firefox y Chrome las bloquearon el 17 de octubre y Apple el 19, mediante OneCRL, CRLite y CRLsets; Mozilla y Chrome están retirando por completo emSign ECC Root CA - G3. eMudhra detuvo la emisión desde la cadena G3 y migra a unos 30.000 suscriptores a RSA.
+***** Take
+La generación de claves es lo único que una CA no puede equivocar, y eMudhra entregó claves que se encuentran contando hasta 256. Lo más revelador es la brecha en la limpieza: los navegadores las anularon en horas con sus propios canales de revocación, mientras Debian, Ubuntu, NSS, Go, Python certifi y Electron necesitan cada uno su propia actualización, y los dispositivos embebidos que nunca se actualizan seguirán confiando en el número 4 durante años.
+***** Comments
+- La clave privada de las 8 CA "comprometidas" es un solo byte. Una de ellas es literalmente "4". Pongo "comprometidas" entre comillas porque no puedo decirlo sin vergüenza y sin maldecir.
+- Explicación de eMudhra en el informe de error de Mozilla: parece haber un fallo en el script KGC que se usó ese día concreto para crear estos emisores ECC.
+- El impacto de este incidente está muy desigualmente repartido. Hace más de 10 años Mozilla lanzó OneCRL, así que lo remediamos en un par de horas para los usuarios de Firefox sin necesidad de actualizaciones. Chrome, Apple y Microsoft tienen herramientas similares. Pero para los demás...
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kompromittierung der eMudhra-Zwischen-CAs
+***** TLDR
+Acht Zwischen-CA-Zertifikate von eMudhra haben P-384-Private-Keys, die Ganzzahlen unter 256 sind und sich in Sekunden per Brute Force finden lassen; einer davon ist die Zahl 4. In Mozillas Bugzilla erklärt eMudhra, ein Fehler im Skript der Schlüsselgenerierungszeremonie vom 30. April 2025 habe ein zweites, schwächeres Schlüsselpaar erzeugt, das dann statt des guten verwendet wurde. Betroffen sind sechs TLS-Zwischenzertifikate (DV, OV, EV) und zwei Code-Signing-Zwischenzertifikate für Microsoft, die an die Wurzel Comodo AAA Services und an emSign ECC Root CA - G3 anknüpfen. Firefox und Chrome blockierten sie am 17. Oktober, Apple am 19., über OneCRL, CRLite und CRLsets; Mozilla und Chrome entfernen emSign ECC Root CA - G3 nun vollständig. eMudhra hat die Ausgabe aus der G3-Kette gestoppt und migriert rund 30.000 Kunden auf RSA.
+***** Take
+Schlüsselgenerierung ist das Einzige, was eine CA nicht falsch machen darf, und eMudhra hat Schlüssel ausgeliefert, die man durch Zählen bis 256 findet. Interessanter ist die Lücke beim Aufräumen: Browser haben das in Stunden über ihre eigenen Sperrkanäle erledigt, während Debian, Ubuntu, NSS, Go, Python certifi und Electron jeweils ein eigenes Update brauchen, und Embedded-Geräte ohne Updates werden der Zahl 4 noch Jahre vertrauen.
+***** Comments
+- Der Private Key aller 8 "kompromittierten" CAs ist ein einzelnes Byte. Einer der Schlüssel ist buchstäblich "4". Ich setze "kompromittiert" in Anführungszeichen, weil ich es ohne Zusammenzucken und Fluchen nicht aussprechen kann.
+- Erklärung von eMudhra im Mozilla-Bugreport: Offenbar gibt es einen Fehler im KGC-Skript, das an diesem bestimmten Tag zur Erzeugung dieser ECC-Issuer verwendet wurde.
+- Die Auswirkungen dieses Vorfalls sind sehr ungleich verteilt. Vor über 10 Jahren hat Mozilla OneCRL ausgeliefert, deshalb war das für Firefox-Nutzer in zwei Stunden behoben, ohne Updates. Chrome, Apple und Microsoft haben ähnliche Werkzeuge. Für alle anderen jedoch ...
+** Facebook Pages require paid subscription to post more than two links per month :meta:facebook:platforms:monetization:
+:PROPERTIES:
+:ID:       50167536
+:URL:      https://mastodon.gamedev.place/@AshleyGullen/117473851565913919
+:HN_URL:   https://news.ycombinator.com/item?id=50167536
+:POINTS:   356
+:COMMENTS: 314
+:BY:       AshleysBrain
+:END:
+
+*** TLDR
+Ashley Gullen of Construct spotted that Facebook now allows links in only 2 organic posts or comments per month from a Page unless the Page pays. Meta's own help page lists the Meta One tiers: $14.99/month for 2 link posts, $49.99 for 8, $149.99 for 20, $499.99 for unlimited. The cap counts comments, unused allowance does not carry over, and the exemptions are telling: links to Meta properties, affiliate partnership links and links in ads do not count. Gullen notes the subscription is not yet available in the UK, so UK Pages are capped with no option to pay.
+
+*** Take
+The exemption list is the whole story. If this were spam control, linking to Instagram would not be free while linking to your own site costs $500 a month for unlimited. It is a toll on leaving the site, and the small-business Pages that replaced having a website are the ones who now pay it.
+
+*** Comments
+
+**** belak
+:PROPERTIES:
+:COMMENT_ID: 50168231
+:END:
+I wonder if this is an effort to combat pages which post a short clickbait description and require you to click "read more" to see the full description, and often post the link in the comments.
+
+**** josefresco
+:PROPERTIES:
+:COMMENT_ID: 50167847
+:END:
+As someone who helps small businesses create their own websites... thank you Facebook! Back when "Facebook Pages instead of websites" were all the rage, FB demoting page content in feeds killed that movement and I was similarly happy.
+
+**** meerita
+:PROPERTIES:
+:COMMENT_ID: 50169065
+:END:
+I quit Facebook in 2012. In 2019 I had to create a new account to test some development stuff, and checked friends and family and it was pretty much dead.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Facebook 主页每月发超过两条链接需付费订阅
+***** TLDR
+Construct 的 Ashley Gullen 发现，Facebook 主页如不付费，每月只能在 2 条自然帖子或评论中包含链接。Meta 自家帮助页列出了 Meta One 的档位：每月 14.99 美元含 2 条带链接帖子，49.99 美元含 8 条，149.99 美元含 20 条，499.99 美元不限量。评论也计入上限，未用完的额度不结转，而豁免项很说明问题：指向 Meta 自家产品的链接、联盟合作链接和广告里的链接都不计数。Gullen 指出该订阅在英国还没上线，所以英国主页被限额却连付费的选项都没有。
+***** Take
+豁免清单就是答案。如果这是为了治理垃圾内容，不会出现链到 Instagram 免费、链到自己网站却要每月 500 美元才不限量的情况。这是一道离站收费闸，而当年用主页代替官网的小商家正是掏钱的人。
+***** Comments
+- 我在想这是不是为了对付那些只写一句标题党简介、逼你点「查看更多」、还常把链接放在评论里的主页。
+- 作为帮小企业做自己网站的人……谢谢你 Facebook！当年「用 Facebook 主页代替网站」很流行，后来 FB 在信息流里降权主页内容，终结了那股风潮，我当时也很高兴。
+- 我 2012 年就不用 Facebook 了。2019 年为测试开发功能新建了账号，看了一圈亲友，基本已经没人了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Facebookページ、月2件以上のリンク投稿は有料サブスクが必要に
+***** TLDR
+ConstructのAshley Gullenが、Facebookページは課金しない限り月2件のオーガニック投稿またはコメントにしかリンクを入れられなくなったと指摘した。Meta自身のヘルプページにMeta Oneの料金帯が載っている。月14.99ドルでリンク投稿2件、49.99ドルで8件、149.99ドルで20件、499.99ドルで無制限。コメントも上限にカウントされ、未使用分は翌月に繰り越されない。除外項目が本質を示していて、Metaの自社サービスへのリンク、アフィリエイト提携リンク、広告内のリンクはカウントされない。Gullenによればこのサブスクは英国では未提供なので、英国のページは上限付きのまま課金もできない。
+***** Take
+除外リストがすべてを語っている。スパム対策なら、Instagramへのリンクが無料で自社サイトへのリンクが無制限で月500ドル、という形にはならない。これはサイトから出ていくことへの通行料で、かつてウェブサイト代わりにページを使った中小事業者がその料金を払う側になる。
+***** Comments
+- 短い釣り文だけ書いて「続きを読む」を押させ、リンクはコメントに置くようなページへの対策なのかもしれない。
+- 中小企業の自社サイト制作を手伝う立場として……ありがとうFacebook！「ウェブサイトの代わりにFacebookページ」が流行った頃、FBがページ投稿をフィードで下げてその流れを終わらせたときも同じようにうれしかった。
+- 2012年にFacebookをやめた。2019年に開発テストで新規アカウントを作り、友人や家族を見てみたが、ほぼ死んでいた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+페이스북 페이지, 월 2개 넘는 링크 게시에 유료 구독 요구
+***** TLDR
+Construct의 Ashley Gullen이 페이스북 페이지가 유료 결제 없이는 월 2개의 자연 게시물 또는 댓글에만 링크를 넣을 수 있게 됐다고 지적했다. 메타의 도움말 페이지에는 Meta One 등급이 나와 있다. 월 14.99달러에 링크 게시 2개, 49.99달러에 8개, 149.99달러에 20개, 499.99달러에 무제한이다. 댓글도 한도에 포함되고 남은 한도는 이월되지 않는다. 면제 항목이 핵심을 보여주는데, 메타 자사 서비스 링크, 어필리에이트 제휴 링크, 광고 내 링크는 집계되지 않는다. Gullen에 따르면 이 구독은 영국에서는 아직 제공되지 않아 영국 페이지는 한도에 걸린 채 결제조차 할 수 없다.
+***** Take
+면제 목록이 전부를 말해준다. 스팸 대응이라면 인스타그램 링크는 무료인데 자기 웹사이트 링크는 무제한에 월 500달러인 구조가 나오지 않는다. 이건 플랫폼을 떠나는 데 매기는 통행료이고, 웹사이트 대신 페이지를 쓰던 소상공인이 그 돈을 내게 된다.
+***** Comments
+- 짧은 낚시 설명만 쓰고 '더 보기'를 누르게 하면서 링크는 댓글에 올리는 페이지들을 막으려는 조치일지도 모르겠다.
+- 소상공인 웹사이트 제작을 돕는 사람으로서... 고맙다 페이스북! '웹사이트 대신 페이스북 페이지'가 유행하던 시절, FB가 피드에서 페이지 콘텐츠 노출을 낮춰 그 흐름을 끝냈을 때도 비슷하게 기뻤다.
+- 2012년에 페이스북을 끊었다. 2019년에 개발 테스트 때문에 새 계정을 만들어 친구와 가족을 둘러봤는데 거의 죽은 상태였다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Las páginas de Facebook exigen suscripción de pago para publicar más de dos enlaces al mes
+***** TLDR
+Ashley Gullen, de Construct, detectó que Facebook solo permite enlaces en 2 publicaciones o comentarios orgánicos al mes desde una página, salvo que la página pague. La propia página de ayuda de Meta enumera los niveles de Meta One: 14,99 dólares al mes por 2 publicaciones con enlace, 49,99 por 8, 149,99 por 20 y 499,99 por ilimitadas. El límite cuenta los comentarios, lo no usado no se acumula, y las excepciones son reveladoras: los enlaces a propiedades de Meta, los de programas de afiliados y los de anuncios no cuentan. Gullen señala que la suscripción todavía no está disponible en el Reino Unido, así que las páginas británicas quedan limitadas sin opción de pagar.
+***** Take
+La lista de excepciones lo explica todo. Si esto fuera control de spam, enlazar a Instagram no sería gratis mientras enlazar a tu propio sitio cuesta 500 dólares al mes por ilimitado. Es un peaje por salir de la plataforma, y lo pagan precisamente las páginas de pequeños negocios que sustituyeron a tener una web.
+***** Comments
+- Me pregunto si es un intento de combatir a las páginas que publican una descripción corta de clickbait, te obligan a pulsar "ver más" y a menudo ponen el enlace en los comentarios.
+- Como alguien que ayuda a pequeños negocios a crear su propia web... ¡gracias, Facebook! Cuando estaba de moda "páginas de Facebook en lugar de webs", que FB degradara el contenido de las páginas en el feed mató ese movimiento y me alegró igual.
+- Dejé Facebook en 2012. En 2019 tuve que crear una cuenta nueva para probar cosas de desarrollo, miré a amigos y familia y estaba prácticamente muerto.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Facebook-Seiten brauchen ein Abo, um mehr als zwei Links pro Monat zu posten
+***** TLDR
+Ashley Gullen von Construct hat entdeckt, dass Facebook Links von einer Seite nur noch in 2 organischen Beiträgen oder Kommentaren pro Monat erlaubt, sofern die Seite nicht zahlt. Metas eigene Hilfeseite listet die Meta-One-Stufen: 14,99 Dollar im Monat für 2 Link-Beiträge, 49,99 für 8, 149,99 für 20, 499,99 für unbegrenzt. Kommentare zählen mit, nicht genutztes Guthaben verfällt, und die Ausnahmen sind aufschlussreich: Links zu Meta-Diensten, Affiliate-Partnerlinks und Links in Werbung zählen nicht. Laut Gullen ist das Abo in Großbritannien noch nicht verfügbar, britische Seiten sind also begrenzt, ohne zahlen zu können.
+***** Take
+Die Ausnahmeliste ist die eigentliche Geschichte. Wäre das Spam-Bekämpfung, wäre ein Link zu Instagram nicht gratis, während ein Link zur eigenen Website 500 Dollar im Monat für unbegrenzt kostet. Es ist eine Maut für das Verlassen der Plattform, und zahlen müssen sie die Seiten kleiner Unternehmen, die einst die eigene Website ersetzt haben.
+***** Comments
+- Ich frage mich, ob das gegen Seiten geht, die eine kurze Clickbait-Beschreibung posten, dich auf "Mehr anzeigen" klicken lassen und den Link oft in die Kommentare setzen.
+- Als jemand, der kleinen Unternehmen beim Aufbau eigener Websites hilft ... danke, Facebook! Als "Facebook-Seiten statt Websites" groß im Trend waren, hat FBs Abstufung von Seiteninhalten im Feed diese Bewegung beendet, und ich habe mich genauso gefreut.
+- Ich habe Facebook 2012 verlassen. 2019 musste ich für Entwicklungstests ein neues Konto anlegen, habe Freunde und Familie angeschaut, und es war praktisch tot.
+** Publish fake stats, get cited in LLMs :ai:llm:seo:misinformation:
+:PROPERTIES:
+:ID:       50165801
+:URL:      https://peec.ai/blog/publish-stats-get-cited-the-tactic-that-put-my-data-all-over-the-web
+:HN_URL:   https://news.ycombinator.com/item?id=50165801
+:POINTS:   268
+:COMMENTS: 151
+:BY:       robtherobber
+:END:
+
+*** TLDR
+Metehan Yesilyurt generated 50,000 statistics pages for stateglobe.com in a single day with GPT-4.1, covering SEO, marketing, social media, e-commerce and web tech across 200 countries, then added 15,000 listicles. Total cost around $50, prompt was two sentences plus a country and topic list, and every number was invented: "I never checked a single one." Google deindexed the site within months after two updates, leaving it on 5 to 20 impressions. ChatGPT did not: over seven months the site drew 10,000+ sessions from ChatGPT, 600,000 bot requests in 30 days (about 72,000 from ChatGPT-User), and 330+ referring domains including Shopify, DHL and Bluehost. The fabricated numbers turned up in academic papers, Indian economics publications, Canadian research reports and the investment research of Qatar's largest financial group. On his tracked prompts the site ranked second for visibility, behind Statista.
+
+*** Take
+Google took two updates and a few months to throw this out. The answer engines took seven months and are still citing it, which is the part worth worrying about: a footnote carries more authority with readers than a blue link ever did, and there is no spam team behind it. $50 bought a place next to Statista in a sovereign bank's research.
+
+*** Comments
+
+**** Amorymeltzer
+:PROPERTIES:
+:COMMENT_ID: 50166710
+:END:
+I'm reminded of Cory Doctorow discussing how the semantic web and an internet set up for agents won't work: it also hasn't happened because there is a reward for cheating. Scammers will label their phone numbers as the customer service line.
+
+**** usrusr
+:PROPERTIES:
+:COMMENT_ID: 50171251
+:END:
+Trust isn't exactly a new problem in AI. Guess why the semantic web never had a chance? There's more incentive for fake than for fact.
+
+**** acadapter
+:PROPERTIES:
+:COMMENT_ID: 50167096
+:END:
+This has existed for a long time before LLMs, although in a slower form. On Wikipedia it's called "citogenesis".
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+发布假数据，然后被大模型引用
+***** TLDR
+Metehan Yesilyurt 用 GPT-4.1 在一天内为 stateglobe.com 生成了 5 万个统计数据页面，覆盖 200 个国家的 SEO、营销、社交媒体、电商和网络技术话题，之后又加了 1.5 万篇清单文。总成本约 50 美元，提示词只是两句话加国家和话题列表，所有数字都是编的：「我一个都没核对过。」谷歌在两次算法更新后几个月内就把站点基本除索引，只剩每次 5 到 20 次展示。ChatGPT 没有：七个月里该站从 ChatGPT 获得超过 1 万次会话，30 天内有 60 万次机器人请求（其中约 7.2 万来自 ChatGPT-User），还有 330 多个引荐域名，包括 Shopify、DHL 和 Bluehost。这些编造的数字出现在学术论文、印度经济类出版物、加拿大研究报告，以及卡塔尔最大金融集团的投资研究里。在他追踪的提示词上，该站可见度排第二，仅次于 Statista。
+***** Take
+谷歌用两次更新和几个月把它清出去了。答案引擎用了七个月还在引用，这才是值得担心的地方：一条脚注在读者眼里的权威性超过当年的蓝色链接，而背后没有反垃圾团队。50 美元买到了在一家主权银行研究报告里紧挨 Statista 的位置。
+***** Comments
+- 这让我想起 Cory Doctorow 讲语义网和为智能体准备的互联网为什么行不通：因为作弊有回报。骗子会把自己的电话号码标成客服热线。
+- 信任在 AI 里本来就不是新问题。语义网为什么从来没机会？因为造假的激励比说真话大。
+- 这在大模型之前就存在很久了，只是慢一些。维基百科管这个叫「引用生成」（citogenesis）。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+偽の統計を公開してLLMに引用させる
+***** TLDR
+Metehan YesilyurtはGPT-4.1で1日のうちにstateglobe.com向けの統計ページを5万件生成した。対象は200か国のSEO、マーケティング、SNS、EC、ウェブ技術で、その後リスト記事を1.5万件追加した。費用は約50ドル、プロンプトは2文に国と話題のリストを添えただけで、数字はすべて作り物だ。「ひとつも確認していない」。Googleは2度のアップデート後、数か月でほぼインデックスから外し、表示回数は5〜20回まで落ちた。ChatGPTは違った。7か月でChatGPT経由のセッションが1万件超、30日間でボットからのリクエストが60万件（うちChatGPT-Userが約7.2万件）、参照ドメインは330件超でShopify、DHL、Bluehostを含む。捏造された数字は学術論文、インドの経済系媒体、カナダの調査報告、さらにカタール最大の金融グループの投資リサーチにも現れた。追跡したプロンプトでの可視性は、Statistaに次ぐ2位だった。
+***** Take
+Googleは2度のアップデートと数か月でこれを排除した。回答エンジンは7か月経ってもまだ引用しており、そこが問題だ。脚注は、かつての青いリンクより読者にとって権威的に見えるのに、裏にスパム対策チームがいない。50ドルで、ある政府系金融グループのリサーチでStatistaの隣に並べた。
+***** Comments
+- Cory Doctorowが、セマンティックウェブやエージェント向けに整えたインターネットが機能しない理由を論じていたのを思い出す。不正に報酬があるから実現しないのだ。詐欺師は自分の電話番号をカスタマーサービス窓口として登録する。
+- 信頼はAIにおいて今さら新しい問題ではない。セマンティックウェブに勝ち目がなかった理由を考えてみればいい。事実より偽物のほうがインセンティブが大きい。
+- これはLLM以前から、もっと遅い形で長く存在していた。Wikipediaではcitogenesis（引用生成）と呼ばれている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+가짜 통계를 올려 LLM에 인용되게 하기
+***** TLDR
+Metehan Yesilyurt는 GPT-4.1으로 하루 만에 stateglobe.com용 통계 페이지 5만 개를 생성했다. 200개국의 SEO, 마케팅, 소셜미디어, 이커머스, 웹 기술을 다뤘고 이후 리스트 글 1만 5천 개를 추가했다. 총비용은 약 50달러, 프롬프트는 두 문장에 국가와 주제 목록을 붙인 수준이었으며 모든 숫자는 지어낸 것이다. "단 하나도 확인하지 않았다." 구글은 두 차례 업데이트 뒤 몇 달 만에 사실상 색인에서 제외해 노출이 5~20회로 줄었다. ChatGPT는 달랐다. 7개월 동안 ChatGPT 경유 세션이 1만 건 이상, 30일간 봇 요청이 60만 건(그중 ChatGPT-User가 약 7만 2천 건), 참조 도메인이 330개 이상이었고 Shopify, DHL, Bluehost가 포함됐다. 조작된 숫자는 학술 논문, 인도 경제 매체, 캐나다 연구 보고서, 그리고 카타르 최대 금융그룹의 투자 리서치에까지 등장했다. 추적한 프롬프트에서 이 사이트의 가시성은 Statista에 이어 2위였다.
+***** Take
+구글은 업데이트 두 번과 몇 달로 이걸 걸러냈다. 답변 엔진은 7개월이 지나도 여전히 인용하고 있고, 그게 걱정할 지점이다. 각주는 과거의 파란 링크보다 독자에게 더 권위 있게 보이는데 뒤를 받치는 스팸 대응 팀은 없다. 50달러로 한 국부 금융그룹 리서치에서 Statista 옆자리를 샀다.
+***** Comments
+- Cory Doctorow가 시맨틱 웹과 에이전트용 인터넷이 작동하지 않는 이유를 말한 게 떠오른다. 속이는 데 보상이 있기 때문에 실현되지 않았다는 것이다. 사기꾼은 자기 전화번호를 고객센터 번호로 표기한다.
+- 신뢰는 AI에서 전혀 새로운 문제가 아니다. 시맨틱 웹에 왜 기회가 없었다고 생각하나? 사실보다 가짜에 인센티브가 더 크다.
+- 이건 LLM 이전에도 더 느린 형태로 오래 있었다. 위키백과에서는 citogenesis라고 부른다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Publica estadísticas falsas y acaba citado por los LLM
+***** TLDR
+Metehan Yesilyurt generó 50.000 páginas de estadísticas para stateglobe.com en un solo día con GPT-4.1, sobre SEO, marketing, redes sociales, comercio electrónico y tecnología web en 200 países, y luego añadió 15.000 listículos. Coste total: unos 50 dólares; el prompt eran dos frases más una lista de países y temas, y todas las cifras eran inventadas: "nunca comprobé ni una". Google lo desindexó casi por completo en unos meses tras dos actualizaciones, dejándolo en 5 a 20 impresiones. ChatGPT no: en siete meses el sitio recibió más de 10.000 sesiones desde ChatGPT, 600.000 peticiones de bots en 30 días (unas 72.000 de ChatGPT-User) y más de 330 dominios de referencia, incluidos Shopify, DHL y Bluehost. Las cifras falsas aparecieron en artículos académicos, publicaciones de economía indias, informes canadienses y la investigación de inversión del mayor grupo financiero de Catar. En sus prompts monitorizados, el sitio quedó segundo en visibilidad, solo detrás de Statista.
+***** Take
+Google necesitó dos actualizaciones y unos meses para expulsar esto. Los motores de respuestas llevan siete meses y siguen citándolo, y eso es lo preocupante: una nota al pie transmite más autoridad al lector que cualquier enlace azul, y detrás no hay un equipo antispam. 50 dólares compraron un sitio junto a Statista en la investigación de un banco soberano.
+***** Comments
+- Me recuerda a Cory Doctorow explicando por qué la web semántica y una internet preparada para agentes no funcionarán: tampoco ha ocurrido porque hay recompensa por hacer trampa. Los estafadores etiquetarán sus números como la línea de atención al cliente.
+- La confianza no es precisamente un problema nuevo en la IA. ¿Por qué creen que la web semántica nunca tuvo posibilidades? Hay más incentivo para lo falso que para lo cierto.
+- Esto existía mucho antes de los LLM, aunque de forma más lenta. En Wikipedia se llama "citogénesis".
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Falsche Statistiken veröffentlichen und von LLMs zitiert werden
+***** TLDR
+Metehan Yesilyurt hat mit GPT-4.1 an einem einzigen Tag 50.000 Statistikseiten für stateglobe.com erzeugt, zu SEO, Marketing, Social Media, E-Commerce und Webtechnik in 200 Ländern, und später 15.000 Listicles ergänzt. Kosten: rund 50 Dollar, der Prompt waren zwei Sätze plus Länder- und Themenliste, und jede Zahl war erfunden: "Ich habe keine einzige geprüft." Google hat die Seite nach zwei Updates innerhalb von Monaten fast vollständig deindexiert, übrig blieben 5 bis 20 Impressionen. ChatGPT nicht: In sieben Monaten kamen über 10.000 Sitzungen von ChatGPT, 600.000 Bot-Anfragen in 30 Tagen (etwa 72.000 von ChatGPT-User) und mehr als 330 verweisende Domains, darunter Shopify, DHL und Bluehost. Die erfundenen Zahlen landeten in wissenschaftlichen Arbeiten, indischen Wirtschaftspublikationen, kanadischen Studien und der Investmentresearch der größten Finanzgruppe Katars. Bei seinen getrackten Prompts lag die Seite in der Sichtbarkeit auf Platz zwei, nur hinter Statista.
+***** Take
+Google brauchte zwei Updates und ein paar Monate, um das rauszuwerfen. Die Antwortmaschinen zitieren es nach sieben Monaten noch, und das ist der beunruhigende Teil: Eine Fußnote wirkt auf Leser autoritativer als jeder blaue Link, und dahinter steht kein Spam-Team. 50 Dollar haben einen Platz neben Statista in der Research einer Staatsbank gekauft.
+***** Comments
+- Das erinnert mich an Cory Doctorow, der erklärt, warum das semantische Web und ein für Agenten gebautes Internet nicht funktionieren: Es ist auch deshalb nicht passiert, weil sich Betrug auszahlt. Betrüger werden ihre Telefonnummern als Kundendienst-Hotline auszeichnen.
+- Vertrauen ist in der KI nicht gerade ein neues Problem. Warum hatte das semantische Web nie eine Chance? Für Fälschung gibt es mehr Anreiz als für Fakten.
+- Das gab es lange vor LLMs, nur langsamer. In der Wikipedia heißt es "Citogenesis".
+** Tsrs: A Port of TypeScript to Rust :rust:typescript:compilers:webassembly:
+:PROPERTIES:
+:ID:       50165953
+:URL:      https://blog.cloudflare.com/typescript-rust-port/
+:HN_URL:   https://news.ycombinator.com/item?id=50165953
+:POINTS:   238
+:COMMENTS: 113
+:BY:       hnisjafx40
+:END:
+
+*** TLDR
+Cloudflare, VoidZero and Max Schwenk of Owner.com have ported the TypeScript compiler to Rust as tsrs, incubated inside the Oxc toolchain and intended as a faithful port rather than a fork. Cloudflare claims up to 8x faster than TypeScript 7.0 with about 70% less memory, plus an adaptive mode that trades memory for more speed. The real driver is WebAssembly: compiling the Go-based tsgo to Wasm drags Go's garbage collector in with it, and Cloudflare wants type checking inside a Wasm-only sandbox. Rather than a GC, tsrs fakes one with arenas that are never freed. It is experimental, installable from npm, and diagnostics come out in a different order than tsc. TypeScript's own 7.1 beta is already 2.5x faster than 7.0, partly from optimizations upstreamed from tsrs.
+
+*** Take
+The most interesting comment is from the TypeScript team: they did their own Rust port and suspect the speed is mostly not about the language. That lines up with 7.1 picking up 2.5x by adopting tsrs's tricks, so the 8x headline is a gap between two moving targets rather than a verdict on Rust versus Go. The Wasm argument is the one that actually holds: no GC to ship is a structural advantage, not a benchmark.
+
+*** Comments
+
+**** DanRosenwasser
+:PROPERTIES:
+:COMMENT_ID: 50167925
+:END:
+TypeScript team member here. We've been working with the maintainers to better understand how tsrs is fast and what sorts of optimizations it uses are safe. We even did our own Rust vibe port, and what we currently suspect is that a lot of the speed does not just come down to language choice.
+
+**** afdbcreid
+:PROPERTIES:
+:COMMENT_ID: 50167990
+:END:
+They're using a unique memory model to overcome the challenge that prevented the TypeScript team from choosing Rust to begin with: Rust has no GC. Essentially, they fake a GC via never-freed arenas.
+
+**** sheepscreek
+:PROPERTIES:
+:COMMENT_ID: 50167635
+:END:
+It wasn't "let's build a faster Rust based TypeScript compiler" at all. They needed a compiler that can run on their WASM only sandbox, and exporting tsc Go to WASM comes with the full Go runtime.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+tsrs：把 TypeScript 移植到 Rust
+***** TLDR
+Cloudflare、VoidZero 和 Owner.com 的 Max Schwenk 把 TypeScript 编译器移植到了 Rust，项目名 tsrs，在 Oxc 工具链里孵化，目标是忠实移植而非分叉。Cloudflare 称其比 TypeScript 7.0 快最多 8 倍、内存少约 70%，还有一个用内存换速度的自适应模式。真正的动因是 WebAssembly：把基于 Go 的 tsgo 编译到 Wasm 会把 Go 的垃圾回收器一起带进去，而 Cloudflare 想在只支持 Wasm 的沙箱里做类型检查。tsrs 不用 GC，而是用永不释放的 arena 模拟了一个。项目仍属实验性，可从 npm 安装，诊断信息的顺序与 tsc 不同。TypeScript 官方的 7.1 beta 已经比 7.0 快 2.5 倍，部分优化正是从 tsrs 回流上游的。
+***** Take
+最值得看的是 TypeScript 团队的留言：他们自己也做了一个 Rust 移植，怀疑速度的大部分并不来自语言选择。这和 7.1 靠吸收 tsrs 的技巧就提速 2.5 倍相吻合，所以 8 倍这个标题是两个移动目标之间的差距，而不是 Rust 对 Go 的判决。真正站得住的是 Wasm 论点：不用随包携带 GC 是结构性优势，而非跑分结果。
+***** Comments
+- 我是 TypeScript 团队成员。我们一直在和维护者合作，想弄清 tsrs 为什么快、它用的哪些优化是安全的。我们自己也做了一个 Rust 版移植，目前的判断是：很大一部分速度并不只是语言选择带来的。
+- 他们用了一套独特的内存模型，来绕过当初让 TypeScript 团队放弃 Rust 的难题：Rust 没有 GC。本质上，他们用永不释放的 arena 伪造了一个 GC。
+- 这根本不是「我们来做一个更快的 Rust 版 TypeScript 编译器」。他们需要一个能跑在只支持 WASM 的沙箱里的编译器，而把 Go 版 tsc 导出到 WASM 会带上整个 Go 运行时。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+tsrs: TypeScriptのRust移植
+***** TLDR
+Cloudflare、VoidZero、Owner.comのMax SchwenkがTypeScriptコンパイラをRustに移植し、tsrsとしてOxcツールチェーン内で育てている。フォークではなく忠実な移植を狙う。CloudflareはTypeScript 7.0比で最大8倍速、メモリ約70%削減、さらにメモリと引き換えに速度を上げるアダプティブモードがあるとしている。本当の動機はWebAssemblyだ。Go製のtsgoをWasmにコンパイルするとGoのガベージコレクタまで一緒に入ってしまうが、CloudflareはWasm専用サンドボックス内で型チェックをしたい。tsrsはGCを使わず、解放しないアリーナで疑似的に代用している。現状は実験的でnpmから導入でき、診断の出力順はtscと異なる。TypeScript本家の7.1ベータはすでに7.0比2.5倍速で、一部はtsrsから上流に取り込まれた最適化による。
+***** Take
+最も興味深いのはTypeScriptチームのコメントだ。自前でもRust移植を試し、速度の大半は言語選択によるものではないと見ている。tsrsの手法を取り入れた7.1が2.5倍になった事実とも整合する。つまり8倍という見出しは動く2つの的の差で、RustとGoの判定ではない。説得力があるのはWasmの論点だ。GCを同梱しなくて済むのはベンチマークではなく構造的な優位だ。
+***** Comments
+- TypeScriptチームの者だ。tsrsがなぜ速いのか、どの最適化が安全なのかを理解するためメンテナと協力してきた。自分たちでもRust版の移植を試し、現時点では速度の多くが言語選択だけに由来するものではないと見ている。
+- 彼らは独自のメモリモデルを使い、TypeScriptチームが当初Rustを選べなかった課題を回避している。RustにはGCがないという問題だ。要するに解放しないアリーナで疑似GCを作っている。
+- 「Rustでより速いTypeScriptコンパイラを作ろう」という話ではまったくない。WASM専用サンドボックスで動くコンパイラが必要で、Go版tscをWASMに出すとGoランタイム一式が付いてくるのだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+tsrs: TypeScript를 러스트로 이식
+***** TLDR
+Cloudflare, VoidZero, 그리고 Owner.com의 Max Schwenk가 TypeScript 컴파일러를 러스트로 이식해 tsrs라는 이름으로 Oxc 툴체인 안에서 키우고 있다. 포크가 아닌 충실한 이식을 목표로 한다. Cloudflare는 TypeScript 7.0보다 최대 8배 빠르고 메모리는 약 70% 적으며, 메모리를 더 쓰는 대신 속도를 올리는 적응 모드도 있다고 밝혔다. 실제 동기는 WebAssembly다. Go 기반 tsgo를 Wasm으로 컴파일하면 Go의 가비지 컬렉터까지 끌려오는데, Cloudflare는 Wasm 전용 샌드박스 안에서 타입 검사를 하고 싶어 한다. tsrs는 GC 대신 절대 해제하지 않는 아레나로 GC를 모방한다. 아직 실험 단계이고 npm으로 설치할 수 있으며 진단 출력 순서가 tsc와 다르다. TypeScript 공식 7.1 베타는 이미 7.0보다 2.5배 빠른데, 일부는 tsrs에서 올라간 최적화 덕이다.
+***** Take
+가장 눈에 띄는 건 TypeScript 팀의 댓글이다. 자기들도 러스트 이식을 해봤고 속도의 상당 부분은 언어 선택과 무관하다고 본다는 것이다. tsrs의 기법을 받아들인 7.1이 2.5배 빨라진 사실과도 맞물린다. 즉 8배라는 제목은 움직이는 두 표적 사이의 간격이고 러스트 대 Go의 판정이 아니다. 실제로 성립하는 논거는 Wasm이다. GC를 함께 실어 보내지 않아도 된다는 건 벤치마크가 아니라 구조적 이점이다.
+***** Comments
+- TypeScript 팀원이다. tsrs가 왜 빠른지, 어떤 최적화가 안전한지 이해하려고 메인테이너들과 협업해왔다. 우리도 직접 러스트 이식을 해봤고, 현재 추정은 속도의 많은 부분이 단순히 언어 선택에서 오는 게 아니라는 것이다.
+- 그들은 독특한 메모리 모델로 TypeScript 팀이 애초에 러스트를 고르지 못했던 문제를 피해간다. 러스트에는 GC가 없다는 문제다. 본질적으로 절대 해제하지 않는 아레나로 GC를 모방한다.
+- '러스트로 더 빠른 TypeScript 컴파일러를 만들자'가 전혀 아니었다. WASM 전용 샌드박스에서 돌아가는 컴파일러가 필요했고, Go 버전 tsc를 WASM으로 내보내면 Go 런타임 전체가 따라온다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Tsrs: un port de TypeScript a Rust
+***** TLDR
+Cloudflare, VoidZero y Max Schwenk, de Owner.com, han portado el compilador de TypeScript a Rust con el nombre tsrs, incubado dentro de la cadena de herramientas Oxc y planteado como port fiel, no como fork. Cloudflare afirma hasta 8 veces más velocidad que TypeScript 7.0 con un 70% menos de memoria, además de un modo adaptativo que cambia memoria por velocidad. El motivo real es WebAssembly: compilar a Wasm el tsgo escrito en Go arrastra consigo el recolector de basura de Go, y Cloudflare quiere comprobación de tipos dentro de un sandbox solo-Wasm. En lugar de un GC, tsrs lo simula con arenas que nunca se liberan. Es experimental, se instala desde npm y los diagnósticos salen en otro orden que en tsc. La propia beta 7.1 de TypeScript ya es 2,5 veces más rápida que 7.0, en parte por optimizaciones que subieron desde tsrs.
+***** Take
+El comentario más interesante es del equipo de TypeScript: hicieron su propio port a Rust y sospechan que la velocidad no se debe sobre todo al lenguaje. Encaja con que 7.1 ganara 2,5x adoptando los trucos de tsrs, así que el titular de 8x es la distancia entre dos blancos en movimiento, no un veredicto de Rust frente a Go. El argumento que sí aguanta es el de Wasm: no tener que enviar un GC es una ventaja estructural, no un benchmark.
+***** Comments
+- Miembro del equipo de TypeScript. Hemos trabajado con los mantenedores para entender mejor por qué tsrs es rápido y qué optimizaciones son seguras. Incluso hicimos nuestro propio port a Rust, y por ahora sospechamos que buena parte de la velocidad no se reduce a la elección de lenguaje.
+- Usan un modelo de memoria peculiar para superar el obstáculo que impidió al equipo de TypeScript elegir Rust: Rust no tiene GC. En esencia, simulan un GC con arenas que nunca se liberan.
+- No era en absoluto "vamos a hacer un compilador de TypeScript más rápido en Rust". Necesitaban un compilador capaz de correr en su sandbox solo-WASM, y exportar el tsc de Go a WASM trae el runtime completo de Go.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Tsrs: eine Portierung von TypeScript nach Rust
+***** TLDR
+Cloudflare, VoidZero und Max Schwenk von Owner.com haben den TypeScript-Compiler als tsrs nach Rust portiert, inkubiert innerhalb der Oxc-Toolchain und als treue Portierung statt Fork gedacht. Cloudflare nennt bis zu 8-mal mehr Tempo als TypeScript 7.0 bei rund 70% weniger Speicher, plus einen adaptiven Modus, der Speicher gegen Geschwindigkeit tauscht. Der eigentliche Treiber ist WebAssembly: Kompiliert man das in Go geschriebene tsgo nach Wasm, kommt Gos Garbage Collector mit, und Cloudflare will Typprüfung in einer Wasm-only-Sandbox. Statt eines GC simuliert tsrs einen über Arenen, die nie freigegeben werden. Das Projekt ist experimentell, per npm installierbar, und die Diagnosen erscheinen in anderer Reihenfolge als bei tsc. TypeScripts eigene 7.1-Beta ist bereits 2,5-mal schneller als 7.0, teils durch Optimierungen, die von tsrs nach oben gewandert sind.
+***** Take
+Der interessanteste Kommentar kommt vom TypeScript-Team: Sie haben selbst eine Rust-Portierung gebaut und vermuten, dass das Tempo überwiegend nicht an der Sprache liegt. Das passt dazu, dass 7.1 durch Übernahme von tsrs-Tricks 2,5x gewonnen hat. Die 8x in der Schlagzeile sind also der Abstand zwischen zwei bewegten Zielen, kein Urteil über Rust gegen Go. Tragfähig ist das Wasm-Argument: keinen GC mitliefern zu müssen ist ein struktureller Vorteil, kein Benchmark.
+***** Comments
+- Hier ein Mitglied des TypeScript-Teams. Wir arbeiten mit den Maintainern daran, besser zu verstehen, warum tsrs schnell ist und welche Optimierungen sicher sind. Wir haben sogar eine eigene Rust-Portierung gebaut, und wir vermuten derzeit, dass ein großer Teil des Tempos nicht einfach an der Sprachwahl liegt.
+- Sie verwenden ein eigenes Speichermodell, um das Problem zu umgehen, das das TypeScript-Team ursprünglich von Rust abgehalten hat: Rust hat keinen GC. Im Grunde faken sie einen GC über Arenen, die nie freigegeben werden.
+- Es war überhaupt kein "bauen wir einen schnelleren TypeScript-Compiler in Rust". Sie brauchten einen Compiler, der in ihrer WASM-only-Sandbox läuft, und tsc in Go nach WASM zu exportieren bringt die komplette Go-Runtime mit.
+** Apple broke an essential presentation feature of iPads :apple:ipad:ux:ipados:
+:PROPERTIES:
+:ID:       50165208
+:URL:      https://teddysvoronos.com/2026-10-19-apple-broke-an-essential-presentation-feature-of-ipads/
+:HN_URL:   https://news.ycombinator.com/item?id=50165208
+:POINTS:   374
+:COMMENTS: 219
+:BY:       evanb
+:END:
+
+*** TLDR
+Teddy Svoronos teaches from an iPad over AirPlay and relied on being able to run slides on the projector while using other apps on the tablet. In iPadOS 27 the most recently tapped app takes over the external display, where previously you had to go through the home screen and dock to switch it. Now touching anything else mid-class pushes the whole iPad screen to the room, including private notes on which students to call on and unpublished poll results. Recovery varies by app: GoodNotes falls back to presenter view, Keynote exits presentation mode outright, PowerPoint needs a restart. His proposal is that an app in presenter mode should keep the external display until the presentation is stopped, the document closed or the app quit. He has no workaround and filed feedback FB23615646.
+
+*** Take
+The iPad still has no concept of a surface with a different audience than the one in your hands, which is fine until you are standing in front of 80 people. Desktop operating systems hit this years ago and settled on asking which screen or window to share. The one-window-at-a-time model keeps being simple right up to the point where it leaks your notes to the lecture hall.
+
+*** Comments
+
+**** whywhywhywhy
+:PROPERTIES:
+:COMMENT_ID: 50171642
+:END:
+The endless struggle of professional iPad users trying to get their hardware to act like something it insists it is not. The team behind it doesn't want to relinquish control to the user, so it can never truly be a professional tool.
+
+**** btown
+:PROPERTIES:
+:COMMENT_ID: 50167825
+:END:
+I could see the other argument here: I'm presenting, I want to switch to a live demo environment, and to do so I need to turn off the presentation entirely? Another OS might see this tension and ask the user whether they want to share their entire screen or stay on the existing window.
+
+**** abujazar
+:PROPERTIES:
+:COMMENT_ID: 50166334
+:END:
+Apple needs to get their software design on track again and do proper QA before making these kinds of changes. 27 was supposed to be a quality improvement and bugfix release, but it's mostly been a cascade of bugs and UI failures.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+苹果弄坏了 iPad 一项关键的演示功能
+***** TLDR
+Teddy Svoronos 用 iPad 通过 AirPlay 上课，一直依赖「投影仪放幻灯片、平板上同时用别的应用」这种用法。在 iPadOS 27 里，最后点击的那个应用会接管外接显示器，而以前必须经由主屏幕和程序坞才能切换。现在上课中途点别的东西，整块 iPad 屏幕就会投到教室里，包括记着该点哪位学生的私人笔记和还没公布的投票结果。恢复方式各应用不同：GoodNotes 退回演讲者视图，Keynote 直接退出演示模式，PowerPoint 得重启。他的建议是：处于演讲者模式的应用应保持对外接屏幕的优先权，直到演示停止、文档关闭或应用退出。他没有找到绕开的办法，已提交反馈 FB23615646。
+***** Take
+iPad 至今没有「这块画面的观众和你手上的不一样」这个概念，平时无妨，但你站在 80 人面前时就不行。桌面系统多年前就遇到过这个问题，最后的答案是问用户要共享哪块屏幕或哪个窗口。一次只管一个窗口的模型一直很简单，直到它把你的备注泄露给整个讲堂。
+***** Comments
+- 专业 iPad 用户一直在做一件没完的事：想让硬件表现成它坚持声称自己不是的那种东西。背后的团队不愿把控制权交给用户，所以它永远成不了真正的专业工具。
+- 我能理解另一边的理由：我正在演示，想切到实时演示环境，难道必须先彻底关掉演示？另一种操作系统看到这种矛盾，会问用户是要共享整个屏幕还是保持当前窗口。
+- 苹果需要让软件设计回到正轨，在做这类改动前好好做 QA。27 本该是质量改进和修 bug 的版本，结果基本是一连串 bug 和界面问题。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AppleがiPadの重要なプレゼン機能を壊した
+***** TLDR
+Teddy SvoronosはiPadからAirPlayで授業をしており、プロジェクターにスライドを出しながら手元で別アプリを使える動作に頼っていた。iPadOS 27では最後にタップしたアプリが外部ディスプレイを乗っ取る。以前はホーム画面とDockを経由しないと切り替わらなかった。いまは授業中に別のものを触ると、iPadの画面全体が教室に映し出され、どの学生を指名するかのメモや未公開の投票結果まで見えてしまう。復帰の挙動はアプリごとに違い、GoodNotesはプレゼンター表示に戻り、Keynoteはプレゼンモードを終了し、PowerPointは再起動が必要になる。彼の提案は、プレゼンターモードのアプリは、プレゼン停止・書類を閉じる・アプリ終了のいずれかまで外部ディスプレイを保持すべきだというもの。回避策はなく、フィードバックFB23615646を提出した。
+***** Take
+iPadには「手元とは別の観客が見ている面」という概念がいまだにない。普段は問題ないが、80人の前に立つと話が変わる。デスクトップOSは何年も前にこの問題に当たり、どの画面やウィンドウを共有するか尋ねる形に落ち着いた。一度に1ウィンドウという設計は単純で済む、メモを講堂に漏らすその瞬間までは。
+***** Comments
+- プロのiPadユーザーは、自ら違うと言い張っているものにハードウェアを振る舞わせようとして、延々と苦労している。作っている側がユーザーに主導権を渡したくないので、真のプロ向け道具にはなりえない。
+- 逆の言い分も分かる。プレゼン中にライブデモ環境へ切り替えたいとき、そのためにプレゼンを完全に止めなければならないのか？別のOSならこの矛盾を見て、画面全体を共有するか今のウィンドウのままにするかをユーザーに尋ねるだろう。
+- Appleはソフトウェア設計を立て直し、この種の変更の前にきちんとQAをするべきだ。27は品質改善とバグ修正のリリースのはずだったのに、ほぼバグとUIの不具合の連続だった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+애플이 아이패드의 핵심 발표 기능을 망가뜨렸다
+***** TLDR
+Teddy Svoronos는 아이패드로 에어플레이를 써서 강의하며, 프로젝터에 슬라이드를 띄운 채 태블릿에서는 다른 앱을 쓰는 방식에 의존해왔다. iPadOS 27에서는 가장 최근에 탭한 앱이 외부 디스플레이를 차지한다. 이전에는 홈 화면과 독을 거쳐야 전환됐다. 이제 수업 중에 다른 것을 건드리면 아이패드 화면 전체가 강의실에 뜬다. 어느 학생을 지명할지 적어둔 개인 메모와 공개하지 않은 투표 결과까지 포함해서다. 복구 방식은 앱마다 달라서 GoodNotes는 발표자 보기로 돌아가고, Keynote는 발표 모드를 아예 종료하고, PowerPoint는 재시작해야 한다. 그의 제안은 발표자 모드인 앱이 발표 중지, 문서 닫기, 앱 종료 중 하나가 일어날 때까지 외부 디스플레이를 계속 쥐고 있어야 한다는 것이다. 우회 방법은 없고 피드백 FB23615646을 접수했다.
+***** Take
+아이패드에는 아직 '이 화면의 관객은 손에 든 화면과 다르다'는 개념이 없다. 평소에는 괜찮지만 80명 앞에 서면 문제가 된다. 데스크톱 운영체제는 몇 년 전에 이 문제에 부딪혀 어느 화면 또는 어느 창을 공유할지 묻는 방식으로 정리했다. 한 번에 창 하나라는 모델은 계속 단순하다가, 메모를 강의실에 흘리는 순간 끝난다.
+***** Comments
+- 전문적으로 아이패드를 쓰는 사람들은 하드웨어가 스스로 아니라고 주장하는 무언가처럼 동작하게 만들려고 끝없이 싸운다. 만드는 팀이 사용자에게 통제권을 넘기려 하지 않으니 진짜 전문 도구가 될 수 없다.
+- 반대쪽 논리도 이해된다. 발표 중에 라이브 데모 환경으로 넘어가려면 발표를 완전히 끝내야 하나? 다른 운영체제라면 이 긴장을 보고 전체 화면을 공유할지 현재 창을 유지할지 사용자에게 물을 것이다.
+- 애플은 소프트웨어 설계를 다시 바로잡고 이런 변경 전에 제대로 QA를 해야 한다. 27은 품질 개선과 버그 수정 릴리스여야 했는데 대부분 버그와 UI 실패의 연속이었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Apple ha roto una función esencial de presentación en los iPad
+***** TLDR
+Teddy Svoronos da clase desde un iPad por AirPlay y dependía de poder mantener las diapositivas en el proyector mientras usaba otras apps en la tableta. En iPadOS 27, la app que tocas más recientemente se queda con la pantalla externa; antes había que pasar por la pantalla de inicio y el dock para cambiarla. Ahora, tocar cualquier otra cosa en mitad de la clase manda toda la pantalla del iPad a la sala, incluidas notas privadas sobre a qué alumnos preguntar y resultados de encuestas aún no publicados. La recuperación varía según la app: GoodNotes vuelve a la vista de presentador, Keynote sale del modo presentación y PowerPoint exige reiniciarse. Su propuesta es que una app en modo presentador conserve la pantalla externa hasta que se detenga la presentación, se cierre el documento o se salga de la app. No tiene solución alternativa y envió el informe FB23615646.
+***** Take
+El iPad sigue sin tener el concepto de una superficie con un público distinto al que tienes en las manos, y eso da igual hasta que estás delante de 80 personas. Los sistemas de escritorio se toparon con esto hace años y acabaron preguntando qué pantalla o ventana compartir. El modelo de una ventana a la vez es simple justo hasta el momento en que filtra tus notas al aula.
+***** Comments
+- La lucha interminable de los usuarios profesionales de iPad por hacer que su hardware actúe como algo que él insiste en no ser. El equipo detrás no quiere ceder el control al usuario, así que nunca podrá ser una herramienta verdaderamente profesional.
+- Veo el otro argumento: estoy presentando, quiero cambiar a un entorno de demo en vivo, ¿y para eso tengo que apagar la presentación entera? Otro sistema operativo vería esta tensión y preguntaría al usuario si quiere compartir toda la pantalla o seguir con la ventana actual.
+- Apple necesita reencauzar su diseño de software y hacer un QA decente antes de este tipo de cambios. La 27 debía ser una versión de mejoras de calidad y correcciones, y ha sido sobre todo una cascada de errores y fallos de interfaz.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Apple hat eine zentrale Präsentationsfunktion des iPads kaputt gemacht
+***** TLDR
+Teddy Svoronos unterrichtet mit einem iPad per AirPlay und war darauf angewiesen, die Folien auf dem Beamer laufen zu lassen, während er auf dem Tablet andere Apps nutzt. In iPadOS 27 übernimmt die zuletzt angetippte App das externe Display; vorher musste man über Home-Bildschirm und Dock gehen, um zu wechseln. Jetzt schiebt jede andere Berührung mitten im Unterricht den gesamten iPad-Bildschirm in den Raum, inklusive privater Notizen dazu, welche Studierenden aufgerufen werden sollen, und noch nicht veröffentlichter Umfrageergebnisse. Die Erholung unterscheidet sich je App: GoodNotes fällt in die Referentenansicht zurück, Keynote verlässt den Präsentationsmodus ganz, PowerPoint muss neu gestartet werden. Sein Vorschlag: Eine App im Referentenmodus soll das externe Display behalten, bis die Präsentation beendet, das Dokument geschlossen oder die App verlassen wird. Einen Workaround hat er nicht und hat Feedback FB23615646 eingereicht.
+***** Take
+Das iPad hat weiterhin kein Konzept für eine Fläche mit einem anderen Publikum als dem in deinen Händen. Das ist egal, bis man vor 80 Leuten steht. Desktop-Betriebssysteme hatten dieses Problem vor Jahren und haben sich darauf geeinigt, zu fragen, welcher Bildschirm oder welches Fenster geteilt wird. Das Modell mit einem Fenster auf einmal bleibt einfach, genau bis zu dem Moment, in dem es die Notizen in den Hörsaal spielt.
+***** Comments
+- Der endlose Kampf professioneller iPad-Nutzer, ihre Hardware dazu zu bringen, sich wie etwas zu verhalten, was sie laut eigener Aussage nicht ist. Das Team dahinter will die Kontrolle nicht an die Nutzer abgeben, also kann es nie ein echtes Profiwerkzeug sein.
+- Das Gegenargument sehe ich auch: Ich präsentiere, ich will in eine Live-Demo-Umgebung wechseln, und dafür muss ich die Präsentation komplett beenden? Ein anderes Betriebssystem würde diese Spannung erkennen und den Nutzer fragen, ob er den ganzen Bildschirm teilen oder beim bestehenden Fenster bleiben will.
+- Apple muss sein Software-Design wieder in den Griff bekommen und vor solchen Änderungen richtiges QA machen. 27 sollte ein Release für Qualität und Bugfixes sein, war aber vor allem eine Kette von Fehlern und UI-Problemen.
