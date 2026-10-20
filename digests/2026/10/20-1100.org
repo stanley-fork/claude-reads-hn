@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-20 11:00 UTC
+#+DATE: 2026-10-20T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+DeepSeek open-sources its serving stack and publishes the margins, 421,179 AfD emails land as AI summaries, and Google TV's ads come off with adb
+
+* Highlights
+- DeepInfer ships under Apache 2.0; a DeepSeek post linked in the thread claims 155 trillion tokens/day per cluster and $38 revenue per card per hour
+- Nordwand Mono draws every glyph from a Python class, and the thread argues over how much JetBrains Mono is left in it
+- 281 GB of AfD email published as AI summaries instead of messages, and HN wants the originals
+- Projectivy Launcher plus adb removes the Google TV banner that 'Apps only mode' leaves in place
+- Ukraine's 92nd Assault Brigade flies a wounded soldier out by bomber hexacopter after ground robots could not reach him
+
+* Stories
+
+** DeepSeek just open-sourced its inference engine :ai:inference:open-source:deepseek:gpu:
+:PROPERTIES:
+:ID:       50163277
+:URL:      https://github.com/deepseek-ai/DeepInfer
+:HN_URL:   https://news.ycombinator.com/item?id=50163277
+:POINTS:   312
+:COMMENTS: 105
+:BY:       ggcr
+:END:
+
+*** TLDR
+DeepInfer is the Apache-2.0 serving stack DeepSeek runs in production for DeepSeek-V4.1-Flash. It wires together their own kernels (FlashMLA, DeepGEMM, DeepEP), attention data parallelism and MoE expert parallelism, DSpark speculative verification with bounded replay, deterministic sampling, and constrained decoding over regex, JSON and EBNF. Targets are NVIDIA SM100 GPUs and Huawei Ascend 950 NPUs, with benchmarks given on 4 GPUs for prefill and 64 for decode. The README says it was originally built on vLLM, with ideas from SGLang and TensorRT-LLM. A Zhihu post from the team, linked in the thread, puts a single cluster at 155 trillion tokens per day and $38 of revenue per card per hour at off-peak pricing. The KV cache system is not in the release.
+
+*** Take
+The $38 per card per hour is the real release. Rented H100s go for under $3 an hour, so even if DeepSeek means its most expensive silicon, the gap says serving a frontier MoE at their published prices is profitable rather than subsidised. Shipping the engine next to that number is the part that stings for anyone whose pitch assumes inference is a loss leader you need ten billion dollars to outlast.
+
+*** Comments
+
+**** schneehertz
+:PROPERTIES:
+:COMMENT_ID: 50163494
+:END:
+A nuclear bomb. "Based on this framework, we have achieved high-throughput, low-latency large-scale inference services for DeepSeek V4.1 Flash. Currently, the service throughput of a single cluster is 155 trillion tokens/day, and the overall revenue is $38 per card per hour (at off-peak pricing)"
+
+**** xrisk
+:PROPERTIES:
+:COMMENT_ID: 50164052
+:END:
+For comparison, rental prices seem to be ~$2.75 per H-100-hour. Meanwhile, Deepseek says "38 USD per hour per card". They haven't specified which card as far as I can tell.
+
+**** wg0
+:PROPERTIES:
+:COMMENT_ID: 50163789
+:END:
+That's Kami Kaze for US frontier labs. There's no way from here for them towards trillion dollar valuations. That's strategic sabotage to say the least. Ban all open weight models! Cried the VCs.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+DeepSeek 刚刚开源了自己的推理引擎
+***** TLDR
+DeepInfer 是 DeepSeek 在生产环境中为 DeepSeek-V4.1-Flash 提供服务的 Apache 2.0 推理框架。它整合了自研算子（FlashMLA、DeepGEMM、DeepEP）、注意力数据并行与 MoE 专家并行、带 bounded replay 的 DSpark 投机验证、确定性采样，以及基于正则、JSON 和 EBNF 的约束解码。目标硬件是英伟达 SM100 GPU 和华为昇腾 950 NPU，基准测试使用 4 卡做 prefill、64 卡做 decode。README 称项目最初基于 vLLM 构建，并借鉴了 SGLang 和 TensorRT-LLM。讨论中链接的知乎文章称单集群日吞吐 155 万亿 token，低峰价下单卡每小时收入 38 美元。KV cache 系统没有包含在本次发布中。
+***** Take
+真正的重磅内容是单卡每小时 38 美元。H100 的租赁价格不到每小时 3 美元，即使 DeepSeek 指的是最贵的卡，这个差距也说明按其公开定价提供前沿 MoE 推理是赚钱的，而不是靠补贴。把引擎和这个数字一起放出来，对那些假设推理必须烧一百亿美元才能熬出头的叙事最不友好。
+***** Comments
+- 一颗核弹。「基于该框架，我们为 DeepSeek V4.1 Flash 实现了高吞吐、低延迟的大规模推理服务。目前单集群服务吞吐为 155 万亿 token/天，整体收入为低峰价下每卡每小时 38 美元」
+- 做个对比：H100 的租赁价格大约是每小时 2.75 美元，而 DeepSeek 说的是「每卡每小时 38 美元」。据我所知他们没说清楚是哪种卡。
+- 这对美国前沿实验室就是神风特攻。他们从这里再也走不到万亿美元估值了。这至少算是战略破坏。风投们高喊：禁掉所有开放权重模型！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+DeepSeekが自社の推論エンジンをオープンソース化
+***** TLDR
+DeepInferは、DeepSeekがDeepSeek-V4.1-Flashの本番運用に使っているApache 2.0の推論スタック。自社カーネル（FlashMLA、DeepGEMM、DeepEP）、アテンションのデータ並列とMoEのエキスパート並列、bounded replay付きDSpark投機検証、決定論的サンプリング、正規表現・JSON・EBNFによる制約デコードを統合している。対応ハードはNVIDIA SM100 GPUとHuawei Ascend 950 NPUで、ベンチマークはprefillが4GPU、decodeが64GPU。READMEによれば当初はvLLMをベースに構築され、SGLangとTensorRT-LLMからも着想を得たという。スレッドで共有された知乎の記事は、単一クラスタで1日155兆トークン、オフピーク価格でカード1枚あたり毎時38ドルの売上と記している。KVキャッシュ機構は今回の公開に含まれていない。
+***** Take
+本当の目玉はカード1枚あたり毎時38ドルという数字だ。H100のレンタルは毎時3ドル未満で、仮にDeepSeekが最も高価なカードを指していても、この差は公開価格でのフロンティアMoE推論が補助金頼みではなく黒字だと示している。エンジンをその数字と並べて出したことが、推論は100億ドルを燃やして耐えるものだと説いてきた側には効く。
+***** Comments
+- 核爆弾だ。「このフレームワークに基づき、DeepSeek V4.1 Flash向けに高スループット・低レイテンシの大規模推論サービスを実現した。現在、単一クラスタのサービススループットは1日155兆トークン、全体の売上はオフピーク価格でカード1枚あたり毎時38ドル」
+- 比較すると、レンタル価格はH100が毎時2.75ドル程度。一方DeepSeekは「カード1枚あたり毎時38ドル」と言っている。どのカードなのかは明示されていないようだ。
+- 米国のフロンティア勢にとっては神風だ。ここから1兆ドル評価に届く道はない。控えめに言っても戦略的な妨害だ。オープンウェイトのモデルを全部禁止しろ、とVCが叫ぶ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+딥시크가 자사 추론 엔진을 오픈소스로 공개
+***** TLDR
+DeepInfer는 딥시크가 DeepSeek-V4.1-Flash를 실제 서비스하는 데 쓰는 Apache 2.0 추론 스택이다. 자체 커널(FlashMLA, DeepGEMM, DeepEP), 어텐션 데이터 병렬과 MoE 전문가 병렬, bounded replay를 더한 DSpark 추측 검증, 결정론적 샘플링, 정규식·JSON·EBNF 제약 디코딩을 묶어 놓았다. 대상 하드웨어는 엔비디아 SM100 GPU와 화웨이 어센드 950 NPU이며, 벤치마크는 prefill 4장, decode 64장 기준이다. README는 처음에 vLLM을 기반으로 만들었고 SGLang과 TensorRT-LLM에서 아이디어를 가져왔다고 밝힌다. 스레드에 링크된 지후 글은 단일 클러스터가 하루 155조 토큰을 처리하고 비수기 가격으로 카드 한 장당 시간당 38달러의 수익을 낸다고 적었다. KV 캐시 시스템은 이번 공개에 빠져 있다.
+***** Take
+진짜 공개물은 카드당 시간당 38달러라는 숫자다. H100 임대가는 시간당 3달러도 안 되니, 딥시크가 가장 비싼 칩을 말한 것이라 해도 이 격차는 공개된 가격으로 프런티어 MoE를 서비스하는 일이 보조금이 아니라 흑자라는 뜻이다. 엔진을 그 숫자와 함께 내놓은 것이, 추론은 100억 달러를 태워 버텨야 하는 적자 사업이라고 설명해 온 쪽에 가장 아프다.
+***** Comments
+- 핵폭탄이다. "이 프레임워크를 바탕으로 DeepSeek V4.1 Flash에 대해 고스루풋·저지연 대규모 추론 서비스를 구현했다. 현재 단일 클러스터의 서비스 스루풋은 하루 155조 토큰이고, 전체 수익은 비수기 가격으로 카드당 시간당 38달러다"
+- 비교해 보면 임대가는 H100이 시간당 2.75달러 정도다. 반면 딥시크는 "카드당 시간당 38달러"라고 한다. 어떤 카드인지는 밝히지 않은 것 같다.
+- 미국 프런티어 랩들에게는 가미카제다. 여기서 1조 달러 기업가치로 가는 길은 없다. 최소한 전략적 사보타주라고 할 만하다. 오픈 웨이트 모델을 전부 금지하라고 VC들이 외친다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+DeepSeek acaba de liberar el código de su motor de inferencia
+***** TLDR
+DeepInfer es el stack de servicio con licencia Apache 2.0 que DeepSeek usa en producción para DeepSeek-V4.1-Flash. Integra sus propios kernels (FlashMLA, DeepGEMM, DeepEP), paralelismo de datos en atención y paralelismo de expertos en MoE, verificación especulativa DSpark con bounded replay, muestreo determinista y decodificación restringida por regex, JSON y EBNF. El objetivo son GPU NVIDIA SM100 y NPU Huawei Ascend 950, con pruebas sobre 4 GPU para prefill y 64 para decode. El README dice que se construyó originalmente sobre vLLM, con ideas de SGLang y TensorRT-LLM. Un artículo del equipo en Zhihu, enlazado en el hilo, cifra un solo clúster en 155 billones de tokens al día y 38 dólares de ingreso por tarjeta y hora en precio de valle. El sistema de caché KV no va incluido.
+***** Take
+El verdadero lanzamiento son los 38 dólares por tarjeta y hora. Alquilar una H100 cuesta menos de 3 dólares la hora, así que incluso si DeepSeek habla de su silicio más caro, la diferencia indica que servir un MoE de frontera a sus precios publicados da beneficio en lugar de subvención. Publicar el motor junto a ese número escuece a quien sostiene que la inferencia es una pérdida que solo se aguanta con diez mil millones en el banco.
+***** Comments
+- Una bomba nuclear. "Sobre este marco hemos logrado servicios de inferencia a gran escala de alto rendimiento y baja latencia para DeepSeek V4.1 Flash. Actualmente el rendimiento de un solo clúster es de 155 billones de tokens al día, y el ingreso total es de 38 dólares por tarjeta y hora en precio de valle"
+- Para comparar, el alquiler ronda los 2,75 dólares por hora de H-100. Mientras tanto DeepSeek dice "38 USD por hora y tarjeta". Por lo que veo, no han especificado qué tarjeta.
+- Esto es un kamikaze contra los laboratorios de frontera estadounidenses. Desde aquí no hay camino hacia valoraciones de un billón. Como mínimo es sabotaje estratégico. ¡Prohibamos todos los modelos de pesos abiertos!, gritaron los fondos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+DeepSeek hat seine Inferenz-Engine als Open Source veröffentlicht
+***** TLDR
+DeepInfer ist der Apache-2.0-Serving-Stack, mit dem DeepSeek DeepSeek-V4.1-Flash produktiv betreibt. Er verbindet die eigenen Kernel (FlashMLA, DeepGEMM, DeepEP), Datenparallelismus in der Attention und Expertenparallelismus bei MoE, spekulative DSpark-Verifikation mit bounded replay, deterministisches Sampling sowie eingeschränktes Decoding über Regex, JSON und EBNF. Zielhardware sind NVIDIA-SM100-GPUs und Huawei-Ascend-950-NPUs, die Benchmarks laufen auf 4 GPUs für Prefill und 64 für Decode. Laut README entstand das Projekt zunächst auf Basis von vLLM, mit Anregungen aus SGLang und TensorRT-LLM. Ein im Thread verlinkter Zhihu-Beitrag des Teams nennt für einen einzelnen Cluster 155 Billionen Token pro Tag und 38 Dollar Umsatz pro Karte und Stunde zum Schwachlastpreis. Das KV-Cache-System fehlt in der Veröffentlichung.
+***** Take
+Die eigentliche Neuigkeit sind die 38 Dollar pro Karte und Stunde. Eine gemietete H100 kostet unter 3 Dollar die Stunde, und selbst wenn DeepSeek sein teuerstes Silizium meint, sagt der Abstand: Ein Frontier-MoE zu den veröffentlichten Preisen auszuliefern ist profitabel und nicht subventioniert. Die Engine zusammen mit dieser Zahl zu zeigen, trifft jeden, dessen Erzählung darauf beruht, dass Inferenz ein Verlustgeschäft ist, das man nur mit zehn Milliarden überlebt.
+***** Comments
+- Eine Atombombe. "Auf Basis dieses Frameworks haben wir Inferenzdienste mit hohem Durchsatz und geringer Latenz für DeepSeek V4.1 Flash im großen Maßstab erreicht. Derzeit liegt der Durchsatz eines einzelnen Clusters bei 155 Billionen Token pro Tag, der Gesamtumsatz bei 38 Dollar pro Karte und Stunde zum Schwachlastpreis"
+- Zum Vergleich: Mietpreise liegen bei etwa 2,75 Dollar pro H-100-Stunde. DeepSeek spricht dagegen von "38 USD pro Stunde pro Karte". Welche Karte gemeint ist, steht soweit ich sehe nirgends.
+- Das ist Kamikaze für die US-Frontier-Labs. Von hier führt kein Weg mehr zu Billionenbewertungen. Das ist mindestens strategische Sabotage. Verbietet alle Open-Weight-Modelle!, riefen die VCs.
+** Nordwand Mono: A monospace font for coders and adventurers :typography:fonts:python:tooling:opensource:
+:PROPERTIES:
+:ID:       50141581
+:URL:      https://github.com/tywr/Nordwand-Mono
+:HN_URL:   https://news.ycombinator.com/item?id=50141581
+:POINTS:   290
+:COMMENTS: 91
+:BY:       noriax86
+:END:
+
+*** TLDR
+Nordwand Mono is a monospace coding face that puts Univers-style neo-grotesk letterforms into JetBrains Mono's proportions, with SF Mono, Alpes Mono and Ubuntu Mono cited as further references. The build is the unusual part: every glyph is a Python class that draws into a context object, metrics like x-height and cap height come from config.yml, and `python -m generate_font` compiles your own cut. It ships multiple weights, Cyrillic and extended Latin, alternate glyph designs, and exactly two ligatures, -> and =>. The author, replying in the thread, says the project is meant to be a Python sandbox more than a set of font files.
+
+*** Take
+The font is the demo and the parametric Python source is the product, which reframes the top comment's "99% JetBrains Mono" complaint: if those proportions are the stated target, matching them is the spec being met, and the thing to fork is the generator. Shipping two ligatures and stopping there is also the right call. Nobody asked for a glyph that turns == into a railway sleeper.
+
+*** Comments
+
+**** rootlocus
+:PROPERTIES:
+:COMMENT_ID: 50162114
+:END:
+It's 99% JetBrains Mono from my quick comparison. I can barely see the difference except for $&# and a few others.
+
+**** bitwize
+:PROPERTIES:
+:COMMENT_ID: 50162060
+:END:
+Y'know, I didn't think anything was gonna pull me away from Iosevka but... here we are. Gonna give this a real go. Helping its case is that it looks a bit like Berkeley Mono.
+
+**** gorgoiler
+:PROPERTIES:
+:COMMENT_ID: 50162290
+:END:
+Brilliant project. The face looks good. The code looks good. Needing to draw an "A" in something without having to pull in font libraries, that is to say passing a compatible draw context to this project's LowercaseAGlyph.draw, sounds nice.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Nordwand Mono：为程序员和冒险者设计的等宽字体
+***** TLDR
+Nordwand Mono 是一款等宽编程字体，把 Univers 风格的新怪诞字形放进 JetBrains Mono 的字面比例里，作者还提到参考了 SF Mono、Alpes Mono 和 Ubuntu Mono。真正特别的是构建方式：每个字形都是一个向绘图上下文作画的 Python 类，x 高度、大写高度等度量写在 config.yml 里，运行 `python -m generate_font` 就能编译出自己的版本。项目提供多种字重、西里尔字母与扩展拉丁字符、替代字形，以及恰好两个连字：-> 和 =>。作者在讨论中回复说，这个项目更像一个 Python 沙盒，而不只是几个字体文件。
+***** Take
+字体只是演示，可参数化的 Python 源码才是产品。这也改变了热评「99% 都是 JetBrains Mono」的分量：如果这个比例本来就是设定目标，那么做到一致正是满足了需求，真正该 fork 的是生成器。只做两个连字也是对的，没人需要把 == 变成铁路枕木的字形。
+***** Comments
+- 快速比较之后，我觉得它 99% 就是 JetBrains Mono。除了 $&# 和少数几个字符，我几乎看不出区别。
+- 说实话，我以为没有东西能把我从 Iosevka 拉走，结果还真有。我打算认真试一试。加分项是它有点像 Berkeley Mono。
+- 项目很棒。字面好看，代码也好看。能在不引入字体库的情况下画出一个「A」，也就是给这个项目的 LowercaseAGlyph.draw 传一个兼容的绘图上下文，这听起来很不错。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Nordwand Mono: コーダーと冒険者のための等幅フォント
+***** TLDR
+Nordwand Monoは、Univers系のネオグロテスクな字形をJetBrains Monoのプロポーションに収めた等幅コーディングフォント。参照先としてSF Mono、Alpes Mono、Ubuntu Monoも挙げられている。変わっているのはビルド方法だ。各グリフは描画コンテキストに描くPythonクラスで、x-heightやキャップハイトなどのメトリクスはconfig.ymlから読み、`python -m generate_font`で自分用のカットを生成できる。複数ウェイト、キリル文字と拡張ラテン、代替グリフ、そして`->`と`=>`のちょうど2種類のリガチャを同梱する。作者はスレッドで、これはフォントファイルというよりPythonのサンドボックスとして作ったと答えている。
+***** Take
+フォントはデモで、パラメトリックなPythonのソースが本体だ。そう捉えると「99%はJetBrains Mono」という人気コメントの意味が変わる。そのプロポーションが狙いなら一致は仕様通りであり、フォークすべき対象はジェネレータの方だ。リガチャを2つで止めたのも正しい。`==`を枕木に変えるグリフは誰も頼んでいない。
+***** Comments
+- ざっと比べた限り99%はJetBrains Monoだ。$&#といくつかの文字を除けば違いがほとんど分からない。
+- 正直、Iosevkaから自分を引き離すものはないと思っていたが、現れてしまった。本気で試してみる。Berkeley Monoに少し似ているのも後押しになっている。
+- 見事なプロジェクト。字面もいいし、コードもいい。フォントライブラリを持ち込まずに「A」を描ける、つまりこのプロジェクトのLowercaseAGlyph.drawに互換の描画コンテキストを渡せるのは気持ちがいい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Nordwand Mono: 코더와 모험가를 위한 고정폭 폰트
+***** TLDR
+Nordwand Mono는 Univers 계열의 네오그로테스크 글자꼴을 JetBrains Mono의 자폭 비율에 담은 고정폭 코딩 폰트다. 작가는 SF Mono, Alpes Mono, Ubuntu Mono도 참고로 꼽는다. 특이한 쪽은 빌드 방식이다. 모든 글립이 드로잉 컨텍스트에 그림을 그리는 파이썬 클래스이고, x-높이와 대문자 높이 같은 지표는 config.yml에서 읽으며, `python -m generate_font`로 자신만의 판본을 만들 수 있다. 여러 굵기, 키릴과 확장 라틴, 대체 글립, 그리고 정확히 두 개의 합자 `->`와 `=>`를 담았다. 작가는 스레드에서 이 프로젝트가 폰트 파일보다 파이썬 샌드박스에 가깝다고 답했다.
+***** Take
+폰트는 시연이고 매개변수화된 파이썬 소스가 제품이다. 그렇게 보면 "99%가 JetBrains Mono"라는 최상위 댓글의 의미가 달라진다. 그 비율이 목표였다면 일치하는 것이 명세 충족이고, 포크해야 할 대상은 생성기다. 합자를 두 개에서 멈춘 것도 옳다. `==`를 철도 침목으로 바꾸는 글립을 원한 사람은 없다.
+***** Comments
+- 빠르게 비교해 본 결과 99%는 JetBrains Mono다. $&#와 몇 글자를 빼면 차이를 거의 못 느낀다.
+- 솔직히 Iosevka에서 나를 떼어낼 건 없다고 생각했는데, 생겼다. 제대로 써 볼 작정이다. Berkeley Mono와 조금 닮은 점도 유리하게 작용한다.
+- 훌륭한 프로젝트다. 글자꼴도 좋고 코드도 좋다. 폰트 라이브러리를 끌어오지 않고 "A"를 그릴 수 있다는 점, 즉 이 프로젝트의 LowercaseAGlyph.draw에 호환되는 드로잉 컨텍스트를 넘기면 된다는 점이 마음에 든다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Nordwand Mono: una tipografía monoespaciada para programadores y aventureros
+***** TLDR
+Nordwand Mono es una monoespaciada para programar que mete letras neogrotescas al estilo Univers en las proporciones de JetBrains Mono, citando además SF Mono, Alpes Mono y Ubuntu Mono como referencias. Lo llamativo es cómo se construye: cada glifo es una clase de Python que dibuja sobre un objeto de contexto, métricas como la altura de x y la de mayúsculas salen de config.yml, y `python -m generate_font` compila tu propia versión. Incluye varios pesos, cirílico y latín extendido, glifos alternativos y exactamente dos ligaduras, -> y =>. El autor, que responde en el hilo, dice que el proyecto es más un entorno de pruebas en Python que un conjunto de archivos de fuente.
+***** Take
+La fuente es la demostración y el código paramétrico en Python es el producto, lo que cambia el peso del comentario más votado, el del "99% JetBrains Mono": si esas proporciones son el objetivo declarado, igualarlas es cumplir la especificación, y lo que hay que bifurcar es el generador. Quedarse en dos ligaduras también es acertado. Nadie pidió un glifo que convierta == en una traviesa de ferrocarril.
+***** Comments
+- En mi comparación rápida es un 99% JetBrains Mono. Apenas veo la diferencia salvo en $&# y algún carácter más.
+- La verdad, pensaba que nada iba a apartarme de Iosevka y aquí estamos. Le voy a dar una oportunidad seria. Le ayuda que se parece un poco a Berkeley Mono.
+- Proyecto brillante. La tipografía se ve bien y el código también. Poder dibujar una "A" sin arrastrar librerías de fuentes, es decir pasando un contexto de dibujo compatible a LowercaseAGlyph.draw de este proyecto, suena muy bien.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Nordwand Mono: eine Monospace-Schrift für Programmierer und Bergsteiger
+***** TLDR
+Nordwand Mono ist eine Monospace-Schrift zum Programmieren, die Univers-artige neogroteske Buchstabenformen in die Proportionen von JetBrains Mono setzt; als weitere Referenzen nennt der Autor SF Mono, Alpes Mono und Ubuntu Mono. Ungewöhnlich ist der Bauweg: Jede Glyphe ist eine Python-Klasse, die in ein Kontextobjekt zeichnet, Maße wie x-Höhe und Versalhöhe stehen in config.yml, und `python -m generate_font` kompiliert den eigenen Schnitt. Dabei sind mehrere Schnittstärken, Kyrillisch und erweitertes Latein, alternative Glyphen und genau zwei Ligaturen, -> und =>. Der Autor schreibt im Thread, das Projekt sei eher eine Python-Spielwiese als ein Satz Fontdateien.
+***** Take
+Die Schrift ist die Demo, der parametrische Python-Code ist das Produkt. Damit liest sich der Top-Kommentar über "99 Prozent JetBrains Mono" anders: Wenn diese Proportionen das erklärte Ziel sind, ist Übereinstimmung die erfüllte Spezifikation, und forken sollte man den Generator. Bei zwei Ligaturen aufzuhören ist ebenfalls richtig. Eine Glyphe, die == in eine Bahnschwelle verwandelt, hat niemand verlangt.
+***** Comments
+- Nach meinem schnellen Vergleich sind das 99 Prozent JetBrains Mono. Außer bei $&# und ein paar Zeichen sehe ich kaum einen Unterschied.
+- Ich hätte nicht gedacht, dass mich etwas von Iosevka wegholt, aber hier sind wir. Ich probiere es ernsthaft aus. Hilfreich ist, dass es ein bisschen wie Berkeley Mono aussieht.
+- Großartiges Projekt. Die Schrift sieht gut aus, der Code auch. Ein "A" zeichnen zu können, ohne Font-Bibliotheken einzubinden, also indem man einen passenden Zeichenkontext an LowercaseAGlyph.draw dieses Projekts übergibt, klingt angenehm.
+** AfD Leak: What 421,179 hacked emails show about the German far right :security:leak:germany:politics:ai:
+:PROPERTIES:
+:ID:       50163502
+:URL:      https://www.heistberlin.com/news/afd-leak-what-421-179-hacked-emails-show-about-the-german-far-right/
+:HN_URL:   https://news.ycombinator.com/item?id=50163502
+:POINTS:   225
+:COMMENTS: 176
+:BY:       firefax
+:END:
+
+*** TLDR
+Hackers published 281 GB containing 421,179 internal AfD emails on Monday 19 October through hexane.cc. The Heist Berlin writeup, which stops at 21% behind an email signup, cites racist slurs, antisemitic theories of Jewish world domination, jokes about turning refugees into handbags and boots, discussion of whether refugees should be shot at the border, and a Christmas card carrying a swastika and "Heil Hitler". The archive is presented as AI-generated summaries rather than the original messages. The AfD polls at 29% nationally and is contesting in court its designation by the Verfassungsschutz as a confirmed right-wing extremist party. Most of the HN thread is about the signup wall, the summaries, and whether the submission belongs on the site.
+
+*** Take
+Publishing AI summaries instead of the mail spool is a self-inflicted wound. Headers and signatures are what make a leak checkable, and a summary is an assertion with the evidence stripped out; commenters went looking and found the index does not even list metadata for all 421,179 messages. For an archive whose point is to be cited in a proceeding against the party, that is the one part you cannot afford to paraphrase.
+
+*** Comments
+
+**** voidUpdate
+:PROPERTIES:
+:COMMENT_ID: 50164350
+:END:
+"as AI summaries" Why not publish the actual emails? Why do they need to be summarised, perhaps incorrectly?
+
+**** k1next
+:PROPERTIES:
+:COMMENT_ID: 50164370
+:END:
+I don't see the metadata of ALL 421,179 emails available on the index at hexane.cc/table/?board=mail. Am I missing something?
+
+**** dudefeliciano
+:PROPERTIES:
+:COMMENT_ID: 50163721
+:END:
+Jokes about turning refugees into handbags and boots, discussions of whether refugees should be shot at the border, a Christmas card sent with a swastika and "Heil Hitler". And the party is currently polling at 29% nationally, even while they fight a designation by the Verfassungsschutz as a "confirmed right-wing extremist" party in court. The system is working.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+德国选择党泄露：42.1 万封被黑邮件揭示了什么
+***** TLDR
+黑客于 10 月 19 日星期一通过 hexane.cc 公布了 281 GB、共 421,179 封德国选择党（AfD）内部邮件。Heist Berlin 的报道在读到 21% 时要求填邮箱才能继续，文中提到种族歧视辱骂、关于犹太人统治世界的反犹阴谋论、把难民做成手袋和靴子的玩笑、是否该在边境射杀难民的讨论，以及一张带纳粹十字和「希特勒万岁」的圣诞卡。整个档案以 AI 生成的摘要形式发布，而不是原始邮件。AfD 目前全国支持率为 29%，同时正在法庭上反对宪法保卫局将其认定为「确认的右翼极端主义」政党。HN 讨论的大部分内容围绕邮箱墙、摘要形式，以及这篇投稿是否适合出现在站上。
+***** Take
+用 AI 摘要代替原始邮件是自伤。邮件头和签名才是泄露内容可被核验的依据，摘要只是抽掉了证据的论断；有评论者去查，发现索引里连 421,179 封邮件的元数据都没有列全。对于一份目的就是被引用到针对该党诉讼中的档案来说，这恰恰是最不能转述的部分。
+***** Comments
+- 「以 AI 摘要的形式」？为什么不直接公布真实邮件？为什么非要做摘要，还可能摘错？
+- 我在 hexane.cc/table/?board=mail 的索引上看不到全部 421,179 封邮件的元数据。是我漏了什么吗？
+- 把难民做成手袋和靴子的玩笑、是否该在边境射杀难民的讨论、一张带纳粹十字和「希特勒万岁」的圣诞卡。而这个党目前全国支持率 29%，同时还在法庭上反对宪法保卫局给它贴上「确认的右翼极端主义」标签。系统运行良好。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AfDリーク: 42万1179通の流出メールが示すドイツ極右の姿
+***** TLDR
+ハッカーが10月19日月曜、hexane.cc経由でドイツのAfDの内部メール421,179通、281GBを公開した。Heist Berlinの記事は21%を読んだところでメール登録の壁に当たる。そこでは人種差別的な罵倒、ユダヤ人が世界を支配しているという反ユダヤ的な陰謀論、難民をハンドバッグやブーツにするという冗談、難民を国境で射殺すべきかという議論、鉤十字と「ハイル・ヒトラー」を記したクリスマスカードが挙げられている。アーカイブは原文のメールではなくAIが生成した要約として公開されている。AfDの全国支持率は29%で、憲法擁護庁による「確認された右翼極端主義」政党という認定を法廷で争っている。HNのスレッドの多くは、登録の壁、要約という形式、そしてこの投稿がサイトにふさわしいかという話に費やされている。
+***** Take
+メール本体ではなくAI要約を公開したのは自傷だ。ヘッダと署名こそがリークを検証可能にするもので、要約は証拠を抜いた主張にすぎない。実際に調べたコメント投稿者は、インデックスに421,179通すべてのメタデータすら載っていないことを見つけた。党への訴訟で引用されることが目的のアーカイブにとって、そこは言い換えてはいけない唯一の部分だった。
+***** Comments
+- 「AIの要約として」。なぜ実際のメールを公開しないのか。なぜ、誤るかもしれない要約にする必要がある？
+- hexane.cc/table/?board=mailのインデックスに421,179通すべてのメタデータが見当たらない。何か見落としている？
+- 難民をハンドバッグやブーツにするという冗談、国境で難民を射殺すべきかという議論、鉤十字と「ハイル・ヒトラー」を添えたクリスマスカード。そしてこの党は憲法擁護庁の「確認された右翼極端主義」認定を法廷で争いながら、全国で29%の支持を得ている。制度は機能している。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AfD 유출: 해킹된 42만 1179통의 이메일이 보여주는 독일 극우
+***** TLDR
+해커들이 10월 19일 월요일 hexane.cc를 통해 독일 AfD의 내부 이메일 421,179통, 281GB를 공개했다. Heist Berlin의 기사는 21% 지점에서 이메일 가입 벽에 막히는데, 인종차별 욕설, 유대인의 세계 지배를 주장하는 반유대 음모론, 난민을 핸드백과 부츠로 만든다는 농담, 난민을 국경에서 사살해야 하는지에 대한 논의, 나치 십자와 "하일 히틀러"가 적힌 크리스마스 카드를 언급한다. 아카이브는 원문 이메일이 아니라 AI가 생성한 요약 형태로 공개됐다. AfD는 전국 지지율 29%를 기록하면서 헌법수호청의 "확인된 우익 극단주의" 정당 지정을 법정에서 다투고 있다. HN 스레드의 대부분은 가입 벽, 요약이라는 형식, 그리고 이 글이 사이트에 올라와도 되는지를 두고 돌아간다.
+***** Take
+메일 원본 대신 AI 요약을 공개한 것은 자기 발등을 찍은 선택이다. 헤더와 서명이 유출을 검증 가능하게 만드는 요소이고, 요약은 증거를 뺀 주장일 뿐이다. 실제로 확인한 댓글 작성자는 색인에 421,179통 전체의 메타데이터조차 없다는 사실을 발견했다. 정당을 상대로 한 절차에서 인용되는 것이 목적인 아카이브에서, 그 부분만은 바꿔 쓸 수 없었다.
+***** Comments
+- "AI 요약으로"라니. 실제 이메일을 공개하지 않는 이유가 뭔가? 잘못될 수도 있는 요약을 꼭 거쳐야 하나?
+- hexane.cc/table/?board=mail 색인에 421,179통 전체의 메타데이터가 보이지 않는다. 내가 뭘 놓쳤나?
+- 난민을 핸드백과 부츠로 만든다는 농담, 국경에서 난민을 사살해야 하는지에 대한 논의, 나치 십자와 "하일 히틀러"를 적어 보낸 크리스마스 카드. 그리고 이 당은 헌법수호청의 "확인된 우익 극단주의" 지정을 법정에서 다투면서 전국 지지율 29%를 받고 있다. 제도가 잘 작동하고 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Filtración de AfD: qué muestran 421.179 correos robados sobre la extrema derecha alemana
+***** TLDR
+El lunes 19 de octubre unos atacantes publicaron a través de hexane.cc 281 GB con 421.179 correos internos del partido alemán AfD. El artículo de Heist Berlin, que se corta al 21% tras un muro de registro por correo, cita insultos racistas, teorías antisemitas sobre un dominio judío del mundo, bromas sobre convertir refugiados en bolsos y botas, discusiones sobre si habría que disparar a los refugiados en la frontera, y una tarjeta de Navidad con una esvástica y "Heil Hitler". El archivo se presenta como resúmenes generados por IA en lugar de los mensajes originales. AfD está al 29% en las encuestas nacionales mientras pelea en los tribunales su clasificación por la Verfassungsschutz como partido extremista de derecha confirmado. El hilo de HN gira sobre todo en torno al muro de registro, los resúmenes y si la publicación encaja en el sitio.
+***** Take
+Publicar resúmenes de IA en lugar del buzón es un disparo en el propio pie. Las cabeceras y las firmas son lo que hace verificable una filtración, y un resumen es una afirmación sin la prueba; al mirarlo, los comentaristas vieron que el índice ni siquiera lista los metadatos de los 421.179 mensajes. En un archivo cuyo objetivo es ser citado en un procedimiento contra el partido, eso es justo lo que no se puede parafrasear.
+***** Comments
+- "Como resúmenes de IA". ¿Por qué no publicar los correos reales? ¿Por qué hace falta resumirlos, quizá de forma incorrecta?
+- No veo los metadatos de TODOS los 421.179 correos en el índice de hexane.cc/table/?board=mail. ¿Se me escapa algo?
+- Bromas sobre convertir refugiados en bolsos y botas, discusiones sobre si disparar a los refugiados en la frontera, una tarjeta de Navidad con una esvástica y "Heil Hitler". Y el partido está al 29% a nivel nacional mientras pelea en los tribunales su designación como partido "extremista de derecha confirmado". El sistema funciona.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+AfD-Leak: Was 421.179 gehackte E-Mails über die deutsche Rechte zeigen
+***** TLDR
+Am Montag, dem 19. Oktober, haben Hacker über hexane.cc 281 GB mit 421.179 internen AfD-E-Mails veröffentlicht. Der Text von Heist Berlin, der nach 21 Prozent hinter einer E-Mail-Anmeldung endet, nennt rassistische Beschimpfungen, antisemitische Theorien einer jüdischen Weltherrschaft, Witze darüber, Geflüchtete zu Handtaschen und Stiefeln zu machen, Diskussionen darüber, ob an der Grenze auf Geflüchtete geschossen werden soll, sowie eine Weihnachtskarte mit Hakenkreuz und "Heil Hitler". Das Archiv erscheint als KI-erzeugte Zusammenfassungen statt als Originalnachrichten. Die AfD liegt bundesweit bei 29 Prozent und klagt gegen die Einstufung des Verfassungsschutzes als gesichert rechtsextremistische Partei. Der HN-Thread dreht sich vor allem um die Anmeldeschranke, die Zusammenfassungen und die Frage, ob der Beitrag auf die Seite gehört.
+***** Take
+KI-Zusammenfassungen statt des Mailbestands zu veröffentlichen, ist ein Eigentor. Header und Signaturen machen ein Leak überprüfbar, eine Zusammenfassung ist eine Behauptung ohne den Beweis; Kommentatoren schauten nach und fanden, dass der Index nicht einmal die Metadaten aller 421.179 Nachrichten auflistet. Für ein Archiv, dessen Zweck die Zitierfähigkeit in einem Verfahren gegen die Partei ist, darf genau dieser Teil nicht paraphrasiert werden.
+***** Comments
+- "Als KI-Zusammenfassungen". Warum nicht die echten E-Mails veröffentlichen? Warum müssen sie zusammengefasst werden, womöglich fehlerhaft?
+- Ich sehe im Index unter hexane.cc/table/?board=mail nicht die Metadaten ALLER 421.179 E-Mails. Übersehe ich etwas?
+- Witze darüber, Geflüchtete zu Handtaschen und Stiefeln zu machen, Diskussionen darüber, ob an der Grenze auf Geflüchtete geschossen werden soll, eine Weihnachtskarte mit Hakenkreuz und "Heil Hitler". Und die Partei liegt bundesweit bei 29 Prozent, während sie gegen die Einstufung als "gesichert rechtsextremistisch" klagt. Das System funktioniert.
+** An ad-free Android TV :android:advertising:google:selfhosted:privacy:
+:PROPERTIES:
+:ID:       50158942
+:URL:      https://cretezy.com/2026/ad-free-android-tv
+:HN_URL:   https://news.ycombinator.com/item?id=50158942
+:POINTS:   234
+:COMMENTS: 78
+:BY:       CraftThatBlock
+:END:
+
+*** TLDR
+A walkthrough for taking the ads out of Google TV. Projectivy Launcher, sideloaded over ADB, replaces the home screen Google does not let you change; SmartTube replaces YouTube and brings SponsorBlock with it; Wholphin is the Jellyfin client; Button Mapper repoints the remote's hardwired streaming buttons at apps you actually use. Google's own "Apps only mode" leaves the promo banner at the top of the screen intact. The process needs developer options and adb, and disabling the stock launcher can break HDMI input switching on some sets. The article suggests handing itself to a coding agent to run the commands for you.
+
+*** Take
+Every step here exists because the launcher is the one component Google ships as non-replaceable, and because the ads showed up in TVs people had already paid for. The cheaper fix is in the comments: point androidtvwatsonfe-pa.googleapis.com at 127.0.0.1 in your DNS and the stock launcher goes quiet on its own. The suggestion to hand the article to Claude Code so it can run the adb commands is curl piped to bash with extra steps and a larger trust assumption.
+
+*** Comments
+
+**** cube00
+:PROPERTIES:
+:COMMENT_ID: 50161434
+:END:
+It was very underhanded of Google to add advertising after the fact. Years later they still haven't updated the screenshots on their Play store page to show the giant 1/3 full screen ads you get now. Replacing the Google launcher was one of the best quality of life upgrades I've ever done. It really lags while it tries to start up to show the ads.
+
+**** nullify88
+:PROPERTIES:
+:COMMENT_ID: 50163989
+:END:
+For those with more capable routers, local dns adblocking, or NextDNS: you can add a static DNS entry for "androidtvwatsonfe-pa.googleapis.com" and direct that to 127.0.0.1, you will also get no ads on the stock launcher. At least on Android 11 (for the Nvidia Shield).
+
+**** giancarlostoro
+:PROPERTIES:
+:COMMENT_ID: 50160377
+:END:
+I just want to buy a "Stupid TV". Can't believe we never thought of having TVs without an entire invasive OS that slows down the entire TV. Every smart TV I own never gets internet access, ever. I just plug a real device that connects to the internet instead, they're a much faster and better experience.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+一台没有广告的 Android TV
+***** TLDR
+一篇把 Google TV 里的广告拆掉的实操记录。通过 ADB 旁载 Projectivy Launcher，替掉谷歌不允许更换的主界面；用 SmartTube 代替 YouTube，顺带获得 SponsorBlock；Wholphin 作为 Jellyfin 客户端；Button Mapper 把遥控器上写死的流媒体按键重新映射到自己真正用的应用。谷歌自带的「仅应用模式」并不会去掉屏幕顶部的推广横幅。整个过程需要开发者选项和 adb，而且禁用原厂启动器在部分电视上会影响 HDMI 输入切换。文章还建议把它本身交给编码智能体来替你执行命令。
+***** Take
+这里每一步之所以存在，都是因为启动器是谷歌唯一不允许替换的组件，而广告出现在人们早已买下的电视上。更省事的方案在评论里：在 DNS 里把 androidtvwatsonfe-pa.googleapis.com 指向 127.0.0.1，原厂启动器就自己安静了。至于把文章交给 Claude Code 去跑 adb 命令，那就是步骤更多、信任假设更大的 curl | bash。
+***** Comments
+- 谷歌事后加广告的做法非常不地道。好几年过去了，他们在应用商店页面上的截图还是没更新，不会显示你现在看到的占屏幕三分之一的巨幅广告。换掉谷歌的启动器是我做过的最值的体验升级之一。它为了加载广告启动时真的很卡。
+- 如果你的路由器能力够强，或者在用本地 DNS 拦截、NextDNS：可以给 androidtvwatsonfe-pa.googleapis.com 加一条静态 DNS 记录指向 127.0.0.1，这样原厂启动器也不会有广告。至少在 Android 11 的 Nvidia Shield 上是这样。
+- 我只想买一台「笨电视」。真不敢相信我们一直没想过做一台不塞一整套拖慢整机的侵入式系统的电视。我家所有智能电视都永远不连网，我只插一个真正联网的设备，体验快得多也好得多。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+広告のないAndroid TV
+***** TLDR
+Google TVから広告を取り除く手順の記録。ADBでサイドロードしたProjectivy Launcherが、Googleが変更を許していないホーム画面を置き換える。YouTubeの代わりにSmartTubeを使えばSponsorBlockも付いてくる。JellyfinクライアントはWholphin、リモコンに固定された配信サービスのボタンはButton Mapperで実際に使うアプリへ割り当て直す。Google自身の「アプリのみモード」では画面上部のプロモーションバナーは消えない。作業には開発者オプションとadbが必要で、純正ランチャーを無効化すると一部のテレビでHDMI入力の切り替えが壊れることがある。記事は最後に、この記事自体をコーディングエージェントに渡してコマンドを実行させる手もあると勧めている。
+***** Take
+ここにある手順のすべては、ランチャーがGoogleが差し替えを許さない唯一の部品であり、広告が人々が購入済みのテレビに後から現れたことに由来する。手間の少ない対処はコメント欄にある。DNSでandroidtvwatsonfe-pa.googleapis.comを127.0.0.1に向ければ純正ランチャーは黙る。記事をClaude Codeに渡してadbコマンドを実行させるという提案は、手数と信頼の前提が増えたcurl | bashだ。
+***** Comments
+- 後から広告を追加したGoogleのやり方は非常に陰湿だった。何年たっても、Playストアのページのスクリーンショットは今の画面の3分の1を占める巨大広告を映すように更新されていない。Googleのランチャーを置き換えたのは、これまでで最良の体験改善のひとつだ。広告を読み込もうとする起動時は本当に重い。
+- 高機能なルーターやローカルDNSの広告ブロック、NextDNSを使っている人向け。androidtvwatsonfe-pa.googleapis.comの静的DNSエントリを127.0.0.1に向ければ、純正ランチャーでも広告は出なくなる。少なくともAndroid 11のNvidia Shieldでは。
+- ただの「バカなテレビ」が買いたい。テレビ全体を遅くする侵襲的なOSを載せないテレビを、誰も思いつかなかったのが信じられない。自宅のスマートテレビは一台もネットにつないでいない。ネットにつながる本物の機器を差すだけで、そのほうがずっと速くて快適だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+광고 없는 안드로이드 TV
+***** TLDR
+구글 TV에서 광고를 걷어내는 실행 기록이다. ADB로 사이드로드한 Projectivy Launcher가 구글이 교체를 막아 둔 홈 화면을 대체하고, SmartTube가 유튜브를 대신하며 SponsorBlock까지 따라온다. Jellyfin 클라이언트는 Wholphin, 리모컨에 박혀 있는 스트리밍 버튼은 Button Mapper로 실제로 쓰는 앱에 다시 배정한다. 구글의 "앱 전용 모드"는 화면 상단 홍보 배너를 그대로 남긴다. 개발자 옵션과 adb가 필요하고, 기본 런처를 비활성화하면 일부 TV에서 HDMI 입력 전환이 깨질 수 있다. 글은 마지막에 이 글 자체를 코딩 에이전트에 넘겨 명령을 실행시키라고 권한다.
+***** Take
+여기 나오는 모든 단계는 런처가 구글이 교체를 허용하지 않는 유일한 구성 요소이기 때문에, 그리고 광고가 이미 돈을 낸 TV에 나중에 들어왔기 때문에 존재한다. 더 싼 해법은 댓글에 있다. DNS에서 androidtvwatsonfe-pa.googleapis.com을 127.0.0.1로 돌리면 기본 런처가 조용해진다. 글을 Claude Code에 넘겨 adb 명령을 돌리게 하라는 제안은 단계와 신뢰 전제가 더 늘어난 curl | bash다.
+***** Comments
+- 나중에 광고를 끼워 넣은 구글의 방식은 아주 치사했다. 몇 년이 지나도 플레이 스토어 페이지의 스크린샷은 지금처럼 화면 3분의 1을 덮는 거대한 광고를 보여주도록 갱신되지 않았다. 구글 런처를 바꾼 건 내가 해 본 최고의 체험 개선 중 하나다. 광고를 띄우려고 시동할 때 정말 버벅인다.
+- 성능 좋은 라우터나 로컬 DNS 광고 차단, NextDNS를 쓰는 사람이라면 androidtvwatsonfe-pa.googleapis.com의 정적 DNS 항목을 127.0.0.1로 보내면 기본 런처에서도 광고가 안 나온다. 최소한 안드로이드 11의 엔비디아 실드에서는 그렇다.
+- 그냥 "멍청한 TV"를 사고 싶다. TV 전체를 느리게 만드는 침습적인 OS 없는 TV를 아무도 생각하지 못했다는 게 믿기지 않는다. 집에 있는 스마트 TV는 단 한 대도 인터넷에 연결하지 않는다. 인터넷에 연결되는 제대로 된 기기를 꽂을 뿐이고, 그게 훨씬 빠르고 낫다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un Android TV sin anuncios
+***** TLDR
+Una guía para quitarle los anuncios a Google TV. Projectivy Launcher, instalado por ADB, sustituye la pantalla de inicio que Google no te deja cambiar; SmartTube reemplaza YouTube y trae SponsorBlock incluido; Wholphin es el cliente de Jellyfin; Button Mapper reasigna los botones de streaming fijos del mando a las apps que de verdad usas. El propio "modo solo aplicaciones" de Google deja intacto el banner promocional de la parte superior. El proceso exige opciones de desarrollador y adb, y desactivar el lanzador de fábrica puede romper el cambio de entrada HDMI en algunos televisores. El artículo sugiere entregarse a sí mismo a un agente de programación para que ejecute los comandos.
+***** Take
+Cada paso existe porque el lanzador es el único componente que Google entrega como no reemplazable, y porque los anuncios aparecieron en televisores que la gente ya había pagado. El arreglo más barato está en los comentarios: apunta androidtvwatsonfe-pa.googleapis.com a 127.0.0.1 en tu DNS y el lanzador de fábrica se calla solo. La idea de pasarle el artículo a Claude Code para que lance los comandos de adb es un curl a bash con más pasos y más confianza depositada.
+***** Comments
+- Fue muy rastrero por parte de Google añadir publicidad después. Años más tarde siguen sin actualizar las capturas de su página en la Play Store para mostrar los anuncios gigantes que ocupan un tercio de la pantalla. Reemplazar el lanzador de Google ha sido una de las mejores mejoras de calidad de vida que he hecho. Va realmente lento mientras intenta arrancar para mostrar los anuncios.
+- Para quienes tengan routers más capaces, bloqueo de anuncios por DNS local o NextDNS: podéis añadir una entrada DNS estática para "androidtvwatsonfe-pa.googleapis.com" apuntando a 127.0.0.1 y tampoco veréis anuncios en el lanzador de fábrica. Al menos en Android 11 (en la Nvidia Shield).
+- Solo quiero comprar una "tele tonta". No me creo que nunca se nos ocurriera hacer televisores sin un sistema operativo invasivo que ralentiza todo el aparato. Ninguna de mis teles inteligentes tiene acceso a internet, nunca. Enchufo un aparato de verdad que sí se conecta, y la experiencia es mucho más rápida y mejor.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein Android TV ohne Werbung
+***** TLDR
+Eine Anleitung, wie man Google TV die Werbung austreibt. Der per ADB installierte Projectivy Launcher ersetzt den Startbildschirm, den Google nicht austauschen lässt; SmartTube tritt an die Stelle von YouTube und bringt SponsorBlock mit; Wholphin ist der Jellyfin-Client; Button Mapper legt die fest verdrahteten Streaming-Tasten der Fernbedienung auf Apps, die man wirklich nutzt. Googles eigener "Nur Apps"-Modus lässt das Werbebanner am oberen Bildrand stehen. Nötig sind Entwickleroptionen und adb, und das Deaktivieren des Werkslaunchers kann bei manchen Geräten die HDMI-Eingangsumschaltung zerstören. Am Ende schlägt der Artikel vor, ihn selbst einem Coding-Agenten zu übergeben, der die Befehle ausführt.
+***** Take
+Jeder Schritt hier existiert, weil der Launcher die eine Komponente ist, die Google als nicht austauschbar ausliefert, und weil die Werbung in Geräten auftauchte, die längst bezahlt waren. Der günstigere Weg steht in den Kommentaren: androidtvwatsonfe-pa.googleapis.com im DNS auf 127.0.0.1 zeigen lassen, dann verstummt der Werkslauncher von selbst. Den Artikel an Claude Code zu geben, damit es die adb-Befehle ausführt, ist curl nach bash mit mehr Schritten und größerem Vertrauensvorschuss.
+***** Comments
+- Es war sehr hinterhältig von Google, die Werbung nachträglich einzubauen. Jahre später haben sie die Screenshots auf ihrer Play-Store-Seite immer noch nicht aktualisiert, um die riesigen Anzeigen zu zeigen, die heute ein Drittel des Bildschirms einnehmen. Den Google-Launcher zu ersetzen war eine der besten Verbesserungen, die ich je vorgenommen habe. Er hängt richtig, während er startet, um die Werbung zu laden.
+- Für alle mit leistungsfähigeren Routern, lokalem DNS-Adblocking oder NextDNS: Legt einen statischen DNS-Eintrag für "androidtvwatsonfe-pa.googleapis.com" auf 127.0.0.1, dann gibt es auch im Werkslauncher keine Werbung. Zumindest unter Android 11 (auf der Nvidia Shield).
+- Ich will einfach einen "dummen Fernseher" kaufen. Unglaublich, dass niemand auf die Idee kam, Fernseher ohne ein aufdringliches Betriebssystem zu bauen, das das ganze Gerät ausbremst. Keiner meiner Smart-TVs bekommt jemals Internetzugang. Ich stecke stattdessen ein richtiges Gerät an, das sich verbindet, und das ist viel schneller und besser.
+** Ukraine claims first drone evacuation of wounded soldier :drones:ukraine:war:robotics:medicine:
+:PROPERTIES:
+:ID:       50153664
+:URL:      https://www.nbcnews.com/world/ukraine/ukraine-first-drone-evacuation-wounded-soldier-frontlines-hexacopter-rcna604310
+:HN_URL:   https://news.ycombinator.com/item?id=50153664
+:POINTS:   300
+:COMMENTS: 235
+:BY:       yzydserd
+:END:
+
+*** TLDR
+Ukraine's 92nd Separate Assault Brigade says it evacuated a wounded infantryman with a heavy-lift hexacopter, a Ukrainian-built airframe designed as a bomber and roughly twice the size of the soldier it carried. The brigade says intense enemy drone activity and mines made evacuation by unmanned ground vehicle impossible. The soldier, whose identity was not released, is in treatment and rehabilitation; the crew included a specialist with the call sign Napalm. Ukraine's Ground Forces said drone units now carry out work recently considered science fiction, and Prime Minister Serhii Koretskyi said an experimental project has been approved to extend drone use into medical logistics, including transporting organs for transplant.
+
+*** Take
+The detail that matters is the order of failure: the ground robot was ruled out before the air route was tried. Drone saturation has made the evacuation corridor itself impassable, which is why, as one commenter with knowledge of the front describes, casualties in some sectors are dying of infections and wounds that treatment could have handled. Flying them out is what remains when the ground is closed, not a capability anyone picked.
+
+*** Comments
+
+**** egorfine
+:PROPERTIES:
+:COMMENT_ID: 50155975
+:END:
+As a Ukrainian, I really wish my country could innovate in areas other than evacuation of wounded people from our own soil.
+
+**** laughing_man
+:PROPERTIES:
+:COMMENT_ID: 50163765
+:END:
+The Russians target the ground vehicles with drones and artillery. From what I understand, in some areas they've been completely unable to evacuate casualties. Guys are dying from infections and wounds that could easily have been treated by people with the right expertise and equipment.
+
+**** 1970-01-01
+:PROPERTIES:
+:COMMENT_ID: 50156173
+:END:
+If they can pull them out, they can also drop fresh ones down. Not sure if that is better than just using a helicopter however.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+乌克兰称完成首次无人机后送伤员
+***** TLDR
+乌克兰第 92 独立突击旅称，他们用一架重载六旋翼无人机后送了一名受伤的步兵。这架乌克兰制造的机体原本设计为轰炸型，体积约为所载士兵的两倍。该旅表示，敌方无人机活动密集加上地雷，使得使用无人地面车辆后送不可能实现。这名未公布身份的士兵正在接受治疗与康复，执行任务的人员中包括代号「凝固汽油」的专家。乌克兰地面部队称，无人机部队如今执行的任务在不久前还被视为科幻；总理谢尔希·科列茨基表示，已批准一个试验项目，把无人机用于医疗后勤，包括运送移植器官。
+***** Take
+关键细节是失败的顺序：在尝试空中路线之前，地面机器人方案已经被排除。无人机的密度让后送通道本身变得无法通行，这也是为什么按一位了解前线情况的评论者所述，某些地段的伤员正因感染和本可救治的创伤而死亡。地面被封死之后，空运是剩下的唯一选择，而不是谁主动挑选的能力。
+***** Comments
+- 作为一个乌克兰人，我真希望我的国家能在别的领域创新，而不是在自己的土地上后送伤员。
+- 俄军用无人机和炮火打击地面车辆。据我了解，有些地段完全无法后送伤员。士兵正因感染和本可由有经验、有装备的人轻松处理的创伤而死去。
+- 既然能把人吊出来，也就能把新的人放下去。不过我不确定这是否比直接用直升机更好。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ウクライナ、負傷兵のドローン後送を初めて実施と発表
+***** TLDR
+ウクライナの第92独立突撃旅団は、重量物運搬用のヘキサコプターで負傷した歩兵を後送したと発表した。機体はウクライナ製で、本来は爆撃用として設計されたもので、運ばれた兵士の約2倍の大きさだという。旅団は、敵のドローン活動が激しく地雷もあるため、無人地上車両による後送は不可能だったとしている。身元は公表されていないこの兵士は治療とリハビリを受けており、任務にはコールサイン「ナパーム」の専門要員が加わった。ウクライナ地上軍は、ドローン部隊が最近まで空想と見なされていた任務を担っていると述べ、セルヒー・コレツキー首相は、臓器輸送を含む医療物流へドローン利用を広げる実験プロジェクトが承認されたと明らかにした。
+***** Take
+重要なのは失敗の順序だ。空路を試す前に、地上ロボットという選択肢が除外されている。ドローンの飽和によって後送路そのものが通行不能になり、だからこそ前線の事情を知るコメント投稿者が述べるように、一部の区域では治療可能だった感染や傷で負傷者が亡くなっている。空から運び出すのは地上が閉ざされた後に残る手段であり、誰かが好んで選んだ能力ではない。
+***** Comments
+- ウクライナ人として、自国の土地から負傷者を後送する分野以外で革新できればと本当に思う。
+- ロシア軍はドローンと砲撃で地上車両を狙う。聞くところでは、一部の地域では負傷者の後送がまったくできていない。適切な知識と装備があれば容易に治療できた感染や傷で、兵士が亡くなっている。
+- 引き上げられるなら、新しい兵士を降ろすこともできる。ただ、それが単にヘリコプターを使うより良いのかは分からない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+우크라이나, 부상병 드론 후송 첫 사례 발표
+***** TLDR
+우크라이나 제92독립돌격여단은 중량 운반용 헥사콥터로 부상한 보병을 후송했다고 밝혔다. 우크라이나에서 제작된 이 기체는 본래 폭격용으로 설계되었고, 실어 나른 병사의 약 두 배 크기다. 여단은 적 드론 활동이 극심하고 지뢰가 깔려 있어 무인 지상 차량을 이용한 후송은 불가능했다고 설명했다. 신원이 공개되지 않은 이 병사는 치료와 재활을 받고 있으며, 임무에는 호출부호 "나팜"의 전문 인력이 참여했다. 우크라이나 지상군은 드론 부대가 얼마 전까지 공상으로 여겨졌던 임무를 수행하고 있다고 밝혔고, 세르히 코레츠키 총리는 장기 이송을 포함해 드론을 의료 물류로 확대하는 실험 사업이 승인됐다고 말했다.
+***** Take
+중요한 대목은 실패의 순서다. 공중 경로를 시도하기 전에 지상 로봇이라는 선택지가 먼저 배제됐다. 드론 포화로 후송로 자체가 통행 불가가 되었고, 그래서 전선 사정을 아는 한 댓글 작성자의 설명처럼 일부 구역에서는 치료할 수 있었던 감염과 상처로 부상자가 숨지고 있다. 공중 후송은 지상이 막힌 뒤 남은 수단이지, 누가 골라서 얻은 역량이 아니다.
+***** Comments
+- 우크라이나인으로서, 우리 땅에서 부상자를 후송하는 분야가 아닌 다른 곳에서 혁신할 수 있기를 정말 바란다.
+- 러시아군은 드론과 포격으로 지상 차량을 노린다. 내가 아는 바로는 일부 지역에서는 부상자 후송이 전혀 되지 않았다. 적절한 지식과 장비가 있으면 쉽게 치료할 수 있었던 감염과 상처로 병사들이 죽고 있다.
+- 끌어올릴 수 있다면 새 병력을 내려놓을 수도 있다. 다만 그게 그냥 헬기를 쓰는 것보다 나은지는 모르겠다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Ucrania afirma haber hecho la primera evacuación de un soldado herido con un dron
+***** TLDR
+La 92ª Brigada de Asalto Independiente de Ucrania afirma haber evacuado a un soldado de infantería herido con un hexacóptero de carga pesada, un aparato de fabricación ucraniana concebido como bombardero y de un tamaño aproximadamente doble que el del soldado transportado. La brigada dice que la intensa actividad de drones enemigos y las minas hacían imposible la evacuación con vehículos terrestres no tripulados. El soldado, cuya identidad no se ha revelado, está en tratamiento y rehabilitación; en la operación participó un especialista con el indicativo Napalm. Las Fuerzas Terrestres ucranianas señalaron que las unidades de drones realizan tareas que hasta hace poco se consideraban ciencia ficción, y el primer ministro Serhii Koretskyi anunció la aprobación de un proyecto experimental para extender el uso de drones a la logística médica, incluido el transporte de órganos para trasplante.
+***** Take
+El dato que importa es el orden de los fracasos: el robot terrestre quedó descartado antes de intentar la vía aérea. La saturación de drones ha vuelto intransitable el propio corredor de evacuación, y por eso, como describe un comentarista que conoce el frente, en algunos sectores los heridos mueren de infecciones y lesiones que el tratamiento habría resuelto. Sacarlos por aire es lo que queda cuando el suelo está cerrado, no una capacidad que alguien eligiera.
+***** Comments
+- Como ucraniano, ojalá mi país pudiera innovar en algo que no fuese evacuar heridos de nuestro propio suelo.
+- Los rusos atacan los vehículos terrestres con drones y artillería. Por lo que entiendo, en algunas zonas han sido completamente incapaces de evacuar bajas. Hay hombres muriendo por infecciones y heridas que se habrían tratado sin problema con la gente y el equipo adecuados.
+- Si pueden sacarlos, también pueden bajar refuerzos. Aunque no sé si eso es mejor que usar simplemente un helicóptero.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ukraine meldet erste Drohnenevakuierung eines verwundeten Soldaten
+***** TLDR
+Die 92. Selbstständige Angriffsbrigade der Ukraine berichtet, einen verwundeten Infanteristen mit einem Lasten-Hexakopter evakuiert zu haben, einem in der Ukraine gebauten Fluggerät, das als Bomber entworfen wurde und etwa doppelt so groß ist wie der transportierte Soldat. Nach Angaben der Brigade machten die intensive feindliche Drohnentätigkeit und Minen eine Evakuierung mit unbemannten Landfahrzeugen unmöglich. Der Soldat, dessen Identität nicht genannt wurde, befindet sich in Behandlung und Rehabilitation; an dem Einsatz war ein Spezialist mit dem Rufzeichen Napalm beteiligt. Die ukrainischen Landstreitkräfte erklärten, Drohneneinheiten leisteten heute Arbeit, die bis vor kurzem als Science-Fiction galt, und Ministerpräsident Serhij Korezkyj kündigte ein genehmigtes Pilotprojekt an, das Drohnen auf die medizinische Logistik ausweitet, einschließlich des Transports von Organen für Transplantationen.
+***** Take
+Entscheidend ist die Reihenfolge des Scheiterns: Der Bodenroboter fiel aus, bevor der Luftweg versucht wurde. Die Drohnendichte hat den Evakuierungskorridor selbst unpassierbar gemacht, und deshalb sterben, wie ein Kommentator mit Kenntnis der Front schildert, in manchen Abschnitten Verwundete an Infektionen und Verletzungen, die behandelbar gewesen wären. Der Lufttransport ist das, was bleibt, wenn der Boden verschlossen ist, und keine Fähigkeit, die sich jemand ausgesucht hat.
+***** Comments
+- Als Ukrainer wünschte ich mir wirklich, mein Land könnte in anderen Bereichen innovativ sein als bei der Evakuierung Verwundeter aus unserem eigenen Boden.
+- Die Russen greifen die Bodenfahrzeuge mit Drohnen und Artillerie an. Soweit ich weiß, war in einigen Gebieten überhaupt keine Evakuierung von Verwundeten möglich. Männer sterben an Infektionen und Wunden, die mit den richtigen Leuten und der richtigen Ausrüstung leicht zu behandeln gewesen wären.
+- Wenn sie Leute herausholen können, können sie auch frische hinunterbringen. Ob das besser ist, als einfach einen Helikopter zu nehmen, weiß ich allerdings nicht.
