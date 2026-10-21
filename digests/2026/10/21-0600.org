@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-21 06:00 UTC
+#+DATE: 2026-10-21T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+Google ships PyTorch on TPUs, a ransom negotiator gets arrested, and paying 4x for more reasoning effort scores worse
+
+* Highlights
+- TorchTPU: Google finally stops telling PyTorch users to learn JAX
+- A cybersecurity COO is charged with helping run the extortion site he negotiated against
+- SlopCodeBench: Opus 5.5 at medium beats Opus 5.5 at xhigh, for a quarter of the cost
+- Josh Comeau's CSS wishlist for Interop 2027, almost all of it Chrome-only today
+- 19 years on Klonopin, a three-week taper, and 27 months to actually stop
+
+* Stories
+
+** Google open-sources TorchTPU, a native PyTorch back end for TPUs :ai:google:pytorch:hardware:
+:PROPERTIES:
+:ID:       50169053
+:URL:      https://github.com/google-pytorch/torch_tpu
+:HN_URL:   https://news.ycombinator.com/item?id=50169053
+:POINTS:   309
+:COMMENTS: 68
+:BY:       ilreb
+:END:
+
+*** TLDR
+Google released torch_tpu, a PyTorch backend that runs models directly on TPUs. It ships ATen kernels written for TPU, caches XLA compilations, supports data and tensor parallelism, and works with torch.compile. Version 0.2.0 is on PyPI, needs Python 3.11+, and installs with pip or builds from source with Bazel. The README points at v6e GCE instances as the easiest place to start.
+
+*** Take
+Google spent years telling PyTorch users that the TPU path ran through JAX or through XLA glue nobody enjoyed. First-party support is the concession that this did not work. The target is Nvidia: TPUs are only interesting to outside buyers if the default framework runs on them without a rewrite, and until now it did not.
+
+*** Comments
+
+**** Lucasoato
+:PROPERTIES:
+:COMMENT_ID: 50169173
+:END:
+Are there TPUs outside Google Cloud?
+
+**** nelaggy
+:PROPERTIES:
+:COMMENT_ID: 50170052
+:END:
+so if the moat isn't the model and the moat isn't the inference layer, i guess the moat is the hardware now? what does this mean for frontier labs?
+
+**** fancyfredbot
+:PROPERTIES:
+:COMMENT_ID: 50170486
+:END:
+XLA is pretty good + potentially a better compiler infrastructure than inductor which will lead to improved performance on all hardware. Also I guess this is the final nail in the coffin of Tensorflow.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+谷歌开源 TorchTPU，面向 TPU 的原生 PyTorch 后端
+***** TLDR
+谷歌发布了 torch_tpu，一个可以让模型直接在 TPU 上运行的 PyTorch 后端。它提供为 TPU 编写的 ATen 算子、XLA 编译缓存、数据并行与张量并行，并支持 torch.compile。0.2.0 版已上架 PyPI，需要 Python 3.11 以上，可用 pip 安装或用 Bazel 从源码构建。README 建议从 v6e GCE 实例入手。
+***** Take
+多年来谷歌一直告诉 PyTorch 用户，走向 TPU 的路要么经过 JAX，要么经过没人喜欢的 XLA 胶水层。第一方支持等于承认这条路走不通。真正的目标是英伟达：只有当主流框架不需要重写就能跑在 TPU 上，外部买家才会认真考虑它，而此前并不能。
+***** Comments
+- 谷歌云之外有 TPU 吗？
+- 如果护城河既不是模型也不是推理层，那现在护城河是硬件了？这对前沿实验室意味着什么？
+- XLA 相当不错，作为编译器基础设施可能比 inductor 更好，这会提升所有硬件上的性能。我猜这也是 TensorFlow 棺材上的最后一颗钉子。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GoogleがTorchTPUをオープンソース化、TPU向けのネイティブPyTorchバックエンド
+***** TLDR
+Googleはモデルを直接TPU上で動かすPyTorchバックエンドtorch_tpuを公開した。TPU向けに書かれたATenカーネル、XLAコンパイルのキャッシュ、データ並列とテンソル並列、torch.compile対応を備える。バージョン0.2.0はPyPIにあり、Python 3.11以上が必要で、pipまたはBazelでのソースビルドに対応。READMEはv6e GCEインスタンスから始めることを勧めている。
+***** Take
+GoogleはPyTorchユーザーに対し、TPUへの道はJAXか、誰も好まないXLAの接着層を通ると言い続けてきた。一次サポートの提供は、それが機能しなかったという認めだ。狙いはNvidiaである。標準フレームワークが書き直しなしで動かない限り、外部の購入者にとってTPUは検討対象にならない。これまでは動かなかった。
+***** Comments
+- Google Cloud以外にTPUはあるのか？
+- 堀がモデルでも推論層でもないなら、今の堀はハードウェアということか？フロンティアラボにとって何を意味する？
+- XLAはかなり良い。コンパイラ基盤としてinductorより優れている可能性があり、あらゆるハードで性能が上がる。TensorFlowの棺に打つ最後の釘でもあるだろう。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+구글, TPU용 네이티브 PyTorch 백엔드 TorchTPU 오픈소스 공개
+***** TLDR
+구글이 모델을 TPU에서 직접 실행하는 PyTorch 백엔드 torch_tpu를 공개했다. TPU용으로 작성된 ATen 커널, XLA 컴파일 캐시, 데이터 및 텐서 병렬화, torch.compile 지원을 제공한다. 0.2.0 버전이 PyPI에 올라와 있고 Python 3.11 이상이 필요하며 pip 설치 또는 Bazel 소스 빌드가 가능하다. README는 v6e GCE 인스턴스에서 시작할 것을 권한다.
+***** Take
+구글은 수년간 PyTorch 사용자에게 TPU로 가는 길은 JAX이거나 아무도 좋아하지 않는 XLA 접착층이라고 말해왔다. 퍼스트파티 지원은 그 방식이 통하지 않았다는 인정이다. 목표는 엔비디아다. 기본 프레임워크가 코드 재작성 없이 돌아가야 외부 구매자가 TPU를 진지하게 고려하는데, 지금까지는 그렇지 않았다.
+***** Comments
+- 구글 클라우드 밖에도 TPU가 있나요?
+- 해자가 모델도 추론 계층도 아니라면 이제 해자는 하드웨어인가? 프런티어 연구소에는 어떤 의미인가?
+- XLA는 꽤 좋고 컴파일러 인프라로서 inductor보다 나을 수 있어 모든 하드웨어의 성능을 끌어올릴 것이다. 그리고 이건 텐서플로 관에 박는 마지막 못이기도 하다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Google libera TorchTPU, un backend nativo de PyTorch para TPU
+***** TLDR
+Google publicó torch_tpu, un backend de PyTorch que ejecuta modelos directamente sobre TPU. Incluye kernels ATen escritos para TPU, caché de compilaciones XLA, paralelismo de datos y de tensores, y compatibilidad con torch.compile. La versión 0.2.0 está en PyPI, requiere Python 3.11 o superior y se instala con pip o se compila con Bazel. El README recomienda empezar con instancias v6e de GCE.
+***** Take
+Google pasó años diciendo a los usuarios de PyTorch que el camino hacia las TPU pasaba por JAX o por un pegamento XLA que no gustaba a nadie. El soporte de primera parte admite que eso no funcionó. El objetivo es Nvidia: las TPU solo interesan a compradores externos si el framework por defecto funciona sin reescribir nada, y hasta ahora no lo hacía.
+***** Comments
+- ¿Hay TPU fuera de Google Cloud?
+- si el foso no es el modelo ni la capa de inferencia, supongo que ahora el foso es el hardware. ¿qué significa eso para los laboratorios punteros?
+- XLA es bastante bueno y como infraestructura de compilador puede superar a inductor, lo que mejorará el rendimiento en todo el hardware. Y supongo que es el último clavo en el ataúd de TensorFlow.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Google veröffentlicht TorchTPU, ein natives PyTorch-Backend für TPUs
+***** TLDR
+Google hat torch_tpu veröffentlicht, ein PyTorch-Backend, das Modelle direkt auf TPUs ausführt. Es bringt für TPUs geschriebene ATen-Kernel, einen Cache für XLA-Kompilate, Daten- und Tensorparallelität sowie Unterstützung für torch.compile mit. Version 0.2.0 liegt auf PyPI, verlangt Python 3.11 oder neuer und lässt sich per pip installieren oder mit Bazel bauen. Das README empfiehlt v6e-GCE-Instanzen als Einstieg.
+***** Take
+Google hat PyTorch-Nutzern jahrelang gesagt, der Weg zur TPU führe über JAX oder über XLA-Klebecode, den niemand mochte. First-Party-Support ist das Eingeständnis, dass das nicht funktioniert hat. Das Ziel heißt Nvidia: TPUs sind für externe Käufer nur interessant, wenn das Standard-Framework ohne Umschreiben läuft, und genau das ging bisher nicht.
+***** Comments
+- Gibt es TPUs außerhalb der Google Cloud?
+- wenn der Burggraben weder das Modell noch die Inferenzschicht ist, dann ist er jetzt wohl die Hardware? Was bedeutet das für die Frontier-Labore?
+- XLA ist ziemlich gut und als Compiler-Infrastruktur potenziell besser als inductor, was die Leistung auf jeder Hardware verbessert. Und wohl der letzte Nagel im Sarg von TensorFlow.
+** Feds suspect ransom negotiator ran ShinyHunters extortion site :security:ransomware:crime:
+:PROPERTIES:
+:ID:       50173487
+:URL:      https://krebsonsecurity.com/2026/10/feds-suspect-ransom-negotiator-ran-shinyhunters-extortion-site/
+:HN_URL:   https://news.ycombinator.com/item?id=50173487
+:POINTS:   158
+:COMMENTS: 64
+:BY:       Bender
+:END:
+
+*** TLDR
+Krebs reports that Edward Dubrovsky, 54, a managing partner and COO at the Toronto incident-response firm Cypfer, was arrested on October 9 and charged with threatening to disclose stolen data and with extortion affecting interstate commerce. Investigators say Signal messages recovered from Dutch hacker Pepijn van der Stap, arrested September 15, show Dubrovsky in frequent contact with ShinyHunters members and helping operate the group's Shinywire leak site, and that he knew about the breach of fbijobs.gov before it became public. ShinyHunters, now run by a teenager in Amman using the handle Rey, has extorted more than $70 million in 2026. Court records are sealed and prosecutors asked that he stay in custody.
+
+*** Take
+Ransom negotiation only works because the victim assumes the negotiator sits on their side of the table. If the allegations hold, Dubrovsky knew about breaches before the companies did, which turns the role into an information advantage rather than a service. Charges are not a conviction, but the gap the case exposes is real: nobody checks the background of the firm you hire to talk to your extortionists.
+
+*** Comments
+
+**** ofjcihen
+:PROPERTIES:
+:COMMENT_ID: 50174176
+:END:
+Working in the IR space I've had a lot of opportunities to work with negotiators before. Most of them are extremely professional and worth their weight in gold for what they provide to their clients. Ridiculous that scumbags like this are tarnishing that space.
+
+**** kevin_thibedeau
+:PROPERTIES:
+:COMMENT_ID: 50174013
+:END:
+In late September, ShinyHunters hacked the FBI recruitment website fbijobs.gov. The OPM breach was 11 years ago and apparently the incompetence still reigns.
+
+**** mmooss
+:PROPERTIES:
+:COMMENT_ID: 50174326
+:END:
+Even before the current administration, federal law enforcement's leaks of suspects, especially in high-profile crimes, have been highly unreliable and have ruined lives. See Wen Ho Lee, Richard Jewell.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+联邦调查人员怀疑赎金谈判人经营 ShinyHunters 勒索网站
+***** TLDR
+Krebs 报道，多伦多事件响应公司 Cypfer 的管理合伙人兼首席运营官、54 岁的 Edward Dubrovsky 于 10 月 9 日被捕，被控威胁披露窃取数据以及实施影响州际商业的勒索。调查人员称，从 9 月 15 日被捕的荷兰黑客 Pepijn van der Stap 处取得的 Signal 消息显示，Dubrovsky 与 ShinyHunters 成员频繁联系并协助运营该组织的 Shinywire 泄露网站，而且他在 fbijobs.gov 被入侵公开之前就已知情。ShinyHunters 目前由一名在安曼、代号 Rey 的少年掌控，2026 年已勒索超过 7000 万美元。法庭记录已封存，检方要求继续羁押。
+***** Take
+赎金谈判之所以成立，是因为受害者默认谈判人站在自己这一边。如果指控成立，Dubrovsky 在企业自己发现之前就知道被入侵，这把这份工作变成了信息优势而不是服务。起诉不等于定罪，但案件暴露的缺口是真实的：没有人会去核查你雇来跟勒索者谈判的那家公司的底细。
+***** Comments
+- 我在事件响应行业工作，接触过很多谈判人。大多数都极其专业，为客户创造的价值抵得上同等重量的黄金。这种败类玷污了这个行业，太荒谬了。
+- 九月下旬 ShinyHunters 入侵了 FBI 招聘网站 fbijobs.gov。OPM 泄露已经是 11 年前的事，看来无能依旧。
+- 即使在本届政府之前，联邦执法部门对嫌疑人的信息泄露，尤其在高关注度案件中，也极不可靠并毁掉过人的一生。参见 Wen Ho Lee 和 Richard Jewell。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+当局、身代金交渉人がShinyHuntersの恐喝サイトを運営していたと疑う
+***** TLDR
+Krebsの報道によると、トロントのインシデント対応企業Cypferのマネージングパートナー兼COOであるEdward Dubrovsky（54）が10月9日に逮捕され、盗まれたデータの公開をちらつかせた脅迫と州際通商に影響する恐喝の容疑で起訴された。捜査当局は、9月15日に逮捕されたオランダ人ハッカーPepijn van der Stapから押収したSignalのメッセージに、DubrovskyがShinyHuntersのメンバーと頻繁にやり取りし、同グループの漏洩サイトShinywireの運営を手伝っていた形跡があり、fbijobs.govの侵害を公表前に知っていたとしている。ShinyHuntersは現在アンマン在住でReyを名乗る十代の人物が率い、2026年だけで7000万ドル超を恐喝した。裁判記録は封印され、検察は勾留継続を求めた。
+***** Take
+身代金交渉が成り立つのは、被害者が交渉人を自分の側の人間だと前提するからだ。容疑が事実なら、Dubrovskyは企業本人より先に侵害を知っていたことになり、その役割はサービスではなく情報上の優位に変わる。起訴は有罪ではないが、この事件が示す穴は本物だ。恐喝者と話させるために雇う会社の素性を、誰も確認していない。
+***** Comments
+- インシデント対応の仕事柄、交渉人と組む機会は多い。大半は極めてプロフェッショナルで、クライアントにとって計り知れない価値がある。こういうクズがその領域を汚すのはばかげている。
+- 9月下旬にShinyHuntersがFBIの採用サイトfbijobs.govを侵害した。OPMの情報漏洩から11年、無能さは相変わらずらしい。
+- 現政権以前から、連邦法執行機関による容疑者情報のリークは、とくに注目度の高い事件で極めて不正確で、人生を壊してきた。Wen Ho LeeやRichard Jewellを見ればいい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+수사당국, 몸값 협상가가 ShinyHunters 갈취 사이트를 운영했다고 의심
+***** TLDR
+Krebs에 따르면 토론토 침해사고 대응 기업 Cypfer의 매니징 파트너 겸 COO인 54세 Edward Dubrovsky가 10월 9일 체포돼 탈취 데이터 공개 협박과 주간 통상에 영향을 미치는 갈취 혐의로 기소됐다. 수사관들은 9월 15일 체포된 네덜란드 해커 Pepijn van der Stap에게서 확보한 시그널 메시지에 Dubrovsky가 ShinyHunters 구성원들과 자주 연락하며 이 조직의 유출 사이트 Shinywire 운영을 도운 정황이 있고, fbijobs.gov 침해를 공개 전에 알고 있었다고 밝혔다. 암만에 거주하며 Rey라는 이름을 쓰는 10대가 이끄는 ShinyHunters는 2026년에만 7천만 달러 넘게 갈취했다. 법원 기록은 봉인됐고 검찰은 계속 구금을 요청했다.
+***** Take
+몸값 협상이 성립하는 이유는 피해자가 협상가를 자기 편이라고 전제하기 때문이다. 혐의가 사실이라면 Dubrovsky는 기업 본인보다 먼저 침해를 알고 있었고, 그 역할은 서비스가 아니라 정보 우위로 바뀐다. 기소가 유죄는 아니지만 이 사건이 드러낸 공백은 실재한다. 갈취범과 대화시키려고 고용하는 회사의 뒷배경을 아무도 확인하지 않는다.
+***** Comments
+- 침해사고 대응 업계에서 일하며 협상가들과 여러 번 일했다. 대부분 지극히 전문적이고 고객에게 그 값어치를 충분히 한다. 이런 쓰레기가 업계를 더럽히는 건 어이없다.
+- 9월 말 ShinyHunters가 FBI 채용 사이트 fbijobs.gov를 해킹했다. OPM 유출이 11년 전인데 무능은 여전한 모양이다.
+- 현 정부 이전에도 연방 수사기관의 피의자 정보 유출은, 특히 주목도 높은 사건에서 매우 부정확했고 인생을 망쳐왔다. Wen Ho Lee와 Richard Jewell을 보라.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Las autoridades sospechan que un negociador de rescates llevaba el sitio de extorsión de ShinyHunters
+***** TLDR
+Krebs informa de que Edward Dubrovsky, de 54 años, socio director y COO de la firma de respuesta a incidentes Cypfer, en Toronto, fue detenido el 9 de octubre y acusado de amenazar con divulgar datos robados y de extorsión con afectación al comercio interestatal. Los investigadores afirman que los mensajes de Signal recuperados al hacker neerlandés Pepijn van der Stap, detenido el 15 de septiembre, muestran a Dubrovsky en contacto frecuente con miembros de ShinyHunters y ayudando a operar el sitio de filtraciones Shinywire, y que conocía la intrusión en fbijobs.gov antes de que se hiciera pública. ShinyHunters, dirigido ahora por un adolescente de Amán que usa el alias Rey, ha extorsionado más de 70 millones de dólares en 2026. El expediente judicial está sellado y la fiscalía pidió que siguiera detenido.
+***** Take
+La negociación de rescates funciona porque la víctima asume que el negociador está de su lado de la mesa. Si las acusaciones se sostienen, Dubrovsky conocía las intrusiones antes que las propias empresas, lo que convierte el papel en una ventaja informativa y no en un servicio. Una acusación no es una condena, pero el hueco que revela el caso es real: nadie investiga a la firma que contratas para hablar con quienes te extorsionan.
+***** Comments
+- Trabajo en respuesta a incidentes y he colaborado muchas veces con negociadores. La mayoría son extremadamente profesionales y valen su peso en oro para sus clientes. Es ridículo que indeseables así manchen ese espacio.
+- A finales de septiembre ShinyHunters hackeó la web de reclutamiento del FBI, fbijobs.gov. La brecha de OPM fue hace 11 años y por lo visto la incompetencia sigue reinando.
+- Incluso antes de este gobierno, las filtraciones de sospechosos por parte de la policía federal, sobre todo en casos mediáticos, han sido muy poco fiables y han arruinado vidas. Véanse Wen Ho Lee y Richard Jewell.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ermittler verdächtigen Lösegeld-Verhandler, die Erpressungsseite von ShinyHunters betrieben zu haben
+***** TLDR
+Krebs berichtet, dass Edward Dubrovsky, 54, Managing Partner und COO der Torontoer Incident-Response-Firma Cypfer, am 9. Oktober festgenommen und wegen Drohung mit der Veröffentlichung gestohlener Daten sowie Erpressung mit Auswirkung auf den zwischenstaatlichen Handel angeklagt wurde. Ermittler sagen, Signal-Nachrichten des am 15. September verhafteten niederländischen Hackers Pepijn van der Stap zeigten Dubrovsky in häufigem Kontakt mit ShinyHunters-Mitgliedern und beim Mitbetrieb der Leak-Seite Shinywire, und er habe vom Einbruch bei fbijobs.gov gewusst, bevor dieser öffentlich wurde. ShinyHunters, inzwischen von einem Jugendlichen in Amman unter dem Namen Rey geführt, hat 2026 mehr als 70 Millionen Dollar erpresst. Die Gerichtsakten sind versiegelt, die Staatsanwaltschaft beantragte weitere Haft.
+***** Take
+Lösegeldverhandlung funktioniert nur, weil das Opfer annimmt, der Verhandler sitze auf seiner Seite des Tisches. Treffen die Vorwürfe zu, wusste Dubrovsky von Einbrüchen, bevor die Unternehmen selbst davon wussten. Damit wird die Rolle zum Informationsvorsprung statt zur Dienstleistung. Eine Anklage ist keine Verurteilung, aber die Lücke, die der Fall zeigt, ist echt: Niemand prüft die Firma, die man anheuert, um mit den eigenen Erpressern zu sprechen.
+***** Comments
+- Ich arbeite in der Incident Response und hatte oft mit Verhandlern zu tun. Die meisten sind äußerst professionell und für ihre Kunden Gold wert. Lächerlich, dass solche Typen dieses Feld beschmutzen.
+- Ende September hat ShinyHunters die FBI-Rekrutierungsseite fbijobs.gov gehackt. Der OPM-Einbruch liegt 11 Jahre zurück, und offenbar herrscht die Inkompetenz weiter.
+- Schon vor der jetzigen Regierung waren Leaks der Bundesstrafverfolgung über Verdächtige, gerade in prominenten Fällen, höchst unzuverlässig und haben Leben zerstört. Siehe Wen Ho Lee und Richard Jewell.
+** SlopCodeBench 10/2026: Astra wins overall, xhigh considered harmful :ai:benchmarks:coding:
+:PROPERTIES:
+:ID:       50108717
+:URL:      https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/benchmarking-new-models-on-slop-code-bench.md
+:HN_URL:   https://news.ycombinator.com/item?id=50108717
+:POINTS:   230
+:COMMENTS: 88
+:BY:       dhorthy
+:END:
+
+*** TLDR
+HumanLayer ran ten campaigns on SlopCodeBench, which hands an agent a feature list one checkpoint at a time and checks whether earlier tests still pass. Strict pass rates: GPT-6 Astra XHigh 16.33% (32 of 196 checkpoints), GPT-6 SOL Medium 15.31%, Astra Medium and GPT-6.1 SOL Medium 14.80%, Opus 5.5 Medium 14.29%. Opus 5.5 at medium scored higher than Opus 5.5 at xhigh, 28 strict passes against 25, while xhigh cost 4.22x more. GPT-6 SOL at xhigh cost 2.11x and also scored lower. Only Astra improved with xhigh, at 2.91x the cost. Core pass rates sit at 65.8 to 74% against strict rates of 12 to 16%.
+
+*** Take
+The leaderboard positions are within noise of each other; the cost column is not. A setting that charges 4x and returns fewer passes is being sold as a quality dial when it mostly buys more output. Worth keeping the absolute numbers in view too: the best run completes 16% of checkpoints without breaking something it already built, so every model here is mostly failing.
+
+*** Comments
+
+**** furyofantares
+:PROPERTIES:
+:COMMENT_ID: 50171161
+:END:
+For most things I find medium to be the highest quality output. However if I want it to do spatial reasoning or if I want it to be funny, then xhigh is where it's at.
+
+**** cute_boi
+:PROPERTIES:
+:COMMENT_ID: 50171469
+:END:
+The irony is the article is very sloppy. Can we at least write it and review it properly.
+
+**** theodorewiles
+:PROPERTIES:
+:COMMENT_ID: 50172282
+:END:
+I have a simplify skill that basically solves the erosion and verbosity metrics SCB flagged. However, after running the benchmark I cannot find any evidence that it actually improves test pass rate trajectories. Food for thought on maintainability metrics.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+SlopCodeBench 2026 年 10 月：Astra 总分第一，xhigh 被认为有害
+***** TLDR
+HumanLayer 在 SlopCodeBench 上跑了十轮评测。该基准每次只向智能体透露一个检查点的需求，并检查此前的测试是否仍然通过。严格通过率：GPT-6 Astra XHigh 16.33%（196 个检查点中通过 32 个）、GPT-6 SOL Medium 15.31%、Astra Medium 与 GPT-6.1 SOL Medium 均为 14.80%、Opus 5.5 Medium 14.29%。Opus 5.5 在 medium 下的成绩高于 xhigh，严格通过 28 对 25，而 xhigh 的花费高出 4.22 倍。GPT-6 SOL 的 xhigh 贵 2.11 倍，分数同样更低。只有 Astra 在 xhigh 下有提升，代价是 2.91 倍成本。核心通过率在 65.8% 到 74% 之间，严格通过率只有 12% 到 16%。
+***** Take
+排行榜上的名次差距在噪声范围内，成本那一列不是。一个贵四倍却通过更少的档位，被当作质量旋钮来卖，实际上买到的多半只是更多输出。也别忽略绝对值：最好的一轮也只有 16% 的检查点在不破坏已有功能的前提下完成，这里每个模型都在大面积失败。
+***** Comments
+- 大多数情况下我觉得 medium 的输出质量最高。但如果需要空间推理，或者想让它写得有趣，那就得用 xhigh。
+- 讽刺的是这篇文章本身就很糙。能不能至少认真写、认真审一遍。
+- 我做了一个 simplify 技能，基本解决了 SCB 指出的腐化和冗长指标。但跑完基准后，我找不到任何证据表明它真的改善了测试通过率的走势。这值得对可维护性指标多想一想。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+SlopCodeBench 2026年10月：Astraが総合首位、xhighは有害とされる
+***** TLDR
+HumanLayerがSlopCodeBenchで10回の評価を実施した。このベンチマークは要求をチェックポイント単位で小出しにし、以前のテストが通り続けるかを確認する。厳格通過率はGPT-6 Astra XHighが16.33%（196チェックポイント中32）、GPT-6 SOL Mediumが15.31%、Astra MediumとGPT-6.1 SOL Mediumが14.80%、Opus 5.5 Mediumが14.29%。Opus 5.5はmediumのほうがxhighより成績が良く、厳格通過28対25、しかもxhighは4.22倍のコストだった。GPT-6 SOLのxhighは2.11倍のコストで点数も下。xhighで伸びたのはAstraだけで、コストは2.91倍。コア通過率は65.8〜74%、厳格通過率は12〜16%にとどまる。
+***** Take
+順位の差は誤差の範囲だが、コストの列はそうではない。4倍を請求して通過数が減る設定が、品質つまみとして売られている。実際に買えているのはたいてい出力量だ。絶対値も忘れてはいけない。最良の実行でも、既存の機能を壊さずに完了できたチェックポイントは16%で、ここにあるどのモデルもほとんど失敗している。
+***** Comments
+- たいていの用途ではmediumが最も品質が高いと感じる。ただ空間推理をさせたいときや、面白い文章を書かせたいときはxhighの出番だ。
+- 皮肉なことに記事自体がかなり雑だ。せめてきちんと書いてきちんと見直してほしい。
+- SCBが指摘した劣化と冗長性の指標をほぼ解消するsimplifyスキルを作った。だがベンチマークを回しても、テスト通過率の推移が実際に改善した証拠は見つからない。保守性指標について考えさせられる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+SlopCodeBench 2026년 10월: Astra 종합 1위, xhigh는 해롭다는 평가
+***** TLDR
+HumanLayer가 SlopCodeBench에서 열 차례 평가를 돌렸다. 이 벤치마크는 요구사항을 체크포인트 단위로 하나씩 공개하고 이전 테스트가 계속 통과하는지 확인한다. 엄격 통과율은 GPT-6 Astra XHigh 16.33%(196개 중 32개), GPT-6 SOL Medium 15.31%, Astra Medium과 GPT-6.1 SOL Medium 14.80%, Opus 5.5 Medium 14.29%였다. Opus 5.5는 medium이 xhigh보다 점수가 높아 엄격 통과 28대 25였고, xhigh는 비용이 4.22배였다. GPT-6 SOL의 xhigh는 2.11배 비싸면서 점수도 낮았다. xhigh로 좋아진 건 Astra뿐이고 비용은 2.91배다. 코어 통과율은 65.8~74%인데 엄격 통과율은 12~16%에 그친다.
+***** Take
+순위 차이는 오차 범위 안이지만 비용 열은 그렇지 않다. 4배를 청구하고 통과 수는 줄어드는 설정이 품질 다이얼처럼 팔리고 있는데, 실제로 사는 건 대체로 더 많은 출력이다. 절대 수치도 잊지 말자. 최고 성적도 기존 기능을 깨지 않고 끝낸 체크포인트가 16%뿐이니, 여기 있는 모든 모델이 대부분 실패하고 있다.
+***** Comments
+- 대부분의 작업에서는 medium의 출력 품질이 가장 좋다고 느낀다. 다만 공간 추론을 시키거나 재미있는 글을 원할 때는 xhigh가 제격이다.
+- 아이러니하게도 글 자체가 매우 엉성하다. 최소한 제대로 쓰고 제대로 검토라도 하자.
+- SCB가 지적한 침식과 장황함 지표를 사실상 해결하는 simplify 스킬을 만들었다. 그런데 벤치마크를 돌려보니 테스트 통과율 추이가 실제로 개선됐다는 증거는 찾을 수 없었다. 유지보수성 지표에 대해 생각해볼 지점이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+SlopCodeBench 10/2026: Astra gana en conjunto y xhigh se considera dañino
+***** TLDR
+HumanLayer ejecutó diez campañas en SlopCodeBench, un banco de pruebas que entrega al agente la lista de funciones de a un punto de control por vez y comprueba si las pruebas anteriores siguen pasando. Tasas de aprobación estricta: GPT-6 Astra XHigh 16,33% (32 de 196 puntos de control), GPT-6 SOL Medium 15,31%, Astra Medium y GPT-6.1 SOL Medium 14,80%, Opus 5.5 Medium 14,29%. Opus 5.5 en medium superó a Opus 5.5 en xhigh, 28 aprobaciones estrictas frente a 25, y xhigh costó 4,22 veces más. GPT-6 SOL en xhigh costó 2,11 veces más y también puntuó peor. Solo Astra mejoró con xhigh, a 2,91 veces el coste. Las tasas core van del 65,8% al 74% frente a tasas estrictas del 12% al 16%.
+***** Take
+Las posiciones de la tabla caben dentro del ruido; la columna de coste no. Un ajuste que cobra 4 veces más y devuelve menos aprobaciones se vende como una perilla de calidad cuando sobre todo compra más texto. Conviene mirar también los valores absolutos: la mejor ejecución completa el 16% de los puntos de control sin romper lo ya construido, así que todos los modelos aquí fallan la mayor parte del tiempo.
+***** Comments
+- Para casi todo, medium me da la mejor calidad de salida. Pero si quiero razonamiento espacial o que resulte gracioso, ahí sí uso xhigh.
+- La ironía es que el artículo es muy descuidado. ¿Podemos al menos escribirlo y revisarlo bien?
+- Tengo una skill de simplificación que básicamente resuelve las métricas de erosión y verbosidad que señala SCB. Sin embargo, tras correr el banco de pruebas no encuentro evidencia de que mejore realmente la trayectoria de aprobación de tests. Da que pensar sobre las métricas de mantenibilidad.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+SlopCodeBench 10/2026: Astra gewinnt insgesamt, xhigh gilt als schädlich
+***** TLDR
+HumanLayer hat zehn Durchläufe auf SlopCodeBench gefahren. Der Benchmark gibt dem Agenten die Featureliste Checkpoint für Checkpoint und prüft, ob frühere Tests weiterhin bestehen. Strikte Bestehensquoten: GPT-6 Astra XHigh 16,33% (32 von 196 Checkpoints), GPT-6 SOL Medium 15,31%, Astra Medium und GPT-6.1 SOL Medium 14,80%, Opus 5.5 Medium 14,29%. Opus 5.5 schnitt bei medium besser ab als bei xhigh, 28 gegen 25 strikte Bestehen, während xhigh 4,22-mal so viel kostete. GPT-6 SOL mit xhigh kostete 2,11-mal so viel und lag ebenfalls zurück. Nur Astra verbesserte sich mit xhigh, zum 2,91-fachen Preis. Die Core-Quoten liegen bei 65,8 bis 74%, die strikten bei 12 bis 16%.
+***** Take
+Die Platzierungen liegen im Rauschen, die Kostenspalte nicht. Eine Einstellung, die das Vierfache kostet und weniger Bestehen liefert, wird als Qualitätsregler verkauft, kauft aber vor allem mehr Ausgabe. Die absoluten Zahlen gehören dazu: Der beste Lauf schafft 16% der Checkpoints, ohne vorher Gebautes zu zerstören. Jedes Modell hier scheitert also überwiegend.
+***** Comments
+- Für die meisten Dinge liefert medium bei mir die beste Qualität. Wenn es aber um räumliches Denken geht oder etwas witzig sein soll, ist xhigh die richtige Wahl.
+- Die Ironie ist, dass der Artikel selbst sehr schludrig ist. Können wir ihn wenigstens ordentlich schreiben und gegenlesen?
+- Ich habe eine Simplify-Skill gebaut, die die von SCB bemängelten Erosions- und Wortfülle-Metriken praktisch löst. Nach dem Benchmark finde ich aber keinen Beleg, dass sie die Testbestehensrate tatsächlich verbessert. Das wirft Fragen zu Wartbarkeitsmetriken auf.
+** The Future of CSS :css:webdev:browsers:
+:PROPERTIES:
+:ID:       50175070
+:URL:      https://www.joshwcomeau.com/css/interop-2027/
+:HN_URL:   https://news.ycombinator.com/item?id=50175070
+:POINTS:   172
+:COMMENTS: 57
+:BY:       soheilpro
+:END:
+
+*** TLDR
+Josh Comeau lists ten CSS features he wants added to Interop 2027, the yearly agreement between Google, Apple, Microsoft, Mozilla, Igalia and Bocoup that usually pushes a feature to near-universal browser support within a year. His picks: @function with parameters and return values, corner-shape for bevels and squircles, border-shape for custom border paths, anchored container queries for tooltips, inherit() so you can run calc() on an inherited value, scroll-triggered animations, reading-flow and reading-order for tab order on responsive layouts, interpolate-size for animating to auto, gap decorations for grid gaps, and scroll-state container queries. He shows how most can ship today behind progressive enhancement, and argues that LLMs will not suggest any of them because their training data predates the features.
+
+*** Take
+Comeau's throwaway point is his strongest: models trained on years-old CSS will keep producing the flexbox and JavaScript workarounds these features exist to delete, so the people who know the new primitives are the ones who can tell when generated CSS is three years stale. The list itself is a wishlist rather than a forecast, and commenters were right that nearly all of it ships only in Chrome today, which is both the argument for Interop and the reason to hold off.
+
+*** Comments
+
+**** herpdyderp
+:PROPERTIES:
+:COMMENT_ID: 50175766
+:END:
+A bit strange to me how Josh begins with heralding the browsers working together and then every mentioned feature is Chrome only. They're nice previews for a potential future I suppose!
+
+**** alberth
+:PROPERTIES:
+:COMMENT_ID: 50175782
+:END:
+Maybe I'm alone, but all of those suggestions seem to make CSS needlessly complex (or more like JS). Especially functions.
+
+**** paczki
+:PROPERTIES:
+:COMMENT_ID: 50175911
+:END:
+As someone who actively goes out of my way to stick to writing vanilla HTML/CSS/JS as much as possible, it's honestly hard to explain to people who only write within frameworks how good it's gotten.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+CSS 的未来
+***** TLDR
+Josh Comeau 列出了他希望纳入 Interop 2027 的十项 CSS 特性。Interop 是 Google、Apple、Microsoft、Mozilla、Igalia 和 Bocoup 之间的年度约定，入选特性通常一年内就能获得接近全面的浏览器支持。他的清单包括：支持参数和返回值的 @function；用于斜角和 squircle 的 corner-shape；绘制自定义边框路径的 border-shape；用于提示框的锚定容器查询；可以对继承值做 calc() 的 inherit()；滚动触发动画；让响应式布局中 Tab 顺序与视觉顺序一致的 reading-flow 和 reading-order；可以动画过渡到 auto 的 interpolate-size；网格间隙装饰 gap decorations；以及滚动状态容器查询。他演示了大多数特性今天就能在渐进增强下使用，并指出大模型不会主动推荐这些特性，因为它们的训练数据早于这些特性出现。
+***** Take
+Comeau 顺带提到的那一点反而最有力：用几年前的 CSS 训练出来的模型，会不断生成这些新特性本就要取代的 flexbox 和 JavaScript 变通写法，所以掌握新原语的人，才看得出生成的 CSS 已经过时三年。清单本身更像愿望而非预测，评论区说得没错，其中几乎所有特性目前只有 Chrome 支持，这既是 Interop 存在的理由，也是现在先别全押的理由。
+***** Comments
+- 有点奇怪，Josh 开头大谈浏览器厂商的合作，然后提到的每个特性都只有 Chrome 支持。姑且算是对某种未来的美好预览吧。
+- 也许只有我这么想，但这些提议都让 CSS 变得不必要地复杂（或者说更像 JS），尤其是函数。
+- 作为一个尽量坚持手写原生 HTML/CSS/JS 的人，很难向只在框架里写代码的人解释现在的原生技术已经好到什么程度。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+CSSの未来
+***** TLDR
+Josh ComeauがInterop 2027に入れてほしいCSS機能を10個挙げた。InteropはGoogle、Apple、Microsoft、Mozilla、Igalia、Bocoupによる年次の合意で、対象になった機能はたいてい1年以内にほぼ全ブラウザで使えるようになる。挙がったのは、引数と戻り値を持つ@function、ベベルやsquircleのためのcorner-shape、独自の枠線パスを描くborder-shape、ツールチップ向けのアンカー付きコンテナクエリ、継承値にcalc()を適用できるinherit()、スクロール連動アニメーション、レスポンシブ配置でタブ順を視覚順に合わせるreading-flowとreading-order、autoへのアニメーションを可能にするinterpolate-size、グリッドの隙間を装飾するgap decorations、スクロール状態のコンテナクエリ。多くはプログレッシブエンハンスメントで今日から使えると示し、LLMは学習データがこれらの機能より古いため提案してこないと指摘する。
+***** Take
+ついでのように書かれた指摘が一番鋭い。数年前のCSSで学習したモデルは、これらの機能が消すために存在するflexboxやJavaScriptの回避策を出し続ける。だから新しいプリミティブを知っている人だけが、生成されたCSSが3年古いと気づける。リスト自体は予測というより願望で、ほぼすべてが現時点ではChrome限定だというコメントは正しい。それがInteropの存在理由であり、同時に今は様子を見る理由でもある。
+***** Comments
+- ブラウザ各社の協調を称えて始まったのに、挙がる機能がどれもChrome限定なのは少し妙だ。可能性のある未来の予告編としては良いのだろうけれど。
+- 自分だけかもしれないが、どの提案もCSSを不必要に複雑に（というかJSっぽく）している気がする。とくに関数。
+- できる限り素のHTML/CSS/JSを書くようにしている身としては、フレームワークの中でしか書かない人に、今どれだけ良くなっているかを説明するのが本当に難しい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+CSS의 미래
+***** TLDR
+Josh Comeau가 Interop 2027에 넣고 싶은 CSS 기능 열 가지를 꼽았다. Interop은 구글, 애플, 마이크로소프트, 모질라, Igalia, Bocoup이 매년 맺는 합의로, 여기에 들어간 기능은 보통 1년 안에 거의 모든 브라우저에서 지원된다. 그가 꼽은 것은 인자와 반환값을 갖는 @function, 베벨과 스퀘어클을 위한 corner-shape, 사용자 정의 테두리 경로를 그리는 border-shape, 툴팁용 앵커 컨테이너 쿼리, 상속값에 calc()를 쓸 수 있는 inherit(), 스크롤 연동 애니메이션, 반응형 레이아웃에서 탭 순서를 시각 순서에 맞추는 reading-flow와 reading-order, auto로 애니메이션하게 해주는 interpolate-size, 그리드 간격 장식, 스크롤 상태 컨테이너 쿼리다. 대부분은 점진적 향상 방식으로 오늘도 쓸 수 있다고 보여주며, LLM은 학습 데이터가 이 기능들보다 오래됐기 때문에 이를 제안하지 못한다고 지적한다.
+***** Take
+지나가듯 적은 지적이 가장 날카롭다. 몇 년 전 CSS로 학습한 모델은 이 기능들이 없애려고 만들어진 flexbox와 자바스크립트 우회책을 계속 만들어낸다. 그래서 새 원시 기능을 아는 사람만이 생성된 CSS가 3년 묵었다는 걸 알아챈다. 목록 자체는 예측이라기보다 희망 사항이고, 거의 전부가 지금은 크롬에서만 동작한다는 댓글이 맞다. 그게 Interop이 존재하는 이유이자 아직 기다릴 이유이기도 하다.
+***** Comments
+- 브라우저들이 협력한다고 치켜세우며 시작해 놓고 언급한 기능이 전부 크롬 전용인 건 좀 이상하다. 가능한 미래의 맛보기로는 괜찮겠지만.
+- 나만 그런지 모르겠는데 저 제안들은 CSS를 쓸데없이 복잡하게, 아니 JS처럼 만든다. 특히 함수가 그렇다.
+- 되도록 순수 HTML/CSS/JS로 작성하려 애쓰는 입장에서, 프레임워크 안에서만 작성하는 사람들에게 지금이 얼마나 좋아졌는지 설명하기가 정말 어렵다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El futuro de CSS
+***** TLDR
+Josh Comeau enumera diez funciones de CSS que quiere ver en Interop 2027, el acuerdo anual entre Google, Apple, Microsoft, Mozilla, Igalia y Bocoup que suele llevar una función a soporte casi universal en un año. Sus elegidas: @function con parámetros y valores de retorno, corner-shape para biseles y squircles, border-shape para trazos de borde personalizados, consultas de contenedor ancladas para tooltips, inherit() para aplicar calc() a un valor heredado, animaciones disparadas por scroll, reading-flow y reading-order para que el orden de tabulación siga al visual en diseños adaptables, interpolate-size para animar hasta auto, decoraciones de gap en grid y consultas de contenedor sobre el estado de scroll. Muestra que la mayoría ya puede usarse con mejora progresiva y sostiene que los LLM no las sugerirán porque sus datos de entrenamiento son anteriores a ellas.
+***** Take
+El apunte que Comeau deja de pasada es el más fuerte: los modelos entrenados con CSS de hace años seguirán generando los apaños de flexbox y JavaScript que estas funciones existen para borrar, así que quien conoce las primitivas nuevas es quien detecta que el CSS generado tiene tres años de retraso. La lista es más deseo que pronóstico, y los comentarios aciertan: casi todo funciona hoy solo en Chrome, que es a la vez el argumento a favor de Interop y la razón para esperar.
+***** Comments
+- Me resulta algo raro que Josh empiece celebrando la colaboración entre navegadores y luego todas las funciones mencionadas sean exclusivas de Chrome. Supongo que son buenos adelantos de un futuro posible.
+- Quizá sea el único, pero todas esas propuestas parecen hacer CSS innecesariamente complejo (o más parecido a JS). Sobre todo las funciones.
+- Como alguien que hace lo posible por escribir HTML/CSS/JS a pelo, es muy difícil explicarle a quien solo trabaja dentro de frameworks lo bien que está la cosa ahora.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die Zukunft von CSS
+***** TLDR
+Josh Comeau nennt zehn CSS-Funktionen, die er in Interop 2027 sehen will. Interop ist die jährliche Absprache zwischen Google, Apple, Microsoft, Mozilla, Igalia und Bocoup, nach der eine Funktion meist binnen eines Jahres nahezu überall unterstützt wird. Seine Auswahl: @function mit Parametern und Rückgabewerten, corner-shape für Fasen und Squircles, border-shape für eigene Rahmenpfade, verankerte Container-Queries für Tooltips, inherit() für calc() auf geerbten Werten, scrollgetriggerte Animationen, reading-flow und reading-order für die Tabreihenfolge in responsiven Layouts, interpolate-size zum Animieren auf auto, Gap Decorations für Grid-Abstände und Container-Queries auf den Scroll-Zustand. Er zeigt, dass sich das meiste schon heute mit Progressive Enhancement einsetzen lässt, und argumentiert, dass LLMs nichts davon vorschlagen, weil ihre Trainingsdaten älter sind als diese Funktionen.
+***** Take
+Comeaus Nebenbemerkung ist sein stärkstes Argument: Modelle, die auf jahrealtem CSS trainiert sind, produzieren weiter genau die Flexbox- und JavaScript-Umwege, die diese Funktionen abschaffen sollen. Wer die neuen Primitiven kennt, erkennt, dass generiertes CSS drei Jahre alt ist. Die Liste selbst ist eher Wunsch als Prognose, und die Kommentare haben recht: Fast alles läuft heute nur in Chrome. Das ist zugleich das Argument für Interop und der Grund, noch zu warten.
+***** Comments
+- Etwas seltsam, dass Josh mit einem Lob auf die Zusammenarbeit der Browser beginnt und dann jede genannte Funktion nur in Chrome existiert. Schöne Vorschau auf eine mögliche Zukunft, nehme ich an.
+- Vielleicht stehe ich allein da, aber all diese Vorschläge machen CSS unnötig komplex (oder eher JS-ähnlich). Besonders Funktionen.
+- Als jemand, der bewusst so viel wie möglich pures HTML/CSS/JS schreibt: Es ist schwer, Leuten, die nur in Frameworks arbeiten, zu erklären, wie gut das inzwischen geworden ist.
+** The Other Epidemic: Trying to get off benzodiazepines :health:medicine:pharma:
+:PROPERTIES:
+:ID:       50173891
+:URL:      https://www.thebeliever.net/the-other-epidemic/
+:HN_URL:   https://news.ycombinator.com/item?id=50173891
+:POINTS:   145
+:COMMENTS: 96
+:BY:       gaplong
+:END:
+
+*** TLDR
+An essay in The Believer by a writer who was prescribed Klonopin in 2002 and took it daily for 19 years. In April 2021 a doctor at Toronto's Centre for Addiction and Mental Health tapered him off over three weeks using short-acting lorazepam. After severe withdrawal he found Heather Ashton's work, reinstated Valium and tapered over 27 months, stopping in February 2024. The piece reports that roughly 30.6 million American adults took benzodiazepines in 2015-2016; that Ashton estimated 10 to 15% of users develop protracted withdrawal, with some researchers putting it higher; that a 2023 study by Alexis Ritvo found over 54% of people tapering had considered suicide and nearly 48% had lost their jobs; and that the FDA added a boxed warning in 2020. Malcolm Lader called benzodiazepines an epidemic in the making in 1981 and said in 1999 that withdrawing people from them is harder than from heroin. The author still has agoraphobia, panic disorder and hypertension he did not have before.
+
+*** Take
+The number to keep from this piece is the distance between the two to three weeks of withdrawal patients are commonly told to expect and the 27 months this taper actually took. The comment thread reads as a long list of the same mismatch, including several people whose doctors never raised dependence at all. Whatever the true rate of protracted withdrawal is, the guidance patients receive at the point of prescription is not matching what the research since 2023 describes.
+
+*** Comments
+
+**** soniczentropy
+:PROPERTIES:
+:COMMENT_ID: 50174587
+:END:
+I helped my mother through this after her psych decided it was time for her to cold turkey a 4x a day xanax prescription she'd been taking for 20+ years. 5 total ER trips, 3 separate hospitalizations, and a full year of absolute misery before she started getting some relief.
+
+**** yodsanklai
+:PROPERTIES:
+:COMMENT_ID: 50174255
+:END:
+To give a different point of view: I've been taking Bromazepam for 25 years, but very occasionally when I'm very anxious or can't sleep, a few times a year, never more than 1-2 days in a row. It's been helpful. I never had the slightest sign of addiction but was also careful not to rely on it too much.
+
+**** BikiniPrince
+:PROPERTIES:
+:COMMENT_ID: 50174885
+:END:
+This also just reminds me of the sensible things to ask your doctor when they try to prescribe a drug. Can I simply stop taking this drug? For two people I know in the last year this would have been a nice question to ask.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+另一场流行病：试图戒掉苯二氮䓬类药物
+***** TLDR
+《The Believer》刊载的一篇文章，作者 2002 年被开具氯硝西泮，连续服用了 19 年。2021 年 4 月，多伦多成瘾与精神健康中心的一位医生用短效劳拉西泮在三周内让他停药。经历严重戒断反应后，他找到 Heather Ashton 的研究，改用安定重新用药，再用 27 个月缓慢减量，于 2024 年 2 月彻底停药。文章引述：2015 至 2016 年约有 3060 万美国成年人服用苯二氮䓬类药物；Ashton 估计 10% 到 15% 的使用者会出现迁延性戒断，部分研究者认为比例更高；Alexis Ritvo 2023 年的研究发现，减药者中超过 54% 曾产生自杀念头，近 48% 失去工作；FDA 于 2020 年加上黑框警告。Malcolm Lader 在 1981 年称其为正在形成的流行病，1999 年又说让人戒掉苯二氮䓬比戒海洛因更难。作者如今患有此前没有的广场恐惧症、惊恐障碍和高血压。
+***** Take
+这篇文章最该记住的数字，是患者通常被告知的两到三周戒断期，与这次实际耗时 27 个月的减药过程之间的落差。评论区几乎是同一种落差的长长名单，其中不少人的医生从未提过依赖性问题。无论迁延性戒断的真实比例是多少，患者在开药时得到的说明，与 2023 年以来的研究所描述的情况并不一致。
+***** Comments
+- 我母亲服用每日四次的阿普唑仑 20 多年后，精神科医生认为可以直接停药，我陪她走过了这段过程。总共跑了 5 次急诊、3 次住院，整整一年的极度痛苦之后才开始好转。
+- 提供一个不同的视角：我服用溴西泮 25 年了，但只在非常焦虑或睡不着时偶尔使用，一年几次，从未连续超过一两天。它确实有帮助。我没有出现过任何成瘾迹象，当然我也一直小心不去依赖它。
+- 这也提醒我，医生开药时有些该问的常识性问题。比如：这个药我能说停就停吗？我认识的两个人，如果去年问过这句话就好了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+もう一つの流行病：ベンゾジアゼピンをやめようとして
+***** TLDR
+The Believer誌に掲載された記事。筆者は2002年にクロナゼパムを処方され、19年間毎日服用した。2021年4月、トロントの依存症・精神保健センターの医師が、短時間作用型のロラゼパムを使って3週間で断薬させた。激しい離脱症状のあと、筆者はHeather Ashtonの研究を知り、バリウムで再導入して27か月かけて漸減し、2024年2月に中止した。記事によれば、2015〜2016年に約3060万人の米国成人がベンゾジアゼピンを服用し、Ashtonは使用者の10〜15%が遷延性離脱を経験すると推定、より高いとする研究者もいる。Alexis Ritvoによる2023年の研究では、減薬中の人の54%超が自殺を考え、48%近くが職を失っていた。FDAは2020年に枠組み警告を追加した。Malcolm Laderは1981年にこれを進行中の流行病と呼び、1999年にはベンゾからの離脱はヘロインより難しいと述べている。筆者には以前なかった広場恐怖、パニック障害、高血圧が残っている。
+***** Take
+この記事から持ち帰るべき数字は、患者が一般に告げられる2〜3週間という離脱期間と、この漸減が実際に要した27か月との差だ。コメント欄は同じずれの長い列挙で、医師から依存の話を一度も聞かなかった人も複数いる。遷延性離脱の真の割合がどうであれ、処方時に患者が受け取る説明は、2023年以降の研究が描く像と合っていない。
+***** Comments
+- 20年以上1日4回のザナックスを服用していた母が、主治医の判断で一気に断薬することになり、私が付き添った。救急外来5回、入院3回、そして本当に苦しい1年を経てようやく楽になり始めた。
+- 別の視点として：私はブロマゼパムを25年使っているが、強い不安や眠れないときにごくたまに、年に数回、連続しても1〜2日までだ。役に立ってきた。依存の兆候は一度もないが、頼りすぎないよう注意もしてきた。
+- 医師が薬を処方しようとしたときに聞くべき常識的な質問を思い出した。この薬はいつでもやめられますか、という問いだ。この1年で知り合った2人は、聞いておけばよかったと思う。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+또 하나의 유행병: 벤조디아제핀을 끊으려는 시도
+***** TLDR
+The Believer에 실린 글로, 필자는 2002년 클로나제팜을 처방받아 19년간 매일 복용했다. 2021년 4월 토론토 중독정신건강센터의 의사가 단시간 작용 로라제팜을 써서 3주 만에 약을 끊게 했다. 심한 금단 증상을 겪은 뒤 필자는 Heather Ashton의 연구를 발견해 발륨으로 다시 시작한 다음 27개월에 걸쳐 감량했고 2024년 2월에 중단했다. 글은 2015~2016년 약 3060만 명의 미국 성인이 벤조디아제핀을 복용했고, Ashton은 사용자의 10~15%가 지연성 금단을 겪는다고 추정했으며 더 높게 보는 연구자도 있다고 전한다. Alexis Ritvo의 2023년 연구에서는 감량 중인 사람의 54% 이상이 자살을 생각했고 48% 가까이가 직장을 잃었다. FDA는 2020년 블랙박스 경고를 추가했다. Malcolm Lader는 1981년 이를 형성 중인 유행병이라 불렀고 1999년에는 벤조디아제핀 중단이 헤로인보다 어렵다고 말했다. 필자에게는 이전에 없던 광장공포증, 공황장애, 고혈압이 남았다.
+***** Take
+이 글에서 기억할 숫자는 환자들이 흔히 듣는 2~3주라는 금단 기간과 실제로 27개월이 걸린 감량 과정 사이의 간극이다. 댓글은 같은 간극의 긴 목록이고, 의사에게 의존성 이야기를 한 번도 듣지 못한 사람도 여럿이다. 지연성 금단의 실제 비율이 얼마든, 처방 시점에 환자가 받는 설명은 2023년 이후 연구가 기술하는 내용과 맞지 않는다.
+***** Comments
+- 20년 넘게 하루 네 번 자낙스를 복용하던 어머니를 담당 정신과 의사가 단번에 끊게 했고, 내가 그 과정을 함께했다. 응급실 5회, 입원 3회, 그리고 완전한 고통의 1년이 지나서야 조금 나아지기 시작했다.
+- 다른 관점을 하나 보태자면, 나는 브로마제팜을 25년째 쓰고 있지만 아주 불안하거나 잠이 안 올 때 가끔, 1년에 몇 번, 연속으로는 하루 이틀을 넘기지 않는다. 도움이 됐다. 중독 조짐은 전혀 없었지만 지나치게 기대지 않으려 조심하기도 했다.
+- 의사가 약을 처방하려 할 때 물어야 할 상식적인 질문이 떠오른다. 이 약은 그냥 끊어도 되나요? 지난 1년 사이 내가 아는 두 사람에게는 꼭 필요한 질문이었다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La otra epidemia: intentar dejar las benzodiacepinas
+***** TLDR
+Un ensayo en The Believer escrito por un autor al que le recetaron Klonopin en 2002 y lo tomó a diario durante 19 años. En abril de 2021, un médico del Centro de Adicciones y Salud Mental de Toronto se lo retiró en tres semanas usando lorazepam de acción corta. Tras una abstinencia severa descubrió el trabajo de Heather Ashton, reinstauró Valium y redujo la dosis durante 27 meses hasta dejarlo en febrero de 2024. El texto señala que unos 30,6 millones de adultos estadounidenses tomaron benzodiacepinas en 2015-2016; que Ashton estimaba que entre el 10% y el 15% desarrollan abstinencia prolongada, con investigadores que elevan la cifra; que un estudio de 2023 de Alexis Ritvo halló que más del 54% de quienes reducían la dosis habían pensado en el suicidio y casi el 48% había perdido el trabajo; y que la FDA añadió una advertencia de recuadro en 2020. Malcolm Lader habló en 1981 de una epidemia en formación y dijo en 1999 que retirar a alguien de estas sustancias es más difícil que de la heroína. El autor sigue con agorafobia, trastorno de pánico e hipertensión que antes no tenía.
+***** Take
+La cifra que conviene retener es la distancia entre las dos o tres semanas de abstinencia que suele anunciarse al paciente y los 27 meses que llevó esta retirada. El hilo de comentarios es una lista larga del mismo desajuste, con varias personas a las que su médico nunca mencionó la dependencia. Sea cual sea la tasa real de abstinencia prolongada, la información que recibe el paciente al momento de la prescripción no coincide con lo que describe la investigación desde 2023.
+***** Comments
+- Acompañé a mi madre en esto después de que su psiquiatra decidiera que dejara de golpe un Xanax de 4 tomas diarias que llevaba más de 20 años tomando. 5 visitas a urgencias, 3 hospitalizaciones y un año entero de absoluta miseria antes de que empezara a sentir algo de alivio.
+- Para aportar otro punto de vista: llevo 25 años tomando bromazepam, pero muy de vez en cuando, cuando estoy muy ansioso o no puedo dormir, unas pocas veces al año y nunca más de 1 o 2 días seguidos. Me ha ayudado. Nunca tuve el menor signo de adicción, aunque también tuve cuidado de no depender de ello.
+- Esto me recuerda las preguntas sensatas que hay que hacerle al médico cuando te receta un fármaco. ¿Puedo simplemente dejar de tomarlo? A dos personas que conozco les habría venido muy bien preguntarlo el año pasado.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Die andere Epidemie: der Versuch, von Benzodiazepinen loszukommen
+***** TLDR
+Ein Essay in The Believer von einem Autor, dem 2002 Klonopin verschrieben wurde und der es 19 Jahre lang täglich nahm. Im April 2021 setzte ihn ein Arzt am Torontoer Centre for Addiction and Mental Health binnen drei Wochen mit kurz wirksamem Lorazepam ab. Nach schwerem Entzug stieß er auf die Arbeiten von Heather Ashton, stellte auf Valium um und reduzierte über 27 Monate, bis er im Februar 2024 aufhörte. Der Text nennt rund 30,6 Millionen US-Erwachsene, die 2015-2016 Benzodiazepine nahmen; Ashtons Schätzung, dass 10 bis 15% einen protrahierten Entzug entwickeln, wobei manche Forschende höher liegen; eine Studie von Alexis Ritvo aus 2023, nach der über 54% der Absetzenden an Suizid gedacht und fast 48% ihren Job verloren hatten; und die 2020 von der FDA verfügte Boxed Warning. Malcolm Lader sprach 1981 von einer sich anbahnenden Epidemie und sagte 1999, Menschen davon zu entwöhnen sei schwerer als von Heroin. Der Autor hat weiterhin Agoraphobie, Panikstörung und Bluthochdruck, die er vorher nicht hatte.
+***** Take
+Die Zahl, die aus diesem Text bleibt, ist der Abstand zwischen den zwei bis drei Wochen Entzug, die Patientinnen und Patienten üblicherweise angekündigt werden, und den 27 Monaten, die dieses Ausschleichen tatsächlich gedauert hat. Der Kommentarstrang ist eine lange Liste desselben Missverhältnisses, darunter mehrere Menschen, deren Ärzte Abhängigkeit nie erwähnt haben. Wie hoch die tatsächliche Rate protrahierter Entzüge auch ist, die Aufklärung bei der Verschreibung deckt sich nicht mit dem, was die Forschung seit 2023 beschreibt.
+***** Comments
+- Ich habe meine Mutter dabei begleitet, nachdem ihr Psychiater entschied, sie solle ein seit über 20 Jahren viermal täglich genommenes Xanax abrupt absetzen. 5 Notaufnahmen, 3 Klinikaufenthalte und ein ganzes Jahr absoluten Elends, bevor es ihr etwas besser ging.
+- Als anderer Blickwinkel: Ich nehme seit 25 Jahren Bromazepam, aber nur sehr gelegentlich, wenn ich sehr ängstlich bin oder nicht schlafen kann, ein paar Mal im Jahr und nie länger als 1 bis 2 Tage am Stück. Es hat geholfen. Ich hatte nie das geringste Anzeichen von Abhängigkeit, habe aber auch aufgepasst, mich nicht darauf zu verlassen.
+- Das erinnert mich an die vernünftigen Fragen, die man der Ärztin stellen sollte, wenn sie ein Medikament verschreibt. Kann ich dieses Mittel einfach absetzen? Zwei Menschen, die ich kenne, hätten das im vergangenen Jahr besser gefragt.
