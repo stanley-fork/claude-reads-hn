@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-10-21 16:00 UTC
+#+DATE: 2026-10-21T16:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+PHP ships the RCE fix after three parties break the embargo, LiteLLM's PyPI release steals keys, and EA closes BioWare
+
+* Highlights
+- PHP: two unauthenticated RCEs patched, and two security firms plus a container vendor broke coordination
+- LiteLLM 1.107.0 on PyPI shipped a stealer and a backdoor that ran in every Python process on the host
+- DuckDB 2.0 LTS gets a real client-server mode and support through October 2027
+- EA is closing BioWare; about 50 people were left, Mass Effect development stops
+- OpenAI models land in Google Cloud Marketplace, payable from existing GCP commitments
+
+* Stories
+
+** Today's PHP security release, and how we're strengthening security :php:security:cve:disclosure:supply-chain:
+:PROPERTIES:
+:ID:       50182987
+:URL:      https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/
+:HN_URL:   https://news.ycombinator.com/item?id=50182987
+:POINTS:   388
+:COMMENTS: 188
+:BY:       ejohnso49
+:END:
+
+*** TLDR
+PHP 8.5.12, 8.4.27, 8.3.36 and 8.2.35 fix two unauthenticated remote code execution bugs. CVE-2026-109618 is memory corruption: hitting PHP's memory limit at the wrong moment leaves partially initialized data that later gets treated as valid. CVE-2026-109619 leaves internal state pointing at memory freed by an earlier request, and the Foundation says that use-after-free was confirmed as working RCE against real applications on Apache with mod_php under default settings. The release moved up a day because CVE IDs with wrong details circulated on October 20, pushing the pre-announcement to 19:30 UTC that evening. After the leak, Calif, one of the firms that reported the bugs, published a video demonstrating exploits against targets; deleted copies spread anyway. Chainguard separately shipped patched container images before disclosure, letting attackers diff the fix while everyone else waited. The Foundation's answer: an Ecosystem Security Team created in May 2026, Alexandre Daubois on triage and fixes, Daniel Scherzer on hardening, sanitizer builds and CI-matched reproduction environments, and majority instead of consensus for security decisions.
+
+*** Take
+The post is two documents stapled together: a competent incident writeup and a funding pitch. The pitch earns its place. Inside one 24-hour window, two reporting firms and a container vendor each broke coordination, and the Foundation's remedy is to hire more engineers who know the codebase. That is the real finding. PHP serves a large share of the web on a security team small enough to list by name in one sentence.
+
+*** Comments
+
+**** dofm
+I am a gruff cynic who is not sure hanging out here is good for his psyche, but thank goodness for HN. A three line nginx mitigation blocking multipart uploads that I wrote in the small hours has been quietly protecting a vulnerable machine I could not get to.
+
+**** dannyw
+Calif saw the leaks, read that as the embargo being broken, and raced to publish their marketing video. I would have expected much better.
+
+**** DooMMasteR
+Maybe there is a new one already.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+今天的 PHP 安全更新，以及我们如何加强安全工作
+***** TLDR
+PHP 8.5.12、8.4.27、8.3.36 和 8.2.35 修复了两个无需认证的远程代码执行漏洞。CVE-2026-109618 属于内存破坏：请求在恰好触及 PHP 内存上限时，会留下只部分初始化的数据，之后被当作有效数据使用。CVE-2026-109619 会让内部状态指向上一个请求已释放的内存，基金会表示这个 use-after-free 已被确认可在默认配置的 Apache + mod_php 环境下对真实应用实现远程代码执行。发布提前了一天：10 月 20 日有带错误细节的 CVE 编号流传，预告因此被迫在当晚 19:30 UTC 发出。泄露之后，报告漏洞的安全公司之一 Calif 发布了一段针对目标演示利用过程的视频，删除后副本仍在扩散。Chainguard 则在披露前自行发布了已打补丁的容器镜像，使攻击者可以提前比对补丁，而其他人还在等待。基金会的应对是：2026 年 5 月成立生态安全团队，Alexandre Daubois 负责分类与修复，Daniel Scherzer 负责加固，引入 sanitizer 构建和与 CI 一致的复现环境，并把安全决策从共识制改为多数制。
+***** Take
+这篇文章其实是两份文件拼在一起：一份称得上专业的事件复盘，一份要钱的呼吁。后者站得住脚。在同一个 24 小时里，两家报告漏洞的公司和一家容器厂商各自破坏了协调流程，而基金会的办法是招更多熟悉代码库的工程师。这才是真正的结论。PHP 支撑着互联网的很大一部分，而它的安全团队小到一句话就能点完名。
+***** Comments
+- 我是个性格别扭的愤世嫉俗者，也不确定常泡在这里对心理有没有好处，但真得谢谢 HN。我凌晨写的那三行 nginx 临时方案（屏蔽 multipart 上传），一直在默默保护一台我当时根本碰不到的有漏洞的机器。
+- Calif 看到泄露，就认为禁令已被打破，然后赶着把自己的营销视频发出来。我本以为他们会做得更好。
+- 说不定已经又出了一个新漏洞。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+本日のPHPセキュリティリリースと、セキュリティ強化の取り組み
+***** TLDR
+PHP 8.5.12、8.4.27、8.3.36、8.2.35が、認証不要のリモートコード実行の脆弱性2件を修正した。CVE-2026-109618はメモリ破壊で、リクエストがPHPのメモリ上限に達するタイミング次第で、初期化が中途半端なデータが残り、後から有効なものとして扱われる。CVE-2026-109619は内部状態が前のリクエストで解放済みのメモリを指したままになるもので、財団によればこのuse-after-freeはデフォルト設定のApache + mod_php環境で実アプリに対する実際のRCEとして確認された。リリースは1日前倒しになった。10月20日に誤った詳細を含むCVE番号が流通したため、事前告知を同日19:30 UTCに出さざるを得なくなった。漏洩後、報告元のセキュリティ企業の一つであるCalifが、標的に対する実証動画を公開した。削除後もコピーが拡散した。さらにChainguardが開示前に修正済みコンテナイメージを独自に配布し、他の利用者が待つ間に攻撃者が修正内容を比較できる状態を作った。財団の対応は、2026年5月に発足したエコシステム・セキュリティチーム、トリアージと修正を担うAlexandre Daubois、ハードニングを担うDaniel Scherzer、サニタイザビルドとCIと同条件の再現環境、そしてセキュリティ上の決定を全員合意から多数決に変えることだ。
+***** Take
+この記事は2つの文書を綴じ合わせたものだ。一つはしっかりしたインシデント報告、もう一つは資金援助の訴えである。後者には正当性がある。同じ24時間のうちに、報告元の企業2社とコンテナベンダー1社がそれぞれ連携を破り、財団の処方箋はコードベースを理解するエンジニアをもっと雇うことだった。それが本当の発見だ。PHPはウェブの大きな部分を支えているのに、そのセキュリティチームは一文で名前を列挙できる規模しかない。
+***** Comments
+- 自分は無愛想な皮肉屋で、ここに居続けるのが精神衛生上いいのかも分からない。それでもHNには感謝する。真夜中に書いたmultipartアップロードを止める3行のnginx緩和策が、手の届かなかった脆弱なマシンを静かに守っていた。
+- Califは漏洩を見て禁止期間が破られたと解釈し、自社のマーケティング動画を急いで公開した。もっとまともな対応を期待していた。
+- もう次の脆弱性が出ているのかもしれない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+오늘의 PHP 보안 릴리스, 그리고 보안을 강화하는 방법
+***** TLDR
+PHP 8.5.12, 8.4.27, 8.3.36, 8.2.35가 인증이 필요 없는 원격 코드 실행 취약점 두 건을 수정했다. CVE-2026-109618은 메모리 손상으로, 요청이 특정 시점에 PHP 메모리 한계에 도달하면 부분적으로만 초기화된 데이터가 남아 이후 유효한 값으로 취급된다. CVE-2026-109619는 내부 상태가 이전 요청에서 해제된 메모리를 계속 가리키게 만드는 문제로, 재단은 이 use-after-free가 기본 설정의 Apache + mod_php 환경에서 실제 애플리케이션을 상대로 작동하는 RCE로 확인됐다고 밝혔다. 릴리스는 하루 앞당겨졌다. 10월 20일에 잘못된 내용이 담긴 CVE 번호가 유포되면서 사전 공지를 그날 19:30 UTC에 내보내야 했다. 유출 이후 취약점을 보고한 보안 업체 중 하나인 Calif가 실제 대상에 대한 공격 시연 영상을 공개했고, 삭제 후에도 사본이 퍼졌다. Chainguard는 별도로 공개 이전에 패치된 컨테이너 이미지를 배포해, 다른 사용자들이 기다리는 동안 공격자가 패치를 비교할 수 있게 만들었다. 재단의 대응은 2026년 5월에 만든 생태계 보안팀, 분류와 수정을 맡은 Alexandre Daubois, 하드닝을 맡은 Daniel Scherzer, 새니타이저 빌드와 CI와 동일한 재현 환경, 그리고 보안 결정을 합의제에서 다수결로 바꾸는 것이다.
+***** Take
+이 글은 두 개의 문서를 붙여놓은 것이다. 하나는 제대로 쓴 사고 보고서이고, 다른 하나는 후원 요청이다. 후자는 충분히 설득력이 있다. 같은 24시간 안에 보고 업체 두 곳과 컨테이너 공급업체 한 곳이 각자 조정 절차를 깼고, 재단의 처방은 코드베이스를 아는 엔지니어를 더 고용하는 것이었다. 그게 진짜 결론이다. PHP는 웹의 상당 부분을 돌리는데, 보안팀은 한 문장으로 이름을 다 나열할 수 있을 만큼 작다.
+***** Comments
+- 나는 무뚝뚝한 냉소주의자고 여기 머무는 게 정신 건강에 좋은지도 모르겠다. 그래도 HN에는 감사한다. 새벽에 써둔 multipart 업로드 차단 세 줄짜리 nginx 완화책이, 내가 손댈 수 없던 취약한 서버를 조용히 지켜주고 있었다.
+- Calif는 유출을 보고 엠바고가 깨졌다고 판단해 자사 마케팅 영상을 서둘러 공개했다. 훨씬 나은 대응을 기대했다.
+- 벌써 새로운 취약점이 하나 더 있는지도 모른다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La publicación de seguridad de PHP de hoy, y cómo estamos reforzando la seguridad
+***** TLDR
+PHP 8.5.12, 8.4.27, 8.3.36 y 8.2.35 corrigen dos fallos de ejecución remota de código sin autenticación. CVE-2026-109618 es corrupción de memoria: si una petición alcanza el límite de memoria de PHP en el momento justo, quedan datos parcialmente inicializados que después se tratan como válidos. CVE-2026-109619 deja el estado interno apuntando a memoria liberada por una petición anterior, y la Fundación afirma que ese use-after-free se confirmó como RCE real contra aplicaciones en producción sobre Apache con mod_php y configuración por defecto. El lanzamiento se adelantó un día porque el 20 de octubre circularon identificadores CVE con datos incorrectos, lo que obligó a publicar el preaviso esa misma noche a las 19:30 UTC. Tras la filtración, Calif, una de las firmas que reportó los fallos, publicó un vídeo demostrando los exploits contra objetivos; las copias siguieron circulando después de borrarlo. Chainguard, por su parte, distribuyó imágenes de contenedor ya parcheadas antes de la divulgación, permitiendo a los atacantes comparar el parche mientras el resto esperaba. La respuesta de la Fundación: un equipo de seguridad del ecosistema creado en mayo de 2026, Alexandre Daubois en triaje y correcciones, Daniel Scherzer en endurecimiento, builds con sanitizers y entornos de reproducción idénticos a CI, y decisiones de seguridad por mayoría en lugar de consenso.
+***** Take
+El texto son dos documentos cosidos: un informe de incidente solvente y una petición de financiación. La petición se la ha ganado. En una sola ventana de 24 horas, dos firmas que reportaron los fallos y un proveedor de contenedores rompieron la coordinación por separado, y el remedio de la Fundación es contratar más ingenieros que conozcan el código. Ese es el hallazgo de verdad. PHP sirve una parte enorme de la web con un equipo de seguridad lo bastante pequeño para nombrarlo entero en una frase.
+***** Comments
+- Soy un cínico de mal carácter y no sé si estar aquí le hace bien a mi cabeza, pero gracias a HN. Una mitigación de tres líneas en nginx que escribí de madrugada, bloqueando subidas multipart, ha estado protegiendo en silencio una máquina vulnerable a la que no podía acceder.
+- Calif vio las filtraciones, interpretó que el embargo estaba roto y corrió a publicar su vídeo de marketing. Esperaba bastante más de ellos.
+- Puede que ya haya otra nueva.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das heutige PHP-Sicherheitsrelease und wie wir die Sicherheit stärken
+***** TLDR
+PHP 8.5.12, 8.4.27, 8.3.36 und 8.2.35 beheben zwei Lücken für nicht authentifizierte Remote Code Execution. CVE-2026-109618 ist Speicherkorruption: erreicht eine Anfrage im falschen Moment das Speicherlimit von PHP, bleiben teilweise initialisierte Daten zurück, die später als gültig behandelt werden. CVE-2026-109619 lässt internen Zustand auf Speicher zeigen, den eine frühere Anfrage freigegeben hat. Laut Foundation wurde dieses Use-after-free als funktionierende RCE gegen reale Anwendungen auf Apache mit mod_php in Standardkonfiguration bestätigt. Das Release wurde um einen Tag vorgezogen, weil am 20. Oktober CVE-Nummern mit falschen Details zirkulierten; die Vorankündigung musste am selben Abend um 19:30 UTC raus. Nach dem Leak veröffentlichte Calif, eine der meldenden Sicherheitsfirmen, ein Video mit Exploits gegen Ziele; Kopien verbreiteten sich auch nach dem Löschen weiter. Chainguard lieferte unabhängig davon gepatchte Container-Images vor der Offenlegung aus, sodass Angreifer den Fix vergleichen konnten, während alle anderen warteten. Die Antwort der Foundation: ein im Mai 2026 gegründetes Ecosystem-Security-Team, Alexandre Daubois für Triage und Fixes, Daniel Scherzer für Hardening, Sanitizer-Builds und Reproduktionsumgebungen identisch zur CI, sowie Sicherheitsentscheidungen per Mehrheit statt Konsens.
+***** Take
+Der Beitrag sind zwei zusammengeklammerte Dokumente: ein sauberer Incident-Bericht und ein Spendenaufruf. Der Aufruf ist berechtigt. In einem Zeitfenster von 24 Stunden brachen zwei meldende Firmen und ein Container-Anbieter jeweils die Koordination, und das Gegenmittel der Foundation lautet: mehr Entwickler einstellen, die die Codebasis kennen. Das ist der eigentliche Befund. PHP bedient einen großen Teil des Webs mit einem Sicherheitsteam, das in einem Satz vollständig aufzuzählen ist.
+***** Comments
+- Ich bin ein mürrischer Zyniker und weiß nicht, ob es meiner Psyche guttut, hier zu sein, aber zum Glück gibt es HN. Eine dreizeilige nginx-Mitigation gegen Multipart-Uploads, die ich mitten in der Nacht geschrieben habe, hat still und leise eine angreifbare Maschine geschützt, an die ich nicht herankam.
+- Calif sah die Leaks, deutete das als gebrochenes Embargo und veröffentlichte eilig das eigene Marketingvideo. Ich hatte deutlich mehr erwartet.
+- Vielleicht gibt es schon eine neue.
+** Compromised LiteLLM 1.107.0 on PyPI installs a credential stealer and backdoor :security:supply-chain:python:pypi:llm:
+:PROPERTIES:
+:ID:       50181114
+:URL:      https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/
+:HN_URL:   https://news.ycombinator.com/item?id=50181114
+:POINTS:   289
+:COMMENTS: 107
+:BY:       abhisek
+:END:
+
+*** TLDR
+All seven platform wheels of LiteLLM 1.107.0 on PyPI carried a credential stealer and a persistent backdoor. The stealer collected sixteen categories of secrets: SSH keys, AWS, Azure, Google Cloud and Kubernetes credentials, browser passwords and history, GitLab, Jenkins, Terraform and Vault secrets, tokens for Claude, Cursor, Copilot and Hugging Face, and the LiteLLM proxy's own database with the provider API keys in it. It encrypted the haul with AES-256-CBC under an RSA-OAEP wrapped key and sent it to a lookalike domain. The backdoor shipped as sitecustomize.py, so it started on every Python process on the machine whether or not anything imported litellm, re-ran the stealer hourly with no per-host limit, and read server addresses from an attacker GitHub repo to exec whatever it was served. The entire payload came from one added line in pyproject.toml: data = "cook". SafeDep found the source distribution diverged from its tagged commit while the wheels matched the project's real maturin build pipeline, with no public GitHub Actions run in the build window, and assesses with moderate to high confidence that the private build pipeline was modified. Upload to takedown was roughly two hours; 1.106.2 and the release candidates were clean.
+
+*** Take
+The sitecustomize.py is the part to copy into your threat model. One bad package in one virtualenv got code into every Python process on the host, so "I never imported it" is not a defense and neither is uninstalling the package. If 1.107.0 touched a machine, the machine is the blast radius, and the LiteLLM proxy database makes that worse: the stealer went looking for the one file that holds every provider key you were proxying.
+
+*** Comments
+
+**** threecheese
+"Attackers compromised 3 unique developer github credentials" is a little scary; this seems systemic. If three developers had their keys stolen, the real problem is elsewhere. I would pin LiteLLM to something before this version and keep it there.
+
+**** crossroadsguy
+All the sandbox-exec and Lulu rules are not going to protect against something like this. Permission popup fatigue sets in and we approve anything. Those 367 tools installed by package X? Must be normal, that's how these work now.
+
+**** linsomniac
+Just going to remind you all that canarytokens.org exists.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+PyPI 上被投毒的 LiteLLM 1.107.0 会安装凭证窃取器和后门
+***** TLDR
+PyPI 上 LiteLLM 1.107.0 的全部七个平台 wheel 都带有凭证窃取器和常驻后门。窃取器收集十六类机密：SSH 密钥，AWS、Azure、Google Cloud 和 Kubernetes 凭证，浏览器密码与历史记录，GitLab、Jenkins、Terraform 和 Vault 的密钥，Claude、Cursor、Copilot 和 Hugging Face 的令牌，以及 LiteLLM 代理自身那个存有各家服务商 API key 的数据库。它用 AES-256-CBC 加密，再用 RSA-OAEP 包装密钥，发送到一个仿冒域名。后门以 sitecustomize.py 的形式投放，因此无论有没有导入 litellm，机器上每个 Python 进程启动时都会加载它；它每小时重跑一次窃取器，没有单机次数限制，并从攻击者的 GitHub 仓库读取服务器地址，用 exec 执行下发的任意代码。整个载荷只来自 pyproject.toml 中新增的一行：data = "cook"。SafeDep 发现源码包与其打标签的提交不一致，而 wheel 与项目真实的 maturin 构建流水线输出相符，并且构建时间窗内没有公开的 GitHub Actions 运行记录，因此以中高置信度判断私有构建流水线被改动。从上传到下架大约两小时；1.106.2 和候选版本是干净的。
+***** Take
+值得写进威胁模型的是那个 sitecustomize.py。一个虚拟环境里的一个坏包，把代码塞进了主机上每一个 Python 进程，所以「我从没导入过它」不是辩护，卸载这个包也不是。只要 1.107.0 碰过某台机器，受影响范围就是整台机器。而 LiteLLM 代理数据库让情况更糟：窃取器专门去找那个保存着你代理的全部服务商密钥的文件。
+***** Comments
+- 「攻击者拿到了 3 个不同开发者的 GitHub 凭证」这点有点吓人，看起来是系统性问题。如果三个开发者的密钥都被偷了，真正的问题在别处。我会把 LiteLLM 钉在这个版本之前，并且先不动。
+- 各种 sandbox-exec 和 Lulu 规则都挡不住这种事。权限弹窗疲劳一上来，我们就什么都点同意。X 包装的那 367 个工具？肯定是正常的，现在都这么搞。
+- 顺便提醒大家，canarytokens.org 是存在的。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+PyPIの改ざんされたLiteLLM 1.107.0が資格情報窃取ツールとバックドアを仕込む
+***** TLDR
+PyPI上のLiteLLM 1.107.0は、7つのプラットフォーム向けwheelすべてに資格情報の窃取ツールと常駐バックドアを含んでいた。窃取ツールは16カテゴリの秘密情報を集めた。SSH鍵、AWS・Azure・Google Cloud・Kubernetesの資格情報、ブラウザのパスワードと履歴、GitLab・Jenkins・Terraform・Vaultのシークレット、Claude・Cursor・Copilot・Hugging Faceのトークン、そして各プロバイダのAPIキーが入ったLiteLLMプロキシ自身のデータベースだ。集めたデータはAES-256-CBCで暗号化し、鍵をRSA-OAEPで包んで、本物に似せたドメインへ送信した。バックドアはsitecustomize.pyとして配置されたため、litellmをimportするかどうかに関係なく、マシン上のあらゆるPythonプロセスの起動時に動いた。1時間ごとに窃取ツールを再実行し、ホストごとの回数制限はなく、攻撃者のGitHubリポジトリからサーバーアドレスを読み取って渡されたコードをexecした。このペイロード全体は、pyproject.tomlに追加されたたった1行、data = "cook"に由来する。SafeDepは、ソース配布物がタグ付きコミットと食い違う一方でwheelはプロジェクト本来のmaturinビルドパイプラインの出力と一致し、ビルド時間帯に対応する公開GitHub Actionsの実行が存在しないことを確認し、非公開のビルドパイプラインが改変されたと中〜高い確度で評価している。アップロードから削除までは約2時間。1.106.2とリリース候補版はクリーンだった。
+***** Take
+脅威モデルに書き写すべきはsitecustomize.pyの部分だ。1つの仮想環境にある1つの悪意あるパッケージが、ホスト上のすべてのPythonプロセスにコードを入れた。だから「importしていない」は防御にならず、パッケージをアンインストールすることも防御にならない。1.107.0がそのマシンに触れたなら、被害範囲はマシン全体だ。LiteLLMプロキシのデータベースが事態をさらに悪くする。窃取ツールは、プロキシ経由で使っていた全プロバイダの鍵が収まった、まさにそのファイルを探しに行った。
+***** Comments
+- 「攻撃者が3人の開発者のGitHub資格情報を侵害した」というのは少し怖い。構造的な問題に見える。3人の鍵が盗まれたなら、本当の問題は別の場所にある。LiteLLMはこのバージョンより前に固定して、しばらくそのままにする。
+- sandbox-execやLuluのルールを並べても、この種の攻撃は止められない。権限ポップアップに疲れてくると、何でも許可してしまう。パッケージXが入れた367個のツール？普通だろう、今はみんなこうなのだからと。
+- 念のため、canarytokens.orgというものがあることを思い出してほしい。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+PyPI의 변조된 LiteLLM 1.107.0이 자격증명 탈취 도구와 백도어를 설치한다
+***** TLDR
+PyPI의 LiteLLM 1.107.0은 7개 플랫폼 wheel 전부에 자격증명 탈취 도구와 상주 백도어를 담고 있었다. 탈취 도구는 16개 범주의 비밀을 수집했다. SSH 키, AWS·Azure·Google Cloud·Kubernetes 자격증명, 브라우저 비밀번호와 방문 기록, GitLab·Jenkins·Terraform·Vault 시크릿, Claude·Cursor·Copilot·Hugging Face 토큰, 그리고 각 공급자 API 키가 들어 있는 LiteLLM 프록시 자체의 데이터베이스다. 수집한 데이터는 AES-256-CBC로 암호화하고 키를 RSA-OAEP로 감싼 뒤 정식 도메인을 흉내 낸 주소로 보냈다. 백도어는 sitecustomize.py로 배치되어, litellm을 import하든 말든 머신의 모든 Python 프로세스가 시작될 때 실행됐다. 호스트당 횟수 제한 없이 매시간 탈취 도구를 다시 돌리고, 공격자의 GitHub 저장소에서 서버 주소를 읽어 받은 코드를 exec했다. 이 전체 페이로드는 pyproject.toml에 추가된 한 줄, data = "cook"에서 나왔다. SafeDep은 소스 배포본이 태그된 커밋과 다른 반면 wheel은 프로젝트의 실제 maturin 빌드 파이프라인 산출물과 일치하고, 빌드 시간대에 대응하는 공개 GitHub Actions 실행이 없다는 점을 확인해, 비공개 빌드 파이프라인이 변조됐다고 중간에서 높은 수준의 확신으로 평가한다. 업로드부터 삭제까지는 약 두 시간이었고, 1.106.2와 릴리스 후보 버전은 깨끗했다.
+***** Take
+위협 모델에 옮겨 적어야 할 부분은 sitecustomize.py다. 가상환경 하나에 들어온 악성 패키지 하나가 호스트의 모든 Python 프로세스에 코드를 집어넣었다. 그래서 "나는 import한 적 없다"도 방어가 아니고, 패키지를 지우는 것도 방어가 아니다. 1.107.0이 그 머신을 거쳤다면 피해 범위는 머신 전체다. LiteLLM 프록시 데이터베이스는 상황을 더 나쁘게 만든다. 탈취 도구는 프록시로 쓰던 모든 공급자 키가 모여 있는 바로 그 파일을 찾아갔다.
+***** Comments
+- "공격자가 서로 다른 개발자 3명의 GitHub 자격증명을 탈취했다"는 대목이 조금 무섭다. 구조적인 문제로 보인다. 개발자 세 명의 키가 털렸다면 진짜 문제는 다른 곳에 있다. 나는 LiteLLM을 이 버전 이전으로 고정하고 당분간 그대로 둘 것이다.
+- sandbox-exec이든 Lulu 규칙이든 이런 공격은 막지 못한다. 권한 팝업에 지치면 아무거나 허용하게 된다. 패키지 X가 설치한 그 367개 도구? 당연히 정상이겠지, 요즘은 다 그렇게 하니까.
+- canarytokens.org라는 게 있다는 걸 다시 알려드린다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La versión comprometida de LiteLLM 1.107.0 en PyPI instala un ladrón de credenciales y una puerta trasera
+***** TLDR
+Las siete ruedas de plataforma de LiteLLM 1.107.0 en PyPI llevaban un ladrón de credenciales y una puerta trasera persistente. El ladrón recogía dieciséis categorías de secretos: claves SSH, credenciales de AWS, Azure, Google Cloud y Kubernetes, contraseñas e historial del navegador, secretos de GitLab, Jenkins, Terraform y Vault, tokens de Claude, Cursor, Copilot y Hugging Face, y la propia base de datos del proxy de LiteLLM con las claves API de los proveedores dentro. Cifraba el botín con AES-256-CBC bajo una clave envuelta con RSA-OAEP y lo enviaba a un dominio que imitaba el legítimo. La puerta trasera venía como sitecustomize.py, así que arrancaba en todos los procesos Python de la máquina, importara litellm o no, reejecutaba el ladrón cada hora sin límite por host y leía direcciones de servidor de un repositorio de GitHub del atacante para ejecutar con exec lo que le sirvieran. Toda la carga salió de una línea añadida en pyproject.toml: data = "cook". SafeDep encontró que la distribución de código fuente no coincidía con su commit etiquetado mientras las ruedas sí coincidían con la pipeline real de maturin del proyecto, sin ninguna ejecución pública de GitHub Actions en la ventana de compilación, y estima con confianza media a alta que la pipeline privada fue modificada. Desde la subida hasta la retirada pasaron unas dos horas; la 1.106.2 y las candidatas estaban limpias.
+***** Take
+El sitecustomize.py es la parte que hay que copiar al modelo de amenazas. Un paquete malicioso en un único entorno virtual metió código en todos los procesos Python del host, así que "yo nunca lo importé" no es una defensa, y desinstalar el paquete tampoco. Si la 1.107.0 pasó por una máquina, el radio del daño es la máquina entera. Y la base de datos del proxy de LiteLLM lo empeora: el ladrón fue directo al único archivo que guarda todas las claves de proveedor que estabas proxyando.
+***** Comments
+- "Los atacantes comprometieron las credenciales de GitHub de 3 desarrolladores distintos" da bastante miedo; parece sistémico. Si a tres desarrolladores les robaron las claves, el problema real está en otro sitio. Yo fijaría LiteLLM a algo anterior a esta versión y lo dejaría ahí.
+- Ni sandbox-exec ni las reglas de Lulu van a proteger de algo así. Llega la fatiga de los avisos de permisos y aceptamos cualquier cosa. ¿Esas 367 herramientas que instaló el paquete X? Será normal, hoy todo funciona así.
+- Solo os recuerdo que canarytokens.org existe.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Kompromittiertes LiteLLM 1.107.0 auf PyPI installiert Credential-Stealer und Backdoor
+***** TLDR
+Alle sieben Plattform-Wheels von LiteLLM 1.107.0 auf PyPI enthielten einen Credential-Stealer und eine dauerhafte Backdoor. Der Stealer sammelte sechzehn Kategorien von Geheimnissen: SSH-Schlüssel, Zugangsdaten für AWS, Azure, Google Cloud und Kubernetes, Browser-Passwörter und -Verlauf, Secrets aus GitLab, Jenkins, Terraform und Vault, Tokens für Claude, Cursor, Copilot und Hugging Face sowie die Datenbank des LiteLLM-Proxys selbst, in der die API-Keys der Anbieter liegen. Die Beute wurde mit AES-256-CBC verschlüsselt, der Schlüssel per RSA-OAEP verpackt und an eine nachgemachte Domain geschickt. Die Backdoor kam als sitecustomize.py und startete damit in jedem Python-Prozess der Maschine, unabhängig davon, ob irgendetwas litellm importierte. Sie führte den Stealer stündlich erneut aus, ohne Begrenzung pro Host, las Serveradressen aus einem GitHub-Repository des Angreifers und führte per exec aus, was ihr geliefert wurde. Die gesamte Payload stammte aus einer hinzugefügten Zeile in pyproject.toml: data = "cook". SafeDep stellte fest, dass die Source-Distribution vom getaggten Commit abwich, während die Wheels zur echten maturin-Build-Pipeline des Projekts passten und im Build-Fenster kein öffentlicher GitHub-Actions-Lauf existierte. Die Einschätzung: mit mittlerer bis hoher Sicherheit wurde die private Build-Pipeline verändert. Von Upload bis Entfernung lagen rund zwei Stunden; 1.106.2 und die Release Candidates waren sauber.
+***** Take
+Die sitecustomize.py ist der Teil, den man ins Bedrohungsmodell übernehmen sollte. Ein schädliches Paket in einem einzigen Virtualenv brachte Code in jeden Python-Prozess des Hosts. "Ich habe es nie importiert" ist also keine Verteidigung, und das Paket zu deinstallieren auch nicht. Wenn 1.107.0 eine Maschine berührt hat, ist die Maschine der Schadensradius. Die Proxy-Datenbank von LiteLLM verschärft das: der Stealer suchte gezielt die eine Datei, in der alle Anbieter-Keys liegen, die man proxyte.
+***** Comments
+- "Angreifer kompromittierten die GitHub-Zugangsdaten von 3 verschiedenen Entwicklern" ist schon beunruhigend; das wirkt systemisch. Wenn drei Entwicklern die Keys gestohlen werden, liegt das eigentliche Problem woanders. Ich würde LiteLLM auf eine Version davor pinnen und dort lassen.
+- Kein sandbox-exec und keine Lulu-Regeln schützen vor so etwas. Irgendwann setzt die Müdigkeit bei Berechtigungsdialogen ein und wir erlauben alles. Diese 367 Tools, die Paket X installiert hat? Wird normal sein, so läuft das heute eben.
+- Nur zur Erinnerung: canarytokens.org gibt es.
+** EA is shutting down BioWare :gaming:ea:bioware:layoffs:business:
+:PROPERTIES:
+:ID:       50184586
+:URL:      https://www.theverge.com/games/1015647/ea-is-shutting-down-bioware
+:HN_URL:   https://news.ycombinator.com/item?id=50184586
+:POINTS:   266
+:COMMENTS: 151
+:BY:       aaronbrethorst
+:END:
+
+*** TLDR
+EA is closing BioWare, the studio behind Baldur's Gate, Knights of the Old Republic, Dragon Age and Mass Effect. Roughly 400 jobs go across EA, about 50 of them at BioWare. Early development on the next Mass Effect ends; Dragon Age, Baldur's Gate and KOTOR are no longer in active development; Anthem is finished. EA says it is consolidating around a Respawn and DICE collaboration, keeping Marvel's Iron Man and Star Wars Jedi in development, and starting a football project and a Fight Night revival. The status of Amazon's Mass Effect series is unclear. The closure follows EA's August privatization in a $55 billion deal led by Saudi Arabia's Public Investment Fund with Silver Lake and Affinity Partners, and a run of commercial failures: Mass Effect: Andromeda's reception, Anthem's launch, and Dragon Age: The Veilguard missing sales targets, which already triggered layoffs in 2025. EA's statement calls BioWare "a legendary studio that helped define the role-playing genre."
+
+*** Take
+Fifty people. That number is the story: the studio that shipped Baldur's Gate and KOTOR and Mass Effect had about fifty employees left, so the closure is bookkeeping and the actual ending happened somewhere around the 2025 layoffs. What EA kept is the forecast. Respawn, DICE, a football game, a boxing revival: live-service and annual franchises with predictable revenue. A 100-hour single-player RPG with a branching script is a four-year bet, and a company taken private at $55 billion has a repayment schedule that does not wait four years.
+
+*** Comments
+
+**** aresant
+Sad, but it's a classic ship of Theseus situation. A handful of notables are still there, but most of the teams that made Baldur's Gate, KOTOR and Mass Effect left long ago through turnover and brutal layoff rounds. The silver lining is the talent didn't vanish.
+
+**** slg
+One way BioWare pushed the industry forward was letting players romance any of a variety of characters, often including same-gender options. Worth noting because the Saudi Investment Fund bought EA a couple of months ago and they have strong opinions about that.
+
+**** mandevil
+As always, the Onion nailed it long ago with the piece about Anthem developers assuring players that words scrawled on a conference room whiteboard would be a revolutionary shooter by the end of the week.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+EA 将关闭 BioWare
+***** TLDR
+EA 决定关闭 BioWare，这家工作室制作过《博德之门》《旧共和国武士》《龙腾世纪》和《质量效应》。EA 全公司裁员约 400 人，其中 BioWare 约 50 人。下一部《质量效应》的早期开发终止；《龙腾世纪》《博德之门》和 KOTOR 不再处于活跃开发状态；《圣歌》彻底结束。EA 表示将把资源集中到 Respawn 与 DICE 的合作项目上，继续开发《漫威钢铁侠》和《星球大战绝地》，并启动一个橄榄球项目和《铁拳重生》的复活计划。亚马逊的《质量效应》剧集状况不明。此次关闭发生在 EA 今年 8 月被私有化之后：由沙特公共投资基金主导、Silver Lake 和 Affinity Partners 参与的 550 亿美元交易。此前该工作室接连失利：《质量效应：仙女座》口碑崩塌，《圣歌》上线失败，《龙腾世纪：影障守护者》未达销售目标，并已在 2025 年引发裁员。EA 的声明称 BioWare 是「一家帮助定义了角色扮演类型的传奇工作室」。
+***** Take
+五十个人。这个数字才是重点：做出《博德之门》《旧共和国武士》和《质量效应》的工作室只剩下大约五十名员工，所以关闭只是做账，真正的终结大概发生在 2025 年那轮裁员。EA 留下了什么，才是对未来的判断。Respawn、DICE、一个橄榄球游戏、一个拳击复活项目：都是收入可预测的长期运营和年度系列。一款带分支剧本、一百小时时长的单人 RPG 是一笔四年的赌注，而一家以 550 亿美元被私有化的公司，其还款表不会等四年。
+***** Comments
+- 挺遗憾，但这是典型的忒修斯之船。还有少数知名人士在，但做出《博德之门》《旧共和国武士》和《质量效应》的团队大部分早就通过自然流动和几轮残酷裁员离开了。好的一面是，这些人才并没有消失。
+- BioWare 推动行业的一个方式，是让玩家可以与多个角色展开恋爱线，其中常常包括同性选项。值得一提，因为沙特投资基金两个月前买下了 EA，而他们对这类内容有很强的立场。
+- 一如往常，《洋葱报》早就说中了：那篇报道里，《圣歌》的开发者向玩家保证，会议室白板上潦草写下的那些词，到本周末就会变成一款革命性的射击游戏。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+EAがBioWareを閉鎖する
+***** TLDR
+EAは、『バルダーズ・ゲート』『Knights of the Old Republic』『ドラゴンエイジ』『マスエフェクト』を手がけたスタジオBioWareを閉鎖する。EA全体で約400人が人員削減の対象となり、そのうちBioWareは約50人だ。次作『マスエフェクト』の初期開発は終了。『ドラゴンエイジ』『バルダーズ・ゲート』『KOTOR』はいずれも活動中の開発ラインから外れ、『Anthem』は完全に終了する。EAはRespawnとDICEの協業に資源を集約し、『Marvel's Iron Man』と『Star Wars Jedi』の開発は継続、さらにフットボールの新規プロジェクトと『Fight Night』の復活に着手するとしている。Amazonの『マスエフェクト』実写シリーズの扱いは不明だ。閉鎖は、サウジアラビアの公共投資基金が主導しSilver LakeとAffinity Partnersが参加した550億ドル規模の取引による8月の非公開化の後に起きた。それ以前から『マスエフェクト：アンドロメダ』の評価、『Anthem』のローンチ失敗、『ドラゴンエイジ：ヴェイルガード』の販売目標未達が続き、2025年には人員削減の引き金になっていた。EAの声明はBioWareを「ロールプレイングというジャンルの定義に貢献した伝説的なスタジオ」と呼んでいる。
+***** Take
+50人。この数字こそが本題だ。『バルダーズ・ゲート』『KOTOR』『マスエフェクト』を出したスタジオに残っていたのは約50人であり、つまり今回の閉鎖は帳簿上の処理で、実質的な終わりは2025年の人員削減のあたりに起きていた。EAが何を残したかが見通しを示している。Respawn、DICE、フットボールゲーム、ボクシングの復活。いずれも収益が読めるライブサービスと年次タイトルだ。分岐する脚本を持つ100時間の単独プレイRPGは4年がかりの賭けであり、550億ドルで非公開化された会社の返済スケジュールは4年を待たない。
+***** Comments
+- 残念だが、典型的なテセウスの船だ。著名な数人はまだ残っているが、『バルダーズ・ゲート』『KOTOR』『マスエフェクト』を作ったチームの大半は、自然な離職と何度かの激しい人員削減でずっと前に去っている。救いは、その人材が消えたわけではないことだ。
+- BioWareが業界を前に進めた点の一つは、プレイヤーが多様なキャラクターと恋愛関係を始められるようにしたことで、そこには同性の選択肢もしばしば含まれていた。わざわざ書くのは、2か月前にサウジ投資基金がEAを買収し、彼らがその種の表現について強い立場を持っているからだ。
+- いつものことだが、The Onionがずっと前に言い当てていた。『Anthem』の開発者が、会議室のホワイトボードに書き散らした言葉が週末までに革新的なシューターになるとプレイヤーに保証する、という記事だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+EA가 BioWare를 폐쇄한다
+***** TLDR
+EA가 '발더스 게이트', '구 공화국의 기사단', '드래곤 에이지', '매스 이펙트'를 만든 스튜디오 BioWare를 폐쇄한다. EA 전체에서 약 400명이 감원되며 그중 BioWare가 약 50명이다. 차기 '매스 이펙트'의 초기 개발은 중단되고, '드래곤 에이지'와 '발더스 게이트', KOTOR는 활성 개발에서 빠지며 '앤섬'은 완전히 끝난다. EA는 Respawn과 DICE의 협업으로 자원을 모으고, 'Marvel's Iron Man'과 'Star Wars Jedi' 개발은 유지하며, 미식축구 프로젝트와 'Fight Night' 부활을 새로 시작한다고 밝혔다. 아마존의 '매스 이펙트' 시리즈 상황은 불분명하다. 이번 폐쇄는 사우디아라비아 공공투자기금이 주도하고 Silver Lake와 Affinity Partners가 참여한 550억 달러 규모 거래로 EA가 8월에 비상장 전환된 뒤에 나왔다. 그 전에도 '매스 이펙트: 안드로메다'의 평가, '앤섬'의 출시 실패, '드래곤 에이지: 베일가드'의 판매 목표 미달이 이어져 2025년에 이미 감원으로 이어졌다. EA는 성명에서 BioWare를 "롤플레잉 장르를 정의하는 데 기여한 전설적인 스튜디오"라고 표현했다.
+***** Take
+50명. 이 숫자가 기사의 핵심이다. '발더스 게이트'와 KOTOR, '매스 이펙트'를 내놓은 스튜디오에 남아 있던 인원이 약 50명이었으니, 이번 폐쇄는 장부 정리이고 실제 종료는 2025년 감원 무렵에 이미 일어났다. EA가 무엇을 남겼는지가 전망을 보여준다. Respawn, DICE, 미식축구 게임, 복싱 부활. 모두 수익이 예측되는 라이브 서비스와 연간 시리즈다. 분기하는 각본을 가진 100시간짜리 싱글플레이 RPG는 4년짜리 베팅이고, 550억 달러에 비상장 전환된 회사의 상환 일정은 4년을 기다려주지 않는다.
+***** Comments
+- 안타깝지만 전형적인 테세우스의 배다. 알려진 몇 사람은 아직 남아 있지만, '발더스 게이트'와 KOTOR, '매스 이펙트'를 만든 팀의 대부분은 자연 이직과 몇 차례의 혹독한 감원으로 오래전에 떠났다. 그나마 다행인 건 그 인재들이 사라진 게 아니라는 점이다.
+- BioWare가 업계를 앞으로 밀었던 방식 중 하나는 플레이어가 여러 캐릭터와 연애 서사를 시작할 수 있게 한 것이고, 거기에는 동성 선택지도 자주 포함됐다. 굳이 언급하는 이유는 두 달 전에 사우디 투자기금이 EA를 인수했고, 그들이 그런 표현에 대해 분명한 입장을 갖고 있기 때문이다.
+- 늘 그렇듯 The Onion이 오래전에 정확히 맞혔다. '앤섬' 개발자들이 회의실 화이트보드에 끼적인 단어들이 주말까지 혁신적인 슈터가 될 거라고 플레이어들에게 보장하는 기사 말이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+EA va a cerrar BioWare
+***** TLDR
+EA cierra BioWare, el estudio detrás de Baldur's Gate, Knights of the Old Republic, Dragon Age y Mass Effect. Desaparecen unos 400 puestos en toda EA, alrededor de 50 en BioWare. Se termina el desarrollo inicial del próximo Mass Effect; Dragon Age, Baldur's Gate y KOTOR salen del desarrollo activo; Anthem queda cancelado. EA dice que concentra recursos en una colaboración entre Respawn y DICE, mantiene Marvel's Iron Man y Star Wars Jedi, y arranca un proyecto de fútbol americano y el regreso de Fight Night. El estado de la serie de Mass Effect de Amazon no está claro. El cierre llega tras la privatización de EA en agosto, una operación de 55.000 millones de dólares liderada por el Fondo de Inversión Pública de Arabia Saudí con Silver Lake y Affinity Partners, y tras una racha de fracasos comerciales: la recepción de Mass Effect: Andromeda, el lanzamiento de Anthem y Dragon Age: The Veilguard por debajo de objetivos de ventas, que ya provocó despidos en 2025. El comunicado de EA llama a BioWare "un estudio legendario que ayudó a definir el género del rol".
+***** Take
+Cincuenta personas. Ese número es la noticia: al estudio que publicó Baldur's Gate, KOTOR y Mass Effect le quedaban unos cincuenta empleados, así que el cierre es contabilidad y el final real ocurrió por los despidos de 2025. Lo que EA conserva es el pronóstico. Respawn, DICE, un juego de fútbol americano, un regreso del boxeo: servicio continuo y franquicias anuales con ingresos predecibles. Un RPG de un jugador de cien horas con guion ramificado es una apuesta a cuatro años, y una empresa privatizada por 55.000 millones tiene un calendario de pagos que no espera cuatro años.
+***** Comments
+- Es triste, pero es el clásico barco de Teseo. Quedan unos pocos nombres conocidos, pero la mayoría de los equipos que hicieron Baldur's Gate, KOTOR y Mass Effect se fueron hace mucho por rotación y rondas brutales de despidos. El consuelo es que ese talento no desapareció.
+- Una de las formas en que BioWare empujó la industria fue permitir romances con cualquiera de varios personajes, a menudo incluyendo opciones del mismo género. Lo señalo porque el fondo de inversión saudí compró EA hace un par de meses y tienen opiniones muy marcadas sobre eso.
+- Como siempre, The Onion lo clavó hace años con la pieza sobre los desarrolladores de Anthem asegurando a los jugadores que unas palabras garabateadas en una pizarra de sala de reuniones serían un shooter revolucionario para final de semana.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+EA schließt BioWare
+***** TLDR
+EA schließt BioWare, das Studio hinter Baldur's Gate, Knights of the Old Republic, Dragon Age und Mass Effect. Konzernweit fallen rund 400 Stellen weg, etwa 50 davon bei BioWare. Die frühe Entwicklung des nächsten Mass Effect endet; Dragon Age, Baldur's Gate und KOTOR sind nicht mehr in aktiver Entwicklung; Anthem ist beendet. EA bündelt die Mittel laut eigener Aussage um eine Zusammenarbeit von Respawn und DICE, behält Marvel's Iron Man und Star Wars Jedi in Entwicklung und startet ein Football-Projekt sowie eine Neuauflage von Fight Night. Der Status der Mass-Effect-Serie bei Amazon ist unklar. Die Schließung folgt auf EAs Privatisierung im August, ein 55-Milliarden-Dollar-Geschäft unter Führung des saudischen Public Investment Fund mit Silver Lake und Affinity Partners, und auf eine Reihe kommerzieller Misserfolge: die Aufnahme von Mass Effect: Andromeda, den Start von Anthem und Dragon Age: The Veilguard unter den Verkaufszielen, was 2025 schon Entlassungen auslöste. In EAs Mitteilung heißt BioWare "ein legendäres Studio, das das Rollenspielgenre mitgeprägt hat".
+***** Take
+Fünfzig Leute. Diese Zahl ist die Nachricht: dem Studio, das Baldur's Gate, KOTOR und Mass Effect veröffentlicht hat, waren rund fünfzig Beschäftigte geblieben. Die Schließung ist also Buchhaltung, das tatsächliche Ende lag bei den Entlassungen von 2025. Was EA behält, ist die Prognose. Respawn, DICE, ein Football-Spiel, eine Box-Neuauflage: Live-Service und Jahresreihen mit planbaren Einnahmen. Ein Singleplayer-Rollenspiel mit hundert Stunden und verzweigtem Drehbuch ist eine Wette auf vier Jahre, und ein für 55 Milliarden privatisiertes Unternehmen hat einen Rückzahlungsplan, der nicht vier Jahre wartet.
+***** Comments
+- Traurig, aber ein klassisches Schiff des Theseus. Ein paar bekannte Namen sind noch da, aber die Teams, die Baldur's Gate, KOTOR und Mass Effect gemacht haben, sind längst durch Abgänge und brutale Entlassungsrunden weg. Der Trost: Das Talent ist nicht verschwunden.
+- BioWare hat die Branche unter anderem damit vorangebracht, dass Spieler Romanzen mit ganz unterschiedlichen Figuren beginnen konnten, oft auch gleichgeschlechtlich. Ich erwähne es, weil der saudische Investmentfonds EA vor zwei Monaten gekauft hat und dort sehr klare Haltungen dazu bestehen.
+- Wie immer hatte The Onion es längst auf den Punkt gebracht, mit dem Stück über Anthem-Entwickler, die Spielern versichern, ein paar an ein Konferenzraum-Whiteboard gekritzelte Wörter würden bis Ende der Woche ein revolutionärer Shooter sein.
+** DuckDB 2.0.0 LTS "Cinnamon Teal" :duckdb:databases:analytics:sql:release:
+:PROPERTIES:
+:ID:       50181136
+:URL:      https://duckdb.org/2026/10/21/announcing-duckdb-200
+:HN_URL:   https://news.ycombinator.com/item?id=50181136
+:POINTS:   292
+:COMMENTS: 29
+:BY:       nnx
+:END:
+
+*** TLDR
+DuckDB 2.0.0 lands with nearly 20,000 commits since 1.5, and the team calls it their biggest feature release. The Quack protocol now backs a real client-server deployment, and a new CONNECT statement attaches to remote databases including PostgreSQL and MySQL. Asynchronous I/O for Parquet and CSV reads in parallel in the background, which mainly helps queries against remote storage. VARIANT is now a first-class type that detects and compresses semi-structured data. The legacy PostgreSQL-derived SQL parser is replaced by a PEG-based parser, so extensions can hook into the grammar itself, and organizations can host their own cryptographically verified extension repositories. New SQL: triggers, data-modifying CTEs, NEAREST joins for similarity search, nested schemas, JSON mutation functions. CLI agent mode cuts output volume 59% for AI-driven queries. Support is guaranteed through October 2027, and 1.5 also became an LTS with support to March 2027. Breaking changes: the storage format changed so pre-2.0 versions cannot read databases created by 2.0 (2.0 still reads older files), C++17 is required, and the single-arrow lambda syntax is off by default.
+
+*** Take
+The client-server mode is the line people will argue about, because it moves DuckDB out of "the SQLite of analytics" and into territory where you can put a team behind one instance. The commenter running a 192-vCPU EC2 box as a central analytics server is the real product announcement, not the feature list. The date matters more than any of it: a guaranteed support window to October 2027 is what lets someone put this in a system they do not want to think about again, and the one-way storage format change is the price.
+
+*** Comments
+
+**** RobinL
+We've found DuckDB 2.0 way faster on high core count EC2 machines, not just reading from S3 but the computations too. Much more likely to see 100% utilisation up to 128 or 192 vCPUs. Before 2.0 speed topped out more like 64 vCPUs.
+
+**** paoliniluis
+The fact that it can now be used as a client-server architecture is a game changer. It will replace many data stacks that currently run on servers with tons of CPU and RAM.
+
+**** nicoritschel
+I built a DuckDB extension so you can connect via Postgres wire protocol or Arrow Flight. DuckDB has its own Quack protocol, but client support for Quack is very limited right now.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+DuckDB 2.0.0 LTS「Cinnamon Teal」
+***** TLDR
+DuckDB 2.0.0 发布，自 1.5 以来积累了近两万次提交，团队称这是他们规模最大的功能版本。Quack 协议现在支撑真正的客户端-服务器部署，新的 CONNECT 语句可以连接远程数据库，包括 PostgreSQL 和 MySQL。Parquet 和 CSV 的异步 I/O 在后台并行读取，主要改善针对远程存储的查询。VARIANT 成为一等类型，可自动识别并压缩半结构化数据。源自 PostgreSQL 的旧 SQL 解析器被基于 PEG 的新解析器取代，扩展因此可以挂接到语法本身，组织也能自建带密码学校验的扩展仓库。新增 SQL 能力包括触发器、可修改数据的 CTE、用于相似度搜索的 NEAREST join、嵌套 schema 和 JSON 修改函数。CLI 的 agent 模式让 AI 驱动的查询输出量减少 59%。官方承诺支持到 2027 年 10 月，1.5 也转为 LTS，支持至 2027 年 3 月。破坏性变更：存储格式改变，2.0 之前的版本无法读取 2.0 创建的数据库（2.0 仍能读旧文件），要求 C++17，单箭头 lambda 语法默认关闭。
+***** Take
+真正会引起争论的是客户端-服务器模式，因为它把 DuckDB 从「分析领域的 SQLite」推向了可以让一个团队共用一个实例的位置。评论里那位把 192 vCPU 的 EC2 当作中心分析服务器在跑的人，才是真正的产品公告，而不是功能清单。不过比这些更重要的是日期：承诺支持到 2027 年 10 月，才让人敢把它放进一个不想再碰的系统里，而单向的存储格式变更就是为此付出的代价。
+***** Comments
+- 我们发现 DuckDB 2.0 在高核心数的 EC2 机器上快得多，不只是从 S3 读数据，计算本身也快。在 128 到 192 vCPU 这个区间更容易把 CPU 跑满。2.0 之前大概到 64 vCPU 就不再提速了。
+- 现在可以当客户端-服务器架构用，这是个质变。它肯定会取代很多现在跑在高 CPU、大内存服务器上的数据栈。
+- 我写了一个 DuckDB 扩展，可以通过 Postgres 线路协议或 Arrow Flight 连接。DuckDB 自己有 Quack 协议，但目前 Quack 的客户端支持非常有限。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+DuckDB 2.0.0 LTS「Cinnamon Teal」
+***** TLDR
+DuckDB 2.0.0がリリースされた。1.5以降で約2万コミットが積み上がり、チームは自身の最大の機能リリースだと述べている。Quackプロトコルが本格的なクライアント・サーバー構成を支え、新しいCONNECT文でPostgreSQLやMySQLを含むリモートデータベースに接続できる。ParquetとCSVの非同期I/Oがバックグラウンドで並列に読み込み、主にリモートストレージへのクエリが速くなる。VARIANTは第一級の型となり、半構造化データを自動的に判別して圧縮する。PostgreSQL由来の旧SQLパーサーはPEGベースの新パーサーに置き換わり、拡張が文法そのものにフックできるようになった。組織が暗号的に検証された独自の拡張リポジトリをホストすることも可能だ。SQL機能ではトリガー、データを変更するCTE、類似検索向けのNEARESTジョイン、入れ子スキーマ、JSON変更関数が加わった。CLIのエージェントモードはAI駆動のクエリで出力量を59%削減する。サポートは2027年10月まで保証され、1.5もLTSとなり2027年3月まで支援される。破壊的変更として、ストレージ形式が変わり2.0より前のバージョンは2.0が作成したデータベースを読めない（2.0は旧ファイルを読める）。C++17が必須となり、単一矢印のラムダ構文は既定で無効になった。
+***** Take
+議論になるのはクライアント・サーバーモードだ。DuckDBを「分析のSQLite」という位置から、1つのインスタンスの背後にチームを置ける領域へ移すからだ。192 vCPUのEC2を中央分析サーバーとして運用しているというコメントこそが本当の製品発表であり、機能一覧ではない。それ以上に重要なのは日付だ。2027年10月までというサポート保証があって初めて、二度と触りたくないシステムにこれを組み込める。一方通行のストレージ形式変更はその代価である。
+***** Comments
+- DuckDB 2.0は高コア数のEC2マシンで格段に速いと分かった。S3からの読み込みだけでなく計算そのものも速い。128から192 vCPUあたりまでCPUを使い切れる場面がずっと増えた。2.0より前は64 vCPU程度で伸びが止まっていた。
+- クライアント・サーバー構成で使えるようになったのは決定的な変化だ。大量のCPUとRAMを積んだサーバー上で動いている多くのデータスタックを置き換えるだろう。
+- Postgresのワイヤプロトコルか Arrow Flightで接続できるDuckDB拡張を作った。DuckDBには独自のQuackプロトコルもあるが、今のところQuackのクライアント対応はかなり限られている。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+DuckDB 2.0.0 LTS "Cinnamon Teal"
+***** TLDR
+DuckDB 2.0.0이 나왔다. 1.5 이후 약 2만 건의 커밋이 쌓였고, 팀은 자신들의 최대 기능 릴리스라고 말한다. Quack 프로토콜이 본격적인 클라이언트-서버 배포를 뒷받침하고, 새 CONNECT 문으로 PostgreSQL과 MySQL을 포함한 원격 데이터베이스에 붙을 수 있다. Parquet와 CSV의 비동기 I/O가 백그라운드에서 병렬로 읽어 주로 원격 스토리지 대상 쿼리가 빨라진다. VARIANT는 반정형 데이터를 자동으로 감지하고 압축하는 일급 타입이 됐다. PostgreSQL에서 파생된 기존 SQL 파서는 PEG 기반 파서로 교체되어 확장이 문법 자체에 후크를 걸 수 있고, 조직이 암호학적으로 검증되는 자체 확장 저장소를 운영할 수도 있다. SQL 쪽에는 트리거, 데이터를 수정하는 CTE, 유사도 검색용 NEAREST 조인, 중첩 스키마, JSON 변경 함수가 추가됐다. CLI 에이전트 모드는 AI 기반 쿼리의 출력량을 59% 줄인다. 지원은 2027년 10월까지 보장되며, 1.5도 LTS가 되어 2027년 3월까지 지원된다. 호환성 변경으로 저장 형식이 바뀌어 2.0 이전 버전은 2.0이 만든 데이터베이스를 읽을 수 없고(2.0은 이전 파일을 읽는다), C++17이 필수이며 단일 화살표 람다 구문은 기본적으로 꺼져 있다.
+***** Take
+논쟁이 붙을 지점은 클라이언트-서버 모드다. DuckDB를 "분석용 SQLite"에서, 하나의 인스턴스 뒤에 팀을 둘 수 있는 영역으로 옮기기 때문이다. 192 vCPU EC2를 중앙 분석 서버로 돌리고 있다는 댓글이야말로 진짜 제품 발표이고, 기능 목록이 아니다. 그보다 중요한 건 날짜다. 2027년 10월까지의 지원 보장이 있어야 다시는 손대고 싶지 않은 시스템에 이걸 넣을 수 있다. 되돌릴 수 없는 저장 형식 변경이 그 대가다.
+***** Comments
+- DuckDB 2.0이 코어 수가 많은 EC2 머신에서 훨씬 빠르다는 걸 확인했다. S3에서 읽는 것만이 아니라 계산 자체도 빠르다. 128에서 192 vCPU까지 CPU를 100% 쓰는 경우가 훨씬 많아졌다. 2.0 이전에는 64 vCPU 정도에서 속도가 멈췄다.
+- 클라이언트-서버 구조로 쓸 수 있게 된 건 판을 바꾸는 변화다. 지금 CPU와 RAM을 잔뜩 올린 서버에서 돌아가는 많은 데이터 스택을 대체할 것이다.
+- Postgres 와이어 프로토콜이나 Arrow Flight로 접속할 수 있는 DuckDB 확장을 만들었다. DuckDB에는 자체 Quack 프로토콜도 있지만, 지금은 Quack의 클라이언트 지원이 매우 제한적이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+DuckDB 2.0.0 LTS "Cinnamon Teal"
+***** TLDR
+DuckDB 2.0.0 llega con casi 20.000 commits desde la 1.5, y el equipo la llama su mayor versión de funcionalidades. El protocolo Quack ahora sostiene un despliegue cliente-servidor de verdad, y una nueva sentencia CONNECT se engancha a bases de datos remotas, incluidas PostgreSQL y MySQL. La E/S asíncrona para Parquet y CSV lee en paralelo en segundo plano, lo que ayuda sobre todo en consultas contra almacenamiento remoto. VARIANT pasa a ser un tipo de primera clase que detecta y comprime datos semiestructurados. El antiguo parser SQL derivado de PostgreSQL se sustituye por uno basado en PEG, así que las extensiones pueden engancharse a la propia gramática, y las organizaciones pueden alojar repositorios de extensiones con verificación criptográfica. En SQL: triggers, CTE que modifican datos, joins NEAREST para búsqueda por similitud, esquemas anidados y funciones de mutación de JSON. El modo agente de la CLI recorta el volumen de salida un 59% en consultas dirigidas por IA. El soporte está garantizado hasta octubre de 2027, y la 1.5 también pasa a LTS con soporte hasta marzo de 2027. Cambios que rompen: el formato de almacenamiento cambió, de modo que las versiones anteriores a 2.0 no pueden leer bases creadas por 2.0 (la 2.0 sí lee archivos antiguos), C++17 es obligatorio y la sintaxis lambda de una sola flecha viene desactivada.
+***** Take
+El modo cliente-servidor es la línea que va a generar discusión, porque saca a DuckDB de "el SQLite de la analítica" y lo mete en terreno donde puedes poner un equipo detrás de una sola instancia. El comentarista que corre un EC2 de 192 vCPU como servidor central de analítica es el anuncio de producto real, no la lista de funciones. Y la fecha importa más que todo lo anterior: una ventana de soporte garantizada hasta octubre de 2027 es lo que permite meter esto en un sistema en el que no quieres volver a pensar, y el cambio de formato de almacenamiento sin vuelta atrás es el precio.
+***** Comments
+- Hemos visto DuckDB 2.0 mucho más rápido en máquinas EC2 con muchos núcleos, no solo leyendo de S3 sino también en el cómputo. Es mucho más fácil ver el 100% de utilización hasta 128 o 192 vCPU. Antes de la 2.0 la velocidad se estancaba más bien en 64 vCPU.
+- Que ahora se pueda usar como arquitectura cliente-servidor lo cambia todo. Va a reemplazar muchos stacks de datos que hoy corren en servidores con montones de CPU y RAM.
+- Hice una extensión de DuckDB para conectarse por el protocolo de cable de Postgres o por Arrow Flight. DuckDB tiene su propio protocolo Quack, pero el soporte de cliente para Quack es muy limitado ahora mismo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+DuckDB 2.0.0 LTS "Cinnamon Teal"
+***** TLDR
+DuckDB 2.0.0 erscheint mit fast 20.000 Commits seit 1.5; das Team nennt es das größte Feature-Release bisher. Das Quack-Protokoll trägt jetzt eine echte Client-Server-Installation, und ein neues CONNECT-Statement bindet entfernte Datenbanken ein, auch PostgreSQL und MySQL. Asynchrone I/O für Parquet und CSV liest parallel im Hintergrund, was vor allem Abfragen gegen entfernten Speicher hilft. VARIANT ist nun ein vollwertiger Typ, der halbstrukturierte Daten erkennt und komprimiert. Der alte, von PostgreSQL abgeleitete SQL-Parser wird durch einen PEG-basierten ersetzt, sodass Erweiterungen sich in die Grammatik selbst einhängen können; Organisationen können eigene, kryptografisch verifizierte Erweiterungs-Repositories betreiben. Neu in SQL: Trigger, datenverändernde CTEs, NEAREST-Joins für Ähnlichkeitssuche, verschachtelte Schemata und JSON-Mutationsfunktionen. Der Agent-Modus der CLI reduziert die Ausgabemenge bei KI-gesteuerten Abfragen um 59%. Der Support ist bis Oktober 2027 garantiert, und 1.5 wurde ebenfalls zum LTS mit Support bis März 2027. Brechende Änderungen: Das Speicherformat hat sich geändert, Versionen vor 2.0 können von 2.0 erstellte Datenbanken nicht lesen (2.0 liest alte Dateien weiterhin), C++17 ist Pflicht, und die Lambda-Syntax mit einfachem Pfeil ist standardmäßig deaktiviert.
+***** Take
+Über den Client-Server-Modus wird gestritten werden, weil er DuckDB aus der Rolle "das SQLite der Analytik" heraushebt und dorthin bringt, wo ein ganzes Team hinter einer Instanz arbeiten kann. Der Kommentar von jemandem, der eine EC2-Maschine mit 192 vCPU als zentralen Analyseserver betreibt, ist die eigentliche Produktankündigung, nicht die Feature-Liste. Noch wichtiger ist das Datum: ein garantiertes Support-Fenster bis Oktober 2027 erlaubt es, das in ein System zu setzen, über das man nicht mehr nachdenken will. Die nicht umkehrbare Änderung des Speicherformats ist der Preis dafür.
+***** Comments
+- Wir haben DuckDB 2.0 auf EC2-Maschinen mit vielen Kernen als deutlich schneller erlebt, nicht nur beim Lesen aus S3, sondern auch bei der Berechnung. Viel häufiger 100% Auslastung bis 128 oder 192 vCPUs. Vor 2.0 war bei etwa 64 vCPUs Schluss.
+- Dass es jetzt als Client-Server-Architektur nutzbar ist, verändert alles. Es wird viele Datenstacks ersetzen, die heute auf Servern mit sehr viel CPU und RAM laufen.
+- Ich habe eine DuckDB-Erweiterung gebaut, mit der man über das Postgres-Wire-Protokoll oder Arrow Flight verbinden kann. DuckDB hat sein eigenes Quack-Protokoll, aber die Client-Unterstützung für Quack ist derzeit sehr begrenzt.
+** OpenAI models are coming to Google Cloud :openai:google:cloud:ai:business:
+:PROPERTIES:
+:ID:       50180079
+:URL:      https://openai.com/index/openai-models-google-cloud/
+:HN_URL:   https://news.ycombinator.com/item?id=50180079
+:POINTS:   155
+:COMMENTS: 59
+:BY:       armcat
+:END:
+
+*** TLDR
+OpenAI's frontier models and its Codex agentic workflows are coming to Google Cloud's Model Garden, bought through Google Cloud Marketplace, with general availability in "the coming weeks." The detail that matters: enterprises with existing Google Cloud spend commitments can draw those commitments down to pay for OpenAI models. The models will also appear in Google Antigravity and the Gemini Agent, which OpenAI frames as giving customers the best model for each task. The announcement has no benchmarks, no pricing and no model names, and closes with one sentence: "Microsoft remains OpenAI's primary cloud partner."
+
+*** Take
+The commitment drawdown is the entire deal. Google booked that enterprise spend as its own revenue and is now letting customers hand it to a direct competitor, which is what it costs to keep those accounts from migrating to Azure. Read it as Google Cloud's sales organization winning an internal argument with DeepMind: selling TPUs to rivals and now reselling a rival's models says Alphabet values the infrastructure business above model exclusivity. That is a defensible read of where the margins actually are, and a loud one about how much Gemini is expected to win on its own.
+
+*** Comments
+
+**** anthonypasq
+Between selling TPUs to external companies and now hosting competitor models, Gemini just doesn't have the full faith of the Alphabet capital allocators, and I can't really blame them. A mature company would rather expand the extremely profitable business.
+
+**** londons_explore
+Enterprises can draw down their GCP commitments for these purchases. That's a big move: revenue they already booked and reported to shareholders they now might have to give away, potentially all of it. Bean counters hate that.
+
+**** nsagent
+Gotta love the disclaimer at the bottom: Microsoft remains OpenAI's primary cloud partner.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+OpenAI 的模型将上线 Google Cloud
+***** TLDR
+OpenAI 的前沿模型及其 Codex 智能体工作流将进入 Google Cloud 的 Model Garden，通过 Google Cloud Marketplace 购买，正式可用时间是「未来几周」。真正关键的细节是：已有 Google Cloud 消费承诺的企业客户，可以用这些承诺额度来支付 OpenAI 模型的费用。这些模型还会出现在 Google Antigravity 和 Gemini Agent 中，OpenAI 的说法是让客户为每项任务选到最合适的模型。公告里没有基准测试、没有价格、也没有具体模型名称，结尾只有一句话：「微软仍然是 OpenAI 的主要云合作伙伴。」
+***** Take
+承诺额度可抵扣，就是这笔交易的全部内容。Google 已经把那笔企业支出记为自己的收入，现在却允许客户把它交给一个直接竞争对手，这就是留住这些客户、不让他们迁去 Azure 的代价。可以把它理解为 Google Cloud 的销售部门在内部争论中赢了 DeepMind：向对手卖 TPU，现在又转售对手的模型，说明 Alphabet 把基础设施生意看得比模型独占更重。这对利润究竟在哪里是个说得通的判断，而对 Gemini 单靠自己能赢多少，则是个相当响亮的表态。
+***** Comments
+- 一边向外部公司卖 TPU，一边现在又托管竞争对手的模型，说明 Gemini 并没有完全获得 Alphabet 资本配置方的信任，而我也不太怪他们。一家成熟的公司宁愿扩张那块极其赚钱的业务。
+- 企业可以用 GCP 的消费承诺来支付这些采购。这一步很大：他们已经记账并向股东报告过的收入，现在可能得让出去，甚至可能全部让出去。会计人员最恨这种事。
+- 最爱底部那句免责声明：微软仍然是 OpenAI 的主要云合作伙伴。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+OpenAIのモデルがGoogle Cloudに来る
+***** TLDR
+OpenAIのフロンティアモデルとCodexのエージェント型ワークフローが、Google CloudのModel Gardenに登場する。購入はGoogle Cloud Marketplace経由で、一般提供は「今後数週間のうち」とされる。重要なのはこの一点だ。既存のGoogle Cloud支出コミットメントを持つ企業は、そのコミットメントを取り崩してOpenAIのモデル利用に充てられる。モデルはGoogle AntigravityとGemini Agentにも登場し、OpenAIはこれを、各タスクに最適なモデルを顧客に提供することだと説明している。発表にベンチマークも価格もモデル名もなく、最後は一文で締められている。「マイクロソフトは引き続きOpenAIの主要なクラウドパートナーである。」
+***** Take
+コミットメントの取り崩しがこの取引の本質だ。Googleはその企業支出を自社の売上として計上済みであり、それを顧客が直接の競合に渡せるようにした。これらの顧客がAzureへ移るのを防ぐための対価がそれである。Google Cloudの営業部門がDeepMindとの社内論争に勝ったと読むべきだ。競合にTPUを売り、いまは競合のモデルを再販する。Alphabetがモデルの独占性よりインフラ事業を上に置いていることの表明だ。利益がどこにあるかという判断としては筋が通っており、Geminiが単独でどれだけ勝てると見込まれているかについては、かなり雄弁である。
+***** Comments
+- 外部企業へのTPU販売に加え、いまは競合モデルのホスティングまでやる。Geminiはアルファベットの資本配分側から完全な信頼を得ていないということで、正直それも責められない。成熟した企業なら、極めて儲かる事業を広げるほうを選ぶ。
+- 企業はこれらの購入にGCPのコミットメントを充当できる。これは大きな動きだ。すでに計上して株主に報告済みの売上を、いまになって手放すことになるかもしれない。全額という可能性もある。経理は嫌がる。
+- 末尾の注意書きがいい。マイクロソフトは引き続きOpenAIの主要なクラウドパートナーである。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+OpenAI 모델이 Google Cloud에 들어온다
+***** TLDR
+OpenAI의 프런티어 모델과 Codex 에이전트 워크플로가 Google Cloud의 Model Garden에 들어온다. 구매는 Google Cloud Marketplace를 통하고, 정식 제공은 "앞으로 몇 주 안"이다. 중요한 세부 사항은 하나다. 기존 Google Cloud 지출 약정을 가진 기업은 그 약정을 끌어다 OpenAI 모델 비용으로 쓸 수 있다. 모델은 Google Antigravity와 Gemini Agent에도 등장하며, OpenAI는 이를 각 작업에 가장 적합한 모델을 고객에게 제공하는 것이라고 설명한다. 발표에는 벤치마크도, 가격도, 모델 이름도 없고 마지막은 한 문장으로 끝난다. "마이크로소프트는 여전히 OpenAI의 주요 클라우드 파트너다."
+***** Take
+약정 차감이 이 거래의 전부다. 구글은 그 기업 지출을 이미 자사 매출로 기록했고, 이제 고객이 그 돈을 직접 경쟁자에게 넘기도록 허용했다. 그 계정들이 Azure로 떠나지 않게 하는 데 드는 값이 그것이다. Google Cloud 영업 조직이 DeepMind와의 내부 논쟁에서 이겼다고 읽는 게 맞다. 경쟁사에 TPU를 팔고 이제 경쟁사의 모델을 재판매한다는 건, Alphabet이 모델 독점보다 인프라 사업을 위에 둔다는 뜻이다. 마진이 실제로 어디 있는지에 대한 판단으로는 설득력이 있고, Gemini가 혼자서 얼마나 이길 것으로 기대되는지에 대해서는 꽤 큰 목소리다.
+***** Comments
+- 외부 기업에 TPU를 팔고 이제는 경쟁사 모델까지 호스팅한다. Gemini가 Alphabet 자본 배분 담당자들의 온전한 신뢰를 받지 못하고 있다는 뜻이고, 그들을 탓하기도 어렵다. 성숙한 회사라면 엄청나게 수익성 좋은 사업을 키우는 쪽을 고를 것이다.
+- 기업이 이 구매에 GCP 약정을 끌어다 쓸 수 있다. 큰 조치다. 이미 계상해 주주에게 보고한 매출을 이제 내줘야 할 수도 있고, 전부일 수도 있다. 회계 담당자들이 질색할 일이다.
+- 맨 아래 면책 문구가 압권이다. 마이크로소프트는 여전히 OpenAI의 주요 클라우드 파트너다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Los modelos de OpenAI llegan a Google Cloud
+***** TLDR
+Los modelos frontera de OpenAI y sus flujos agénticos Codex llegan al Model Garden de Google Cloud, comprables a través de Google Cloud Marketplace, con disponibilidad general en "las próximas semanas". El detalle que importa: las empresas con compromisos de gasto ya firmados con Google Cloud podrán consumir esos compromisos para pagar modelos de OpenAI. Los modelos también aparecerán en Google Antigravity y en el Gemini Agent, algo que OpenAI presenta como dar al cliente el mejor modelo para cada tarea. El anuncio no trae benchmarks, ni precios, ni nombres de modelos, y cierra con una sola frase: "Microsoft sigue siendo el socio principal de nube de OpenAI".
+***** Take
+El consumo de compromisos es todo el acuerdo. Google contabilizó ese gasto empresarial como ingreso propio y ahora deja que los clientes lo entreguen a un competidor directo, que es lo que cuesta evitar que esas cuentas se vayan a Azure. Léase como la organización de ventas de Google Cloud ganando una discusión interna con DeepMind: vender TPUs a rivales y ahora revender los modelos de un rival dice que Alphabet valora el negocio de infraestructura por encima de la exclusividad de modelo. Es una lectura defendible de dónde están los márgenes, y bastante elocuente sobre cuánto se espera que Gemini gane por sí solo.
+***** Comments
+- Entre vender TPUs a empresas externas y ahora alojar modelos de la competencia, Gemini no tiene la confianza plena de quienes asignan capital en Alphabet, y no se lo puedo reprochar. Una empresa madura preferiría expandir el negocio enormemente rentable.
+- Las empresas pueden consumir sus compromisos de GCP para estas compras. Es un movimiento grande: ingresos que ya contabilizaron y reportaron a los accionistas podrían tener que regalarlos, potencialmente todos. A los contables eso les horroriza.
+- Hay que reconocer el aviso del final: Microsoft sigue siendo el socio principal de nube de OpenAI.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+OpenAI-Modelle kommen zu Google Cloud
+***** TLDR
+OpenAIs Frontier-Modelle und die agentischen Codex-Workflows kommen in den Model Garden von Google Cloud, erwerbbar über den Google Cloud Marketplace, mit allgemeiner Verfügbarkeit in "den kommenden Wochen". Entscheidend ist ein Detail: Unternehmen mit bestehenden Ausgabenzusagen bei Google Cloud dürfen diese Zusagen abrufen, um OpenAI-Modelle zu bezahlen. Die Modelle erscheinen außerdem in Google Antigravity und im Gemini Agent, was OpenAI damit begründet, Kunden für jede Aufgabe das beste Modell zu geben. Die Ankündigung enthält keine Benchmarks, keine Preise und keine Modellnamen und endet mit einem Satz: "Microsoft bleibt OpenAIs primärer Cloud-Partner."
+***** Take
+Das Abrufen der Zusagen ist das ganze Geschäft. Google hat diese Unternehmensausgaben als eigenen Umsatz verbucht und lässt Kunden sie nun einem direkten Wettbewerber übergeben. Genau das kostet es, diese Accounts von einer Wanderung zu Azure abzuhalten. Zu lesen ist das als Sieg der Vertriebsorganisation von Google Cloud in einem internen Streit mit DeepMind: TPUs an Rivalen verkaufen und jetzt die Modelle eines Rivalen weiterverkaufen heißt, Alphabet stellt das Infrastrukturgeschäft über die Modellexklusivität. Als Einschätzung, wo die Margen tatsächlich liegen, ist das vertretbar. Darüber, wie viel Gemini aus eigener Kraft gewinnen soll, ist es sehr deutlich.
+***** Comments
+- TPUs an externe Firmen verkaufen und jetzt auch noch Modelle der Konkurrenz hosten: Gemini hat offenbar nicht das volle Vertrauen derer, die bei Alphabet das Kapital verteilen, und ich kann es ihnen kaum vorwerfen. Ein ausgereiftes Unternehmen würde lieber das extrem profitable Geschäft ausbauen.
+- Unternehmen können ihre GCP-Zusagen für diese Käufe abrufen. Das ist ein großer Schritt: Umsatz, den sie bereits verbucht und den Aktionären gemeldet haben, müssen sie nun möglicherweise hergeben, im Extremfall vollständig. Buchhalter hassen das.
+- Herrlich, der Hinweis am Ende: Microsoft bleibt OpenAIs primärer Cloud-Partner.
