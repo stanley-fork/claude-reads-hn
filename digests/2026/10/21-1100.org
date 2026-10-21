@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-21 11:00 UTC
+#+DATE: 2026-10-21T11:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+PHP puts a clock on two 9.2 RCEs, UNEP writes off 1.5C, and Meta's AI agent leaked chat titles into DNS
+
+* Highlights
+- PHP: two unauthenticated RCEs, patch at 14:00 UTC, no technical details until then
+- UNEP: 1.5C with limited overshoot is gone; full pledges deliver a third of the needed 2030 cut
+- Meta Muse put conversation titles in share hostnames; 6,800 links found by passive DNS
+- Quanta on Hilbert space, and whether the math is the territory
+- Typography that survived five-by-seven pixels and molded plastic
+
+* Stories
+
+** Upcoming critical PHP security release (CVE-2026-109618 / -109619) :php:security:cve:disclosure:
+:PROPERTIES:
+:ID:       50172041
+:URL:      https://news-web.php.net/php.announce/509
+:HN_URL:   https://news.ycombinator.com/item?id=50172041
+:POINTS:   958
+:COMMENTS: 387
+:BY:       xd
+:END:
+
+*** TLDR
+PHP pre-announced two critical vulnerabilities, CVE-2026-109618 and -109619, with the fixed releases scheduled for 14:00 UTC on October 21 and no technical details until then. php.net's announcement server is returning 502, so this is from the CERT-EU advisory it links: both score CVSS 9.2, both allow unauthenticated remote code execution, and every PHP version from PHP 5 onward is affected. CERT-EU tells admins to inventory PHP apps now and isolate internet-facing ones if they cannot patch immediately. In the thread, admins are reverse-engineering the vector from the one hint circulating, session.upload_progress, and someone identifying as a release manager says turning INI settings off is not enough.
+
+*** Take
+A 9.2 with a published patch time and no details leaves operators in the worst spot: certain they are exposed, blind to where. The PHP team is betting that a head start helps attackers more than defenders, which holds only if the release lands on schedule and the INI workarounds people are already deploying do not give them false confidence in the meantime.
+
+*** Comments
+
+**** richardbarosky
+:PROPERTIES:
+:COMMENT_ID: 50178649
+:END:
+I turned off session.upload_progress and verified it in phpinfo. Then a PHP release manager said INI settings alone won't protect you, you need to patch PHP.
+
+**** TekMol
+:PROPERTIES:
+:COMMENT_ID: 50177902
+:END:
+Many here call for an earlier release of the patch. But having the patch probably makes creating an exploit easier, so the number of attacks would increase. There is no way to coordinate the whole world on an earlier time.
+
+**** chrisvenum
+:PROPERTIES:
+:COMMENT_ID: 50178229
+:END:
+Just made the call to take all my customers' apps offline until this is fixed. Can't find any reliable information on what to do prior to the patch.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+PHP 即将发布关键安全更新（CVE-2026-109618 / -109619）
+***** TLDR
+PHP 提前通告了两个严重漏洞 CVE-2026-109618 和 -109619，修复版本定于 10 月 21 日 14:00 UTC 发布，在那之前不公开任何技术细节。php.net 的公告服务器返回 502，因此以下内容来自其引用的 CERT-EU 公告：两个漏洞 CVSS 均为 9.2，均可实现未经身份验证的远程代码执行，自 PHP 5 以来的所有版本都受影响。CERT-EU 建议管理员立即清点 PHP 应用，若无法立刻打补丁就把面向互联网的应用隔离。帖子里管理员正根据流传的唯一线索 session.upload_progress 推测攻击面，一位自称发布经理的人表示仅关闭 INI 设置并不够。
+***** Take
+一个 9.2 级漏洞，补丁时间已公布却没有细节，把运维推到最糟的位置：确定自己有风险，却看不到风险在哪。PHP 团队押注提前披露对攻击者的帮助大于对防御者的帮助，这个判断只有在发布准时、而且大家此刻部署的 INI 规避措施没有带来虚假安全感时才成立。
+***** Comments
+- 我关掉了 session.upload_progress 并在 phpinfo 里确认生效。然后一位 PHP 发布经理说，仅靠 INI 设置保护不了你，必须打补丁。
+- 这里很多人呼吁提前发布补丁。但有了补丁，写出利用代码大概会更容易，攻击数量会上升。而且没办法让全世界协调到一个更早的时间。
+- 我已经决定在修复之前把所有客户的应用下线。补丁之前该做什么，找不到任何可靠信息。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+PHPの重大なセキュリティリリースが近日公開（CVE-2026-109618 / -109619）
+***** TLDR
+PHPは2件の重大な脆弱性CVE-2026-109618と-109619を事前告知し、修正版を10月21日14:00 UTCに公開予定で、それまで技術的詳細は出さないとしている。php.netの告知サーバーが502を返すため、以下はリンク先のCERT-EU勧告による。両方ともCVSS 9.2で、認証不要のリモートコード実行が可能、PHP 5以降の全バージョンが影響を受ける。CERT-EUは管理者に対し、PHPアプリの棚卸しを今すぐ行い、すぐにパッチを当てられないならインターネット公開分を隔離せよと勧めている。スレッドでは管理者たちが唯一流れている手がかりsession.upload_progressから攻撃経路を推測しており、リリースマネージャーと名乗る人物はINI設定を無効にするだけでは不十分だと述べている。
+***** Take
+パッチ公開時刻だけが決まって詳細がない9.2の脆弱性は、運用者を最悪の状態に置く。危険なのは確実だが、どこが危険か見えない。PHPチームは先行情報が攻撃者の助けになる度合いが防御側より大きいと賭けているが、それが成立するのはリリースが予定どおり出て、今みんなが入れているINI回避策が誤った安心感を生まない場合だけだ。
+***** Comments
+- session.upload_progressをオフにしてphpinfoで反映を確認した。その後PHPのリリースマネージャーが、INI設定だけでは守れない、パッチを当てる必要があると言った。
+- ここでは多くの人がパッチの早期公開を求めている。しかしパッチがあればエクスプロイト作成はおそらく容易になり、攻撃は増える。世界全体を前倒しの時刻に合わせる方法もない。
+- 修正されるまで顧客のアプリを全部オフラインにすると決めた。パッチ前に何をすべきか、信頼できる情報が見つからない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+PHP 중대 보안 릴리스 예고 (CVE-2026-109618 / -109619)
+***** TLDR
+PHP가 중대 취약점 두 건 CVE-2026-109618과 -109619를 사전 공지했고, 수정 버전은 10월 21일 14:00 UTC에 공개되며 그때까지 기술적 세부사항은 공개하지 않는다. php.net 공지 서버가 502를 반환해 아래 내용은 그 글이 링크한 CERT-EU 권고에서 가져왔다. 둘 다 CVSS 9.2이고 인증 없는 원격 코드 실행이 가능하며 PHP 5 이후 모든 버전이 영향을 받는다. CERT-EU는 관리자에게 지금 PHP 애플리케이션을 파악하고, 즉시 패치가 어렵다면 인터넷에 노출된 것부터 격리하라고 권고한다. 스레드에서는 관리자들이 유일하게 돌고 있는 단서인 session.upload_progress로 공격 경로를 추측하고 있고, 릴리스 매니저라고 밝힌 사람은 INI 설정을 끄는 것만으로는 부족하다고 말한다.
+***** Take
+패치 시각만 정해지고 내용은 없는 9.2 취약점은 운영자를 최악의 상태에 둔다. 노출된 것은 확실한데 어디가 노출됐는지는 보이지 않는다. PHP 팀은 사전 정보가 방어자보다 공격자에게 더 도움이 된다고 보고 베팅했지만, 그 베팅은 릴리스가 제때 나오고 지금 사람들이 적용하는 INI 우회책이 헛된 안심을 주지 않을 때만 성립한다.
+***** Comments
+- session.upload_progress를 끄고 phpinfo로 적용을 확인했다. 그런데 PHP 릴리스 매니저가 INI 설정만으로는 보호되지 않고 패치를 해야 한다고 했다.
+- 여기 많은 사람이 패치를 더 빨리 내놓으라고 한다. 하지만 패치가 있으면 익스플로잇 작성이 더 쉬워져 공격이 늘어날 것이다. 전 세계를 더 이른 시각에 맞추는 방법도 없다.
+- 수정될 때까지 고객 앱을 전부 오프라인으로 내리기로 했다. 패치 전에 무엇을 해야 하는지 믿을 만한 정보를 찾을 수 없다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Próxima versión crítica de seguridad de PHP (CVE-2026-109618 / -109619)
+***** TLDR
+PHP preanunció dos vulnerabilidades críticas, CVE-2026-109618 y -109619, con las versiones corregidas previstas para las 14:00 UTC del 21 de octubre y sin detalles técnicos hasta entonces. El servidor de anuncios de php.net devuelve un 502, así que esto viene del aviso de CERT-EU que enlaza: ambas tienen CVSS 9.2, ambas permiten ejecución remota de código sin autenticación y afectan a todas las versiones desde PHP 5. CERT-EU pide inventariar ya las aplicaciones PHP y aislar las expuestas a internet si no se puede parchear de inmediato. En el hilo, los administradores deducen el vector a partir de la única pista que circula, session.upload_progress, y alguien que se identifica como release manager dice que desactivar ajustes del INI no basta.
+***** Take
+Un 9.2 con hora de parche publicada y sin detalles deja a los operadores en la peor posición: seguros de estar expuestos y ciegos a dónde. El equipo de PHP apuesta a que la ventaja informativa ayuda más al atacante que al defensor, y eso solo se sostiene si la versión sale puntual y si los apaños del INI que ya se están aplicando no generan una falsa confianza.
+***** Comments
+- Desactivé session.upload_progress y lo verifiqué en phpinfo. Luego un release manager de PHP dijo que los ajustes del INI por sí solos no protegen, hay que parchear PHP.
+- Muchos aquí piden que el parche salga antes. Pero tener el parche probablemente facilita crear el exploit, así que los ataques aumentarían. Y no hay forma de coordinar al mundo entero en un horario más temprano.
+- Acabo de decidir dejar fuera de línea todas las aplicaciones de mis clientes hasta que esto se arregle. No encuentro información fiable sobre qué hacer antes del parche.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Bevorstehendes kritisches PHP-Sicherheitsrelease (CVE-2026-109618 / -109619)
+***** TLDR
+PHP hat zwei kritische Schwachstellen vorab angekündigt, CVE-2026-109618 und -109619, die korrigierten Versionen sind für den 21. Oktober um 14:00 UTC geplant, technische Details gibt es bis dahin nicht. Der Ankündigungsserver von php.net liefert einen 502, daher stammt das hier aus dem verlinkten CERT-EU-Advisory: beide mit CVSS 9.2, beide erlauben unauthentifizierte Remote-Code-Ausführung, betroffen sind alle Versionen ab PHP 5. CERT-EU rät, PHP-Anwendungen jetzt zu inventarisieren und internetseitige Systeme zu isolieren, wenn nicht sofort gepatcht werden kann. Im Thread rekonstruieren Admins den Angriffsweg aus dem einzigen kursierenden Hinweis, session.upload_progress, und jemand, der sich als Release-Manager ausgibt, sagt, das Abschalten von INI-Einstellungen genügt nicht.
+***** Take
+Eine 9.2 mit veröffentlichtem Patch-Termin und ohne Details bringt Betreiber in die schlechteste Lage: sicher betroffen, blind für das Wo. Das PHP-Team wettet darauf, dass ein Informationsvorsprung Angreifern mehr hilft als Verteidigern, und das trägt nur, wenn das Release pünktlich kommt und die gerade verteilten INI-Workarounds kein falsches Sicherheitsgefühl erzeugen.
+***** Comments
+- Ich habe session.upload_progress abgeschaltet und es in phpinfo geprüft. Dann sagte ein PHP-Release-Manager, INI-Einstellungen allein schützen nicht, man muss PHP patchen.
+- Viele hier fordern ein früheres Release des Patches. Aber mit dem Patch lässt sich ein Exploit wohl leichter schreiben, die Zahl der Angriffe würde steigen. Und man kann die ganze Welt nicht auf einen früheren Termin koordinieren.
+- Ich habe entschieden, alle Anwendungen meiner Kunden offline zu nehmen, bis das behoben ist. Zu dem, was man vor dem Patch tun soll, finde ich keine verlässlichen Informationen.
+** The 1.5°C goal of the Paris Agreement is no longer viable :climate:policy:energy:un:
+:PROPERTIES:
+:ID:       50177911
+:URL:      https://unric.org/en/unep-emissions-gap-report-2026-1-5-degree-overshoot/
+:HN_URL:   https://news.ycombinator.com/item?id=50177911
+:POINTS:   238
+:COMMENTS: 244
+:BY:       velo_aprx
+:END:
+
+*** TLDR
+UNEP's Emissions Gap Report 2026 states that the chance to close the 1.5C gap with no or limited overshoot has been lost, so the stated aim shifts to holding warming below 2C and then bringing it back toward 1.5C by the end of the century. That path needs emissions down 18% by 2030, 45% by 2035 and 69% by 2040 against 2025 levels. Full implementation of current government pledges gets 5-8% by 2030 and 11-15% by 2035. The report's one positive line: since 2015 renewable capacity has grown three times faster than projected, and solar seven times faster.
+
+*** Take
+The report's own arithmetic is a verdict on the pledge system: even perfect compliance delivers about a third of the 2030 cut. The part of the forecast that beat expectations was the part nobody had to negotiate, which is the detail worth carrying into whatever replaces the current target.
+
+*** Comments
+
+**** mbgerring
+:PROPERTIES:
+:COMMENT_ID: 50178562
+:END:
+I've worked in climate tech for 12 years and watched the environment for political action and funding swing maybe half a dozen times. The physics, however, don't change, and neither does the task in front of us.
+
+**** AnaSpelunker
+:PROPERTIES:
+:COMMENT_ID: 50178629
+:END:
+The devil comes to Davos and says: you can enjoy cheap energy, but some poor people in the global south will suffer and die. After a long silence the US president says: I feel like there is a catch there, but I just can't figure out what it is.
+
+**** asphodele
+:PROPERTIES:
+:COMMENT_ID: 50178352
+:END:
+There are 100+ years of extracted carbon already baked into the system, with roughly a 15-year lag on observed temperature increases. The temperatures we see now reflect emissions from years ago.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+《巴黎协定》的 1.5°C 目标已不再可行
+***** TLDR
+联合国环境署《2026 年排放差距报告》指出，以不超标或有限超标方式弥合 1.5C 差距的机会已经失去，因此目标转向把升温控制在 2C 以下，再在本世纪末把温度拉回 1.5C 附近。这条路径要求以 2025 年为基准，到 2030 年减排 18%、2035 年减排 45%、2040 年减排 69%。而各国现有承诺即便完全落实，2030 年只能减 5-8%，2035 年减 11-15%。报告里唯一的好消息：2015 年以来可再生能源装机增速是预测的三倍，太阳能是七倍。
+***** Take
+报告自己的算术就是对承诺机制的判决：即便完全履约，也只能完成 2030 年所需减排量的三分之一。预测中唯一超出预期的部分，恰恰是不需要谈判的那部分，这个细节值得带进取代当前目标的任何新框架。
+***** Comments
+- 我在气候科技领域干了 12 年，看着政治意愿和资金环境来回摆了大概六次。但物理不会变，摆在我们面前的任务也不会变。
+- 魔鬼来到达沃斯说：你们可以享受廉价能源，但南方一些穷人会受苦、会死。长久的沉默之后，美国总统说：我觉得这里面有陷阱，可就是想不出来是什么。
+- 一百多年开采出来的碳已经进入系统，观测到的升温还有大约 15 年的滞后。我们现在看到的温度，反映的是多年前的排放。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+パリ協定の1.5°C目標はもはや達成不可能
+***** TLDR
+UNEPの排出ギャップ報告書2026は、オーバーシュートなし、または限定的なオーバーシュートで1.5Cのギャップを埋める機会は失われたと述べ、目標は2C未満に抑えたうえで世紀末までに1.5C付近へ戻すことへ移った。その経路には2025年比で2030年に18%、2035年に45%、2040年に69%の排出削減が必要になる。各国の現行の約束を完全に実施しても、2030年は5-8%、2035年は11-15%にとどまる。報告書で唯一明るい点は、2015年以降、再生可能エネルギーの容量が予測の3倍、太陽光は7倍の速さで伸びたことだ。
+***** Take
+報告書自身の計算が、約束に頼る仕組みへの判定になっている。完全履行でも2030年に必要な削減の3分の1ほどしか届かない。予測を上回ったのは誰も交渉しなくてよかった部分であり、現行目標の後継を考えるときに持っていくべき事実はそこだ。
+***** Comments
+- 気候テックで12年働き、政治的な機運と資金の環境が6回ほど揺れるのを見てきた。しかし物理は変わらないし、目の前の課題も変わらない。
+- 悪魔がダボスに来て言う。安いエネルギーを享受していい、ただし南半球の貧しい人々が苦しんで死ぬ、と。長い沈黙のあと米国大統領が言う。何か裏がある気がするが、それが何かどうしても分からない。
+- 100年以上かけて掘り出した炭素がすでにシステムに組み込まれており、観測される気温上昇には約15年の遅れがある。いま見ている気温は何年も前の排出の結果だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+파리협정의 1.5°C 목표는 더 이상 유효하지 않다
+***** TLDR
+UNEP 배출 격차 보고서 2026은 초과 없이 또는 제한적 초과로 1.5C 격차를 메울 기회는 사라졌다고 밝히고, 목표를 2C 아래로 억제한 뒤 세기말까지 1.5C 수준으로 되돌리는 쪽으로 옮긴다. 그 경로에는 2025년 대비 2030년 18%, 2035년 45%, 2040년 69% 감축이 필요하다. 각국의 현재 공약을 전부 이행해도 2030년 5-8%, 2035년 11-15%에 그친다. 보고서의 유일한 희망적 대목은 2015년 이후 재생에너지 설비가 예측보다 3배, 태양광은 7배 빠르게 늘었다는 점이다.
+***** Take
+보고서 자신의 산수가 공약 체제에 대한 판결이다. 완전 이행조차 2030년에 필요한 감축의 3분의 1 정도만 달성한다. 예측을 넘어선 부분은 아무도 협상할 필요가 없었던 부분이었고, 현재 목표를 대체할 무엇에든 가져가야 할 사실이 바로 그것이다.
+***** Comments
+- 기후 기술 분야에서 12년 일하며 정치적 동력과 자금 환경이 여섯 번쯤 요동치는 것을 봤다. 하지만 물리는 바뀌지 않고, 우리 앞에 놓인 과제도 바뀌지 않는다.
+- 악마가 다보스에 와서 말한다. 값싼 에너지를 누려도 좋다, 다만 남반구의 가난한 사람들이 고통받고 죽는다. 긴 침묵 뒤에 미국 대통령이 말한다. 뭔가 함정이 있는 것 같은데 그게 뭔지 모르겠다.
+- 100년 넘게 캐낸 탄소가 이미 시스템에 들어가 있고, 관측되는 기온 상승에는 약 15년의 지연이 있다. 지금 보는 기온은 수년 전 배출의 결과다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El objetivo de 1,5 °C del Acuerdo de París ya no es viable
+***** TLDR
+El Informe sobre la Brecha de Emisiones 2026 del PNUMA afirma que se ha perdido la oportunidad de cerrar la brecha de 1,5 C sin rebasamiento o con uno limitado, por lo que el objetivo pasa a mantener el calentamiento por debajo de 2 C y luego volver hacia 1,5 C a final de siglo. Esa ruta exige recortar emisiones un 18% para 2030, un 45% para 2035 y un 69% para 2040 respecto a 2025. Con los compromisos actuales plenamente aplicados se llega a un 5-8% en 2030 y un 11-15% en 2035. El único dato positivo del informe: desde 2015 la capacidad renovable creció tres veces más rápido de lo previsto, y la solar siete veces más rápido.
+***** Take
+La aritmética del propio informe es un veredicto sobre el sistema de compromisos: incluso el cumplimiento perfecto entrega alrededor de un tercio del recorte necesario para 2030. La parte del pronóstico que superó lo previsto fue la que nadie tuvo que negociar, y ese es el detalle que conviene llevarse a lo que sustituya al objetivo actual.
+***** Comments
+- Llevo 12 años trabajando en tecnología climática y he visto el entorno político y de financiación cambiar media docena de veces. La física, en cambio, no cambia, ni tampoco la tarea que tenemos delante.
+- El diablo llega a Davos y dice: pueden disfrutar de energía barata, pero algunos pobres del sur global sufrirán y morirán. Tras un largo silencio, el presidente de EE. UU. dice: siento que hay trampa, pero no logro ver cuál.
+- Hay más de 100 años de carbono extraído ya incorporado al sistema, con un desfase de unos 15 años en las temperaturas observadas. Las temperaturas de hoy reflejan emisiones de hace años.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das 1,5-°C-Ziel des Pariser Abkommens ist nicht mehr erreichbar
+***** TLDR
+Der Emissions Gap Report 2026 des UNEP hält fest, dass die Gelegenheit, die 1,5-C-Lücke ohne oder mit begrenzter Überschreitung zu schließen, verloren ist. Das Ziel verschiebt sich darauf, die Erwärmung unter 2 C zu halten und sie dann bis Ende des Jahrhunderts wieder in Richtung 1,5 C zu senken. Dieser Pfad erfordert gegenüber 2025 Minderungen von 18% bis 2030, 45% bis 2035 und 69% bis 2040. Bei vollständiger Umsetzung der aktuellen Zusagen sind es 5-8% bis 2030 und 11-15% bis 2035. Der eine positive Punkt des Berichts: Seit 2015 wuchs die Kapazität der Erneuerbaren dreimal schneller als prognostiziert, Solar siebenmal schneller.
+***** Take
+Die Rechnung des Berichts ist ein Urteil über das System freiwilliger Zusagen: Selbst perfekte Erfüllung bringt etwa ein Drittel der für 2030 nötigen Minderung. Übertroffen wurde die Prognose genau dort, wo niemand verhandeln musste, und das ist der Punkt, den man in jeden Nachfolger des aktuellen Ziels mitnehmen sollte.
+***** Comments
+- Ich arbeite seit 12 Jahren in Climate Tech und habe das politische und finanzielle Umfeld etwa ein halbes Dutzend Mal schwanken sehen. Die Physik ändert sich jedoch nicht, und die Aufgabe vor uns auch nicht.
+- Der Teufel kommt nach Davos und sagt: Ihr könnt billige Energie genießen, aber einige arme Menschen im globalen Süden werden leiden und sterben. Nach langem Schweigen sagt der US-Präsident: Ich habe das Gefühl, da ist ein Haken, aber ich komme nicht drauf.
+- Über 100 Jahre gefördertes Kohlenstoffmaterial steckt schon im System, mit rund 15 Jahren Verzögerung bei den beobachteten Temperaturen. Was wir heute messen, spiegelt Emissionen von vor Jahren.
+** Muse exposes users' personal and business secrets when they share conversations :meta:ai:privacy:security:
+:PROPERTIES:
+:ID:       50174687
+:URL:      https://arstechnica.com/security/2026/10/meta-muse-exposes-users-personal-and-business-secrets-when-they-share-conversations/
+:HN_URL:   https://news.ycombinator.com/item?id=50174687
+:POINTS:   195
+:COMMENTS: 90
+:BY:       gumby
+:END:
+
+*** TLDR
+Share links from Meta's Muse agent put the conversation title into the hostname, as in loan-application-draft-a4c9e2.cf.metaaiusercontent.com, and every one of them sits under cf.metaaiusercontent.com. That means shared chats land in passive DNS records, so they can be enumerated without guessing URLs. Researchers at Claroc found 6,800 such links and read interview notes on executive candidates, a marketing firm's internal revenue review addressed to its CEO, business loan applications with amounts, bank fraud alerts with partial account numbers, real estate investment reports with addresses, and employee vacation schedules. They reported it through Meta's bug bounty on October 8; Meta suspended sharing while it reviews and said it would consider changes to how the links can be discovered.
+
+*** Take
+Encoding the subject line in the hostname leaks what a chat is about to DNS logs before anyone clicks, and DNS history does not get recalled. Reconsidering discoverability is the wrong repair: the title should never have been in the name, and the 6,800 already-published hostnames stay published no matter what Meta does to the feature next.
+
+*** Comments
+
+**** _pdp_
+:PROPERTIES:
+:COMMENT_ID: 50178848
+:END:
+Someone asked me this morning if I consider Muse a privacy risk. I do. But this is all temporary, there will be viable options for self-hosting too. I'm already running inference for the whole family through a single device.
+
+**** lmf4lol
+:PROPERTIES:
+:COMMENT_ID: 50178453
+:END:
+We are building a personal AI assistant platform in Europe and it is freaking hard. We have 20 paying users and what those people do, you really can't make it up. Especially if you let the harness evolve: no sandbox is the same anymore.
+
+**** ryandrake
+:PROPERTIES:
+:COMMENT_ID: 50176206
+:END:
+You're telling me that Meta, of all companies, would be careless with user data and privacy? Totally unbelievable!
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Muse 在用户分享对话时暴露个人与商业机密
+***** TLDR
+Meta 的 Muse 智能体生成的分享链接把对话标题放进了主机名，例如 loan-application-draft-a4c9e2.cf.metaaiusercontent.com，而且全部挂在 cf.metaaiusercontent.com 之下。这意味着分享过的对话会进入被动 DNS 记录，不用猜 URL 就能枚举。安全公司 Claroc 的研究人员找到 6800 条这样的链接，读到了高管候选人的面试记录、一家营销公司呈给 CEO 的内部营收评审、带金额的企业贷款申请、含部分账号的银行欺诈警报、带地址的房地产投资报告，以及员工休假安排。他们在 10 月 8 日通过 Meta 的漏洞奖励计划上报；Meta 在复核期间暂停了分享功能，并表示会考虑调整这些链接的可发现方式。
+***** Take
+把主题写进主机名，等于在任何人点击之前就把对话内容泄露给了 DNS 日志，而 DNS 历史是收不回来的。所谓重新考虑可发现性是修错了地方：标题本来就不该出现在域名里，而那 6800 个已经公开的主机名，无论 Meta 接下来怎么改这个功能，都已经公开了。
+***** Comments
+- 今早有人问我是否认为 Muse 有隐私风险。我认为有。但这都是暂时的，自托管也会有可行的选项。我已经用一台设备给全家跑推理了。
+- 我们在欧洲做个人 AI 助手平台，真的非常难。我们有 20 个付费用户，他们的用法你根本编不出来。尤其是允许运行环境自行演化之后，没有两个沙箱是一样的了。
+- 你是说 Meta，偏偏是 Meta，会对用户数据和隐私粗心大意？完全难以置信！
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Museが会話を共有したユーザーの個人情報やビジネス上の秘密を露出
+***** TLDR
+MetaのエージェントMuseの共有リンクは、loan-application-draft-a4c9e2.cf.metaaiusercontent.com のように会話のタイトルをホスト名に入れており、すべてcf.metaaiusercontent.com配下にある。つまり共有された会話はパッシブDNSの記録に残り、URLを推測せずに列挙できる。セキュリティ企業Clarocの研究者はそうしたリンクを6,800件見つけ、役員候補の面接メモ、マーケティング会社がCEO向けにまとめた社内の売上レビュー、金額付きの事業融資申請、口座番号の一部を含む銀行の不正警告、住所付きの不動産投資レポート、従業員の休暇予定などを閲覧できた。10月8日にMetaのバグバウンティ経由で報告され、Metaは調査のあいだ共有機能を停止し、リンクの発見方法について変更を検討すると述べた。
+***** Take
+件名をホスト名に入れることは、誰かがクリックする前に会話の主題をDNSログへ漏らすことであり、DNSの履歴は回収できない。発見しにくくする方向の修正は的を外している。タイトルは最初から名前に入れるべきではなく、すでに公開された6,800件のホスト名は、Metaが機能をどう変えても公開済みのままだ。
+***** Comments
+- 今朝、Museはプライバシーリスクだと思うかと聞かれた。思う。ただこれは一時的な話で、セルフホストの選択肢も出てくる。私はすでに一台の機器で家族全員の推論を回している。
+- ヨーロッパで個人向けAIアシスタントのプラットフォームを作っているが、本当に大変だ。有料ユーザーは20人で、彼らのやることは作り話では追いつかない。特にハーネスの進化を許すと、同じサンドボックスはもう一つもない。
+- Metaが、よりによってMetaが、ユーザーのデータとプライバシーに不注意だと言うのか。まったく信じられない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Muse, 대화를 공유하면 사용자의 개인정보와 업무 기밀이 노출된다
+***** TLDR
+Meta의 에이전트 Muse가 만드는 공유 링크는 loan-application-draft-a4c9e2.cf.metaaiusercontent.com처럼 대화 제목을 호스트명에 넣고, 모두 cf.metaaiusercontent.com 아래에 있다. 그래서 공유된 대화가 패시브 DNS 기록에 남고, URL을 추측하지 않고도 열거할 수 있다. 보안 기업 Claroc 연구진은 그런 링크 6,800개를 찾아 임원 후보 면접 메모, 마케팅 회사가 CEO에게 올린 내부 매출 검토, 금액이 적힌 사업 대출 신청, 계좌번호 일부가 담긴 은행 사기 경고, 주소가 적힌 부동산 투자 보고서, 직원 휴가 일정까지 읽을 수 있었다. 10월 8일 Meta 버그 바운티로 신고했고, Meta는 검토하는 동안 공유 기능을 중단하며 링크가 발견되는 방식을 변경할지 검토하겠다고 밝혔다.
+***** Take
+제목을 호스트명에 넣는 것은 누가 클릭하기도 전에 대화 주제를 DNS 로그에 흘리는 일이고, DNS 기록은 회수되지 않는다. 발견 가능성을 다시 검토한다는 것은 잘못된 수리다. 제목은 애초에 이름에 들어가면 안 됐고, 이미 공개된 6,800개 호스트명은 Meta가 기능을 어떻게 바꾸든 공개된 상태로 남는다.
+***** Comments
+- 오늘 아침 누가 Muse를 프라이버시 위험으로 보느냐고 물었다. 그렇게 본다. 다만 이건 일시적이고 자체 호스팅 선택지도 생길 것이다. 나는 이미 기기 한 대로 온 가족의 추론을 돌리고 있다.
+- 우리는 유럽에서 개인용 AI 어시스턴트 플랫폼을 만들고 있는데 정말 어렵다. 유료 사용자는 20명이고, 이 사람들이 하는 일은 지어낼 수도 없다. 특히 하네스가 진화하도록 두면 같은 샌드박스가 하나도 남지 않는다.
+- 다른 곳도 아니고 Meta가 사용자 데이터와 프라이버시에 부주의하다고? 전혀 믿을 수 없는 일이다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Muse expone secretos personales y de empresa de sus usuarios al compartir conversaciones
+***** TLDR
+Los enlaces para compartir del agente Muse de Meta meten el título de la conversación en el nombre de host, como loan-application-draft-a4c9e2.cf.metaaiusercontent.com, y todos cuelgan de cf.metaaiusercontent.com. Eso hace que las conversaciones compartidas queden en registros de DNS pasivo y puedan enumerarse sin adivinar URLs. Investigadores de la firma Claroc encontraron 6.800 de esos enlaces y leyeron notas de entrevistas a candidatos a puestos directivos, una revisión interna de ingresos de una empresa de marketing dirigida a su CEO, solicitudes de crédito empresarial con importes, alertas de fraude bancario con números de cuenta parciales, informes de inversión inmobiliaria con direcciones y calendarios de vacaciones de empleados. Lo reportaron por el programa de recompensas de Meta el 8 de octubre; Meta suspendió la función mientras revisa y dijo que consideraría cambios en cómo se pueden descubrir los enlaces.
+***** Take
+Codificar el asunto en el nombre de host filtra de qué va una conversación a los registros DNS antes de que nadie haga clic, y el historial de DNS no se retira. Revisar la descubribilidad es arreglar lo que no toca: el título nunca debió estar en el nombre, y los 6.800 hosts ya publicados seguirán publicados haga lo que haga Meta con la función.
+***** Comments
+- Esta mañana me preguntaron si considero Muse un riesgo de privacidad. Lo considero. Pero todo esto es temporal, también habrá opciones viables de autoalojamiento. Yo ya hago inferencia para toda la familia desde un solo equipo.
+- Estamos construyendo una plataforma de asistente personal de IA en Europa y es durísimo. Tenemos 20 usuarios que pagan y lo que hacen no se puede inventar. Más aún si dejas que el entorno evolucione: ya no hay dos sandboxes iguales.
+- ¿Me estás diciendo que Meta, precisamente Meta, sería descuidada con los datos y la privacidad de los usuarios? Totalmente increíble.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Muse gibt persönliche und geschäftliche Geheimnisse preis, wenn Nutzer Konversationen teilen
+***** TLDR
+Die Teilen-Links von Metas Agent Muse schreiben den Titel der Konversation in den Hostnamen, etwa loan-application-draft-a4c9e2.cf.metaaiusercontent.com, und alle liegen unter cf.metaaiusercontent.com. Damit landen geteilte Chats in Passive-DNS-Daten und lassen sich aufzählen, ohne URLs zu erraten. Forscher der Firma Claroc fanden 6.800 solcher Links und lasen Interviewnotizen zu Führungskandidaten, eine interne Umsatzauswertung einer Marketingfirma für ihren CEO, Kreditanträge mit Beträgen, Betrugswarnungen von Banken mit Teilkontonummern, Immobilien-Investmentberichte mit Adressen und Urlaubsplanungen von Mitarbeitern. Gemeldet wurde es am 8. Oktober über Metas Bug-Bounty-Programm; Meta hat die Funktion während der Prüfung ausgesetzt und will Änderungen daran prüfen, wie die Links gefunden werden können.
+***** Take
+Den Betreff in den Hostnamen zu schreiben, verrät das Thema eines Chats an DNS-Logs, bevor überhaupt jemand klickt, und DNS-Historie lässt sich nicht zurückrufen. Die Auffindbarkeit zu überdenken, kuriert die falsche Stelle: Der Titel hatte im Namen nie etwas zu suchen, und die 6.800 bereits veröffentlichten Hostnamen bleiben veröffentlicht, was Meta mit der Funktion auch tut.
+***** Comments
+- Heute Morgen fragte mich jemand, ob ich Muse für ein Datenschutzrisiko halte. Halte ich. Aber das ist vorübergehend, es wird auch brauchbare Self-Hosting-Optionen geben. Ich betreibe die Inferenz für die ganze Familie bereits über ein einzelnes Gerät.
+- Wir bauen in Europa eine Plattform für persönliche KI-Assistenten, und es ist wahnsinnig schwer. Wir haben 20 zahlende Nutzer, und was diese Leute tun, kann man sich nicht ausdenken. Besonders wenn man die Umgebung sich entwickeln lässt: Keine Sandbox gleicht noch einer anderen.
+- Du willst mir sagen, dass Meta, von allen Unternehmen, nachlässig mit Nutzerdaten und Privatsphäre umgeht? Völlig unglaublich.
+** In Hilbert space, all things are quantumly possible :physics:quantum:math:
+:PROPERTIES:
+:ID:       50175185
+:URL:      https://www.quantamagazine.org/in-hilbert-space-all-things-are-quantumly-possible-20260826/
+:HN_URL:   https://news.ycombinator.com/item?id=50175185
+:POINTS:   101
+:COMMENTS: 54
+:BY:       unprovable
+:END:
+
+*** TLDR
+Quanta walks through Hilbert space, the abstract space of possibilities where a quantum state is a vector that rotates as the system evolves and snaps onto an axis when measured. The history: von Neumann used it in 1927 to show that Heisenberg's matrix mechanics and Schrodinger's wave mechanics were the same theory seen from different angles, then set out the rules quantum states obey there. The live disagreement is about status. Sean Carroll treats Hilbert space as the actual arena of reality if quantum mechanics is fundamental; Jonathan Sorce treats it as a tool that fits many systems but probably not quantum gravity, where von Neumann algebras may describe spacetime better.
+
+*** Take
+The headline oversells, and the thread caught it within minutes: Hilbert space holds the states a system's own laws allow, not everything imaginable. The substance is the Carroll versus Sorce split over whether the formalism is the territory or just a very good map, and that is the part worth reading past the title for.
+
+*** Comments
+
+**** djsjajah
+:PROPERTIES:
+:COMMENT_ID: 50177318
+:END:
+Not all things are possible, only potentially possible ones. If you take all the numbers between zero and one, you will find an endless supply of distinct numbers but none of them are 3.
+
+**** dbvdh
+:PROPERTIES:
+:COMMENT_ID: 50177846
+:END:
+It's not 'all' things that are possible, just things that are allowed within the laws of physics. Subtle difference, but energy conservation for example has to be adhered to.
+
+**** librasteve
+:PROPERTIES:
+:COMMENT_ID: 50176963
+:END:
+Sean Carroll, name checked in the article, has an excellent podcast, Mindscape. I particularly like the one with David Wallace.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+在希尔伯特空间里，一切量子上皆有可能
+***** TLDR
+《Quanta》讲解了希尔伯特空间：量子态在其中是一个向量，随系统演化而旋转，被测量时骤然落到某条轴上，这是一个抽象的可能性空间。历史部分是：冯·诺依曼在 1927 年用它证明海森堡的矩阵力学和薛定谔的波动力学其实是同一理论的不同视角，并给出了量子态在其中遵循的规则。眼下真正的分歧在于它的地位。肖恩·卡罗尔认为，如果量子力学是基础性的，希尔伯特空间就是现实的真实舞台；乔纳森·索斯则把它当成工具，适用于许多系统但大概不适用于量子引力，在那里冯·诺依曼代数也许能更好地描述时空。
+***** Take
+标题夸大了，而评论区几分钟就指了出来：希尔伯特空间装的是系统自身定律允许的状态，而不是一切可以想象的东西。真正的内容是卡罗尔与索斯之争——形式体系到底是疆域本身，还是一张很好用的地图，这才是值得越过标题去读的部分。
+***** Comments
+- 并非一切皆有可能，只有潜在可能的才可能。取 0 到 1 之间的所有数，你会得到无穷多个互不相同的数，但其中没有一个是 3。
+- 不是一切皆有可能，而是物理定律允许的才可能。差别很细微，但比如能量守恒还是必须遵守的。
+- 文章里点到的肖恩·卡罗尔有一档很好的播客 Mindscape。我特别喜欢他和大卫·华莱士那一期。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ヒルベルト空間では、量子的にあらゆることが可能だ
+***** TLDR
+Quantaはヒルベルト空間を解説する。量子状態はそこでベクトルとして表され、系の発展につれて回転し、測定されると軸の上へ飛びつく、可能性の抽象的な空間だ。歴史としては、フォン・ノイマンが1927年にこれを用いて、ハイゼンベルクの行列力学とシュレーディンガーの波動力学が同じ理論の別の見方であることを示し、量子状態が従う規則をまとめた。いま争点なのはその地位である。ショーン・キャロルは、量子力学が基礎的ならヒルベルト空間は実在の舞台そのものだと考える。一方ジョナサン・ソースは、多くの系には有効だが量子重力にはおそらく合わない道具とみなし、そこではフォン・ノイマン代数のほうが時空をよく記述するかもしれないという。
+***** Take
+見出しは言いすぎで、スレッドは数分でそれを突いた。ヒルベルト空間に入るのは系の法則が許す状態であり、想像できるすべてではない。中身はキャロル対ソースの対立、つまり形式体系が領土そのものなのか、とても優れた地図にすぎないのかという点であり、タイトルの先まで読む価値はそこにある。
+***** Comments
+- あらゆることが可能なのではなく、可能になりうることだけが可能だ。0と1のあいだの数を全部取れば、異なる数が無限に見つかるが、そのどれも3ではない。
+- 可能なのは「あらゆる」ことではなく、物理法則が許すことだけだ。細かい違いだが、たとえばエネルギー保存は守らなければならない。
+- 記事で名前が出ているショーン・キャロルには、Mindscapeという優れたポッドキャストがある。デヴィッド・ウォレス回が特に好きだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+힐베르트 공간에서는 양자적으로 모든 것이 가능하다
+***** TLDR
+Quanta가 힐베르트 공간을 짚는다. 양자 상태는 이 추상적인 가능성의 공간에서 벡터로 표현되고, 계가 진화하면 회전하며, 측정되면 한 축으로 뛰어든다. 역사 부분은 이렇다. 폰 노이만은 1927년 이를 이용해 하이젠베르크의 행렬역학과 슈뢰딩거의 파동역학이 같은 이론을 다른 각도에서 본 것임을 보이고, 양자 상태가 거기서 따르는 규칙을 정리했다. 지금의 쟁점은 그 지위다. 숀 캐럴은 양자역학이 근본적이라면 힐베르트 공간이 실재의 무대 자체라고 본다. 조너선 소스는 많은 계에는 들어맞지만 양자 중력에는 아마 맞지 않는 도구로 보며, 거기서는 폰 노이만 대수가 시공간을 더 잘 기술할 수 있다고 말한다.
+***** Take
+제목은 과장이고, 스레드는 몇 분 만에 그 점을 짚었다. 힐베르트 공간에 담기는 것은 계 자신의 법칙이 허용하는 상태이고, 상상할 수 있는 모든 것이 아니다. 알맹이는 형식 체계가 영토 자체인지 아주 좋은 지도일 뿐인지를 두고 갈리는 캐럴과 소스의 대립이며, 제목을 지나쳐 읽을 가치는 거기에 있다.
+***** Comments
+- 모든 것이 가능한 게 아니라 가능성이 있는 것만 가능하다. 0과 1 사이의 모든 수를 가져오면 서로 다른 수가 끝없이 나오지만 그중 3은 없다.
+- 가능한 것은 '모든' 것이 아니라 물리 법칙이 허용하는 것뿐이다. 미묘한 차이지만 예컨대 에너지 보존은 지켜야 한다.
+- 기사에 이름이 나온 숀 캐럴은 Mindscape라는 훌륭한 팟캐스트를 한다. 데이비드 월리스가 나온 편을 특히 좋아한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+En el espacio de Hilbert, todo es cuánticamente posible
+***** TLDR
+Quanta repasa el espacio de Hilbert, el espacio abstracto de posibilidades donde un estado cuántico es un vector que rota mientras el sistema evoluciona y salta a un eje al medirlo. La historia: von Neumann lo usó en 1927 para mostrar que la mecánica matricial de Heisenberg y la mecánica ondulatoria de Schrödinger eran la misma teoría vista desde ángulos distintos, y fijó las reglas que siguen allí los estados cuánticos. La discusión viva es sobre su estatus. Sean Carroll lo considera el escenario real de la realidad si la mecánica cuántica es fundamental; Jonathan Sorce lo ve como una herramienta que encaja en muchos sistemas pero probablemente no en la gravedad cuántica, donde las álgebras de von Neumann podrían describir mejor el espaciotiempo.
+***** Take
+El titular promete de más, y el hilo lo detectó en minutos: el espacio de Hilbert contiene los estados que permiten las leyes del propio sistema, no todo lo imaginable. Lo sustancioso es el desacuerdo entre Carroll y Sorce sobre si el formalismo es el territorio o solo un mapa muy bueno, y por eso vale la pena pasar del título.
+***** Comments
+- No todo es posible, solo lo potencialmente posible. Si tomas todos los números entre cero y uno encontrarás una provisión infinita de números distintos, pero ninguno de ellos es 3.
+- No es que 'todo' sea posible, solo lo que permiten las leyes de la física. Es una diferencia sutil, pero la conservación de la energía, por ejemplo, hay que respetarla.
+- Sean Carroll, mencionado en el artículo, tiene un podcast excelente, Mindscape. Me gusta especialmente el episodio con David Wallace.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Im Hilbertraum ist quantenmechanisch alles möglich
+***** TLDR
+Quanta führt durch den Hilbertraum, den abstrakten Möglichkeitsraum, in dem ein Quantenzustand ein Vektor ist, der mit der Entwicklung des Systems rotiert und bei einer Messung auf eine Achse springt. Zur Geschichte: von Neumann zeigte damit 1927, dass Heisenbergs Matrizenmechanik und Schrödingers Wellenmechanik dieselbe Theorie aus verschiedenen Blickwinkeln sind, und formulierte die Regeln, denen Quantenzustände dort folgen. Umstritten ist der Status. Sean Carroll hält den Hilbertraum für die tatsächliche Bühne der Realität, wenn die Quantenmechanik fundamental ist; Jonathan Sorce sieht ihn als Werkzeug, das für viele Systeme passt, für Quantengravitation aber wohl nicht, wo von-Neumann-Algebren die Raumzeit besser beschreiben könnten.
+***** Take
+Die Schlagzeile verspricht zu viel, und der Thread hat das in Minuten bemerkt: Der Hilbertraum enthält die Zustände, die die Gesetze des Systems zulassen, nicht alles Vorstellbare. Der Gehalt liegt im Streit zwischen Carroll und Sorce, ob der Formalismus das Gebiet selbst ist oder nur eine sehr gute Karte, und dafür lohnt es, über den Titel hinauszulesen.
+***** Comments
+- Nicht alles ist möglich, nur das potenziell Mögliche. Nimm alle Zahlen zwischen null und eins, und du findest unendlich viele verschiedene Zahlen, aber keine davon ist 3.
+- Es ist nicht 'alles' möglich, sondern nur das, was die Gesetze der Physik erlauben. Ein feiner Unterschied, aber die Energieerhaltung zum Beispiel muss eingehalten werden.
+- Sean Carroll, im Artikel erwähnt, hat einen ausgezeichneten Podcast, Mindscape. Die Folge mit David Wallace mag ich besonders.
+** Good type against all odds :typography:design:hardware:
+:PROPERTIES:
+:ID:       50175059
+:URL:      https://unsung.aresluna.org/good-type-against-all-odds/
+:HN_URL:   https://news.ycombinator.com/item?id=50175059
+:POINTS:   135
+:COMMENTS: 12
+:BY:       firloop
+:END:
+
+*** TLDR
+Marcin Wichary collects typography that came out well under hard technical limits: small caps on cramped displays, a train carriage drawn in five by seven pixels, a stadium icon assembled from four characters, vertical ligatures molded into Gorton-engraved plastic, a slanted NOT standing in for an underline, several elaborate underlines including a three-dimensional one, and hyphenation printed on a computer keyboard. His argument is that craft sometimes costs no extra work at all, but only if you take the right technical fork early.
+
+*** Take
+The sharpest example in the piece was never designed: text that reads as italic because the display refreshes line by line, a rolling-shutter artifact mistaken for a typeface decision. Constrained type is worth studying because the constraints leave fingerprints, and you can still read which fork the designer took decades later.
+
+*** Comments
+
+**** weinzierl
+:PROPERTIES:
+:COMMENT_ID: 50176815
+:END:
+The article says right-leaning letters are just customary, with nothing inherently better about them. Not at all. The tip of a quill and the nib of a traditional fountain pen cannot move in any direction, and that is what sets the slant.
+
+**** john_saptra
+:PROPERTIES:
+:COMMENT_ID: 50175878
+:END:
+Marcin's attention to details, showcasing works that demonstrate the craftsmanship in what is typically considered mundane, is really amazing.
+
+**** jjcm
+:PROPERTIES:
+:COMMENT_ID: 50175108
+:END:
+I'm a simple man. I see a post from Marcin about typography or keyboards and I upvote.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+在重重限制下依然做好字体排印
+***** TLDR
+Marcin Wichary 收集了那些在严苛技术限制下依然做得很好的排印：局促显示屏上的小型大写、用五乘七像素画出的火车车厢、由四个字符拼出的体育场图标、Gorton 刻字塑料上压出的纵向连字、用倾斜的 NOT 代替下划线、若干精巧的下划线（包括一个三维的），以及印在电脑键盘上的连字符断词。他的论点是：工艺有时根本不需要额外投入，但前提是你在一开始就选对了技术岔路。
+***** Take
+文中最精彩的例子其实根本没人设计过：因为显示屏逐行刷新而看起来像斜体的文字，一个被当成字体决定的滚动快门伪影。受限条件下的排印值得研究，正是因为限制会留下指纹，几十年后你仍能读出设计者当初选了哪条岔路。
+***** Comments
+- 文章说字母右倾只是习惯，本身并不更好。完全不是。鹅毛笔的笔尖和传统钢笔的笔尖并不能朝任意方向移动，正是这一点决定了倾斜方向。
+- Marcin 对细节的关注，把通常被视为平庸之物里的手艺展示出来，真的很了不起。
+- 我是个简单的人。看到 Marcin 写字体或键盘的帖子，我就点赞。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+悪条件のなかの良いタイポグラフィ
+***** TLDR
+Marcin Wicharyが、厳しい技術的制約のもとでうまく仕上がったタイポグラフィを集めている。窮屈なディスプレイのスモールキャップス、五×七ピクセルで描いた鉄道車両、四文字を組み合わせたスタジアムのアイコン、Gortonで刻まれたプラスチックに成形された縦方向のリガチャ、下線の代わりに傾けた「NOT」、三次元のものを含む凝った下線のいくつか、そしてコンピューターのキーボードに印字されたハイフネーション。彼の主張は、工芸性は追加の手間なしに得られることもあるが、それは早い段階で正しい技術的な分岐を選んだ場合に限るというものだ。
+***** Take
+記事で一番鋭い例は、そもそも設計されていない。ディスプレイが一行ずつ書き換わるせいで斜体に見える文字、つまり書体の判断と勘違いされたローリングシャッター現象だ。制約下のタイポグラフィを調べる価値は、制約が指紋を残すところにある。何十年たっても、設計者がどちらの分岐を選んだのか読み取れる。
+***** Comments
+- 記事は右に傾いた字体は単なる慣習で、本質的に優れているわけではないと書く。まったく違う。羽ペンの先や伝統的な万年筆のペン先はどの方向にも動けず、それが傾きを決めている。
+- Marcinの細部へのこだわり、ふつうは平凡とされるものの中の職人技を見せてくれるやり方は、本当に見事だ。
+- 私は単純な人間だ。Marcinのタイポグラフィかキーボードの投稿を見たら、賛成票を入れる。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+온갖 제약을 뚫고 나온 좋은 타이포그래피
+***** TLDR
+Marcin Wichary가 까다로운 기술적 제약 아래에서도 잘 나온 타이포그래피를 모았다. 좁은 디스플레이의 스몰캡스, 다섯 곱하기 일곱 픽셀로 그린 기차 객차, 네 글자를 조합해 만든 경기장 아이콘, Gorton으로 새긴 플라스틱에 성형된 수직 합자, 밑줄 대신 기울인 NOT, 입체적인 것을 포함한 공들인 밑줄 몇 가지, 그리고 컴퓨터 키보드에 인쇄된 하이픈 분철. 그의 주장은 공들인 솜씨가 때로는 추가 노동 없이 얻어지지만, 그것은 이른 단계에서 올바른 기술적 갈림길을 택했을 때만 가능하다는 것이다.
+***** Take
+이 글에서 가장 날카로운 예는 애초에 설계된 적이 없다. 디스플레이가 한 줄씩 갱신되기 때문에 이탤릭처럼 보이는 글자, 서체 결정으로 오해된 롤링 셔터 현상이다. 제약 아래의 타이포그래피가 연구할 가치가 있는 이유는 제약이 지문을 남기기 때문이다. 수십 년 뒤에도 설계자가 어느 갈림길을 택했는지 읽을 수 있다.
+***** Comments
+- 글은 오른쪽으로 기운 글자가 그저 관습이고 본질적으로 더 나은 건 없다고 말한다. 전혀 아니다. 깃펜의 끝과 전통 만년필의 펜촉은 아무 방향으로나 움직일 수 없고, 그것이 기울기를 정한다.
+- Marcin의 세부에 대한 집요함, 보통 평범하다고 여겨지는 것 속의 장인정신을 보여주는 방식은 정말 대단하다.
+- 나는 단순한 사람이다. Marcin이 타이포그래피나 키보드에 대해 쓴 글을 보면 추천한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Buena tipografía contra todo pronóstico
+***** TLDR
+Marcin Wichary reúne tipografía que salió bien pese a límites técnicos duros: versalitas en pantallas estrechas, un vagón de tren dibujado en cinco por siete píxeles, un icono de estadio armado con cuatro caracteres, ligaduras verticales moldeadas en plástico grabado con Gorton, un NOT inclinado en lugar de un subrayado, varios subrayados elaborados incluido uno tridimensional, y la división con guion impresa en un teclado de ordenador. Su argumento es que el oficio a veces no cuesta ningún trabajo extra, pero solo si tomas pronto la bifurcación técnica correcta.
+***** Take
+El mejor ejemplo del texto nunca se diseñó: letras que parecen cursivas porque la pantalla se refresca línea a línea, un artefacto de obturador rodante confundido con una decisión tipográfica. La tipografía con restricciones merece estudio porque las restricciones dejan huellas, y décadas después todavía se puede leer qué bifurcación tomó quien la hizo.
+***** Comments
+- El artículo dice que las letras inclinadas a la derecha son solo costumbre y que no hay nada mejor en ellas. Nada de eso. La punta de una pluma de ave y el plumín de una pluma tradicional no pueden moverse en cualquier dirección, y eso fija la inclinación.
+- La atención al detalle de Marcin, mostrando trabajos que revelan el oficio en lo que normalmente se considera anodino, es realmente admirable.
+- Soy un hombre sencillo. Veo un artículo de Marcin sobre tipografía o teclados y voto a favor.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Gute Typografie gegen alle Widerstände
+***** TLDR
+Marcin Wichary sammelt Typografie, die unter harten technischen Grenzen gelungen ist: Kapitälchen auf engen Displays, ein Eisenbahnwagen in fünf mal sieben Pixeln, ein Stadion-Icon aus vier Zeichen, vertikale Ligaturen, in Gorton-gravierten Kunststoff geformt, ein schräg gestelltes NOT anstelle einer Unterstreichung, mehrere kunstvolle Unterstreichungen samt einer dreidimensionalen, und Silbentrennung, aufgedruckt auf einer Computertastatur. Sein Argument: Handwerk kostet manchmal gar keine Mehrarbeit, aber nur, wenn man früh die richtige technische Abzweigung nimmt.
+***** Take
+Das schärfste Beispiel des Textes wurde nie entworfen: Schrift, die kursiv wirkt, weil das Display zeilenweise aktualisiert, ein Rolling-Shutter-Artefakt, das für eine Schriftentscheidung gehalten wird. Typografie unter Zwängen lohnt das Studium, weil die Zwänge Fingerabdrücke hinterlassen, und noch Jahrzehnte später lässt sich ablesen, welche Abzweigung gewählt wurde.
+***** Comments
+- Der Artikel sagt, nach rechts geneigte Buchstaben seien nur üblich und nichts daran inhärent besser. Keineswegs. Die Spitze eines Federkiels und die Feder eines traditionellen Füllhalters können sich nicht in jede Richtung bewegen, und das bestimmt die Neigung.
+- Marcins Aufmerksamkeit für Details, mit der er das Handwerk in dem zeigt, was üblicherweise als banal gilt, ist wirklich bemerkenswert.
+- Ich bin ein einfacher Mensch. Ich sehe einen Beitrag von Marcin über Typografie oder Tastaturen und stimme dafür.
