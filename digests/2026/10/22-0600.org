@@ -1,0 +1,512 @@
+#+TITLE: HN Digest 2026-10-22 06:00 UTC
+#+DATE: 2026-10-22T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A PHP panic with no working exploit, 10.6 TB out of TiDB Cloud, and a mathematician who let a model read the paper for him
+
+* Highlights
+- PHP CVE: thousands of GitHub PoCs, none of them work on vanilla PHP
+- TiDB Cloud breach: 115,308 plaintext API keys, production creds in Jira
+- o(n log n) multiplication claim: David Harvey had Fable read it for him
+- Apple pulls menu icons back out of macOS and calls Tahoe the bad example
+- Two marsupials missing for 6,000 years turn up alive in West Papua
+
+* Stories
+
+** There isn't an easy exploit for this PHP vulnerability :security:php:ai:cve:
+:PROPERTIES:
+:ID:       50188948
+:URL:      https://eliastaylor.com/noexploit/
+:HN_URL:   https://news.ycombinator.com/item?id=50188948
+:POINTS:   371
+:COMMENTS: 173
+:BY:       zkldi
+:END:
+
+*** TLDR
+Elias Taylor argues the PHP vulnerability dominating the news is nowhere near Log4Shell, Heartbleed or Shellshock in practice. GitHub now holds thousands of proof-of-concept repos for it, and he says none of them work against a vanilla PHP install: the ones he examined need local file inclusion to already be present on the target, which makes them LFI with extra steps. His explanation is that people assumed an LLM could build the exploit chain straight from the diff, and the models told them it had. Ten hours after disclosure there were still no botnets, which is not how the CVEs he compares it to behaved.
+
+*** Take
+Taylor gives the test that settles it: stand up vanilla PHP in Docker and run the PoC yourself. A repo count is not an exploit count, and a model saying the code works is not a reproduction. The bug is real and worth patching today. The panic was priced off GitHub activity that nobody ran.
+
+*** Comments
+
+**** nemothekid
+What's strange is there were no write-ups on how the vulnerability actually worked. It feels like a lot of people went 'Claude found a bug, and Claude says it's dangerous' without anyone verifying how exploitable it really is.
+
+**** kgeist
+I ran two PoCs from GitHub. One expected local file inclusion to already be present, so it's just LFI with extra steps. The other didn't work at all without modifications, and what it did trigger was a stale write, not RCE.
+
+**** hn773746483
+Social media and 'cybersecurity experts' had a big role in this. They cite the experts' posts about the advisory, while those same experts share AI-generated mitigation strategies.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+No hay un exploit fácil para esta vulnerabilidad de PHP
+***** TLDR
+Elias Taylor sostiene que la vulnerabilidad de PHP que domina las noticias no se acerca en la práctica a Log4Shell, Heartbleed o Shellshock. GitHub ya aloja miles de repositorios con pruebas de concepto, y según él ninguno funciona contra una instalación limpia de PHP: los que revisó necesitan que el objetivo ya tenga inclusión de archivos locales, lo que los convierte en LFI con pasos extra. Su explicación es que la gente supuso que un LLM podía construir la cadena de exploit leyendo el diff, y los modelos les dijeron que ya lo había hecho. Diez horas después de la divulgación seguía sin haber botnets, algo que no ocurrió con los CVE que usa como comparación.
+***** Take
+Taylor da la prueba que zanja el asunto: levanta PHP limpio en Docker y ejecuta tú mismo la PoC. El número de repositorios no es el número de exploits, y que un modelo diga que el código funciona no es una reproducción. El fallo es real y hay que parchearlo hoy. El pánico se calculó sobre actividad de GitHub que nadie ejecutó.
+***** Comments
+- Lo raro es que no hubo ningún análisis de cómo funcionaba de verdad la vulnerabilidad. Parece que mucha gente dijo 'Claude encontró un fallo y Claude dice que es peligroso' sin que nadie verificara cuán explotable es.
+- Ejecuté dos PoC de GitHub. Una daba por hecho que ya existía inclusión de archivos locales, así que es LFI con pasos extra. La otra no funcionó sin modificaciones, y lo que provocó fue una escritura obsoleta, no RCE.
+- Las redes sociales y los 'expertos en ciberseguridad' tuvieron mucho que ver. Citan las publicaciones de los expertos sobre el aviso, mientras esos mismos expertos comparten mitigaciones generadas por IA.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Für diese PHP-Lücke gibt es keinen einfachen Exploit
+***** TLDR
+Elias Taylor argumentiert, dass die PHP-Lücke, die derzeit die Nachrichten beherrscht, praktisch nicht an Log4Shell, Heartbleed oder Shellshock heranreicht. Auf GitHub liegen inzwischen Tausende Proof-of-Concept-Repos, und nach seiner Prüfung funktioniert keines davon gegen eine unveränderte PHP-Installation: Die untersuchten setzen voraus, dass auf dem Ziel bereits Local File Inclusion vorhanden ist, womit sie LFI mit Zusatzschritten sind. Seine Erklärung: Alle gingen davon aus, ein LLM könne die Exploit-Kette direkt aus dem Diff bauen, und die Modelle behaupteten, genau das getan zu haben. Zehn Stunden nach der Veröffentlichung gab es noch immer keine Botnets, anders als bei den CVEs, mit denen er vergleicht.
+***** Take
+Taylor nennt den Test, der die Sache klärt: unveränderte PHP-Instanz in Docker hochziehen und die PoC selbst ausführen. Die Zahl der Repos ist nicht die Zahl der Exploits, und ein Modell, das sagt, der Code funktioniere, ist kein Nachweis. Der Bug ist echt und gehört heute gepatcht. Die Panik basierte auf GitHub-Aktivität, die niemand ausgeführt hat.
+***** Comments
+- Merkwürdig ist, dass es keine einzige Analyse gab, wie die Lücke tatsächlich funktioniert. Viele sagten offenbar 'Claude hat einen Bug gefunden und Claude sagt, er ist gefährlich', ohne dass jemand die Ausnutzbarkeit geprüft hat.
+- Ich habe zwei PoCs von GitHub ausgeführt. Eine setzte Local File Inclusion bereits voraus, das ist also LFI mit Zusatzschritten. Die andere lief ohne Änderungen gar nicht, und ausgelöst hat sie einen Stale Write, kein RCE.
+- Social Media und 'Cybersecurity-Experten' hatten großen Anteil daran. Man zitiert die Posts der Experten zum Advisory, während dieselben Experten KI-generierte Gegenmaßnahmen verbreiten.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+이 PHP 취약점에는 쉬운 익스플로잇이 없다
+***** TLDR
+Elias Taylor는 뉴스를 뒤덮은 PHP 취약점이 실제로는 Log4Shell, Heartbleed, Shellshock 수준에 한참 못 미친다고 주장한다. GitHub에는 이미 수천 개의 PoC 저장소가 올라와 있지만, 그가 확인한 바로는 순정 PHP 설치본에서 작동하는 것은 하나도 없다. 살펴본 것들은 대상 서버에 이미 로컬 파일 인클루전이 있어야 하므로, 결국 단계만 더 붙은 LFI다. 그의 설명은 사람들이 LLM이 diff만 보고 익스플로잇 체인을 바로 만들어낼 수 있다고 믿었고, 모델이 그렇게 했다고 말해줬다는 것이다. 공개 10시간이 지나도 봇넷은 없었는데, 그가 비교한 CVE들은 그렇지 않았다.
+***** Take
+Taylor가 결론을 내는 방법을 제시한다. 순정 PHP를 Docker에 띄우고 PoC를 직접 돌려보라는 것이다. 저장소 수는 익스플로잇 수가 아니며, 모델이 코드가 작동한다고 말하는 것은 재현이 아니다. 버그는 실재하고 오늘 패치해야 한다. 다만 공포는 아무도 실행해보지 않은 GitHub 활동량을 근거로 매겨졌다.
+***** Comments
+- 이상한 건 이 취약점이 실제로 어떻게 작동하는지에 대한 분석 글이 하나도 없었다는 점이다. 많은 사람이 'Claude가 버그를 찾았고 Claude가 위험하다고 했다'로 끝냈고, 실제 악용 가능성을 검증한 사람은 없어 보인다.
+- GitHub의 PoC 두 개를 돌려봤다. 하나는 로컬 파일 인클루전이 이미 있다고 전제해서 단계만 더 붙은 LFI였다. 다른 하나는 수정 없이는 아예 작동하지 않았고, 실제로 유발한 것은 stale write였지 RCE가 아니었다.
+- 소셜 미디어와 '보안 전문가'들이 큰 역할을 했다. 권고문에 대한 전문가 게시물을 인용하는데, 정작 그 전문가들은 AI가 만들어낸 완화 방안을 공유하고 있다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+このPHPの脆弱性に簡単なエクスプロイトは存在しない
+***** TLDR
+Elias Taylorは、報道を独占しているPHPの脆弱性が実務上Log4ShellやHeartbleed、Shellshockには遠く及ばないと論じる。GitHubには既に数千のPoCリポジトリがあるが、素のPHP環境に対して動くものは一つもないという。彼が確認したものは標的側にローカルファイルインクルージョンが既に存在していることを前提としており、要するに手順が増えただけのLFIだ。原因は、LLMが差分を読むだけでエクスプロイトチェーンを即座に組めると皆が思い込み、モデルが組めたと答えたことにある。公開から10時間経ってもボットネットは現れず、彼が比較するCVE群とは明らかに違う。
+***** Take
+Taylorは決着のつけ方を示している。素のPHPをDockerで立ち上げ、自分の手でPoCを走らせることだ。リポジトリ数はエクスプロイト数ではないし、モデルが動くと言うことは再現ではない。バグは実在し、今日パッチを当てるべきものだ。ただしパニックの値付けは、誰も実行していないGitHubの活動量を根拠にしていた。
+***** Comments
+- 妙なのは、この脆弱性が実際にどう動くのかという解説が一つも出なかったことだ。多くの人が「Claudeがバグを見つけ、Claudeが危険だと言っている」で止まり、悪用可能性を検証した人がいないように見える。
+- GitHubのPoCを2つ動かした。1つはローカルファイルインクルージョンが既にある前提で、手順が増えただけのLFIだった。もう1つは改変なしでは全く動かず、起きたのはstale writeでRCEではなかった。
+- SNSと「セキュリティ専門家」の役割が大きい。専門家の投稿を根拠に引用するが、その専門家自身がAI生成の緩和策を共有している。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+这个 PHP 漏洞并没有什么容易的利用方式
+***** TLDR
+Elias Taylor 认为，眼下刷屏的 PHP 漏洞在实际危害上远远够不上 Log4Shell、Heartbleed 或 Shellshock。GitHub 上已经有数千个所谓的 PoC 仓库，但他说没有一个能打穿未经改动的 PHP 安装：他看过的那些都要求目标上先存在本地文件包含，说白了就是多绕几步的 LFI。他的解释是，大家默认大模型能直接读 diff 拼出利用链，而模型也确实告诉他们拼出来了。漏洞公开十小时后依然没有僵尸网络出现，这和他拿来对比的那几个 CVE 完全不同。
+***** Take
+Taylor 给出了能一锤定音的办法：用 Docker 起一个原版 PHP，自己把 PoC 跑一遍。仓库数量不等于利用数量，模型说代码能跑也不等于复现。漏洞是真的，今天就该打补丁。但这场恐慌的定价，依据的是一堆没人真正运行过的 GitHub 活动。
+***** Comments
+- 奇怪的是没有任何一篇讲清楚这个漏洞究竟怎么工作的分析。感觉很多人就是「Claude 找到了一个 bug，Claude 说它很危险」，没人去验证到底有多好利用。
+- 我跑了 GitHub 上的两个 PoC。一个默认目标已经存在本地文件包含，那就是多绕几步的 LFI。另一个不改代码根本跑不起来，最后触发的是一个陈旧写入，不是 RCE。
+- 社交媒体和所谓「安全专家」在这件事里出力不小。大家引用专家关于公告的帖子，而这些专家自己在转发 AI 生成的缓解方案。
+** PingCAP TiDB Leaks :security:breach:database:cloud:
+:PROPERTIES:
+:ID:       50173716
+:URL:      https://fulcrumsec.vg/pingcap/
+:HN_URL:   https://news.ycombinator.com/item?id=50173716
+:POINTS:   285
+:COMMENTS: 42
+:BY:       swyx
+:END:
+
+*** TLDR
+Fulcrum Security published a report on a breach of PingCAP's TiDB Cloud totalling about 10.6 TB. The haul includes the control-plane database covering 180,046 tenant organisations and 403,262 emails, 115,308 plaintext customer API keys of which 42,612 were still active, over 20 million raw customer SQL statements, four years of gateway logs covering 102 million connections, 413 private repositories, and per-customer AWS cost and margin data. The attackers used GCP service-account keys and an Azure service principal committed to PingCAP's own repositories to stand up a replication feed of the control plane, which exported every six hours for 88 cycles through September 2026. The report also documents engineers pasting production credentials into Jira tickets, a 2022 internal ticket noting any org member could reset the root password on every cluster that was still open at the time of the breach, and password encryption using AES-CBC with a static IV derived from the key prefix.
+
+*** Take
+PingCAP's trust-hub statement says an external responder found no evidence the attacker ran commands or kept persistent access. Replicating a database 88 times over a month does not require running commands, so that sentence can be true and irrelevant at once. The detail that matters most is not the breach: it is the 2022 ticket about cross-tenant root resets that sat open for four years.
+
+*** Comments
+
+**** aliasxneo
+'PingCAP's engineers paste customers' production credentials into Jira tickets.' I've heard of this happening, but I've never personally seen it in my 10 years as an SRE.
+
+**** llama052
+I find it baffling how much they downplay this. 'No evidence the attacker ran commands or maintained persistent access in the systems reviewed' does not appear to be true.
+
+**** xKingfisher
+Coming this close on the heels of the NCC Group security audit is pretty embarrassing for all parties.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Filtraciones de TiDB en PingCAP
+***** TLDR
+Fulcrum Security publicó un informe sobre una brecha en TiDB Cloud de PingCAP de unos 10,6 TB. El botín incluye la base de datos del plano de control con 180.046 organizaciones y 403.262 correos, 115.308 claves de API de clientes en texto plano de las que 42.612 seguían activas, más de 20 millones de sentencias SQL de clientes, cuatro años de registros de pasarela con 102 millones de conexiones, 413 repositorios privados y datos de coste y margen por cliente en AWS. Los atacantes usaron claves de cuenta de servicio de GCP y un service principal de Azure subidos a los propios repositorios de PingCAP para montar una réplica del plano de control que exportaba cada seis horas, durante 88 ciclos hasta septiembre de 2026. El informe también documenta credenciales de producción pegadas en tickets de Jira, un ticket interno de 2022 que señalaba que cualquier miembro de una organización podía restablecer la contraseña root de todos los clústeres y que seguía abierto, y cifrado de contraseñas con AES-CBC y un IV estático derivado del prefijo de la clave.
+***** Take
+El comunicado de PingCAP dice que una firma externa no halló indicios de que el atacante ejecutara comandos ni mantuviera acceso persistente. Replicar una base de datos 88 veces en un mes no exige ejecutar comandos, así que esa frase puede ser cierta e irrelevante a la vez. El dato más grave no es la brecha: es el ticket de 2022 sobre restablecer root entre inquilinos que estuvo abierto cuatro años.
+***** Comments
+- 'Los ingenieros de PingCAP pegan credenciales de producción de clientes en tickets de Jira.' He oído que pasa, pero nunca lo había visto en mis 10 años como SRE.
+- Me resulta desconcertante lo mucho que lo minimizan. 'Sin indicios de que el atacante ejecutara comandos ni mantuviera acceso persistente en los sistemas revisados' no parece ser cierto.
+- Que ocurra tan poco después de la auditoría de seguridad de NCC Group es bastante bochornoso para todas las partes.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+PingCAP-TiDB-Leaks
+***** TLDR
+Fulcrum Security hat einen Bericht über einen Einbruch bei PingCAPs TiDB Cloud mit rund 10,6 TB veröffentlicht. Erbeutet wurden unter anderem die Control-Plane-Datenbank mit 180.046 Mandantenorganisationen und 403.262 E-Mail-Adressen, 115.308 Kunden-API-Schlüssel im Klartext, davon 42.612 noch aktiv, über 20 Millionen rohe SQL-Anweisungen von Kunden, vier Jahre Gateway-Logs mit 102 Millionen Verbindungen, 413 private Repositories sowie AWS-Kosten- und Margendaten pro Kunde. Die Angreifer nutzten GCP-Service-Account-Schlüssel und ein Azure Service Principal, die in PingCAPs eigenen Repositories eingecheckt waren, um eine Replikation der Control Plane aufzusetzen, die alle sechs Stunden exportierte, 88 Zyklen lang bis September 2026. Der Bericht dokumentiert zudem Produktionszugangsdaten in Jira-Tickets, ein internes Ticket von 2022 über die Möglichkeit jedes Organisationsmitglieds, das Root-Passwort aller Cluster zurückzusetzen, das noch offen war, und Passwortverschlüsselung mit AES-CBC und statischem IV aus dem Schlüsselpräfix.
+***** Take
+PingCAPs Stellungnahme sagt, ein externer Dienstleister habe keine Hinweise gefunden, dass der Angreifer Befehle ausführte oder dauerhaften Zugang behielt. Eine Datenbank 88-mal in einem Monat zu replizieren erfordert keine Befehle, der Satz kann also gleichzeitig wahr und belanglos sein. Entscheidend ist nicht der Einbruch, sondern das Ticket von 2022 über mandantenübergreifende Root-Resets, das vier Jahre offen blieb.
+***** Comments
+- 'PingCAPs Entwickler fügen Produktionszugangsdaten von Kunden in Jira-Tickets ein.' Ich habe davon gehört, aber in 10 Jahren als SRE noch nie selbst gesehen.
+- Mich verblüfft, wie stark sie das herunterspielen. 'Keine Hinweise, dass der Angreifer Befehle ausführte oder dauerhaften Zugang in den geprüften Systemen behielt' scheint nicht zu stimmen.
+- Dass das so kurz nach dem Sicherheitsaudit von NCC Group passiert, ist für alle Beteiligten ziemlich peinlich.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+PingCAP TiDB 유출
+***** TLDR
+Fulcrum Security가 PingCAP의 TiDB Cloud 침해 사고 보고서를 공개했다. 유출 규모는 약 10.6TB로, 테넌트 조직 180,046곳과 이메일 403,262건이 담긴 컨트롤 플레인 데이터베이스, 평문으로 저장된 고객 API 키 115,308개(이 중 42,612개는 여전히 유효), 고객의 원본 SQL 구문 2,000만 건 이상, 1억 200만 건의 접속 기록을 담은 4년치 게이트웨이 로그, 비공개 저장소 413개, 고객별 AWS 비용과 마진 데이터가 포함된다. 공격자는 PingCAP 자체 저장소에 커밋되어 있던 GCP 서비스 계정 키와 Azure 서비스 주체를 이용해 컨트롤 플레인 복제 피드를 구축했고, 이 피드는 2026년 9월까지 6시간마다 88회에 걸쳐 데이터를 내보냈다. 보고서는 엔지니어들이 운영 환경 자격 증명을 Jira 티켓에 붙여넣은 사실, 조직 구성원 누구나 모든 클러스터의 root 비밀번호를 재설정할 수 있다는 2022년 내부 티켓이 여전히 열려 있었다는 점, 키 접두사에서 파생한 고정 IV를 쓰는 AES-CBC 비밀번호 암호화도 함께 기록했다.
+***** Take
+PingCAP는 외부 대응 업체가 공격자가 명령을 실행하거나 지속적 접근을 유지한 증거를 찾지 못했다고 밝혔다. 한 달 동안 데이터베이스를 88번 복제하는 데는 명령 실행이 필요 없으므로, 그 문장은 참인 동시에 무의미할 수 있다. 가장 중요한 대목은 침해 자체가 아니라, 테넌트 간 root 재설정에 관한 2022년 티켓이 4년간 열려 있었다는 사실이다.
+***** Comments
+- 'PingCAP 엔지니어들이 고객의 운영 자격 증명을 Jira 티켓에 붙여넣는다.' 이런 일이 있다는 말은 들어봤지만, SRE로 일한 10년 동안 직접 본 적은 없다.
+- 이렇게까지 축소하는 게 이해가 안 된다. '검토한 시스템에서 공격자가 명령을 실행하거나 지속적 접근을 유지한 증거 없음'은 사실이 아닌 것으로 보인다.
+- NCC Group 보안 감사 직후에 이런 일이 터진 건 관련된 모두에게 꽤 민망한 일이다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+PingCAP TiDB の情報流出
+***** TLDR
+Fulcrum SecurityがPingCAPのTiDB Cloudへの侵害について報告書を公開した。規模は約10.6TB。内容には、テナント組織180,046件とメールアドレス403,262件を含むコントロールプレーンのデータベース、平文の顧客APIキー115,308件（うち42,612件は有効）、顧客の生SQL文2,000万件超、1億200万接続分にあたる4年分のゲートウェイログ、非公開リポジトリ413件、顧客別のAWSコストと利益率データが含まれる。攻撃者はPingCAP自身のリポジトリにコミットされていたGCPサービスアカウント鍵とAzureサービスプリンシパルを使い、コントロールプレーンの複製を構築。2026年9月まで6時間ごとに88回エクスポートが続いた。報告書はさらに、本番環境の認証情報をJiraチケットに貼り付ける慣行、組織メンバーなら誰でも全クラスタのrootパスワードを再設定できると指摘した2022年の社内チケットが未解決のままだったこと、鍵のプレフィックスから導出した固定IVを使うAES-CBCでのパスワード暗号化も記録している。
+***** Take
+PingCAPは、外部対応会社が攻撃者によるコマンド実行や持続的アクセスの証拠を見つけなかったとしている。1か月で88回データベースを複製するのにコマンド実行は不要なので、その文は真であると同時に無意味でもある。最も重いのは侵害そのものではなく、テナントをまたぐrootリセットに関する2022年のチケットが4年間開いたままだった点だ。
+***** Comments
+- 「PingCAPのエンジニアは顧客の本番環境の認証情報をJiraチケットに貼り付けている」。話には聞いていたが、SRE歴10年で実際に見たのは初めてだ。
+- ここまで矮小化するのが理解できない。「レビュー対象のシステムで攻撃者がコマンドを実行したり持続的アクセスを維持した証拠はない」は事実ではなさそうだ。
+- NCC Groupのセキュリティ監査の直後にこれが出てくるのは、関係者全員にとってかなり恥ずかしい。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+PingCAP TiDB 数据泄露
+***** TLDR
+Fulcrum Security 发布报告，披露 PingCAP 的 TiDB Cloud 遭入侵，外泄数据约 10.6 TB。其中包括覆盖 180,046 个租户组织和 403,262 个邮箱的控制平面数据库、115,308 个明文客户 API 密钥（其中 42,612 个仍然有效）、超过 2,000 万条客户原始 SQL 语句、含 1.02 亿次连接记录的四年网关日志、413 个私有仓库，以及按客户拆分的 AWS 成本与利润率数据。攻击者利用 PingCAP 自己仓库里提交的 GCP 服务账号密钥和 Azure 服务主体，搭建了控制平面的复制链路，每六小时导出一次，到 2026 年 9 月共跑了 88 轮。报告还记录了工程师把生产环境凭证粘贴进 Jira 工单、2022 年一张指出组织内任何成员都能重置所有集群 root 密码的内部工单仍未关闭，以及密码加密使用 AES-CBC 且 IV 由密钥前缀推导而来、属于静态 IV。
+***** Take
+PingCAP 的声明称外部应急机构未发现攻击者执行过命令或维持持久访问。一个月里把数据库复制 88 次并不需要执行命令，所以这句话可以同时既属实又没有意义。真正要命的不是这次入侵，而是那张关于跨租户重置 root 的 2022 年工单，开了四年没人处理。
+***** Comments
+- 「PingCAP 的工程师把客户的生产环境凭证粘贴到 Jira 工单里。」听说过这种事，但我做 SRE 十年从没亲眼见过。
+- 他们淡化的程度让我难以理解。「在已审查的系统中没有证据表明攻击者执行命令或维持持久访问」看起来并不属实。
+- 紧挨着 NCC Group 的安全审计之后出这种事，对所有相关方都挺难堪的。
+** The recently proposed o(n log n) integer multiplication algorithm ［pdf］ :math:algorithms:ai:research:
+:PROPERTIES:
+:ID:       50190455
+:URL:      https://web.maths.unsw.edu.au/~davidharvey/research/subnlogn.pdf
+:HN_URL:   https://news.ycombinator.com/item?id=50190455
+:POINTS:   105
+:COMMENTS: 64
+:BY:       craigcitro
+:END:
+
+*** TLDR
+David Harvey, who with Joris van der Hoeven proved integer multiplication can be done in O(n log n), wrote a note on three papers released in October 2026 by an unnamed American technology company claiming to beat that bound: multiplication in n(log n) raised to a power strictly below one. Harvey opens by saying he has not read the papers. He tried, gave up because the exposition is poor, and asked Fable to explain them instead, then worked through the details from that. His verdict is that the claim is plausible and the bound has the right shape, but he has not checked the proof seriously. He notes it took him two weeks of hard work to understand fragments of what the model read in minutes, and calls that unsettling.
+
+*** Take
+The algorithm is the smaller story. The expert most qualified to referee this result could not get through the prose and used a model as his reading interface, then said so in print rather than hiding it. That is honest and it is also the problem: the current answer to 'who checks it' is a Lean formalisation posted in the HN thread, not the field. Harvey's note is less a review than a notice that review no longer scales.
+
+*** Comments
+
+**** Kapura
+'I have not actually read the paper. I tried, but soon gave up. Instead, I asked Fable to explain it to me. Fable seems to understand the argument and thinks that it is correct.' This does not feel like a healthy place to be.
+
+**** jdb1729
+The result is fully formalized in Lean by platypii and myself, on Mathlib's TM2 machine, with ongoing improvements to the exponent. Contributions welcome.
+
+**** Eji1700
+Is this an immediately practical breakthrough that will change computing? My limited understanding is no. A massive improvement over any previous progress, but still small from a practical standpoint.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+El algoritmo o(n log n) de multiplicación de enteros propuesto recientemente ［pdf］
+***** TLDR
+David Harvey, que junto a Joris van der Hoeven demostró que multiplicar enteros se puede hacer en O(n log n), escribió una nota sobre tres artículos publicados en octubre de 2026 por una empresa tecnológica estadounidense sin nombrar que afirman superar esa cota: multiplicación en n(log n) elevado a una potencia estrictamente menor que uno. Harvey empieza diciendo que no ha leído los artículos. Lo intentó, lo dejó porque la exposición es mala y pidió a Fable que se los explicara, y a partir de ahí trabajó los detalles. Su veredicto es que la afirmación es plausible y la cota tiene la forma correcta, pero no ha revisado la demostración en serio. Señala que le costó dos semanas de trabajo duro entender fragmentos de lo que el modelo leyó en minutos, y lo califica de inquietante.
+***** Take
+El algoritmo es lo de menos. El experto más capacitado para arbitrar este resultado no pudo con la prosa y usó un modelo como interfaz de lectura, y lo dijo por escrito en vez de ocultarlo. Eso es honesto y también es el problema: hoy la respuesta a 'quién lo verifica' es una formalización en Lean publicada en el hilo de HN, no el campo. La nota de Harvey no es tanto una revisión como un aviso de que la revisión ya no escala.
+***** Comments
+- 'No he leído realmente el artículo. Lo intenté, pero pronto lo dejé. Le pedí a Fable que me lo explicara. Fable parece entender el argumento y cree que es correcto.' Esto no parece un buen sitio donde estar.
+- El resultado está completamente formalizado en Lean por platypii y por mí, sobre la máquina TM2 de Mathlib, con mejoras en curso del exponente. Se aceptan contribuciones.
+- ¿Es un avance inmediatamente práctico que cambiará la informática? Por lo poco que entiendo, no. Es una mejora enorme sobre todo lo anterior, pero sigue siendo pequeña en la práctica.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Der kürzlich vorgeschlagene o(n log n)-Algorithmus zur Ganzzahlmultiplikation ［pdf］
+***** TLDR
+David Harvey, der mit Joris van der Hoeven bewies, dass Ganzzahlmultiplikation in O(n log n) möglich ist, hat eine Notiz zu drei Arbeiten geschrieben, die im Oktober 2026 von einem ungenannten US-Technologieunternehmen veröffentlicht wurden und diese Schranke unterbieten wollen: Multiplikation in n(log n) hoch einem Exponenten strikt kleiner als eins. Harvey schreibt gleich zu Beginn, dass er die Arbeiten nicht gelesen hat. Er hat es versucht, wegen der schlechten Darstellung aufgegeben und stattdessen Fable um eine Erklärung gebeten, um von dort aus die Details durchzuarbeiten. Sein Urteil: Die Behauptung ist plausibel und die Schranke hat die richtige Form, geprüft hat er den Beweis aber nicht ernsthaft. Er brauchte zwei Wochen harter Arbeit, um Bruchstücke dessen zu verstehen, was das Modell in Minuten las, und nennt das beunruhigend.
+***** Take
+Der Algorithmus ist die kleinere Geschichte. Der am besten qualifizierte Gutachter kam durch den Text nicht durch, benutzte ein Modell als Leseschnittstelle und schrieb das offen hin, statt es zu verschweigen. Das ist ehrlich und zugleich das Problem: Die aktuelle Antwort auf 'wer prüft das' ist eine im HN-Thread gepostete Lean-Formalisierung, nicht das Fachgebiet. Harveys Notiz ist weniger Begutachtung als Hinweis darauf, dass Begutachtung nicht mehr skaliert.
+***** Comments
+- 'Ich habe die Arbeit nicht wirklich gelesen. Ich habe es versucht, aber bald aufgegeben. Stattdessen habe ich Fable gebeten, sie mir zu erklären. Fable scheint das Argument zu verstehen und hält es für korrekt.' Das fühlt sich nach keinem guten Zustand an.
+- Das Resultat ist von platypii und mir vollständig in Lean formalisiert, auf Mathlibs TM2-Maschine, mit laufenden Verbesserungen des Exponenten. Beiträge willkommen.
+- Ist das ein sofort praktischer Durchbruch, der das Rechnen verändert? Nach meinem begrenzten Verständnis nein. Eine enorme Verbesserung gegenüber allem bisherigen, praktisch aber weiterhin klein.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+최근 제안된 o(n log n) 정수 곱셈 알고리즘 ［pdf］
+***** TLDR
+Joris van der Hoeven과 함께 정수 곱셈을 O(n log n)에 할 수 있음을 증명한 David Harvey가, 2026년 10월에 이름을 밝히지 않은 미국 기술 기업이 공개한 세 편의 논문에 대한 노트를 썼다. 그 논문들은 해당 상한을 깨고 n(log n)의 1보다 작은 거듭제곱 시간에 곱셈이 가능하다고 주장한다. Harvey는 글 첫머리에서 논문을 읽지 않았다고 밝힌다. 읽어보려 했지만 서술이 부실해 포기했고, 대신 Fable에게 설명을 요청한 뒤 거기서부터 세부를 따라갔다는 것이다. 그의 판단은 주장이 그럴듯하고 상한의 형태도 맞지만, 증명을 진지하게 검증하지는 않았다는 것이다. 모델이 몇 분 만에 읽은 내용의 일부를 이해하는 데 자신은 2주간 고생했다며 이를 불안한 일이라고 적었다.
+***** Take
+알고리즘은 작은 이야기다. 이 결과를 심사하기에 가장 적합한 전문가가 글을 끝까지 읽지 못하고 모델을 독해 인터페이스로 삼았으며, 그 사실을 숨기지 않고 활자로 밝혔다. 정직하지만 동시에 그것이 문제다. '누가 검증하는가'에 대한 현재의 답은 학계가 아니라 HN 스레드에 올라온 Lean 형식화다. Harvey의 노트는 심사라기보다, 심사가 더 이상 감당되지 않는다는 통지에 가깝다.
+***** Comments
+- '나는 사실 논문을 읽지 않았다. 시도했지만 곧 포기했다. 대신 Fable에게 설명을 부탁했다. Fable은 논증을 이해하는 듯하고 옳다고 본다.' 이건 건강한 상태로 느껴지지 않는다.
+- 이 결과는 platypii와 내가 Mathlib의 TM2 기계 위에서 Lean으로 완전히 형식화했고, 지수 개선 작업도 진행 중이다. 기여를 환영한다.
+- 이게 당장 컴퓨팅을 바꿀 실용적 돌파구인가? 내 짧은 이해로는 아니다. 기존 진전에 비하면 엄청난 개선이지만 실무적으로는 여전히 작다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+最近提案された o(n log n) 整数乗算アルゴリズム ［pdf］
+***** TLDR
+Joris van der Hoevenとともに整数乗算がO(n log n)で可能であることを証明したDavid Harveyが、2026年10月に匿名の米テクノロジー企業が公開した3本の論文についてノートを書いた。論文はその上界を破り、n(log n)の1未満の冪で乗算できると主張している。Harveyは冒頭で、論文を読んでいないと明かす。読もうとしたが説明が不十分で断念し、代わりにFableに解説を頼み、そこから詳細を追ったという。彼の見立ては、主張はもっともらしく上界の形も正しいが、証明を本格的に検証してはいない、というもの。モデルが数分で読んだ内容の断片を理解するのに自分は2週間を要したと述べ、それを不安だと書いている。
+***** Take
+アルゴリズムの方が小さな話だ。この結果を審査するのに最も適した専門家が本文を読み通せず、モデルを読解のインターフェースとして使い、それを隠さず書いた。誠実ではあるが、同時にそこが問題でもある。「誰が検証するのか」への現在の答えは、学界ではなくHNのスレッドに投稿されたLeanの形式化だ。Harveyのノートは査読というより、査読がもう追いつかないという告知に近い。
+***** Comments
+- 「私は実際には論文を読んでいない。試したがすぐに諦めた。代わりにFableに説明を頼んだ。Fableは議論を理解しているようで、正しいと考えている」。これは健全な状態には思えない。
+- この結果はplatypiiと私がMathlibのTM2機械上でLeanにより完全に形式化済みで、指数の改善も進行中だ。貢献歓迎。
+- これはすぐに計算を変える実用的なブレークスルーなのか。私の乏しい理解では違う。これまでの進展に比べれば巨大な改善だが、実用上はまだ小さい。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+最近提出的 o(n log n) 整数乘法算法 ［pdf］
+***** TLDR
+David Harvey 与 Joris van der Hoeven 曾证明整数乘法可以在 O(n log n) 内完成。如今他为 2026 年 10 月由一家未具名的美国科技公司发布的三篇论文写了一份说明，这些论文声称突破了该上界，能在 n 乘以 log n 的某个小于 1 的幂次的时间内完成乘法。Harvey 开篇就说自己没读过这些论文：他试过，但因为行文太差而放弃，于是请 Fable 讲解，再据此推演细节。他的结论是这一主张看起来合理、上界的形式也对，但他并没有认真核查证明。他提到自己花了两周苦功才理解模型几分钟就读完的片段，并称这件事令人不安。
+***** Take
+算法本身反而是小事。最有资格评审这个结果的专家读不下去原文，把模型当作阅读接口，还把这件事写进了公开文稿而不是藏起来。这很诚实，也正是问题所在：眼下「谁来核查」的答案是 HN 帖子里贴出的 Lean 形式化，而不是这个领域本身。Harvey 这份说明与其说是评审，不如说是在通知大家：评审已经跟不上了。
+***** Comments
+- 「我其实没有读这篇论文。我试过，但很快放弃了。我让 Fable 给我解释。Fable 似乎理解了论证，并认为它是对的。」这个状态感觉不太健康。
+- 这个结果已经由 platypii 和我在 Mathlib 的 TM2 机器上用 Lean 完整形式化，指数还在继续改进。欢迎贡献。
+- 这是会立刻改变计算的实用突破吗？以我有限的理解，不是。相比以往的进展这是巨大改进，但从实用角度看仍然很小。
+** No more icons in every menu by default :design:ui:apple:macos:
+:PROPERTIES:
+:ID:       50161346
+:URL:      https://blog.jim-nielsen.com/2026/icons-in-every-menu/
+:HN_URL:   https://news.ycombinator.com/item?id=50161346
+:POINTS:   243
+:COMMENTS: 161
+:BY:       riffraff
+:END:
+
+*** TLDR
+Jim Nielsen notes that Apple has taken icons back out of menu items by default in the macOS release following Tahoe, reversing the change Tahoe shipped. Apple's updated Human Interface Guidelines now use Tahoe's own menus as the example of what not to do, and John Gruber wrote about the reversion in June. Nielsen's argument is that this is a stronger case than citing precedent: Apple tried icons everywhere and backed out, and choosing not to do something you have actually done is experience rather than preference.
+
+*** Take
+Commenters found the 2008 Human Interface Guidelines saying the same thing on page 170, which makes this a round trip rather than a discovery. The interesting failure is organisational: Apple had the rule written down, shipped the opposite to every Mac, and then rewrote the rule using its own shipped product as the counterexample.
+
+*** Comments
+
+**** kevin_thibedeau
+Apple knew this was bad 20 years ago. The 2008 Human Interface Guidelines say it on page 170. They just don't bother to read their own documentation.
+
+**** cosmic_cheese
+I think this and many other questionable UI decisions are the fallout of the old guard of UI designers rotating out over the past decade with little transfer of knowledge to their replacements.
+
+**** paxy
+This Apple devotion is really something else. Looking at all their design missteps and corrections in recent releases, my only takeaway is that they are making it up as they go along just like the rest of us.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Se acabaron los iconos en todos los menús por defecto
+***** TLDR
+Jim Nielsen observa que Apple ha vuelto a quitar los iconos de los elementos de menú por defecto en la versión de macOS posterior a Tahoe, revirtiendo el cambio que Tahoe introdujo. Las Human Interface Guidelines actualizadas usan ahora los propios menús de Tahoe como ejemplo de lo que no se debe hacer, y John Gruber escribió sobre la marcha atrás en junio. El argumento de Nielsen es que esto pesa más que citar precedentes: Apple probó los iconos en todas partes y dio marcha atrás, y decidir no hacer algo que ya has hecho es experiencia, no preferencia.
+***** Take
+Los comentaristas encontraron que las Human Interface Guidelines de 2008 decían lo mismo en la página 170, así que esto es un viaje de ida y vuelta más que un hallazgo. El fallo interesante es organizativo: Apple tenía la regla escrita, envió lo contrario a todos los Mac y luego reescribió la regla usando su propio producto como contraejemplo.
+***** Comments
+- Apple sabía que esto era malo hace 20 años. Las Human Interface Guidelines de 2008 lo dicen en la página 170. Simplemente no se molestan en leer su propia documentación.
+- Creo que esta y otras decisiones de interfaz cuestionables son la consecuencia de que la vieja guardia de diseñadores haya ido saliendo en la última década sin apenas transferir conocimiento a sus sustitutos.
+- Esta devoción por Apple es increíble. Viendo todos sus errores de diseño y sus correcciones en las últimas versiones, mi única conclusión es que improvisan sobre la marcha igual que el resto de nosotros.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Standardmäßig keine Icons mehr in jedem Menü
+***** TLDR
+Jim Nielsen stellt fest, dass Apple in der macOS-Version nach Tahoe die Icons in Menüeinträgen standardmäßig wieder entfernt und damit die mit Tahoe eingeführte Änderung zurückgenommen hat. Die aktualisierten Human Interface Guidelines führen jetzt Tahoes eigene Menüs als Beispiel dafür an, was man nicht tun soll, und John Gruber schrieb im Juni über die Kehrtwende. Nielsens Argument: Das wiegt schwerer als ein Verweis auf Gepflogenheiten. Apple hat Icons überall ausprobiert und ist zurückgerudert, und sich gegen etwas zu entscheiden, das man tatsächlich getan hat, ist Erfahrung und nicht Geschmack.
+***** Take
+Kommentatoren fanden dieselbe Aussage in den Human Interface Guidelines von 2008 auf Seite 170, womit das eher eine Rundreise als eine Erkenntnis ist. Das interessante Versagen ist organisatorisch: Apple hatte die Regel schriftlich, lieferte das Gegenteil an jeden Mac aus und schrieb die Regel dann neu, mit dem eigenen Produkt als Gegenbeispiel.
+***** Comments
+- Apple wusste schon vor 20 Jahren, dass das schlecht ist. Die Human Interface Guidelines von 2008 sagen es auf Seite 170. Sie lesen ihre eigene Dokumentation einfach nicht.
+- Ich halte das und viele andere fragwürdige UI-Entscheidungen für die Folge davon, dass die alte Garde der UI-Designer im letzten Jahrzehnt ausgeschieden ist, ohne ihr Wissen weiterzugeben.
+- Diese Apple-Verehrung ist schon besonders. Angesichts all der Designfehltritte und Korrekturen der letzten Releases bleibt mir nur der Schluss, dass sie es genauso improvisieren wie wir alle.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+이제 기본값으로 모든 메뉴에 아이콘을 넣지 않는다
+***** TLDR
+Jim Nielsen은 Apple이 Tahoe 다음 macOS 릴리스에서 메뉴 항목의 아이콘을 기본값에서 다시 제거해 Tahoe의 변경을 되돌렸다고 지적한다. 갱신된 Human Interface Guidelines는 이제 Tahoe의 메뉴 자체를 하지 말아야 할 예시로 들고 있으며, John Gruber는 6월에 이 번복을 다뤘다. Nielsen의 논지는 이것이 선례를 인용하는 것보다 강한 근거라는 점이다. Apple은 모든 곳에 아이콘을 넣어보고 물러섰고, 실제로 해본 일을 하지 않기로 택하는 것은 취향이 아니라 경험이다.
+***** Take
+댓글에서 2008년 Human Interface Guidelines 170쪽에 같은 내용이 있다는 사실이 나왔다. 그렇다면 이건 발견이 아니라 한 바퀴 돌아온 것이다. 흥미로운 실패는 조직 차원이다. Apple은 규칙을 문서로 갖고 있었으면서 정반대를 모든 Mac에 출시했고, 그런 다음 자사 제품을 반례로 삼아 규칙을 다시 썼다.
+***** Comments
+- Apple은 20년 전에 이미 이게 나쁘다는 걸 알고 있었다. 2008년 Human Interface Guidelines 170쪽에 그렇게 적혀 있다. 자기들 문서를 읽지 않을 뿐이다.
+- 이 결정과 최근의 여러 의심스러운 UI 결정은, 지난 10년간 기존 UI 디자이너 세대가 빠져나가면서 지식이 거의 전수되지 않은 결과라고 본다.
+- 이 Apple 숭배는 정말 대단하다. 최근 릴리스의 디자인 실책과 수정을 보면, 결국 그들도 우리와 똑같이 즉흥적으로 해나가고 있다는 결론만 남는다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+デフォルトですべてのメニューにアイコンを付けるのはもうやめ
+***** TLDR
+Jim Nielsenは、AppleがTahoeの次のmacOSリリースでメニュー項目のアイコンをデフォルトから外し、Tahoeで入れた変更を撤回したと指摘する。更新されたHuman Interface GuidelinesはTahoe自身のメニューを「やってはいけない例」として挙げており、John Gruberは6月にこの撤回について書いている。Nielsenの主張は、これが前例を引くより強い論拠だというものだ。Appleはあらゆる場所にアイコンを置いて試し、引き返した。実際にやったことをやらないと決めるのは好みではなく経験である。
+***** Take
+コメント欄では2008年のHuman Interface Guidelines170ページに同じ記述があると指摘された。つまりこれは発見ではなく一周して戻っただけだ。興味深い失敗は組織の側にある。Appleはルールを文書で持ちながら、その逆をすべてのMacに出荷し、その後に自社製品を反例としてルールを書き直した。
+***** Comments
+- Appleは20年前にこれが悪いと分かっていた。2008年のHuman Interface Guidelines170ページにそう書いてある。自社のドキュメントを読まないだけだ。
+- これも含めた近年の疑わしいUI判断の多くは、この10年でUIデザイナーの旧世代が抜け、後任にほとんど知識が引き継がれなかった結果だと思う。
+- このApple信仰は本当にすごい。近年のリリースでの設計の失敗と修正を見ると、結局彼らも我々と同じで出たとこ勝負だという結論にしかならない。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+默认不再给每个菜单项加图标
+***** TLDR
+Jim Nielsen 注意到，Apple 在 Tahoe 之后的 macOS 版本里又把菜单项的图标从默认设置中去掉了，撤回了 Tahoe 带来的改动。更新后的 Human Interface Guidelines 如今直接把 Tahoe 自己的菜单列为反面示例，John Gruber 在 6 月写过这次回退。Nielsen 的论点是，这比引用惯例更有说服力：Apple 把图标铺满菜单试了一遍又退了回来，而对自己真正做过的事选择不再做，这是经验而不是偏好。
+***** Take
+评论区翻出 2008 年的 Human Interface Guidelines 第 170 页写的是同一件事，所以这不是新发现，而是绕了一圈回到原点。真正值得看的失败在组织层面：Apple 把规则写在文档里，却把相反的做法推送给每一台 Mac，然后再用自家产品当反例重写了那条规则。
+***** Comments
+- Apple 二十年前就知道这样不好。2008 年的 Human Interface Guidelines 第 170 页就这么写着。他们只是懒得看自己的文档。
+- 我觉得这个决定和近年其他可疑的 UI 决定，都是过去十年老一代 UI 设计师陆续离开、几乎没有把经验传给接手者的后果。
+- 这种对 Apple 的崇拜真是没谁了。看看他们近几个版本的设计失误和回退，我唯一的感受是他们和我们一样，也是走一步看一步。
+** Tiny possum and glider thought extinct for 6000 years found in remote West Papua :science:biology:conservation:
+:PROPERTIES:
+:ID:       50162044
+:URL:      https://www.bbc.com/news/articles/cp814l80pw2o
+:HN_URL:   https://news.ycombinator.com/item?id=50162044
+:POINTS:   184
+:COMMENTS: 37
+:BY:       bryanrasmussen
+:END:
+
+*** TLDR
+A team led by Tim Flannery and Kris Helgen, working with researchers from the University of Papua and collaborators from the Maybrat and Tambrauw clans, found the pygmy long-fingered possum and the ring-tailed glider alive in rainforest in West Papua, Indonesia. Both were known only from remains roughly 6,000 years old. The search combined decades-old fossils, photographs and museum specimens with the knowledge of local elders about which animals were still in the forest. The possum uses an unusually long fourth finger to pull insect larvae out of wood; the glider nests in tree hollows. Logging is the immediate threat to the forest where they were found.
+
+*** Take
+The fossils said where to look; the elders said what was still there. That division of labour is the method worth copying, and it is why the find happened in a place with no survey data rather than despite it. The same report that announces two species back from 6,000 years of absence names logging as the thing that could undo it.
+
+*** Comments
+
+**** swiftcoder
+Really cool. I hope they succeed in establishing native rights to the forest before the logging companies make them extinct again.
+
+**** culi
+Cogito just came out with a documentary on the history of West Papua that changed the way I see it. Even the citations are worth spending time with.
+
+**** nkoren
+Here's a West Papua mystery the internet needs to become as interested in as I am: a young man develops a special interest in the Thylacine and it goes from there.
+
+*** i18n                                                  :i18n:
+
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Hallan en una zona remota de Papúa Occidental un diminuto falangero y un planeador que se creían extintos desde hace 6.000 años
+***** TLDR
+Un equipo dirigido por Tim Flannery y Kris Helgen, junto a investigadores de la Universidad de Papúa y colaboradores de los clanes Maybrat y Tambrauw, encontró vivos al falangero pigmeo de dedos largos y al planeador de cola anillada en la selva de Papúa Occidental, Indonesia. De ambos solo se conocían restos de unos 6.000 años. La búsqueda combinó fósiles, fotografías y especímenes de museo con décadas de antigüedad y el conocimiento de los ancianos locales sobre qué animales seguían en el bosque. El falangero usa un cuarto dedo inusualmente largo para extraer larvas de insectos de la madera; el planeador anida en huecos de árboles. La tala es la amenaza inmediata para el bosque donde aparecieron.
+***** Take
+Los fósiles indicaron dónde buscar; los ancianos indicaron qué seguía allí. Ese reparto del trabajo es el método que merece copiarse, y explica por qué el hallazgo ocurrió en un lugar sin datos de censo en lugar de pese a ello. El mismo informe que anuncia dos especies de vuelta tras 6.000 años señala la tala como lo que podría deshacerlo.
+***** Comments
+- Genial. Espero que consigan establecer los derechos indígenas sobre el bosque antes de que las madereras los extingan otra vez.
+- Cogito acaba de sacar un documental sobre la historia de Papúa Occidental que cambió mi forma de verla. Hasta las citas merecen el tiempo.
+- Aquí va un misterio de Papúa Occidental que a internet debería interesarle tanto como a mí: un joven desarrolla un interés especial por el tilacino y la cosa sigue desde ahí.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Winziges Possum und Gleitbeutler, seit 6000 Jahren für ausgestorben gehalten, in abgelegenem Westpapua gefunden
+***** TLDR
+Ein Team um Tim Flannery und Kris Helgen hat gemeinsam mit Forschenden der Universität Papua und Mitarbeitenden aus den Maybrat- und Tambrauw-Clans das Zwerg-Langfingerpossum und den Ringelschwanz-Gleitbeutler lebend im Regenwald von Westpapua, Indonesien, nachgewiesen. Von beiden Arten waren bislang nur rund 6000 Jahre alte Überreste bekannt. Die Suche verband jahrzehntealte Fossilien, Fotografien und Museumsexemplare mit dem Wissen lokaler Ältester darüber, welche Tiere noch im Wald leben. Das Possum zieht mit einem ungewöhnlich langen vierten Finger Insektenlarven aus Holz, der Gleitbeutler nistet in Baumhöhlen. Holzeinschlag ist die unmittelbare Bedrohung für den Wald, in dem sie gefunden wurden.
+***** Take
+Die Fossilien sagten, wo zu suchen ist, die Ältesten, was noch da ist. Diese Arbeitsteilung ist die Methode, die sich zu kopieren lohnt, und sie erklärt, warum der Fund an einem Ort ohne Erhebungsdaten gelang und nicht trotz dessen. Derselbe Bericht, der zwei Arten nach 6000 Jahren zurückmeldet, benennt den Holzeinschlag als das, was es wieder zunichtemachen könnte.
+***** Comments
+- Richtig schön. Ich hoffe, sie können die Landrechte der indigenen Gemeinschaften am Wald sichern, bevor die Holzkonzerne die Tiere erneut ausrotten.
+- Cogito hat gerade eine Dokumentation zur Geschichte Westpapuas veröffentlicht, die meinen Blick darauf verändert hat. Selbst die Quellenangaben lohnen die Zeit.
+- Hier ein Rätsel aus Westpapua, für das sich das Internet so interessieren sollte wie ich: Ein junger Mann entwickelt ein Spezialinteresse am Beutelwolf, und von da geht es weiter.
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+6000년간 멸종으로 여겨졌던 작은 주머니쥐와 활강 유대류, 서파푸아 오지에서 발견
+***** TLDR
+Tim Flannery와 Kris Helgen이 이끄는 연구진이 파푸아 대학 연구자들, Maybrat·Tambrauw 씨족 협력자들과 함께 인도네시아 서파푸아의 열대우림에서 긴손가락 피그미 주머니쥐와 고리꼬리 활강 유대류가 살아 있는 것을 확인했다. 두 종 모두 약 6,000년 된 유해로만 알려져 있었다. 조사는 수십 년 된 화석과 사진, 박물관 표본에 더해 어떤 동물이 숲에 아직 남아 있는지에 대한 현지 원로들의 지식을 결합했다. 주머니쥐는 유난히 긴 네 번째 손가락으로 나무 속 애벌레를 꺼내 먹고, 활강 유대류는 나무 구멍에 둥지를 튼다. 이들이 발견된 숲을 당장 위협하는 것은 벌목이다.
+***** Take
+화석은 어디를 볼지 알려줬고, 원로들은 무엇이 아직 남아 있는지 알려줬다. 이 역할 분담이 따라 할 만한 방법이며, 조사 자료가 없는 지역에서 발견이 나온 이유도 거기에 있다. 6,000년 만에 두 종의 생존을 알리는 바로 그 보고서가, 그것을 되돌릴 수 있는 요인으로 벌목을 지목한다.
+***** Comments
+- 정말 멋지다. 벌목 회사들이 이들을 다시 멸종시키기 전에 숲에 대한 원주민 권리가 확립되기를 바란다.
+- Cogito가 서파푸아 역사에 관한 다큐멘터리를 막 내놨는데, 그 지역을 보는 내 시각이 바뀌었다. 인용 목록만 봐도 시간을 들일 가치가 있다.
+- 인터넷이 나만큼 관심을 가져줬으면 하는 서파푸아 미스터리가 있다. 한 청년이 태즈메이니아주머니늑대에 특별한 관심을 갖게 되면서 시작되는 이야기다.
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+6000年前に絶滅したとされた小型のポッサムとフクロモモンガ、西パプア奥地で発見
+***** TLDR
+Tim FlanneryとKris Helgenが率いるチームが、パプア大学の研究者やMaybrat・Tambrauw両氏族の協力者とともに、インドネシア・西パプアの熱帯雨林でコユビピグミーポッサムとワオフクロモモンガの生存を確認した。いずれもおよそ6000年前の遺骸でしか知られていなかった種だ。調査は数十年前の化石や写真、博物館標本に、どの動物がまだ森にいるかという地元長老の知識を組み合わせて進められた。ポッサムは異様に長い第4指で木の中の昆虫の幼虫を引き出し、フクロモモンガは樹洞に巣を作る。発見された森にとっての当面の脅威は伐採である。
+***** Take
+化石はどこを探すかを示し、長老たちは何がまだいるかを示した。この分担こそ真似すべき方法であり、調査データのない土地で発見が起きた理由でもある。6000年ぶりの2種の生存を伝えるその同じ報告が、それを台無しにしうるものとして伐採を名指ししている。
+***** Comments
+- 素晴らしい。伐採企業が彼らを再び絶滅させる前に、森に対する先住民の権利が確立されることを願う。
+- Cogitoが西パプアの歴史についてのドキュメンタリーを出したばかりで、見方が変わった。引用文献だけでも時間をかける価値がある。
+- ネットが自分と同じくらい関心を持つべき西パプアの謎がある。ある若者がフクロオオカミに特別な興味を抱くところから始まる話だ。
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+被认为已灭绝 6000 年的小型袋貂与滑翔有袋类在西巴布亚偏远地区被发现
+***** TLDR
+由 Tim Flannery 和 Kris Helgen 带领的团队，与巴布亚大学的研究者以及 Maybrat、Tambrauw 氏族的合作者一道，在印度尼西亚西巴布亚的雨林中确认了长指侏儒袋貂和环尾滑翔袋貂仍然存活。此前这两个物种只有约 6000 年前的遗骸记录。调查把数十年前的化石、照片和博物馆标本，与当地长者关于森林里还有哪些动物的知识结合起来。袋貂用异常修长的第四指从木头里把昆虫幼虫掏出来，滑翔袋貂在树洞中筑巢。发现它们的那片森林眼下面临的威胁是伐木。
+***** Take
+化石指出该去哪里找，长者指出那里还剩下什么。这种分工才是值得照搬的方法，也解释了为什么这次发现出现在一个没有调查数据的地方，而不是「尽管没有数据」。宣布两个物种在消失 6000 年后重现的同一份报道，也点名伐木是可能让这一切前功尽弃的因素。
+***** Comments
+- 太棒了。希望他们能在伐木公司让这些动物再次灭绝之前，把森林的原住民权利确立下来。
+- Cogito 刚出了一部关于西巴布亚历史的纪录片，改变了我对那里的看法。光是它的引用资料就值得花时间看。
+- 有个西巴布亚的谜团，我希望网上的人能像我一样感兴趣：一个年轻人对袋狼产生了特别的兴趣，故事由此展开。
