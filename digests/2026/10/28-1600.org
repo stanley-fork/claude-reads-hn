@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-28 16:00 UTC
+#+DATE: 2026-10-28T16:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+macOS still trusts broken certificates, ICE's surveillance op ran on Fly.io and Stripe logs, and Emacs turns 50 by learning to talk to Claude
+
+* Highlights
+- Apple's bundled git, curl and python3 still trust the compromised eMudhra roots eleven days in, and macOS 27.2 reverted the manual fix
+- Wired: 120 HSI agents, 15TB of infiltrated Signal messages, and a plate-lookup tool's Fly.io SSH logs and Stripe card fingerprint
+- Emacs at 50: the thread is full of people handing Claude a live Elisp image
+- CircuitHub's Massachusetts robot factory beats Shenzhen on days, loses badly on dollars
+- A Kentucky humanist gets a religious accommodation from his employer's AI mandate
+
+* Stories
+
+** Ten days later, Git on macOS still trusts the compromised eMudhra certificates :security:apple:tls:git:
+:PROPERTIES:
+:ID:       50271640
+:URL:      https://emudhra.we-have-a-problem.com/apple.html
+:HN_URL:   https://news.ycombinator.com/item?id=50271640
+:POINTS:   763
+:COMMENTS: 292
+:BY:       galadran
+:END:
+
+*** TLDR
+Apple was notified about the compromised eMudhra certificate authority on October 17. Eleven days later the git, curl and python3 that ship with macOS still trust those roots. macOS 27.2, released October 26, did not fix it and reverted the hand-edit to /etc/ssl/cert.pem that users had applied, putting them back where they started. Anyone on the network path can intercept HTTPS from those tools, which for git means a clone or pull over https:// can deliver attacker-chosen code and a push can leak credentials. Apple's published guidance is to edit the certificate bundle yourself. Dozens of smaller projects, several run by volunteers, shipped fixes days ago.
+
+*** Take
+Shipping an OS update that undoes the user's own mitigation is worse than shipping nothing. Apple already has a fast channel for exactly this, the background security data update, and chose not to use it for a revoked CA. Homebrew, which has no revenue and no certificate team, had its own CA bundle out first.
+
+*** Comments
+
+**** stingraycharles
+:PROPERTIES:
+:COMMENT_ID: 50273818
+:END:
+git deferring to the OS is the right thing to do. It's macOS that's the problem, not git.
+
+**** moi2388
+:PROPERTIES:
+:COMMENT_ID: 50275287
+:END:
+I'm somewhat of an Apple fanboy, and I find this absolutely unacceptable.
+
+**** kryptiskt
+:PROPERTIES:
+:COMMENT_ID: 50274711
+:END:
+Apple should copy Windows Update and be able to push a small patch without waiting for a whole OS release.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+十天过去了，macOS 上的 Git 仍然信任被攻破的 eMudhra 证书
+***** TLDR
+苹果在 10 月 17 日收到了关于 eMudhra 证书颁发机构被攻破的通知。十一天后，macOS 自带的 git、curl 和 python3 仍然信任这些根证书。10 月 26 日发布的 macOS 27.2 没有修复问题，还撤销了用户手工修改的 /etc/ssl/cert.pem，让他们回到了起点。网络路径上的任何人都能拦截这些工具的 HTTPS 流量：对 git 来说，通过 https:// 克隆或拉取可能会得到攻击者指定的代码，推送则可能泄露凭据。苹果给出的官方建议是让用户自己编辑证书包。几十个规模更小的项目，其中好几个由志愿者维护，几天前就已经发布了修复。
+***** Take
+发布一个会撤销用户自救措施的系统更新，比什么都不发布更糟。苹果本来就有专门的快速通道，也就是后台安全数据更新，却没有用它来处理一个已被吊销的 CA。没有营收、也没有证书团队的 Homebrew，反倒先一步推出了自己的 CA 包。
+***** Comments
+- git 把信任决定交给操作系统是正确的做法。问题出在 macOS，不在 git。
+- 我算是个苹果粉，但我觉得这件事完全不可接受。
+- 苹果应该学学 Windows Update，不必等整个系统版本就能推送一个小补丁。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+10日経ってもmacOSのGitは侵害されたeMudhra証明書を信頼し続けている
+***** TLDR
+AppleはeMudhra認証局の侵害について10月17日に通知を受けた。11日後の現在も、macOS同梱のgit、curl、python3はこれらのルート証明書を信頼し続けている。10月26日公開のmacOS 27.2は問題を修正せず、ユーザーが手作業で編集した/etc/ssl/cert.pemを元に戻してしまい、対策が振り出しに戻った。経路上の第三者はこれらのツールのHTTPS通信を傍受できる。gitの場合、https://経由のクローンやプルで攻撃者が選んだコードが届く可能性があり、プッシュでは認証情報が漏れる恐れがある。Appleの公式案内は証明書バンドルを自分で編集することだ。ボランティア運営を含む数十の小規模プロジェクトは数日前に修正を出している。
+***** Take
+ユーザー自身の回避策を取り消すOS更新を出すのは、何も出さないより悪い。Appleにはまさにこの用途の高速配信経路、バックグラウンドのセキュリティデータ更新があるのに、失効したCAに対して使わなかった。収益も証明書チームも持たないHomebrewのほうが先に独自のCAバンドルを出した。
+***** Comments
+- gitがOSに信頼判断を委ねるのは正しい設計だ。問題はmacOSであってgitではない。
+- 自分はかなりのApple好きだが、これはまったく容認できない。
+- AppleはWindows Updateを真似て、OS全体のリリースを待たずに小さなパッチを配れるようにすべきだ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+열흘이 지났지만 macOS의 Git은 아직도 유출된 eMudhra 인증서를 신뢰한다
+***** TLDR
+애플은 10월 17일에 eMudhra 인증기관 침해 사실을 통보받았다. 11일이 지난 지금도 macOS에 기본 포함된 git, curl, python3는 해당 루트 인증서를 신뢰한다. 10월 26일 배포된 macOS 27.2는 문제를 고치지 않았고, 사용자가 손으로 수정해 둔 /etc/ssl/cert.pem까지 되돌려 놓아 대응이 원점으로 돌아갔다. 네트워크 경로에 있는 누구든 이 도구들의 HTTPS 연결을 가로챌 수 있다. git의 경우 https:// 클론이나 풀에서 공격자가 고른 코드가 전달될 수 있고, 푸시 과정에서 인증 정보가 노출될 수 있다. 애플의 공식 안내는 인증서 번들을 직접 편집하라는 것이다. 자원봉사자가 운영하는 곳을 포함한 수십 개의 작은 프로젝트는 며칠 전에 이미 수정을 내놨다.
+***** Take
+사용자가 직접 적용한 완화 조치를 되돌리는 OS 업데이트는 아무것도 내놓지 않는 것보다 나쁘다. 애플에는 바로 이런 상황을 위한 빠른 배포 경로, 백그라운드 보안 데이터 업데이트가 있는데도 폐기된 CA에는 쓰지 않았다. 수익도 인증서 전담 팀도 없는 Homebrew가 먼저 자체 CA 번들을 내놨다.
+***** Comments
+- git이 신뢰 판단을 OS에 맡기는 것은 올바른 설계다. 문제는 macOS이고 git이 아니다.
+- 나는 애플을 꽤 좋아하는 편이지만 이건 전혀 받아들일 수 없다.
+- 애플도 Windows Update처럼 전체 OS 릴리스를 기다리지 않고 작은 패치를 배포할 수 있어야 한다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Diez días después, Git en macOS sigue confiando en los certificados comprometidos de eMudhra
+***** TLDR
+Apple fue avisada del compromiso de la autoridad certificadora eMudhra el 17 de octubre. Once días después, el git, el curl y el python3 que vienen con macOS siguen confiando en esas raíces. macOS 27.2, publicado el 26 de octubre, no lo corrigió y además revirtió la edición manual de /etc/ssl/cert.pem que los usuarios habían aplicado, dejándolos como al principio. Cualquiera en la ruta de red puede interceptar el HTTPS de esas herramientas: con git, un clone o un pull por https:// puede entregar código elegido por el atacante y un push puede filtrar credenciales. La guía publicada por Apple es que edites tú mismo el paquete de certificados. Decenas de proyectos más pequeños, varios mantenidos por voluntarios, publicaron correcciones hace días.
+***** Take
+Publicar una actualización del sistema que deshace la mitigación del propio usuario es peor que no publicar nada. Apple ya tiene un canal rápido justo para esto, la actualización de datos de seguridad en segundo plano, y decidió no usarlo para una CA revocada. Homebrew, que no tiene ingresos ni equipo de certificados, sacó antes su propio paquete de CA.
+***** Comments
+- Que git delegue en el sistema operativo es lo correcto. El problema es macOS, no git.
+- Soy bastante fan de Apple y esto me parece absolutamente inaceptable.
+- Apple debería copiar Windows Update y poder enviar un parche pequeño sin esperar a una versión completa del sistema.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Zehn Tage später vertraut Git auf macOS noch immer den kompromittierten eMudhra-Zertifikaten
+***** TLDR
+Apple wurde am 17. Oktober über die Kompromittierung der Zertifizierungsstelle eMudhra informiert. Elf Tage später vertrauen das mit macOS ausgelieferte git, curl und python3 diesen Wurzelzertifikaten weiterhin. macOS 27.2 vom 26. Oktober behob das Problem nicht und setzte zusätzlich die von Hand vorgenommene Änderung an /etc/ssl/cert.pem zurück, sodass Nutzer wieder am Anfang stehen. Wer im Netzwerkpfad sitzt, kann die HTTPS-Verbindungen dieser Werkzeuge abfangen: bei git kann ein clone oder pull über https:// vom Angreifer gewählten Code liefern, ein push Zugangsdaten preisgeben. Apples veröffentlichte Empfehlung lautet, das Zertifikatspaket selbst zu bearbeiten. Dutzende kleinere Projekte, mehrere davon von Freiwilligen betrieben, haben schon vor Tagen Korrekturen ausgeliefert.
+***** Take
+Ein Systemupdate auszuliefern, das die eigene Schutzmaßnahme des Nutzers zurücknimmt, ist schlimmer als gar keines. Apple hat für genau diesen Fall einen schnellen Kanal, das Hintergrund-Update der Sicherheitsdaten, und nutzte ihn für eine widerrufene CA nicht. Homebrew, ohne Umsatz und ohne Zertifikatsteam, hatte sein eigenes CA-Paket früher fertig.
+***** Comments
+- Dass git die Entscheidung dem Betriebssystem überlässt, ist richtig. Das Problem ist macOS, nicht git.
+- Ich bin durchaus Apple-Fan und finde das völlig unakzeptabel.
+- Apple sollte sich Windows Update abschauen und einen kleinen Patch ausliefern können, ohne auf ein komplettes OS-Release zu warten.
+** ICE Is Running One of the Largest Anti-Left Surveillance Ops in US History :surveillance:privacy:politics:infrastructure:
+:PROPERTIES:
+:ID:       50272749
+:URL:      https://www.wired.com/story/ice-is-running-one-of-the-largest-anti-left-surveillance-operations-in-us-history/
+:HN_URL:   https://news.ycombinator.com/item?id=50272749
+:POINTS:   935
+:COMMENTS: 658
+:BY:       zzzeek
+:END:
+
+*** TLDR
+Wired reports that ICE's Homeland Security Investigations is running two efforts, Project Whipple Shield and Operation Puppet Master, against anti-ICE activists in the Twin Cities, authorized under National Security Presidential Memorandum 7 and funded through Operation Keyhole, a 2008 undercover program covering five states. Roughly 120 HSI agents, including 11 undercovers and Special Operations Group personnel, worked the case against the defendants now called the Minnesota 15. Investigators infiltrated Signal groups and collected about 15 terabytes of messages, and used license plate readers, CBP Reaper drones, Treasury 314(a) financial requests under the Patriot Act, and the Thomson Reuters CLEAR broker platform. After an activist posted a license-plate lookup tool hosted on Fly.io into an infiltrated chat, agents obtained the site's DNS queries, SSH session logs, outbound connection records, the account's signup IP and a Stripe card fingerprint. Surveillance reached contacts in Seattle, Michigan, Chicago and New York.
+
+*** Take
+The detail worth internalizing is the Fly.io and Stripe trail. A weekend project's control plane is a complete identity dossier: signup IP, SSH sessions, who you connected out to, and a card fingerprint that links the account to every other purchase made with that card. The vendors handed it over on subpoena rather than making anyone get a warrant, and no amount of Signal discipline upstream survives that.
+
+*** Comments
+
+**** driverdan
+:PROPERTIES:
+:COMMENT_ID: 50276760
+:END:
+They provided data without fighting the subpoenas. Warrants should be required for this data.
+
+**** iugtmkbdfil834
+:PROPERTIES:
+:COMMENT_ID: 50273925
+:END:
+Am I missing something? Someone is using a paid service to surveil an actual law enforcement agency and they are surprised the agency can compel that paid service?
+
+**** Jensson
+:PROPERTIES:
+:COMMENT_ID: 50274277
+:END:
+Private corporations selling data willingly is not bound by the fourth amendment.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+ICE 正在执行美国史上规模最大的针对左翼的监控行动之一
+***** TLDR
+《连线》报道，ICE 下属的国土安全调查局（HSI）针对双城地区的反 ICE 活动人士推进两项行动：Whipple Shield 项目和 Puppet Master 行动，授权依据是第 7 号国家安全总统备忘录，经费来自 2008 年设立、覆盖五个州的卧底项目 Operation Keyhole。约 120 名 HSI 探员参与了针对被称为「明尼苏达 15 人」的案件，其中包括 11 名卧底和特别行动组人员。调查人员渗透进 Signal 群组，收集了约 15 TB 的消息，并使用车牌识别器、CBP 的「死神」无人机、依据《爱国者法案》提出的财政部 314(a) 金融调取请求，以及汤森路透的 CLEAR 数据平台。一名活动人士把托管在 Fly.io 上的车牌查询工具发到已被渗透的群聊后，探员拿到了该站点的 DNS 查询记录、SSH 会话日志、外联记录、账号注册 IP 和一个 Stripe 卡片指纹。监控还延伸到西雅图、密歇根、芝加哥和纽约的联系人。
+***** Take
+最值得记住的细节是 Fly.io 和 Stripe 这条线索。一个周末写的小项目，其控制台就是一份完整的身份档案：注册 IP、SSH 会话、你连出去的目标，还有一个把这个账号和用同一张卡的所有消费关联起来的卡片指纹。供应商在收到传票后直接交出数据，没有要求对方申请搜查令。上游再怎么严守 Signal 纪律，也挡不住这一点。
+***** Comments
+- 他们没有对传票提出任何抗辩就交出了数据。这类数据本应要求搜查令。
+- 是我理解有误吗？有人用付费服务去监视真正的执法机构，然后惊讶执法机构能强制这家付费服务交出数据？
+- 私营公司自愿出售数据，并不受第四修正案约束。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ICEが米国史上最大規模の左派監視作戦の一つを展開している
+***** TLDR
+Wiredの報道によれば、ICE傘下の国土安全保障調査局（HSI）はツインシティーズの反ICE活動家に対し、Whipple Shield計画とPuppet Master作戦という二つの取り組みを進めている。根拠は国家安全保障大統領覚書7号で、資金は5州を対象に2008年に設けられた潜入プログラムOperation Keyholeから出ている。「ミネソタ15」と呼ばれる被告らの事件には、11人の潜入捜査官と特殊作戦グループ要員を含む約120人のHSI捜査官が関わった。捜査側はSignalのグループに潜入して約15テラバイトのメッセージを収集し、ナンバープレート読み取り装置、CBPのリーパー無人機、愛国者法に基づく財務省314(a)の金融照会、トムソン・ロイターのCLEARプラットフォームを使った。ある活動家がFly.ioで動くナンバープレート検索ツールを潜入済みのチャットに投稿した後、捜査官はそのサイトのDNSクエリ、SSHセッションログ、外向き接続記録、アカウントの登録IP、Stripeのカード指紋を入手した。監視はシアトル、ミシガン、シカゴ、ニューヨークの関係者にも及んだ。
+***** Take
+記憶すべき細部はFly.ioとStripeの痕跡だ。週末に作った小さなプロジェクトの管理画面が、そのまま完全な身元ファイルになる。登録IP、SSHセッション、どこへ接続したか、そしてそのアカウントを同じカードでの全購入に結びつけるカード指紋。事業者は令状を求めさせるのではなく、召喚状だけで引き渡した。上流でSignalの規律をどれだけ守っても、ここは守れない。
+***** Comments
+- 彼らは召喚状に争わずデータを渡した。この種のデータには令状が必要であるべきだ。
+- 何か見落としているだろうか。有料サービスを使って実際の法執行機関を監視し、その機関が有料サービスに提出を強制できることに驚いているのか？
+- 民間企業が自ら進んでデータを売る行為は、修正第4条の制約を受けない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+ICE가 미국 역사상 최대 규모의 좌파 감시 작전 중 하나를 수행하고 있다
+***** TLDR
+와이어드 보도에 따르면 ICE 산하 국토안보수사국(HSI)은 트윈시티의 반ICE 활동가들을 겨냥해 윕플 실드 프로젝트와 퍼펫 마스터 작전이라는 두 가지 활동을 진행하고 있다. 근거는 국가안보 대통령각서 7호이며, 자금은 5개 주를 포괄하는 2008년 설립 잠입 프로그램 오퍼레이션 키홀에서 나온다. '미네소타 15'로 불리는 피고인들의 사건에는 잠입 요원 11명과 특수작전단 인력을 포함해 약 120명의 HSI 요원이 투입됐다. 수사팀은 시그널 그룹에 잠입해 약 15테라바이트의 메시지를 수집하고, 번호판 판독기, CBP의 리퍼 무인기, 애국자법에 근거한 재무부 314(a) 금융 조회, 톰슨로이터 CLEAR 데이터 플랫폼을 활용했다. 한 활동가가 Fly.io에 올린 번호판 조회 도구를 이미 잠입된 대화방에 공유한 뒤, 요원들은 해당 사이트의 DNS 쿼리, SSH 세션 로그, 외부 연결 기록, 계정 가입 IP, 스트라이프 카드 지문을 확보했다. 감시는 시애틀, 미시간, 시카고, 뉴욕의 관계자들에게까지 뻗었다.
+***** Take
+기억할 대목은 Fly.io와 스트라이프로 이어진 흔적이다. 주말에 만든 작은 프로젝트의 관리 화면이 곧 완전한 신원 파일이다. 가입 IP, SSH 세션, 어디로 접속했는지, 그리고 그 계정을 같은 카드로 한 모든 결제와 연결하는 카드 지문까지. 업체들은 영장을 요구하게 하지 않고 소환장만 받고 넘겼다. 상류에서 시그널 보안 수칙을 아무리 지켜도 이 지점은 막을 수 없다.
+***** Comments
+- 그들은 소환장에 다투지도 않고 데이터를 넘겼다. 이런 데이터에는 영장이 필요해야 한다.
+- 내가 뭔가 놓쳤나? 유료 서비스로 실제 법 집행 기관을 감시하면서, 그 기관이 유료 서비스에 제출을 강제할 수 있다는 걸 의외라고 여기는 건가?
+- 민간 기업이 자발적으로 데이터를 파는 행위는 수정헌법 제4조의 제약을 받지 않는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+ICE lleva adelante una de las mayores operaciones de vigilancia contra la izquierda en la historia de EE. UU.
+***** TLDR
+Wired informa que la división de Investigaciones de Seguridad Nacional (HSI) de ICE mantiene dos esfuerzos, el Proyecto Whipple Shield y la Operación Puppet Master, contra activistas anti-ICE en las Ciudades Gemelas, autorizados por el Memorando Presidencial de Seguridad Nacional 7 y financiados a través de Operation Keyhole, un programa encubierto de 2008 que cubre cinco estados. Unos 120 agentes de HSI, entre ellos 11 encubiertos y personal del Grupo de Operaciones Especiales, trabajaron el caso de los acusados que ahora se conocen como los Minnesota 15. Los investigadores se infiltraron en grupos de Signal y reunieron unos 15 terabytes de mensajes, y usaron lectores de matrículas, drones Reaper de CBP, solicitudes financieras 314(a) del Tesoro bajo la Patriot Act y la plataforma de datos CLEAR de Thomson Reuters. Después de que un activista compartiera en un chat infiltrado una herramienta de consulta de matrículas alojada en Fly.io, los agentes obtuvieron las consultas DNS del sitio, los registros de sesiones SSH, los registros de conexiones salientes, la IP de registro de la cuenta y una huella de tarjeta de Stripe. La vigilancia alcanzó contactos en Seattle, Michigan, Chicago y Nueva York.
+***** Take
+El detalle que conviene retener es el rastro de Fly.io y Stripe. El panel de control de un proyecto de fin de semana es un expediente de identidad completo: IP de registro, sesiones SSH, con quién te conectaste y una huella de tarjeta que une la cuenta con cualquier otra compra hecha con esa tarjeta. Los proveedores lo entregaron con una citación en lugar de obligar a conseguir una orden judicial, y ninguna disciplina con Signal aguanta eso.
+***** Comments
+- Entregaron los datos sin pelear las citaciones. Para estos datos debería exigirse una orden judicial.
+- ¿Se me escapa algo? Alguien usa un servicio de pago para vigilar a una agencia policial real y le sorprende que la agencia pueda obligar a ese servicio a entregar datos.
+- Que las empresas privadas vendan datos por voluntad propia no está limitado por la Cuarta Enmienda.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+ICE betreibt eine der größten Überwachungsoperationen gegen Linke in der US-Geschichte
+***** TLDR
+Wired berichtet, dass die ICE-Abteilung Homeland Security Investigations zwei Vorhaben gegen Anti-ICE-Aktivisten in den Twin Cities betreibt: Project Whipple Shield und Operation Puppet Master, genehmigt durch das National Security Presidential Memorandum 7 und finanziert über Operation Keyhole, ein verdecktes Programm von 2008 für fünf Bundesstaaten. Rund 120 HSI-Beamte, darunter 11 verdeckte Ermittler und Personal der Special Operations Group, arbeiteten am Fall der Angeklagten, die nun als Minnesota 15 bezeichnet werden. Die Ermittler infiltrierten Signal-Gruppen und sammelten etwa 15 Terabyte Nachrichten; dazu kamen Kennzeichenleser, Reaper-Drohnen der CBP, Finanzabfragen nach 314(a) des Finanzministeriums auf Basis des Patriot Act und die Datenplattform CLEAR von Thomson Reuters. Nachdem ein Aktivist ein auf Fly.io gehostetes Werkzeug zur Kennzeichenabfrage in einen infiltrierten Chat gestellt hatte, erhielten die Beamten die DNS-Anfragen der Seite, SSH-Sitzungsprotokolle, Aufzeichnungen ausgehender Verbindungen, die Anmelde-IP des Kontos und einen Stripe-Kartenfingerabdruck. Die Überwachung reichte bis zu Kontakten in Seattle, Michigan, Chicago und New York.
+***** Take
+Das Detail, das man sich merken sollte, ist die Spur über Fly.io und Stripe. Die Steuerungsebene eines Wochenendprojekts ist eine vollständige Identitätsakte: Anmelde-IP, SSH-Sitzungen, mit wem man nach außen sprach, und ein Kartenfingerabdruck, der das Konto mit jedem anderen Einkauf derselben Karte verknüpft. Die Anbieter lieferten das auf eine Vorladung hin aus, statt einen Durchsuchungsbefehl zu verlangen, und dagegen hilft keine Signal-Disziplin weiter oben.
+***** Comments
+- Sie gaben die Daten heraus, ohne die Vorladungen anzufechten. Für solche Daten sollte ein Durchsuchungsbefehl nötig sein.
+- Übersehe ich etwas? Jemand nutzt einen bezahlten Dienst, um eine echte Strafverfolgungsbehörde zu überwachen, und ist überrascht, dass die Behörde diesen Dienst zur Herausgabe zwingen kann?
+- Dass private Unternehmen Daten freiwillig verkaufen, wird vom vierten Verfassungszusatz nicht erfasst.
+** Emacs Turns 50 :emacs:editors:history:lisp:
+:PROPERTIES:
+:ID:       50273171
+:URL:      https://www.technologyreview.com/2026/10/20/1145399/emacs-turns-50/
+:HN_URL:   https://news.ycombinator.com/item?id=50273171
+:POINTS:   203
+:COMMENTS: 81
+:BY:       internet_points
+:END:
+
+*** TLDR
+MIT Technology Review traces Emacs from TECO macros at the MIT AI Lab, through Carl Mikkelsen's 1971 Control-R hack that made editing happen on screen in real time, to Richard Stallman's idea that every keystroke should run a macro the user can redefine. Stallman built it with Guy Steele Jr. and David Moon, and Steele frames the original goal as a social one: a single shared command set so programmers in the lab could help each other instead of each maintaining a private editor. The article credits the sharing arrangement around Emacs with seeding what became the GNU project and the free software movement, and notes macOS still honors Emacs key bindings in text fields even though Apple stopped shipping the binary in 2019.
+
+*** Take
+The anniversary piece is standard; the thread is the story. Several people describe handing Claude a live Emacs process so it writes Elisp, injects it into the running image and evaluates it against the editor they are currently using. An editor that is one inspectable, redefinable Lisp program turns out to be the best target a coding agent could ask for. Nobody predicted that the AI era would reward a 50-year-old design for being transparent all the way down.
+
+*** Comments
+
+**** iLemming
+:PROPERTIES:
+:COMMENT_ID: 50276668
+:END:
+50 years old and feels more modern than any of the crap folks try to sell you as the editor of the future. Modal editing was supposed to pull users away; Evil mode made vimming better. LSPs were supposed to kill it; they only made it better.
+
+**** gpderetta
+:PROPERTIES:
+:COMMENT_ID: 50275019
+:END:
+I can ask Claude, from within emacs, to implement an extension for me on the fly and inject it into the running process. The ultimate REPL.
+
+**** yipinwong
+:PROPERTIES:
+:COMMENT_ID: 50276621
+:END:
+Five years in, the keybindings gave me arthritis in my pinky and I never got far enough with Lisp to extend it properly.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Emacs 五十岁了
+***** TLDR
+《麻省理工科技评论》梳理了 Emacs 的来历：从 MIT 人工智能实验室里的 TECO 宏，到 Carl Mikkelsen 在 1971 年做的 Control-R 改造（让编辑在屏幕上实时发生），再到 Richard Stallman 的想法：每一次按键都应该运行一个用户可以重新定义的宏。Stallman 与 Guy Steele Jr. 和 David Moon 一起把它做出来。Steele 把最初的目标描述为一个社会性目标：共用一套命令集，这样实验室里的程序员可以互相帮忙，而不是各自维护一个私人编辑器。文章认为围绕 Emacs 形成的共享方式孕育了后来的 GNU 项目和自由软件运动，并指出尽管苹果在 2019 年停止随系统分发 Emacs，macOS 的文本框至今仍然支持 Emacs 的按键绑定。
+***** Take
+周年文章本身很常规，真正有意思的是讨论区。好几个人描述了把一个正在运行的 Emacs 进程交给 Claude：它写 Elisp，注入到运行中的镜像里，然后在他们当下正在用的编辑器上求值。一个整体就是可检视、可重定义的 Lisp 程序的编辑器，原来是编程智能体最理想的目标。没人预料到 AI 时代会奖励一个五十年前的设计，仅仅因为它从上到下都是透明的。
+***** Comments
+- 五十岁了，却比那些号称「未来编辑器」的玩意儿更现代。模式化编辑本该把用户抢走，结果 Evil mode 让 vim 操作变得更好；LSP 本该终结它，结果只是让它更强。
+- 我可以在 emacs 里让 Claude 当场给我实现一个扩展，并把它注入到正在运行的进程里。这是终极 REPL。
+- 用了五年，这套按键绑定让我小指得了关节炎，而我始终没把 Lisp 学到能好好写扩展的程度。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Emacsが50歳になった
+***** TLDR
+MIT Technology ReviewはEmacsの系譜を辿る。MIT人工知能研究所のTECOマクロから、画面上でリアルタイムに編集できるようにしたCarl Mikkelsenの1971年のControl-R、そしてすべてのキー入力がユーザーが再定義できるマクロを実行すべきだというRichard Stallmanの着想へ。StallmanはGuy Steele Jr.とDavid Moonとともに作り上げた。Steeleは当初の目的を社会的なものだと語る。共通のコマンド体系を一つ持てば、研究室のプログラマーが各自の私物エディタを抱え込まずに互いを助けられる、というわけだ。記事はEmacsを巡る共有の仕組みが後のGNUプロジェクトとフリーソフトウェア運動の種になったと位置づけ、Appleが2019年にバイナリの同梱をやめた後もmacOSのテキスト入力欄がEmacsのキーバインドを受け付け続けている点に触れる。
+***** Take
+記念記事そのものは平凡だが、スレッドが本題だ。動作中のEmacsプロセスをClaudeに渡し、Elispを書かせて実行中のイメージに注入し、いま使っているエディタ上で評価させる、という話が複数ある。全体が一つの検査可能で再定義可能なLispプログラムであるエディタは、コーディングエージェントにとって理想的な対象だった。AIの時代が、上から下まで透明であるという50年前の設計を評価することになるとは誰も予想していなかった。
+***** Comments
+- 50歳なのに、「未来のエディタ」として売り込まれるどの代物より現代的に感じる。モーダル編集がユーザーを奪うはずだったが、Evil modeはvim操作をより良くした。LSPが終わらせるはずだったが、より強くしただけだ。
+- emacsの中からClaudeに頼んで、その場で拡張を実装させ、動作中のプロセスに注入できる。究極のREPLだ。
+- 5年使って、このキーバインドで小指に関節炎が出た。拡張をちゃんと書けるところまでLispを学べなかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Emacs가 50살이 됐다
+***** TLDR
+MIT 테크놀로지 리뷰는 Emacs의 계보를 짚는다. MIT 인공지능연구소의 TECO 매크로에서 출발해, 편집이 화면에서 실시간으로 일어나게 만든 칼 미켈슨의 1971년 Control-R을 거쳐, 모든 키 입력이 사용자가 재정의할 수 있는 매크로를 실행해야 한다는 리처드 스톨만의 구상으로 이어진다. 스톨만은 가이 스틸 주니어와 데이비드 문과 함께 이를 만들었다. 스틸은 애초의 목표가 사회적인 것이었다고 말한다. 공통된 명령 체계를 하나 두면 연구실 프로그래머들이 각자의 개인 편집기를 끌어안는 대신 서로를 도울 수 있다는 뜻이다. 기사는 Emacs를 둘러싼 공유 방식이 훗날 GNU 프로젝트와 자유 소프트웨어 운동의 씨앗이 됐다고 평가하며, 애플이 2019년에 바이너리 동봉을 중단한 뒤에도 macOS의 텍스트 입력란이 여전히 Emacs 키 바인딩을 받아들인다는 점을 짚는다.
+***** Take
+기념 기사 자체는 평범하고, 진짜 이야기는 댓글이다. 실행 중인 Emacs 프로세스를 Claude에 넘겨 Elisp를 작성하게 하고, 돌아가는 이미지에 주입해 지금 쓰고 있는 편집기 위에서 평가시키는 사례가 여럿 나온다. 전체가 하나의 들여다볼 수 있고 재정의할 수 있는 리스프 프로그램인 편집기는, 코딩 에이전트가 바랄 수 있는 최적의 대상이었다. AI 시대가 위부터 아래까지 투명하다는 이유로 50년 전 설계에 보상을 줄 것이라고 예측한 사람은 없었다.
+***** Comments
+- 50살인데도 '미래의 편집기'라며 팔려는 어떤 물건보다 현대적으로 느껴진다. 모달 편집이 사용자를 데려갈 줄 알았지만 Evil 모드가 vim 조작을 더 좋게 만들었고, LSP가 끝낼 줄 알았지만 더 강하게 만들기만 했다.
+- emacs 안에서 Claude에게 확장을 즉석에서 구현하게 하고 실행 중인 프로세스에 주입할 수 있다. 궁극의 REPL이다.
+- 5년을 쓰고 나니 키 바인딩 때문에 새끼손가락에 관절염이 생겼고, 확장을 제대로 쓸 만큼 리스프를 익히지도 못했다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Emacs cumple 50 años
+***** TLDR
+MIT Technology Review recorre la historia de Emacs: desde las macros de TECO en el laboratorio de inteligencia artificial del MIT, pasando por el Control-R de Carl Mikkelsen en 1971, que hizo que la edición ocurriera en pantalla en tiempo real, hasta la idea de Richard Stallman de que cada pulsación ejecutara una macro que el usuario pudiera redefinir. Stallman lo construyó con Guy Steele Jr. y David Moon, y Steele describe el objetivo original como social: un único conjunto de comandos compartido para que los programadores del laboratorio pudieran ayudarse en lugar de mantener cada uno su editor privado. El artículo atribuye al esquema de compartición en torno a Emacs la semilla de lo que luego fue el proyecto GNU y el movimiento del software libre, y señala que macOS sigue aceptando los atajos de Emacs en los campos de texto aunque Apple dejó de incluir el binario en 2019.
+***** Take
+El texto de aniversario es convencional; el hilo es la noticia. Varios describen entregarle a Claude un proceso de Emacs en marcha para que escriba Elisp, lo inyecte en la imagen viva y lo evalúe contra el editor que están usando en ese momento. Un editor que es un solo programa Lisp inspeccionable y redefinible resulta ser el mejor objetivo que un agente de programación podría pedir. Nadie previó que la era de la IA premiaría un diseño de hace 50 años por ser transparente de arriba a abajo.
+***** Comments
+- Cincuenta años y se siente más moderno que cualquiera de las cosas que intentan venderte como el editor del futuro. La edición modal iba a llevarse a los usuarios; Evil mode mejoró el vimming. Los LSP iban a matarlo; solo lo mejoraron.
+- Puedo pedirle a Claude, desde dentro de emacs, que me implemente una extensión al vuelo y la inyecte en el proceso en marcha. El REPL definitivo.
+- Cinco años después, los atajos me dejaron artritis en el dedo pequeño y nunca llegué lo bastante lejos con Lisp para extenderlo en serio.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Emacs wird 50
+***** TLDR
+MIT Technology Review verfolgt Emacs von den TECO-Makros im KI-Labor des MIT über Carl Mikkelsens Control-R von 1971, das das Bearbeiten in Echtzeit auf dem Bildschirm möglich machte, bis zu Richard Stallmans Idee, dass jeder Tastendruck ein Makro ausführen soll, das der Nutzer neu definieren kann. Stallman baute es mit Guy Steele Jr. und David Moon; Steele beschreibt das ursprüngliche Ziel als soziales: ein einziger gemeinsamer Befehlssatz, damit die Programmierer im Labor einander helfen konnten, statt jeweils einen privaten Editor zu pflegen. Der Artikel sieht in der Teilungspraxis um Emacs den Keim des späteren GNU-Projekts und der Freie-Software-Bewegung und merkt an, dass macOS in Textfeldern weiterhin Emacs-Tastenkürzel akzeptiert, obwohl Apple die Binärdatei seit 2019 nicht mehr mitliefert.
+***** Take
+Der Jubiläumstext ist gewöhnlich, der Thread ist die Geschichte. Mehrere Leute beschreiben, wie sie Claude einen laufenden Emacs-Prozess übergeben, damit er Elisp schreibt, in das laufende Image einspeist und gegen den Editor auswertet, den sie gerade benutzen. Ein Editor, der ein einziges inspizierbares, umdefinierbares Lisp-Programm ist, erweist sich als bestes Ziel, das ein Coding-Agent haben kann. Niemand hat vorhergesagt, dass die KI-Ära ein 50 Jahre altes Design dafür belohnt, bis in jede Schicht hinein durchsichtig zu sein.
+***** Comments
+- 50 Jahre alt und fühlt sich moderner an als alles, was einem als Editor der Zukunft verkauft wird. Modales Editieren sollte die Nutzer abziehen; Evil mode machte das Vimmen besser. LSPs sollten es töten; sie machten es nur besser.
+- Ich kann Claude von innerhalb von emacs bitten, mir spontan eine Erweiterung zu bauen und sie in den laufenden Prozess einzuspeisen. Das ultimative REPL.
+- Nach fünf Jahren haben mir die Tastenkürzel Arthritis im kleinen Finger eingebracht, und mit Lisp kam ich nie weit genug, um es richtig zu erweitern.
+** Unveiling The Grid: PCBs made in America, twice as fast as Shenzhen :hardware:manufacturing:pcb:supply-chain:
+:PROPERTIES:
+:ID:       50243060
+:URL:      https://www.circuithub.com/post/unveiling-the-grid
+:HN_URL:   https://news.ycombinator.com/item?id=50243060
+:POINTS:   224
+:COMMENTS: 98
+:BY:       seddona
+:END:
+
+*** TLDR
+CircuitHub introduced The Grid, which it describes as one factory-scale robot in Massachusetts: boards ride on levitating movers between automated soldering, placement and inspection stations, with a scheduler routing each board individually so there is no per-design setup and high-mix work does not stall the line. The post's own benchmark is a 4-layer motor controller, 5 boards, 118 parts: 4 days and $630 delivered from The Grid, against a 9-day median and about $465 from a Shenzhen shop including shipping and tariffs. CircuitHub says the line has run for five years, ships tens of millions of dollars of electronics a year, and is planning a 5x capacity increase in 2026 with more in 2027.
+
+*** Take
+The headline benchmark is the one case where the gap is small. People who ran their own boards through came back with $9k against JLCPCB's $2k, and the constraints matter: 1oz copper and no buried vias rules out exactly the high-current designs that a motor controller implies. Four days instead of nine is worth real money on the prototype that is blocking your week. It is not worth 4x on a production run, and CircuitHub is pricing as if it were.
+
+*** Comments
+
+**** kevin42
+:PROPERTIES:
+:COMMENT_ID: 50274323
+:END:
+I got a quote of $9k compared to JLC's $2k, even after tariffs and shipping. That makes the project unviable for us.
+
+**** WarmWash
+:PROPERTIES:
+:COMMENT_ID: 50273878
+:END:
+Our domestic made boards tend to be lower quality with more mistakes than Chinese made ones, while also costing up to 50x more. I really hope this one is broadly viable.
+
+**** phkahler
+:PROPERTIES:
+:COMMENT_ID: 50273213
+:END:
+They give an example motor controller, but then require 1oz copper. Motor controllers in particular often use 2oz for high current. No buried vias is an interesting requirement too.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+揭晓 The Grid：美国制造的 PCB，比深圳快一倍
+***** TLDR
+CircuitHub 推出了 The Grid，公司把它描述成位于马萨诸塞州的一台「工厂规模的机器人」：电路板搭乘磁悬浮载具在自动焊接、贴装和检测工位之间移动，调度系统为每块板单独规划路线，因此不存在逐个设计的换线准备，多品种小批量的订单也不会堵住产线。文章自己给出的对比是一块四层电机控制板，5 片、118 个元件：The Grid 为 4 天、送到手 630 美元；深圳厂家的中位数是 9 天，含运费和关税约 465 美元。CircuitHub 说这条线已运行五年，每年出货数千万美元的电子产品，计划 2026 年把产能提高到五倍，2027 年继续扩张。
+***** Take
+标题里的那个对比，恰好是差距最小的一个案例。真正拿自己板子去询价的人回来说：9000 美元对 JLCPCB 的 2000 美元。而限制条件也很要紧：只支持 1oz 铜厚、不支持埋孔，恰恰排除了电机控制板所暗示的大电流设计。在卡住你这一周的样板上，四天而不是九天值真金白银；但在量产批次上不值四倍价差，而 CircuitHub 的定价却当它值。
+***** Comments
+- 我拿到的报价是 9000 美元，JLC 是 2000 美元，算上关税和运费也还是这样。这让项目对我们来说根本做不下去。
+- 我们在国内（美国）做的板子质量往往更差、错误更多，价格却能贵到 50 倍。我真希望这家能普遍可用。
+- 他们拿电机控制板当例子，却要求 1oz 铜厚。偏偏电机控制板为了大电流经常要用 2oz。不支持埋孔这条要求也挺有意思。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+The Gridを公開：米国製のPCBを深圳の倍の速さで
+***** TLDR
+CircuitHubが公開したThe Gridは、同社の説明では「工場規模のロボット一台」だ。マサチューセッツ州の施設で、基板が磁気浮上の搬送体に乗って自動はんだ付け、実装、検査の各工程を移動し、スケジューラが基板ごとに経路を決めるため設計単位の段取り替えが不要で、多品種少量の仕事でもラインが止まらない。記事自身の比較対象は4層のモーターコントローラ、5枚・118部品で、The Gridが4日・配送込み630ドル、深圳の工場が中央値9日・送料と関税込みで約465ドル。CircuitHubによれば、このラインは5年稼働しており、年間数千万ドル規模の電子機器を出荷し、2026年に生産能力を5倍、2027年にさらに拡張する計画だという。
+***** Take
+見出しの比較は、差が最も小さい一例をあえて選んでいる。自分の基板で見積もりを取った人たちは、JLCPCBの2千ドルに対して9千ドルという数字を持ち帰った。制約も効く。1oz銅厚のみで埋め込みビアなしという条件は、モーターコントローラが前提とする大電流設計をまさに排除する。今週を止めている試作基板なら、9日ではなく4日に実際の金銭的価値がある。量産ロットで4倍の価格差に値はしないのに、CircuitHubはそれを前提に値付けしている。
+***** Comments
+- 見積もりは9千ドル、JLCは2千ドルだった。関税と送料を入れてもこの差だ。これではこちらの案件は成立しない。
+- 国内製の基板は中国製より品質が低くミスも多い傾向があるのに、価格は最大50倍になる。これが幅広く使えるものになってほしいと本気で思う。
+- 例としてモーターコントローラを挙げながら、1oz銅厚を要求している。モーターコントローラは大電流のために2ozを使うことが多い。埋め込みビア不可という条件も興味深い。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+The Grid 공개: 미국에서 만드는 PCB, 선전보다 두 배 빠르게
+***** TLDR
+CircuitHub가 공개한 The Grid는 회사 설명으로는 매사추세츠에 있는 '공장 규모의 로봇 한 대'다. 기판이 자기부상 이송체에 실려 자동 솔더링, 실장, 검사 공정 사이를 오가고, 스케줄러가 기판마다 경로를 따로 정해 설계별 셋업이 없고 다품종 소량 작업에도 라인이 멈추지 않는다. 글이 직접 내세운 비교 대상은 4층 모터 컨트롤러, 5장·118개 부품으로, The Grid는 4일에 배송 포함 630달러, 선전 업체는 중간값 9일에 배송과 관세를 포함해 약 465달러다. CircuitHub는 이 라인이 5년간 가동됐고 연간 수천만 달러 규모의 전자제품을 출하하며, 2026년에 생산능력을 5배로 늘리고 2027년에 더 확장할 계획이라고 밝혔다.
+***** Take
+제목에 쓰인 비교는 격차가 가장 작은 사례다. 자기 기판으로 실제 견적을 받아 본 사람들은 JLCPCB의 2천 달러 대비 9천 달러라는 숫자를 들고 왔다. 제약도 중요하다. 1oz 구리에 매립 비아 불가라는 조건은 모터 컨트롤러가 전제하는 대전류 설계를 그대로 배제한다. 이번 주를 막고 있는 시제품이라면 9일이 아닌 4일에 실제 돈을 쓸 가치가 있다. 양산 물량에서 4배 차이를 낼 가치는 없는데, CircuitHub의 가격은 그럴 가치가 있다는 전제로 매겨져 있다.
+***** Comments
+- 견적이 9천 달러였고 JLC는 2천 달러였다. 관세와 배송비를 더해도 그렇다. 이러면 우리 프로젝트는 성립하지 않는다.
+- 국내에서 만든 기판은 중국산보다 품질이 낮고 실수도 많은 편인데 가격은 최대 50배까지 비싸다. 이번 건은 널리 쓸 만하길 진심으로 바란다.
+- 예시로 모터 컨트롤러를 들면서 1oz 구리를 요구한다. 모터 컨트롤러는 대전류 때문에 2oz를 쓰는 경우가 많다. 매립 비아 불가라는 조건도 흥미롭다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Presentando The Grid: placas fabricadas en Estados Unidos, el doble de rápido que Shenzhen
+***** TLDR
+CircuitHub presentó The Grid, que describe como un único robot a escala de fábrica en Massachusetts: las placas viajan sobre transportadores levitantes entre estaciones automáticas de soldadura, montaje e inspección, y un planificador asigna a cada placa su propia ruta, de modo que no hay preparación por diseño y el trabajo de mucha variedad no frena la línea. El punto de comparación que elige el propio artículo es un controlador de motor de 4 capas, 5 placas y 118 componentes: 4 días y 630 dólares entregados desde The Grid, frente a una mediana de 9 días y unos 465 dólares de un taller de Shenzhen con envío y aranceles incluidos. CircuitHub dice que la línea lleva cinco años funcionando, envía decenas de millones de dólares en electrónica al año y planea quintuplicar la capacidad en 2026 y ampliarla más en 2027.
+***** Take
+La comparación del titular es el caso donde la diferencia es menor. Quienes pidieron presupuesto con sus propias placas volvieron con 9.000 dólares frente a los 2.000 de JLCPCB, y las restricciones pesan: cobre de 1oz y sin vías enterradas descarta justo los diseños de alta corriente que implica un controlador de motor. Cuatro días en lugar de nueve vale dinero real en el prototipo que te bloquea la semana. No vale cuatro veces más en una tirada de producción, y CircuitHub pone precio como si lo valiera.
+***** Comments
+- Me dieron un presupuesto de 9.000 dólares frente a los 2.000 de JLC, incluso con aranceles y envío. Así el proyecto no es viable para nosotros.
+- Nuestras placas hechas en el país suelen tener peor calidad y más fallos que las chinas, y además cuestan hasta 50 veces más. Ojalá esta sea ampliamente viable.
+- Ponen como ejemplo un controlador de motor, pero exigen cobre de 1oz. Los controladores de motor suelen usar 2oz por la corriente alta. Prohibir las vías enterradas también es un requisito curioso.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+The Grid vorgestellt: Platinen aus den USA, doppelt so schnell wie Shenzhen
+***** TLDR
+CircuitHub stellte The Grid vor, laut eigener Beschreibung ein einziger Roboter in Fabrikgröße in Massachusetts: Platinen fahren auf schwebenden Transportern zwischen automatisierten Löt-, Bestückungs- und Prüfstationen, und ein Planer vergibt jeder Platine ihre eigene Route, sodass keine Einrichtung pro Design nötig ist und Arbeit mit großer Variantenvielfalt die Linie nicht aufhält. Der Vergleichspunkt des Beitrags selbst ist eine vierlagige Motorsteuerung, 5 Platinen, 118 Bauteile: 4 Tage und 630 Dollar geliefert von The Grid, gegenüber einem Median von 9 Tagen und etwa 465 Dollar bei einem Betrieb in Shenzhen inklusive Versand und Zoll. CircuitHub gibt an, die Linie laufe seit fünf Jahren, liefere Elektronik im Wert von zig Millionen Dollar pro Jahr aus und solle 2026 die fünffache Kapazität erreichen, mit weiterem Ausbau 2027.
+***** Take
+Der Vergleich in der Überschrift ist der Fall mit dem kleinsten Abstand. Wer eigene Platinen anfragte, kam mit 9.000 Dollar gegenüber 2.000 bei JLCPCB zurück, und die Einschränkungen wiegen: 1oz Kupfer und keine vergrabenen Durchkontaktierungen schließt genau die Hochstromdesigns aus, die eine Motorsteuerung voraussetzt. Vier Tage statt neun sind beim Prototypen, der die Woche blockiert, echtes Geld wert. Beim Serienlauf sind sie keinen vierfachen Preis wert, und CircuitHub kalkuliert, als wären sie es.
+***** Comments
+- Mein Angebot lag bei 9.000 Dollar gegenüber 2.000 bei JLC, selbst mit Zoll und Versand. Damit ist das Projekt für uns nicht machbar.
+- Unsere im Inland gefertigten Platinen sind tendenziell schlechter und fehlerhafter als chinesische und kosten dabei bis zu 50-mal mehr. Ich hoffe wirklich, dass das hier breit tragfähig ist.
+- Sie zeigen als Beispiel eine Motorsteuerung, verlangen dann aber 1oz Kupfer. Gerade Motorsteuerungen nutzen für hohe Ströme oft 2oz. Keine vergrabenen Vias ist auch eine interessante Vorgabe.
+** Kentucky man becomes the first humanist granted religious exemption from AI :ai:law:labor:ethics:
+:PROPERTIES:
+:ID:       50273396
+:URL:      https://religionnews.com/2026/10/26/in-a-first-a-humanist-granted-a-religious-exemption-from-using-ai/
+:HN_URL:   https://news.ycombinator.com/item?id=50273396
+:POINTS:   234
+:COMMENTS: 260
+:BY:       danso
+:END:
+
+*** TLDR
+［Religion News Service sits behind a bot check that blocks both direct fetch and the text proxy, so this is from the headline and the HN thread.］ A Kentucky man who identifies as a secular humanist, reported in the thread as an administrator at a public university, was granted a religious accommodation exempting him from his employer's mandatory AI-use requirement. His stated objection is that handing the reasoning work to a model erodes his capacity to develop as a moral actor, since thinking situations through is the substance of his job. The accommodation is notable because it treats non-theistic humanism as a belief system qualifying for religious protection.
+
+*** Take
+The mechanism matters more than the novelty. Accommodation law does not ask whether a belief is true, only whether it is sincerely held and functions as a religious conviction, which is why this was always available to atheists and why the next hundred requests will not all be sympathetic. The thread's sharpest objection stands unanswered: no principle on offer explains why offloading labor to a dishwasher, a car or a compiler is fine and offloading it to a model is the line.
+
+*** Comments
+
+**** joshstrange
+:PROPERTIES:
+:COMMENT_ID: 50273780
+:END:
+The car he drives to work, the house he heats, all that labor is fine to offload, but AI is the line?
+
+**** bunderbunder
+:PROPERTIES:
+:COMMENT_ID: 50273914
+:END:
+I can remember a time when the Borg's famous catchphrase was understood to be the kind of thing that only the bad guys would say.
+
+**** Aurornis
+:PROPERTIES:
+:COMMENT_ID: 50275210
+:END:
+Reminds me of the older adults who refused to use email. It worked out for the ones who could afford to retire.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+肯塔基州一名男子成为首位以人文主义信念获得 AI 豁免的人
+***** TLDR
+［Religion News Service 设有机器人验证，直接抓取和文本代理都被拦下，因此以下内容来自标题和 HN 讨论。］一名自认是世俗人文主义者的肯塔基州男子（讨论区称他是一所公立大学的行政人员）获得了宗教信仰方面的工作安排豁免，不必遵守雇主强制使用 AI 的要求。他提出的理由是：把推理工作交给模型，会削弱他作为道德主体成长的能力，因为把各种情形想清楚正是他工作的实质。这件事值得注意，是因为它把非有神论的人文主义当作可享受宗教保护的信念体系。
+***** Take
+机制比新鲜感更重要。信仰安排的法律不追问一个信念是否正确，只问它是否被真诚持有、是否在功能上相当于宗教信念——这正是无神论者一直可以援引它的原因，也意味着接下来的一百份申请不会个个都讨人喜欢。讨论区里最锋利的那个反驳至今无人回应：没有任何现成原则能说明，为什么把劳动交给洗碗机、汽车或编译器都没问题，交给模型就是底线。
+***** Comments
+- 他开车上班，他给房子供暖，这些劳动都可以外包，偏偏 AI 就是底线？
+- 我还记得有那么一个时代，博格人那句著名的台词被理解成只有反派才会说的话。
+- 这让我想起那些拒绝用电子邮件的年长者。对那些付得起退休成本的人来说，结果还不错。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ケンタッキー州の男性が、人文主義を理由にAI利用免除を認められた初の事例に
+***** TLDR
+［Religion News Serviceはボット判定の画面を挟んでおり、直接取得もテキストプロキシも通らなかったため、以下は見出しとHNのスレッドに基づく。］世俗的人文主義者を自認するケンタッキー州の男性（スレッドでは公立大学の管理職とされる）が、雇用主のAI利用義務からの免除を信念に基づく配慮として認められた。本人の主張は、推論の仕事をモデルに渡すことが道徳的主体として育つ力を損なう、というものだ。状況を考え抜くこと自体が彼の職務の中身だからである。無神論的な人文主義を、宗教的保護の対象となる信念体系として扱った点が注目される。
+***** Take
+新規性より仕組みが重要だ。信念に基づく配慮の法は、その信念が正しいかを問わない。誠実に抱かれているか、宗教的確信として機能しているかだけを問う。だからこそ無神論者にも以前から使えたし、今後の百件の申請がどれも共感を呼ぶとは限らない。スレッドで最も鋭い反論は未回答のままだ。食器洗い機や自動車やコンパイラに労働を渡すのは良いのに、モデルに渡すのが一線だという理屈を、誰も示していない。
+***** Comments
+- 通勤に使う車、暖房する家、そうした労働はすべて外部化してよくて、AIだけが一線なのか。
+- ボーグのあの有名な台詞が、悪役だけが口にする類のものだと理解されていた時代を覚えている。
+- 電子メールを使うことを拒んだ年長者を思い出す。引退できる余裕のある人にとってはうまくいった話だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+켄터키의 한 남성, 인간주의를 이유로 AI 사용 면제를 받은 첫 사례가 됐다
+***** TLDR
+［Religion News Service는 봇 확인 화면을 띄워 직접 가져오기와 텍스트 프록시 모두 막혔다. 아래 내용은 제목과 HN 스레드에 근거한다.］ 세속적 인간주의자라고 밝힌 켄터키의 한 남성(스레드에서는 공립대학 행정직으로 전해진다)이 고용주의 AI 사용 의무에서 면제되는 신념상 배려를 인정받았다. 그가 내세운 이유는 추론 작업을 모델에 넘기면 도덕적 주체로 성장할 능력이 깎인다는 것이다. 상황을 끝까지 생각해 보는 일 자체가 그의 업무의 본질이기 때문이다. 이 사례는 무신론적 인간주의를 종교적 보호 대상이 되는 신념 체계로 다뤘다는 점에서 주목된다.
+***** Take
+새로움보다 작동 방식이 중요하다. 신념상 배려에 관한 법은 그 신념이 옳은지를 묻지 않는다. 진심으로 품고 있는지, 종교적 확신으로 기능하는지만 묻는다. 그래서 무신론자에게도 원래부터 열려 있었고, 앞으로 들어올 수백 건의 요청이 모두 호감을 살 리도 없다. 스레드에서 가장 날카로운 반박은 아직 답을 얻지 못했다. 식기세척기와 자동차와 컴파일러에 노동을 넘기는 것은 괜찮고 모델에 넘기는 것은 선을 넘는다는 근거를 아무도 내놓지 못했다.
+***** Comments
+- 출근하는 데 쓰는 차, 난방하는 집, 그런 노동은 전부 넘겨도 되는데 AI만 선을 넘는 건가?
+- 보그의 그 유명한 대사가 악역만 할 법한 말로 이해되던 시절이 기억난다.
+- 이메일 쓰기를 거부했던 어르신들이 떠오른다. 은퇴할 여유가 있던 사람들에게는 괜찮게 끝난 이야기다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Un hombre de Kentucky es el primer humanista al que se concede una exención religiosa del uso de IA
+***** TLDR
+［Religion News Service está detrás de una verificación antibots que bloquea tanto la descarga directa como el proxy de texto, así que esto proviene del titular y del hilo de HN.］ A un hombre de Kentucky que se identifica como humanista secular, descrito en el hilo como administrativo de una universidad pública, se le concedió una adaptación por creencias que lo exime del requisito de su empleador de usar IA. Su objeción es que entregar el trabajo de razonar a un modelo erosiona su capacidad de formarse como agente moral, ya que pensar las situaciones a fondo es la sustancia de su trabajo. El caso llama la atención porque trata al humanismo no teísta como un sistema de creencias con derecho a protección religiosa.
+***** Take
+El mecanismo importa más que la novedad. La ley de adaptaciones no pregunta si una creencia es cierta, solo si se sostiene con sinceridad y funciona como una convicción religiosa, que es la razón por la que esto siempre estuvo disponible para los ateos y por la que las próximas cien solicitudes no serán todas simpáticas. La objeción más afilada del hilo sigue sin respuesta: ningún principio sobre la mesa explica por qué delegar trabajo a un lavaplatos, un coche o un compilador está bien y delegarlo a un modelo es la línea roja.
+***** Comments
+- El coche con el que va al trabajo, la casa que calienta: todo ese trabajo se puede delegar, pero la IA es la línea.
+- Recuerdo una época en la que la famosa frase de los Borg se entendía como algo que solo dirían los malos.
+- Me recuerda a los adultos mayores que se negaron a usar el correo electrónico. Les salió bien a los que podían permitirse jubilarse.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Ein Mann aus Kentucky ist der erste Humanist, dem eine religiöse Ausnahme von der KI-Nutzung gewährt wird
+***** TLDR
+［Religion News Service steht hinter einer Bot-Prüfung, die sowohl den direkten Abruf als auch den Textproxy blockiert; das Folgende stammt daher aus der Überschrift und dem HN-Thread.］ Einem Mann aus Kentucky, der sich als säkularer Humanist bezeichnet und im Thread als Verwaltungsangestellter einer staatlichen Universität beschrieben wird, wurde eine Glaubensrücksicht gewährt, die ihn von der verpflichtenden KI-Nutzung seines Arbeitgebers ausnimmt. Sein Einwand: Die Denkarbeit an ein Modell abzugeben, untergräbt seine Fähigkeit, sich als moralisch Handelnder zu entwickeln, denn Situationen durchzudenken ist der Kern seiner Arbeit. Bemerkenswert ist der Fall, weil er nicht-theistischen Humanismus als Überzeugungssystem behandelt, das religiösen Schutz genießt.
+***** Take
+Der Mechanismus zählt mehr als die Neuheit. Das Recht auf Glaubensrücksicht fragt nicht, ob eine Überzeugung zutrifft, sondern nur, ob sie aufrichtig gehalten wird und wie eine religiöse Gewissheit funktioniert. Deshalb stand sie Atheisten immer offen, und deshalb werden die nächsten hundert Anträge nicht alle sympathisch sein. Der schärfste Einwand im Thread bleibt unbeantwortet: Kein vorgetragenes Prinzip erklärt, warum Arbeit an eine Geschirrspülmaschine, ein Auto oder einen Compiler abzugeben in Ordnung ist und an ein Modell die Grenze.
+***** Comments
+- Das Auto, mit dem er zur Arbeit fährt, das Haus, das er heizt: diese Arbeit darf man alle abgeben, aber bei KI ist die Grenze?
+- Ich erinnere mich an eine Zeit, in der der berühmte Spruch der Borg als etwas verstanden wurde, das nur die Bösen sagen.
+- Erinnert mich an ältere Menschen, die sich weigerten, E-Mail zu nutzen. Für die, die sich den Ruhestand leisten konnten, ging es gut aus.
