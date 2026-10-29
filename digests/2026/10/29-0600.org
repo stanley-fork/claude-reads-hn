@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-29 06:00 UTC
+#+DATE: 2026-10-29T06:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A RISC-V CPU compiled into Qwen's weights, Claude Code's status line eating a fifth of its API calls, and Alpine rebuilding GitLab after a Ruby regex bug
+
+* Highlights
+- Qwenputer compiles an RV32IM core into 11 extra Qwen 3.5 4B layers and runs 18 million instructions without an error
+- Claude Code's 3-5 word panel summary was 19.7% of API requests and 96% Opus, at a 9,000:1 input-to-output ratio
+- Alpine's GitLab was attacked through a CVSS 10.0 Onigmo regex bug that GitLab patches in Ruby, not in GitLab
+- Eric Fischer traces 'else' to a 1958 German ALGOL proposal; HN finds the English conjunction in Call of the Wild
+- Formlabs' $699 resin printer still needs a $199 wash-and-cure station and proprietary resin cartridges
+
+* Stories
+
+** Qwenputer: A functioning, deterministic RISC-V CPU inside Qwen3.5 :llm:risc-v:qwen:architecture:emulation:
+:PROPERTIES:
+:ID:       50282838
+:URL:      https://divagr.com/blog/qwenputer
+:HN_URL:   https://news.ycombinator.com/item?id=50282838
+:POINTS:   274
+:COMMENTS: 62
+:BY:       csmantle
+:END:
+
+*** TLDR
+Divyansh Agrawal compiled a 32-bit RV32IM RISC-V CPU into 11 extra layers of a stock Qwen 3.5 4B. The trick is Gated DeltaNet: set the gate and write strength to 1 and use one-hot key encoding, and a GDN head becomes exact addressable RAM whose state stays the same size no matter how long the conversation runs, unlike a KV cache. Instructions arrive as token sequences, attention heads do lookups, feed-forward units do arithmetic. It passes the official RISC-V test suites, ran 18 million instructions without an error, runs C and MicroPython inside the forward pass, and lifts accuracy on DeepMind arithmetic benchmarks from 72.5-95% to 97.5-100%. There is also an in-weight filesystem holding up to 512 files, around 53,000 tokens, at 90% retrieval accuracy. The bill: an 18.8 GB checkpoint, 24 GB of GPU memory, and about 3,200 CPU tokens per second on an L4.
+
+*** Take
+The interesting result is not the CPU, it is that DeltaNet's fixed-size state can be driven as exact memory at all. The CPU is an expensive way to prove it. Doubling the checkpoint to get a 3,200-instruction-per-second core, where each instruction costs several decoded tokens, is a worse deal than the tool call it replaces, and andai says so in the thread. Read it for the memory mechanism, not for the arithmetic.
+
+*** Comments
+
+**** andai
+:PROPERTIES:
+:COMMENT_ID: 50283954
+:END:
+So like... can't you use a computer as a computer without doing all that roundabout stuff? If you want to integrate an LLM with hard computation there's probably a more efficient way.
+
+**** mkturkcan
+:PROPERTIES:
+:COMMENT_ID: 50283990
+:END:
+Nice project and write up. I've done similar work with a custom tiny network I call Loom; you need far fewer layers, and you can run Doom, very slowly.
+
+**** Ericson2314
+:PROPERTIES:
+:COMMENT_ID: 50284325
+:END:
+The real question is whether current training methods allow a model to learn this from enough assembly, or whether the weights can only be hard-coded.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Qwenputer：Qwen3.5 权重里跑着一个确定性的 RISC-V CPU
+***** TLDR
+Divyansh Agrawal 把一个 32 位 RV32IM RISC-V CPU 编译进原版 Qwen 3.5 4B 额外增加的 11 层里。关键在 Gated DeltaNet：把门控和写入强度设为 1，再用 one-hot 键编码，GDN 头就变成了精确可寻址的 RAM，而且不像 KV 缓存，对话再长它的状态大小也不变。指令以 token 序列输入，注意力头负责查表，前馈单元负责算术。它通过了官方 RISC-V 测试套件，连续执行 1800 万条指令没有出错，能在前向传播内运行 C 和 MicroPython，并把模型在 DeepMind 算术基准上的准确率从 72.5-95% 提升到 97.5-100%。此外还有一个存在于权重中的文件系统，可存 512 个文件、约 53000 个 token，检索准确率 90%。代价是 18.8 GB 的检查点、24 GB 显存，以及在 L4 上每秒约 3200 个 CPU token。
+***** Take
+真正有意思的不是这个 CPU，而是 DeltaNet 的定长状态居然能被当作精确内存来驱动。CPU 只是一个昂贵的证明方式。把检查点体积翻倍，换来每秒 3200 条指令、而每条指令还要消耗好几个解码 token 的内核，这笔账比它所替代的工具调用更差，andai 在讨论里就直接这么说了。看它是为了那套内存机制，不是为了算术。
+***** Comments
+- 所以说……不绕这么大一圈，直接用计算机当计算机不行吗？要让大模型做硬核计算，大概有更高效的办法。
+- 项目和文章都不错。我用自己做的一个小网络 Loom 做过类似的事，需要的层数少得多，还能跑 Doom，只是非常慢。
+- 真正的问题是：现有训练方法能让模型从足够多的汇编里学到这套结构，还是这些权重只能靠手写硬编码。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Qwenputer: Qwen3.5の重みの中で動く決定論的なRISC-V CPU
+***** TLDR
+Divyansh Agrawalは32ビットのRV32IM RISC-V CPUを、素のQwen 3.5 4Bに追加した11層の中にコンパイルした。鍵はGated DeltaNetで、ゲートと書き込み強度を1にしone-hotキー符号化を使うと、GDNヘッドが正確にアドレス指定できるRAMになる。KVキャッシュと違い、会話がどれだけ長くなっても状態のサイズは変わらない。命令はトークン列として入り、アテンションヘッドが参照を、フィードフォワード部が演算を担う。公式のRISC-Vテストスイートに合格し、1800万命令をエラーなしで実行し、順伝播の中でCとMicroPythonを動かし、DeepMindの算術ベンチマークの精度を72.5-95%から97.5-100%に引き上げた。さらに重みの中にファイルシステムがあり、最大512ファイル、約53,000トークンを90%の取得精度で保持する。代償は18.8GBのチェックポイント、24GBのGPUメモリ、L4で毎秒約3,200 CPUトークンだ。
+***** Take
+面白いのはCPUそのものではなく、DeltaNetの固定長の状態を正確なメモリとして駆動できるという点だ。CPUはそれを示すための高価な手段にすぎない。チェックポイントを倍にして得られるのは毎秒3,200命令、しかも1命令ごとに複数のトークンを復号するコアであり、置き換えようとしているツール呼び出しより割に合わない。andaiもスレッドでそう言っている。算術のためではなく、メモリの仕組みのために読む価値がある。
+***** Comments
+- というか、こんな回り道をせずにコンピュータをコンピュータとして使えばいいのでは。LLMに厳密な計算をさせたいなら、もっと効率的な方法があるはずだ。
+- 良いプロジェクトと記事だ。私もLoomという自作の小さなネットワークで似たことをやった。必要な層はずっと少なくて済み、非常に遅いがDoomも動く。
+- 本当の問題は、十分な量のアセンブリで学習させれば現在の訓練手法でもこれを獲得できるのか、それともこの重みは手で埋め込むしかないのか、という点だ。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Qwenputer: Qwen3.5 가중치 안에서 동작하는 결정론적 RISC-V CPU
+***** TLDR
+Divyansh Agrawal은 32비트 RV32IM RISC-V CPU를 기본 Qwen 3.5 4B에 추가한 11개 레이어 안으로 컴파일했다. 핵심은 Gated DeltaNet이다. 게이트와 쓰기 강도를 1로 두고 one-hot 키 인코딩을 쓰면 GDN 헤드가 정확히 주소 지정 가능한 RAM이 되며, KV 캐시와 달리 대화가 길어져도 상태 크기가 그대로다. 명령은 토큰 열로 들어오고 어텐션 헤드가 조회를, 피드포워드가 연산을 맡는다. 공식 RISC-V 테스트 스위트를 통과했고 1800만 개 명령을 오류 없이 실행했으며, 순전파 안에서 C와 MicroPython을 돌리고 DeepMind 산술 벤치마크 정확도를 72.5-95%에서 97.5-100%로 올렸다. 가중치 안에 파일 시스템도 있어 최대 512개 파일, 약 53,000토큰을 90% 검색 정확도로 보관한다. 비용은 18.8GB 체크포인트, 24GB GPU 메모리, L4에서 초당 약 3,200 CPU 토큰이다.
+***** Take
+흥미로운 결과는 CPU가 아니라, DeltaNet의 고정 크기 상태를 정확한 메모리로 다룰 수 있다는 사실이다. CPU는 그것을 증명하는 값비싼 방법일 뿐이다. 체크포인트를 두 배로 늘려 얻는 것이 초당 3,200개 명령이고 명령마다 여러 토큰을 디코딩해야 한다면, 대체하려는 도구 호출보다 손해다. andai가 스레드에서 바로 그 말을 한다. 산술이 아니라 메모리 메커니즘 때문에 읽을 가치가 있다.
+***** Comments
+- 그러니까... 이렇게 돌아가지 않고 컴퓨터를 컴퓨터로 쓰면 안 되나요? LLM에 엄밀한 계산을 붙이려면 더 효율적인 방법이 있을 겁니다.
+- 좋은 프로젝트와 글입니다. 저도 Loom이라는 직접 만든 작은 네트워크로 비슷한 작업을 했는데, 레이어가 훨씬 적게 들고 아주 느리지만 둠도 돌아갑니다.
+- 진짜 질문은 충분한 양의 어셈블리로 학습시키면 현재 훈련 방식으로 이것을 배울 수 있는지, 아니면 이 가중치는 하드코딩만 가능한지입니다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Qwenputer: una CPU RISC-V determinista y funcional dentro de Qwen3.5
+***** TLDR
+Divyansh Agrawal compiló una CPU RISC-V RV32IM de 32 bits dentro de 11 capas añadidas a un Qwen 3.5 4B de serie. El truco está en Gated DeltaNet: con la puerta y la fuerza de escritura en 1 y codificación de claves one-hot, una cabeza GDN se convierte en RAM direccionable exacta cuyo estado no crece por mucho que se alargue la conversación, a diferencia de una caché KV. Las instrucciones llegan como secuencias de tokens, las cabezas de atención hacen las consultas y las unidades feed-forward la aritmética. Pasa las suites oficiales de pruebas RISC-V, ejecutó 18 millones de instrucciones sin error, corre C y MicroPython dentro del paso hacia delante y sube la precisión en los benchmarks aritméticos de DeepMind del 72,5-95% al 97,5-100%. También hay un sistema de archivos en los pesos con hasta 512 archivos, unos 53.000 tokens, con 90% de acierto al recuperar. El coste: un checkpoint de 18,8 GB, 24 GB de memoria de GPU y unos 3.200 tokens de CPU por segundo en una L4.
+***** Take
+El resultado interesante no es la CPU, sino que el estado de tamaño fijo de DeltaNet se pueda usar como memoria exacta. La CPU es una forma caray de demostrarlo. Duplicar el checkpoint para obtener un núcleo de 3.200 instrucciones por segundo, donde cada instrucción cuesta varios tokens decodificados, sale peor que la llamada a herramienta que pretende sustituir, y andai lo dice sin rodeos en el hilo. Léelo por el mecanismo de memoria, no por la aritmética.
+***** Comments
+- O sea... ¿no se puede usar un ordenador como ordenador sin dar tantas vueltas? Si quieres integrar un LLM con cálculo exacto, seguramente haya una forma más eficiente.
+- Buen proyecto y buena escritura. Yo he hecho algo parecido con una red diminuta propia que llamo Loom; hacen falta muchas menos capas y puedes correr Doom, muy despacio.
+- La pregunta de verdad es si los métodos de entrenamiento actuales permiten aprender esto con suficiente ensamblador, o si estos pesos solo se pueden escribir a mano.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Qwenputer: eine funktionierende, deterministische RISC-V-CPU in Qwen3.5
+***** TLDR
+Divyansh Agrawal hat eine 32-Bit-RISC-V-CPU (RV32IM) in elf zusätzliche Schichten eines unveränderten Qwen 3.5 4B kompiliert. Der Kniff ist Gated DeltaNet: Setzt man Gate und Schreibstärke auf 1 und nutzt One-Hot-Key-Kodierung, wird ein GDN-Kopf zu exakt adressierbarem RAM, dessen Zustand anders als ein KV-Cache unabhängig von der Gesprächslänge gleich groß bleibt. Instruktionen kommen als Tokenfolgen an, Attention-Köpfe übernehmen Lookups, Feed-Forward-Einheiten die Arithmetik. Das Ganze besteht die offiziellen RISC-V-Testsuiten, führte 18 Millionen Instruktionen fehlerfrei aus, lässt C und MicroPython im Forward-Pass laufen und hebt die Genauigkeit in den Arithmetik-Benchmarks von DeepMind von 72,5-95% auf 97,5-100%. Dazu kommt ein Dateisystem in den Gewichten mit bis zu 512 Dateien, rund 53.000 Token, bei 90% Trefferquote. Der Preis: ein Checkpoint von 18,8 GB, 24 GB GPU-Speicher und etwa 3.200 CPU-Token pro Sekunde auf einer L4.
+***** Take
+Das interessante Ergebnis ist nicht die CPU, sondern dass sich der Zustand fester Größe von DeltaNet überhaupt als exakter Speicher ansteuern lässt. Die CPU ist dafür ein teurer Beweis. Den Checkpoint zu verdoppeln, um einen Kern mit 3.200 Instruktionen pro Sekunde zu bekommen, bei dem jede Instruktion mehrere dekodierte Token kostet, ist schlechter als der Tool-Aufruf, den er ersetzen soll, und andai sagt das im Thread direkt. Lesenswert wegen des Speichermechanismus, nicht wegen der Arithmetik.
+***** Comments
+- Also... kann man einen Computer nicht einfach als Computer benutzen, ohne diesen Umweg? Wenn man ein LLM mit exakter Rechnung verbinden will, gibt es wohl effizientere Wege.
+- Schönes Projekt und guter Text. Ich habe Ähnliches mit einem eigenen winzigen Netz namens Loom gemacht; man braucht weit weniger Schichten und kann sogar Doom laufen lassen, sehr langsam.
+- Die eigentliche Frage ist, ob heutige Trainingsmethoden das aus genügend Assembler lernen können oder ob diese Gewichte nur hart codiert entstehen.
+** Claude Code burns ~15-20% of your tokens on a 3-word status line :claude-code:llm:telemetry:tooling:cost:
+:PROPERTIES:
+:ID:       50284255
+:URL:      https://gist.github.com/flamerix-ai/c3905705cc4205e5de3011fa2e74efce
+:HN_URL:   https://news.ycombinator.com/item?id=50284255
+:POINTS:   201
+:COMMENTS: 47
+:BY:       NikZaal
+:END:
+
+*** TLDR
+A gist from flamerix-ai exports Claude Code's OpenTelemetry data and groups claude_code.api_request events by query_source. The agent-summary feature, which asks a model roughly every 30 seconds to 'describe your most recent action in 3-5 words' for the panel status line, came out at 16.4% of Claude Code spend, against 15.7% for the main conversation, and 19.7% of all API requests. 96% of that spend was on Opus, at an input-to-output ratio near 9,000:1, and the output never reaches the conversation. Turning summaries off took both numbers to zero. The author notes that on subscription plans the real loss is rate-limit headroom rather than invoice, and cites independent measurements in the 18-26% range.
+
+*** Take
+9,000 tokens in for five words out, every 30 seconds, is the kind of waste nobody finds until someone exports telemetry. But the headline number is softer than it reads: jakozaur measured about 8% and says it only affects subagents, and HeavenFox is right that most of those input tokens are cache reads, so the dollar figure is not what the percentage implies. The cost that is real is rate-limit headroom, which on a subscription plan is the only budget you have. The fix is a config flag, and the question worth asking is why the default sends this to Opus.
+
+*** Comments
+
+**** franticgecko3
+:PROPERTIES:
+:COMMENT_ID: 50285008
+:END:
+Claude Code burning a large amount of tokens for no good reason is a headline we've seen more than a few times now. Time to start questioning the motivations of model providers shipping their own harnesses.
+
+**** HeavenFox
+:PROPERTIES:
+:COMMENT_ID: 50284556
+:END:
+If they are literally sending the entire transcript and asking for a summary, wouldn't almost all of the tokens be cache hits, and therefore fairly cheap?
+
+**** jakozaur
+:PROPERTIES:
+:COMMENT_ID: 50284683
+:END:
+I tested it and it looks real but more nuanced. It is just for subagents, and it is mostly cached reads. In my sessions it looks more like ~8% at most.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Claude Code 把约 15-20% 的 token 花在了一行三个词的状态栏上
+***** TLDR
+flamerix-ai 的一篇 gist 导出了 Claude Code 的 OpenTelemetry 数据，并按 query_source 对 claude_code.api_request 事件分组。那个大约每 30 秒就请求模型“用 3 到 5 个词描述你最近的动作”、只为填面板状态栏的摘要功能，占了 Claude Code 总花费的 16.4%，而主对话只占 15.7%，并占全部 API 请求的 19.7%。其中 96% 花在 Opus 上，输入输出比接近 9000:1，而输出根本不会进入对话。关闭摘要后两个数字都归零。作者指出，在订阅套餐下真正损失的是速率限制额度，而不是账单金额，并引用了其他人测出的 18-26% 的数据。
+***** Take
+每 30 秒投入 9000 个 token 换五个词，这种浪费只有在有人导出遥测数据之后才会被发现。但标题数字比看上去要软：jakozaur 实测约 8%，并指出它只影响子智能体；HeavenFox 说得对，那些输入 token 大多是缓存命中，所以实际花的钱并不等于这个百分比。真正的代价是速率限制额度，而在订阅制下那就是你唯一的预算。修复只是一个配置开关，值得问的是为什么默认把这件事交给 Opus。
+***** Comments
+- Claude Code 毫无理由地烧掉大量 token，这种标题我们已经见过不止一次了。是时候质疑模型厂商自己做工具链的动机了。
+- 如果他们真是把整份对话记录发过去要摘要，那绝大部分 token 应该都是缓存命中，成本其实很低吧？
+- 我测了一下，确实存在，但更复杂一些。它只针对子智能体，而且主要是缓存读取。在我的会话里最多也就 8% 左右。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Claude Codeは3語のステータス行にトークンの約15-20%を使っている
+***** TLDR
+flamerix-aiのgistがClaude CodeのOpenTelemetryデータを書き出し、claude_code.api_requestイベントをquery_sourceごとに集計した。約30秒ごとにモデルへ「直近の動作を3-5語で説明せよ」と投げ、パネルのステータス行だけを更新する要約機能が、Claude Codeの支出の16.4%を占めていた。本来の会話は15.7%で、全APIリクエストの19.7%にもなる。その支出の96%はOpusで、入出力比は約9,000:1、しかも出力は会話に届かない。要約を切ると両方の数値はゼロになった。著者は、サブスクリプションでは請求額ではなくレート制限の余裕が失われる点を指摘し、18-26%という第三者の計測も挙げている。
+***** Take
+30秒ごとに9,000トークンを入れて5語を得る。こうした無駄は、誰かがテレメトリを書き出すまで見つからない。ただし見出しの数字は実態より強い。jakozaurの計測は約8%でサブエージェント限定だと言い、入力の大半がキャッシュ読み出しだというHeavenFoxの指摘も正しい。つまり金額はこの割合どおりではない。実際に失われるのはレート制限の余裕で、サブスクリプションではそれが唯一の予算だ。対処は設定フラグ一つであり、問うべきは既定でこれをOpusに投げている理由だ。
+***** Comments
+- Claude Codeが理由もなく大量のトークンを消費する、という見出しはもう何度も見た。モデル提供者が自前のハーネスを出す動機を疑い始める時期だ。
+- 本当に全トランスクリプトを送って要約させているなら、トークンのほとんどはキャッシュヒットで、かなり安いのでは？
+- 試したところ本当だが、もっと微妙だ。サブエージェント限定で、ほとんどがキャッシュ読み出し。自分のセッションでは多くても8%程度に見える。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Claude Code는 세 단어짜리 상태줄에 토큰의 약 15-20%를 쓴다
+***** TLDR
+flamerix-ai의 gist가 Claude Code의 OpenTelemetry 데이터를 추출해 claude_code.api_request 이벤트를 query_source별로 묶었다. 약 30초마다 모델에 '최근 동작을 3-5단어로 설명하라'고 요청해 패널 상태줄만 갱신하는 요약 기능이 Claude Code 지출의 16.4%를 차지했고, 본 대화는 15.7%였다. 전체 API 요청의 19.7%에 해당한다. 그 지출의 96%가 Opus였고 입출력 비율은 9,000:1에 가까웠으며, 출력은 대화에 전달되지도 않는다. 요약을 끄면 두 수치가 0이 됐다. 저자는 구독 요금제에서 실제로 잃는 것은 청구액이 아니라 레이트 리밋 여유라고 적고, 18-26%라는 독립 측정도 인용한다.
+***** Take
+30초마다 9,000토큰을 넣어 다섯 단어를 얻는다. 이런 낭비는 누군가 텔레메트리를 뽑아보기 전까지 드러나지 않는다. 다만 제목의 숫자는 읽히는 것보다 약하다. jakozaur는 약 8%를 측정했고 서브에이전트에만 해당한다고 말하며, 입력 토큰 대부분이 캐시 읽기라는 HeavenFox의 지적도 맞다. 금액은 저 비율과 다르다. 실제 비용은 레이트 리밋 여유이고, 구독제에서는 그것이 유일한 예산이다. 해결은 설정 플래그 하나이며, 물어야 할 것은 왜 기본값이 이 일을 Opus에 보내느냐다.
+***** Comments
+- Claude Code가 이유 없이 토큰을 많이 태운다는 제목은 이제 여러 번 봤다. 모델 제공자가 직접 하네스를 내놓는 동기를 의심할 때다.
+- 정말 전체 대화 기록을 보내 요약을 요청하는 거라면 토큰 대부분이 캐시 히트라서 꽤 저렴하지 않나요?
+- 테스트해보니 사실이지만 더 미묘하다. 서브에이전트에만 해당하고 대부분 캐시 읽기다. 내 세션에서는 많아도 8% 정도로 보인다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Claude Code gasta ~15-20% de tus tokens en una línea de estado de tres palabras
+***** TLDR
+Un gist de flamerix-ai exporta los datos de OpenTelemetry de Claude Code y agrupa los eventos claude_code.api_request por query_source. La función de resumen, que cada 30 segundos aproximadamente pide a un modelo que 'describa tu acción más reciente en 3-5 palabras' solo para el panel de estado, suponía el 16,4% del gasto de Claude Code, frente al 15,7% de la conversación principal, y el 19,7% de todas las peticiones a la API. El 96% de ese gasto fue en Opus, con una relación entrada-salida cercana a 9.000:1, y la salida nunca llega a la conversación. Al desactivar los resúmenes, ambas cifras cayeron a cero. El autor aclara que en los planes de suscripción lo que se pierde es margen de límite de uso, no factura, y cita mediciones independientes del 18-26%.
+***** Take
+9.000 tokens de entrada para cinco palabras de salida, cada 30 segundos: ese desperdicio no aparece hasta que alguien exporta la telemetría. Pero el titular es más blando de lo que suena. jakozaur midió cerca del 8% y dice que solo afecta a los subagentes, y HeavenFox tiene razón en que la mayoría de esos tokens de entrada son lecturas de caché, así que el coste en dinero no es el que sugiere el porcentaje. Lo que se paga de verdad es margen de límite de uso, que en una suscripción es todo el presupuesto que tienes. La solución es un flag de configuración, y la pregunta pertinente es por qué por defecto esto va a Opus.
+***** Comments
+- Que Claude Code queme muchos tokens sin buena razón es un titular que ya hemos visto varias veces. Toca cuestionar las motivaciones de los proveedores de modelos que publican sus propios entornos.
+- Si de verdad envían toda la transcripción y piden un resumen, ¿no serían casi todos los tokens aciertos de caché y por tanto bastante baratos?
+- Lo probé y parece real, pero con matices. Solo ocurre con subagentes y son en su mayoría lecturas de caché. En mis sesiones parece más bien un 8% como máximo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Claude Code verbrennt ~15-20% der Token für eine dreiwortige Statuszeile
+***** TLDR
+Ein Gist von flamerix-ai exportiert die OpenTelemetry-Daten von Claude Code und gruppiert claude_code.api_request-Events nach query_source. Die Zusammenfassungsfunktion, die etwa alle 30 Sekunden ein Modell bittet, 'deine letzte Aktion in 3-5 Worten zu beschreiben', nur für die Statuszeile des Panels, machte 16,4% der Ausgaben aus, gegenüber 15,7% für das eigentliche Gespräch, und 19,7% aller API-Anfragen. 96% davon liefen auf Opus, bei einem Input-Output-Verhältnis von fast 9.000:1, und die Ausgabe erreicht das Gespräch nie. Nach dem Abschalten standen beide Werte auf null. Der Autor merkt an, dass bei Abo-Tarifen nicht die Rechnung, sondern der Spielraum beim Nutzungslimit verloren geht, und verweist auf unabhängige Messungen von 18-26%.
+***** Take
+9.000 Token hinein für fünf Worte heraus, alle 30 Sekunden: solche Verschwendung findet niemand, bis jemand die Telemetrie exportiert. Die Schlagzeile ist aber weicher als sie klingt. jakozaur misst rund 8% und sagt, es betrifft nur Subagenten, und HeavenFox hat recht, dass die meisten dieser Input-Token Cache-Treffer sind, der Geldbetrag entspricht also nicht dem Prozentwert. Real bezahlt wird mit Spielraum beim Nutzungslimit, und im Abo ist das das ganze Budget. Die Abhilfe ist ein Konfigurationsflag; die interessante Frage ist, warum das standardmäßig an Opus geht.
+***** Comments
+- Dass Claude Code ohne guten Grund viele Token verbrennt, ist eine Schlagzeile, die wir schon mehrfach gesehen haben. Zeit, die Motive von Modellanbietern mit eigenen Harnesses zu hinterfragen.
+- Wenn sie wirklich das gesamte Transkript senden und um eine Zusammenfassung bitten, wären dann nicht fast alle Token Cache-Treffer und damit recht günstig?
+- Ich habe es getestet, es stimmt, ist aber differenzierter. Es betrifft nur Subagenten und sind überwiegend Cache-Lesevorgänge. In meinen Sitzungen sieht es nach höchstens 8% aus.
+** GitLab Security Incident: Attempted Exploitation of CVE-2026-97229 :security:ruby:gitlab:alpine:cve:
+:PROPERTIES:
+:ID:       50282544
+:URL:      https://alpinelinux.org/posts/GitLab-security-incident-CVE-2026-97229.html
+:HN_URL:   https://news.ycombinator.com/item?id=50282544
+:POINTS:   136
+:COMMENTS: 57
+:BY:       sashk
+:END:
+
+*** TLDR
+Alpine Linux published a post-mortem on its own GitLab instance. CVE-2026-97229 is a CVSS 10.0 bug in Onigmo, Ruby's regex engine, where a crafted pattern can crash a process or lead to code execution. GitLab shipped a fix on October 12, but the patch lives in Ruby and GitLab applies it only in its official packages, so Alpine's image on standard Ruby stayed vulnerable even after upgrading to 19.3.6 on October 22. Ruby released fixed builds on October 23. Between October 20 and 21 an attacker registered an account, submitted crafted CI configurations, crashed worker processes eight times and partially succeeded four times. Alpine found no evidence that code ran, verified the package repository and the October 21 releases as untampered, and notes signing keys are stored separately. The instance was closed on October 27, rebuilt on October 28, and all passwords reset. Anything that compiles regexes from untrusted input is exposed, not just GitLab.
+
+*** Take
+The write-up is unusually honest, down to an explicit list of what would have leaked had the exploit landed: emails, IPs, password hashes, 2FA secrets, CI tokens. The structural failure is the one wilson-draugr names. The CVE is filed against GitLab, 19.3.6 is past the listed fixed version, and Ruby shipped the real fix without requesting a CVE of its own. A scanner looks at that image and calls it patched. If you build from source or roll your own container, the advisory database is now actively misleading you, and the only working procedure is reading release notes by hand.
+
+*** Comments
+
+**** wilson-draugr
+:PROPERTIES:
+:COMMENT_ID: 50284526
+:END:
+The nasty part is that a version scan would have called that 19.3.6 image fixed. The CVE is filed against GitLab, and Ruby shipped the actual fix without requesting a CVE, so anything scanning the Ruby in the image has no advisory to match.
+
+**** akersten
+:PROPERTIES:
+:COMMENT_ID: 50284297
+:END:
+Shouldn't they tag a new version instead of re-releasing a fixed 19.3.6, if earlier 19.3.6 images are vulnerable?
+
+**** literallyroy
+:PROPERTIES:
+:COMMENT_ID: 50283939
+:END:
+I feel like this title downplays the scenario. I read 'attempted' as unsuccessful, not as maybe entirely successful.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+GitLab 安全事件：针对 CVE-2026-97229 的攻击尝试
+***** TLDR
+Alpine Linux 公布了自家 GitLab 实例的事后分析。CVE-2026-97229 是 Ruby 正则引擎 Onigmo 中的一个 CVSS 10.0 漏洞，精心构造的正则可以让进程崩溃，甚至导致代码执行。GitLab 在 10 月 12 日发布了修复，但补丁其实在 Ruby 里，而 GitLab 只在自己的官方包中打这个补丁，所以 Alpine 用标准 Ruby 构建的镜像即便在 10 月 22 日升级到 19.3.6 仍然有漏洞。Ruby 在 10 月 23 日发布了修复版本。10 月 20 日到 21 日之间，攻击者注册账号、提交构造的 CI 配置，让工作进程崩溃八次，其中四次部分成功。Alpine 没有发现代码执行的证据，核验了软件仓库和 10 月 21 日的发布未被篡改，并指出签名密钥是分开存放的。实例于 10 月 27 日关闭、10 月 28 日重建，所有密码已重置。任何会用不可信输入编译正则的程序都受影响，不只是 GitLab。
+***** Take
+这篇复盘诚实得少见，连“如果攻击成功会泄露什么”都列得很清楚：邮箱、IP、密码哈希、二次验证密钥、CI 令牌。真正的结构性问题正是 wilson-draugr 指出的那点：CVE 挂在 GitLab 名下，19.3.6 已经高于公布的修复版本，而真正的修复由 Ruby 发布且没有申请自己的 CVE。扫描器看一眼这个镜像，就会判定已修复。如果你从源码构建或自己做容器，漏洞库现在是在误导你，唯一可行的办法是手工读发布说明。
+***** Comments
+- 最难受的是，版本扫描会把那个 19.3.6 镜像判为已修复。CVE 挂在 GitLab 上，而真正的修复由 Ruby 发布却没申请 CVE，所以扫描镜像里 Ruby 的工具根本找不到对应的公告。
+- 如果早期的 19.3.6 镜像有漏洞，他们不该打一个新版本号，而不是重新发布一个修好的 19.3.6 吗？
+- 我觉得这个标题把事情说轻了。“尝试”听起来像没成功，而不是可能完全成功了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+GitLabセキュリティインシデント: CVE-2026-97229の悪用の試み
+***** TLDR
+Alpine Linuxが自前のGitLabインスタンスについて事後報告を公開した。CVE-2026-97229はRubyの正規表現エンジンOnigmoにあるCVSS 10.0の脆弱性で、細工したパターンでプロセスをクラッシュさせ、コード実行に至る可能性がある。GitLabは10月12日に修正を出したが、パッチ自体はRuby側にあり、GitLabは自社の公式パッケージにしか適用しない。そのため標準のRubyを使うAlpineのイメージは、10月22日に19.3.6へ上げても脆弱なままだった。Rubyの修正版は10月23日公開。10月20日から21日にかけて攻撃者がアカウントを登録し、細工したCI設定を送ってワーカープロセスを8回クラッシュさせ、うち4回は部分的に成功した。Alpineはコードが実行された証拠はないとし、パッケージリポジトリと10月21日のリリースの改ざんがないことを確認、署名鍵は別管理だと述べている。インスタンスは10月27日に閉鎖、10月28日に再構築し、全パスワードをリセットした。信頼できない入力から正規表現をコンパイルするプログラムはすべて影響を受ける。
+***** Take
+この報告は珍しく正直で、攻撃が成功していたら漏れていたもの、つまりメールアドレス、IP、パスワードハッシュ、2FAの秘密、CIトークンまで明記している。構造的な失敗はwilson-draugrが指摘した点だ。CVEはGitLabに対して登録され、19.3.6は修正版より新しく、実際の修正はRubyが独自のCVEを取らずに出した。スキャナはそのイメージを見て修正済みと判定する。ソースから入れる人や自作コンテナを使う人にとって、脆弱性データベースはいま積極的に誤った答えを返しており、唯一機能する手順はリリースノートを手で読むことだ。
+***** Comments
+- 厄介なのは、バージョンスキャンならあの19.3.6イメージを修正済みと判定してしまう点だ。CVEはGitLabに対して登録され、実際の修正はRubyがCVEなしで出したので、イメージ内のRubyを調べても照合すべき勧告が存在しない。
+- 以前の19.3.6イメージが脆弱なら、修正版を同じ19.3.6で出し直すのではなく、新しいバージョンを振るべきではないか。
+- このタイトルは事態を軽く見せていると思う。「試み」は失敗したように読めるが、完全に成功していた可能性もある。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+GitLab 보안 사고: CVE-2026-97229 악용 시도
+***** TLDR
+Alpine Linux가 자체 GitLab 인스턴스에 대한 사후 보고서를 공개했다. CVE-2026-97229는 Ruby의 정규식 엔진 Onigmo에 있는 CVSS 10.0 취약점으로, 조작된 패턴으로 프로세스를 중단시키거나 코드 실행에 이를 수 있다. GitLab은 10월 12일 수정을 배포했지만 패치는 Ruby에 있고 GitLab은 자사 공식 패키지에만 적용한다. 그래서 표준 Ruby를 쓰던 Alpine 이미지는 10월 22일 19.3.6으로 올린 뒤에도 취약했다. Ruby의 수정 버전은 10월 23일에 나왔다. 10월 20일에서 21일 사이 공격자가 계정을 등록하고 조작된 CI 설정을 제출해 워커 프로세스를 여덟 번 중단시켰고 네 번은 부분적으로 성공했다. Alpine은 코드가 실행된 증거는 없다고 밝히고, 패키지 저장소와 10월 21일 릴리스가 변조되지 않았음을 확인했으며 서명 키는 별도 보관한다고 설명했다. 인스턴스는 10월 27일 폐쇄, 10월 28일 재구축했고 모든 비밀번호를 초기화했다. 신뢰할 수 없는 입력으로 정규식을 컴파일하는 모든 프로그램이 영향을 받는다.
+***** Take
+보고서는 드물게 솔직하다. 공격이 성공했다면 유출됐을 항목까지 명시한다. 이메일, IP, 비밀번호 해시, 2FA 비밀값, CI 토큰이다. 구조적 실패는 wilson-draugr가 짚은 바로 그것이다. CVE는 GitLab에 등록됐고 19.3.6은 명시된 수정 버전보다 높으며, 실제 수정은 Ruby가 자체 CVE 없이 배포했다. 스캐너는 그 이미지를 보고 패치됐다고 판단한다. 소스에서 빌드하거나 컨테이너를 직접 만드는 쪽에는 취약점 데이터베이스가 지금 적극적으로 잘못된 답을 주고 있고, 유일하게 작동하는 절차는 릴리스 노트를 손으로 읽는 것이다.
+***** Comments
+- 고약한 부분은 버전 스캔이 그 19.3.6 이미지를 수정됐다고 판정한다는 점이다. CVE는 GitLab에 등록됐고 실제 수정은 Ruby가 CVE 없이 배포했으니, 이미지 안의 Ruby를 검사해도 대조할 공지가 없다.
+- 이전 19.3.6 이미지가 취약하다면, 수정본을 같은 19.3.6으로 다시 올리는 대신 새 버전 태그를 붙여야 하지 않나요?
+- 제목이 상황을 가볍게 만든다고 느낀다. '시도'는 실패로 읽히지만, 완전히 성공했을 가능성도 있다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Incidente de seguridad en GitLab: intento de explotación de CVE-2026-97229
+***** TLDR
+Alpine Linux publicó el análisis posterior sobre su propia instancia de GitLab. CVE-2026-97229 es un fallo CVSS 10.0 en Onigmo, el motor de expresiones regulares de Ruby, donde un patrón manipulado puede tumbar un proceso o llevar a ejecución de código. GitLab publicó un arreglo el 12 de octubre, pero el parche está en Ruby y GitLab solo lo aplica en sus paquetes oficiales, así que la imagen de Alpine con Ruby estándar siguió vulnerable incluso tras actualizar a 19.3.6 el 22 de octubre. Ruby liberó versiones corregidas el 23 de octubre. Entre el 20 y el 21 de octubre un atacante registró una cuenta, envió configuraciones de CI manipuladas, tumbó procesos de trabajo ocho veces y tuvo éxito parcial en cuatro. Alpine no encontró evidencia de que se ejecutara código, verificó que el repositorio de paquetes y las versiones del 21 de octubre no fueron alterados, y señala que las claves de firma se guardan aparte. La instancia se cerró el 27 de octubre, se reconstruyó el 28 y se restablecieron todas las contraseñas. Cualquier programa que compile expresiones regulares a partir de entrada no confiable está expuesto, no solo GitLab.
+***** Take
+El informe es inusualmente honesto, hasta incluir la lista de lo que se habría filtrado si el exploit hubiera funcionado: correos, IPs, hashes de contraseñas, secretos 2FA, tokens de CI. El fallo estructural es el que señala wilson-draugr: el CVE está presentado contra GitLab, 19.3.6 es posterior a la versión corregida que figura, y Ruby publicó el arreglo real sin pedir un CVE propio. Un escáner mira esa imagen y la declara parcheada. Si compilas desde fuente o armas tu propio contenedor, la base de avisos te está engañando activamente y el único procedimiento que funciona es leer las notas de versión a mano.
+***** Comments
+- Lo peor es que un escaneo de versiones habría declarado esa imagen 19.3.6 como corregida. El CVE está presentado contra GitLab y Ruby publicó el arreglo real sin pedir un CVE, así que nada que escanee el Ruby de la imagen encuentra un aviso con el que casarlo.
+- ¿No deberían etiquetar una versión nueva en lugar de volver a publicar una 19.3.6 corregida, si las 19.3.6 anteriores son vulnerables?
+- Creo que este título minimiza la situación. Leo 'intento' como fallido, no como posiblemente exitoso del todo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+GitLab-Sicherheitsvorfall: Versuchte Ausnutzung von CVE-2026-97229
+***** TLDR
+Alpine Linux hat eine Nachbetrachtung zur eigenen GitLab-Instanz veröffentlicht. CVE-2026-97229 ist eine Lücke mit CVSS 10.0 in Onigmo, der Regex-Engine von Ruby, bei der ein präpariertes Muster einen Prozess abstürzen lassen oder zur Codeausführung führen kann. GitLab lieferte am 12. Oktober einen Fix, der Patch steckt aber in Ruby und wird von GitLab nur in den eigenen offiziellen Paketen eingespielt. Alpines Image mit Standard-Ruby blieb daher auch nach dem Upgrade auf 19.3.6 am 22. Oktober angreifbar. Ruby veröffentlichte die korrigierten Versionen am 23. Oktober. Zwischen dem 20. und 21. Oktober registrierte ein Angreifer ein Konto, schickte präparierte CI-Konfigurationen, brachte Worker-Prozesse achtmal zum Absturz und war viermal teilweise erfolgreich. Alpine fand keinen Hinweis darauf, dass Code lief, bestätigte Paket-Repository und die Releases vom 21. Oktober als unverändert und weist darauf hin, dass die Signaturschlüssel getrennt liegen. Die Instanz wurde am 27. Oktober geschlossen, am 28. neu aufgebaut und alle Passwörter zurückgesetzt. Betroffen ist jedes Programm, das Regexes aus nicht vertrauenswürdigen Eingaben kompiliert, nicht nur GitLab.
+***** Take
+Der Bericht ist ungewöhnlich offen, bis hin zur ausdrücklichen Liste dessen, was bei erfolgreichem Exploit abgeflossen wäre: E-Mail-Adressen, IPs, Passwort-Hashes, 2FA-Secrets, CI-Token. Das strukturelle Versagen benennt wilson-draugr: Der CVE ist gegen GitLab eingetragen, 19.3.6 liegt über der dort genannten korrigierten Version, und den eigentlichen Fix lieferte Ruby ohne eigenen CVE. Ein Scanner sieht dieses Image und nennt es gepatcht. Wer aus Quellen baut oder eigene Container pflegt, wird von der Advisory-Datenbank aktiv in die Irre geführt; das einzige funktionierende Verfahren ist, die Release Notes selbst zu lesen.
+***** Comments
+- Das Unangenehme ist, dass ein Versions-Scan dieses 19.3.6-Image als behoben eingestuft hätte. Der CVE ist gegen GitLab eingetragen, und Ruby hat den eigentlichen Fix ohne CVE veröffentlicht, also findet nichts, was das Ruby im Image scannt, ein passendes Advisory.
+- Sollten sie nicht eine neue Version taggen, statt eine korrigierte 19.3.6 erneut zu veröffentlichen, wenn frühere 19.3.6-Images angreifbar sind?
+- Der Titel spielt die Lage meines Erachtens herunter. 'Versucht' liest sich wie erfolglos, nicht wie möglicherweise vollständig erfolgreich.
+** Formlabs Studio 1 $699 Resin Printer :3d-printing:hardware:formlabs:manufacturing:
+:PROPERTIES:
+:ID:       50281044
+:URL:      https://formlabs.com/products/form-studio-1-basic-founders-edition/
+:HN_URL:   https://news.ycombinator.com/item?id=50281044
+:POINTS:   157
+:COMMENTS: 106
+:BY:       mhb
+:END:
+
+*** TLDR
+Formlabs has preorders open for the Form Studio 1, a $699 masked-SLA resin printer with a 20 x 12.5 x 23.5 cm build volume, 35 µm pixels and a claimed XY tolerance of ±0.5% on features from 1 to 30 mm. Formlabs says print success is comparable to the Form 4's 98.7% and that most parts finish in under two hours, up to 130 mm/hour with Alpha Fast Resin. Resin comes in proprietary auto-dispensing cartridges covering nine validated Formlabs materials; third-party resin works only in Open Material Mode with manual pouring and the $79 Tank Pro rather than the $55 standard tank. Washing in IPA and UV curing are still required and sold separately, from the $199 Studio Wash+Cure up to the $699 Form Wash V2 and $999 Form Cure V2. Bundles run to $2,447.
+
+*** Take
+The $699 is the printer alone. The cheapest setup that actually produces a finished part is $898 plus resin, and the cartridge system is where the recurring revenue sits, which is pen2l's complaint. rfrey asks the question the product page avoids: every comparison on it is against Formlabs' own expensive machines, never against an Elegoo or Anycubic at half the price. The honest case for it is tonyhb's, printing dental aligner negatives where dimensional accuracy pays for itself. For everyone else the thread is nearly unanimous: buy an FDM printer and skip the isopropyl, the PPE and the ventilation.
+
+*** Comments
+
+**** pen2l
+:PROPERTIES:
+:COMMENT_ID: 50281279
+:END:
+Formlabs uses a proprietary resin cartridge. It's the paper printer situation all over again: the printers aren't that expensive but the disposables cost an arm and a leg. Support the open-platform alternatives.
+
+**** rfrey
+:PROPERTIES:
+:COMMENT_ID: 50284316
+:END:
+There's a lot of discussion about how large a discount this is from Formlabs' expensive printers, but absolutely no comparison to other brands. It's a cheaper Bentley, but how does it compare to the Toyota down the street?
+
+**** tonyhb
+:PROPERTIES:
+:COMMENT_ID: 50281701
+:END:
+I used an older, more expensive Formlabs at my last company to print Invisalign negatives and thermoform aligners over the cured resin. The accuracy was great and they held up as we scaled to a full lab setup.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Formlabs Studio 1：699 美元的光固化 3D 打印机
+***** TLDR
+Formlabs 开放了 Form Studio 1 的预订，这是一台 699 美元的掩膜 SLA 光固化打印机，成型尺寸 20 x 12.5 x 23.5 厘米，像素 35 微米，官方称 1 到 30 毫米特征的 XY 公差为 ±0.5%。Formlabs 说它的打印成功率与 Form 4 的 98.7% 相当，多数零件两小时内完成，用 Alpha Fast Resin 最快可达每小时 130 毫米。树脂使用专有的自动供料盒，覆盖九种官方验证材料；第三方树脂只能在开放材料模式下手动倒入，还得用 79 美元的 Tank Pro 而不是 55 美元的标准料槽。异丙醇清洗和紫外固化仍然必需，且单独售卖，从 199 美元的 Studio Wash+Cure 到 699 美元的 Form Wash V2 和 999 美元的 Form Cure V2。套装价格最高到 2447 美元。
+***** Take
+699 美元只是打印机本身。能真正做出成品的最便宜组合是 898 美元加树脂，而持续的利润来自料盒，这正是 pen2l 抱怨的地方。rfrey 问了产品页回避的问题：页面上所有比较都是跟 Formlabs 自家的贵机器比，从不跟价格只有一半的 Elegoo 或 Anycubic 比。真正站得住的理由是 tonyhb 那种：打印隐形牙套的负模，尺寸精度本身就值钱。对其他人来说，讨论区几乎一致：买台 FDM，省下异丙醇、防护装备和通风。
+***** Comments
+- Formlabs 用的是专有树脂料盒。又是打印机那套老路：机器本身不贵，耗材贵得离谱。还是支持开放平台的替代品吧。
+- 大家都在讨论这台比 Formlabs 的贵机器便宜多少，却完全没有跟别的品牌做比较。这是一辆便宜些的宾利，可它和街角那台丰田比起来怎么样？
+- 我在上一家公司用过更老更贵的 Formlabs，打印隐形牙套负模，再在固化树脂上热压成型。精度很好，一路扩展到完整实验室规模也撑住了。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+Formlabs Studio 1、699ドルのレジンプリンター
+***** TLDR
+FormlabsがForm Studio 1の予約を開始した。699ドルのマスクSLA方式のレジンプリンターで、造形サイズは20 x 12.5 x 23.5cm、ピクセルは35µm、1-30mmの形状でXY公差±0.5%を謳う。印刷成功率はForm 4の98.7%と同等とし、多くの部品は2時間以内、Alpha Fast Resin使用時は最大毎時130mmで造形できるという。レジンは自動供給の専用カートリッジで、公式検証済み材料は9種類。サードパーティ製レジンはOpen Material Modeで手動注入のみで、55ドルの標準タンクではなく79ドルのTank Proが必要になる。IPAでの洗浄とUV硬化は依然として必須で別売りだ。199ドルのStudio Wash+Cureから、699ドルのForm Wash V2と999ドルのForm Cure V2まで用意される。セットは最大2,447ドル。
+***** Take
+699ドルはプリンター単体の値段だ。実際に完成品を作れる最安構成は898ドルに加えてレジン代で、継続的な利益はカートリッジにある。pen2lの不満はそこだ。rfreyは製品ページが避けている問いを突く。ページ上の比較はすべてFormlabs自社の高価な機種に対してであり、半額のElegooやAnycubicとは一度も比べていない。説得力のある用途はtonyhbのような例、つまり寸法精度がそのまま価値になる歯科アライナーの陰型だ。それ以外の人にはスレッドの結論はほぼ一致している。FDMを買って、イソプロパノールと保護具と換気を省けというものだ。
+***** Comments
+- Formlabsは専用のレジンカートリッジを使う。紙のプリンターと同じ構図で、本体はそれほど高くないが消耗品が高すぎる。オープンなプラットフォームの選択肢を支持したい。
+- Formlabsの高価な機種からどれだけ安くなったかという話は山ほどあるのに、他社との比較がまったくない。安いベントレーではあるが、近所のトヨタと比べてどうなのか。
+- 前の会社でもっと古くて高いFormlabsを使い、インビザラインの陰型を印刷して硬化レジンの上からアライナーを熱成形していた。精度は良く、本格的なラボ規模まで拡大しても問題なかった。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+Formlabs Studio 1, 699달러 레진 프린터
+***** TLDR
+Formlabs가 Form Studio 1의 사전 주문을 열었다. 699달러의 마스크 SLA 레진 프린터로 조형 크기는 20 x 12.5 x 23.5cm, 픽셀은 35µm이며 1-30mm 형상에서 XY 공차 ±0.5%를 주장한다. Formlabs는 출력 성공률이 Form 4의 98.7%와 비슷하고 대부분 부품이 두 시간 안에 끝나며 Alpha Fast Resin으로 시간당 최대 130mm까지 나온다고 말한다. 레진은 자동 공급되는 전용 카트리지로 공급되며 공식 검증 재료는 아홉 가지다. 서드파티 레진은 Open Material Mode에서 수동으로 부어야 하고 55달러 표준 탱크 대신 79달러 Tank Pro가 필요하다. IPA 세척과 UV 경화는 여전히 필수이고 별도 판매인데, 199달러 Studio Wash+Cure부터 699달러 Form Wash V2와 999달러 Form Cure V2까지 있다. 패키지는 최대 2,447달러다.
+***** Take
+699달러는 프린터만의 값이다. 실제로 완성품을 만들 수 있는 가장 싼 구성은 898달러에 레진 값이 더 붙고, 반복 수익은 카트리지에 있다. pen2l의 불만이 바로 그것이다. rfrey는 제품 페이지가 피하는 질문을 던진다. 페이지의 모든 비교는 Formlabs 자사 고가 장비를 상대로 하고, 절반 값인 Elegoo나 Anycubic과는 한 번도 비교하지 않는다. 설득력 있는 용도는 tonyhb의 경우, 치과 교정 장치 음형처럼 치수 정확도가 곧 돈이 되는 작업이다. 나머지 사람들에게 스레드의 결론은 거의 일치한다. FDM을 사고 아이소프로필알코올과 보호구와 환기는 건너뛰라는 것이다.
+***** Comments
+- Formlabs는 전용 레진 카트리지를 쓴다. 종이 프린터와 똑같은 구도로, 본체는 그리 비싸지 않은데 소모품이 터무니없이 비싸다. 개방형 플랫폼 대안을 지지하자.
+- Formlabs의 비싼 기종보다 얼마나 싸졌는지에 대한 이야기는 많은데, 다른 브랜드와의 비교는 전혀 없다. 더 싼 벤틀리이긴 하지만, 길 건너 도요타와 비교하면 어떤가?
+- 전 회사에서 더 오래되고 비싼 Formlabs로 인비절라인 음형을 출력하고 경화된 레진 위에 얼라이너를 열성형했다. 정확도가 좋았고 본격적인 랩 규모로 키워도 잘 버텼다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Formlabs Studio 1, impresora de resina de 699 dólares
+***** TLDR
+Formlabs abrió reservas de la Form Studio 1, una impresora de resina MSLA de 699 dólares con volumen de impresión de 20 x 12,5 x 23,5 cm, píxel de 35 µm y una tolerancia XY declarada de ±0,5% en detalles de 1 a 30 mm. Formlabs dice que la tasa de éxito es comparable al 98,7% de la Form 4 y que la mayoría de piezas acaban en menos de dos horas, hasta 130 mm/hora con Alpha Fast Resin. La resina llega en cartuchos propietarios de dispensado automático con nueve materiales validados; la resina de terceros solo funciona en Open Material Mode, vertida a mano y con el Tank Pro de 79 dólares en lugar del tanque estándar de 55. Lavar en alcohol isopropílico y curar con UV sigue siendo obligatorio y se vende aparte, desde los 199 dólares del Studio Wash+Cure hasta los 699 del Form Wash V2 y los 999 del Form Cure V2. Los paquetes llegan a 2.447 dólares.
+***** Take
+Los 699 dólares son solo la impresora. El montaje más barato que realmente produce una pieza acabada cuesta 898 más resina, y el ingreso recurrente está en los cartuchos, que es la queja de pen2l. rfrey plantea la pregunta que la página evita: todas las comparaciones son contra las máquinas caras de Formlabs y ninguna contra una Elegoo o Anycubic a mitad de precio. El caso honesto es el de tonyhb, imprimir negativos de alineadores dentales donde la precisión dimensional se paga sola. Para el resto, el hilo es casi unánime: compra una FDM y ahórrate el isopropanol, el equipo de protección y la ventilación.
+***** Comments
+- Formlabs usa un cartucho de resina propietario. Es la situación de las impresoras de papel otra vez: las máquinas no son tan caras, pero los consumibles cuestan un riñón. Apoyad las alternativas de plataforma abierta.
+- Se habla mucho de lo barata que es respecto a las impresoras caras de Formlabs, pero no hay ninguna comparación con otras marcas. Es un Bentley más barato, pero ¿cómo queda frente al Toyota de la esquina?
+- En mi anterior empresa usaba una Formlabs más vieja y más cara para imprimir negativos de Invisalign y termoformar los alineadores sobre la resina curada. La precisión era excelente y aguantaron al escalar a un laboratorio completo.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Formlabs Studio 1: Resin-Drucker für 699 Dollar
+***** TLDR
+Formlabs nimmt Vorbestellungen für den Form Studio 1 an, einen MSLA-Resin-Drucker für 699 Dollar mit 20 x 12,5 x 23,5 cm Bauraum, 35 µm Pixel und einer angegebenen XY-Toleranz von ±0,5% bei Details von 1 bis 30 mm. Formlabs nennt eine Druckerfolgsquote vergleichbar mit den 98,7% des Form 4, die meisten Teile sollen in unter zwei Stunden fertig sein, mit Alpha Fast Resin bis zu 130 mm pro Stunde. Das Resin kommt in herstellereigenen Kartuschen mit automatischer Zuführung und neun validierten Materialien; Fremdresin läuft nur im Open Material Mode mit manuellem Einfüllen und dem Tank Pro für 79 Dollar statt des Standardtanks für 55. Waschen in Isopropanol und UV-Härten bleiben Pflicht und kosten extra, von 199 Dollar für Studio Wash+Cure bis zu 699 für Form Wash V2 und 999 für Form Cure V2. Bundles reichen bis 2.447 Dollar.
+***** Take
+Die 699 Dollar sind der Drucker allein. Das günstigste Setup, das tatsächlich ein fertiges Teil liefert, kostet 898 plus Resin, und der laufende Umsatz steckt in den Kartuschen; genau das kritisiert pen2l. rfrey stellt die Frage, die die Produktseite umgeht: Alle Vergleiche dort gehen gegen Formlabs' eigene teure Maschinen, keiner gegen einen Elegoo oder Anycubic zum halben Preis. Das ehrliche Argument ist tonyhbs Fall, Negative für Zahnschienen, wo Maßhaltigkeit sich selbst bezahlt. Für alle anderen ist der Thread nahezu einstimmig: FDM-Drucker kaufen und sich Isopropanol, Schutzausrüstung und Absaugung sparen.
+***** Comments
+- Formlabs setzt auf eigene Resin-Kartuschen. Das ist wieder die Situation der Papierdrucker: Die Geräte sind nicht so teuer, aber die Verbrauchsmaterialien kosten ein Vermögen. Unterstützt die offenen Alternativen.
+- Es wird viel darüber geredet, wie viel günstiger das gegenüber den teuren Formlabs-Druckern ist, aber es gibt keinen einzigen Vergleich mit anderen Marken. Ein billigerer Bentley, aber wie schlägt er sich gegen den Toyota um die Ecke?
+- In meiner letzten Firma habe ich mit einem älteren, teureren Formlabs Invisalign-Negative gedruckt und die Schienen über dem gehärteten Resin thermogeformt. Die Genauigkeit war sehr gut und hielt auch beim Hochskalieren auf ein komplettes Labor.
+** The 'else' keyword is probably a literal translation from German (2020) :programming-languages:history:algol:linguistics:
+:PROPERTIES:
+:ID:       50233059
+:URL:      https://github.com/e-n-f/if-then-else/blob/master/if-then-else.md
+:HN_URL:   https://news.ycombinator.com/item?id=50233059
+:POINTS:   69
+:COMMENTS: 47
+:BY:       theanonymousone
+:END:
+
+*** TLDR
+Eric Fischer's 2020 write-up traces where programming's 'else' came from. Fortran had a three-way arithmetic IF on the sign of an expression; Grace Hopper's Flow-Matic used 'otherwise' for the unmatched case. 'else' appears in a 1958 German ALGOL proposal, inside a separate case construct, and Klaus Samelson folded it into the basic if statement in 1959, which is what made 'else if' chaining possible. Because that proposal was written in German and translated into English in a hurry, Fischer guesses a carefully chosen German word became an archaic English one and nobody revisited it. He does not name the German word and says the original text was not available to check. Christopher Strachey called 'else' 'ignorantly incorrect English'; MAD used 'otherwise' and CPL preferred 'or'.
+
+*** Take
+The word 'probably' is carrying the entire headline, and the author is upfront that he could not find the German original. The thread fills the gap better than the article does. bitwize quotes Call of the Wild from 1903 using 'else' exactly as a conditional conjunction, divbzero has the Webster's 1913 entry, and zacharyvoase supplies the obvious candidate, 'sonst', which is an ordinary German word rather than a mistranslation. The real find in the piece is Samelson's 1959 unification, which turned two separate constructs into the if-else chain every language has copied since. That deserved the title.
+
+*** Comments
+
+**** bitwize
+:PROPERTIES:
+:COMMENT_ID: 50284456
+:END:
+No. English has used else to mean otherwise since before computers came along. Wiktionary quotes Call of the Wild from 1903: 'it was a vicarious experience, else he would not have lived to profit by it.'
+
+**** zacharyvoase
+:PROPERTIES:
+:COMMENT_ID: 50284443
+:END:
+It was probably a rote translation of the German word 'sonst'.
+
+**** divbzero
+:PROPERTIES:
+:COMMENT_ID: 50284564
+:END:
+Else is not commonly used in English today but the meaning does fit. Webster's 1913 gives: otherwise; in the other, or the contrary, case; if the facts were different.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+else 这个关键字很可能是从德语直译过来的（2020）
+***** TLDR
+Eric Fischer 2020 年的这篇文章追溯了编程里 else 的来历。Fortran 用的是按表达式符号三路跳转的算术 IF；Grace Hopper 的 Flow-Matic 用 otherwise 表示未匹配的情况。else 首次出现在 1958 年一份德文的 ALGOL 提案中，当时属于一个单独的 case 结构；1959 年 Klaus Samelson 把它并入基本的 if 语句，这才让 else if 链成为可能。由于那份提案是用德语写成后匆忙译成英文的，Fischer 猜测某个精心挑选的德语词被译成了一个古旧的英语词，从此无人再改。他没有指出那个德语词，并说原始文本无从查证。Christopher Strachey 曾批评 else 是“无知的错误英语”；MAD 用 otherwise，CPL 则偏好 or。
+***** Take
+标题全靠“很可能”这三个字撑着，而作者自己也坦白找不到德语原文。讨论区把这个缺口补得比文章更好。bitwize 引了 1903 年《野性的呼唤》里 else 作条件连词的用法，divbzero 拿出了 1913 年韦氏词典的词条，zacharyvoase 则给出了最明显的候选词 sonst，而那是个普通德语词，不是误译。文章里真正的发现是 Samelson 在 1959 年的那次合并，它把两个独立结构变成了此后所有语言都照抄的 if-else 链。那才配得上做标题。
+***** Comments
+- 不对。在计算机出现之前，英语里 else 就有 otherwise 的意思。维基词典引了 1903 年《野性的呼唤》：那是一次别人代受的经历，否则他活不下来从中受益。
+- 大概就是把德语词 sonst 机械直译过来的。
+- else 在今天的英语里不常用，但意思是对得上的。1913 年韦氏词典的释义是：否则；在另一种或相反的情况下；若事实不同时。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+キーワード「else」はおそらくドイツ語の直訳である (2020)
+***** TLDR
+Eric Fischerの2020年の文章は、プログラミングのelseがどこから来たのかを追う。Fortranは式の符号で三方向に分岐する算術IFを持ち、Grace HopperのFlow-Maticは一致しない場合にotherwiseを使った。elseは1958年のドイツ語によるALGOL提案に現れ、そこでは独立したcase構文の中にあった。1959年にKlaus Samelsonがそれを基本のif文に統合し、これによってelse ifの連鎖が可能になった。その提案はドイツ語で書かれ急いで英訳されたため、Fischerは慎重に選ばれたドイツ語の語が古風な英語に訳され、その後見直されなかったのだろうと推測する。ただし彼はそのドイツ語の単語を特定しておらず、原文は確認できなかったと述べている。Christopher Stracheyはelseを「無知による誤った英語」と呼び、MADはotherwise、CPLはorを好んだ。
+***** Take
+見出しは「おそらく」の一語で支えられており、著者自身がドイツ語の原文を見つけられなかったと認めている。スレッドのほうが記事よりその穴をうまく埋めている。bitwizeは1903年の『野性の呼び声』でelseが条件の接続詞としてそのまま使われている例を引き、divbzeroは1913年のウェブスター辞典の項目を示し、zacharyvoaseは有力候補のsonstを挙げる。これは誤訳ではなくごく普通のドイツ語だ。この文章の本当の収穫は1959年のSamelsonによる統合で、二つの別個の構文を、以後あらゆる言語が踏襲したif-else連鎖に変えた。それこそが見出しに値した。
+***** Comments
+- 違う。英語はコンピュータが登場する前からelseをotherwiseの意味で使っている。Wiktionaryは1903年の『野性の呼び声』を引いている。あれは代理の経験であり、さもなければ彼は生き延びてそこから学ぶことはなかった。
+- おそらくドイツ語のsonstを機械的に訳したものだろう。
+- elseは今日の英語ではあまり使われないが、意味は合っている。1913年のウェブスターにはこうある。otherwise、つまり別の、あるいは反対の場合に、事実が違っていたなら。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+'else' 키워드는 아마 독일어의 직역이다 (2020)
+***** TLDR
+Eric Fischer의 2020년 글은 프로그래밍의 else가 어디서 왔는지 추적한다. Fortran은 식의 부호에 따라 세 갈래로 가는 산술 IF를 썼고, Grace Hopper의 Flow-Matic은 일치하지 않는 경우에 otherwise를 썼다. else는 1958년 독일어로 작성된 ALGOL 제안에 등장하는데, 당시에는 별도의 case 구문 안에 있었다. 1959년 Klaus Samelson이 이를 기본 if 문에 통합했고, 그래서 else if 연쇄가 가능해졌다. 그 제안이 독일어로 쓰인 뒤 급하게 영어로 번역됐기 때문에, Fischer는 신중히 고른 독일어 단어가 고풍스러운 영어 단어로 번역되고 이후 아무도 다시 손대지 않았으리라 추측한다. 다만 그는 그 독일어 단어를 특정하지 않았고 원문을 확인할 수 없었다고 말한다. Christopher Strachey는 else를 '무지하게 틀린 영어'라고 불렀고, MAD는 otherwise를, CPL은 or를 선호했다.
+***** Take
+제목 전체를 '아마'라는 단어가 떠받치고 있고, 저자 자신도 독일어 원문을 찾지 못했다고 밝힌다. 그 빈틈은 글보다 스레드가 더 잘 메운다. bitwize는 1903년 『야성의 부름』에서 else가 조건 접속사로 그대로 쓰인 예를 인용하고, divbzero는 1913년 웹스터 사전 항목을 가져오며, zacharyvoase는 가장 유력한 후보 sonst를 제시한다. 이는 오역이 아니라 평범한 독일어 단어다. 이 글의 진짜 수확은 1959년 Samelson의 통합이다. 별개였던 두 구문을 이후 모든 언어가 베낀 if-else 연쇄로 바꿔놓았다. 그게 제목이 될 만했다.
+***** Comments
+- 아니다. 영어는 컴퓨터가 나오기 전부터 else를 otherwise의 뜻으로 써왔다. 위키낱말사전은 1903년 『야성의 부름』을 인용한다. 그것은 대리 경험이었고, 그렇지 않았다면 그는 살아남아 교훈을 얻지 못했을 것이다.
+- 아마 독일어 단어 sonst를 기계적으로 번역한 것일 겁니다.
+- else는 오늘날 영어에서 흔히 쓰이지 않지만 의미는 들어맞는다. 1913년 웹스터는 이렇게 적는다. otherwise, 즉 다른 또는 반대의 경우에, 사실이 달랐다면.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La palabra clave 'else' es probablemente una traducción literal del alemán (2020)
+***** TLDR
+El texto de 2020 de Eric Fischer rastrea de dónde salió el 'else' de la programación. Fortran tenía un IF aritmético de tres ramas según el signo de una expresión; el Flow-Matic de Grace Hopper usaba 'otherwise' para el caso no cubierto. 'else' aparece en una propuesta alemana de ALGOL de 1958, dentro de una construcción case aparte, y Klaus Samelson lo integró en la sentencia if básica en 1959, que es lo que hizo posible encadenar 'else if'. Como esa propuesta se escribió en alemán y se tradujo al inglés con prisas, Fischer supone que una palabra alemana bien elegida acabó como una palabra inglesa arcaica que nadie revisó. No nombra la palabra alemana y dice que el texto original no estaba disponible para comprobarlo. Christopher Strachey calificó 'else' de 'inglés ignorantemente incorrecto'; MAD usó 'otherwise' y CPL prefirió 'or'.
+***** Take
+El titular entero se apoya en la palabra 'probablemente', y el autor reconoce de entrada que no pudo encontrar el original alemán. El hilo rellena el hueco mejor que el artículo. bitwize cita La llamada de lo salvaje de 1903 usando 'else' exactamente como conjunción condicional, divbzero trae la entrada del Webster's de 1913 y zacharyvoase aporta el candidato evidente, 'sonst', que es una palabra alemana corriente y no una mala traducción. El hallazgo real del texto es la unificación de Samelson en 1959, que convirtió dos construcciones separadas en la cadena if-else que han copiado todos los lenguajes desde entonces. Eso merecía el titular.
+***** Comments
+- No. El inglés usa else con el sentido de otherwise desde antes de que existieran los ordenadores. Wiktionary cita La llamada de lo salvaje de 1903: fue una experiencia vicaria, de lo contrario no habría vivido para aprovecharla.
+- Probablemente fue una traducción mecánica de la palabra alemana 'sonst'.
+- Else no se usa mucho en el inglés de hoy, pero el significado encaja. El Webster's de 1913 da: otherwise; en el otro caso, o en el contrario; si los hechos fueran distintos.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Das Schlüsselwort 'else' ist wahrscheinlich eine wörtliche Übersetzung aus dem Deutschen (2020)
+***** TLDR
+Eric Fischers Text von 2020 verfolgt, woher das 'else' der Programmierung kommt. Fortran hatte ein arithmetisches IF mit drei Zweigen je nach Vorzeichen eines Ausdrucks; Grace Hoppers Flow-Matic nutzte 'otherwise' für den nicht abgedeckten Fall. 'else' erscheint in einem deutschen ALGOL-Vorschlag von 1958, dort in einer separaten case-Konstruktion, und Klaus Samelson integrierte es 1959 in die einfache if-Anweisung, was erst die Verkettung mit 'else if' ermöglichte. Weil dieser Vorschlag auf Deutsch geschrieben und eilig ins Englische übersetzt wurde, vermutet Fischer, ein sorgfältig gewähltes deutsches Wort sei als archaisches englisches gelandet und nie überarbeitet worden. Das deutsche Wort nennt er nicht, und der Originaltext war ihm nicht zugänglich. Christopher Strachey nannte 'else' 'ignorantly incorrect English'; MAD verwendete 'otherwise', CPL bevorzugte 'or'.
+***** Take
+Die ganze Schlagzeile hängt am Wort 'wahrscheinlich', und der Autor sagt offen, dass er das deutsche Original nicht fand. Der Thread füllt diese Lücke besser als der Artikel. bitwize zitiert Ruf der Wildnis von 1903, wo 'else' genau als konditionale Konjunktion steht, divbzero bringt den Eintrag aus Webster's 1913, und zacharyvoase liefert den naheliegenden Kandidaten 'sonst', ein ganz normales deutsches Wort und keine Fehlübersetzung. Der eigentliche Fund des Textes ist Samelsons Vereinheitlichung von 1959, die aus zwei getrennten Konstruktionen die if-else-Kette machte, die seither jede Sprache kopiert hat. Das hätte die Überschrift verdient.
+***** Comments
+- Nein. Das Englische verwendet else im Sinne von otherwise schon lange vor den Computern. Wiktionary zitiert Ruf der Wildnis von 1903: Es war eine fremde Erfahrung, sonst hätte er nicht überlebt, um daraus zu lernen.
+- Das war wahrscheinlich eine mechanische Übersetzung des deutschen Wortes 'sonst'.
+- Else wird im heutigen Englisch selten benutzt, aber die Bedeutung passt. Webster's 1913 nennt: otherwise; im anderen oder entgegengesetzten Fall; wenn die Tatsachen anders lägen.
