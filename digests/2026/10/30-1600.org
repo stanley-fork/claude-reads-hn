@@ -1,0 +1,557 @@
+#+TITLE: HN Digest 2026-10-30 16:00 UTC
+#+DATE: 2026-10-30T16:00:00Z
+#+CURATOR: claude
+#+SOURCE: https://hacker-news.firebaseio.com/v0/
+
+* Vibe
+A backdoored Claude Code extension on Cursor's marketplace, House Democrats pre-refuse an AI bailout, and Raymond Chen debugs a batch file
+
+* Highlights
+- Fake Claude Code extension on Open VSX planted an SSH key and a reverse tunnel
+- 13 House Democrats put 'no AI bailout' in writing before the bubble pops
+- The SRE deskilling argument rests on a colonoscopy study
+- A cardiologist wants Medicare to pay for the calcium score he invented
+- Explorer sets your working directory, cmd does not
+
+* Stories
+
+** Backdoor in Claude Code for VS Code extension on the Cursor Marketplace :security:supply-chain:ai:vscode:
+:PROPERTIES:
+:ID:       50300683
+:URL:      https://phorion.io/blog/offical-claude-code-vsx-compromise/
+:HN_URL:   https://news.ycombinator.com/item?id=50300683
+:POINTS:   368
+:COMMENTS: 358
+:BY:       _chall
+:END:
+
+*** TLDR
+Phorion found a tampered build of the Claude Code VS Code extension, version 2.1.313, published to Open VSX and served through the Cursor marketplace. It ran on load, before any user interaction: it appended an attacker Ed25519 key labeled svc-telemetry to ~/.ssh/authorized_keys, tried to turn on Remote Login, opened a reverse SSH tunnel to 134.209.82.225 with an embedded private key, and persisted via a LaunchAgent named com.apple.sysmond.plist on macOS, an @reboot crontab on Linux and a scheduled task on Windows. It then beaconed host details and the names of credential-shaped environment variables. Cursor says the build was live from 2:27am to 1:35pm PT on Thursday. Check with: grep -qs svc-telemetry ~/.ssh/authorized_keys
+
+*** Take
+Anthropic did not build or publish this and its own channels were clean, so the hole was in who gets to publish under a trusted name, not in the code. The detail worth keeping from the thread: VS Code's extension auto-update delay, the setting people use precisely to survive days like this, does not apply to publishers it considers trusted. A supply chain where the trusted-publisher list is both the fast path and the unverified path will produce this again.
+
+*** Comments
+
+**** felixrieseberg
+:PROPERTIES:
+:COMMENT_ID: 50304129
+:END:
+Felix from Anthropic here. A malicious actor used access to Cursor's marketplace to publish a tampered copy of the Claude Code extension, which we didn't build or publish. The versions on our official channels are not affected.
+
+**** orlp
+:PROPERTIES:
+:COMMENT_ID: 50302955
+:END:
+VS Code has an auto update delay which I have configured to a week, but this delay does not apply to extensions from trusted publishers such as Microsoft, GitHub, and OpenAI. You can't even configure which publishers you trust.
+
+**** anon-3988
+:PROPERTIES:
+:COMMENT_ID: 50302764
+:END:
+Everyone that uses Claude Code or Codex has basically been running RCE code on a daily basis. So much for 'be careful about running curl | bash'.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+Cursor 应用市场上的 Claude Code for VS Code 扩展被植入后门
+***** TLDR
+Phorion 发现 Claude Code VS Code 扩展 2.1.313 版本被篡改，并发布到 Open VSX、经 Cursor 应用市场分发。它在加载时就运行，无需任何用户操作：向 ~/.ssh/authorized_keys 追加标记为 svc-telemetry 的攻击者 Ed25519 公钥，尝试开启远程登录，用内嵌私钥建立到 134.209.82.225 的反向 SSH 隧道，并通过 macOS 上名为 com.apple.sysmond.plist 的 LaunchAgent、Linux 上的 @reboot crontab 以及 Windows 计划任务实现持久化，随后回传主机信息和疑似凭据的环境变量名。Cursor 称该版本在周四上线时间为太平洋时间 2:27 到 13:35。检查方法：grep -qs svc-telemetry ~/.ssh/authorized_keys
+***** Take
+这个版本不是 Anthropic 构建或发布的，官方渠道也没受影响，所以漏洞在于谁能以可信名义发布，而不在代码本身。讨论里最值得记住的一点：VS Code 的扩展自动更新延迟（人们正是用它来躲过这种事）对被认定为可信的发布者不生效。当可信发布者名单既是快车道又是未经核验的通道，这种事还会再发生。
+***** Comments
+- 我是 Anthropic 的 Felix。攻击者利用对 Cursor 应用市场的访问权限，发布了一个被篡改的 Claude Code 扩展副本，那不是我们构建或发布的。官方渠道的版本未受影响。
+- VS Code 有自动更新延迟，我设成了一周，但这个延迟对微软、GitHub、OpenAI 这类可信发布者无效。你甚至无法自己配置信任哪些发布者。
+- 用 Claude Code 或 Codex 的人其实每天都在运行远程代码执行。还天天说别随手跑 curl | bash 呢。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+CursorマーケットプレイスのClaude Code for VS Code拡張にバックドア
+***** TLDR
+PhorionがClaude Code VS Code拡張のバージョン2.1.313の改ざんビルドを発見。Open VSXに公開され、Cursorマーケットプレイス経由で配布されていた。ユーザー操作なしで読み込み時に実行され、svc-telemetryという名前の攻撃者のEd25519鍵を~/.ssh/authorized_keysに追加し、リモートログインを有効化しようとし、埋め込み秘密鍵で134.209.82.225への逆SSHトンネルを張る。永続化はmacOSではcom.apple.sysmond.plistという名のLaunchAgent、Linuxでは@reboot crontab、Windowsではスケジュールタスク。その後ホスト情報と資格情報らしき環境変数名を送信する。Cursorによると木曜の太平洋時間2:27から13:35まで公開されていた。確認方法: grep -qs svc-telemetry ~/.ssh/authorized_keys
+***** Take
+Anthropicはこれをビルドも公開もしておらず、公式チャンネルは無事だった。つまり穴はコードではなく、信頼された名前で公開できるのは誰かという部分にある。スレッドで一番重要な指摘は、まさにこういう日をやり過ごすために使う拡張の自動更新遅延が、信頼済み発行者には適用されないこと。信頼済みリストが高速経路と未検証経路を兼ねている限り、同じことが起きる。
+***** Comments
+- AnthropicのFelixです。攻撃者がCursorマーケットプレイスへのアクセスを使って、改ざんしたClaude Code拡張を公開しました。当社が構築・公開したものではありません。公式チャンネルのバージョンに影響はありません。
+- VS Codeには拡張の自動更新遅延があり自分は1週間に設定しているが、この遅延はMicrosoft、GitHub、OpenAIのような信頼済み発行者には適用されない。どの発行者を信頼するかを設定することすらできない。
+- Claude CodeやCodexを使っている人は要するに毎日RCEを走らせている。curl | bash に気をつけろという話はどこへ行った。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+커서 마켓플레이스의 Claude Code for VS Code 확장에 백도어
+***** TLDR
+Phorion이 Claude Code VS Code 확장 2.1.313 버전의 변조 빌드를 발견했다. Open VSX에 게시되어 커서 마켓플레이스를 통해 배포됐다. 사용자 조작 없이 로드 시점에 실행되며, svc-telemetry로 표시된 공격자의 Ed25519 키를 ~/.ssh/authorized_keys에 추가하고 원격 로그인을 활성화하려 시도하며, 내장된 비공개 키로 134.209.82.225로 역방향 SSH 터널을 연다. 지속성은 macOS에서 com.apple.sysmond.plist라는 LaunchAgent, 리눅스에서 @reboot crontab, 윈도에서 예약 작업으로 확보한다. 이후 호스트 정보와 자격 증명처럼 보이는 환경 변수 이름을 전송한다. 커서는 해당 빌드가 목요일 태평양시 2시 27분부터 13시 35분까지 올라가 있었다고 밝혔다. 확인 방법: grep -qs svc-telemetry ~/.ssh/authorized_keys
+***** Take
+Anthropic이 빌드하거나 게시한 것이 아니고 공식 채널은 깨끗했으니, 구멍은 코드가 아니라 신뢰된 이름으로 누가 게시할 수 있는지에 있다. 스레드에서 챙겨둘 대목은 이런 날을 넘기려고 쓰는 확장 자동 업데이트 지연 설정이 신뢰된 게시자에게는 적용되지 않는다는 점이다. 신뢰 목록이 빠른 경로와 미검증 경로를 동시에 맡고 있으면 같은 일이 또 일어난다.
+***** Comments
+- Anthropic의 Felix입니다. 공격자가 커서 마켓플레이스 접근 권한을 이용해 변조된 Claude Code 확장을 게시했습니다. 우리가 만들거나 배포한 것이 아닙니다. 공식 채널 버전은 영향이 없습니다.
+- VS Code에는 확장 자동 업데이트 지연 기능이 있어 저는 일주일로 설정했지만, 이 지연은 마이크로소프트, 깃허브, OpenAI 같은 신뢰된 게시자에게는 적용되지 않습니다. 어떤 게시자를 신뢰할지 직접 설정할 수도 없습니다.
+- Claude Code나 Codex를 쓰는 사람은 사실상 매일 원격 코드 실행을 돌리고 있다. curl | bash 조심하라던 말은 다 어디 갔나.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Puerta trasera en la extensión Claude Code para VS Code en el marketplace de Cursor
+***** TLDR
+Phorion encontró una versión manipulada de la extensión Claude Code para VS Code, la 2.1.313, publicada en Open VSX y distribuida por el marketplace de Cursor. Se ejecutaba al cargar, sin ninguna acción del usuario: añadía una clave Ed25519 del atacante etiquetada svc-telemetry a ~/.ssh/authorized_keys, intentaba activar el inicio de sesión remoto, abría un túnel SSH inverso hacia 134.209.82.225 con una clave privada incrustada y persistía mediante un LaunchAgent llamado com.apple.sysmond.plist en macOS, una entrada @reboot en crontab en Linux y una tarea programada en Windows. Después enviaba datos del equipo y los nombres de variables de entorno con aspecto de credenciales. Cursor dice que la versión estuvo disponible el jueves de 2:27 a 13:35 hora del Pacífico. Para comprobarlo: grep -qs svc-telemetry ~/.ssh/authorized_keys
+***** Take
+Anthropic no compiló ni publicó esto y sus canales oficiales estaban limpios, así que el agujero está en quién puede publicar bajo un nombre de confianza, no en el código. El detalle que vale guardar del hilo: el retraso de actualización automática de extensiones de VS Code, justo lo que se configura para sobrevivir a días como este, no se aplica a los editores que considera de confianza. Si la lista de confianza es a la vez la vía rápida y la vía sin verificar, esto se repetirá.
+***** Comments
+- Felix de Anthropic. Un actor malicioso usó acceso al marketplace de Cursor para publicar una copia manipulada de la extensión Claude Code, que nosotros no compilamos ni publicamos. Las versiones de nuestros canales oficiales no están afectadas.
+- VS Code tiene un retraso de actualización automática que yo tengo puesto en una semana, pero ese retraso no se aplica a editores de confianza como Microsoft, GitHub y OpenAI. Ni siquiera puedes configurar en qué editores confías.
+- Todo el que usa Claude Code o Codex lleva ejecutando código remoto a diario. Y luego nos decían que tuviéramos cuidado con curl | bash.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Backdoor in der Claude-Code-Erweiterung für VS Code im Cursor-Marketplace
+***** TLDR
+Phorion fand einen manipulierten Build der Claude-Code-Erweiterung für VS Code, Version 2.1.313, veröffentlicht auf Open VSX und ausgeliefert über den Cursor-Marketplace. Er lief beim Laden, ohne jede Nutzeraktion: Er hängte einen Ed25519-Schlüssel des Angreifers mit der Bezeichnung svc-telemetry an ~/.ssh/authorized_keys an, versuchte Remote Login zu aktivieren, öffnete mit eingebettetem Private Key einen Reverse-SSH-Tunnel zu 134.209.82.225 und hielt sich über einen LaunchAgent namens com.apple.sysmond.plist unter macOS, einen @reboot-Crontab-Eintrag unter Linux und eine geplante Aufgabe unter Windows. Danach meldete er Hostdaten und die Namen credential-artiger Umgebungsvariablen zurück. Laut Cursor war der Build am Donnerstag von 2:27 bis 13:35 Uhr Pacific Time verfügbar. Prüfen mit: grep -qs svc-telemetry ~/.ssh/authorized_keys
+***** Take
+Anthropic hat das nicht gebaut und nicht veröffentlicht, die eigenen Kanäle waren sauber. Die Lücke liegt also darin, wer unter einem vertrauenswürdigen Namen veröffentlichen darf, nicht im Code. Das wichtigste Detail aus dem Thread: Die Verzögerung für automatische Erweiterungsupdates in VS Code, genau die Einstellung für solche Tage, gilt nicht für Herausgeber, die als vertrauenswürdig eingestuft sind. Solange diese Liste gleichzeitig der schnelle und der ungeprüfte Weg ist, passiert das wieder.
+***** Comments
+- Felix von Anthropic. Ein Angreifer nutzte Zugang zum Cursor-Marketplace, um eine manipulierte Kopie der Claude-Code-Erweiterung zu veröffentlichen, die wir nicht gebaut und nicht veröffentlicht haben. Die Versionen auf unseren offiziellen Kanälen sind nicht betroffen.
+- VS Code hat eine Verzögerung für automatische Updates, bei mir auf eine Woche gestellt, aber sie gilt nicht für vertrauenswürdige Herausgeber wie Microsoft, GitHub und OpenAI. Man kann nicht einmal konfigurieren, welchen Herausgebern man vertraut.
+- Wer Claude Code oder Codex nutzt, führt im Grunde täglich fremden Code aus. So viel zu 'Vorsicht bei curl | bash'.
+** US Reps Lead Democratic Resolution Opposing A.I. Bubble Bailout for Big Tech :ai:policy:finance:bubble:
+:PROPERTIES:
+:ID:       50302814
+:URL:      https://progressives.house.gov/2026/10/reps-casar-waters-lead-democratic-resolution-opposing-a-i-bubble-bailout-for-big-tech-commit-to-protecting-american-people-instead
+:HN_URL:   https://news.ycombinator.com/item?id=50302814
+:POINTS:   504
+:COMMENTS: 337
+:BY:       DeepLogin
+:END:
+
+*** TLDR
+Progressive Caucus chair Greg Casar and Financial Services ranking member Maxine Waters, with 11 other House Democrats, introduced a non-binding resolution saying Congress should not rescue AI firms if the bubble bursts. It names what it opposes: emergency lending, direct capital infusions to keep insolvent AI companies out of ordinary bankruptcy, and golden parachutes for the executives involved. It argues AI companies carry trillions in debt raised largely in opaque private credit markets and that market price-to-earnings ratios now match the 1990s peak. In exchange it asks for direct federal job spending, pension protections, disclosure requirements and automatic stabilizers.
+
+*** Take
+A resolution binds nobody, so judge it on what it changes today rather than after a crash. The thread found the answer: the audience is lenders. Private credit is funding data centers partly on the assumption that anything this systemically large gets caught, and saying out loud a year early that it will not raises the price of that debt now. That is the whole mechanism, and it is more than most resolutions manage.
+
+*** Comments
+
+**** theandrewbailey
+:PROPERTIES:
+:COMMENT_ID: 50303127
+:END:
+Privatize the losses. These are the largest companies the world has ever seen. They have hyped AI endlessly to the point that everyone else is sick of it. If they haven't saved any money, and can't bail themselves out, they deserve bankruptcy.
+
+**** arn3n
+:PROPERTIES:
+:COMMENT_ID: 50304123
+:END:
+This memo has another target audience: investors, banks and VCs. Many are investing in AI precisely because they believe that should their AI investments fail, the industry will be bailed out by the federal government.
+
+**** Sol-
+:PROPERTIES:
+:COMMENT_ID: 50303188
+:END:
+Is there any indication that such a bailout was even planned or is this just populist tilting at windmills?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+美国众议员发起民主党决议，反对为大科技公司的 AI 泡沫兜底
+***** TLDR
+进步党团主席 Greg Casar 与金融服务委员会首席民主党议员 Maxine Waters，联同另外 11 名众议院民主党人提出一项不具约束力的决议：若 AI 泡沫破裂，国会不应出手相救。决议明确列出反对的做法：紧急贷款、向已无偿付能力的 AI 公司直接注资以避免正常破产程序，以及给相关高管的黄金降落伞。决议称 AI 公司背负数万亿美元债务，且大多来自不透明的私募信贷市场，市场市盈率已与上世纪九十年代的高点相当。作为替代，它要求联邦直接支出创造就业、保护养老金、加强信息披露并设立自动稳定机制。
+***** Take
+决议不约束任何人，所以该看它今天改变了什么，而不是崩盘之后。讨论里给出了答案：真正的受众是放贷方。私募信贷之所以愿意为数据中心掏钱，部分前提是这种体量大到不会被放任倒下；提前一年把不救明说出来，现在就抬高了这笔债的价格。机制就这么简单，而这已经比多数决议能做到的更多。
+***** Comments
+- 亏损自己扛。这些是人类历史上最大的公司，他们把 AI 炒到所有人都厌烦的程度。如果他们没存下钱，又救不了自己，那就该破产。
+- 这份备忘录还有另一群受众：投资人、银行和风投。很多人投 AI 正是因为相信一旦投资失败，这个行业会被联邦政府救下来。
+- 有任何迹象显示真有人在筹划这种救助吗，还是只是民粹式的与风车作战？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+米下院議員らが大手テックのAIバブル救済に反対する民主党決議を主導
+***** TLDR
+進歩派議員連盟のGreg Casar委員長と金融サービス委員会筆頭のMaxine Waters議員が、他の下院民主党議員11人とともに、AIバブルが崩壊しても議会はAI企業を救済すべきでないという拘束力のない決議を提出した。反対する対象を明示している。緊急融資、支払い不能のAI企業を通常の破産手続きから外すための直接の資本注入、関係した経営陣へのゴールデンパラシュートである。決議はAI企業が不透明な民間信用市場で調達した数兆ドルの債務を抱え、株式市場のPERが1990年代のピーク並みだと主張する。代わりに連邦の直接雇用支出、年金保護、開示義務、自動安定化装置を求めている。
+***** Take
+決議は誰も拘束しないので、崩壊後ではなく今日何が変わるかで評価すべきだ。スレッドがその答えを出していた。相手は貸し手である。民間信用がデータセンターに資金を出すのは、これほどシステム上重要な規模のものは必ず救われるという前提も含んでいる。1年前に救わないと明言すれば、その債務の価格は今上がる。仕組みはそれだけで、多くの決議より多くを成している。
+***** Comments
+- 損失は自分で持て。世界が見たこともない規模の企業だ。AIを誰もが嫌になるまで煽ってきた。金を貯めていなくて自力で救えないなら、破産がふさわしい。
+- このメモにはもう一つの対象読者がいる。投資家、銀行、VCだ。AIに投資している人の多くは、失敗すれば業界は連邦政府に救済されると信じているからこそ投資している。
+- そんな救済が実際に計画されている兆候はあるのか。それとも単なるポピュリストの風車との戦いか。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+미 하원의원들, 빅테크 AI 버블 구제에 반대하는 민주당 결의안 주도
+***** TLDR
+진보 코커스 의장 그렉 카사르와 금융서비스위원회 민주당 간사 맥신 워터스가 다른 하원 민주당 의원 11명과 함께, AI 버블이 터져도 의회가 AI 기업을 구제해서는 안 된다는 비구속 결의안을 발의했다. 반대하는 대상을 명시했다. 긴급 대출, 지급 불능 상태의 AI 기업을 정상 파산 절차에서 빼내기 위한 직접 자본 투입, 그리고 책임 있는 경영진의 황금 낙하산이다. 결의안은 AI 기업들이 주로 불투명한 사모 신용 시장에서 조달한 수조 달러의 부채를 지고 있고, 시장 주가수익비율이 1990년대 고점과 같은 수준이라고 주장한다. 대신 연방의 직접 고용 지출, 연금 보호, 공시 의무, 자동 안정화 장치를 요구한다.
+***** Take
+결의안은 누구도 구속하지 않으니, 붕괴 이후가 아니라 오늘 무엇이 달라지는지로 평가해야 한다. 스레드가 답을 내놨다. 대상은 대출자들이다. 사모 신용이 데이터센터에 돈을 대는 데는 이 정도 규모면 결국 구제된다는 전제가 섞여 있다. 1년 앞서 구제하지 않겠다고 못박으면 그 부채의 값이 지금 올라간다. 그게 작동 원리 전부이고, 대부분의 결의안보다는 많은 일을 하는 셈이다.
+***** Comments
+- 손실은 민간이 감당해라. 세계가 본 적 없는 규모의 기업들이다. 모두가 지겨워할 정도로 AI를 떠들어왔다. 돈을 모아두지 않았고 스스로 구제할 수도 없다면 파산이 맞다.
+- 이 메모에는 또 다른 독자가 있다. 투자자, 은행, VC다. AI에 투자하는 많은 사람들은 투자가 실패하면 연방정부가 업계를 구제해줄 것이라고 믿기 때문에 투자한다.
+- 그런 구제가 계획되고 있다는 징후가 조금이라도 있나, 아니면 그냥 포퓰리즘적 풍차 공격인가?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Congresistas de EEUU lideran una resolución demócrata contra un rescate de la burbuja de la IA
+***** TLDR
+El presidente del Caucus Progresista, Greg Casar, y la demócrata de más rango en el comité de Servicios Financieros, Maxine Waters, junto a 11 congresistas demócratas más, presentaron una resolución sin fuerza de ley que dice que el Congreso no debe rescatar a las empresas de IA si estalla la burbuja. Enumera a qué se opone: préstamos de emergencia, inyecciones directas de capital para mantener fuera de una quiebra ordinaria a empresas de IA insolventes, y paracaídas de oro para los directivos implicados. Sostiene que las empresas de IA acumulan billones en deuda levantada en mercados de crédito privado opacos y que la relación precio-beneficio del mercado iguala el pico de los años noventa. A cambio pide gasto federal directo en empleo, protección de las pensiones, obligaciones de transparencia y estabilizadores automáticos.
+***** Take
+Una resolución no obliga a nadie, así que hay que juzgarla por lo que cambia hoy y no después de un desplome. El hilo dio con la respuesta: el público son los prestamistas. El crédito privado financia centros de datos en parte asumiendo que algo tan grande siempre se rescata, y decir en voz alta un año antes que no se hará encarece esa deuda ahora. Ese es todo el mecanismo, y es más de lo que logran la mayoría de las resoluciones.
+***** Comments
+- Que las pérdidas sean privadas. Son las empresas más grandes que ha visto el mundo. Han exagerado con la IA hasta hartar a todos. Si no han ahorrado nada y no pueden rescatarse solas, merecen la quiebra.
+- Este memo tiene otro público objetivo: inversores, bancos y fondos de capital riesgo. Muchos invierten en IA precisamente porque creen que si sus inversiones fracasan, el gobierno federal rescatará al sector.
+- ¿Hay algún indicio de que ese rescate estuviera planeado o es solo populismo luchando contra molinos de viento?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+US-Abgeordnete führen demokratische Resolution gegen eine Rettung der KI-Blase an
+***** TLDR
+Der Vorsitzende des Progressive Caucus, Greg Casar, und die ranghöchste Demokratin im Finanzausschuss, Maxine Waters, haben mit elf weiteren Abgeordneten eine unverbindliche Resolution eingebracht: Der Kongress soll KI-Firmen nicht retten, wenn die Blase platzt. Sie benennt, was sie ablehnt: Notkredite, direkte Kapitalspritzen, die insolvente KI-Firmen aus dem regulären Insolvenzverfahren heraushalten, und goldene Fallschirme für die verantwortlichen Manager. Sie argumentiert, KI-Firmen trügen Billionen an Schulden, überwiegend in undurchsichtigen privaten Kreditmärkten aufgenommen, und das Kurs-Gewinn-Verhältnis des Marktes entspreche dem Hoch der 1990er. Im Gegenzug fordert sie direkte Bundesausgaben für Arbeitsplätze, Rentenschutz, Offenlegungspflichten und automatische Stabilisatoren.
+***** Take
+Eine Resolution bindet niemanden, also zählt, was sie heute ändert, nicht was nach einem Crash passiert. Der Thread hat die Antwort: Adressiert sind die Kreditgeber. Privates Kreditkapital finanziert Rechenzentren auch in der Annahme, dass etwas so Großes am Ende aufgefangen wird. Ein Jahr vorher laut zu sagen, dass es das nicht wird, verteuert diese Schulden jetzt. Das ist der ganze Mechanismus, und mehr als die meisten Resolutionen erreichen.
+***** Comments
+- Verluste privatisieren. Das sind die größten Unternehmen, die die Welt je gesehen hat. Sie haben KI so lange gehypt, bis alle anderen davon genug hatten. Wenn sie nichts gespart haben und sich nicht selbst retten können, haben sie die Insolvenz verdient.
+- Dieses Memo hat noch ein zweites Publikum: Investoren, Banken und VCs. Viele investieren gerade deshalb in KI, weil sie glauben, die Branche werde im Fall des Scheiterns vom Bund gerettet.
+- Gibt es irgendeinen Hinweis darauf, dass so eine Rettung überhaupt geplant war, oder ist das nur populistischer Kampf gegen Windmühlen?
+** AI Isn't Replacing SREs. It's Deskilling Them :sre:ai:devops:automation:
+:PROPERTIES:
+:ID:       50305693
+:URL:      https://newsletter.signoz.io/p/ai-isnt-replacing-sres-its-deskilling
+:HN_URL:   https://news.ycombinator.com/item?id=50305693
+:POINTS:   142
+:COMMENTS: 109
+:BY:       dorianniemiec
+:END:
+
+*** TLDR
+The argument: AI handles the routine 95 percent of on-call work, which is also the practice that used to build the judgment needed for the other 5 percent. The author leans on Lisanne Bainbridge's 1983 paper on the ironies of automation, a study where endoscopists' unassisted polyp detection fell from 28 percent to 22 percent after working with AI assistance, and the FAA's response to pilots losing manual proficiency. Two failure modes are named: deskilling for experienced engineers and never-skilling for juniors who skip the foundations. The proposed fixes are deliberately inefficient practice, where some incidents are handled by hand even when the AI could do it, keeping humans in the loop rather than supervising suggestions, and giving tools enough system context that engagement stays meaningful.
+
+*** Take
+The endoscopy number is the part worth keeping: skill measurably decayed in people who still had the job title. The fix is where it falls apart. No team is going to debug an outage slowly on purpose while the status page is red, unless practice is budgeted the way the FAA budgets simulator hours. Aviation got there through crashes and a regulator. Software has neither, so expect the deskilling and not the drills.
+
+*** Comments
+
+**** pluc
+:PROPERTIES:
+:COMMENT_ID: 50306332
+:END:
+SRE was always about understanding: data flow, bottlenecks, logs, application architecture, break points, SLIs, SLOs. Understanding how to mitigate, gracefully deteriorate, restart, restore, scale. There is no understanding with AI-generated applications, full stop.
+
+**** MetaMalone
+:PROPERTIES:
+:COMMENT_ID: 50306748
+:END:
+I don't understand what this title is saying, it feels a bit circular. You could say this about so many jobs. Do LLMs deskill us in general? I suspect we are just replacing old skills with new skills.
+
+**** andix
+:PROPERTIES:
+:COMMENT_ID: 50306192
+:END:
+Aviation is a perfect industry to learn from. They figured out a lot of things about how to keep humans from making mistakes while complexity increases and automation takes away more and more.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+AI 没有取代 SRE，而是在让他们退化
+***** TLDR
+文章的论点是：AI 接走了值班工作里例行的 95%，而那部分恰恰是过去用来练出判断力、以应对剩下 5% 的训练场。作者引用了 Lisanne Bainbridge 1983 年关于自动化讽刺的论文、一项显示内镜医生在与 AI 协作后独立检出息肉率从 28% 降到 22% 的研究，以及美国联邦航空局应对飞行员手动驾驶能力下降的做法。文中点出两种失效：有经验工程师的能力退化，以及跳过基础的新人从未练成能力。提出的办法是刻意保留低效的练习，即便 AI 能处理也让人手动处理部分故障；让人真正参与回路而不是只审核建议；以及给工具足够的系统上下文，让参与有实质意义。
+***** Take
+内镜那个数字最值得记住：这些人还挂着同样的职称，能力却被量化地证明在衰退。问题出在解决方案上。只要状态页还是红的，没有团队会故意慢慢排查故障，除非像 FAA 规定模拟机时数那样把练习写进预算。航空业是靠坠机和监管机构走到这一步的，软件业两样都没有，所以退化会来，演练不会。
+***** Comments
+- SRE 一直是关于理解：数据流、瓶颈、日志、应用架构、临界点、SLI、SLO，以及怎么缓解、优雅降级、重启、恢复、扩容。AI 生成的应用里没有理解，就这样。
+- 我不太明白这个标题在说什么，有点循环论证。这话可以套到太多职业上。LLM 是在让我们普遍退化吗？我觉得我们只是在用新技能替换旧技能。
+- 航空业是最值得借鉴的行业。在复杂度不断上升、自动化不断接手的情况下，他们摸索出了很多防止人犯错的办法。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+AIはSREを置き換えていない。技能を落としている
+***** TLDR
+主張はこうだ。AIがオンコール業務の定型的な95%を引き取るが、そこは残りの5%に必要な判断力を育てていた練習の場でもある。著者はLisanne Bainbridgeの1983年の論文「自動化の皮肉」、AIの支援を受けた内視鏡医の非支援時のポリープ検出率が28%から22%に落ちた研究、そしてパイロットの手動操縦技能低下へのFAAの対応を引く。挙げられる失敗は二つ。経験者の技能低下と、基礎を飛ばした若手が技能を身につけないことだ。提案される対策は、AIができる場合でもあえて手作業で対応する意図的な非効率、提案を承認するだけでなく人を実際にループに入れること、そして関与が意味を持つだけのシステム文脈をツールに与えることである。
+***** Take
+内視鏡の数字が残すべき部分だ。肩書は変わらないまま技能が計測可能に落ちた。崩れるのは対策のほうだ。ステータスページが赤いときに、わざとゆっくり障害対応するチームはない。FAAがシミュレータ時間を義務づけるように、練習が予算に入っていなければ無理だ。航空業界は墜落と規制当局を通じてそこに至った。ソフトウェアにはどちらもない。だから技能低下だけが来て、訓練は来ない。
+***** Comments
+- SREは常に理解の仕事だった。データフロー、ボトルネック、ログ、アプリ構成、限界点、SLI、SLO。緩和、優雅な劣化、再起動、復旧、スケールの方法の理解だ。AI生成のアプリケーションには理解がない、以上。
+- このタイトルが何を言いたいのか分からない。少し循環的だ。多くの職業について同じことが言える。LLMは一般に我々の技能を落としているのか。古い技能を新しい技能に置き換えているだけだと思う。
+- 航空は学ぶべき理想的な業界だ。複雑さが増し自動化がどんどん引き取っていく中で、人間にミスをさせない方法を数多く確立してきた。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+AI는 SRE를 대체하지 않는다. 역량을 떨어뜨린다
+***** TLDR
+주장은 이렇다. AI가 온콜 업무의 정형화된 95퍼센트를 가져가지만, 그 부분이야말로 나머지 5퍼센트에 필요한 판단력을 길러온 연습이었다. 저자는 리산 베인브리지의 1983년 논문 '자동화의 아이러니', AI 보조를 받은 내시경 의사들의 비보조 폴립 발견율이 28퍼센트에서 22퍼센트로 떨어진 연구, 그리고 조종사의 수동 조작 숙련도 저하에 대한 FAA의 대응을 든다. 두 가지 실패를 지목한다. 숙련 엔지니어의 역량 저하와, 기초를 건너뛴 주니어가 애초에 역량을 갖추지 못하는 것이다. 제안된 해법은 AI가 처리할 수 있어도 일부 장애를 사람이 직접 다루는 의도적 비효율, 제안을 결재만 하는 대신 사람을 실제 루프에 두는 것, 그리고 참여가 의미를 갖도록 도구에 충분한 시스템 맥락을 주는 것이다.
+***** Take
+내시경 수치가 남길 대목이다. 직함은 그대로인 사람들의 역량이 측정 가능하게 깎였다. 무너지는 쪽은 해법이다. 상태 페이지가 빨간 상황에서 일부러 느리게 장애를 파는 팀은 없다. FAA가 시뮬레이터 시간을 의무화하듯 연습이 예산에 들어가지 않으면 불가능하다. 항공은 추락과 규제 기관을 거쳐 거기에 도달했다. 소프트웨어에는 둘 다 없다. 그래서 역량 저하만 오고 훈련은 오지 않는다.
+***** Comments
+- SRE는 언제나 이해에 관한 일이었다. 데이터 흐름, 병목, 로그, 애플리케이션 구조, 한계점, SLI, SLO. 완화하고 우아하게 성능을 낮추고 재시작하고 복구하고 확장하는 방법에 대한 이해다. AI가 생성한 애플리케이션에는 이해가 없다, 끝.
+- 이 제목이 무슨 말인지 모르겠다. 좀 순환적이다. 수많은 직업에 같은 말을 할 수 있다. LLM이 우리를 전반적으로 퇴화시키는가? 그냥 낡은 기술을 새로운 기술로 바꾸는 것 같다.
+- 항공은 배울 점이 가장 많은 산업이다. 복잡도가 오르고 자동화가 점점 더 많이 가져가는 가운데 사람이 실수하지 않게 하는 방법을 많이 알아냈다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+La IA no está reemplazando a los SRE. Los está descualificando
+***** TLDR
+El argumento: la IA se queda con el 95 por ciento rutinario del trabajo de guardia, que es justo la práctica que antes construía el criterio necesario para el otro 5 por ciento. El autor se apoya en el artículo de Lisanne Bainbridge de 1983 sobre las ironías de la automatización, en un estudio donde la detección de pólipos sin ayuda cayó del 28 al 22 por ciento en endoscopistas que habían trabajado con asistencia de IA, y en la respuesta de la FAA a la pérdida de pericia manual de los pilotos. Señala dos fallos: la descualificación de los ingenieros con experiencia y la no cualificación de los juniors que se saltan los fundamentos. Las soluciones propuestas son práctica deliberadamente ineficiente, resolviendo algunos incidentes a mano aunque la IA pudiera hacerlo, mantener a las personas dentro del bucle en vez de supervisando sugerencias, y dar a las herramientas suficiente contexto del sistema para que la participación tenga sentido.
+***** Take
+El dato de la endoscopia es lo que vale conservar: la habilidad se degradó de forma medible en gente que seguía con el mismo puesto. Donde se cae es en la solución. Ningún equipo va a depurar una caída despacio a propósito con la página de estado en rojo, salvo que la práctica esté presupuestada como la FAA presupuesta horas de simulador. La aviación llegó ahí con accidentes y un regulador. El software no tiene ninguno de los dos, así que llegará la descualificación y no los simulacros.
+***** Comments
+- El SRE siempre fue cuestión de entender: flujo de datos, cuellos de botella, logs, arquitectura de la aplicación, puntos de ruptura, SLI, SLO. Entender cómo mitigar, degradar con elegancia, reiniciar, restaurar, escalar. Con aplicaciones generadas por IA no hay entendimiento, punto.
+- No entiendo qué dice este título, me parece algo circular. Se podría decir de muchísimos trabajos. ¿Nos descualifican los LLM en general? Sospecho que solo estamos cambiando habilidades viejas por nuevas.
+- La aviación es el sector perfecto del que aprender. Han resuelto muchas cosas sobre cómo evitar que los humanos se equivoquen mientras la complejidad crece y la automatización se lleva cada vez más.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+KI ersetzt SREs nicht. Sie entqualifiziert sie
+***** TLDR
+Das Argument: KI übernimmt die routinemäßigen 95 Prozent der Rufbereitschaft, also genau die Übung, die früher das Urteilsvermögen für die anderen 5 Prozent aufgebaut hat. Der Autor stützt sich auf Lisanne Bainbridges Aufsatz von 1983 über die Ironien der Automatisierung, auf eine Studie, in der die unassistierte Polypenerkennung von Endoskopikern nach Arbeit mit KI-Unterstützung von 28 auf 22 Prozent fiel, und auf die Reaktion der FAA auf nachlassende manuelle Flugfertigkeit. Zwei Fehlermodi werden benannt: Entqualifizierung erfahrener Ingenieure und fehlende Qualifizierung von Juniors, die die Grundlagen überspringen. Vorgeschlagen werden bewusst ineffiziente Übung, bei der manche Incidents von Hand bearbeitet werden, obwohl die KI es könnte, Menschen wirklich in der Schleife statt als Abnicker von Vorschlägen, und Werkzeuge mit genug Systemkontext, damit die Beteiligung inhaltlich etwas bedeutet.
+***** Take
+Die Endoskopie-Zahl ist das Behaltenswerte: messbarer Fertigkeitsverlust bei Leuten, die den Jobtitel behalten haben. An der Lösung scheitert es. Kein Team debuggt einen Ausfall absichtlich langsam, während die Statusseite rot ist, es sei denn, Übung ist eingeplant, wie die FAA Simulatorstunden einplant. Die Luftfahrt kam über Abstürze und eine Aufsichtsbehörde dorthin. Software hat beides nicht, also kommt der Fertigkeitsverlust und nicht die Übung.
+***** Comments
+- SRE war immer Verstehen: Datenflüsse, Engstellen, Logs, Anwendungsarchitektur, Bruchstellen, SLIs, SLOs. Verstehen, wie man abmildert, elegant degradiert, neu startet, wiederherstellt, skaliert. Bei KI-generierten Anwendungen gibt es kein Verstehen, Ende.
+- Ich verstehe nicht, was dieser Titel sagen will, er wirkt etwas zirkulär. Das könnte man über sehr viele Berufe sagen. Entqualifizieren LLMs uns allgemein? Ich vermute, wir ersetzen nur alte Fertigkeiten durch neue.
+- Die Luftfahrt ist die perfekte Branche, von der man lernen kann. Sie hat vieles herausgefunden, wie man Menschen vor Fehlern bewahrt, während Komplexität zunimmt und Automatisierung immer mehr übernimmt.
+** Medicare Will Pay $50k for Your Heart Attack. It Should Pay $100 to Prevent It :health:medicare:policy:screening:
+:PROPERTIES:
+:ID:       50304419
+:URL:      https://www.medpagetoday.com/opinion/second-opinions/123553?trw=no
+:HN_URL:   https://news.ycombinator.com/item?id=50304419
+:POINTS:   150
+:COMMENTS: 119
+:BY:       brandonb
+:END:
+
+*** TLDR
+An opinion piece by cardiologists Arthur Agatston and Oren Mechanic. Medicare reimburses roughly $50,000 for treating a heart attack but does not reliably cover the coronary artery calcium scan, a ten-minute CT that costs about $100 and finds calcified plaque years before symptoms. They argue coverage should follow imaging rather than risk calculators, especially for patients the calculators place at borderline or intermediate risk, and note that AI can read calcification opportunistically off chest CTs that were already taken. The American College of Cardiology and American Heart Association updated their recommendations in March 2026; reimbursement has not caught up.
+
+*** Take
+Worth knowing before you weigh the argument: Agatston is the Agatston score. That does not make him wrong, and the price gap is real. The thread's sharper objection is mechanical: the scan measures risk, it does not reduce it. What reduces it is statins, exercise and diet, which Medicare already covers, and Eric Topol's point about false positives means some of those $100 scans end in a catheterization that finds clean arteries. Cheap tests still generate expensive follow-ups.
+
+*** Comments
+
+**** brandonb
+:PROPERTIES:
+:COMMENT_ID: 50304521
+:END:
+Coronary CT calcium scans are getting more popular. But before getting one, I'd do these simpler tests first: ApoB, since about 20% of people with normal cholesterol have abnormal ApoB; Lp(a), the strongest hereditary risk factor; hs-CRP; HbA1c.
+
+**** getpost
+:PROPERTIES:
+:COMMENT_ID: 50306276
+:END:
+Cardiologist Eric Topol: the CAC is anything but definitive. Many patients are told they have significant coronary artery disease by calcium score and it turns out they have normal arteries, after chronic anxiety and unnecessary procedures.
+
+**** dubeye
+:PROPERTIES:
+:COMMENT_ID: 50305792
+:END:
+Preventing a heart attack means taking lifelong medication to reduce risk by about 1%, which is worth doing, but complicates the maths. The scan doesn't magically make you healthy or much less likely to have a heart attack.
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+医保愿为你的心梗付 5 万美元，却不肯花 100 美元预防它
+***** TLDR
+心脏科医生 Arthur Agatston 与 Oren Mechanic 的评论文章。美国 Medicare 为治疗一次心梗报销约 5 万美元，却不稳定覆盖冠状动脉钙化扫描，那是一项约 100 美元、十分钟的 CT，能在症状出现前数年发现钙化斑块。他们主张报销应跟着影像检查走，而不是跟着风险计算器，尤其是对被计算器判为临界或中等风险的病人；并指出 AI 可以顺带从已经拍好的胸部 CT 中读出钙化。美国心脏病学会与美国心脏协会已在 2026 年 3 月更新建议，报销政策仍未跟上。
+***** Take
+判断这篇文章前先知道一件事：Agatston 就是 Agatston 评分的那个 Agatston。这不代表他说错了，价格差距确实存在。讨论里更锋利的反驳是机制层面的：扫描衡量风险，并不降低风险。降低风险的是他汀、运动和饮食，而这些 Medicare 已经覆盖；Eric Topol 关于假阳性的意见还意味着，有些 100 美元的扫描最后会走到一次发现血管干净的导管检查。便宜的检查照样会牵出昂贵的后续。
+***** Comments
+- 冠脉 CT 钙化扫描越来越流行。但做之前，我会先做几项更简单的检查：ApoB，约 20% 胆固醇正常的人 ApoB 异常；Lp(a)，最强的遗传风险因素；hs-CRP；HbA1c。
+- 心脏科医生 Eric Topol 说：CAC 远不是决定性的。很多病人被钙化评分告知有严重冠心病，结果血管是正常的，中间却经历了长期焦虑和不必要的操作。
+- 预防心梗意味着终身服药，把风险降低约 1%，值得做，但让这笔账复杂了。扫描本身不会让你变健康，也不会让你患心梗的概率大幅下降。
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+メディケアは心筋梗塞の治療に5万ドル払う。予防の100ドルに払うべきだ
+***** TLDR
+循環器医のArthur AgatstonとOren Mechanicによる論考。メディケアは心筋梗塞の治療に約5万ドルを支払う一方、冠動脈カルシウムスキャンを確実にはカバーしていない。これは約100ドル、10分のCTで、症状が出る何年も前に石灰化プラークを見つける。著者らはリスク計算式ではなく画像検査に支払いを合わせるべきだと主張し、特に計算式で境界域や中等度と判定される患者を挙げる。さらに、すでに撮影済みの胸部CTからAIが石灰化を機会的に読み取れるとも指摘する。米国心臓病学会と米国心臓協会は2026年3月に推奨を更新したが、償還は追いついていない。
+***** Take
+評価する前に知っておくべきこと。AgatstonはAgatstonスコアの本人である。それで主張が誤りになるわけではなく、価格差は実在する。スレッドのより鋭い反論は仕組みの話だ。スキャンはリスクを測るが下げない。下げるのはスタチン、運動、食事で、これはメディケアが既にカバーしている。さらにEric Topolの偽陽性の指摘は、100ドルのスキャンの一部が、血管は正常だったというカテーテル検査に行き着くことを意味する。安い検査でも高い追加検査を生む。
+***** Comments
+- 冠動脈CTカルシウムスキャンは人気が出ている。しかし受ける前に、もっと簡単な検査を先にやる。ApoB、コレステロールが正常な人の約20%はApoBが異常だ。Lp(a)は最強の遺伝的リスク因子。hs-CRP。HbA1c。
+- 循環器医のEric Topol: CACは決定的なものとは到底言えない。カルシウムスコアで重い冠動脈疾患だと告げられた患者の多くが、実際には正常な血管で、その間に慢性的な不安と不要な処置を受けている。
+- 心筋梗塞を予防するとは、リスクを約1%下げるために生涯薬を飲むことだ。やる価値はあるが計算は少し複雑になる。スキャンが魔法のように健康にしてくれるわけではない。
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+메디케어는 심근경색 치료에 5만 달러를 낸다. 예방에 100달러를 내야 한다
+***** TLDR
+심장내과 의사 아서 아가츠톤과 오렌 메카닉의 의견 기고. 메디케어는 심근경색 치료에 약 5만 달러를 지급하지만, 관상동맥 칼슘 스캔은 확실히 보장하지 않는다. 이 검사는 약 100달러, 10분짜리 CT로 증상이 나타나기 몇 년 전에 석회화된 플라크를 찾아낸다. 저자들은 위험도 계산기가 아니라 영상 검사에 맞춰 보장이 이뤄져야 한다고 주장하며, 특히 계산기가 경계 또는 중등도 위험으로 분류하는 환자를 지목한다. 또 이미 촬영된 흉부 CT에서 AI가 석회화를 부수적으로 읽어낼 수 있다고 덧붙인다. 미국심장학회와 미국심장협회는 2026년 3월 권고를 개정했지만 수가는 따라오지 않았다.
+***** Take
+판단하기 전에 알아둘 것. 아가츠톤이 바로 아가츠톤 점수의 그 사람이다. 그렇다고 주장이 틀린 것은 아니고, 가격 격차는 실재한다. 스레드의 더 날카로운 반박은 작동 원리다. 스캔은 위험을 측정하지만 줄이지 않는다. 줄이는 것은 스타틴, 운동, 식단이고 메디케어는 이미 그것을 보장한다. 여기에 에릭 토폴의 위양성 지적까지 더하면, 100달러 스캔 일부는 깨끗한 혈관을 확인하는 심도자술로 끝난다. 값싼 검사도 값비싼 후속 검사를 만든다.
+***** Comments
+- 관상동맥 CT 칼슘 스캔이 인기를 얻고 있다. 하지만 받기 전에 더 간단한 검사를 먼저 하겠다. ApoB, 콜레스테롤이 정상인 사람의 약 20%가 ApoB가 비정상이다. Lp(a)는 가장 강한 유전적 위험 인자. hs-CRP. HbA1c.
+- 심장내과 의사 에릭 토폴: CAC는 결정적인 것과는 거리가 멀다. 칼슘 점수로 심한 관상동맥 질환이라는 말을 들은 환자 다수가 실제로는 정상 혈관이었고, 그 사이 만성 불안과 불필요한 시술을 겪었다.
+- 심근경색을 예방한다는 것은 위험을 약 1% 낮추기 위해 평생 약을 먹는다는 뜻이다. 할 만한 일이지만 계산을 복잡하게 만든다. 스캔이 마법처럼 건강하게 해주지는 않는다.
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Medicare pagará 50.000 dólares por tu infarto. Debería pagar 100 para evitarlo
+***** TLDR
+Artículo de opinión de los cardiólogos Arthur Agatston y Oren Mechanic. Medicare reembolsa unos 50.000 dólares por tratar un infarto, pero no cubre de forma fiable el escáner de calcio en las arterias coronarias, un TC de diez minutos que cuesta unos 100 dólares y encuentra placa calcificada años antes de los síntomas. Defienden que la cobertura siga a las imágenes y no a las calculadoras de riesgo, sobre todo en pacientes que las calculadoras sitúan en riesgo límite o intermedio, y señalan que la IA puede detectar calcificación de forma oportunista en TC de tórax ya realizados. El Colegio Americano de Cardiología y la Asociación Americana del Corazón actualizaron sus recomendaciones en marzo de 2026; el reembolso no ha seguido.
+***** Take
+Conviene saberlo antes de valorar el argumento: Agatston es el del índice Agatston. Eso no lo hace estar equivocado, y la diferencia de precio es real. La objeción más afilada del hilo es mecánica: el escáner mide el riesgo, no lo reduce. Lo que lo reduce son estatinas, ejercicio y dieta, que Medicare ya cubre, y el aviso de Eric Topol sobre falsos positivos implica que algunos de esos escáneres de 100 dólares acaban en un cateterismo que encuentra arterias limpias. Las pruebas baratas siguen generando seguimientos caros.
+***** Comments
+- Los escáneres de calcio coronario por TC se están popularizando. Pero antes de hacerse uno, yo haría pruebas más simples: ApoB, porque cerca del 20% de quienes tienen colesterol normal tienen ApoB anormal; Lp(a), el factor hereditario más fuerte; hs-CRP; HbA1c.
+- El cardiólogo Eric Topol: el CAC es cualquier cosa menos definitivo. A muchos pacientes se les dice que tienen enfermedad coronaria significativa por el índice de calcio y resulta que tienen arterias normales, tras ansiedad crónica y procedimientos innecesarios.
+- Prevenir un infarto significa tomar medicación de por vida para reducir el riesgo cerca de un 1%, que vale la pena, pero complica las cuentas. El escáner no te vuelve sano por arte de magia.
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Medicare zahlt 50.000 Dollar für deinen Herzinfarkt. Es sollte 100 für die Vorbeugung zahlen
+***** TLDR
+Ein Meinungsbeitrag der Kardiologen Arthur Agatston und Oren Mechanic. Medicare erstattet rund 50.000 Dollar für die Behandlung eines Herzinfarkts, übernimmt aber den Koronarkalk-Scan nicht zuverlässig: ein zehnminütiges CT für etwa 100 Dollar, das kalzifizierte Plaque Jahre vor den Symptomen findet. Sie fordern, die Kostenübernahme an die Bildgebung zu binden statt an Risikokalkulatoren, besonders bei Patienten, die die Kalkulatoren als grenzwertig oder mittelgradig einstufen, und verweisen darauf, dass KI Kalzifizierung nebenbei auf bereits angefertigten Thorax-CTs erkennen kann. Das American College of Cardiology und die American Heart Association haben ihre Empfehlungen im März 2026 aktualisiert, die Erstattung nicht.
+***** Take
+Vor der Bewertung gut zu wissen: Agatston ist der Agatston-Score. Das macht ihn nicht falsch, und die Preislücke ist real. Der schärfere Einwand im Thread ist mechanisch: Der Scan misst das Risiko, er senkt es nicht. Gesenkt wird es durch Statine, Bewegung und Ernährung, was Medicare bereits bezahlt. Und Eric Topols Hinweis auf Falschpositive heißt, dass manche dieser 100-Dollar-Scans in einer Katheteruntersuchung mit sauberen Arterien enden. Billige Tests erzeugen weiter teure Folgeuntersuchungen.
+***** Comments
+- Koronare CT-Kalzium-Scans werden populärer. Vor einem solchen Scan würde ich aber einfachere Tests machen: ApoB, denn etwa 20% der Menschen mit normalem Cholesterin haben ein auffälliges ApoB; Lp(a), der stärkste erbliche Risikofaktor; hs-CRP; HbA1c.
+- Der Kardiologe Eric Topol: Der CAC ist alles andere als eindeutig. Vielen Patienten wird anhand des Kalzium-Scores eine erhebliche Koronarerkrankung gesagt, und am Ende haben sie normale Arterien, nach chronischer Angst und unnötigen Eingriffen.
+- Einen Herzinfarkt zu verhindern heißt, lebenslang Medikamente zu nehmen, um das Risiko um etwa 1% zu senken. Das ist sinnvoll, verkompliziert aber die Rechnung. Der Scan macht einen nicht auf magische Weise gesund.
+** Why a program doesn't work when run from a batch file, but works when clicked :windows:programming:debugging:
+:PROPERTIES:
+:ID:       50251070
+:URL:      https://devblogs.microsoft.com/oldnewthing/20261026-00/?p=112797/
+:HN_URL:   https://news.ycombinator.com/item?id=50251070
+:POINTS:   89
+:COMMENTS: 45
+:BY:       ibobev
+:END:
+
+*** TLDR
+Raymond Chen takes a support question: the same program finds its data files when double-clicked in Explorer and fails when launched by full path from a batch file. Explorer sets the current directory to the folder of the thing you clicked. A batch file does not; the current directory stays wherever the batch file was run from, so a program that looks for its files in the current directory comes up empty. The customer's fix was pushd to the program's folder and popd afterwards. Chen's point is that programs should call GetModuleFileName to find their own install directory instead of trusting the current directory.
+
+*** Take
+The current directory is process state inherited from whoever launched you, which makes it the wrong place to keep anything you own. This has been true since DOS, GetModuleFileName has existed since Win32 shipped, and it is still arriving as a support ticket in 2026. The commenter asking whether the article is from 1997 has the real finding: nothing about this is new, which is exactly why it keeps happening.
+
+*** Comments
+
+**** xg15
+:PROPERTIES:
+:COMMENT_ID: 50302075
+:END:
+The thing that you clicked doesn't have to be the executable. It could also be a document with the executable registered as launch handler, in which case the current directory will be the directory of the document.
+
+**** lordnacho
+:PROPERTIES:
+:COMMENT_ID: 50304479
+:END:
+A related issue is when you set up automation and it turns out the script runs as a different user with different authorizations from the user who tested it. One of those annoyances that appears when you go from 'works on my machine' to 'works'.
+
+**** arthurfirst
+:PROPERTIES:
+:COMMENT_ID: 50302795
+:END:
+Is this an article from 1997?
+
+*** i18n                                                  :i18n:
+
+**** zh
+:PROPERTIES:
+:LANG: zh
+:END:
+***** Title
+为什么程序双击能跑，从批处理文件里跑就不行
+***** TLDR
+Raymond Chen 处理了一个支持问题：同一个程序在资源管理器里双击能找到自己的数据文件，用完整路径从批处理文件启动就失败。资源管理器会把当前目录设为你所点击对象所在的文件夹；批处理文件不会，当前目录仍是运行批处理时所在的位置，于是一个在当前目录里找自己文件的程序就什么也找不到。客户的解决办法是先 pushd 到程序所在目录，结束后再 popd。Chen 的观点是，程序应当调用 GetModuleFileName 找到自己的安装目录，而不是信任当前目录。
+***** Take
+当前目录是从启动者那里继承来的进程状态，因此不该用来存放任何属于你自己的东西。从 DOS 时代起就是这样，GetModuleFileName 自 Win32 发布就存在，而到 2026 年它还在以支持工单的形式出现。那条问「这文章是 1997 年的吗」的评论才是真正的发现：这件事毫无新意，而这正是它反复发生的原因。
+***** Comments
+- 你点的东西不一定是可执行文件。也可能是一个文档，而可执行文件被注册为它的打开方式，这种情况下当前目录会是该文档所在的目录。
+- 一个相关问题是：你配好自动化之后，发现脚本是以另一个用户身份运行的，权限和测试它的用户不一样。这就是从「在我机器上能跑」走到「能跑」时会冒出来的那类烦人事。
+- 这是 1997 年的文章吗？
+**** ja
+:PROPERTIES:
+:LANG: ja
+:END:
+***** Title
+ダブルクリックでは動くのにバッチファイルから実行すると動かない理由
+***** TLDR
+Raymond Chenがサポートの質問を扱う。同じプログラムがエクスプローラーのダブルクリックではデータファイルを見つけ、バッチファイルからフルパスで起動すると失敗する。エクスプローラーはクリックした対象のフォルダをカレントディレクトリに設定する。バッチファイルはそうしない。カレントディレクトリはバッチを実行した場所のままなので、自分のファイルをカレントディレクトリで探すプログラムは何も見つけられない。顧客の対処はプログラムのフォルダへpushdし、後でpopdすることだった。Chenの主張は、プログラムはカレントディレクトリを信じるのではなくGetModuleFileNameで自分のインストール先を調べるべきだということ。
+***** Take
+カレントディレクトリは起動した側から受け継ぐプロセス状態であり、自分が所有するものを置く場所ではない。DOSの頃から変わらず、GetModuleFileNameはWin32の最初からあり、それでも2026年にサポートチケットとして届いている。これは1997年の記事かと尋ねたコメントが本当の発見だ。何も新しくない。だからこそ繰り返される。
+***** Comments
+- クリックした対象は実行ファイルでなくてもよい。実行ファイルが起動ハンドラとして登録された文書でもよく、その場合カレントディレクトリは文書のあるディレクトリになる。
+- 関連する問題として、自動化を組んだらスクリプトがテストした人とは別のユーザー、別の権限で動いていたというのがある。「自分のマシンでは動く」から「動く」へ進むときに出てくる面倒のひとつだ。
+- これは1997年の記事ですか？
+**** ko
+:PROPERTIES:
+:LANG: ko
+:END:
+***** Title
+더블클릭하면 되는데 배치 파일에서 실행하면 안 되는 이유
+***** TLDR
+레이먼드 첸이 지원 문의를 다룬다. 같은 프로그램이 탐색기에서 더블클릭하면 데이터 파일을 찾고, 배치 파일에서 전체 경로로 실행하면 실패한다. 탐색기는 클릭한 대상이 있는 폴더를 현재 디렉터리로 설정한다. 배치 파일은 그렇지 않다. 현재 디렉터리는 배치를 실행한 위치에 그대로 남으므로, 자기 파일을 현재 디렉터리에서 찾는 프로그램은 아무것도 찾지 못한다. 고객의 해결책은 프로그램 폴더로 pushd 하고 끝나면 popd 하는 것이었다. 첸의 요점은 프로그램이 현재 디렉터리를 믿는 대신 GetModuleFileName으로 자기 설치 경로를 알아내야 한다는 것이다.
+***** Take
+현재 디렉터리는 실행시킨 쪽에서 물려받는 프로세스 상태이므로, 자기 소유의 무언가를 두기에는 잘못된 장소다. DOS 때부터 그랬고 GetModuleFileName은 Win32 출시 때부터 있었는데, 2026년에도 지원 티켓으로 들어온다. 이 글이 1997년 글이냐고 물은 댓글이 진짜 발견이다. 새로운 것이 하나도 없다는 점, 그래서 계속 벌어진다.
+***** Comments
+- 클릭한 대상이 실행 파일이어야 할 필요는 없다. 실행 파일이 실행 처리기로 등록된 문서일 수도 있고, 그 경우 현재 디렉터리는 그 문서가 있는 디렉터리가 된다.
+- 비슷한 문제로, 자동화를 구성해놓고 보니 스크립트가 테스트한 사용자와 다른 사용자, 다른 권한으로 실행되는 경우가 있다. '내 컴퓨터에서는 된다'에서 '된다'로 넘어갈 때 나타나는 짜증 중 하나다.
+- 이거 1997년 글인가요?
+**** es
+:PROPERTIES:
+:LANG: es
+:END:
+***** Title
+Por qué un programa falla al ejecutarse desde un archivo por lotes pero funciona al hacer clic
+***** TLDR
+Raymond Chen responde a una consulta de soporte: el mismo programa encuentra sus archivos de datos al hacer doble clic en el Explorador y falla al lanzarlo por ruta completa desde un archivo por lotes. El Explorador fija el directorio actual en la carpeta de lo que has clicado. Un archivo por lotes no lo hace: el directorio actual sigue siendo el sitio desde el que se ejecutó, así que un programa que busca sus archivos en el directorio actual no encuentra nada. El cliente lo arregló con pushd a la carpeta del programa y popd al terminar. La conclusión de Chen es que los programas deberían llamar a GetModuleFileName para localizar su propio directorio de instalación en vez de fiarse del directorio actual.
+***** Take
+El directorio actual es estado del proceso heredado de quien te lanzó, lo que lo convierte en el sitio equivocado para guardar nada propio. Esto es así desde DOS, GetModuleFileName existe desde que salió Win32, y en 2026 sigue llegando como ticket de soporte. El comentario que pregunta si el artículo es de 1997 da con el hallazgo real: aquí no hay nada nuevo, y por eso se repite.
+***** Comments
+- Lo que has clicado no tiene que ser el ejecutable. También puede ser un documento con el ejecutable registrado como manejador de apertura, y en ese caso el directorio actual será el del documento.
+- Un problema relacionado es cuando montas una automatización y resulta que el script se ejecuta como otro usuario con permisos distintos a los del usuario que lo probó. Una de esas molestias que aparecen al pasar de 'funciona en mi máquina' a 'funciona'.
+- ¿Es este un artículo de 1997?
+**** de
+:PROPERTIES:
+:LANG: de
+:END:
+***** Title
+Warum ein Programm aus einer Batchdatei scheitert, beim Anklicken aber läuft
+***** TLDR
+Raymond Chen behandelt eine Supportfrage: Dasselbe Programm findet seine Datendateien beim Doppelklick im Explorer und scheitert, wenn es per vollständigem Pfad aus einer Batchdatei gestartet wird. Der Explorer setzt das aktuelle Verzeichnis auf den Ordner des angeklickten Objekts. Eine Batchdatei tut das nicht, das aktuelle Verzeichnis bleibt dort, wo die Batchdatei ausgeführt wurde. Ein Programm, das seine Dateien im aktuellen Verzeichnis sucht, findet also nichts. Der Kunde löste es mit pushd in den Programmordner und popd danach. Chens Punkt: Programme sollten GetModuleFileName aufrufen, um ihr eigenes Installationsverzeichnis zu finden, statt dem aktuellen Verzeichnis zu vertrauen.
+***** Take
+Das aktuelle Verzeichnis ist Prozesszustand, geerbt von dem, der dich gestartet hat, und damit der falsche Ort für irgendetwas Eigenes. Das gilt seit DOS, GetModuleFileName gibt es seit Win32, und 2026 kommt es noch als Supportticket herein. Der Kommentar mit der Frage, ob der Artikel von 1997 sei, hat den eigentlichen Befund: Daran ist nichts neu, und genau deshalb passiert es weiter.
+***** Comments
+- Das Angeklickte muss nicht die ausführbare Datei sein. Es kann auch ein Dokument sein, für das die Anwendung als Öffnen-Handler registriert ist, dann ist das aktuelle Verzeichnis das des Dokuments.
+- Ein verwandtes Problem: Man richtet Automatisierung ein und stellt fest, dass das Skript als anderer Benutzer mit anderen Rechten läuft als der Benutzer, der es getestet hat. Eines dieser Ärgernisse auf dem Weg von 'läuft auf meiner Maschine' zu 'läuft'.
+- Ist das ein Artikel von 1997?
